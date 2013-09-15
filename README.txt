@@ -1,0 +1,73 @@
+=JavaCPP Presets=
+
+==Introduction==
+The JavaCPP Presets module contains Java configuration and interface classes for widely used C/C++ libraries. The configuration files in the `com.googlecode.javacpp.presets` package are used by the `Parser` to create from C/C++ header files the Java interface files targeting the `com.googlecode.javacpp` package, which is turn are used by the `Generator` and the native C++ compiler to produce the required JNI libraries.
+
+More details to come shortly... In the meantime, please feel free to ask questions on [http://groups.google.com/group/javacpp-project the mailing list].
+
+
+==Required Software==
+To use JavaCPP Presets, you will need to download and install the following software:
+ * An implementation of Java SE 6 or 7
+  * OpenJDK  http://openjdk.java.net/install/  or
+  * Sun JDK  http://www.oracle.com/technetwork/java/javase/downloads/  or
+  * IBM JDK  http://www.ibm.com/developerworks/java/jdk/  or
+  * Java SE for Mac OS X  http://developer.apple.com/java/  etc.
+
+
+==Build Instructions==
+To rebuild the source code, please note that the project files were created for:
+ * Maven 2 or 3  http://maven.apache.org/download.html
+ * JavaCPP 0.6  http://code.google.com/p/javacpp/
+ * msinttypes  http://code.google.com/p/msinttypes/ (under Windows for the Microsoft C/C++ Compiler)
+
+Each child module in turn relies on its corresponding native library being installed on the native system in `/usr/local/`, or `C:/MinGW/local/` (under Windows), or `${platform.root}/../` (for Android):
+ * FFmpeg 2.0.x  http://ffmpeg.org/download.html
+ * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
+
+Once everything installed, simply call the usual `mvn install` command, either in the root directory, or inside each directory of the desired child modules. Please refer to the comments inside the parent `pom.xml` file for further details.
+
+
+==Quick Start==
+Simply put all the desired JAR files (`ffmpeg*.jar`, `libdc1394*.jar`), in addition to `javacpp.jar`, somewhere in your CLASSPATH, or point your `pom.xml` file to the Maven repository http://maven2.javacpp.googlecode.com/git/, when the binary files are present. Here are some more specific instructions for common cases:
+
+NetBeans (Java SE 6 or 7):
+ # In the Projects window, right-click the Libraries node of your project, and select "Add JAR/Folder...".
+ # Locate the JAR files, select them, and click OK.
+
+Eclipse (Java SE 6 or 7):
+ # Navigate to Project > Properties > Java Build Path > Libraries and click "Add External JARs...".
+ # Locate the JAR files, select them, and click OK.
+
+Eclipse (Android 2.2 or newer):
+ # Follow the instructions on this page: http://developer.android.com/training/basics/firstapp/
+ # Go to File > New > Folder, select your project as parent folder, type "libs/armeabi" as Folder name, and click Finish.
+ # Copy `javacpp.jar` and `ffmpeg.jar` into the newly created "libs" folder.
+ # Extract all the `*.so` files from `ffmpeg-android-arm.jar` directly into the newly created "libs/armeabi" folder, without creating any of the subdirectories found in the JAR files.
+ # Navigate to Project > Properties > Java Build Path > Libraries and click "Add JARs...".
+ # Select both `javacpp.jar` and `ffmpeg.jar` from the newly created "libs" folder.
+
+After that, we can access almost transparently the corresponding C/C++ APIs through the interface classes found in the `com.googlecode.javacpp` package. Indeed, the `Parser` translates the code comments from the C/C++ header files into the Java interface files, (almost) ready to be consumed by Javadoc.
+
+
+==How Can I Help?==
+Contribution of any kind is highly welcome! At the moment, the `Parser` has rather limited abilities with C++, but I plan to improve it gradually to the point where it can successfully parse large and convoluted C++ header files, such as the ones of OpenCV. Consequently, I am looking for help especially with the two following tasks:
+ # Improving the `Parser`
+ # Adding new presets as child modules for other C/C++ libraries
+
+Please post your suggestions and patches [http://code.google.com/p/javacpp/issues/ as a new "issue"]. Thank you very much in advance for your contribution!
+
+
+==Changes==
+
+===September 15, 2013 version 0.6===
+Initial release
+
+
+----
+Copyright (C) 2013 Samuel Audet <samuel.audet@gmail.com>
+Project site: http://code.google.com/p/javacpp/
+
+Licensed under the GNU General Public License version 2 (GPLv2) with Classpath exception.
+Please refer to LICENSE.txt or http://www.gnu.org/licenses/ for details.
+

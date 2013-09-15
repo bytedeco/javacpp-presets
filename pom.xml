@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.googlecode.javacpp.presets</groupId>
+  <artifactId>javacpp-presets</artifactId>
+  <version>0.6</version>
+  <packaging>pom</packaging>
+
+  <name>JavaCPP Presets</name>
+  <description>The missing bridge between Java and native C++ libraries</description>
+  <url>http://code.google.com/p/javacpp/</url>
+  <licenses>
+    <license>
+      <name>GPLv2 with Classpath exception</name>
+      <url>http://www.gnu.org/software/classpath/license.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Samuel Audet</name>
+      <email>samuel.audet@gmail.com</email>
+    </developer>
+  </developers>
+
+  <modules>
+    <module>ffmpeg</module>
+    <module>libdc1394</module>
+    <module>distribution</module>
+  </modules>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <generate-sources.skip>false</generate-sources.skip> <!-- To skip header file parsing phase: -Dgenerate-sources.skip=true  -->
+    <process-classes.skip> false</process-classes.skip>  <!-- To skip native compilation phase: -Dprocess-classes.skip=true    -->
+    <platform.name>${os.name}-${os.arch}</platform.name> <!-- For Android: -Dplatform.name=android-arm                         -->
+    <platform.root></platform.root>                      <!--              -Dplatform.root=<path/to/android-ndk-r9>            -->
+    <compiler.path></compiler.path>                      <!--              -Dcompiler.path=<path/to/arm-linux-androideabi-g++> -->
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.googlecode.javacpp</groupId>
+      <artifactId>javacpp</artifactId>
+      <version>0.6</version>
+    </dependency>
+  </dependencies>
+
+  <repositories>
+    <repository>
+      <id>javacpp</id>
+      <name>JavaCPP</name>
+      <url>http://maven2.javacpp.googlecode.com/git/</url>
+    </repository>
+  </repositories>
+
+  <build>
+    <finalName>${project.artifactId}</finalName>
+    <pluginManagement>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>2.3</version>
+        <executions>
+          <execution>
+            <id>generate-sources</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+            <configuration>
+              <skipMain>${generate-sources.skip}</skipMain>
+              <includes>
+                <include>com/googlecode/javacpp/presets/*.java</include>
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.googlecode.javacpp</groupId>
+        <artifactId>javacpp</artifactId>
+        <version>0.6</version>
+        <configuration>
+          <platformName>${platform.name}</platformName>
+          <platformRoot>${platform.root}</platformRoot>
+          <compilerPath>${compiler.path}</compilerPath>
+          <classPath>${project.build.outputDirectory}</classPath>
+        </configuration>
+        <executions>
+          <execution>
+            <id>generate-sources</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+            <configuration>
+              <skip>${generate-sources.skip}</skip>
+              <outputDirectory>${project.build.sourceDirectory}</outputDirectory>
+              <classOrPackageName>com.googlecode.javacpp.presets.*</classOrPackageName>
+            </configuration>
+          </execution>
+          <execution>
+            <id>process-classes</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+            <configuration>
+              <skip>${process-classes.skip}</skip>
+              <classOrPackageName>com.googlecode.javacpp.*</classOrPackageName>
+              <copyLibs>true</copyLibs>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>       
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>com.googlecode.javacpp.presets.Main</mainClass>
+              <addClasspath>true</addClasspath>
+            </manifest>
+            <manifestEntries>
+              <!-- <addClasspath/> is broken: http://jira.codehaus.org/browse/MJAR-61 -->
+              <Class-Path>./ javacpp.jar ${project.artifactId}-linux-arm.jar ${project.artifactId}-linux-x86.jar ${project.artifactId}-linux-x86_64.jar ${project.artifactId}-macosx-x86.jar ${project.artifactId}-macosx-x86_64.jar ${project.artifactId}-windows-x86.jar ${project.artifactId}-windows-x86_64.jar</Class-Path>
+              <Name>com/googlecode/javacpp/presets/</Name>
+              <Implementation-Title>${project.name}</Implementation-Title>
+              <Implementation-Vendor>Samuel Audet</Implementation-Vendor>
+              <Implementation-Version>${project.version}</Implementation-Version>
+              <Specification-Title>${project.name}</Specification-Title>
+              <Specification-Vendor>Samuel Audet</Specification-Vendor>
+              <Specification-Version>${project.version}</Specification-Version>
+            </manifestEntries>
+          </archive>
+        </configuration>
+        <executions>
+          <execution>
+            <id>default-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <excludes>
+                <exclude>com/googlecode/javacpp/*.h</exclude>
+                <exclude>com/googlecode/javacpp/${platform.name}/</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>${platform.name}</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <classifier>${platform.name}</classifier>
+              <includes>
+                <include>com/googlecode/javacpp/${platform.name}/</include>
+              </includes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.3</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.parent.build.directory}</outputDirectory>
+              <stripVersion>true</stripVersion>
+            </configuration>
+          </execution>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <stripVersion>true</stripVersion>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>${project.artifactId}</artifactId>
+                  <version>${project.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.parent.build.directory}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>${project.artifactId}</artifactId>
+                  <version>${project.version}</version>
+                  <classifier>${platform.name}</classifier>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.parent.build.directory}</outputDirectory>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+    </pluginManagement>
+  </build>
+
+  <!-- If someone knows a better way to do this, please do let me know! -->
+  <profiles>
+    <profile>
+      <id>linux</id>
+      <activation>
+        <os><name>linux</name></os>
+      </activation>
+      <properties>
+        <os.name>linux</os.name>
+      </properties>
+    </profile>
+    <profile>
+      <id>macosx</id>
+      <activation>
+        <os><name>mac os x</name></os>
+      </activation>
+      <properties>
+        <os.name>macosx</os.name>
+      </properties>
+    </profile>
+    <profile>
+      <id>windows</id>
+      <activation>
+        <os><family>windows</family></os>
+      </activation>
+      <properties>
+        <os.name>windows</os.name>
+      </properties>
+    </profile>
+    <profile>
+      <id>i386</id>
+      <activation>
+        <os><arch>i386</arch></os>
+      </activation>
+      <properties>
+        <os.arch>x86</os.arch>
+      </properties>
+    </profile>
+    <profile>
+      <id>i486</id>
+      <activation>
+        <os><arch>i486</arch></os>
+      </activation>
+      <properties>
+        <os.arch>x86</os.arch>
+      </properties>
+    </profile>
+    <profile>
+      <id>i586</id>
+      <activation>
+        <os><arch>i586</arch></os>
+      </activation>
+      <properties>
+        <os.arch>x86</os.arch>
+      </properties>
+    </profile>
+    <profile>
+      <id>i686</id>
+      <activation>
+        <os><arch>i686</arch></os>
+      </activation>
+      <properties>
+        <os.arch>x86</os.arch>
+      </properties>
+    </profile>
+    <profile>
+      <id>amd64</id>
+      <activation>
+        <os><arch>amd64</arch></os>
+      </activation>
+      <properties>
+        <os.arch>x86_64</os.arch>
+      </properties>
+    </profile>
+    <profile>
+      <id>x86-64</id>
+      <activation>
+        <os><arch>x86-64</arch></os>
+      </activation>
+      <properties>
+        <os.arch>x86_64</os.arch>
+      </properties>
+    </profile>
+  </profiles>
+
+</project>
