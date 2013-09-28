@@ -16,14 +16,18 @@ To use JavaCPP Presets, you will need to download and install the following soft
 
 
 ==Build Instructions==
+The source code can be found at this repository: 
+ * https://code.google.com/p/javacpp.presets/
+
 To rebuild the source code, please note that the project files were created for:
  * Maven 2 or 3  http://maven.apache.org/download.html
  * JavaCPP 0.6  http://code.google.com/p/javacpp/
  * msinttypes  http://code.google.com/p/msinttypes/ (under Windows for the Microsoft C/C++ Compiler)
 
-Each child module in turn relies on its corresponding native library being installed on the native system in `/usr/local/`, or `C:/MinGW/local/` (under Windows), or `${platform.root}/../` (for Android):
+Each child module in turn relies on its corresponding native library being installed, by default, on the native system in `/usr/local/`, or `C:/MinGW/local/` (under Windows), or `${platform.root}/../` (for Android):
  * FFmpeg 2.0.x  http://ffmpeg.org/download.html
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
+ * libfreenect 0.2  https://github.com/OpenKinect/libfreenect
 
 Once everything installed, simply call the usual `mvn install` command, either in the root directory, or inside each directory of the desired child modules. Please refer to the comments inside the parent `pom.xml` file for further details.
 
@@ -59,6 +63,8 @@ Please post your suggestions and patches [http://code.google.com/p/javacpp/issue
 
 
 ==Changes==
+
+ * Added preset for libfreenect 0.2 (OpenKinect)
 
 ===September 15, 2013 version 0.6===
 Initial release

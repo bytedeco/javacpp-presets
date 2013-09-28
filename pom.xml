@@ -29,6 +29,7 @@
   <modules>
     <module>ffmpeg</module>
     <module>libdc1394</module>
+    <module>libfreenect</module>
     <module>distribution</module>
   </modules>
 
