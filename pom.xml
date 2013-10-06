@@ -30,6 +30,8 @@
     <module>ffmpeg</module>
     <module>libdc1394</module>
     <module>libfreenect</module>
+    <module>videoinput</module>
+    <module>artoolkitplus</module>
     <module>distribution</module>
   </modules>
 
@@ -86,9 +88,17 @@
         <artifactId>javacpp</artifactId>
         <version>0.6</version>
         <configuration>
-          <platformName>${platform.name}</platformName>
-          <platformRoot>${platform.root}</platformRoot>
-          <compilerPath>${compiler.path}</compilerPath>
+          <properties>${platform.name}</properties>
+          <propertyKeysAndValues>
+            <property>
+              <name>platform.root</name>
+              <value>${platform.root}</value>
+            </property>
+            <property>
+              <name>compiler.path</name>
+              <value>${compiler.path}</value>
+            </property>
+          </propertyKeysAndValues>
           <classPath>${project.build.outputDirectory}</classPath>
         </configuration>
         <executions>

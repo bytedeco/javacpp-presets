@@ -28,14 +28,17 @@ import com.googlecode.javacpp.annotation.Properties;
  *
  * @author Samuel Audet
  */
-@Properties(inherit=avcodec.class, target="com.googlecode.javacpp.avformat", value={
-    @Platform(cinclude={"<libavformat/avio.h>", "<libavformat/avformat.h>"}, link="avformat@.55"),
-    @Platform(value="windows", preload="avformat-55") })
-public class avformat implements Parser.InfoMapper {
+@Properties(target="com.googlecode.javacpp.videoInputLib", value={
+    @Platform(value="windows", include={"<videoInput.h>", "<videoInput.cpp>"},
+        includepath={"../videoInput-update2013/videoInputSrcAndDemos/libs/videoInput/",
+                     "../videoInput-update2013/videoInputSrcAndDemos/libs/DShow/Include/"},
+        link={"ole32", "oleaut32", "amstrmid", "strmiids", "uuid"}) })
+public class videoInputLib implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        new avcodec().map(infoMap);
-        infoMap.put(new Parser.Info("AVFormatContext").opaque(false))
-               .put(new Parser.Info("AVPROBE_SCORE_RETRY").complex(true))
-               .put(new Parser.Info("FF_API_PKT_DUMP", "LIBAVFORMAT_VERSION_MAJOR <= 54").define(false));
+          infoMap.put(new Parser.Info("videoInput.cpp").parse(false))
+                 .put(new Parser.Info("_WIN32_WINNT").genericTypes().define(false))
+                 .put(new Parser.Info("std::vector").genericTypes("std::string").pointerTypes("StringVector"))
+                 .put(new Parser.Info("GUID").pointerTypes("Pointer").cast(true))
+                 .put(new Parser.Info("long", "unsigned long").valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]").cast(true));
     }
 }

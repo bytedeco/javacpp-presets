@@ -1128,7 +1128,7 @@ public static class AVPanScan extends Pointer {
      * - decoding: Set by libavcodec.
      */
     public native @Name("position") short _position(int i, int j); public native AVPanScan _position(int i, int j, short _position);
-    @MemberGetter public native @Cast("int16_t*") @Name("position") ShortPointer _position();
+    @MemberGetter public native @Cast("int16_t(*)[2]") @Name("position") ShortPointer _position();
 }
 
 public static final int FF_QSCALE_TYPE_MPEG1 = 0;

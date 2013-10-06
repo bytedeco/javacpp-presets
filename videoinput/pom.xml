@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.googlecode.javacpp.presets</groupId>
+    <artifactId>javacpp-presets</artifactId>
+    <version>0.6</version>
+  </parent>
+
+  <artifactId>videoinput</artifactId>
+  <version>0.200</version>
+  <packaging>jar</packaging>
+  <name>JavaCPP Presets for videoInput</name>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>com.googlecode.javacpp</groupId>
+        <artifactId>javacpp</artifactId>
+        <configuration>
+          <environmentVariables>
+            <!-- Hack required for Windows SDK v7.1 -->
+            <CL>&quot;/I${env.SDKDIR}/Include/&quot;</CL>
+          </environmentVariables>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

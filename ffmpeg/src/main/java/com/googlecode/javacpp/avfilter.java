@@ -1030,7 +1030,7 @@ public static class AVFilterLink extends Pointer {
     public native int request_samples(); public native AVFilterLink request_samples(int request_samples);
 
     /** stage of the initialization of the link properties (dimensions, etc) */
-    /** enum init_state */
+    /** enum AVFilterLink::init_state */
     public static final int
         /** not started */
         AVLINK_UNINIT = 0,

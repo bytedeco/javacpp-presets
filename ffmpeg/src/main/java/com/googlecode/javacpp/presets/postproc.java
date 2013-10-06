@@ -34,7 +34,7 @@ import com.googlecode.javacpp.annotation.Properties;
 public class postproc implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
         new avutil().map(infoMap);
-        infoMap.put(new Parser.Info("QP_STORE_T").genericTypes().primitiveTypes("byte").pointerTypes("BytePointer"))
+        infoMap.put(new Parser.Info("QP_STORE_T").genericTypes().valueTypes("byte").pointerTypes("BytePointer"))
                .put(new Parser.Info("LIBPOSTPROC_VERSION_INT < (52<<16)").define(false));
     }
 }

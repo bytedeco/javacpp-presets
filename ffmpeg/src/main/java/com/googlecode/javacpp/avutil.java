@@ -1970,7 +1970,7 @@ public static final int AV_NUM_DATA_POINTERS = 8;
      * @endcode
      */
     public native @Deprecated short motion_val(int i, int j, int k); public native AVFrame motion_val(int i, int j, int k, short motion_val);
-    @MemberGetter public native @Cast("int16_t*") @Deprecated ShortPointer motion_val();
+    @MemberGetter public native @Cast("int16_t(*)[2]") @Deprecated ShortPointer motion_val();
 
     /**
      * macroblock type table

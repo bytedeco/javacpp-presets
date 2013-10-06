@@ -43,7 +43,7 @@ public class avutil implements Parser.InfoMapper {
                .put(new Parser.Info("av_const").annotations("@Const"))
                .put(new Parser.Info("av_malloc_attrib").genericTypes().annotations())
                .put(new Parser.Info("attribute_deprecated").annotations("@Deprecated"))
-               .put(new Parser.Info("AVOptionRanges").forwardDeclared(true))
+               .put(new Parser.Info("AVOptionRanges").opaque(false))
                .put(new Parser.Info("AVPanScan", "AVCodecContext").pointerTypes("Pointer").cast(true))
                .put(new Parser.Info("AV_PIX_FMT_ABI_GIT_MASTER", "AV_HAVE_INCOMPATIBLE_LIBAV_ABI").define(false))
                .put(new Parser.Info("ff_get_cpu_flags_arm", "ff_get_cpu_flags_ppc", "ff_get_cpu_flags_x86").javaNames());
