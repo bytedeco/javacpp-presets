@@ -31,7 +31,11 @@ Each child module in turn relies on its corresponding native library being insta
  * videoInput 0.200  https://github.com/ofTheo/videoInput/tree/update2013
  * ARToolKitPlus 2.3.0  https://launchpad.net/artoolkitplus
 
-Once everything installed, simply execute `mvn install --projects ffmpeg,libdc1394,libfreenect,videoinput,artoolkitplus,distribution` in the root directory, by specifying only the desired child modules in the command. Please refer to the comments inside the parent `pom.xml` file for further details.
+Once everything installed, simply execute
+{{{
+$ mvn install --projects ffmpeg,libdc1394,libfreenect,videoinput,artoolkitplus,distribution
+}}}
+in the root directory, by specifying only the desired child modules in the command. Please refer to the comments inside the parent `pom.xml` file for further details.
 
 
 ==Quick Start==

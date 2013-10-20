@@ -184,6 +184,11 @@ public static class freenect_frame_mode extends Pointer {
 	public native @Cast("uint32_t") int reserved(); public native freenect_frame_mode reserved(int reserved);
 	/** Resolution this freenect_frame_mode describes, should you want to find it again with freenect_find_*_frame_mode(). */
 	public native @Cast("freenect_resolution") int resolution(); public native freenect_frame_mode resolution(int resolution);
+		public native int dummy(); public native freenect_frame_mode dummy(int dummy);
+		public native @Cast("freenect_video_format") int video_format(); public native freenect_frame_mode video_format(int video_format);
+		public native @Cast("freenect_depth_format") int depth_format(); public native freenect_frame_mode depth_format(int depth_format);
+	/** Total buffer size in bytes to hold a single frame of data.  Should be equivalent to width * height * (data_bits_per_pixel+padding_bits_per_pixel) / 8 */
+	public native int bytes(); public native freenect_frame_mode bytes(int bytes);
 	/** Width of the frame, in pixels */
 	public native short width(); public native freenect_frame_mode width(short width);
 	/** Height of the frame, in pixels */
@@ -273,17 +278,25 @@ public static class freenect_raw_tilt_state extends Pointer {
 
 // usb backend specific section
 /** Holds libusb-1.0 context */
+@Opaque public static class freenect_usb_context extends Pointer {
+    public freenect_usb_context() { }
+    public freenect_usb_context(Pointer p) { super(p); }
+}
 //
 
 /// If Win32, export all functions for DLL usage
 // #ifndef _WIN32
-  // #define FREENECTAPI
+/** DLLExport information for windows, set to nothing on other platforms */
+//   #define FREENECTAPI
+/** DLLExport information for windows, set to nothing on other platforms */
 // #else
-  // #ifdef __cplusplus
-  // #else
+//   #ifdef __cplusplus
+//     #define FREENECTAPI extern "C" __declspec(dllexport)
+//   #else
     // this is required when building from a Win32 port of gcc without being
     // forced to compile all of the library files (.c) with g++...
-  // #endif
+//     #define FREENECTAPI __declspec(dllexport)
+//   #endif
 // #endif
 
 /// Enumeration of message logging levels
@@ -315,8 +328,8 @@ public static final int
  *
  * @return 0 on success, < 0 on error
  */
-public static native int freenect_init(@Cast("freenect_context**") PointerPointer ctx, @Cast("freenect_usb_context*") Pointer usb_ctx);
-public static native int freenect_init(@ByPtrPtr freenect_context ctx, @Cast("freenect_usb_context*") Pointer usb_ctx);
+public static native int freenect_init(@Cast("freenect_context**") PointerPointer ctx, freenect_usb_context usb_ctx);
+public static native int freenect_init(@ByPtrPtr freenect_context ctx, freenect_usb_context usb_ctx);
 
 /**
  * Closes the device if it is open, and frees the context
@@ -903,7 +916,7 @@ public static class freenect_zero_plane_info extends Pointer {
 	public native float dcmos_emitter_dist(); public native freenect_zero_plane_info dcmos_emitter_dist(float dcmos_emitter_dist);    // Distance between IR camera and IR emitter, in cm.
 	public native float dcmos_rcmos_dist(); public native freenect_zero_plane_info dcmos_rcmos_dist(float dcmos_rcmos_dist);      // Distance between IR camera and RGB camera, in cm.
 	public native float reference_distance(); public native freenect_zero_plane_info reference_distance(float reference_distance);    // The focal length of the IR camera, in mm.
-	public native float reference_pixel_size(); public native freenect_zero_plane_info reference_pixel_size(float reference_pixel_size);
+	public native float reference_pixel_size(); public native freenect_zero_plane_info reference_pixel_size(float reference_pixel_size);  // The size of a single pixel on the zero plane, in mm.
 }
 
 /// all data needed for depth->RGB mapping
@@ -927,7 +940,8 @@ public static class freenect_registration extends Pointer {
 	public native @Cast("uint16_t*") ShortPointer raw_to_mm_shift(); public native freenect_registration raw_to_mm_shift(ShortPointer raw_to_mm_shift);
 	public native IntPointer depth_to_rgb_shift(); public native freenect_registration depth_to_rgb_shift(IntPointer depth_to_rgb_shift);
 	public native int registration_table(int i, int j); public native freenect_registration registration_table(int i, int j, int registration_table);
-	@MemberGetter public native @Cast("int32_t*") IntPointer registration_table();
+	@MemberGetter public native @Cast("int32_t*") IntPointer registration_table();  // A table of 640*480 pairs of x,y values.
+	                                   // Index first by pixel, then x:0 and y:1.
 }
 
 

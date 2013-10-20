@@ -393,6 +393,71 @@ public static final int DC1394_LOG_NUM =              (DC1394_LOG_MAX - DC1394_L
    if error is positive. Neg errors are messages and are thus ignored */
 
 /* Some macros to log errors, etc... conditionally */
+// #define DC1394_WRN(err,message)
+//   do {
+//     if ((err>0)||(err<=-DC1394_ERROR_NUM))
+//       err=DC1394_INVALID_ERROR_CODE;
+// 
+//     if (err!=DC1394_SUCCESS) {
+//       dc1394_log_warning("%s: in %s (%s, line %d): %s\n",
+//       dc1394_error_get_string(err),
+//           __FUNCTION__, __FILE__, __LINE__, message);
+//     }
+//   } while (0);
+
+// #define DC1394_ERR(err,message)
+//   do {
+//     if ((err>0)||(err<=-DC1394_ERROR_NUM))
+//       err=DC1394_INVALID_ERROR_CODE;
+// 
+//     if (err!=DC1394_SUCCESS) {
+//       dc1394_log_error("%s: in %s (%s, line %d): %s\n",
+//       dc1394_error_get_string(err),
+//           __FUNCTION__, __FILE__, __LINE__, message);
+//       return;
+//     }
+//   } while (0);
+
+// #define DC1394_ERR_RTN(err,message)
+//   do {
+//     if ((err>0)||(err<=-DC1394_ERROR_NUM))
+//       err=DC1394_INVALID_ERROR_CODE;
+// 
+//     if (err!=DC1394_SUCCESS) {
+//       dc1394_log_error("%s: in %s (%s, line %d): %s\n",
+//       dc1394_error_get_string(err),
+//           __FUNCTION__, __FILE__, __LINE__, message);
+//       return err;
+//     }
+//   } while (0);
+
+// #define DC1394_ERR_CLN(err,cleanup,message)
+//   do {
+//     if ((err>0)||(err<=-DC1394_ERROR_NUM))
+//       err=DC1394_INVALID_ERROR_CODE;
+// 
+//     if (err!=DC1394_SUCCESS) {
+//       dc1394_log_error("%s: in %s (%s, line %d): %s\n",
+//       dc1394_error_get_string(err),
+//           __FUNCTION__, __FILE__, __LINE__, message);
+//       cleanup;
+//       return;
+//     }
+//   } while (0);
+
+// #define DC1394_ERR_CLN_RTN(err,cleanup,message)
+//   do {
+//     if ((err>0)||(err<=-DC1394_ERROR_NUM))
+//       err=DC1394_INVALID_ERROR_CODE;
+// 
+//     if (err!=DC1394_SUCCESS) {
+//       dc1394_log_error("%s: in %s (%s, line %d): %s\n",
+//       dc1394_error_get_string(err),
+//           __FUNCTION__, __FILE__, __LINE__, message);
+//       cleanup;
+//       return err;
+//     }
+//   } while (0);
 
 
 // #endif /* _MSC_VER */
@@ -1461,6 +1526,8 @@ public static native @Cast("dc1394bool_t") int dc1394_capture_is_frame_corrupt(d
     More details soon
 */
 
+// #define restrict __restrict
+
 /**
  * A list of de-mosaicing techniques for Bayer-patterns.
  *
@@ -1494,6 +1561,10 @@ public static final int DC1394_STEREO_METHOD_NUM =    (DC1394_STEREO_METHOD_MAX-
 
 // color conversion functions from Bart Nabbe.
 // corrected by Damien: bad coeficients in YUV2RGB
+public static native void YUV2RGB(int y, int u, int v, @ByRef int[] r, @ByRef int[] g, @ByRef int[] b);
+
+
+public static native void RGB2YUV(int r, int g, int b, @ByRef int[] y, @ByRef int[] u, @ByRef int[] v);
 
 // #ifdef __cplusplus
 // #endif
@@ -2495,7 +2566,8 @@ public static class dc1394video_frame_t extends Pointer {
     public native @Cast("uint64_t") long allocated_image_bytes(); public native dc1394video_frame_t allocated_image_bytes(long allocated_image_bytes); /* amount of memory allocated in for the *image field. */
     public native @Cast("dc1394bool_t") int little_endian(); public native dc1394video_frame_t little_endian(int little_endian);         /* DC1394_TRUE if little endian (16bpp modes only),
                                                        DC1394_FALSE otherwise */
-    public native @Cast("dc1394bool_t") int data_in_padding(); public native dc1394video_frame_t data_in_padding(int data_in_padding);
+    public native @Cast("dc1394bool_t") int data_in_padding(); public native dc1394video_frame_t data_in_padding(int data_in_padding);       /* DC1394_TRUE if data is present in the padding bytes in IIDC 1.32 format,
+                                                       DC1394_FALSE otherwise */
 }
 
 // #ifdef __cplusplus

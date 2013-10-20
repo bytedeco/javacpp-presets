@@ -38,7 +38,7 @@ import com.googlecode.javacpp.annotation.Properties;
         linkpath="C:/Program Files/libfreenect/lib/") })
 public class freenect implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        infoMap.put(new Parser.Info("FREENECTAPI").genericTypes())
+        infoMap.put(new Parser.Info("FREENECTAPI").genericArgs().annotations())
                .put(new Parser.Info("freenect_device_attributes").opaque(false))
                .put(new Parser.Info("timeval").pointerTypes("Pointer").cast(true));
     }

@@ -1328,6 +1328,9 @@ public static class AVPacket extends Pointer {
      * Additional packet data that can be provided by the container.
      * Packet can contain several types of side information.
      */
+        @Name({"side_data", ".data"}) public native @Cast("uint8_t*") BytePointer side_data_data(int i); public native AVPacket side_data_data(int i, BytePointer side_data_data);
+        @Name({"side_data", ".size"}) public native int side_data_size(int i); public native AVPacket side_data_size(int i, int side_data_size);
+        @Name({"side_data", ".type"}) public native @Cast("AVPacketSideDataType") int side_data_type(int i); public native AVPacket side_data_type(int i, int side_data_type);
     public native int side_data_elems(); public native AVPacket side_data_elems(int side_data_elems);
 
     /**

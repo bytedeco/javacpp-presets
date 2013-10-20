@@ -40,7 +40,7 @@ import com.googlecode.javacpp.annotation.Properties;
         linkpath="C:/Program Files/ARToolKitPlus/lib/") })
 public class ARToolKitPlus implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-          infoMap.put(new Parser.Info("AR_EXPORT").genericTypes().annotations())
+          infoMap.put(new Parser.Info("AR_EXPORT").genericArgs().annotations())
                  .put(new Parser.Info("ARMat").opaque(false))
                  .put(new Parser.Info("std::vector<CornerPoint>", "CornerPoints").pointerTypes("@StdVector CornerPoint"))
                  .put(new Parser.Info("std::vector<int>").valueTypes("@StdVector int[]"))

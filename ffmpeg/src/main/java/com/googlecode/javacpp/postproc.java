@@ -66,7 +66,18 @@ public static native @Cast("const char*") BytePointer postproc_license();
 
 public static final int PP_QUALITY_MAX = 6;
 
+// #define QP_STORE_T int8_t
+
 // #include <inttypes.h>
+
+@Opaque public static class pp_context extends Pointer {
+    public pp_context() { }
+    public pp_context(Pointer p) { super(p); }
+}
+@Opaque public static class pp_mode extends Pointer {
+    public pp_mode() { }
+    public pp_mode(Pointer p) { super(p); }
+}
 
 // #if LIBPOSTPROC_VERSION_INT < (52<<16)
 // #else
@@ -79,22 +90,22 @@ public static native void pp_postprocess(@Cast("const uint8_t**") PointerPointer
                      @Cast("uint8_t**") PointerPointer dst, @Const IntPointer dstStride,
                      int horizontalSize, int verticalSize,
                      @Const BytePointer QP_store,  int QP_stride,
-                     @Cast("pp_mode*") Pointer mode, @Cast("pp_context*") Pointer ppContext, int pict_type);
+                     pp_mode mode, pp_context ppContext, int pict_type);
 public static native void pp_postprocess(@Cast("const uint8_t**") @ByPtrPtr BytePointer src, @Const IntPointer srcStride,
                      @Cast("uint8_t**") @ByPtrPtr BytePointer dst, @Const IntPointer dstStride,
                      int horizontalSize, int verticalSize,
                      @Const BytePointer QP_store,  int QP_stride,
-                     @Cast("pp_mode*") Pointer mode, @Cast("pp_context*") Pointer ppContext, int pict_type);
+                     pp_mode mode, pp_context ppContext, int pict_type);
 public static native void pp_postprocess(@Cast("const uint8_t**") @ByPtrPtr ByteBuffer src, @Const IntBuffer srcStride,
                      @Cast("uint8_t**") @ByPtrPtr ByteBuffer dst, @Const IntBuffer dstStride,
                      int horizontalSize, int verticalSize,
                      @Const BytePointer QP_store,  int QP_stride,
-                     @Cast("pp_mode*") Pointer mode, @Cast("pp_context*") Pointer ppContext, int pict_type);
+                     pp_mode mode, pp_context ppContext, int pict_type);
 public static native void pp_postprocess(@Cast("const uint8_t**") @ByPtrPtr byte[] src, @Const int[] srcStride,
                      @Cast("uint8_t**") @ByPtrPtr byte[] dst, @Const int[] dstStride,
                      int horizontalSize, int verticalSize,
                      @Const BytePointer QP_store,  int QP_stride,
-                     @Cast("pp_mode*") Pointer mode, @Cast("pp_context*") Pointer ppContext, int pict_type);
+                     pp_mode mode, pp_context ppContext, int pict_type);
 
 
 /**
@@ -103,12 +114,12 @@ public static native void pp_postprocess(@Cast("const uint8_t**") @ByPtrPtr byte
  * @param name    the string after "-pp" on the command line
  * @param quality a number from 0 to PP_QUALITY_MAX
  */
-public static native @Cast("pp_mode*") Pointer pp_get_mode_by_name_and_quality(@Cast("const char*") BytePointer name, int quality);
-public static native @Cast("pp_mode*") Pointer pp_get_mode_by_name_and_quality(String name, int quality);
-public static native void pp_free_mode(@Cast("pp_mode*") Pointer mode);
+public static native pp_mode pp_get_mode_by_name_and_quality(@Cast("const char*") BytePointer name, int quality);
+public static native pp_mode pp_get_mode_by_name_and_quality(String name, int quality);
+public static native void pp_free_mode(pp_mode mode);
 
-public static native @Cast("pp_context*") Pointer pp_get_context(int width, int height, int flags);
-public static native void pp_free_context(@Cast("pp_context*") Pointer ppContext);
+public static native pp_context pp_get_context(int width, int height, int flags);
+public static native void pp_free_context(pp_context ppContext);
 
 public static final int PP_CPU_CAPS_MMX =   0x80000000;
 public static final int PP_CPU_CAPS_MMX2 =  0x20000000;

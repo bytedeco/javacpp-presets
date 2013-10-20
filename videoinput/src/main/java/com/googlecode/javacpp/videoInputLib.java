@@ -86,6 +86,7 @@ Thanks to:
 
 //this is for TryEnterCriticalSection
 // #ifndef _WIN32_WINNT
+// 	#   define _WIN32_WINNT 0x400
 // #endif
 // #include <windows.h>
 
@@ -442,7 +443,7 @@ public static native int comInitCount(); public static native void comInitCount(
 
 }
 
- // #endif
+//  #endif
 
 
 }

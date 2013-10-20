@@ -250,6 +250,8 @@ public static final int AV_TIME_BASE =            1000000;
  * Internal time base represented as fractional value
  */
 
+// #define AV_TIME_BASE_Q          (AVRational){1, AV_TIME_BASE}
+
 /**
  * @}
  * @}
@@ -324,6 +326,8 @@ public static native @Cast("unsigned") int av_int_list_length_for_size(@Cast("un
  * @param list  pointer to the list
  * @return  length of the list, in elements, not counting the terminator
  */
+// #define av_int_list_length(list, term)
+//     av_int_list_length_for_size(sizeof(*(list)), list, term)
 
 /**
  * @}
@@ -374,10 +378,16 @@ public static native @Cast("unsigned") int av_int_list_length_for_size(@Cast("un
 /* error handling */
 // #if EDOM > 0
 /** Returns a negative error code from a POSIX error code, to return from library functions. */
+// #define AVERROR(e) (-(e))
 /** Returns a POSIX error code from a library function error return value. */
+// #define AVUNERROR(e) (-(e))
 // #else
 /* Some platforms have E* and errno already negated. */
+// #define AVERROR(e) (e)
+// #define AVUNERROR(e) (e)
 // #endif
+
+// #define FFERRTAG(a, b, c, d) (-(int)MKTAG(a, b, c, d))
 
 /** Bitstream filter not found */
 public static native @MemberGetter int AVERROR_BSF_NOT_FOUND();
@@ -476,6 +486,8 @@ public static native @Cast("char*") byte[] av_make_error_string(@Cast("char*") b
  * Convenience macro, the return value should be used only directly in
  * function arguments but never stand-alone.
  */
+// #define av_err2str(errnum)
+//     av_make_error_string((char[AV_ERROR_MAX_STRING_SIZE]){0}, AV_ERROR_MAX_STRING_SIZE, errnum)
 
 /**
  * @}
@@ -528,19 +540,36 @@ public static native @Cast("char*") byte[] av_make_error_string(@Cast("char*") b
 
 
 // #if defined(__INTEL_COMPILER) && __INTEL_COMPILER < 1110 || defined(__SUNPRO_C)
+//     #define DECLARE_ALIGNED(n,t,v)      t __attribute__ ((aligned (n))) v
+//     #define DECLARE_ASM_CONST(n,t,v)    const t __attribute__ ((aligned (n))) v
 // #elif defined(__TI_COMPILER_VERSION__)
+//     #define DECLARE_ALIGNED(n,t,v)
+//         AV_PRAGMA(DATA_ALIGN(v,n))
+//         t __attribute__((aligned(n))) v
+//     #define DECLARE_ASM_CONST(n,t,v)
+//         AV_PRAGMA(DATA_ALIGN(v,n))
+//         static const t __attribute__((aligned(n))) v
 // #elif defined(__GNUC__)
+//     #define DECLARE_ALIGNED(n,t,v)      t __attribute__ ((aligned (n))) v
+//     #define DECLARE_ASM_CONST(n,t,v)    static const t av_used __attribute__ ((aligned (n))) v
 // #elif defined(_MSC_VER)
+//     #define DECLARE_ALIGNED(n,t,v)      __declspec(align(n)) t v
+//     #define DECLARE_ASM_CONST(n,t,v)    __declspec(align(n)) static const t v
 // #else
+//     #define DECLARE_ALIGNED(n,t,v)      t v
+//     #define DECLARE_ASM_CONST(n,t,v)    static const t v
 // #endif
 
 // #if AV_GCC_VERSION_AT_LEAST(3,1)
+//     #define av_malloc_attrib __attribute__((__malloc__))
 // #else
-    // #define av_malloc_attrib
+//     #define av_malloc_attrib
 // #endif
 
 // #if AV_GCC_VERSION_AT_LEAST(4,3)
+//     #define av_alloc_size(...) __attribute__((alloc_size(__VA_ARGS__)))
 // #else
+//     #define av_alloc_size(...)
 // #endif
 
 /**
@@ -1372,7 +1401,9 @@ public static native void av_log_format_line(Pointer ptr, int level, String fmt,
  */
 
 // #ifdef DEBUG
+// #    define av_dlog(pctx, ...) av_log(pctx, AV_LOG_DEBUG, __VA_ARGS__)
 // #else
+// #    define av_dlog(pctx, ...) do { if (0) av_log(pctx, AV_LOG_DEBUG, __VA_ARGS__); } while (0)
 // #endif
 
 /**
@@ -2751,7 +2782,9 @@ public static final int AV_PIX_FMT_Y400A = AV_PIX_FMT_GRAY8A;
 public static final int AV_PIX_FMT_GBR24P = AV_PIX_FMT_GBRP;
 
 // #if AV_HAVE_BIGENDIAN
+// #   define AV_PIX_FMT_NE(be, le) AV_PIX_FMT_##be
 // #else
+// #   define AV_PIX_FMT_NE(be, le) AV_PIX_FMT_##le
 // #endif
 
 public static native @MemberGetter int AV_PIX_FMT_RGB32();
@@ -2855,9 +2888,12 @@ public static native @MemberGetter int AV_PIX_FMT_XYZ12();
 public static final int AV_PIX_FMT_XYZ12 = AV_PIX_FMT_XYZ12();
 
 // #if FF_API_PIX_FMT
+// #define PixelFormat AVPixelFormat
 
 public static final int PIX_FMT_Y400A = AV_PIX_FMT_Y400A;
 public static final int PIX_FMT_GBR24P = AV_PIX_FMT_GBR24P;
+
+// #define PIX_FMT_NE(be, le) AV_PIX_FMT_NE(be, le)
 
 public static final int PIX_FMT_RGB32 =   AV_PIX_FMT_RGB32;
 public static final int PIX_FMT_RGB32_1 = AV_PIX_FMT_RGB32_1;
@@ -4071,6 +4107,11 @@ public static class AVOption extends Pointer {
     /**
      * the default value for scalar options
      */
+        @Name({"default_val", ".i64"}) public native long default_val_i64(); public native AVOption default_val_i64(long default_val_i64);
+        @Name({"default_val", ".dbl"}) public native double default_val_dbl(); public native AVOption default_val_dbl(double default_val_dbl);
+        @Name({"default_val", ".str"}) @MemberGetter public native @Cast("const char*") BytePointer default_val_str();
+        /* TODO those are unused now */
+        @Name({"default_val", ".q"}) public native @ByVal AVRational default_val_q(); public native AVOption default_val_q(AVRational default_val_q);
     /** minimum valid value for the option */
     public native double min(); public native AVOption min(double min);
     /** maximum valid value for the option */
@@ -4603,6 +4644,11 @@ public static native int av_opt_set_video_rate(Pointer obj, String name, @ByVal 
  * @param term   list terminator (usually 0 or -1)
  * @param flags  search flags
  */
+// #define av_opt_set_int_list(obj, name, val, term, flags)
+//     (av_int_list_length(val, term) > INT_MAX / sizeof(*(val)) ?
+//      AVERROR(EINVAL) :
+//      av_opt_set_bin(obj, name, (const uint8_t *)(val),
+//                     av_int_list_length(val, term) * sizeof(*(val)), flags))
 /**
  * @}
  */

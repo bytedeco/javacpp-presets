@@ -36,8 +36,8 @@ import com.googlecode.javacpp.annotation.Properties;
 public class videoInputLib implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
           infoMap.put(new Parser.Info("videoInput.cpp").parse(false))
-                 .put(new Parser.Info("_WIN32_WINNT").genericTypes().define(false))
-                 .put(new Parser.Info("std::vector").genericTypes("std::string").pointerTypes("StringVector"))
+                 .put(new Parser.Info("_WIN32_WINNT").genericArgs().define(false))
+                 .put(new Parser.Info("std::vector").genericArgs("std::string").pointerTypes("StringVector"))
                  .put(new Parser.Info("GUID").pointerTypes("Pointer").cast(true))
                  .put(new Parser.Info("long", "unsigned long").valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]").cast(true));
     }

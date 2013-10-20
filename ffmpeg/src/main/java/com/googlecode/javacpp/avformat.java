@@ -1081,6 +1081,9 @@ public static final int AVFMT_ALLOW_FLUSH =  0x10000;
 // #if LIBAVFORMAT_VERSION_MAJOR <= 54 //we try to be compatible to the ABIs of ffmpeg and major forks
 // #else
 public static final int AVFMT_TS_NONSTRICT = 0x20000;
+/** Format does not require strictly
+                                        increasing timestamps, but they must
+                                        still be monotonic */
 // #endif
 /** Format allows muxing negative
                                         timestamps. If not set the timestamp
@@ -1640,6 +1643,23 @@ public static class AVStream extends Pointer {
      * Stream information used internally by av_find_stream_info()
      */
 public static final int MAX_STD_TIMEBASES = (60*12+6);
+        @Name({"info", ".last_dts"}) public native long info_last_dts(int i); public native AVStream info_last_dts(int i, long info_last_dts);
+        @Name({"info", ".duration_gcd"}) public native long info_duration_gcd(int i); public native AVStream info_duration_gcd(int i, long info_duration_gcd);
+        @Name({"info", ".duration_count"}) public native int info_duration_count(int i); public native AVStream info_duration_count(int i, int info_duration_count);
+        @Name({"info", ".duration_error"}) @MemberGetter public native @Cast("double*") DoublePointer info_duration_error(int i);
+        @Name({"info", ".codec_info_duration"}) public native long info_codec_info_duration(int i); public native AVStream info_codec_info_duration(int i, long info_codec_info_duration);
+        @Name({"info", ".codec_info_duration_fields"}) public native long info_codec_info_duration_fields(int i); public native AVStream info_codec_info_duration_fields(int i, long info_codec_info_duration_fields);
+        @Name({"info", ".found_decoder"}) public native int info_found_decoder(int i); public native AVStream info_found_decoder(int i, int info_found_decoder);
+
+        @Name({"info", ".last_duration"}) public native long info_last_duration(int i); public native AVStream info_last_duration(int i, long info_last_duration);
+
+        /**
+         * Those are used for average framerate estimation.
+         */
+        @Name({"info", ".fps_first_dts"}) public native long info_fps_first_dts(int i); public native AVStream info_fps_first_dts(int i, long info_fps_first_dts);
+        @Name({"info", ".fps_first_dts_idx"}) public native int info_fps_first_dts_idx(int i); public native AVStream info_fps_first_dts_idx(int i, int info_fps_first_dts_idx);
+        @Name({"info", ".fps_last_dts"}) public native long info_fps_last_dts(int i); public native AVStream info_fps_last_dts(int i, long info_fps_last_dts);
+        @Name({"info", ".fps_last_dts_idx"}) public native int info_fps_last_dts_idx(int i); public native AVStream info_fps_last_dts_idx(int i, int info_fps_last_dts_idx);
 
     /** number of bits in pts (used for wrapping control) */
     public native int pts_wrap_bits(); public native AVStream pts_wrap_bits(int pts_wrap_bits);

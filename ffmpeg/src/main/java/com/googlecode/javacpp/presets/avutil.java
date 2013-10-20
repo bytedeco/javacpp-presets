@@ -38,10 +38,10 @@ import com.googlecode.javacpp.annotation.Properties;
     @Platform(value="windows", includepath={"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, preload="avutil-52") })
 public class avutil implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        infoMap.put(new Parser.Info("AV_NOPTS_VALUE").genericTypes("long"))
-               .put(new Parser.Info("AV_TIME_BASE_Q", "PixelFormat", "CodecID").genericTypes())
+        infoMap.put(new Parser.Info("AV_NOPTS_VALUE").genericArgs("long").complex(true))
+               .put(new Parser.Info("AV_TIME_BASE_Q", "PixelFormat", "CodecID").genericArgs())
                .put(new Parser.Info("av_const").annotations("@Const"))
-               .put(new Parser.Info("av_malloc_attrib").genericTypes().annotations())
+               .put(new Parser.Info("av_malloc_attrib", "av_alloc_size", "av_always_inline").genericArgs().annotations())
                .put(new Parser.Info("attribute_deprecated").annotations("@Deprecated"))
                .put(new Parser.Info("AVOptionRanges").opaque(false))
                .put(new Parser.Info("AVPanScan", "AVCodecContext").pointerTypes("Pointer").cast(true))
