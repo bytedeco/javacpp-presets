@@ -25,6 +25,7 @@ To rebuild the source code, please note that the project files were created for:
  * msinttypes  http://code.google.com/p/msinttypes/ (under Windows for the Microsoft C/C++ Compiler)
 
 Each child module in turn relies on its corresponding native library being installed in the directory specified in its `.java` configuration file or, by default, on the native system in `/usr/local/`, or `C:/MinGW/local/` (under Windows), or `${platform.root}/../` (for Android):
+ * OpenCV 2.4.7  http://opencv.org/downloads.html
  * FFmpeg 2.0.x  http://ffmpeg.org/download.html
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
  * libfreenect 0.2  https://github.com/OpenKinect/libfreenect
@@ -33,13 +34,13 @@ Each child module in turn relies on its corresponding native library being insta
 
 Once everything installed, simply execute
 {{{
-$ mvn install --projects ffmpeg,libdc1394,libfreenect,videoinput,artoolkitplus,distribution
+$ mvn install --projects opencv,ffmpeg,libdc1394,libfreenect,videoinput,artoolkitplus,distribution
 }}}
 in the root directory, by specifying only the desired child modules in the command. Please refer to the comments inside the parent `pom.xml` file for further details.
 
 
 ==Quick Start==
-Simply put all the desired JAR files (`ffmpeg*.jar`, `libdc1394*.jar`, `libfreenect*.jar`, `videoinput*.jar`, and `artoolkitplus*.jar`), in addition to `javacpp.jar`, somewhere in your CLASSPATH, or point your `pom.xml` file to the Maven repository http://maven2.javacpp.googlecode.com/git/, when the binary files are present. Here are some more specific instructions for common cases:
+Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, `libdc1394*.jar`, `libfreenect*.jar`, `videoinput*.jar`, and `artoolkitplus*.jar`), in addition to `javacpp.jar`, somewhere in your CLASSPATH, or point your `pom.xml` file to the Maven repository http://maven2.javacpp.googlecode.com/git/, when the binary files are present. Here are some more specific instructions for common cases:
 
 NetBeans (Java SE 6 or 7):
  # In the Projects window, right-click the Libraries node of your project, and select "Add JAR/Folder...".
@@ -52,8 +53,8 @@ Eclipse (Java SE 6 or 7):
 Eclipse (Android 2.2 or newer):
  # Follow the instructions on this page: http://developer.android.com/training/basics/firstapp/
  # Go to File > New > Folder, select your project as parent folder, type "libs/armeabi" as Folder name, and click Finish.
- # Copy `javacpp.jar`, `ffmpeg.jar`, and `artoolkitplus.jar` into the newly created "libs" folder.
- # Extract all the `*.so` files from `ffmpeg-android-arm.jar` and `artoolkitplus-android-arm.jar` directly into the newly created "libs/armeabi" folder, without creating any of the subdirectories found in the JAR files.
+ # Copy `javacpp.jar`, `opencv.jar`, `ffmpeg.jar`, and `artoolkitplus.jar` into the newly created "libs" folder.
+ # Extract all the `*.so` files from `opencv-android-arm.jar`, `ffmpeg-android-arm.jar` and `artoolkitplus-android-arm.jar` directly into the newly created "libs/armeabi" folder, without creating any of the subdirectories found in the JAR files.
  # Navigate to Project > Properties > Java Build Path > Libraries and click "Add JARs...".
  # Select all of `javacpp.jar`, `ffmpeg.jar`, and `artoolkitplus.jar` from the newly created "libs" folder.
 
@@ -63,7 +64,7 @@ After that, we can access almost transparently the corresponding C/C++ APIs thro
 ==How Can I Help?==
 Contribution of any kind is highly welcome! At the moment, the `Parser` has rather limited capabilities with C++, but I plan to improve it gradually to the point where it can successfully parse large and convoluted C++ header files, such as the ones of OpenCV. Consequently, I am looking for help especially with the two following tasks:
  # Improving the `Parser`
- # Adding new presets as child modules for other C/C++ libraries
+ # Adding new presets as child modules for other C/C++ libraries (Tesseract, LLVM, etc)
 
 Please post your suggestions and patches [http://code.google.com/p/javacpp/issues/ as a new "issue"]. Thank you very much in advance for your contribution!
 
@@ -71,7 +72,7 @@ Please post your suggestions and patches [http://code.google.com/p/javacpp/issue
 ==Changes==
 
  * Fixed JavaCPP properties not getting set by the parent `pom.xml` file
- * Added presets for libfreenect 0.2 (OpenKinect), videoInput 0.200, and ARToolkitPlus 2.3.0
+ * Added presets for the C API of OpenCV 2.4.7, libfreenect 0.2 (OpenKinect), videoInput 0.200, and ARToolkitPlus 2.3.0
 
 ===September 15, 2013 version 0.6===
 Initial release

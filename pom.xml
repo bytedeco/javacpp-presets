@@ -27,6 +27,7 @@
   </developers>
 
   <modules>
+    <module>opencv</module>
     <module>ffmpeg</module>
     <module>libdc1394</module>
     <module>libfreenect</module>

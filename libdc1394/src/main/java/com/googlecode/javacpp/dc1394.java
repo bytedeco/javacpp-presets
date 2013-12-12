@@ -1561,9 +1561,13 @@ public static final int DC1394_STEREO_METHOD_NUM =    (DC1394_STEREO_METHOD_MAX-
 
 // color conversion functions from Bart Nabbe.
 // corrected by Damien: bad coeficients in YUV2RGB
+public static native void YUV2RGB(int y, int u, int v, @ByRef IntPointer r, @ByRef IntPointer g, @ByRef IntPointer b);
+public static native void YUV2RGB(int y, int u, int v, @ByRef IntBuffer r, @ByRef IntBuffer g, @ByRef IntBuffer b);
 public static native void YUV2RGB(int y, int u, int v, @ByRef int[] r, @ByRef int[] g, @ByRef int[] b);
 
 
+public static native void RGB2YUV(int r, int g, int b, @ByRef IntPointer y, @ByRef IntPointer u, @ByRef IntPointer v);
+public static native void RGB2YUV(int r, int g, int b, @ByRef IntBuffer y, @ByRef IntBuffer u, @ByRef IntBuffer v);
 public static native void RGB2YUV(int r, int g, int b, @ByRef int[] y, @ByRef int[] u, @ByRef int[] v);
 
 // #ifdef __cplusplus

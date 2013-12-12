@@ -5154,9 +5154,9 @@ public static native void avcodec_set_dimensions(AVCodecContext s, int width, in
  * @return the length of the string that would have been generated if
  * enough space had been available, excluding the trailing null
  */
-public static native long av_get_codec_tag_string(@Cast("char*") BytePointer buf, long buf_size, @Cast("unsigned int") int codec_tag);
-public static native long av_get_codec_tag_string(@Cast("char*") ByteBuffer buf, long buf_size, @Cast("unsigned int") int codec_tag);
-public static native long av_get_codec_tag_string(@Cast("char*") byte[] buf, long buf_size, @Cast("unsigned int") int codec_tag);
+public static native @Cast("size_t") long av_get_codec_tag_string(@Cast("char*") BytePointer buf, @Cast("size_t") long buf_size, @Cast("unsigned int") int codec_tag);
+public static native @Cast("size_t") long av_get_codec_tag_string(@Cast("char*") ByteBuffer buf, @Cast("size_t") long buf_size, @Cast("unsigned int") int codec_tag);
+public static native @Cast("size_t") long av_get_codec_tag_string(@Cast("char*") byte[] buf, @Cast("size_t") long buf_size, @Cast("unsigned int") int codec_tag);
 
 public static native void avcodec_string(@Cast("char*") BytePointer buf, int buf_size, AVCodecContext enc, int encode);
 public static native void avcodec_string(@Cast("char*") ByteBuffer buf, int buf_size, AVCodecContext enc, int encode);
@@ -5429,9 +5429,9 @@ public static native AVBitStreamFilter av_bitstream_filter_next(AVBitStreamFilte
  *
  * @see av_realloc
  */
-public static native Pointer av_fast_realloc(Pointer ptr, @Cast("unsigned int*") IntPointer size, long min_size);
-public static native Pointer av_fast_realloc(Pointer ptr, @Cast("unsigned int*") IntBuffer size, long min_size);
-public static native Pointer av_fast_realloc(Pointer ptr, @Cast("unsigned int*") int[] size, long min_size);
+public static native Pointer av_fast_realloc(Pointer ptr, @Cast("unsigned int*") IntPointer size, @Cast("size_t") long min_size);
+public static native Pointer av_fast_realloc(Pointer ptr, @Cast("unsigned int*") IntBuffer size, @Cast("size_t") long min_size);
+public static native Pointer av_fast_realloc(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
 
 /**
  * Allocate a buffer, reusing the given one if large enough.
@@ -5445,9 +5445,9 @@ public static native Pointer av_fast_realloc(Pointer ptr, @Cast("unsigned int*")
  * @param min_size minimum size of *ptr buffer after returning, *ptr will be NULL and
  *                 *size 0 if an error occurred.
  */
-public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") IntPointer size, long min_size);
-public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") IntBuffer size, long min_size);
-public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") int[] size, long min_size);
+public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") IntPointer size, @Cast("size_t") long min_size);
+public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") IntBuffer size, @Cast("size_t") long min_size);
+public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
 
 /**
  * Same behaviour av_fast_malloc but the buffer has additional
@@ -5456,17 +5456,17 @@ public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") int
  * In addition the whole buffer will initially and after resizes
  * be 0-initialized so that no uninitialized data will ever appear.
  */
-public static native void av_fast_padded_malloc(Pointer ptr, @Cast("unsigned int*") IntPointer size, long min_size);
-public static native void av_fast_padded_malloc(Pointer ptr, @Cast("unsigned int*") IntBuffer size, long min_size);
-public static native void av_fast_padded_malloc(Pointer ptr, @Cast("unsigned int*") int[] size, long min_size);
+public static native void av_fast_padded_malloc(Pointer ptr, @Cast("unsigned int*") IntPointer size, @Cast("size_t") long min_size);
+public static native void av_fast_padded_malloc(Pointer ptr, @Cast("unsigned int*") IntBuffer size, @Cast("size_t") long min_size);
+public static native void av_fast_padded_malloc(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
 
 /**
  * Same behaviour av_fast_padded_malloc except that buffer will always
  * be 0-initialized after call.
  */
-public static native void av_fast_padded_mallocz(Pointer ptr, @Cast("unsigned int*") IntPointer size, long min_size);
-public static native void av_fast_padded_mallocz(Pointer ptr, @Cast("unsigned int*") IntBuffer size, long min_size);
-public static native void av_fast_padded_mallocz(Pointer ptr, @Cast("unsigned int*") int[] size, long min_size);
+public static native void av_fast_padded_mallocz(Pointer ptr, @Cast("unsigned int*") IntPointer size, @Cast("size_t") long min_size);
+public static native void av_fast_padded_mallocz(Pointer ptr, @Cast("unsigned int*") IntBuffer size, @Cast("size_t") long min_size);
+public static native void av_fast_padded_mallocz(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
 
 /**
  * Encode extradata length to a buffer. Used by xiph codecs.

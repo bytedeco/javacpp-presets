@@ -464,9 +464,9 @@ public static final int AV_ERROR_MAX_STRING_SIZE = 64;
  * @return 0 on success, a negative value if a description for errnum
  * cannot be found
  */
-public static native int av_strerror(int errnum, @Cast("char*") BytePointer errbuf, long errbuf_size);
-public static native int av_strerror(int errnum, @Cast("char*") ByteBuffer errbuf, long errbuf_size);
-public static native int av_strerror(int errnum, @Cast("char*") byte[] errbuf, long errbuf_size);
+public static native int av_strerror(int errnum, @Cast("char*") BytePointer errbuf, @Cast("size_t") long errbuf_size);
+public static native int av_strerror(int errnum, @Cast("char*") ByteBuffer errbuf, @Cast("size_t") long errbuf_size);
+public static native int av_strerror(int errnum, @Cast("char*") byte[] errbuf, @Cast("size_t") long errbuf_size);
 
 /**
  * Fill the provided buffer with a string containing an error string
@@ -478,9 +478,9 @@ public static native int av_strerror(int errnum, @Cast("char*") byte[] errbuf, l
  * @return the buffer in input, filled with the error description
  * @see av_strerror()
  */
-public static native @Cast("char*") BytePointer av_make_error_string(@Cast("char*") BytePointer errbuf, long errbuf_size, int errnum);
-public static native @Cast("char*") ByteBuffer av_make_error_string(@Cast("char*") ByteBuffer errbuf, long errbuf_size, int errnum);
-public static native @Cast("char*") byte[] av_make_error_string(@Cast("char*") byte[] errbuf, long errbuf_size, int errnum);
+public static native @Cast("char*") BytePointer av_make_error_string(@Cast("char*") BytePointer errbuf, @Cast("size_t") long errbuf_size, int errnum);
+public static native @Cast("char*") ByteBuffer av_make_error_string(@Cast("char*") ByteBuffer errbuf, @Cast("size_t") long errbuf_size, int errnum);
+public static native @Cast("char*") byte[] av_make_error_string(@Cast("char*") byte[] errbuf, @Cast("size_t") long errbuf_size, int errnum);
 
 /**
  * Convenience macro, the return value should be used only directly in
@@ -580,7 +580,7 @@ public static native @Cast("char*") byte[] av_make_error_string(@Cast("char*") b
  * be allocated.
  * @see av_mallocz()
  */
-public static native Pointer av_malloc(long size);
+public static native Pointer av_malloc(@Cast("size_t") long size);
 
 /**
  * Helper function to allocate a block of size * nmemb bytes with
@@ -591,7 +591,7 @@ public static native Pointer av_malloc(long size);
  * be allocated.
  * @see av_malloc()
  */
- public static native Pointer av_malloc_array(long nmemb, long size);
+ public static native Pointer av_malloc_array(@Cast("size_t") long nmemb, @Cast("size_t") long size);
 
 /**
  * Allocate or reallocate a block of memory.
@@ -605,7 +605,7 @@ public static native Pointer av_malloc(long size);
  * cannot be reallocated or the function is used to free the memory block.
  * @see av_fast_realloc()
  */
-public static native Pointer av_realloc(Pointer ptr, long size);
+public static native Pointer av_realloc(Pointer ptr, @Cast("size_t") long size);
 
 /**
  * Allocate or reallocate a block of memory.
@@ -615,7 +615,7 @@ public static native Pointer av_realloc(Pointer ptr, long size);
  * - It frees the input block in case of failure, thus avoiding the memory
  *   leak with the classic "buf = realloc(buf); if (!buf) return -1;".
  */
-public static native Pointer av_realloc_f(Pointer ptr, long nelem, long elsize);
+public static native Pointer av_realloc_f(Pointer ptr, @Cast("size_t") long nelem, @Cast("size_t") long elsize);
 
 /**
  * Allocate or reallocate an array.
@@ -628,7 +628,7 @@ public static native Pointer av_realloc_f(Pointer ptr, long nelem, long elsize);
  * @return Pointer to a newly reallocated block or NULL if the block
  * cannot be reallocated or the function is used to free the memory block.
  */
- public static native Pointer av_realloc_array(Pointer ptr, long nmemb, long size);
+ public static native Pointer av_realloc_array(Pointer ptr, @Cast("size_t") long nmemb, @Cast("size_t") long size);
 
 /**
  * Allocate or reallocate an array.
@@ -641,7 +641,7 @@ public static native Pointer av_realloc_f(Pointer ptr, long nelem, long elsize);
  * @param size Size of the single element
  * @return Zero on success, an AVERROR error code on failure.
  */
- public static native int av_reallocp_array(Pointer ptr, long nmemb, long size);
+ public static native int av_reallocp_array(Pointer ptr, @Cast("size_t") long nmemb, @Cast("size_t") long size);
 
 /**
  * Free a memory block which has been allocated with av_malloc(z)() or
@@ -661,7 +661,7 @@ public static native void av_free(Pointer ptr);
  * @return Pointer to the allocated block, NULL if it cannot be allocated.
  * @see av_malloc()
  */
-public static native Pointer av_mallocz(long size);
+public static native Pointer av_mallocz(@Cast("size_t") long size);
 
 /**
  * Allocate a block of nmemb * size bytes with alignment suitable for all
@@ -673,7 +673,7 @@ public static native Pointer av_mallocz(long size);
  * @param size
  * @return Pointer to the allocated block, NULL if it cannot be allocated.
  */
-public static native Pointer av_calloc(long nmemb, long size);
+public static native Pointer av_calloc(@Cast("size_t") long nmemb, @Cast("size_t") long size);
 
 /**
  * Helper function to allocate a block of size * nmemb bytes with
@@ -685,7 +685,7 @@ public static native Pointer av_calloc(long nmemb, long size);
  * @see av_mallocz()
  * @see av_malloc_array()
  */
- public static native Pointer av_mallocz_array(long nmemb, long size);
+ public static native Pointer av_mallocz_array(@Cast("size_t") long nmemb, @Cast("size_t") long size);
 
 /**
  * Duplicate the string s.
@@ -702,7 +702,7 @@ public static native @Cast("char*") ByteBuffer av_strdup(String s);
  * @return Pointer to a newly allocated buffer containing a
  * copy of p or NULL if the buffer cannot be allocated.
  */
-public static native Pointer av_memdup(@Const Pointer p, long size);
+public static native Pointer av_memdup(@Const Pointer p, @Cast("size_t") long size);
 
 /**
  * Free a memory block which has been allocated with av_malloc(z)() or
@@ -759,25 +759,25 @@ public static native void av_dynarray_add(Pointer tab_ptr, int[] nb_ptr, Pointer
  *                  If NULL, the new allocated space is left uninitialized."
  * @see av_dynarray_add()
  */
-public static native Pointer av_dynarray2_add(@Cast("void**") PointerPointer tab_ptr, IntPointer nb_ptr, long elem_size,
+public static native Pointer av_dynarray2_add(@Cast("void**") PointerPointer tab_ptr, IntPointer nb_ptr, @Cast("size_t") long elem_size,
                        @Cast("const uint8_t*") BytePointer elem_data);
-public static native Pointer av_dynarray2_add(@Cast("void**") @ByPtrPtr Pointer tab_ptr, IntPointer nb_ptr, long elem_size,
+public static native Pointer av_dynarray2_add(@Cast("void**") @ByPtrPtr Pointer tab_ptr, IntPointer nb_ptr, @Cast("size_t") long elem_size,
                        @Cast("const uint8_t*") BytePointer elem_data);
-public static native Pointer av_dynarray2_add(@Cast("void**") @ByPtrPtr Pointer tab_ptr, IntBuffer nb_ptr, long elem_size,
+public static native Pointer av_dynarray2_add(@Cast("void**") @ByPtrPtr Pointer tab_ptr, IntBuffer nb_ptr, @Cast("size_t") long elem_size,
                        @Cast("const uint8_t*") ByteBuffer elem_data);
-public static native Pointer av_dynarray2_add(@Cast("void**") @ByPtrPtr Pointer tab_ptr, int[] nb_ptr, long elem_size,
+public static native Pointer av_dynarray2_add(@Cast("void**") @ByPtrPtr Pointer tab_ptr, int[] nb_ptr, @Cast("size_t") long elem_size,
                        @Cast("const uint8_t*") byte[] elem_data);
 
 /**
  * Multiply two size_t values checking for overflow.
  * @return  0 if success, AVERROR(EINVAL) if overflow.
  */
-public static native int av_size_mult(long a, long b, SizeTPointer r);
+public static native int av_size_mult(@Cast("size_t") long a, @Cast("size_t") long b, @Cast("size_t*") SizeTPointer r);
 
 /**
  * Set the maximum size that may me allocated in one block.
  */
-public static native void av_max_alloc(long max);
+public static native void av_max_alloc(@Cast("size_t") long max);
 
 /**
  * @brief deliberately overlapping memcpy implementation

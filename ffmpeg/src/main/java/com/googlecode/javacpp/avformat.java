@@ -1078,7 +1078,7 @@ public static final int AVFMT_NOGENSEARCH =   0x4000;
 public static final int AVFMT_NO_BYTE_SEEK =  0x8000;
 /** Format allows flushing. If not set, the muxer will not receive a NULL packet in the write_packet function. */
 public static final int AVFMT_ALLOW_FLUSH =  0x10000;
-// #if LIBAVFORMAT_VERSION_MAJOR <= 54 //we try to be compatible to the ABIs of ffmpeg and major forks
+// #if LIBAVFORMAT_VERSION_MAJOR <= 54
 // #else
 public static final int AVFMT_TS_NONSTRICT = 0x20000;
 /** Format does not require strictly

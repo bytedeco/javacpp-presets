@@ -28,13 +28,11 @@ import com.googlecode.javacpp.annotation.Properties;
  *
  * @author Samuel Audet
  */
-@Properties(target="com.googlecode.javacpp.dc1394", value={
-    @Platform(include={"<dc1394/dc1394.h>", "<dc1394/types.h>", "<dc1394/log.h>", "<dc1394/camera.h>",
-        "<dc1394/control.h>", "<dc1394/capture.h>", "<dc1394/conversions.h>", "<dc1394/format7.h>",
-        "<dc1394/iso.h>", "<dc1394/register.h>", "<dc1394/video.h>", "<dc1394/utils.h>"}, link="dc1394@.22") })
-public class dc1394 implements Parser.InfoMapper {
+@Properties(inherit=opencv_highgui.class, target="com.googlecode.javacpp.opencv_objdetect", value={
+    @Platform(include="<opencv2/objdetect/objdetect.hpp>", link="opencv_objdetect@.2.4"),
+    @Platform(value="windows", link="opencv_objdetect247") })
+public class opencv_objdetect implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        infoMap.put(new Parser.Info("restrict").genericArgs())
-               .put(new Parser.Info("YUV2RGB", "RGB2YUV").genericArgs("void", "int", "int", "int", "int&", "int&", "int&"));
+        new opencv_highgui().map(infoMap);
     }
 }
