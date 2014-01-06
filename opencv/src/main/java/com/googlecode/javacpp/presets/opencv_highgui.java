@@ -30,13 +30,13 @@ import com.googlecode.javacpp.annotation.Properties;
  */
 @Properties(inherit=opencv_imgproc.class, target="com.googlecode.javacpp.opencv_highgui", value={
     @Platform(include="<opencv2/highgui/highgui_c.h>", link="opencv_highgui@.2.4"),
-    @Platform(value="windows", link="opencv_highgui247", preload={"opencv_ffmpeg247", "opencv_ffmpeg247_64"}) })
+    @Platform(value="windows", link="opencv_highgui248", preload={"opencv_ffmpeg248", "opencv_ffmpeg248_64"}) })
 public class opencv_highgui implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
         new opencv_imgproc().map(infoMap);
         infoMap.put(new Parser.Info("cvCaptureFromFile", "cvCaptureFromAVI").genericArgs("CvCapture*", "const char*"))
                .put(new Parser.Info("cvCaptureFromCAM").genericArgs("CvCapture*", "int"))
-               .put(new Parser.Info("cvCreateAVIWriter").genericArgs("CvVideoWriter*", "cosnt char*", "int", "double", "CvSize", "int"))
+               .put(new Parser.Info("cvCreateAVIWriter").genericArgs("CvVideoWriter*", "const char*", "int", "double", "CvSize", "int"))
                .put(new Parser.Info("cvWriteToAVI").genericArgs("int", "CvVideoWriter*", "IplImage*"))
                .put(new Parser.Info("cvvInitSystem").genericArgs("int", "int", "char**"))
                .put(new Parser.Info("cvvNamedWindow").genericArgs("void", "const char*", "int"))

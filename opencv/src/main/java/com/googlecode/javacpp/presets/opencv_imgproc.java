@@ -30,7 +30,7 @@ import com.googlecode.javacpp.annotation.Properties;
  */
 @Properties(inherit=opencv_core.class, target="com.googlecode.javacpp.opencv_imgproc", value={
     @Platform(include={"<opencv2/imgproc/types_c.h>", "<opencv2/imgproc/imgproc_c.h>"}, link="opencv_imgproc@.2.4"),
-    @Platform(value="windows", link="opencv_imgproc247") })
+    @Platform(value="windows", link="opencv_imgproc248") })
 public class opencv_imgproc implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
         new opencv_core().map(infoMap);

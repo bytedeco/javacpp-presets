@@ -30,7 +30,7 @@ import com.googlecode.javacpp.annotation.Properties;
  */
 @Properties(inherit=opencv_highgui.class, target="com.googlecode.javacpp.opencv_objdetect", value={
     @Platform(include="<opencv2/objdetect/objdetect.hpp>", link="opencv_objdetect@.2.4"),
-    @Platform(value="windows", link="opencv_objdetect247") })
+    @Platform(value="windows", link="opencv_objdetect248") })
 public class opencv_objdetect implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
         new opencv_highgui().map(infoMap);

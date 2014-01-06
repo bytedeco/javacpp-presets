@@ -6,7 +6,7 @@
   <parent>
     <groupId>com.googlecode.javacpp.presets</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>0.6</version>
+    <version>0.7</version>
   </parent>
 
   <artifactId>artoolkitplus</artifactId>

@@ -30,11 +30,11 @@ import com.googlecode.javacpp.annotation.Properties;
  */
 @Properties(inherit={opencv_calib3d.class, opencv_video.class}, target="com.googlecode.javacpp.opencv_legacy", value={
     @Platform(include={"<opencv2/legacy/compat.hpp>", "<opencv2/legacy/legacy.hpp>"}, link="opencv_legacy@.2.4"),
-    @Platform(value="windows", link="opencv_legacy247") })
+    @Platform(value="windows", link="opencv_legacy248") })
 public class opencv_legacy implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
         new opencv_calib3d().map(infoMap);
-        infoMap.put(new Parser.Info("CvLCMEdge", "CvLCMNode", "CvBGStatModel").opaque(false))
+        infoMap.put(new Parser.Info("CvLCMEdge", "CvLCMNode", "CvBGStatModel").complete(true))
                .put(new Parser.Info("cvCreateImageData", "cvReleaseImageData", "cvmAlloc", "cvmFree", "cvmAllocArray", "cvmFreeArray").genericArgs("void", "CvArr*"))
                .put(new Parser.Info("cvSetImageData").genericArgs("void", "CvArr*", "void*", "int"))
                .put(new Parser.Info("cvGetImageRawData").genericArgs("void", "CvArr*", "uchar**", "int*", "CvSize*"))
@@ -60,6 +60,6 @@ public class opencv_legacy implements Parser.InfoMapper {
                .put(new Parser.Info("CV_IS_SET_ELEM_EXISTS").genericArgs("bool", "CvSetElem*"))
                .put(new Parser.Info("cvMake2DPoints", "cvMake3DPoints", "cvConvertPointsHomogenious").genericArgs("void", "CvMat*", "CvMat*"))
                .put(new Parser.Info("cvWarpPerspectiveQMatrix").genericArgs("CvMat*", "CvPoint2D32f*", "CvPoint2D32f*", "CvMat*"))
-               .put(new Parser.Info("CV_STEREO_GC_OCCLUDED").complex(true));
+               .put(new Parser.Info("CV_STEREO_GC_OCCLUDED").translate(false));
     }
 }

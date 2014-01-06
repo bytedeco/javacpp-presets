@@ -34,7 +34,7 @@ import com.googlecode.javacpp.annotation.Properties;
 public class avcodec implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
         new avutil().map(infoMap);
-        infoMap.put(new Parser.Info("AVSubtitle").opaque(false))
+        infoMap.put(new Parser.Info("AVSubtitle").complete(true))
                .put(new Parser.Info("FF_API_ALLOC_CONTEXT", "FF_API_AVCODEC_OPEN", "!FF_API_LOWRES").define(false));
         infoMap.get("AVPanScan").clear();
         infoMap.get("AVCodecContext").clear();

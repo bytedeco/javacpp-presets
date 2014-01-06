@@ -1157,7 +1157,7 @@ public static native double cvArcLength( @Const Pointer curve,
 public static native double cvContourPerimeter( @Const Pointer contour );
 
 
-/* Calculates contour boundning rectangle (update=1) or
+/* Calculates contour bounding rectangle (update=1) or
    just retrieves pre-calculated rectangle (update=0) */
 public static native @ByVal CvRect cvBoundingRect( CvArr points, int update/*CV_DEFAULT(0)*/ );
 

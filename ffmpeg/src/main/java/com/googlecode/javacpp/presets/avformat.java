@@ -34,8 +34,8 @@ import com.googlecode.javacpp.annotation.Properties;
 public class avformat implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
         new avcodec().map(infoMap);
-        infoMap.put(new Parser.Info("AVFormatContext").opaque(false))
-               .put(new Parser.Info("AVPROBE_SCORE_RETRY").complex(true))
+        infoMap.put(new Parser.Info("AVFormatContext").complete(true))
+               .put(new Parser.Info("AVPROBE_SCORE_RETRY").translate(false))
                .put(new Parser.Info("FF_API_PKT_DUMP", "LIBAVFORMAT_VERSION_MAJOR <= 54").define(false));
     }
 }

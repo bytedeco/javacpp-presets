@@ -1175,6 +1175,23 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
     public TrackerMultiMarker() { }
     public TrackerMultiMarker(Pointer p) { super(p); }
 
+    /**
+     * These parameters control the way the toolkit warps a found
+     * marker to a perfect square. The square has size
+     * pattWidth * pattHeight, the projected
+     * square in the image is subsampled at a min of
+     * pattWidth/pattHeight and a max of pattSamples
+     * steps in both x and y direction
+     *  @param imWidth width of the source image in px
+     *  @param imHeight height of the source image in px
+     *  @param maxImagePatterns describes the maximum number of patterns that can be analyzed in a camera image.
+     *  @param pattWidth describes the pattern image width (must be 6 for binary markers)
+     *  @param pattHeight describes the pattern image height (must be 6 for binary markers)
+     *  @param pattSamples describes the maximum resolution at which a pattern is sampled from the camera image
+     *  (6 by default, must a a multiple of pattWidth and pattHeight).
+     *  @param maxLoadPatterns describes the maximum number of pattern files that can be loaded.
+     *  Reduce maxLoadPatterns and maxImagePatterns to reduce memory footprint.
+     */
     public TrackerMultiMarker(int imWidth, int imHeight, int maxImagePatterns/*=8*/, int pattWidth/*=6*/, int pattHeight/*=6*/, int pattSamples/*=6*/,
                 int maxLoadPatterns/*=0*/) { allocate(imWidth, imHeight, maxImagePatterns, pattWidth, pattHeight, pattSamples, maxLoadPatterns); }
     private native void allocate(int imWidth, int imHeight, int maxImagePatterns/*=8*/, int pattWidth/*=6*/, int pattHeight/*=6*/, int pattSamples/*=6*/,
@@ -1288,6 +1305,23 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
     public TrackerSingleMarker() { }
     public TrackerSingleMarker(Pointer p) { super(p); }
 
+    /**
+     * These parameters control the way the toolkit warps a found
+     * marker to a perfect square. The square has size
+     * pattWidth * pattHeight, the projected
+     * square in the image is subsampled at a min of
+     * pattWidth/pattHeight and a max of pattSamples
+     * steps in both x and y direction
+     *  @param imWidth width of the source image in px
+     *  @param imHeight height of the source image in px
+     *  @param maxImagePatterns describes the maximum number of patterns that can be analyzed in a camera image.
+     *  @param pattWidth describes the pattern image width (must be 6 for binary markers)
+     *  @param pattHeight describes the pattern image height (must be 6 for binary markers)
+     *  @param pattSamples describes the maximum resolution at which a pattern is sampled from the camera image
+     *  (6 by default, must a a multiple of pattWidth and pattHeight).
+     *  @param maxLoadPatterns describes the maximum number of pattern files that can be loaded.
+     *  Reduce maxLoadPatterns and maxImagePatterns to reduce memory footprint.
+     */
     public TrackerSingleMarker(int imWidth, int imHeight, int maxImagePatterns/*=8*/, int pattWidth/*=6*/, int pattHeight/*=6*/, int pattSamples/*=6*/,
                 int maxLoadPatterns/*=0*/) { allocate(imWidth, imHeight, maxImagePatterns, pattWidth, pattHeight, pattSamples, maxLoadPatterns); }
     private native void allocate(int imWidth, int imHeight, int maxImagePatterns/*=8*/, int pattWidth/*=6*/, int pattHeight/*=6*/, int pattSamples/*=6*/,

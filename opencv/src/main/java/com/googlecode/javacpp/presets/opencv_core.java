@@ -31,7 +31,7 @@ import com.googlecode.javacpp.annotation.Properties;
 @Properties(target="com.googlecode.javacpp.opencv_core", value={
     @Platform(include={"<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>"}, link="opencv_core@.2.4", preload="tbb"),
     @Platform(value="windows", define="_WIN32_WINNT 0x0502", includepath="C:/opencv/build/include/",
-        link="opencv_core247", preload={"msvcr100", "msvcp100"}),
+        link="opencv_core248", preload={"msvcr100", "msvcp100"}),
     @Platform(value="windows-x86",    linkpath="C:/opencv/build/x86/vc10/lib/", preloadpath="C:/opencv/build/x86/vc10/bin/"),
     @Platform(value="windows-x86_64", linkpath="C:/opencv/build/x64/vc10/lib/", preloadpath="C:/opencv/build/x64/vc10/bin/") })
 public class opencv_core implements Parser.InfoMapper {
@@ -41,9 +41,9 @@ public class opencv_core implements Parser.InfoMapper {
                                     "defined __INTEL_COMPILER", "defined WIN32 || defined _WIN32").define(false))
                .put(new Parser.Info("CV_ENABLE_UNROLLED", "CV_CDECL", "CV_STDCALL", "CV_EXTERN_C").genericArgs())
                .put(new Parser.Info("CV_DEFAULT", "CV_INLINE", "CV_EXPORTS").genericArgs().annotations())
-               .put(new Parser.Info("CVAPI").genericArgs("rettype").text("rettype"))
+               .put(new Parser.Info("CVAPI").macroParams("rettype").text("rettype"))
                .put(new Parser.Info("CV_EXPORTS_W", "CV_EXPORTS_W_SIMPLE", "CV_EXPORTS_W_MAP", "CV_WRAP").genericArgs().annotations())
-               .put(new Parser.Info("CvSet", "CvTypeInfo").opaque(false))
+               .put(new Parser.Info("CvSet", "CvTypeInfo").complete(true))
                .put(new Parser.Info("CV_MAT_DEPTH", "CV_8UC", "CV_8SC", "CV_16UC", "CV_16SC", "CV_32SC", "CV_32FC", "CV_64FC").genericArgs("int", "int"))
                .put(new Parser.Info("CV_MAKETYPE", "CV_MAKE_TYPE").genericArgs("int", "int", "int"))
                .put(new Parser.Info("CV_IS_MAT_CONT", "CV_IS_CONT_MAT").genericArgs("int", "int"))
@@ -53,8 +53,8 @@ public class opencv_core implements Parser.InfoMapper {
                                     "CV_16SC1", "CV_16SC2", "CV_16SC3", "CV_16SC4",
                                     "CV_32SC1", "CV_32SC2", "CV_32SC3", "CV_32SC4",
                                     "CV_32FC1", "CV_32FC2", "CV_32FC3", "CV_32FC4",
-                                    "CV_64FC1", "CV_64FC2", "CV_64FC3", "CV_64FC4").genericArgs("int"))
-               .put(new Parser.Info("CV_WHOLE_ARR", "CV_WHOLE_SEQ").genericArgs("CvSlice").complex(false))
+                                    "CV_64FC1", "CV_64FC2", "CV_64FC3", "CV_64FC4").genericArgs("int").translate(true))
+               .put(new Parser.Info("CV_WHOLE_ARR", "CV_WHOLE_SEQ").genericArgs("CvSlice").translate(true))
                .put(new Parser.Info("_IplROI").pointerTypes("IplROI"))
                .put(new Parser.Info("_IplImage").pointerTypes("IplImage"))
                .put(new Parser.Info("_IplTileInfo").pointerTypes("IplTileInfo"))

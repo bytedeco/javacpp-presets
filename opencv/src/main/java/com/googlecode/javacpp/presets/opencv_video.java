@@ -30,7 +30,7 @@ import com.googlecode.javacpp.annotation.Properties;
  */
 @Properties(inherit=opencv_imgproc.class, target="com.googlecode.javacpp.opencv_video", value={
     @Platform(include="<opencv2/video/tracking.hpp>", link="opencv_video@.2.4"),
-    @Platform(value="windows", link="opencv_video247") })
+    @Platform(value="windows", link="opencv_video248") })
 public class opencv_video implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
         new opencv_imgproc().map(infoMap);

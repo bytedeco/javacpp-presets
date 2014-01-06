@@ -21,12 +21,12 @@ The source code can be found at this repository:
 
 To rebuild the source code, please note that the project files were created for:
  * Maven 2 or 3  http://maven.apache.org/download.html
- * JavaCPP 0.6  http://code.google.com/p/javacpp/
+ * JavaCPP 0.7  http://code.google.com/p/javacpp/
  * msinttypes  http://code.google.com/p/msinttypes/ (under Windows for the Microsoft C/C++ Compiler)
 
 Each child module in turn relies on its corresponding native library being installed in the directory specified in its `.java` configuration file or, by default, on the native system in `/usr/local/`, or `C:/MinGW/local/` (under Windows), or `${platform.root}/../` (for Android):
- * OpenCV 2.4.7  http://opencv.org/downloads.html
- * FFmpeg 2.0.x  http://ffmpeg.org/download.html
+ * OpenCV 2.4.8  http://opencv.org/downloads.html
+ * FFmpeg 2.1.x  http://ffmpeg.org/download.html
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
  * libfreenect 0.2  https://github.com/OpenKinect/libfreenect
  * videoInput 0.200  https://github.com/ofTheo/videoInput/tree/update2013
@@ -71,15 +71,16 @@ Please post your suggestions and patches [http://code.google.com/p/javacpp/issue
 
 ==Changes==
 
+===January 6, 2014 version 0.7===
  * Fixed JavaCPP properties not getting set by the parent `pom.xml` file
- * Added presets for the C API of OpenCV 2.4.7, libfreenect 0.2 (OpenKinect), videoInput 0.200, and ARToolkitPlus 2.3.0
+ * Added presets for the C API of OpenCV 2.4.8, FFmpeg 2.1.x, libfreenect 0.2 (OpenKinect), videoInput 0.200, and ARToolkitPlus 2.3.0
 
 ===September 15, 2013 version 0.6===
 Initial release
 
 
 ----
-Copyright (C) 2013 Samuel Audet <samuel.audet@gmail.com>
+Copyright (C) 2013-2014 Samuel Audet <samuel.audet@gmail.com>
 Project site: http://code.google.com/p/javacpp/
 
 Licensed under the GNU General Public License version 2 (GPLv2) with Classpath exception.

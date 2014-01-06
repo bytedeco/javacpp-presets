@@ -38,14 +38,13 @@ import com.googlecode.javacpp.annotation.Properties;
     @Platform(value="windows", includepath={"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, preload="avutil-52") })
 public class avutil implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        infoMap.put(new Parser.Info("AV_NOPTS_VALUE").genericArgs("int64_t").complex(true))
+        infoMap.put(new Parser.Info("AV_NOPTS_VALUE").genericArgs("int64_t").translate(false))
                .put(new Parser.Info("AV_TIME_BASE_Q", "PixelFormat", "CodecID").genericArgs())
                .put(new Parser.Info("av_const").annotations("@Const"))
                .put(new Parser.Info("av_malloc_attrib", "av_alloc_size", "av_always_inline").genericArgs().annotations())
                .put(new Parser.Info("attribute_deprecated").annotations("@Deprecated"))
-               .put(new Parser.Info("AVOptionRanges").opaque(false))
+               .put(new Parser.Info("AVOptionRanges").complete(true))
                .put(new Parser.Info("AVPanScan", "AVCodecContext").pointerTypes("Pointer").cast(true))
-               .put(new Parser.Info("AV_PIX_FMT_ABI_GIT_MASTER", "AV_HAVE_INCOMPATIBLE_LIBAV_ABI").define(false))
-               .put(new Parser.Info("ff_get_cpu_flags_arm", "ff_get_cpu_flags_ppc", "ff_get_cpu_flags_x86").javaNames());
+               .put(new Parser.Info("AV_PIX_FMT_ABI_GIT_MASTER", "AV_HAVE_INCOMPATIBLE_LIBAV_ABI").define(false));
     }
 }
