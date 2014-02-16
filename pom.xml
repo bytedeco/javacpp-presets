@@ -5,7 +5,7 @@
 
   <groupId>com.googlecode.javacpp.presets</groupId>
   <artifactId>javacpp-presets</artifactId>
-  <version>0.7</version>
+  <version>0.8-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>JavaCPP Presets</name>
@@ -49,7 +49,7 @@
     <dependency>
       <groupId>com.googlecode.javacpp</groupId>
       <artifactId>javacpp</artifactId>
-      <version>0.7</version>
+      <version>0.8-SNAPSHOT</version>
     </dependency>
   </dependencies>
 
@@ -87,7 +87,7 @@
       <plugin>
         <groupId>com.googlecode.javacpp</groupId>
         <artifactId>javacpp</artifactId>
-        <version>0.7</version>
+        <version>0.8-SNAPSHOT</version>
         <configuration>
           <properties>${platform.name}</properties>
           <propertyKeysAndValues>

@@ -79,6 +79,11 @@ public static final int
 @Namespace("ARToolKitPlus") @NoOffset public static class CornerPoint extends Pointer {
     static { Loader.load(); }
     public CornerPoint(Pointer p) { super(p); }
+    public CornerPoint(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public CornerPoint position(int position) {
+        return (CornerPoint)super.position(position);
+    }
 
     public CornerPoint() { allocate(); }
     private native void allocate();
@@ -580,6 +585,11 @@ public static final int P_MAX =       500;
 @Namespace("ARToolKitPlus") @NoOffset public static class Camera extends Pointer {
     static { Loader.load(); }
     public Camera(Pointer p) { super(p); }
+    public Camera(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public Camera position(int position) {
+        return (Camera)super.position(position);
+    }
 
     public Camera() { allocate(); }
     private native void allocate();
@@ -676,6 +686,11 @@ public static final int BCH_MAX_SQ =   8;  // SQRT(MAX_LUT) -- (?)
 @Namespace("ARToolKitPlus") @NoOffset public static class BCH extends Pointer {
     static { Loader.load(); }
     public BCH(Pointer p) { super(p); }
+    public BCH(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public BCH position(int position) {
+        return (BCH)super.position(position);
+    }
 
     public BCH() { allocate(); }
     private native void allocate();
@@ -909,24 +924,24 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
      */
     public native void setLoadUndistLUT(@Cast("bool") boolean nSet);
 
-    /// marker detection using tracking history
+    /** marker detection using tracking history */
     public native int arDetectMarker(@Cast("const uint8_t*") BytePointer dataPtr, int thresh, @Cast("ARToolKitPlus::ARMarkerInfo**") PointerPointer marker_info, IntPointer marker_num);
     public native int arDetectMarker(@Cast("const uint8_t*") BytePointer dataPtr, int thresh, @ByPtrPtr ARMarkerInfo marker_info, IntPointer marker_num);
     public native int arDetectMarker(@Cast("const uint8_t*") ByteBuffer dataPtr, int thresh, @ByPtrPtr ARMarkerInfo marker_info, IntBuffer marker_num);
     public native int arDetectMarker(@Cast("const uint8_t*") byte[] dataPtr, int thresh, @ByPtrPtr ARMarkerInfo marker_info, int[] marker_num);
 
-    /// marker detection without using tracking history
+    /** marker detection without using tracking history */
     public native int arDetectMarkerLite(@Cast("const uint8_t*") BytePointer dataPtr, int thresh, @Cast("ARToolKitPlus::ARMarkerInfo**") PointerPointer marker_info, IntPointer marker_num);
     public native int arDetectMarkerLite(@Cast("const uint8_t*") BytePointer dataPtr, int thresh, @ByPtrPtr ARMarkerInfo marker_info, IntPointer marker_num);
     public native int arDetectMarkerLite(@Cast("const uint8_t*") ByteBuffer dataPtr, int thresh, @ByPtrPtr ARMarkerInfo marker_info, IntBuffer marker_num);
     public native int arDetectMarkerLite(@Cast("const uint8_t*") byte[] dataPtr, int thresh, @ByPtrPtr ARMarkerInfo marker_info, int[] marker_num);
 
-    /// calculates the transformation matrix between camera and the given multi-marker config
+    /** calculates the transformation matrix between camera and the given multi-marker config */
     public native @Cast("ARFloat") float arMultiGetTransMat(ARMarkerInfo marker_info, int marker_num, ARMultiMarkerInfoT config);
 
     public native @Cast("ARFloat") float arMultiGetTransMatHull(ARMarkerInfo marker_info, int marker_num, ARMultiMarkerInfoT config);
 
-    /// calculates the transformation matrix between camera and the given marker
+    /** calculates the transformation matrix between camera and the given marker */
     public native @Cast("ARFloat") float arGetTransMat(ARMarkerInfo marker_info, @Cast("ARFloat*") FloatPointer center, @Cast("ARFloat") float width, @Cast("ARFloat(*)[4]") FloatPointer conv);
     public native @Cast("ARFloat") float arGetTransMat(ARMarkerInfo marker_info, @Cast("ARFloat*") FloatBuffer center, @Cast("ARFloat") float width, @Cast("ARFloat(*)[4]") FloatBuffer conv);
     public native @Cast("ARFloat") float arGetTransMat(ARMarkerInfo marker_info, @Cast("ARFloat*") float[] center, @Cast("ARFloat") float width, @Cast("ARFloat(*)[4]") float[] conv);
@@ -944,12 +959,12 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
     public native @Cast("ARFloat") float rppGetTransMat(ARMarkerInfo marker_info, @Cast("ARFloat*") FloatBuffer center, @Cast("ARFloat") float width, @Cast("ARFloat(*)[4]") FloatBuffer conv);
     public native @Cast("ARFloat") float rppGetTransMat(ARMarkerInfo marker_info, @Cast("ARFloat*") float[] center, @Cast("ARFloat") float width, @Cast("ARFloat(*)[4]") float[] conv);
 
-    /// loads a pattern from a file
+    /** loads a pattern from a file */
     public native int arLoadPatt(@Cast("char*") BytePointer filename);
     public native int arLoadPatt(@Cast("char*") ByteBuffer filename);
     public native int arLoadPatt(@Cast("char*") byte[] filename);
 
-    /// frees a pattern from memory
+    /** frees a pattern from memory */
     public native int arFreePatt(int patno);
 
     public native int arMultiFreeConfig(ARMultiMarkerInfoT config);
@@ -1001,7 +1016,7 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
     public static native @Cast("bool") boolean calcCameraMatrix(@Cast("const char*") BytePointer nCamParamFile, @Cast("ARFloat") float nNear, @Cast("ARFloat") float nFar, @Cast("ARFloat*") FloatBuffer nMatrix);
     public static native @Cast("bool") boolean calcCameraMatrix(String nCamParamFile, @Cast("ARFloat") float nNear, @Cast("ARFloat") float nFar, @Cast("ARFloat*") float[] nMatrix);
 
-    /// Changes the resolution of the camera after the camerafile was already loaded
+    /** Changes the resolution of the camera after the camerafile was already loaded */
     public native void changeCameraSize(int nWidth, int nHeight);
 
     /**
@@ -1041,16 +1056,16 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
      */
     public native void setBorderWidth(@Cast("ARFloat") float nFraction);
 
-    /// Sets the threshold value that is used for black/white conversion
+    /** Sets the threshold value that is used for black/white conversion */
     public native void setThreshold(int nValue);
 
-    /// Returns the current threshold value.
+    /** Returns the current threshold value. */
     public native int getThreshold();
 
-    /// Turns automatic threshold calculation on/off
+    /** Turns automatic threshold calculation on/off */
     public native void activateAutoThreshold(@Cast("bool") boolean nEnable);
 
-    /// Returns true if automatic threshold detection is enabled
+    /** Returns true if automatic threshold detection is enabled */
     public native @Cast("bool") boolean isAutoThresholdActivated();
 
     /**
@@ -1073,16 +1088,16 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
      */
     public native void setImageProcessingMode(@Cast("ARToolKitPlus::IMAGE_PROC_MODE") int nMode);
 
-    /// Returns an opengl-style modelview transformation matrix
+    /** Returns an opengl-style modelview transformation matrix */
     public native @Cast("const ARFloat*") FloatPointer getModelViewMatrix();
 
-    /// Returns an opengl-style projection transformation matrix
+    /** Returns an opengl-style projection transformation matrix */
     public native @Cast("const ARFloat*") FloatPointer getProjectionMatrix();
 
-    /// Returns the compiled-in pixel format
+    /** Returns the compiled-in pixel format */
     public native @Cast("ARToolKitPlus::PIXEL_FORMAT") int getPixelFormat();
 
-    /// Returns the numbber of bits per pixel for the compiled-in pixel format
+    /** Returns the numbber of bits per pixel for the compiled-in pixel format */
     public native int getBitsPerPixel();
 
     /**
@@ -1092,16 +1107,16 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
      */
     public native int getNumLoadablePatterns();
 
-    /// Returns the current camera
+    /** Returns the current camera */
     public native Camera getCamera();
 
-    /// Sets a new camera without specifying new near and far clip values
+    /** Sets a new camera without specifying new near and far clip values */
     public native void setCamera(Camera nCamera);
 
-    /// Sets a new camera including specifying new near and far clip values
+    /** Sets a new camera including specifying new near and far clip values */
     public native void setCamera(Camera nCamera, @Cast("ARFloat") float nNearClip, @Cast("ARFloat") float nFarClip);
 
-    /// Calculates the OpenGL transformation matrix for a specific marker info
+    /** Calculates the OpenGL transformation matrix for a specific marker info */
     public native @Cast("ARFloat") float calcOpenGLMatrixFromMarker(ARMarkerInfo nMarkerInfo, @Cast("ARFloat*") FloatPointer nPatternCenter,
                 @Cast("ARFloat") float nPatternSize, @Cast("ARFloat*") FloatPointer nOpenGLMatrix);
     public native @Cast("ARFloat") float calcOpenGLMatrixFromMarker(ARMarkerInfo nMarkerInfo, @Cast("ARFloat*") FloatBuffer nPatternCenter,
@@ -1109,7 +1124,7 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
     public native @Cast("ARFloat") float calcOpenGLMatrixFromMarker(ARMarkerInfo nMarkerInfo, @Cast("ARFloat*") float[] nPatternCenter,
                 @Cast("ARFloat") float nPatternSize, @Cast("ARFloat*") float[] nOpenGLMatrix);
 
-    /// Calls the pose estimator set with setPoseEstimator() for single marker tracking
+    /** Calls the pose estimator set with setPoseEstimator() for single marker tracking */
     public native @Cast("ARFloat") float executeSingleMarkerPoseEstimator(ARMarkerInfo marker_info, @Cast("ARFloat*") FloatPointer center, @Cast("ARFloat") float width,
                 @Cast("ARFloat(*)[4]") FloatPointer conv);
     public native @Cast("ARFloat") float executeSingleMarkerPoseEstimator(ARMarkerInfo marker_info, @Cast("ARFloat*") FloatBuffer center, @Cast("ARFloat") float width,
@@ -1117,7 +1132,7 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
     public native @Cast("ARFloat") float executeSingleMarkerPoseEstimator(ARMarkerInfo marker_info, @Cast("ARFloat*") float[] center, @Cast("ARFloat") float width,
                 @Cast("ARFloat(*)[4]") float[] conv);
 
-    /// Calls the pose estimator set with setPoseEstimator() for multi marker tracking
+    /** Calls the pose estimator set with setPoseEstimator() for multi marker tracking */
     public native @Cast("ARFloat") float executeMultiMarkerPoseEstimator(ARMarkerInfo marker_info, int marker_num,
                 ARMultiMarkerInfoT config);
 
@@ -1125,7 +1140,7 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
      * Returns a vector with screen coordinates of all corners
      * that were used for marker tracking for the last image
      */
-    public native @Const @ByRef @StdVector CornerPoint getTrackedCorners();
+    public native @StdVector CornerPoint getTrackedCorners();
 }
 
  // namespace ARToolKitPlus
@@ -1219,7 +1234,7 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
      */
     public native int getNumDetectedMarkers();
 
-    /// Enables usage of arDetectMarkerLite. Otherwise arDetectMarker is used
+    /** Enables usage of arDetectMarkerLite. Otherwise arDetectMarker is used
     /**
      * Enables usage of arDetectMarkerLite. Otherwise arDetectMarker is used
      * In general arDetectMarker is more powerful since it keeps history about markers.
@@ -1346,9 +1361,9 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
      * pass the image as RGBX (32-bits)
      * @return detected markers in image
      */
-    public native @StdVector int[] calc(@Cast("const uint8_t*") BytePointer nImage, @Cast("ARToolKitPlus::ARMarkerInfo**") PointerPointer nMarker_info/*=NULL*/, IntPointer nNumMarkers/*=NULL*/);
-    public native @StdVector int[] calc(@Cast("const uint8_t*") BytePointer nImage, @ByPtrPtr ARMarkerInfo nMarker_info/*=NULL*/, IntPointer nNumMarkers/*=NULL*/);
-    public native @StdVector int[] calc(@Cast("const uint8_t*") ByteBuffer nImage, @ByPtrPtr ARMarkerInfo nMarker_info/*=NULL*/, IntBuffer nNumMarkers/*=NULL*/);
+    public native @StdVector IntPointer calc(@Cast("const uint8_t*") BytePointer nImage, @Cast("ARToolKitPlus::ARMarkerInfo**") PointerPointer nMarker_info/*=NULL*/, IntPointer nNumMarkers/*=NULL*/);
+    public native @StdVector IntPointer calc(@Cast("const uint8_t*") BytePointer nImage, @ByPtrPtr ARMarkerInfo nMarker_info/*=NULL*/, IntPointer nNumMarkers/*=NULL*/);
+    public native @StdVector IntBuffer calc(@Cast("const uint8_t*") ByteBuffer nImage, @ByPtrPtr ARMarkerInfo nMarker_info/*=NULL*/, IntBuffer nNumMarkers/*=NULL*/);
     public native @StdVector int[] calc(@Cast("const uint8_t*") byte[] nImage, @ByPtrPtr ARMarkerInfo nMarker_info/*=NULL*/, int[] nNumMarkers/*=NULL*/);
 
     /**

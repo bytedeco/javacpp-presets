@@ -34,6 +34,6 @@ import com.googlecode.javacpp.annotation.Properties;
 public class opencv_video implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
         new opencv_imgproc().map(infoMap);
-        infoMap.put(new Parser.Info("cvKalmanUpdateByTime", "cvKalmanUpdateByMeasurement").genericArgs("const CvMat*", "CvKalman*", "CvMat*"));
+        infoMap.put(new Parser.Info("cvKalmanUpdateByTime", "cvKalmanUpdateByMeasurement").cppTypes("const CvMat*", "CvKalman*", "CvMat*"));
     }
 }

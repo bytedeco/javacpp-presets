@@ -48,7 +48,7 @@ public class dc1394 extends com.googlecode.javacpp.presets.dc1394 {
 // #define __DC1394_H__
 
 
-/*! \file dc1394/dc1394.h
+/** \file dc1394/dc1394.h
     \brief Main include file, which include all others.
 
     More details soon
@@ -97,7 +97,7 @@ public class dc1394 extends com.googlecode.javacpp.presets.dc1394 {
 // #ifndef __DC1394_TYPES_H__
 // #define __DC1394_TYPES_H__
 
-/*! \file dc1394/types.h
+/** \file dc1394/types.h
     \brief Various types that must be defined here
 
     More details soon
@@ -311,7 +311,7 @@ public static final int
 // #ifndef __DC1394_LOG_H__
 // #define __DC1394_LOG_H__
 
-/*! \file dc1394/log.h
+/** \file dc1394/log.h
     \brief Functions to log errors, warning and debug messages
     \author Damien Douxchamps: coding
     \author Rudolf Leitgeb: coding
@@ -566,7 +566,7 @@ public static native void dc1394_log_debug(String format);
 // #ifndef __DC1394_CAMERA_H__
 // #define __DC1394_CAMERA_H__
 
-/*! \file dc1394/camera.h
+/** \file dc1394/camera.h
     \brief Basic system and camera functions
     \author Damien Douxchamps: coding
     \author Peter Antoniac: documentation maintainer
@@ -856,7 +856,7 @@ public static native @Cast("dc1394error_t") int dc1394_camera_print_info(dc1394c
 // #ifndef __DC1394_CONTROL_H__
 // #define __DC1394_CONTROL_H__
 
-/*! \file dc1394/control.h
+/** \file dc1394/control.h
     \brief Diverse controls of camera features
     \author Gord Peters: main writer
     \author Chris Urmson: some additions
@@ -1407,7 +1407,7 @@ public static native @Cast("dc1394error_t") int dc1394_memory_load(dc1394camera_
 // #ifndef __DC1394_CAPTURE_H__
 // #define __DC1394_CAPTURE_H__
 
-/*! \file dc1394/capture.h
+/** \file dc1394/capture.h
     \brief Capture functions
     \author Damien Douxchamps: coding
     \author Peter Antoniac: documentation maintainer
@@ -1517,7 +1517,7 @@ public static native @Cast("dc1394bool_t") int dc1394_capture_is_frame_corrupt(d
 // #ifndef __DC1394_CONVERSIONS_H__
 // #define __DC1394_CONVERSIONS_H__
 
-/*! \file dc1394/conversions.h
+/** \file dc1394/conversions.h
     \brief functions to convert video formats
     \author Damien Douxchamps: coding
     \author Frederic Devernay: coding
@@ -1743,7 +1743,7 @@ public static native @Cast("dc1394error_t") int dc1394_deinterlace_stereo_frames
 // #ifndef __DC1394_FORMAT7_H__
 // #define __DC1394_FORMAT7_H__
 
-/*! \file dc1394/format7.h
+/** \file dc1394/format7.h
     \brief Functions to control Format_7 (aka scalable format, ROI)
 
     More details soon
@@ -2026,7 +2026,7 @@ public static native @Cast("dc1394error_t") int dc1394_format7_get_roi(dc1394cam
 // #ifndef __DC1394_ISO_H__
 // #define __DC1394_ISO_H__
 
-/*! \file dc1394/iso.h
+/** \file dc1394/iso.h
     \brief Functions to manually manage the ISO resources (channels and bandwidth)
     \author Damien Douxchamps: coding
     \author Peter Antoniac: documentation maintainer
@@ -2199,7 +2199,7 @@ public static native @Cast("dc1394error_t") int dc1394_iso_release_all(dc1394cam
 // #ifndef __DC1394_REGISTER_H__
 // #define __DC1394_REGISTER_H__
 
-/*! \file dc1394/register.h
+/** \file dc1394/register.h
     \brief Functions to directly access camera registers.
     \author Damien Douxchamps: coding
     \author Peter Antoniac: documentation maintainer
@@ -2439,7 +2439,7 @@ public static native @Cast("dc1394error_t") int dc1394_set_strobe_register(dc139
 
 // #include <dc1394/log.h>
 
-/*! \file dc1394/video.h
+/** \file dc1394/video.h
     \brief Functions related to video modes, formats, framerate and video flow.
 
     More details soon
@@ -2740,7 +2740,7 @@ public static native @Cast("dc1394error_t") int dc1394_video_get_bandwidth_usage
 // #ifndef __DC1394_UTILS_H__
 // #define __DC1394_UTILS_H__
 
-/*! \file dc1394/utils.h
+/** \file dc1394/utils.h
     \brief Utility functions
     \author Damien Douxchamps: coding
     \author Peter Antoniac: documentation maintainer

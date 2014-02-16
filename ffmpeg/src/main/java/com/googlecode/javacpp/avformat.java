@@ -1047,7 +1047,7 @@ public static final int AVPROBE_SCORE_MAX =       100;
 /** extra allocated bytes at the end of the probe buffer */
 public static final int AVPROBE_PADDING_SIZE = 32;
 
-/// Demuxer will use avio_open, no opened file should be provided by the caller.
+/** Demuxer will use avio_open, no opened file should be provided by the caller. */
 public static final int AVFMT_NOFILE =        0x0001;
 /** Needs '%d' in filename. */
 public static final int AVFMT_NEEDNUMBER =    0x0002;

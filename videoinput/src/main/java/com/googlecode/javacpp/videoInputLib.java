@@ -259,6 +259,11 @@ public static native int comInitCount(); public static native void comInitCount(
 @NoOffset public static class videoDevice extends Pointer {
     static { Loader.load(); }
     public videoDevice(Pointer p) { super(p); }
+    public videoDevice(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public videoDevice position(int position) {
+        return (videoDevice)super.position(position);
+    }
 
 
 		public videoDevice() { allocate(); }
@@ -324,6 +329,11 @@ public static native int comInitCount(); public static native void comInitCount(
 @NoOffset public static class videoInput extends Pointer {
     static { Loader.load(); }
     public videoInput(Pointer p) { super(p); }
+    public videoInput(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public videoInput position(int position) {
+        return (videoInput)super.position(position);
+    }
 
 		public videoInput() { allocate(); }
 		private native void allocate();

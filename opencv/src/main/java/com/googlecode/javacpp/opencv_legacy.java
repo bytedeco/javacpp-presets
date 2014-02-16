@@ -863,7 +863,7 @@ public static native void cvExtractSURF( @Const CvArr img, @Const CvArr mask,
                           CvMemStorage storage, @ByVal CvSURFParams params,
                              int useProvidedKeyPts/*CV_DEFAULT(0)*/  );
 
-/*!
+/**
  Maximal Stable Regions Parameters
  */
 public static class CvMSERParams extends Pointer {
@@ -877,26 +877,26 @@ public static class CvMSERParams extends Pointer {
         return (CvMSERParams)super.position(position);
     }
 
-    //! delta, in the code, it compares (size_{i}-size_{i-delta})/size_{i-delta}
+    /** delta, in the code, it compares (size_{i}-size_{i-delta})/size_{i-delta} */
     public native int delta(); public native CvMSERParams delta(int delta);
-    //! prune the area which bigger than maxArea
+    /** prune the area which bigger than maxArea */
     public native int maxArea(); public native CvMSERParams maxArea(int maxArea);
-    //! prune the area which smaller than minArea
+    /** prune the area which smaller than minArea */
     public native int minArea(); public native CvMSERParams minArea(int minArea);
-    //! prune the area have simliar size to its children
+    /** prune the area have simliar size to its children */
     public native float maxVariation(); public native CvMSERParams maxVariation(float maxVariation);
-    //! trace back to cut off mser with diversity < min_diversity
+    /** trace back to cut off mser with diversity < min_diversity */
     public native float minDiversity(); public native CvMSERParams minDiversity(float minDiversity);
 
     /////// the next few params for MSER of color image
 
-    //! for color image, the evolution steps
+    /** for color image, the evolution steps */
     public native int maxEvolution(); public native CvMSERParams maxEvolution(int maxEvolution);
-    //! the area threshold to cause re-initialize
+    /** the area threshold to cause re-initialize */
     public native double areaThreshold(); public native CvMSERParams areaThreshold(double areaThreshold);
-    //! ignore too small margin
+    /** ignore too small margin */
     public native double minMargin(); public native CvMSERParams minMargin(double minMargin);
-    //! the aperture size for edge blur
+    /** the aperture size for edge blur */
     public native int edgeBlurSize(); public native CvMSERParams edgeBlurSize(int edgeBlurSize);
 }
 

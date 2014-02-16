@@ -34,22 +34,22 @@ import com.googlecode.javacpp.annotation.Properties;
 public class opencv_highgui implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
         new opencv_imgproc().map(infoMap);
-        infoMap.put(new Parser.Info("cvCaptureFromFile", "cvCaptureFromAVI").genericArgs("CvCapture*", "const char*"))
-               .put(new Parser.Info("cvCaptureFromCAM").genericArgs("CvCapture*", "int"))
-               .put(new Parser.Info("cvCreateAVIWriter").genericArgs("CvVideoWriter*", "const char*", "int", "double", "CvSize", "int"))
-               .put(new Parser.Info("cvWriteToAVI").genericArgs("int", "CvVideoWriter*", "IplImage*"))
-               .put(new Parser.Info("cvvInitSystem").genericArgs("int", "int", "char**"))
-               .put(new Parser.Info("cvvNamedWindow").genericArgs("void", "const char*", "int"))
-               .put(new Parser.Info("cvvShowImage").genericArgs("void", "const char*", "CvArr*"))
-               .put(new Parser.Info("cvvResizeWindow").genericArgs("void", "const char*", "int", "int"))
-               .put(new Parser.Info("cvvDestroyWindow").genericArgs("void", "const char*"))
-               .put(new Parser.Info("cvvCreateTrackbar").genericArgs("int", "const char*", "const char*", "int*", "int", "CvTrackbarCallback*"))
-               .put(new Parser.Info("cvvLoadImage").genericArgs("IplImage*", "const char*"))
-               .put(new Parser.Info("cvvSaveImage").genericArgs("int", "const char*", "CvArr*", "int*"))
-               .put(new Parser.Info("cvvAddSearchPath", "cvAddSearchPath").genericArgs("void", "const char*"))
-               .put(new Parser.Info("cvvWaitKey").genericArgs("int", "const char*"))
-               .put(new Parser.Info("cvvWaitKeyEx").genericArgs("int", "const char*", "int"))
-               .put(new Parser.Info("cvvConvertImage").genericArgs("void", "CvArr*", "CvArr*", "int"))
-               .put(new Parser.Info("set_preprocess_func", "set_postprocess_func").genericArgs());
+        infoMap.put(new Parser.Info("cvCaptureFromFile", "cvCaptureFromAVI").cppTypes("CvCapture*", "const char*"))
+               .put(new Parser.Info("cvCaptureFromCAM").cppTypes("CvCapture*", "int"))
+               .put(new Parser.Info("cvCreateAVIWriter").cppTypes("CvVideoWriter*", "const char*", "int", "double", "CvSize", "int"))
+               .put(new Parser.Info("cvWriteToAVI").cppTypes("int", "CvVideoWriter*", "IplImage*"))
+               .put(new Parser.Info("cvvInitSystem").cppTypes("int", "int", "char**"))
+               .put(new Parser.Info("cvvNamedWindow").cppTypes("void", "const char*", "int"))
+               .put(new Parser.Info("cvvShowImage").cppTypes("void", "const char*", "CvArr*"))
+               .put(new Parser.Info("cvvResizeWindow").cppTypes("void", "const char*", "int", "int"))
+               .put(new Parser.Info("cvvDestroyWindow").cppTypes("void", "const char*"))
+               .put(new Parser.Info("cvvCreateTrackbar").cppTypes("int", "const char*", "const char*", "int*", "int", "CvTrackbarCallback*"))
+               .put(new Parser.Info("cvvLoadImage").cppTypes("IplImage*", "const char*"))
+               .put(new Parser.Info("cvvSaveImage").cppTypes("int", "const char*", "CvArr*", "int*"))
+               .put(new Parser.Info("cvvAddSearchPath", "cvAddSearchPath").cppTypes("void", "const char*"))
+               .put(new Parser.Info("cvvWaitKey").cppTypes("int", "const char*"))
+               .put(new Parser.Info("cvvWaitKeyEx").cppTypes("int", "const char*", "int"))
+               .put(new Parser.Info("cvvConvertImage").cppTypes("void", "CvArr*", "CvArr*", "int"))
+               .put(new Parser.Info("set_preprocess_func", "set_postprocess_func").cppTypes());
     }
 }

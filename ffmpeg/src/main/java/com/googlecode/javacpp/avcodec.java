@@ -3212,10 +3212,10 @@ public static final int FF_LEVEL_UNKNOWN = -99;
      * - decoding: maintained and used by libavcodec, not intended to be used by user apps
      * - encoding: unused
      */
-    public native long pts_correction_num_faulty_pts(); public native AVCodecContext pts_correction_num_faulty_pts(long pts_correction_num_faulty_pts); /// Number of incorrect PTS values so far
-    public native long pts_correction_num_faulty_dts(); public native AVCodecContext pts_correction_num_faulty_dts(long pts_correction_num_faulty_dts); /// Number of incorrect DTS values so far
-    public native long pts_correction_last_pts(); public native AVCodecContext pts_correction_last_pts(long pts_correction_last_pts);       /// PTS of the last frame
-    public native long pts_correction_last_dts(); public native AVCodecContext pts_correction_last_dts(long pts_correction_last_dts);       /// DTS of the last frame
+    public native long pts_correction_num_faulty_pts(); public native AVCodecContext pts_correction_num_faulty_pts(long pts_correction_num_faulty_pts); /** Number of incorrect PTS values so far */
+    public native long pts_correction_num_faulty_dts(); public native AVCodecContext pts_correction_num_faulty_dts(long pts_correction_num_faulty_dts); /** Number of incorrect DTS values so far */
+    public native long pts_correction_last_pts(); public native AVCodecContext pts_correction_last_pts(long pts_correction_last_pts);       /** PTS of the last frame */
+    public native long pts_correction_last_dts(); public native AVCodecContext pts_correction_last_dts(long pts_correction_last_dts);       /** DTS of the last frame
 
     /**
      * Character encoding of the input subtitles file.
@@ -4486,7 +4486,7 @@ public static final int AV_PARSER_PTS_NB = 4;
     public native int flags(); public native AVCodecParserContext flags(int flags);
 public static final int PARSER_FLAG_COMPLETE_FRAMES =           0x0001;
 public static final int PARSER_FLAG_ONCE =                      0x0002;
-/// Set if the parser has a valid file offset
+/** Set if the parser has a valid file offset */
 public static final int PARSER_FLAG_FETCHED_OFFSET =            0x0004;
 public static final int PARSER_FLAG_USE_CODEC_TS =              0x1000;
 

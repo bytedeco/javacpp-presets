@@ -14,7 +14,7 @@ public class opencv_video extends com.googlecode.javacpp.presets.opencv_video {
 
 /* Wrapper for header file /usr/local/include/opencv2/video/tracking.hpp */
 
-/*! \file tracking.hpp
+/** \file tracking.hpp
  \brief The Object and Feature Tracking
  */
 

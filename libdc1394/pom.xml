@@ -6,7 +6,7 @@
   <parent>
     <groupId>com.googlecode.javacpp.presets</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>0.7</version>
+    <version>0.8-SNAPSHOT</version>
   </parent>
 
   <artifactId>libdc1394</artifactId>

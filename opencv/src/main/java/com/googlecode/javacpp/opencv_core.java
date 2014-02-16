@@ -1347,7 +1347,7 @@ public static class CvSetElem extends Pointer {
 //     CvSetElem* free_elems;
 //     int active_count;
 
-public static class CvSet extends Pointer {
+public static class CvSet extends CvSeq {
     static { Loader.load(); }
     public CvSet() { allocate(); }
     public CvSet(int size) { allocateArray(size); }
@@ -2170,22 +2170,24 @@ public static class CvModuleInfo extends Pointer {
 // #include "opencv2/core/types_c.h"
 
 // #ifdef __cplusplus
-/**malloc> wrapper.
-   If there is no enough memory, the function
-   (as well as other OpenCV functions that call cvAlloc)
-   raises an error. */
 // #endif
 
 /****************************************************************************************\
 *          Array allocation, deallocation, initialization and access to elements         *
 \****************************************************************************************/
-/**free> wrapper.
+
+/* <malloc> wrapper.
+   If there is no enough memory, the function
+   (as well as other OpenCV functions that call cvAlloc)
+   raises an error. */
+public static native Pointer cvAlloc( @Cast("size_t") long size );
+
+/* <free> wrapper.
    Here and further all the memory releasing functions
    (that all call cvFree) take double pointer in order to
    to clear pointer to the data after releasing it.
    Passing pointer to NULL pointer is Ok: nothing happens in this case
 */
-public static native Pointer cvAlloc( @Cast("size_t") long size );
 public static native void cvFree_( Pointer ptr );
 // #define cvFree(ptr) (cvFree_(*(ptr)), *(ptr)=0)
 

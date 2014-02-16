@@ -34,7 +34,7 @@ import com.googlecode.javacpp.annotation.Properties;
         "<dc1394/iso.h>", "<dc1394/register.h>", "<dc1394/video.h>", "<dc1394/utils.h>"}, link="dc1394@.22") })
 public class dc1394 implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        infoMap.put(new Parser.Info("restrict").genericArgs())
-               .put(new Parser.Info("YUV2RGB", "RGB2YUV").genericArgs("void", "int", "int", "int", "int&", "int&", "int&"));
+        infoMap.put(new Parser.Info("restrict").cppTypes())
+               .put(new Parser.Info("YUV2RGB", "RGB2YUV").cppTypes("void", "int", "int", "int", "int&", "int&", "int&"));
     }
 }

@@ -54,29 +54,29 @@ public class freenect extends com.googlecode.javacpp.presets.freenect {
 /** Ticks per G for accelerometer as set per http://www.kionix.com/Product%20Sheets/KXSD9%20Product%20Brief.pdf */
 public static final int FREENECT_COUNTS_PER_G = 819;
 
-/// Maximum value that a uint16_t pixel will take on in the buffer of any of the FREENECT_DEPTH_MM or FREENECT_DEPTH_REGISTERED frame callbacks
+/** Maximum value that a uint16_t pixel will take on in the buffer of any of the FREENECT_DEPTH_MM or FREENECT_DEPTH_REGISTERED frame callbacks */
 public static final int FREENECT_DEPTH_MM_MAX_VALUE = 10000;
-/// Value indicating that this pixel has no data, when using FREENECT_DEPTH_MM or FREENECT_DEPTH_REGISTERED depth modes
+/** Value indicating that this pixel has no data, when using FREENECT_DEPTH_MM or FREENECT_DEPTH_REGISTERED depth modes */
 public static final int FREENECT_DEPTH_MM_NO_VALUE = 0;
-/// Maximum value that a uint16_t pixel will take on in the buffer of any of the FREENECT_DEPTH_11BIT, FREENECT_DEPTH_10BIT, FREENECT_DEPTH_11BIT_PACKED, or FREENECT_DEPTH_10BIT_PACKED frame callbacks
+/** Maximum value that a uint16_t pixel will take on in the buffer of any of the FREENECT_DEPTH_11BIT, FREENECT_DEPTH_10BIT, FREENECT_DEPTH_11BIT_PACKED, or FREENECT_DEPTH_10BIT_PACKED frame callbacks */
 public static final int FREENECT_DEPTH_RAW_MAX_VALUE = 2048;
-/// Value indicating that this pixel has no data, when using FREENECT_DEPTH_11BIT, FREENECT_DEPTH_10BIT, FREENECT_DEPTH_11BIT_PACKED, or FREENECT_DEPTH_10BIT_PACKED
+/** Value indicating that this pixel has no data, when using FREENECT_DEPTH_11BIT, FREENECT_DEPTH_10BIT, FREENECT_DEPTH_11BIT_PACKED, or FREENECT_DEPTH_10BIT_PACKED */
 public static final int FREENECT_DEPTH_RAW_NO_VALUE = 2047;
 
-/// Flags representing devices to open when freenect_open_device() is called.
-/// In particular, this allows libfreenect to grab only a subset of the devices
-/// in the Kinect, so you could (for instance) use libfreenect to handle audio
-/// and motor support while letting OpenNI have access to the cameras.
-/// If a device is not supported on a particular platform, its flag will be ignored.
+/** Flags representing devices to open when freenect_open_device() is called.
+ *  In particular, this allows libfreenect to grab only a subset of the devices
+ *  in the Kinect, so you could (for instance) use libfreenect to handle audio
+ *  and motor support while letting OpenNI have access to the cameras.
+ *  If a device is not supported on a particular platform, its flag will be ignored. */
 /** enum freenect_device_flags */
 public static final int
 	FREENECT_DEVICE_MOTOR  =  0x01,
 	FREENECT_DEVICE_CAMERA =  0x02,
 	FREENECT_DEVICE_AUDIO  =  0x04;
 
-/// A struct used in enumeration to give access to serial numbers, so you can
-/// open a particular device by serial rather than depending on index.  This
-/// is most useful if you have more than one Kinect.
+/** A struct used in enumeration to give access to serial numbers, so you can
+ *  open a particular device by serial rather than depending on index.  This
+ *  is most useful if you have more than one Kinect. */
 public static class freenect_device_attributes extends Pointer {
     static { Loader.load(); }
     public freenect_device_attributes() { allocate(); }
@@ -94,10 +94,10 @@ public static class freenect_device_attributes extends Pointer {
 	@MemberGetter public native @Cast("const char*") BytePointer camera_serial();
 }
 
-/// Enumeration of available resolutions.
-/// Not all available resolutions are actually supported for all video formats.
-/// Frame modes may not perfectly match resolutions.  For instance,
-/// FREENECT_RESOLUTION_MEDIUM is 640x488 for the IR camera.
+/** Enumeration of available resolutions.
+ *  Not all available resolutions are actually supported for all video formats.
+ *  Frame modes may not perfectly match resolutions.  For instance,
+ *  FREENECT_RESOLUTION_MEDIUM is 640x488 for the IR camera. */
 /** enum freenect_resolution */
 public static final int
 	/** QVGA - 320x240 */
@@ -109,8 +109,8 @@ public static final int
 	/** Dummy value to force enum to be 32 bits wide */
 	FREENECT_RESOLUTION_DUMMY  = 2147483647;
 
-/// Enumeration of video frame information states.
-/// See http://openkinect.org/wiki/Protocol_Documentation#RGB_Camera for more information.
+/** Enumeration of video frame information states.
+ *  See http://openkinect.org/wiki/Protocol_Documentation#RGB_Camera for more information. */
 /** enum freenect_video_format */
 public static final int
 	/** Decompressed RGB mode (demosaicing done by libfreenect) */
@@ -130,8 +130,8 @@ public static final int
 	/** Dummy value to force enum to be 32 bits wide */
 	FREENECT_VIDEO_DUMMY           = 2147483647;
 
-/// Enumeration of depth frame states
-/// See http://openkinect.org/wiki/Protocol_Documentation#RGB_Camera for more information.
+/** Enumeration of depth frame states
+ *  See http://openkinect.org/wiki/Protocol_Documentation#RGB_Camera for more information. */
 /** enum freenect_depth_format */
 public static final int
 	/** 11 bit depth information in one uint16_t/pixel */
@@ -149,7 +149,7 @@ public static final int
 	/** Dummy value to force enum to be 32 bits wide */
 	FREENECT_DEPTH_DUMMY        = 2147483647;
 
-/// Enumeration of flags to toggle features with freenect_set_flag()
+/** Enumeration of flags to toggle features with freenect_set_flag() */
 /** enum freenect_flag */
 public static final int
 	// values written to the CMOS register
@@ -160,15 +160,15 @@ public static final int
 	FREENECT_MIRROR_DEPTH       =  0x0017,
 	FREENECT_MIRROR_VIDEO       =  0x0047;
 
-/// Possible values for setting each `freenect_flag`
+/** Possible values for setting each `freenect_flag` */
 /** enum freenect_flag_value */
 public static final int
 	FREENECT_OFF = 0,
 	FREENECT_ON  = 1;
 
-/// Structure to give information about the width, height, bitrate,
-/// framerate, and buffer size of a frame in a particular mode, as
-/// well as the total number of bytes needed to hold a single frame.
+/** Structure to give information about the width, height, bitrate,
+ *  framerate, and buffer size of a frame in a particular mode, as
+ *  well as the total number of bytes needed to hold a single frame. */
 public static class freenect_frame_mode extends Pointer {
     static { Loader.load(); }
     public freenect_frame_mode() { allocate(); }
@@ -203,8 +203,8 @@ public static class freenect_frame_mode extends Pointer {
 	public native byte is_valid(); public native freenect_frame_mode is_valid(byte is_valid);
 }
 
-/// Enumeration of LED states
-/// See http://openkinect.org/wiki/Protocol_Documentation#Setting_LED for more information.
+/** Enumeration of LED states
+ *  See http://openkinect.org/wiki/Protocol_Documentation#Setting_LED for more information. */
 /** enum freenect_led_options */
 public static final int
 	/** Turn LED off */
@@ -222,7 +222,7 @@ public static final int
 	LED_BLINK_RED_YELLOW = 6;
 
 
-/// Enumeration of tilt motor status
+/** Enumeration of tilt motor status */
 /** enum freenect_tilt_status_code */
 public static final int
 	/** Tilt motor is stopped */
@@ -232,7 +232,7 @@ public static final int
 	/** Tilt motor is currently moving to new position */
 	TILT_STATUS_MOVING  =  0x04;
 
-/// Data from the tilt motor and accelerometer
+/** Data from the tilt motor and accelerometer */
 public static class freenect_raw_tilt_state extends Pointer {
     static { Loader.load(); }
     public freenect_raw_tilt_state() { allocate(); }
@@ -284,7 +284,7 @@ public static class freenect_raw_tilt_state extends Pointer {
 }
 //
 
-/// If Win32, export all functions for DLL usage
+/** If Win32, export all functions for DLL usage */
 // #ifndef _WIN32
 /** DLLExport information for windows, set to nothing on other platforms */
 //   #define FREENECTAPI
@@ -299,7 +299,7 @@ public static class freenect_raw_tilt_state extends Pointer {
 //   #endif
 // #endif
 
-/// Enumeration of message logging levels
+/** Enumeration of message logging levels */
 /** enum freenect_loglevel */
 public static final int
 	/** Log for crashing/non-recoverable errors */
@@ -340,7 +340,7 @@ public static native int freenect_init(@ByPtrPtr freenect_context ctx, freenect_
  */
 public static native int freenect_shutdown(freenect_context ctx);
 
-/// Typedef for logging callback functions
+/** Typedef for logging callback functions */
 public static class freenect_log_cb extends FunctionPointer {
     static { Loader.load(); }
     public    freenect_log_cb(Pointer p) { super(p); }
@@ -503,7 +503,7 @@ public static native void freenect_set_user(freenect_device dev, Pointer user);
  */
 public static native Pointer freenect_get_user(freenect_device dev);
 
-/// Typedef for depth image received event callbacks
+/** Typedef for depth image received event callbacks */
 public static class freenect_depth_cb extends FunctionPointer {
     static { Loader.load(); }
     public    freenect_depth_cb(Pointer p) { super(p); }
@@ -511,7 +511,7 @@ public static class freenect_depth_cb extends FunctionPointer {
     private native void allocate();
     public native void call(freenect_device dev, Pointer depth, @Cast("uint32_t") int timestamp);
 }
-/// Typedef for video image received event callbacks
+/** Typedef for video image received event callbacks */
 public static class freenect_video_cb extends FunctionPointer {
     static { Loader.load(); }
     public    freenect_video_cb(Pointer p) { super(p); }
@@ -826,9 +826,9 @@ public static native int freenect_set_flag(freenect_device dev, @Cast("freenect_
 // #ifdef __cplusplus
 // #endif
 
-/// Internal Kinect registration parameters.
-/// Structure matches that of the line protocol
-/// of the Kinect.
+/** Internal Kinect registration parameters.
+ *  Structure matches that of the line protocol
+ *  of the Kinect. */
 public static class freenect_reg_info extends Pointer {
     static { Loader.load(); }
     public freenect_reg_info() { allocate(); }
@@ -884,7 +884,7 @@ public static class freenect_reg_info extends Pointer {
 	public native int dydydy_start(); public native freenect_reg_info dydydy_start(int dydydy_start);
 }
 
-/// registration padding info (?)
+/** registration padding info (?) */
 public static class freenect_reg_pad_info extends Pointer {
     static { Loader.load(); }
     public freenect_reg_pad_info() { allocate(); }
@@ -901,7 +901,7 @@ public static class freenect_reg_pad_info extends Pointer {
 	public native @Cast("uint16_t") short cropping_lines(); public native freenect_reg_pad_info cropping_lines(short cropping_lines);
 }
 
-/// internal Kinect zero plane data
+/** internal Kinect zero plane data */
 public static class freenect_zero_plane_info extends Pointer {
     static { Loader.load(); }
     public freenect_zero_plane_info() { allocate(); }
@@ -919,7 +919,7 @@ public static class freenect_zero_plane_info extends Pointer {
 	public native float reference_pixel_size(); public native freenect_zero_plane_info reference_pixel_size(float reference_pixel_size);  // The size of a single pixel on the zero plane, in mm.
 }
 
-/// all data needed for depth->RGB mapping
+/** all data needed for depth->RGB mapping */
 public static class freenect_registration extends Pointer {
     static { Loader.load(); }
     public freenect_registration() { allocate(); }
@@ -999,7 +999,7 @@ public static native void freenect_camera_to_world(freenect_device dev,
 // #ifdef __cplusplus
 // #endif
 
-/// Structure to represent a single 16-bit signed little-endian PCM sample.
+/** Structure to represent a single 16-bit signed little-endian PCM sample. */
 public static class freenect_sample_51 extends Pointer {
     static { Loader.load(); }
     public freenect_sample_51() { allocate(); }

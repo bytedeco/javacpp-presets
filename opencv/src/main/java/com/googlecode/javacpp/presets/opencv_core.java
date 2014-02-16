@@ -39,22 +39,22 @@ public class opencv_core implements Parser.InfoMapper {
         infoMap.put(new Parser.Info("__cplusplus").define(false))
                .put(new Parser.Info("defined __ICL", "defined __ICC", "defined __ECL", "defined __ECC",
                                     "defined __INTEL_COMPILER", "defined WIN32 || defined _WIN32").define(false))
-               .put(new Parser.Info("CV_ENABLE_UNROLLED", "CV_CDECL", "CV_STDCALL", "CV_EXTERN_C").genericArgs())
-               .put(new Parser.Info("CV_DEFAULT", "CV_INLINE", "CV_EXPORTS").genericArgs().annotations())
-               .put(new Parser.Info("CVAPI").macroParams("rettype").text("rettype"))
-               .put(new Parser.Info("CV_EXPORTS_W", "CV_EXPORTS_W_SIMPLE", "CV_EXPORTS_W_MAP", "CV_WRAP").genericArgs().annotations())
-               .put(new Parser.Info("CvSet", "CvTypeInfo").complete(true))
-               .put(new Parser.Info("CV_MAT_DEPTH", "CV_8UC", "CV_8SC", "CV_16UC", "CV_16SC", "CV_32SC", "CV_32FC", "CV_64FC").genericArgs("int", "int"))
-               .put(new Parser.Info("CV_MAKETYPE", "CV_MAKE_TYPE").genericArgs("int", "int", "int"))
-               .put(new Parser.Info("CV_IS_MAT_CONT", "CV_IS_CONT_MAT").genericArgs("int", "int"))
+               .put(new Parser.Info("CV_ENABLE_UNROLLED", "CV_CDECL", "CV_STDCALL", "CV_EXTERN_C", "CV_Func").cppTypes())
+               .put(new Parser.Info("CV_DEFAULT", "CV_INLINE", "CV_EXPORTS").cppTypes().annotations())
+               .put(new Parser.Info("CVAPI").text("#define CVAPI(rettype) rettype"))
+               .put(new Parser.Info("CV_EXPORTS_W", "CV_EXPORTS_W_SIMPLE", "CV_EXPORTS_W_MAP",
+                                    "CV_IN_OUT", "CV_OUT", "CV_PROP", "CV_PROP_RW", "CV_WRAP").cppTypes().annotations())
+               .put(new Parser.Info("CV_MAT_DEPTH", "CV_8UC", "CV_8SC", "CV_16UC", "CV_16SC", "CV_32SC", "CV_32FC", "CV_64FC").cppTypes("int", "int"))
+               .put(new Parser.Info("CV_MAKETYPE", "CV_MAKE_TYPE").cppTypes("int", "int", "int"))
+               .put(new Parser.Info("CV_IS_MAT_CONT", "CV_IS_CONT_MAT").cppTypes("int", "int"))
                .put(new Parser.Info("CV_8UC1", "CV_8UC2", "CV_8UC3", "CV_8UC4",
                                     "CV_8SC1", "CV_8SC2", "CV_8SC3", "CV_8SC4",
                                     "CV_16UC1", "CV_16UC2", "CV_16UC3", "CV_16UC4",
                                     "CV_16SC1", "CV_16SC2", "CV_16SC3", "CV_16SC4",
                                     "CV_32SC1", "CV_32SC2", "CV_32SC3", "CV_32SC4",
                                     "CV_32FC1", "CV_32FC2", "CV_32FC3", "CV_32FC4",
-                                    "CV_64FC1", "CV_64FC2", "CV_64FC3", "CV_64FC4").genericArgs("int").translate(true))
-               .put(new Parser.Info("CV_WHOLE_ARR", "CV_WHOLE_SEQ").genericArgs("CvSlice").translate(true))
+                                    "CV_64FC1", "CV_64FC2", "CV_64FC3", "CV_64FC4").cppTypes("int").translate(true))
+               .put(new Parser.Info("CV_WHOLE_ARR", "CV_WHOLE_SEQ").cppTypes("CvSlice").translate(true))
                .put(new Parser.Info("_IplROI").pointerTypes("IplROI"))
                .put(new Parser.Info("_IplImage").pointerTypes("IplImage"))
                .put(new Parser.Info("_IplTileInfo").pointerTypes("IplTileInfo"))
@@ -63,22 +63,22 @@ public class opencv_core implements Parser.InfoMapper {
                .put(new Parser.Info("CvGraph").parent("CvSet"))
                .put(new Parser.Info("CvGraphVtx2D").parent("CvGraphVtx"))
                .put(new Parser.Info("CvChainPtReader").parent("CvSeqReader"))
-               .put(new Parser.Info("cvGetSubArr").genericArgs("CvMat*", "CvArr*", "CvMat*", "CvRect"))
-               .put(new Parser.Info("cvZero").genericArgs("void", "CvArr*"))
-               .put(new Parser.Info("cvCvtScale", "cvScale", "cvCvtScaleAbs").genericArgs("void", "CvArr*", "CvArr*", "double", "double"))
-               .put(new Parser.Info("cvConvert", "cvT").genericArgs("void", "CvArr*", "CvArr*"))
-               .put(new Parser.Info("cvCheckArray").genericArgs("int", "CvArr*", "int", "double", "double"))
-               .put(new Parser.Info("cvMatMulAddEx").genericArgs("void", "CvArr*", "CvArr*", "double", "CvArr*", "double", "CvArr*", "int"))
-               .put(new Parser.Info("cvMatMulAddS").genericArgs("void", "CvArr*", "CvArr*", "CvMat*", "CvMat*"))
-               .put(new Parser.Info("cvMirror", "cvInv").genericArgs("void", "CvArr*", "CvArr*", "int"))
-               .put(new Parser.Info("cvMahalonobis").genericArgs("double", "CvArr*", "CvArr*", "CvArr*"))
-               .put(new Parser.Info("cvFFT").genericArgs("void", "CvArr*", "CvArr*", "int", "int"))
-               .put(new Parser.Info("cvGraphFindEdge").genericArgs("CvGraphEdge*", "CvGraph*", "int", "int"))
-               .put(new Parser.Info("cvGraphFindEdgeByPtr").genericArgs("CvGraphEdge*", "CvGraph*", "CvGraphVtx*", "CvGraphVtx*"))
-               .put(new Parser.Info("cvDrawRect", "cvDrawLine").genericArgs("void", "CvArr*", "CvPoint", "CvPoint", "CvScalar", "int", "int", "int"))
-               .put(new Parser.Info("cvDrawCircle").genericArgs("void", "CvArr*", "CvPoint", "int", "CvScalar", "int", "int", "int"))
-               .put(new Parser.Info("cvDrawEllipse").genericArgs("void", "CvArr*", "CvPoint", "CvSize", "double", "double", "double", "CvScalar", "int", "int", "int"))
-               .put(new Parser.Info("cvDrawPolyLine").genericArgs("void", "CvArr*", "CvPoint**", "int*", "int", "int", "CvScalar", "int", "int", "int"))
-               .put(new Parser.Info("__CV_BEGIN__", "__CV_END__", "__CV_EXIT__").genericArgs());
+               .put(new Parser.Info("cvGetSubArr").cppTypes("CvMat*", "CvArr*", "CvMat*", "CvRect"))
+               .put(new Parser.Info("cvZero").cppTypes("void", "CvArr*"))
+               .put(new Parser.Info("cvCvtScale", "cvScale", "cvCvtScaleAbs").cppTypes("void", "CvArr*", "CvArr*", "double", "double"))
+               .put(new Parser.Info("cvConvert", "cvT").cppTypes("void", "CvArr*", "CvArr*"))
+               .put(new Parser.Info("cvCheckArray").cppTypes("int", "CvArr*", "int", "double", "double"))
+               .put(new Parser.Info("cvMatMulAddEx").cppTypes("void", "CvArr*", "CvArr*", "double", "CvArr*", "double", "CvArr*", "int"))
+               .put(new Parser.Info("cvMatMulAddS").cppTypes("void", "CvArr*", "CvArr*", "CvMat*", "CvMat*"))
+               .put(new Parser.Info("cvMirror", "cvInv").cppTypes("void", "CvArr*", "CvArr*", "int"))
+               .put(new Parser.Info("cvMahalonobis").cppTypes("double", "CvArr*", "CvArr*", "CvArr*"))
+               .put(new Parser.Info("cvFFT").cppTypes("void", "CvArr*", "CvArr*", "int", "int"))
+               .put(new Parser.Info("cvGraphFindEdge").cppTypes("CvGraphEdge*", "CvGraph*", "int", "int"))
+               .put(new Parser.Info("cvGraphFindEdgeByPtr").cppTypes("CvGraphEdge*", "CvGraph*", "CvGraphVtx*", "CvGraphVtx*"))
+               .put(new Parser.Info("cvDrawRect", "cvDrawLine").cppTypes("void", "CvArr*", "CvPoint", "CvPoint", "CvScalar", "int", "int", "int"))
+               .put(new Parser.Info("cvDrawCircle").cppTypes("void", "CvArr*", "CvPoint", "int", "CvScalar", "int", "int", "int"))
+               .put(new Parser.Info("cvDrawEllipse").cppTypes("void", "CvArr*", "CvPoint", "CvSize", "double", "double", "double", "CvScalar", "int", "int", "int"))
+               .put(new Parser.Info("cvDrawPolyLine").cppTypes("void", "CvArr*", "CvPoint**", "int*", "int", "int", "CvScalar", "int", "int", "int"))
+               .put(new Parser.Info("__CV_BEGIN__", "__CV_END__", "__CV_EXIT__").cppTypes());
     }
 }

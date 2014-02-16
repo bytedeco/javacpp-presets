@@ -34,8 +34,7 @@ import com.googlecode.javacpp.annotation.Properties;
 public class avfilter implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
         new avformat().map(infoMap);
-        infoMap.put(new Parser.Info("AVFilterPad", "AVFilterContext", "AVFilterLink").complete(true))
-               .put(new Parser.Info("AVFilterPool", "AVFilterCommand", "AVFilterChannelLayouts").pointerTypes("Pointer").cast(true))
+        infoMap.put(new Parser.Info("AVFilterPool", "AVFilterCommand", "AVFilterChannelLayouts").pointerTypes("Pointer").cast(true))
                .put(new Parser.Info("!FF_API_FOO_COUNT", "AV_HAVE_INCOMPATIBLE_LIBAV_ABI || !FF_API_OLD_GRAPH_PARSE").define(false));
     }
 }
