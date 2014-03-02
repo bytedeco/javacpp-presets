@@ -481,7 +481,7 @@ public static class Log_handler_int_BytePointer_Pointer extends FunctionPointer 
     public native void call(@Cast("dc1394log_t") int type,
                                           @Cast("const char*") BytePointer message, Pointer user);
 }
-
+public static native @Cast("dc1394error_t") int dc1394_log_register_handler(@Cast("dc1394log_t") int type, Log_handler_int_BytePointer_Pointer log_handler, Pointer user);
 public static class Log_handler_int_String_Pointer extends FunctionPointer {
     static { Loader.load(); }
     public    Log_handler_int_String_Pointer(Pointer p) { super(p); }
@@ -490,8 +490,6 @@ public static class Log_handler_int_String_Pointer extends FunctionPointer {
     public native void call(@Cast("dc1394log_t") int type,
                                           String message, Pointer user);
 }
-
-public static native @Cast("dc1394error_t") int dc1394_log_register_handler(@Cast("dc1394log_t") int type, Log_handler_int_BytePointer_Pointer log_handler, Pointer user);
 public static native @Cast("dc1394error_t") int dc1394_log_register_handler(@Cast("dc1394log_t") int type, Log_handler_int_String_Pointer log_handler, Pointer user);
 
 /**

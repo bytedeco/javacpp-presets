@@ -300,7 +300,14 @@ public static class Seek_Pointer_long_int extends FunctionPointer {
     private native void allocate();
     public native long call(Pointer opaque, long offset, int whence);
 }
-
+public static native AVIOContext avio_alloc_context(
+                  @Cast("unsigned char*") BytePointer buffer,
+                  int buffer_size,
+                  int write_flag,
+                  Pointer opaque,
+                  Read_packet_Pointer_BytePointer_int read_packet,
+                  Write_packet_Pointer_BytePointer_int write_packet,
+                  Seek_Pointer_long_int seek);
 public static class Read_packet_Pointer_ByteBuffer_int extends FunctionPointer {
     static { Loader.load(); }
     public    Read_packet_Pointer_ByteBuffer_int(Pointer p) { super(p); }
@@ -315,30 +322,6 @@ public static class Write_packet_Pointer_ByteBuffer_int extends FunctionPointer 
     private native void allocate();
     public native int call(Pointer opaque, @Cast("uint8_t*") ByteBuffer buf, int buf_size);
 }
-
-public static class Read_packet_Pointer_byte_int extends FunctionPointer {
-    static { Loader.load(); }
-    public    Read_packet_Pointer_byte_int(Pointer p) { super(p); }
-    protected Read_packet_Pointer_byte_int() { allocate(); }
-    private native void allocate();
-    public native int call(Pointer opaque, @Cast("uint8_t*") byte[] buf, int buf_size);
-}
-public static class Write_packet_Pointer_byte_int extends FunctionPointer {
-    static { Loader.load(); }
-    public    Write_packet_Pointer_byte_int(Pointer p) { super(p); }
-    protected Write_packet_Pointer_byte_int() { allocate(); }
-    private native void allocate();
-    public native int call(Pointer opaque, @Cast("uint8_t*") byte[] buf, int buf_size);
-}
-
-public static native AVIOContext avio_alloc_context(
-                  @Cast("unsigned char*") BytePointer buffer,
-                  int buffer_size,
-                  int write_flag,
-                  Pointer opaque,
-                  Read_packet_Pointer_BytePointer_int read_packet,
-                  Write_packet_Pointer_BytePointer_int write_packet,
-                  Seek_Pointer_long_int seek);
 public static native AVIOContext avio_alloc_context(
                   @Cast("unsigned char*") ByteBuffer buffer,
                   int buffer_size,
@@ -347,13 +330,27 @@ public static native AVIOContext avio_alloc_context(
                   Read_packet_Pointer_ByteBuffer_int read_packet,
                   Write_packet_Pointer_ByteBuffer_int write_packet,
                   Seek_Pointer_long_int seek);
+public static class Read_packet_Pointer_byte___int extends FunctionPointer {
+    static { Loader.load(); }
+    public    Read_packet_Pointer_byte___int(Pointer p) { super(p); }
+    protected Read_packet_Pointer_byte___int() { allocate(); }
+    private native void allocate();
+    public native int call(Pointer opaque, @Cast("uint8_t*") byte[] buf, int buf_size);
+}
+public static class Write_packet_Pointer_byte___int extends FunctionPointer {
+    static { Loader.load(); }
+    public    Write_packet_Pointer_byte___int(Pointer p) { super(p); }
+    protected Write_packet_Pointer_byte___int() { allocate(); }
+    private native void allocate();
+    public native int call(Pointer opaque, @Cast("uint8_t*") byte[] buf, int buf_size);
+}
 public static native AVIOContext avio_alloc_context(
                   @Cast("unsigned char*") byte[] buffer,
                   int buffer_size,
                   int write_flag,
                   Pointer opaque,
-                  Read_packet_Pointer_byte_int read_packet,
-                  Write_packet_Pointer_byte_int write_packet,
+                  Read_packet_Pointer_byte___int read_packet,
+                  Write_packet_Pointer_byte___int write_packet,
                   Seek_Pointer_long_int seek);
 
 public static native void avio_w8(AVIOContext s, int b);

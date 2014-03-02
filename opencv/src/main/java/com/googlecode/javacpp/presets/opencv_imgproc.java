@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Samuel Audet
+ * Copyright (C) 2013,2014 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -29,10 +29,10 @@ import com.googlecode.javacpp.annotation.Properties;
  * @author Samuel Audet
  */
 @Properties(inherit=opencv_core.class, target="com.googlecode.javacpp.opencv_imgproc", value={
-    @Platform(include={"<opencv2/imgproc/types_c.h>", "<opencv2/imgproc/imgproc_c.h>"}, link="opencv_imgproc@.2.4"),
+    @Platform(include={"<opencv2/imgproc/types_c.h>", "<opencv2/imgproc/imgproc_c.h>", "<opencv2/imgproc/imgproc.hpp>"}, link="opencv_imgproc@.2.4"),
     @Platform(value="windows", link="opencv_imgproc248") })
 public class opencv_imgproc implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        new opencv_core().map(infoMap);
+        infoMap.put(new Parser.Info("cv::Vec4f", "cv::Vec6f").cast(true).pointerTypes("FloatPointer"));
     }
 }

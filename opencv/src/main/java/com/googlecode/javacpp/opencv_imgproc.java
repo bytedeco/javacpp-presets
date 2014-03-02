@@ -443,7 +443,7 @@ public static final int
     CV_TM_CCOEFF        = 4,
     CV_TM_CCOEFF_NORMED = 5;
 
-public static class CvDistanceFunction extends FunctionPointer {
+@Convention("CV_CDECL") public static class CvDistanceFunction extends FunctionPointer {
     static { Loader.load(); }
     public    CvDistanceFunction(Pointer p) { super(p); }
     protected CvDistanceFunction() { allocate(); }
@@ -1495,6 +1495,1450 @@ public static native void cvFitLine( @Const CvArr points, int dist_type, double 
 // #endif
 
 // #endif
+
+
+/* Wrapper for header file /usr/local/include/opencv2/imgproc/imgproc.hpp */
+
+/** \file imgproc.hpp
+ \brief The Image Processing
+ */
+
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+//
+//  By downloading, copying, installing or using the software you agree to this license.
+//  If you do not agree to this license, do not download, install,
+//  copy or use the software.
+//
+//
+//                           License Agreement
+//                For Open Source Computer Vision Library
+//
+// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
+// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
+// Third party copyrights are property of their respective owners.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+//   * Redistribution's of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//
+//   * Redistribution's in binary form must reproduce the above copyright notice,
+//     this list of conditions and the following disclaimer in the documentation
+//     and/or other materials provided with the distribution.
+//
+//   * The name of the copyright holders may not be used to endorse or promote products
+//     derived from this software without specific prior written permission.
+//
+// This software is provided by the copyright holders and contributors "as is" and
+// any express or implied warranties, including, but not limited to, the implied
+// warranties of merchantability and fitness for a particular purpose are disclaimed.
+// In no event shall the Intel Corporation or contributors be liable for any direct,
+// indirect, incidental, special, exemplary, or consequential damages
+// (including, but not limited to, procurement of substitute goods or services;
+// loss of use, data, or profits; or business interruption) however caused
+// and on any theory of liability, whether in contract, strict liability,
+// or tort (including negligence or otherwise) arising in any way out of
+// the use of this software, even if advised of the possibility of such damage.
+//
+//M*/
+
+// #ifndef __OPENCV_IMGPROC_HPP__
+// #define __OPENCV_IMGPROC_HPP__
+
+// #include "opencv2/core/core.hpp"
+// #include "opencv2/imgproc/types_c.h"
+
+// #ifdef __cplusplus
+
+/** \namespace cv
+ Namespace where all the C++ OpenCV functionality resides
+ */
+
+/** various border interpolation methods */
+/** enum cv:: */
+public static final int BORDER_REPLICATE= IPL_BORDER_REPLICATE, BORDER_CONSTANT= IPL_BORDER_CONSTANT,
+       BORDER_REFLECT= IPL_BORDER_REFLECT, BORDER_WRAP= IPL_BORDER_WRAP,
+       BORDER_REFLECT_101= IPL_BORDER_REFLECT_101, BORDER_REFLECT101= BORDER_REFLECT_101,
+       BORDER_TRANSPARENT= IPL_BORDER_TRANSPARENT,
+       BORDER_DEFAULT= BORDER_REFLECT_101, BORDER_ISOLATED= 16;
+
+/** 1D interpolation function: returns coordinate of the "donor" pixel for the specified location p. */
+@Namespace("cv") public static native int borderInterpolate( int p, int len, int borderType );
+
+/**
+ The Base Class for 1D or Row-wise Filters
+
+ This is the base class for linear or non-linear filters that process 1D data.
+ In particular, such filters are used for the "horizontal" filtering parts in separable filters.
+
+ Several functions in OpenCV return Ptr<BaseRowFilter> for the specific types of filters,
+ and those pointers can be used directly or within cv::FilterEngine.
+*/
+@Namespace("cv") @NoOffset public static class BaseRowFilter extends Pointer {
+    static { Loader.load(); }
+    public BaseRowFilter() { }
+    public BaseRowFilter(Pointer p) { super(p); }
+
+    /** the default constructor */
+    /** the destructor */
+    /** the filtering operator. Must be overrided in the derived classes. The horizontal border interpolation is done outside of the class. */
+    public native @Name("operator()") void apply(@Cast("const uchar*") BytePointer src, @Cast("uchar*") BytePointer dst,
+                                int width, int cn);
+    public native @Name("operator()") void apply(@Cast("const uchar*") ByteBuffer src, @Cast("uchar*") ByteBuffer dst,
+                                int width, int cn);
+    public native @Name("operator()") void apply(@Cast("const uchar*") byte[] src, @Cast("uchar*") byte[] dst,
+                                int width, int cn);
+    public native int ksize(); public native BaseRowFilter ksize(int ksize);
+    public native int anchor(); public native BaseRowFilter anchor(int anchor);
+}
+
+
+/**
+ The Base Class for Column-wise Filters
+
+ This is the base class for linear or non-linear filters that process columns of 2D arrays.
+ Such filters are used for the "vertical" filtering parts in separable filters.
+
+ Several functions in OpenCV return Ptr<BaseColumnFilter> for the specific types of filters,
+ and those pointers can be used directly or within cv::FilterEngine.
+
+ Unlike cv::BaseRowFilter, cv::BaseColumnFilter may have some context information,
+ i.e. box filter keeps the sliding sum of elements. To reset the state BaseColumnFilter::reset()
+ must be called (e.g. the method is called by cv::FilterEngine)
+ */
+@Namespace("cv") @NoOffset public static class BaseColumnFilter extends Pointer {
+    static { Loader.load(); }
+    public BaseColumnFilter() { }
+    public BaseColumnFilter(Pointer p) { super(p); }
+
+    /** the default constructor */
+    /** the destructor */
+    /** the filtering operator. Must be overrided in the derived classes. The vertical border interpolation is done outside of the class. */
+    public native @Name("operator()") void apply(@Cast("const uchar**") PointerPointer src, @Cast("uchar*") BytePointer dst, int dststep,
+                                int dstcount, int width);
+    public native @Name("operator()") void apply(@Cast("const uchar**") @ByPtrPtr BytePointer src, @Cast("uchar*") BytePointer dst, int dststep,
+                                int dstcount, int width);
+    public native @Name("operator()") void apply(@Cast("const uchar**") @ByPtrPtr ByteBuffer src, @Cast("uchar*") ByteBuffer dst, int dststep,
+                                int dstcount, int width);
+    public native @Name("operator()") void apply(@Cast("const uchar**") @ByPtrPtr byte[] src, @Cast("uchar*") byte[] dst, int dststep,
+                                int dstcount, int width);
+    /** resets the internal buffers, if any */
+    public native void reset();
+    public native int ksize(); public native BaseColumnFilter ksize(int ksize);
+    public native int anchor(); public native BaseColumnFilter anchor(int anchor);
+}
+
+/**
+ The Base Class for Non-Separable 2D Filters.
+
+ This is the base class for linear or non-linear 2D filters.
+
+ Several functions in OpenCV return Ptr<BaseFilter> for the specific types of filters,
+ and those pointers can be used directly or within cv::FilterEngine.
+
+ Similar to cv::BaseColumnFilter, the class may have some context information,
+ that should be reset using BaseFilter::reset() method before processing the new array.
+*/
+@Namespace("cv") @NoOffset public static class BaseFilter extends Pointer {
+    static { Loader.load(); }
+    public BaseFilter() { }
+    public BaseFilter(Pointer p) { super(p); }
+
+    /** the default constructor */
+    /** the destructor */
+    /** the filtering operator. The horizontal and the vertical border interpolation is done outside of the class. */
+    public native @Name("operator()") void apply(@Cast("const uchar**") PointerPointer src, @Cast("uchar*") BytePointer dst, int dststep,
+                                int dstcount, int width, int cn);
+    public native @Name("operator()") void apply(@Cast("const uchar**") @ByPtrPtr BytePointer src, @Cast("uchar*") BytePointer dst, int dststep,
+                                int dstcount, int width, int cn);
+    public native @Name("operator()") void apply(@Cast("const uchar**") @ByPtrPtr ByteBuffer src, @Cast("uchar*") ByteBuffer dst, int dststep,
+                                int dstcount, int width, int cn);
+    public native @Name("operator()") void apply(@Cast("const uchar**") @ByPtrPtr byte[] src, @Cast("uchar*") byte[] dst, int dststep,
+                                int dstcount, int width, int cn);
+    /** resets the internal buffers, if any */
+    public native void reset();
+    public native @ByVal Size ksize(); public native BaseFilter ksize(Size ksize);
+    public native @ByVal Point anchor(); public native BaseFilter anchor(Point anchor);
+}
+
+/**
+ The Main Class for Image Filtering.
+
+ The class can be used to apply an arbitrary filtering operation to an image.
+ It contains all the necessary intermediate buffers, it computes extrapolated values
+ of the "virtual" pixels outside of the image etc.
+ Pointers to the initialized cv::FilterEngine instances
+ are returned by various OpenCV functions, such as cv::createSeparableLinearFilter(),
+ cv::createLinearFilter(), cv::createGaussianFilter(), cv::createDerivFilter(),
+ cv::createBoxFilter() and cv::createMorphologyFilter().
+
+ Using the class you can process large images by parts and build complex pipelines
+ that include filtering as some of the stages. If all you need is to apply some pre-defined
+ filtering operation, you may use cv::filter2D(), cv::erode(), cv::dilate() etc.
+ functions that create FilterEngine internally.
+
+ Here is the example on how to use the class to implement Laplacian operator, which is the sum of
+ second-order derivatives. More complex variant for different types is implemented in cv::Laplacian().
+
+ \code
+ void laplace_f(const Mat& src, Mat& dst)
+ {
+     CV_Assert( src.type() == CV_32F );
+     // make sure the destination array has the proper size and type
+     dst.create(src.size(), src.type());
+
+     // get the derivative and smooth kernels for d2I/dx2.
+     // for d2I/dy2 we could use the same kernels, just swapped
+     Mat kd, ks;
+     getSobelKernels( kd, ks, 2, 0, ksize, false, ktype );
+
+     // let's process 10 source rows at once
+     int DELTA = std::min(10, src.rows);
+     Ptr<FilterEngine> Fxx = createSeparableLinearFilter(src.type(),
+     dst.type(), kd, ks, Point(-1,-1), 0, borderType, borderType, Scalar() );
+     Ptr<FilterEngine> Fyy = createSeparableLinearFilter(src.type(),
+     dst.type(), ks, kd, Point(-1,-1), 0, borderType, borderType, Scalar() );
+
+     int y = Fxx->start(src), dsty = 0, dy = 0;
+     Fyy->start(src);
+     const uchar* sptr = src.data + y*src.step;
+
+     // allocate the buffers for the spatial image derivatives;
+     // the buffers need to have more than DELTA rows, because at the
+     // last iteration the output may take max(kd.rows-1,ks.rows-1)
+     // rows more than the input.
+     Mat Ixx( DELTA + kd.rows - 1, src.cols, dst.type() );
+     Mat Iyy( DELTA + kd.rows - 1, src.cols, dst.type() );
+
+     // inside the loop we always pass DELTA rows to the filter
+     // (note that the "proceed" method takes care of possibe overflow, since
+     // it was given the actual image height in the "start" method)
+     // on output we can get:
+     //  * < DELTA rows (the initial buffer accumulation stage)
+     //  * = DELTA rows (settled state in the middle)
+     //  * > DELTA rows (then the input image is over, but we generate
+     //                  "virtual" rows using the border mode and filter them)
+     // this variable number of output rows is dy.
+     // dsty is the current output row.
+     // sptr is the pointer to the first input row in the portion to process
+     for( ; dsty < dst.rows; sptr += DELTA*src.step, dsty += dy )
+     {
+         Fxx->proceed( sptr, (int)src.step, DELTA, Ixx.data, (int)Ixx.step );
+         dy = Fyy->proceed( sptr, (int)src.step, DELTA, d2y.data, (int)Iyy.step );
+         if( dy > 0 )
+         {
+             Mat dstripe = dst.rowRange(dsty, dsty + dy);
+             add(Ixx.rowRange(0, dy), Iyy.rowRange(0, dy), dstripe);
+         }
+     }
+ }
+ \endcode
+*/
+@Namespace("cv") @NoOffset public static class FilterEngine extends Pointer {
+    static { Loader.load(); }
+    public FilterEngine(Pointer p) { super(p); }
+    public FilterEngine(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public FilterEngine position(int position) {
+        return (FilterEngine)super.position(position);
+    }
+
+    /** the default constructor */
+    public FilterEngine() { allocate(); }
+    private native void allocate();
+    /** the full constructor. Either _filter2D or both _rowFilter and _columnFilter must be non-empty. */
+    public FilterEngine(@Ptr BaseFilter _filter2D,
+                     @Ptr BaseRowFilter _rowFilter,
+                     @Ptr BaseColumnFilter _columnFilter,
+                     int srcType, int dstType, int bufType,
+                     int _rowBorderType/*=BORDER_REPLICATE*/,
+                     int _columnBorderType/*=-1*/,
+                     @Const @ByRef Scalar _borderValue/*=Scalar()*/) { allocate(_filter2D, _rowFilter, _columnFilter, srcType, dstType, bufType, _rowBorderType, _columnBorderType, _borderValue); }
+    private native void allocate(@Ptr BaseFilter _filter2D,
+                     @Ptr BaseRowFilter _rowFilter,
+                     @Ptr BaseColumnFilter _columnFilter,
+                     int srcType, int dstType, int bufType,
+                     int _rowBorderType/*=BORDER_REPLICATE*/,
+                     int _columnBorderType/*=-1*/,
+                     @Const @ByRef Scalar _borderValue/*=Scalar()*/);
+    /** the destructor */
+    /** reinitializes the engine. The previously assigned filters are released. */
+    public native void init(@Ptr BaseFilter _filter2D,
+                  @Ptr BaseRowFilter _rowFilter,
+                  @Ptr BaseColumnFilter _columnFilter,
+                  int srcType, int dstType, int bufType,
+                  int _rowBorderType/*=BORDER_REPLICATE*/, int _columnBorderType/*=-1*/,
+                  @Const @ByRef Scalar _borderValue/*=Scalar()*/);
+    /** starts filtering of the specified ROI of an image of size wholeSize. */
+    public native int start(@ByVal Size wholeSize, @ByVal Rect roi, int maxBufRows/*=-1*/);
+    /** starts filtering of the specified ROI of the specified image. */
+    public native int start(@Const @ByRef Mat src, @Const @ByRef Rect srcRoi/*=Rect(0,0,-1,-1)*/,
+                          @Cast("bool") boolean isolated/*=false*/, int maxBufRows/*=-1*/);
+    /** processes the next srcCount rows of the image. */
+    public native int proceed(@Cast("const uchar*") BytePointer src, int srcStep, int srcCount,
+                            @Cast("uchar*") BytePointer dst, int dstStep);
+    public native int proceed(@Cast("const uchar*") ByteBuffer src, int srcStep, int srcCount,
+                            @Cast("uchar*") ByteBuffer dst, int dstStep);
+    public native int proceed(@Cast("const uchar*") byte[] src, int srcStep, int srcCount,
+                            @Cast("uchar*") byte[] dst, int dstStep);
+    /** applies filter to the specified ROI of the image. if srcRoi=(0,0,-1,-1), the whole image is filtered. */
+    public native void apply( @Const @ByRef Mat src, @ByRef Mat dst,
+                            @Const @ByRef Rect srcRoi/*=Rect(0,0,-1,-1)*/,
+                            @ByVal Point dstOfs/*=Point(0,0)*/,
+                            @Cast("bool") boolean isolated/*=false*/);
+    /** returns true if the filter is separable */
+    public native @Cast("bool") boolean isSeparable();
+    /** returns the number */
+    public native int remainingInputRows();
+    public native int remainingOutputRows();
+
+    public native int srcType(); public native FilterEngine srcType(int srcType);
+    public native int dstType(); public native FilterEngine dstType(int dstType);
+    public native int bufType(); public native FilterEngine bufType(int bufType);
+    public native @ByVal Size ksize(); public native FilterEngine ksize(Size ksize);
+    public native @ByVal Point anchor(); public native FilterEngine anchor(Point anchor);
+    public native int maxWidth(); public native FilterEngine maxWidth(int maxWidth);
+    public native @ByVal Size wholeSize(); public native FilterEngine wholeSize(Size wholeSize);
+    public native @ByVal Rect roi(); public native FilterEngine roi(Rect roi);
+    public native int dx1(); public native FilterEngine dx1(int dx1);
+    public native int dx2(); public native FilterEngine dx2(int dx2);
+    public native int rowBorderType(); public native FilterEngine rowBorderType(int rowBorderType);
+    public native int columnBorderType(); public native FilterEngine columnBorderType(int columnBorderType);
+    public native @StdVector IntPointer borderTab(); public native FilterEngine borderTab(IntPointer borderTab);
+    public native int borderElemSize(); public native FilterEngine borderElemSize(int borderElemSize);
+    public native @Cast("uchar*") @StdVector BytePointer ringBuf(); public native FilterEngine ringBuf(BytePointer ringBuf);
+    public native @Cast("uchar*") @StdVector BytePointer srcRow(); public native FilterEngine srcRow(BytePointer srcRow);
+    public native @Cast("uchar*") @StdVector BytePointer constBorderValue(); public native FilterEngine constBorderValue(BytePointer constBorderValue);
+    public native @Cast("uchar*") @StdVector BytePointer constBorderRow(); public native FilterEngine constBorderRow(BytePointer constBorderRow);
+    public native int bufStep(); public native FilterEngine bufStep(int bufStep);
+    public native int startY(); public native FilterEngine startY(int startY);
+    public native int startY0(); public native FilterEngine startY0(int startY0);
+    public native int endY(); public native FilterEngine endY(int endY);
+    public native int rowCount(); public native FilterEngine rowCount(int rowCount);
+    public native int dstY(); public native FilterEngine dstY(int dstY);
+    public native @Cast("uchar**") @StdVector PointerPointer rows(); public native FilterEngine rows(PointerPointer rows);
+
+    public native @Ptr BaseFilter filter2D(); public native FilterEngine filter2D(BaseFilter filter2D);
+    public native @Ptr BaseRowFilter rowFilter(); public native FilterEngine rowFilter(BaseRowFilter rowFilter);
+    public native @Ptr BaseColumnFilter columnFilter(); public native FilterEngine columnFilter(BaseColumnFilter columnFilter);
+}
+
+/** type of the kernel */
+/** enum cv:: */
+public static final int KERNEL_GENERAL= 0, KERNEL_SYMMETRICAL= 1, KERNEL_ASYMMETRICAL= 2,
+       KERNEL_SMOOTH= 4, KERNEL_INTEGER= 8;
+
+/** returns type (one of KERNEL_*) of 1D or 2D kernel specified by its coefficients. */
+@Namespace("cv") public static native int getKernelType(@ByVal Mat kernel, @ByVal Point anchor);
+
+/** returns the primitive row filter with the specified kernel */
+@Namespace("cv") public static native @Ptr BaseRowFilter getLinearRowFilter(int srcType, int bufType,
+                                            @ByVal Mat kernel, int anchor,
+                                            int symmetryType);
+
+/** returns the primitive column filter with the specified kernel */
+@Namespace("cv") public static native @Ptr BaseColumnFilter getLinearColumnFilter(int bufType, int dstType,
+                                            @ByVal Mat kernel, int anchor,
+                                            int symmetryType, double delta/*=0*/,
+                                            int bits/*=0*/);
+
+/** returns 2D filter with the specified kernel */
+@Namespace("cv") public static native @Ptr BaseFilter getLinearFilter(int srcType, int dstType,
+                                           @ByVal Mat kernel,
+                                           @ByVal Point anchor/*=Point(-1,-1)*/,
+                                           double delta/*=0*/, int bits/*=0*/);
+
+/** returns the separable linear filter engine */
+@Namespace("cv") public static native @Ptr FilterEngine createSeparableLinearFilter(int srcType, int dstType,
+                          @ByVal Mat rowKernel, @ByVal Mat columnKernel,
+                          @ByVal Point anchor/*=Point(-1,-1)*/, double delta/*=0*/,
+                          int rowBorderType/*=BORDER_DEFAULT*/,
+                          int columnBorderType/*=-1*/,
+                          @Const @ByRef Scalar borderValue/*=Scalar()*/);
+
+/** returns the non-separable linear filter engine */
+@Namespace("cv") public static native @Ptr FilterEngine createLinearFilter(int srcType, int dstType,
+                 @ByVal Mat kernel, @ByVal Point _anchor/*=Point(-1,-1)*/,
+                 double delta/*=0*/, int rowBorderType/*=BORDER_DEFAULT*/,
+                 int columnBorderType/*=-1*/, @Const @ByRef Scalar borderValue/*=Scalar()*/);
+
+/** returns the Gaussian kernel with the specified parameters */
+@Namespace("cv") public static native @ByVal Mat getGaussianKernel( int ksize, double sigma, int ktype/*=CV_64F*/ );
+
+/** returns the Gaussian filter engine */
+@Namespace("cv") public static native @Ptr FilterEngine createGaussianFilter( int type, @ByVal Size ksize,
+                                    double sigma1, double sigma2/*=0*/,
+                                    int borderType/*=BORDER_DEFAULT*/);
+/** initializes kernels of the generalized Sobel operator */
+@Namespace("cv") public static native void getDerivKernels( @ByVal Mat kx, @ByVal Mat ky,
+                                   int dx, int dy, int ksize,
+                                   @Cast("bool") boolean normalize/*=false*/, int ktype/*=CV_32F*/ );
+/** returns filter engine for the generalized Sobel operator */
+@Namespace("cv") public static native @Ptr FilterEngine createDerivFilter( int srcType, int dstType,
+                                        int dx, int dy, int ksize,
+                                        int borderType/*=BORDER_DEFAULT*/ );
+/** returns horizontal 1D box filter */
+@Namespace("cv") public static native @Ptr BaseRowFilter getRowSumFilter(int srcType, int sumType,
+                                              int ksize, int anchor/*=-1*/);
+/** returns vertical 1D box filter */
+@Namespace("cv") public static native @Ptr BaseColumnFilter getColumnSumFilter( int sumType, int dstType,
+                                                     int ksize, int anchor/*=-1*/,
+                                                     double scale/*=1*/);
+/** returns box filter engine */
+@Namespace("cv") public static native @Ptr FilterEngine createBoxFilter( int srcType, int dstType, @ByVal Size ksize,
+                                              @ByVal Point anchor/*=Point(-1,-1)*/,
+                                              @Cast("bool") boolean normalize/*=true*/,
+                                              int borderType/*=BORDER_DEFAULT*/);
+
+/** returns the Gabor kernel with the specified parameters */
+@Namespace("cv") public static native @ByVal Mat getGaborKernel( @ByVal Size ksize, double sigma, double theta, double lambd,
+                                 double gamma, double psi/*=CV_PI*0.5*/, int ktype/*=CV_64F*/ );
+
+/** type of morphological operation */
+/** enum cv:: */
+public static final int MORPH_ERODE= CV_MOP_ERODE, MORPH_DILATE= CV_MOP_DILATE,
+       MORPH_OPEN= CV_MOP_OPEN, MORPH_CLOSE= CV_MOP_CLOSE,
+       MORPH_GRADIENT= CV_MOP_GRADIENT, MORPH_TOPHAT= CV_MOP_TOPHAT,
+       MORPH_BLACKHAT= CV_MOP_BLACKHAT;
+
+/** returns horizontal 1D morphological filter */
+@Namespace("cv") public static native @Ptr BaseRowFilter getMorphologyRowFilter(int op, int type, int ksize, int anchor/*=-1*/);
+/** returns vertical 1D morphological filter */
+@Namespace("cv") public static native @Ptr BaseColumnFilter getMorphologyColumnFilter(int op, int type, int ksize, int anchor/*=-1*/);
+/** returns 2D morphological filter */
+@Namespace("cv") public static native @Ptr BaseFilter getMorphologyFilter(int op, int type, @ByVal Mat kernel,
+                                               @ByVal Point anchor/*=Point(-1,-1)*/);
+
+/** returns "magic" border value for erosion and dilation. It is automatically transformed to Scalar::all(-DBL_MAX) for dilation. */
+@Namespace("cv") public static native @ByVal Scalar morphologyDefaultBorderValue();
+
+/** returns morphological filter engine. Only MORPH_ERODE and MORPH_DILATE are supported. */
+@Namespace("cv") public static native @Ptr FilterEngine createMorphologyFilter(int op, int type, @ByVal Mat kernel,
+                    @ByVal Point anchor/*=Point(-1,-1)*/, int rowBorderType/*=BORDER_CONSTANT*/,
+                    int columnBorderType/*=-1*/,
+                    @Const @ByRef Scalar borderValue/*=morphologyDefaultBorderValue()*/);
+
+/** shape of the structuring element */
+/** enum cv:: */
+public static final int MORPH_RECT= 0, MORPH_CROSS= 1, MORPH_ELLIPSE= 2;
+/** returns structuring element of the specified shape and size */
+@Namespace("cv") public static native @ByVal Mat getStructuringElement(int shape, @ByVal Size ksize, @ByVal Point anchor/*=Point(-1,-1)*/);
+
+
+
+/** copies 2D array to a larger destination array with extrapolation of the outer part of src using the specified border mode */
+@Namespace("cv") public static native void copyMakeBorder( @ByVal Mat src, @ByVal Mat dst,
+                                int top, int bottom, int left, int right,
+                                int borderType, @Const @ByRef Scalar value/*=Scalar()*/ );
+
+/** smooths the image using median filter. */
+@Namespace("cv") public static native void medianBlur( @ByVal Mat src, @ByVal Mat dst, int ksize );
+/** smooths the image using Gaussian filter. */
+@Namespace("cv") public static native void GaussianBlur( @ByVal Mat src,
+                                               @ByVal Mat dst, @ByVal Size ksize,
+                                               double sigmaX, double sigmaY/*=0*/,
+                                               int borderType/*=BORDER_DEFAULT*/ );
+/** smooths the image using bilateral filter */
+@Namespace("cv") public static native void bilateralFilter( @ByVal Mat src, @ByVal Mat dst, int d,
+                                   double sigmaColor, double sigmaSpace,
+                                   int borderType/*=BORDER_DEFAULT*/ );
+/** smooths the image using adaptive bilateral filter */
+@Namespace("cv") public static native void adaptiveBilateralFilter( @ByVal Mat src, @ByVal Mat dst, @ByVal Size ksize,
+                                           double sigmaSpace, double maxSigmaColor/*=20.0*/, @ByVal Point anchor/*=Point(-1, -1)*/,
+                                           int borderType/*=BORDER_DEFAULT*/ );
+/** smooths the image using the box filter. Each pixel is processed in O(1) time */
+@Namespace("cv") public static native void boxFilter( @ByVal Mat src, @ByVal Mat dst, int ddepth,
+                             @ByVal Size ksize, @ByVal Point anchor/*=Point(-1,-1)*/,
+                             @Cast("bool") boolean normalize/*=true*/,
+                             int borderType/*=BORDER_DEFAULT*/ );
+/** a synonym for normalized box filter */
+@Namespace("cv") public static native void blur( @ByVal Mat src, @ByVal Mat dst,
+                        @ByVal Size ksize, @ByVal Point anchor/*=Point(-1,-1)*/,
+                        int borderType/*=BORDER_DEFAULT*/ );
+
+/** applies non-separable 2D linear filter to the image */
+@Namespace("cv") public static native void filter2D( @ByVal Mat src, @ByVal Mat dst, int ddepth,
+                            @ByVal Mat kernel, @ByVal Point anchor/*=Point(-1,-1)*/,
+                            double delta/*=0*/, int borderType/*=BORDER_DEFAULT*/ );
+
+/** applies separable 2D linear filter to the image */
+@Namespace("cv") public static native void sepFilter2D( @ByVal Mat src, @ByVal Mat dst, int ddepth,
+                               @ByVal Mat kernelX, @ByVal Mat kernelY,
+                               @ByVal Point anchor/*=Point(-1,-1)*/,
+                               double delta/*=0*/, int borderType/*=BORDER_DEFAULT*/ );
+
+/** applies generalized Sobel operator to the image */
+@Namespace("cv") public static native void Sobel( @ByVal Mat src, @ByVal Mat dst, int ddepth,
+                         int dx, int dy, int ksize/*=3*/,
+                         double scale/*=1*/, double delta/*=0*/,
+                         int borderType/*=BORDER_DEFAULT*/ );
+
+/** applies the vertical or horizontal Scharr operator to the image */
+@Namespace("cv") public static native void Scharr( @ByVal Mat src, @ByVal Mat dst, int ddepth,
+                          int dx, int dy, double scale/*=1*/, double delta/*=0*/,
+                          int borderType/*=BORDER_DEFAULT*/ );
+
+/** applies Laplacian operator to the image */
+@Namespace("cv") public static native void Laplacian( @ByVal Mat src, @ByVal Mat dst, int ddepth,
+                             int ksize/*=1*/, double scale/*=1*/, double delta/*=0*/,
+                             int borderType/*=BORDER_DEFAULT*/ );
+
+/** applies Canny edge detector and produces the edge map. */
+@Namespace("cv") public static native void Canny( @ByVal Mat image, @ByVal Mat edges,
+                         double threshold1, double threshold2,
+                         int apertureSize/*=3*/, @Cast("bool") boolean L2gradient/*=false*/ );
+
+/** computes minimum eigen value of 2x2 derivative covariation matrix at each pixel - the cornerness criteria */
+@Namespace("cv") public static native void cornerMinEigenVal( @ByVal Mat src, @ByVal Mat dst,
+                                   int blockSize, int ksize/*=3*/,
+                                   int borderType/*=BORDER_DEFAULT*/ );
+
+/** computes Harris cornerness criteria at each image pixel */
+@Namespace("cv") public static native void cornerHarris( @ByVal Mat src, @ByVal Mat dst, int blockSize,
+                                int ksize, double k,
+                                int borderType/*=BORDER_DEFAULT*/ );
+
+// low-level function for computing eigenvalues and eigenvectors of 2x2 matrices
+@Namespace("cv") public static native void eigen2x2( @Const FloatPointer a, FloatPointer e, int n );
+@Namespace("cv") public static native void eigen2x2( @Const FloatBuffer a, FloatBuffer e, int n );
+@Namespace("cv") public static native void eigen2x2( @Const float[] a, float[] e, int n );
+
+/** computes both eigenvalues and the eigenvectors of 2x2 derivative covariation matrix  at each pixel. The output is stored as 6-channel matrix. */
+@Namespace("cv") public static native void cornerEigenValsAndVecs( @ByVal Mat src, @ByVal Mat dst,
+                                          int blockSize, int ksize,
+                                          int borderType/*=BORDER_DEFAULT*/ );
+
+/** computes another complex cornerness criteria at each pixel */
+@Namespace("cv") public static native void preCornerDetect( @ByVal Mat src, @ByVal Mat dst, int ksize,
+                                   int borderType/*=BORDER_DEFAULT*/ );
+
+/** adjusts the corner locations with sub-pixel accuracy to maximize the certain cornerness criteria */
+@Namespace("cv") public static native void cornerSubPix( @ByVal Mat image, @ByVal Mat corners,
+                                @ByVal Size winSize, @ByVal Size zeroZone,
+                                @ByVal TermCriteria criteria );
+
+/** finds the strong enough corners where the cornerMinEigenVal() or cornerHarris() report the local maxima */
+@Namespace("cv") public static native void goodFeaturesToTrack( @ByVal Mat image, @ByVal Mat corners,
+                                     int maxCorners, double qualityLevel, double minDistance,
+                                     @ByVal Mat mask/*=noArray()*/, int blockSize/*=3*/,
+                                     @Cast("bool") boolean useHarrisDetector/*=false*/, double k/*=0.04*/ );
+
+/** finds lines in the black-n-white image using the standard or pyramid Hough transform */
+@Namespace("cv") public static native void HoughLines( @ByVal Mat image, @ByVal Mat lines,
+                              double rho, double theta, int threshold,
+                              double srn/*=0*/, double stn/*=0*/ );
+
+/** finds line segments in the black-n-white image using probabilistic Hough transform */
+@Namespace("cv") public static native void HoughLinesP( @ByVal Mat image, @ByVal Mat lines,
+                               double rho, double theta, int threshold,
+                               double minLineLength/*=0*/, double maxLineGap/*=0*/ );
+
+/** finds circles in the grayscale image using 2+1 gradient Hough transform */
+@Namespace("cv") public static native void HoughCircles( @ByVal Mat image, @ByVal Mat circles,
+                               int method, double dp, double minDist,
+                               double param1/*=100*/, double param2/*=100*/,
+                               int minRadius/*=0*/, int maxRadius/*=0*/ );
+
+/** enum cv:: */
+public static final int
+    GHT_POSITION = 0,
+    GHT_SCALE = 1,
+    GHT_ROTATION = 2;
+
+/** finds arbitrary template in the grayscale image using Generalized Hough Transform
+ *  Ballard, D.H. (1981). Generalizing the Hough transform to detect arbitrary shapes. Pattern Recognition 13 (2): 111-122.
+ *  Guil, N., González-Linares, J.M. and Zapata, E.L. (1999). Bidimensional shape detection using an invariant approach. Pattern Recognition 32 (6): 1025-1038. */
+@Namespace("cv") @NoOffset public static class GeneralizedHough extends Algorithm {
+    static { Loader.load(); }
+    public GeneralizedHough() { }
+    public GeneralizedHough(Pointer p) { super(p); }
+
+    public native @Ptr GeneralizedHough create(int method);
+
+    /** set template to search */
+    public native void setTemplate(@ByVal Mat templ, int cannyThreshold/*=100*/, @ByVal Point templCenter/*=Point(-1, -1)*/);
+    public native void setTemplate(@ByVal Mat edges, @ByVal Mat dx, @ByVal Mat dy, @ByVal Point templCenter/*=Point(-1, -1)*/);
+
+    /** find template on image */
+    public native void detect(@ByVal Mat image, @ByVal Mat positions, @ByVal Mat votes/*=cv::noArray()*/, int cannyThreshold/*=100*/);
+    public native void detect(@ByVal Mat edges, @ByVal Mat dx, @ByVal Mat dy, @ByVal Mat positions, @ByVal Mat votes/*=cv::noArray()*/);
+
+    public native void release();
+}
+
+/** erodes the image (applies the local minimum operator) */
+@Namespace("cv") public static native void erode( @ByVal Mat src, @ByVal Mat dst, @ByVal Mat kernel,
+                         @ByVal Point anchor/*=Point(-1,-1)*/, int iterations/*=1*/,
+                         int borderType/*=BORDER_CONSTANT*/,
+                         @Const @ByRef Scalar borderValue/*=morphologyDefaultBorderValue()*/ );
+
+/** dilates the image (applies the local maximum operator) */
+@Namespace("cv") public static native void dilate( @ByVal Mat src, @ByVal Mat dst, @ByVal Mat kernel,
+                          @ByVal Point anchor/*=Point(-1,-1)*/, int iterations/*=1*/,
+                          int borderType/*=BORDER_CONSTANT*/,
+                          @Const @ByRef Scalar borderValue/*=morphologyDefaultBorderValue()*/ );
+
+/** applies an advanced morphological operation to the image */
+@Namespace("cv") public static native void morphologyEx( @ByVal Mat src, @ByVal Mat dst,
+                                int op, @ByVal Mat kernel,
+                                @ByVal Point anchor/*=Point(-1,-1)*/, int iterations/*=1*/,
+                                int borderType/*=BORDER_CONSTANT*/,
+                                @Const @ByRef Scalar borderValue/*=morphologyDefaultBorderValue()*/ );
+
+/** interpolation algorithm */
+/** enum cv:: */
+public static final int
+    /** nearest neighbor interpolation */
+    INTER_NEAREST= CV_INTER_NN,
+    /** bilinear interpolation */
+    INTER_LINEAR= CV_INTER_LINEAR,
+    /** bicubic interpolation */
+    INTER_CUBIC= CV_INTER_CUBIC,
+    /** area-based (or super) interpolation */
+    INTER_AREA= CV_INTER_AREA,
+    /** Lanczos interpolation over 8x8 neighborhood */
+    INTER_LANCZOS4= CV_INTER_LANCZOS4,
+    INTER_MAX= 7,
+    WARP_INVERSE_MAP= CV_WARP_INVERSE_MAP;
+
+/** resizes the image */
+@Namespace("cv") public static native void resize( @ByVal Mat src, @ByVal Mat dst,
+                          @ByVal Size dsize, double fx/*=0*/, double fy/*=0*/,
+                          int interpolation/*=INTER_LINEAR*/ );
+
+/** warps the image using affine transformation */
+@Namespace("cv") public static native void warpAffine( @ByVal Mat src, @ByVal Mat dst,
+                              @ByVal Mat M, @ByVal Size dsize,
+                              int flags/*=INTER_LINEAR*/,
+                              int borderMode/*=BORDER_CONSTANT*/,
+                              @Const @ByRef Scalar borderValue/*=Scalar()*/);
+
+/** warps the image using perspective transformation */
+@Namespace("cv") public static native void warpPerspective( @ByVal Mat src, @ByVal Mat dst,
+                                   @ByVal Mat M, @ByVal Size dsize,
+                                   int flags/*=INTER_LINEAR*/,
+                                   int borderMode/*=BORDER_CONSTANT*/,
+                                   @Const @ByRef Scalar borderValue/*=Scalar()*/);
+
+/** enum cv:: */
+public static final int
+    INTER_BITS= 5, INTER_BITS2= INTER_BITS*2,
+    INTER_TAB_SIZE= (1<<INTER_BITS),
+    INTER_TAB_SIZE2= INTER_TAB_SIZE*INTER_TAB_SIZE;
+
+/** warps the image using the precomputed maps. The maps are stored in either floating-point or integer fixed-point format */
+@Namespace("cv") public static native void remap( @ByVal Mat src, @ByVal Mat dst,
+                         @ByVal Mat map1, @ByVal Mat map2,
+                         int interpolation, int borderMode/*=BORDER_CONSTANT*/,
+                         @Const @ByRef Scalar borderValue/*=Scalar()*/);
+
+/** converts maps for remap from floating-point to fixed-point format or backwards */
+@Namespace("cv") public static native void convertMaps( @ByVal Mat map1, @ByVal Mat map2,
+                               @ByVal Mat dstmap1, @ByVal Mat dstmap2,
+                               int dstmap1type, @Cast("bool") boolean nninterpolation/*=false*/ );
+
+/** returns 2x3 affine transformation matrix for the planar rotation. */
+@Namespace("cv") public static native @ByVal Mat getRotationMatrix2D( @ByVal Point2f center, double angle, double scale );
+/** returns 3x3 perspective transformation for the corresponding 4 point pairs. */
+@Namespace("cv") public static native @ByVal Mat getPerspectiveTransform( @Const Point2f src, @Const Point2f dst );
+/** returns 2x3 affine transformation for the corresponding 3 point pairs. */
+@Namespace("cv") public static native @ByVal Mat getAffineTransform( @Const Point2f src, @Const Point2f dst );
+/** computes 2x3 affine transformation matrix that is inverse to the specified 2x3 affine transformation. */
+@Namespace("cv") public static native void invertAffineTransform( @ByVal Mat M, @ByVal Mat iM );
+
+@Namespace("cv") public static native @ByVal Mat getPerspectiveTransform( @ByVal Mat src, @ByVal Mat dst );
+@Namespace("cv") public static native @ByVal Mat getAffineTransform( @ByVal Mat src, @ByVal Mat dst );
+
+/** extracts rectangle from the image at sub-pixel location */
+@Namespace("cv") public static native void getRectSubPix( @ByVal Mat image, @ByVal Size patchSize,
+                                 @ByVal Point2f center, @ByVal Mat patch, int patchType/*=-1*/ );
+
+/** computes the integral image */
+@Namespace("cv") public static native void integral( @ByVal Mat src, @ByVal Mat sum, int sdepth/*=-1*/ );
+
+/** computes the integral image and integral for the squared image */
+@Namespace("cv") public static native void integral( @ByVal Mat src, @ByVal Mat sum,
+                                        @ByVal Mat sqsum, int sdepth/*=-1*/ );
+/** computes the integral image, integral for the squared image and the tilted integral image */
+@Namespace("cv") public static native void integral( @ByVal Mat src, @ByVal Mat sum,
+                                        @ByVal Mat sqsum, @ByVal Mat tilted,
+                                        int sdepth/*=-1*/ );
+
+/** adds image to the accumulator (dst += src). Unlike cv::add, dst and src can have different types. */
+@Namespace("cv") public static native void accumulate( @ByVal Mat src, @ByVal Mat dst,
+                              @ByVal Mat mask/*=noArray()*/ );
+/** adds squared src image to the accumulator (dst += src*src). */
+@Namespace("cv") public static native void accumulateSquare( @ByVal Mat src, @ByVal Mat dst,
+                                    @ByVal Mat mask/*=noArray()*/ );
+/** adds product of the 2 images to the accumulator (dst += src1*src2). */
+@Namespace("cv") public static native void accumulateProduct( @ByVal Mat src1, @ByVal Mat src2,
+                                     @ByVal Mat dst, @ByVal Mat mask/*=noArray()*/ );
+/** updates the running average (dst = dst*(1-alpha) + src*alpha) */
+@Namespace("cv") public static native void accumulateWeighted( @ByVal Mat src, @ByVal Mat dst,
+                                      double alpha, @ByVal Mat mask/*=noArray()*/ );
+
+/** computes PSNR image/video quality metric */
+@Namespace("cv") public static native double PSNR(@ByVal Mat src1, @ByVal Mat src2);
+
+@Namespace("cv") public static native @ByVal Point2d phaseCorrelate(@ByVal Mat src1, @ByVal Mat src2,
+                                  @ByVal Mat window/*=noArray()*/);
+@Namespace("cv") public static native @ByVal Point2d phaseCorrelateRes(@ByVal Mat src1, @ByVal Mat src2,
+                                    @ByVal Mat window, DoublePointer response/*=0*/);
+@Namespace("cv") public static native @ByVal Point2d phaseCorrelateRes(@ByVal Mat src1, @ByVal Mat src2,
+                                    @ByVal Mat window, DoubleBuffer response/*=0*/);
+@Namespace("cv") public static native @ByVal Point2d phaseCorrelateRes(@ByVal Mat src1, @ByVal Mat src2,
+                                    @ByVal Mat window, double[] response/*=0*/);
+@Namespace("cv") public static native void createHanningWindow(@ByVal Mat dst, @ByVal Size winSize, int type);
+
+/** type of the threshold operation */
+/** enum cv:: */
+public static final int THRESH_BINARY= CV_THRESH_BINARY, THRESH_BINARY_INV= CV_THRESH_BINARY_INV,
+       THRESH_TRUNC= CV_THRESH_TRUNC, THRESH_TOZERO= CV_THRESH_TOZERO,
+       THRESH_TOZERO_INV= CV_THRESH_TOZERO_INV, THRESH_MASK= CV_THRESH_MASK,
+       THRESH_OTSU= CV_THRESH_OTSU;
+
+/** applies fixed threshold to the image */
+@Namespace("cv") public static native double threshold( @ByVal Mat src, @ByVal Mat dst,
+                               double thresh, double maxval, int type );
+
+/** adaptive threshold algorithm */
+/** enum cv:: */
+public static final int ADAPTIVE_THRESH_MEAN_C= 0, ADAPTIVE_THRESH_GAUSSIAN_C= 1;
+
+/** applies variable (adaptive) threshold to the image */
+@Namespace("cv") public static native void adaptiveThreshold( @ByVal Mat src, @ByVal Mat dst,
+                                     double maxValue, int adaptiveMethod,
+                                     int thresholdType, int blockSize, double C );
+
+/** smooths and downsamples the image */
+@Namespace("cv") public static native void pyrDown( @ByVal Mat src, @ByVal Mat dst,
+                           @Const @ByRef Size dstsize/*=Size()*/, int borderType/*=BORDER_DEFAULT*/ );
+/** upsamples and smoothes the image */
+@Namespace("cv") public static native void pyrUp( @ByVal Mat src, @ByVal Mat dst,
+                         @Const @ByRef Size dstsize/*=Size()*/, int borderType/*=BORDER_DEFAULT*/ );
+
+/** builds the gaussian pyramid using pyrDown() as a basic operation */
+@Namespace("cv") public static native void buildPyramid( @ByVal Mat src, @ByVal MatVector dst,
+                              int maxlevel, int borderType/*=BORDER_DEFAULT*/ );
+
+/** corrects lens distortion for the given camera matrix and distortion coefficients */
+@Namespace("cv") public static native void undistort( @ByVal Mat src, @ByVal Mat dst,
+                             @ByVal Mat cameraMatrix,
+                             @ByVal Mat distCoeffs,
+                             @ByVal Mat newCameraMatrix/*=noArray()*/ );
+
+/** initializes maps for cv::remap() to correct lens distortion and optionally rectify the image */
+@Namespace("cv") public static native void initUndistortRectifyMap( @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                           @ByVal Mat R, @ByVal Mat newCameraMatrix,
+                           @ByVal Size size, int m1type, @ByVal Mat map1, @ByVal Mat map2 );
+
+/** enum cv:: */
+public static final int
+    PROJ_SPHERICAL_ORTHO = 0,
+    PROJ_SPHERICAL_EQRECT = 1;
+
+/** initializes maps for cv::remap() for wide-angle */
+@Namespace("cv") public static native float initWideAngleProjMap( @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                         @ByVal Size imageSize, int destImageWidth,
+                                         int m1type, @ByVal Mat map1, @ByVal Mat map2,
+                                         int projType/*=PROJ_SPHERICAL_EQRECT*/, double alpha/*=0*/);
+
+/** returns the default new camera matrix (by default it is the same as cameraMatrix unless centerPricipalPoint=true) */
+@Namespace("cv") public static native @ByVal Mat getDefaultNewCameraMatrix( @ByVal Mat cameraMatrix, @ByVal Size imgsize/*=Size()*/,
+                                            @Cast("bool") boolean centerPrincipalPoint/*=false*/ );
+
+/** returns points' coordinates after lens distortion correction */
+@Namespace("cv") public static native void undistortPoints( @ByVal Mat src, @ByVal Mat dst,
+                                   @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
+                                   @ByVal Mat R/*=noArray()*/, @ByVal Mat P/*=noArray()*/);
+
+
+
+/** computes the joint dense histogram for a set of images. */
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const IntPointer channels, @ByVal Mat mask,
+                          @ByVal Mat hist, int dims, @Const IntPointer histSize,
+                          @Cast("const float**") PointerPointer ranges, @Cast("bool") boolean uniform/*=true*/, @Cast("bool") boolean accumulate/*=false*/ );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const IntPointer channels, @ByVal Mat mask,
+                          @ByVal Mat hist, int dims, @Const IntPointer histSize,
+                          @Const @ByPtrPtr FloatPointer ranges, @Cast("bool") boolean uniform/*=true*/, @Cast("bool") boolean accumulate/*=false*/ );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const IntBuffer channels, @ByVal Mat mask,
+                          @ByVal Mat hist, int dims, @Const IntBuffer histSize,
+                          @Const @ByPtrPtr FloatBuffer ranges, @Cast("bool") boolean uniform/*=true*/, @Cast("bool") boolean accumulate/*=false*/ );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const int[] channels, @ByVal Mat mask,
+                          @ByVal Mat hist, int dims, @Const int[] histSize,
+                          @Const @ByPtrPtr float[] ranges, @Cast("bool") boolean uniform/*=true*/, @Cast("bool") boolean accumulate/*=false*/ );
+
+/** computes the joint sparse histogram for a set of images. */
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const IntPointer channels, @ByVal Mat mask,
+                          @ByRef SparseMat hist, int dims,
+                          @Const IntPointer histSize, @Cast("const float**") PointerPointer ranges,
+                          @Cast("bool") boolean uniform/*=true*/, @Cast("bool") boolean accumulate/*=false*/ );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const IntPointer channels, @ByVal Mat mask,
+                          @ByRef SparseMat hist, int dims,
+                          @Const IntPointer histSize, @Const @ByPtrPtr FloatPointer ranges,
+                          @Cast("bool") boolean uniform/*=true*/, @Cast("bool") boolean accumulate/*=false*/ );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const IntBuffer channels, @ByVal Mat mask,
+                          @ByRef SparseMat hist, int dims,
+                          @Const IntBuffer histSize, @Const @ByPtrPtr FloatBuffer ranges,
+                          @Cast("bool") boolean uniform/*=true*/, @Cast("bool") boolean accumulate/*=false*/ );
+@Namespace("cv") public static native void calcHist( @Const Mat images, int nimages,
+                          @Const int[] channels, @ByVal Mat mask,
+                          @ByRef SparseMat hist, int dims,
+                          @Const int[] histSize, @Const @ByPtrPtr float[] ranges,
+                          @Cast("bool") boolean uniform/*=true*/, @Cast("bool") boolean accumulate/*=false*/ );
+
+@Namespace("cv") public static native void calcHist( @ByVal MatVector images,
+                            @StdVector IntPointer channels,
+                            @ByVal Mat mask, @ByVal Mat hist,
+                            @StdVector IntPointer histSize,
+                            @StdVector FloatPointer ranges,
+                            @Cast("bool") boolean accumulate/*=false*/ );
+@Namespace("cv") public static native void calcHist( @ByVal MatVector images,
+                            @StdVector IntBuffer channels,
+                            @ByVal Mat mask, @ByVal Mat hist,
+                            @StdVector IntBuffer histSize,
+                            @StdVector FloatBuffer ranges,
+                            @Cast("bool") boolean accumulate/*=false*/ );
+@Namespace("cv") public static native void calcHist( @ByVal MatVector images,
+                            @StdVector int[] channels,
+                            @ByVal Mat mask, @ByVal Mat hist,
+                            @StdVector int[] histSize,
+                            @StdVector float[] ranges,
+                            @Cast("bool") boolean accumulate/*=false*/ );
+
+/** computes back projection for the set of images */
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const IntPointer channels, @ByVal Mat hist,
+                                 @ByVal Mat backProject, @Cast("const float**") PointerPointer ranges,
+                                 double scale/*=1*/, @Cast("bool") boolean uniform/*=true*/ );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const IntPointer channels, @ByVal Mat hist,
+                                 @ByVal Mat backProject, @Const @ByPtrPtr FloatPointer ranges,
+                                 double scale/*=1*/, @Cast("bool") boolean uniform/*=true*/ );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const IntBuffer channels, @ByVal Mat hist,
+                                 @ByVal Mat backProject, @Const @ByPtrPtr FloatBuffer ranges,
+                                 double scale/*=1*/, @Cast("bool") boolean uniform/*=true*/ );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const int[] channels, @ByVal Mat hist,
+                                 @ByVal Mat backProject, @Const @ByPtrPtr float[] ranges,
+                                 double scale/*=1*/, @Cast("bool") boolean uniform/*=true*/ );
+
+/** computes back projection for the set of images */
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const IntPointer channels, @Const @ByRef SparseMat hist,
+                                 @ByVal Mat backProject, @Cast("const float**") PointerPointer ranges,
+                                 double scale/*=1*/, @Cast("bool") boolean uniform/*=true*/ );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const IntPointer channels, @Const @ByRef SparseMat hist,
+                                 @ByVal Mat backProject, @Const @ByPtrPtr FloatPointer ranges,
+                                 double scale/*=1*/, @Cast("bool") boolean uniform/*=true*/ );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const IntBuffer channels, @Const @ByRef SparseMat hist,
+                                 @ByVal Mat backProject, @Const @ByPtrPtr FloatBuffer ranges,
+                                 double scale/*=1*/, @Cast("bool") boolean uniform/*=true*/ );
+@Namespace("cv") public static native void calcBackProject( @Const Mat images, int nimages,
+                                 @Const int[] channels, @Const @ByRef SparseMat hist,
+                                 @ByVal Mat backProject, @Const @ByPtrPtr float[] ranges,
+                                 double scale/*=1*/, @Cast("bool") boolean uniform/*=true*/ );
+
+@Namespace("cv") public static native void calcBackProject( @ByVal MatVector images, @StdVector IntPointer channels,
+                                   @ByVal Mat hist, @ByVal Mat dst,
+                                   @StdVector FloatPointer ranges,
+                                   double scale );
+@Namespace("cv") public static native void calcBackProject( @ByVal MatVector images, @StdVector IntBuffer channels,
+                                   @ByVal Mat hist, @ByVal Mat dst,
+                                   @StdVector FloatBuffer ranges,
+                                   double scale );
+@Namespace("cv") public static native void calcBackProject( @ByVal MatVector images, @StdVector int[] channels,
+                                   @ByVal Mat hist, @ByVal Mat dst,
+                                   @StdVector float[] ranges,
+                                   double scale );
+
+/*CV_EXPORTS void calcBackProjectPatch( const Mat* images, int nimages, const int* channels,
+                                      InputArray hist, OutputArray dst, Size patchSize,
+                                      int method, double factor=1 );
+
+CV_EXPORTS_W void calcBackProjectPatch( InputArrayOfArrays images, const vector<int>& channels,
+                                        InputArray hist, OutputArray dst, Size patchSize,
+                                        int method, double factor=1 );*/
+
+/** compares two histograms stored in dense arrays */
+@Namespace("cv") public static native double compareHist( @ByVal Mat H1, @ByVal Mat H2, int method );
+
+/** compares two histograms stored in sparse arrays */
+@Namespace("cv") public static native double compareHist( @Const @ByRef SparseMat H1, @Const @ByRef SparseMat H2, int method );
+
+/** normalizes the grayscale image brightness and contrast by normalizing its histogram */
+@Namespace("cv") public static native void equalizeHist( @ByVal Mat src, @ByVal Mat dst );
+
+@Namespace("cv") public static class CLAHE extends Algorithm {
+    static { Loader.load(); }
+    public CLAHE() { }
+    public CLAHE(Pointer p) { super(p); }
+
+    public native void apply(@ByVal Mat src, @ByVal Mat dst);
+
+    public native void setClipLimit(double clipLimit);
+    public native double getClipLimit();
+
+    public native void setTilesGridSize(@ByVal Size tileGridSize);
+    public native @ByVal Size getTilesGridSize();
+
+    public native void collectGarbage();
+}
+@Namespace("cv") public static native @Ptr CLAHE createCLAHE(double clipLimit/*=40.0*/, @ByVal Size tileGridSize/*=Size(8, 8)*/);
+
+@Namespace("cv") public static native float EMD( @ByVal Mat signature1, @ByVal Mat signature2,
+                      int distType, @ByVal Mat cost/*=noArray()*/,
+                      FloatPointer lowerBound/*=0*/, @ByVal Mat flow/*=noArray()*/ );
+@Namespace("cv") public static native float EMD( @ByVal Mat signature1, @ByVal Mat signature2,
+                      int distType, @ByVal Mat cost/*=noArray()*/,
+                      FloatBuffer lowerBound/*=0*/, @ByVal Mat flow/*=noArray()*/ );
+@Namespace("cv") public static native float EMD( @ByVal Mat signature1, @ByVal Mat signature2,
+                      int distType, @ByVal Mat cost/*=noArray()*/,
+                      float[] lowerBound/*=0*/, @ByVal Mat flow/*=noArray()*/ );
+
+/** segments the image using watershed algorithm */
+@Namespace("cv") public static native void watershed( @ByVal Mat image, @ByVal Mat markers );
+
+/** filters image using meanshift algorithm */
+@Namespace("cv") public static native void pyrMeanShiftFiltering( @ByVal Mat src, @ByVal Mat dst,
+                                         double sp, double sr, int maxLevel/*=1*/,
+                                         @ByVal TermCriteria termcrit/*=TermCriteria(
+                                            TermCriteria::MAX_ITER+TermCriteria::EPS,5,1)*/ );
+
+/** class of the pixel in GrabCut algorithm */
+/** enum cv:: */
+public static final int
+    /** background */
+    GC_BGD    = 0,
+    /** foreground */
+    GC_FGD    = 1,
+    /** most probably background */
+    GC_PR_BGD = 2,
+    /** most probably foreground */
+    GC_PR_FGD = 3;
+
+/** GrabCut algorithm flags */
+/** enum cv:: */
+public static final int
+    GC_INIT_WITH_RECT  = 0,
+    GC_INIT_WITH_MASK  = 1,
+    GC_EVAL            = 2;
+
+/** segments the image using GrabCut algorithm */
+@Namespace("cv") public static native void grabCut( @ByVal Mat img, @ByVal Mat mask, @ByVal Rect rect,
+                           @ByVal Mat bgdModel, @ByVal Mat fgdModel,
+                           int iterCount, int mode/*=GC_EVAL*/ );
+
+/** enum cv:: */
+public static final int
+    DIST_LABEL_CCOMP = 0,
+    DIST_LABEL_PIXEL = 1;
+
+/** builds the discrete Voronoi diagram */
+@Namespace("cv") public static native void distanceTransform( @ByVal Mat src, @ByVal Mat dst,
+                                     @ByVal Mat labels, int distanceType, int maskSize,
+                                     int labelType/*=DIST_LABEL_CCOMP*/ );
+
+/** computes the distance transform map */
+@Namespace("cv") public static native void distanceTransform( @ByVal Mat src, @ByVal Mat dst,
+                                     int distanceType, int maskSize );
+
+/** enum cv:: */
+public static final int FLOODFILL_FIXED_RANGE =  1 << 16, FLOODFILL_MASK_ONLY =  1 << 17;
+
+/** fills the semi-uniform image region starting from the specified seed point */
+@Namespace("cv") public static native int floodFill( @ByVal Mat image,
+                          @ByVal Point seedPoint, @ByVal Scalar newVal, Rect rect/*=0*/,
+                          @ByVal Scalar loDiff/*=Scalar()*/, @ByVal Scalar upDiff/*=Scalar()*/,
+                          int flags/*=4*/ );
+
+/** fills the semi-uniform image region and/or the mask starting from the specified seed point */
+@Namespace("cv") public static native int floodFill( @ByVal Mat image, @ByVal Mat mask,
+                            @ByVal Point seedPoint, @ByVal Scalar newVal, Rect rect/*=0*/,
+                            @ByVal Scalar loDiff/*=Scalar()*/, @ByVal Scalar upDiff/*=Scalar()*/,
+                            int flags/*=4*/ );
+
+
+/** enum cv:: */
+public static final int
+    COLOR_BGR2BGRA    = 0,
+    COLOR_RGB2RGBA    = COLOR_BGR2BGRA,
+
+    COLOR_BGRA2BGR    = 1,
+    COLOR_RGBA2RGB    = COLOR_BGRA2BGR,
+
+    COLOR_BGR2RGBA    = 2,
+    COLOR_RGB2BGRA    = COLOR_BGR2RGBA,
+
+    COLOR_RGBA2BGR    = 3,
+    COLOR_BGRA2RGB    = COLOR_RGBA2BGR,
+
+    COLOR_BGR2RGB     = 4,
+    COLOR_RGB2BGR     = COLOR_BGR2RGB,
+
+    COLOR_BGRA2RGBA   = 5,
+    COLOR_RGBA2BGRA   = COLOR_BGRA2RGBA,
+
+    COLOR_BGR2GRAY    = 6,
+    COLOR_RGB2GRAY    = 7,
+    COLOR_GRAY2BGR    = 8,
+    COLOR_GRAY2RGB    = COLOR_GRAY2BGR,
+    COLOR_GRAY2BGRA   = 9,
+    COLOR_GRAY2RGBA   = COLOR_GRAY2BGRA,
+    COLOR_BGRA2GRAY   = 10,
+    COLOR_RGBA2GRAY   = 11,
+
+    COLOR_BGR2BGR565  = 12,
+    COLOR_RGB2BGR565  = 13,
+    COLOR_BGR5652BGR  = 14,
+    COLOR_BGR5652RGB  = 15,
+    COLOR_BGRA2BGR565 = 16,
+    COLOR_RGBA2BGR565 = 17,
+    COLOR_BGR5652BGRA = 18,
+    COLOR_BGR5652RGBA = 19,
+
+    COLOR_GRAY2BGR565 = 20,
+    COLOR_BGR5652GRAY = 21,
+
+    COLOR_BGR2BGR555  = 22,
+    COLOR_RGB2BGR555  = 23,
+    COLOR_BGR5552BGR  = 24,
+    COLOR_BGR5552RGB  = 25,
+    COLOR_BGRA2BGR555 = 26,
+    COLOR_RGBA2BGR555 = 27,
+    COLOR_BGR5552BGRA = 28,
+    COLOR_BGR5552RGBA = 29,
+
+    COLOR_GRAY2BGR555 = 30,
+    COLOR_BGR5552GRAY = 31,
+
+    COLOR_BGR2XYZ     = 32,
+    COLOR_RGB2XYZ     = 33,
+    COLOR_XYZ2BGR     = 34,
+    COLOR_XYZ2RGB     = 35,
+
+    COLOR_BGR2YCrCb   = 36,
+    COLOR_RGB2YCrCb   = 37,
+    COLOR_YCrCb2BGR   = 38,
+    COLOR_YCrCb2RGB   = 39,
+
+    COLOR_BGR2HSV     = 40,
+    COLOR_RGB2HSV     = 41,
+
+    COLOR_BGR2Lab     = 44,
+    COLOR_RGB2Lab     = 45,
+
+    COLOR_BayerBG2BGR = 46,
+    COLOR_BayerGB2BGR = 47,
+    COLOR_BayerRG2BGR = 48,
+    COLOR_BayerGR2BGR = 49,
+
+    COLOR_BayerBG2RGB = COLOR_BayerRG2BGR,
+    COLOR_BayerGB2RGB = COLOR_BayerGR2BGR,
+    COLOR_BayerRG2RGB = COLOR_BayerBG2BGR,
+    COLOR_BayerGR2RGB = COLOR_BayerGB2BGR,
+
+    COLOR_BGR2Luv     = 50,
+    COLOR_RGB2Luv     = 51,
+    COLOR_BGR2HLS     = 52,
+    COLOR_RGB2HLS     = 53,
+
+    COLOR_HSV2BGR     = 54,
+    COLOR_HSV2RGB     = 55,
+
+    COLOR_Lab2BGR     = 56,
+    COLOR_Lab2RGB     = 57,
+    COLOR_Luv2BGR     = 58,
+    COLOR_Luv2RGB     = 59,
+    COLOR_HLS2BGR     = 60,
+    COLOR_HLS2RGB     = 61,
+
+    COLOR_BayerBG2BGR_VNG = 62,
+    COLOR_BayerGB2BGR_VNG = 63,
+    COLOR_BayerRG2BGR_VNG = 64,
+    COLOR_BayerGR2BGR_VNG = 65,
+
+    COLOR_BayerBG2RGB_VNG = COLOR_BayerRG2BGR_VNG,
+    COLOR_BayerGB2RGB_VNG = COLOR_BayerGR2BGR_VNG,
+    COLOR_BayerRG2RGB_VNG = COLOR_BayerBG2BGR_VNG,
+    COLOR_BayerGR2RGB_VNG = COLOR_BayerGB2BGR_VNG,
+
+    COLOR_BGR2HSV_FULL = 66,
+    COLOR_RGB2HSV_FULL = 67,
+    COLOR_BGR2HLS_FULL = 68,
+    COLOR_RGB2HLS_FULL = 69,
+
+    COLOR_HSV2BGR_FULL = 70,
+    COLOR_HSV2RGB_FULL = 71,
+    COLOR_HLS2BGR_FULL = 72,
+    COLOR_HLS2RGB_FULL = 73,
+
+    COLOR_LBGR2Lab     = 74,
+    COLOR_LRGB2Lab     = 75,
+    COLOR_LBGR2Luv     = 76,
+    COLOR_LRGB2Luv     = 77,
+
+    COLOR_Lab2LBGR     = 78,
+    COLOR_Lab2LRGB     = 79,
+    COLOR_Luv2LBGR     = 80,
+    COLOR_Luv2LRGB     = 81,
+
+    COLOR_BGR2YUV      = 82,
+    COLOR_RGB2YUV      = 83,
+    COLOR_YUV2BGR      = 84,
+    COLOR_YUV2RGB      = 85,
+
+    COLOR_BayerBG2GRAY = 86,
+    COLOR_BayerGB2GRAY = 87,
+    COLOR_BayerRG2GRAY = 88,
+    COLOR_BayerGR2GRAY = 89,
+
+    //YUV 4:2:0 formats family
+    COLOR_YUV2RGB_NV12 = 90,
+    COLOR_YUV2BGR_NV12 = 91,
+    COLOR_YUV2RGB_NV21 = 92,
+    COLOR_YUV2BGR_NV21 = 93,
+    COLOR_YUV420sp2RGB =  COLOR_YUV2RGB_NV21,
+    COLOR_YUV420sp2BGR =  COLOR_YUV2BGR_NV21,
+
+    COLOR_YUV2RGBA_NV12 = 94,
+    COLOR_YUV2BGRA_NV12 = 95,
+    COLOR_YUV2RGBA_NV21 = 96,
+    COLOR_YUV2BGRA_NV21 = 97,
+    COLOR_YUV420sp2RGBA =  COLOR_YUV2RGBA_NV21,
+    COLOR_YUV420sp2BGRA =  COLOR_YUV2BGRA_NV21,
+
+    COLOR_YUV2RGB_YV12 = 98,
+    COLOR_YUV2BGR_YV12 = 99,
+    COLOR_YUV2RGB_IYUV = 100,
+    COLOR_YUV2BGR_IYUV = 101,
+    COLOR_YUV2RGB_I420 =  COLOR_YUV2RGB_IYUV,
+    COLOR_YUV2BGR_I420 =  COLOR_YUV2BGR_IYUV,
+    COLOR_YUV420p2RGB =  COLOR_YUV2RGB_YV12,
+    COLOR_YUV420p2BGR =  COLOR_YUV2BGR_YV12,
+
+    COLOR_YUV2RGBA_YV12 = 102,
+    COLOR_YUV2BGRA_YV12 = 103,
+    COLOR_YUV2RGBA_IYUV = 104,
+    COLOR_YUV2BGRA_IYUV = 105,
+    COLOR_YUV2RGBA_I420 =  COLOR_YUV2RGBA_IYUV,
+    COLOR_YUV2BGRA_I420 =  COLOR_YUV2BGRA_IYUV,
+    COLOR_YUV420p2RGBA =  COLOR_YUV2RGBA_YV12,
+    COLOR_YUV420p2BGRA =  COLOR_YUV2BGRA_YV12,
+
+    COLOR_YUV2GRAY_420 = 106,
+    COLOR_YUV2GRAY_NV21 =  COLOR_YUV2GRAY_420,
+    COLOR_YUV2GRAY_NV12 =  COLOR_YUV2GRAY_420,
+    COLOR_YUV2GRAY_YV12 =  COLOR_YUV2GRAY_420,
+    COLOR_YUV2GRAY_IYUV =  COLOR_YUV2GRAY_420,
+    COLOR_YUV2GRAY_I420 =  COLOR_YUV2GRAY_420,
+    COLOR_YUV420sp2GRAY =  COLOR_YUV2GRAY_420,
+    COLOR_YUV420p2GRAY =  COLOR_YUV2GRAY_420,
+
+    //YUV 4:2:2 formats family
+    COLOR_YUV2RGB_UYVY = 107,
+    COLOR_YUV2BGR_UYVY = 108,
+    //COLOR_YUV2RGB_VYUY = 109,
+    //COLOR_YUV2BGR_VYUY = 110,
+    COLOR_YUV2RGB_Y422 =  COLOR_YUV2RGB_UYVY,
+    COLOR_YUV2BGR_Y422 =  COLOR_YUV2BGR_UYVY,
+    COLOR_YUV2RGB_UYNV =  COLOR_YUV2RGB_UYVY,
+    COLOR_YUV2BGR_UYNV =  COLOR_YUV2BGR_UYVY,
+
+    COLOR_YUV2RGBA_UYVY = 111,
+    COLOR_YUV2BGRA_UYVY = 112,
+    //COLOR_YUV2RGBA_VYUY = 113,
+    //COLOR_YUV2BGRA_VYUY = 114,
+    COLOR_YUV2RGBA_Y422 =  COLOR_YUV2RGBA_UYVY,
+    COLOR_YUV2BGRA_Y422 =  COLOR_YUV2BGRA_UYVY,
+    COLOR_YUV2RGBA_UYNV =  COLOR_YUV2RGBA_UYVY,
+    COLOR_YUV2BGRA_UYNV =  COLOR_YUV2BGRA_UYVY,
+
+    COLOR_YUV2RGB_YUY2 = 115,
+    COLOR_YUV2BGR_YUY2 = 116,
+    COLOR_YUV2RGB_YVYU = 117,
+    COLOR_YUV2BGR_YVYU = 118,
+    COLOR_YUV2RGB_YUYV =  COLOR_YUV2RGB_YUY2,
+    COLOR_YUV2BGR_YUYV =  COLOR_YUV2BGR_YUY2,
+    COLOR_YUV2RGB_YUNV =  COLOR_YUV2RGB_YUY2,
+    COLOR_YUV2BGR_YUNV =  COLOR_YUV2BGR_YUY2,
+
+    COLOR_YUV2RGBA_YUY2 = 119,
+    COLOR_YUV2BGRA_YUY2 = 120,
+    COLOR_YUV2RGBA_YVYU = 121,
+    COLOR_YUV2BGRA_YVYU = 122,
+    COLOR_YUV2RGBA_YUYV =  COLOR_YUV2RGBA_YUY2,
+    COLOR_YUV2BGRA_YUYV =  COLOR_YUV2BGRA_YUY2,
+    COLOR_YUV2RGBA_YUNV =  COLOR_YUV2RGBA_YUY2,
+    COLOR_YUV2BGRA_YUNV =  COLOR_YUV2BGRA_YUY2,
+
+    COLOR_YUV2GRAY_UYVY = 123,
+    COLOR_YUV2GRAY_YUY2 = 124,
+    //COLOR_YUV2GRAY_VYUY = COLOR_YUV2GRAY_UYVY,
+    COLOR_YUV2GRAY_Y422 =  COLOR_YUV2GRAY_UYVY,
+    COLOR_YUV2GRAY_UYNV =  COLOR_YUV2GRAY_UYVY,
+    COLOR_YUV2GRAY_YVYU =  COLOR_YUV2GRAY_YUY2,
+    COLOR_YUV2GRAY_YUYV =  COLOR_YUV2GRAY_YUY2,
+    COLOR_YUV2GRAY_YUNV =  COLOR_YUV2GRAY_YUY2,
+
+    // alpha premultiplication
+    COLOR_RGBA2mRGBA = 125,
+    COLOR_mRGBA2RGBA = 126,
+
+    COLOR_RGB2YUV_I420 = 127,
+    COLOR_BGR2YUV_I420 = 128,
+    COLOR_RGB2YUV_IYUV =  COLOR_RGB2YUV_I420,
+    COLOR_BGR2YUV_IYUV =  COLOR_BGR2YUV_I420,
+
+    COLOR_RGBA2YUV_I420 = 129,
+    COLOR_BGRA2YUV_I420 = 130,
+    COLOR_RGBA2YUV_IYUV =  COLOR_RGBA2YUV_I420,
+    COLOR_BGRA2YUV_IYUV =  COLOR_BGRA2YUV_I420,
+    COLOR_RGB2YUV_YV12  = 131,
+    COLOR_BGR2YUV_YV12  = 132,
+    COLOR_RGBA2YUV_YV12 = 133,
+    COLOR_BGRA2YUV_YV12 = 134,
+
+    COLOR_COLORCVT_MAX  = 135;
+
+
+/** converts image from one color space to another */
+@Namespace("cv") public static native void cvtColor( @ByVal Mat src, @ByVal Mat dst, int code, int dstCn/*=0*/ );
+
+/** raster image moments */
+@Namespace("cv") @NoOffset public static class Moments extends Pointer {
+    static { Loader.load(); }
+    public Moments(Pointer p) { super(p); }
+    public Moments(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public Moments position(int position) {
+        return (Moments)super.position(position);
+    }
+
+    /** the default constructor */
+    public Moments() { allocate(); }
+    private native void allocate();
+    /** the full constructor */
+    public Moments(double m00, double m10, double m01, double m20, double m11,
+                double m02, double m30, double m21, double m12, double m03 ) { allocate(m00, m10, m01, m20, m11, m02, m30, m21, m12, m03); }
+    private native void allocate(double m00, double m10, double m01, double m20, double m11,
+                double m02, double m30, double m21, double m12, double m03 );
+    /** the conversion from CvMoments */
+    public Moments( @Const @ByRef CvMoments moments ) { allocate(moments); }
+    private native void allocate( @Const @ByRef CvMoments moments );
+    /** the conversion to CvMoments */
+    public native @ByVal @Name("operator CvMoments") CvMoments asCvMoments();
+
+    /** spatial moments */
+    public native double m00(); public native Moments m00(double m00);
+    public native double m10(); public native Moments m10(double m10);
+    public native double m01(); public native Moments m01(double m01);
+    public native double m20(); public native Moments m20(double m20);
+    public native double m11(); public native Moments m11(double m11);
+    public native double m02(); public native Moments m02(double m02);
+    public native double m30(); public native Moments m30(double m30);
+    public native double m21(); public native Moments m21(double m21);
+    public native double m12(); public native Moments m12(double m12);
+    public native double m03(); public native Moments m03(double m03);
+    /** central moments */
+    public native double mu20(); public native Moments mu20(double mu20);
+    public native double mu11(); public native Moments mu11(double mu11);
+    public native double mu02(); public native Moments mu02(double mu02);
+    public native double mu30(); public native Moments mu30(double mu30);
+    public native double mu21(); public native Moments mu21(double mu21);
+    public native double mu12(); public native Moments mu12(double mu12);
+    public native double mu03(); public native Moments mu03(double mu03);
+    /** central normalized moments */
+    public native double nu20(); public native Moments nu20(double nu20);
+    public native double nu11(); public native Moments nu11(double nu11);
+    public native double nu02(); public native Moments nu02(double nu02);
+    public native double nu30(); public native Moments nu30(double nu30);
+    public native double nu21(); public native Moments nu21(double nu21);
+    public native double nu12(); public native Moments nu12(double nu12);
+    public native double nu03(); public native Moments nu03(double nu03);
+}
+
+/** computes moments of the rasterized shape or a vector of points */
+@Namespace("cv") public static native @ByVal Moments moments( @ByVal Mat array, @Cast("bool") boolean binaryImage/*=false*/ );
+
+/** computes 7 Hu invariants from the moments */
+@Namespace("cv") public static native void HuMoments( @Const @ByRef Moments moments, DoublePointer hu );
+@Namespace("cv") public static native void HuMoments( @Const @ByRef Moments moments, DoubleBuffer hu );
+@Namespace("cv") public static native void HuMoments( @Const @ByRef Moments moments, double[] hu );
+@Namespace("cv") public static native void HuMoments( @Const @ByRef Moments m, @ByVal Mat hu );
+
+/** type of the template matching operation */
+/** enum cv:: */
+public static final int TM_SQDIFF= 0, TM_SQDIFF_NORMED= 1, TM_CCORR= 2, TM_CCORR_NORMED= 3, TM_CCOEFF= 4, TM_CCOEFF_NORMED= 5;
+
+/** computes the proximity map for the raster template and the image where the template is searched for */
+@Namespace("cv") public static native void matchTemplate( @ByVal Mat image, @ByVal Mat templ,
+                                 @ByVal Mat result, int method );
+
+/** mode of the contour retrieval algorithm */
+/** enum cv:: */
+public static final int
+    /** retrieve only the most external (top-level) contours */
+    RETR_EXTERNAL= CV_RETR_EXTERNAL,
+    /** retrieve all the contours without any hierarchical information */
+    RETR_LIST= CV_RETR_LIST,
+    /** retrieve the connected components (that can possibly be nested) */
+    RETR_CCOMP= CV_RETR_CCOMP,
+    /** retrieve all the contours and the whole hierarchy */
+    RETR_TREE= CV_RETR_TREE,
+    RETR_FLOODFILL= CV_RETR_FLOODFILL;
+
+/** the contour approximation algorithm */
+/** enum cv:: */
+public static final int
+    CHAIN_APPROX_NONE= CV_CHAIN_APPROX_NONE,
+    CHAIN_APPROX_SIMPLE= CV_CHAIN_APPROX_SIMPLE,
+    CHAIN_APPROX_TC89_L1= CV_CHAIN_APPROX_TC89_L1,
+    CHAIN_APPROX_TC89_KCOS= CV_CHAIN_APPROX_TC89_KCOS;
+
+/** retrieves contours and the hierarchical information from black-n-white image. */
+@Namespace("cv") public static native void findContours( @ByVal Mat image, @ByVal MatVector contours,
+                              @ByVal Mat hierarchy, int mode,
+                              int method, @ByVal Point offset/*=Point()*/);
+
+/** retrieves contours from black-n-white image. */
+@Namespace("cv") public static native void findContours( @ByVal Mat image, @ByVal MatVector contours,
+                              int mode, int method, @ByVal Point offset/*=Point()*/);
+
+/** draws contours in the image */
+@Namespace("cv") public static native void drawContours( @ByVal Mat image, @ByVal MatVector contours,
+                              int contourIdx, @Const @ByRef Scalar color,
+                              int thickness/*=1*/, int lineType/*=8*/,
+                              @ByVal Mat hierarchy/*=noArray()*/,
+                              int maxLevel/*=INT_MAX*/, @ByVal Point offset/*=Point()*/ );
+
+/** approximates contour or a curve using Douglas-Peucker algorithm */
+@Namespace("cv") public static native void approxPolyDP( @ByVal Mat curve,
+                                @ByVal Mat approxCurve,
+                                double epsilon, @Cast("bool") boolean closed );
+
+/** computes the contour perimeter (closed=true) or a curve length */
+@Namespace("cv") public static native double arcLength( @ByVal Mat curve, @Cast("bool") boolean closed );
+/** computes the bounding rectangle for a contour */
+@Namespace("cv") public static native @ByVal Rect boundingRect( @ByVal Mat points );
+/** computes the contour area */
+@Namespace("cv") public static native double contourArea( @ByVal Mat contour, @Cast("bool") boolean oriented/*=false*/ );
+/** computes the minimal rotated rectangle for a set of points */
+@Namespace("cv") public static native @ByVal RotatedRect minAreaRect( @ByVal Mat points );
+/** computes the minimal enclosing circle for a set of points */
+@Namespace("cv") public static native void minEnclosingCircle( @ByVal Mat points,
+                                      @ByRef Point2f center, @ByRef FloatPointer radius );
+@Namespace("cv") public static native void minEnclosingCircle( @ByVal Mat points,
+                                      @ByRef Point2f center, @ByRef FloatBuffer radius );
+@Namespace("cv") public static native void minEnclosingCircle( @ByVal Mat points,
+                                      @ByRef Point2f center, @ByRef float[] radius );
+/** matches two contours using one of the available algorithms */
+@Namespace("cv") public static native double matchShapes( @ByVal Mat contour1, @ByVal Mat contour2,
+                                 int method, double parameter );
+/** computes convex hull for a set of 2D points. */
+@Namespace("cv") public static native void convexHull( @ByVal Mat points, @ByVal Mat hull,
+                              @Cast("bool") boolean clockwise/*=false*/, @Cast("bool") boolean returnPoints/*=true*/ );
+/** computes the contour convexity defects */
+@Namespace("cv") public static native void convexityDefects( @ByVal Mat contour, @ByVal Mat convexhull, @ByVal Mat convexityDefects );
+
+/** returns true if the contour is convex. Does not support contours with self-intersection */
+@Namespace("cv") public static native @Cast("bool") boolean isContourConvex( @ByVal Mat contour );
+
+/** finds intersection of two convex polygons */
+@Namespace("cv") public static native float intersectConvexConvex( @ByVal Mat _p1, @ByVal Mat _p2,
+                                          @ByVal Mat _p12, @Cast("bool") boolean handleNested/*=true*/ );
+
+/** fits ellipse to the set of 2D points */
+@Namespace("cv") public static native @ByVal RotatedRect fitEllipse( @ByVal Mat points );
+
+/** fits line to the set of 2D points using M-estimator algorithm */
+@Namespace("cv") public static native void fitLine( @ByVal Mat points, @ByVal Mat line, int distType,
+                           double param, double reps, double aeps );
+/** checks if the point is inside the contour. Optionally computes the signed distance from the point to the contour boundary */
+@Namespace("cv") public static native double pointPolygonTest( @ByVal Mat contour, @ByVal Point2f pt, @Cast("bool") boolean measureDist );
+
+
+@Namespace("cv") @NoOffset public static class Subdiv2D extends Pointer {
+    static { Loader.load(); }
+    public Subdiv2D(Pointer p) { super(p); }
+    public Subdiv2D(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public Subdiv2D position(int position) {
+        return (Subdiv2D)super.position(position);
+    }
+
+    /** enum cv::Subdiv2D:: */
+    public static final int
+        PTLOC_ERROR = -2,
+        PTLOC_OUTSIDE_RECT = -1,
+        PTLOC_INSIDE = 0,
+        PTLOC_VERTEX = 1,
+        PTLOC_ON_EDGE = 2;
+
+    /** enum cv::Subdiv2D:: */
+    public static final int
+        NEXT_AROUND_ORG   =  0x00,
+        NEXT_AROUND_DST   =  0x22,
+        PREV_AROUND_ORG   =  0x11,
+        PREV_AROUND_DST   =  0x33,
+        NEXT_AROUND_LEFT  =  0x13,
+        NEXT_AROUND_RIGHT =  0x31,
+        PREV_AROUND_LEFT  =  0x20,
+        PREV_AROUND_RIGHT =  0x02;
+
+    public Subdiv2D() { allocate(); }
+    private native void allocate();
+    public Subdiv2D(@ByVal Rect rect) { allocate(rect); }
+    private native void allocate(@ByVal Rect rect);
+    public native void initDelaunay(@ByVal Rect rect);
+
+    public native int insert(@ByVal Point2f pt);
+    public native int locate(@ByVal Point2f pt, @ByRef IntPointer edge, @ByRef IntPointer vertex);
+    public native int locate(@ByVal Point2f pt, @ByRef IntBuffer edge, @ByRef IntBuffer vertex);
+    public native int locate(@ByVal Point2f pt, @ByRef int[] edge, @ByRef int[] vertex);
+
+    public native int findNearest(@ByVal Point2f pt, Point2f nearestPt/*=0*/);
+    public native void getEdgeList(@Cast("cv::Vec4f*") @StdVector FloatPointer edgeList);
+    public native void getTriangleList(@Cast("cv::Vec6f*") @StdVector FloatPointer triangleList);
+    public native void getVoronoiFacetList(@StdVector IntPointer idx, @ByRef Point2fVectorVector facetList,
+                                         @StdVector Point2f facetCenters);
+    public native void getVoronoiFacetList(@StdVector IntBuffer idx, @ByRef Point2fVectorVector facetList,
+                                         @StdVector Point2f facetCenters);
+    public native void getVoronoiFacetList(@StdVector int[] idx, @ByRef Point2fVectorVector facetList,
+                                         @StdVector Point2f facetCenters);
+
+    public native @ByVal Point2f getVertex(int vertex, IntPointer firstEdge/*=0*/);
+    public native @ByVal Point2f getVertex(int vertex, IntBuffer firstEdge/*=0*/);
+    public native @ByVal Point2f getVertex(int vertex, int[] firstEdge/*=0*/);
+
+    public native int getEdge( int edge, int nextEdgeType );
+    public native int nextEdge(int edge);
+    public native int rotateEdge(int edge, int rotate);
+    public native int symEdge(int edge);
+    public native int edgeOrg(int edge, Point2f orgpt/*=0*/);
+    public native int edgeDst(int edge, Point2f dstpt/*=0*/);
+}
+
+
+
+// #endif /* __cplusplus */
+
+// #endif
+
+/* End of file. */
 
 
 }

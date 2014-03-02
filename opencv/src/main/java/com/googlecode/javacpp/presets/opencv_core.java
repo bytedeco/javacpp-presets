@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Samuel Audet
+ * Copyright (C) 2013,2014 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -21,27 +21,34 @@
 package com.googlecode.javacpp.presets;
 
 import com.googlecode.javacpp.Parser;
+import com.googlecode.javacpp.annotation.Adapter;
+import com.googlecode.javacpp.annotation.Cast;
 import com.googlecode.javacpp.annotation.Platform;
 import com.googlecode.javacpp.annotation.Properties;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  *
  * @author Samuel Audet
  */
 @Properties(target="com.googlecode.javacpp.opencv_core", value={
-    @Platform(include={"<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>"}, link="opencv_core@.2.4", preload="tbb"),
+    @Platform(include={"<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/core.hpp>", "opencv_adapters.h"}, link="opencv_core@.2.4", preload="tbb"),
     @Platform(value="windows", define="_WIN32_WINNT 0x0502", includepath="C:/opencv/build/include/",
         link="opencv_core248", preload={"msvcr100", "msvcp100"}),
     @Platform(value="windows-x86",    linkpath="C:/opencv/build/x86/vc10/lib/", preloadpath="C:/opencv/build/x86/vc10/bin/"),
     @Platform(value="windows-x86_64", linkpath="C:/opencv/build/x64/vc10/lib/", preloadpath="C:/opencv/build/x64/vc10/bin/") })
 public class opencv_core implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        infoMap.put(new Parser.Info("__cplusplus").define(false))
+        infoMap.put(new Parser.Info("opencv_adapters.h").skip(true))
+               .put(new Parser.Info("__cplusplus").define(true))
                .put(new Parser.Info("defined __ICL", "defined __ICC", "defined __ECL", "defined __ECC",
                                     "defined __INTEL_COMPILER", "defined WIN32 || defined _WIN32").define(false))
                .put(new Parser.Info("CV_ENABLE_UNROLLED", "CV_CDECL", "CV_STDCALL", "CV_EXTERN_C", "CV_Func").cppTypes())
                .put(new Parser.Info("CV_DEFAULT", "CV_INLINE", "CV_EXPORTS").cppTypes().annotations())
-               .put(new Parser.Info("CVAPI").text("#define CVAPI(rettype) rettype"))
+               .put(new Parser.Info("CVAPI").cppText("#define CVAPI(rettype) rettype"))
                .put(new Parser.Info("CV_EXPORTS_W", "CV_EXPORTS_W_SIMPLE", "CV_EXPORTS_W_MAP",
                                     "CV_IN_OUT", "CV_OUT", "CV_PROP", "CV_PROP_RW", "CV_WRAP").cppTypes().annotations())
                .put(new Parser.Info("CV_MAT_DEPTH", "CV_8UC", "CV_8SC", "CV_16UC", "CV_16SC", "CV_32SC", "CV_32FC", "CV_64FC").cppTypes("int", "int"))
@@ -79,6 +86,58 @@ public class opencv_core implements Parser.InfoMapper {
                .put(new Parser.Info("cvDrawCircle").cppTypes("void", "CvArr*", "CvPoint", "int", "CvScalar", "int", "int", "int"))
                .put(new Parser.Info("cvDrawEllipse").cppTypes("void", "CvArr*", "CvPoint", "CvSize", "double", "double", "double", "CvScalar", "int", "int", "int"))
                .put(new Parser.Info("cvDrawPolyLine").cppTypes("void", "CvArr*", "CvPoint**", "int*", "int", "int", "CvScalar", "int", "int", "int"))
-               .put(new Parser.Info("__CV_BEGIN__", "__CV_END__", "__CV_EXIT__").cppTypes());
+               .put(new Parser.Info("__CV_BEGIN__", "__CV_END__", "__CV_EXIT__").cppTypes())
+
+               .put(new Parser.Info("std::vector<std::vector<char> >", "std::vector<std::vector<unsigned char> >").cast(true).pointerTypes("ByteVectorVector").define(true))
+               .put(new Parser.Info("std::vector<std::vector<int> >").pointerTypes("IntVectorVector").define(true))
+               .put(new Parser.Info("std::vector<std::string>").pointerTypes("StringVector").define(true))
+               .put(new Parser.Info("std::vector<std::vector<cv::Point_<int> > >").pointerTypes("PointVectorVector").define(true))
+               .put(new Parser.Info("std::vector<std::vector<cv::Point_<float> > >").pointerTypes("Point2fVectorVector").define(true))
+               .put(new Parser.Info("std::vector<std::vector<cv::Point_<double> > >").pointerTypes("Point2dVectorVector").define(true))
+               .put(new Parser.Info("std::vector<std::vector<cv::Rect_<int> > >").pointerTypes("RectVectorVector").define(true))
+               .put(new Parser.Info("std::vector<cv::Mat>").pointerTypes("MatVector").define(true))
+               .put(new Parser.Info("cv::randu<int>").javaNames("randInt"))
+               .put(new Parser.Info("cv::randu<float>").javaNames("randFloat"))
+               .put(new Parser.Info("cv::randu<double>").javaNames("randDouble"))
+
+               .put(new Parser.Info("cv::fromUtf16", "cv::toUtf16", "cv::Allocator", "cv::DataDepth", "cv::DataType", "cv::ParamType",
+                                    "cv::_InputArray", "cv::_OutputArray", "cv::noArray", "cv::Mat_", "cv::SparseMat_",
+                                    "cv::Matx_AddOp", "cv::Matx_SubOp", "cv::Matx_ScaleOp", "cv::Matx_MulOp", "cv::Matx_MatMulOp", "cv::Matx_TOp",
+                                    "cv::Matx", "cv::Vec", "cv::MatIterator_", "cv::MatConstIterator_", "cv::Mat::MSize", "cv::Mat::MStep",
+                                    "cv::MatCommaInitializer_", "cv::MatxCommaInitializer", "cv::VecCommaInitializer",
+                                    "cv::SparseMatIterator_", "cv::SparseMatConstIterator_",
+                                    "cv::AlgorithmInfoData", "cv::AlgorithmInfo::addParam", "cv::CommandLineParser").skip(true))
+
+               .put(new Parser.Info("cv::Mat::size").javaText("@MemberGetter public native int size(int i);"))
+               .put(new Parser.Info("cv::Mat::step").javaText("@MemberGetter public native long step();"))
+
+               .put(new Parser.Info("cv::InputArray", "cv::OutputArray", "cv::InputOutputArray").skip(true)./*cast(true).*/pointerTypes("Mat"))
+               .put(new Parser.Info("cv::InputArrayOfArrays", "cv::OutputArrayOfArrays", "cv::InputOutputArrayOfArrays").skip(true)./*cast(true).*/pointerTypes("MatVector"))
+
+               .put(new Parser.Info("cv::Point_<int>").pointerTypes("Point"))
+               .put(new Parser.Info("cv::Point_<float>").pointerTypes("Point2f"))
+               .put(new Parser.Info("cv::Point_<double>").pointerTypes("Point2d"))
+               .put(new Parser.Info("cv::Point3_<int>").pointerTypes("Point3i"))
+               .put(new Parser.Info("cv::Point3_<float>").pointerTypes("Point3f"))
+               .put(new Parser.Info("cv::Point3_<double>").pointerTypes("Point3d"))
+               .put(new Parser.Info("cv::Size_<int>").pointerTypes("Size"))
+               .put(new Parser.Info("cv::Size_<float>").pointerTypes("Size2f"))
+               .put(new Parser.Info("cv::Size_<double>").pointerTypes("Size2d"))
+               .put(new Parser.Info("cv::Rect_<int>").pointerTypes("Rect"))
+               .put(new Parser.Info("cv::Rect_<float>").pointerTypes("Rectf"))
+               .put(new Parser.Info("cv::Rect_<double>").pointerTypes("Rectd"))
+               .put(new Parser.Info("cv::Scalar_<double>").pointerTypes("Scalar").parent("Pointer"))
+
+               .put(new Parser.Info("cv::Vec2i").pointerTypes("Point"))
+               .put(new Parser.Info("cv::Vec2d").pointerTypes("Point2d"))
+               .put(new Parser.Info("cv::Vec3d").pointerTypes("Point3d"))
+
+               .put(new Parser.Info("cv::Ptr").annotations("@Ptr"));
+    }
+
+    @Retention(RetentionPolicy.RUNTIME) @Target({ElementType.METHOD, ElementType.PARAMETER})
+    @Cast({"cv::Ptr", "&"}) @Adapter("PtrAdapter") public @interface Ptr {
+        /** @return template type */
+        String value() default "";
     }
 }

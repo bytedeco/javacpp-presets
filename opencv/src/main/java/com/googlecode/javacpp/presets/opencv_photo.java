@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Samuel Audet
+ * Copyright (C) 2013,2014 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -29,10 +29,9 @@ import com.googlecode.javacpp.annotation.Properties;
  * @author Samuel Audet
  */
 @Properties(inherit=opencv_imgproc.class, target="com.googlecode.javacpp.opencv_photo", value={
-    @Platform(include="<opencv2/photo/photo_c.h>", link="opencv_photo@.2.4"),
+    @Platform(include={"<opencv2/photo/photo_c.h>", "<opencv2/photo/photo.hpp>"}, link="opencv_photo@.2.4"),
     @Platform(value="windows", link="opencv_photo248") })
 public class opencv_photo implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        new opencv_imgproc().map(infoMap);
     }
 }

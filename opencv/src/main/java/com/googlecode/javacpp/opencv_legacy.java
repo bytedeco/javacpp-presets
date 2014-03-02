@@ -9,11 +9,984 @@ import java.nio.*;
 import static com.googlecode.javacpp.opencv_core.*;
 import static com.googlecode.javacpp.opencv_imgproc.*;
 import static com.googlecode.javacpp.opencv_highgui.*;
+import static com.googlecode.javacpp.opencv_flann.*;
+import static com.googlecode.javacpp.opencv_features2d.*;
 import static com.googlecode.javacpp.opencv_calib3d.*;
 import static com.googlecode.javacpp.opencv_video.*;
+import static com.googlecode.javacpp.opencv_ml.*;
 
 public class opencv_legacy extends com.googlecode.javacpp.presets.opencv_legacy {
     static { Loader.load(); }
+
+/* Wrapper for header file /usr/local/include/opencv2/legacy/blobtrack.hpp */
+
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+//
+//  By downloading, copying, installing or using the software you agree to this license.
+//  If you do not agree to this license, do not download, install,
+//  copy or use the software.
+//
+//
+//                        Intel License Agreement
+//                For Open Source Computer Vision Library
+//
+// Copyright (C) 2000, Intel Corporation, all rights reserved.
+// Third party copyrights are property of their respective owners.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+//   * Redistribution's of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//
+//   * Redistribution's in binary form must reproduce the above copyright notice,
+//     this list of conditions and the following disclaimer in the documentation
+//     and/or other materials provided with the distribution.
+//
+//   * The name of Intel Corporation may not be used to endorse or promote products
+//     derived from this software without specific prior written permission.
+//
+// This software is provided by the copyright holders and contributors "as is" and
+// any express or implied warranties, including, but not limited to, the implied
+// warranties of merchantability and fitness for a particular purpose are disclaimed.
+// In no event shall the Intel Corporation or contributors be liable for any direct,
+// indirect, incidental, special, exemplary, or consequential damages
+// (including, but not limited to, procurement of substitute goods or services;
+// loss of use, data, or profits; or business interruption) however caused
+// and on any theory of liability, whether in contract, strict liability,
+// or tort (including negligence or otherwise) arising in any way out of
+// the use of this software, even if advised of the possibility of such damage.
+//
+//M*/
+
+
+// #ifndef __OPENCV_VIDEOSURVEILLANCE_H__
+// #define __OPENCV_VIDEOSURVEILLANCE_H__
+
+/* Turn off the functionality until cvaux/src/Makefile.am gets updated: */
+//#if _MSC_VER >= 1200
+
+// #include "opencv2/core/core_c.h"
+// #include <stdio.h>
+
+// #if (defined _MSC_VER && _MSC_VER >= 1200) || defined __BORLANDC__
+// #define cv_stricmp stricmp
+// #define cv_strnicmp strnicmp
+// #if defined WINCE
+// #define strdup _strdup
+// #define stricmp _stricmp
+// #endif
+// #elif defined __GNUC__ || defined __sun
+// #define cv_stricmp strcasecmp
+// #define cv_strnicmp strncasecmp
+// #else
+// #error Do not know how to make case-insensitive string comparison on this platform
+// #endif
+
+//struct DefParam;
+public static class CvDefParam extends Pointer {
+    static { Loader.load(); }
+    public CvDefParam() { allocate(); }
+    public CvDefParam(int size) { allocateArray(size); }
+    public CvDefParam(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public CvDefParam position(int position) {
+        return (CvDefParam)super.position(position);
+    }
+
+    public native CvDefParam next(); public native CvDefParam next(CvDefParam next);
+    public native @Cast("char*") BytePointer pName(); public native CvDefParam pName(BytePointer pName);
+    public native @Cast("char*") BytePointer pComment(); public native CvDefParam pComment(BytePointer pComment);
+    public native DoublePointer pDouble(); public native CvDefParam pDouble(DoublePointer pDouble);
+    public native double Double(); public native CvDefParam Double(double Double);
+    public native FloatPointer pFloat(); public native CvDefParam pFloat(FloatPointer pFloat);
+    public native float Float(); public native CvDefParam Float(float Float);
+    public native IntPointer pInt(); public native CvDefParam pInt(IntPointer pInt);
+    public native int Int(); public native CvDefParam Int(int Int);
+    public native @Cast("char*") BytePointer pStr(int i); public native CvDefParam pStr(int i, BytePointer pStr);
+    @MemberGetter public native @Cast("char**") PointerPointer pStr();
+    public native @Cast("char*") BytePointer Str(); public native CvDefParam Str(BytePointer Str);
+}
+
+@NoOffset public static class CvVSModule extends Pointer {
+    static { Loader.load(); }
+    public CvVSModule() { }
+    public CvVSModule(Pointer p) { super(p); }
+ /* Constructor and destructor: */ /* EXTERNAL INTERFACE */
+    public native @Cast("const char*") BytePointer GetParamName(int index);
+    public native @Cast("const char*") BytePointer GetParamComment(@Cast("const char*") BytePointer name);
+    public native String GetParamComment(String name);
+    public native double GetParam(@Cast("const char*") BytePointer name);
+    public native double GetParam(String name);
+    public native @Cast("const char*") BytePointer GetParamStr(@Cast("const char*") BytePointer name);
+    public native String GetParamStr(String name);
+    public native void SetParam(@Cast("const char*") BytePointer name, double val);
+    public native void SetParam(String name, double val);
+    public native void SetParamStr(@Cast("const char*") BytePointer name, @Cast("const char*") BytePointer str);
+    public native void SetParamStr(String name, String str);
+    public native void TransferParamsFromChild(CvVSModule pM, @Cast("const char*") BytePointer prefix/*=NULL*/);
+    public native void TransferParamsFromChild(CvVSModule pM, String prefix/*=NULL*/);
+    public native void TransferParamsToChild(CvVSModule pM, @Cast("char*") BytePointer prefix/*=NULL*/);
+    public native void TransferParamsToChild(CvVSModule pM, @Cast("char*") ByteBuffer prefix/*=NULL*/);
+    public native void TransferParamsToChild(CvVSModule pM, @Cast("char*") byte[] prefix/*=NULL*/);
+    public native void ParamUpdate();
+    public native @Cast("const char*") BytePointer GetTypeName();
+    public native int IsModuleTypeName(@Cast("const char*") BytePointer name);
+    public native int IsModuleTypeName(String name);
+    public native @Cast("char*") BytePointer GetModuleName();
+    public native int IsModuleName(@Cast("const char*") BytePointer name);
+    public native int IsModuleName(String name);
+    public native void SetNickName(@Cast("const char*") BytePointer pStr);
+    public native void SetNickName(String pStr);
+    public native @Cast("const char*") BytePointer GetNickName();
+    public native void SaveState(CvFileStorage arg0);
+    public native void LoadState(CvFileStorage arg0, CvFileNode arg1);
+
+    public native void Release();
+}/* CvVMModule */
+
+public static native void cvWriteStruct(CvFileStorage fs, @Cast("const char*") BytePointer name, Pointer addr, @Cast("const char*") BytePointer desc, int num/*=1*/);
+public static native void cvWriteStruct(CvFileStorage fs, String name, Pointer addr, String desc, int num/*=1*/);
+public static native void cvReadStructByName(CvFileStorage fs, CvFileNode node, @Cast("const char*") BytePointer name, Pointer addr, @Cast("const char*") BytePointer desc);
+public static native void cvReadStructByName(CvFileStorage fs, CvFileNode node, String name, Pointer addr, String desc);
+
+/* FOREGROUND DETECTOR INTERFACE */
+public static class CvFGDetector extends CvVSModule {
+    static { Loader.load(); }
+    public CvFGDetector() { }
+    public CvFGDetector(Pointer p) { super(p); }
+
+    public native IplImage GetMask();
+    /* Process current image: */
+    public native void Process(IplImage pImg);
+    /* Release foreground detector: */
+    public native void Release();
+}
+
+public static native void cvReleaseFGDetector(@Cast("CvFGDetector**") PointerPointer ppT );
+public static native void cvReleaseFGDetector(@ByPtrPtr CvFGDetector ppT );
+public static native CvFGDetector cvCreateFGDetectorBase(int type, Pointer param);
+
+
+/* BLOB STRUCTURE*/
+public static class CvBlob extends Pointer {
+    static { Loader.load(); }
+    public CvBlob() { allocate(); }
+    public CvBlob(int size) { allocateArray(size); }
+    public CvBlob(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public CvBlob position(int position) {
+        return (CvBlob)super.position(position);
+    }
+
+    public native float x(); public native CvBlob x(float x);
+    public native float y(); public native CvBlob y(float y); /* blob position   */
+    public native float w(); public native CvBlob w(float w);
+    public native float h(); public native CvBlob h(float h); /* blob sizes      */
+    public native int ID(); public native CvBlob ID(int ID);  /* blob ID         */
+}
+
+public static native @ByVal CvBlob cvBlob(float x,float y, float w, float h);
+public static final int CV_BLOB_MINW = 5;
+public static final int CV_BLOB_MINH = 5;
+// #define CV_BLOB_ID(pB) (((CvBlob*)(pB))->ID)
+// #define CV_BLOB_CENTER(pB) cvPoint2D32f(((CvBlob*)(pB))->x,((CvBlob*)(pB))->y)
+// #define CV_BLOB_X(pB) (((CvBlob*)(pB))->x)
+// #define CV_BLOB_Y(pB) (((CvBlob*)(pB))->y)
+// #define CV_BLOB_WX(pB) (((CvBlob*)(pB))->w)
+// #define CV_BLOB_WY(pB) (((CvBlob*)(pB))->h)
+// #define CV_BLOB_RX(pB) (0.5f*CV_BLOB_WX(pB))
+// #define CV_BLOB_RY(pB) (0.5f*CV_BLOB_WY(pB))
+// #define CV_BLOB_RECT(pB) cvRect(cvRound(((CvBlob*)(pB))->x-CV_BLOB_RX(pB)),cvRound(((CvBlob*)(pB))->y-CV_BLOB_RY(pB)),cvRound(CV_BLOB_WX(pB)),cvRound(CV_BLOB_WY(pB)))
+/* END BLOB STRUCTURE*/
+
+
+/* simple BLOBLIST */
+@NoOffset public static class CvBlobSeq extends Pointer {
+    static { Loader.load(); }
+    public CvBlobSeq() { }
+    public CvBlobSeq(Pointer p) { super(p); }
+
+    public CvBlobSeq(int BlobSize/*=sizeof(CvBlob)*/) { allocate(BlobSize); }
+    private native void allocate(int BlobSize/*=sizeof(CvBlob)*/);
+    public native CvBlob GetBlob(int BlobIndex);
+    public native CvBlob GetBlobByID(int BlobID);
+    public native void DelBlob(int BlobIndex);
+    public native void DelBlobByID(int BlobID);
+    public native void Clear();
+    public native void AddBlob(CvBlob pB);
+    public native int GetBlobNum();
+    public native void Write(CvFileStorage fs, @Cast("const char*") BytePointer name);
+    public native void Write(CvFileStorage fs, String name);
+    public native void Load(CvFileStorage fs, CvFileNode node);
+    public native void AddFormat(@Cast("const char*") BytePointer str);
+    public native void AddFormat(String str);
+}
+/* simple BLOBLIST */
+
+
+/* simple TRACKLIST */
+public static class CvBlobTrack extends Pointer {
+    static { Loader.load(); }
+    public CvBlobTrack() { allocate(); }
+    public CvBlobTrack(int size) { allocateArray(size); }
+    public CvBlobTrack(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public CvBlobTrack position(int position) {
+        return (CvBlobTrack)super.position(position);
+    }
+
+    public native int TrackID(); public native CvBlobTrack TrackID(int TrackID);
+    public native int StartFrame(); public native CvBlobTrack StartFrame(int StartFrame);
+    public native CvBlobSeq pBlobSeq(); public native CvBlobTrack pBlobSeq(CvBlobSeq pBlobSeq);
+}
+
+@NoOffset public static class CvBlobTrackSeq extends Pointer {
+    static { Loader.load(); }
+    public CvBlobTrackSeq() { }
+    public CvBlobTrackSeq(Pointer p) { super(p); }
+
+    public CvBlobTrackSeq(int TrackSize/*=sizeof(CvBlobTrack)*/) { allocate(TrackSize); }
+    private native void allocate(int TrackSize/*=sizeof(CvBlobTrack)*/);
+    public native CvBlobTrack GetBlobTrack(int TrackIndex);
+    public native CvBlobTrack GetBlobTrackByID(int TrackID);
+    public native void DelBlobTrack(int TrackIndex);
+    public native void DelBlobTrackByID(int TrackID);
+    public native void Clear();
+    public native void AddBlobTrack(int TrackID, int StartFrame/*=0*/);
+    public native int GetBlobTrackNum();
+}
+
+/* simple TRACKLIST */
+
+
+/* BLOB DETECTOR INTERFACE */
+public static class CvBlobDetector extends CvVSModule {
+    static { Loader.load(); }
+    public CvBlobDetector() { }
+    public CvBlobDetector(Pointer p) { super(p); }
+
+    /* Try to detect new blob entrance based on foreground mask. */
+    /* pFGMask - image of foreground mask */
+    /* pNewBlob - pointer to CvBlob structure which will be filled if new blob entrance detected */
+    /* pOldBlobList - pointer to blob list which already exist on image */
+    public native int DetectNewBlob(IplImage pImg, IplImage pImgFG, CvBlobSeq pNewBlobList, CvBlobSeq pOldBlobList);
+    /* release blob detector */
+    public native void Release();
+}
+
+/* Release any blob detector: */
+public static native void cvReleaseBlobDetector(@Cast("CvBlobDetector**") PointerPointer ppBD);
+public static native void cvReleaseBlobDetector(@ByPtrPtr CvBlobDetector ppBD);
+
+/* Declarations of constructors of implemented modules: */
+public static native CvBlobDetector cvCreateBlobDetectorSimple();
+public static native CvBlobDetector cvCreateBlobDetectorCC();
+
+@NoOffset public static class CvDetectedBlob extends CvBlob {
+    static { Loader.load(); }
+    public CvDetectedBlob() { allocate(); }
+    public CvDetectedBlob(int size) { allocateArray(size); }
+    public CvDetectedBlob(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public CvDetectedBlob position(int position) {
+        return (CvDetectedBlob)super.position(position);
+    }
+
+    public native float response(); public native CvDetectedBlob response(float response);
+}
+
+public static native @ByVal CvDetectedBlob cvDetectedBlob( float x, float y, float w, float h, int ID/*=0*/, float response/*=0.0F*/ );
+
+
+@NoOffset public static class CvObjectDetector extends Pointer {
+    static { Loader.load(); }
+    public CvObjectDetector() { }
+    public CvObjectDetector(Pointer p) { super(p); }
+
+    public CvObjectDetector( @Cast("const char*") BytePointer arg0/*=0*/ ) { allocate(arg0); }
+    private native void allocate( @Cast("const char*") BytePointer arg0/*=0*/ );
+    public CvObjectDetector( String arg0/*=0*/ ) { allocate(arg0); }
+    private native void allocate( String arg0/*=0*/ );
+
+    /*
+     * Release the current detector and load new detector from file
+     * (if detector_file_name is not 0)
+     * Return true on success:
+     */
+    public native @Cast("bool") boolean Load( @Cast("const char*") BytePointer arg0/*=0*/ );
+    public native @Cast("bool") boolean Load( String arg0/*=0*/ );
+
+    /* Return min detector window size: */
+    public native @ByVal CvSize GetMinWindowSize();
+
+    /* Return max border: */
+    public native int GetMaxBorderSize();
+
+    /*
+     * Detect the object on the image and push the detected
+     * blobs into <detected_blob_seq> which must be the sequence of <CvDetectedBlob>s
+     */
+    public native void Detect( @Const CvArr arg0, CvBlobSeq arg1/*=0*/ );
+}
+
+
+public static native @ByVal CvRect cvRectIntersection( @Const @ByVal CvRect r1, @Const @ByVal CvRect r2 );
+
+
+/*
+ * CvImageDrawer
+ *
+ * Draw on an image the specified ROIs from the source image and
+ * given blobs as ellipses or rectangles:
+ */
+
+public static class CvDrawShape extends Pointer {
+    static { Loader.load(); }
+    public CvDrawShape() { allocate(); }
+    public CvDrawShape(int size) { allocateArray(size); }
+    public CvDrawShape(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public CvDrawShape position(int position) {
+        return (CvDrawShape)super.position(position);
+    }
+
+    /** enum CvDrawShape::shape */
+    public static final int RECT = 0, ELLIPSE = 1;
+    public native @ByVal CvScalar color(); public native CvDrawShape color(CvScalar color);
+}
+
+/*extern const CvDrawShape icv_shape[] =
+{
+    { CvDrawShape::ELLIPSE, CV_RGB(255,0,0) },
+    { CvDrawShape::ELLIPSE, CV_RGB(0,255,0) },
+    { CvDrawShape::ELLIPSE, CV_RGB(0,0,255) },
+    { CvDrawShape::ELLIPSE, CV_RGB(255,255,0) },
+    { CvDrawShape::ELLIPSE, CV_RGB(0,255,255) },
+    { CvDrawShape::ELLIPSE, CV_RGB(255,0,255) }
+};*/
+
+@NoOffset public static class CvImageDrawer extends Pointer {
+    static { Loader.load(); }
+    public CvImageDrawer(Pointer p) { super(p); }
+    public CvImageDrawer(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public CvImageDrawer position(int position) {
+        return (CvImageDrawer)super.position(position);
+    }
+
+    public CvImageDrawer() { allocate(); }
+    private native void allocate();
+    public native void SetShapes( @Const CvDrawShape shapes, int num );
+    /* <blob_seq> must be the sequence of <CvDetectedBlob>s */
+    public native IplImage Draw( @Const CvArr src, CvBlobSeq blob_seq/*=0*/, @Const CvSeq roi_seq/*=0*/ );
+    public native IplImage GetImage();
+}
+
+
+
+/* Trajectory generation module: */
+public static class CvBlobTrackGen extends CvVSModule {
+    static { Loader.load(); }
+    public CvBlobTrackGen() { }
+    public CvBlobTrackGen(Pointer p) { super(p); }
+
+    public native void SetFileName(@Cast("char*") BytePointer pFileName);
+    public native void SetFileName(@Cast("char*") ByteBuffer pFileName);
+    public native void SetFileName(@Cast("char*") byte[] pFileName);
+    public native void AddBlob(CvBlob pBlob);
+    public native void Process(IplImage pImg/*=NULL*/, IplImage pFG/*=NULL*/);
+    public native void Release();
+}
+
+public static native void cvReleaseBlobTrackGen(@Cast("CvBlobTrackGen**") PointerPointer pBTGen);
+public static native void cvReleaseBlobTrackGen(@ByPtrPtr CvBlobTrackGen pBTGen);
+
+/* Declarations of constructors of implemented modules: */
+public static native CvBlobTrackGen cvCreateModuleBlobTrackGen1();
+public static native CvBlobTrackGen cvCreateModuleBlobTrackGenYML();
+
+
+
+/* BLOB TRACKER INTERFACE */
+public static class CvBlobTracker extends CvVSModule {
+    static { Loader.load(); }
+    public CvBlobTracker() { }
+    public CvBlobTracker(Pointer p) { super(p); }
+
+
+    /* Add new blob to track it and assign to this blob personal ID */
+    /* pBlob - pointer to structure with blob parameters (ID is ignored)*/
+    /* pImg - current image */
+    /* pImgFG - current foreground mask */
+    /* Return pointer to new added blob: */
+    public native CvBlob AddBlob(CvBlob pBlob, IplImage pImg, IplImage pImgFG/*=NULL*/ );
+
+    /* Return number of currently tracked blobs: */
+    public native int GetBlobNum();
+
+    /* Return pointer to specified by index blob: */
+    public native CvBlob GetBlob(int BlobIndex);
+
+    /* Delete blob by its index: */
+    public native void DelBlob(int BlobIndex);
+
+    /* Process current image and track all existed blobs: */
+    public native void Process(IplImage pImg, IplImage pImgFG/*=NULL*/);
+
+    /* Release blob tracker: */
+    public native void Release();
+
+
+    /* Process one blob (for multi hypothesis tracing): */
+    public native void ProcessBlob(int BlobIndex, CvBlob pBlob, IplImage arg2, IplImage arg3/*=NULL*/);
+
+    /* Get confidence/wieght/probability (0-1) for blob: */
+    public native double GetConfidence(int arg0, CvBlob arg1, IplImage arg2, IplImage arg3/*=NULL*/);
+
+    public native double GetConfidenceList(CvBlobSeq pBlobList, IplImage pImg, IplImage pImgFG/*=NULL*/);
+
+    public native void UpdateBlob(int arg0, CvBlob arg1, IplImage arg2, IplImage arg3/*=NULL*/);
+
+    /* Update all blob models: */
+    public native void Update(IplImage pImg, IplImage pImgFG/*=NULL*/);
+
+    /* Return pointer to blob by its unique ID: */
+    public native int GetBlobIndexByID(int BlobID);
+
+    /* Return pointer to blob by its unique ID: */
+    public native CvBlob GetBlobByID(int BlobID);
+
+    /* Delete blob by its ID: */
+    public native void DelBlobByID(int BlobID);
+
+    /* Set new parameters for specified (by index) blob: */
+    public native void SetBlob(int arg0, CvBlob arg1);
+
+    /* Set new parameters for specified (by ID) blob: */
+    public native void SetBlobByID(int BlobID, CvBlob pBlob);
+
+    /*  ===============  MULTI HYPOTHESIS INTERFACE ==================  */
+
+    /* Return number of position hyposetis of currently tracked blob: */
+    public native int GetBlobHypNum(int arg0);
+
+    /* Return pointer to specified blob hypothesis by index blob: */
+    public native CvBlob GetBlobHyp(int BlobIndex, int arg1);
+
+    /* Set new parameters for specified (by index) blob hyp
+     * (can be called several times for each hyp ):
+     */
+    public native void SetBlobHyp(int arg0, CvBlob arg1);
+}
+
+public static native void cvReleaseBlobTracker(@Cast("CvBlobTracker**") PointerPointer ppT );
+public static native void cvReleaseBlobTracker(@ByPtrPtr CvBlobTracker ppT );
+/* BLOB TRACKER INTERFACE */
+
+/*BLOB TRACKER ONE INTERFACE */
+public static class CvBlobTrackerOne extends CvVSModule {
+    static { Loader.load(); }
+    public CvBlobTrackerOne() { }
+    public CvBlobTrackerOne(Pointer p) { super(p); }
+
+    public native void Init(CvBlob pBlobInit, IplImage pImg, IplImage pImgFG/*=NULL*/);
+    public native CvBlob Process(CvBlob pBlobPrev, IplImage pImg, IplImage pImgFG/*=NULL*/);
+    public native void Release();
+
+    /* Non-required methods: */
+    public native void SkipProcess(CvBlob arg0, IplImage arg1, IplImage arg2/*=NULL*/);
+    public native void Update(CvBlob arg0, IplImage arg1, IplImage arg2/*=NULL*/);
+    public native void SetCollision(int arg0); /* call in case of blob collision situation*/
+    public native double GetConfidence(CvBlob arg0, IplImage arg1,
+                                     IplImage arg2/*=NULL*/, IplImage arg3/*=NULL*/);
+}
+public static native void cvReleaseBlobTrackerOne(@Cast("CvBlobTrackerOne**") PointerPointer ppT );
+public static native void cvReleaseBlobTrackerOne(@ByPtrPtr CvBlobTrackerOne ppT );
+public static class CvBlobTrackerOne_Create extends FunctionPointer {
+    static { Loader.load(); }
+    public    CvBlobTrackerOne_Create(Pointer p) { super(p); }
+    protected CvBlobTrackerOne_Create() { allocate(); }
+    private native void allocate();
+    public native CvBlobTrackerOne call();
+}
+public static native CvBlobTracker cvCreateBlobTrackerList(CvBlobTrackerOne_Create create);
+/*BLOB TRACKER ONE INTERFACE */
+
+/* Declarations of constructors of implemented modules: */
+
+/* Some declarations for specific MeanShift tracker: */
+public static final int PROFILE_EPANECHNIKOV =    0;
+public static final int PROFILE_DOG =             1;
+public static class CvBlobTrackerParamMS extends Pointer {
+    static { Loader.load(); }
+    public CvBlobTrackerParamMS() { allocate(); }
+    public CvBlobTrackerParamMS(int size) { allocateArray(size); }
+    public CvBlobTrackerParamMS(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public CvBlobTrackerParamMS position(int position) {
+        return (CvBlobTrackerParamMS)super.position(position);
+    }
+
+    public native int noOfSigBits(); public native CvBlobTrackerParamMS noOfSigBits(int noOfSigBits);
+    public native int appearance_profile(); public native CvBlobTrackerParamMS appearance_profile(int appearance_profile);
+    public native int meanshift_profile(); public native CvBlobTrackerParamMS meanshift_profile(int meanshift_profile);
+    public native float sigma(); public native CvBlobTrackerParamMS sigma(float sigma);
+}
+
+public static native CvBlobTracker cvCreateBlobTrackerMS1(CvBlobTrackerParamMS param);
+public static native CvBlobTracker cvCreateBlobTrackerMS2(CvBlobTrackerParamMS param);
+public static native CvBlobTracker cvCreateBlobTrackerMS1ByList();
+
+/* Some declarations for specific Likelihood tracker: */
+public static class CvBlobTrackerParamLH extends Pointer {
+    static { Loader.load(); }
+    public CvBlobTrackerParamLH() { allocate(); }
+    public CvBlobTrackerParamLH(int size) { allocateArray(size); }
+    public CvBlobTrackerParamLH(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public CvBlobTrackerParamLH position(int position) {
+        return (CvBlobTrackerParamLH)super.position(position);
+    }
+
+    public native int HistType(); public native CvBlobTrackerParamLH HistType(int HistType); /* see Prob.h */
+    public native int ScaleAfter(); public native CvBlobTrackerParamLH ScaleAfter(int ScaleAfter);
+}
+
+/* Without scale optimization: */
+public static native CvBlobTracker cvCreateBlobTrackerLHR(CvBlobTrackerParamLH arg0/*=NULL*/);
+
+/* With scale optimization: */
+public static native CvBlobTracker cvCreateBlobTrackerLHRS(CvBlobTrackerParamLH arg0/*=NULL*/);
+
+/* Simple blob tracker based on connected component tracking: */
+public static native CvBlobTracker cvCreateBlobTrackerCC();
+
+/* Connected component tracking and mean-shift particle filter collion-resolver: */
+public static native CvBlobTracker cvCreateBlobTrackerCCMSPF();
+
+/* Blob tracker that integrates meanshift and connected components: */
+public static native CvBlobTracker cvCreateBlobTrackerMSFG();
+public static native CvBlobTracker cvCreateBlobTrackerMSFGS();
+
+/* Meanshift without connected-components */
+public static native CvBlobTracker cvCreateBlobTrackerMS();
+
+/* Particle filtering via Bhattacharya coefficient, which        */
+/* is roughly the dot-product of two probability densities.      */
+/* See: Real-Time Tracking of Non-Rigid Objects using Mean Shift */
+/*      Comanicius, Ramesh, Meer, 2000, 8p                       */
+/*      http://citeseer.ist.psu.edu/321441.html                  */
+public static native CvBlobTracker cvCreateBlobTrackerMSPF();
+
+/* =========== tracker integrators trackers =============*/
+
+/* Integrator based on Particle Filtering method: */
+//CV_EXPORTS CvBlobTracker* cvCreateBlobTrackerIPF();
+
+/* Rule based integrator: */
+//CV_EXPORTS CvBlobTracker* cvCreateBlobTrackerIRB();
+
+/* Integrator based on data fusion using particle filtering: */
+//CV_EXPORTS CvBlobTracker* cvCreateBlobTrackerIPFDF();
+
+
+
+
+/* Trajectory postprocessing module: */
+public static class CvBlobTrackPostProc extends CvVSModule {
+    static { Loader.load(); }
+    public CvBlobTrackPostProc() { }
+    public CvBlobTrackPostProc(Pointer p) { super(p); }
+
+    public native void AddBlob(CvBlob pBlob);
+    public native void Process();
+    public native int GetBlobNum();
+    public native CvBlob GetBlob(int index);
+    public native void Release();
+
+    /* Additional functionality: */
+    public native CvBlob GetBlobByID(int BlobID);
+}
+
+public static native void cvReleaseBlobTrackPostProc(@Cast("CvBlobTrackPostProc**") PointerPointer pBTPP);
+public static native void cvReleaseBlobTrackPostProc(@ByPtrPtr CvBlobTrackPostProc pBTPP);
+
+/* Trajectory generation module: */
+public static class CvBlobTrackPostProcOne extends CvVSModule {
+    static { Loader.load(); }
+    public CvBlobTrackPostProcOne() { }
+    public CvBlobTrackPostProcOne(Pointer p) { super(p); }
+
+    public native CvBlob Process(CvBlob pBlob);
+    public native void Release();
+}
+
+/* Create blob tracking post processing module based on simle module: */
+public static class CvBlobTrackPostProcOne_Create extends FunctionPointer {
+    static { Loader.load(); }
+    public    CvBlobTrackPostProcOne_Create(Pointer p) { super(p); }
+    protected CvBlobTrackPostProcOne_Create() { allocate(); }
+    private native void allocate();
+    public native CvBlobTrackPostProcOne call();
+}
+public static native CvBlobTrackPostProc cvCreateBlobTrackPostProcList(CvBlobTrackPostProcOne_Create create);
+
+
+/* Declarations of constructors of implemented modules: */
+public static native CvBlobTrackPostProc cvCreateModuleBlobTrackPostProcKalman();
+public static native CvBlobTrackPostProc cvCreateModuleBlobTrackPostProcTimeAverRect();
+public static native CvBlobTrackPostProc cvCreateModuleBlobTrackPostProcTimeAverExp();
+
+
+/* PREDICTORS */
+/* blob PREDICTOR */
+public static class CvBlobTrackPredictor extends CvVSModule {
+    static { Loader.load(); }
+    public CvBlobTrackPredictor() { }
+    public CvBlobTrackPredictor(Pointer p) { super(p); }
+
+    public native CvBlob Predict();
+    public native void Update(CvBlob pBlob);
+    public native void Release();
+}
+public static native CvBlobTrackPredictor cvCreateModuleBlobTrackPredictKalman();
+
+
+
+/* Trajectory analyser module: */
+public static class CvBlobTrackAnalysis extends CvVSModule {
+    static { Loader.load(); }
+    public CvBlobTrackAnalysis() { }
+    public CvBlobTrackAnalysis(Pointer p) { super(p); }
+
+    public native void AddBlob(CvBlob pBlob);
+    public native void Process(IplImage pImg, IplImage pFG);
+    public native float GetState(int BlobID);
+    /* return 0 if trajectory is normal
+       return >0 if trajectory abnormal */
+    public native @Cast("const char*") BytePointer GetStateDesc(int arg0);
+    public native void SetFileName(@Cast("char*") BytePointer arg0);
+    public native void SetFileName(@Cast("char*") ByteBuffer arg0);
+    public native void SetFileName(@Cast("char*") byte[] arg0);
+    public native void Release();
+}
+
+
+public static native void cvReleaseBlobTrackAnalysis(@Cast("CvBlobTrackAnalysis**") PointerPointer pBTPP);
+public static native void cvReleaseBlobTrackAnalysis(@ByPtrPtr CvBlobTrackAnalysis pBTPP);
+
+/* Feature-vector generation module: */
+public static class CvBlobTrackFVGen extends CvVSModule {
+    static { Loader.load(); }
+    public CvBlobTrackFVGen() { }
+    public CvBlobTrackFVGen(Pointer p) { super(p); }
+
+    public native void AddBlob(CvBlob pBlob);
+    public native void Process(IplImage pImg, IplImage pFG);
+    public native void Release();
+    public native int GetFVSize();
+    public native int GetFVNum();
+    public native FloatPointer GetFV(int index, IntPointer pFVID);
+    public native FloatBuffer GetFV(int index, IntBuffer pFVID);
+    public native float[] GetFV(int index, int[] pFVID); /* Returns pointer to FV, if return 0 then FV not created */
+    public native FloatPointer GetFVVar(); /* Returns pointer to array of variation of values of FV, if returns 0 then FVVar does not exist. */
+    public native FloatPointer GetFVMin(); /* Returns pointer to array of minimal values of FV, if returns 0 then FVrange does not exist */
+    public native FloatPointer GetFVMax(); /* Returns pointer to array of maximal values of FV, if returns 0 then FVrange does not exist */
+}
+
+
+/* Trajectory Analyser module: */
+public static class CvBlobTrackAnalysisOne extends Pointer {
+    static { Loader.load(); }
+    public CvBlobTrackAnalysisOne() { }
+    public CvBlobTrackAnalysisOne(Pointer p) { super(p); }
+
+    public native int Process(CvBlob pBlob, IplImage pImg, IplImage pFG);
+    /* return 0 if trajectory is normal
+       return >0 if trajectory abnormal */
+    public native void Release();
+}
+
+/* Create blob tracking post processing module based on simle module: */
+public static class CvBlobTrackAnalysisOne_Create extends FunctionPointer {
+    static { Loader.load(); }
+    public    CvBlobTrackAnalysisOne_Create(Pointer p) { super(p); }
+    protected CvBlobTrackAnalysisOne_Create() { allocate(); }
+    private native void allocate();
+    public native CvBlobTrackAnalysisOne call();
+}
+public static native CvBlobTrackAnalysis cvCreateBlobTrackAnalysisList(CvBlobTrackAnalysisOne_Create create);
+
+/* Declarations of constructors of implemented modules: */
+
+/* Based on histogram analysis of 2D FV (x,y): */
+public static native CvBlobTrackAnalysis cvCreateModuleBlobTrackAnalysisHistP();
+
+/* Based on histogram analysis of 4D FV (x,y,vx,vy): */
+public static native CvBlobTrackAnalysis cvCreateModuleBlobTrackAnalysisHistPV();
+
+/* Based on histogram analysis of 5D FV (x,y,vx,vy,state): */
+public static native CvBlobTrackAnalysis cvCreateModuleBlobTrackAnalysisHistPVS();
+
+/* Based on histogram analysis of 4D FV (startpos,stoppos): */
+public static native CvBlobTrackAnalysis cvCreateModuleBlobTrackAnalysisHistSS();
+
+
+
+/* Based on SVM classifier analysis of 2D FV (x,y): */
+//CV_EXPORTS CvBlobTrackAnalysis* cvCreateModuleBlobTrackAnalysisSVMP();
+
+/* Based on SVM classifier analysis of 4D FV (x,y,vx,vy): */
+//CV_EXPORTS CvBlobTrackAnalysis* cvCreateModuleBlobTrackAnalysisSVMPV();
+
+/* Based on SVM classifier analysis of 5D FV (x,y,vx,vy,state): */
+//CV_EXPORTS CvBlobTrackAnalysis* cvCreateModuleBlobTrackAnalysisSVMPVS();
+
+/* Based on SVM classifier analysis of 4D FV (startpos,stoppos): */
+//CV_EXPORTS CvBlobTrackAnalysis* cvCreateModuleBlobTrackAnalysisSVMSS();
+
+/* Track analysis based on distance between tracks: */
+public static native CvBlobTrackAnalysis cvCreateModuleBlobTrackAnalysisTrackDist();
+
+/* Analyzer based on reation Road and height map: */
+//CV_EXPORTS CvBlobTrackAnalysis* cvCreateModuleBlobTrackAnalysis3DRoadMap();
+
+/* Analyzer that makes OR decision using set of analyzers: */
+public static native CvBlobTrackAnalysis cvCreateModuleBlobTrackAnalysisIOR();
+
+/* Estimator of human height: */
+public static class CvBlobTrackAnalysisHeight extends CvBlobTrackAnalysis {
+    static { Loader.load(); }
+    public CvBlobTrackAnalysisHeight() { }
+    public CvBlobTrackAnalysisHeight(Pointer p) { super(p); }
+
+    public native double GetHeight(CvBlob pB);
+}
+//CV_EXPORTS CvBlobTrackAnalysisHeight* cvCreateModuleBlobTrackAnalysisHeightScale();
+
+
+
+/* AUTO BLOB TRACKER INTERFACE -- pipeline of 3 modules: */
+public static class CvBlobTrackerAuto extends CvVSModule {
+    static { Loader.load(); }
+    public CvBlobTrackerAuto() { }
+    public CvBlobTrackerAuto(Pointer p) { super(p); }
+
+    public native void Process(IplImage pImg, IplImage pMask/*=NULL*/);
+    public native CvBlob GetBlob(int index);
+    public native CvBlob GetBlobByID(int ID);
+    public native int GetBlobNum();
+    public native IplImage GetFGMask();
+    public native float GetState(int BlobID);
+    public native @Cast("const char*") BytePointer GetStateDesc(int BlobID);
+    /* return 0 if trajectory is normal;
+     * return >0 if trajectory abnormal. */
+    public native void Release();
+}
+public static native void cvReleaseBlobTrackerAuto(@Cast("CvBlobTrackerAuto**") PointerPointer ppT);
+public static native void cvReleaseBlobTrackerAuto(@ByPtrPtr CvBlobTrackerAuto ppT);
+/* END AUTO BLOB TRACKER INTERFACE */
+
+
+/* Constructor functions and data for specific BlobTRackerAuto modules: */
+
+/* Parameters of blobtracker auto ver1: */
+public static class CvBlobTrackerAutoParam1 extends Pointer {
+    static { Loader.load(); }
+    public CvBlobTrackerAutoParam1() { allocate(); }
+    public CvBlobTrackerAutoParam1(int size) { allocateArray(size); }
+    public CvBlobTrackerAutoParam1(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public CvBlobTrackerAutoParam1 position(int position) {
+        return (CvBlobTrackerAutoParam1)super.position(position);
+    }
+
+    public native int FGTrainFrames(); public native CvBlobTrackerAutoParam1 FGTrainFrames(int FGTrainFrames); /* Number of frames needed for FG (foreground) detector to train.        */
+
+    public native CvFGDetector pFG(); public native CvBlobTrackerAutoParam1 pFG(CvFGDetector pFG);           /* FGDetector module. If this field is NULL the Process FG mask is used. */
+
+    public native CvBlobDetector pBD(); public native CvBlobTrackerAutoParam1 pBD(CvBlobDetector pBD);           /* Selected blob detector module. 					    */
+                                           /* If this field is NULL default blobdetector module will be created.    */
+
+    public native CvBlobTracker pBT(); public native CvBlobTrackerAutoParam1 pBT(CvBlobTracker pBT);           /* Selected blob tracking module.					    */
+                                           /* If this field is NULL default blobtracker module will be created.     */
+
+    public native CvBlobTrackGen pBTGen(); public native CvBlobTrackerAutoParam1 pBTGen(CvBlobTrackGen pBTGen);        /* Selected blob trajectory generator.				    */
+                                           /* If this field is NULL no generator is used.                           */
+
+    public native CvBlobTrackPostProc pBTPP(); public native CvBlobTrackerAutoParam1 pBTPP(CvBlobTrackPostProc pBTPP);         /* Selected blob trajectory postprocessing module.			    */
+                                           /* If this field is NULL no postprocessing is done.                      */
+
+    public native int UsePPData(); public native CvBlobTrackerAutoParam1 UsePPData(int UsePPData);
+
+    public native CvBlobTrackAnalysis pBTA(); public native CvBlobTrackerAutoParam1 pBTA(CvBlobTrackAnalysis pBTA);          /* Selected blob trajectory analysis module.                             */
+                                           /* If this field is NULL no track analysis is done.                      */
+}
+
+/* Create blob tracker auto ver1: */
+public static native CvBlobTrackerAuto cvCreateBlobTrackerAuto1(CvBlobTrackerAutoParam1 param/*=NULL*/);
+
+/* Simple loader for many auto trackers by its type : */
+public static native CvBlobTrackerAuto cvCreateBlobTrackerAuto(int type, Pointer param);
+
+
+
+public static class CvTracksTimePos extends Pointer {
+    static { Loader.load(); }
+    public CvTracksTimePos() { allocate(); }
+    public CvTracksTimePos(int size) { allocateArray(size); }
+    public CvTracksTimePos(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public CvTracksTimePos position(int position) {
+        return (CvTracksTimePos)super.position(position);
+    }
+
+    public native int len1(); public native CvTracksTimePos len1(int len1);
+    public native int len2(); public native CvTracksTimePos len2(int len2);
+    public native int beg1(); public native CvTracksTimePos beg1(int beg1);
+    public native int beg2(); public native CvTracksTimePos beg2(int beg2);
+    public native int end1(); public native CvTracksTimePos end1(int end1);
+    public native int end2(); public native CvTracksTimePos end2(int end2);
+    public native int comLen(); public native CvTracksTimePos comLen(int comLen); //common length for two tracks
+    public native int shift1(); public native CvTracksTimePos shift1(int shift1);
+    public native int shift2(); public native CvTracksTimePos shift2(int shift2);
+}
+
+/*CV_EXPORTS int cvCompareTracks( CvBlobTrackSeq *groundTruth,
+                   CvBlobTrackSeq *result,
+                   FILE *file);*/
+
+
+/* Constructor functions:  */
+
+public static native void cvCreateTracks_One(CvBlobTrackSeq TS);
+public static native void cvCreateTracks_Same(CvBlobTrackSeq TS1, CvBlobTrackSeq TS2);
+public static native void cvCreateTracks_AreaErr(CvBlobTrackSeq TS1, CvBlobTrackSeq TS2, int addW, int addH);
+
+
+/* HIST API */
+public static class CvProb extends Pointer {
+    static { Loader.load(); }
+    public CvProb() { }
+    public CvProb(Pointer p) { super(p); }
+
+
+    /* Calculate probability value: */
+    public native double Value(IntPointer arg0, int arg1/*=0*/, int arg2/*=0*/);
+    public native double Value(IntBuffer arg0, int arg1/*=0*/, int arg2/*=0*/);
+    public native double Value(int[] arg0, int arg1/*=0*/, int arg2/*=0*/);
+
+    /* Update histograpp Pnew = (1-W)*Pold + W*Padd*/
+    /* W weight of new added prob */
+    /* comps - matrix of new fetature vectors used to update prob */
+    public native void AddFeature(float W, IntPointer comps, int x/*=0*/, int y/*=0*/);
+    public native void AddFeature(float W, IntBuffer comps, int x/*=0*/, int y/*=0*/);
+    public native void AddFeature(float W, int[] comps, int x/*=0*/, int y/*=0*/);
+    public native void Scale(float factor/*=0*/, int x/*=-1*/, int y/*=-1*/);
+    public native void Release();
+}
+public static native void cvReleaseProb(@Cast("CvProb**") PointerPointer ppProb);
+public static native void cvReleaseProb(@ByPtrPtr CvProb ppProb);
+/* HIST API */
+
+/* Some Prob: */
+public static native CvProb cvCreateProbS(int dim, @ByVal CvSize size, int sample_num);
+public static native CvProb cvCreateProbMG(int dim, @ByVal CvSize size, int sample_num);
+public static native CvProb cvCreateProbMG2(int dim, @ByVal CvSize size, int sample_num);
+public static native CvProb cvCreateProbHist(int dim, @ByVal CvSize size);
+
+public static final int CV_BT_HIST_TYPE_S =     0;
+public static final int CV_BT_HIST_TYPE_MG =    1;
+public static final int CV_BT_HIST_TYPE_MG2 =   2;
+public static final int CV_BT_HIST_TYPE_H =     3;
+public static native CvProb cvCreateProb(int type, int dim, @ByVal CvSize size/*=cvSize(1,1)*/, Pointer arg3/*=NULL*/);
+
+
+
+/* Noise type definitions: */
+public static final int CV_NOISE_NONE =               0;
+public static final int CV_NOISE_GAUSSIAN =           1;
+public static final int CV_NOISE_UNIFORM =            2;
+public static final int CV_NOISE_SPECKLE =            3;
+public static final int CV_NOISE_SALT_AND_PEPPER =    4;
+
+/* Add some noise to image: */
+/* pImg - (input) image without noise */
+/* pImg - (output) image with noise */
+/* noise_type - type of added noise */
+/*  CV_NOISE_GAUSSIAN - pImg += n , n - is gaussian noise with Ampl standart deviation */
+/*  CV_NOISE_UNIFORM - pImg += n , n - is uniform noise with Ampl standart deviation */
+/*  CV_NOISE_SPECKLE - pImg += n*pImg , n - is gaussian noise with Ampl standart deviation */
+/*  CV_NOISE_SALT_AND_PAPPER - pImg = pImg with blacked and whited pixels,
+            Ampl is density of brocken pixels (0-there are not broken pixels, 1 - all pixels are broken)*/
+/* Ampl - "amplitude" of noise */
+//CV_EXPORTS void cvAddNoise(IplImage* pImg, int noise_type, double Ampl, CvRNG* rnd_state = NULL);
+
+/*================== GENERATOR OF TEST VIDEO SEQUENCE ===================== */
+@Opaque public static class CvTestSeq extends Pointer {
+    public CvTestSeq() { }
+    public CvTestSeq(Pointer p) { super(p); }
+}
+
+/* pConfigfile - Name of file (yml or xml) with description of test sequence */
+/* videos - array of names of test videos described in "pConfigfile" file */
+/* numvideos - size of "videos" array */
+public static native CvTestSeq cvCreateTestSeq(@Cast("char*") BytePointer pConfigfile, @Cast("char**") PointerPointer videos, int numvideo, float Scale/*=1*/, int noise_type/*=CV_NOISE_NONE*/, double noise_ampl/*=0*/);
+public static native CvTestSeq cvCreateTestSeq(@Cast("char*") BytePointer pConfigfile, @Cast("char**") @ByPtrPtr BytePointer videos, int numvideo, float Scale/*=1*/, int noise_type/*=CV_NOISE_NONE*/, double noise_ampl/*=0*/);
+public static native CvTestSeq cvCreateTestSeq(@Cast("char*") ByteBuffer pConfigfile, @Cast("char**") @ByPtrPtr ByteBuffer videos, int numvideo, float Scale/*=1*/, int noise_type/*=CV_NOISE_NONE*/, double noise_ampl/*=0*/);
+public static native CvTestSeq cvCreateTestSeq(@Cast("char*") byte[] pConfigfile, @Cast("char**") @ByPtrPtr byte[] videos, int numvideo, float Scale/*=1*/, int noise_type/*=CV_NOISE_NONE*/, double noise_ampl/*=0*/);
+public static native void cvReleaseTestSeq(@Cast("CvTestSeq**") PointerPointer ppTestSeq);
+public static native void cvReleaseTestSeq(@ByPtrPtr CvTestSeq ppTestSeq);
+
+/* Generate next frame from test video seq and return pointer to it: */
+public static native IplImage cvTestSeqQueryFrame(CvTestSeq pTestSeq);
+
+/* Return pointer to current foreground mask: */
+public static native IplImage cvTestSeqGetFGMask(CvTestSeq pTestSeq);
+
+/* Return pointer to current image: */
+public static native IplImage cvTestSeqGetImage(CvTestSeq pTestSeq);
+
+/* Return frame size of result test video: */
+public static native @ByVal CvSize cvTestSeqGetImageSize(CvTestSeq pTestSeq);
+
+/* Return number of frames result test video: */
+public static native int cvTestSeqFrameNum(CvTestSeq pTestSeq);
+
+/* Return number of existing objects.
+ * This is general number of any objects.
+ * For example number of trajectories may be equal or less than returned value:
+ */
+public static native int cvTestSeqGetObjectNum(CvTestSeq pTestSeq);
+
+/* Return 0 if there is not position for current defined on current frame */
+/* Return 1 if there is object position and pPos was filled */
+public static native int cvTestSeqGetObjectPos(CvTestSeq pTestSeq, int ObjIndex, CvPoint2D32f pPos);
+public static native int cvTestSeqGetObjectSize(CvTestSeq pTestSeq, int ObjIndex, CvPoint2D32f pSize);
+
+/* Add noise to final image: */
+public static native void cvTestSeqAddNoise(CvTestSeq pTestSeq, int noise_type/*=CV_NOISE_NONE*/, double noise_ampl/*=0*/);
+
+/* Add Intensity variation: */
+public static native void cvTestSeqAddIntensityVariation(CvTestSeq pTestSeq, float DI_per_frame, float MinI, float MaxI);
+public static native void cvTestSeqSetFrame(CvTestSeq pTestSeq, int n);
+
+// #endif
+
+/* End of file. */
+
 
 /* Wrapper for header file /usr/local/include/opencv2/legacy/compat.hpp */
 
@@ -1028,7 +2001,7 @@ public static native CvSeq cvSegmentImage( @Const CvArr srcarr, CvArr dstarr,
 *                                  Eigen objects                                         *
 \****************************************************************************************/
 
-public static class CvCallback extends FunctionPointer {
+@Convention("CV_CDECL") public static class CvCallback extends FunctionPointer {
     static { Loader.load(); }
     public    CvCallback(Pointer p) { super(p); }
     protected CvCallback() { allocate(); }
@@ -1167,9 +2140,9 @@ public static class CvEHMM extends Pointer {
     public native FloatPointer obsProb(int i); public native CvEHMM obsProb(int i, FloatPointer obsProb);
     @MemberGetter public native @Cast("float**") PointerPointer obsProb(); /* if level == 0 - array of brob matrices corresponding to hmm
                         if level == 1 - martix of matrices */
-        @Name({"u", ".state"}) public native CvEHMMState u_state(); public native CvEHMM u_state(CvEHMMState u_state); /* if level == 0 points to real states array,
+        @Name("u.state") public native CvEHMMState u_state(); public native CvEHMM u_state(CvEHMMState u_state); /* if level == 0 points to real states array,
                                if not - points to embedded hmms */
-        @Name({"u", ".ehmm"}) public native CvEHMM u_ehmm(); public native CvEHMM u_ehmm(CvEHMM u_ehmm); /* pointer to an embedded model or NULL, if it is a leaf */
+        @Name("u.ehmm") public native CvEHMM u_ehmm(); public native CvEHMM u_ehmm(CvEHMM u_ehmm); /* pointer to an embedded model or NULL, if it is a leaf */
 
 }
 
@@ -2875,6 +3848,1594 @@ public static native int iplHeight( @Const IplImage img );
 
 // #ifdef __cplusplus
 
+/****************************************************************************************\
+*                                   Calibration engine                                   *
+\****************************************************************************************/
+
+/** enum CvCalibEtalonType */
+public static final int
+    CV_CALIB_ETALON_USER = -1,
+    CV_CALIB_ETALON_CHESSBOARD = 0,
+    CV_CALIB_ETALON_CHECKERBOARD =  CV_CALIB_ETALON_CHESSBOARD;
+
+@NoOffset public static class CvCalibFilter extends Pointer {
+    static { Loader.load(); }
+    public CvCalibFilter(Pointer p) { super(p); }
+    public CvCalibFilter(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public CvCalibFilter position(int position) {
+        return (CvCalibFilter)super.position(position);
+    }
+
+    /* Constructor & destructor */
+    public CvCalibFilter() { allocate(); }
+    private native void allocate();
+
+    /* Sets etalon type - one for all cameras.
+       etalonParams is used in case of pre-defined etalons (such as chessboard).
+       Number of elements in etalonParams is determined by etalonType.
+       E.g., if etalon type is CV_ETALON_TYPE_CHESSBOARD then:
+         etalonParams[0] is number of squares per one side of etalon
+         etalonParams[1] is number of squares per another side of etalon
+         etalonParams[2] is linear size of squares in the board in arbitrary units.
+       pointCount & points are used in case of
+       CV_CALIB_ETALON_USER (user-defined) etalon. */
+    public native @Cast("bool") boolean SetEtalon( @Cast("CvCalibEtalonType") int etalonType, DoublePointer etalonParams,
+                       int pointCount/*=0*/, CvPoint2D32f points/*=0*/ );
+    public native @Cast("bool") boolean SetEtalon( @Cast("CvCalibEtalonType") int etalonType, DoubleBuffer etalonParams,
+                       int pointCount/*=0*/, CvPoint2D32f points/*=0*/ );
+    public native @Cast("bool") boolean SetEtalon( @Cast("CvCalibEtalonType") int etalonType, double[] etalonParams,
+                       int pointCount/*=0*/, CvPoint2D32f points/*=0*/ );
+
+    /* Retrieves etalon parameters/or and points */
+    public native @Cast("CvCalibEtalonType") int GetEtalon( IntPointer paramCount/*=0*/, @Cast("const double**") PointerPointer etalonParams/*=0*/,
+                       IntPointer pointCount/*=0*/, @Cast("const CvPoint2D32f**") PointerPointer etalonPoints/*=0*/ );
+    public native @Cast("CvCalibEtalonType") int GetEtalon( IntPointer paramCount/*=0*/, @Const @ByPtrPtr DoublePointer etalonParams/*=0*/,
+                       IntPointer pointCount/*=0*/, @Const @ByPtrPtr CvPoint2D32f etalonPoints/*=0*/ );
+    public native @Cast("CvCalibEtalonType") int GetEtalon( IntBuffer paramCount/*=0*/, @Const @ByPtrPtr DoubleBuffer etalonParams/*=0*/,
+                       IntBuffer pointCount/*=0*/, @Const @ByPtrPtr CvPoint2D32f etalonPoints/*=0*/ );
+    public native @Cast("CvCalibEtalonType") int GetEtalon( int[] paramCount/*=0*/, @Const @ByPtrPtr double[] etalonParams/*=0*/,
+                       int[] pointCount/*=0*/, @Const @ByPtrPtr CvPoint2D32f etalonPoints/*=0*/ );
+
+    /* Sets number of cameras calibrated simultaneously. It is equal to 1 initially */
+    public native void SetCameraCount( int cameraCount );
+
+    /* Retrieves number of cameras */
+    public native int GetCameraCount();
+
+    /* Starts cameras calibration */
+    public native @Cast("bool") boolean SetFrames( int totalFrames );
+
+    /* Stops cameras calibration */
+    public native void Stop( @Cast("bool") boolean calibrate/*=false*/ );
+
+    /* Retrieves number of cameras */
+    public native @Cast("bool") boolean IsCalibrated();
+
+    /* Feeds another serie of snapshots (one per each camera) to filter.
+       Etalon points on these images are found automatically.
+       If the function can't locate points, it returns false */
+    public native @Cast("bool") boolean FindEtalon( @Cast("IplImage**") PointerPointer imgs );
+    public native @Cast("bool") boolean FindEtalon( @ByPtrPtr IplImage imgs );
+
+    /* The same but takes matrices */
+    public native @Cast("bool") boolean FindEtalon( @ByPtrPtr CvMat imgs );
+
+    /* Lower-level function for feeding filter with already found etalon points.
+       Array of point arrays for each camera is passed. */
+    public native @Cast("bool") boolean Push( @Cast("const CvPoint2D32f**") PointerPointer points/*=0*/ );
+    public native @Cast("bool") boolean Push( @Const @ByPtrPtr CvPoint2D32f points/*=0*/ );
+
+    /* Returns total number of accepted frames and, optionally,
+       total number of frames to collect */
+    public native int GetFrameCount( IntPointer framesTotal/*=0*/ );
+    public native int GetFrameCount( IntBuffer framesTotal/*=0*/ );
+    public native int GetFrameCount( int[] framesTotal/*=0*/ );
+
+    /* Retrieves camera parameters for specified camera.
+       If camera is not calibrated the function returns 0 */
+    public native @Const CvCamera GetCameraParams( int idx/*=0*/ );
+
+    public native @Const CvStereoCamera GetStereoParams();
+
+    /* Sets camera parameters for all cameras */
+    public native @Cast("bool") boolean SetCameraParams( CvCamera params );
+
+    /* Saves all camera parameters to file */
+    public native @Cast("bool") boolean SaveCameraParams( @Cast("const char*") BytePointer filename );
+    public native @Cast("bool") boolean SaveCameraParams( String filename );
+
+    /* Loads all camera parameters from file */
+    public native @Cast("bool") boolean LoadCameraParams( @Cast("const char*") BytePointer filename );
+    public native @Cast("bool") boolean LoadCameraParams( String filename );
+
+    /* Undistorts images using camera parameters. Some of src pointers can be NULL. */
+    public native @Cast("bool") boolean Undistort( @Cast("IplImage**") PointerPointer src, @Cast("IplImage**") PointerPointer dst );
+    public native @Cast("bool") boolean Undistort( @ByPtrPtr IplImage src, @ByPtrPtr IplImage dst );
+
+    /* Undistorts images using camera parameters. Some of src pointers can be NULL. */
+    public native @Cast("bool") boolean Undistort( @ByPtrPtr CvMat src, @ByPtrPtr CvMat dst );
+
+    /* Returns array of etalon points detected/partally detected
+       on the latest frame for idx-th camera */
+    public native @Cast("bool") boolean GetLatestPoints( int idx, @Cast("CvPoint2D32f**") PointerPointer pts,
+                                                      IntPointer count, @Cast("bool*") BoolPointer found );
+    public native @Cast("bool") boolean GetLatestPoints( int idx, @ByPtrPtr CvPoint2D32f pts,
+                                                      IntPointer count, @Cast("bool*") BoolPointer found );
+    public native @Cast("bool") boolean GetLatestPoints( int idx, @ByPtrPtr CvPoint2D32f pts,
+                                                      IntBuffer count, @Cast("bool*") BoolPointer found );
+    public native @Cast("bool") boolean GetLatestPoints( int idx, @ByPtrPtr CvPoint2D32f pts,
+                                                      int[] count, @Cast("bool*") BoolPointer found );
+
+    /* Draw the latest detected/partially detected etalon */
+    public native void DrawPoints( @Cast("IplImage**") PointerPointer dst );
+    public native void DrawPoints( @ByPtrPtr IplImage dst );
+
+    /* Draw the latest detected/partially detected etalon */
+    public native void DrawPoints( @ByPtrPtr CvMat dst );
+
+    public native @Cast("bool") boolean Rectify( @Cast("IplImage**") PointerPointer srcarr, @Cast("IplImage**") PointerPointer dstarr );
+    public native @Cast("bool") boolean Rectify( @ByPtrPtr IplImage srcarr, @ByPtrPtr IplImage dstarr );
+    public native @Cast("bool") boolean Rectify( @ByPtrPtr CvMat srcarr, @ByPtrPtr CvMat dstarr );
+}
+
+// #include <iosfwd>
+// #include <limits>
+
+@NoOffset public static class CvImage extends Pointer {
+    static { Loader.load(); }
+    public CvImage(Pointer p) { super(p); }
+    public CvImage(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public CvImage position(int position) {
+        return (CvImage)super.position(position);
+    }
+
+    public CvImage() { allocate(); }
+    private native void allocate();
+    public CvImage( @ByVal CvSize _size, int _depth, int _channels ) { allocate(_size, _depth, _channels); }
+    private native void allocate( @ByVal CvSize _size, int _depth, int _channels );
+
+    public CvImage( IplImage img ) { allocate(img); }
+    private native void allocate( IplImage img );
+
+    public CvImage( @Const @ByRef CvImage img ) { allocate(img); }
+    private native void allocate( @Const @ByRef CvImage img );
+
+    public CvImage( @Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer imgname/*=0*/, int color/*=-1*/ ) { allocate(filename, imgname, color); }
+    private native void allocate( @Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer imgname/*=0*/, int color/*=-1*/ );
+    public CvImage( String filename, String imgname/*=0*/, int color/*=-1*/ ) { allocate(filename, imgname, color); }
+    private native void allocate( String filename, String imgname/*=0*/, int color/*=-1*/ );
+
+    public CvImage( CvFileStorage fs, @Cast("const char*") BytePointer mapname, @Cast("const char*") BytePointer imgname ) { allocate(fs, mapname, imgname); }
+    private native void allocate( CvFileStorage fs, @Cast("const char*") BytePointer mapname, @Cast("const char*") BytePointer imgname );
+    public CvImage( CvFileStorage fs, String mapname, String imgname ) { allocate(fs, mapname, imgname); }
+    private native void allocate( CvFileStorage fs, String mapname, String imgname );
+
+    public CvImage( CvFileStorage fs, @Cast("const char*") BytePointer seqname, int idx ) { allocate(fs, seqname, idx); }
+    private native void allocate( CvFileStorage fs, @Cast("const char*") BytePointer seqname, int idx );
+    public CvImage( CvFileStorage fs, String seqname, int idx ) { allocate(fs, seqname, idx); }
+    private native void allocate( CvFileStorage fs, String seqname, int idx );
+
+    public native @ByVal CvImage clone();
+
+    public native void create( @ByVal CvSize _size, int _depth, int _channels );
+
+    public native void release();
+    public native void clear();
+
+    public native void attach( IplImage img, @Cast("bool") boolean use_refcount/*=true*/ );
+
+    public native void detach();
+
+    public native @Cast("bool") boolean load( @Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer imgname/*=0*/, int color/*=-1*/ );
+    public native @Cast("bool") boolean load( String filename, String imgname/*=0*/, int color/*=-1*/ );
+    public native @Cast("bool") boolean read( CvFileStorage fs, @Cast("const char*") BytePointer mapname, @Cast("const char*") BytePointer imgname );
+    public native @Cast("bool") boolean read( CvFileStorage fs, String mapname, String imgname );
+    public native @Cast("bool") boolean read( CvFileStorage fs, @Cast("const char*") BytePointer seqname, int idx );
+    public native @Cast("bool") boolean read( CvFileStorage fs, String seqname, int idx );
+    public native void save( @Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer imgname, @Const IntPointer params/*=0*/ );
+    public native void save( String filename, String imgname, @Const IntBuffer params/*=0*/ );
+    public native void save( @Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer imgname, @Const int[] params/*=0*/ );
+    public native void save( String filename, String imgname, @Const IntPointer params/*=0*/ );
+    public native void save( @Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer imgname, @Const IntBuffer params/*=0*/ );
+    public native void save( String filename, String imgname, @Const int[] params/*=0*/ );
+    public native void write( CvFileStorage fs, @Cast("const char*") BytePointer imgname );
+    public native void write( CvFileStorage fs, String imgname );
+
+    public native void show( @Cast("const char*") BytePointer window_name );
+    public native void show( String window_name );
+    public native @Cast("bool") boolean is_valid();
+
+    public native int width();
+    public native int height();
+
+    public native @ByVal CvSize size();
+
+    public native @ByVal CvSize roi_size();
+
+    public native @ByVal CvRect roi();
+
+    public native int coi();
+
+    public native void set_roi(@ByVal CvRect _roi);
+    public native void reset_roi();
+    public native void set_coi(int _coi);
+    public native int depth();
+    public native int channels();
+    public native int pix_size();
+
+    public native @Cast("uchar*") BytePointer data();
+    public native int step();
+    public native int origin();
+
+    public native @Cast("uchar*") BytePointer roi_row(int y);
+    public native @Name("operator IplImage*") IplImage asIplImage();
+
+    public native @ByRef @Name("operator=") CvImage put(@Const @ByRef CvImage img);
+}
+
+
+@NoOffset public static class CvMatrix extends Pointer {
+    static { Loader.load(); }
+    public CvMatrix(Pointer p) { super(p); }
+    public CvMatrix(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public CvMatrix position(int position) {
+        return (CvMatrix)super.position(position);
+    }
+
+    public CvMatrix() { allocate(); }
+    private native void allocate();
+    public CvMatrix( int _rows, int _cols, int _type ) { allocate(_rows, _cols, _type); }
+    private native void allocate( int _rows, int _cols, int _type );
+
+    public CvMatrix( int _rows, int _cols, int _type, CvMat hdr,
+                 Pointer _data/*=0*/, int _step/*=CV_AUTOSTEP*/ ) { allocate(_rows, _cols, _type, hdr, _data, _step); }
+    private native void allocate( int _rows, int _cols, int _type, CvMat hdr,
+                 Pointer _data/*=0*/, int _step/*=CV_AUTOSTEP*/ );
+
+    public CvMatrix( int rows, int cols, int type, CvMemStorage storage, @Cast("bool") boolean alloc_data/*=true*/ ) { allocate(rows, cols, type, storage, alloc_data); }
+    private native void allocate( int rows, int cols, int type, CvMemStorage storage, @Cast("bool") boolean alloc_data/*=true*/ );
+
+    public CvMatrix( int _rows, int _cols, int _type, Pointer _data, int _step/*=CV_AUTOSTEP*/ ) { allocate(_rows, _cols, _type, _data, _step); }
+    private native void allocate( int _rows, int _cols, int _type, Pointer _data, int _step/*=CV_AUTOSTEP*/ );
+
+    public CvMatrix( CvMat m ) { allocate(m); }
+    private native void allocate( CvMat m );
+
+    public CvMatrix( @Const @ByRef CvMatrix m ) { allocate(m); }
+    private native void allocate( @Const @ByRef CvMatrix m );
+
+    public CvMatrix( @Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer matname/*=0*/, int color/*=-1*/ ) { allocate(filename, matname, color); }
+    private native void allocate( @Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer matname/*=0*/, int color/*=-1*/ );
+    public CvMatrix( String filename, String matname/*=0*/, int color/*=-1*/ ) { allocate(filename, matname, color); }
+    private native void allocate( String filename, String matname/*=0*/, int color/*=-1*/ );
+
+    public CvMatrix( CvFileStorage fs, @Cast("const char*") BytePointer mapname, @Cast("const char*") BytePointer matname ) { allocate(fs, mapname, matname); }
+    private native void allocate( CvFileStorage fs, @Cast("const char*") BytePointer mapname, @Cast("const char*") BytePointer matname );
+    public CvMatrix( CvFileStorage fs, String mapname, String matname ) { allocate(fs, mapname, matname); }
+    private native void allocate( CvFileStorage fs, String mapname, String matname );
+
+    public CvMatrix( CvFileStorage fs, @Cast("const char*") BytePointer seqname, int idx ) { allocate(fs, seqname, idx); }
+    private native void allocate( CvFileStorage fs, @Cast("const char*") BytePointer seqname, int idx );
+    public CvMatrix( CvFileStorage fs, String seqname, int idx ) { allocate(fs, seqname, idx); }
+    private native void allocate( CvFileStorage fs, String seqname, int idx );
+
+    public native @ByVal CvMatrix clone();
+
+    public native void set( CvMat m, @Cast("bool") boolean add_ref );
+
+    public native void create( int _rows, int _cols, int _type );
+
+    public native void addref();
+
+    public native void release();
+
+    public native void clear();
+
+    public native @Cast("bool") boolean load( @Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer matname/*=0*/, int color/*=-1*/ );
+    public native @Cast("bool") boolean load( String filename, String matname/*=0*/, int color/*=-1*/ );
+    public native @Cast("bool") boolean read( CvFileStorage fs, @Cast("const char*") BytePointer mapname, @Cast("const char*") BytePointer matname );
+    public native @Cast("bool") boolean read( CvFileStorage fs, String mapname, String matname );
+    public native @Cast("bool") boolean read( CvFileStorage fs, @Cast("const char*") BytePointer seqname, int idx );
+    public native @Cast("bool") boolean read( CvFileStorage fs, String seqname, int idx );
+    public native void save( @Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer matname, @Const IntPointer params/*=0*/ );
+    public native void save( String filename, String matname, @Const IntBuffer params/*=0*/ );
+    public native void save( @Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer matname, @Const int[] params/*=0*/ );
+    public native void save( String filename, String matname, @Const IntPointer params/*=0*/ );
+    public native void save( @Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer matname, @Const IntBuffer params/*=0*/ );
+    public native void save( String filename, String matname, @Const int[] params/*=0*/ );
+    public native void write( CvFileStorage fs, @Cast("const char*") BytePointer matname );
+    public native void write( CvFileStorage fs, String matname );
+
+    public native void show( @Cast("const char*") BytePointer window_name );
+    public native void show( String window_name );
+
+    public native @Cast("bool") boolean is_valid();
+
+    public native int rows();
+    public native int cols();
+
+    public native @ByVal CvSize size();
+
+    public native int type();
+    public native int depth();
+    public native int channels();
+    public native int pix_size();
+
+    public native @Cast("uchar*") BytePointer data();
+    public native int step();
+
+    public native void set_data( Pointer _data, int _step/*=CV_AUTOSTEP*/ );
+
+    public native @Cast("uchar*") BytePointer row(int i);
+    public native @Name("operator CvMat*") CvMat asCvMat();
+
+    public native @ByRef @Name("operator=") CvMatrix put(@Const @ByRef CvMatrix _m);
+}
+
+/****************************************************************************************\
+ *                                       CamShiftTracker                                  *
+ \****************************************************************************************/
+
+@NoOffset public static class CvCamShiftTracker extends Pointer {
+    static { Loader.load(); }
+    public CvCamShiftTracker(Pointer p) { super(p); }
+    public CvCamShiftTracker(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public CvCamShiftTracker position(int position) {
+        return (CvCamShiftTracker)super.position(position);
+    }
+
+
+    public CvCamShiftTracker() { allocate(); }
+    private native void allocate();
+
+    /**** Characteristics of the object that are calculated by track_object method *****/
+    public native float get_orientation();
+    public native float get_length();
+    public native float get_width();
+    public native @ByVal CvPoint2D32f get_center();
+    public native @ByVal CvRect get_window();
+
+    /*********************** Tracking parameters ************************/
+    public native int get_threshold();
+
+    public native int get_hist_dims( IntPointer dims/*=0*/ );
+    public native int get_hist_dims( IntBuffer dims/*=0*/ );
+    public native int get_hist_dims( int[] dims/*=0*/ );
+
+    public native int get_min_ch_val( int channel );
+
+    public native int get_max_ch_val( int channel );
+
+    // set initial object rectangle (must be called before initial calculation of the histogram)
+    public native @Cast("bool") boolean set_window( @ByVal CvRect window);
+
+    public native @Cast("bool") boolean set_threshold( int threshold );
+
+    public native @Cast("bool") boolean set_hist_bin_range( int dim, int min_val, int max_val );
+
+    public native @Cast("bool") boolean set_hist_dims( int c_dims, IntPointer dims );
+    public native @Cast("bool") boolean set_hist_dims( int c_dims, IntBuffer dims );
+    public native @Cast("bool") boolean set_hist_dims( int c_dims, int[] dims );// set the histogram parameters
+
+    public native @Cast("bool") boolean set_min_ch_val( int channel, int val );
+    public native @Cast("bool") boolean set_max_ch_val( int channel, int val );
+
+    /************************ The processing methods *********************************/
+    // update object position
+    public native @Cast("bool") boolean track_object( @Const IplImage cur_frame );
+
+    // update object histogram
+    public native @Cast("bool") boolean update_histogram( @Const IplImage cur_frame );
+
+    // reset histogram
+    public native void reset_histogram();
+
+    /************************ Retrieving internal data *******************************/
+    // get back project image
+    public native IplImage get_back_project();
+
+    public native float query( IntPointer bin );
+    public native float query( IntBuffer bin );
+    public native float query( int[] bin );
+}
+
+/****************************************************************************************\
+*                              Expectation - Maximization                                *
+\****************************************************************************************/
+@NoOffset public static class CvEMParams extends Pointer {
+    static { Loader.load(); }
+    public CvEMParams(Pointer p) { super(p); }
+    public CvEMParams(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public CvEMParams position(int position) {
+        return (CvEMParams)super.position(position);
+    }
+
+    public CvEMParams() { allocate(); }
+    private native void allocate();
+    public CvEMParams( int nclusters, int cov_mat_type/*=cv::EM::COV_MAT_DIAGONAL*/,
+                    int start_step/*=cv::EM::START_AUTO_STEP*/,
+                    @ByVal CvTermCriteria term_crit/*=cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 100, FLT_EPSILON)*/,
+                    @Const CvMat probs/*=0*/, @Const CvMat weights/*=0*/, @Const CvMat means/*=0*/, @Cast("const CvMat**") PointerPointer covs/*=0*/ ) { allocate(nclusters, cov_mat_type, start_step, term_crit, probs, weights, means, covs); }
+    private native void allocate( int nclusters, int cov_mat_type/*=cv::EM::COV_MAT_DIAGONAL*/,
+                    int start_step/*=cv::EM::START_AUTO_STEP*/,
+                    @ByVal CvTermCriteria term_crit/*=cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 100, FLT_EPSILON)*/,
+                    @Const CvMat probs/*=0*/, @Const CvMat weights/*=0*/, @Const CvMat means/*=0*/, @Cast("const CvMat**") PointerPointer covs/*=0*/ );
+    public CvEMParams( int nclusters, int cov_mat_type/*=cv::EM::COV_MAT_DIAGONAL*/,
+                    int start_step/*=cv::EM::START_AUTO_STEP*/,
+                    @ByVal CvTermCriteria term_crit/*=cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 100, FLT_EPSILON)*/,
+                    @Const CvMat probs/*=0*/, @Const CvMat weights/*=0*/, @Const CvMat means/*=0*/, @Const @ByPtrPtr CvMat covs/*=0*/ ) { allocate(nclusters, cov_mat_type, start_step, term_crit, probs, weights, means, covs); }
+    private native void allocate( int nclusters, int cov_mat_type/*=cv::EM::COV_MAT_DIAGONAL*/,
+                    int start_step/*=cv::EM::START_AUTO_STEP*/,
+                    @ByVal CvTermCriteria term_crit/*=cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 100, FLT_EPSILON)*/,
+                    @Const CvMat probs/*=0*/, @Const CvMat weights/*=0*/, @Const CvMat means/*=0*/, @Const @ByPtrPtr CvMat covs/*=0*/ );
+
+    public native int nclusters(); public native CvEMParams nclusters(int nclusters);
+    public native int cov_mat_type(); public native CvEMParams cov_mat_type(int cov_mat_type);
+    public native int start_step(); public native CvEMParams start_step(int start_step);
+    @MemberGetter public native @Const CvMat probs();
+    @MemberGetter public native @Const CvMat weights();
+    @MemberGetter public native @Const CvMat means();
+    @MemberGetter public native @Const CvMat covs(int i);
+    @MemberGetter public native @Cast("const CvMat**") PointerPointer covs();
+    public native @ByVal CvTermCriteria term_crit(); public native CvEMParams term_crit(CvTermCriteria term_crit);
+}
+
+
+@NoOffset public static class CvEM extends CvStatModel {
+    static { Loader.load(); }
+    public CvEM(Pointer p) { super(p); }
+    public CvEM(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public CvEM position(int position) {
+        return (CvEM)super.position(position);
+    }
+
+    // Type of covariation matrices
+    /** enum CvEM:: */
+    public static final int COV_MAT_SPHERICAL=EM.COV_MAT_SPHERICAL,
+           COV_MAT_DIAGONAL =EM.COV_MAT_DIAGONAL,
+           COV_MAT_GENERIC  =EM.COV_MAT_GENERIC;
+
+    // The initial step
+    /** enum CvEM:: */
+    public static final int START_E_STEP=EM.START_E_STEP,
+           START_M_STEP=EM.START_M_STEP,
+           START_AUTO_STEP=EM.START_AUTO_STEP;
+
+    public CvEM() { allocate(); }
+    private native void allocate();
+    public CvEM( @Const CvMat samples, @Const CvMat sampleIdx/*=0*/,
+              @ByVal CvEMParams params/*=CvEMParams()*/, CvMat labels/*=0*/ ) { allocate(samples, sampleIdx, params, labels); }
+    private native void allocate( @Const CvMat samples, @Const CvMat sampleIdx/*=0*/,
+              @ByVal CvEMParams params/*=CvEMParams()*/, CvMat labels/*=0*/ );
+
+    public native @Cast("bool") boolean train( @Const CvMat samples, @Const CvMat sampleIdx/*=0*/,
+                            @ByVal CvEMParams params/*=CvEMParams()*/, CvMat labels/*=0*/ );
+
+    public native float predict( @Const CvMat sample, CvMat probs );
+
+    public CvEM( @Const @ByRef Mat samples, @Const @ByRef Mat sampleIdx/*=cv::Mat()*/,
+                      @ByVal CvEMParams params/*=CvEMParams()*/ ) { allocate(samples, sampleIdx, params); }
+    private native void allocate( @Const @ByRef Mat samples, @Const @ByRef Mat sampleIdx/*=cv::Mat()*/,
+                      @ByVal CvEMParams params/*=CvEMParams()*/ );
+
+    public native @Cast("bool") boolean train( @Const @ByRef Mat samples,
+                                    @Const @ByRef Mat sampleIdx/*=cv::Mat()*/,
+                                    @ByVal CvEMParams params/*=CvEMParams()*/,
+                                    Mat labels/*=0*/ );
+
+    public native float predict( @Const @ByRef Mat sample, Mat probs/*=0*/ );
+    public native double calcLikelihood( @Const @ByRef Mat sample );
+
+    public native int getNClusters();
+    public native @ByVal Mat getMeans();
+    public native void getCovs(@ByRef MatVector covs);
+    public native @ByVal Mat getWeights();
+    public native @ByVal Mat getProbs();
+
+    public native double getLikelihood();
+
+    public native void clear();
+
+    public native int get_nclusters();
+    public native @Const CvMat get_means();
+    public native @Cast("const CvMat**") PointerPointer get_covs();
+    public native @Const CvMat get_weights();
+    public native @Const CvMat get_probs();
+
+    public native double get_log_likelihood();
+
+    public native void read( CvFileStorage fs, CvFileNode node );
+    public native void write( CvFileStorage fs, @Cast("const char*") BytePointer name );
+    public native void write( CvFileStorage fs, String name );
+}
+
+/**
+ The Patch Generator class
+ */
+@Namespace("cv") @NoOffset public static class PatchGenerator extends Pointer {
+    static { Loader.load(); }
+    public PatchGenerator(Pointer p) { super(p); }
+    public PatchGenerator(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public PatchGenerator position(int position) {
+        return (PatchGenerator)super.position(position);
+    }
+
+    public PatchGenerator() { allocate(); }
+    private native void allocate();
+    public PatchGenerator(double _backgroundMin, double _backgroundMax,
+                       double _noiseRange, @Cast("bool") boolean _randomBlur/*=true*/,
+                       double _lambdaMin/*=0.6*/, double _lambdaMax/*=1.5*/,
+                       double _thetaMin/*=-CV_PI*/, double _thetaMax/*=CV_PI*/,
+                       double _phiMin/*=-CV_PI*/, double _phiMax/*=CV_PI*/ ) { allocate(_backgroundMin, _backgroundMax, _noiseRange, _randomBlur, _lambdaMin, _lambdaMax, _thetaMin, _thetaMax, _phiMin, _phiMax); }
+    private native void allocate(double _backgroundMin, double _backgroundMax,
+                       double _noiseRange, @Cast("bool") boolean _randomBlur/*=true*/,
+                       double _lambdaMin/*=0.6*/, double _lambdaMax/*=1.5*/,
+                       double _thetaMin/*=-CV_PI*/, double _thetaMax/*=CV_PI*/,
+                       double _phiMin/*=-CV_PI*/, double _phiMax/*=CV_PI*/ );
+    public native @Name("operator()") void apply(@Const @ByRef Mat image, @ByVal Point2f pt, @ByRef Mat patch, @ByVal Size patchSize, @ByRef RNG rng);
+    public native @Name("operator()") void apply(@Const @ByRef Mat image, @Const @ByRef Mat transform, @ByRef Mat patch,
+                        @ByVal Size patchSize, @ByRef RNG rng);
+    public native void warpWholeImage(@Const @ByRef Mat image, @ByRef Mat matT, @ByRef Mat buf,
+                            @ByRef Mat warped, int border, @ByRef RNG rng);
+    public native void generateRandomTransform(@ByVal Point2f srcCenter, @ByVal Point2f dstCenter,
+                                     @ByRef Mat transform, @ByRef RNG rng,
+                                     @Cast("bool") boolean inverse/*=false*/);
+    public native void setAffineParam(double lambda, double theta, double phi);
+
+    public native double backgroundMin(); public native PatchGenerator backgroundMin(double backgroundMin);
+    public native double backgroundMax(); public native PatchGenerator backgroundMax(double backgroundMax);
+    public native double noiseRange(); public native PatchGenerator noiseRange(double noiseRange);
+    public native @Cast("bool") boolean randomBlur(); public native PatchGenerator randomBlur(boolean randomBlur);
+    public native double lambdaMin(); public native PatchGenerator lambdaMin(double lambdaMin);
+    public native double lambdaMax(); public native PatchGenerator lambdaMax(double lambdaMax);
+    public native double thetaMin(); public native PatchGenerator thetaMin(double thetaMin);
+    public native double thetaMax(); public native PatchGenerator thetaMax(double thetaMax);
+    public native double phiMin(); public native PatchGenerator phiMin(double phiMin);
+    public native double phiMax(); public native PatchGenerator phiMax(double phiMax);
+}
+
+
+@Namespace("cv") @NoOffset public static class LDetector extends Pointer {
+    static { Loader.load(); }
+    public LDetector(Pointer p) { super(p); }
+    public LDetector(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public LDetector position(int position) {
+        return (LDetector)super.position(position);
+    }
+
+    public LDetector() { allocate(); }
+    private native void allocate();
+    public LDetector(int _radius, int _threshold, int _nOctaves,
+                  int _nViews, double _baseFeatureSize, double _clusteringDistance) { allocate(_radius, _threshold, _nOctaves, _nViews, _baseFeatureSize, _clusteringDistance); }
+    private native void allocate(int _radius, int _threshold, int _nOctaves,
+                  int _nViews, double _baseFeatureSize, double _clusteringDistance);
+    public native @Name("operator()") void apply(@Const @ByRef Mat image,
+                        @StdVector KeyPoint keypoints,
+                        int maxCount/*=0*/, @Cast("bool") boolean scaleCoords/*=true*/);
+    public native @Name("operator()") void apply(@Const @ByRef MatVector pyr,
+                        @StdVector KeyPoint keypoints,
+                        int maxCount/*=0*/, @Cast("bool") boolean scaleCoords/*=true*/);
+    public native void getMostStable2D(@Const @ByRef Mat image, @StdVector KeyPoint keypoints,
+                             int maxCount, @Const @ByRef PatchGenerator patchGenerator);
+    public native void setVerbose(@Cast("bool") boolean verbose);
+
+    public native void read(@Const @ByRef FileNode node);
+    public native void write(@ByRef FileStorage fs, @StdString BytePointer name/*=String()*/);
+    public native void write(@ByRef FileStorage fs, @StdString String name/*=String()*/);
+
+    public native int radius(); public native LDetector radius(int radius);
+    public native int threshold(); public native LDetector threshold(int threshold);
+    public native int nOctaves(); public native LDetector nOctaves(int nOctaves);
+    public native int nViews(); public native LDetector nViews(int nViews);
+    public native @Cast("bool") boolean verbose(); public native LDetector verbose(boolean verbose);
+
+    public native double baseFeatureSize(); public native LDetector baseFeatureSize(double baseFeatureSize);
+    public native double clusteringDistance(); public native LDetector clusteringDistance(double clusteringDistance);
+}
+
+@Namespace("cv") @NoOffset public static class FernClassifier extends Pointer {
+    static { Loader.load(); }
+    public FernClassifier(Pointer p) { super(p); }
+    public FernClassifier(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public FernClassifier position(int position) {
+        return (FernClassifier)super.position(position);
+    }
+
+    public FernClassifier() { allocate(); }
+    private native void allocate();
+    public FernClassifier(@Const @ByRef FileNode node) { allocate(node); }
+    private native void allocate(@Const @ByRef FileNode node);
+    public FernClassifier(@Const @ByRef Point2fVectorVector points,
+                       @Const @ByRef MatVector refimgs,
+                       @Const @ByRef IntVectorVector labels/*=vector<vector<int> >()*/,
+                       int _nclasses/*=0*/, int _patchSize/*=PATCH_SIZE*/,
+                       int _signatureSize/*=DEFAULT_SIGNATURE_SIZE*/,
+                       int _nstructs/*=DEFAULT_STRUCTS*/,
+                       int _structSize/*=DEFAULT_STRUCT_SIZE*/,
+                       int _nviews/*=DEFAULT_VIEWS*/,
+                       int _compressionMethod/*=COMPRESSION_NONE*/,
+                       @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/) { allocate(points, refimgs, labels, _nclasses, _patchSize, _signatureSize, _nstructs, _structSize, _nviews, _compressionMethod, patchGenerator); }
+    private native void allocate(@Const @ByRef Point2fVectorVector points,
+                       @Const @ByRef MatVector refimgs,
+                       @Const @ByRef IntVectorVector labels/*=vector<vector<int> >()*/,
+                       int _nclasses/*=0*/, int _patchSize/*=PATCH_SIZE*/,
+                       int _signatureSize/*=DEFAULT_SIGNATURE_SIZE*/,
+                       int _nstructs/*=DEFAULT_STRUCTS*/,
+                       int _structSize/*=DEFAULT_STRUCT_SIZE*/,
+                       int _nviews/*=DEFAULT_VIEWS*/,
+                       int _compressionMethod/*=COMPRESSION_NONE*/,
+                       @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/);
+    public native void read(@Const @ByRef FileNode n);
+    public native void write(@ByRef FileStorage fs, @StdString BytePointer name/*=String()*/);
+    public native void write(@ByRef FileStorage fs, @StdString String name/*=String()*/);
+    public native void trainFromSingleView(@Const @ByRef Mat image,
+                                         @StdVector KeyPoint keypoints,
+                                         int _patchSize/*=PATCH_SIZE*/,
+                                         int _signatureSize/*=DEFAULT_SIGNATURE_SIZE*/,
+                                         int _nstructs/*=DEFAULT_STRUCTS*/,
+                                         int _structSize/*=DEFAULT_STRUCT_SIZE*/,
+                                         int _nviews/*=DEFAULT_VIEWS*/,
+                                         int _compressionMethod/*=COMPRESSION_NONE*/,
+                                         @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/);
+    public native void train(@Const @ByRef Point2fVectorVector points,
+                           @Const @ByRef MatVector refimgs,
+                           @Const @ByRef IntVectorVector labels/*=vector<vector<int> >()*/,
+                           int _nclasses/*=0*/, int _patchSize/*=PATCH_SIZE*/,
+                           int _signatureSize/*=DEFAULT_SIGNATURE_SIZE*/,
+                           int _nstructs/*=DEFAULT_STRUCTS*/,
+                           int _structSize/*=DEFAULT_STRUCT_SIZE*/,
+                           int _nviews/*=DEFAULT_VIEWS*/,
+                           int _compressionMethod/*=COMPRESSION_NONE*/,
+                           @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/);
+    public native @Name("operator()") int apply(@Const @ByRef Mat img, @ByVal Point2f kpt, @StdVector FloatPointer signature);
+    public native @Name("operator()") int apply(@Const @ByRef Mat img, @ByVal Point2f kpt, @StdVector FloatBuffer signature);
+    public native @Name("operator()") int apply(@Const @ByRef Mat img, @ByVal Point2f kpt, @StdVector float[] signature);
+    public native @Name("operator()") int apply(@Const @ByRef Mat patch, @StdVector FloatPointer signature);
+    public native @Name("operator()") int apply(@Const @ByRef Mat patch, @StdVector FloatBuffer signature);
+    public native @Name("operator()") int apply(@Const @ByRef Mat patch, @StdVector float[] signature);
+    public native void clear();
+    public native @Cast("bool") boolean empty();
+    public native void setVerbose(@Cast("bool") boolean verbose);
+
+    public native int getClassCount();
+    public native int getStructCount();
+    public native int getStructSize();
+    public native int getSignatureSize();
+    public native int getCompressionMethod();
+    public native @ByVal Size getPatchSize();
+
+    @NoOffset public static class Feature extends Pointer {
+        static { Loader.load(); }
+        public Feature(Pointer p) { super(p); }
+        public Feature(int size) { allocateArray(size); }
+        private native void allocateArray(int size);
+        @Override public Feature position(int position) {
+            return (Feature)super.position(position);
+        }
+    
+        public native @Cast("uchar") byte x1(); public native Feature x1(byte x1);
+        public native @Cast("uchar") byte y1(); public native Feature y1(byte y1);
+        public native @Cast("uchar") byte x2(); public native Feature x2(byte x2);
+        public native @Cast("uchar") byte y2(); public native Feature y2(byte y2);
+        public Feature() { allocate(); }
+        private native void allocate();
+        public Feature(int _x1, int _y1, int _x2, int _y2) { allocate(_x1, _y1, _x2, _y2); }
+        private native void allocate(int _x1, int _y1, int _x2, int _y2);
+    }
+
+    /** enum cv::FernClassifier:: */
+    public static final int
+        PATCH_SIZE = 31,
+        DEFAULT_STRUCTS = 50,
+        DEFAULT_STRUCT_SIZE = 9,
+        DEFAULT_VIEWS = 5000,
+        DEFAULT_SIGNATURE_SIZE = 176,
+        COMPRESSION_NONE = 0,
+        COMPRESSION_RANDOM_PROJ = 1,
+        COMPRESSION_PCA = 2,
+        DEFAULT_COMPRESSION_METHOD =  COMPRESSION_NONE;
+}
+
+
+/****************************************************************************************\
+ *                                 Calonder Classifier                                    *
+ \****************************************************************************************/
+
+@Namespace("cv") @NoOffset public static class BaseKeypoint extends Pointer {
+    static { Loader.load(); }
+    public BaseKeypoint(Pointer p) { super(p); }
+    public BaseKeypoint(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public BaseKeypoint position(int position) {
+        return (BaseKeypoint)super.position(position);
+    }
+
+    public native int x(); public native BaseKeypoint x(int x);
+    public native int y(); public native BaseKeypoint y(int y);
+    public native IplImage image(); public native BaseKeypoint image(IplImage image);
+
+    public BaseKeypoint() { allocate(); }
+    private native void allocate();
+
+    public BaseKeypoint(int _x, int _y, IplImage _image) { allocate(_x, _y, _image); }
+    private native void allocate(int _x, int _y, IplImage _image);
+}
+
+@Namespace("cv") @NoOffset public static class RandomizedTree extends Pointer {
+    static { Loader.load(); }
+    public RandomizedTree(Pointer p) { super(p); }
+    public RandomizedTree(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public RandomizedTree position(int position) {
+        return (RandomizedTree)super.position(position);
+    }
+
+
+    @MemberGetter public static native @Cast("const uchar") byte PATCH_SIZE();
+    @MemberGetter public static native int DEFAULT_DEPTH();
+    @MemberGetter public static native int DEFAULT_VIEWS();
+    @MemberGetter public static native @Cast("const size_t") long DEFAULT_REDUCED_NUM_DIM();
+    public static native float GET_LOWER_QUANT_PERC();
+    public static native float GET_UPPER_QUANT_PERC();
+
+    public RandomizedTree() { allocate(); }
+    private native void allocate();
+
+    public native void train(@StdVector BaseKeypoint base_set, @ByRef RNG rng,
+                   int depth, int views, @Cast("size_t") long reduced_num_dim, int num_quant_bits);
+    public native void train(@StdVector BaseKeypoint base_set, @ByRef RNG rng,
+                   @ByRef PatchGenerator make_patch, int depth, int views, @Cast("size_t") long reduced_num_dim,
+                   int num_quant_bits);
+
+    // following two funcs are EXPERIMENTAL (do not use unless you know exactly what you do)
+    public static native void quantizeVector(FloatPointer vec, int dim, int N, FloatPointer bnds, int clamp_mode/*=0*/);
+    public static native void quantizeVector(FloatBuffer vec, int dim, int N, FloatBuffer bnds, int clamp_mode/*=0*/);
+    public static native void quantizeVector(float[] vec, int dim, int N, float[] bnds, int clamp_mode/*=0*/);
+    public static native void quantizeVector(FloatPointer src, int dim, int N, FloatPointer bnds, @Cast("uchar*") BytePointer dst);
+    public static native void quantizeVector(FloatBuffer src, int dim, int N, FloatBuffer bnds, @Cast("uchar*") ByteBuffer dst);
+    public static native void quantizeVector(float[] src, int dim, int N, float[] bnds, @Cast("uchar*") byte[] dst);
+
+    // patch_data must be a 32x32 array (no row padding)
+    public native FloatPointer getPosterior(@Cast("uchar*") BytePointer patch_data);
+    public native FloatBuffer getPosterior(@Cast("uchar*") ByteBuffer patch_data);
+    public native float[] getPosterior(@Cast("uchar*") byte[] patch_data);
+    public native @Cast("uchar*") BytePointer getPosterior2(@Cast("uchar*") BytePointer patch_data);
+    public native @Cast("uchar*") ByteBuffer getPosterior2(@Cast("uchar*") ByteBuffer patch_data);
+    public native @Cast("uchar*") byte[] getPosterior2(@Cast("uchar*") byte[] patch_data);
+
+    public native void read(@Cast("const char*") BytePointer file_name, int num_quant_bits);
+    public native void read(String file_name, int num_quant_bits);
+    public native void read(@Cast("std::istream*") @ByRef Pointer is, int num_quant_bits);
+    public native void write(@Cast("const char*") BytePointer file_name);
+    public native void write(String file_name);
+    public native void write(@Cast("std::ostream*") @ByRef Pointer os);
+
+    public native int classes();
+    public native int depth();
+
+    //void setKeepFloatPosteriors(bool b) { keep_float_posteriors_ = b; }
+    public native void discardFloatPosteriors();
+
+    public native void applyQuantization(int num_quant_bits);
+
+    // debug
+    public native void savePosteriors(@StdString BytePointer url, @Cast("bool") boolean append/*=false*/);
+    public native void savePosteriors(@StdString String url, @Cast("bool") boolean append/*=false*/);
+    public native void savePosteriors2(@StdString BytePointer url, @Cast("bool") boolean append/*=false*/);
+    public native void savePosteriors2(@StdString String url, @Cast("bool") boolean append/*=false*/);
+}
+
+
+@Namespace("cv") public static native @Cast("uchar*") BytePointer getData(IplImage image);
+
+
+
+
+
+
+
+
+
+@Namespace("cv") @NoOffset public static class RTreeNode extends Pointer {
+    static { Loader.load(); }
+    public RTreeNode(Pointer p) { super(p); }
+    public RTreeNode(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public RTreeNode position(int position) {
+        return (RTreeNode)super.position(position);
+    }
+
+    public native short offset1(); public native RTreeNode offset1(short offset1);
+    public native short offset2(); public native RTreeNode offset2(short offset2);
+
+    public RTreeNode() { allocate(); }
+    private native void allocate();
+    public RTreeNode(@Cast("uchar") byte x1, @Cast("uchar") byte y1, @Cast("uchar") byte x2, @Cast("uchar") byte y2) { allocate(x1, y1, x2, y2); }
+    private native void allocate(@Cast("uchar") byte x1, @Cast("uchar") byte y1, @Cast("uchar") byte x2, @Cast("uchar") byte y2);
+
+    /** Left child on 0, right child on 1 */
+    public native @Cast("bool") @Name("operator()") boolean apply(@Cast("uchar*") BytePointer patch_data);
+    public native @Cast("bool") @Name("operator()") boolean apply(@Cast("uchar*") ByteBuffer patch_data);
+    public native @Cast("bool") @Name("operator()") boolean apply(@Cast("uchar*") byte[] patch_data);
+}
+
+@Namespace("cv") @NoOffset public static class RTreeClassifier extends Pointer {
+    static { Loader.load(); }
+    public RTreeClassifier(Pointer p) { super(p); }
+    public RTreeClassifier(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public RTreeClassifier position(int position) {
+        return (RTreeClassifier)super.position(position);
+    }
+
+    @MemberGetter public static native int DEFAULT_TREES();
+    @MemberGetter public static native @Cast("const size_t") long DEFAULT_NUM_QUANT_BITS();
+
+    public RTreeClassifier() { allocate(); }
+    private native void allocate();
+    public native void train(@StdVector BaseKeypoint base_set,
+                   @ByRef RNG rng,
+                   int num_trees/*=RTreeClassifier::DEFAULT_TREES*/,
+                   int depth/*=RandomizedTree::DEFAULT_DEPTH*/,
+                   int views/*=RandomizedTree::DEFAULT_VIEWS*/,
+                   @Cast("size_t") long reduced_num_dim/*=RandomizedTree::DEFAULT_REDUCED_NUM_DIM*/,
+                   int num_quant_bits/*=DEFAULT_NUM_QUANT_BITS*/);
+    public native void train(@StdVector BaseKeypoint base_set,
+                   @ByRef RNG rng,
+                   @ByRef PatchGenerator make_patch,
+                   int num_trees/*=RTreeClassifier::DEFAULT_TREES*/,
+                   int depth/*=RandomizedTree::DEFAULT_DEPTH*/,
+                   int views/*=RandomizedTree::DEFAULT_VIEWS*/,
+                   @Cast("size_t") long reduced_num_dim/*=RandomizedTree::DEFAULT_REDUCED_NUM_DIM*/,
+                   int num_quant_bits/*=DEFAULT_NUM_QUANT_BITS*/);
+
+    // sig must point to a memory block of at least classes()*sizeof(float|uchar) bytes
+    public native void getSignature(IplImage patch, @Cast("uchar*") BytePointer sig);
+    public native void getSignature(IplImage patch, @Cast("uchar*") ByteBuffer sig);
+    public native void getSignature(IplImage patch, @Cast("uchar*") byte[] sig);
+    public native void getSignature(IplImage patch, FloatPointer sig);
+    public native void getSignature(IplImage patch, FloatBuffer sig);
+    public native void getSignature(IplImage patch, float[] sig);
+    public native void getSparseSignature(IplImage patch, FloatPointer sig, float thresh);
+    public native void getSparseSignature(IplImage patch, FloatBuffer sig, float thresh);
+    public native void getSparseSignature(IplImage patch, float[] sig, float thresh);
+    // TODO: deprecated in favor of getSignature overload, remove
+    public native void getFloatSignature(IplImage patch, FloatPointer sig);
+    public native void getFloatSignature(IplImage patch, FloatBuffer sig);
+    public native void getFloatSignature(IplImage patch, float[] sig);
+
+    public static native int countNonZeroElements(FloatPointer vec, int n, double tol/*=1e-10*/);
+    public static native int countNonZeroElements(FloatBuffer vec, int n, double tol/*=1e-10*/);
+    public static native int countNonZeroElements(float[] vec, int n, double tol/*=1e-10*/);
+    public static native void safeSignatureAlloc(@Cast("uchar**") PointerPointer sig, int num_sig/*=1*/, int sig_len/*=176*/);
+    public static native void safeSignatureAlloc(@Cast("uchar**") @ByPtrPtr BytePointer sig, int num_sig/*=1*/, int sig_len/*=176*/);
+    public static native void safeSignatureAlloc(@Cast("uchar**") @ByPtrPtr ByteBuffer sig, int num_sig/*=1*/, int sig_len/*=176*/);
+    public static native void safeSignatureAlloc(@Cast("uchar**") @ByPtrPtr byte[] sig, int num_sig/*=1*/, int sig_len/*=176*/);
+    public static native @Cast("uchar*") BytePointer safeSignatureAlloc(int num_sig/*=1*/, int sig_len/*=176*/);
+
+    public native int classes();
+    public native int original_num_classes();
+
+    public native void setQuantization(int num_quant_bits);
+    public native void discardFloatPosteriors();
+
+    public native void read(@Cast("const char*") BytePointer file_name);
+    public native void read(String file_name);
+    public native void read(@Cast("std::istream*") @ByRef Pointer is);
+    public native void write(@Cast("const char*") BytePointer file_name);
+    public native void write(String file_name);
+    public native void write(@Cast("std::ostream*") @ByRef Pointer os);
+
+    // experimental and debug
+    public native void saveAllFloatPosteriors(@StdString BytePointer file_url);
+    public native void saveAllFloatPosteriors(@StdString String file_url);
+    public native void saveAllBytePosteriors(@StdString BytePointer file_url);
+    public native void saveAllBytePosteriors(@StdString String file_url);
+    public native void setFloatPosteriorsFromTextfile_176(@StdString BytePointer url);
+    public native void setFloatPosteriorsFromTextfile_176(@StdString String url);
+    public native float countZeroElements();
+
+    public native @StdVector RandomizedTree trees_(); public native RTreeClassifier trees_(RandomizedTree trees_);
+}
+
+/****************************************************************************************\
+*                                     One-Way Descriptor                                 *
+\****************************************************************************************/
+
+// CvAffinePose: defines a parameterized affine transformation of an image patch.
+// An image patch is rotated on angle phi (in degrees), then scaled lambda1 times
+// along horizontal and lambda2 times along vertical direction, and then rotated again
+// on angle (theta - phi).
+@Namespace("cv") public static class CvAffinePose extends Pointer {
+    static { Loader.load(); }
+    public CvAffinePose() { allocate(); }
+    public CvAffinePose(int size) { allocateArray(size); }
+    public CvAffinePose(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public CvAffinePose position(int position) {
+        return (CvAffinePose)super.position(position);
+    }
+
+    public native float phi(); public native CvAffinePose phi(float phi);
+    public native float theta(); public native CvAffinePose theta(float theta);
+    public native float lambda1(); public native CvAffinePose lambda1(float lambda1);
+    public native float lambda2(); public native CvAffinePose lambda2(float lambda2);
+}
+
+@Namespace("cv") @NoOffset public static class OneWayDescriptor extends Pointer {
+    static { Loader.load(); }
+    public OneWayDescriptor(Pointer p) { super(p); }
+    public OneWayDescriptor(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public OneWayDescriptor position(int position) {
+        return (OneWayDescriptor)super.position(position);
+    }
+
+    public OneWayDescriptor() { allocate(); }
+    private native void allocate();
+
+    // allocates memory for given descriptor parameters
+    public native void Allocate(int pose_count, @ByVal CvSize size, int nChannels);
+
+    // GenerateSamples: generates affine transformed patches with averaging them over small transformation variations.
+    // If external poses and transforms were specified, uses them instead of generating random ones
+    // - pose_count: the number of poses to be generated
+    // - frontal: the input patch (can be a roi in a larger image)
+    // - norm: if nonzero, normalizes the output patch so that the sum of pixel intensities is 1
+    public native void GenerateSamples(int pose_count, IplImage frontal, int norm/*=0*/);
+
+    // GenerateSamplesFast: generates affine transformed patches with averaging them over small transformation variations.
+    // Uses precalculated transformed pca components.
+    // - frontal: the input patch (can be a roi in a larger image)
+    // - pca_hr_avg: pca average vector
+    // - pca_hr_eigenvectors: pca eigenvectors
+    // - pca_descriptors: an array of precomputed descriptors of pca components containing their affine transformations
+    //   pca_descriptors[0] corresponds to the average, pca_descriptors[1]-pca_descriptors[pca_dim] correspond to eigenvectors
+    public native void GenerateSamplesFast(IplImage frontal, CvMat pca_hr_avg,
+                                 CvMat pca_hr_eigenvectors, OneWayDescriptor pca_descriptors);
+
+    // sets the poses and corresponding transforms
+    public native void SetTransforms(CvAffinePose poses, @Cast("CvMat**") PointerPointer transforms);
+    public native void SetTransforms(CvAffinePose poses, @ByPtrPtr CvMat transforms);
+
+    // Initialize: builds a descriptor.
+    // - pose_count: the number of poses to build. If poses were set externally, uses them rather than generating random ones
+    // - frontal: input patch. Can be a roi in a larger image
+    // - feature_name: the feature name to be associated with the descriptor
+    // - norm: if 1, the affine transformed patches are normalized so that their sum is 1
+    public native void Initialize(int pose_count, IplImage frontal, @Cast("const char*") BytePointer feature_name/*=0*/, int norm/*=0*/);
+    public native void Initialize(int pose_count, IplImage frontal, String feature_name/*=0*/, int norm/*=0*/);
+
+    // InitializeFast: builds a descriptor using precomputed descriptors of pca components
+    // - pose_count: the number of poses to build
+    // - frontal: input patch. Can be a roi in a larger image
+    // - feature_name: the feature name to be associated with the descriptor
+    // - pca_hr_avg: average vector for PCA
+    // - pca_hr_eigenvectors: PCA eigenvectors (one vector per row)
+    // - pca_descriptors: precomputed descriptors of PCA components, the first descriptor for the average vector
+    // followed by the descriptors for eigenvectors
+    public native void InitializeFast(int pose_count, IplImage frontal, @Cast("const char*") BytePointer feature_name,
+                            CvMat pca_hr_avg, CvMat pca_hr_eigenvectors, OneWayDescriptor pca_descriptors);
+    public native void InitializeFast(int pose_count, IplImage frontal, String feature_name,
+                            CvMat pca_hr_avg, CvMat pca_hr_eigenvectors, OneWayDescriptor pca_descriptors);
+
+    // ProjectPCASample: unwarps an image patch into a vector and projects it into PCA space
+    // - patch: input image patch
+    // - avg: PCA average vector
+    // - eigenvectors: PCA eigenvectors, one per row
+    // - pca_coeffs: output PCA coefficients
+    public native void ProjectPCASample(IplImage patch, CvMat avg, CvMat eigenvectors, CvMat pca_coeffs);
+
+    // InitializePCACoeffs: projects all warped patches into PCA space
+    // - avg: PCA average vector
+    // - eigenvectors: PCA eigenvectors, one per row
+    public native void InitializePCACoeffs(CvMat avg, CvMat eigenvectors);
+
+    // EstimatePose: finds the closest match between an input patch and a set of patches with different poses
+    // - patch: input image patch
+    // - pose_idx: the output index of the closest pose
+    // - distance: the distance to the closest pose (L2 distance)
+    public native void EstimatePose(IplImage patch, @ByRef IntPointer pose_idx, @ByRef FloatPointer distance);
+    public native void EstimatePose(IplImage patch, @ByRef IntBuffer pose_idx, @ByRef FloatBuffer distance);
+    public native void EstimatePose(IplImage patch, @ByRef int[] pose_idx, @ByRef float[] distance);
+
+    // EstimatePosePCA: finds the closest match between an input patch and a set of patches with different poses.
+    // The distance between patches is computed in PCA space
+    // - patch: input image patch
+    // - pose_idx: the output index of the closest pose
+    // - distance: distance to the closest pose (L2 distance in PCA space)
+    // - avg: PCA average vector. If 0, matching without PCA is used
+    // - eigenvectors: PCA eigenvectors, one per row
+    public native void EstimatePosePCA(CvArr patch, @ByRef IntPointer pose_idx, @ByRef FloatPointer distance, CvMat avg, CvMat eigenvalues);
+    public native void EstimatePosePCA(CvArr patch, @ByRef IntBuffer pose_idx, @ByRef FloatBuffer distance, CvMat avg, CvMat eigenvalues);
+    public native void EstimatePosePCA(CvArr patch, @ByRef int[] pose_idx, @ByRef float[] distance, CvMat avg, CvMat eigenvalues);
+
+    // GetPatchSize: returns the size of each image patch after warping (2 times smaller than the input patch)
+    public native @ByVal CvSize GetPatchSize();
+
+    // GetInputPatchSize: returns the required size of the patch that the descriptor is built from
+    // (2 time larger than the patch after warping)
+    public native @ByVal CvSize GetInputPatchSize();
+
+    // GetPatch: returns a patch corresponding to specified pose index
+    // - index: pose index
+    // - return value: the patch corresponding to specified pose index
+    public native IplImage GetPatch(int index);
+
+    // GetPose: returns a pose corresponding to specified pose index
+    // - index: pose index
+    // - return value: the pose corresponding to specified pose index
+    public native @ByVal CvAffinePose GetPose(int index);
+
+    // Save: saves all patches with different poses to a specified path
+    public native void Save(@Cast("const char*") BytePointer path);
+    public native void Save(String path);
+
+    // ReadByName: reads a descriptor from a file storage
+    // - fs: file storage
+    // - parent: parent node
+    // - name: node name
+    // - return value: 1 if succeeded, 0 otherwise
+    public native int ReadByName(CvFileStorage fs, CvFileNode parent, @Cast("const char*") BytePointer name);
+    public native int ReadByName(CvFileStorage fs, CvFileNode parent, String name);
+
+    // ReadByName: reads a descriptor from a file node
+    // - parent: parent node
+    // - name: node name
+    // - return value: 1 if succeeded, 0 otherwise
+    public native int ReadByName(@Const @ByRef FileNode parent, @Cast("const char*") BytePointer name);
+    public native int ReadByName(@Const @ByRef FileNode parent, String name);
+
+    // Write: writes a descriptor into a file storage
+    // - fs: file storage
+    // - name: node name
+    public native void Write(CvFileStorage fs, @Cast("const char*") BytePointer name);
+    public native void Write(CvFileStorage fs, String name);
+
+    // GetFeatureName: returns a name corresponding to a feature
+    public native @Cast("const char*") BytePointer GetFeatureName();
+
+    // GetCenter: returns the center of the feature
+    public native @ByVal CvPoint GetCenter();
+
+    public native void SetPCADimHigh(int pca_dim_high);
+    public native void SetPCADimLow(int pca_dim_low);
+
+    public native int GetPCADimLow();
+    public native int GetPCADimHigh();
+
+    public native @Cast("CvMat**") PointerPointer GetPCACoeffs(); // the number of pca components to use for comparison
+}
+
+
+// OneWayDescriptorBase: encapsulates functionality for training/loading a set of one way descriptors
+// and finding the nearest closest descriptor to an input feature
+@Namespace("cv") @NoOffset public static class OneWayDescriptorBase extends Pointer {
+    static { Loader.load(); }
+    public OneWayDescriptorBase() { }
+    public OneWayDescriptorBase(Pointer p) { super(p); }
+
+
+    // creates an instance of OneWayDescriptor from a set of training files
+    // - patch_size: size of the input (large) patch
+    // - pose_count: the number of poses to generate for each descriptor
+    // - train_path: path to training files
+    // - pca_config: the name of the file that contains PCA for small patches (2 times smaller
+    // than patch_size each dimension
+    // - pca_hr_config: the name of the file that contains PCA for large patches (of patch_size size)
+    // - pca_desc_config: the name of the file that contains descriptors of PCA components
+    public OneWayDescriptorBase(@ByVal CvSize patch_size, int pose_count, @Cast("const char*") BytePointer train_path/*=0*/, @Cast("const char*") BytePointer pca_config/*=0*/,
+                             @Cast("const char*") BytePointer pca_hr_config/*=0*/, @Cast("const char*") BytePointer pca_desc_config/*=0*/, int pyr_levels/*=1*/,
+                             int pca_dim_high/*=100*/, int pca_dim_low/*=100*/) { allocate(patch_size, pose_count, train_path, pca_config, pca_hr_config, pca_desc_config, pyr_levels, pca_dim_high, pca_dim_low); }
+    private native void allocate(@ByVal CvSize patch_size, int pose_count, @Cast("const char*") BytePointer train_path/*=0*/, @Cast("const char*") BytePointer pca_config/*=0*/,
+                             @Cast("const char*") BytePointer pca_hr_config/*=0*/, @Cast("const char*") BytePointer pca_desc_config/*=0*/, int pyr_levels/*=1*/,
+                             int pca_dim_high/*=100*/, int pca_dim_low/*=100*/);
+    public OneWayDescriptorBase(@ByVal CvSize patch_size, int pose_count, String train_path/*=0*/, String pca_config/*=0*/,
+                             String pca_hr_config/*=0*/, String pca_desc_config/*=0*/, int pyr_levels/*=1*/,
+                             int pca_dim_high/*=100*/, int pca_dim_low/*=100*/) { allocate(patch_size, pose_count, train_path, pca_config, pca_hr_config, pca_desc_config, pyr_levels, pca_dim_high, pca_dim_low); }
+    private native void allocate(@ByVal CvSize patch_size, int pose_count, String train_path/*=0*/, String pca_config/*=0*/,
+                             String pca_hr_config/*=0*/, String pca_desc_config/*=0*/, int pyr_levels/*=1*/,
+                             int pca_dim_high/*=100*/, int pca_dim_low/*=100*/);
+
+    public OneWayDescriptorBase(@ByVal CvSize patch_size, int pose_count, @StdString BytePointer pca_filename, @StdString BytePointer train_path/*=string()*/, @StdString BytePointer images_list/*=string()*/,
+                             float _scale_min/*=0.7f*/, float _scale_max/*=1.5f*/, float _scale_step/*=1.2f*/, int pyr_levels/*=1*/,
+                             int pca_dim_high/*=100*/, int pca_dim_low/*=100*/) { allocate(patch_size, pose_count, pca_filename, train_path, images_list, _scale_min, _scale_max, _scale_step, pyr_levels, pca_dim_high, pca_dim_low); }
+    private native void allocate(@ByVal CvSize patch_size, int pose_count, @StdString BytePointer pca_filename, @StdString BytePointer train_path/*=string()*/, @StdString BytePointer images_list/*=string()*/,
+                             float _scale_min/*=0.7f*/, float _scale_max/*=1.5f*/, float _scale_step/*=1.2f*/, int pyr_levels/*=1*/,
+                             int pca_dim_high/*=100*/, int pca_dim_low/*=100*/);
+    public OneWayDescriptorBase(@ByVal CvSize patch_size, int pose_count, @StdString String pca_filename, @StdString String train_path/*=string()*/, @StdString String images_list/*=string()*/,
+                             float _scale_min/*=0.7f*/, float _scale_max/*=1.5f*/, float _scale_step/*=1.2f*/, int pyr_levels/*=1*/,
+                             int pca_dim_high/*=100*/, int pca_dim_low/*=100*/) { allocate(patch_size, pose_count, pca_filename, train_path, images_list, _scale_min, _scale_max, _scale_step, pyr_levels, pca_dim_high, pca_dim_low); }
+    private native void allocate(@ByVal CvSize patch_size, int pose_count, @StdString String pca_filename, @StdString String train_path/*=string()*/, @StdString String images_list/*=string()*/,
+                             float _scale_min/*=0.7f*/, float _scale_max/*=1.5f*/, float _scale_step/*=1.2f*/, int pyr_levels/*=1*/,
+                             int pca_dim_high/*=100*/, int pca_dim_low/*=100*/);
+    public native void clear();
+
+
+    // Allocate: allocates memory for a given number of descriptors
+    public native void Allocate(int train_feature_count);
+
+    // AllocatePCADescriptors: allocates memory for pca descriptors
+    public native void AllocatePCADescriptors();
+
+    // returns patch size
+    public native @ByVal CvSize GetPatchSize();
+    // returns the number of poses for each descriptor
+    public native int GetPoseCount();
+
+    // returns the number of pyramid levels
+    public native int GetPyrLevels();
+
+    // returns the number of descriptors
+    public native int GetDescriptorCount();
+
+    // CreateDescriptorsFromImage: creates descriptors for each of the input features
+    // - src: input image
+    // - features: input features
+    // - pyr_levels: the number of pyramid levels
+    public native void CreateDescriptorsFromImage(IplImage src, @StdVector KeyPoint features);
+
+    // CreatePCADescriptors: generates descriptors for PCA components, needed for fast generation of feature descriptors
+    public native void CreatePCADescriptors();
+
+    // returns a feature descriptor by feature index
+    public native @Const OneWayDescriptor GetDescriptor(int desc_idx);
+
+    // FindDescriptor: finds the closest descriptor
+    // - patch: input image patch
+    // - desc_idx: output index of the closest descriptor to the input patch
+    // - pose_idx: output index of the closest pose of the closest descriptor to the input patch
+    // - distance: distance from the input patch to the closest feature pose
+    // - _scales: scales of the input patch for each descriptor
+    // - scale_ranges: input scales variation (float[2])
+    public native void FindDescriptor(IplImage patch, @ByRef IntPointer desc_idx, @ByRef IntPointer pose_idx, @ByRef FloatPointer distance, FloatPointer _scale/*=0*/, FloatPointer scale_ranges/*=0*/);
+    public native void FindDescriptor(IplImage patch, @ByRef IntBuffer desc_idx, @ByRef IntBuffer pose_idx, @ByRef FloatBuffer distance, FloatBuffer _scale/*=0*/, FloatBuffer scale_ranges/*=0*/);
+    public native void FindDescriptor(IplImage patch, @ByRef int[] desc_idx, @ByRef int[] pose_idx, @ByRef float[] distance, float[] _scale/*=0*/, float[] scale_ranges/*=0*/);
+
+    // - patch: input image patch
+    // - n: number of the closest indexes
+    // - desc_idxs: output indexes of the closest descriptor to the input patch (n)
+    // - pose_idx: output indexes of the closest pose of the closest descriptor to the input patch (n)
+    // - distances: distance from the input patch to the closest feature pose (n)
+    // - _scales: scales of the input patch
+    // - scale_ranges: input scales variation (float[2])
+    public native void FindDescriptor(IplImage patch, int n, @StdVector IntPointer desc_idxs, @StdVector IntPointer pose_idxs,
+                            @StdVector FloatPointer distances, @StdVector FloatPointer _scales, FloatPointer scale_ranges/*=0*/);
+    public native void FindDescriptor(IplImage patch, int n, @StdVector IntBuffer desc_idxs, @StdVector IntBuffer pose_idxs,
+                            @StdVector FloatBuffer distances, @StdVector FloatBuffer _scales, FloatBuffer scale_ranges/*=0*/);
+    public native void FindDescriptor(IplImage patch, int n, @StdVector int[] desc_idxs, @StdVector int[] pose_idxs,
+                            @StdVector float[] distances, @StdVector float[] _scales, float[] scale_ranges/*=0*/);
+
+    // FindDescriptor: finds the closest descriptor
+    // - src: input image
+    // - pt: center of the feature
+    // - desc_idx: output index of the closest descriptor to the input patch
+    // - pose_idx: output index of the closest pose of the closest descriptor to the input patch
+    // - distance: distance from the input patch to the closest feature pose
+    public native void FindDescriptor(IplImage src, @ByVal Point2f pt, @ByRef IntPointer desc_idx, @ByRef IntPointer pose_idx, @ByRef FloatPointer distance);
+    public native void FindDescriptor(IplImage src, @ByVal Point2f pt, @ByRef IntBuffer desc_idx, @ByRef IntBuffer pose_idx, @ByRef FloatBuffer distance);
+    public native void FindDescriptor(IplImage src, @ByVal Point2f pt, @ByRef int[] desc_idx, @ByRef int[] pose_idx, @ByRef float[] distance);
+
+    // InitializePoses: generates random poses
+    public native void InitializePoses();
+
+    // InitializeTransformsFromPoses: generates 2x3 affine matrices from poses (initializes m_transforms)
+    public native void InitializeTransformsFromPoses();
+
+    // InitializePoseTransforms: subsequently calls InitializePoses and InitializeTransformsFromPoses
+    public native void InitializePoseTransforms();
+
+    // InitializeDescriptor: initializes a descriptor
+    // - desc_idx: descriptor index
+    // - train_image: image patch (ROI is supported)
+    // - feature_label: feature textual label
+    public native void InitializeDescriptor(int desc_idx, IplImage train_image, @Cast("const char*") BytePointer feature_label);
+    public native void InitializeDescriptor(int desc_idx, IplImage train_image, String feature_label);
+
+    public native void InitializeDescriptor(int desc_idx, IplImage train_image, @Const @ByRef KeyPoint keypoint, @Cast("const char*") BytePointer feature_label);
+    public native void InitializeDescriptor(int desc_idx, IplImage train_image, @Const @ByRef KeyPoint keypoint, String feature_label);
+
+    // InitializeDescriptors: load features from an image and create descriptors for each of them
+    public native void InitializeDescriptors(IplImage train_image, @StdVector KeyPoint features,
+                                   @Cast("const char*") BytePointer feature_label/*=""*/, int desc_start_idx/*=0*/);
+    public native void InitializeDescriptors(IplImage train_image, @StdVector KeyPoint features,
+                                   String feature_label/*=""*/, int desc_start_idx/*=0*/);
+
+    // Write: writes this object to a file storage
+    // - fs: output filestorage
+    public native void Write(@ByRef FileStorage fs);
+
+    // Read: reads OneWayDescriptorBase object from a file node
+    // - fn: input file node
+    public native void Read(@Const @ByRef FileNode fn);
+
+    // LoadPCADescriptors: loads PCA descriptors from a file
+    // - filename: input filename
+    public native int LoadPCADescriptors(@Cast("const char*") BytePointer filename);
+    public native int LoadPCADescriptors(String filename);
+
+    // LoadPCADescriptors: loads PCA descriptors from a file node
+    // - fn: input file node
+    public native int LoadPCADescriptors(@Const @ByRef FileNode fn);
+
+    // SavePCADescriptors: saves PCA descriptors to a file
+    // - filename: output filename
+    public native void SavePCADescriptors(@Cast("const char*") BytePointer filename);
+    public native void SavePCADescriptors(String filename);
+
+    // SavePCADescriptors: saves PCA descriptors to a file storage
+    // - fs: output file storage
+    public native void SavePCADescriptors(CvFileStorage fs);
+
+    // GeneratePCA: calculate and save PCA components and descriptors
+    // - img_path: path to training PCA images directory
+    // - images_list: filename with filenames of training PCA images
+    public native void GeneratePCA(@Cast("const char*") BytePointer img_path, @Cast("const char*") BytePointer images_list, int pose_count/*=500*/);
+    public native void GeneratePCA(String img_path, String images_list, int pose_count/*=500*/);
+
+    // SetPCAHigh: sets the high resolution pca matrices (copied to internal structures)
+    public native void SetPCAHigh(CvMat avg, CvMat eigenvectors);
+
+    // SetPCALow: sets the low resolution pca matrices (copied to internal structures)
+    public native void SetPCALow(CvMat avg, CvMat eigenvectors);
+
+    public native int GetLowPCA(@Cast("CvMat**") PointerPointer avg, @Cast("CvMat**") PointerPointer eigenvectors);
+    public native int GetLowPCA(@ByPtrPtr CvMat avg, @ByPtrPtr CvMat eigenvectors);
+
+    public native int GetPCADimLow();
+    public native int GetPCADimHigh();
+
+    public native void ConvertDescriptorsArrayToTree(); // Converting pca_descriptors array to KD tree
+
+    // GetPCAFilename: get default PCA filename
+    public static native @StdString BytePointer GetPCAFilename();
+
+    public native @Cast("bool") boolean empty();
+}
+
+@Namespace("cv") @NoOffset public static class OneWayDescriptorObject extends OneWayDescriptorBase {
+    static { Loader.load(); }
+    public OneWayDescriptorObject() { }
+    public OneWayDescriptorObject(Pointer p) { super(p); }
+
+    // creates an instance of OneWayDescriptorObject from a set of training files
+    // - patch_size: size of the input (large) patch
+    // - pose_count: the number of poses to generate for each descriptor
+    // - train_path: path to training files
+    // - pca_config: the name of the file that contains PCA for small patches (2 times smaller
+    // than patch_size each dimension
+    // - pca_hr_config: the name of the file that contains PCA for large patches (of patch_size size)
+    // - pca_desc_config: the name of the file that contains descriptors of PCA components
+    public OneWayDescriptorObject(@ByVal CvSize patch_size, int pose_count, @Cast("const char*") BytePointer train_path, @Cast("const char*") BytePointer pca_config,
+                               @Cast("const char*") BytePointer pca_hr_config/*=0*/, @Cast("const char*") BytePointer pca_desc_config/*=0*/, int pyr_levels/*=1*/) { allocate(patch_size, pose_count, train_path, pca_config, pca_hr_config, pca_desc_config, pyr_levels); }
+    private native void allocate(@ByVal CvSize patch_size, int pose_count, @Cast("const char*") BytePointer train_path, @Cast("const char*") BytePointer pca_config,
+                               @Cast("const char*") BytePointer pca_hr_config/*=0*/, @Cast("const char*") BytePointer pca_desc_config/*=0*/, int pyr_levels/*=1*/);
+    public OneWayDescriptorObject(@ByVal CvSize patch_size, int pose_count, String train_path, String pca_config,
+                               String pca_hr_config/*=0*/, String pca_desc_config/*=0*/, int pyr_levels/*=1*/) { allocate(patch_size, pose_count, train_path, pca_config, pca_hr_config, pca_desc_config, pyr_levels); }
+    private native void allocate(@ByVal CvSize patch_size, int pose_count, String train_path, String pca_config,
+                               String pca_hr_config/*=0*/, String pca_desc_config/*=0*/, int pyr_levels/*=1*/);
+
+    public OneWayDescriptorObject(@ByVal CvSize patch_size, int pose_count, @StdString BytePointer pca_filename,
+                               @StdString BytePointer train_path/*=string ()*/, @StdString BytePointer images_list/*=string ()*/,
+                               float _scale_min/*=0.7f*/, float _scale_max/*=1.5f*/, float _scale_step/*=1.2f*/, int pyr_levels/*=1*/) { allocate(patch_size, pose_count, pca_filename, train_path, images_list, _scale_min, _scale_max, _scale_step, pyr_levels); }
+    private native void allocate(@ByVal CvSize patch_size, int pose_count, @StdString BytePointer pca_filename,
+                               @StdString BytePointer train_path/*=string ()*/, @StdString BytePointer images_list/*=string ()*/,
+                               float _scale_min/*=0.7f*/, float _scale_max/*=1.5f*/, float _scale_step/*=1.2f*/, int pyr_levels/*=1*/);
+    public OneWayDescriptorObject(@ByVal CvSize patch_size, int pose_count, @StdString String pca_filename,
+                               @StdString String train_path/*=string ()*/, @StdString String images_list/*=string ()*/,
+                               float _scale_min/*=0.7f*/, float _scale_max/*=1.5f*/, float _scale_step/*=1.2f*/, int pyr_levels/*=1*/) { allocate(patch_size, pose_count, pca_filename, train_path, images_list, _scale_min, _scale_max, _scale_step, pyr_levels); }
+    private native void allocate(@ByVal CvSize patch_size, int pose_count, @StdString String pca_filename,
+                               @StdString String train_path/*=string ()*/, @StdString String images_list/*=string ()*/,
+                               float _scale_min/*=0.7f*/, float _scale_max/*=1.5f*/, float _scale_step/*=1.2f*/, int pyr_levels/*=1*/);
+
+    // Allocate: allocates memory for a given number of features
+    // - train_feature_count: the total number of features
+    // - object_feature_count: the number of features extracted from the object
+    public native void Allocate(int train_feature_count, int object_feature_count);
+
+
+    public native void SetLabeledFeatures(@StdVector KeyPoint features);
+    public native @StdVector KeyPoint GetLabeledFeatures();
+    public native @StdVector KeyPoint _GetLabeledFeatures();
+
+    // IsDescriptorObject: returns 1 if descriptor with specified index is positive, otherwise 0
+    public native int IsDescriptorObject(int desc_idx);
+
+    // MatchPointToPart: returns the part number of a feature if it matches one of the object parts, otherwise -1
+    public native int MatchPointToPart(@ByVal CvPoint pt);
+
+    // GetDescriptorPart: returns the part number of the feature corresponding to a specified descriptor
+    // - desc_idx: descriptor index
+    public native int GetDescriptorPart(int desc_idx);
+
+
+    public native void InitializeObjectDescriptors(IplImage train_image, @StdVector KeyPoint features,
+                                         @Cast("const char*") BytePointer feature_label, int desc_start_idx/*=0*/, float scale/*=1.0f*/,
+                                         int is_background/*=0*/);
+    public native void InitializeObjectDescriptors(IplImage train_image, @StdVector KeyPoint features,
+                                         String feature_label, int desc_start_idx/*=0*/, float scale/*=1.0f*/,
+                                         int is_background/*=0*/);
+
+    // GetObjectFeatureCount: returns the number of object features
+    public native int GetObjectFeatureCount(); // the number of the positive features
+
+}
+
+
+/*
+ *  OneWayDescriptorMatcher
+ */
+
+@Namespace("cv") @NoOffset public static class OneWayDescriptorMatcher extends GenericDescriptorMatcher {
+    static { Loader.load(); }
+    public OneWayDescriptorMatcher() { }
+    public OneWayDescriptorMatcher(Pointer p) { super(p); }
+
+    @NoOffset public static class Params extends Pointer {
+        static { Loader.load(); }
+        public Params() { }
+        public Params(Pointer p) { super(p); }
+    
+        @MemberGetter public static native int POSE_COUNT();
+        @MemberGetter public static native int PATCH_WIDTH();
+        @MemberGetter public static native int PATCH_HEIGHT();
+        public static native float GET_MIN_SCALE();
+        public static native float GET_MAX_SCALE();
+        public static native float GET_STEP_SCALE();
+
+        public Params( int poseCount/*=POSE_COUNT*/,
+                       @ByVal Size patchSize/*=Size(PATCH_WIDTH, PATCH_HEIGHT)*/,
+                       @StdString BytePointer pcaFilename/*=string()*/,
+                       @StdString BytePointer trainPath/*=string()*/, @StdString BytePointer trainImagesList/*=string()*/,
+                       float minScale/*=GET_MIN_SCALE()*/, float maxScale/*=GET_MAX_SCALE()*/,
+                       float stepScale/*=GET_STEP_SCALE()*/ ) { allocate(poseCount, patchSize, pcaFilename, trainPath, trainImagesList, minScale, maxScale, stepScale); }
+        private native void allocate( int poseCount/*=POSE_COUNT*/,
+                       @ByVal Size patchSize/*=Size(PATCH_WIDTH, PATCH_HEIGHT)*/,
+                       @StdString BytePointer pcaFilename/*=string()*/,
+                       @StdString BytePointer trainPath/*=string()*/, @StdString BytePointer trainImagesList/*=string()*/,
+                       float minScale/*=GET_MIN_SCALE()*/, float maxScale/*=GET_MAX_SCALE()*/,
+                       float stepScale/*=GET_STEP_SCALE()*/ );
+        public Params( int poseCount/*=POSE_COUNT*/,
+                       @ByVal Size patchSize/*=Size(PATCH_WIDTH, PATCH_HEIGHT)*/,
+                       @StdString String pcaFilename/*=string()*/,
+                       @StdString String trainPath/*=string()*/, @StdString String trainImagesList/*=string()*/,
+                       float minScale/*=GET_MIN_SCALE()*/, float maxScale/*=GET_MAX_SCALE()*/,
+                       float stepScale/*=GET_STEP_SCALE()*/ ) { allocate(poseCount, patchSize, pcaFilename, trainPath, trainImagesList, minScale, maxScale, stepScale); }
+        private native void allocate( int poseCount/*=POSE_COUNT*/,
+                       @ByVal Size patchSize/*=Size(PATCH_WIDTH, PATCH_HEIGHT)*/,
+                       @StdString String pcaFilename/*=string()*/,
+                       @StdString String trainPath/*=string()*/, @StdString String trainImagesList/*=string()*/,
+                       float minScale/*=GET_MIN_SCALE()*/, float maxScale/*=GET_MAX_SCALE()*/,
+                       float stepScale/*=GET_STEP_SCALE()*/ );
+
+        public native int poseCount(); public native Params poseCount(int poseCount);
+        public native @ByVal Size patchSize(); public native Params patchSize(Size patchSize);
+        public native @StdString BytePointer pcaFilename(); public native Params pcaFilename(BytePointer pcaFilename);
+        public native @StdString BytePointer trainPath(); public native Params trainPath(BytePointer trainPath);
+        public native @StdString BytePointer trainImagesList(); public native Params trainImagesList(BytePointer trainImagesList);
+
+        public native float minScale(); public native Params minScale(float minScale);
+        public native float maxScale(); public native Params maxScale(float maxScale);
+        public native float stepScale(); public native Params stepScale(float stepScale);
+    }
+
+    public OneWayDescriptorMatcher( @Const @ByRef Params params/*=Params()*/ ) { allocate(params); }
+    private native void allocate( @Const @ByRef Params params/*=Params()*/ );
+
+    public native void initialize( @Const @ByRef Params params, @Ptr OneWayDescriptorBase base/*=Ptr<OneWayDescriptorBase>()*/ );
+
+    // Clears keypoints storing in collection and OneWayDescriptorBase
+    public native void clear();
+
+    public native void train();
+
+    public native @Cast("bool") boolean isMaskSupported();
+
+    public native void read( @Const @ByRef FileNode fn );
+    public native void write( @ByRef FileStorage fs );
+
+    public native @Cast("bool") boolean empty();
+
+    public native @Ptr GenericDescriptorMatcher clone( @Cast("bool") boolean emptyTrainData/*=false*/ );
+}
+
+/*
+ *  FernDescriptorMatcher
+ */
+
+@Namespace("cv") @NoOffset public static class FernDescriptorMatcher extends GenericDescriptorMatcher {
+    static { Loader.load(); }
+    public FernDescriptorMatcher() { }
+    public FernDescriptorMatcher(Pointer p) { super(p); }
+
+    @NoOffset public static class Params extends Pointer {
+        static { Loader.load(); }
+        public Params() { }
+        public Params(Pointer p) { super(p); }
+    
+        public Params( int nclasses/*=0*/,
+                       int patchSize/*=FernClassifier::PATCH_SIZE*/,
+                       int signatureSize/*=FernClassifier::DEFAULT_SIGNATURE_SIZE*/,
+                       int nstructs/*=FernClassifier::DEFAULT_STRUCTS*/,
+                       int structSize/*=FernClassifier::DEFAULT_STRUCT_SIZE*/,
+                       int nviews/*=FernClassifier::DEFAULT_VIEWS*/,
+                       int compressionMethod/*=FernClassifier::COMPRESSION_NONE*/,
+                       @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/ ) { allocate(nclasses, patchSize, signatureSize, nstructs, structSize, nviews, compressionMethod, patchGenerator); }
+        private native void allocate( int nclasses/*=0*/,
+                       int patchSize/*=FernClassifier::PATCH_SIZE*/,
+                       int signatureSize/*=FernClassifier::DEFAULT_SIGNATURE_SIZE*/,
+                       int nstructs/*=FernClassifier::DEFAULT_STRUCTS*/,
+                       int structSize/*=FernClassifier::DEFAULT_STRUCT_SIZE*/,
+                       int nviews/*=FernClassifier::DEFAULT_VIEWS*/,
+                       int compressionMethod/*=FernClassifier::COMPRESSION_NONE*/,
+                       @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/ );
+
+        public Params( @StdString BytePointer filename ) { allocate(filename); }
+        private native void allocate( @StdString BytePointer filename );
+        public Params( @StdString String filename ) { allocate(filename); }
+        private native void allocate( @StdString String filename );
+
+        public native int nclasses(); public native Params nclasses(int nclasses);
+        public native int patchSize(); public native Params patchSize(int patchSize);
+        public native int signatureSize(); public native Params signatureSize(int signatureSize);
+        public native int nstructs(); public native Params nstructs(int nstructs);
+        public native int structSize(); public native Params structSize(int structSize);
+        public native int nviews(); public native Params nviews(int nviews);
+        public native int compressionMethod(); public native Params compressionMethod(int compressionMethod);
+        public native @ByVal PatchGenerator patchGenerator(); public native Params patchGenerator(PatchGenerator patchGenerator);
+
+        public native @StdString BytePointer filename(); public native Params filename(BytePointer filename);
+    }
+
+    public FernDescriptorMatcher( @Const @ByRef Params params/*=Params()*/ ) { allocate(params); }
+    private native void allocate( @Const @ByRef Params params/*=Params()*/ );
+
+    public native void clear();
+
+    public native void train();
+
+    public native @Cast("bool") boolean isMaskSupported();
+
+    public native void read( @Const @ByRef FileNode fn );
+    public native void write( @ByRef FileStorage fs );
+    public native @Cast("bool") boolean empty();
+
+    public native @Ptr GenericDescriptorMatcher clone( @Cast("bool") boolean emptyTrainData/*=false*/ );
+}
+
+
+/*
+ * CalonderDescriptorExtractor
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////////// Brute Force Matcher //////////////////////////
+
+
+/****************************************************************************************\
+*                                Planar Object Detection                                 *
+\****************************************************************************************/
+
+@Namespace("cv") @NoOffset public static class PlanarObjectDetector extends Pointer {
+    static { Loader.load(); }
+    public PlanarObjectDetector(Pointer p) { super(p); }
+    public PlanarObjectDetector(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public PlanarObjectDetector position(int position) {
+        return (PlanarObjectDetector)super.position(position);
+    }
+
+    public PlanarObjectDetector() { allocate(); }
+    private native void allocate();
+    public PlanarObjectDetector(@Const @ByRef FileNode node) { allocate(node); }
+    private native void allocate(@Const @ByRef FileNode node);
+    public PlanarObjectDetector(@Const @ByRef MatVector pyr, int _npoints/*=300*/,
+                             int _patchSize/*=FernClassifier::PATCH_SIZE*/,
+                             int _nstructs/*=FernClassifier::DEFAULT_STRUCTS*/,
+                             int _structSize/*=FernClassifier::DEFAULT_STRUCT_SIZE*/,
+                             int _nviews/*=FernClassifier::DEFAULT_VIEWS*/,
+                             @Const @ByRef LDetector detector/*=LDetector()*/,
+                             @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/) { allocate(pyr, _npoints, _patchSize, _nstructs, _structSize, _nviews, detector, patchGenerator); }
+    private native void allocate(@Const @ByRef MatVector pyr, int _npoints/*=300*/,
+                             int _patchSize/*=FernClassifier::PATCH_SIZE*/,
+                             int _nstructs/*=FernClassifier::DEFAULT_STRUCTS*/,
+                             int _structSize/*=FernClassifier::DEFAULT_STRUCT_SIZE*/,
+                             int _nviews/*=FernClassifier::DEFAULT_VIEWS*/,
+                             @Const @ByRef LDetector detector/*=LDetector()*/,
+                             @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/);
+    public native void train(@Const @ByRef MatVector pyr, int _npoints/*=300*/,
+                           int _patchSize/*=FernClassifier::PATCH_SIZE*/,
+                           int _nstructs/*=FernClassifier::DEFAULT_STRUCTS*/,
+                           int _structSize/*=FernClassifier::DEFAULT_STRUCT_SIZE*/,
+                           int _nviews/*=FernClassifier::DEFAULT_VIEWS*/,
+                           @Const @ByRef LDetector detector/*=LDetector()*/,
+                           @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/);
+    public native void train(@Const @ByRef MatVector pyr, @StdVector KeyPoint keypoints,
+                           int _patchSize/*=FernClassifier::PATCH_SIZE*/,
+                           int _nstructs/*=FernClassifier::DEFAULT_STRUCTS*/,
+                           int _structSize/*=FernClassifier::DEFAULT_STRUCT_SIZE*/,
+                           int _nviews/*=FernClassifier::DEFAULT_VIEWS*/,
+                           @Const @ByRef LDetector detector/*=LDetector()*/,
+                           @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/);
+    public native @ByVal Rect getModelROI();
+    public native @StdVector KeyPoint getModelPoints();
+    public native @Const @ByRef LDetector getDetector();
+    public native @Const @ByRef FernClassifier getClassifier();
+    public native void setVerbose(@Cast("bool") boolean verbose);
+
+    public native void read(@Const @ByRef FileNode node);
+    public native void write(@ByRef FileStorage fs, @StdString BytePointer name/*=String()*/);
+    public native void write(@ByRef FileStorage fs, @StdString String name/*=String()*/);
+    public native @Cast("bool") @Name("operator()") boolean apply(@Const @ByRef Mat image, @ByRef Mat H, @StdVector Point2f corners);
+    public native @Cast("bool") @Name("operator()") boolean apply(@Const @ByRef MatVector pyr, @StdVector KeyPoint keypoints,
+                        @ByRef Mat H, @StdVector Point2f corners,
+                        @StdVector IntPointer pairs/*=0*/);
+    public native @Cast("bool") @Name("operator()") boolean apply(@Const @ByRef MatVector pyr, @StdVector KeyPoint keypoints,
+                        @ByRef Mat H, @StdVector Point2f corners,
+                        @StdVector IntBuffer pairs/*=0*/);
+    public native @Cast("bool") @Name("operator()") boolean apply(@Const @ByRef MatVector pyr, @StdVector KeyPoint keypoints,
+                        @ByRef Mat H, @StdVector Point2f corners,
+                        @StdVector int[] pairs/*=0*/);
+}
+
+
+
+// 2009-01-12, Xavier Delacour <xavier.delacour@gmail.com>
+
+public static class lsh_hash extends Pointer {
+    static { Loader.load(); }
+    public lsh_hash() { allocate(); }
+    public lsh_hash(int size) { allocateArray(size); }
+    public lsh_hash(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public lsh_hash position(int position) {
+        return (lsh_hash)super.position(position);
+    }
+
+    public native int h1(); public native lsh_hash h1(int h1);
+    public native int h2(); public native lsh_hash h2(int h2);
+}
+
+public static class CvLSHOperations extends Pointer {
+    static { Loader.load(); }
+    public CvLSHOperations() { }
+    public CvLSHOperations(Pointer p) { super(p); }
+
+
+    public native int vector_add(@Const Pointer data);
+    public native void vector_remove(int i);
+    public native @Const Pointer vector_lookup(int i);
+    public native void vector_reserve(int n);
+    public native @Cast("unsigned int") int vector_count();
+
+    public native void hash_insert(@ByVal lsh_hash h, int l, int i);
+    public native void hash_remove(@ByVal lsh_hash h, int l, int i);
+    public native int hash_lookup(@ByVal lsh_hash h, int l, IntPointer ret_i, int ret_i_max);
+    public native int hash_lookup(@ByVal lsh_hash h, int l, IntBuffer ret_i, int ret_i_max);
+    public native int hash_lookup(@ByVal lsh_hash h, int l, int[] ret_i, int ret_i_max);
+}
+
 // #endif
 
 // #ifdef __cplusplus
@@ -3128,14 +5689,14 @@ public static final int CV_BG_MODEL_FGD =		0;
 public static final int CV_BG_MODEL_MOG =		1;			/* "Mixture of Gaussians".	*/
 public static final int CV_BG_MODEL_FGD_SIMPLE =	2;
 
-public static class CvReleaseBGStatModel extends FunctionPointer {
+@Convention("CV_CDECL") public static class CvReleaseBGStatModel extends FunctionPointer {
     static { Loader.load(); }
     public    CvReleaseBGStatModel(Pointer p) { super(p); }
     protected CvReleaseBGStatModel() { allocate(); }
     private native void allocate();
     public native void call( @ByPtrPtr CvBGStatModel bg_model );
 }
-public static class CvUpdateBGStatModel extends FunctionPointer {
+@Convention("CV_CDECL") public static class CvUpdateBGStatModel extends FunctionPointer {
     static { Loader.load(); }
     public    CvUpdateBGStatModel(Pointer p) { super(p); }
     protected CvUpdateBGStatModel() { allocate(); }

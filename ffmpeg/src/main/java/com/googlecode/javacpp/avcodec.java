@@ -2984,7 +2984,6 @@ public static final int FF_THREAD_SLICE =   2;
         private native void allocate();
         public native int call(AVCodecContext c2, Pointer arg);
     }
-    
     public static class Execute_AVCodecContext_Func_AVCodecContext_Pointer_Pointer_IntPointer_int_int extends FunctionPointer {
         static { Loader.load(); }
         public    Execute_AVCodecContext_Func_AVCodecContext_Pointer_Pointer_IntPointer_int_int(Pointer p) { super(p); }
@@ -3019,7 +3018,6 @@ public static final int FF_THREAD_SLICE =   2;
         private native void allocate();
         public native int call(AVCodecContext c2, Pointer arg, int jobnr, int threadnr);
     }
-    
     public static class Execute2_AVCodecContext_Func_AVCodecContext_Pointer_int_int_Pointer_IntPointer_int extends FunctionPointer {
         static { Loader.load(); }
         public    Execute2_AVCodecContext_Func_AVCodecContext_Pointer_int_int_Pointer_IntPointer_int(Pointer p) { super(p); }
@@ -5354,7 +5352,6 @@ public static class Func_AVCodecContext_Pointer extends FunctionPointer {
     private native void allocate();
     public native int call(AVCodecContext c2, Pointer arg2);
 }
-
 public static native int avcodec_default_execute(AVCodecContext c, Func_AVCodecContext_Pointer func,Pointer arg, IntPointer ret, int count, int size);
 public static native int avcodec_default_execute(AVCodecContext c, Func_AVCodecContext_Pointer func,Pointer arg, IntBuffer ret, int count, int size);
 public static native int avcodec_default_execute(AVCodecContext c, Func_AVCodecContext_Pointer func,Pointer arg, int[] ret, int count, int size);
@@ -5365,7 +5362,6 @@ public static class Func_AVCodecContext_Pointer_int_int extends FunctionPointer 
     private native void allocate();
     public native int call(AVCodecContext c2, Pointer arg2, int arg3, int arg4);
 }
-
 public static native int avcodec_default_execute2(AVCodecContext c, Func_AVCodecContext_Pointer_int_int func,Pointer arg, IntPointer ret, int count);
 public static native int avcodec_default_execute2(AVCodecContext c, Func_AVCodecContext_Pointer_int_int func,Pointer arg, IntBuffer ret, int count);
 public static native int avcodec_default_execute2(AVCodecContext c, Func_AVCodecContext_Pointer_int_int func,Pointer arg, int[] ret, int count);
@@ -5738,7 +5734,7 @@ public static class Cb_PointerPointer_int extends FunctionPointer {
     private native void allocate();
     public native int call(@Cast("void**") PointerPointer mutex, @Cast("AVLockOp") int op);
 }
-
+public static native int av_lockmgr_register(Cb_PointerPointer_int cb);
 public static class Cb_Pointer_int extends FunctionPointer {
     static { Loader.load(); }
     public    Cb_Pointer_int(Pointer p) { super(p); }
@@ -5746,8 +5742,6 @@ public static class Cb_Pointer_int extends FunctionPointer {
     private native void allocate();
     public native int call(@Cast("void**") @ByPtrPtr Pointer mutex, @Cast("AVLockOp") int op);
 }
-
-public static native int av_lockmgr_register(Cb_PointerPointer_int cb);
 public static native int av_lockmgr_register(Cb_Pointer_int cb);
 
 /**

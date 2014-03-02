@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Samuel Audet
+ * Copyright (C) 2013,2014 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -29,11 +29,10 @@ import com.googlecode.javacpp.annotation.Properties;
  * @author Samuel Audet
  */
 @Properties(inherit=opencv_imgproc.class, target="com.googlecode.javacpp.opencv_highgui", value={
-    @Platform(include="<opencv2/highgui/highgui_c.h>", link="opencv_highgui@.2.4"),
+    @Platform(include={"<opencv2/highgui/highgui_c.h>","<opencv2/highgui/highgui.hpp>"}, link="opencv_highgui@.2.4"),
     @Platform(value="windows", link="opencv_highgui248", preload={"opencv_ffmpeg248", "opencv_ffmpeg248_64"}) })
 public class opencv_highgui implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        new opencv_imgproc().map(infoMap);
         infoMap.put(new Parser.Info("cvCaptureFromFile", "cvCaptureFromAVI").cppTypes("CvCapture*", "const char*"))
                .put(new Parser.Info("cvCaptureFromCAM").cppTypes("CvCapture*", "int"))
                .put(new Parser.Info("cvCreateAVIWriter").cppTypes("CvVideoWriter*", "const char*", "int", "double", "CvSize", "int"))

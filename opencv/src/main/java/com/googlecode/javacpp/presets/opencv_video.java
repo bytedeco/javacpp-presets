@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Samuel Audet
+ * Copyright (C) 2013,2014 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -29,11 +29,10 @@ import com.googlecode.javacpp.annotation.Properties;
  * @author Samuel Audet
  */
 @Properties(inherit=opencv_imgproc.class, target="com.googlecode.javacpp.opencv_video", value={
-    @Platform(include="<opencv2/video/tracking.hpp>", link="opencv_video@.2.4"),
+    @Platform(include={"<opencv2/video/video.hpp>", "<opencv2/video/tracking.hpp>", "<opencv2/video/background_segm.hpp>"}, link="opencv_video@.2.4"),
     @Platform(value="windows", link="opencv_video248") })
 public class opencv_video implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        new opencv_imgproc().map(infoMap);
         infoMap.put(new Parser.Info("cvKalmanUpdateByTime", "cvKalmanUpdateByMeasurement").cppTypes("const CvMat*", "CvKalman*", "CvMat*"));
     }
 }

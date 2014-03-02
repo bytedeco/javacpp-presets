@@ -21,7 +21,7 @@ The source code can be found at this repository:
 
 To rebuild the source code, please note that the project files were created for:
  * Maven 2 or 3  http://maven.apache.org/download.html
- * JavaCPP 0.7  http://code.google.com/p/javacpp/
+ * JavaCPP 0.8  http://code.google.com/p/javacpp/
  * msinttypes  http://code.google.com/p/msinttypes/ (under Windows for the Microsoft C/C++ Compiler)
 
 Each child module in turn relies on its corresponding native library being installed in the directory specified in its `.java` configuration file or, by default, on the native system in `/usr/local/`, or `C:/MinGW/local/` (under Windows), or `${platform.root}/../` (for Android):
@@ -62,14 +62,16 @@ After that, we can access almost transparently the corresponding C/C++ APIs thro
 
 
 ==How Can I Help?==
-Contribution of any kind is highly welcome! At the moment, the `Parser` has rather limited capabilities with C++, but I plan to improve it gradually to the point where it can successfully parse large and convoluted C++ header files, such as the ones of OpenCV. Consequently, I am looking for help especially with the two following tasks:
+Contribution of any kind is highly welcome! At the moment, the `Parser` has limited capabilities, but I plan to improve it gradually to the point where it can successfully parse large C++ header files that are even more convoluted than the ones from OpenCV. Consequently, I am looking for help especially with the two following tasks:
  # Improving the `Parser`
- # Adding new presets as child modules for other C/C++ libraries (Tesseract, LLVM, etc)
+ # Adding new presets as child modules for other C/C++ libraries (LLVM, OpenMesh, Tesseract, etc)
 
 Please post your suggestions and patches [http://code.google.com/p/javacpp/issues/ as a new "issue"]. Thank you very much in advance for your contribution!
 
 
 ==Changes==
+
+ * Added presets for the C++ API of OpenCV 2.4.8, which can now be parsed due to the latest changes in JavaCPP
 
 ===January 6, 2014 version 0.7===
  * Fixed JavaCPP properties not getting set by the parent `pom.xml` file

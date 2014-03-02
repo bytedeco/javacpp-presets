@@ -1465,7 +1465,7 @@ public static class Callback_Pointer_int_BytePointer_Pointer extends FunctionPoi
     private native void allocate();
     public native void call(Pointer arg0, int arg1, @Cast("const char*") BytePointer arg2, @ByVal @Cast("va_list*") Pointer arg3);
 }
-
+public static native void av_log_set_callback(Callback_Pointer_int_BytePointer_Pointer callback);
 public static class Callback_Pointer_int_String_Pointer extends FunctionPointer {
     static { Loader.load(); }
     public    Callback_Pointer_int_String_Pointer(Pointer p) { super(p); }
@@ -1473,8 +1473,6 @@ public static class Callback_Pointer_int_String_Pointer extends FunctionPointer 
     private native void allocate();
     public native void call(Pointer arg0, int arg1, String arg2, @ByVal @Cast("va_list*") Pointer arg3);
 }
-
-public static native void av_log_set_callback(Callback_Pointer_int_BytePointer_Pointer callback);
 public static native void av_log_set_callback(Callback_Pointer_int_String_Pointer callback);
 
 /**
@@ -1703,7 +1701,9 @@ public static class Free_Pointer_BytePointer extends FunctionPointer {
     private native void allocate();
     public native void call(Pointer opaque, @Cast("uint8_t*") BytePointer data);
 }
-
+public static native AVBufferRef av_buffer_create(@Cast("uint8_t*") BytePointer data, int size,
+                              Free_Pointer_BytePointer free,
+                              Pointer opaque, int flags);
 public static class Free_Pointer_ByteBuffer extends FunctionPointer {
     static { Loader.load(); }
     public    Free_Pointer_ByteBuffer(Pointer p) { super(p); }
@@ -1711,23 +1711,18 @@ public static class Free_Pointer_ByteBuffer extends FunctionPointer {
     private native void allocate();
     public native void call(Pointer opaque, @Cast("uint8_t*") ByteBuffer data);
 }
-
-public static class Free_Pointer_byte extends FunctionPointer {
-    static { Loader.load(); }
-    public    Free_Pointer_byte(Pointer p) { super(p); }
-    protected Free_Pointer_byte() { allocate(); }
-    private native void allocate();
-    public native void call(Pointer opaque, @Cast("uint8_t*") byte[] data);
-}
-
-public static native AVBufferRef av_buffer_create(@Cast("uint8_t*") BytePointer data, int size,
-                              Free_Pointer_BytePointer free,
-                              Pointer opaque, int flags);
 public static native AVBufferRef av_buffer_create(@Cast("uint8_t*") ByteBuffer data, int size,
                               Free_Pointer_ByteBuffer free,
                               Pointer opaque, int flags);
+public static class Free_Pointer_byte__ extends FunctionPointer {
+    static { Loader.load(); }
+    public    Free_Pointer_byte__(Pointer p) { super(p); }
+    protected Free_Pointer_byte__() { allocate(); }
+    private native void allocate();
+    public native void call(Pointer opaque, @Cast("uint8_t*") byte[] data);
+}
 public static native AVBufferRef av_buffer_create(@Cast("uint8_t*") byte[] data, int size,
-                              Free_Pointer_byte free,
+                              Free_Pointer_byte__ free,
                               Pointer opaque, int flags);
 
 /**
@@ -1860,7 +1855,6 @@ public static class Alloc_int extends FunctionPointer {
     private native void allocate();
     public native AVBufferRef call(int size);
 }
-
 public static native AVBufferPool av_buffer_pool_init(int size, Alloc_int alloc);
 
 /**
@@ -4359,11 +4353,11 @@ public static class AVOption extends Pointer {
     /**
      * the default value for scalar options
      */
-        @Name({"default_val", ".i64"}) public native long default_val_i64(); public native AVOption default_val_i64(long default_val_i64);
-        @Name({"default_val", ".dbl"}) public native double default_val_dbl(); public native AVOption default_val_dbl(double default_val_dbl);
-        @Name({"default_val", ".str"}) @MemberGetter public native @Cast("const char*") BytePointer default_val_str();
+        @Name("default_val.i64") public native long default_val_i64(); public native AVOption default_val_i64(long default_val_i64);
+        @Name("default_val.dbl") public native double default_val_dbl(); public native AVOption default_val_dbl(double default_val_dbl);
+        @Name("default_val.str") @MemberGetter public native @Cast("const char*") BytePointer default_val_str();
         /* TODO those are unused now */
-        @Name({"default_val", ".q"}) public native @ByVal AVRational default_val_q(); public native AVOption default_val_q(AVRational default_val_q);
+        @Name("default_val.q") public native @ByVal AVRational default_val_q(); public native AVOption default_val_q(AVRational default_val_q);
     /** minimum valid value for the option */
     public native double min(); public native AVOption min(double min);
     /** maximum valid value for the option */

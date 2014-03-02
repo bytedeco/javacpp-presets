@@ -25,7 +25,7 @@ public class videoInputLib extends com.googlecode.javacpp.presets.videoInputLib 
     public native StringVector put(@Cast("size_t") long i, BytePointer value);
 
     public StringVector put(BytePointer ... array) {
-        if (size() < array.length) { resize(array.length); }
+        if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
             put(i, array[i]);
         }

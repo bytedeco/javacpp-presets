@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Samuel Audet
+ * Copyright (C) 2013,2014 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -28,13 +28,13 @@ import com.googlecode.javacpp.annotation.Properties;
  *
  * @author Samuel Audet
  */
-@Properties(inherit={opencv_calib3d.class, opencv_video.class}, target="com.googlecode.javacpp.opencv_legacy", value={
-    @Platform(include={"<opencv2/legacy/compat.hpp>", "<opencv2/legacy/legacy.hpp>"}, link="opencv_legacy@.2.4"),
+@Properties(inherit={opencv_calib3d.class, opencv_features2d.class, opencv_video.class, opencv_ml.class}, target="com.googlecode.javacpp.opencv_legacy", value={
+    @Platform(include={"<opencv2/legacy/blobtrack.hpp>", "<opencv2/legacy/compat.hpp>", "<opencv2/legacy/legacy.hpp>"}, link="opencv_legacy@.2.4"),
     @Platform(value="windows", link="opencv_legacy248") })
 public class opencv_legacy implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        new opencv_calib3d().map(infoMap);
-        infoMap.put(new Parser.Info("cvCreateImageData", "cvReleaseImageData", "cvmAlloc", "cvmFree", "cvmAllocArray", "cvmFreeArray").cppTypes("void", "CvArr*"))
+        infoMap.put(new Parser.Info("cv_stricmp", "cv_strnicmp", "strdup", "stricmp", "cv_stricmp", "cv_strnicmp").cppTypes())
+               .put(new Parser.Info("cvCreateImageData", "cvReleaseImageData", "cvmAlloc", "cvmFree", "cvmAllocArray", "cvmFreeArray").cppTypes("void", "CvArr*"))
                .put(new Parser.Info("cvSetImageData").cppTypes("void", "CvArr*", "void*", "int"))
                .put(new Parser.Info("cvGetImageRawData").cppTypes("void", "CvArr*", "uchar**", "int*", "CvSize*"))
                .put(new Parser.Info("cvIntegralImage", "cvMultiplyAccMask").cppTypes("void", "CvArr*", "CvArr*", "CvArr*", "CvArr*"))

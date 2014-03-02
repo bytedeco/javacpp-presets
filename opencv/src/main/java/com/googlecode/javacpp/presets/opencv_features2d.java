@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013,2014 Samuel Audet
+ * Copyright (C) 2014 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -28,13 +28,13 @@ import com.googlecode.javacpp.annotation.Properties;
  *
  * @author Samuel Audet
  */
-@Properties(inherit=opencv_highgui.class, target="com.googlecode.javacpp.opencv_objdetect", value={
-    @Platform(include="<opencv2/objdetect/objdetect.hpp>", link="opencv_objdetect@.2.4"),
-    @Platform(value="windows", link="opencv_objdetect248") })
-public class opencv_objdetect implements Parser.InfoMapper {
+@Properties(inherit={opencv_highgui.class, opencv_flann.class}, target="com.googlecode.javacpp.opencv_features2d", value={
+    @Platform(include="<opencv2/features2d/features2d.hpp>", link="opencv_features2d@.2.4"),
+    @Platform(value="windows", link="opencv_features2d248") })
+public class opencv_features2d implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        infoMap.put(new Parser.Info("std::deque<CvDataMatrixCode>").pointerTypes("CvDataMatrixCodeDeque").define(true))
-               .put(new Parser.Info("std::vector<cv::Ptr<cv::linemod::Modality> >").pointerTypes("ModalityVector").define(true))
-               .put(new Parser.Info("cv::Ptr<cv::linemod::Modality>").annotations("@Ptr").valueTypes("Modality").define(true));
+        infoMap.put(new Parser.Info().javaText("import com.googlecode.javacpp.annotation.Index;"))
+               .put(new Parser.Info("std::vector<std::vector<cv::KeyPoint> >").pointerTypes("KeyPointVectorVector").define(true))
+               .put(new Parser.Info("std::vector<std::vector<cv::DMatch> >").pointerTypes("DMatchVectorVector").define(true));
     }
 }
