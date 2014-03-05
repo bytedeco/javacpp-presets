@@ -34,7 +34,7 @@ import com.googlecode.javacpp.annotation.Properties;
         "<libavutil/pixfmt.h>", "<libavutil/samplefmt.h>", "<libavutil/channel_layout.h>", "<libavutil/cpu.h>", "<libavutil/dict.h>",
         "<libavutil/opt.h>", "<libavutil/audioconvert.h>", "<libavutil/pixdesc.h>", "<libavutil/imgutils.h>"},
         includepath={"/usr/local/include/ffmpeg/", "/opt/local/include/ffmpeg/", "/usr/include/ffmpeg/"},
-        link="avutil@.52", options={"default", "nodeprecated"}),
+        link="avutil@.52", compiler={"default", "nodeprecated"}),
     @Platform(value="windows", includepath={"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, preload="avutil-52") })
 public class avutil implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {

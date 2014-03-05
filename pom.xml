@@ -40,9 +40,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <generate-sources.skip>false</generate-sources.skip> <!-- To skip header file parsing phase: -Dgenerate-sources.skip=true  -->
     <process-classes.skip> false</process-classes.skip>  <!-- To skip native compilation phase: -Dprocess-classes.skip=true    -->
-    <platform.name>${os.name}-${os.arch}</platform.name> <!-- For Android: -Dplatform.name=android-arm                         -->
-    <platform.root></platform.root>                      <!--              -Dplatform.root=<path/to/android-ndk-r9>            -->
-    <compiler.path></compiler.path>                      <!--              -Dcompiler.path=<path/to/arm-linux-androideabi-g++> -->
+    <platform>${os.name}-${os.arch}</platform> <!-- For Android: -Dplatform=android-arm                                  -->
+    <platform.root></platform.root>            <!--              -Dplatform.root=<path/to/android-ndk-r9c>               -->
+    <platform.compiler></platform.compiler>    <!--              -Dplatform.compiler=<path/to/arm-linux-androideabi-g++> -->
   </properties>
 
   <dependencies>
@@ -89,15 +89,15 @@
         <artifactId>javacpp</artifactId>
         <version>0.8-SNAPSHOT</version>
         <configuration>
-          <properties>${platform.name}</properties>
+          <properties>${platform}</properties>
           <propertyKeysAndValues>
             <property>
               <name>platform.root</name>
               <value>${platform.root}</value>
             </property>
             <property>
-              <name>compiler.path</name>
-              <value>${compiler.path}</value>
+              <name>platform.compiler</name>
+              <value>${platform.compiler}</value>
             </property>
           </propertyKeysAndValues>
           <classPath>${project.build.outputDirectory}</classPath>
@@ -161,20 +161,20 @@
             <configuration>
               <excludes>
                 <exclude>com/googlecode/javacpp/*.h</exclude>
-                <exclude>com/googlecode/javacpp/${platform.name}/</exclude>
+                <exclude>com/googlecode/javacpp/${platform}/</exclude>
               </excludes>
             </configuration>
           </execution>
           <execution>
-            <id>${platform.name}</id>
+            <id>${platform}</id>
             <phase>package</phase>
             <goals>
               <goal>jar</goal>
             </goals>
             <configuration>
-              <classifier>${platform.name}</classifier>
+              <classifier>${platform}</classifier>
               <includes>
-                <include>com/googlecode/javacpp/${platform.name}/</include>
+                <include>com/googlecode/javacpp/${platform}/</include>
               </includes>
             </configuration>
           </execution>
@@ -214,7 +214,7 @@
                   <groupId>${project.groupId}</groupId>
                   <artifactId>${project.artifactId}</artifactId>
                   <version>${project.version}</version>
-                  <classifier>${platform.name}</classifier>
+                  <classifier>${platform}</classifier>
                   <type>jar</type>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.parent.build.directory}</outputDirectory>
