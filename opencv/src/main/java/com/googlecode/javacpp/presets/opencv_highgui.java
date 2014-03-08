@@ -33,7 +33,8 @@ import com.googlecode.javacpp.annotation.Properties;
     @Platform(value="windows", link="opencv_highgui248", preload={"opencv_ffmpeg248", "opencv_ffmpeg248_64"}) })
 public class opencv_highgui implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        infoMap.put(new Parser.Info("cvCaptureFromFile", "cvCaptureFromAVI").cppTypes("CvCapture*", "const char*"))
+        infoMap.put(new Parser.Info().javaText("import com.googlecode.javacpp.helper.opencv_highgui.*;"))
+               .put(new Parser.Info("cvCaptureFromFile", "cvCaptureFromAVI").cppTypes("CvCapture*", "const char*"))
                .put(new Parser.Info("cvCaptureFromCAM").cppTypes("CvCapture*", "int"))
                .put(new Parser.Info("cvCreateAVIWriter").cppTypes("CvVideoWriter*", "const char*", "int", "double", "CvSize", "int"))
                .put(new Parser.Info("cvWriteToAVI").cppTypes("int", "CvVideoWriter*", "IplImage*"))

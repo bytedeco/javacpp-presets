@@ -29,9 +29,9 @@ import com.googlecode.javacpp.annotation.Properties;
  * @author Samuel Audet
  */
 @Properties(target="com.googlecode.javacpp.ARToolKitPlus", value={
-    @Platform(include={"<ARToolKitPlus/ARToolKitPlus.h>", "<ARToolKitPlus/config.h>", "<ARToolKitPlus/ar.h>", 
+    @Platform(include={"ARToolKitPlus_plus.h", "<ARToolKitPlus/ARToolKitPlus.h>", "<ARToolKitPlus/config.h>", "<ARToolKitPlus/ar.h>",
         "<ARToolKitPlus/arMulti.h>", "<ARToolKitPlus/matrix.h>", "<ARToolKitPlus/vector.h>", "<ARToolKitPlus/Camera.h>",
-        "<ARToolKitPlus/extra/BCH.h>", "<ARToolKitPlus/extra/Hull.h>", "<ARToolKitPlus/extra/rpp.h>", 
+        "<ARToolKitPlus/extra/BCH.h>", "<ARToolKitPlus/extra/Hull.h>", "<ARToolKitPlus/extra/rpp.h>",
         "<ARToolKitPlus/Tracker.h>", "<ARToolKitPlus/TrackerMultiMarker.h>", "<ARToolKitPlus/TrackerSingleMarker.h>",
         "<ARToolKitPlus/arBitFieldPattern.h>", "<ARToolKitPlus/arGetInitRot2Sub.h>"},  link="ARToolKitPlus"),
     @Platform(value="windows-x86", includepath="C:/Program Files (x86)/ARToolKitPlus/include/",
@@ -40,7 +40,8 @@ import com.googlecode.javacpp.annotation.Properties;
         linkpath="C:/Program Files/ARToolKitPlus/lib/") })
 public class ARToolKitPlus implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-          infoMap.put(new Parser.Info("AR_EXPORT").cppTypes().annotations())
+          infoMap.put(new Parser.Info("ARToolKitPlus::IDPATTERN").cast(true).valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
+                 .put(new Parser.Info("AR_EXPORT").cppTypes().annotations())
                  .put(new Parser.Info("ARFloat").valueTypes("float").pointerTypes("FloatPointer", "FloatBuffer", "float[]").cast(true))
                  .put(new Parser.Info("ARToolKitPlus::_64bits").valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]").cast(true))
                  .put(new Parser.Info("rpp_vec").valueTypes("DoublePointer").pointerTypes("PointerPointer").cast(true))

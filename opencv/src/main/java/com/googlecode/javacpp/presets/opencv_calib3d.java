@@ -33,5 +33,8 @@ import com.googlecode.javacpp.annotation.Properties;
     @Platform(value="windows", link="opencv_calib3d248") })
 public class opencv_calib3d implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
+        infoMap.put(new Parser.Info().javaText("import com.googlecode.javacpp.helper.opencv_calib3d.*;"))
+               .put(new Parser.Info("CvPOSITObject").parent("AbstractCvPOSITObject"))
+               .put(new Parser.Info("CvStereoBMState").parent("AbstractCvStereoBMState"));
     }
 }

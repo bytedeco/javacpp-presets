@@ -38,7 +38,7 @@ public class videoInputLib implements Parser.InfoMapper {
           infoMap.put(new Parser.Info("videoInput.cpp").skip(true))
                  .put(new Parser.Info("_WIN32_WINNT").cppTypes().define(false))
                  .put(new Parser.Info("std::vector<std::string>").pointerTypes("StringVector").define(true))
-                 .put(new Parser.Info("GUID").pointerTypes("Pointer").cast(true))
-                 .put(new Parser.Info("long", "unsigned long").valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]").cast(true));
+                 .put(new Parser.Info("GUID").cast(true).pointerTypes("Pointer"))
+                 .put(new Parser.Info("long", "unsigned long").cast(true).valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"));
     }
 }

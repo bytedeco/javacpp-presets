@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Samuel Audet
+ * Copyright (C) 2013,2014 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -20,7 +20,9 @@
 
 package com.googlecode.javacpp.presets;
 
+import com.googlecode.javacpp.Loader;
 import com.googlecode.javacpp.Parser;
+import com.googlecode.javacpp.Pointer;
 import com.googlecode.javacpp.annotation.Platform;
 import com.googlecode.javacpp.annotation.Properties;
 
@@ -29,16 +31,27 @@ import com.googlecode.javacpp.annotation.Properties;
  * @author Samuel Audet
  */
 @Properties(target="com.googlecode.javacpp.freenect", value={
-    @Platform(include={"<libfreenect.h>", "<libfreenect-registration.h>", "<libfreenect-audio.h>", "<libfreenect_sync.h>"},
+    @Platform(not="android", include={"<libfreenect.h>", "<libfreenect-registration.h>", "<libfreenect-audio.h>", "<libfreenect_sync.h>"},
         includepath={"/usr/local/include/libfreenect/", "/opt/local/include/libfreenect/", "/usr/include/libfreenect/"},
         link={"freenect@0.2", "freenect_sync@0.2"}),
     @Platform(value="windows-x86", includepath="C:/Program Files (x86)/libfreenect/include/libfreenect/",
-        linkpath="C:/Program Files (x86)/libfreenect/lib/"),
+        linkpath={"C:/pthreads-w32-2-9-1-release/Pre-built.2/lib/x86", "C:/Program Files (x86)/libfreenect/lib/"}),
     @Platform(value="windows-x86_64", includepath="C:/Program Files/libfreenect/include/libfreenect/",
-        linkpath="C:/Program Files/libfreenect/lib/") })
+        linkpath={"C:/pthreads-w32-2-9-1-release/Pre-built.2/lib/x64", "C:/Program Files/libfreenect/lib/"}) })
 public class freenect implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        infoMap.put(new Parser.Info("FREENECTAPI").cppTypes().annotations())
-               .put(new Parser.Info("timeval").pointerTypes("Pointer").cast(true));
+        infoMap.put(new Parser.Info("FREENECTAPI").cppTypes().annotations());
+    }
+
+    public static class timeval extends Pointer {
+        static { Loader.load(); }
+        public timeval() { allocate(); }
+        public timeval(int size) { allocateArray(size); }
+        public timeval(Pointer p) { super(p); }
+        private native void allocate();
+        private native void allocateArray(int size);
+
+        public native long tv_sec();  public native timeval tv_sec (long tv_sec);
+        public native long tv_usec(); public native timeval tv_usec(long tv_usec);
     }
 }

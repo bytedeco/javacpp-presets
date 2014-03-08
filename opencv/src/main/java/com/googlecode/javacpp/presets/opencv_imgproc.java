@@ -33,6 +33,10 @@ import com.googlecode.javacpp.annotation.Properties;
     @Platform(value="windows", link="opencv_imgproc248") })
 public class opencv_imgproc implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        infoMap.put(new Parser.Info("cv::Vec4f", "cv::Vec6f").cast(true).pointerTypes("FloatPointer"));
+        infoMap.put(new Parser.Info().javaText("import com.googlecode.javacpp.helper.opencv_imgproc.*;"))
+               .put(new Parser.Info("CvMoments").parent("AbstractCvMoments"))
+               .put(new Parser.Info("cvCalcBackProject").cppTypes("void", "IplImage**", "CvArr*", "CvHistogram*"))
+               .put(new Parser.Info("cvCalcBackProjectPatch").cppTypes("void", "IplImage**", "CvArr*", "CvSize", "CvHistogram*", "int", "double"))
+               .put(new Parser.Info("cv::Vec4f", "cv::Vec6f").cast(true).pointerTypes("FloatPointer"));
     }
 }

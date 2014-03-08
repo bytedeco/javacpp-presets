@@ -14,8 +14,19 @@
   <packaging>jar</packaging>
   <name>JavaCPP Presets for ARToolKitPlus</name>
 
+  <dependencies>
+    <dependency>
+      <groupId>com.googlecode.javacpp</groupId>
+      <artifactId>javacpp</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+  </dependencies>
+
   <build>
     <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+      </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
       </plugin>

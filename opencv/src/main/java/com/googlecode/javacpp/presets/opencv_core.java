@@ -42,7 +42,8 @@ import java.lang.annotation.Target;
     @Platform(value="windows-x86_64", linkpath="C:/opencv/build/x64/vc10/lib/", preloadpath="C:/opencv/build/x64/vc10/bin/") })
 public class opencv_core implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        infoMap.put(new Parser.Info("opencv_adapters.h").skip(true))
+        infoMap.put(new Parser.Info().javaText("import com.googlecode.javacpp.helper.opencv_core.*;"))
+               .put(new Parser.Info("opencv_adapters.h").skip(true))
                .put(new Parser.Info("__cplusplus").define(true))
                .put(new Parser.Info("defined __ICL", "defined __ICC", "defined __ECL", "defined __ECC",
                                     "defined __INTEL_COMPILER", "defined WIN32 || defined _WIN32").define(false))
@@ -51,9 +52,9 @@ public class opencv_core implements Parser.InfoMapper {
                .put(new Parser.Info("CVAPI").cppText("#define CVAPI(rettype) rettype"))
                .put(new Parser.Info("CV_EXPORTS_W", "CV_EXPORTS_W_SIMPLE", "CV_EXPORTS_W_MAP",
                                     "CV_IN_OUT", "CV_OUT", "CV_PROP", "CV_PROP_RW", "CV_WRAP").cppTypes().annotations())
+               .put(new Parser.Info("CvRNG").cast(true).valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
                .put(new Parser.Info("CV_MAT_DEPTH", "CV_8UC", "CV_8SC", "CV_16UC", "CV_16SC", "CV_32SC", "CV_32FC", "CV_64FC").cppTypes("int", "int"))
                .put(new Parser.Info("CV_MAKETYPE", "CV_MAKE_TYPE").cppTypes("int", "int", "int"))
-               .put(new Parser.Info("CV_IS_MAT_CONT", "CV_IS_CONT_MAT").cppTypes("int", "int"))
                .put(new Parser.Info("CV_8UC1", "CV_8UC2", "CV_8UC3", "CV_8UC4",
                                     "CV_8SC1", "CV_8SC2", "CV_8SC3", "CV_8SC4",
                                     "CV_16UC1", "CV_16UC2", "CV_16UC3", "CV_16UC4",
@@ -61,15 +62,36 @@ public class opencv_core implements Parser.InfoMapper {
                                     "CV_32SC1", "CV_32SC2", "CV_32SC3", "CV_32SC4",
                                     "CV_32FC1", "CV_32FC2", "CV_32FC3", "CV_32FC4",
                                     "CV_64FC1", "CV_64FC2", "CV_64FC3", "CV_64FC4").cppTypes("int").translate(true))
+               .put(new Parser.Info("CV_MAT_CN", "CV_MAT_TYPE", "CV_IS_CONT_MAT", "CV_IS_MAT_CONT").cppTypes("int", "int"))
                .put(new Parser.Info("CV_WHOLE_ARR", "CV_WHOLE_SEQ").cppTypes("CvSlice").translate(true))
                .put(new Parser.Info("_IplROI").pointerTypes("IplROI"))
                .put(new Parser.Info("_IplImage").pointerTypes("IplImage"))
                .put(new Parser.Info("_IplTileInfo").pointerTypes("IplTileInfo"))
-               .put(new Parser.Info("IplImage", "CvMat", "CvMatND", "CvSparseMat", "CvSeq").parent("CvArr"))
-               .put(new Parser.Info("CvSet", "CvChain", "CvContour", "CvContourTree").parent("CvSeq"))
-               .put(new Parser.Info("CvGraph").parent("CvSet"))
+               .put(new Parser.Info("IplImage").parent("AbstractIplImage"))
+               .put(new Parser.Info("IplConvKernel").parent("com.googlecode.javacpp.helper.opencv_imgproc.AbstractIplConvKernel"))
+               .put(new Parser.Info("CvMat").parent("AbstractCvMat"))
+               .put(new Parser.Info("CvMatND").parent("AbstractCvMatND"))
+               .put(new Parser.Info("CvSparseMat").parent("AbstractCvSparseMat"))
+               .put(new Parser.Info("CvHistogram").parent("com.googlecode.javacpp.helper.opencv_imgproc.AbstractCvHistogram"))
+               .put(new Parser.Info("CvRect").parent("AbstractCvRect"))
+               .put(new Parser.Info("CvPoint").parent("AbstractCvPoint"))
+               .put(new Parser.Info("CvPoint2D32f").parent("AbstractCvPoint2D32f"))
+               .put(new Parser.Info("CvPoint3D32f").parent("AbstractCvPoint3D32f"))
+               .put(new Parser.Info("CvPoint2D64f").parent("AbstractCvPoint2D64f"))
+               .put(new Parser.Info("CvPoint3D64f").parent("AbstractCvPoint3D64f"))
+               .put(new Parser.Info("CvSize").parent("AbstractCvSize"))
+               .put(new Parser.Info("CvSize2D32f").parent("AbstractCvSize2D32f"))
+               .put(new Parser.Info("CvBox2D").parent("AbstractCvBox2D"))
+               .put(new Parser.Info("CvScalar").parent("AbstractCvScalar"))
+               .put(new Parser.Info("CvMemStorage").parent("AbstractCvMemStorage"))
+               .put(new Parser.Info("CvSeq").parent("AbstractCvSeq"))
+               .put(new Parser.Info("CvSet").parent("AbstractCvSet"))
+               .put(new Parser.Info("CvChain", "CvContour", "CvContourTree").parent("CvSeq"))
+               .put(new Parser.Info("CvGraph").parent("AbstractCvGraph"))
                .put(new Parser.Info("CvGraphVtx2D").parent("CvGraphVtx"))
                .put(new Parser.Info("CvChainPtReader").parent("CvSeqReader"))
+               .put(new Parser.Info("CvFileStorage").parent("AbstractCvFileStorage"))
+               .put(new Parser.Info("CvGraphScanner").parent("AbstractCvGraphScanner"))
                .put(new Parser.Info("cvGetSubArr").cppTypes("CvMat*", "CvArr*", "CvMat*", "CvRect"))
                .put(new Parser.Info("cvZero").cppTypes("void", "CvArr*"))
                .put(new Parser.Info("cvCvtScale", "cvScale", "cvCvtScaleAbs").cppTypes("void", "CvArr*", "CvArr*", "double", "double"))
