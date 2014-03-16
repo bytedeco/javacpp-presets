@@ -28,13 +28,13 @@ import com.googlecode.javacpp.annotation.Properties;
  *
  * @author Samuel Audet
  */
-@Properties(inherit=opencv_imgproc.class, target="com.googlecode.javacpp.opencv_video", value={
+@Properties(inherit=opencv_imgproc.class, value={
     @Platform(include={"<opencv2/video/video.hpp>", "<opencv2/video/tracking.hpp>", "<opencv2/video/background_segm.hpp>"}, link="opencv_video@.2.4"),
-    @Platform(value="windows", link="opencv_video248") })
+    @Platform(value="windows", link="opencv_video248") },
+        target="com.googlecode.javacpp.opencv_video", helper="com.googlecode.javacpp.helper.opencv_video")
 public class opencv_video implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        infoMap.put(new Parser.Info().javaText("import com.googlecode.javacpp.helper.opencv_video.*;"))
-               .put(new Parser.Info("CvKalman").parent("AbstractCvKalman"))
+        infoMap.put(new Parser.Info("CvKalman").base("AbstractCvKalman"))
                .put(new Parser.Info("cvKalmanUpdateByTime", "cvKalmanUpdateByMeasurement").cppTypes("const CvMat*", "CvKalman*", "CvMat*"));
     }
 }

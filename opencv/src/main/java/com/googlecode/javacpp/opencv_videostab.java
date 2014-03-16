@@ -22,7 +22,7 @@ import static com.googlecode.javacpp.opencv_nonfree.*;
 public class opencv_videostab extends com.googlecode.javacpp.presets.opencv_videostab {
     static { Loader.load(); }
 
-// Parsed from header file /usr/local/include/opencv2/videostab/videostab.hpp
+// Parsed from /usr/local/include/opencv2/videostab/frame_source.hpp
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -66,147 +66,57 @@ public class opencv_videostab extends com.googlecode.javacpp.presets.opencv_vide
 //
 //M*/
 
-// #ifndef __OPENCV_VIDEOSTAB_HPP__
-// #define __OPENCV_VIDEOSTAB_HPP__
-
-// #include "opencv2/videostab/stabilizer.hpp"
-
-// #endif
-
-
-// Parsed from header file /usr/local/include/opencv2/videostab/stabilizer.hpp
-
-/*M///////////////////////////////////////////////////////////////////////////////////////
-//
-//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-//
-//  By downloading, copying, installing or using the software you agree to this license.
-//  If you do not agree to this license, do not download, install,
-//  copy or use the software.
-//
-//
-//                           License Agreement
-//                For Open Source Computer Vision Library
-//
-// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-// Copyright (C) 2009-2011, Willow Garage Inc., all rights reserved.
-// Third party copyrights are property of their respective owners.
-//
-// Redistribution and use in source and binary forms, with or without modification,
-// are permitted provided that the following conditions are met:
-//
-//   * Redistribution's of source code must retain the above copyright notice,
-//     this list of conditions and the following disclaimer.
-//
-//   * Redistribution's in binary form must reproduce the above copyright notice,
-//     this list of conditions and the following disclaimer in the documentation
-//     and/or other materials provided with the distribution.
-//
-//   * The name of the copyright holders may not be used to endorse or promote products
-//     derived from this software without specific prior written permission.
-//
-// This software is provided by the copyright holders and contributors "as is" and
-// any express or implied warranties, including, but not limited to, the implied
-// warranties of merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the Intel Corporation or contributors be liable for any direct,
-// indirect, incidental, special, exemplary, or consequential damages
-// (including, but not limited to, procurement of substitute goods or services;
-// loss of use, data, or profits; or business interruption) however caused
-// and on any theory of liability, whether in contract, strict liability,
-// or tort (including negligence or otherwise) arising in any way out of
-// the use of this software, even if advised of the possibility of such damage.
-//
-//M*/
-
-// #ifndef __OPENCV_VIDEOSTAB_STABILIZER_HPP__
-// #define __OPENCV_VIDEOSTAB_STABILIZER_HPP__
+// #ifndef __OPENCV_VIDEOSTAB_FRAME_SOURCE_HPP__
+// #define __OPENCV_VIDEOSTAB_FRAME_SOURCE_HPP__
 
 // #include <vector>
+// #include <string>
 // #include "opencv2/core/core.hpp"
-// #include "opencv2/imgproc/imgproc.hpp"
-// #include "opencv2/videostab/global_motion.hpp"
-// #include "opencv2/videostab/motion_stabilizing.hpp"
-// #include "opencv2/videostab/frame_source.hpp"
-// #include "opencv2/videostab/log.hpp"
-// #include "opencv2/videostab/inpainting.hpp"
-// #include "opencv2/videostab/deblurring.hpp"
+// #include "opencv2/highgui/highgui.hpp"
 
-@Namespace("cv::videostab") @NoOffset public static class StabilizerBase extends Pointer {
+@Namespace("cv::videostab") public static class IFrameSource extends Pointer {
     static { Loader.load(); }
-    public StabilizerBase() { }
-    public StabilizerBase(Pointer p) { super(p); }
-
-
-    public native void setLog(@Ptr ILog _log);
-    public native @Ptr ILog log();
-
-    public native void setRadius(int val);
-    public native int radius();
-
-    public native void setFrameSource(@Ptr IFrameSource val);
-    public native @Ptr IFrameSource frameSource();
-
-    public native void setMotionEstimator(@Ptr IGlobalMotionEstimator val);
-    public native @Ptr IGlobalMotionEstimator motionEstimator();
-
-    public native void setDeblurer(@Ptr DeblurerBase val);
-    public native @Ptr DeblurerBase deblurrer();
-
-    public native void setTrimRatio(float val);
-    public native float trimRatio();
-
-    public native void setCorrectionForInclusion(@Cast("bool") boolean val);
-    public native @Cast("bool") boolean doCorrectionForInclusion();
-
-    public native void setBorderMode(int val);
-    public native int borderMode();
-
-    public native void setInpainter(@Ptr InpainterBase val);
-    public native @Ptr InpainterBase inpainter();
-}
-
-@Namespace("cv::videostab") @NoOffset public static class OnePassStabilizer extends IFrameSource {
-    static { Loader.load(); }
-    public OnePassStabilizer(Pointer p) { super(p); }
-    public OnePassStabilizer(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public OnePassStabilizer position(int position) {
-        return (OnePassStabilizer)super.position(position);
-    }
-
-    public OnePassStabilizer() { allocate(); }
-    private native void allocate();
-
-    public native void setMotionFilter(@Ptr MotionFilterBase val);
-    public native @Ptr MotionFilterBase motionFilter();
+    public IFrameSource() { }
+    public IFrameSource(Pointer p) { super(p); }
 
     public native void reset();
     public native @ByVal Mat nextFrame();
 }
 
-@Namespace("cv::videostab") @NoOffset public static class TwoPassStabilizer extends IFrameSource {
+@Namespace("cv::videostab") public static class NullFrameSource extends IFrameSource {
     static { Loader.load(); }
-    public TwoPassStabilizer(Pointer p) { super(p); }
-    public TwoPassStabilizer(int size) { allocateArray(size); }
+    public NullFrameSource() { allocate(); }
+    public NullFrameSource(int size) { allocateArray(size); }
+    public NullFrameSource(Pointer p) { super(p); }
+    private native void allocate();
     private native void allocateArray(int size);
-    @Override public TwoPassStabilizer position(int position) {
-        return (TwoPassStabilizer)super.position(position);
+    @Override public NullFrameSource position(int position) {
+        return (NullFrameSource)super.position(position);
     }
 
-    public TwoPassStabilizer() { allocate(); }
-    private native void allocate();
+    public native void reset();
+    public native @ByVal Mat nextFrame();
+}
 
-    public native void setMotionStabilizer(@Ptr IMotionStabilizer val);
-    public native @Ptr IMotionStabilizer motionStabilizer();
+@Namespace("cv::videostab") @NoOffset public static class VideoFileSource extends IFrameSource {
+    static { Loader.load(); }
+    public VideoFileSource() { }
+    public VideoFileSource(Pointer p) { super(p); }
 
-    public native void setEstimateTrimRatio(@Cast("bool") boolean val);
-    public native @Cast("bool") boolean mustEstimateTrimaRatio();
+    public VideoFileSource(@StdString BytePointer path, @Cast("bool") boolean volatileFrame/*=false*/) { allocate(path, volatileFrame); }
+    private native void allocate(@StdString BytePointer path, @Cast("bool") boolean volatileFrame/*=false*/);
+    public VideoFileSource(@StdString BytePointer path) { allocate(path); }
+    private native void allocate(@StdString BytePointer path);
+    public VideoFileSource(@StdString String path, @Cast("bool") boolean volatileFrame/*=false*/) { allocate(path, volatileFrame); }
+    private native void allocate(@StdString String path, @Cast("bool") boolean volatileFrame/*=false*/);
+    public VideoFileSource(@StdString String path) { allocate(path); }
+    private native void allocate(@StdString String path);
 
     public native void reset();
     public native @ByVal Mat nextFrame();
 
-    // available after pre-pass, before it's empty
-    public native @ByVal MatVector motions();
+    public native int frameCount();
+    public native double fps();
 }
 
 
@@ -215,7 +125,177 @@ public class opencv_videostab extends com.googlecode.javacpp.presets.opencv_vide
 // #endif
 
 
-// Parsed from header file /usr/local/include/opencv2/videostab/optical_flow.hpp
+// Parsed from /usr/local/include/opencv2/videostab/log.hpp
+
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+//
+//  By downloading, copying, installing or using the software you agree to this license.
+//  If you do not agree to this license, do not download, install,
+//  copy or use the software.
+//
+//
+//                           License Agreement
+//                For Open Source Computer Vision Library
+//
+// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
+// Copyright (C) 2009-2011, Willow Garage Inc., all rights reserved.
+// Third party copyrights are property of their respective owners.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+//   * Redistribution's of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//
+//   * Redistribution's in binary form must reproduce the above copyright notice,
+//     this list of conditions and the following disclaimer in the documentation
+//     and/or other materials provided with the distribution.
+//
+//   * The name of the copyright holders may not be used to endorse or promote products
+//     derived from this software without specific prior written permission.
+//
+// This software is provided by the copyright holders and contributors "as is" and
+// any express or implied warranties, including, but not limited to, the implied
+// warranties of merchantability and fitness for a particular purpose are disclaimed.
+// In no event shall the Intel Corporation or contributors be liable for any direct,
+// indirect, incidental, special, exemplary, or consequential damages
+// (including, but not limited to, procurement of substitute goods or services;
+// loss of use, data, or profits; or business interruption) however caused
+// and on any theory of liability, whether in contract, strict liability,
+// or tort (including negligence or otherwise) arising in any way out of
+// the use of this software, even if advised of the possibility of such damage.
+//
+//M*/
+
+// #ifndef __OPENCV_VIDEOSTAB_LOG_HPP__
+// #define __OPENCV_VIDEOSTAB_LOG_HPP__
+
+// #include "opencv2/core/core.hpp"
+
+@Namespace("cv::videostab") public static class ILog extends Pointer {
+    static { Loader.load(); }
+    public ILog() { }
+    public ILog(Pointer p) { super(p); }
+
+    public native void print(@Cast("const char*") BytePointer format);
+    public native void print(String format);
+}
+
+@Namespace("cv::videostab") public static class NullLog extends ILog {
+    static { Loader.load(); }
+    public NullLog() { allocate(); }
+    public NullLog(int size) { allocateArray(size); }
+    public NullLog(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public NullLog position(int position) {
+        return (NullLog)super.position(position);
+    }
+
+    public native void print(@Cast("const char*") BytePointer arg0);
+    public native void print(String arg0);
+}
+
+@Namespace("cv::videostab") public static class LogToStdout extends ILog {
+    static { Loader.load(); }
+    public LogToStdout() { allocate(); }
+    public LogToStdout(int size) { allocateArray(size); }
+    public LogToStdout(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public LogToStdout position(int position) {
+        return (LogToStdout)super.position(position);
+    }
+
+    public native void print(@Cast("const char*") BytePointer format);
+    public native void print(String format);
+}
+
+
+ // namespace cv
+
+// #endif
+
+
+// Parsed from /usr/local/include/opencv2/videostab/fast_marching.hpp
+
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+//
+//  By downloading, copying, installing or using the software you agree to this license.
+//  If you do not agree to this license, do not download, install,
+//  copy or use the software.
+//
+//
+//                           License Agreement
+//                For Open Source Computer Vision Library
+//
+// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
+// Copyright (C) 2009-2011, Willow Garage Inc., all rights reserved.
+// Third party copyrights are property of their respective owners.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+//   * Redistribution's of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//
+//   * Redistribution's in binary form must reproduce the above copyright notice,
+//     this list of conditions and the following disclaimer in the documentation
+//     and/or other materials provided with the distribution.
+//
+//   * The name of the copyright holders may not be used to endorse or promote products
+//     derived from this software without specific prior written permission.
+//
+// This software is provided by the copyright holders and contributors "as is" and
+// any express or implied warranties, including, but not limited to, the implied
+// warranties of merchantability and fitness for a particular purpose are disclaimed.
+// In no event shall the Intel Corporation or contributors be liable for any direct,
+// indirect, incidental, special, exemplary, or consequential damages
+// (including, but not limited to, procurement of substitute goods or services;
+// loss of use, data, or profits; or business interruption) however caused
+// and on any theory of liability, whether in contract, strict liability,
+// or tort (including negligence or otherwise) arising in any way out of
+// the use of this software, even if advised of the possibility of such damage.
+//
+//M*/
+
+// #ifndef __OPENCV_VIDEOSTAB_FAST_MARCHING_HPP__
+// #define __OPENCV_VIDEOSTAB_FAST_MARCHING_HPP__
+
+// #include <cmath>
+// #include <queue>
+// #include <algorithm>
+// #include "opencv2/core/core.hpp"
+
+// See http://iwi.eldoc.ub.rug.nl/FILES/root/2004/JGraphToolsTelea/2004JGraphToolsTelea.pdf
+@Namespace("cv::videostab") @NoOffset public static class FastMarchingMethod extends Pointer {
+    static { Loader.load(); }
+    public FastMarchingMethod(Pointer p) { super(p); }
+    public FastMarchingMethod(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public FastMarchingMethod position(int position) {
+        return (FastMarchingMethod)super.position(position);
+    }
+
+    public FastMarchingMethod() { allocate(); }
+    private native void allocate();
+
+    public native @ByVal Mat distanceMap(); // narrow band size
+}
+
+
+ // namespace cv
+
+// #include "fast_marching_inl.hpp"
+
+// #endif
+
+
+// Parsed from /usr/local/include/opencv2/videostab/optical_flow.hpp
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -308,7 +388,7 @@ public class opencv_videostab extends com.googlecode.javacpp.presets.opencv_vide
     public native int maxLevel();
 }
 
-@Namespace("cv::videostab") public static class SparsePyrLkOptFlowEstimator extends ISparseOptFlowEstimator {
+@Namespace("cv::videostab") public static class SparsePyrLkOptFlowEstimator extends PyrLkOptFlowEstimatorBase {
     static { Loader.load(); }
     public SparsePyrLkOptFlowEstimator() { allocate(); }
     public SparsePyrLkOptFlowEstimator(int size) { allocateArray(size); }
@@ -318,6 +398,8 @@ public class opencv_videostab extends com.googlecode.javacpp.presets.opencv_vide
     @Override public SparsePyrLkOptFlowEstimator position(int position) {
         return (SparsePyrLkOptFlowEstimator)super.position(position);
     }
+    public ISparseOptFlowEstimator asISparseOptFlowEstimator() { return asISparseOptFlowEstimator(this); }
+    @Namespace public static native @Name("static_cast<cv::videostab::ISparseOptFlowEstimator*>") ISparseOptFlowEstimator asISparseOptFlowEstimator(SparsePyrLkOptFlowEstimator pointer);
 
     public native void run(
                 @ByVal Mat frame0, @ByVal Mat frame1, @ByVal Mat points0, @ByVal Mat points1,
@@ -325,7 +407,7 @@ public class opencv_videostab extends com.googlecode.javacpp.presets.opencv_vide
 }
 
 // #if defined(HAVE_OPENCV_GPU) && !defined(ANDROID)
-@Namespace("cv::videostab") @NoOffset public static class DensePyrLkOptFlowEstimatorGpu extends IDenseOptFlowEstimator {
+@Namespace("cv::videostab") @NoOffset public static class DensePyrLkOptFlowEstimatorGpu extends PyrLkOptFlowEstimatorBase {
     static { Loader.load(); }
     public DensePyrLkOptFlowEstimatorGpu(Pointer p) { super(p); }
     public DensePyrLkOptFlowEstimatorGpu(int size) { allocateArray(size); }
@@ -333,6 +415,8 @@ public class opencv_videostab extends com.googlecode.javacpp.presets.opencv_vide
     @Override public DensePyrLkOptFlowEstimatorGpu position(int position) {
         return (DensePyrLkOptFlowEstimatorGpu)super.position(position);
     }
+    public IDenseOptFlowEstimator asIDenseOptFlowEstimator() { return asIDenseOptFlowEstimator(this); }
+    @Namespace public static native @Name("static_cast<cv::videostab::IDenseOptFlowEstimator*>") IDenseOptFlowEstimator asIDenseOptFlowEstimator(DensePyrLkOptFlowEstimatorGpu pointer);
 
     public DensePyrLkOptFlowEstimatorGpu() { allocate(); }
     private native void allocate();
@@ -349,7 +433,7 @@ public class opencv_videostab extends com.googlecode.javacpp.presets.opencv_vide
 // #endif
 
 
-// Parsed from header file /usr/local/include/opencv2/videostab/global_motion.hpp
+// Parsed from /usr/local/include/opencv2/videostab/global_motion.hpp
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -412,6 +496,8 @@ public static final int
         @StdVector Point2f points0, @StdVector Point2f points1,
         int model/*=AFFINE*/, FloatPointer rmse/*=0*/);
 @Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionLeastSquares(
+        @StdVector Point2f points0, @StdVector Point2f points1);
+@Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionLeastSquares(
         @StdVector Point2f points0, @StdVector Point2f points1,
         int model/*=AFFINE*/, FloatBuffer rmse/*=0*/);
 @Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionLeastSquares(
@@ -441,6 +527,8 @@ public static final int
         @StdVector Point2f points0, @StdVector Point2f points1,
         int model/*=AFFINE*/, @Const @ByRef RansacParams params/*=RansacParams::affine2dMotionStd()*/,
         FloatPointer rmse/*=0*/, IntPointer ninliers/*=0*/);
+@Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionRobust(
+        @StdVector Point2f points0, @StdVector Point2f points1);
 @Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionRobust(
         @StdVector Point2f points0, @StdVector Point2f points1,
         int model/*=AFFINE*/, @Const @ByRef RansacParams params/*=RansacParams::affine2dMotionStd()*/,
@@ -501,7 +589,7 @@ public static final int
 // #endif
 
 
-// Parsed from header file /usr/local/include/opencv2/videostab/motion_stabilizing.hpp
+// Parsed from /usr/local/include/opencv2/videostab/motion_stabilizing.hpp
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -607,276 +695,7 @@ public static final int
 // #endif
 
 
-// Parsed from header file /usr/local/include/opencv2/videostab/frame_source.hpp
-
-/*M///////////////////////////////////////////////////////////////////////////////////////
-//
-//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-//
-//  By downloading, copying, installing or using the software you agree to this license.
-//  If you do not agree to this license, do not download, install,
-//  copy or use the software.
-//
-//
-//                           License Agreement
-//                For Open Source Computer Vision Library
-//
-// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-// Copyright (C) 2009-2011, Willow Garage Inc., all rights reserved.
-// Third party copyrights are property of their respective owners.
-//
-// Redistribution and use in source and binary forms, with or without modification,
-// are permitted provided that the following conditions are met:
-//
-//   * Redistribution's of source code must retain the above copyright notice,
-//     this list of conditions and the following disclaimer.
-//
-//   * Redistribution's in binary form must reproduce the above copyright notice,
-//     this list of conditions and the following disclaimer in the documentation
-//     and/or other materials provided with the distribution.
-//
-//   * The name of the copyright holders may not be used to endorse or promote products
-//     derived from this software without specific prior written permission.
-//
-// This software is provided by the copyright holders and contributors "as is" and
-// any express or implied warranties, including, but not limited to, the implied
-// warranties of merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the Intel Corporation or contributors be liable for any direct,
-// indirect, incidental, special, exemplary, or consequential damages
-// (including, but not limited to, procurement of substitute goods or services;
-// loss of use, data, or profits; or business interruption) however caused
-// and on any theory of liability, whether in contract, strict liability,
-// or tort (including negligence or otherwise) arising in any way out of
-// the use of this software, even if advised of the possibility of such damage.
-//
-//M*/
-
-// #ifndef __OPENCV_VIDEOSTAB_FRAME_SOURCE_HPP__
-// #define __OPENCV_VIDEOSTAB_FRAME_SOURCE_HPP__
-
-// #include <vector>
-// #include <string>
-// #include "opencv2/core/core.hpp"
-// #include "opencv2/highgui/highgui.hpp"
-
-@Namespace("cv::videostab") public static class IFrameSource extends Pointer {
-    static { Loader.load(); }
-    public IFrameSource() { }
-    public IFrameSource(Pointer p) { super(p); }
-
-    public native void reset();
-    public native @ByVal Mat nextFrame();
-}
-
-@Namespace("cv::videostab") public static class NullFrameSource extends IFrameSource {
-    static { Loader.load(); }
-    public NullFrameSource() { allocate(); }
-    public NullFrameSource(int size) { allocateArray(size); }
-    public NullFrameSource(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NullFrameSource position(int position) {
-        return (NullFrameSource)super.position(position);
-    }
-
-    public native void reset();
-    public native @ByVal Mat nextFrame();
-}
-
-@Namespace("cv::videostab") @NoOffset public static class VideoFileSource extends IFrameSource {
-    static { Loader.load(); }
-    public VideoFileSource() { }
-    public VideoFileSource(Pointer p) { super(p); }
-
-    public VideoFileSource(@StdString BytePointer path, @Cast("bool") boolean volatileFrame/*=false*/) { allocate(path, volatileFrame); }
-    private native void allocate(@StdString BytePointer path, @Cast("bool") boolean volatileFrame/*=false*/);
-    public VideoFileSource(@StdString String path, @Cast("bool") boolean volatileFrame/*=false*/) { allocate(path, volatileFrame); }
-    private native void allocate(@StdString String path, @Cast("bool") boolean volatileFrame/*=false*/);
-
-    public native void reset();
-    public native @ByVal Mat nextFrame();
-
-    public native int frameCount();
-    public native double fps();
-}
-
-
- // namespace cv
-
-// #endif
-
-
-// Parsed from header file /usr/local/include/opencv2/videostab/log.hpp
-
-/*M///////////////////////////////////////////////////////////////////////////////////////
-//
-//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-//
-//  By downloading, copying, installing or using the software you agree to this license.
-//  If you do not agree to this license, do not download, install,
-//  copy or use the software.
-//
-//
-//                           License Agreement
-//                For Open Source Computer Vision Library
-//
-// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-// Copyright (C) 2009-2011, Willow Garage Inc., all rights reserved.
-// Third party copyrights are property of their respective owners.
-//
-// Redistribution and use in source and binary forms, with or without modification,
-// are permitted provided that the following conditions are met:
-//
-//   * Redistribution's of source code must retain the above copyright notice,
-//     this list of conditions and the following disclaimer.
-//
-//   * Redistribution's in binary form must reproduce the above copyright notice,
-//     this list of conditions and the following disclaimer in the documentation
-//     and/or other materials provided with the distribution.
-//
-//   * The name of the copyright holders may not be used to endorse or promote products
-//     derived from this software without specific prior written permission.
-//
-// This software is provided by the copyright holders and contributors "as is" and
-// any express or implied warranties, including, but not limited to, the implied
-// warranties of merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the Intel Corporation or contributors be liable for any direct,
-// indirect, incidental, special, exemplary, or consequential damages
-// (including, but not limited to, procurement of substitute goods or services;
-// loss of use, data, or profits; or business interruption) however caused
-// and on any theory of liability, whether in contract, strict liability,
-// or tort (including negligence or otherwise) arising in any way out of
-// the use of this software, even if advised of the possibility of such damage.
-//
-//M*/
-
-// #ifndef __OPENCV_VIDEOSTAB_LOG_HPP__
-// #define __OPENCV_VIDEOSTAB_LOG_HPP__
-
-// #include "opencv2/core/core.hpp"
-
-@Namespace("cv::videostab") public static class ILog extends Pointer {
-    static { Loader.load(); }
-    public ILog() { }
-    public ILog(Pointer p) { super(p); }
-
-    public native void print(@Cast("const char*") BytePointer format);
-    public native void print(String format);
-}
-
-@Namespace("cv::videostab") public static class NullLog extends ILog {
-    static { Loader.load(); }
-    public NullLog() { allocate(); }
-    public NullLog(int size) { allocateArray(size); }
-    public NullLog(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NullLog position(int position) {
-        return (NullLog)super.position(position);
-    }
-
-    public native void print(@Cast("const char*") BytePointer arg0);
-    public native void print(String arg0);
-}
-
-@Namespace("cv::videostab") public static class LogToStdout extends ILog {
-    static { Loader.load(); }
-    public LogToStdout() { allocate(); }
-    public LogToStdout(int size) { allocateArray(size); }
-    public LogToStdout(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public LogToStdout position(int position) {
-        return (LogToStdout)super.position(position);
-    }
-
-    public native void print(@Cast("const char*") BytePointer format);
-    public native void print(String format);
-}
-
-
- // namespace cv
-
-// #endif
-
-
-// Parsed from header file /usr/local/include/opencv2/videostab/fast_marching.hpp
-
-/*M///////////////////////////////////////////////////////////////////////////////////////
-//
-//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-//
-//  By downloading, copying, installing or using the software you agree to this license.
-//  If you do not agree to this license, do not download, install,
-//  copy or use the software.
-//
-//
-//                           License Agreement
-//                For Open Source Computer Vision Library
-//
-// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-// Copyright (C) 2009-2011, Willow Garage Inc., all rights reserved.
-// Third party copyrights are property of their respective owners.
-//
-// Redistribution and use in source and binary forms, with or without modification,
-// are permitted provided that the following conditions are met:
-//
-//   * Redistribution's of source code must retain the above copyright notice,
-//     this list of conditions and the following disclaimer.
-//
-//   * Redistribution's in binary form must reproduce the above copyright notice,
-//     this list of conditions and the following disclaimer in the documentation
-//     and/or other materials provided with the distribution.
-//
-//   * The name of the copyright holders may not be used to endorse or promote products
-//     derived from this software without specific prior written permission.
-//
-// This software is provided by the copyright holders and contributors "as is" and
-// any express or implied warranties, including, but not limited to, the implied
-// warranties of merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the Intel Corporation or contributors be liable for any direct,
-// indirect, incidental, special, exemplary, or consequential damages
-// (including, but not limited to, procurement of substitute goods or services;
-// loss of use, data, or profits; or business interruption) however caused
-// and on any theory of liability, whether in contract, strict liability,
-// or tort (including negligence or otherwise) arising in any way out of
-// the use of this software, even if advised of the possibility of such damage.
-//
-//M*/
-
-// #ifndef __OPENCV_VIDEOSTAB_FAST_MARCHING_HPP__
-// #define __OPENCV_VIDEOSTAB_FAST_MARCHING_HPP__
-
-// #include <cmath>
-// #include <queue>
-// #include <algorithm>
-// #include "opencv2/core/core.hpp"
-
-// See http://iwi.eldoc.ub.rug.nl/FILES/root/2004/JGraphToolsTelea/2004JGraphToolsTelea.pdf
-@Namespace("cv::videostab") @NoOffset public static class FastMarchingMethod extends Pointer {
-    static { Loader.load(); }
-    public FastMarchingMethod(Pointer p) { super(p); }
-    public FastMarchingMethod(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public FastMarchingMethod position(int position) {
-        return (FastMarchingMethod)super.position(position);
-    }
-
-    public FastMarchingMethod() { allocate(); }
-    private native void allocate();
-
-    public native @ByVal Mat distanceMap(); // narrow band size
-}
-
-
- // namespace cv
-
-// #include "fast_marching_inl.hpp"
-
-// #endif
-
-
-// Parsed from header file /usr/local/include/opencv2/videostab/inpainting.hpp
+// Parsed from /usr/local/include/opencv2/videostab/inpainting.hpp
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1055,11 +874,17 @@ public static final int
 
 @Namespace("cv::videostab") @NoOffset public static class ColorInpainter extends InpainterBase {
     static { Loader.load(); }
-    public ColorInpainter() { }
     public ColorInpainter(Pointer p) { super(p); }
+    public ColorInpainter(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public ColorInpainter position(int position) {
+        return (ColorInpainter)super.position(position);
+    }
 
     public ColorInpainter(int method/*=INPAINT_TELEA*/, double _radius/*=2.*/) { allocate(method, _radius); }
     private native void allocate(int method/*=INPAINT_TELEA*/, double _radius/*=2.*/);
+    public ColorInpainter() { allocate(); }
+    private native void allocate();
 
     public native void inpaint(int idx, @ByRef Mat frame, @ByRef Mat mask);
 }
@@ -1078,7 +903,7 @@ public static final int
 // #endif
 
 
-// Parsed from header file /usr/local/include/opencv2/videostab/deblurring.hpp
+// Parsed from /usr/local/include/opencv2/videostab/deblurring.hpp
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1189,6 +1014,203 @@ public static final int
 
 
  // namespace cv
+
+// #endif
+
+
+// Parsed from /usr/local/include/opencv2/videostab/stabilizer.hpp
+
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+//
+//  By downloading, copying, installing or using the software you agree to this license.
+//  If you do not agree to this license, do not download, install,
+//  copy or use the software.
+//
+//
+//                           License Agreement
+//                For Open Source Computer Vision Library
+//
+// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
+// Copyright (C) 2009-2011, Willow Garage Inc., all rights reserved.
+// Third party copyrights are property of their respective owners.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+//   * Redistribution's of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//
+//   * Redistribution's in binary form must reproduce the above copyright notice,
+//     this list of conditions and the following disclaimer in the documentation
+//     and/or other materials provided with the distribution.
+//
+//   * The name of the copyright holders may not be used to endorse or promote products
+//     derived from this software without specific prior written permission.
+//
+// This software is provided by the copyright holders and contributors "as is" and
+// any express or implied warranties, including, but not limited to, the implied
+// warranties of merchantability and fitness for a particular purpose are disclaimed.
+// In no event shall the Intel Corporation or contributors be liable for any direct,
+// indirect, incidental, special, exemplary, or consequential damages
+// (including, but not limited to, procurement of substitute goods or services;
+// loss of use, data, or profits; or business interruption) however caused
+// and on any theory of liability, whether in contract, strict liability,
+// or tort (including negligence or otherwise) arising in any way out of
+// the use of this software, even if advised of the possibility of such damage.
+//
+//M*/
+
+// #ifndef __OPENCV_VIDEOSTAB_STABILIZER_HPP__
+// #define __OPENCV_VIDEOSTAB_STABILIZER_HPP__
+
+// #include <vector>
+// #include "opencv2/core/core.hpp"
+// #include "opencv2/imgproc/imgproc.hpp"
+// #include "opencv2/videostab/global_motion.hpp"
+// #include "opencv2/videostab/motion_stabilizing.hpp"
+// #include "opencv2/videostab/frame_source.hpp"
+// #include "opencv2/videostab/log.hpp"
+// #include "opencv2/videostab/inpainting.hpp"
+// #include "opencv2/videostab/deblurring.hpp"
+
+@Namespace("cv::videostab") @NoOffset public static class StabilizerBase extends Pointer {
+    static { Loader.load(); }
+    public StabilizerBase() { }
+    public StabilizerBase(Pointer p) { super(p); }
+
+
+    public native void setLog(@Ptr ILog _log);
+    public native @Ptr ILog log();
+
+    public native void setRadius(int val);
+    public native int radius();
+
+    public native void setFrameSource(@Ptr IFrameSource val);
+    public native @Ptr IFrameSource frameSource();
+
+    public native void setMotionEstimator(@Ptr IGlobalMotionEstimator val);
+    public native @Ptr IGlobalMotionEstimator motionEstimator();
+
+    public native void setDeblurer(@Ptr DeblurerBase val);
+    public native @Ptr DeblurerBase deblurrer();
+
+    public native void setTrimRatio(float val);
+    public native float trimRatio();
+
+    public native void setCorrectionForInclusion(@Cast("bool") boolean val);
+    public native @Cast("bool") boolean doCorrectionForInclusion();
+
+    public native void setBorderMode(int val);
+    public native int borderMode();
+
+    public native void setInpainter(@Ptr InpainterBase val);
+    public native @Ptr InpainterBase inpainter();
+}
+
+@Namespace("cv::videostab") @NoOffset public static class OnePassStabilizer extends StabilizerBase {
+    static { Loader.load(); }
+    public OnePassStabilizer(Pointer p) { super(p); }
+    public OnePassStabilizer(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public OnePassStabilizer position(int position) {
+        return (OnePassStabilizer)super.position(position);
+    }
+    public IFrameSource asIFrameSource() { return asIFrameSource(this); }
+    @Namespace public static native @Name("static_cast<cv::videostab::IFrameSource*>") IFrameSource asIFrameSource(OnePassStabilizer pointer);
+
+    public OnePassStabilizer() { allocate(); }
+    private native void allocate();
+
+    public native void setMotionFilter(@Ptr MotionFilterBase val);
+    public native @Ptr MotionFilterBase motionFilter();
+
+    public native void reset();
+    public native @ByVal Mat nextFrame();
+}
+
+@Namespace("cv::videostab") @NoOffset public static class TwoPassStabilizer extends StabilizerBase {
+    static { Loader.load(); }
+    public TwoPassStabilizer(Pointer p) { super(p); }
+    public TwoPassStabilizer(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public TwoPassStabilizer position(int position) {
+        return (TwoPassStabilizer)super.position(position);
+    }
+    public IFrameSource asIFrameSource() { return asIFrameSource(this); }
+    @Namespace public static native @Name("static_cast<cv::videostab::IFrameSource*>") IFrameSource asIFrameSource(TwoPassStabilizer pointer);
+
+    public TwoPassStabilizer() { allocate(); }
+    private native void allocate();
+
+    public native void setMotionStabilizer(@Ptr IMotionStabilizer val);
+    public native @Ptr IMotionStabilizer motionStabilizer();
+
+    public native void setEstimateTrimRatio(@Cast("bool") boolean val);
+    public native @Cast("bool") boolean mustEstimateTrimaRatio();
+
+    public native void reset();
+    public native @ByVal Mat nextFrame();
+
+    // available after pre-pass, before it's empty
+    public native @ByVal MatVector motions();
+}
+
+
+ // namespace cv
+
+// #endif
+
+
+// Parsed from /usr/local/include/opencv2/videostab/videostab.hpp
+
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+//
+//  By downloading, copying, installing or using the software you agree to this license.
+//  If you do not agree to this license, do not download, install,
+//  copy or use the software.
+//
+//
+//                           License Agreement
+//                For Open Source Computer Vision Library
+//
+// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
+// Copyright (C) 2009-2011, Willow Garage Inc., all rights reserved.
+// Third party copyrights are property of their respective owners.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+//   * Redistribution's of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//
+//   * Redistribution's in binary form must reproduce the above copyright notice,
+//     this list of conditions and the following disclaimer in the documentation
+//     and/or other materials provided with the distribution.
+//
+//   * The name of the copyright holders may not be used to endorse or promote products
+//     derived from this software without specific prior written permission.
+//
+// This software is provided by the copyright holders and contributors "as is" and
+// any express or implied warranties, including, but not limited to, the implied
+// warranties of merchantability and fitness for a particular purpose are disclaimed.
+// In no event shall the Intel Corporation or contributors be liable for any direct,
+// indirect, incidental, special, exemplary, or consequential damages
+// (including, but not limited to, procurement of substitute goods or services;
+// loss of use, data, or profits; or business interruption) however caused
+// and on any theory of liability, whether in contract, strict liability,
+// or tort (including negligence or otherwise) arising in any way out of
+// the use of this software, even if advised of the possibility of such damage.
+//
+//M*/
+
+// #ifndef __OPENCV_VIDEOSTAB_HPP__
+// #define __OPENCV_VIDEOSTAB_HPP__
+
+// #include "opencv2/videostab/stabilizer.hpp"
 
 // #endif
 

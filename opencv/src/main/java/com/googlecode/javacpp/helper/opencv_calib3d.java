@@ -30,7 +30,7 @@ import static com.googlecode.javacpp.opencv_calib3d.cvCreateStereoBMState;
 import static com.googlecode.javacpp.opencv_calib3d.cvReleasePOSITObject;
 import static com.googlecode.javacpp.opencv_calib3d.cvReleaseStereoBMState;
 
-public class opencv_calib3d {
+public class opencv_calib3d extends com.googlecode.javacpp.presets.opencv_calib3d {
 
     public static abstract class AbstractCvPOSITObject extends Pointer {
         public AbstractCvPOSITObject() { }

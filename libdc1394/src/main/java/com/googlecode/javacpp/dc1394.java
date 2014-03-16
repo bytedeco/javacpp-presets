@@ -9,7 +9,7 @@ import java.nio.*;
 public class dc1394 extends com.googlecode.javacpp.presets.dc1394 {
     static { Loader.load(); }
 
-// Parsed from header file /usr/local/include/dc1394/dc1394.h
+// Parsed from /usr/local/include/dc1394/dc1394.h
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -70,7 +70,7 @@ public class dc1394 extends com.googlecode.javacpp.presets.dc1394 {
 // #endif
 
 
-// Parsed from header file /usr/local/include/dc1394/types.h
+// Parsed from /usr/local/include/dc1394/types.h
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -260,7 +260,7 @@ public static final int
 // #endif
 
 
-// Parsed from header file /usr/local/include/dc1394/log.h
+// Parsed from /usr/local/include/dc1394/log.h
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -536,7 +536,7 @@ public static native void dc1394_log_debug(String format);
 // #endif
 
 
-// Parsed from header file /usr/local/include/dc1394/camera.h
+// Parsed from /usr/local/include/dc1394/camera.h
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -825,7 +825,7 @@ public static native @Cast("dc1394error_t") int dc1394_camera_print_info(dc1394c
 // #endif
 
 
-// Parsed from header file /usr/local/include/dc1394/control.h
+// Parsed from /usr/local/include/dc1394/control.h
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -1032,11 +1032,11 @@ public static class dc1394feature_info_t extends Pointer {
     public native @Cast("dc1394bool_t") int polarity_capable(); public native dc1394feature_info_t polarity_capable(int polarity_capable);
     public native @Cast("dc1394switch_t") int is_on(); public native dc1394feature_info_t is_on(int is_on);
     public native @Cast("dc1394feature_mode_t") int current_mode(); public native dc1394feature_info_t current_mode(int current_mode);
-    public native @ByVal dc1394feature_modes_t modes(); public native dc1394feature_info_t modes(dc1394feature_modes_t modes);
-    public native @ByVal dc1394trigger_modes_t trigger_modes(); public native dc1394feature_info_t trigger_modes(dc1394trigger_modes_t trigger_modes);
+    public native @ByRef dc1394feature_modes_t modes(); public native dc1394feature_info_t modes(dc1394feature_modes_t modes);
+    public native @ByRef dc1394trigger_modes_t trigger_modes(); public native dc1394feature_info_t trigger_modes(dc1394trigger_modes_t trigger_modes);
     public native @Cast("dc1394trigger_mode_t") int trigger_mode(); public native dc1394feature_info_t trigger_mode(int trigger_mode);
     public native @Cast("dc1394trigger_polarity_t") int trigger_polarity(); public native dc1394feature_info_t trigger_polarity(int trigger_polarity);
-    public native @ByVal dc1394trigger_sources_t trigger_sources(); public native dc1394feature_info_t trigger_sources(dc1394trigger_sources_t trigger_sources);
+    public native @ByRef dc1394trigger_sources_t trigger_sources(); public native dc1394feature_info_t trigger_sources(dc1394trigger_sources_t trigger_sources);
     public native @Cast("dc1394trigger_source_t") int trigger_source(); public native dc1394feature_info_t trigger_source(int trigger_source);
     public native @Cast("uint32_t") int min(); public native dc1394feature_info_t min(int min);
     public native @Cast("uint32_t") int max(); public native dc1394feature_info_t max(int max);
@@ -1069,7 +1069,7 @@ public static class dc1394featureset_t extends Pointer {
         return (dc1394featureset_t)super.position(position);
     }
 
-    public native @ByVal dc1394feature_info_t feature(int i); public native dc1394featureset_t feature(int i, dc1394feature_info_t feature);
+    public native @ByRef dc1394feature_info_t feature(int i); public native dc1394featureset_t feature(int i, dc1394feature_info_t feature);
     @MemberGetter public native dc1394feature_info_t feature();
 }
 
@@ -1376,7 +1376,7 @@ public static native @Cast("dc1394error_t") int dc1394_memory_load(dc1394camera_
 // #endif /* __DC1394_CONTROL_H__ */
 
 
-// Parsed from header file /usr/local/include/dc1394/capture.h
+// Parsed from /usr/local/include/dc1394/capture.h
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -1486,7 +1486,7 @@ public static native @Cast("dc1394bool_t") int dc1394_capture_is_frame_corrupt(d
 // #endif
 
 
-// Parsed from header file /usr/local/include/dc1394/conversions.h
+// Parsed from /usr/local/include/dc1394/conversions.h
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -1711,7 +1711,7 @@ public static native @Cast("dc1394error_t") int dc1394_deinterlace_stereo_frames
 
 
 
-// Parsed from header file /usr/local/include/dc1394/format7.h
+// Parsed from /usr/local/include/dc1394/format7.h
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -1776,7 +1776,7 @@ public static class dc1394format7mode_t extends Pointer {
     public native @Cast("uint32_t") int unit_pos_x(); public native dc1394format7mode_t unit_pos_x(int unit_pos_x);
     public native @Cast("uint32_t") int unit_pos_y(); public native dc1394format7mode_t unit_pos_y(int unit_pos_y);
 
-    public native @ByVal dc1394color_codings_t color_codings(); public native dc1394format7mode_t color_codings(dc1394color_codings_t color_codings);
+    public native @ByRef dc1394color_codings_t color_codings(); public native dc1394format7mode_t color_codings(dc1394color_codings_t color_codings);
     public native @Cast("dc1394color_coding_t") int color_coding(); public native dc1394format7mode_t color_coding(int color_coding);
 
     public native @Cast("uint32_t") int pixnum(); public native dc1394format7mode_t pixnum(int pixnum);
@@ -1806,7 +1806,7 @@ public static class dc1394format7modeset_t extends Pointer {
         return (dc1394format7modeset_t)super.position(position);
     }
 
-    public native @ByVal dc1394format7mode_t mode(int i); public native dc1394format7modeset_t mode(int i, dc1394format7mode_t mode);
+    public native @ByRef dc1394format7mode_t mode(int i); public native dc1394format7modeset_t mode(int i, dc1394format7mode_t mode);
     @MemberGetter public native dc1394format7mode_t mode();
 }
 
@@ -1997,7 +1997,7 @@ public static native @Cast("dc1394error_t") int dc1394_format7_get_roi(dc1394cam
 // #endif
 
 
-// Parsed from header file /usr/local/include/dc1394/iso.h
+// Parsed from /usr/local/include/dc1394/iso.h
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -2170,7 +2170,7 @@ public static native @Cast("dc1394error_t") int dc1394_iso_release_all(dc1394cam
 // #endif
 
 
-// Parsed from header file /usr/local/include/dc1394/register.h
+// Parsed from /usr/local/include/dc1394/register.h
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -2411,7 +2411,7 @@ public static native @Cast("dc1394error_t") int dc1394_set_strobe_register(dc139
 // #endif /* __DC1394_REGISTER_H__ */
 
 
-// Parsed from header file /usr/local/include/dc1394/video.h
+// Parsed from /usr/local/include/dc1394/video.h
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -2711,7 +2711,7 @@ public static native @Cast("dc1394error_t") int dc1394_video_get_bandwidth_usage
 // #endif
 
 
-// Parsed from header file /usr/local/include/dc1394/utils.h
+// Parsed from /usr/local/include/dc1394/utils.h
 
 /*
  * 1394-Based Digital Camera Control Library

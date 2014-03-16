@@ -16,7 +16,7 @@ import static com.googlecode.javacpp.swscale.*;
 public class avfilter extends com.googlecode.javacpp.presets.avfilter {
     static { Loader.load(); }
 
-// Parsed from header file /usr/local/include/libavfilter/avfilter.h
+// Parsed from /usr/local/include/libavfilter/avfilter.h
 
 /*
  * filter layer
@@ -216,7 +216,7 @@ public static class AVFilterBufferRefVideoProps extends Pointer {
     /** image height */
     public native int h(); public native AVFilterBufferRefVideoProps h(int h);
     /** sample aspect ratio */
-    public native @ByVal AVRational sample_aspect_ratio(); public native AVFilterBufferRefVideoProps sample_aspect_ratio(AVRational sample_aspect_ratio);
+    public native @ByRef AVRational sample_aspect_ratio(); public native AVFilterBufferRefVideoProps sample_aspect_ratio(AVRational sample_aspect_ratio);
     /** is frame interlaced */
     public native int interlaced(); public native AVFilterBufferRefVideoProps interlaced(int interlaced);
     /** field order */
@@ -980,7 +980,7 @@ public static class AVFilterLink extends Pointer {
     /** agreed upon image height */
     public native int h(); public native AVFilterLink h(int h);
     /** agreed upon sample aspect ratio */
-    public native @ByVal AVRational sample_aspect_ratio(); public native AVFilterLink sample_aspect_ratio(AVRational sample_aspect_ratio);
+    public native @ByRef AVRational sample_aspect_ratio(); public native AVFilterLink sample_aspect_ratio(AVRational sample_aspect_ratio);
     /* These parameters apply only to audio */
     /** channel layout of current buffer (see libavutil/channel_layout.h) */
     public native @Cast("uint64_t") long channel_layout(); public native AVFilterLink channel_layout(long channel_layout);
@@ -997,7 +997,7 @@ public static class AVFilterLink extends Pointer {
      * change only the output timebase, while the timebase of the
      * input link is assumed to be an unchangeable property.
      */
-    public native @ByVal AVRational time_base(); public native AVFilterLink time_base(AVRational time_base);
+    public native @ByRef AVRational time_base(); public native AVFilterLink time_base(AVRational time_base);
 
     /*****************************************************************
      * All fields below this line are not part of the public API. They
@@ -1072,7 +1072,7 @@ public static class AVFilterLink extends Pointer {
      * Sinks can use it to set a default output frame rate.
      * It is similar to the r_frame_rate field in AVStream.
      */
-    public native @ByVal AVRational frame_rate(); public native AVFilterLink frame_rate(AVRational frame_rate);
+    public native @ByRef AVRational frame_rate(); public native AVFilterLink frame_rate(AVRational frame_rate);
 
     /**
      * Buffer partially filled with samples to achieve a fixed/minimum size.
@@ -1897,7 +1897,7 @@ public static native int avfilter_graph_request_oldest(AVFilterGraph graph);
 // #endif /* AVFILTER_AVFILTER_H */
 
 
-// Parsed from header file /usr/local/include/libavfilter/buffersink.h
+// Parsed from /usr/local/include/libavfilter/buffersink.h
 
 /*
  * This file is part of FFmpeg.
@@ -2114,7 +2114,7 @@ public static native int av_buffersink_get_samples(AVFilterContext ctx, AVFrame 
 // #endif /* AVFILTER_BUFFERSINK_H */
 
 
-// Parsed from header file /usr/local/include/libavfilter/buffersrc.h
+// Parsed from /usr/local/include/libavfilter/buffersrc.h
 
 /*
  *

@@ -43,7 +43,7 @@ import static com.googlecode.javacpp.opencv_legacy.cvReleaseFaceTracker;
 import static com.googlecode.javacpp.opencv_legacy.cvReleaseGLCM;
 import static com.googlecode.javacpp.opencv_legacy.cvReleaseObsInfo;
 
-public class opencv_legacy {
+public class opencv_legacy extends com.googlecode.javacpp.presets.opencv_legacy {
 
     public static abstract class AbstractCvImgObsInfo extends Pointer {
         public AbstractCvImgObsInfo() { }

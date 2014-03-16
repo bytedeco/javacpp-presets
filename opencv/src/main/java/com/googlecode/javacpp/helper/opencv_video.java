@@ -27,7 +27,7 @@ import com.googlecode.javacpp.opencv_video.*;
 import static com.googlecode.javacpp.opencv_video.cvCreateKalman;
 import static com.googlecode.javacpp.opencv_video.cvReleaseKalman;
 
-public class opencv_video {
+public class opencv_video extends com.googlecode.javacpp.presets.opencv_video {
 
     public static abstract class AbstractCvKalman extends Pointer {
         public AbstractCvKalman() { }

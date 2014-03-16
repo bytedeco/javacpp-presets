@@ -28,13 +28,13 @@ import com.googlecode.javacpp.annotation.Properties;
  *
  * @author Samuel Audet
  */
-@Properties(inherit={opencv_calib3d.class, opencv_features2d.class, opencv_video.class, opencv_ml.class}, target="com.googlecode.javacpp.opencv_legacy", value={
+@Properties(inherit={opencv_calib3d.class, opencv_features2d.class, opencv_video.class, opencv_ml.class}, value={
     @Platform(include={"<opencv2/legacy/blobtrack.hpp>", "<opencv2/legacy/compat.hpp>", "<opencv2/legacy/legacy.hpp>"}, link="opencv_legacy@.2.4"),
-    @Platform(value="windows", link="opencv_legacy248") })
+    @Platform(value="windows", link="opencv_legacy248") },
+        target="com.googlecode.javacpp.opencv_legacy", helper="com.googlecode.javacpp.helper.opencv_legacy")
 public class opencv_legacy implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        infoMap.put(new Parser.Info().javaText("import com.googlecode.javacpp.helper.opencv_legacy.*;"))
-               .put(new Parser.Info("cv_stricmp", "cv_strnicmp", "strdup", "stricmp", "cv_stricmp", "cv_strnicmp").cppTypes())
+        infoMap.put(new Parser.Info("cv_stricmp", "cv_strnicmp", "strdup", "stricmp", "cv_stricmp", "cv_strnicmp").cppTypes())
                .put(new Parser.Info("cvCreateImageData", "cvReleaseImageData", "cvmAlloc", "cvmFree", "cvmAllocArray", "cvmFreeArray").cppTypes("void", "CvArr*"))
                .put(new Parser.Info("cvSetImageData").cppTypes("void", "CvArr*", "void*", "int"))
                .put(new Parser.Info("cvGetImageRawData").cppTypes("void", "CvArr*", "uchar**", "int*", "CvSize*"))
@@ -68,13 +68,13 @@ public class opencv_legacy implements Parser.InfoMapper {
                .put(new Parser.Info("CV_IS_SET_ELEM_EXISTS").cppTypes("bool", "CvSetElem*"))
                .put(new Parser.Info("cvMake2DPoints", "cvMake3DPoints", "cvConvertPointsHomogenious").cppTypes("void", "CvMat*", "CvMat*"))
                .put(new Parser.Info("cvWarpPerspectiveQMatrix").cppTypes("CvMat*", "CvPoint2D32f*", "CvPoint2D32f*", "CvMat*"))
-               .put(new Parser.Info("CvImgObsInfo").parent("AbstractCvImgObsInfo"))
-               .put(new Parser.Info("CvEHMM").parent("AbstractCvEHMM"))
-               .put(new Parser.Info("CvGLCM").parent("AbstractCvGLCM"))
-               .put(new Parser.Info("CvFaceTracker").parent("AbstractCvFaceTracker"))
-               .put(new Parser.Info("CvConDensation").parent("AbstractCvConDensation"))
-               .put(new Parser.Info("CvBGStatModel").parent("AbstractCvBGStatModel"))
-               .put(new Parser.Info("CvBGCodeBookModel").parent("AbstractCvBGCodeBookModel"))
+               .put(new Parser.Info("CvImgObsInfo").base("AbstractCvImgObsInfo"))
+               .put(new Parser.Info("CvEHMM").base("AbstractCvEHMM"))
+               .put(new Parser.Info("CvGLCM").base("AbstractCvGLCM"))
+               .put(new Parser.Info("CvFaceTracker").base("AbstractCvFaceTracker"))
+               .put(new Parser.Info("CvConDensation").base("AbstractCvConDensation"))
+               .put(new Parser.Info("CvBGStatModel").base("AbstractCvBGStatModel"))
+               .put(new Parser.Info("CvBGCodeBookModel").base("AbstractCvBGCodeBookModel"))
                .put(new Parser.Info("CV_STEREO_GC_OCCLUDED").translate(false));
     }
 }

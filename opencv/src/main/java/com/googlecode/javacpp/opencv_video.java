@@ -2,7 +2,6 @@
 
 package com.googlecode.javacpp;
 
-import com.googlecode.javacpp.helper.opencv_video.*;
 import com.googlecode.javacpp.*;
 import com.googlecode.javacpp.annotation.*;
 import java.nio.*;
@@ -10,10 +9,10 @@ import java.nio.*;
 import static com.googlecode.javacpp.opencv_core.*;
 import static com.googlecode.javacpp.opencv_imgproc.*;
 
-public class opencv_video extends com.googlecode.javacpp.presets.opencv_video {
+public class opencv_video extends com.googlecode.javacpp.helper.opencv_video {
     static { Loader.load(); }
 
-// Parsed from header file /usr/local/include/opencv2/video/video.hpp
+// Parsed from /usr/local/include/opencv2/video/video.hpp
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -73,7 +72,7 @@ public class opencv_video extends com.googlecode.javacpp.presets.opencv_video {
 // #endif //__OPENCV_VIDEO_HPP__
 
 
-// Parsed from header file /usr/local/include/opencv2/video/tracking.hpp
+// Parsed from /usr/local/include/opencv2/video/tracking.hpp
 
 /** \file tracking.hpp
  \brief The Object and Feature Tracking
@@ -159,8 +158,8 @@ public static native void cvCalcOpticalFlowPyrLK( @Const CvArr prev, @Const CvAr
                                      int flags );
 public static native void cvCalcOpticalFlowPyrLK( @Const CvArr prev, @Const CvArr curr,
                                      CvArr prev_pyr, CvArr curr_pyr,
-                                     @Const CvPoint2D32f prev_features,
-                                     CvPoint2D32f curr_features,
+                                     @Cast("const CvPoint2D32f*") FloatBuffer prev_features,
+                                     @Cast("CvPoint2D32f*") FloatBuffer curr_features,
                                      int count,
                                      @ByVal CvSize win_size,
                                      int level,
@@ -170,8 +169,8 @@ public static native void cvCalcOpticalFlowPyrLK( @Const CvArr prev, @Const CvAr
                                      int flags );
 public static native void cvCalcOpticalFlowPyrLK( @Const CvArr prev, @Const CvArr curr,
                                      CvArr prev_pyr, CvArr curr_pyr,
-                                     @Const CvPoint2D32f prev_features,
-                                     CvPoint2D32f curr_features,
+                                     @Cast("const CvPoint2D32f*") float[] prev_features,
+                                     @Cast("CvPoint2D32f*") float[] curr_features,
                                      int count,
                                      @ByVal CvSize win_size,
                                      int level,
@@ -193,16 +192,16 @@ public static native void cvCalcAffineFlowPyrLK( @Const CvArr prev, @Const CvArr
                                     @ByVal CvTermCriteria criteria, int flags );
 public static native void cvCalcAffineFlowPyrLK( @Const CvArr prev, @Const CvArr curr,
                                     CvArr prev_pyr, CvArr curr_pyr,
-                                    @Const CvPoint2D32f prev_features,
-                                    CvPoint2D32f curr_features,
+                                    @Cast("const CvPoint2D32f*") FloatBuffer prev_features,
+                                    @Cast("CvPoint2D32f*") FloatBuffer curr_features,
                                     FloatBuffer matrices, int count,
                                     @ByVal CvSize win_size, int level,
                                     @Cast("char*") ByteBuffer status, FloatBuffer track_error,
                                     @ByVal CvTermCriteria criteria, int flags );
 public static native void cvCalcAffineFlowPyrLK( @Const CvArr prev, @Const CvArr curr,
                                     CvArr prev_pyr, CvArr curr_pyr,
-                                    @Const CvPoint2D32f prev_features,
-                                    CvPoint2D32f curr_features,
+                                    @Cast("const CvPoint2D32f*") float[] prev_features,
+                                    @Cast("CvPoint2D32f*") float[] curr_features,
                                     float[] matrices, int count,
                                     @ByVal CvSize win_size, int level,
                                     @Cast("char*") byte[] status, float[] track_error,
@@ -239,6 +238,8 @@ public static native void cvUpdateMotionHistory( @Const CvArr silhouette, CvArr 
 public static native void cvCalcMotionGradient( @Const CvArr mhi, CvArr mask, CvArr orientation,
                                      double delta1, double delta2,
                                      int aperture_size/*CV_DEFAULT(3)*/);
+public static native void cvCalcMotionGradient( @Const CvArr mhi, CvArr mask, CvArr orientation,
+                                     double delta1, double delta2);
 
 /* Calculates average motion direction within a selected motion region
    (region can be selected by setting ROIs and/or by composing a valid gradient mask
@@ -262,6 +263,8 @@ public static native CvSeq cvSegmentMotion( @Const CvArr mhi, CvArr seg_mask,
 public static native int cvCamShift( @Const CvArr prob_image, @ByVal CvRect window,
                         @ByVal CvTermCriteria criteria, CvConnectedComp comp,
                         CvBox2D box/*CV_DEFAULT(NULL)*/ );
+public static native int cvCamShift( @Const CvArr prob_image, @ByVal CvRect window,
+                        @ByVal CvTermCriteria criteria, CvConnectedComp comp );
 
 /* Implements MeanShift algorithm - determines object position
    from the object histogram back project */
@@ -330,6 +333,7 @@ public static class CvKalman extends AbstractCvKalman {
 /* Creates Kalman filter and sets A, B, Q, R and state to some initial values */
 public static native CvKalman cvCreateKalman( int dynam_params, int measure_params,
                                  int control_params/*CV_DEFAULT(0)*/);
+public static native CvKalman cvCreateKalman( int dynam_params, int measure_params);
 
 /* Releases Kalman filter state */
 public static native void cvReleaseKalman( @Cast("CvKalman**") PointerPointer kalman);
@@ -338,6 +342,7 @@ public static native void cvReleaseKalman( @ByPtrPtr CvKalman kalman);
 /* Updates Kalman filter by time (predicts future state of the system) */
 public static native @Const CvMat cvKalmanPredict( CvKalman kalman,
                                       @Const CvMat control/*CV_DEFAULT(NULL)*/);
+public static native @Const CvMat cvKalmanPredict( CvKalman kalman);
 
 /* Updates Kalman filter by measurement
    (corrects state of the system and internal matrices) */
@@ -357,6 +362,9 @@ public static native @Const CvMat cvKalmanUpdateByMeasurement(CvKalman arg1, CvM
                                       @ByVal Mat orientation,
                                       double delta1, double delta2,
                                       int apertureSize/*=3*/ );
+@Namespace("cv") public static native void calcMotionGradient( @ByVal Mat mhi, @ByVal Mat mask,
+                                      @ByVal Mat orientation,
+                                      double delta1, double delta2 );
 
 /** computes the global orientation of the selected motion history image part */
 @Namespace("cv") public static native double calcGlobalOrientation( @ByVal Mat orientation, @ByVal Mat mask,
@@ -397,41 +405,45 @@ public static native @Const CvMat cvKalmanUpdateByMeasurement(CvKalman arg1, CvM
     /** the full constructor taking the dimensionality of the state, of the measurement and of the control vector */
     public KalmanFilter(int dynamParams, int measureParams, int controlParams/*=0*/, int type/*=CV_32F*/) { allocate(dynamParams, measureParams, controlParams, type); }
     private native void allocate(int dynamParams, int measureParams, int controlParams/*=0*/, int type/*=CV_32F*/);
+    public KalmanFilter(int dynamParams, int measureParams) { allocate(dynamParams, measureParams); }
+    private native void allocate(int dynamParams, int measureParams);
     /** re-initializes Kalman filter. The previous content is destroyed. */
     public native void init(int dynamParams, int measureParams, int controlParams/*=0*/, int type/*=CV_32F*/);
+    public native void init(int dynamParams, int measureParams);
 
     /** computes predicted state */
     public native @Const @ByRef Mat predict(@Const @ByRef Mat control/*=Mat()*/);
+    public native @Const @ByRef Mat predict();
     /** updates the predicted state from the measurement */
     public native @Const @ByRef Mat correct(@Const @ByRef Mat measurement);
 
     /** predicted state (x'(k)): x(k)=A*x(k-1)+B*u(k) */
-    public native @ByVal Mat statePre(); public native KalmanFilter statePre(Mat statePre);
+    public native @ByRef Mat statePre(); public native KalmanFilter statePre(Mat statePre);
     /** corrected state (x(k)): x(k)=x'(k)+K(k)*(z(k)-H*x'(k)) */
-    public native @ByVal Mat statePost(); public native KalmanFilter statePost(Mat statePost);
+    public native @ByRef Mat statePost(); public native KalmanFilter statePost(Mat statePost);
     /** state transition matrix (A) */
-    public native @ByVal Mat transitionMatrix(); public native KalmanFilter transitionMatrix(Mat transitionMatrix);
+    public native @ByRef Mat transitionMatrix(); public native KalmanFilter transitionMatrix(Mat transitionMatrix);
     /** control matrix (B) (not used if there is no control) */
-    public native @ByVal Mat controlMatrix(); public native KalmanFilter controlMatrix(Mat controlMatrix);
+    public native @ByRef Mat controlMatrix(); public native KalmanFilter controlMatrix(Mat controlMatrix);
     /** measurement matrix (H) */
-    public native @ByVal Mat measurementMatrix(); public native KalmanFilter measurementMatrix(Mat measurementMatrix);
+    public native @ByRef Mat measurementMatrix(); public native KalmanFilter measurementMatrix(Mat measurementMatrix);
     /** process noise covariance matrix (Q) */
-    public native @ByVal Mat processNoiseCov(); public native KalmanFilter processNoiseCov(Mat processNoiseCov);
+    public native @ByRef Mat processNoiseCov(); public native KalmanFilter processNoiseCov(Mat processNoiseCov);
     /** measurement noise covariance matrix (R) */
-    public native @ByVal Mat measurementNoiseCov(); public native KalmanFilter measurementNoiseCov(Mat measurementNoiseCov);
+    public native @ByRef Mat measurementNoiseCov(); public native KalmanFilter measurementNoiseCov(Mat measurementNoiseCov);
     /** priori error estimate covariance matrix (P'(k)): P'(k)=A*P(k-1)*At + Q)*/
-    public native @ByVal Mat errorCovPre(); public native KalmanFilter errorCovPre(Mat errorCovPre);
+    public native @ByRef Mat errorCovPre(); public native KalmanFilter errorCovPre(Mat errorCovPre);
     /** Kalman gain matrix (K(k)): K(k)=P'(k)*Ht*inv(H*P'(k)*Ht+R) */
-    public native @ByVal Mat gain(); public native KalmanFilter gain(Mat gain);
+    public native @ByRef Mat gain(); public native KalmanFilter gain(Mat gain);
     /** posteriori error estimate covariance matrix (P(k)): P(k)=(I-K(k)*H)*P'(k) */
-    public native @ByVal Mat errorCovPost(); public native KalmanFilter errorCovPost(Mat errorCovPost);
+    public native @ByRef Mat errorCovPost(); public native KalmanFilter errorCovPost(Mat errorCovPost);
 
     // temporary matrices
-    public native @ByVal Mat temp1(); public native KalmanFilter temp1(Mat temp1);
-    public native @ByVal Mat temp2(); public native KalmanFilter temp2(Mat temp2);
-    public native @ByVal Mat temp3(); public native KalmanFilter temp3(Mat temp3);
-    public native @ByVal Mat temp4(); public native KalmanFilter temp4(Mat temp4);
-    public native @ByVal Mat temp5(); public native KalmanFilter temp5(Mat temp5);
+    public native @ByRef Mat temp1(); public native KalmanFilter temp1(Mat temp1);
+    public native @ByRef Mat temp2(); public native KalmanFilter temp2(Mat temp2);
+    public native @ByRef Mat temp3(); public native KalmanFilter temp3(Mat temp3);
+    public native @ByRef Mat temp4(); public native KalmanFilter temp4(Mat temp4);
+    public native @ByRef Mat temp5(); public native KalmanFilter temp5(Mat temp5);
 }
 
 /** enum cv:: */
@@ -445,6 +457,8 @@ public static final int
                                          @ByVal Size winSize, int maxLevel, @Cast("bool") boolean withDerivatives/*=true*/,
                                          int pyrBorder/*=BORDER_REFLECT_101*/, int derivBorder/*=BORDER_CONSTANT*/,
                                          @Cast("bool") boolean tryReuseInputImage/*=true*/);
+@Namespace("cv") public static native int buildOpticalFlowPyramid(@ByVal Mat img, @ByVal MatVector pyramid,
+                                         @ByVal Size winSize, int maxLevel);
 
 /** computes sparse optical flow using multi-scale Lucas-Kanade algorithm */
 @Namespace("cv") public static native void calcOpticalFlowPyrLK( @ByVal Mat prevImg, @ByVal Mat nextImg,
@@ -453,6 +467,9 @@ public static final int
                            @ByVal Size winSize/*=Size(21,21)*/, int maxLevel/*=3*/,
                            @ByVal TermCriteria criteria/*=TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 30, 0.01)*/,
                            int flags/*=0*/, double minEigThreshold/*=1e-4*/);
+@Namespace("cv") public static native void calcOpticalFlowPyrLK( @ByVal Mat prevImg, @ByVal Mat nextImg,
+                           @ByVal Mat prevPts, @ByVal Mat nextPts,
+                           @ByVal Mat status, @ByVal Mat err);
 
 /** computes dense optical flow using Farneback algorithm */
 @Namespace("cv") public static native void calcOpticalFlowFarneback( @ByVal Mat prev, @ByVal Mat next,
@@ -512,7 +529,7 @@ public static final int
 // #endif
 
 
-// Parsed from header file /usr/local/include/opencv2/video/background_segm.hpp
+// Parsed from /usr/local/include/opencv2/video/background_segm.hpp
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -580,8 +597,10 @@ public static final int
     }
 
     /** the virtual destructor */
-    /** the update operator that takes the next video frame and returns the current foreground mask as 8-bit binary image. */ public native @Name("operator()") void apply(@ByVal Mat image, @ByVal Mat fgmask,
-                                              double learningRate/*=0*/);
+    /** the update operator that takes the next video frame and returns the current foreground mask as 8-bit binary image. */
+    public native @Name("operator()") void apply(@ByVal Mat image, @ByVal Mat fgmask,
+                                                  double learningRate/*=0*/);
+    public native @Name("operator()") void apply(@ByVal Mat image, @ByVal Mat fgmask);
 
     /** computes a background image */
     public native void getBackgroundImage(@ByVal Mat backgroundImage);
@@ -613,9 +632,12 @@ public static final int
     /** the full constructor that takes the length of the history, the number of gaussian mixtures, the background ratio parameter and the noise strength */
     public BackgroundSubtractorMOG(int history, int nmixtures, double backgroundRatio, double noiseSigma/*=0*/) { allocate(history, nmixtures, backgroundRatio, noiseSigma); }
     private native void allocate(int history, int nmixtures, double backgroundRatio, double noiseSigma/*=0*/);
+    public BackgroundSubtractorMOG(int history, int nmixtures, double backgroundRatio) { allocate(history, nmixtures, backgroundRatio); }
+    private native void allocate(int history, int nmixtures, double backgroundRatio);
     /** the destructor */
     /** the update operator */
     public native @Name("operator()") void apply(@ByVal Mat image, @ByVal Mat fgmask, double learningRate/*=0*/);
+    public native @Name("operator()") void apply(@ByVal Mat image, @ByVal Mat fgmask);
 
     /** re-initiaization method */
     public native void initialize(@ByVal Size frameSize, int frameType);
@@ -646,9 +668,12 @@ public static final int
     /** the full constructor that takes the length of the history, the number of gaussian mixtures, the background ratio parameter and the noise strength */
     public BackgroundSubtractorMOG2(int history,  float varThreshold, @Cast("bool") boolean bShadowDetection/*=true*/) { allocate(history, varThreshold, bShadowDetection); }
     private native void allocate(int history,  float varThreshold, @Cast("bool") boolean bShadowDetection/*=true*/);
+    public BackgroundSubtractorMOG2(int history,  float varThreshold) { allocate(history, varThreshold); }
+    private native void allocate(int history,  float varThreshold);
     /** the destructor */
     /** the update operator */
     public native @Name("operator()") void apply(@ByVal Mat image, @ByVal Mat fgmask, double learningRate/*=-1*/);
+    public native @Name("operator()") void apply(@ByVal Mat image, @ByVal Mat fgmask);
 
     /** computes a background image which are the mean of all background gaussians */
     public native void getBackgroundImage(@ByVal Mat backgroundImage);
@@ -699,6 +724,7 @@ public static final int
      * @param fgmask Output mask image representing foreground and background pixels
      */
     public native @Name("operator()") void apply(@ByVal Mat image, @ByVal Mat fgmask, double learningRate/*=-1.0*/);
+    public native @Name("operator()") void apply(@ByVal Mat image, @ByVal Mat fgmask);
 
     /**
      * Releases all inner buffers.

@@ -11,7 +11,7 @@
 
   <artifactId>distribution</artifactId>
   <packaging>pom</packaging>
-  <name>Distribution of JavaCPP Presets</name>
+  <name>JavaCPP Presets Distribution</name>
 
   <build>
     <finalName>${project.parent.artifactId}</finalName>

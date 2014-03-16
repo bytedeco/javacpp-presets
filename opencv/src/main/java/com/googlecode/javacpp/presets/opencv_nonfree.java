@@ -29,9 +29,11 @@ import com.googlecode.javacpp.annotation.Properties;
  * @author Samuel Audet
  */
 @Properties(inherit={opencv_calib3d.class, opencv_features2d.class, opencv_objdetect.class,
-        opencv_photo.class, opencv_ml.class, opencv_legacy.class, opencv_video.class}, target="com.googlecode.javacpp.opencv_nonfree", value={
-    @Platform(include={"<opencv2/nonfree/nonfree.hpp>", "<opencv2/nonfree/features2d.hpp>"}, link="opencv_nonfree@.2.4", preload={"opencv_gpu@.2.4", "opencv_ocl@.2.4"}),
-    @Platform(value="windows", link="opencv_nonfree248", preload={"opencv_gpu248", "opencv_ocl248"}) })
+        opencv_photo.class, opencv_ml.class, opencv_legacy.class, opencv_video.class}, value={
+    @Platform(include={"<opencv2/nonfree/nonfree.hpp>", "<opencv2/nonfree/features2d.hpp>"},
+        link="opencv_nonfree@.2.4", preload={"opencv_gpu@.2.4", "opencv_ocl@.2.4"}),
+    @Platform(value="windows", link="opencv_nonfree248", preload={"opencv_gpu248", "opencv_ocl248"}) },
+        target="com.googlecode.javacpp.opencv_nonfree")
 public class opencv_nonfree implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
     }

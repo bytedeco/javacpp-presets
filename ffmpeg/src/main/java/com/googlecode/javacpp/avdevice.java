@@ -17,7 +17,7 @@ import static com.googlecode.javacpp.avfilter.*;
 public class avdevice extends com.googlecode.javacpp.presets.avdevice {
     static { Loader.load(); }
 
-// Parsed from header file /usr/local/include/libavdevice/avdevice.h
+// Parsed from /usr/local/include/libavdevice/avdevice.h
 
 /*
  * This file is part of FFmpeg.

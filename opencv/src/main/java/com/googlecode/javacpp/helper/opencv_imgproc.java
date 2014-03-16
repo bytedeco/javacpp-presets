@@ -33,7 +33,7 @@ import static com.googlecode.javacpp.opencv_imgproc.cvCreateStructuringElementEx
 import static com.googlecode.javacpp.opencv_imgproc.cvReleaseHist;
 import static com.googlecode.javacpp.opencv_imgproc.cvReleaseStructuringElement;
 
-public class opencv_imgproc {
+public class opencv_imgproc extends com.googlecode.javacpp.presets.opencv_imgproc {
 
     public static abstract class AbstractCvMoments extends Pointer {
         public AbstractCvMoments() { }
@@ -46,6 +46,15 @@ public class opencv_imgproc {
                 }
             };
         }
+    }
+
+    public static int cvFindContours(CvArr image, CvMemStorage storage, CvSeq first_contour,
+            int header_size/*=sizeof(CvContour)*/, int mode/*=CV_RETR_LIST*/, int method/*=CV_CHAIN_APPROX_SIMPLE*/) {
+        return com.googlecode.javacpp.opencv_imgproc.cvFindContours(image, storage, first_contour, header_size, mode, method, CvPoint.ZERO);
+    }
+    public static CvContourScanner cvStartFindContours(CvArr image, CvMemStorage storage,
+            int header_size/*=sizeof(CvContour)*/, int mode/*=CV_RETR_LIST*/, int method/*=CV_CHAIN_APPROX_SIMPLE*/) {
+        return com.googlecode.javacpp.opencv_imgproc.cvStartFindContours(image, storage, header_size, mode, method, CvPoint.ZERO);
     }
 
     public static abstract class AbstractIplConvKernel extends Pointer {

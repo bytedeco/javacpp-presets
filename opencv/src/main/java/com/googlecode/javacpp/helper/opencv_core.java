@@ -64,6 +64,7 @@ import static com.googlecode.javacpp.opencv_core.CV_64F;
 import static com.googlecode.javacpp.opencv_core.CV_8S;
 import static com.googlecode.javacpp.opencv_core.CV_8U;
 import static com.googlecode.javacpp.opencv_core.CV_IS_MAT_CONT;
+import static com.googlecode.javacpp.opencv_core.CV_L2;
 import static com.googlecode.javacpp.opencv_core.CV_MAKETYPE;
 import static com.googlecode.javacpp.opencv_core.CV_MAT_CN;
 import static com.googlecode.javacpp.opencv_core.CV_MAT_DEPTH;
@@ -108,7 +109,7 @@ import static com.googlecode.javacpp.opencv_core.cvReleaseMemStorage;
 import static com.googlecode.javacpp.opencv_core.cvReleaseSparseMat;
 import static com.googlecode.javacpp.opencv_core.cvScalar;
 
-public class opencv_core {
+public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
 
     public static class CvArrArray extends PointerPointer<CvArr> {
         static { Loader.load(); }
@@ -362,7 +363,7 @@ public class opencv_core {
 
         public CvSize cvSize() { return com.googlecode.javacpp.opencv_core.cvSize(width(), height()); }
 
-        public ByteBuffer   getByteBuffer  (int index) { return imageData().position(index).capacity(imageSize()).asByteBuffer(); }
+        public ByteBuffer   getByteBuffer  (int index) { return imageData().position(index).capacity(imageSize() - index).asByteBuffer(); }
         public ShortBuffer  getShortBuffer (int index) { return getByteBuffer(index*2).asShortBuffer();  }
         public IntBuffer    getIntBuffer   (int index) { return getByteBuffer(index*4).asIntBuffer();    }
         public FloatBuffer  getFloatBuffer (int index) { return getByteBuffer(index*4).asFloatBuffer();  }
@@ -1076,7 +1077,7 @@ public class opencv_core {
         public int matType() {
             return CV_MAT_TYPE(type());
         }
-        public void matType(int depth, int cn) {
+        public void type(int depth, int cn) {
             type(CV_MAKETYPE(depth, cn) | CV_MAT_MAGIC_VAL);
         }
         public int depth() {
@@ -2118,8 +2119,6 @@ public class opencv_core {
         }
     }
 
-    public static final CvAttrList CV_ATTR_LIST_EMPTY = new CvAttrList();
-
     public static abstract class AbstractCvGraphScanner extends Pointer {
         public AbstractCvGraphScanner() { }
         public AbstractCvGraphScanner(Pointer p) { super(p); }
@@ -2139,6 +2138,71 @@ public class opencv_core {
             ReleaseDeallocator(CvGraphScanner p) { super(p); }
             @Override public void deallocate() { cvReleaseGraphScanner(this); }
         }
+    }
+
+    public static abstract class AbstractCvFont extends Pointer {
+        public AbstractCvFont() { }
+        public AbstractCvFont(Pointer p) { super(p); }
+
+//        public AbstractCvFont(int font_face, double hscale, double vscale,
+//            double shear, int thickness, int line_type) {
+//            allocate();
+//            cvInitFont(this, font_face, hscale, vscale, shear, thickness, line_type);
+//        }
+//        public AbstractCvFont(int font_face, double scale, int thickness) {
+//            allocate();
+//            cvInitFont(this, font_face, scale, scale, 0, thickness, CV_AA);
+//        }
+    }
+
+    public static void cvFillPoly(CvArr img, CvPoint[] pts, int[] npts,
+            int contours, CvScalar color, int line_type/*=8*/, int shift/*=0*/) {
+        com.googlecode.javacpp.opencv_core.cvFillPoly(img, new PointerPointer(pts),
+                new IntPointer(npts), contours, color, line_type, shift);
+    }
+
+    public static void cvPolyLine(CvArr img, CvPoint[] pts,
+            int[] npts, int contours, int is_closed, CvScalar color,
+            int thickness/*=1*/, int line_type/*=8*/, int shift/*=0*/) {
+        com.googlecode.javacpp.opencv_core.cvPolyLine(img, new PointerPointer(pts),
+                new IntPointer(npts), contours, is_closed, color, thickness, line_type, shift);
+    }
+
+    public static void cvDrawPolyLine(CvArr img, CvPoint[] pts,
+            int[] npts, int contours, int is_closed, CvScalar color,
+            int thickness/*=1*/, int line_type/*=8*/, int shift/*=0*/) {
+        cvPolyLine(img, pts, npts, contours, is_closed, color, thickness, line_type, shift);
+    }
+
+    public static void cvDrawContours(CvArr img, CvSeq contour, CvScalar external_color,
+            CvScalar hole_color, int max_level, int thickness/*=1*/, int line_type/*=8*/) {
+        com.googlecode.javacpp.opencv_core.cvDrawContours(img, contour, external_color,
+                hole_color, max_level, thickness, line_type, CvPoint.ZERO);
+    }
+
+    public static double cvNorm(CvArr arr1, CvArr arr2) {
+        return com.googlecode.javacpp.opencv_core.cvNorm(arr1, arr2, CV_L2, null);
+    }
+
+
+    public static abstract class AbstractMat extends Pointer {
+        public AbstractMat() { }
+        public AbstractMat(Pointer p) { super(p); }
+
+        public abstract BytePointer data();
+        public abstract int size(int i);
+        public abstract int step(int i);
+
+        public ByteBuffer   getByteBuffer  (int index) { return data().position(index).capacity(step(0)*size(0) - index).asByteBuffer(); }
+        public ShortBuffer  getShortBuffer (int index) { return getByteBuffer(index*2).asShortBuffer();  }
+        public IntBuffer    getIntBuffer   (int index) { return getByteBuffer(index*4).asIntBuffer();    }
+        public FloatBuffer  getFloatBuffer (int index) { return getByteBuffer(index*4).asFloatBuffer();  }
+        public DoubleBuffer getDoubleBuffer(int index) { return getByteBuffer(index*8).asDoubleBuffer(); }
+        public ByteBuffer   getByteBuffer()   { return getByteBuffer  (0); }
+        public ShortBuffer  getShortBuffer()  { return getShortBuffer (0); }
+        public IntBuffer    getIntBuffer()    { return getIntBuffer   (0); }
+        public FloatBuffer  getFloatBuffer()  { return getFloatBuffer (0); }
+        public DoubleBuffer getDoubleBuffer() { return getDoubleBuffer(0); }
     }
 
 }

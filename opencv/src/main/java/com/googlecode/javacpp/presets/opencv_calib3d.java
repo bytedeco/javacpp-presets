@@ -28,13 +28,13 @@ import com.googlecode.javacpp.annotation.Properties;
  *
  * @author Samuel Audet
  */
-@Properties(inherit={opencv_highgui.class, opencv_features2d.class}, target="com.googlecode.javacpp.opencv_calib3d", value={
+@Properties(inherit={opencv_highgui.class, opencv_features2d.class}, value={
     @Platform(include="<opencv2/calib3d/calib3d.hpp>", link="opencv_calib3d@.2.4"),
-    @Platform(value="windows", link="opencv_calib3d248") })
+    @Platform(value="windows", link="opencv_calib3d248") },
+        target="com.googlecode.javacpp.opencv_calib3d", helper="com.googlecode.javacpp.helper.opencv_calib3d")
 public class opencv_calib3d implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        infoMap.put(new Parser.Info().javaText("import com.googlecode.javacpp.helper.opencv_calib3d.*;"))
-               .put(new Parser.Info("CvPOSITObject").parent("AbstractCvPOSITObject"))
-               .put(new Parser.Info("CvStereoBMState").parent("AbstractCvStereoBMState"));
+        infoMap.put(new Parser.Info("CvPOSITObject").base("AbstractCvPOSITObject"))
+               .put(new Parser.Info("CvStereoBMState").base("AbstractCvStereoBMState"));
     }
 }

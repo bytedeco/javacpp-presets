@@ -21,7 +21,7 @@ import static com.googlecode.javacpp.opencv_legacy.*;
 public class opencv_nonfree extends com.googlecode.javacpp.presets.opencv_nonfree {
     static { Loader.load(); }
 
-// Parsed from header file /usr/local/include/opencv2/nonfree/nonfree.hpp
+// Parsed from /usr/local/include/opencv2/nonfree/nonfree.hpp
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -79,7 +79,7 @@ public class opencv_nonfree extends com.googlecode.javacpp.presets.opencv_nonfre
 /* End of file. */
 
 
-// Parsed from header file /usr/local/include/opencv2/nonfree/features2d.hpp
+// Parsed from /usr/local/include/opencv2/nonfree/features2d.hpp
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -137,8 +137,12 @@ public class opencv_nonfree extends com.googlecode.javacpp.presets.opencv_nonfre
 */
 @Namespace("cv") @NoOffset public static class SIFT extends Feature2D {
     static { Loader.load(); }
-    public SIFT() { }
     public SIFT(Pointer p) { super(p); }
+    public SIFT(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public SIFT position(int position) {
+        return (SIFT)super.position(position);
+    }
 
     public SIFT( int nfeatures/*=0*/, int nOctaveLayers/*=3*/,
               double contrastThreshold/*=0.04*/, double edgeThreshold/*=10*/,
@@ -146,6 +150,8 @@ public class opencv_nonfree extends com.googlecode.javacpp.presets.opencv_nonfre
     private native void allocate( int nfeatures/*=0*/, int nOctaveLayers/*=3*/,
               double contrastThreshold/*=0.04*/, double edgeThreshold/*=10*/,
               double sigma/*=1.6*/);
+    public SIFT() { allocate(); }
+    private native void allocate();
 
     /** returns the descriptor size in floats (128) */
     public native int descriptorSize();
@@ -162,6 +168,9 @@ public class opencv_nonfree extends com.googlecode.javacpp.presets.opencv_nonfre
                         @StdVector KeyPoint keypoints,
                         @ByVal Mat descriptors,
                         @Cast("bool") boolean useProvidedKeypoints/*=false*/);
+    public native @Name("operator()") void apply(@ByVal Mat img, @ByVal Mat mask,
+                        @StdVector KeyPoint keypoints,
+                        @ByVal Mat descriptors);
 
     public native AlgorithmInfo info();
 
@@ -195,6 +204,8 @@ public class opencv_nonfree extends com.googlecode.javacpp.presets.opencv_nonfre
     private native void allocate(double hessianThreshold,
                       int nOctaves/*=4*/, int nOctaveLayers/*=2*/,
                       @Cast("bool") boolean extended/*=true*/, @Cast("bool") boolean upright/*=false*/);
+    public SURF(double hessianThreshold) { allocate(hessianThreshold); }
+    private native void allocate(double hessianThreshold);
 
     /** returns the descriptor size in float's (64 or 128) */
     public native int descriptorSize();
@@ -210,6 +221,9 @@ public class opencv_nonfree extends com.googlecode.javacpp.presets.opencv_nonfre
                         @StdVector KeyPoint keypoints,
                         @ByVal Mat descriptors,
                         @Cast("bool") boolean useProvidedKeypoints/*=false*/);
+    public native @Name("operator()") void apply(@ByVal Mat img, @ByVal Mat mask,
+                        @StdVector KeyPoint keypoints,
+                        @ByVal Mat descriptors);
 
     public native AlgorithmInfo info();
 

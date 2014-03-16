@@ -42,7 +42,7 @@ public class dc1394 implements Parser.InfoMapper {
         infoMap.put(new Parser.Info("poll.h").skip(true))
                .put(new Parser.Info("restrict").cppTypes())
                .put(new Parser.Info("YUV2RGB", "RGB2YUV").cppTypes("void", "int", "int", "int", "int&", "int&", "int&"))
-               .put(new Parser.Info("dc1394video_frame_t").parent("dc1394video_frame_t_abstract"));
+               .put(new Parser.Info("dc1394video_frame_t").base("dc1394video_frame_t_abstract"));
     }
 
     public static final short

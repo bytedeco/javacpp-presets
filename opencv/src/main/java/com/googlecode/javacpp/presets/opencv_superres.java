@@ -29,11 +29,10 @@ import com.googlecode.javacpp.annotation.Properties;
  * @author Samuel Audet
  */
 @Properties(inherit=opencv_core.class, value={
-    @Platform(include={"<opencv2/flann/defines.h>", "<opencv2/flann/miniflann.hpp>"}, link="opencv_flann@.2.4"),
-    @Platform(value="windows", link="opencv_flann248") },
-        target="com.googlecode.javacpp.opencv_flann")
-public class opencv_flann implements Parser.InfoMapper {
+    @Platform(include={"<opencv2/superres/superres.hpp>", "<opencv2/superres/optical_flow.hpp>"}, link="opencv_superres@.2.4"),
+    @Platform(value="windows", link="opencv_superres248") },
+        target="com.googlecode.javacpp.opencv_superres")
+public class opencv_superres implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        infoMap.put(new Parser.Info("FLANN_EXPORT", "FLANN_DEPRECATED").cppTypes());
     }
 }

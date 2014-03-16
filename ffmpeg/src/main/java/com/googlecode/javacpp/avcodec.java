@@ -11,7 +11,7 @@ import static com.googlecode.javacpp.avutil.*;
 public class avcodec extends com.googlecode.javacpp.presets.avcodec {
     static { Loader.load(); }
 
-// Parsed from header file /usr/local/include/libavcodec/avcodec.h
+// Parsed from /usr/local/include/libavcodec/avcodec.h
 
 /*
  * copyright (c) 2001 Fabrice Bellard
@@ -1530,7 +1530,7 @@ public static final int FF_COMPRESSION_DEFAULT = -1;
      * - encoding: MUST be set by user.
      * - decoding: Set by libavcodec.
      */
-    public native @ByVal AVRational time_base(); public native AVCodecContext time_base(AVRational time_base);
+    public native @ByRef AVRational time_base(); public native AVCodecContext time_base(AVRational time_base);
 
     /**
      * For some codecs, the time base is closer to the field rate than the frame rate.
@@ -1798,7 +1798,7 @@ public static final int FF_PRED_MEDIAN = 2;
      * - encoding: Set by user.
      * - decoding: Set by libavcodec.
      */
-    public native @ByVal AVRational sample_aspect_ratio(); public native AVCodecContext sample_aspect_ratio(AVRational sample_aspect_ratio);
+    public native @ByRef AVRational sample_aspect_ratio(); public native AVCodecContext sample_aspect_ratio(AVRational sample_aspect_ratio);
 
     /**
      * motion estimation comparison function
@@ -3191,7 +3191,7 @@ public static final int FF_LEVEL_UNKNOWN = -99;
      * - encoding unused.
      * - decoding set by user.
      */
-    public native @ByVal AVRational pkt_timebase(); public native AVCodecContext pkt_timebase(AVRational pkt_timebase);
+    public native @ByRef AVRational pkt_timebase(); public native AVCodecContext pkt_timebase(AVRational pkt_timebase);
 
     /**
      * AVCodecDescriptor
@@ -3679,7 +3679,7 @@ public static class AVSubtitleRect extends Pointer {
      * data+linesize for the bitmap of this subtitle.
      * can be set for text/ass as well once they where rendered
      */
-    public native @ByVal AVPicture pict(); public native AVSubtitleRect pict(AVPicture pict);
+    public native @ByRef AVPicture pict(); public native AVSubtitleRect pict(AVPicture pict);
     public native @Cast("AVSubtitleType") int type(); public native AVSubtitleRect type(int type);
 
     /** 0 terminated plain UTF-8 text */
@@ -5299,7 +5299,6 @@ public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt_of_2(@
 public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt_of_2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
                                             @Cast("AVPixelFormat") int src_pix_fmt, int has_alpha, int[] loss_ptr);
 
-
 // #if AV_HAVE_INCOMPATIBLE_LIBAV_ABI
 // #else
 public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
@@ -5799,7 +5798,7 @@ public static native @Const AVCodecDescriptor avcodec_descriptor_get_by_name(Str
 // #endif /* AVCODEC_AVCODEC_H */
 
 
-// Parsed from header file /usr/local/include/libavcodec/avfft.h
+// Parsed from /usr/local/include/libavcodec/avfft.h
 
 /*
  * This file is part of FFmpeg.

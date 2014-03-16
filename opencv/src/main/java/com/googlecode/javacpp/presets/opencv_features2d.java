@@ -28,9 +28,10 @@ import com.googlecode.javacpp.annotation.Properties;
  *
  * @author Samuel Audet
  */
-@Properties(inherit={opencv_highgui.class, opencv_flann.class}, target="com.googlecode.javacpp.opencv_features2d", value={
+@Properties(inherit={opencv_highgui.class, opencv_flann.class}, value={
     @Platform(include="<opencv2/features2d/features2d.hpp>", link="opencv_features2d@.2.4"),
-    @Platform(value="windows", link="opencv_features2d248") })
+    @Platform(value="windows", link="opencv_features2d248") },
+        target="com.googlecode.javacpp.opencv_features2d")
 public class opencv_features2d implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
         infoMap.put(new Parser.Info().javaText("import com.googlecode.javacpp.annotation.Index;"))

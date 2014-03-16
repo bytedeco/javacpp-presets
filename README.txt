@@ -71,7 +71,7 @@ Please post your suggestions and patches [http://code.google.com/p/javacpp/issue
 
 ==Changes==
 
- * Ported various helper classes from JavaCV
+ * Ported various helper classes and methods from JavaCV
  * Inserted missing dependency entries in the `pom.xml` files of the child modules
  * Added presets for the C++ API of OpenCV 2.4.8, which can now be parsed due to the latest changes in JavaCPP
 

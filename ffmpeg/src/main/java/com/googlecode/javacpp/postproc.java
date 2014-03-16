@@ -11,7 +11,7 @@ import static com.googlecode.javacpp.avutil.*;
 public class postproc extends com.googlecode.javacpp.presets.postproc {
     static { Loader.load(); }
 
-// Parsed from header file /usr/local/include/libpostproc/postprocess.h
+// Parsed from /usr/local/include/libpostproc/postprocess.h
 
 /*
  * Copyright (C) 2001-2003 Michael Niedermayer (michaelni@gmx.at)

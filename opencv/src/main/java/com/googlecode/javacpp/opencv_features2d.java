@@ -73,7 +73,7 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
     }
 }
 
-// Parsed from header file /usr/local/include/opencv2/features2d/features2d.hpp
+// Parsed from /usr/local/include/opencv2/features2d/features2d.hpp
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -157,11 +157,15 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
                 float _response/*=0*/, int _octave/*=0*/, int _class_id/*=-1*/) { allocate(_pt, _size, _angle, _response, _octave, _class_id); }
     private native void allocate(@ByVal Point2f _pt, float _size, float _angle/*=-1*/,
                 float _response/*=0*/, int _octave/*=0*/, int _class_id/*=-1*/);
+    public KeyPoint(@ByVal Point2f _pt, float _size) { allocate(_pt, _size); }
+    private native void allocate(@ByVal Point2f _pt, float _size);
     /** another form of the full constructor */
     public KeyPoint(float x, float y, float _size, float _angle/*=-1*/,
                 float _response/*=0*/, int _octave/*=0*/, int _class_id/*=-1*/) { allocate(x, y, _size, _angle, _response, _octave, _class_id); }
     private native void allocate(float x, float y, float _size, float _angle/*=-1*/,
                 float _response/*=0*/, int _octave/*=0*/, int _class_id/*=-1*/);
+    public KeyPoint(float x, float y, float _size) { allocate(x, y, _size); }
+    private native void allocate(float x, float y, float _size);
 
     public native @Cast("size_t") long hash();
 
@@ -169,6 +173,8 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
     public static native void convert(@StdVector KeyPoint keypoints,
                             @StdVector Point2f points2f,
                             @StdVector IntPointer keypointIndexes/*=vector<int>()*/);
+    public static native void convert(@StdVector KeyPoint keypoints,
+                            @StdVector Point2f points2f);
     public static native void convert(@StdVector KeyPoint keypoints,
                             @StdVector Point2f points2f,
                             @StdVector IntBuffer keypointIndexes/*=vector<int>()*/);
@@ -179,6 +185,8 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
     public static native void convert(@StdVector Point2f points2f,
                             @StdVector KeyPoint keypoints,
                             float size/*=1*/, float response/*=1*/, int octave/*=0*/, int class_id/*=-1*/);
+    public static native void convert(@StdVector Point2f points2f,
+                            @StdVector KeyPoint keypoints);
 
     /** computes overlap for pair of keypoints;
      *  overlap is a ratio between area of keypoint regions intersection and
@@ -186,7 +194,7 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
     public static native float overlap(@Const @ByRef KeyPoint kp1, @Const @ByRef KeyPoint kp2);
 
     /** coordinates of the keypoints */
-    public native @ByVal Point2f pt(); public native KeyPoint pt(Point2f pt);
+    public native @ByRef Point2f pt(); public native KeyPoint pt(Point2f pt);
     /** diameter of the meaningful keypoint neighborhood */
     public native float size(); public native KeyPoint size(float size);
     /** computed orientation of the keypoint (-1 if not applicable); *  it's in [0,360) degrees and measured relative to *  image coordinate system, ie in clockwise. */
@@ -231,6 +239,7 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
      */
     public static native void runByKeypointSize( @StdVector KeyPoint keypoints, float minSize,
                                        float maxSize/*=FLT_MAX*/ );
+    public static native void runByKeypointSize( @StdVector KeyPoint keypoints, float minSize );
     /*
      * Remove keypoints from some image by mask for pixels of this image.
      */
@@ -266,6 +275,7 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
      *              matrix with non-zero values in the region of interest.
      */
     public native void detect( @Const @ByRef Mat image, @StdVector KeyPoint keypoints, @Const @ByRef Mat mask/*=Mat()*/ );
+    public native void detect( @Const @ByRef Mat image, @StdVector KeyPoint keypoints );
 
     /*
      * Detect keypoints in an image set.
@@ -274,6 +284,7 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
      * masks        Masks for image set. masks[i] is a mask for images[i].
      */
     public native void detect( @Const @ByRef MatVector images, @ByRef KeyPointVectorVector keypoints, @Const @ByRef MatVector masks/*=vector<Mat>()*/ );
+    public native void detect( @Const @ByRef MatVector images, @ByRef KeyPointVectorVector keypoints );
 
     // Return true if detector object is empty
     public native @Cast("bool") boolean empty();
@@ -330,10 +341,12 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
 /*
  * Abstract base class for simultaneous 2D feature detection descriptor extraction.
  */
-@Namespace("cv") public static class Feature2D extends DescriptorExtractor {
+@Namespace("cv") public static class Feature2D extends FeatureDetector {
     static { Loader.load(); }
     public Feature2D() { }
     public Feature2D(Pointer p) { super(p); }
+    public DescriptorExtractor asDescriptorExtractor() { return asDescriptorExtractor(this); }
+    @Namespace public static native @Name("static_cast<cv::DescriptorExtractor*>") DescriptorExtractor asDescriptorExtractor(Feature2D pointer);
 
     /*
      * Detect keypoints in an image.
@@ -343,10 +356,14 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
      *              matrix with non-zero values in the region of interest.
      * useProvidedKeypoints If true, the method will skip the detection phase and will compute
      *                      descriptors for the provided keypoints
-     */ public native @Name("operator()") void apply( @ByVal Mat image, @ByVal Mat mask,
-                                     @StdVector KeyPoint keypoints,
-                                     @ByVal Mat descriptors,
-                                     @Cast("bool") boolean useProvidedKeypoints/*=false*/ );
+     */
+    public native @Name("operator()") void detectAndCompute( @ByVal Mat image, @ByVal Mat mask,
+                                         @StdVector KeyPoint keypoints,
+                                         @ByVal Mat descriptors,
+                                         @Cast("bool") boolean useProvidedKeypoints/*=false*/ );
+    public native @Name("operator()") void detectAndCompute( @ByVal Mat image, @ByVal Mat mask,
+                                         @StdVector KeyPoint keypoints,
+                                         @ByVal Mat descriptors );
 
     public native void compute( @Const @ByRef Mat image, @StdVector KeyPoint keypoints, @ByRef Mat descriptors );
 
@@ -360,11 +377,17 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
 */
 @Namespace("cv") @NoOffset public static class BRISK extends Feature2D {
     static { Loader.load(); }
-    public BRISK() { }
     public BRISK(Pointer p) { super(p); }
+    public BRISK(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public BRISK position(int position) {
+        return (BRISK)super.position(position);
+    }
 
     public BRISK(int thresh/*=30*/, int octaves/*=3*/, float patternScale/*=1.0f*/) { allocate(thresh, octaves, patternScale); }
     private native void allocate(int thresh/*=30*/, int octaves/*=3*/, float patternScale/*=1.0f*/);
+    public BRISK() { allocate(); }
+    private native void allocate();
 
     // returns the descriptor size in bytes
     public native int descriptorSize();
@@ -377,6 +400,8 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
     // Compute the BRISK features and descriptors on an image
     public native @Name("operator()") void apply( @ByVal Mat image, @ByVal Mat mask, @StdVector KeyPoint keypoints,
                           @ByVal Mat descriptors, @Cast("bool") boolean useProvidedKeypoints/*=false*/ );
+    public native @Name("operator()") void apply( @ByVal Mat image, @ByVal Mat mask, @StdVector KeyPoint keypoints,
+                          @ByVal Mat descriptors );
 
     public native AlgorithmInfo info();
 
@@ -385,14 +410,20 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
             float dMax/*=5.85f*/, float dMin/*=8.2f*/, @StdVector IntPointer indexChange/*=std::vector<int>()*/) { allocate(radiusList, numberList, dMax, dMin, indexChange); }
     private native void allocate(@StdVector FloatPointer radiusList, @StdVector IntPointer numberList,
             float dMax/*=5.85f*/, float dMin/*=8.2f*/, @StdVector IntPointer indexChange/*=std::vector<int>()*/);
+    public BRISK(@StdVector FloatPointer radiusList, @StdVector IntPointer numberList) { allocate(radiusList, numberList); }
+    private native void allocate(@StdVector FloatPointer radiusList, @StdVector IntPointer numberList);
     public BRISK(@StdVector FloatBuffer radiusList, @StdVector IntBuffer numberList,
             float dMax/*=5.85f*/, float dMin/*=8.2f*/, @StdVector IntBuffer indexChange/*=std::vector<int>()*/) { allocate(radiusList, numberList, dMax, dMin, indexChange); }
     private native void allocate(@StdVector FloatBuffer radiusList, @StdVector IntBuffer numberList,
             float dMax/*=5.85f*/, float dMin/*=8.2f*/, @StdVector IntBuffer indexChange/*=std::vector<int>()*/);
+    public BRISK(@StdVector FloatBuffer radiusList, @StdVector IntBuffer numberList) { allocate(radiusList, numberList); }
+    private native void allocate(@StdVector FloatBuffer radiusList, @StdVector IntBuffer numberList);
     public BRISK(@StdVector float[] radiusList, @StdVector int[] numberList,
             float dMax/*=5.85f*/, float dMin/*=8.2f*/, @StdVector int[] indexChange/*=std::vector<int>()*/) { allocate(radiusList, numberList, dMax, dMin, indexChange); }
     private native void allocate(@StdVector float[] radiusList, @StdVector int[] numberList,
             float dMax/*=5.85f*/, float dMin/*=8.2f*/, @StdVector int[] indexChange/*=std::vector<int>()*/);
+    public BRISK(@StdVector float[] radiusList, @StdVector int[] numberList) { allocate(radiusList, numberList); }
+    private native void allocate(@StdVector float[] radiusList, @StdVector int[] numberList);
 
     // call this to generate the kernel:
     // circle of radius r (pixels), with n points;
@@ -400,12 +431,18 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
     public native void generateKernel(@StdVector FloatPointer radiusList,
             @StdVector IntPointer numberList, float dMax/*=5.85f*/, float dMin/*=8.2f*/,
             @StdVector IntPointer indexChange/*=std::vector<int>()*/);
+    public native void generateKernel(@StdVector FloatPointer radiusList,
+            @StdVector IntPointer numberList);
     public native void generateKernel(@StdVector FloatBuffer radiusList,
             @StdVector IntBuffer numberList, float dMax/*=5.85f*/, float dMin/*=8.2f*/,
             @StdVector IntBuffer indexChange/*=std::vector<int>()*/);
+    public native void generateKernel(@StdVector FloatBuffer radiusList,
+            @StdVector IntBuffer numberList);
     public native void generateKernel(@StdVector float[] radiusList,
             @StdVector int[] numberList, float dMax/*=5.85f*/, float dMin/*=8.2f*/,
             @StdVector int[] indexChange/*=std::vector<int>()*/);
+    public native void generateKernel(@StdVector float[] radiusList,
+            @StdVector int[] numberList);
 }
 
 
@@ -414,8 +451,12 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
 */
 @Namespace("cv") @NoOffset public static class ORB extends Feature2D {
     static { Loader.load(); }
-    public ORB() { }
     public ORB(Pointer p) { super(p); }
+    public ORB(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public ORB position(int position) {
+        return (ORB)super.position(position);
+    }
 
     // the size of the signature in bytes
     /** enum cv::ORB:: */
@@ -425,6 +466,8 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
             int firstLevel/*=0*/, int WTA_K/*=2*/, int scoreType/*=ORB::HARRIS_SCORE*/, int patchSize/*=31*/ ) { allocate(nfeatures, scaleFactor, nlevels, edgeThreshold, firstLevel, WTA_K, scoreType, patchSize); }
     private native void allocate(int nfeatures/*=500*/, float scaleFactor/*=1.2f*/, int nlevels/*=8*/, int edgeThreshold/*=31*/,
             int firstLevel/*=0*/, int WTA_K/*=2*/, int scoreType/*=ORB::HARRIS_SCORE*/, int patchSize/*=31*/ );
+    public ORB( ) { allocate(); }
+    private native void allocate( );
 
     // returns the descriptor size in bytes
     public native int descriptorSize();
@@ -437,6 +480,8 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
     // Compute the ORB features and descriptors on an image
     public native @Name("operator()") void apply( @ByVal Mat image, @ByVal Mat mask, @StdVector KeyPoint keypoints,
                          @ByVal Mat descriptors, @Cast("bool") boolean useProvidedKeypoints/*=false*/ );
+    public native @Name("operator()") void apply( @ByVal Mat image, @ByVal Mat mask, @StdVector KeyPoint keypoints,
+                         @ByVal Mat descriptors );
 
     public native AlgorithmInfo info();
 }
@@ -446,8 +491,12 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
 */
 @Namespace("cv") @NoOffset public static class FREAK extends DescriptorExtractor {
     static { Loader.load(); }
-    public FREAK() { }
     public FREAK(Pointer p) { super(p); }
+    public FREAK(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public FREAK position(int position) {
+        return (FREAK)super.position(position);
+    }
 
     /** Constructor
          * @param orientationNormalized enable orientation normalization
@@ -466,6 +515,8 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
                float patternScale/*=22.0f*/,
                int nOctaves/*=4*/,
                @StdVector IntPointer selectedPairs/*=vector<int>()*/);
+    public FREAK() { allocate(); }
+    private native void allocate();
     public FREAK( @Cast("bool") boolean orientationNormalized/*=true*/,
                @Cast("bool") boolean scaleNormalized/*=true*/,
                float patternScale/*=22.0f*/,
@@ -505,6 +556,7 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
     */
     public native @StdVector IntPointer selectPairs( @Const @ByRef MatVector images, @ByRef KeyPointVectorVector keypoints,
                           double corrThresh/*=0.7*/, @Cast("bool") boolean verbose/*=true*/ );
+    public native @StdVector IntPointer selectPairs( @Const @ByRef MatVector images, @ByRef KeyPointVectorVector keypoints );
 
     public native AlgorithmInfo info();
 
@@ -525,8 +577,12 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
 */
 @Namespace("cv") @NoOffset public static class MSER extends FeatureDetector {
     static { Loader.load(); }
-    public MSER() { }
     public MSER(Pointer p) { super(p); }
+    public MSER(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public MSER position(int position) {
+        return (MSER)super.position(position);
+    }
 
     /** the full constructor */
     public MSER( int _delta/*=5*/, int _min_area/*=60*/, int _max_area/*=14400*/,
@@ -537,9 +593,13 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
               double _max_variation/*=0.25*/, double _min_diversity/*=.2*/,
               int _max_evolution/*=200*/, double _area_threshold/*=1.01*/,
               double _min_margin/*=0.003*/, int _edge_blur_size/*=5*/ );
+    public MSER( ) { allocate(); }
+    private native void allocate( );
 
-    /** the operator that extracts the MSERs from the image or the specific part of it */ public native @Name("operator()") void apply( @Const @ByRef Mat image, @ByRef PointVectorVector msers,
-                                        @Const @ByRef Mat mask/*=Mat()*/ );
+    /** the operator that extracts the MSERs from the image or the specific part of it */
+    public native @Name("operator()") void detect( @Const @ByRef Mat image, @ByRef PointVectorVector msers,
+                                            @Const @ByRef Mat mask/*=Mat()*/ );
+    public native @Name("operator()") void detect( @Const @ByRef Mat image, @ByRef PointVectorVector msers );
     public native AlgorithmInfo info();
 }
 
@@ -550,8 +610,12 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
 */
 @Namespace("cv") @NoOffset public static class StarDetector extends FeatureDetector {
     static { Loader.load(); }
-    public StarDetector() { }
     public StarDetector(Pointer p) { super(p); }
+    public StarDetector(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public StarDetector position(int position) {
+        return (StarDetector)super.position(position);
+    }
 
     /** the full constructor */
     public StarDetector(int _maxSize/*=45*/, int _responseThreshold/*=30*/,
@@ -562,9 +626,12 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
                      int _lineThresholdProjected/*=10*/,
                      int _lineThresholdBinarized/*=8*/,
                      int _suppressNonmaxSize/*=5*/);
+    public StarDetector() { allocate(); }
+    private native void allocate();
 
-    /** finds the keypoints in the image */ public native @Name("operator()") void apply(@Const @ByRef Mat image,
-                @StdVector KeyPoint keypoints);
+    /** finds the keypoints in the image */
+    public native @Name("operator()") void detect(@Const @ByRef Mat image,
+                    @StdVector KeyPoint keypoints);
 
     public native AlgorithmInfo info();
 }
@@ -572,14 +639,20 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
 /** detects corners using FAST algorithm by E. Rosten */
 @Namespace("cv") public static native void FAST( @ByVal Mat image, @StdVector KeyPoint keypoints,
                       int threshold, @Cast("bool") boolean nonmaxSupression/*=true*/ );
+@Namespace("cv") public static native void FAST( @ByVal Mat image, @StdVector KeyPoint keypoints,
+                      int threshold );
 
 @Namespace("cv") public static native void FASTX( @ByVal Mat image, @StdVector KeyPoint keypoints,
                       int threshold, @Cast("bool") boolean nonmaxSupression, int type );
 
 @Namespace("cv") @NoOffset public static class FastFeatureDetector extends FeatureDetector {
     static { Loader.load(); }
-    public FastFeatureDetector() { }
     public FastFeatureDetector(Pointer p) { super(p); }
+    public FastFeatureDetector(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public FastFeatureDetector position(int position) {
+        return (FastFeatureDetector)super.position(position);
+    }
 
 
     /** enum cv::FastFeatureDetector:: */
@@ -588,26 +661,38 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
 
     public FastFeatureDetector( int threshold/*=10*/, @Cast("bool") boolean nonmaxSuppression/*=true*/ ) { allocate(threshold, nonmaxSuppression); }
     private native void allocate( int threshold/*=10*/, @Cast("bool") boolean nonmaxSuppression/*=true*/ );
+    public FastFeatureDetector( ) { allocate(); }
+    private native void allocate( );
     public native AlgorithmInfo info();
 }
 
 
 @Namespace("cv") @NoOffset public static class GFTTDetector extends FeatureDetector {
     static { Loader.load(); }
-    public GFTTDetector() { }
     public GFTTDetector(Pointer p) { super(p); }
+    public GFTTDetector(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public GFTTDetector position(int position) {
+        return (GFTTDetector)super.position(position);
+    }
 
     public GFTTDetector( int maxCorners/*=1000*/, double qualityLevel/*=0.01*/, double minDistance/*=1*/,
                               int blockSize/*=3*/, @Cast("bool") boolean useHarrisDetector/*=false*/, double k/*=0.04*/ ) { allocate(maxCorners, qualityLevel, minDistance, blockSize, useHarrisDetector, k); }
     private native void allocate( int maxCorners/*=1000*/, double qualityLevel/*=0.01*/, double minDistance/*=1*/,
                               int blockSize/*=3*/, @Cast("bool") boolean useHarrisDetector/*=false*/, double k/*=0.04*/ );
+    public GFTTDetector( ) { allocate(); }
+    private native void allocate( );
     public native AlgorithmInfo info();
 }
 
 @Namespace("cv") @NoOffset public static class SimpleBlobDetector extends FeatureDetector {
     static { Loader.load(); }
-    public SimpleBlobDetector() { }
     public SimpleBlobDetector(Pointer p) { super(p); }
+    public SimpleBlobDetector(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public SimpleBlobDetector position(int position) {
+        return (SimpleBlobDetector)super.position(position);
+    }
 
   @NoOffset public static class Params extends Pointer {
       static { Loader.load(); }
@@ -651,6 +736,8 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
 
   public SimpleBlobDetector(@Const @ByRef Params parameters/*=SimpleBlobDetector::Params()*/) { allocate(parameters); }
   private native void allocate(@Const @ByRef Params parameters/*=SimpleBlobDetector::Params()*/);
+  public SimpleBlobDetector() { allocate(); }
+  private native void allocate();
 
   public native void read( @Const @ByRef FileNode fn );
   public native void write( @ByRef FileStorage fs );
@@ -659,8 +746,12 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
 
 @Namespace("cv") @NoOffset public static class DenseFeatureDetector extends FeatureDetector {
     static { Loader.load(); }
-    public DenseFeatureDetector() { }
     public DenseFeatureDetector(Pointer p) { super(p); }
+    public DenseFeatureDetector(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public DenseFeatureDetector position(int position) {
+        return (DenseFeatureDetector)super.position(position);
+    }
 
     public DenseFeatureDetector( float initFeatureScale/*=1.f*/, int featureScaleLevels/*=1*/,
                                        float featureScaleMul/*=0.1f*/,
@@ -672,6 +763,8 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
                                        int initXyStep/*=6*/, int initImgBound/*=0*/,
                                        @Cast("bool") boolean varyXyStepWithScale/*=true*/,
                                        @Cast("bool") boolean varyImgBoundWithScale/*=false*/ );
+    public DenseFeatureDetector( ) { allocate(); }
+    private native void allocate( );
     public native AlgorithmInfo info();
 }
 
@@ -681,8 +774,12 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
  */
 @Namespace("cv") @NoOffset public static class GridAdaptedFeatureDetector extends FeatureDetector {
     static { Loader.load(); }
-    public GridAdaptedFeatureDetector() { }
     public GridAdaptedFeatureDetector(Pointer p) { super(p); }
+    public GridAdaptedFeatureDetector(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public GridAdaptedFeatureDetector position(int position) {
+        return (GridAdaptedFeatureDetector)super.position(position);
+    }
 
     /*
      * detector            Detector that will be adapted.
@@ -697,6 +794,8 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
     private native void allocate( @Ptr FeatureDetector detector/*=0*/,
                                             int maxTotalKeypoints/*=1000*/,
                                             int gridRows/*=4*/, int gridCols/*=4*/ );
+    public GridAdaptedFeatureDetector( ) { allocate(); }
+    private native void allocate( );
 
     // TODO implement read/write
     public native @Cast("bool") boolean empty();
@@ -716,6 +815,8 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
     // maxLevel - The 0-based index of the last pyramid layer
     public PyramidAdaptedFeatureDetector( @Ptr FeatureDetector detector, int maxLevel/*=2*/ ) { allocate(detector, maxLevel); }
     private native void allocate( @Ptr FeatureDetector detector, int maxLevel/*=2*/ );
+    public PyramidAdaptedFeatureDetector( @Ptr FeatureDetector detector ) { allocate(detector); }
+    private native void allocate( @Ptr FeatureDetector detector );
 
     // TODO implement read/write
     public native @Cast("bool") boolean empty();
@@ -777,6 +878,8 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
      */
     public DynamicAdaptedFeatureDetector( @Ptr AdjusterAdapter adjuster, int min_features/*=400*/, int max_features/*=500*/, int max_iters/*=5*/ ) { allocate(adjuster, min_features, max_features, max_iters); }
     private native void allocate( @Ptr AdjusterAdapter adjuster, int min_features/*=400*/, int max_features/*=500*/, int max_iters/*=5*/ );
+    public DynamicAdaptedFeatureDetector( @Ptr AdjusterAdapter adjuster ) { allocate(adjuster); }
+    private native void allocate( @Ptr AdjusterAdapter adjuster );
 
     public native @Cast("bool") boolean empty();
 }
@@ -786,14 +889,20 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
  */
 @Namespace("cv") @NoOffset public static class FastAdjuster extends AdjusterAdapter {
     static { Loader.load(); }
-    public FastAdjuster() { }
     public FastAdjuster(Pointer p) { super(p); }
+    public FastAdjuster(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public FastAdjuster position(int position) {
+        return (FastAdjuster)super.position(position);
+    }
 
     /**\param init_thresh the initial threshold to start with, default = 20
      * \param nonmax whether to use non max or not for fast feature detection
      */
     public FastAdjuster(int init_thresh/*=20*/, @Cast("bool") boolean nonmax/*=true*/, int min_thresh/*=1*/, int max_thresh/*=200*/) { allocate(init_thresh, nonmax, min_thresh, max_thresh); }
     private native void allocate(int init_thresh/*=20*/, @Cast("bool") boolean nonmax/*=true*/, int min_thresh/*=1*/, int max_thresh/*=200*/);
+    public FastAdjuster() { allocate(); }
+    private native void allocate();
 
     public native void tooFew(int minv, int n_detected);
     public native void tooMany(int maxv, int n_detected);
@@ -808,11 +917,17 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
  */
 @Namespace("cv") @NoOffset public static class StarAdjuster extends AdjusterAdapter {
     static { Loader.load(); }
-    public StarAdjuster() { }
     public StarAdjuster(Pointer p) { super(p); }
+    public StarAdjuster(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public StarAdjuster position(int position) {
+        return (StarAdjuster)super.position(position);
+    }
 
     public StarAdjuster(double initial_thresh/*=30.0*/, double min_thresh/*=2.*/, double max_thresh/*=200.*/) { allocate(initial_thresh, min_thresh, max_thresh); }
     private native void allocate(double initial_thresh/*=30.0*/, double min_thresh/*=2.*/, double max_thresh/*=200.*/);
+    public StarAdjuster() { allocate(); }
+    private native void allocate();
 
     public native void tooFew(int minv, int n_detected);
     public native void tooMany(int maxv, int n_detected);
@@ -823,11 +938,17 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
 
 @Namespace("cv") @NoOffset public static class SurfAdjuster extends AdjusterAdapter {
     static { Loader.load(); }
-    public SurfAdjuster() { }
     public SurfAdjuster(Pointer p) { super(p); }
+    public SurfAdjuster(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public SurfAdjuster position(int position) {
+        return (SurfAdjuster)super.position(position);
+    }
 
     public SurfAdjuster( double initial_thresh/*=400.f*/, double min_thresh/*=2*/, double max_thresh/*=1000*/ ) { allocate(initial_thresh, min_thresh, max_thresh); }
     private native void allocate( double initial_thresh/*=400.f*/, double min_thresh/*=2*/, double max_thresh/*=1000*/ );
+    public SurfAdjuster( ) { allocate(); }
+    private native void allocate( );
 
     public native void tooFew(int minv, int n_detected);
     public native void tooMany(int maxv, int n_detected);
@@ -872,7 +993,6 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
  */
 @Namespace("cv") @NoOffset public static class BriefDescriptorExtractor extends DescriptorExtractor {
     static { Loader.load(); }
-    public BriefDescriptorExtractor() { }
     public BriefDescriptorExtractor(Pointer p) { super(p); }
 
     @MemberGetter public static native int PATCH_SIZE();
@@ -881,6 +1001,8 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
     // bytes is a length of descriptor in bytes. It can be equal 16, 32 or 64 bytes.
     public BriefDescriptorExtractor( int bytes/*=32*/ ) { allocate(bytes); }
     private native void allocate( int bytes/*=32*/ );
+    public BriefDescriptorExtractor( ) { allocate(); }
+    private native void allocate( );
 
     public native void read( @Const @ByRef FileNode arg0 );
     public native void write( @ByRef FileStorage arg0 );
@@ -1033,6 +1155,8 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
     // Find one best match for each query descriptor (if mask is empty).
     public native void match( @Const @ByRef Mat queryDescriptors, @Const @ByRef Mat trainDescriptors,
                     @StdVector DMatch matches, @Const @ByRef Mat mask/*=Mat()*/ );
+    public native void match( @Const @ByRef Mat queryDescriptors, @Const @ByRef Mat trainDescriptors,
+                    @StdVector DMatch matches );
     // Find k best matches for each query descriptor (in increasing order of distances).
     // compactResult is used when mask is not empty. If compactResult is false matches
     // vector will have the same size as queryDescriptors rows. If compactResult is true
@@ -1040,21 +1164,28 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
     public native void knnMatch( @Const @ByRef Mat queryDescriptors, @Const @ByRef Mat trainDescriptors,
                        @ByRef DMatchVectorVector matches, int k,
                        @Const @ByRef Mat mask/*=Mat()*/, @Cast("bool") boolean compactResult/*=false*/ );
+    public native void knnMatch( @Const @ByRef Mat queryDescriptors, @Const @ByRef Mat trainDescriptors,
+                       @ByRef DMatchVectorVector matches, int k );
     // Find best matches for each query descriptor which have distance less than
     // maxDistance (in increasing order of distances).
     public native void radiusMatch( @Const @ByRef Mat queryDescriptors, @Const @ByRef Mat trainDescriptors,
                           @ByRef DMatchVectorVector matches, float maxDistance,
                           @Const @ByRef Mat mask/*=Mat()*/, @Cast("bool") boolean compactResult/*=false*/ );
+    public native void radiusMatch( @Const @ByRef Mat queryDescriptors, @Const @ByRef Mat trainDescriptors,
+                          @ByRef DMatchVectorVector matches, float maxDistance );
     /*
      * Group of methods to match descriptors from one image to image set.
      * See description of similar methods for matching image pair above.
      */
     public native void match( @Const @ByRef Mat queryDescriptors, @StdVector DMatch matches,
                     @Const @ByRef MatVector masks/*=vector<Mat>()*/ );
+    public native void match( @Const @ByRef Mat queryDescriptors, @StdVector DMatch matches );
     public native void knnMatch( @Const @ByRef Mat queryDescriptors, @ByRef DMatchVectorVector matches, int k,
                @Const @ByRef MatVector masks/*=vector<Mat>()*/, @Cast("bool") boolean compactResult/*=false*/ );
+    public native void knnMatch( @Const @ByRef Mat queryDescriptors, @ByRef DMatchVectorVector matches, int k );
     public native void radiusMatch( @Const @ByRef Mat queryDescriptors, @ByRef DMatchVectorVector matches, float maxDistance,
                        @Const @ByRef MatVector masks/*=vector<Mat>()*/, @Cast("bool") boolean compactResult/*=false*/ );
+    public native void radiusMatch( @Const @ByRef Mat queryDescriptors, @ByRef DMatchVectorVector matches, float maxDistance );
 
     // Reads matcher object from a file node
     public native void read( @Const @ByRef FileNode arg0 );
@@ -1065,6 +1196,7 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
     // both parameters and train data. If emptyTrainData is true the method create object copy with current parameters
     // but with empty train data.
     public native @Ptr DescriptorMatcher clone( @Cast("bool") boolean emptyTrainData/*=false*/ );
+    public native @Ptr DescriptorMatcher clone( );
 
     public native @Ptr DescriptorMatcher create( @StdString BytePointer descriptorMatcherType );
     public native @Ptr DescriptorMatcher create( @StdString String descriptorMatcherType );
@@ -1081,15 +1213,22 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
  */
 @Namespace("cv") @NoOffset public static class BFMatcher extends DescriptorMatcher {
     static { Loader.load(); }
-    public BFMatcher() { }
     public BFMatcher(Pointer p) { super(p); }
+    public BFMatcher(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public BFMatcher position(int position) {
+        return (BFMatcher)super.position(position);
+    }
 
     public BFMatcher( int normType/*=NORM_L2*/, @Cast("bool") boolean crossCheck/*=false*/ ) { allocate(normType, crossCheck); }
     private native void allocate( int normType/*=NORM_L2*/, @Cast("bool") boolean crossCheck/*=false*/ );
+    public BFMatcher( ) { allocate(); }
+    private native void allocate( );
 
     public native @Cast("bool") boolean isMaskSupported();
 
     public native @Ptr DescriptorMatcher clone( @Cast("bool") boolean emptyTrainData/*=false*/ );
+    public native @Ptr DescriptorMatcher clone( );
 
     public native AlgorithmInfo info();
 }
@@ -1100,13 +1239,19 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
  */
 @Namespace("cv") @NoOffset public static class FlannBasedMatcher extends DescriptorMatcher {
     static { Loader.load(); }
-    public FlannBasedMatcher() { }
     public FlannBasedMatcher(Pointer p) { super(p); }
+    public FlannBasedMatcher(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public FlannBasedMatcher position(int position) {
+        return (FlannBasedMatcher)super.position(position);
+    }
 
     public FlannBasedMatcher( @Ptr IndexParams indexParams/*=new flann::KDTreeIndexParams()*/,
                            @Ptr SearchParams searchParams/*=new flann::SearchParams()*/ ) { allocate(indexParams, searchParams); }
     private native void allocate( @Ptr IndexParams indexParams/*=new flann::KDTreeIndexParams()*/,
                            @Ptr SearchParams searchParams/*=new flann::SearchParams()*/ );
+    public FlannBasedMatcher( ) { allocate(); }
+    private native void allocate( );
 
     public native void add( @Const @ByRef MatVector descriptors );
     public native void clear();
@@ -1120,6 +1265,7 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
     public native @Cast("bool") boolean isMaskSupported();
 
     public native @Ptr DescriptorMatcher clone( @Cast("bool") boolean emptyTrainData/*=false*/ );
+    public native @Ptr DescriptorMatcher clone( );
 
     public native AlgorithmInfo info();
 }
@@ -1190,6 +1336,9 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
     public native void match( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
                     @Const @ByRef Mat trainImage, @StdVector KeyPoint trainKeypoints,
                     @StdVector DMatch matches, @Const @ByRef Mat mask/*=Mat()*/ );
+    public native void match( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
+                    @Const @ByRef Mat trainImage, @StdVector KeyPoint trainKeypoints,
+                    @StdVector DMatch matches );
     // Find k best matches for each query keypoint (in increasing order of distances).
     // compactResult is used when mask is not empty. If compactResult is false matches
     // vector will have the same size as queryDescriptors rows.
@@ -1198,23 +1347,35 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
                        @Const @ByRef Mat trainImage, @StdVector KeyPoint trainKeypoints,
                        @ByRef DMatchVectorVector matches, int k,
                        @Const @ByRef Mat mask/*=Mat()*/, @Cast("bool") boolean compactResult/*=false*/ );
+    public native void knnMatch( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
+                       @Const @ByRef Mat trainImage, @StdVector KeyPoint trainKeypoints,
+                       @ByRef DMatchVectorVector matches, int k );
     // Find best matches for each query descriptor which have distance less than maxDistance (in increasing order of distances).
     public native void radiusMatch( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
                           @Const @ByRef Mat trainImage, @StdVector KeyPoint trainKeypoints,
                           @ByRef DMatchVectorVector matches, float maxDistance,
                           @Const @ByRef Mat mask/*=Mat()*/, @Cast("bool") boolean compactResult/*=false*/ );
+    public native void radiusMatch( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
+                          @Const @ByRef Mat trainImage, @StdVector KeyPoint trainKeypoints,
+                          @ByRef DMatchVectorVector matches, float maxDistance );
     /*
      * Group of methods to match keypoints from one image to image set.
      * See description of similar methods for matching image pair above.
      */
     public native void match( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
                     @StdVector DMatch matches, @Const @ByRef MatVector masks/*=vector<Mat>()*/ );
+    public native void match( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
+                    @StdVector DMatch matches );
     public native void knnMatch( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
                        @ByRef DMatchVectorVector matches, int k,
                        @Const @ByRef MatVector masks/*=vector<Mat>()*/, @Cast("bool") boolean compactResult/*=false*/ );
+    public native void knnMatch( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
+                       @ByRef DMatchVectorVector matches, int k );
     public native void radiusMatch( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
                           @ByRef DMatchVectorVector matches, float maxDistance,
                           @Const @ByRef MatVector masks/*=vector<Mat>()*/, @Cast("bool") boolean compactResult/*=false*/ );
+    public native void radiusMatch( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
+                          @ByRef DMatchVectorVector matches, float maxDistance );
 
     // Reads matcher object from a file node
     public native void read( @Const @ByRef FileNode fn );
@@ -1228,11 +1389,14 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
     // both parameters and train data. If emptyTrainData is true the method create object copy with current parameters
     // but with empty train data.
     public native @Ptr GenericDescriptorMatcher clone( @Cast("bool") boolean emptyTrainData/*=false*/ );
+    public native @Ptr GenericDescriptorMatcher clone( );
 
     public native @Ptr GenericDescriptorMatcher create( @StdString BytePointer genericDescritptorMatcherType,
                                                      @StdString BytePointer paramsFilename/*=string()*/ );
+    public native @Ptr GenericDescriptorMatcher create( @StdString BytePointer genericDescritptorMatcherType );
     public native @Ptr GenericDescriptorMatcher create( @StdString String genericDescritptorMatcherType,
                                                      @StdString String paramsFilename/*=string()*/ );
+    public native @Ptr GenericDescriptorMatcher create( @StdString String genericDescritptorMatcherType );
 }
 
 
@@ -1266,6 +1430,7 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
     public native @Cast("bool") boolean empty();
 
     public native @Ptr GenericDescriptorMatcher clone( @Cast("bool") boolean emptyTrainData/*=false*/ );
+    public native @Ptr GenericDescriptorMatcher clone( );
 }
 
 /****************************************************************************************\
@@ -1298,6 +1463,7 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
 // Draw keypoints.
 @Namespace("cv") public static native void drawKeypoints( @Const @ByRef Mat image, @StdVector KeyPoint keypoints, @ByRef Mat outImage,
                                @Const @ByRef Scalar color/*=Scalar::all(-1)*/, int flags/*=DrawMatchesFlags::DEFAULT*/ );
+@Namespace("cv") public static native void drawKeypoints( @Const @ByRef Mat image, @StdVector KeyPoint keypoints, @ByRef Mat outImage );
 
 // Draws matches of keypints from two images on output image.
 @Namespace("cv") public static native void drawMatches( @Const @ByRef Mat img1, @StdVector KeyPoint keypoints1,
@@ -1305,6 +1471,9 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
                              @StdVector DMatch matches1to2, @ByRef Mat outImg,
                              @Const @ByRef Scalar matchColor/*=Scalar::all(-1)*/, @Const @ByRef Scalar singlePointColor/*=Scalar::all(-1)*/,
                              @Cast("char*") @StdVector BytePointer matchesMask/*=vector<char>()*/, int flags/*=DrawMatchesFlags::DEFAULT*/ );
+@Namespace("cv") public static native void drawMatches( @Const @ByRef Mat img1, @StdVector KeyPoint keypoints1,
+                             @Const @ByRef Mat img2, @StdVector KeyPoint keypoints2,
+                             @StdVector DMatch matches1to2, @ByRef Mat outImg );
 @Namespace("cv") public static native void drawMatches( @Const @ByRef Mat img1, @StdVector KeyPoint keypoints1,
                              @Const @ByRef Mat img2, @StdVector KeyPoint keypoints2,
                              @StdVector DMatch matches1to2, @ByRef Mat outImg,
@@ -1321,6 +1490,9 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
                              @Const @ByRef DMatchVectorVector matches1to2, @ByRef Mat outImg,
                              @Const @ByRef Scalar matchColor/*=Scalar::all(-1)*/, @Const @ByRef Scalar singlePointColor/*=Scalar::all(-1)*/,
                              @Cast("const std::vector<std::vector<char> >*") @ByRef ByteVectorVector matchesMask/*=vector<vector<char> >()*/, int flags/*=DrawMatchesFlags::DEFAULT*/ );
+@Namespace("cv") public static native void drawMatches( @Const @ByRef Mat img1, @StdVector KeyPoint keypoints1,
+                             @Const @ByRef Mat img2, @StdVector KeyPoint keypoints2,
+                             @Const @ByRef DMatchVectorVector matches1to2, @ByRef Mat outImg );
 
 /****************************************************************************************\
 *   Functions to evaluate the feature detectors and [generic] descriptor extractors      *
@@ -1332,12 +1504,21 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
                                          @Ptr FeatureDetector fdetector/*=Ptr<FeatureDetector>()*/ );
 @Namespace("cv") public static native void evaluateFeatureDetector( @Const @ByRef Mat img1, @Const @ByRef Mat img2, @Const @ByRef Mat H1to2,
                                          @StdVector KeyPoint keypoints1, @StdVector KeyPoint keypoints2,
+                                         @ByRef FloatPointer repeatability, @ByRef IntPointer correspCount );
+@Namespace("cv") public static native void evaluateFeatureDetector( @Const @ByRef Mat img1, @Const @ByRef Mat img2, @Const @ByRef Mat H1to2,
+                                         @StdVector KeyPoint keypoints1, @StdVector KeyPoint keypoints2,
                                          @ByRef FloatBuffer repeatability, @ByRef IntBuffer correspCount,
                                          @Ptr FeatureDetector fdetector/*=Ptr<FeatureDetector>()*/ );
 @Namespace("cv") public static native void evaluateFeatureDetector( @Const @ByRef Mat img1, @Const @ByRef Mat img2, @Const @ByRef Mat H1to2,
                                          @StdVector KeyPoint keypoints1, @StdVector KeyPoint keypoints2,
+                                         @ByRef FloatBuffer repeatability, @ByRef IntBuffer correspCount );
+@Namespace("cv") public static native void evaluateFeatureDetector( @Const @ByRef Mat img1, @Const @ByRef Mat img2, @Const @ByRef Mat H1to2,
+                                         @StdVector KeyPoint keypoints1, @StdVector KeyPoint keypoints2,
                                          @ByRef float[] repeatability, @ByRef int[] correspCount,
                                          @Ptr FeatureDetector fdetector/*=Ptr<FeatureDetector>()*/ );
+@Namespace("cv") public static native void evaluateFeatureDetector( @Const @ByRef Mat img1, @Const @ByRef Mat img2, @Const @ByRef Mat H1to2,
+                                         @StdVector KeyPoint keypoints1, @StdVector KeyPoint keypoints2,
+                                         @ByRef float[] repeatability, @ByRef int[] correspCount );
 
 @Namespace("cv") public static native void computeRecallPrecisionCurve( @Const @ByRef DMatchVectorVector matches1to2,
                                              @Cast("const std::vector<std::vector<unsigned char> >*") @ByRef ByteVectorVector correctMatches1to2Mask,
@@ -1351,6 +1532,10 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
                                                   DMatchVectorVector matches1to2, @Cast("std::vector<std::vector<unsigned char> >*") ByteVectorVector correctMatches1to2Mask,
                                                   @StdVector Point2f recallPrecisionCurve,
                                                   @Ptr GenericDescriptorMatcher dmatch/*=Ptr<GenericDescriptorMatcher>()*/ );
+@Namespace("cv") public static native void evaluateGenericDescriptorMatcher( @Const @ByRef Mat img1, @Const @ByRef Mat img2, @Const @ByRef Mat H1to2,
+                                                  @StdVector KeyPoint keypoints1, @StdVector KeyPoint keypoints2,
+                                                  DMatchVectorVector matches1to2, @Cast("std::vector<std::vector<unsigned char> >*") ByteVectorVector correctMatches1to2Mask,
+                                                  @StdVector Point2f recallPrecisionCurve );
 
 
 /****************************************************************************************\
@@ -1394,6 +1579,8 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
                           int attempts/*=3*/, int flags/*=KMEANS_PP_CENTERS*/ ) { allocate(clusterCount, termcrit, attempts, flags); }
     private native void allocate( int clusterCount, @Const @ByRef TermCriteria termcrit/*=TermCriteria()*/,
                           int attempts/*=3*/, int flags/*=KMEANS_PP_CENTERS*/ );
+    public BOWKMeansTrainer( int clusterCount ) { allocate(clusterCount); }
+    private native void allocate( int clusterCount );
 
     // Returns trained vocabulary (i.e. cluster centers).
     public native @ByVal Mat cluster();
@@ -1417,6 +1604,7 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
     public native @Const @ByRef Mat getVocabulary();
     public native void compute( @Const @ByRef Mat image, @StdVector KeyPoint keypoints, @ByRef Mat imgDescriptor,
                       IntVectorVector pointIdxsOfClusters/*=0*/, Mat descriptors/*=0*/ );
+    public native void compute( @Const @ByRef Mat image, @StdVector KeyPoint keypoints, @ByRef Mat imgDescriptor );
     // compute() is not constant because DescriptorMatcher::match is not constant
 
     public native int descriptorSize();

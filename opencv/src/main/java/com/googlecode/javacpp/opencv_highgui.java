@@ -2,7 +2,6 @@
 
 package com.googlecode.javacpp;
 
-import com.googlecode.javacpp.helper.opencv_highgui.*;
 import com.googlecode.javacpp.*;
 import com.googlecode.javacpp.annotation.*;
 import java.nio.*;
@@ -10,10 +9,10 @@ import java.nio.*;
 import static com.googlecode.javacpp.opencv_core.*;
 import static com.googlecode.javacpp.opencv_imgproc.*;
 
-public class opencv_highgui extends com.googlecode.javacpp.presets.opencv_highgui {
+public class opencv_highgui extends com.googlecode.javacpp.helper.opencv_highgui {
     static { Loader.load(); }
 
-// Parsed from header file /usr/local/include/opencv2/highgui/highgui_c.h
+// Parsed from /usr/local/include/opencv2/highgui/highgui_c.h
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -86,15 +85,25 @@ public static final int  CV_STYLE_NORMAL         = 0,//QFont::StyleNormal,
 //for color cvScalar(blue_component, green_component, red\_component[, alpha_component])
 //and alpha= 0 <-> 0xFF (not transparent <-> transparent)
 public static native @ByVal CvFont cvFontQt(@Cast("const char*") BytePointer nameFont, int pointSize/*CV_DEFAULT(-1)*/, @ByVal CvScalar color/*CV_DEFAULT(cvScalarAll(0))*/, int weight/*CV_DEFAULT(CV_FONT_NORMAL)*/,  int style/*CV_DEFAULT(CV_STYLE_NORMAL)*/, int spacing/*CV_DEFAULT(0)*/);
+public static native @ByVal CvFont cvFontQt(@Cast("const char*") BytePointer nameFont);
 public static native @ByVal CvFont cvFontQt(String nameFont, int pointSize/*CV_DEFAULT(-1)*/, @ByVal CvScalar color/*CV_DEFAULT(cvScalarAll(0))*/, int weight/*CV_DEFAULT(CV_FONT_NORMAL)*/,  int style/*CV_DEFAULT(CV_STYLE_NORMAL)*/, int spacing/*CV_DEFAULT(0)*/);
+public static native @ByVal CvFont cvFontQt(String nameFont);
 
 public static native void cvAddText(@Const CvArr img, @Cast("const char*") BytePointer text, @ByVal CvPoint org, CvFont arg2);
+public static native void cvAddText(@Const CvArr img, String text, @ByVal @Cast("CvPoint*") IntBuffer org, CvFont arg2);
+public static native void cvAddText(@Const CvArr img, @Cast("const char*") BytePointer text, @ByVal @Cast("CvPoint*") int[] org, CvFont arg2);
 public static native void cvAddText(@Const CvArr img, String text, @ByVal CvPoint org, CvFont arg2);
+public static native void cvAddText(@Const CvArr img, @Cast("const char*") BytePointer text, @ByVal @Cast("CvPoint*") IntBuffer org, CvFont arg2);
+public static native void cvAddText(@Const CvArr img, String text, @ByVal @Cast("CvPoint*") int[] org, CvFont arg2);
 
 public static native void cvDisplayOverlay(@Cast("const char*") BytePointer name, @Cast("const char*") BytePointer text, int delayms/*CV_DEFAULT(0)*/);
+public static native void cvDisplayOverlay(@Cast("const char*") BytePointer name, @Cast("const char*") BytePointer text);
 public static native void cvDisplayOverlay(String name, String text, int delayms/*CV_DEFAULT(0)*/);
+public static native void cvDisplayOverlay(String name, String text);
 public static native void cvDisplayStatusBar(@Cast("const char*") BytePointer name, @Cast("const char*") BytePointer text, int delayms/*CV_DEFAULT(0)*/);
+public static native void cvDisplayStatusBar(@Cast("const char*") BytePointer name, @Cast("const char*") BytePointer text);
 public static native void cvDisplayStatusBar(String name, String text, int delayms/*CV_DEFAULT(0)*/);
+public static native void cvDisplayStatusBar(String name, String text);
 
 public static native void cvSaveWindowParameters(@Cast("const char*") BytePointer name);
 public static native void cvSaveWindowParameters(String name);
@@ -144,6 +153,7 @@ public static native void cvStopLoop( );
 /** enum  */
 public static final int CV_PUSH_BUTTON = 0, CV_CHECKBOX = 1, CV_RADIOBOX = 2;
 public static native int cvCreateButton( @Cast("const char*") BytePointer button_name/*CV_DEFAULT(NULL)*/,CvButtonCallback on_change/*CV_DEFAULT(NULL)*/, Pointer userdata/*CV_DEFAULT(NULL)*/, int button_type/*CV_DEFAULT(CV_PUSH_BUTTON)*/, int initial_button_state/*CV_DEFAULT(0)*/);
+public static native int cvCreateButton();
 public static native int cvCreateButton( String button_name/*CV_DEFAULT(NULL)*/,CvButtonCallback on_change/*CV_DEFAULT(NULL)*/, Pointer userdata/*CV_DEFAULT(NULL)*/, int button_type/*CV_DEFAULT(CV_PUSH_BUTTON)*/, int initial_button_state/*CV_DEFAULT(0)*/);
 //----------------------
 
@@ -181,7 +191,9 @@ public static final int
 
 /* create window */
 public static native int cvNamedWindow( @Cast("const char*") BytePointer name, int flags/*CV_DEFAULT(CV_WINDOW_AUTOSIZE)*/ );
+public static native int cvNamedWindow( @Cast("const char*") BytePointer name );
 public static native int cvNamedWindow( String name, int flags/*CV_DEFAULT(CV_WINDOW_AUTOSIZE)*/ );
+public static native int cvNamedWindow( String name );
 
 /* Set and Get Property of the window */
 public static native void cvSetWindowProperty(@Cast("const char*") BytePointer name, int prop_id, double prop_value);
@@ -225,16 +237,28 @@ public static native @Cast("const char*") BytePointer cvGetWindowName( Pointer w
 /* create trackbar and display it on top of given window, set callback */
 public static native int cvCreateTrackbar( @Cast("const char*") BytePointer trackbar_name, @Cast("const char*") BytePointer window_name,
                              IntPointer value, int count, CvTrackbarCallback on_change/*CV_DEFAULT(NULL)*/);
+public static native int cvCreateTrackbar( @Cast("const char*") BytePointer trackbar_name, @Cast("const char*") BytePointer window_name,
+                             IntPointer value, int count);
 public static native int cvCreateTrackbar( String trackbar_name, String window_name,
                              IntBuffer value, int count, CvTrackbarCallback on_change/*CV_DEFAULT(NULL)*/);
+public static native int cvCreateTrackbar( String trackbar_name, String window_name,
+                             IntBuffer value, int count);
 public static native int cvCreateTrackbar( @Cast("const char*") BytePointer trackbar_name, @Cast("const char*") BytePointer window_name,
                              int[] value, int count, CvTrackbarCallback on_change/*CV_DEFAULT(NULL)*/);
+public static native int cvCreateTrackbar( @Cast("const char*") BytePointer trackbar_name, @Cast("const char*") BytePointer window_name,
+                             int[] value, int count);
 public static native int cvCreateTrackbar( String trackbar_name, String window_name,
                              IntPointer value, int count, CvTrackbarCallback on_change/*CV_DEFAULT(NULL)*/);
+public static native int cvCreateTrackbar( String trackbar_name, String window_name,
+                             IntPointer value, int count);
 public static native int cvCreateTrackbar( @Cast("const char*") BytePointer trackbar_name, @Cast("const char*") BytePointer window_name,
                              IntBuffer value, int count, CvTrackbarCallback on_change/*CV_DEFAULT(NULL)*/);
+public static native int cvCreateTrackbar( @Cast("const char*") BytePointer trackbar_name, @Cast("const char*") BytePointer window_name,
+                             IntBuffer value, int count);
 public static native int cvCreateTrackbar( String trackbar_name, String window_name,
                              int[] value, int count, CvTrackbarCallback on_change/*CV_DEFAULT(NULL)*/);
+public static native int cvCreateTrackbar( String trackbar_name, String window_name,
+                             int[] value, int count);
 
 @Convention("CV_CDECL") public static class CvTrackbarCallback2 extends FunctionPointer {
     static { Loader.load(); }
@@ -247,21 +271,33 @@ public static native int cvCreateTrackbar( String trackbar_name, String window_n
 public static native int cvCreateTrackbar2( @Cast("const char*") BytePointer trackbar_name, @Cast("const char*") BytePointer window_name,
                               IntPointer value, int count, CvTrackbarCallback2 on_change,
                               Pointer userdata/*CV_DEFAULT(0)*/);
+public static native int cvCreateTrackbar2( @Cast("const char*") BytePointer trackbar_name, @Cast("const char*") BytePointer window_name,
+                              IntPointer value, int count, CvTrackbarCallback2 on_change);
 public static native int cvCreateTrackbar2( String trackbar_name, String window_name,
                               IntBuffer value, int count, CvTrackbarCallback2 on_change,
                               Pointer userdata/*CV_DEFAULT(0)*/);
+public static native int cvCreateTrackbar2( String trackbar_name, String window_name,
+                              IntBuffer value, int count, CvTrackbarCallback2 on_change);
 public static native int cvCreateTrackbar2( @Cast("const char*") BytePointer trackbar_name, @Cast("const char*") BytePointer window_name,
                               int[] value, int count, CvTrackbarCallback2 on_change,
                               Pointer userdata/*CV_DEFAULT(0)*/);
+public static native int cvCreateTrackbar2( @Cast("const char*") BytePointer trackbar_name, @Cast("const char*") BytePointer window_name,
+                              int[] value, int count, CvTrackbarCallback2 on_change);
 public static native int cvCreateTrackbar2( String trackbar_name, String window_name,
                               IntPointer value, int count, CvTrackbarCallback2 on_change,
                               Pointer userdata/*CV_DEFAULT(0)*/);
+public static native int cvCreateTrackbar2( String trackbar_name, String window_name,
+                              IntPointer value, int count, CvTrackbarCallback2 on_change);
 public static native int cvCreateTrackbar2( @Cast("const char*") BytePointer trackbar_name, @Cast("const char*") BytePointer window_name,
                               IntBuffer value, int count, CvTrackbarCallback2 on_change,
                               Pointer userdata/*CV_DEFAULT(0)*/);
+public static native int cvCreateTrackbar2( @Cast("const char*") BytePointer trackbar_name, @Cast("const char*") BytePointer window_name,
+                              IntBuffer value, int count, CvTrackbarCallback2 on_change);
 public static native int cvCreateTrackbar2( String trackbar_name, String window_name,
                               int[] value, int count, CvTrackbarCallback2 on_change,
                               Pointer userdata/*CV_DEFAULT(0)*/);
+public static native int cvCreateTrackbar2( String trackbar_name, String window_name,
+                              int[] value, int count, CvTrackbarCallback2 on_change);
 
 /* retrieve or set trackbar position */
 public static native int cvGetTrackbarPos( @Cast("const char*") BytePointer trackbar_name, @Cast("const char*") BytePointer window_name );
@@ -302,8 +338,10 @@ public static final int
 /* assign callback for mouse events */
 public static native void cvSetMouseCallback( @Cast("const char*") BytePointer window_name, CvMouseCallback on_mouse,
                                 Pointer param/*CV_DEFAULT(NULL)*/);
+public static native void cvSetMouseCallback( @Cast("const char*") BytePointer window_name, CvMouseCallback on_mouse);
 public static native void cvSetMouseCallback( String window_name, CvMouseCallback on_mouse,
                                 Pointer param/*CV_DEFAULT(NULL)*/);
+public static native void cvSetMouseCallback( String window_name, CvMouseCallback on_mouse);
 
 /** enum  */
 public static final int
@@ -325,9 +363,13 @@ public static final int
   unless CV_LOAD_IMAGE_ANYDEPTH is specified images are converted to 8bit
 */
 public static native IplImage cvLoadImage( @Cast("const char*") BytePointer filename, int iscolor/*CV_DEFAULT(CV_LOAD_IMAGE_COLOR)*/);
+public static native IplImage cvLoadImage( @Cast("const char*") BytePointer filename);
 public static native IplImage cvLoadImage( String filename, int iscolor/*CV_DEFAULT(CV_LOAD_IMAGE_COLOR)*/);
+public static native IplImage cvLoadImage( String filename);
 public static native CvMat cvLoadImageM( @Cast("const char*") BytePointer filename, int iscolor/*CV_DEFAULT(CV_LOAD_IMAGE_COLOR)*/);
+public static native CvMat cvLoadImageM( @Cast("const char*") BytePointer filename);
 public static native CvMat cvLoadImageM( String filename, int iscolor/*CV_DEFAULT(CV_LOAD_IMAGE_COLOR)*/);
+public static native CvMat cvLoadImageM( String filename);
 
 /** enum  */
 public static final int
@@ -345,8 +387,10 @@ public static final int
 /* save image to file */
 public static native int cvSaveImage( @Cast("const char*") BytePointer filename, @Const CvArr image,
                         @Const IntPointer params/*CV_DEFAULT(0)*/ );
+public static native int cvSaveImage( @Cast("const char*") BytePointer filename, @Const CvArr image );
 public static native int cvSaveImage( String filename, @Const CvArr image,
                         @Const IntBuffer params/*CV_DEFAULT(0)*/ );
+public static native int cvSaveImage( String filename, @Const CvArr image );
 public static native int cvSaveImage( @Cast("const char*") BytePointer filename, @Const CvArr image,
                         @Const int[] params/*CV_DEFAULT(0)*/ );
 public static native int cvSaveImage( String filename, @Const CvArr image,
@@ -358,13 +402,17 @@ public static native int cvSaveImage( String filename, @Const CvArr image,
 
 /* decode image stored in the buffer */
 public static native IplImage cvDecodeImage( @Const CvMat buf, int iscolor/*CV_DEFAULT(CV_LOAD_IMAGE_COLOR)*/);
+public static native IplImage cvDecodeImage( @Const CvMat buf);
 public static native CvMat cvDecodeImageM( @Const CvMat buf, int iscolor/*CV_DEFAULT(CV_LOAD_IMAGE_COLOR)*/);
+public static native CvMat cvDecodeImageM( @Const CvMat buf);
 
 /* encode image and store the result as a byte vector (single-row 8uC1 matrix) */
 public static native CvMat cvEncodeImage( @Cast("const char*") BytePointer ext, @Const CvArr image,
                              @Const IntPointer params/*CV_DEFAULT(0)*/ );
+public static native CvMat cvEncodeImage( @Cast("const char*") BytePointer ext, @Const CvArr image );
 public static native CvMat cvEncodeImage( String ext, @Const CvArr image,
                              @Const IntBuffer params/*CV_DEFAULT(0)*/ );
+public static native CvMat cvEncodeImage( String ext, @Const CvArr image );
 public static native CvMat cvEncodeImage( @Cast("const char*") BytePointer ext, @Const CvArr image,
                              @Const int[] params/*CV_DEFAULT(0)*/ );
 public static native CvMat cvEncodeImage( String ext, @Const CvArr image,
@@ -381,9 +429,11 @@ public static final int
 
 /* utility function: convert one image to another with optional vertical flip */
 public static native void cvConvertImage( @Const CvArr src, CvArr dst, int flags/*CV_DEFAULT(0)*/);
+public static native void cvConvertImage( @Const CvArr src, CvArr dst);
 
 /* wait for key event infinitely (delay<=0) or for "delay" milliseconds */
 public static native int cvWaitKey(int delay/*CV_DEFAULT(0)*/);
+public static native int cvWaitKey();
 
 // OpenGL support
 
@@ -395,7 +445,9 @@ public static native int cvWaitKey(int delay/*CV_DEFAULT(0)*/);
     public native void call(Pointer userdata);
 }
 public static native void cvSetOpenGlDrawCallback(@Cast("const char*") BytePointer window_name, CvOpenGlDrawCallback callback, Pointer userdata/*CV_DEFAULT(NULL)*/);
+public static native void cvSetOpenGlDrawCallback(@Cast("const char*") BytePointer window_name, CvOpenGlDrawCallback callback);
 public static native void cvSetOpenGlDrawCallback(String window_name, CvOpenGlDrawCallback callback, Pointer userdata/*CV_DEFAULT(NULL)*/);
+public static native void cvSetOpenGlDrawCallback(String window_name, CvOpenGlDrawCallback callback);
 
 public static native void cvSetOpenGlContext(@Cast("const char*") BytePointer window_name);
 public static native void cvSetOpenGlContext(String window_name);
@@ -476,6 +528,7 @@ public static native int cvGrabFrame( CvCapture capture );
   frame decompression, flipping etc.
   !!!DO NOT RELEASE or MODIFY the retrieved frame!!! */
 public static native IplImage cvRetrieveFrame( CvCapture capture, int streamIdx/*CV_DEFAULT(0)*/ );
+public static native IplImage cvRetrieveFrame( CvCapture capture );
 
 /* Just a combination of cvGrabFrame and cvRetrieveFrame
    !!!DO NOT RELEASE or MODIFY the retrieved frame!!!      */
@@ -735,9 +788,13 @@ public static final int CV_FOURCC_DEFAULT = CV_FOURCC_DEFAULT(); /* Use default 
 public static native CvVideoWriter cvCreateVideoWriter( @Cast("const char*") BytePointer filename, int fourcc,
                                            double fps, @ByVal CvSize frame_size,
                                            int is_color/*CV_DEFAULT(1)*/);
+public static native CvVideoWriter cvCreateVideoWriter( @Cast("const char*") BytePointer filename, int fourcc,
+                                           double fps, @ByVal CvSize frame_size);
 public static native CvVideoWriter cvCreateVideoWriter( String filename, int fourcc,
                                            double fps, @ByVal CvSize frame_size,
                                            int is_color/*CV_DEFAULT(1)*/);
+public static native CvVideoWriter cvCreateVideoWriter( String filename, int fourcc,
+                                           double fps, @ByVal CvSize frame_size);
 
 //CVAPI(CvVideoWriter*) cvCreateImageSequenceWriter( const char* filename,
 //                                                   int is_color CV_DEFAULT(1));
@@ -810,7 +867,7 @@ public static final int HG_AUTOSIZE = CV_WINDOW_AUTOSIZE;
 // #endif
 
 
-// Parsed from header file /usr/local/include/opencv2/highgui/highgui.hpp
+// Parsed from /usr/local/include/opencv2/highgui/highgui.hpp
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -876,7 +933,9 @@ public static final int
     WND_PROP_OPENGL       =  CV_WND_PROP_OPENGL;       // opengl support
 
 @Namespace("cv") public static native void namedWindow(@StdString BytePointer winname, int flags/*=WINDOW_AUTOSIZE*/);
+@Namespace("cv") public static native void namedWindow(@StdString BytePointer winname);
 @Namespace("cv") public static native void namedWindow(@StdString String winname, int flags/*=WINDOW_AUTOSIZE*/);
+@Namespace("cv") public static native void namedWindow(@StdString String winname);
 @Namespace("cv") public static native void destroyWindow(@StdString BytePointer winname);
 @Namespace("cv") public static native void destroyWindow(@StdString String winname);
 @Namespace("cv") public static native void destroyAllWindows();
@@ -884,6 +943,7 @@ public static final int
 @Namespace("cv") public static native int startWindowThread();
 
 @Namespace("cv") public static native int waitKey(int delay/*=0*/);
+@Namespace("cv") public static native int waitKey();
 
 @Namespace("cv") public static native void imshow(@StdString BytePointer winname, @ByVal Mat mat);
 @Namespace("cv") public static native void imshow(@StdString String winname, @ByVal Mat mat);
@@ -930,7 +990,9 @@ public static class MouseCallback extends FunctionPointer {
 
 /** assigns callback for mouse events */
 @Namespace("cv") public static native void setMouseCallback(@StdString BytePointer winname, MouseCallback onMouse, Pointer userdata/*=0*/);
+@Namespace("cv") public static native void setMouseCallback(@StdString BytePointer winname, MouseCallback onMouse);
 @Namespace("cv") public static native void setMouseCallback(@StdString String winname, MouseCallback onMouse, Pointer userdata/*=0*/);
+@Namespace("cv") public static native void setMouseCallback(@StdString String winname, MouseCallback onMouse);
 
 
 @Convention("CV_CDECL") public static class TrackbarCallback extends FunctionPointer {
@@ -945,26 +1007,38 @@ public static class MouseCallback extends FunctionPointer {
                               IntPointer value, int count,
                               TrackbarCallback onChange/*=0*/,
                               Pointer userdata/*=0*/);
+@Namespace("cv") public static native int createTrackbar(@StdString BytePointer trackbarname, @StdString BytePointer winname,
+                              IntPointer value, int count);
 @Namespace("cv") public static native int createTrackbar(@StdString String trackbarname, @StdString String winname,
                               IntBuffer value, int count,
                               TrackbarCallback onChange/*=0*/,
                               Pointer userdata/*=0*/);
+@Namespace("cv") public static native int createTrackbar(@StdString String trackbarname, @StdString String winname,
+                              IntBuffer value, int count);
 @Namespace("cv") public static native int createTrackbar(@StdString BytePointer trackbarname, @StdString BytePointer winname,
                               int[] value, int count,
                               TrackbarCallback onChange/*=0*/,
                               Pointer userdata/*=0*/);
+@Namespace("cv") public static native int createTrackbar(@StdString BytePointer trackbarname, @StdString BytePointer winname,
+                              int[] value, int count);
 @Namespace("cv") public static native int createTrackbar(@StdString String trackbarname, @StdString String winname,
                               IntPointer value, int count,
                               TrackbarCallback onChange/*=0*/,
                               Pointer userdata/*=0*/);
+@Namespace("cv") public static native int createTrackbar(@StdString String trackbarname, @StdString String winname,
+                              IntPointer value, int count);
 @Namespace("cv") public static native int createTrackbar(@StdString BytePointer trackbarname, @StdString BytePointer winname,
                               IntBuffer value, int count,
                               TrackbarCallback onChange/*=0*/,
                               Pointer userdata/*=0*/);
+@Namespace("cv") public static native int createTrackbar(@StdString BytePointer trackbarname, @StdString BytePointer winname,
+                              IntBuffer value, int count);
 @Namespace("cv") public static native int createTrackbar(@StdString String trackbarname, @StdString String winname,
                               int[] value, int count,
                               TrackbarCallback onChange/*=0*/,
                               Pointer userdata/*=0*/);
+@Namespace("cv") public static native int createTrackbar(@StdString String trackbarname, @StdString String winname,
+                              int[] value, int count);
 
 @Namespace("cv") public static native int getTrackbarPos(@StdString BytePointer trackbarname, @StdString BytePointer winname);
 @Namespace("cv") public static native int getTrackbarPos(@StdString String trackbarname, @StdString String winname);
@@ -981,7 +1055,9 @@ public static class OpenGlDrawCallback extends FunctionPointer {
     public native void call(Pointer userdata);
 }
 @Namespace("cv") public static native void setOpenGlDrawCallback(@StdString BytePointer winname, OpenGlDrawCallback onOpenGlDraw, Pointer userdata/*=0*/);
+@Namespace("cv") public static native void setOpenGlDrawCallback(@StdString BytePointer winname, OpenGlDrawCallback onOpenGlDraw);
 @Namespace("cv") public static native void setOpenGlDrawCallback(@StdString String winname, OpenGlDrawCallback onOpenGlDraw, Pointer userdata/*=0*/);
+@Namespace("cv") public static native void setOpenGlDrawCallback(@StdString String winname, OpenGlDrawCallback onOpenGlDraw);
 
 @Namespace("cv") public static native void setOpenGlContext(@StdString BytePointer winname);
 @Namespace("cv") public static native void setOpenGlContext(@StdString String winname);
@@ -993,7 +1069,9 @@ public static class OpenGlDrawCallback extends FunctionPointer {
 @Namespace("cv") public static native void pointCloudShow(@StdString BytePointer winname, @Const @ByRef GlCamera camera, @Const @ByRef GlArrays arr);
 @Namespace("cv") public static native void pointCloudShow(@StdString String winname, @Const @ByRef GlCamera camera, @Const @ByRef GlArrays arr);
 @Namespace("cv") public static native void pointCloudShow(@StdString BytePointer winname, @Const @ByRef GlCamera camera, @ByVal Mat points, @ByVal Mat colors/*=noArray()*/);
+@Namespace("cv") public static native void pointCloudShow(@StdString BytePointer winname, @Const @ByRef GlCamera camera, @ByVal Mat points);
 @Namespace("cv") public static native void pointCloudShow(@StdString String winname, @Const @ByRef GlCamera camera, @ByVal Mat points, @ByVal Mat colors/*=noArray()*/);
+@Namespace("cv") public static native void pointCloudShow(@StdString String winname, @Const @ByRef GlCamera camera, @ByVal Mat points);
 // >
 
 //Only for Qt
@@ -1001,16 +1079,22 @@ public static class OpenGlDrawCallback extends FunctionPointer {
 @Namespace("cv") public static native @ByVal CvFont fontQt(@StdString BytePointer nameFont, int pointSize/*=-1*/,
                          @ByVal Scalar color/*=Scalar::all(0)*/, int weight/*=CV_FONT_NORMAL*/,
                          int style/*=CV_STYLE_NORMAL*/, int spacing/*=0*/);
+@Namespace("cv") public static native @ByVal CvFont fontQt(@StdString BytePointer nameFont);
 @Namespace("cv") public static native @ByVal CvFont fontQt(@StdString String nameFont, int pointSize/*=-1*/,
                          @ByVal Scalar color/*=Scalar::all(0)*/, int weight/*=CV_FONT_NORMAL*/,
                          int style/*=CV_STYLE_NORMAL*/, int spacing/*=0*/);
+@Namespace("cv") public static native @ByVal CvFont fontQt(@StdString String nameFont);
 @Namespace("cv") public static native void addText( @Const @ByRef Mat img, @StdString BytePointer text, @ByVal Point org, @ByVal CvFont font);
 @Namespace("cv") public static native void addText( @Const @ByRef Mat img, @StdString String text, @ByVal Point org, @ByVal CvFont font);
 
 @Namespace("cv") public static native void displayOverlay(@StdString BytePointer winname, @StdString BytePointer text, int delayms/*CV_DEFAULT(0)*/);
+@Namespace("cv") public static native void displayOverlay(@StdString BytePointer winname, @StdString BytePointer text);
 @Namespace("cv") public static native void displayOverlay(@StdString String winname, @StdString String text, int delayms/*CV_DEFAULT(0)*/);
+@Namespace("cv") public static native void displayOverlay(@StdString String winname, @StdString String text);
 @Namespace("cv") public static native void displayStatusBar(@StdString BytePointer winname, @StdString BytePointer text, int delayms/*CV_DEFAULT(0)*/);
+@Namespace("cv") public static native void displayStatusBar(@StdString BytePointer winname, @StdString BytePointer text);
 @Namespace("cv") public static native void displayStatusBar(@StdString String winname, @StdString String text, int delayms/*CV_DEFAULT(0)*/);
+@Namespace("cv") public static native void displayStatusBar(@StdString String winname, @StdString String text);
 
 @Namespace("cv") public static native void saveWindowParameters(@StdString BytePointer windowName);
 @Namespace("cv") public static native void saveWindowParameters(@StdString String windowName);
@@ -1032,9 +1116,11 @@ public static class OpenGlDrawCallback extends FunctionPointer {
 @Namespace("cv") public static native int createButton( @StdString BytePointer bar_name, ButtonCallback on_change,
                              Pointer userdata/*=NULL*/, int type/*=CV_PUSH_BUTTON*/,
                              @Cast("bool") boolean initial_button_state/*=0*/);
+@Namespace("cv") public static native int createButton( @StdString BytePointer bar_name, ButtonCallback on_change);
 @Namespace("cv") public static native int createButton( @StdString String bar_name, ButtonCallback on_change,
                              Pointer userdata/*=NULL*/, int type/*=CV_PUSH_BUTTON*/,
                              @Cast("bool") boolean initial_button_state/*=0*/);
+@Namespace("cv") public static native int createButton( @StdString String bar_name, ButtonCallback on_change);
 
 //-------------------------
 
@@ -1065,11 +1151,15 @@ public static final int
     IMWRITE_PXM_BINARY = 32;
 
 @Namespace("cv") public static native @ByVal Mat imread( @StdString BytePointer filename, int flags/*=1*/ );
+@Namespace("cv") public static native @ByVal Mat imread( @StdString BytePointer filename );
 @Namespace("cv") public static native @ByVal Mat imread( @StdString String filename, int flags/*=1*/ );
+@Namespace("cv") public static native @ByVal Mat imread( @StdString String filename );
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString BytePointer filename, @ByVal Mat img,
               @StdVector IntPointer params/*=vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString BytePointer filename, @ByVal Mat img);
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString String filename, @ByVal Mat img,
               @StdVector IntBuffer params/*=vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString String filename, @ByVal Mat img);
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString BytePointer filename, @ByVal Mat img,
               @StdVector int[] params/*=vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString String filename, @ByVal Mat img,
@@ -1083,21 +1173,33 @@ public static final int
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString BytePointer ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector BytePointer buf,
                             @StdVector IntPointer params/*=vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString BytePointer ext, @ByVal Mat img,
+                            @Cast("uchar*") @StdVector BytePointer buf);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString String ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector ByteBuffer buf,
                             @StdVector IntBuffer params/*=vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString String ext, @ByVal Mat img,
+                            @Cast("uchar*") @StdVector ByteBuffer buf);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString BytePointer ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector byte[] buf,
                             @StdVector int[] params/*=vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString BytePointer ext, @ByVal Mat img,
+                            @Cast("uchar*") @StdVector byte[] buf);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString String ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector BytePointer buf,
                             @StdVector IntPointer params/*=vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString String ext, @ByVal Mat img,
+                            @Cast("uchar*") @StdVector BytePointer buf);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString BytePointer ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector ByteBuffer buf,
                             @StdVector IntBuffer params/*=vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString BytePointer ext, @ByVal Mat img,
+                            @Cast("uchar*") @StdVector ByteBuffer buf);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString String ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector byte[] buf,
                             @StdVector int[] params/*=vector<int>()*/);
+@Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString String ext, @ByVal Mat img,
+                            @Cast("uchar*") @StdVector byte[] buf);
 
 // #ifndef CV_NO_VIDEO_CAPTURE_CPP_API
 
@@ -1124,6 +1226,7 @@ public static final int
 
     public native @Cast("bool") boolean grab();
     public native @Cast("bool") boolean retrieve(@ByRef Mat image, int channel/*=0*/);
+    public native @Cast("bool") boolean retrieve(@ByRef Mat image);
     public native @ByRef @Name("operator>>") VideoCapture shiftRight(@ByRef Mat image);
     public native @Cast("bool") boolean read(@ByRef Mat image);
 
@@ -1147,14 +1250,26 @@ public static final int
                     @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/) { allocate(filename, fourcc, fps, frameSize, isColor); }
     private native void allocate(@StdString BytePointer filename, int fourcc, double fps,
                     @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/);
+    public VideoWriter(@StdString BytePointer filename, int fourcc, double fps,
+                    @ByVal Size frameSize) { allocate(filename, fourcc, fps, frameSize); }
+    private native void allocate(@StdString BytePointer filename, int fourcc, double fps,
+                    @ByVal Size frameSize);
     public VideoWriter(@StdString String filename, int fourcc, double fps,
                     @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/) { allocate(filename, fourcc, fps, frameSize, isColor); }
     private native void allocate(@StdString String filename, int fourcc, double fps,
                     @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/);
+    public VideoWriter(@StdString String filename, int fourcc, double fps,
+                    @ByVal Size frameSize) { allocate(filename, fourcc, fps, frameSize); }
+    private native void allocate(@StdString String filename, int fourcc, double fps,
+                    @ByVal Size frameSize);
     public native @Cast("bool") boolean open(@StdString BytePointer filename, int fourcc, double fps,
                           @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/);
+    public native @Cast("bool") boolean open(@StdString BytePointer filename, int fourcc, double fps,
+                          @ByVal Size frameSize);
     public native @Cast("bool") boolean open(@StdString String filename, int fourcc, double fps,
                           @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/);
+    public native @Cast("bool") boolean open(@StdString String filename, int fourcc, double fps,
+                          @ByVal Size frameSize);
     public native @Cast("bool") boolean isOpened();
     public native void release();
     public native @ByRef @Name("operator<<") VideoWriter shiftLeft(@Const @ByRef Mat image);

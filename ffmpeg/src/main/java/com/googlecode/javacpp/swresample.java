@@ -11,7 +11,7 @@ import static com.googlecode.javacpp.avutil.*;
 public class swresample extends com.googlecode.javacpp.presets.swresample {
     static { Loader.load(); }
 
-// Parsed from header file /usr/local/include/libswresample/swresample.h
+// Parsed from /usr/local/include/libswresample/swresample.h
 
 /*
  * Copyright (C) 2011-2013 Michael Niedermayer (michaelni@gmx.at)

@@ -9,7 +9,7 @@ import java.nio.*;
 public class avutil extends com.googlecode.javacpp.presets.avutil {
     static { Loader.load(); }
 
-// Parsed from header file /usr/local/include/libavutil/avutil.h
+// Parsed from /usr/local/include/libavutil/avutil.h
 
 /*
  * copyright (c) 2006 Michael Niedermayer <michaelni@gmx.at>
@@ -343,7 +343,7 @@ public static native @Cast("unsigned") int av_int_list_length_for_size(@Cast("un
 // #endif /* AVUTIL_AVUTIL_H */
 
 
-// Parsed from header file /usr/local/include/libavutil/error.h
+// Parsed from /usr/local/include/libavutil/error.h
 
 /*
  * This file is part of FFmpeg.
@@ -502,7 +502,7 @@ public static native @Cast("char*") byte[] av_make_error_string(@Cast("char*") b
 // #endif /* AVUTIL_ERROR_H */
 
 
-// Parsed from header file /usr/local/include/libavutil/mem.h
+// Parsed from /usr/local/include/libavutil/mem.h
 
 /*
  * copyright (c) 2006 Michael Niedermayer <michaelni@gmx.at>
@@ -596,7 +596,7 @@ public static native Pointer av_malloc(@Cast("size_t") long size);
  * be allocated.
  * @see av_malloc()
  */
- public static native Pointer av_malloc_array(@Cast("size_t") long nmemb, @Cast("size_t") long size);
+public static native Pointer av_malloc_array(@Cast("size_t") long nmemb, @Cast("size_t") long size);
 
 /**
  * Allocate or reallocate a block of memory.
@@ -664,7 +664,7 @@ public static native int av_reallocp(Pointer ptr, @Cast("size_t") long size);
  *          The situation is undefined according to POSIX and may crash with
  *          some libc implementations.
  */
- public static native Pointer av_realloc_array(Pointer ptr, @Cast("size_t") long nmemb, @Cast("size_t") long size);
+public static native Pointer av_realloc_array(Pointer ptr, @Cast("size_t") long nmemb, @Cast("size_t") long size);
 
 /**
  * Allocate or reallocate an array through a pointer to a pointer.
@@ -683,7 +683,7 @@ public static native int av_reallocp(Pointer ptr, @Cast("size_t") long size);
  *          The situation is undefined according to POSIX and may crash with
  *          some libc implementations.
  */
- public static native int av_reallocp_array(Pointer ptr, @Cast("size_t") long nmemb, @Cast("size_t") long size);
+public static native int av_reallocp_array(Pointer ptr, @Cast("size_t") long nmemb, @Cast("size_t") long size);
 
 /**
  * Free a memory block which has been allocated with av_malloc(z)() or
@@ -726,7 +726,7 @@ public static native Pointer av_calloc(@Cast("size_t") long nmemb, @Cast("size_t
  * @see av_mallocz()
  * @see av_malloc_array()
  */
- public static native Pointer av_mallocz_array(@Cast("size_t") long nmemb, @Cast("size_t") long size);
+public static native Pointer av_mallocz_array(@Cast("size_t") long nmemb, @Cast("size_t") long size);
 
 /**
  * Duplicate the string s.
@@ -840,7 +840,7 @@ public static native void av_memcpy_backptr(@Cast("uint8_t*") byte[] dst, int ba
 // #endif /* AVUTIL_MEM_H */
 
 
-// Parsed from header file /usr/local/include/libavutil/mathematics.h
+// Parsed from /usr/local/include/libavutil/mathematics.h
 
 /*
  * copyright (c) 2005-2012 Michael Niedermayer <michaelni@gmx.at>
@@ -1001,7 +1001,7 @@ public static native long av_rescale_delta(@ByVal AVRational in_tb, long in_ts, 
 // #endif /* AVUTIL_MATHEMATICS_H */
 
 
-// Parsed from header file /usr/local/include/libavutil/rational.h
+// Parsed from /usr/local/include/libavutil/rational.h
 
 /*
  * rational numbers
@@ -1161,7 +1161,7 @@ public static native int av_find_nearest_q_idx(@ByVal AVRational q, @Const AVRat
 // #endif /* AVUTIL_RATIONAL_H */
 
 
-// Parsed from header file /usr/local/include/libavutil/log.h
+// Parsed from /usr/local/include/libavutil/log.h
 
 /*
  * copyright (c) 2006 Michael Niedermayer <michaelni@gmx.at>
@@ -1550,7 +1550,7 @@ public static native void av_log_set_flags(int arg);
 // #endif /* AVUTIL_LOG_H */
 
 
-// Parsed from header file /usr/local/include/libavutil/buffer.h
+// Parsed from /usr/local/include/libavutil/buffer.h
 
 /*
  * This file is part of FFmpeg.
@@ -1884,7 +1884,7 @@ public static native AVBufferRef av_buffer_pool_get(AVBufferPool pool);
 // #endif /* AVUTIL_BUFFER_H */
 
 
-// Parsed from header file /usr/local/include/libavutil/frame.h
+// Parsed from /usr/local/include/libavutil/frame.h
 
 /*
  *
@@ -2094,7 +2094,7 @@ public static final int AV_NUM_DATA_POINTERS = 8;
     /**
      * Sample aspect ratio for the video frame, 0/1 if unknown/unspecified.
      */
-    public native @ByVal AVRational sample_aspect_ratio(); public native AVFrame sample_aspect_ratio(AVRational sample_aspect_ratio);
+    public native @ByRef AVRational sample_aspect_ratio(); public native AVFrame sample_aspect_ratio(AVRational sample_aspect_ratio);
 
     /**
      * Presentation timestamp in time_base units (time when frame should be shown to user).
@@ -2573,7 +2573,7 @@ public static native AVFrameSideData av_frame_get_side_data(@Const AVFrame frame
 // #endif /* AVUTIL_FRAME_H */
 
 
-// Parsed from header file /usr/local/include/libavutil/pixfmt.h
+// Parsed from /usr/local/include/libavutil/pixfmt.h
 
 /*
  * copyright (c) 2006 Michael Niedermayer <michaelni@gmx.at>
@@ -3178,7 +3178,7 @@ public static final int PIX_FMT_GBRP16 = AV_PIX_FMT_GBRP16;
 // #endif /* AVUTIL_PIXFMT_H */
 
 
-// Parsed from header file /usr/local/include/libavutil/samplefmt.h
+// Parsed from /usr/local/include/libavutil/samplefmt.h
 
 /*
  * This file is part of FFmpeg.
@@ -3492,7 +3492,7 @@ public static native int av_samples_set_silence(@Cast("uint8_t**") @ByPtrPtr byt
 // #endif /* AVUTIL_SAMPLEFMT_H */
 
 
-// Parsed from header file /usr/local/include/libavutil/channel_layout.h
+// Parsed from /usr/local/include/libavutil/channel_layout.h
 
 /*
  * Copyright (c) 2006 Michael Niedermayer <michaelni@gmx.at>
@@ -3731,7 +3731,7 @@ public static native int av_get_standard_channel_layout(@Cast("unsigned") int in
 // #endif /* AVUTIL_CHANNEL_LAYOUT_H */
 
 
-// Parsed from header file /usr/local/include/libavutil/cpu.h
+// Parsed from /usr/local/include/libavutil/cpu.h
 
 /*
  * Copyright (c) 2000, 2001, 2002 Fabrice Bellard
@@ -3869,7 +3869,7 @@ public static native int av_cpu_count();
 // #endif /* AVUTIL_CPU_H */
 
 
-// Parsed from header file /usr/local/include/libavutil/dict.h
+// Parsed from /usr/local/include/libavutil/dict.h
 
 /*
  *
@@ -4052,7 +4052,7 @@ public static native void av_dict_free(@ByPtrPtr AVDictionary m);
 // #endif /* AVUTIL_DICT_H */
 
 
-// Parsed from header file /usr/local/include/libavutil/opt.h
+// Parsed from /usr/local/include/libavutil/opt.h
 
 /*
  * AVOptions
@@ -4357,7 +4357,7 @@ public static class AVOption extends Pointer {
         @Name("default_val.dbl") public native double default_val_dbl(); public native AVOption default_val_dbl(double default_val_dbl);
         @Name("default_val.str") @MemberGetter public native @Cast("const char*") BytePointer default_val_str();
         /* TODO those are unused now */
-        @Name("default_val.q") public native @ByVal AVRational default_val_q(); public native AVOption default_val_q(AVRational default_val_q);
+        @Name("default_val.q") public native @ByRef AVRational default_val_q(); public native AVOption default_val_q(AVRational default_val_q);
     /** minimum valid value for the option */
     public native double min(); public native AVOption min(double min);
     /** maximum valid value for the option */
@@ -5023,7 +5023,7 @@ public static native int av_opt_query_ranges_default(@ByPtrPtr AVOptionRanges ar
 // #endif /* AVUTIL_OPT_H */
 
 
-// Parsed from header file /usr/local/include/libavutil/audioconvert.h
+// Parsed from /usr/local/include/libavutil/audioconvert.h
 
 
 // #include "version.h"
@@ -5033,7 +5033,7 @@ public static native int av_opt_query_ranges_default(@ByPtrPtr AVOptionRanges ar
 // #endif
 
 
-// Parsed from header file /usr/local/include/libavutil/pixdesc.h
+// Parsed from /usr/local/include/libavutil/pixdesc.h
 
 /*
  * pixel format descriptor
@@ -5147,7 +5147,7 @@ public static class AVPixFmtDescriptor extends Pointer {
      * if the RGB flag is set then 0 is red, 1 is green and 2 is blue;
      * otherwise 0 is luma, 1 is chroma-U and 2 is chroma-V.
      */
-    public native @ByVal AVComponentDescriptor comp(int i); public native AVPixFmtDescriptor comp(int i, AVComponentDescriptor comp);
+    public native @ByRef AVComponentDescriptor comp(int i); public native AVPixFmtDescriptor comp(int i, AVComponentDescriptor comp);
     @MemberGetter public native AVComponentDescriptor comp();
 }
 
@@ -5204,7 +5204,7 @@ public static final int PIX_FMT_ALPHA =     AV_PIX_FMT_FLAG_ALPHA;
 /**
  * The array of all the pixel format descriptors.
  */
-@MemberGetter public static native @Const @Deprecated @ByVal AVPixFmtDescriptor av_pix_fmt_descriptors(int i);
+@MemberGetter public static native @Const @Deprecated @ByRef AVPixFmtDescriptor av_pix_fmt_descriptors(int i);
 @MemberGetter public static native @Const @Deprecated AVPixFmtDescriptor av_pix_fmt_descriptors();
 // #endif
 
@@ -5374,7 +5374,7 @@ public static native @Cast("AVPixelFormat") int av_pix_fmt_swap_endianness(@Cast
 // #endif /* AVUTIL_PIXDESC_H */
 
 
-// Parsed from header file /usr/local/include/libavutil/imgutils.h
+// Parsed from /usr/local/include/libavutil/imgutils.h
 
 /*
  * This file is part of FFmpeg.

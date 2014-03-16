@@ -29,12 +29,13 @@ import com.googlecode.javacpp.annotation.Properties;
  * @author Samuel Audet
  */
 @Properties(inherit={opencv_calib3d.class, opencv_features2d.class, opencv_objdetect.class, opencv_photo.class,
-        opencv_nonfree.class, opencv_video.class, opencv_ml.class, opencv_legacy.class}, target="com.googlecode.javacpp.opencv_videostab", value={
-    @Platform(include={"<opencv2/videostab/videostab.hpp>", "<opencv2/videostab/stabilizer.hpp>", "<opencv2/videostab/optical_flow.hpp>",
-        "<opencv2/videostab/global_motion.hpp>", "<opencv2/videostab/motion_stabilizing.hpp>", "<opencv2/videostab/frame_source.hpp>",
-        "<opencv2/videostab/log.hpp>", "<opencv2/videostab/fast_marching.hpp>", "<opencv2/videostab/inpainting.hpp>",
-        "<opencv2/videostab/deblurring.hpp>"}, link="opencv_videostab@.2.4", preload={"opencv_gpu@.2.4", "opencv_ocl@.2.4"}),
-    @Platform(value="windows", link="opencv_videostab248", preload={"opencv_gpu248", "opencv_ocl248"}) })
+        opencv_nonfree.class, opencv_video.class, opencv_ml.class, opencv_legacy.class}, value={
+    @Platform(include={"<opencv2/videostab/frame_source.hpp>", "<opencv2/videostab/log.hpp>", "<opencv2/videostab/fast_marching.hpp>",
+        "<opencv2/videostab/optical_flow.hpp>", "<opencv2/videostab/global_motion.hpp>", "<opencv2/videostab/motion_stabilizing.hpp>",
+        "<opencv2/videostab/inpainting.hpp>", "<opencv2/videostab/deblurring.hpp>", "<opencv2/videostab/stabilizer.hpp>",
+        "<opencv2/videostab/videostab.hpp>"}, link="opencv_videostab@.2.4", preload={"opencv_gpu@.2.4", "opencv_ocl@.2.4"}),
+    @Platform(value="windows", link="opencv_videostab248", preload={"opencv_gpu248", "opencv_ocl248"}) },
+        target="com.googlecode.javacpp.opencv_videostab")
 public class opencv_videostab implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
     }

@@ -2,7 +2,6 @@
 
 package com.googlecode.javacpp;
 
-import com.googlecode.javacpp.helper.opencv_objdetect.*;
 import com.googlecode.javacpp.*;
 import com.googlecode.javacpp.annotation.*;
 import java.nio.*;
@@ -11,7 +10,7 @@ import static com.googlecode.javacpp.opencv_core.*;
 import static com.googlecode.javacpp.opencv_imgproc.*;
 import static com.googlecode.javacpp.opencv_highgui.*;
 
-public class opencv_objdetect extends com.googlecode.javacpp.presets.opencv_objdetect {
+public class opencv_objdetect extends com.googlecode.javacpp.helper.opencv_objdetect {
     static { Loader.load(); }
 
 @Name("std::deque<CvDataMatrixCode>") public static class CvDataMatrixCodeDeque extends Pointer {
@@ -62,7 +61,7 @@ public class opencv_objdetect extends com.googlecode.javacpp.presets.opencv_objd
     }
 }
 
-// Parsed from header file /usr/local/include/opencv2/objdetect/objdetect.hpp
+// Parsed from /usr/local/include/opencv2/objdetect/objdetect.hpp
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -141,7 +140,7 @@ public static class CvHaarFeature extends Pointer {
     }
 
     public native int tilted(); public native CvHaarFeature tilted(int tilted);
-        @Name({"rect", ".r"}) public native @ByVal CvRect rect_r(int i); public native CvHaarFeature rect_r(int i, CvRect rect_r);
+        @Name({"rect", ".r"}) public native @ByRef CvRect rect_r(int i); public native CvHaarFeature rect_r(int i, CvRect rect_r);
         @Name({"rect", ".weight"}) public native float rect_weight(int i); public native CvHaarFeature rect_weight(int i, float rect_weight);
 }
 
@@ -202,8 +201,8 @@ public static class CvHaarClassifierCascade extends AbstractCvHaarClassifierCasc
 
     public native int flags(); public native CvHaarClassifierCascade flags(int flags);
     public native int count(); public native CvHaarClassifierCascade count(int count);
-    public native @ByVal CvSize orig_window_size(); public native CvHaarClassifierCascade orig_window_size(CvSize orig_window_size);
-    public native @ByVal CvSize real_window_size(); public native CvHaarClassifierCascade real_window_size(CvSize real_window_size);
+    public native @ByRef CvSize orig_window_size(); public native CvHaarClassifierCascade orig_window_size(CvSize orig_window_size);
+    public native @ByRef CvSize real_window_size(); public native CvHaarClassifierCascade real_window_size(CvSize real_window_size);
     public native double scale(); public native CvHaarClassifierCascade scale(double scale);
     public native CvHaarStageClassifier stage_classifier(); public native CvHaarClassifierCascade stage_classifier(CvHaarStageClassifier stage_classifier);
     public native CvHidHaarClassifierCascade hid_cascade(); public native CvHaarClassifierCascade hid_cascade(CvHidHaarClassifierCascade hid_cascade);
@@ -220,7 +219,7 @@ public static class CvAvgComp extends Pointer {
         return (CvAvgComp)super.position(position);
     }
 
-    public native @ByVal CvRect rect(); public native CvAvgComp rect(CvRect rect);
+    public native @ByRef CvRect rect(); public native CvAvgComp rect(CvRect rect);
     public native int neighbors(); public native CvAvgComp neighbors(int neighbors);
 }
 
@@ -253,6 +252,8 @@ public static native CvSeq cvHaarDetectObjects( @Const CvArr image,
                      double scale_factor/*CV_DEFAULT(1.1)*/,
                      int min_neighbors/*CV_DEFAULT(3)*/, int flags/*CV_DEFAULT(0)*/,
                      @ByVal CvSize min_size/*CV_DEFAULT(cvSize(0,0))*/, @ByVal CvSize max_size/*CV_DEFAULT(cvSize(0,0))*/);
+public static native CvSeq cvHaarDetectObjects( @Const CvArr image,
+                     CvHaarClassifierCascade cascade, CvMemStorage storage);
 
 /* sets images for haar classifier cascade */
 public static native void cvSetImagesForHaarClassifierCascade( CvHaarClassifierCascade cascade,
@@ -262,6 +263,16 @@ public static native void cvSetImagesForHaarClassifierCascade( CvHaarClassifierC
 /* runs the cascade on the specified window */
 public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
                                        @ByVal CvPoint pt, int start_stage/*CV_DEFAULT(0)*/);
+public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
+                                       @ByVal CvPoint pt);
+public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
+                                       @ByVal @Cast("CvPoint*") IntBuffer pt, int start_stage/*CV_DEFAULT(0)*/);
+public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
+                                       @ByVal @Cast("CvPoint*") IntBuffer pt);
+public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
+                                       @ByVal @Cast("CvPoint*") int[] pt, int start_stage/*CV_DEFAULT(0)*/);
+public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
+                                       @ByVal @Cast("CvPoint*") int[] pt);
 
 
 /****************************************************************************************\
@@ -313,7 +324,7 @@ public static class CvLSVMFilterObject extends Pointer {
         return (CvLSVMFilterObject)super.position(position);
     }
 
-    public native @ByVal CvLSVMFilterPosition V(); public native CvLSVMFilterObject V(CvLSVMFilterPosition V);
+    public native @ByRef CvLSVMFilterPosition V(); public native CvLSVMFilterObject V(CvLSVMFilterPosition V);
     public native float fineFunction(int i); public native CvLSVMFilterObject fineFunction(int i, float fineFunction);
     @MemberGetter public native FloatPointer fineFunction();
     public native int sizeX(); public native CvLSVMFilterObject sizeX(int sizeX);
@@ -365,7 +376,7 @@ public static class CvObjectDetection extends Pointer {
         return (CvObjectDetection)super.position(position);
     }
 
-    public native @ByVal CvRect rect(); public native CvObjectDetection rect(CvRect rect);
+    public native @ByRef CvRect rect(); public native CvObjectDetection rect(CvRect rect);
     public native float score(); public native CvObjectDetection score(float score);
 }
 
@@ -423,6 +434,9 @@ public static native CvSeq cvLatentSvmDetectObjects(IplImage image,
                                 CvMemStorage storage,
                                 float overlap_threshold/*CV_DEFAULT(0.5f)*/,
                                 int numThreads/*CV_DEFAULT(-1)*/);
+public static native CvSeq cvLatentSvmDetectObjects(IplImage image,
+                                CvLatentSvmDetector detector,
+                                CvMemStorage storage);
 
 // #ifdef __cplusplus
 
@@ -435,6 +449,9 @@ public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
                      @Cast("bool") boolean outputRejectLevels/*=false*/ );
 public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
                      CvHaarClassifierCascade cascade, CvMemStorage storage,
+                     @StdVector IntPointer rejectLevels, @StdVector DoublePointer levelWeightds );
+public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
+                     CvHaarClassifierCascade cascade, CvMemStorage storage,
                      @StdVector IntBuffer rejectLevels, @StdVector DoubleBuffer levelWeightds,
                      double scale_factor/*CV_DEFAULT(1.1)*/,
                      int min_neighbors/*CV_DEFAULT(3)*/, int flags/*CV_DEFAULT(0)*/,
@@ -442,11 +459,17 @@ public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
                      @Cast("bool") boolean outputRejectLevels/*=false*/ );
 public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
                      CvHaarClassifierCascade cascade, CvMemStorage storage,
+                     @StdVector IntBuffer rejectLevels, @StdVector DoubleBuffer levelWeightds );
+public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
+                     CvHaarClassifierCascade cascade, CvMemStorage storage,
                      @StdVector int[] rejectLevels, @StdVector double[] levelWeightds,
                      double scale_factor/*CV_DEFAULT(1.1)*/,
                      int min_neighbors/*CV_DEFAULT(3)*/, int flags/*CV_DEFAULT(0)*/,
                      @ByVal CvSize min_size/*CV_DEFAULT(cvSize(0,0))*/, @ByVal CvSize max_size/*CV_DEFAULT(cvSize(0,0))*/,
                      @Cast("bool") boolean outputRejectLevels/*=false*/ );
+public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
+                     CvHaarClassifierCascade cascade, CvMemStorage storage,
+                     @StdVector int[] rejectLevels, @StdVector double[] levelWeightds );
 
 ///////////////////////////// Object Detection ////////////////////////////
 
@@ -478,7 +501,9 @@ public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
         private native void allocate();
         public ObjectDetection( @Const @ByRef Rect rect, float score, int classID/*=-1*/ ) { allocate(rect, score, classID); }
         private native void allocate( @Const @ByRef Rect rect, float score, int classID/*=-1*/ );
-        public native @ByVal Rect rect(); public native ObjectDetection rect(Rect rect);
+        public ObjectDetection( @Const @ByRef Rect rect, float score ) { allocate(rect, score); }
+        private native void allocate( @Const @ByRef Rect rect, float score );
+        public native @ByRef Rect rect(); public native ObjectDetection rect(Rect rect);
         public native float score(); public native ObjectDetection score(float score);
         public native int classID(); public native ObjectDetection classID(int classID);
     }
@@ -487,15 +512,20 @@ public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
     private native void allocate();
     public LatentSvmDetector( @Const @ByRef StringVector filenames, @Const @ByRef StringVector classNames/*=vector<string>()*/ ) { allocate(filenames, classNames); }
     private native void allocate( @Const @ByRef StringVector filenames, @Const @ByRef StringVector classNames/*=vector<string>()*/ );
+    public LatentSvmDetector( @Const @ByRef StringVector filenames ) { allocate(filenames); }
+    private native void allocate( @Const @ByRef StringVector filenames );
 
     public native void clear();
     public native @Cast("bool") boolean empty();
     public native @Cast("bool") boolean load( @Const @ByRef StringVector filenames, @Const @ByRef StringVector classNames/*=vector<string>()*/ );
+    public native @Cast("bool") boolean load( @Const @ByRef StringVector filenames );
 
     public native void detect( @Const @ByRef Mat image,
                              @StdVector ObjectDetection objectDetections,
                              float overlapThreshold/*=0.5f*/,
                              int numThreads/*=-1*/ );
+    public native void detect( @Const @ByRef Mat image,
+                             @StdVector ObjectDetection objectDetections );
 
     public native @Const @ByRef StringVector getClassNames();
     public native @Cast("size_t") long getClassCount();
@@ -515,24 +545,37 @@ public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
 }
 
 @Namespace("cv") public static native void groupRectangles(@StdVector Rect rectList, int groupThreshold, double eps/*=0.2*/);
+@Namespace("cv") public static native void groupRectangles(@StdVector Rect rectList, int groupThreshold);
 @Namespace("cv") public static native void groupRectangles(@StdVector Rect rectList, @StdVector IntPointer weights, int groupThreshold, double eps/*=0.2*/);
+@Namespace("cv") public static native void groupRectangles(@StdVector Rect rectList, @StdVector IntPointer weights, int groupThreshold);
 @Namespace("cv") public static native void groupRectangles(@StdVector Rect rectList, @StdVector IntBuffer weights, int groupThreshold, double eps/*=0.2*/);
+@Namespace("cv") public static native void groupRectangles(@StdVector Rect rectList, @StdVector IntBuffer weights, int groupThreshold);
 @Namespace("cv") public static native void groupRectangles(@StdVector Rect rectList, @StdVector int[] weights, int groupThreshold, double eps/*=0.2*/);
+@Namespace("cv") public static native void groupRectangles(@StdVector Rect rectList, @StdVector int[] weights, int groupThreshold);
 @Namespace("cv") public static native void groupRectangles( @StdVector Rect rectList, int groupThreshold, double eps, @StdVector IntPointer weights, @StdVector DoublePointer levelWeights );
 @Namespace("cv") public static native void groupRectangles( @StdVector Rect rectList, int groupThreshold, double eps, @StdVector IntBuffer weights, @StdVector DoubleBuffer levelWeights );
 @Namespace("cv") public static native void groupRectangles( @StdVector Rect rectList, int groupThreshold, double eps, @StdVector int[] weights, @StdVector double[] levelWeights );
 @Namespace("cv") public static native void groupRectangles(@StdVector Rect rectList, @StdVector IntPointer rejectLevels,
                                 @StdVector DoublePointer levelWeights, int groupThreshold, double eps/*=0.2*/);
+@Namespace("cv") public static native void groupRectangles(@StdVector Rect rectList, @StdVector IntPointer rejectLevels,
+                                @StdVector DoublePointer levelWeights, int groupThreshold);
 @Namespace("cv") public static native void groupRectangles(@StdVector Rect rectList, @StdVector IntBuffer rejectLevels,
                                 @StdVector DoubleBuffer levelWeights, int groupThreshold, double eps/*=0.2*/);
+@Namespace("cv") public static native void groupRectangles(@StdVector Rect rectList, @StdVector IntBuffer rejectLevels,
+                                @StdVector DoubleBuffer levelWeights, int groupThreshold);
 @Namespace("cv") public static native void groupRectangles(@StdVector Rect rectList, @StdVector int[] rejectLevels,
                                 @StdVector double[] levelWeights, int groupThreshold, double eps/*=0.2*/);
+@Namespace("cv") public static native void groupRectangles(@StdVector Rect rectList, @StdVector int[] rejectLevels,
+                                @StdVector double[] levelWeights, int groupThreshold);
 @Namespace("cv") public static native void groupRectangles_meanshift(@StdVector Rect rectList, @StdVector DoublePointer foundWeights, @StdVector DoublePointer foundScales,
                                           double detectThreshold/*=0.0*/, @ByVal Size winDetSize/*=Size(64, 128)*/);
+@Namespace("cv") public static native void groupRectangles_meanshift(@StdVector Rect rectList, @StdVector DoublePointer foundWeights, @StdVector DoublePointer foundScales);
 @Namespace("cv") public static native void groupRectangles_meanshift(@StdVector Rect rectList, @StdVector DoubleBuffer foundWeights, @StdVector DoubleBuffer foundScales,
                                           double detectThreshold/*=0.0*/, @ByVal Size winDetSize/*=Size(64, 128)*/);
+@Namespace("cv") public static native void groupRectangles_meanshift(@StdVector Rect rectList, @StdVector DoubleBuffer foundWeights, @StdVector DoubleBuffer foundScales);
 @Namespace("cv") public static native void groupRectangles_meanshift(@StdVector Rect rectList, @StdVector double[] foundWeights, @StdVector double[] foundScales,
                                           double detectThreshold/*=0.0*/, @ByVal Size winDetSize/*=Size(64, 128)*/);
+@Namespace("cv") public static native void groupRectangles_meanshift(@StdVector Rect rectList, @StdVector double[] foundWeights, @StdVector double[] foundScales);
 
 
 @Namespace("cv") public static class FeatureEvaluator extends Pointer {
@@ -597,6 +640,8 @@ public static final int
                                        int minNeighbors/*=3*/, int flags/*=0*/,
                                        @ByVal Size minSize/*=Size()*/,
                                        @ByVal Size maxSize/*=Size()*/ );
+    public native void detectMultiScale( @Const @ByRef Mat image,
+                                       @StdVector Rect objects );
 
     public native void detectMultiScale( @Const @ByRef Mat image,
                                        @StdVector Rect objects,
@@ -609,6 +654,10 @@ public static final int
                                        @Cast("bool") boolean outputRejectLevels/*=false*/ );
     public native void detectMultiScale( @Const @ByRef Mat image,
                                        @StdVector Rect objects,
+                                       @StdVector IntPointer rejectLevels,
+                                       @StdVector DoublePointer levelWeights );
+    public native void detectMultiScale( @Const @ByRef Mat image,
+                                       @StdVector Rect objects,
                                        @StdVector IntBuffer rejectLevels,
                                        @StdVector DoubleBuffer levelWeights,
                                        double scaleFactor/*=1.1*/,
@@ -618,6 +667,10 @@ public static final int
                                        @Cast("bool") boolean outputRejectLevels/*=false*/ );
     public native void detectMultiScale( @Const @ByRef Mat image,
                                        @StdVector Rect objects,
+                                       @StdVector IntBuffer rejectLevels,
+                                       @StdVector DoubleBuffer levelWeights );
+    public native void detectMultiScale( @Const @ByRef Mat image,
+                                       @StdVector Rect objects,
                                        @StdVector int[] rejectLevels,
                                        @StdVector double[] levelWeights,
                                        double scaleFactor/*=1.1*/,
@@ -625,6 +678,10 @@ public static final int
                                        @ByVal Size minSize/*=Size()*/,
                                        @ByVal Size maxSize/*=Size()*/,
                                        @Cast("bool") boolean outputRejectLevels/*=false*/ );
+    public native void detectMultiScale( @Const @ByRef Mat image,
+                                       @StdVector Rect objects,
+                                       @StdVector int[] rejectLevels,
+                                       @StdVector double[] levelWeights );
 
 
     public native @Cast("bool") boolean isOldFormatCascade();
@@ -695,6 +752,10 @@ public static final int
                       int _histogramNormType/*=HOGDescriptor::L2Hys*/,
                       double _L2HysThreshold/*=0.2*/, @Cast("bool") boolean _gammaCorrection/*=false*/,
                       int _nlevels/*=HOGDescriptor::DEFAULT_NLEVELS*/);
+    public HOGDescriptor(@ByVal Size _winSize, @ByVal Size _blockSize, @ByVal Size _blockStride,
+                      @ByVal Size _cellSize, int _nbins) { allocate(_winSize, _blockSize, _blockStride, _cellSize, _nbins); }
+    private native void allocate(@ByVal Size _winSize, @ByVal Size _blockSize, @ByVal Size _blockStride,
+                      @ByVal Size _cellSize, int _nbins);
 
     public HOGDescriptor(@StdString BytePointer filename) { allocate(filename); }
     private native void allocate(@StdString BytePointer filename);
@@ -715,9 +776,13 @@ public static final int
     public native void write(@ByRef FileStorage fs, @StdString String objname);
 
     public native @Cast("bool") boolean load(@StdString BytePointer filename, @StdString BytePointer objname/*=String()*/);
+    public native @Cast("bool") boolean load(@StdString BytePointer filename);
     public native @Cast("bool") boolean load(@StdString String filename, @StdString String objname/*=String()*/);
+    public native @Cast("bool") boolean load(@StdString String filename);
     public native void save(@StdString BytePointer filename, @StdString BytePointer objname/*=String()*/);
+    public native void save(@StdString BytePointer filename);
     public native void save(@StdString String filename, @StdString String objname/*=String()*/);
+    public native void save(@StdString String filename);
     public native void copyTo(@ByRef HOGDescriptor c);
 
     public native void compute(@Const @ByRef Mat img,
@@ -725,13 +790,19 @@ public static final int
                              @ByVal Size winStride/*=Size()*/, @ByVal Size padding/*=Size()*/,
                              @StdVector Point locations/*=vector<Point>()*/);
     public native void compute(@Const @ByRef Mat img,
+                             @StdVector FloatPointer descriptors);
+    public native void compute(@Const @ByRef Mat img,
                              @StdVector FloatBuffer descriptors,
                              @ByVal Size winStride/*=Size()*/, @ByVal Size padding/*=Size()*/,
                              @StdVector Point locations/*=vector<Point>()*/);
     public native void compute(@Const @ByRef Mat img,
+                             @StdVector FloatBuffer descriptors);
+    public native void compute(@Const @ByRef Mat img,
                              @StdVector float[] descriptors,
                              @ByVal Size winStride/*=Size()*/, @ByVal Size padding/*=Size()*/,
                              @StdVector Point locations/*=vector<Point>()*/);
+    public native void compute(@Const @ByRef Mat img,
+                             @StdVector float[] descriptors);
     //with found weights output
     public native void detect(@Const @ByRef Mat img, @StdVector Point foundLocations,
                             @StdVector DoublePointer weights,
@@ -739,49 +810,64 @@ public static final int
                             @ByVal Size padding/*=Size()*/,
                             @StdVector Point searchLocations/*=vector<Point>()*/);
     public native void detect(@Const @ByRef Mat img, @StdVector Point foundLocations,
+                            @StdVector DoublePointer weights);
+    public native void detect(@Const @ByRef Mat img, @StdVector Point foundLocations,
                             @StdVector DoubleBuffer weights,
                             double hitThreshold/*=0*/, @ByVal Size winStride/*=Size()*/,
                             @ByVal Size padding/*=Size()*/,
                             @StdVector Point searchLocations/*=vector<Point>()*/);
     public native void detect(@Const @ByRef Mat img, @StdVector Point foundLocations,
+                            @StdVector DoubleBuffer weights);
+    public native void detect(@Const @ByRef Mat img, @StdVector Point foundLocations,
                             @StdVector double[] weights,
                             double hitThreshold/*=0*/, @ByVal Size winStride/*=Size()*/,
                             @ByVal Size padding/*=Size()*/,
                             @StdVector Point searchLocations/*=vector<Point>()*/);
+    public native void detect(@Const @ByRef Mat img, @StdVector Point foundLocations,
+                            @StdVector double[] weights);
     //without found weights output
     public native void detect(@Const @ByRef Mat img, @StdVector Point foundLocations,
                             double hitThreshold/*=0*/, @ByVal Size winStride/*=Size()*/,
                             @ByVal Size padding/*=Size()*/,
                             @StdVector Point searchLocations/*=vector<Point>()*/);
+    public native void detect(@Const @ByRef Mat img, @StdVector Point foundLocations);
     //with result weights output
     public native void detectMultiScale(@Const @ByRef Mat img, @StdVector Rect foundLocations,
                                       @StdVector DoublePointer foundWeights, double hitThreshold/*=0*/,
                                       @ByVal Size winStride/*=Size()*/, @ByVal Size padding/*=Size()*/, double scale/*=1.05*/,
                                       double finalThreshold/*=2.0*/,@Cast("bool") boolean useMeanshiftGrouping/*=false*/);
     public native void detectMultiScale(@Const @ByRef Mat img, @StdVector Rect foundLocations,
+                                      @StdVector DoublePointer foundWeights);
+    public native void detectMultiScale(@Const @ByRef Mat img, @StdVector Rect foundLocations,
                                       @StdVector DoubleBuffer foundWeights, double hitThreshold/*=0*/,
                                       @ByVal Size winStride/*=Size()*/, @ByVal Size padding/*=Size()*/, double scale/*=1.05*/,
                                       double finalThreshold/*=2.0*/,@Cast("bool") boolean useMeanshiftGrouping/*=false*/);
     public native void detectMultiScale(@Const @ByRef Mat img, @StdVector Rect foundLocations,
+                                      @StdVector DoubleBuffer foundWeights);
+    public native void detectMultiScale(@Const @ByRef Mat img, @StdVector Rect foundLocations,
                                       @StdVector double[] foundWeights, double hitThreshold/*=0*/,
                                       @ByVal Size winStride/*=Size()*/, @ByVal Size padding/*=Size()*/, double scale/*=1.05*/,
                                       double finalThreshold/*=2.0*/,@Cast("bool") boolean useMeanshiftGrouping/*=false*/);
+    public native void detectMultiScale(@Const @ByRef Mat img, @StdVector Rect foundLocations,
+                                      @StdVector double[] foundWeights);
     //without found weights output
     public native void detectMultiScale(@Const @ByRef Mat img, @StdVector Rect foundLocations,
                                       double hitThreshold/*=0*/, @ByVal Size winStride/*=Size()*/,
                                       @ByVal Size padding/*=Size()*/, double scale/*=1.05*/,
                                       double finalThreshold/*=2.0*/, @Cast("bool") boolean useMeanshiftGrouping/*=false*/);
+    public native void detectMultiScale(@Const @ByRef Mat img, @StdVector Rect foundLocations);
 
     public native void computeGradient(@Const @ByRef Mat img, @ByRef Mat grad, @ByRef Mat angleOfs,
                                      @ByVal Size paddingTL/*=Size()*/, @ByVal Size paddingBR/*=Size()*/);
+    public native void computeGradient(@Const @ByRef Mat img, @ByRef Mat grad, @ByRef Mat angleOfs);
 
     public native @StdVector FloatPointer getDefaultPeopleDetector();
     public native @StdVector FloatPointer getDaimlerPeopleDetector();
 
-    public native @ByVal Size winSize(); public native HOGDescriptor winSize(Size winSize);
-    public native @ByVal Size blockSize(); public native HOGDescriptor blockSize(Size blockSize);
-    public native @ByVal Size blockStride(); public native HOGDescriptor blockStride(Size blockStride);
-    public native @ByVal Size cellSize(); public native HOGDescriptor cellSize(Size cellSize);
+    public native @ByRef Size winSize(); public native HOGDescriptor winSize(Size winSize);
+    public native @ByRef Size blockSize(); public native HOGDescriptor blockSize(Size blockSize);
+    public native @ByRef Size blockStride(); public native HOGDescriptor blockStride(Size blockStride);
+    public native @ByRef Size cellSize(); public native HOGDescriptor cellSize(Size cellSize);
     public native int nbins(); public native HOGDescriptor nbins(int nbins);
     public native int derivAperture(); public native HOGDescriptor derivAperture(int derivAperture);
     public native double winSigma(); public native HOGDescriptor winSigma(double winSigma);
@@ -798,13 +884,19 @@ public static final int
                                       double hitThreshold/*=0*/, @ByVal Size winStride/*=Size()*/,
                                       @ByVal Size padding/*=Size()*/);
    public native void detectROI(@Const @ByRef Mat img, @StdVector Point locations,
+                                      @StdVector Point foundLocations, @StdVector DoublePointer confidences);
+   public native void detectROI(@Const @ByRef Mat img, @StdVector Point locations,
                                       @StdVector Point foundLocations, @StdVector DoubleBuffer confidences,
                                       double hitThreshold/*=0*/, @ByVal Size winStride/*=Size()*/,
                                       @ByVal Size padding/*=Size()*/);
    public native void detectROI(@Const @ByRef Mat img, @StdVector Point locations,
+                                      @StdVector Point foundLocations, @StdVector DoubleBuffer confidences);
+   public native void detectROI(@Const @ByRef Mat img, @StdVector Point locations,
                                       @StdVector Point foundLocations, @StdVector double[] confidences,
                                       double hitThreshold/*=0*/, @ByVal Size winStride/*=Size()*/,
                                       @ByVal Size padding/*=Size()*/);
+   public native void detectROI(@Const @ByRef Mat img, @StdVector Point locations,
+                                      @StdVector Point foundLocations, @StdVector double[] confidences);
 
    // evaluate specified ROI and return confidence value for each location in multiple scales
    public native void detectMultiScaleROI(@Const @ByRef Mat img,
@@ -812,6 +904,9 @@ public static final int
                                                           @StdVector DetectionROI locations,
                                                           double hitThreshold/*=0*/,
                                                           int groupThreshold/*=0*/);
+   public native void detectMultiScaleROI(@Const @ByRef Mat img,
+                                                          @StdVector Rect foundLocations,
+                                                          @StdVector DetectionROI locations);
 
    // read/parse Dalal's alt model file
    public native void readALTModel(@StdString BytePointer modelfile);
@@ -826,6 +921,8 @@ public static final int
                                  @ByRef StringVector codes,
                                  @ByVal Mat corners/*=noArray()*/,
                                  @ByVal MatVector dmtx/*=noArray()*/);
+@Namespace("cv") public static native void findDataMatrix(@ByVal Mat image,
+                                 @ByRef StringVector codes);
 @Namespace("cv") public static native void drawDataMatrixCodes(@ByVal Mat image,
                                       @Const @ByRef StringVector codes,
                                       @ByVal Mat corners);
@@ -966,6 +1063,7 @@ public static native @ByVal CvDataMatrixCodeDeque cvFindDataMatrix(CvMat im);
    */
   public native @Ptr QuantizedPyramid process(@Const @ByRef Mat src,
                       @Const @ByRef Mat mask/*=Mat()*/);
+  public native @Ptr QuantizedPyramid process(@Const @ByRef Mat src);
 
   public native @StdString BytePointer name();
 
@@ -1162,6 +1260,7 @@ public static native @ByVal CvDataMatrixCodeDeque cvFindDataMatrix(CvMat im);
                @Const @ByRef StringVector class_ids/*=std::vector<std::string>()*/,
                @ByVal MatVector quantized_images/*=noArray()*/,
                @Const @ByRef MatVector masks/*=std::vector<Mat>()*/);
+  public native void match(@Const @ByRef MatVector sources, float threshold, @StdVector Match matches);
 
   /**
    * \brief Add new object template.
@@ -1175,8 +1274,12 @@ public static native @ByVal CvDataMatrixCodeDeque cvFindDataMatrix(CvMat im);
    */
   public native int addTemplate(@Const @ByRef MatVector sources, @StdString BytePointer class_id,
             @Const @ByRef Mat object_mask, Rect bounding_box/*=NULL*/);
+  public native int addTemplate(@Const @ByRef MatVector sources, @StdString BytePointer class_id,
+            @Const @ByRef Mat object_mask);
   public native int addTemplate(@Const @ByRef MatVector sources, @StdString String class_id,
             @Const @ByRef Mat object_mask, Rect bounding_box/*=NULL*/);
+  public native int addTemplate(@Const @ByRef MatVector sources, @StdString String class_id,
+            @Const @ByRef Mat object_mask);
 
   /**
    * \brief Add a new object template computed by external means.
@@ -1222,15 +1325,18 @@ public static native @ByVal CvDataMatrixCodeDeque cvFindDataMatrix(CvMat im);
   public native void write(@ByRef FileStorage fs);
 
   public native @StdString BytePointer readClass(@Const @ByRef FileNode fn, @StdString BytePointer class_id_override/*=""*/);
+  public native @StdString BytePointer readClass(@Const @ByRef FileNode fn);
   public native @StdString String readClass(@Const @ByRef FileNode fn, @StdString String class_id_override/*=""*/);
   public native void writeClass(@StdString BytePointer class_id, @ByRef FileStorage fs);
   public native void writeClass(@StdString String class_id, @ByRef FileStorage fs);
 
   public native void readClasses(@Const @ByRef StringVector class_ids,
                      @StdString BytePointer format/*="templates_%s.yml.gz"*/);
+  public native void readClasses(@Const @ByRef StringVector class_ids);
   public native void readClasses(@Const @ByRef StringVector class_ids,
                      @StdString String format/*="templates_%s.yml.gz"*/);
   public native void writeClasses(@StdString BytePointer format/*="templates_%s.yml.gz"*/);
+  public native void writeClasses();
   public native void writeClasses(@StdString String format/*="templates_%s.yml.gz"*/);
 }
 

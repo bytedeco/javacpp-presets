@@ -12,7 +12,7 @@ import static com.googlecode.javacpp.avcodec.*;
 public class avformat extends com.googlecode.javacpp.presets.avformat {
     static { Loader.load(); }
 
-// Parsed from header file /usr/local/include/libavformat/avio.h
+// Parsed from /usr/local/include/libavformat/avio.h
 
 /*
  * copyright (c) 2001 Fabrice Bellard
@@ -668,7 +668,7 @@ public static native long avio_seek_time(AVIOContext h, int stream_index,
 // #endif /* AVFORMAT_AVIO_H */
 
 
-// Parsed from header file /usr/local/include/libavformat/avformat.h
+// Parsed from /usr/local/include/libavformat/avformat.h
 
 /*
  * copyright (c) 2001 Fabrice Bellard
@@ -1566,7 +1566,7 @@ public static class AVStream extends Pointer {
     /**
      * encoding: pts generation when outputting stream
      */
-    public native @ByVal AVFrac pts(); public native AVStream pts(AVFrac pts);
+    public native @ByRef AVFrac pts(); public native AVStream pts(AVFrac pts);
 
     /**
      * This is the fundamental unit of time (in seconds) in terms
@@ -1577,7 +1577,7 @@ public static class AVStream extends Pointer {
      * user-provided value of @ref AVCodecContext.time_base "codec->time_base"
      * as a hint.
      */
-    public native @ByVal AVRational time_base(); public native AVStream time_base(AVRational time_base);
+    public native @ByRef AVRational time_base(); public native AVStream time_base(AVRational time_base);
 
     /**
      * Decoding: pts of the first frame of the stream in presentation order, in stream time base.
@@ -1610,14 +1610,14 @@ public static class AVStream extends Pointer {
      * - encoding: Set by user.
      * - decoding: Set by libavformat.
      */
-    public native @ByVal AVRational sample_aspect_ratio(); public native AVStream sample_aspect_ratio(AVRational sample_aspect_ratio);
+    public native @ByRef AVRational sample_aspect_ratio(); public native AVStream sample_aspect_ratio(AVRational sample_aspect_ratio);
 
     public native AVDictionary metadata(); public native AVStream metadata(AVDictionary metadata);
 
     /**
      * Average framerate
      */
-    public native @ByVal AVRational avg_frame_rate(); public native AVStream avg_frame_rate(AVRational avg_frame_rate);
+    public native @ByRef AVRational avg_frame_rate(); public native AVStream avg_frame_rate(AVRational avg_frame_rate);
 
     /**
      * For streams with AV_DISPOSITION_ATTACHED_PIC disposition, this packet
@@ -1626,7 +1626,7 @@ public static class AVStream extends Pointer {
      * decoding: set by libavformat, must not be modified by the caller.
      * encoding: unused
      */
-    public native @ByVal AVPacket attached_pic(); public native AVStream attached_pic(AVPacket attached_pic);
+    public native @ByRef AVPacket attached_pic(); public native AVStream attached_pic(AVPacket attached_pic);
 
     /*****************************************************************
      * All fields below this line are not part of the public API. They
@@ -1694,7 +1694,7 @@ public static final int MAX_PROBE_PACKETS = 2500;
      * last packet in packet_buffer for this stream when muxing.
      */
     public native AVPacketList last_in_packet_buffer(); public native AVStream last_in_packet_buffer(AVPacketList last_in_packet_buffer);
-    public native @ByVal AVProbeData probe_data(); public native AVStream probe_data(AVProbeData probe_data);
+    public native @ByRef AVProbeData probe_data(); public native AVStream probe_data(AVProbeData probe_data);
 public static final int MAX_REORDER_DELAY = 16;
     public native long pts_buffer(int i); public native AVStream pts_buffer(int i, long pts_buffer);
     @MemberGetter public native LongPointer pts_buffer();
@@ -1716,7 +1716,7 @@ public static final int MAX_REORDER_DELAY = 16;
      * Code outside avformat should access this field using:
      * av_stream_get/set_r_frame_rate(stream)
      */
-    public native @ByVal AVRational r_frame_rate(); public native AVStream r_frame_rate(AVRational r_frame_rate);
+    public native @ByRef AVRational r_frame_rate(); public native AVStream r_frame_rate(AVRational r_frame_rate);
 
     /**
      * Stream Identifier
@@ -1846,7 +1846,7 @@ public static class AVChapter extends Pointer {
     /** unique ID to identify the chapter */
     public native int id(); public native AVChapter id(int id);
     /** time base in which the start/end timestamps are specified */
-    public native @ByVal AVRational time_base(); public native AVChapter time_base(AVRational time_base);
+    public native @ByRef AVRational time_base(); public native AVChapter time_base(AVRational time_base);
     /** chapter start/end time in time_base units */
     public native long start(); public native AVChapter start(long start);
     public native long end(); public native AVChapter end(long end);
@@ -2098,7 +2098,7 @@ public static final int AVFMT_FLAG_KEEP_SIDE_DATA = 0x40000;
      * should also be passed to avio_open2() if it's used to
      * open the file.
      */
-    public native @ByVal AVIOInterruptCB interrupt_callback(); public native AVFormatContext interrupt_callback(AVIOInterruptCB interrupt_callback);
+    public native @ByRef AVIOInterruptCB interrupt_callback(); public native AVFormatContext interrupt_callback(AVIOInterruptCB interrupt_callback);
 
     /**
      * Flags to enable debugging.
@@ -2256,7 +2256,7 @@ public static final int RAW_PACKET_BUFFER_SIZE = 2500000;
     /**
      * Timebase for the timestamp offset.
      */
-    public native @ByVal AVRational offset_timebase(); public native AVFormatContext offset_timebase(AVRational offset_timebase);
+    public native @ByRef AVRational offset_timebase(); public native AVFormatContext offset_timebase(AVRational offset_timebase);
 
     /**
      * IO repositioned flag.
@@ -2317,7 +2317,7 @@ public static class AVPacketList extends Pointer {
         return (AVPacketList)super.position(position);
     }
 
-    public native @ByVal AVPacket pkt(); public native AVPacketList pkt(AVPacket pkt);
+    public native @ByRef AVPacket pkt(); public native AVPacketList pkt(AVPacket pkt);
     public native AVPacketList next(); public native AVPacketList next(AVPacketList next);
 }
 

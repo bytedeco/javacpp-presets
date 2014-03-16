@@ -28,15 +28,15 @@ import com.googlecode.javacpp.annotation.Properties;
  *
  * @author Samuel Audet
  */
-@Properties(inherit=opencv_highgui.class, target="com.googlecode.javacpp.opencv_objdetect", value={
+@Properties(inherit=opencv_highgui.class, value={
     @Platform(include="<opencv2/objdetect/objdetect.hpp>", link="opencv_objdetect@.2.4"),
-    @Platform(value="windows", link="opencv_objdetect248") })
+    @Platform(value="windows", link="opencv_objdetect248") },
+        target="com.googlecode.javacpp.opencv_objdetect", helper="com.googlecode.javacpp.helper.opencv_objdetect")
 public class opencv_objdetect implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        infoMap.put(new Parser.Info().javaText("import com.googlecode.javacpp.helper.opencv_objdetect.*;"))
-               .put(new Parser.Info("std::deque<CvDataMatrixCode>").pointerTypes("CvDataMatrixCodeDeque").define(true))
+        infoMap.put(new Parser.Info("std::deque<CvDataMatrixCode>").pointerTypes("CvDataMatrixCodeDeque").define(true))
                .put(new Parser.Info("std::vector<cv::Ptr<cv::linemod::Modality> >").pointerTypes("ModalityVector").define(true))
                .put(new Parser.Info("cv::Ptr<cv::linemod::Modality>").annotations("@Ptr").valueTypes("Modality").define(true))
-               .put(new Parser.Info("CvHaarClassifierCascade").parent("AbstractCvHaarClassifierCascade"));
+               .put(new Parser.Info("CvHaarClassifierCascade").base("AbstractCvHaarClassifierCascade"));
     }
 }

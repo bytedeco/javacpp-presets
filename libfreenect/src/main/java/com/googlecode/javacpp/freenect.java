@@ -9,7 +9,7 @@ import java.nio.*;
 public class freenect extends com.googlecode.javacpp.presets.freenect {
     static { Loader.load(); }
 
-// Parsed from header file /usr/local/include/libfreenect/libfreenect.h
+// Parsed from /usr/local/include/libfreenect/libfreenect.h
 
 /*
  * This file is part of the OpenKinect Project. http://www.openkinect.org
@@ -790,7 +790,7 @@ public static native int freenect_set_flag(freenect_device dev, @Cast("freenect_
 // #endif
 
 
-// Parsed from header file /usr/local/include/libfreenect/libfreenect-registration.h
+// Parsed from /usr/local/include/libfreenect/libfreenect-registration.h
 
 /*
  * This file is part of the OpenKinect Project. http://www.openkinect.org
@@ -931,9 +931,9 @@ public static class freenect_registration extends Pointer {
         return (freenect_registration)super.position(position);
     }
 
-	public native @ByVal freenect_reg_info reg_info(); public native freenect_registration reg_info(freenect_reg_info reg_info);
-	public native @ByVal freenect_reg_pad_info reg_pad_info(); public native freenect_registration reg_pad_info(freenect_reg_pad_info reg_pad_info);
-	public native @ByVal freenect_zero_plane_info zero_plane_info(); public native freenect_registration zero_plane_info(freenect_zero_plane_info zero_plane_info);
+	public native @ByRef freenect_reg_info reg_info(); public native freenect_registration reg_info(freenect_reg_info reg_info);
+	public native @ByRef freenect_reg_pad_info reg_pad_info(); public native freenect_registration reg_pad_info(freenect_reg_pad_info reg_pad_info);
+	public native @ByRef freenect_zero_plane_info zero_plane_info(); public native freenect_registration zero_plane_info(freenect_zero_plane_info zero_plane_info);
 
 	public native double const_shift(); public native freenect_registration const_shift(double const_shift);
 
@@ -963,7 +963,7 @@ public static native void freenect_camera_to_world(freenect_device dev,
 // #endif
 
 
-// Parsed from header file /usr/local/include/libfreenect/libfreenect-audio.h
+// Parsed from /usr/local/include/libfreenect/libfreenect-audio.h
 
 /*
  * This file is part of the OpenKinect Project. http://www.openkinect.org
@@ -1102,7 +1102,7 @@ public static native int freenect_stop_audio(freenect_device dev);
 // #endif
 
 
-// Parsed from header file /usr/local/include/libfreenect/libfreenect_sync.h
+// Parsed from /usr/local/include/libfreenect/libfreenect_sync.h
 
 /*
  * This file is part of the OpenKinect Project. http://www.openkinect.org

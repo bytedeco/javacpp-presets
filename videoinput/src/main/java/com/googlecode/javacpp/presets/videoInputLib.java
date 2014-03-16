@@ -29,7 +29,7 @@ import com.googlecode.javacpp.annotation.Properties;
  * @author Samuel Audet
  */
 @Properties(target="com.googlecode.javacpp.videoInputLib", value={
-    @Platform(value="windows", include={"<videoInput.h>", "<videoInput.cpp>"},
+    @Platform(include={"<videoInput.h>", "<videoInput.cpp>"},
         includepath={"../videoInput-update2013/videoInputSrcAndDemos/libs/videoInput/",
                      "../videoInput-update2013/videoInputSrcAndDemos/libs/DShow/Include/"},
         link={"ole32", "oleaut32", "amstrmid", "strmiids", "uuid"}) })

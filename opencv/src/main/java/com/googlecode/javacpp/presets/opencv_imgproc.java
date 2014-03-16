@@ -28,13 +28,13 @@ import com.googlecode.javacpp.annotation.Properties;
  *
  * @author Samuel Audet
  */
-@Properties(inherit=opencv_core.class, target="com.googlecode.javacpp.opencv_imgproc", value={
+@Properties(inherit=opencv_core.class, value={
     @Platform(include={"<opencv2/imgproc/types_c.h>", "<opencv2/imgproc/imgproc_c.h>", "<opencv2/imgproc/imgproc.hpp>"}, link="opencv_imgproc@.2.4"),
-    @Platform(value="windows", link="opencv_imgproc248") })
+    @Platform(value="windows", link="opencv_imgproc248") },
+        target="com.googlecode.javacpp.opencv_imgproc", helper="com.googlecode.javacpp.helper.opencv_imgproc")
 public class opencv_imgproc implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        infoMap.put(new Parser.Info().javaText("import com.googlecode.javacpp.helper.opencv_imgproc.*;"))
-               .put(new Parser.Info("CvMoments").parent("AbstractCvMoments"))
+        infoMap.put(new Parser.Info("CvMoments").base("AbstractCvMoments"))
                .put(new Parser.Info("cvCalcBackProject").cppTypes("void", "IplImage**", "CvArr*", "CvHistogram*"))
                .put(new Parser.Info("cvCalcBackProjectPatch").cppTypes("void", "IplImage**", "CvArr*", "CvSize", "CvHistogram*", "int", "double"))
                .put(new Parser.Info("cv::Vec4f", "cv::Vec6f").cast(true).pointerTypes("FloatPointer"));

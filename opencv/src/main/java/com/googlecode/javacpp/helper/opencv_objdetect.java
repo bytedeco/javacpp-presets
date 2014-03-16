@@ -28,7 +28,7 @@ import com.googlecode.javacpp.opencv_objdetect.*;
 import static com.googlecode.javacpp.opencv_objdetect.cvLoadHaarClassifierCascade;
 import static com.googlecode.javacpp.opencv_objdetect.cvReleaseHaarClassifierCascade;
 
-public class opencv_objdetect {
+public class opencv_objdetect extends com.googlecode.javacpp.presets.opencv_objdetect {
 
     public static abstract class AbstractCvHaarClassifierCascade extends Pointer {
         public AbstractCvHaarClassifierCascade() { }
@@ -51,6 +51,12 @@ public class opencv_objdetect {
             ReleaseDeallocator(CvHaarClassifierCascade p) { super(p); }
             @Override public void deallocate() { cvReleaseHaarClassifierCascade(this); }
         }
+    }
+
+    public static CvSeq cvHaarDetectObjects(CvArr image, CvHaarClassifierCascade cascade,
+            CvMemStorage storage, double scale_factor/*=1.1*/, int min_neighbors/*=3*/, int flags/*=0*/) {
+        return com.googlecode.javacpp.opencv_objdetect.cvHaarDetectObjects(image, cascade,
+                storage, scale_factor, min_neighbors, flags, CvSize.ZERO, CvSize.ZERO);
     }
 
 }

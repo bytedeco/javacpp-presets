@@ -9,7 +9,7 @@ import java.nio.*;
 public class ARToolKitPlus extends com.googlecode.javacpp.presets.ARToolKitPlus {
     static { Loader.load(); }
 
-// Parsed from header file /home/saudet/projects/javacpp.presets/artoolkitplus/target/classes/com/googlecode/javacpp/ARToolKitPlus_plus.h
+// Parsed from /home/saudet/projects/javacpp.presets/artoolkitplus/target/classes/com/googlecode/javacpp/ARToolKitPlus_plus.h
 
 // #include <assert.h>
 // #include <ARToolKitPlus/arBitFieldPattern.h>
@@ -52,7 +52,7 @@ public static final int MAX_PATTERNS = 256;
 
 
 
-// Parsed from header file /usr/local/include/ARToolKitPlus/ARToolKitPlus.h
+// Parsed from /usr/local/include/ARToolKitPlus/ARToolKitPlus.h
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -144,7 +144,7 @@ public static final int
 // #endif //__ARTOOLKITPLUS_HEADERFILE__
 
 
-// Parsed from header file /usr/local/include/ARToolKitPlus/config.h
+// Parsed from /usr/local/include/ARToolKitPlus/config.h
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -278,7 +278,7 @@ public static final int P_MAX =       500;
 
 
 
-// Parsed from header file /usr/local/include/ARToolKitPlus/ar.h
+// Parsed from /usr/local/include/ARToolKitPlus/ar.h
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -369,7 +369,7 @@ public static final int P_MAX =       500;
         return (arPrevInfo)super.position(position);
     }
 
-    public native @ByVal ARMarkerInfo marker(); public native arPrevInfo marker(ARMarkerInfo marker);
+    public native @ByRef ARMarkerInfo marker(); public native arPrevInfo marker(ARMarkerInfo marker);
     public native int count(); public native arPrevInfo count(int count);
 }
 
@@ -379,7 +379,7 @@ public static final int P_MAX =       500;
 // #endif  //__ARTOOLKITAR_HEADERFILE__
 
 
-// Parsed from header file /usr/local/include/ARToolKitPlus/arMulti.h
+// Parsed from /usr/local/include/ARToolKitPlus/arMulti.h
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -462,7 +462,7 @@ public static final int P_MAX =       500;
 // #endif // __ARTOOLKITMULTI_HEADERFILE__
 
 
-// Parsed from header file /usr/local/include/ARToolKitPlus/matrix.h
+// Parsed from /usr/local/include/ARToolKitPlus/matrix.h
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -539,7 +539,7 @@ public static final int P_MAX =       500;
 // #endif // __ARTOOLKITMATRIX_HEADERFILE__
 
 
-// Parsed from header file /usr/local/include/ARToolKitPlus/vector.h
+// Parsed from /usr/local/include/ARToolKitPlus/vector.h
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -593,7 +593,7 @@ public static final int P_MAX =       500;
 // #endif // __ARTOOLKITVECTOR_HEADERFILE__
 
 
-// Parsed from header file /usr/local/include/ARToolKitPlus/Camera.h
+// Parsed from /usr/local/include/ARToolKitPlus/Camera.h
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -662,7 +662,7 @@ public static final int P_MAX =       500;
  // namespace ARToolKitPlus
 
 
-// Parsed from header file /usr/local/include/ARToolKitPlus/extra/BCH.h
+// Parsed from /usr/local/include/ARToolKitPlus/extra/BCH.h
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -759,7 +759,7 @@ public static final int BCH_MAX_SQ =   8;  // SQRT(MAX_LUT) -- (?)
 // #endif // __BCH_CODE__H__
 
 
-// Parsed from header file /usr/local/include/ARToolKitPlus/extra/Hull.h
+// Parsed from /usr/local/include/ARToolKitPlus/extra/Hull.h
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -838,7 +838,7 @@ public static final int BCH_MAX_SQ =   8;  // SQRT(MAX_LUT) -- (?)
 // #endif //__ARTOOLKITPLUS_HULL_HEADERFILE__
 
 
-// Parsed from header file /usr/local/include/ARToolKitPlus/extra/rpp.h
+// Parsed from /usr/local/include/ARToolKitPlus/extra/rpp.h
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -881,7 +881,7 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
 // #endif // __LINK_WITH_RPP__
 
 
-// Parsed from header file /usr/local/include/ARToolKitPlus/Tracker.h
+// Parsed from /usr/local/include/ARToolKitPlus/Tracker.h
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -940,6 +940,8 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
                 int maxLoadPatterns/*=0*/) { allocate(imWidth, imHeight, maxImagePatterns, pattWidth, pattHeight, pattSamples, maxLoadPatterns); }
     private native void allocate(int imWidth, int imHeight, int maxImagePatterns/*=8*/, int pattWidth/*=6*/, int pattHeight/*=6*/, int pattSamples/*=6*/,
                 int maxLoadPatterns/*=0*/);
+    public Tracker(int imWidth, int imHeight) { allocate(imWidth, imHeight); }
+    private native void allocate(int imWidth, int imHeight);
 
     /**
      * Sets the pixel format of the camera image
@@ -1045,6 +1047,7 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
      *  be interpolated.
      */
     public native void activateVignettingCompensation(@Cast("bool") boolean nEnable, int nCorners/*=0*/, int nLeftRight/*=0*/, int nTopBottom/*=0*/);
+    public native void activateVignettingCompensation(@Cast("bool") boolean nEnable);
 
     /**
      * Calculates the camera matrix from an ARToolKit camera file.
@@ -1191,7 +1194,7 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
 // #endif //__ARTOOLKIT_TRACKERIMPL_HEADERFILE__
 
 
-// Parsed from header file /usr/local/include/ARToolKitPlus/TrackerMultiMarker.h
+// Parsed from /usr/local/include/ARToolKitPlus/TrackerMultiMarker.h
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -1254,6 +1257,8 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
                 int maxLoadPatterns/*=0*/) { allocate(imWidth, imHeight, maxImagePatterns, pattWidth, pattHeight, pattSamples, maxLoadPatterns); }
     private native void allocate(int imWidth, int imHeight, int maxImagePatterns/*=8*/, int pattWidth/*=6*/, int pattHeight/*=6*/, int pattSamples/*=6*/,
                 int maxLoadPatterns/*=0*/);
+    public TrackerMultiMarker(int imWidth, int imHeight) { allocate(imWidth, imHeight); }
+    private native void allocate(int imWidth, int imHeight);
 
     /**
      * initializes ARToolKit
@@ -1321,7 +1326,7 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
  // namespace ARToolKitPlus
 
 
-// Parsed from header file /usr/local/include/ARToolKitPlus/TrackerSingleMarker.h
+// Parsed from /usr/local/include/ARToolKitPlus/TrackerSingleMarker.h
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -1384,6 +1389,8 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
                 int maxLoadPatterns/*=0*/) { allocate(imWidth, imHeight, maxImagePatterns, pattWidth, pattHeight, pattSamples, maxLoadPatterns); }
     private native void allocate(int imWidth, int imHeight, int maxImagePatterns/*=8*/, int pattWidth/*=6*/, int pattHeight/*=6*/, int pattSamples/*=6*/,
                 int maxLoadPatterns/*=0*/);
+    public TrackerSingleMarker(int imWidth, int imHeight) { allocate(imWidth, imHeight); }
+    private native void allocate(int imWidth, int imHeight);
 
     /**
      * initializes TrackerSingleMarker
@@ -1405,9 +1412,12 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
      * @return detected markers in image
      */
     public native @StdVector IntPointer calc(@Cast("const uint8_t*") BytePointer nImage, @Cast("ARToolKitPlus::ARMarkerInfo**") PointerPointer nMarker_info/*=NULL*/, IntPointer nNumMarkers/*=NULL*/);
+    public native @StdVector IntPointer calc(@Cast("const uint8_t*") BytePointer nImage);
     public native @StdVector IntPointer calc(@Cast("const uint8_t*") BytePointer nImage, @ByPtrPtr ARMarkerInfo nMarker_info/*=NULL*/, IntPointer nNumMarkers/*=NULL*/);
     public native @StdVector IntBuffer calc(@Cast("const uint8_t*") ByteBuffer nImage, @ByPtrPtr ARMarkerInfo nMarker_info/*=NULL*/, IntBuffer nNumMarkers/*=NULL*/);
+    public native @StdVector IntBuffer calc(@Cast("const uint8_t*") ByteBuffer nImage);
     public native @StdVector int[] calc(@Cast("const uint8_t*") byte[] nImage, @ByPtrPtr ARMarkerInfo nMarker_info/*=NULL*/, int[] nNumMarkers/*=NULL*/);
+    public native @StdVector int[] calc(@Cast("const uint8_t*") byte[] nImage);
 
     /**
      * manually select one of the detected markers
@@ -1446,7 +1456,7 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
  // namespace ARToolKitPlus
 
 
-// Parsed from header file /usr/local/include/ARToolKitPlus/arBitFieldPattern.h
+// Parsed from /usr/local/include/ARToolKitPlus/arBitFieldPattern.h
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -1534,7 +1544,7 @@ public static final int
 // #endif //__ARBITFIELDPATTERN_HEADERFILE__
 
 
-// Parsed from header file /usr/local/include/ARToolKitPlus/arGetInitRot2Sub.h
+// Parsed from /usr/local/include/ARToolKitPlus/arGetInitRot2Sub.h
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors

@@ -28,9 +28,10 @@ import com.googlecode.javacpp.annotation.Properties;
  *
  * @author Samuel Audet
  */
-@Properties(inherit=opencv_imgproc.class, target="com.googlecode.javacpp.opencv_photo", value={
+@Properties(inherit=opencv_imgproc.class, value={
     @Platform(include={"<opencv2/photo/photo_c.h>", "<opencv2/photo/photo.hpp>"}, link="opencv_photo@.2.4"),
-    @Platform(value="windows", link="opencv_photo248") })
+    @Platform(value="windows", link="opencv_photo248") },
+        target="com.googlecode.javacpp.opencv_photo")
 public class opencv_photo implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
     }

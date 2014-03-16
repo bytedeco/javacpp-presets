@@ -33,7 +33,7 @@ public class videoInputLib extends com.googlecode.javacpp.presets.videoInputLib 
     }
 }
 
-// Parsed from header file .\..\videoInput-update2013\videoInputSrcAndDemos\libs\videoInput\videoInput.h
+// Parsed from ./../videoInput-update2013/videoInputSrcAndDemos/libs/videoInput/videoInput.h
 
 // #ifndef _VIDEOINPUT
 // #define _VIDEOINPUT
@@ -290,7 +290,7 @@ public static native int comInitCount(); public static native void comInitCount(
 
 		public native IMediaEventEx pMediaEvent(); public native videoDevice pMediaEvent(IMediaEventEx pMediaEvent);
 
-		public native @ByVal @Cast("GUID*") Pointer videoType(); public native videoDevice videoType(Pointer videoType);
+		public native @ByRef @Cast("GUID*") Pointer videoType(); public native videoDevice videoType(Pointer videoType);
 		public native @Cast("long") int formatType(); public native videoDevice formatType(int formatType);
 
 		public native SampleGrabberCallback sgCallback(); public native videoDevice sgCallback(SampleGrabberCallback sgCallback);
@@ -348,6 +348,7 @@ public static native int comInitCount(); public static native void comInitCount(
 
 		//Functions in rough order they should be used.
 		public static native int listDevices(@Cast("bool") boolean silent/*=false*/);
+		public static native int listDevices();
 		public static native @ByVal StringVector getDeviceList(); 
 
 		//needs to be called after listDevices - otherwise returns NULL
@@ -392,11 +393,15 @@ public static native int comInitCount(); public static native void comInitCount(
 
 		//Returns the pixels - flipRedAndBlue toggles RGB/BGR flipping - and you can flip the image too
 		public native @Cast("unsigned char*") BytePointer getPixels(int deviceID, @Cast("bool") boolean flipRedAndBlue/*=true*/, @Cast("bool") boolean flipImage/*=false*/);
+		public native @Cast("unsigned char*") BytePointer getPixels(int deviceID);
 
 		//Or pass in a buffer for getPixels to fill returns true if successful.
 		public native @Cast("bool") boolean getPixels(int id, @Cast("unsigned char*") BytePointer pixels, @Cast("bool") boolean flipRedAndBlue/*=true*/, @Cast("bool") boolean flipImage/*=false*/);
+		public native @Cast("bool") boolean getPixels(int id, @Cast("unsigned char*") BytePointer pixels);
 		public native @Cast("bool") boolean getPixels(int id, @Cast("unsigned char*") ByteBuffer pixels, @Cast("bool") boolean flipRedAndBlue/*=true*/, @Cast("bool") boolean flipImage/*=false*/);
+		public native @Cast("bool") boolean getPixels(int id, @Cast("unsigned char*") ByteBuffer pixels);
 		public native @Cast("bool") boolean getPixels(int id, @Cast("unsigned char*") byte[] pixels, @Cast("bool") boolean flipRedAndBlue/*=true*/, @Cast("bool") boolean flipImage/*=false*/);
+		public native @Cast("bool") boolean getPixels(int id, @Cast("unsigned char*") byte[] pixels);
 
 		//Launches a pop up settings window
 		//For some reason in GLUT you have to call it twice each time.
@@ -405,13 +410,17 @@ public static native int comInitCount(); public static native void comInitCount(
 		//Manual control over settings thanks.....
 		//These are experimental for now.
 		public native @Cast("bool") boolean setVideoSettingFilter(int deviceID, @Cast("long") int Property, @Cast("long") int lValue, @Cast("long") int Flags/*=NULL*/, @Cast("bool") boolean useDefaultValue/*=false*/);
+		public native @Cast("bool") boolean setVideoSettingFilter(int deviceID, @Cast("long") int Property, @Cast("long") int lValue);
 		public native @Cast("bool") boolean setVideoSettingFilterPct(int deviceID, @Cast("long") int Property, float pctValue, @Cast("long") int Flags/*=NULL*/);
+		public native @Cast("bool") boolean setVideoSettingFilterPct(int deviceID, @Cast("long") int Property, float pctValue);
 		public native @Cast("bool") boolean getVideoSettingFilter(int deviceID, @Cast("long") int Property, @Cast("long*") @ByRef IntPointer min, @Cast("long*") @ByRef IntPointer max, @Cast("long*") @ByRef IntPointer SteppingDelta, @Cast("long*") @ByRef IntPointer currentValue, @Cast("long*") @ByRef IntPointer flags, @Cast("long*") @ByRef IntPointer defaultValue);
 		public native @Cast("bool") boolean getVideoSettingFilter(int deviceID, @Cast("long") int Property, @Cast("long*") @ByRef IntBuffer min, @Cast("long*") @ByRef IntBuffer max, @Cast("long*") @ByRef IntBuffer SteppingDelta, @Cast("long*") @ByRef IntBuffer currentValue, @Cast("long*") @ByRef IntBuffer flags, @Cast("long*") @ByRef IntBuffer defaultValue);
 		public native @Cast("bool") boolean getVideoSettingFilter(int deviceID, @Cast("long") int Property, @Cast("long*") @ByRef int[] min, @Cast("long*") @ByRef int[] max, @Cast("long*") @ByRef int[] SteppingDelta, @Cast("long*") @ByRef int[] currentValue, @Cast("long*") @ByRef int[] flags, @Cast("long*") @ByRef int[] defaultValue);
 
 		public native @Cast("bool") boolean setVideoSettingCamera(int deviceID, @Cast("long") int Property, @Cast("long") int lValue, @Cast("long") int Flags/*=NULL*/, @Cast("bool") boolean useDefaultValue/*=false*/);
+		public native @Cast("bool") boolean setVideoSettingCamera(int deviceID, @Cast("long") int Property, @Cast("long") int lValue);
 		public native @Cast("bool") boolean setVideoSettingCameraPct(int deviceID, @Cast("long") int Property, float pctValue, @Cast("long") int Flags/*=NULL*/);
+		public native @Cast("bool") boolean setVideoSettingCameraPct(int deviceID, @Cast("long") int Property, float pctValue);
 		public native @Cast("bool") boolean getVideoSettingCamera(int deviceID, @Cast("long") int Property, @Cast("long*") @ByRef IntPointer min, @Cast("long*") @ByRef IntPointer max, @Cast("long*") @ByRef IntPointer SteppingDelta, @Cast("long*") @ByRef IntPointer currentValue, @Cast("long*") @ByRef IntPointer flags, @Cast("long*") @ByRef IntPointer defaultValue);
 		public native @Cast("bool") boolean getVideoSettingCamera(int deviceID, @Cast("long") int Property, @Cast("long*") @ByRef IntBuffer min, @Cast("long*") @ByRef IntBuffer max, @Cast("long*") @ByRef IntBuffer SteppingDelta, @Cast("long*") @ByRef IntBuffer currentValue, @Cast("long*") @ByRef IntBuffer flags, @Cast("long*") @ByRef IntBuffer defaultValue);
 		public native @Cast("bool") boolean getVideoSettingCamera(int deviceID, @Cast("long") int Property, @Cast("long*") @ByRef int[] min, @Cast("long*") @ByRef int[] max, @Cast("long*") @ByRef int[] SteppingDelta, @Cast("long*") @ByRef int[] currentValue, @Cast("long*") @ByRef int[] flags, @Cast("long*") @ByRef int[] defaultValue);

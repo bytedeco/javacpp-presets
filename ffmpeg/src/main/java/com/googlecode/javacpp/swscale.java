@@ -11,7 +11,7 @@ import static com.googlecode.javacpp.avutil.*;
 public class swscale extends com.googlecode.javacpp.presets.swscale {
     static { Loader.load(); }
 
-// Parsed from header file /usr/local/include/libswscale/swscale.h
+// Parsed from /usr/local/include/libswscale/swscale.h
 
 /*
  * Copyright (C) 2001-2011 Michael Niedermayer <michaelni@gmx.at>

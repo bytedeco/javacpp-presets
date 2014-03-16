@@ -14,6 +14,11 @@
   <packaging>jar</packaging>
   <name>JavaCPP Presets for videoInput</name>
 
+  <properties>
+    <!-- Skip native compilation phase on non-Windows system (see profile below) -->
+    <process-classes.skip>true</process-classes.skip>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>com.googlecode.javacpp</groupId>
@@ -48,5 +53,17 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>windows</id>
+      <activation>
+        <os><family>windows</family></os>
+      </activation>
+      <properties>
+        <process-classes.skip>false</process-classes.skip>
+      </properties>
+    </profile>
+  </profiles>
 
 </project>

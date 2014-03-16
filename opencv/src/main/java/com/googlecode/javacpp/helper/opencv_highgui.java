@@ -31,7 +31,7 @@ import static com.googlecode.javacpp.opencv_imgproc.CV_BGR2BGRA;
 import static com.googlecode.javacpp.opencv_imgproc.CV_BGR2RGBA;
 import static com.googlecode.javacpp.opencv_imgproc.cvCvtColor;
 
-public class opencv_highgui {
+public class opencv_highgui extends com.googlecode.javacpp.presets.opencv_highgui {
 
     public static IplImage cvLoadImageBGRA(String filename) {
         IplImage imageBGR = cvLoadImage(filename, CV_LOAD_IMAGE_COLOR);

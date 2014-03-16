@@ -59,7 +59,7 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
     }
 }
 
-// Parsed from header file /usr/local/include/opencv2/contrib/contrib.hpp
+// Parsed from /usr/local/include/opencv2/contrib/contrib.hpp
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -119,8 +119,12 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
 
 @NoOffset public static class CvAdaptiveSkinDetector extends Pointer {
     static { Loader.load(); }
-    public CvAdaptiveSkinDetector() { }
     public CvAdaptiveSkinDetector(Pointer p) { super(p); }
+    public CvAdaptiveSkinDetector(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public CvAdaptiveSkinDetector position(int position) {
+        return (CvAdaptiveSkinDetector)super.position(position);
+    }
 
 
     /** enum CvAdaptiveSkinDetector:: */
@@ -132,6 +136,8 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
 
     public CvAdaptiveSkinDetector(int samplingDivider/*=1*/, int morphingMethod/*=MORPHING_METHOD_NONE*/) { allocate(samplingDivider, morphingMethod); }
     private native void allocate(int samplingDivider/*=1*/, int morphingMethod/*=MORPHING_METHOD_NONE*/);
+    public CvAdaptiveSkinDetector() { allocate(); }
+    private native void allocate();
 
     public native void process(IplImage inputBGRImage, IplImage outputHueMask);
 }
@@ -189,6 +195,7 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
     public CvFuzzyFunction() { allocate(); }
     private native void allocate();
     public native void addCurve(CvFuzzyCurve curve, double value/*=0*/);
+    public native void addCurve(CvFuzzyCurve curve);
     public native void resetValues();
     public native double calcValue();
     public native CvFuzzyCurve newCurve();
@@ -258,6 +265,7 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
     private native void allocate();
 
     public native void track(IplImage maskImage, IplImage depthMap, int resizeMethod, @Cast("bool") boolean resetSearch, int minKernelMass/*=MinKernelMass*/);
+    public native void track(IplImage maskImage, IplImage depthMap, int resizeMethod, @Cast("bool") boolean resetSearch);
 }
 
     @Namespace("cv") @NoOffset public static class Octree extends Pointer {
@@ -298,8 +306,11 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
         private native void allocate();
         public Octree( @StdVector Point3f points, int maxLevels/*=10*/, int minPoints/*=20*/ ) { allocate(points, maxLevels, minPoints); }
         private native void allocate( @StdVector Point3f points, int maxLevels/*=10*/, int minPoints/*=20*/ );
+        public Octree( @StdVector Point3f points ) { allocate(points); }
+        private native void allocate( @StdVector Point3f points );
 
         public native void buildTree( @StdVector Point3f points, int maxLevels/*=10*/, int minPoints/*=20*/ );
+        public native void buildTree( @StdVector Point3f points );
         public native void getPointsWithinSphere( @Const @ByRef Point3f center, float radius,
                                                    @StdVector Point3f points );
         public native @StdVector Node getNodes();
@@ -335,20 +346,27 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
         public native void buildOctree();
         public native void clearOctree();
         public native float estimateResolution(float tryRatio/*=0.1f*/);
+        public native float estimateResolution();
         public native void computeNormals(float normalRadius, int minNeighbors/*=20*/);
+        public native void computeNormals(float normalRadius);
         public native void computeNormals(@StdVector IntPointer subset, float normalRadius, int minNeighbors/*=20*/);
+        public native void computeNormals(@StdVector IntPointer subset, float normalRadius);
         public native void computeNormals(@StdVector IntBuffer subset, float normalRadius, int minNeighbors/*=20*/);
+        public native void computeNormals(@StdVector IntBuffer subset, float normalRadius);
         public native void computeNormals(@StdVector int[] subset, float normalRadius, int minNeighbors/*=20*/);
+        public native void computeNormals(@StdVector int[] subset, float normalRadius);
 
         public native void writeAsVrml(@StdString BytePointer file, @StdVector Scalar colors/*=vector<Scalar>()*/);
+        public native void writeAsVrml(@StdString BytePointer file);
         public native void writeAsVrml(@StdString String file, @StdVector Scalar colors/*=vector<Scalar>()*/);
+        public native void writeAsVrml(@StdString String file);
 
         public native @StdVector Point3f vtx(); public native Mesh3D vtx(Point3f vtx);
         public native @StdVector Point3f normals(); public native Mesh3D normals(Point3f normals);
         public native float resolution(); public native Mesh3D resolution(float resolution);
-        public native @ByVal Octree octree(); public native Mesh3D octree(Octree octree);
+        public native @ByRef Octree octree(); public native Mesh3D octree(Octree octree);
 
-        @MemberGetter public static native @Const @ByVal Point3f allzero();
+        @MemberGetter public static native @Const @ByRef Point3f allzero();
     }
 
     @Namespace("cv") @NoOffset public static class SpinImageModel extends Pointer {
@@ -390,6 +408,7 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
         public native void match(@Const @ByRef SpinImageModel scene, @Cast("std::vector<std::vector<cv::Vec2i> >*") @ByRef PointVectorVector result);
 
         public native @ByVal Mat packRandomScaledSpins(@Cast("bool") boolean separateScale/*=false*/, @Cast("size_t") long xCount/*=10*/, @Cast("size_t") long yCount/*=10*/);
+        public native @ByVal Mat packRandomScaledSpins();
 
         public native @Cast("size_t") long getSpinCount();
         public native @ByVal Mat getSpinImage(@Cast("size_t") long index);
@@ -460,6 +479,8 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
                                   int _startDistanceBucket/*=DEFAULT_START_DISTANCE_BUCKET*/,
                                   int _numberOfDistanceBuckets/*=DEFAULT_NUM_DISTANCE_BUCKETS*/,
                                   int _nangles/*=DEFAULT_NUM_ANGLES*/);
+        public SelfSimDescriptor(int _ssize, int _lsize) { allocate(_ssize, _lsize); }
+        private native void allocate(int _ssize, int _lsize);
         public SelfSimDescriptor(@Const @ByRef SelfSimDescriptor ss) { allocate(ss); }
         private native void allocate(@Const @ByRef SelfSimDescriptor ss);
         public native @ByRef @Name("operator=") SelfSimDescriptor put(@Const @ByRef SelfSimDescriptor ss);
@@ -469,10 +490,13 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
 
         public native void compute(@Const @ByRef Mat img, @StdVector FloatPointer descriptors, @ByVal Size winStride/*=Size()*/,
                                      @StdVector Point locations/*=vector<Point>()*/);
+        public native void compute(@Const @ByRef Mat img, @StdVector FloatPointer descriptors);
         public native void compute(@Const @ByRef Mat img, @StdVector FloatBuffer descriptors, @ByVal Size winStride/*=Size()*/,
                                      @StdVector Point locations/*=vector<Point>()*/);
+        public native void compute(@Const @ByRef Mat img, @StdVector FloatBuffer descriptors);
         public native void compute(@Const @ByRef Mat img, @StdVector float[] descriptors, @ByVal Size winStride/*=Size()*/,
                                      @StdVector Point locations/*=vector<Point>()*/);
+        public native void compute(@Const @ByRef Mat img, @StdVector float[] descriptors);
         public native void computeLogPolarMapping(@ByRef Mat mappingMask);
         public native void SSD(@Const @ByRef Mat img, @ByVal Point pt, @ByRef Mat ssd);
 
@@ -579,10 +603,18 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
                                          @ByRef MatVector distCoeffs,
                                          @Const @ByRef TermCriteria criteria/*=TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 30, DBL_EPSILON)*/,
                                          BundleAdjustCallback cb/*=0*/, Pointer user_data/*=0*/);
+        public static native void bundleAdjust(@StdVector Point3d points,
+                                         @Const @ByRef Point2dVectorVector imagePoints,
+                                         @Const @ByRef IntVectorVector visibility,
+                                         @ByRef MatVector cameraMatrix,
+                                         @ByRef MatVector R,
+                                         @ByRef MatVector T,
+                                         @ByRef MatVector distCoeffs);
         public native void optimize(@ByRef CvMat _vis); //main function that runs minimization
 
         //iteratively asks for measurement for visible camera-point pairs
         public native void ask_for_proj(@ByRef CvMat _vis,@Cast("bool") boolean once/*=false*/);
+        public native void ask_for_proj(@ByRef CvMat _vis);
         //iteratively asks for Jacobians for every camera_point pair
         public native void ask_for_projac(@ByRef CvMat _vis);
 
@@ -590,7 +622,7 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
         public native double prevErrNorm(); public native LevMarqSparse prevErrNorm(double prevErrNorm);
         public native double errNorm(); public native LevMarqSparse errNorm(double errNorm);
         public native double lambda(); public native LevMarqSparse lambda(double lambda);
-        public native @ByVal CvTermCriteria criteria(); public native LevMarqSparse criteria(CvTermCriteria criteria);
+        public native @ByRef CvTermCriteria criteria(); public native LevMarqSparse criteria(CvTermCriteria criteria);
         public native int iters(); public native LevMarqSparse iters(int iters);
 
         public native CvMat U(int i); public native LevMarqSparse U(int i, CvMat U);
@@ -655,17 +687,23 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
                                       int padY/*=3*/, int scales/*=5*/, double minScale/*=0.6*/, double maxScale/*=1.6*/,
                                       double orientationWeight/*=0.5*/, double truncate/*=20*/);
     @Namespace("cv") public static native int chamerMatching( @ByRef Mat img, @ByRef Mat templ,
+                                      @ByRef PointVectorVector results, @StdVector FloatPointer cost);
+    @Namespace("cv") public static native int chamerMatching( @ByRef Mat img, @ByRef Mat templ,
                                       @ByRef PointVectorVector results, @StdVector FloatBuffer cost,
                                       double templScale/*=1*/, int maxMatches/*=20*/,
                                       double minMatchDistance/*=1.0*/, int padX/*=3*/,
                                       int padY/*=3*/, int scales/*=5*/, double minScale/*=0.6*/, double maxScale/*=1.6*/,
                                       double orientationWeight/*=0.5*/, double truncate/*=20*/);
     @Namespace("cv") public static native int chamerMatching( @ByRef Mat img, @ByRef Mat templ,
+                                      @ByRef PointVectorVector results, @StdVector FloatBuffer cost);
+    @Namespace("cv") public static native int chamerMatching( @ByRef Mat img, @ByRef Mat templ,
                                       @ByRef PointVectorVector results, @StdVector float[] cost,
                                       double templScale/*=1*/, int maxMatches/*=20*/,
                                       double minMatchDistance/*=1.0*/, int padX/*=3*/,
                                       int padY/*=3*/, int scales/*=5*/, double minScale/*=0.6*/, double maxScale/*=1.6*/,
                                       double orientationWeight/*=0.5*/, double truncate/*=20*/);
+    @Namespace("cv") public static native int chamerMatching( @ByRef Mat img, @ByRef Mat templ,
+                                      @ByRef PointVectorVector results, @StdVector float[] cost);
 
 
     @Namespace("cv") @NoOffset public static class StereoVar extends Pointer {
@@ -695,7 +733,8 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
 
         /** the destructor */
 
-        /** the stereo correspondence operator that computes disparity map for the specified rectified stereo pair */ public native @Name("operator()") void apply(@Const @ByRef Mat left, @Const @ByRef Mat right, @ByRef Mat disp);
+        /** the stereo correspondence operator that computes disparity map for the specified rectified stereo pair */
+        public native @Name("operator()") void compute(@Const @ByRef Mat left, @Const @ByRef Mat right, @ByRef Mat disp);
 
         public native int levels(); public native StereoVar levels(int levels);
         public native double pyrScale(); public native StereoVar pyrScale(double pyrScale);
@@ -725,11 +764,17 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
         }
     
             public static native @ByVal StringVector GetListFiles( @StdString BytePointer path, @StdString BytePointer exten/*="*"*/, @Cast("bool") boolean addPath/*=true*/ );
+            public static native @ByVal StringVector GetListFiles( @StdString BytePointer path );
             public static native @ByVal StringVector GetListFiles( @StdString String path, @StdString String exten/*="*"*/, @Cast("bool") boolean addPath/*=true*/ );
+            public static native @ByVal StringVector GetListFiles( @StdString String path );
             public static native @ByVal StringVector GetListFilesR( @StdString BytePointer path, @StdString BytePointer exten/*="*"*/, @Cast("bool") boolean addPath/*=true*/ );
+            public static native @ByVal StringVector GetListFilesR( @StdString BytePointer path );
             public static native @ByVal StringVector GetListFilesR( @StdString String path, @StdString String exten/*="*"*/, @Cast("bool") boolean addPath/*=true*/ );
+            public static native @ByVal StringVector GetListFilesR( @StdString String path );
             public static native @ByVal StringVector GetListFolders( @StdString BytePointer path, @StdString BytePointer exten/*="*"*/, @Cast("bool") boolean addPath/*=true*/ );
+            public static native @ByVal StringVector GetListFolders( @StdString BytePointer path );
             public static native @ByVal StringVector GetListFolders( @StdString String path, @StdString String exten/*="*"*/, @Cast("bool") boolean addPath/*=true*/ );
+            public static native @ByVal StringVector GetListFolders( @StdString String path );
     }
 
     /*
@@ -741,6 +786,7 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
      * 4) convert the colors back to RGB
      */
     @Namespace("cv") public static native void generateColors( @StdVector Scalar colors, @Cast("size_t") long count, @Cast("size_t") long factor/*=100*/ );
+    @Namespace("cv") public static native void generateColors( @StdVector Scalar colors, @Cast("size_t") long count );
 
 
     /*
@@ -758,6 +804,10 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
                                       @StdVector IntPointer iterCounts/*=std::vector<int>()*/,
                                       @StdVector FloatPointer minGradientMagnitudes/*=std::vector<float>()*/,
                                       int transformType/*=RIGID_BODY_MOTION*/ );
+    @Namespace("cv") public static native @Cast("bool") boolean RGBDOdometry( @ByRef Mat Rt, @Const @ByRef Mat initRt,
+                                      @Const @ByRef Mat image0, @Const @ByRef Mat depth0, @Const @ByRef Mat mask0,
+                                      @Const @ByRef Mat image1, @Const @ByRef Mat depth1, @Const @ByRef Mat mask1,
+                                      @Const @ByRef Mat cameraMatrix );
     @Namespace("cv") public static native @Cast("bool") boolean RGBDOdometry( @ByRef Mat Rt, @Const @ByRef Mat initRt,
                                       @Const @ByRef Mat image0, @Const @ByRef Mat depth0, @Const @ByRef Mat mask0,
                                       @Const @ByRef Mat image1, @Const @ByRef Mat depth1, @Const @ByRef Mat mask1,
@@ -813,6 +863,8 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
                                 int interp/*=INTER_LINEAR*/, int full/*=1*/, int S/*=117*/, int sp/*=1*/) { allocate(w, h, center, R, ro0, interp, full, S, sp); }
         private native void allocate(int w, int h, @ByVal @Cast("cv::Point2i*") Point center, int R/*=70*/, double ro0/*=3.0*/,
                                 int interp/*=INTER_LINEAR*/, int full/*=1*/, int S/*=117*/, int sp/*=1*/);
+        public LogPolar_Interp(int w, int h, @ByVal @Cast("cv::Point2i*") Point center) { allocate(w, h, center); }
+        private native void allocate(int w, int h, @ByVal @Cast("cv::Point2i*") Point center);
         /**
         *Transformation from Cartesian image to cortical (log-polar) image.
         *\param source the Cartesian image
@@ -869,6 +921,8 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
                                      double ro0/*=3.0*/, int full/*=1*/, int S/*=117*/, int sp/*=1*/) { allocate(w, h, center, R, ro0, full, S, sp); }
         private native void allocate(int w, int h, @ByVal @Cast("cv::Point2i*") Point center, int R/*=70*/,
                                      double ro0/*=3.0*/, int full/*=1*/, int S/*=117*/, int sp/*=1*/);
+        public LogPolar_Overlapping(int w, int h, @ByVal @Cast("cv::Point2i*") Point center) { allocate(w, h, center); }
+        private native void allocate(int w, int h, @ByVal @Cast("cv::Point2i*") Point center);
         /**
         *Transformation from Cartesian image to cortical (log-polar) image.
         *\param source the Cartesian image
@@ -925,6 +979,8 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
          */
         public LogPolar_Adjacent(int w, int h, @ByVal @Cast("cv::Point2i*") Point center, int R/*=70*/, double ro0/*=3.0*/, double smin/*=0.25*/, int full/*=1*/, int S/*=117*/, int sp/*=1*/) { allocate(w, h, center, R, ro0, smin, full, S, sp); }
         private native void allocate(int w, int h, @ByVal @Cast("cv::Point2i*") Point center, int R/*=70*/, double ro0/*=3.0*/, double smin/*=0.25*/, int full/*=1*/, int S/*=117*/, int sp/*=1*/);
+        public LogPolar_Adjacent(int w, int h, @ByVal @Cast("cv::Point2i*") Point center) { allocate(w, h, center); }
+        private native void allocate(int w, int h, @ByVal @Cast("cv::Point2i*") Point center);
         /**
          *Transformation from Cartesian image to cortical (log-polar) image.
          *\param source the Cartesian image
@@ -947,13 +1003,14 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
 
     @Namespace("cv") @NoOffset public static class LDA extends Pointer {
         static { Loader.load(); }
-        public LDA() { }
         public LDA(Pointer p) { super(p); }
     
         // Initializes a LDA with num_components (default 0) and specifies how
         // samples are aligned (default dataAsRow=true).
         public LDA(int num_components/*=0*/) { allocate(num_components); }
         private native void allocate(int num_components/*=0*/);
+        public LDA() { allocate(); }
+        private native void allocate();
 
         // Initializes and performs a Discriminant Analysis with Fisher's
         // Optimization Criterion on given data in src and corresponding labels
@@ -963,14 +1020,20 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
                         int num_components/*=0*/) { allocate(src, labels, num_components); }
         private native void allocate(@Const @ByRef Mat src, @StdVector IntPointer labels,
                         int num_components/*=0*/);
+        public LDA(@Const @ByRef Mat src, @StdVector IntPointer labels) { allocate(src, labels); }
+        private native void allocate(@Const @ByRef Mat src, @StdVector IntPointer labels);
         public LDA(@Const @ByRef Mat src, @StdVector IntBuffer labels,
                         int num_components/*=0*/) { allocate(src, labels, num_components); }
         private native void allocate(@Const @ByRef Mat src, @StdVector IntBuffer labels,
                         int num_components/*=0*/);
+        public LDA(@Const @ByRef Mat src, @StdVector IntBuffer labels) { allocate(src, labels); }
+        private native void allocate(@Const @ByRef Mat src, @StdVector IntBuffer labels);
         public LDA(@Const @ByRef Mat src, @StdVector int[] labels,
                         int num_components/*=0*/) { allocate(src, labels, num_components); }
         private native void allocate(@Const @ByRef Mat src, @StdVector int[] labels,
                         int num_components/*=0*/);
+        public LDA(@Const @ByRef Mat src, @StdVector int[] labels) { allocate(src, labels); }
+        private native void allocate(@Const @ByRef Mat src, @StdVector int[] labels);
 
         // Initializes and performs a Discriminant Analysis with Fisher's
         // Optimization Criterion on given data in src and corresponding labels
@@ -980,6 +1043,8 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
                         int num_components/*=0*/) { allocate(src, labels, num_components); }
         private native void allocate(@ByVal MatVector src, @ByVal Mat labels,
                         int num_components/*=0*/);
+        public LDA(@ByVal MatVector src, @ByVal Mat labels) { allocate(src, labels); }
+        private native void allocate(@ByVal MatVector src, @ByVal Mat labels);
 
         // Serializes this object to a given filename.
         public native void save(@StdString BytePointer filename);
@@ -1051,9 +1116,12 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
     }
 
     @Namespace("cv") public static native @Ptr FaceRecognizer createEigenFaceRecognizer(int num_components/*=0*/, double threshold/*=DBL_MAX*/);
+    @Namespace("cv") public static native @Ptr FaceRecognizer createEigenFaceRecognizer();
     @Namespace("cv") public static native @Ptr FaceRecognizer createFisherFaceRecognizer(int num_components/*=0*/, double threshold/*=DBL_MAX*/);
+    @Namespace("cv") public static native @Ptr FaceRecognizer createFisherFaceRecognizer();
     @Namespace("cv") public static native @Ptr FaceRecognizer createLBPHFaceRecognizer(int radius/*=1*/, int neighbors/*=8*/,
                                                                 int grid_x/*=8*/, int grid_y/*=8*/, double threshold/*=DBL_MAX*/);
+    @Namespace("cv") public static native @Ptr FaceRecognizer createLBPHFaceRecognizer();
 
     /** enum cv:: */
     public static final int
@@ -1084,7 +1152,7 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
 // #endif
 
 
-// Parsed from header file /usr/local/include/opencv2/contrib/detection_based_tracker.hpp
+// Parsed from /usr/local/include/opencv2/contrib/detection_based_tracker.hpp
 
 // #pragma once
 
@@ -1141,7 +1209,7 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
 // #endif
 
 
-// Parsed from header file /usr/local/include/opencv2/contrib/hybridtracker.hpp
+// Parsed from /usr/local/include/opencv2/contrib/hybridtracker.hpp
 
 //*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1220,8 +1288,12 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
 // Mean Shift Tracker parameters for specifying use of HSV channel and CamShift parameters.
 @Namespace("cv") @NoOffset public static class CvMeanShiftTrackerParams extends Pointer {
     static { Loader.load(); }
-    public CvMeanShiftTrackerParams() { }
     public CvMeanShiftTrackerParams(Pointer p) { super(p); }
+    public CvMeanShiftTrackerParams(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public CvMeanShiftTrackerParams position(int position) {
+        return (CvMeanShiftTrackerParams)super.position(position);
+    }
 
     /** enum cv::CvMeanShiftTrackerParams:: */
     public static final int  H = 0, HS = 1, HSV = 2;
@@ -1229,24 +1301,32 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
                 @ByVal CvTermCriteria term_crit/*=CvTermCriteria()*/) { allocate(tracking_type, term_crit); }
     private native void allocate(int tracking_type/*=CvMeanShiftTrackerParams::HS*/,
                 @ByVal CvTermCriteria term_crit/*=CvTermCriteria()*/);
+    public CvMeanShiftTrackerParams() { allocate(); }
+    private native void allocate();
 
     public native int tracking_type(); public native CvMeanShiftTrackerParams tracking_type(int tracking_type);
     public native @StdVector FloatPointer h_range(); public native CvMeanShiftTrackerParams h_range(FloatPointer h_range);
     public native @StdVector FloatPointer s_range(); public native CvMeanShiftTrackerParams s_range(FloatPointer s_range);
     public native @StdVector FloatPointer v_range(); public native CvMeanShiftTrackerParams v_range(FloatPointer v_range);
-    public native @ByVal CvTermCriteria term_crit(); public native CvMeanShiftTrackerParams term_crit(CvTermCriteria term_crit);
+    public native @ByRef CvTermCriteria term_crit(); public native CvMeanShiftTrackerParams term_crit(CvTermCriteria term_crit);
 }
 
 // Feature tracking parameters
 @Namespace("cv") @NoOffset public static class CvFeatureTrackerParams extends Pointer {
     static { Loader.load(); }
-    public CvFeatureTrackerParams() { }
     public CvFeatureTrackerParams(Pointer p) { super(p); }
+    public CvFeatureTrackerParams(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public CvFeatureTrackerParams position(int position) {
+        return (CvFeatureTrackerParams)super.position(position);
+    }
 
     /** enum cv::CvFeatureTrackerParams:: */
     public static final int  SIFT = 0, SURF = 1, OPTICAL_FLOW = 2;
     public CvFeatureTrackerParams(int featureType/*=0*/, int windowSize/*=0*/) { allocate(featureType, windowSize); }
     private native void allocate(int featureType/*=0*/, int windowSize/*=0*/);
+    public CvFeatureTrackerParams() { allocate(); }
+    private native void allocate();
 
     public native int feature_type(); public native CvFeatureTrackerParams feature_type(int feature_type); // Feature type to use
     public native int window_size(); public native CvFeatureTrackerParams window_size(int window_size); // Window size in pixels around which to search for new window
@@ -1255,8 +1335,12 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
 // Hybrid Tracking parameters for specifying weights of individual trackers and motion model.
 @Namespace("cv") @NoOffset public static class CvHybridTrackerParams extends Pointer {
     static { Loader.load(); }
-    public CvHybridTrackerParams() { }
     public CvHybridTrackerParams(Pointer p) { super(p); }
+    public CvHybridTrackerParams(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public CvHybridTrackerParams position(int position) {
+        return (CvHybridTrackerParams)super.position(position);
+    }
 
     public CvHybridTrackerParams(float ft_tracker_weight/*=0.5*/, float ms_tracker_weight/*=0.5*/,
                 @ByVal CvFeatureTrackerParams ft_params/*=CvFeatureTrackerParams()*/,
@@ -1266,11 +1350,13 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
                 @ByVal CvFeatureTrackerParams ft_params/*=CvFeatureTrackerParams()*/,
                 @ByVal CvMeanShiftTrackerParams ms_params/*=CvMeanShiftTrackerParams()*/,
                 @ByVal CvMotionModel model/*=CvMotionModel()*/);
+    public CvHybridTrackerParams() { allocate(); }
+    private native void allocate();
 
     public native float ft_tracker_weight(); public native CvHybridTrackerParams ft_tracker_weight(float ft_tracker_weight);
     public native float ms_tracker_weight(); public native CvHybridTrackerParams ms_tracker_weight(float ms_tracker_weight);
-    public native @ByVal CvFeatureTrackerParams ft_params(); public native CvHybridTrackerParams ft_params(CvFeatureTrackerParams ft_params);
-    public native @ByVal CvMeanShiftTrackerParams ms_params(); public native CvHybridTrackerParams ms_params(CvMeanShiftTrackerParams ms_params);
+    public native @ByRef CvFeatureTrackerParams ft_params(); public native CvHybridTrackerParams ft_params(CvFeatureTrackerParams ft_params);
+    public native @ByRef CvMeanShiftTrackerParams ms_params(); public native CvHybridTrackerParams ms_params(CvMeanShiftTrackerParams ms_params);
     public native int motion_model(); public native CvHybridTrackerParams motion_model(int motion_model);
     public native float low_pass_gain(); public native CvHybridTrackerParams low_pass_gain(float low_pass_gain);
 }
@@ -1285,7 +1371,7 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
         return (CvMeanShiftTracker)super.position(position);
     }
 
-    public native @ByVal CvMeanShiftTrackerParams params(); public native CvMeanShiftTracker params(CvMeanShiftTrackerParams params);
+    public native @ByRef CvMeanShiftTrackerParams params(); public native CvMeanShiftTracker params(CvMeanShiftTrackerParams params);
 
     public CvMeanShiftTracker() { allocate(); }
     private native void allocate();
@@ -1310,8 +1396,8 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
         return (CvFeatureTracker)super.position(position);
     }
 
-    public native @ByVal Mat disp_matches(); public native CvFeatureTracker disp_matches(Mat disp_matches);
-    public native @ByVal CvFeatureTrackerParams params(); public native CvFeatureTracker params(CvFeatureTrackerParams params);
+    public native @ByRef Mat disp_matches(); public native CvFeatureTracker disp_matches(Mat disp_matches);
+    public native @ByRef CvFeatureTrackerParams params(); public native CvFeatureTracker params(CvFeatureTrackerParams params);
 
     public CvFeatureTracker() { allocate(); }
     private native void allocate();
@@ -1336,7 +1422,7 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
         return (CvHybridTracker)super.position(position);
     }
 
-    public native @ByVal CvHybridTrackerParams params(); public native CvHybridTracker params(CvHybridTrackerParams params);
+    public native @ByRef CvHybridTrackerParams params(); public native CvHybridTracker params(CvHybridTrackerParams params);
     public CvHybridTracker() { allocate(); }
     private native void allocate();
     public CvHybridTracker(@ByVal CvHybridTrackerParams params) { allocate(params); }
@@ -1353,7 +1439,7 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
 // #endif
 
 
-// Parsed from header file /usr/local/include/opencv2/contrib/retina.hpp
+// Parsed from /usr/local/include/opencv2/contrib/retina.hpp
 
 /*#******************************************************************************
  ** IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
@@ -1528,8 +1614,8 @@ public static final int
                public native float localAdaptintegration_tau(); public native IplMagnoParameters localAdaptintegration_tau(float localAdaptintegration_tau);
                public native float localAdaptintegration_k(); public native IplMagnoParameters localAdaptintegration_k(float localAdaptintegration_k);
            }
-            public native @ByVal OPLandIplParvoParameters OPLandIplParvo(); public native RetinaParameters OPLandIplParvo(OPLandIplParvoParameters OPLandIplParvo);
-            public native @ByVal IplMagnoParameters IplMagno(); public native RetinaParameters IplMagno(IplMagnoParameters IplMagno);
+            public native @ByRef OPLandIplParvoParameters OPLandIplParvo(); public native RetinaParameters OPLandIplParvo(OPLandIplParvoParameters OPLandIplParvo);
+            public native @ByRef IplMagnoParameters IplMagno(); public native RetinaParameters IplMagno(IplMagnoParameters IplMagno);
     }
 
     /**
@@ -1550,6 +1636,8 @@ public static final int
      */
     public Retina(@ByVal Size inputSize, @Cast("const bool") boolean colorMode, @Cast("cv::RETINA_COLORSAMPLINGMETHOD") int colorSamplingMethod/*=RETINA_COLOR_BAYER*/, @Cast("const bool") boolean useRetinaLogSampling/*=false*/, double reductionFactor/*=1.0*/, double samplingStrenght/*=10.0*/) { allocate(inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrenght); }
     private native void allocate(@ByVal Size inputSize, @Cast("const bool") boolean colorMode, @Cast("cv::RETINA_COLORSAMPLINGMETHOD") int colorSamplingMethod/*=RETINA_COLOR_BAYER*/, @Cast("const bool") boolean useRetinaLogSampling/*=false*/, double reductionFactor/*=1.0*/, double samplingStrenght/*=10.0*/);
+    public Retina(@ByVal Size inputSize, @Cast("const bool") boolean colorMode) { allocate(inputSize, colorMode); }
+    private native void allocate(@ByVal Size inputSize, @Cast("const bool") boolean colorMode);
 
     /**
     * retreive retina input buffer size
@@ -1569,6 +1657,7 @@ public static final int
          * @param applyDefaultSetupOnFailure : set to true if an error must be thrown on error
      */
     public native void setup(@StdString BytePointer retinaParameterFile/*=""*/, @Cast("const bool") boolean applyDefaultSetupOnFailure/*=true*/);
+    public native void setup();
     public native void setup(@StdString String retinaParameterFile/*=""*/, @Cast("const bool") boolean applyDefaultSetupOnFailure/*=true*/);
 
 
@@ -1580,6 +1669,7 @@ public static final int
      * @param applyDefaultSetupOnFailure : set to true if an error must be thrown on error
      */
     public native void setup(@ByRef FileStorage fs, @Cast("const bool") boolean applyDefaultSetupOnFailure/*=true*/);
+    public native void setup(@ByRef FileStorage fs);
 
     /**
      * try to open an XML retina parameters file to adjust current retina instance setup
@@ -1631,6 +1721,7 @@ public static final int
      * @param ganglionCellsSensitivity: the compression strengh of the ganglion cells local adaptation output, set a value between 160 and 250 for best results, a high value increases more the low value sensitivity... and the output saturates faster, recommended value: 230
      */
     public native void setupOPLandIPLParvoChannel(@Cast("const bool") boolean colorMode/*=true*/, @Cast("const bool") boolean normaliseOutput/*=true*/, float photoreceptorsLocalAdaptationSensitivity/*=0.7*/, float photoreceptorsTemporalConstant/*=0.5*/, float photoreceptorsSpatialConstant/*=0.53*/, float horizontalCellsGain/*=0*/, float HcellsTemporalConstant/*=1*/, float HcellsSpatialConstant/*=7*/, float ganglionCellsSensitivity/*=0.7*/);
+    public native void setupOPLandIPLParvoChannel();
 
     /**
      * set parameters values for the Inner Plexiform Layer (IPL) magnocellular channel
@@ -1645,6 +1736,7 @@ public static final int
      * @param localAdaptintegration_k: specifies the spatial constant of the low pas filter involved in the computation of the local "motion mean" for the local adaptation computation
      */
     public native void setupIPLMagnoChannel(@Cast("const bool") boolean normaliseOutput/*=true*/, float parasolCells_beta/*=0*/, float parasolCells_tau/*=0*/, float parasolCells_k/*=7*/, float amacrinCellsTemporalCutFrequency/*=1.2*/, float V0CompressionParameter/*=0.95*/, float localAdaptintegration_tau/*=0*/, float localAdaptintegration_k/*=7*/);
+    public native void setupIPLMagnoChannel();
 
     /**
      * method which allows retina to be applied on an input image, after run, encapsulated retina module is ready to deliver its outputs using dedicated acccessors, see getParvo and getMagno methods
@@ -1687,6 +1779,7 @@ public static final int
      * @param colorSaturationValue: the saturation factor
      */
     public native void setColorSaturation(@Cast("const bool") boolean saturateColors/*=true*/, float colorSaturationValue/*=4.0*/);
+    public native void setColorSaturation();
 
     /**
      * clear all retina buffers (equivalent to opening the eyes after a long period of eye close ;o)
@@ -1712,7 +1805,7 @@ public static final int
 // #endif /* __OPENCV_CONTRIB_RETINA_HPP__ */
 
 
-// Parsed from header file /usr/local/include/opencv2/contrib/openfabmap.hpp
+// Parsed from /usr/local/include/opencv2/contrib/openfabmap.hpp
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1827,6 +1920,8 @@ public static final int
                 int numSamples/*=0*/) { allocate(clTree, PzGe, PzGNe, flags, numSamples); }
     private native void allocate(@Const @ByRef Mat clTree, double PzGe, double PzGNe, int flags,
                 int numSamples/*=0*/);
+    public FabMap(@Const @ByRef Mat clTree, double PzGe, double PzGNe, int flags) { allocate(clTree, PzGe, PzGNe, flags); }
+    private native void allocate(@Const @ByRef Mat clTree, double PzGe, double PzGNe, int flags);
 
     //methods to add training data for sampling method
     public native void addTraining(@Const @ByRef Mat queryImgDescriptor);
@@ -1845,15 +1940,26 @@ public static final int
                 @StdVector IMatch matches, @Cast("bool") boolean addQuery/*=false*/,
                 @Const @ByRef Mat mask/*=Mat()*/);
     public native void compare(@Const @ByRef Mat queryImgDescriptor,
+                @StdVector IMatch matches);
+    public native void compare(@Const @ByRef Mat queryImgDescriptor,
                 @Const @ByRef Mat testImgDescriptors, @StdVector IMatch matches,
                 @Const @ByRef Mat mask/*=Mat()*/);
     public native void compare(@Const @ByRef Mat queryImgDescriptor,
+                @Const @ByRef Mat testImgDescriptors, @StdVector IMatch matches);
+    public native void compare(@Const @ByRef Mat queryImgDescriptor,
                 @Const @ByRef MatVector testImgDescriptors,
                 @StdVector IMatch matches, @Const @ByRef Mat mask/*=Mat()*/);
+    public native void compare(@Const @ByRef Mat queryImgDescriptor,
+                @Const @ByRef MatVector testImgDescriptors,
+                @StdVector IMatch matches);
     public native void compare(@Const @ByRef MatVector queryImgDescriptors, @StdVector IMatch matches, @Cast("bool") boolean addQuery/*=false*/, @Const @ByRef Mat mask/*=Mat()*/);
+    public native void compare(@Const @ByRef MatVector queryImgDescriptors, @StdVector IMatch matches);
     public native void compare(@Const @ByRef MatVector queryImgDescriptors,
                 @Const @ByRef MatVector testImgDescriptors,
                 @StdVector IMatch matches, @Const @ByRef Mat mask/*=Mat()*/);
+    public native void compare(@Const @ByRef MatVector queryImgDescriptors,
+                @Const @ByRef MatVector testImgDescriptors,
+                @StdVector IMatch matches);
 
 }
 
@@ -1870,6 +1976,8 @@ public static final int
                 int numSamples/*=0*/) { allocate(clTree, PzGe, PzGNe, flags, numSamples); }
     private native void allocate(@Const @ByRef Mat clTree, double PzGe, double PzGNe, int flags,
                 int numSamples/*=0*/);
+    public FabMap1(@Const @ByRef Mat clTree, double PzGe, double PzGNe, int flags) { allocate(clTree, PzGe, PzGNe, flags); }
+    private native void allocate(@Const @ByRef Mat clTree, double PzGe, double PzGNe, int flags);
 }
 
 /*
@@ -1885,6 +1993,10 @@ public static final int
                 int flags, int numSamples/*=0*/, int precision/*=6*/) { allocate(clTree, PzGe, PzGNe, flags, numSamples, precision); }
     private native void allocate(@Const @ByRef Mat clTree, double PzGe, double PzGNe,
                 int flags, int numSamples/*=0*/, int precision/*=6*/);
+    public FabMapLUT(@Const @ByRef Mat clTree, double PzGe, double PzGNe,
+                int flags) { allocate(clTree, PzGe, PzGNe, flags); }
+    private native void allocate(@Const @ByRef Mat clTree, double PzGe, double PzGNe,
+                int flags);
 }
 
 /*
@@ -1900,6 +2012,8 @@ public static final int
                 int numSamples/*=0*/, double rejectionThreshold/*=1e-8*/, double PsGd/*=1e-8*/, int bisectionStart/*=512*/, int bisectionIts/*=9*/) { allocate(clTree, PzGe, PzGNe, flags, numSamples, rejectionThreshold, PsGd, bisectionStart, bisectionIts); }
     private native void allocate(@Const @ByRef Mat clTree, double PzGe, double PzGNe, int flags,
                 int numSamples/*=0*/, double rejectionThreshold/*=1e-8*/, double PsGd/*=1e-8*/, int bisectionStart/*=512*/, int bisectionIts/*=9*/);
+    public FabMapFBO(@Const @ByRef Mat clTree, double PzGe, double PzGNe, int flags) { allocate(clTree, PzGe, PzGNe, flags); }
+    private native void allocate(@Const @ByRef Mat clTree, double PzGe, double PzGNe, int flags);
 }
 
 /*
@@ -1948,6 +2062,7 @@ public static final int
     public native @Const @ByRef MatVector getImgDescriptors();
 
     public native @ByVal Mat make(double infoThreshold/*=0.0*/);
+    public native @ByVal Mat make();
 
 }
 
@@ -1957,11 +2072,17 @@ public static final int
 */
 @Namespace("cv::of2") @NoOffset public static class BOWMSCTrainer extends BOWTrainer {
     static { Loader.load(); }
-    public BOWMSCTrainer() { }
     public BOWMSCTrainer(Pointer p) { super(p); }
+    public BOWMSCTrainer(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public BOWMSCTrainer position(int position) {
+        return (BOWMSCTrainer)super.position(position);
+    }
 
     public BOWMSCTrainer(double clusterSize/*=0.4*/) { allocate(clusterSize); }
     private native void allocate(double clusterSize/*=0.4*/);
+    public BOWMSCTrainer() { allocate(); }
+    private native void allocate();
 
     // Returns trained vocabulary (i.e. cluster centers).
     public native @ByVal Mat cluster();

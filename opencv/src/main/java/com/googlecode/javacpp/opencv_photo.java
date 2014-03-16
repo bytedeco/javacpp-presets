@@ -12,7 +12,7 @@ import static com.googlecode.javacpp.opencv_imgproc.*;
 public class opencv_photo extends com.googlecode.javacpp.presets.opencv_photo {
     static { Loader.load(); }
 
-// Parsed from header file /usr/local/include/opencv2/photo/photo_c.h
+// Parsed from /usr/local/include/opencv2/photo/photo_c.h
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -82,7 +82,7 @@ public static native void cvInpaint( @Const CvArr src, @Const CvArr inpaint_mask
 // #endif //__OPENCV_PHOTO_C_H__
 
 
-// Parsed from header file /usr/local/include/opencv2/photo/photo.hpp
+// Parsed from /usr/local/include/opencv2/photo/photo.hpp
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -153,19 +153,25 @@ public static final int
 
 @Namespace("cv") public static native void fastNlMeansDenoising( @ByVal Mat src, @ByVal Mat dst, float h/*=3*/,
                                         int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
+@Namespace("cv") public static native void fastNlMeansDenoising( @ByVal Mat src, @ByVal Mat dst);
 
 @Namespace("cv") public static native void fastNlMeansDenoisingColored( @ByVal Mat src, @ByVal Mat dst,
                                                float h/*=3*/, float hColor/*=3*/,
                                                int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
+@Namespace("cv") public static native void fastNlMeansDenoisingColored( @ByVal Mat src, @ByVal Mat dst);
 
 @Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal MatVector srcImgs, @ByVal Mat dst,
                                              int imgToDenoiseIndex, int temporalWindowSize,
                                              float h/*=3*/, int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
+@Namespace("cv") public static native void fastNlMeansDenoisingMulti( @ByVal MatVector srcImgs, @ByVal Mat dst,
+                                             int imgToDenoiseIndex, int temporalWindowSize);
 
 @Namespace("cv") public static native void fastNlMeansDenoisingColoredMulti( @ByVal MatVector srcImgs, @ByVal Mat dst,
                                                     int imgToDenoiseIndex, int temporalWindowSize,
                                                     float h/*=3*/, float hColor/*=3*/,
                                                     int templateWindowSize/*=7*/, int searchWindowSize/*=21*/);
+@Namespace("cv") public static native void fastNlMeansDenoisingColoredMulti( @ByVal MatVector srcImgs, @ByVal Mat dst,
+                                                    int imgToDenoiseIndex, int temporalWindowSize);
 
 
 

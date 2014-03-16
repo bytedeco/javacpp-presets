@@ -28,9 +28,10 @@ import com.googlecode.javacpp.annotation.Properties;
  *
  * @author Samuel Audet
  */
-@Properties(inherit=opencv_core.class, target="com.googlecode.javacpp.opencv_ml", value={
+@Properties(inherit=opencv_core.class, value={
     @Platform(include={"<opencv2/ml/ml.hpp>"}, link="opencv_ml@.2.4"),
-    @Platform(value="windows", link="opencv_ml248") })
+    @Platform(value="windows", link="opencv_ml248") },
+        target="com.googlecode.javacpp.opencv_ml")
 public class opencv_ml implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
         infoMap.put(new Parser.Info("std::map<std::string,int>").pointerTypes("StringIntMap").define(true));
