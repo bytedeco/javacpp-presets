@@ -1427,6 +1427,19 @@ public static final int DC1394_CAPTURE_POLICY_MAX =    DC1394_CAPTURE_POLICY_POL
 public static final int DC1394_CAPTURE_POLICY_NUM =   (DC1394_CAPTURE_POLICY_MAX - DC1394_CAPTURE_POLICY_MIN + 1);
 
 /**
+* typedef for the callback param for dc1394_capture_set_callback
+*/
+
+public static class dc1394capture_callback_t extends FunctionPointer {
+    static { Loader.load(); }
+    public    dc1394capture_callback_t(Pointer p) { super(p); }
+    protected dc1394capture_callback_t() { allocate(); }
+    private native void allocate();
+    public native void call(dc1394camera_t arg0, Pointer arg1);
+}
+
+
+/**
  * Capture flags. Currently limited to switching automatic functions on/off: channel allocation, bandwidth allocation and automatic
  * starting of ISO transmission
  */
@@ -1479,6 +1492,12 @@ public static native @Cast("dc1394error_t") int dc1394_capture_enqueue(dc1394cam
  */
 public static native @Cast("dc1394bool_t") int dc1394_capture_is_frame_corrupt(dc1394camera_t camera,
         dc1394video_frame_t frame);
+
+/**
+ * Set a callback if supported by the platform (OS X only for now).
+ */
+public static native void dc1394_capture_set_callback(dc1394camera_t camera,
+        dc1394capture_callback_t callback, Pointer user_data);
 
 // #ifdef __cplusplus
 // #endif

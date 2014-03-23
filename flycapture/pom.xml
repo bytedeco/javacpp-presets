@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.googlecode.javacpp.presets</groupId>
+    <artifactId>javacpp-presets</artifactId>
+    <version>0.8-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>flycapture</artifactId>
+  <version>1.7.17</version>
+  <packaging>jar</packaging>
+  <name>JavaCPP Presets for PGR FlyCapture</name>
+
+  <properties>
+    <!-- Skip on non-Windows system (see profile below) -->
+    <generate-sources.skip>true</generate-sources.skip>
+    <process-classes.skip>true</process-classes.skip>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.googlecode.javacpp</groupId>
+      <artifactId>javacpp</artifactId>
+      <version>${project.parent.version}</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>com.googlecode.javacpp</groupId>
+        <artifactId>javacpp</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>windows</id>
+      <activation>
+        <os><family>windows</family></os>
+      </activation>
+      <properties>
+        <generate-sources.skip>false</generate-sources.skip>
+        <process-classes.skip>false</process-classes.skip>
+      </properties>
+    </profile>
+  </profiles>
+
+</project>

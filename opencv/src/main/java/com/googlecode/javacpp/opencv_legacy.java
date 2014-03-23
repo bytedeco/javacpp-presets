@@ -389,24 +389,6 @@ public static class CvDrawShape extends Pointer {
     { CvDrawShape::ELLIPSE, CV_RGB(255,0,255) }
 };*/
 
-@NoOffset public static class CvImageDrawer extends Pointer {
-    static { Loader.load(); }
-    public CvImageDrawer(Pointer p) { super(p); }
-    public CvImageDrawer(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvImageDrawer position(int position) {
-        return (CvImageDrawer)super.position(position);
-    }
-
-    public CvImageDrawer() { allocate(); }
-    private native void allocate();
-    public native void SetShapes( @Const CvDrawShape shapes, int num );
-    /* <blob_seq> must be the sequence of <CvDetectedBlob>s */
-    public native IplImage Draw( @Const CvArr src, CvBlobSeq blob_seq/*=0*/, @Const CvSeq roi_seq/*=0*/ );
-    public native IplImage Draw( @Const CvArr src );
-    public native IplImage GetImage();
-}
-
 
 
 /* Trajectory generation module: */
@@ -572,9 +554,9 @@ public static class CvBlobTrackerParamMS extends Pointer {
     public native float sigma(); public native CvBlobTrackerParamMS sigma(float sigma);
 }
 
-public static native CvBlobTracker cvCreateBlobTrackerMS1(CvBlobTrackerParamMS param);
-public static native CvBlobTracker cvCreateBlobTrackerMS2(CvBlobTrackerParamMS param);
-public static native CvBlobTracker cvCreateBlobTrackerMS1ByList();
+
+
+
 
 /* Some declarations for specific Likelihood tracker: */
 public static class CvBlobTrackerParamLH extends Pointer {
@@ -593,12 +575,10 @@ public static class CvBlobTrackerParamLH extends Pointer {
 }
 
 /* Without scale optimization: */
-public static native CvBlobTracker cvCreateBlobTrackerLHR(CvBlobTrackerParamLH arg0/*=NULL*/);
-public static native CvBlobTracker cvCreateBlobTrackerLHR();
+
 
 /* With scale optimization: */
-public static native CvBlobTracker cvCreateBlobTrackerLHRS(CvBlobTrackerParamLH arg0/*=NULL*/);
-public static native CvBlobTracker cvCreateBlobTrackerLHRS();
+
 
 /* Simple blob tracker based on connected component tracking: */
 public static native CvBlobTracker cvCreateBlobTrackerCC();
@@ -905,9 +885,9 @@ public static class CvTracksTimePos extends Pointer {
 
 /* Constructor functions:  */
 
-public static native void cvCreateTracks_One(CvBlobTrackSeq TS);
-public static native void cvCreateTracks_Same(CvBlobTrackSeq TS1, CvBlobTrackSeq TS2);
-public static native void cvCreateTracks_AreaErr(CvBlobTrackSeq TS1, CvBlobTrackSeq TS2, int addW, int addH);
+
+
+
 
 
 /* HIST API */
@@ -943,17 +923,16 @@ public static native void cvReleaseProb(@ByPtrPtr CvProb ppProb);
 /* HIST API */
 
 /* Some Prob: */
-public static native CvProb cvCreateProbS(int dim, @ByVal CvSize size, int sample_num);
-public static native CvProb cvCreateProbMG(int dim, @ByVal CvSize size, int sample_num);
-public static native CvProb cvCreateProbMG2(int dim, @ByVal CvSize size, int sample_num);
-public static native CvProb cvCreateProbHist(int dim, @ByVal CvSize size);
+
+
+
+
 
 public static final int CV_BT_HIST_TYPE_S =     0;
 public static final int CV_BT_HIST_TYPE_MG =    1;
 public static final int CV_BT_HIST_TYPE_MG2 =   2;
 public static final int CV_BT_HIST_TYPE_H =     3;
-public static native CvProb cvCreateProb(int type, int dim, @ByVal CvSize size/*=cvSize(1,1)*/, Pointer arg3/*=NULL*/);
-public static native CvProb cvCreateProb(int type, int dim);
+
 
 
 
@@ -2029,17 +2008,10 @@ public static class CvMSERParams extends Pointer {
     public native int edgeBlurSize(); public native CvMSERParams edgeBlurSize(int edgeBlurSize);
 }
 
-public static native @ByVal CvMSERParams cvMSERParams( int delta/*CV_DEFAULT(5)*/, int min_area/*CV_DEFAULT(60)*/,
-                                 int max_area/*CV_DEFAULT(14400)*/, float max_variation/*CV_DEFAULT(.25f)*/,
-                                 float min_diversity/*CV_DEFAULT(.2f)*/, int max_evolution/*CV_DEFAULT(200)*/,
-                                 double area_threshold/*CV_DEFAULT(1.01)*/,
-                                 double min_margin/*CV_DEFAULT(.003)*/,
-                                 int edge_blur_size/*CV_DEFAULT(5)*/ );
-public static native @ByVal CvMSERParams cvMSERParams( );
+
 
 // Extracts the contours of Maximally Stable Extremal Regions
-public static native void cvExtractMSER( CvArr _img, CvArr _mask, @Cast("CvSeq**") PointerPointer contours, CvMemStorage storage, @ByVal CvMSERParams params );
-public static native void cvExtractMSER( CvArr _img, CvArr _mask, @ByPtrPtr CvSeq contours, CvMemStorage storage, @ByVal CvMSERParams params );
+
 
 
 public static class CvStarKeypoint extends Pointer {
@@ -3340,15 +3312,11 @@ public static native double cvMatchContourTrees( @Const CvContourTree tree1,
 \****************************************************************************************/
 
 /* finds correspondence between two contours */
-public static native CvSeq cvCalcContoursCorrespondence( @Const CvSeq contour1,
-                                     @Const CvSeq contour2,
-                                     CvMemStorage storage);
+
 
 /* morphs contours using the pre-calculated correspondence:
    alpha=0 ~ contour1, alpha=1 ~ contour2 */
-public static native CvSeq cvMorphContours( @Const CvSeq contour1, @Const CvSeq contour2,
-                        CvSeq corr, double alpha,
-                        CvMemStorage storage );
+
 
 
 /****************************************************************************************\
@@ -3507,8 +3475,8 @@ public static class CvFaceData extends Pointer {
     public native @ByRef CvRect RightEyeRect(); public native CvFaceData RightEyeRect(CvRect RightEyeRect);
 }
 
-public static native CvSeq cvFindFace(IplImage Image,CvMemStorage storage);
-public static native CvSeq cvPostBoostingFindFace(IplImage Image,CvMemStorage storage);
+
+
 
 
 /****************************************************************************************\
@@ -5033,15 +5001,8 @@ public static final int
     public static native int countNonZeroElements(FloatBuffer vec, int n);
     public static native int countNonZeroElements(float[] vec, int n, double tol/*=1e-10*/);
     public static native int countNonZeroElements(float[] vec, int n);
-    public static native void safeSignatureAlloc(@Cast("uchar**") PointerPointer sig, int num_sig/*=1*/, int sig_len/*=176*/);
-    public static native void safeSignatureAlloc(@Cast("uchar**") @ByPtrPtr BytePointer sig);
-    public static native void safeSignatureAlloc(@Cast("uchar**") @ByPtrPtr BytePointer sig, int num_sig/*=1*/, int sig_len/*=176*/);
-    public static native void safeSignatureAlloc(@Cast("uchar**") @ByPtrPtr ByteBuffer sig, int num_sig/*=1*/, int sig_len/*=176*/);
-    public static native void safeSignatureAlloc(@Cast("uchar**") @ByPtrPtr ByteBuffer sig);
-    public static native void safeSignatureAlloc(@Cast("uchar**") @ByPtrPtr byte[] sig, int num_sig/*=1*/, int sig_len/*=176*/);
-    public static native void safeSignatureAlloc(@Cast("uchar**") @ByPtrPtr byte[] sig);
-    public static native @Cast("uchar*") BytePointer safeSignatureAlloc(int num_sig/*=1*/, int sig_len/*=176*/);
-    public static native @Cast("uchar*") BytePointer safeSignatureAlloc();
+    
+    
 
     public native int classes();
     public native int original_num_classes();
@@ -5436,7 +5397,7 @@ public static final int
     public native int GetPCADimLow();
     public native int GetPCADimHigh();
 
-    public native void ConvertDescriptorsArrayToTree(); // Converting pca_descriptors array to KD tree
+     // Converting pca_descriptors array to KD tree
 
     // GetPCAFilename: get default PCA filename
     public static native @StdString BytePointer GetPCAFilename();
@@ -5763,10 +5724,10 @@ public static final int
                            @Const @ByRef LDetector detector/*=LDetector()*/,
                            @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/);
     public native void train(@Const @ByRef MatVector pyr, @StdVector KeyPoint keypoints);
-    public native @ByVal Rect getModelROI();
+    
     public native @StdVector KeyPoint getModelPoints();
-    public native @Const @ByRef LDetector getDetector();
-    public native @Const @ByRef FernClassifier getClassifier();
+    
+    
     public native void setVerbose(@Cast("bool") boolean verbose);
 
     public native void read(@Const @ByRef FileNode node);

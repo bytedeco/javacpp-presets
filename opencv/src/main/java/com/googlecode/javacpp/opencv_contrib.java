@@ -366,7 +366,7 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
         public native float resolution(); public native Mesh3D resolution(float resolution);
         public native @ByRef Octree octree(); public native Mesh3D octree(Octree octree);
 
-        @MemberGetter public static native @Const @ByRef Point3f allzero();
+        
     }
 
     @Namespace("cv") @NoOffset public static class SpinImageModel extends Pointer {
@@ -421,18 +421,11 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
         public static native @Cast("bool") boolean spinCorrelation(@Const @ByRef Mat spin1, @Const @ByRef Mat spin2, float lambda, @ByRef FloatBuffer result);
         public static native @Cast("bool") boolean spinCorrelation(@Const @ByRef Mat spin1, @Const @ByRef Mat spin2, float lambda, @ByRef float[] result);
 
-        public static native @ByVal Point2f calcSpinMapCoo(@Const @ByRef Point3f point, @Const @ByRef Point3f vertex, @Const @ByRef Point3f normal);
+        
 
-        public static native float geometricConsistency(@Const @ByRef Point3f pointScene1, @Const @ByRef Point3f normalScene1,
-                                                  @Const @ByRef Point3f pointModel1, @Const @ByRef Point3f normalModel1,
-                                                  @Const @ByRef Point3f pointScene2, @Const @ByRef Point3f normalScene2,
-                                                  @Const @ByRef Point3f pointModel2, @Const @ByRef Point3f normalModel2);
+        
 
-        public static native float groupingCreteria(@Const @ByRef Point3f pointScene1, @Const @ByRef Point3f normalScene1,
-                                              @Const @ByRef Point3f pointModel1, @Const @ByRef Point3f normalModel1,
-                                              @Const @ByRef Point3f pointScene2, @Const @ByRef Point3f normalScene2,
-                                              @Const @ByRef Point3f pointModel2, @Const @ByRef Point3f normalModel2,
-                                              float gamma);
+        
     }
 
     @Namespace("cv") @NoOffset public static class TickMeter extends Pointer {
@@ -1364,19 +1357,15 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
 // Performs Camshift using parameters from MeanShiftTrackerParams
 @Namespace("cv") @NoOffset public static class CvMeanShiftTracker extends Pointer {
     static { Loader.load(); }
+    public CvMeanShiftTracker() { }
     public CvMeanShiftTracker(Pointer p) { super(p); }
-    public CvMeanShiftTracker(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvMeanShiftTracker position(int position) {
-        return (CvMeanShiftTracker)super.position(position);
-    }
 
     public native @ByRef CvMeanShiftTrackerParams params(); public native CvMeanShiftTracker params(CvMeanShiftTrackerParams params);
 
-    public CvMeanShiftTracker() { allocate(); }
-    private native void allocate();
+    
     public CvMeanShiftTracker(@ByVal CvMeanShiftTrackerParams _params) { allocate(_params); }
     private native void allocate(@ByVal CvMeanShiftTrackerParams _params);
+    
     public native void newTrackingWindow(@ByVal Mat image, @ByVal Rect selection);
     public native @ByVal RotatedRect updateTrackingWindow(@ByVal Mat image);
     public native @ByVal Mat getHistogramProjection(int type);
@@ -1389,20 +1378,16 @@ public class opencv_contrib extends com.googlecode.javacpp.presets.opencv_contri
 // Performs SIFT/SURF feature tracking using parameters from FeatureTrackerParams
 @Namespace("cv") @NoOffset public static class CvFeatureTracker extends Pointer {
     static { Loader.load(); }
+    public CvFeatureTracker() { }
     public CvFeatureTracker(Pointer p) { super(p); }
-    public CvFeatureTracker(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvFeatureTracker position(int position) {
-        return (CvFeatureTracker)super.position(position);
-    }
 
     public native @ByRef Mat disp_matches(); public native CvFeatureTracker disp_matches(Mat disp_matches);
     public native @ByRef CvFeatureTrackerParams params(); public native CvFeatureTracker params(CvFeatureTrackerParams params);
 
-    public CvFeatureTracker() { allocate(); }
-    private native void allocate();
+    
     public CvFeatureTracker(@ByVal CvFeatureTrackerParams params) { allocate(params); }
     private native void allocate(@ByVal CvFeatureTrackerParams params);
+    
     public native void newTrackingWindow(@ByVal Mat image, @ByVal Rect selection);
     public native @ByVal Rect updateTrackingWindow(@ByVal Mat image);
     public native @ByVal Rect updateTrackingWindowWithSIFT(@ByVal Mat image);

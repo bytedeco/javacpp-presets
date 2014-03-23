@@ -38,8 +38,10 @@ import java.lang.annotation.Target;
     @Platform(include={"<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/core.hpp>", "opencv_adapters.h"}, link="opencv_core@.2.4", preload="tbb"),
     @Platform(value="windows", define="_WIN32_WINNT 0x0502", includepath="C:/opencv/build/include/",
         link="opencv_core248", preload={"msvcr100", "msvcp100"}),
-    @Platform(value="windows-x86",    linkpath="C:/opencv/build/x86/vc10/lib/", preloadpath="C:/opencv/build/x86/vc10/bin/"),
-    @Platform(value="windows-x86_64", linkpath="C:/opencv/build/x64/vc10/lib/", preloadpath="C:/opencv/build/x64/vc10/bin/") },
+    @Platform(value="windows-x86",    linkpath="C:/opencv/build/x86/vc10/lib/", preloadpath={"C:/opencv/build/x86/vc10/bin/",
+            "C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/redist/x86/Microsoft.VC100.CRT/"}),
+    @Platform(value="windows-x86_64", linkpath="C:/opencv/build/x64/vc10/lib/", preloadpath={"C:/opencv/build/x64/vc10/bin/",
+            "C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/redist/x64/Microsoft.VC100.CRT/"}) },
         target="com.googlecode.javacpp.opencv_core", helper="com.googlecode.javacpp.helper.opencv_core")
 public class opencv_core implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
@@ -125,15 +127,18 @@ public class opencv_core implements Parser.InfoMapper {
                .put(new Parser.Info("cv::randu<float>").javaNames("randFloat"))
                .put(new Parser.Info("cv::randu<double>").javaNames("randDouble"))
 
-               .put(new Parser.Info("cv::fromUtf16", "cv::toUtf16", "cv::Exception", "cv::Allocator", "cv::DataDepth", "cv::DataType", "cv::ParamType",
+               .put(new Parser.Info("CvModule::first", "CvModule::last", "CvType::first", "CvType::last",
+                                    "cv::fromUtf16", "cv::toUtf16", "cv::Exception", "cv::Allocator", "cv::DataDepth", "cv::DataType", "cv::ParamType",
                                     "cv::_InputArray", "cv::_OutputArray", "cv::noArray", "cv::Mat_", "cv::SparseMat_",
                                     "cv::Matx_AddOp", "cv::Matx_SubOp", "cv::Matx_ScaleOp", "cv::Matx_MulOp", "cv::Matx_MatMulOp", "cv::Matx_TOp",
                                     "cv::Matx", "cv::Vec", "cv::MatIterator_", "cv::MatConstIterator_", "cv::Mat::MSize", "cv::Mat::MStep",
                                     "cv::MatCommaInitializer_", "cv::MatxCommaInitializer", "cv::VecCommaInitializer",
-                                    "cv::SparseMatIterator_", "cv::SparseMatConstIterator_",
+                                    "cv::MatConstIterator(cv::Mat*, int*)", "cv::SparseMatIterator(cv::SparseMat*, int*)",
+                                    "cv::SparseMatIterator_", "cv::SparseMatConstIterator_", "cv::SparseMatConstIterator::operator--",
                                     "cv::AlgorithmInfoData", "cv::AlgorithmInfo::addParam", "cv::CommandLineParser").skip(true))
 
                .put(new Parser.Info("cv::Mat").base("AbstractMat"))
+               .put(new Parser.Info("cv::Mat::zeros(int, int*, int)", "cv::Mat::ones(int, int*, int)").skip(true))
                .put(new Parser.Info("cv::Mat::size").javaText("public native @ByVal Size size();\n@MemberGetter public native int size(int i);"))
                .put(new Parser.Info("cv::Mat::step").javaText("@MemberGetter public native long step();\n@MemberGetter public native int step(int i);"))
 

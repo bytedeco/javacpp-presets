@@ -84,31 +84,31 @@ public static final int  CV_STYLE_NORMAL         = 0,//QFont::StyleNormal,
 
 //for color cvScalar(blue_component, green_component, red\_component[, alpha_component])
 //and alpha= 0 <-> 0xFF (not transparent <-> transparent)
-public static native @ByVal CvFont cvFontQt(@Cast("const char*") BytePointer nameFont, int pointSize/*CV_DEFAULT(-1)*/, @ByVal CvScalar color/*CV_DEFAULT(cvScalarAll(0))*/, int weight/*CV_DEFAULT(CV_FONT_NORMAL)*/,  int style/*CV_DEFAULT(CV_STYLE_NORMAL)*/, int spacing/*CV_DEFAULT(0)*/);
-public static native @ByVal CvFont cvFontQt(@Cast("const char*") BytePointer nameFont);
-public static native @ByVal CvFont cvFontQt(String nameFont, int pointSize/*CV_DEFAULT(-1)*/, @ByVal CvScalar color/*CV_DEFAULT(cvScalarAll(0))*/, int weight/*CV_DEFAULT(CV_FONT_NORMAL)*/,  int style/*CV_DEFAULT(CV_STYLE_NORMAL)*/, int spacing/*CV_DEFAULT(0)*/);
-public static native @ByVal CvFont cvFontQt(String nameFont);
+public static native @ByVal @Platform("linux") CvFont cvFontQt(@Cast("const char*") BytePointer nameFont, int pointSize/*CV_DEFAULT(-1)*/, @ByVal CvScalar color/*CV_DEFAULT(cvScalarAll(0))*/, int weight/*CV_DEFAULT(CV_FONT_NORMAL)*/,  int style/*CV_DEFAULT(CV_STYLE_NORMAL)*/, int spacing/*CV_DEFAULT(0)*/);
+public static native @ByVal @Platform("linux") CvFont cvFontQt(@Cast("const char*") BytePointer nameFont);
+public static native @ByVal @Platform("linux") CvFont cvFontQt(String nameFont, int pointSize/*CV_DEFAULT(-1)*/, @ByVal CvScalar color/*CV_DEFAULT(cvScalarAll(0))*/, int weight/*CV_DEFAULT(CV_FONT_NORMAL)*/,  int style/*CV_DEFAULT(CV_STYLE_NORMAL)*/, int spacing/*CV_DEFAULT(0)*/);
+public static native @ByVal @Platform("linux") CvFont cvFontQt(String nameFont);
 
-public static native void cvAddText(@Const CvArr img, @Cast("const char*") BytePointer text, @ByVal CvPoint org, CvFont arg2);
-public static native void cvAddText(@Const CvArr img, String text, @ByVal @Cast("CvPoint*") IntBuffer org, CvFont arg2);
-public static native void cvAddText(@Const CvArr img, @Cast("const char*") BytePointer text, @ByVal @Cast("CvPoint*") int[] org, CvFont arg2);
-public static native void cvAddText(@Const CvArr img, String text, @ByVal CvPoint org, CvFont arg2);
-public static native void cvAddText(@Const CvArr img, @Cast("const char*") BytePointer text, @ByVal @Cast("CvPoint*") IntBuffer org, CvFont arg2);
-public static native void cvAddText(@Const CvArr img, String text, @ByVal @Cast("CvPoint*") int[] org, CvFont arg2);
+public static native @Platform("linux") void cvAddText(@Const CvArr img, @Cast("const char*") BytePointer text, @ByVal CvPoint org, CvFont arg2);
+public static native @Platform("linux") void cvAddText(@Const CvArr img, String text, @ByVal @Cast("CvPoint*") IntBuffer org, CvFont arg2);
+public static native @Platform("linux") void cvAddText(@Const CvArr img, @Cast("const char*") BytePointer text, @ByVal @Cast("CvPoint*") int[] org, CvFont arg2);
+public static native @Platform("linux") void cvAddText(@Const CvArr img, String text, @ByVal CvPoint org, CvFont arg2);
+public static native @Platform("linux") void cvAddText(@Const CvArr img, @Cast("const char*") BytePointer text, @ByVal @Cast("CvPoint*") IntBuffer org, CvFont arg2);
+public static native @Platform("linux") void cvAddText(@Const CvArr img, String text, @ByVal @Cast("CvPoint*") int[] org, CvFont arg2);
 
-public static native void cvDisplayOverlay(@Cast("const char*") BytePointer name, @Cast("const char*") BytePointer text, int delayms/*CV_DEFAULT(0)*/);
-public static native void cvDisplayOverlay(@Cast("const char*") BytePointer name, @Cast("const char*") BytePointer text);
-public static native void cvDisplayOverlay(String name, String text, int delayms/*CV_DEFAULT(0)*/);
-public static native void cvDisplayOverlay(String name, String text);
-public static native void cvDisplayStatusBar(@Cast("const char*") BytePointer name, @Cast("const char*") BytePointer text, int delayms/*CV_DEFAULT(0)*/);
-public static native void cvDisplayStatusBar(@Cast("const char*") BytePointer name, @Cast("const char*") BytePointer text);
-public static native void cvDisplayStatusBar(String name, String text, int delayms/*CV_DEFAULT(0)*/);
-public static native void cvDisplayStatusBar(String name, String text);
+public static native @Platform("linux") void cvDisplayOverlay(@Cast("const char*") BytePointer name, @Cast("const char*") BytePointer text, int delayms/*CV_DEFAULT(0)*/);
+public static native @Platform("linux") void cvDisplayOverlay(@Cast("const char*") BytePointer name, @Cast("const char*") BytePointer text);
+public static native @Platform("linux") void cvDisplayOverlay(String name, String text, int delayms/*CV_DEFAULT(0)*/);
+public static native @Platform("linux") void cvDisplayOverlay(String name, String text);
+public static native @Platform("linux") void cvDisplayStatusBar(@Cast("const char*") BytePointer name, @Cast("const char*") BytePointer text, int delayms/*CV_DEFAULT(0)*/);
+public static native @Platform("linux") void cvDisplayStatusBar(@Cast("const char*") BytePointer name, @Cast("const char*") BytePointer text);
+public static native @Platform("linux") void cvDisplayStatusBar(String name, String text, int delayms/*CV_DEFAULT(0)*/);
+public static native @Platform("linux") void cvDisplayStatusBar(String name, String text);
 
-public static native void cvSaveWindowParameters(@Cast("const char*") BytePointer name);
-public static native void cvSaveWindowParameters(String name);
-public static native void cvLoadWindowParameters(@Cast("const char*") BytePointer name);
-public static native void cvLoadWindowParameters(String name);
+public static native @Platform("linux") void cvSaveWindowParameters(@Cast("const char*") BytePointer name);
+public static native @Platform("linux") void cvSaveWindowParameters(String name);
+public static native @Platform("linux") void cvLoadWindowParameters(@Cast("const char*") BytePointer name);
+public static native @Platform("linux") void cvLoadWindowParameters(String name);
 public static class Pt2Func_int_PointerPointer extends FunctionPointer {
     static { Loader.load(); }
     public    Pt2Func_int_PointerPointer(Pointer p) { super(p); }
@@ -116,7 +116,7 @@ public static class Pt2Func_int_PointerPointer extends FunctionPointer {
     private native void allocate();
     public native int call(int argc, @Cast("char**") PointerPointer argv);
 }
-public static native int cvStartLoop(Pt2Func_int_PointerPointer pt2Func, int argc, @Cast("char**") PointerPointer argv);
+public static native @Platform("linux") int cvStartLoop(Pt2Func_int_PointerPointer pt2Func, int argc, @Cast("char**") PointerPointer argv);
 public static class Pt2Func_int_BytePointer extends FunctionPointer {
     static { Loader.load(); }
     public    Pt2Func_int_BytePointer(Pointer p) { super(p); }
@@ -124,7 +124,7 @@ public static class Pt2Func_int_BytePointer extends FunctionPointer {
     private native void allocate();
     public native int call(int argc, @Cast("char**") @ByPtrPtr BytePointer argv);
 }
-public static native int cvStartLoop(Pt2Func_int_BytePointer pt2Func, int argc, @Cast("char**") @ByPtrPtr BytePointer argv);
+public static native @Platform("linux") int cvStartLoop(Pt2Func_int_BytePointer pt2Func, int argc, @Cast("char**") @ByPtrPtr BytePointer argv);
 public static class Pt2Func_int_ByteBuffer extends FunctionPointer {
     static { Loader.load(); }
     public    Pt2Func_int_ByteBuffer(Pointer p) { super(p); }
@@ -132,7 +132,7 @@ public static class Pt2Func_int_ByteBuffer extends FunctionPointer {
     private native void allocate();
     public native int call(int argc, @Cast("char**") @ByPtrPtr ByteBuffer argv);
 }
-public static native int cvStartLoop(Pt2Func_int_ByteBuffer pt2Func, int argc, @Cast("char**") @ByPtrPtr ByteBuffer argv);
+public static native @Platform("linux") int cvStartLoop(Pt2Func_int_ByteBuffer pt2Func, int argc, @Cast("char**") @ByPtrPtr ByteBuffer argv);
 public static class Pt2Func_int_byte__ extends FunctionPointer {
     static { Loader.load(); }
     public    Pt2Func_int_byte__(Pointer p) { super(p); }
@@ -140,8 +140,8 @@ public static class Pt2Func_int_byte__ extends FunctionPointer {
     private native void allocate();
     public native int call(int argc, @Cast("char**") @ByPtrPtr byte[] argv);
 }
-public static native int cvStartLoop(Pt2Func_int_byte__ pt2Func, int argc, @Cast("char**") @ByPtrPtr byte[] argv);
-public static native void cvStopLoop( );
+public static native @Platform("linux") int cvStartLoop(Pt2Func_int_byte__ pt2Func, int argc, @Cast("char**") @ByPtrPtr byte[] argv);
+public static native @Platform("linux") void cvStopLoop( );
 
 @Convention("CV_CDECL") public static class CvButtonCallback extends FunctionPointer {
     static { Loader.load(); }
@@ -152,9 +152,9 @@ public static native void cvStopLoop( );
 }
 /** enum  */
 public static final int CV_PUSH_BUTTON = 0, CV_CHECKBOX = 1, CV_RADIOBOX = 2;
-public static native int cvCreateButton( @Cast("const char*") BytePointer button_name/*CV_DEFAULT(NULL)*/,CvButtonCallback on_change/*CV_DEFAULT(NULL)*/, Pointer userdata/*CV_DEFAULT(NULL)*/, int button_type/*CV_DEFAULT(CV_PUSH_BUTTON)*/, int initial_button_state/*CV_DEFAULT(0)*/);
-public static native int cvCreateButton();
-public static native int cvCreateButton( String button_name/*CV_DEFAULT(NULL)*/,CvButtonCallback on_change/*CV_DEFAULT(NULL)*/, Pointer userdata/*CV_DEFAULT(NULL)*/, int button_type/*CV_DEFAULT(CV_PUSH_BUTTON)*/, int initial_button_state/*CV_DEFAULT(0)*/);
+public static native @Platform("linux") int cvCreateButton( @Cast("const char*") BytePointer button_name/*CV_DEFAULT(NULL)*/,CvButtonCallback on_change/*CV_DEFAULT(NULL)*/, Pointer userdata/*CV_DEFAULT(NULL)*/, int button_type/*CV_DEFAULT(CV_PUSH_BUTTON)*/, int initial_button_state/*CV_DEFAULT(0)*/);
+public static native @Platform("linux") int cvCreateButton();
+public static native @Platform("linux") int cvCreateButton( String button_name/*CV_DEFAULT(NULL)*/,CvButtonCallback on_change/*CV_DEFAULT(NULL)*/, Pointer userdata/*CV_DEFAULT(NULL)*/, int button_type/*CV_DEFAULT(CV_PUSH_BUTTON)*/, int initial_button_state/*CV_DEFAULT(0)*/);
 //----------------------
 
 

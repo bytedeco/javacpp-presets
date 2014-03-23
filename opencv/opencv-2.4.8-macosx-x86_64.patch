@@ -1,0 +1,17 @@
+diff -ruN opencv-2.4.8/3rdparty/tbb/CMakeLists.txt opencv-2.4.8-macosx-x86_64/3rdparty/tbb/CMakeLists.txt
+--- opencv-2.4.8/3rdparty/tbb/CMakeLists.txt	2013-12-28 02:09:18.000000000 +0900
++++ opencv-2.4.8-macosx-x86_64/3rdparty/tbb/CMakeLists.txt	2014-01-05 21:39:33.431825473 +0900
+@@ -177,13 +177,7 @@
+                  )
+ endif()
+ 
+-if (HAVE_LIBPTHREAD)
+   add_definitions(-DUSE_PTHREAD) #required for Unix
+-endif()
+-
+-if (CMAKE_COMPILER_IS_GNUCXX)
+-  add_definitions(-DTBB_USE_GCC_BUILTINS=1) #required for ARM GCC
+-endif()
+ 
+ if(ANDROID_COMPILER_IS_CLANG)
+   add_definitions(-D__TBB_GCC_BUILTIN_ATOMICS_PRESENT=1)

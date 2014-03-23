@@ -407,7 +407,7 @@ public class opencv_videostab extends com.googlecode.javacpp.presets.opencv_vide
 }
 
 // #if defined(HAVE_OPENCV_GPU) && !defined(ANDROID)
-@Namespace("cv::videostab") @NoOffset public static class DensePyrLkOptFlowEstimatorGpu extends PyrLkOptFlowEstimatorBase {
+@Platform(not="android") @Namespace("cv::videostab") @NoOffset public static class DensePyrLkOptFlowEstimatorGpu extends PyrLkOptFlowEstimatorBase {
     static { Loader.load(); }
     public DensePyrLkOptFlowEstimatorGpu(Pointer p) { super(p); }
     public DensePyrLkOptFlowEstimatorGpu(int size) { allocateArray(size); }

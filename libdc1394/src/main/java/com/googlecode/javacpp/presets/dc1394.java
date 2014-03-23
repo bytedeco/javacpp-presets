@@ -36,7 +36,7 @@ import java.nio.ByteBuffer;
 @Properties(target="com.googlecode.javacpp.dc1394", value={
     @Platform(value={"linux", "macosx"}, include={"<poll.h>", "<dc1394/dc1394.h>", "<dc1394/types.h>", "<dc1394/log.h>",
         "<dc1394/camera.h>", "<dc1394/control.h>", "<dc1394/capture.h>", "<dc1394/conversions.h>", "<dc1394/format7.h>",
-        "<dc1394/iso.h>", "<dc1394/register.h>", "<dc1394/video.h>", "<dc1394/utils.h>"}, link="dc1394@.22") })
+        "<dc1394/iso.h>", "<dc1394/register.h>", "<dc1394/video.h>", "<dc1394/utils.h>"}, link="dc1394@.22", preload="libusb-1.0") })
 public class dc1394 implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
         infoMap.put(new Parser.Info("poll.h").skip(true))

@@ -1,0 +1,27 @@
+diff -ruN ffmpeg-2.1.4-win32-dev/include/libavutil/pixdesc.h ffmpeg-2.1.4-win32-dev-patch/include/libavutil/pixdesc.h
+--- ffmpeg-2.1.4-win32-dev/include/libavutil/pixdesc.h	2014-02-27 13:18:52.000000000 +0900
++++ ffmpeg-2.1.4-win32-dev-patch/include/libavutil/pixdesc.h	2014-03-22 16:11:24.320484673 +0900
+@@ -141,7 +141,7 @@
+ /**
+  * The array of all the pixel format descriptors.
+  */
+-extern attribute_deprecated const AVPixFmtDescriptor av_pix_fmt_descriptors[];
++extern __declspec(dllimport) attribute_deprecated const AVPixFmtDescriptor av_pix_fmt_descriptors[];
+ #endif
+ 
+ /**
+diff -ruN ffmpeg-2.1.4-win32-dev/include/libpostproc/postprocess.h ffmpeg-2.1.4-win32-dev-patch/include/libpostproc/postprocess.h
+--- ffmpeg-2.1.4-win32-dev/include/libpostproc/postprocess.h	2014-02-27 13:18:52.000000000 +0900
++++ ffmpeg-2.1.4-win32-dev-patch/include/libpostproc/postprocess.h	2014-03-22 16:11:24.321484690 +0900
+@@ -61,9 +61,9 @@
+ #if LIBPOSTPROC_VERSION_INT < (52<<16)
+ typedef pp_context pp_context_t;
+ typedef pp_mode pp_mode_t;
+-extern const char *const pp_help; ///< a simple help text
++extern __declspec(dllimport) const char *const pp_help; ///< a simple help text
+ #else
+-extern const char pp_help[]; ///< a simple help text
++extern __declspec(dllimport) const char pp_help[]; ///< a simple help text
+ #endif
+ 
+ void  pp_postprocess(const uint8_t * src[3], const int srcStride[3],

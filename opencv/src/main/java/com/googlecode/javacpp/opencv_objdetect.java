@@ -1172,7 +1172,7 @@ public static native @ByVal CvDataMatrixCodeDeque cvFindDataMatrix(CvMat im);
 /**
  * \brief Debug function to colormap a quantized image for viewing.
  */
-@Namespace("cv::linemod") public static native void colormap(@Const @ByRef Mat quantized, @ByRef Mat dst);
+
 
 /**
  * \brief Represents a successful template match.

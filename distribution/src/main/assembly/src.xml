@@ -13,6 +13,7 @@
         <exclude>**/*.log</exclude>
         <!-- TODO: use expresssions instead: ${project.parent.build.directory}, etc -->
         <exclude>**/target/**</exclude>
+        <exclude>**/cppbuild/**</exclude>
       </excludes>
     </fileSet>
   </fileSets>

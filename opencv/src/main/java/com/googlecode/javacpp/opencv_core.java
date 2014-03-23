@@ -4741,8 +4741,8 @@ public static final String cvFuncName = "";
     private native void allocate( CvModuleInfo _info );
     public native CvModuleInfo info(); public native CvModule info(CvModuleInfo info);
 
-    public static native CvModuleInfo first(); public static native void first(CvModuleInfo first);
-    public static native CvModuleInfo last(); public static native void last(CvModuleInfo last);
+    
+    
 }
 
 @NoOffset public static class CvType extends Pointer {
@@ -4772,8 +4772,8 @@ public static final String cvFuncName = "";
                 CvIsInstanceFunc is_instance );
     public native CvTypeInfo info(); public native CvType info(CvTypeInfo info);
 
-    public static native CvTypeInfo first(); public static native void first(CvTypeInfo first);
-    public static native CvTypeInfo last(); public static native void last(CvTypeInfo last);
+    
+    
 }
 
 // #endif
@@ -6365,14 +6365,10 @@ public static final int MAGIC_MASK= 0xFFFF0000, TYPE_MASK= 0x00000FFF, DEPTH_MAS
     /** Matlab-style matrix initialization */
     public static native @ByVal MatExpr zeros(int rows, int cols, int type);
     public static native @ByVal MatExpr zeros(@ByVal Size size, int type);
-    public static native @ByVal MatExpr zeros(int ndims, @Const IntPointer sz, int type);
-    public static native @ByVal MatExpr zeros(int ndims, @Const IntBuffer sz, int type);
-    public static native @ByVal MatExpr zeros(int ndims, @Const int[] sz, int type);
+    
     public static native @ByVal MatExpr ones(int rows, int cols, int type);
     public static native @ByVal MatExpr ones(@ByVal Size size, int type);
-    public static native @ByVal MatExpr ones(int ndims, @Const IntPointer sz, int type);
-    public static native @ByVal MatExpr ones(int ndims, @Const IntBuffer sz, int type);
-    public static native @ByVal MatExpr ones(int ndims, @Const int[] sz, int type);
+    
     public static native @ByVal MatExpr eye(int rows, int cols, int type);
     public static native @ByVal MatExpr eye(@ByVal Size size, int type);
 
@@ -7515,12 +7511,7 @@ public static final int
     public MatConstIterator(@Const Mat _m, @ByVal Point _pt) { allocate(_m, _pt); }
     private native void allocate(@Const Mat _m, @ByVal Point _pt);
     /** constructor that sets the iterator to the specified element of the matrix */
-    public MatConstIterator(@Const Mat _m, @Const IntPointer _idx) { allocate(_m, _idx); }
-    private native void allocate(@Const Mat _m, @Const IntPointer _idx);
-    public MatConstIterator(@Const Mat _m, @Const IntBuffer _idx) { allocate(_m, _idx); }
-    private native void allocate(@Const Mat _m, @Const IntBuffer _idx);
-    public MatConstIterator(@Const Mat _m, @Const int[] _idx) { allocate(_m, _idx); }
-    private native void allocate(@Const Mat _m, @Const int[] _idx);
+    
     /** copy constructor */
     public MatConstIterator(@Const @ByRef MatConstIterator it) { allocate(it); }
     private native void allocate(@Const @ByRef MatConstIterator it);
@@ -8190,9 +8181,9 @@ public static class ConvertScaleData extends FunctionPointer {
     public native @Const SparseMat.Node node();
 
     /** moves iterator to the previous element */
-    public native @ByRef @Name("operator--") SparseMatConstIterator decrement();
+    
     /** moves iterator to the previous element */
-    public native @ByVal @Name("operator--") SparseMatConstIterator decrement(int arg0);
+    
     /** moves iterator to the next element */
     public native @ByRef @Name("operator++") SparseMatConstIterator increment();
     /** moves iterator to the next element */
@@ -8228,12 +8219,7 @@ public static class ConvertScaleData extends FunctionPointer {
     public SparseMatIterator(SparseMat _m) { allocate(_m); }
     private native void allocate(SparseMat _m);
     /** the full constructor setting the iterator to the specified sparse matrix element */
-    public SparseMatIterator(SparseMat _m, @Const IntPointer idx) { allocate(_m, idx); }
-    private native void allocate(SparseMat _m, @Const IntPointer idx);
-    public SparseMatIterator(SparseMat _m, @Const IntBuffer idx) { allocate(_m, idx); }
-    private native void allocate(SparseMat _m, @Const IntBuffer idx);
-    public SparseMatIterator(SparseMat _m, @Const int[] idx) { allocate(_m, idx); }
-    private native void allocate(SparseMat _m, @Const int[] idx);
+    
     /** the copy constructor */
     public SparseMatIterator(@Const @ByRef SparseMatIterator it) { allocate(it); }
     private native void allocate(@Const @ByRef SparseMatIterator it);

@@ -31,7 +31,8 @@ import com.googlecode.javacpp.annotation.Properties;
 @Properties(inherit={opencv_calib3d.class, opencv_objdetect.class, opencv_video.class, opencv_ml.class}, value={
     @Platform(include={"<opencv2/contrib/contrib.hpp>", "<opencv2/contrib/detection_based_tracker.hpp>",
         "<opencv2/contrib/hybridtracker.hpp>", "<opencv2/contrib/retina.hpp>", "<opencv2/contrib/openfabmap.hpp>"}, link="opencv_contrib@.2.4"),
-    @Platform(value="windows", link="opencv_contrib248") },
+    @Platform(value="windows", include={"<opencv2/contrib/contrib.hpp>",
+        "<opencv2/contrib/hybridtracker.hpp>", "<opencv2/contrib/retina.hpp>", "<opencv2/contrib/openfabmap.hpp>"}, link="opencv_contrib248") },
         target="com.googlecode.javacpp.opencv_contrib")
 public class opencv_contrib implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
@@ -39,6 +40,8 @@ public class opencv_contrib implements Parser.InfoMapper {
                .put(new Parser.Info("std::vector<std::vector<cv::Vec2i> >").cast(true).pointerTypes("PointVectorVector").define(false))
                .put(new Parser.Info("std::vector<std::pair<cv::Rect_<int>,int> >").pointerTypes("RectIntPairVector").define(true))
                .put(new Parser.Info("std::valarray<float>").pointerTypes("FloatValArray").define(true))
-               .put(new Parser.Info("CvFuzzyMeanShiftTracker::kernel").skip(true));
+               .put(new Parser.Info("CvFuzzyMeanShiftTracker::kernel", "cv::Mesh3D::allzero",
+                                    "cv::SpinImageModel::calcSpinMapCoo", "cv::SpinImageModel::geometricConsistency", "cv::SpinImageModel::groupingCreteria",
+                                    "cv::CvMeanShiftTracker()", "cv::CvFeatureTracker()").skip(true));
     }
 }

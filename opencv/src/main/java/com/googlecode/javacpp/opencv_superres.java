@@ -167,18 +167,18 @@ public class opencv_superres extends com.googlecode.javacpp.presets.opencv_super
 
         @Namespace("cv::superres") public static native @Ptr DenseOpticalFlowExt createOptFlow_Farneback();
         @Namespace("cv::superres") public static native @Ptr DenseOpticalFlowExt createOptFlow_Farneback_GPU();
-        @Namespace("cv::superres") public static native @Ptr DenseOpticalFlowExt createOptFlow_Farneback_OCL();
+        
 
         @Namespace("cv::superres") public static native @Ptr DenseOpticalFlowExt createOptFlow_Simple();
 
         @Namespace("cv::superres") public static native @Ptr DenseOpticalFlowExt createOptFlow_DualTVL1();
         @Namespace("cv::superres") public static native @Ptr DenseOpticalFlowExt createOptFlow_DualTVL1_GPU();
-        @Namespace("cv::superres") public static native @Ptr DenseOpticalFlowExt createOptFlow_DualTVL1_OCL();
+        
 
         @Namespace("cv::superres") public static native @Ptr DenseOpticalFlowExt createOptFlow_Brox_GPU();
 
         @Namespace("cv::superres") public static native @Ptr DenseOpticalFlowExt createOptFlow_PyrLK_GPU();
-        @Namespace("cv::superres") public static native @Ptr DenseOpticalFlowExt createOptFlow_PyrLK_OCL();
+        
     
 
 

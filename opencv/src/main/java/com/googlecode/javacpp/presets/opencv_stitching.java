@@ -51,10 +51,14 @@ public class opencv_stitching implements Parser.InfoMapper {
                .put(new Parser.Info("cv::detail::PaniniPortraitWarper").pointerTypes("DetailPaniniPortraitWarper").base("RotationWarper"))
                .put(new Parser.Info("cv::detail::MercatorWarper").pointerTypes("DetailMercatorWarper").base("RotationWarper"))
                .put(new Parser.Info("cv::detail::TransverseMercatorWarper").pointerTypes("DetailTransverseMercatorWarper").base("RotationWarper"))
-               .put(new Parser.Info("cv::detail::PlaneWarperGpu").pointerTypes("DetailPlaneWarperGpu").base("RotationWarper"))
-               .put(new Parser.Info("cv::detail::SphericalWarperGpu").pointerTypes("DetailSphericalWarperGpu").base("RotationWarper"))
-               .put(new Parser.Info("cv::detail::CylindricalWarperGpu").pointerTypes("DetailCylindricalWarperGpu").base("RotationWarper"))
+               .put(new Parser.Info("cv::detail::PlaneWarperGpu").annotations("@Platform(not=\"android\")").pointerTypes("DetailPlaneWarperGpu").base("RotationWarper"))
+               .put(new Parser.Info("cv::detail::SphericalWarperGpu").annotations("@Platform(not=\"android\")").pointerTypes("DetailSphericalWarperGpu").base("RotationWarper"))
+               .put(new Parser.Info("cv::detail::CylindricalWarperGpu").annotations("@Platform(not=\"android\")").pointerTypes("DetailCylindricalWarperGpu").base("RotationWarper"))
                .put(new Parser.Info("cv::detail::SphericalPortraitWarper", "cv::detail::CylindricalPortraitWarper", "cv::detail::PlanePortraitWarper").base("RotationWarper"))
-               .put(new Parser.Info("cv::detail::WaveCorrectKind").cast(true).valueTypes("int"));
+               .put(new Parser.Info("cv::PlaneWarperGpu").annotations("@Platform(not=\"android\")").pointerTypes("PlaneWarperGpu"))
+               .put(new Parser.Info("cv::CylindricalWarperGpu").annotations("@Platform(not=\"android\")").pointerTypes("CylindricalWarperGpu"))
+               .put(new Parser.Info("cv::SphericalWarperGpu").annotations("@Platform(not=\"android\")").pointerTypes("SphericalWarperGpu"))
+               .put(new Parser.Info("cv::detail::SurfFeaturesFinderGpu").annotations("@Platform(not=\"android\")").pointerTypes("SurfFeaturesFinderGpu"))
+               .put(new Parser.Info("cv::detail::GraphCutSeamFinderGpu").annotations("@Platform(not=\"android\")").pointerTypes("GraphCutSeamFinderGpu"));
     }
 }

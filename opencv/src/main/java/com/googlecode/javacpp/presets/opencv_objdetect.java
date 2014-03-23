@@ -36,7 +36,8 @@ public class opencv_objdetect implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
         infoMap.put(new Parser.Info("std::deque<CvDataMatrixCode>").pointerTypes("CvDataMatrixCodeDeque").define(true))
                .put(new Parser.Info("std::vector<cv::Ptr<cv::linemod::Modality> >").pointerTypes("ModalityVector").define(true))
-               .put(new Parser.Info("cv::Ptr<cv::linemod::Modality>").annotations("@Ptr").valueTypes("Modality").define(true))
-               .put(new Parser.Info("CvHaarClassifierCascade").base("AbstractCvHaarClassifierCascade"));
+               .put(new Parser.Info("cv::Ptr<cv::linemod::Modality>").annotations("@Ptr").valueTypes("Modality"))
+               .put(new Parser.Info("CvHaarClassifierCascade").base("AbstractCvHaarClassifierCascade"))
+               .put(new Parser.Info("cv::linemod::colormap").skip(true));
     }
 }

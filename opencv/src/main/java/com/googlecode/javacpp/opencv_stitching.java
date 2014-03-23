@@ -517,7 +517,7 @@ public class opencv_stitching extends com.googlecode.javacpp.presets.opencv_stit
 
 
 // #if defined(HAVE_OPENCV_GPU) && !defined(ANDROID)
-@Name("cv::detail::PlaneWarperGpu") @NoOffset public static class DetailPlaneWarperGpu extends RotationWarper {
+@Platform(not="android") @Name("cv::detail::PlaneWarperGpu") @NoOffset public static class DetailPlaneWarperGpu extends RotationWarper {
     static { Loader.load(); }
     public DetailPlaneWarperGpu(Pointer p) { super(p); }
     public DetailPlaneWarperGpu(int size) { allocateArray(size); }
@@ -553,7 +553,7 @@ public class opencv_stitching extends com.googlecode.javacpp.presets.opencv_stit
 }
 
 
-@Name("cv::detail::SphericalWarperGpu") @NoOffset public static class DetailSphericalWarperGpu extends RotationWarper {
+@Platform(not="android") @Name("cv::detail::SphericalWarperGpu") @NoOffset public static class DetailSphericalWarperGpu extends RotationWarper {
     static { Loader.load(); }
     public DetailSphericalWarperGpu() { }
     public DetailSphericalWarperGpu(Pointer p) { super(p); }
@@ -573,7 +573,7 @@ public class opencv_stitching extends com.googlecode.javacpp.presets.opencv_stit
 }
 
 
-@Name("cv::detail::CylindricalWarperGpu") @NoOffset public static class DetailCylindricalWarperGpu extends RotationWarper {
+@Platform(not="android") @Name("cv::detail::CylindricalWarperGpu") @NoOffset public static class DetailCylindricalWarperGpu extends RotationWarper {
     static { Loader.load(); }
     public DetailCylindricalWarperGpu() { }
     public DetailCylindricalWarperGpu(Pointer p) { super(p); }
@@ -810,7 +810,7 @@ public class opencv_stitching extends com.googlecode.javacpp.presets.opencv_stit
 
 
 // #if defined(HAVE_OPENCV_NONFREE) && defined(HAVE_OPENCV_GPU) && !defined(ANDROID)
-@Namespace("cv::detail") @NoOffset public static class SurfFeaturesFinderGpu extends FeaturesFinder {
+@Platform(not="android") @Namespace("cv::detail") @NoOffset public static class SurfFeaturesFinderGpu extends FeaturesFinder {
     static { Loader.load(); }
     public SurfFeaturesFinderGpu(Pointer p) { super(p); }
     public SurfFeaturesFinderGpu(int size) { allocateArray(size); }
@@ -1596,7 +1596,7 @@ public static final int
 
 
 // #if defined(HAVE_OPENCV_GPU) && !defined(ANDROID)
-@Namespace("cv::detail") @NoOffset public static class GraphCutSeamFinderGpu extends GraphCutSeamFinderBase {
+@Platform(not="android") @Namespace("cv::detail") @NoOffset public static class GraphCutSeamFinderGpu extends GraphCutSeamFinderBase {
     static { Loader.load(); }
     public GraphCutSeamFinderGpu(Pointer p) { super(p); }
     public GraphCutSeamFinderGpu(int size) { allocateArray(size); }
@@ -2073,7 +2073,7 @@ public static final int
 
 
 // #if defined(HAVE_OPENCV_GPU) && !defined(ANDROID)
-@Namespace("cv") public static class PlaneWarperGpu extends WarperCreator {
+@Platform(not="android") @Namespace("cv") public static class PlaneWarperGpu extends WarperCreator {
     static { Loader.load(); }
     public PlaneWarperGpu() { allocate(); }
     public PlaneWarperGpu(int size) { allocateArray(size); }
@@ -2088,7 +2088,7 @@ public static final int
 }
 
 
-@Namespace("cv") public static class CylindricalWarperGpu extends WarperCreator {
+@Platform(not="android") @Namespace("cv") public static class CylindricalWarperGpu extends WarperCreator {
     static { Loader.load(); }
     public CylindricalWarperGpu() { allocate(); }
     public CylindricalWarperGpu(int size) { allocateArray(size); }
@@ -2103,7 +2103,7 @@ public static final int
 }
 
 
-@Namespace("cv") public static class SphericalWarperGpu extends WarperCreator {
+@Platform(not="android") @Namespace("cv") public static class SphericalWarperGpu extends WarperCreator {
     static { Loader.load(); }
     public SphericalWarperGpu() { allocate(); }
     public SphericalWarperGpu(int size) { allocateArray(size); }

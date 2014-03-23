@@ -34,5 +34,8 @@ import com.googlecode.javacpp.annotation.Properties;
         target="com.googlecode.javacpp.opencv_superres")
 public class opencv_superres implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
+        infoMap.put(new Parser.Info("cv::superres::createOptFlow_Farneback_OCL",
+                                    "cv::superres::createOptFlow_DualTVL1_OCL",
+                                    "cv::superres::createOptFlow_PyrLK_OCL").skip(true));
     }
 }

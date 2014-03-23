@@ -156,9 +156,9 @@ public static final int
 	FREENECT_AUTO_EXPOSURE      =  1 << 14,
 	FREENECT_AUTO_WHITE_BALANCE =  1 << 1,
 	FREENECT_RAW_COLOR          =  1 << 4,
-	// registers to be written with 0 or 1
-	FREENECT_MIRROR_DEPTH       =  0x0017,
-	FREENECT_MIRROR_VIDEO       =  0x0047;
+	// arbitrary bitfields to support flag combination
+	FREENECT_MIRROR_DEPTH       =  1 << 16,
+	FREENECT_MIRROR_VIDEO       =  1 << 17;
 
 /** Possible values for setting each `freenect_flag` */
 /** enum freenect_flag_value */
@@ -519,6 +519,15 @@ public static class freenect_video_cb extends FunctionPointer {
     private native void allocate();
     public native void call(freenect_device dev, Pointer video, @Cast("uint32_t") int timestamp);
 }
+/** Typedef for stream chunk processing callbacks */
+public static class freenect_chunk_cb extends FunctionPointer {
+    static { Loader.load(); }
+    public    freenect_chunk_cb(Pointer p) { super(p); }
+    protected freenect_chunk_cb() { allocate(); }
+    private native void allocate();
+    public native void call(Pointer buffer, Pointer pkt_data, int pkt_num, int datalen, Pointer user_data);
+}
+
 
 /**
  * Set callback for depth information received event
@@ -535,6 +544,22 @@ public static native void freenect_set_depth_callback(freenect_device dev, freen
  * @param cb Function pointer for processing video information
  */
 public static native void freenect_set_video_callback(freenect_device dev, freenect_video_cb cb);
+
+/**
+ * Set callback for depth chunk processing
+ *
+ * @param dev Device to set callback for
+ * @param cb Function pointer for processing depth chunk
+ */
+public static native void freenect_set_depth_chunk_callback(freenect_device dev, freenect_chunk_cb cb);
+
+/**
+ * Set callback for video chunk processing
+ *
+ * @param dev Device to set callback for
+ * @param cb Function pointer for processing video chunk
+ */
+public static native void freenect_set_video_chunk_callback(freenect_device dev, freenect_chunk_cb cb);
 
 /**
  * Set the buffer to store depth information to. Size of buffer is
@@ -786,11 +811,35 @@ public static native int freenect_set_depth_mode(freenect_device dev, @Const @By
  */
 public static native int freenect_set_flag(freenect_device dev, @Cast("freenect_flag") int flag, @Cast("freenect_flag_value") int value);
 
+
+/**
+ * Allows the user to specify a pointer to the audio firmware in memory for the Xbox 360 Kinect
+ *
+ * @param ctx Context to open device through
+ * @param fw_ptr Pointer to audio firmware loaded in memory
+ * @param num_bytes The size of the firmware in bytes
+ */
+public static native void freenect_set_fw_address_nui(freenect_context ctx, @Cast("unsigned char*") BytePointer fw_ptr, @Cast("unsigned int") int num_bytes);
+public static native void freenect_set_fw_address_nui(freenect_context ctx, @Cast("unsigned char*") ByteBuffer fw_ptr, @Cast("unsigned int") int num_bytes);
+public static native void freenect_set_fw_address_nui(freenect_context ctx, @Cast("unsigned char*") byte[] fw_ptr, @Cast("unsigned int") int num_bytes);
+
+/**
+ * Allows the user to specify a pointer to the audio firmware in memory for the K4W Kinect 
+ *
+ * @param ctx Context to open device through
+ * @param fw_ptr Pointer to audio firmware loaded in memory
+ * @param num_bytes The size of the firmware in bytes
+ */
+public static native void freenect_set_fw_address_k4w(freenect_context ctx, @Cast("unsigned char*") BytePointer fw_ptr, @Cast("unsigned int") int num_bytes);
+public static native void freenect_set_fw_address_k4w(freenect_context ctx, @Cast("unsigned char*") ByteBuffer fw_ptr, @Cast("unsigned int") int num_bytes);
+public static native void freenect_set_fw_address_k4w(freenect_context ctx, @Cast("unsigned char*") byte[] fw_ptr, @Cast("unsigned int") int num_bytes);
+
+
 // #ifdef __cplusplus
 // #endif
 
 
-// Parsed from /usr/local/include/libfreenect/libfreenect-registration.h
+// Parsed from /usr/local/include/libfreenect/libfreenect_registration.h
 
 /*
  * This file is part of the OpenKinect Project. http://www.openkinect.org
@@ -817,10 +866,9 @@ public static native int freenect_set_flag(freenect_device dev, @Cast("freenect_
  * Binary distributions must follow the binary distribution requirements of
  * either License.
  */
-
 // #pragma once
 
-// #include <libfreenect.h>
+// #include "libfreenect.h"
 // #include <stdint.h>
 
 // #ifdef __cplusplus
@@ -963,7 +1011,7 @@ public static native void freenect_camera_to_world(freenect_device dev,
 // #endif
 
 
-// Parsed from /usr/local/include/libfreenect/libfreenect-audio.h
+// Parsed from /usr/local/include/libfreenect/libfreenect_audio.h
 
 /*
  * This file is part of the OpenKinect Project. http://www.openkinect.org
@@ -990,10 +1038,9 @@ public static native void freenect_camera_to_world(freenect_device dev,
  * Binary distributions must follow the binary distribution requirements of
  * either License.
  */
-
 // #pragma once
 
-// #include <libfreenect.h>
+// #include "libfreenect.h"
 // #include <stdint.h>
 
 // #ifdef __cplusplus
@@ -1129,10 +1176,9 @@ public static native int freenect_stop_audio(freenect_device dev);
  * Binary distributions must follow the binary distribution requirements of
  * either License.
  */
-
 // #pragma once
 
-// #include <libfreenect.h>
+// #include "libfreenect.h"
 // #include <stdint.h>
 
 // #ifdef __cplusplus

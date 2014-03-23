@@ -36,6 +36,7 @@ public class opencv_features2d implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
         infoMap.put(new Parser.Info().javaText("import com.googlecode.javacpp.annotation.Index;"))
                .put(new Parser.Info("std::vector<std::vector<cv::KeyPoint> >").pointerTypes("KeyPointVectorVector").define(true))
-               .put(new Parser.Info("std::vector<std::vector<cv::DMatch> >").pointerTypes("DMatchVectorVector").define(true));
+               .put(new Parser.Info("std::vector<std::vector<cv::DMatch> >").pointerTypes("DMatchVectorVector").define(true))
+               .put(new Parser.Info("cv::FREAK(cv::FREAK&)", "cv::FREAK::operator=").skip(true));
     }
 }

@@ -75,6 +75,13 @@ public class opencv_legacy implements Parser.InfoMapper {
                .put(new Parser.Info("CvConDensation").base("AbstractCvConDensation"))
                .put(new Parser.Info("CvBGStatModel").base("AbstractCvBGStatModel"))
                .put(new Parser.Info("CvBGCodeBookModel").base("AbstractCvBGCodeBookModel"))
+               .put(new Parser.Info("CvImageDrawer", "cvCreateBlobTrackerMS1", "cvCreateBlobTrackerMS2",
+                                    "cvCreateBlobTrackerMS1ByList", "cvCreateBlobTrackerLHR", "cvCreateBlobTrackerLHRS",
+                                    "cvCreateTracks_One", "cvCreateTracks_Same", "cvCreateTracks_AreaErr",
+                                    "cvCreateProbS", "cvCreateProbMG", "cvCreateProbMG2", "cvCreateProbHist", "cvCreateProb", "cvMSERParams", "cvExtractMSER",
+                                    "cvCalcContoursCorrespondence", "cvMorphContours", "cvFindFace", "cvPostBoostingFindFace",
+                                    "cv::RTreeClassifier::safeSignatureAlloc", "cv::OneWayDescriptorBase::ConvertDescriptorsArrayToTree",
+                                    "cv::PlanarObjectDetector::getModelROI", "cv::PlanarObjectDetector::getDetector", "cv::PlanarObjectDetector::getClassifier").skip(true))
                .put(new Parser.Info("CV_STEREO_GC_OCCLUDED").translate(false));
     }
 }

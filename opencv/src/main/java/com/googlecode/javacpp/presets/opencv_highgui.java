@@ -34,7 +34,16 @@ import com.googlecode.javacpp.annotation.Properties;
         target="com.googlecode.javacpp.opencv_highgui", helper="com.googlecode.javacpp.helper.opencv_highgui")
 public class opencv_highgui implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        infoMap.put(new Parser.Info("cvCaptureFromFile", "cvCaptureFromAVI").cppTypes("CvCapture*", "const char*"))
+        infoMap.put(new Parser.Info("cvFontQt").annotations("@Platform(\"linux\")").javaNames("cvFontQt"))
+               .put(new Parser.Info("cvAddText").annotations("@Platform(\"linux\")").javaNames("cvAddText"))
+               .put(new Parser.Info("cvDisplayOverlay").annotations("@Platform(\"linux\")").javaNames("cvDisplayOverlay"))
+               .put(new Parser.Info("cvDisplayStatusBar").annotations("@Platform(\"linux\")").javaNames("cvDisplayStatusBar"))
+               .put(new Parser.Info("cvSaveWindowParameters").annotations("@Platform(\"linux\")").javaNames("cvSaveWindowParameters"))
+               .put(new Parser.Info("cvLoadWindowParameters").annotations("@Platform(\"linux\")").javaNames("cvLoadWindowParameters"))
+               .put(new Parser.Info("cvStartLoop").annotations("@Platform(\"linux\")").javaNames("cvStartLoop"))
+               .put(new Parser.Info("cvStopLoop").annotations("@Platform(\"linux\")").javaNames("cvStopLoop"))
+               .put(new Parser.Info("cvCreateButton").annotations("@Platform(\"linux\")").javaNames("cvCreateButton"))
+               .put(new Parser.Info("cvCaptureFromFile", "cvCaptureFromAVI").cppTypes("CvCapture*", "const char*"))
                .put(new Parser.Info("cvCaptureFromCAM").cppTypes("CvCapture*", "int"))
                .put(new Parser.Info("cvCreateAVIWriter").cppTypes("CvVideoWriter*", "const char*", "int", "double", "CvSize", "int"))
                .put(new Parser.Info("cvWriteToAVI").cppTypes("int", "CvVideoWriter*", "IplImage*"))

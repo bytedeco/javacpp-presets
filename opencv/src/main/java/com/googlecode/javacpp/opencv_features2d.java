@@ -537,9 +537,8 @@ public class opencv_features2d extends com.googlecode.javacpp.presets.opencv_fea
                float patternScale/*=22.0f*/,
                int nOctaves/*=4*/,
                @StdVector int[] selectedPairs/*=vector<int>()*/);
-    public FREAK( @Const @ByRef FREAK rhs ) { allocate(rhs); }
-    private native void allocate( @Const @ByRef FREAK rhs );
-    public native @ByRef @Name("operator=") FREAK put( @Const @ByRef FREAK arg0 );
+    
+    
 
     /** returns the descriptor length in bytes */
     public native int descriptorSize();

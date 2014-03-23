@@ -33,7 +33,7 @@ public class videoInputLib extends com.googlecode.javacpp.presets.videoInputLib 
     }
 }
 
-// Parsed from ./../videoInput-update2013/videoInputSrcAndDemos/libs/videoInput/videoInput.h
+// Parsed from C:\videoInput-update2013\videoInputSrcAndDemos\libs\videoInput\videoInput.h
 
 // #ifndef _VIDEOINPUT
 // #define _VIDEOINPUT

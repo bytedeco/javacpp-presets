@@ -38,5 +38,6 @@ import com.googlecode.javacpp.annotation.Properties;
         target="com.googlecode.javacpp.opencv_videostab")
 public class opencv_videostab implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
+        infoMap.put(new Parser.Info("cv::videostab::DensePyrLkOptFlowEstimatorGpu").annotations("@Platform(not=\"android\")").pointerTypes("DensePyrLkOptFlowEstimatorGpu"));
     }
 }

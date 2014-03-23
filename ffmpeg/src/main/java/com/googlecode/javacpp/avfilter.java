@@ -1478,6 +1478,13 @@ public static native @Const AVClass avfilter_get_class();
  *
  * @return 0 on success, a negative AVERROR on error
  */
+public static class avfilter_action_func extends FunctionPointer {
+    static { Loader.load(); }
+    public    avfilter_action_func(Pointer p) { super(p); }
+    protected avfilter_action_func() { allocate(); }
+    private native void allocate();
+    public native int call(AVFilterContext ctx, Pointer arg, int jobnr, int nb_jobs);
+}
 
 /**
  * A function executing multiple jobs, possibly in parallel.
@@ -1491,6 +1498,14 @@ public static native @Const AVClass avfilter_get_class();
  *
  * @return 0 on success, a negative AVERROR on error
  */
+public static class avfilter_execute_func extends FunctionPointer {
+    static { Loader.load(); }
+    public    avfilter_execute_func(Pointer p) { super(p); }
+    protected avfilter_execute_func() { allocate(); }
+    private native void allocate();
+    public native int call(AVFilterContext ctx, avfilter_action_func func,
+                                    Pointer arg, IntPointer ret, int nb_jobs);
+}
 
 public static class AVFilterGraph extends Pointer {
     static { Loader.load(); }
@@ -1565,7 +1580,7 @@ public static class AVFilterGraph extends Pointer {
      * implementation, which may or may not be multithreaded depending on the
      * platform and build options.
      */
-    public native @Cast("avfilter_execute_func*") IntPointer execute(); public native AVFilterGraph execute(IntPointer execute);
+    public native avfilter_execute_func execute(); public native AVFilterGraph execute(avfilter_execute_func execute);
 
     /** swr options to use for the auto-inserted aresample filters, Access ONLY through AVOptions */
     public native @Cast("char*") BytePointer aresample_swr_opts(); public native AVFilterGraph aresample_swr_opts(BytePointer aresample_swr_opts);
