@@ -408,10 +408,6 @@ public class opencv_core extends com.googlecode.javacpp.helper.opencv_core {
  * into functions where the particular
  * array type is recognized at runtime:
  */
-@Opaque public static class CvArr extends Pointer {
-    public CvArr() { }
-    public CvArr(Pointer p) { super(p); }
-}
 
 public static class Cv32suf extends Pointer {
     static { Loader.load(); }

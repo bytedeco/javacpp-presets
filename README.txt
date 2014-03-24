@@ -34,7 +34,7 @@ Each child module in turn relies on its corresponding native library being insta
 
 We can accomplished that with the included [#CPPBuild_Scripts], explained below. Once everything installed, simply execute
 {{{
-    $ mvn install --projects opencv,ffmpeg,libdc1394,libfreenect,videoinput,artoolkitplus,distribution
+    $ mvn install --projects opencv,ffmpeg,flycapture,libdc1394,libfreenect,videoinput,artoolkitplus,distribution
 }}}
 in the root directory, by specifying only the desired child modules in the command. Please refer to the comments inside the parent `pom.xml` file for further details.
 

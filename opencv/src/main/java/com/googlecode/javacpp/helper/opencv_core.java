@@ -29,6 +29,9 @@ import com.googlecode.javacpp.LongPointer;
 import com.googlecode.javacpp.Pointer;
 import com.googlecode.javacpp.PointerPointer;
 import com.googlecode.javacpp.ShortPointer;
+import com.googlecode.javacpp.annotation.Name;
+import com.googlecode.javacpp.annotation.Opaque;
+import com.googlecode.javacpp.annotation.ValueGetter;
 import java.awt.Rectangle;
 import java.awt.Transparency;
 import java.awt.color.ColorSpace;
@@ -111,203 +114,20 @@ import static com.googlecode.javacpp.opencv_core.cvScalar;
 
 public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
 
-    public static class CvArrArray extends PointerPointer<CvArr> {
-        static { Loader.load(); }
-        public CvArrArray(CvArr ... array) { super(array); }
-        public CvArrArray(int size) { super(size); }
-        public CvArrArray(Pointer p) { super(p); }
+    public static abstract class AbstractArray extends Pointer {
+        public AbstractArray() { }
+        public AbstractArray(Pointer p) { super(p); }
 
-        @Override public CvArrArray position(int position) {
-            return (CvArrArray)super.position(position);
-        }
-        public CvArrArray put(CvArr p) {
-            return (CvArrArray)super.put(p);
-        }
-        @Override public CvArrArray put(CvArr ... array) {
-            for (int i = 0; i < array.length; i++) {
-                position(i).put(array[i]);
-            }
-            return this;
-        }
-    }
-
-    public static class CvMatArray extends CvArrArray {
-        public CvMatArray(CvMat ... array) { super(array); }
-        public CvMatArray(int size) { super(size); }
-        public CvMatArray(Pointer p) { super(p); }
-
-        @Override public CvMatArray position(int position) {
-            return (CvMatArray)super.position(position);
-        }
-        @Override public CvMatArray put(CvArr ... array) {
-            return (CvMatArray)super.put(array);
-        }
-        @Override public CvMatArray put(CvArr p) {
-            if (p instanceof CvMat) {
-                return (CvMatArray)super.put(p);
-            } else {
-                throw new ArrayStoreException(p.getClass().getName());
-            }
-        }
-    }
-
-    public static class CvMatNDArray extends CvArrArray {
-        public CvMatNDArray(CvMatND ... array) { super(array); }
-        public CvMatNDArray(int size) { super(size); }
-        public CvMatNDArray(Pointer p) { super(p); }
-
-        @Override public CvMatNDArray position(int position) {
-            return (CvMatNDArray)super.position(position);
-        }
-        @Override public CvMatNDArray put(CvArr ... array) {
-            return (CvMatNDArray)super.put(array);
-        }
-        @Override public CvMatNDArray put(CvArr p) {
-            if (p instanceof CvMatND) {
-                return (CvMatNDArray)super.put(p);
-            } else {
-                throw new ArrayStoreException(p.getClass().getName());
-            }
-        }
-    }
-
-    public static class IplImageArray extends CvArrArray {
-        public IplImageArray(IplImage ... array) { super(array); }
-        public IplImageArray(int size) { super(size); }
-        public IplImageArray(Pointer p) { super(p); }
-
-        @Override public IplImageArray position(int position) {
-            return (IplImageArray)super.position(position);
-        }
-        @Override public IplImageArray put(CvArr ... array) {
-            return (IplImageArray)super.put(array);
-        }
-        @Override public IplImageArray put(CvArr p) {
-            if (p instanceof IplImage) {
-                return (IplImageArray)super.put(p);
-            } else {
-                throw new ArrayStoreException(p.getClass().getName());
-            }
-        }
-    }
-
-    public static abstract class AbstractIplImage extends CvArr {
-        public AbstractIplImage() { }
-        public AbstractIplImage(Pointer p) { super(p); }
-
-        public static IplImage create(CvSize size, int depth, int channels) {
-            IplImage i = cvCreateImage(size, depth, channels);
-            if (i != null) {
-                i.deallocator(new ReleaseDeallocator(i));
-            }
-            return i;
-        }
-        public static IplImage create(int width, int height, int depth, int channels) {
-            return create(com.googlecode.javacpp.opencv_core.cvSize(width, height), depth, channels);
-        }
-        public static IplImage create(CvSize size, int depth, int channels, int origin) {
-            IplImage i = create(size, depth, channels);
-            if (i != null) {
-                i.origin(origin);
-            }
-            return i;
-        }
-        public static IplImage create(int width, int height, int depth, int channels, int origin) {
-            IplImage i = create(width, height, depth, channels);
-            if (i != null) {
-                i.origin(origin);
-            }
-            return i;
-        }
-
-        public static IplImage createHeader(CvSize size, int depth, int channels) {
-            IplImage i = cvCreateImageHeader(size, depth, channels);
-            if (i != null) {
-                i.deallocator(new HeaderReleaseDeallocator(i));
-            }
-            return i;
-        }
-        public static IplImage createHeader(int width, int height, int depth, int channels) {
-            return createHeader(com.googlecode.javacpp.opencv_core.cvSize(width, height), depth, channels);
-        }
-        public static IplImage createHeader(CvSize size, int depth, int channels, int origin) {
-            IplImage i = createHeader(size, depth, channels);
-            if (i != null) {
-                i.origin(origin);
-            }
-            return i;
-        }
-        public static IplImage createHeader(int width, int height, int depth, int channels, int origin) {
-            IplImage i = createHeader(width, height, depth, channels);
-            if (i != null) {
-                i.origin(origin);
-            }
-            return i;
-        }
-
-        public static IplImage createCompatible(IplImage template) {
-            return createIfNotCompatible(null, template);
-        }
-        public static IplImage createIfNotCompatible(IplImage image, IplImage template) {
-            if (image == null || image.width() != template.width() || image.height() != template.height() ||
-                    image.depth() != template.depth() || image.nChannels() != template.nChannels()) {
-                image = create(template.width(), template.height(),
-                        template.depth(), template.nChannels(), template.origin());
-                if (((AbstractIplImage)template).bufferedImage != null) {
-                    ((AbstractIplImage)template).bufferedImage = template.cloneBufferedImage();
-                }
-            }
-            image.origin(template.origin());
-            return image;
-        }
-
-        public static IplImage createFrom(BufferedImage image) {
-            return createFrom(image, 1.0);
-        }
-        public static IplImage createFrom(BufferedImage image, double gamma) {
-            return createFrom(image, gamma, false);
-        }
-        public static IplImage createFrom(BufferedImage image, double gamma, boolean flipChannels) {
-            if (image == null) {
-                return null;
-            }
-            SampleModel sm = image.getSampleModel();
-            int depth = 0, numChannels = sm.getNumBands();
-            switch (image.getType()) {
-                case BufferedImage.TYPE_INT_RGB:
-                case BufferedImage.TYPE_INT_ARGB:
-                case BufferedImage.TYPE_INT_ARGB_PRE:
-                case BufferedImage.TYPE_INT_BGR:
-                    depth = IPL_DEPTH_8U;
-                    numChannels = 4;
-                    break;
-            }
-            if (depth == 0 || numChannels == 0) {
-                switch (sm.getDataType()) {
-                    case DataBuffer.TYPE_BYTE:   depth = IPL_DEPTH_8U;  break;
-                    case DataBuffer.TYPE_USHORT: depth = IPL_DEPTH_16U; break;
-                    case DataBuffer.TYPE_SHORT:  depth = IPL_DEPTH_16S; break;
-                    case DataBuffer.TYPE_INT:    depth = IPL_DEPTH_32S; break;
-                    case DataBuffer.TYPE_FLOAT:  depth = IPL_DEPTH_32F; break;
-                    case DataBuffer.TYPE_DOUBLE: depth = IPL_DEPTH_64F; break;
-                    default: assert false;
-                }
-            }
-            IplImage i = create(image.getWidth(), image.getHeight(), depth, numChannels);
-            i.copyFrom(image, gamma, flipChannels);
-            return i;
-        }
-
-        @Override public IplImage clone() {
-            IplImage i = cvCloneImage((IplImage)this);
-            if (i != null) {
-                i.deallocator(new ReleaseDeallocator(i));
-            }
-            if (i != null && bufferedImage != null) {
-                ((AbstractIplImage)i).bufferedImage = cloneBufferedImage();
-            }
-            return i;
-        }
+        protected abstract int arrayChannels();
+        protected abstract int arrayDepth();
+        protected abstract int arrayOrigin();
+        protected abstract void arrayOrigin(int origin);
+        protected abstract int arrayWidth();
+        protected abstract int arrayHeight();
+        protected abstract IplROI arrayROI();
+        protected abstract int arraySize();
+        protected abstract BytePointer arrayData();
+        protected abstract int arrayStep();
 
         protected BufferedImage cloneBufferedImage() {
             if (bufferedImage == null) {
@@ -323,31 +143,9 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
             }
         }
 
-        public void release() {
-            deallocate();
-        }
-        protected static class ReleaseDeallocator extends IplImage implements Pointer.Deallocator {
-            ReleaseDeallocator(IplImage p) { super(p); }
-            @Override public void deallocate() { cvReleaseImage(this); }
-        }
-        protected static class HeaderReleaseDeallocator extends IplImage implements Pointer.Deallocator {
-            HeaderReleaseDeallocator(IplImage p) { super(p); }
-            @Override public void deallocate() { cvReleaseImageHeader(this); }
-        }
-
-        public abstract int nChannels();
-        public abstract int depth();
-        public abstract int width();
-        public abstract int origin(); public abstract IplImage origin(int origin);
-        public abstract int height();
-        public abstract IplROI roi();
-        public abstract int imageSize();
-        public abstract BytePointer imageData();
-        public abstract int widthStep();
-
         public double highValue() {
             double highValue = 0.0;
-            switch (depth()) {
+            switch (arrayDepth()) {
                 case IPL_DEPTH_8U:  highValue = 0xFF;              break;
                 case IPL_DEPTH_16U: highValue = 0xFFFF;            break;
                 case IPL_DEPTH_8S:  highValue = Byte.MAX_VALUE;    break;
@@ -361,9 +159,9 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
             return highValue;
         }
 
-        public CvSize cvSize() { return com.googlecode.javacpp.opencv_core.cvSize(width(), height()); }
+        public CvSize cvSize() { return com.googlecode.javacpp.opencv_core.cvSize(arrayWidth(), arrayHeight()); }
 
-        public ByteBuffer   getByteBuffer  (int index) { return imageData().position(index).capacity(imageSize() - index).asByteBuffer(); }
+        public ByteBuffer   getByteBuffer  (int index) { return arrayData().position(index).capacity(arraySize() - index).asByteBuffer(); }
         public ShortBuffer  getShortBuffer (int index) { return getByteBuffer(index*2).asShortBuffer();  }
         public IntBuffer    getIntBuffer   (int index) { return getByteBuffer(index*4).asIntBuffer();    }
         public FloatBuffer  getFloatBuffer (int index) { return getByteBuffer(index*4).asFloatBuffer();  }
@@ -693,27 +491,27 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
             if (gamma == 1.0) {
                 return;
             }
-            switch (depth()) {
+            switch (arrayDepth()) {
                 case IPL_DEPTH_8U:
-                    flipCopyWithGamma(getByteBuffer(), widthStep(), getByteBuffer(), widthStep(), false, gamma, false, 0);
+                    flipCopyWithGamma(getByteBuffer(), arrayStep(), getByteBuffer(), arrayStep(), false, gamma, false, 0);
                     break;
                 case IPL_DEPTH_8S:
-                    flipCopyWithGamma(getByteBuffer(), widthStep(), getByteBuffer(), widthStep(), true, gamma, false, 0);
+                    flipCopyWithGamma(getByteBuffer(), arrayStep(), getByteBuffer(), arrayStep(), true, gamma, false, 0);
                     break;
                 case IPL_DEPTH_16U:
-                    flipCopyWithGamma(getShortBuffer(), widthStep()/2, getShortBuffer(), widthStep()/2, false, gamma, false, 0);
+                    flipCopyWithGamma(getShortBuffer(), arrayStep()/2, getShortBuffer(), arrayStep()/2, false, gamma, false, 0);
                     break;
                 case IPL_DEPTH_16S:
-                    flipCopyWithGamma(getShortBuffer(), widthStep()/2, getShortBuffer(), widthStep()/2, true, gamma, false, 0);
+                    flipCopyWithGamma(getShortBuffer(), arrayStep()/2, getShortBuffer(), arrayStep()/2, true, gamma, false, 0);
                     break;
                 case IPL_DEPTH_32S:
-                    flipCopyWithGamma(getFloatBuffer(), widthStep()/4, getFloatBuffer(), widthStep()/4, gamma, false, 0);
+                    flipCopyWithGamma(getFloatBuffer(), arrayStep()/4, getFloatBuffer(), arrayStep()/4, gamma, false, 0);
                     break;
                 case IPL_DEPTH_32F:
-                    flipCopyWithGamma(getFloatBuffer(), widthStep()/4, getFloatBuffer(), widthStep()/4, gamma, false, 0);
+                    flipCopyWithGamma(getFloatBuffer(), arrayStep()/4, getFloatBuffer(), arrayStep()/4, gamma, false, 0);
                     break;
                 case IPL_DEPTH_64F:
-                    flipCopyWithGamma(getDoubleBuffer(), widthStep()/8, getDoubleBuffer(), widthStep()/8, gamma, false, 0);
+                    flipCopyWithGamma(getDoubleBuffer(), arrayStep()/8, getDoubleBuffer(), arrayStep()/8, gamma, false, 0);
                     break;
                 default:
                     assert false;
@@ -729,16 +527,16 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         }
         public void copyTo(BufferedImage image, double gamma, boolean flipChannels) {
             Rectangle r = null;
-            IplROI roi = roi();
+            IplROI roi = arrayROI();
             if (roi != null) {
                 r = new Rectangle(roi.xOffset(), roi.yOffset(), roi.width(), roi.height());
             }
             copyTo(image, gamma, flipChannels, r);
         }
         public void copyTo(BufferedImage image, double gamma, boolean flipChannels, Rectangle roi) {
-            boolean flip = origin() == IPL_ORIGIN_BL; // need to add support for ROI..
+            boolean flip = arrayOrigin() == IPL_ORIGIN_BL; // need to add support for ROI..
 
-            ByteBuffer in  = getByteBuffer(roi == null ? 0 : roi.y*widthStep() + roi.x*nChannels());
+            ByteBuffer in  = getByteBuffer(roi == null ? 0 : roi.y*arrayStep() + roi.x*arrayChannels());
             SampleModel sm = image.getSampleModel();
             Raster r       = image.getRaster();
             DataBuffer out = r.getDataBuffer();
@@ -760,22 +558,22 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
 
             if (out instanceof DataBufferByte) {
                 byte[] a = ((DataBufferByte)out).getData();
-                flipCopyWithGamma(in, widthStep(), ByteBuffer.wrap(a, start, a.length - start), step, false, gamma, flip, flipChannels ? channels : 0);
+                flipCopyWithGamma(in, arrayStep(), ByteBuffer.wrap(a, start, a.length - start), step, false, gamma, flip, flipChannels ? channels : 0);
             } else if (out instanceof DataBufferDouble) {
                 double[] a = ((DataBufferDouble)out).getData();
-                flipCopyWithGamma(in.asDoubleBuffer(), widthStep()/8, DoubleBuffer.wrap(a, start, a.length - start), step, gamma, flip, flipChannels ? channels : 0);
+                flipCopyWithGamma(in.asDoubleBuffer(), arrayStep()/8, DoubleBuffer.wrap(a, start, a.length - start), step, gamma, flip, flipChannels ? channels : 0);
             } else if (out instanceof DataBufferFloat) {
                 float[] a = ((DataBufferFloat)out).getData();
-                flipCopyWithGamma(in.asFloatBuffer(), widthStep()/4, FloatBuffer.wrap(a, start, a.length - start), step, gamma, flip, flipChannels ? channels : 0);
+                flipCopyWithGamma(in.asFloatBuffer(), arrayStep()/4, FloatBuffer.wrap(a, start, a.length - start), step, gamma, flip, flipChannels ? channels : 0);
             } else if (out instanceof DataBufferInt) {
                 int[] a = ((DataBufferInt)out).getData();
-                flipCopyWithGamma(in.asIntBuffer(), widthStep()/4, IntBuffer.wrap(a, start, a.length - start), step, gamma, flip, flipChannels ? channels : 0);
+                flipCopyWithGamma(in.asIntBuffer(), arrayStep()/4, IntBuffer.wrap(a, start, a.length - start), step, gamma, flip, flipChannels ? channels : 0);
             } else if (out instanceof DataBufferShort) {
                 short[] a = ((DataBufferShort)out).getData();
-                flipCopyWithGamma(in.asShortBuffer(), widthStep()/2, ShortBuffer.wrap(a, start, a.length - start), step, true, gamma, flip, flipChannels ? channels : 0);
+                flipCopyWithGamma(in.asShortBuffer(), arrayStep()/2, ShortBuffer.wrap(a, start, a.length - start), step, true, gamma, flip, flipChannels ? channels : 0);
             } else if (out instanceof DataBufferUShort) {
                 short[] a = ((DataBufferUShort)out).getData();
-                flipCopyWithGamma(in.asShortBuffer(), widthStep()/2, ShortBuffer.wrap(a, start, a.length - start), step, false, gamma, flip, flipChannels ? channels : 0);
+                flipCopyWithGamma(in.asShortBuffer(), arrayStep()/2, ShortBuffer.wrap(a, start, a.length - start), step, false, gamma, flip, flipChannels ? channels : 0);
             } else {
                 assert false;
             }
@@ -789,16 +587,16 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         }
         public void copyFrom(BufferedImage image, double gamma, boolean flipChannels) {
             Rectangle r = null;
-            IplROI roi = roi();
+            IplROI roi = arrayROI();
             if (roi != null) {
                 r = new Rectangle(roi.xOffset(), roi.yOffset(), roi.width(), roi.height());
             }
             copyFrom(image, gamma, flipChannels, r);
         }
         public void copyFrom(BufferedImage image, double gamma, boolean flipChannels, Rectangle roi) {
-            origin(IPL_ORIGIN_TL);
+            arrayOrigin(IPL_ORIGIN_TL);
 
-            ByteBuffer out = getByteBuffer(roi == null ? 0 : roi.y*widthStep() + roi.x);
+            ByteBuffer out = getByteBuffer(roi == null ? 0 : roi.y*arrayStep() + roi.x);
             SampleModel sm = image.getSampleModel();
             Raster r       = image.getRaster();
             DataBuffer in  = r.getDataBuffer();
@@ -820,32 +618,32 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
 
             if (in instanceof DataBufferByte) {
                 byte[] a = ((DataBufferByte)in).getData();
-                flipCopyWithGamma(ByteBuffer.wrap(a, start, a.length - start), step, out, widthStep(), false, gamma, false, flipChannels ? channels : 0);
+                flipCopyWithGamma(ByteBuffer.wrap(a, start, a.length - start), step, out, arrayStep(), false, gamma, false, flipChannels ? channels : 0);
             } else if (in instanceof DataBufferDouble) {
                 double[] a = ((DataBufferDouble)in).getData();
-                flipCopyWithGamma(DoubleBuffer.wrap(a, start, a.length - start), step, out.asDoubleBuffer(), widthStep()/8, gamma, false, flipChannels ? channels : 0);
+                flipCopyWithGamma(DoubleBuffer.wrap(a, start, a.length - start), step, out.asDoubleBuffer(), arrayStep()/8, gamma, false, flipChannels ? channels : 0);
             } else if (in instanceof DataBufferFloat) {
                 float[] a = ((DataBufferFloat)in).getData();
-                flipCopyWithGamma(FloatBuffer.wrap(a, start, a.length - start), step, out.asFloatBuffer(), widthStep()/4, gamma, false, flipChannels ? channels : 0);
+                flipCopyWithGamma(FloatBuffer.wrap(a, start, a.length - start), step, out.asFloatBuffer(), arrayStep()/4, gamma, false, flipChannels ? channels : 0);
             } else if (in instanceof DataBufferInt) {
                 int[] a = ((DataBufferInt)in).getData();
-                flipCopyWithGamma(IntBuffer.wrap(a, start, a.length - start), step, out.asIntBuffer(), widthStep()/4, gamma, false, flipChannels ? channels : 0);
+                flipCopyWithGamma(IntBuffer.wrap(a, start, a.length - start), step, out.asIntBuffer(), arrayStep()/4, gamma, false, flipChannels ? channels : 0);
             } else if (in instanceof DataBufferShort) {
                 short[] a = ((DataBufferShort)in).getData();
-                flipCopyWithGamma(ShortBuffer.wrap(a, start, a.length - start), step, out.asShortBuffer(), widthStep()/2, true, gamma, false, flipChannels ? channels : 0);
+                flipCopyWithGamma(ShortBuffer.wrap(a, start, a.length - start), step, out.asShortBuffer(), arrayStep()/2, true, gamma, false, flipChannels ? channels : 0);
             } else if (in instanceof DataBufferUShort) {
                 short[] a = ((DataBufferUShort)in).getData();
-                flipCopyWithGamma(ShortBuffer.wrap(a, start, a.length - start), step, out.asShortBuffer(), widthStep()/2, false, gamma, false, flipChannels ? channels : 0);
+                flipCopyWithGamma(ShortBuffer.wrap(a, start, a.length - start), step, out.asShortBuffer(), arrayStep()/2, false, gamma, false, flipChannels ? channels : 0);
             } else {
                 assert false;
             }
             if (bufferedImage == null && roi == null &&
-                    image.getWidth() == width() && image.getHeight() == height()) {
+                    image.getWidth() == arrayWidth() && image.getHeight() == arrayHeight()) {
                 bufferedImage = image;
             }
         }
         // not declared as BufferedImage => Android friendly
-        private Object bufferedImage = null;
+        protected Object bufferedImage = null;
         public int getBufferedImageType() {
             // precanned BufferedImage types are confusing... in practice though,
             // they all use the sRGB color model when blitting:
@@ -854,21 +652,21 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
             // workaround: do gamma correction ourselves ("gamma" parameter)
             //             since we'll never use getRGB() and setRGB(), right?
             int type = BufferedImage.TYPE_CUSTOM;
-            if (nChannels() == 1) {
-                if (depth() == IPL_DEPTH_8U || depth() == IPL_DEPTH_8S) {
+            if (arrayChannels() == 1) {
+                if (arrayDepth() == IPL_DEPTH_8U || arrayDepth() == IPL_DEPTH_8S) {
                     type = BufferedImage.TYPE_BYTE_GRAY;
-                } else if (depth() == IPL_DEPTH_16U) {
+                } else if (arrayDepth() == IPL_DEPTH_16U) {
                     type = BufferedImage.TYPE_USHORT_GRAY;
                 }
-            } else if (nChannels() == 3) {
-                if (depth() == IPL_DEPTH_8U || depth() == IPL_DEPTH_8S) {
+            } else if (arrayChannels() == 3) {
+                if (arrayDepth() == IPL_DEPTH_8U || arrayDepth() == IPL_DEPTH_8S) {
                     type = BufferedImage.TYPE_3BYTE_BGR;
                 }
-            } else if (nChannels() == 4) {
+            } else if (arrayChannels() == 4) {
                 // The channels end up reversed of what we need for OpenCL.
                 // We work around this in copyTo() and copyFrom() by
                 // inversing the channels to let us use RGBA in our IplImage.
-                if (depth() == IPL_DEPTH_8U || depth() == IPL_DEPTH_8S) {
+                if (arrayDepth() == IPL_DEPTH_8U || arrayDepth() == IPL_DEPTH_8S) {
                     type = BufferedImage.TYPE_4BYTE_ABGR;
                 }
             }
@@ -887,26 +685,26 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
             int type = getBufferedImageType();
 
             if (bufferedImage == null && type != BufferedImage.TYPE_CUSTOM && cs == null) {
-                bufferedImage = new BufferedImage(width(), height(), type);
+                bufferedImage = new BufferedImage(arrayWidth(), arrayHeight(), type);
             }
 
             if (bufferedImage == null) {
                 boolean alpha = false;
                 int[] offsets = null;
-                if (nChannels() == 1) {
+                if (arrayChannels() == 1) {
                     alpha = false;
                     if (cs == null) {
                         cs = ColorSpace.getInstance(ColorSpace.CS_GRAY);
                     }
                     offsets = new int[] {0};
-                } else if (nChannels() == 3) {
+                } else if (arrayChannels() == 3) {
                     alpha = false;
                     if (cs == null) {
                         cs = ColorSpace.getInstance(ColorSpace.CS_LINEAR_RGB);
                     }
                     // raster in "BGR" order like OpenCV..
                     offsets = new int[] {2, 1, 0};
-                } else if (nChannels() == 4) {
+                } else if (arrayChannels() == 4) {
                     alpha = true;
                     if (cs == null) {
                         cs = ColorSpace.getInstance(ColorSpace.CS_LINEAR_RGB);
@@ -919,41 +717,41 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
 
                 ColorModel cm = null;
                 WritableRaster wr = null;
-                if (depth() == IPL_DEPTH_8U || depth() == IPL_DEPTH_8S) {
+                if (arrayDepth() == IPL_DEPTH_8U || arrayDepth() == IPL_DEPTH_8S) {
                     cm = new ComponentColorModel(cs, alpha,
                             false, Transparency.OPAQUE, DataBuffer.TYPE_BYTE);
                     wr = Raster.createWritableRaster(new ComponentSampleModel(
-                            DataBuffer.TYPE_BYTE, width(), height(), nChannels(), widthStep(),
+                            DataBuffer.TYPE_BYTE, arrayWidth(), arrayHeight(), arrayChannels(), arrayStep(),
                             offsets), null);
-                } else if (depth() == IPL_DEPTH_16U) {
+                } else if (arrayDepth() == IPL_DEPTH_16U) {
                     cm = new ComponentColorModel(cs, alpha,
                             false, Transparency.OPAQUE, DataBuffer.TYPE_USHORT);
                     wr = Raster.createWritableRaster(new ComponentSampleModel(
-                            DataBuffer.TYPE_USHORT, width(), height(), nChannels(), widthStep()/2,
+                            DataBuffer.TYPE_USHORT, arrayWidth(), arrayHeight(), arrayChannels(), arrayStep()/2,
                             offsets), null);
-                } else if (depth() == IPL_DEPTH_16S) {
+                } else if (arrayDepth() == IPL_DEPTH_16S) {
                     cm = new ComponentColorModel(cs, alpha,
                             false, Transparency.OPAQUE, DataBuffer.TYPE_SHORT);
                     wr = Raster.createWritableRaster(new ComponentSampleModel(
-                            DataBuffer.TYPE_SHORT, width(), height(), nChannels(), widthStep()/2,
+                            DataBuffer.TYPE_SHORT, arrayWidth(), arrayHeight(), arrayChannels(), arrayStep()/2,
                             offsets), null);
-                } else if (depth() == IPL_DEPTH_32S) {
+                } else if (arrayDepth() == IPL_DEPTH_32S) {
                     cm = new ComponentColorModel(cs, alpha,
                             false, Transparency.OPAQUE, DataBuffer.TYPE_INT);
                     wr = Raster.createWritableRaster(new ComponentSampleModel(
-                            DataBuffer.TYPE_INT, width(), height(), nChannels(), widthStep()/4,
+                            DataBuffer.TYPE_INT, arrayWidth(), arrayHeight(), arrayChannels(), arrayStep()/4,
                             offsets), null);
-                } else if (depth() == IPL_DEPTH_32F) {
+                } else if (arrayDepth() == IPL_DEPTH_32F) {
                     cm = new ComponentColorModel(cs, alpha,
                             false, Transparency.OPAQUE, DataBuffer.TYPE_FLOAT);
                     wr = Raster.createWritableRaster(new ComponentSampleModel(
-                            DataBuffer.TYPE_FLOAT, width(), height(), nChannels(), widthStep()/4,
+                            DataBuffer.TYPE_FLOAT, arrayWidth(), arrayHeight(), arrayChannels(), arrayStep()/4,
                             offsets), null);
-                } else if (depth() == IPL_DEPTH_64F) {
+                } else if (arrayDepth() == IPL_DEPTH_64F) {
                     cm = new ComponentColorModel(cs, alpha,
                             false, Transparency.OPAQUE, DataBuffer.TYPE_DOUBLE);
                     wr = Raster.createWritableRaster(new ComponentSampleModel(
-                            DataBuffer.TYPE_DOUBLE, width(), height(), nChannels(), widthStep()/8,
+                            DataBuffer.TYPE_DOUBLE, arrayWidth(), arrayHeight(), arrayChannels(), arrayStep()/8,
                             offsets), null);
                 } else {
                     assert false;
@@ -963,7 +761,7 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
             }
 
             if (bufferedImage != null) {
-                IplROI roi = roi();
+                IplROI roi = arrayROI();
                 if (roi != null) {
                     copyTo(((BufferedImage)bufferedImage).getSubimage(roi.xOffset(), roi.yOffset(), roi.width(), roi.height()), gamma, flipChannels);
                 } else {
@@ -973,6 +771,279 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
 
             return (BufferedImage)bufferedImage;
         }
+
+        @Override public String toString() {
+            if (isNull()) {
+                return super.toString();
+            } else {
+                try {
+                    return "AbstractArray[width=" + arrayWidth() + ",height=" + arrayHeight()
+                                      + ",depth=" + arrayDepth() + ",channels=" + arrayChannels() + "]";
+                } catch (Exception e) {
+                    return super.toString();
+                }
+            }
+        }
+    }
+
+    @Opaque public static class CvArr extends AbstractArray {
+        public CvArr() { }
+        public CvArr(Pointer p) { super(p); }
+
+        @Override protected int arrayChannels()          { throw new UnsupportedOperationException(); }
+        @Override protected int arrayDepth()             { throw new UnsupportedOperationException(); }
+        @Override protected int arrayOrigin()            { throw new UnsupportedOperationException(); }
+        @Override protected void arrayOrigin(int origin) { throw new UnsupportedOperationException(); }
+        @Override protected int arrayWidth()             { throw new UnsupportedOperationException(); }
+        @Override protected int arrayHeight()            { throw new UnsupportedOperationException(); }
+        @Override protected IplROI arrayROI()            { throw new UnsupportedOperationException(); }
+        @Override protected int arraySize()              { throw new UnsupportedOperationException(); }
+        @Override protected BytePointer arrayData()      { throw new UnsupportedOperationException(); }
+        @Override protected int arrayStep()              { throw new UnsupportedOperationException(); }
+    }
+
+    @Name("CvArr*")
+    public static class CvArrArray extends PointerPointer<CvArr> {
+        static { Loader.load(); }
+        public CvArrArray(CvArr ... array) { this(array.length); put(array); position(0); }
+        public CvArrArray(int size) { super(size); allocateArray(size); }
+        public CvArrArray(Pointer p) { super(p); }
+        private native void allocateArray(int size);
+
+        @Override public CvArrArray position(int position) {
+            return (CvArrArray)super.position(position);
+        }
+
+        public CvArrArray put(CvArr ... array) {
+            for (int i = 0; i < array.length; i++) {
+                position(i).put(array[i]);
+            }
+            return this;
+        }
+
+        public native CvArr get();
+        public native CvArrArray put(CvArr p);
+    }
+
+    @Name("CvMat*")
+    public static class CvMatArray extends CvArrArray {
+        public CvMatArray(CvMat ... array) { this(array.length); put(array); position(0); }
+        public CvMatArray(int size) { allocateArray(size); }
+        public CvMatArray(Pointer p) { super(p); }
+        private native void allocateArray(int size);
+
+        @Override public CvMatArray position(int position) {
+            return (CvMatArray)super.position(position);
+        }
+        @Override public CvMatArray put(CvArr ... array) {
+            return (CvMatArray)super.put(array);
+        }
+        @Override @ValueGetter public native CvMat get();
+        @Override public CvMatArray put(CvArr p) {
+            if (p instanceof CvMat) {
+                return (CvMatArray)super.put(p);
+            } else {
+                throw new ArrayStoreException(p.getClass().getName());
+            }
+        }
+    }
+
+    @Name("CvMatND*")
+    public static class CvMatNDArray extends CvArrArray {
+        public CvMatNDArray(CvMatND ... array) { this(array.length); put(array); position(0); }
+        public CvMatNDArray(int size) { allocateArray(size); }
+        public CvMatNDArray(Pointer p) { super(p); }
+        private native void allocateArray(int size);
+
+        @Override public CvMatNDArray position(int position) {
+            return (CvMatNDArray)super.position(position);
+        }
+        @Override public CvMatNDArray put(CvArr ... array) {
+            return (CvMatNDArray)super.put(array);
+        }
+        @Override @ValueGetter public native CvMatND get();
+        @Override public CvMatNDArray put(CvArr p) {
+            if (p instanceof CvMatND) {
+                return (CvMatNDArray)super.put(p);
+            } else {
+                throw new ArrayStoreException(p.getClass().getName());
+            }
+        }
+    }
+
+    @Name("IplImage*")
+    public static class IplImageArray extends CvArrArray {
+        public IplImageArray(IplImage ... array) { this(array.length); put(array); position(0); }
+        public IplImageArray(int size) { allocateArray(size); }
+        public IplImageArray(Pointer p) { super(p); }
+        private native void allocateArray(int size);
+
+        @Override public IplImageArray position(int position) {
+            return (IplImageArray)super.position(position);
+        }
+        @Override public IplImageArray put(CvArr ... array) {
+            return (IplImageArray)super.put(array);
+        }
+        @Override @ValueGetter public native IplImage get();
+        @Override public IplImageArray put(CvArr p) {
+            if (p instanceof IplImage) {
+                return (IplImageArray)super.put(p);
+            } else {
+                throw new ArrayStoreException(p.getClass().getName());
+            }
+        }
+    }
+
+    public static abstract class AbstractIplImage extends CvArr {
+        public AbstractIplImage() { }
+        public AbstractIplImage(Pointer p) { super(p); }
+
+        public static IplImage create(CvSize size, int depth, int channels) {
+            IplImage i = cvCreateImage(size, depth, channels);
+            if (i != null) {
+                i.deallocator(new ReleaseDeallocator(i));
+            }
+            return i;
+        }
+        public static IplImage create(int width, int height, int depth, int channels) {
+            return create(com.googlecode.javacpp.opencv_core.cvSize(width, height), depth, channels);
+        }
+        public static IplImage create(CvSize size, int depth, int channels, int origin) {
+            IplImage i = create(size, depth, channels);
+            if (i != null) {
+                i.origin(origin);
+            }
+            return i;
+        }
+        public static IplImage create(int width, int height, int depth, int channels, int origin) {
+            IplImage i = create(width, height, depth, channels);
+            if (i != null) {
+                i.origin(origin);
+            }
+            return i;
+        }
+
+        public static IplImage createHeader(CvSize size, int depth, int channels) {
+            IplImage i = cvCreateImageHeader(size, depth, channels);
+            if (i != null) {
+                i.deallocator(new HeaderReleaseDeallocator(i));
+            }
+            return i;
+        }
+        public static IplImage createHeader(int width, int height, int depth, int channels) {
+            return createHeader(com.googlecode.javacpp.opencv_core.cvSize(width, height), depth, channels);
+        }
+        public static IplImage createHeader(CvSize size, int depth, int channels, int origin) {
+            IplImage i = createHeader(size, depth, channels);
+            if (i != null) {
+                i.origin(origin);
+            }
+            return i;
+        }
+        public static IplImage createHeader(int width, int height, int depth, int channels, int origin) {
+            IplImage i = createHeader(width, height, depth, channels);
+            if (i != null) {
+                i.origin(origin);
+            }
+            return i;
+        }
+
+        public static IplImage createCompatible(IplImage template) {
+            return createIfNotCompatible(null, template);
+        }
+        public static IplImage createIfNotCompatible(IplImage image, IplImage template) {
+            if (image == null || image.width() != template.width() || image.height() != template.height() ||
+                    image.depth() != template.depth() || image.nChannels() != template.nChannels()) {
+                image = create(template.width(), template.height(),
+                        template.depth(), template.nChannels(), template.origin());
+                if (((AbstractIplImage)template).bufferedImage != null) {
+                    ((AbstractIplImage)template).bufferedImage = template.cloneBufferedImage();
+                }
+            }
+            image.origin(template.origin());
+            return image;
+        }
+
+        public static IplImage createFrom(BufferedImage image) {
+            return createFrom(image, 1.0);
+        }
+        public static IplImage createFrom(BufferedImage image, double gamma) {
+            return createFrom(image, gamma, false);
+        }
+        public static IplImage createFrom(BufferedImage image, double gamma, boolean flipChannels) {
+            if (image == null) {
+                return null;
+            }
+            SampleModel sm = image.getSampleModel();
+            int depth = 0, numChannels = sm.getNumBands();
+            switch (image.getType()) {
+                case BufferedImage.TYPE_INT_RGB:
+                case BufferedImage.TYPE_INT_ARGB:
+                case BufferedImage.TYPE_INT_ARGB_PRE:
+                case BufferedImage.TYPE_INT_BGR:
+                    depth = IPL_DEPTH_8U;
+                    numChannels = 4;
+                    break;
+            }
+            if (depth == 0 || numChannels == 0) {
+                switch (sm.getDataType()) {
+                    case DataBuffer.TYPE_BYTE:   depth = IPL_DEPTH_8U;  break;
+                    case DataBuffer.TYPE_USHORT: depth = IPL_DEPTH_16U; break;
+                    case DataBuffer.TYPE_SHORT:  depth = IPL_DEPTH_16S; break;
+                    case DataBuffer.TYPE_INT:    depth = IPL_DEPTH_32S; break;
+                    case DataBuffer.TYPE_FLOAT:  depth = IPL_DEPTH_32F; break;
+                    case DataBuffer.TYPE_DOUBLE: depth = IPL_DEPTH_64F; break;
+                    default: assert false;
+                }
+            }
+            IplImage i = create(image.getWidth(), image.getHeight(), depth, numChannels);
+            i.copyFrom(image, gamma, flipChannels);
+            return i;
+        }
+
+        @Override public IplImage clone() {
+            IplImage i = cvCloneImage((IplImage)this);
+            if (i != null) {
+                i.deallocator(new ReleaseDeallocator(i));
+            }
+            if (i != null && bufferedImage != null) {
+                ((AbstractIplImage)i).bufferedImage = cloneBufferedImage();
+            }
+            return i;
+        }
+
+        public void release() {
+            deallocate();
+        }
+        protected static class ReleaseDeallocator extends IplImage implements Pointer.Deallocator {
+            ReleaseDeallocator(IplImage p) { super(p); }
+            @Override public void deallocate() { cvReleaseImage(this); }
+        }
+        protected static class HeaderReleaseDeallocator extends IplImage implements Pointer.Deallocator {
+            HeaderReleaseDeallocator(IplImage p) { super(p); }
+            @Override public void deallocate() { cvReleaseImageHeader(this); }
+        }
+
+        public abstract int nChannels();
+        public abstract int depth();
+        public abstract int origin(); public abstract IplImage origin(int origin);
+        public abstract int width();
+        public abstract int height();
+        public abstract IplROI roi();
+        public abstract int imageSize();
+        public abstract BytePointer imageData();
+        public abstract int widthStep();
+
+        @Override protected int arrayChannels() { return nChannels(); }
+        @Override protected int arrayDepth() { return depth(); }
+        @Override protected int arrayOrigin() { return origin(); }
+        @Override protected void arrayOrigin(int origin) { origin(origin); }
+        @Override protected int arrayWidth() { return width(); }
+        @Override protected int arrayHeight() { return height(); }
+        @Override protected IplROI arrayROI() { return roi(); }
+        @Override protected int arraySize() { return imageSize(); }
+        @Override protected BytePointer arrayData() { return imageData(); }
+        @Override protected int arrayStep() { return widthStep(); }
 
         public CvMat asCvMat() {
             CvMat mat = new CvMat();
@@ -1120,7 +1191,28 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
             return cols()*elemSize()*channels() + (rows > 1 ? step()*(rows-1) : 0);
         }
 
-        public CvSize cvSize() { return com.googlecode.javacpp.opencv_core.cvSize(cols(), rows()); }
+        @Override protected int arrayChannels() { return channels(); }
+        @Override protected int arrayDepth() {
+            switch (depth()) {
+                case CV_8U : return IPL_DEPTH_8U;
+                case CV_8S : return IPL_DEPTH_8S;
+                case CV_16U: return IPL_DEPTH_16U;
+                case CV_16S: return IPL_DEPTH_16S;
+                case CV_32S: return IPL_DEPTH_32S;
+                case CV_32F: return IPL_DEPTH_32F;
+                case CV_64F: return IPL_DEPTH_64F;
+                default: assert (false);
+            }
+            return -1;
+        }
+        @Override protected int arrayOrigin() { return 0; }
+        @Override protected void arrayOrigin(int origin) { }
+        @Override protected int arrayWidth() { return cols(); }
+        @Override protected int arrayHeight() { return rows(); }
+        @Override protected IplROI arrayROI() { return null; }
+        @Override protected int arraySize() { return size(); }
+        @Override protected BytePointer arrayData() { return data_ptr(); }
+        @Override protected int arrayStep() { return step(); }
 
         public void reset() {
             fullSize = 0;
@@ -1915,8 +2007,8 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
 //            allocate(); width(width).height(height);
 //        }
 
-        public native float width();  public native CvSize2D32f width(float width);
-        public native float height(); public native CvSize2D32f height(float height);
+        public abstract float width();  public abstract CvSize2D32f width(float width);
+        public abstract float height(); public abstract CvSize2D32f height(float height);
 
         @Override public String toString() {
             if (isNull()) {
@@ -2185,24 +2277,80 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
     }
 
 
-    public static abstract class AbstractMat extends Pointer {
+    public static abstract class AbstractMat extends AbstractArray {
         public AbstractMat() { }
         public AbstractMat(Pointer p) { super(p); }
 
+        public void createFrom(BufferedImage image) {
+            createFrom(image, 1.0);
+        }
+        public void createFrom(BufferedImage image, double gamma) {
+            createFrom(image, gamma, false);
+        }
+        public void createFrom(BufferedImage image, double gamma, boolean flipChannels) {
+            if (image == null) {
+                release();
+                return;
+            }
+            SampleModel sm = image.getSampleModel();
+            int depth = 0, numChannels = sm.getNumBands();
+            switch (image.getType()) {
+                case BufferedImage.TYPE_INT_RGB:
+                case BufferedImage.TYPE_INT_ARGB:
+                case BufferedImage.TYPE_INT_ARGB_PRE:
+                case BufferedImage.TYPE_INT_BGR:
+                    depth = CV_8U;
+                    numChannels = 4;
+                    break;
+            }
+            if (depth == 0 || numChannels == 0) {
+                switch (sm.getDataType()) {
+                    case DataBuffer.TYPE_BYTE:   depth = CV_8U;  break;
+                    case DataBuffer.TYPE_USHORT: depth = CV_16U; break;
+                    case DataBuffer.TYPE_SHORT:  depth = CV_16S; break;
+                    case DataBuffer.TYPE_INT:    depth = CV_32S; break;
+                    case DataBuffer.TYPE_FLOAT:  depth = CV_32F; break;
+                    case DataBuffer.TYPE_DOUBLE: depth = CV_64F; break;
+                    default: assert false;
+                }
+            }
+            create(image.getWidth(), image.getHeight(), CV_MAKETYPE(depth, numChannels));
+            copyFrom(image, gamma, flipChannels);
+        }
+
+        public abstract void create(int rows, int cols, int type);
+        public abstract void release();
+        public abstract int type();
+        public abstract int depth();
+        public abstract int channels();
+        public abstract int rows();
+        public abstract int cols();
         public abstract BytePointer data();
         public abstract int size(int i);
         public abstract int step(int i);
 
-        public ByteBuffer   getByteBuffer  (int index) { return data().position(index).capacity(step(0)*size(0) - index).asByteBuffer(); }
-        public ShortBuffer  getShortBuffer (int index) { return getByteBuffer(index*2).asShortBuffer();  }
-        public IntBuffer    getIntBuffer   (int index) { return getByteBuffer(index*4).asIntBuffer();    }
-        public FloatBuffer  getFloatBuffer (int index) { return getByteBuffer(index*4).asFloatBuffer();  }
-        public DoubleBuffer getDoubleBuffer(int index) { return getByteBuffer(index*8).asDoubleBuffer(); }
-        public ByteBuffer   getByteBuffer()   { return getByteBuffer  (0); }
-        public ShortBuffer  getShortBuffer()  { return getShortBuffer (0); }
-        public IntBuffer    getIntBuffer()    { return getIntBuffer   (0); }
-        public FloatBuffer  getFloatBuffer()  { return getFloatBuffer (0); }
-        public DoubleBuffer getDoubleBuffer() { return getDoubleBuffer(0); }
+        protected int arrayChannels() { return channels(); }
+        protected int arrayDepth() {
+            switch (depth()) {
+                case CV_8U : return IPL_DEPTH_8U;
+                case CV_8S : return IPL_DEPTH_8S;
+                case CV_16U: return IPL_DEPTH_16U;
+                case CV_16S: return IPL_DEPTH_16S;
+                case CV_32S: return IPL_DEPTH_32S;
+                case CV_32F: return IPL_DEPTH_32F;
+                case CV_64F: return IPL_DEPTH_64F;
+                default: assert (false);
+            }
+            return -1;
+        }
+        protected int arrayOrigin() { return 0; }
+        protected void arrayOrigin(int origin) { }
+        protected int arrayWidth() { return cols(); }
+        protected int arrayHeight() { return rows(); }
+        protected IplROI arrayROI() { return null; }
+        protected int arraySize() { return step(0)*size(0); }
+        protected BytePointer arrayData() { return data(); }
+        protected int arrayStep() { return step(0); }
     }
 
 }

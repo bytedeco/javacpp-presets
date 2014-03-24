@@ -53,7 +53,7 @@ public class opencv_objdetect extends com.googlecode.javacpp.presets.opencv_objd
         }
     }
 
-    public static CvSeq cvHaarDetectObjects(CvArr image, CvHaarClassifierCascade cascade,
+    public static CvSeq cvHaarDetectObjects(opencv_core.CvArr image, CvHaarClassifierCascade cascade,
             CvMemStorage storage, double scale_factor/*=1.1*/, int min_neighbors/*=3*/, int flags/*=0*/) {
         return com.googlecode.javacpp.opencv_objdetect.cvHaarDetectObjects(image, cascade,
                 storage, scale_factor, min_neighbors, flags, CvSize.ZERO, CvSize.ZERO);

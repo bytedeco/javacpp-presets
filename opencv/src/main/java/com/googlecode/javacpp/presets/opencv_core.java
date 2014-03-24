@@ -66,6 +66,7 @@ public class opencv_core implements Parser.InfoMapper {
                                     "CV_64FC1", "CV_64FC2", "CV_64FC3", "CV_64FC4").cppTypes("int").translate(true))
                .put(new Parser.Info("CV_MAT_CN", "CV_MAT_TYPE", "CV_IS_CONT_MAT", "CV_IS_MAT_CONT").cppTypes("int", "int"))
                .put(new Parser.Info("CV_WHOLE_ARR", "CV_WHOLE_SEQ").cppTypes("CvSlice").translate(true))
+               .put(new Parser.Info("CvArr").skip(true).pointerTypes("CvArr"))
                .put(new Parser.Info("_IplROI").pointerTypes("IplROI"))
                .put(new Parser.Info("_IplImage").pointerTypes("IplImage"))
                .put(new Parser.Info("_IplTileInfo").pointerTypes("IplTileInfo"))
