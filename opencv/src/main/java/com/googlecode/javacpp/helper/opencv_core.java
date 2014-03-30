@@ -2232,19 +2232,24 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         }
     }
 
-    public static abstract class AbstractCvFont extends Pointer {
-        public AbstractCvFont() { }
-        public AbstractCvFont(Pointer p) { super(p); }
+    public static int cvInitNArrayIterator(int count, CvArr[] arrs,
+            CvArr mask, CvMatND stubs, CvNArrayIterator array_iterator, int flags/*=0*/) {
+        return com.googlecode.javacpp.opencv_core.cvInitNArrayIterator(count, new CvArrArray(arrs),
+                mask, stubs, array_iterator, flags);
+    }
 
-//        public AbstractCvFont(int font_face, double hscale, double vscale,
-//            double shear, int thickness, int line_type) {
-//            allocate();
-//            cvInitFont(this, font_face, hscale, vscale, shear, thickness, line_type);
-//        }
-//        public AbstractCvFont(int font_face, double scale, int thickness) {
-//            allocate();
-//            cvInitFont(this, font_face, scale, scale, 0, thickness, CV_AA);
-//        }
+    public static void cvMixChannels(CvArr[] src, int src_count,
+            CvArr[] dst, int dst_count, int[] from_to, int pair_count) {
+        com.googlecode.javacpp.opencv_core.cvMixChannels(new CvArrArray(src), src_count,
+                new CvArrArray(dst), dst_count, new IntPointer(from_to), pair_count);
+    }
+
+    public static void cvCalcCovarMatrix(CvArr[] vects, int count, CvArr cov_mat, CvArr avg, int flags) {
+        com.googlecode.javacpp.opencv_core.cvCalcCovarMatrix(new CvArrArray(vects), count, cov_mat, avg, flags);
+    }
+
+    public static double cvNorm(CvArr arr1, CvArr arr2) {
+        return com.googlecode.javacpp.opencv_core.cvNorm(arr1, arr2, CV_L2, null);
     }
 
     public static void cvFillPoly(CvArr img, CvPoint[] pts, int[] npts,
@@ -2266,14 +2271,25 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         cvPolyLine(img, pts, npts, contours, is_closed, color, thickness, line_type, shift);
     }
 
+    public static abstract class AbstractCvFont extends Pointer {
+        public AbstractCvFont() { }
+        public AbstractCvFont(Pointer p) { super(p); }
+
+//        public AbstractCvFont(int font_face, double hscale, double vscale,
+//            double shear, int thickness, int line_type) {
+//            allocate();
+//            cvInitFont(this, font_face, hscale, vscale, shear, thickness, line_type);
+//        }
+//        public AbstractCvFont(int font_face, double scale, int thickness) {
+//            allocate();
+//            cvInitFont(this, font_face, scale, scale, 0, thickness, CV_AA);
+//        }
+    }
+
     public static void cvDrawContours(CvArr img, CvSeq contour, CvScalar external_color,
             CvScalar hole_color, int max_level, int thickness/*=1*/, int line_type/*=8*/) {
         com.googlecode.javacpp.opencv_core.cvDrawContours(img, contour, external_color,
                 hole_color, max_level, thickness, line_type, CvPoint.ZERO);
-    }
-
-    public static double cvNorm(CvArr arr1, CvArr arr2) {
-        return com.googlecode.javacpp.opencv_core.cvNorm(arr1, arr2, CV_L2, null);
     }
 
 
@@ -2351,6 +2367,8 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         protected int arraySize() { return step(0)*size(0); }
         protected BytePointer arrayData() { return data(); }
         protected int arrayStep() { return step(0); }
+
+        public static final Mat EMPTY = new Mat();
     }
 
 }

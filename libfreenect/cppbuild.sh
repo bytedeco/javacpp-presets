@@ -22,7 +22,7 @@ cd libfreenect-$LIBFREENECT_VERSION/build_$PLATFORM
 
 case $PLATFORM in
     linux-x86)
-        CC="gcc -m32" CXX="g++ -m32" cmake -DCMAKE_BUILD_TYPE=Release -DLIB_SUFFIX= -DBUILD_AUDIO=ON ..
+        CC="gcc -m32" CXX="g++ -m32" cmake -DCMAKE_BUILD_TYPE=Release -DLIB_SUFFIX=32 -DBUILD_AUDIO=ON ..
         make -j4
         sudo make install
         ;;

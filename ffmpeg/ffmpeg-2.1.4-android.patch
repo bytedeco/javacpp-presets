@@ -1,6 +1,6 @@
-diff -ruN ffmpeg-2.1.4/library.mak ffmpeg-2.1.4-android-arm/library.mak
+diff -ruN ffmpeg-2.1.4/library.mak ffmpeg-2.1.4-android/library.mak
 --- ffmpeg-2.1.4/library.mak	2014-02-24 06:59:11.000000000 +0900
-+++ ffmpeg-2.1.4-android-arm/library.mak	2014-03-22 16:08:20.075289341 +0900
++++ ffmpeg-2.1.4-android/library.mak	2014-03-22 16:08:20.075289341 +0900
 @@ -48,16 +48,13 @@
  $(EXAMPLES) $(TESTPROGS) $(TOOLS): %$(EXESUF): %.o $(EXEOBJS)
  	$$(LD) $(LDFLAGS) $$(LD_O) $$(filter %.o,$$^) $$(THISLIB) $(FFEXTRALIBS) $$(ELIBS)

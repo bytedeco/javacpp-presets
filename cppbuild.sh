@@ -53,25 +53,26 @@ done
 echo "Targeting platform \"$PLATFORM\""
 
 if [[ -z "$OPERATION" ]]; then
-    echo "Usage: ANDROID_NDK=/path/to/android-ndk-r9d/ bash cppbuild.sh [-platform <name>] [<install | clean>] [projects]"
-    echo "where platform includes: android-arm, linux-x86, linux-x86_64, macosx-x86_64, windows-x86, windows-x86_64, etc."
+    echo "Usage: ANDROID_NDK=/path/to/android-ndk/ bash cppbuild.sh [-platform <name>] [<install | clean>] [projects]"
+    echo "where platform includes: android-arm, android-x86, linux-x86, linux-x86_64, macosx-x86_64, windows-x86, windows-x86_64, etc."
     exit 1
 fi
 
 if [[ -z "$ANDROID_NDK" ]]; then
-    ANDROID_NDK=~/projects/android/android-ndk-r9d/
+    ANDROID_NDK=~/projects/android/android-ndk/
 fi
+export ANDROID_NDK
+export ANDROID_CPP="$ANDROID_NDK/sources/cxx-stl/gnu-libstdc++/4.6/"
 case $PLATFORM in
     android-x86)
-        ANDROID_TOOLCHAIN="toolchains/x86-4.6/prebuilt/$KERNEL-$ARCH/bin/i686-linux-android"
+        export ANDROID_BIN="$ANDROID_NDK/toolchains/x86-4.6/prebuilt/$KERNEL-$ARCH/bin/i686-linux-android"
+        export ANDROID_ROOT="$ANDROID_NDK/platforms/android-9/arch-x86/"
         ;;
     *)
-        ANDROID_TOOLCHAIN="toolchains/arm-linux-androideabi-4.6/prebuilt/$KERNEL-$ARCH/bin/arm-linux-androideabi"
+        export ANDROID_BIN="$ANDROID_NDK/toolchains/arm-linux-androideabi-4.6/prebuilt/$KERNEL-$ARCH/bin/arm-linux-androideabi"
+        export ANDROID_ROOT="$ANDROID_NDK/platforms/android-9/arch-arm/"
         ;;
 esac
-export ANDROID_BIN="$ANDROID_NDK/$ANDROID_TOOLCHAIN"
-export ANDROID_CPP="$ANDROID_NDK/sources/cxx-stl/gnu-libstdc++/4.6/"
-export ANDROID_ROOT="$ANDROID_NDK/platforms/android-9/arch-arm/"
 
 function download {
     COMMAND="curl -C - -L $1 -o $2"

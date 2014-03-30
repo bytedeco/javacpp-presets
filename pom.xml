@@ -41,9 +41,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <generate-sources.skip>false</generate-sources.skip> <!-- To skip header file parsing phase: -Dgenerate-sources.skip=true  -->
     <process-classes.skip> false</process-classes.skip>  <!-- To skip native compilation phase: -Dprocess-classes.skip=true    -->
-    <platform>${os.name}-${os.arch}</platform> <!-- For Android: -Dplatform=android-arm                                  -->
-    <platform.root></platform.root>            <!--              -Dplatform.root=<path/to/android-ndk-r9c>               -->
-    <platform.compiler></platform.compiler>    <!--              -Dplatform.compiler=<path/to/arm-linux-androideabi-g++> -->
+    <platform>${os.name}-${os.arch}</platform> <!-- For Android: -Dplatform=android-arm                                        -->
+    <platform.root></platform.root>            <!--              -Dplatform.root=/path/to/android-ndk/                         -->
+    <platform.compiler></platform.compiler>    <!--              -Dplatform.compiler=/path/to/arm-linux-androideabi-g++        -->
   </properties>
 
   <dependencies>
@@ -173,8 +173,16 @@
               <goal>jar</goal>
             </goals>
             <configuration>
+              <includes>
+                <include>com/googlecode/javacpp/*</include>
+                <include>com/googlecode/javacpp/helper/*</include>
+                <include>com/googlecode/javacpp/presets/*</include>
+              </includes>
               <excludes>
                 <exclude>com/googlecode/javacpp/*.h</exclude>
+                <exclude>com/googlecode/javacpp/linux-*/</exclude>
+                <exclude>com/googlecode/javacpp/macosx-*/</exclude>
+                <exclude>com/googlecode/javacpp/windows-*/</exclude>
                 <exclude>com/googlecode/javacpp/${platform}/</exclude>
               </excludes>
             </configuration>
@@ -187,7 +195,9 @@
             </goals>
             <configuration>
               <classifier>${platform}</classifier>
+              <skipIfEmpty>true</skipIfEmpty>
               <includes>
+                <include>${platform.library.path}/</include>
                 <include>com/googlecode/javacpp/${platform}/</include>
               </includes>
             </configuration>

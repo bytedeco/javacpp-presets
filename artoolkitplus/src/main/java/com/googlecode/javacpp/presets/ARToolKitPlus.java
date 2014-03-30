@@ -33,7 +33,7 @@ import com.googlecode.javacpp.annotation.Properties;
         "<ARToolKitPlus/arMulti.h>", "<ARToolKitPlus/matrix.h>", "<ARToolKitPlus/vector.h>", "<ARToolKitPlus/Camera.h>",
         "<ARToolKitPlus/extra/BCH.h>", "<ARToolKitPlus/extra/Hull.h>", "<ARToolKitPlus/extra/rpp.h>",
         "<ARToolKitPlus/Tracker.h>", "<ARToolKitPlus/TrackerMultiMarker.h>", "<ARToolKitPlus/TrackerSingleMarker.h>",
-        "<ARToolKitPlus/arBitFieldPattern.h>", "<ARToolKitPlus/arGetInitRot2Sub.h>"},  link="ARToolKitPlus"),
+        "<ARToolKitPlus/arBitFieldPattern.h>", "<ARToolKitPlus/arGetInitRot2Sub.h>"}, define="AR_STATIC", link="ARToolKitPlus"),
     @Platform(value="windows-x86", includepath="C:/Program Files (x86)/ARToolKitPlus/include/",
         linkpath="C:/Program Files (x86)/ARToolKitPlus/lib/"),
     @Platform(value="windows-x86_64", includepath="C:/Program Files/ARToolKitPlus/include/",

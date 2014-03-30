@@ -46,11 +46,11 @@ Required software to build native libraries on the C/C++ side:
 
 Then, execute:
 {{{
-    $ ANDROID_NDK=/path/to/android-ndk-r9d/ bash cppbuild.sh [-platform <name>] [<install | clean>] [projects]
+    $ ANDROID_NDK=/path/to/android-ndk/ bash cppbuild.sh [-platform <name>] [<install | clean>] [projects]
 }}}
-where platform includes: android-arm, linux-x86, linux-x86_64, macosx-x86_64, windows-x86, windows-x86_64, etc.
+where platform includes: android-arm, android-x86, linux-x86, linux-x86_64, macosx-x86_64, windows-x86, windows-x86_64, etc.
 
-To compile binaries for an Android device with no FPU, first make sure this is what you want. Without FPU, the performance of either OpenCV or FFmpeg is bound to be unacceptable. If you still wish to continue down that road, then replace "libs/armeabi-v7a" by "libs/armeabi" and "-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16" with "-march=armv5te -mtune=xscale -msoft-float", inside the patch files.
+To compile binaries for an Android device with no FPU, first make sure this is what you want. Without FPU, the performance of either OpenCV or FFmpeg is bound to be unacceptable. If you still wish to continue down that road, then replace "armeabi-v7a" by "armeabi" and "-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16" with "-march=armv5te -mtune=xscale -msoft-float", inside various files.
 
 Although the scripts install the native libraries on the system to facilitate the build process, JavaCPP can at runtime load them from the JAR files created above by Maven, a useful feature for standalone applications or Java applets. Moreover, tricks such as the following work with JNLP:
 {{{
@@ -99,6 +99,7 @@ Please post your suggestions and patches [http://code.google.com/p/javacpp/issue
 
 ==Changes==
 
+ * Updated `cppbuild.sh` scripts with support for the "android-x86" platform (issue javacv:411), thanks to Xavier Hallade
  * Added presets for PGR FlyCapture 1.7
  * Fixed compilation errors on Android, Mac OS X, and Windows
  * Upgraded to FFmpeg 2.1.4, libdc1394 2.2.2, and libfreenect 0.4

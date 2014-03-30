@@ -12,7 +12,7 @@ cd libdc1394-$LIBDC1394_VERSION-linux-$PLATFORM
 
 case $PLATFORM in
     linux-x86)
-        CC="gcc -m32" ./configure
+        CC="gcc -m32" ./configure --libdir=/usr/local/lib32/
         make -j4
         sudo make install-strip
         ;;

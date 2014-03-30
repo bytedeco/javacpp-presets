@@ -20,9 +20,12 @@
 
 package com.googlecode.javacpp.helper;
 
+import com.googlecode.javacpp.BytePointer;
+import com.googlecode.javacpp.FloatPointer;
 import com.googlecode.javacpp.Pointer;
 
 // required by javac to resolve circular dependencies
+import com.googlecode.javacpp.helper.opencv_core.*;
 import com.googlecode.javacpp.opencv_core.*;
 import com.googlecode.javacpp.opencv_legacy.*;
 import static com.googlecode.javacpp.opencv_legacy.CV_GLCM_ALL;
@@ -44,6 +47,48 @@ import static com.googlecode.javacpp.opencv_legacy.cvReleaseGLCM;
 import static com.googlecode.javacpp.opencv_legacy.cvReleaseObsInfo;
 
 public class opencv_legacy extends com.googlecode.javacpp.presets.opencv_legacy {
+
+    public static void cvCalcCovarMatrixEx(int nObjects, IplImage[] input,
+            int ioFlags, int ioBufSize, byte[] buffer, Pointer userData, IplImage avg, float[] covarMatrix) {
+        com.googlecode.javacpp.opencv_legacy.cvCalcCovarMatrixEx(nObjects, new IplImageArray(input), ioFlags,
+                ioBufSize, buffer, userData, avg, covarMatrix);
+    }
+    public static void cvCalcEigenObjects(int nObjects, IplImage[] input, IplImage[] output,
+            int ioFlags, int ioBufSize, Pointer userData, CvTermCriteria calcLimit, IplImage avg, float[] eigVals) {
+        com.googlecode.javacpp.opencv_legacy.cvCalcEigenObjects(nObjects, new IplImageArray(input), new IplImageArray(output),
+                ioFlags, ioBufSize, userData, calcLimit, avg, eigVals);
+    }
+    public static void cvEigenDecomposite(IplImage obj, int nEigObjs, IplImage[] eigInput,
+            int ioFlags, Pointer userData, IplImage avg, float[] coeffs) {
+        com.googlecode.javacpp.opencv_legacy.cvEigenDecomposite(obj, nEigObjs, new IplImageArray(eigInput),
+                ioFlags, userData, avg, coeffs);
+    }
+    public static void cvEigenProjection(IplImage[] eigInput, int nEigObjs,
+            int ioFlags, Pointer userData, float[] coeffs, IplImage avg, IplImage proj) {
+        com.googlecode.javacpp.opencv_legacy.cvEigenProjection(new IplImageArray(eigInput), nEigObjs,
+                ioFlags, userData, coeffs, avg, proj);
+    }
+
+    public static void cvCalcCovarMatrixEx(int nObjects, IplImage[] input,
+            int ioFlags, int ioBufSize, BytePointer buffer, Pointer userData, IplImage avg, FloatPointer covarMatrix) {
+        com.googlecode.javacpp.opencv_legacy.cvCalcCovarMatrixEx(nObjects, new IplImageArray(input),
+                ioFlags, ioBufSize, buffer, userData, avg, covarMatrix);
+    }
+    public static void cvCalcEigenObjects(int nObjects, IplImage[] input, IplImage[] output,
+            int ioFlags, int ioBufSize, Pointer userData, CvTermCriteria calcLimit, IplImage avg, FloatPointer eigVals) {
+        com.googlecode.javacpp.opencv_legacy.cvCalcEigenObjects(nObjects, new IplImageArray(input), new IplImageArray(output),
+                ioFlags, ioBufSize, userData, calcLimit, avg, eigVals);
+    }
+    public static void cvEigenDecomposite(IplImage obj, int nEigObjs, IplImage[] eigInput,
+            int ioFlags, Pointer userData, IplImage avg, FloatPointer coeffs) {
+        com.googlecode.javacpp.opencv_legacy.cvEigenDecomposite(obj, nEigObjs, new IplImageArray(eigInput),
+                ioFlags, userData, avg, coeffs);
+    }
+    public static void cvEigenProjection(IplImage[] eigInput, int nEigObjs,
+            int ioFlags, Pointer userData, FloatPointer coeffs, IplImage avg, IplImage proj) {
+        com.googlecode.javacpp.opencv_legacy.cvEigenProjection(new IplImageArray(eigInput), nEigObjs,
+                ioFlags, userData, coeffs, avg, proj);
+    }
 
     public static abstract class AbstractCvImgObsInfo extends Pointer {
         public AbstractCvImgObsInfo() { }

@@ -5205,7 +5205,7 @@ public static final int DFT_INVERSE= 1, DFT_SCALE= 2, DFT_ROWS= 4, DFT_COMPLEX_O
   as a template parameter. There are a few shorter aliases available for user convenience.
   See cv::Point, cv::Point2i, cv::Point2f and cv::Point2d.
 */
-@Name("cv::Point_<int>") @NoOffset public static class Point extends Pointer {
+@Name("cv::Point_<int>") @NoOffset public static class Point extends IntPointer {
     static { Loader.load(); }
     public Point(Pointer p) { super(p); }
     public Point(int size) { allocateArray(size); }
@@ -5256,7 +5256,7 @@ public static final int DFT_INVERSE= 1, DFT_SCALE= 2, DFT_ROWS= 4, DFT_COMPLEX_O
     public native int x(); public native Point x(int x);
     public native int y(); public native Point y(int y); //< the point coordinates
 }
-@Name("cv::Point_<float>") @NoOffset public static class Point2f extends Pointer {
+@Name("cv::Point_<float>") @NoOffset public static class Point2f extends FloatPointer {
     static { Loader.load(); }
     public Point2f(Pointer p) { super(p); }
     public Point2f(int size) { allocateArray(size); }
@@ -5307,7 +5307,7 @@ public static final int DFT_INVERSE= 1, DFT_SCALE= 2, DFT_ROWS= 4, DFT_COMPLEX_O
     public native float x(); public native Point2f x(float x);
     public native float y(); public native Point2f y(float y); //< the point coordinates
 }
-@Name("cv::Point_<double>") @NoOffset public static class Point2d extends Pointer {
+@Name("cv::Point_<double>") @NoOffset public static class Point2d extends DoublePointer {
     static { Loader.load(); }
     public Point2d(Pointer p) { super(p); }
     public Point2d(int size) { allocateArray(size); }
@@ -5367,7 +5367,7 @@ public static final int DFT_INVERSE= 1, DFT_SCALE= 2, DFT_ROWS= 4, DFT_COMPLEX_O
 
   \see cv::Point3i, cv::Point3f and cv::Point3d
 */
-@Name("cv::Point3_<int>") @NoOffset public static class Point3i extends Pointer {
+@Name("cv::Point3_<int>") @NoOffset public static class Point3i extends IntPointer {
     static { Loader.load(); }
     public Point3i(Pointer p) { super(p); }
     public Point3i(int size) { allocateArray(size); }
@@ -5410,7 +5410,7 @@ public static final int DFT_INVERSE= 1, DFT_SCALE= 2, DFT_ROWS= 4, DFT_COMPLEX_O
     public native int y(); public native Point3i y(int y);
     public native int z(); public native Point3i z(int z); //< the point coordinates
 }
-@Name("cv::Point3_<float>") @NoOffset public static class Point3f extends Pointer {
+@Name("cv::Point3_<float>") @NoOffset public static class Point3f extends FloatPointer {
     static { Loader.load(); }
     public Point3f(Pointer p) { super(p); }
     public Point3f(int size) { allocateArray(size); }
@@ -5453,7 +5453,7 @@ public static final int DFT_INVERSE= 1, DFT_SCALE= 2, DFT_ROWS= 4, DFT_COMPLEX_O
     public native float y(); public native Point3f y(float y);
     public native float z(); public native Point3f z(float z); //< the point coordinates
 }
-@Name("cv::Point3_<double>") @NoOffset public static class Point3d extends Pointer {
+@Name("cv::Point3_<double>") @NoOffset public static class Point3d extends DoublePointer {
     static { Loader.load(); }
     public Point3d(Pointer p) { super(p); }
     public Point3d(int size) { allocateArray(size); }
@@ -5505,7 +5505,7 @@ public static final int DFT_INVERSE= 1, DFT_SCALE= 2, DFT_ROWS= 4, DFT_COMPLEX_O
   The class represents the size of a 2D rectangle, image size, matrix size etc.
   Normally, cv::Size ~ cv::Size_<int> is used.
 */
-@Name("cv::Size_<int>") @NoOffset public static class Size extends Pointer {
+@Name("cv::Size_<int>") @NoOffset public static class Size extends IntPointer {
     static { Loader.load(); }
     public Size(Pointer p) { super(p); }
     public Size(int size) { allocateArray(size); }
@@ -5542,7 +5542,7 @@ public static final int DFT_INVERSE= 1, DFT_SCALE= 2, DFT_ROWS= 4, DFT_COMPLEX_O
     public native int width(); public native Size width(int width);
     public native int height(); public native Size height(int height); // the width and the height
 }
-@Name("cv::Size_<float>") @NoOffset public static class Size2f extends Pointer {
+@Name("cv::Size_<float>") @NoOffset public static class Size2f extends FloatPointer {
     static { Loader.load(); }
     public Size2f(Pointer p) { super(p); }
     public Size2f(int size) { allocateArray(size); }
@@ -5579,7 +5579,7 @@ public static final int DFT_INVERSE= 1, DFT_SCALE= 2, DFT_ROWS= 4, DFT_COMPLEX_O
     public native float width(); public native Size2f width(float width);
     public native float height(); public native Size2f height(float height); // the width and the height
 }
-@Name("cv::Size_<double>") @NoOffset public static class Size2d extends Pointer {
+@Name("cv::Size_<double>") @NoOffset public static class Size2d extends DoublePointer {
     static { Loader.load(); }
     public Size2d(Pointer p) { super(p); }
     public Size2d(int size) { allocateArray(size); }
@@ -5625,7 +5625,7 @@ public static final int DFT_INVERSE= 1, DFT_SCALE= 2, DFT_ROWS= 4, DFT_COMPLEX_O
   The class represents a 2D rectangle with coordinates of the specified data type.
   Normally, cv::Rect ~ cv::Rect_<int> is used.
 */
-@Name("cv::Rect_<int>") @NoOffset public static class Rect extends Pointer {
+@Name("cv::Rect_<int>") @NoOffset public static class Rect extends IntPointer {
     static { Loader.load(); }
     public Rect(Pointer p) { super(p); }
     public Rect(int size) { allocateArray(size); }
@@ -5672,7 +5672,7 @@ public static final int DFT_INVERSE= 1, DFT_SCALE= 2, DFT_ROWS= 4, DFT_COMPLEX_O
     public native int width(); public native Rect width(int width);
     public native int height(); public native Rect height(int height); //< the top-left corner, as well as width and height of the rectangle
 }
-@Name("cv::Rect_<float>") @NoOffset public static class Rectf extends Pointer {
+@Name("cv::Rect_<float>") @NoOffset public static class Rectf extends FloatPointer {
     static { Loader.load(); }
     public Rectf(Pointer p) { super(p); }
     public Rectf(int size) { allocateArray(size); }
@@ -5719,7 +5719,7 @@ public static final int DFT_INVERSE= 1, DFT_SCALE= 2, DFT_ROWS= 4, DFT_COMPLEX_O
     public native float width(); public native Rectf width(float width);
     public native float height(); public native Rectf height(float height); //< the top-left corner, as well as width and height of the rectangle
 }
-@Name("cv::Rect_<double>") @NoOffset public static class Rectd extends Pointer {
+@Name("cv::Rect_<double>") @NoOffset public static class Rectd extends DoublePointer {
     static { Loader.load(); }
     public Rectd(Pointer p) { super(p); }
     public Rectd(int size) { allocateArray(size); }
@@ -5819,7 +5819,7 @@ public static final int DFT_INVERSE= 1, DFT_SCALE= 2, DFT_ROWS= 4, DFT_COMPLEX_O
    This is partially specialized cv::Vec class with the number of elements = 4, i.e. a short vector of four elements.
    Normally, cv::Scalar ~ cv::Scalar_<double> is used.
 */
-@Name("cv::Scalar_<double>") public static class Scalar extends Pointer {
+@Name("cv::Scalar_<double>") public static class Scalar extends DoublePointer {
     static { Loader.load(); }
     public Scalar(Pointer p) { super(p); }
     public Scalar(int size) { allocateArray(size); }
@@ -6239,10 +6239,15 @@ public static final int MAGIC_MASK= 0xFFFF0000, TYPE_MASK= 0x00000FFF, DEPTH_MAS
     public Mat(@Const @ByRef Mat m) { allocate(m); }
     private native void allocate(@Const @ByRef Mat m);
     /** constructor for matrix headers pointing to user-allocated data */
-    public Mat(int rows, int cols, int type, Pointer data, @Cast("size_t") long step/*=AUTO_STEP*/) { allocate(rows, cols, type, data, step); }
+    public Mat(int rows, int cols, int type, Pointer data, @Cast("size_t") long step/*=AUTO_STEP*/) { allocate(rows, cols, type, data, step); this.data = data; }
     private native void allocate(int rows, int cols, int type, Pointer data, @Cast("size_t") long step/*=AUTO_STEP*/);
-    public Mat(int rows, int cols, int type, Pointer data) { allocate(rows, cols, type, data); }
-    private native void allocate(int rows, int cols, int type, Pointer data);
+    private Pointer data; // a reference to prevent deallocation
+    public Mat(int rows, int cols, int type, Pointer data) { this(rows, cols, type, data, AUTO_STEP); }
+    public Mat(BytePointer p, boolean signed) { this(p.limit - p.position, 1, signed ? CV_8SC1 : CV_8UC1, p); }
+    public Mat(ShortPointer p, boolean signed) { this(p.limit - p.position, 1, signed ? CV_16SC1 : CV_16UC1, p); }
+    public Mat(IntPointer p) { this(p.limit - p.position, 1, CV_32SC1, p); }
+    public Mat(FloatPointer p) { this(p.limit - p.position, 1, CV_32FC1, p); }
+    public Mat(DoublePointer p) { this(p.limit - p.position, 1, CV_64FC1, p); }
     public Mat(@ByVal Size size, int type, Pointer data, @Cast("size_t") long step/*=AUTO_STEP*/) { allocate(size, type, data, step); }
     private native void allocate(@ByVal Size size, int type, Pointer data, @Cast("size_t") long step/*=AUTO_STEP*/);
     public Mat(@ByVal Size size, int type, Pointer data) { allocate(size, type, data); }

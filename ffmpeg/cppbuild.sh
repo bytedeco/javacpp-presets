@@ -32,10 +32,19 @@ case $PLATFORM in
         ./configure --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=arm-linux --extra-cflags="-DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="-nostdlib -Wl,--fix-cortex-a8 -lgcc -ldl -lz -lm -lc"
         make -j4
         cd ..
-        patch -Np1 < ../../ffmpeg-$FFMPEG_VERSION-android-arm.patch
-        ./configure --prefix="$ANDROID_NDK/../" --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-outdev=sdl --enable-libx264 --extra-cflags="-I$X264" --extra-ldflags="-L$X264" --enable-cross-compile --cc="$ANDROID_BIN-gcc" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=arm --extra-cflags="-DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="-nostdlib -Wl,--fix-cortex-a8" --extra-libs="-lgcc -ldl -lz -lm -lc" --disable-stripping --disable-symver --disable-programs
+        patch -Np1 < ../../ffmpeg-$FFMPEG_VERSION-android.patch
+        ./configure --prefix="$ANDROID_NDK/../local/" --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-outdev=sdl --enable-libx264 --extra-cflags="-I$X264" --extra-ldflags="-L$X264" --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=arm --extra-cflags="-DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="-nostdlib -Wl,--fix-cortex-a8" --extra-libs="-lgcc -ldl -lz -lm -lc" --disable-symver --disable-programs --libdir="$ANDROID_NDK/../local/lib/armeabi/" --shlibdir="$ANDROID_NDK/../local/lib/armeabi/"
         make -j4
-        "$ANDROID_BIN-strip" `find ./ -type f -name *.so`
+        make install
+        ;;
+     android-x86)
+        cd $X264
+        ./configure --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=i686-linux --extra-cflags="-DANDROID -fPIC -ffunction-sections -funwind-tables -mtune=atom -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="-nostdlib -lgcc -ldl -lz -lm -lc"
+        make -j4
+        cd ..
+        patch -Np1 < ../../ffmpeg-$FFMPEG_VERSION-android.patch
+        ./configure --prefix="$ANDROID_NDK/../local/" --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-outdev=sdl --enable-libx264 --extra-cflags="-I$X264" --extra-ldflags="-L$X264" --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=atom --extra-cflags="-DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="-nostdlib" --extra-libs="-lgcc -ldl -lz -lm -lc" --disable-symver --disable-programs --libdir="$ANDROID_NDK/../local/lib/x86/" --shlibdir="$ANDROID_NDK/../local/lib/x86/"
+        make -j4
         make install
         ;;
     linux-x86)
@@ -43,7 +52,7 @@ case $PLATFORM in
         ./configure --enable-static --enable-pic --host=i686-linux
         make -j4
         cd ..
-        ./configure --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-outdev=sdl --enable-libx264 --extra-cflags="-I$X264" --extra-ldflags="-L$X264" --cc="gcc -m32" --extra-ldflags="-ldl"
+        ./configure --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-outdev=sdl --enable-libx264 --extra-cflags="-I$X264" --extra-ldflags="-L$X264" --cc="gcc -m32" --extra-ldflags="-ldl" --libdir=/usr/local/lib32/ --shlibdir=/usr/local/lib32/
         make -j4
         sudo make install
         ;;
@@ -52,7 +61,7 @@ case $PLATFORM in
         ./configure --enable-static --enable-pic
         make -j4
         cd ..
-        ./configure --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-outdev=sdl --enable-libx264 --extra-cflags="-I$X264" --extra-ldflags="-L$X264" --libdir=/usr/local/lib64/ --shlibdir=/usr/local/lib64/ --extra-ldflags="-ldl"
+        ./configure --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-outdev=sdl --enable-libx264 --extra-cflags="-I$X264" --extra-ldflags="-L$X264" --extra-ldflags="-ldl" --libdir=/usr/local/lib64/ --shlibdir=/usr/local/lib64/
         make -j4
         sudo make install
         ;;

@@ -36,6 +36,9 @@ import java.lang.annotation.Target;
  */
 @Properties(value={
     @Platform(include={"<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/core.hpp>", "opencv_adapters.h"}, link="opencv_core@.2.4", preload="tbb"),
+    @Platform(value="android", includepath="../sdk/native/jni/include/"),
+    @Platform(value="android-arm", linkpath="../sdk/native/libs/armeabi-v7a/"),
+    @Platform(value="android-x86", linkpath="../sdk/native/libs/x86/"),
     @Platform(value="windows", define="_WIN32_WINNT 0x0502", includepath="C:/opencv/build/include/",
         link="opencv_core248", preload={"msvcr100", "msvcp100"}),
     @Platform(value="windows-x86",    linkpath="C:/opencv/build/x86/vc10/lib/", preloadpath={"C:/opencv/build/x86/vc10/bin/",
@@ -139,6 +142,16 @@ public class opencv_core implements Parser.InfoMapper {
                                     "cv::AlgorithmInfoData", "cv::AlgorithmInfo::addParam", "cv::CommandLineParser").skip(true))
 
                .put(new Parser.Info("cv::Mat").base("AbstractMat"))
+               .put(new Parser.Info("cv::Mat(int, int, int, void*, size_t)").javaText(
+                       "public Mat(int rows, int cols, int type, Pointer data, @Cast(\"size_t\") long step/*=AUTO_STEP*/) { allocate(rows, cols, type, data, step); this.data = data; }\n"
+                     + "private native void allocate(int rows, int cols, int type, Pointer data, @Cast(\"size_t\") long step/*=AUTO_STEP*/);\n"
+                     + "private Pointer data; // a reference to prevent deallocation\n"
+                     + "public Mat(int rows, int cols, int type, Pointer data) { this(rows, cols, type, data, AUTO_STEP); }\n"
+                     + "public Mat(BytePointer p, boolean signed) { this(p.limit - p.position, 1, signed ? CV_8SC1 : CV_8UC1, p); }\n"
+                     + "public Mat(ShortPointer p, boolean signed) { this(p.limit - p.position, 1, signed ? CV_16SC1 : CV_16UC1, p); }\n"
+                     + "public Mat(IntPointer p) { this(p.limit - p.position, 1, CV_32SC1, p); }\n"
+                     + "public Mat(FloatPointer p) { this(p.limit - p.position, 1, CV_32FC1, p); }\n"
+                     + "public Mat(DoublePointer p) { this(p.limit - p.position, 1, CV_64FC1, p); }\n"))
                .put(new Parser.Info("cv::Mat::zeros(int, int*, int)", "cv::Mat::ones(int, int*, int)").skip(true))
                .put(new Parser.Info("cv::Mat::size").javaText("public native @ByVal Size size();\n@MemberGetter public native int size(int i);"))
                .put(new Parser.Info("cv::Mat::step").javaText("@MemberGetter public native long step();\n@MemberGetter public native int step(int i);"))
@@ -146,19 +159,19 @@ public class opencv_core implements Parser.InfoMapper {
                .put(new Parser.Info("cv::InputArray", "cv::OutputArray", "cv::InputOutputArray").skip(true)./*cast(true).*/pointerTypes("Mat"))
                .put(new Parser.Info("cv::InputArrayOfArrays", "cv::OutputArrayOfArrays", "cv::InputOutputArrayOfArrays").skip(true)./*cast(true).*/pointerTypes("MatVector"))
 
-               .put(new Parser.Info("cv::Point_<int>").pointerTypes("Point"))
-               .put(new Parser.Info("cv::Point_<float>").pointerTypes("Point2f"))
-               .put(new Parser.Info("cv::Point_<double>").pointerTypes("Point2d"))
-               .put(new Parser.Info("cv::Point3_<int>").pointerTypes("Point3i"))
-               .put(new Parser.Info("cv::Point3_<float>").pointerTypes("Point3f"))
-               .put(new Parser.Info("cv::Point3_<double>").pointerTypes("Point3d"))
-               .put(new Parser.Info("cv::Size_<int>").pointerTypes("Size"))
-               .put(new Parser.Info("cv::Size_<float>").pointerTypes("Size2f"))
-               .put(new Parser.Info("cv::Size_<double>").pointerTypes("Size2d"))
-               .put(new Parser.Info("cv::Rect_<int>").pointerTypes("Rect"))
-               .put(new Parser.Info("cv::Rect_<float>").pointerTypes("Rectf"))
-               .put(new Parser.Info("cv::Rect_<double>").pointerTypes("Rectd"))
-               .put(new Parser.Info("cv::Scalar_<double>").pointerTypes("Scalar").base("Pointer"))
+               .put(new Parser.Info("cv::Point_<int>").pointerTypes("Point").base("IntPointer"))
+               .put(new Parser.Info("cv::Point_<float>").pointerTypes("Point2f").base("FloatPointer"))
+               .put(new Parser.Info("cv::Point_<double>").pointerTypes("Point2d").base("DoublePointer"))
+               .put(new Parser.Info("cv::Point3_<int>").pointerTypes("Point3i").base("IntPointer"))
+               .put(new Parser.Info("cv::Point3_<float>").pointerTypes("Point3f").base("FloatPointer"))
+               .put(new Parser.Info("cv::Point3_<double>").pointerTypes("Point3d").base("DoublePointer"))
+               .put(new Parser.Info("cv::Size_<int>").pointerTypes("Size").base("IntPointer"))
+               .put(new Parser.Info("cv::Size_<float>").pointerTypes("Size2f").base("FloatPointer"))
+               .put(new Parser.Info("cv::Size_<double>").pointerTypes("Size2d").base("DoublePointer"))
+               .put(new Parser.Info("cv::Rect_<int>").pointerTypes("Rect").base("IntPointer"))
+               .put(new Parser.Info("cv::Rect_<float>").pointerTypes("Rectf").base("FloatPointer"))
+               .put(new Parser.Info("cv::Rect_<double>").pointerTypes("Rectd").base("DoublePointer"))
+               .put(new Parser.Info("cv::Scalar_<double>").pointerTypes("Scalar").base("DoublePointer"))
 
                .put(new Parser.Info("cv::Vec2i").pointerTypes("Point"))
                .put(new Parser.Info("cv::Vec2d").pointerTypes("Point2d"))
