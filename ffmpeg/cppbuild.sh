@@ -4,7 +4,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 if [[ $PLATFORM == windows* ]]; then
-    FFMPEG_VERSION=2.1.4
+    FFMPEG_VERSION=2.2
     download http://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-$FFMPEG_VERSION-win32-dev.7z ffmpeg-$FFMPEG_VERSION-win32-dev.7z
     download http://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-$FFMPEG_VERSION-win64-dev.7z ffmpeg-$FFMPEG_VERSION-win64-dev.7z
     download http://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-$FFMPEG_VERSION-win32-shared.7z ffmpeg-$FFMPEG_VERSION-win32-shared.7z
@@ -15,7 +15,7 @@ if [[ $PLATFORM == windows* ]]; then
     mkdir -p $INSTALL_DIR/include
     unzip -o msinttypes-r26.zip -d $INSTALL_DIR/include
 else
-    FFMPEG_VERSION=2.1.4
+    FFMPEG_VERSION=2.2
     download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
     download ftp://ftp.videolan.org/pub/videolan/x264/snapshots/last_stable_x264.tar.bz2 last_stable_x264.tar.bz2
 

@@ -33,6 +33,5 @@ import com.googlecode.javacpp.annotation.Properties;
     @Platform(value="windows", preload="swscale-2") })
 public class swscale implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        new avutil().map(infoMap);
     }
 }

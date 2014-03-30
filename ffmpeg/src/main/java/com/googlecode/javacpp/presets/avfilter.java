@@ -29,11 +29,10 @@ import com.googlecode.javacpp.annotation.Properties;
  * @author Samuel Audet
  */
 @Properties(inherit={avformat.class, postproc.class, swresample.class, swscale.class}, target="com.googlecode.javacpp.avfilter", value={
-    @Platform(cinclude={"<libavfilter/avfilter.h>", "<libavfilter/buffersink.h>", "<libavfilter/buffersrc.h>"}, link="avfilter@.3"),
-    @Platform(value="windows", preload="avfilter-3") })
+    @Platform(cinclude={"<libavfilter/avfilter.h>", "<libavfilter/buffersink.h>", "<libavfilter/buffersrc.h>"}, link="avfilter@.4"),
+    @Platform(value="windows", preload="avfilter-4") })
 public class avfilter implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        new avformat().map(infoMap);
         infoMap.put(new Parser.Info("AVFilterPool", "AVFilterCommand", "AVFilterChannelLayouts").cast(true).pointerTypes("Pointer"))
                .put(new Parser.Info("!FF_API_FOO_COUNT", "AV_HAVE_INCOMPATIBLE_LIBAV_ABI || !FF_API_OLD_GRAPH_PARSE").define(false));
     }

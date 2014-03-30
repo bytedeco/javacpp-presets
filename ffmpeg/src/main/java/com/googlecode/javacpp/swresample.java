@@ -194,6 +194,13 @@ public static native SwrContext swr_alloc();
 public static native int swr_init(SwrContext s);
 
 /**
+ * Check whether an swr context has been initialized or not.
+ *
+ * @return positive if it has been initialized, 0 if not initialized
+ */
+public static native int swr_is_initialized(SwrContext s);
+
+/**
  * Allocate SwrContext if needed and set/reset common parameters.
  *
  * This function does not require s to be allocated with swr_alloc(). On the

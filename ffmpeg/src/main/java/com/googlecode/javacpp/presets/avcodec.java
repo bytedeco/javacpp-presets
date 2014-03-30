@@ -33,9 +33,8 @@ import com.googlecode.javacpp.annotation.Properties;
     @Platform(value="windows", preload="avcodec-55") })
 public class avcodec implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        new avutil().map(infoMap);
-        infoMap.put(new Parser.Info("FF_API_ALLOC_CONTEXT", "FF_API_AVCODEC_OPEN", "!FF_API_LOWRES").define(false));
-        infoMap.get("AVPanScan").clear();
-        infoMap.get("AVCodecContext").clear();
+        infoMap.put(new Parser.Info("!FF_API_LOWRES", "!FF_API_DEBUG_MV").define(false))
+               .putFirst(new Parser.Info("AVPanScan").pointerTypes("AVPanScan"))
+               .putFirst(new Parser.Info("AVCodecContext").pointerTypes("AVCodecContext"));
     }
 }

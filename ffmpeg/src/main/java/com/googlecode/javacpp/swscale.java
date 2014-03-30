@@ -38,13 +38,8 @@ public class swscale extends com.googlecode.javacpp.presets.swscale {
 
 /**
  * @file
- * @ingroup lsws
+ * @ingroup libsws
  * external API header
- */
-
-/**
- * @defgroup lsws Libswscale
- * @{
  */
 
 // #include <stdint.h>
@@ -55,6 +50,9 @@ public class swscale extends com.googlecode.javacpp.presets.swscale {
 // #include "version.h"
 
 /**
+ * @defgroup libsws Color conversion and scaling
+ * @{
+ *
  * Return the LIBSWSCALE_VERSION_INT constant.
  */
 public static native @Cast("unsigned") int swscale_version();

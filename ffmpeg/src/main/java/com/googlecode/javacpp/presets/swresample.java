@@ -33,6 +33,5 @@ import com.googlecode.javacpp.annotation.Properties;
     @Platform(value="windows", preload="swresample-0") })
 public class swresample implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        new avutil().map(infoMap);
     }
 }

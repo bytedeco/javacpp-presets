@@ -33,6 +33,5 @@ import com.googlecode.javacpp.annotation.Properties;
     @Platform(value="windows", preload="avdevice-55") })
 public class avdevice implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        new avfilter().map(infoMap);
     }
 }

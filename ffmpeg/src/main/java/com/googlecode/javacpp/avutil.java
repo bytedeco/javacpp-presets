@@ -54,7 +54,7 @@ public class avutil extends com.googlecode.javacpp.presets.avutil {
  * @li @ref lavu "libavutil" common utility library
  * @li @ref lswr "libswresample" audio resampling, format conversion and mixing
  * @li @ref lpp  "libpostproc" post processing library
- * @li @ref lsws "libswscale" color conversion and scaling library
+ * @li @ref libsws "libswscale" color conversion and scaling library
  *
  * @section ffmpeg_versioning Versioning and compatibility
  *
@@ -154,6 +154,12 @@ public class avutil extends com.googlecode.javacpp.presets.avutil {
  * @defgroup lavu_internal Internal
  *
  * Not exported functions, for internal usage only
+ *
+ * @{
+ *
+ * @}
+ *
+ * @defgroup preproc_misc Preprocessor String Macros
  *
  * @{
  *
@@ -303,9 +309,9 @@ public static native @Cast("char") byte av_get_picture_type_char(@Cast("AVPictur
 // #include "common.h"
 // #include "error.h"
 // #include "version.h"
+// #include "macros.h"
 // #include "mathematics.h"
 // #include "rational.h"
-// #include "intfloat_readwrite.h"
 // #include "log.h"
 // #include "pixfmt.h"
 
@@ -334,6 +340,14 @@ public static native @Cast("unsigned") int av_int_list_length_for_size(@Cast("un
  */
 // #define av_int_list_length(list, term)
 //     av_int_list_length_for_size(sizeof(*(list)), list, term)
+
+/**
+ * Open a file using a UTF-8 filename.
+ * The API of this function matches POSIX fopen(), errors are returned through
+ * errno.
+ */
+public static native @Cast("FILE*") Pointer av_fopen_utf8(@Cast("const char*") BytePointer path, @Cast("const char*") BytePointer mode);
+public static native @Cast("FILE*") Pointer av_fopen_utf8(String path, String mode);
 
 /**
  * @}
@@ -834,6 +848,31 @@ public static native void av_memcpy_backptr(@Cast("uint8_t*") ByteBuffer dst, in
 public static native void av_memcpy_backptr(@Cast("uint8_t*") byte[] dst, int back, int cnt);
 
 /**
+ * Reallocate the given block if it is not large enough, otherwise do nothing.
+ *
+ * @see av_realloc
+ */
+public static native Pointer av_fast_realloc(Pointer ptr, @Cast("unsigned int*") IntPointer size, @Cast("size_t") long min_size);
+public static native Pointer av_fast_realloc(Pointer ptr, @Cast("unsigned int*") IntBuffer size, @Cast("size_t") long min_size);
+public static native Pointer av_fast_realloc(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
+
+/**
+ * Allocate a buffer, reusing the given one if large enough.
+ *
+ * Contrary to av_fast_realloc the current buffer contents might not be
+ * preserved and on error the old buffer is freed, thus no special
+ * handling to avoid memleaks is necessary.
+ *
+ * @param ptr pointer to pointer to already allocated buffer, overwritten with pointer to new buffer
+ * @param size size of the buffer *ptr points to
+ * @param min_size minimum size of *ptr buffer after returning, *ptr will be NULL and
+ *                 *size 0 if an error occurred.
+ */
+public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") IntPointer size, @Cast("size_t") long min_size);
+public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") IntBuffer size, @Cast("size_t") long min_size);
+public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
+
+/**
  * @}
  */
 
@@ -888,6 +927,9 @@ public static final double M_PHI =          1.61803398874989484820;   /* phi / g
 // #endif
 // #ifndef M_PI
 public static final double M_PI =           3.14159265358979323846;  /* pi */
+// #endif
+// #ifndef M_PI_2
+public static final double M_PI_2 =         1.57079632679489661923;  /* pi/2 */
 // #endif
 // #ifndef M_SQRT1_2
 public static final double M_SQRT1_2 =      0.70710678118654752440;  /* 1/sqrt(2) */
@@ -985,16 +1027,30 @@ public static native long av_compare_mod(@Cast("uint64_t") long a, @Cast("uint64
  * Rescale a timestamp while preserving known durations.
  *
  * @param in_ts Input timestamp
- * @param in_tb Input timesbase
+ * @param in_tb Input timebase
  * @param fs_tb Duration and *last timebase
  * @param duration duration till the next call
- * @param out_tb Output timesbase
+ * @param out_tb Output timebase
  */
 public static native long av_rescale_delta(@ByVal AVRational in_tb, long in_ts,  @ByVal AVRational fs_tb, int duration, LongPointer last, @ByVal AVRational out_tb);
 public static native long av_rescale_delta(@ByVal AVRational in_tb, long in_ts,  @ByVal AVRational fs_tb, int duration, LongBuffer last, @ByVal AVRational out_tb);
 public static native long av_rescale_delta(@ByVal AVRational in_tb, long in_ts,  @ByVal AVRational fs_tb, int duration, long[] last, @ByVal AVRational out_tb);
 
 /**
+ * Add a value to a timestamp.
+ *
+ * This function gurantees that when the same value is repeatly added that
+ * no accumulation of rounding errors occurs.
+ *
+ * @param ts Input timestamp
+ * @param ts_tb Input timestamp timebase
+ * @param inc value to add to ts
+ * @param inc_tb inc timebase
+ */
+public static native long av_add_stable(@ByVal AVRational ts_tb, long ts, @ByVal AVRational inc_tb, long inc);
+
+
+    /**
  * @}
  */
 
@@ -1061,6 +1117,13 @@ public static class AVRational extends Pointer {
     /** denominator */
     public native int den(); public native AVRational den(int den);
 }
+
+/**
+ * Create a rational.
+ * Useful for compilers that do not support compound literals.
+ * @note  The return value is not reduced.
+ */
+public static native @ByVal AVRational av_make_q(int num, int den);
 
 /**
  * Compare two rationals.
@@ -1486,10 +1549,12 @@ public static native void av_log_set_callback(Callback_Pointer_int_String_Pointe
  *        lavu_log_constants "Logging Constant".
  * @param fmt The format string (printf-compatible) that specifies how
  *        subsequent arguments are converted to output.
- * @param ap The arguments referenced by the format string.
+ * @param vl The arguments referenced by the format string.
  */
-public static native void av_log_default_callback(Pointer ptr, int level, @Cast("const char*") BytePointer fmt, @ByVal @Cast("va_list*") Pointer vl);
-public static native void av_log_default_callback(Pointer ptr, int level, String fmt, @ByVal @Cast("va_list*") Pointer vl);
+public static native void av_log_default_callback(Pointer avcl, int level, @Cast("const char*") BytePointer fmt,
+                             @ByVal @Cast("va_list*") Pointer vl);
+public static native void av_log_default_callback(Pointer avcl, int level, String fmt,
+                             @ByVal @Cast("va_list*") Pointer vl);
 
 /**
  * Return the context name
@@ -1905,18 +1970,24 @@ public static native AVBufferRef av_buffer_pool_get(AVBufferPool pool);
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
+/**
+ * @file
+ * @ingroup lavu_frame
+ * reference-counted frame API
+ */
+
 // #ifndef AVUTIL_FRAME_H
 // #define AVUTIL_FRAME_H
 
 // #include <stdint.h>
-
-// #include "libavcodec/version.h"
 
 // #include "avutil.h"
 // #include "buffer.h"
 // #include "dict.h"
 // #include "rational.h"
 // #include "samplefmt.h"
+// #include "version.h"
+
 
 /** enum AVColorSpace */
 public static final int
@@ -1932,8 +2003,12 @@ public static final int
     AVCOL_SPC_SMPTE240M   = 7,
     /** Used by Dirac / VC-2 and H.264 FRext, see ITU-T SG16 */
     AVCOL_SPC_YCOCG       = 8,
+    /** ITU-R BT2020 non-constant luminance system */
+    AVCOL_SPC_BT2020_NCL  = 9,
+    /** ITU-R BT2020 constant luminance system */
+    AVCOL_SPC_BT2020_CL   = 10,
     /** Not part of ABI */
-    AVCOL_SPC_NB = 9;
+    AVCOL_SPC_NB = 11;
 public static final int AVCOL_SPC_YCGCO = AVCOL_SPC_YCOCG;
 
 /** enum AVColorRange */
@@ -1946,12 +2021,41 @@ public static final int
     /** Not part of ABI */
     AVCOL_RANGE_NB = 3;
 
+
+/**
+ * @defgroup lavu_frame AVFrame
+ * @ingroup lavu_data
+ *
+ * @{
+ * AVFrame is an abstraction for reference-counted raw multimedia data.
+ */
+
 /** enum AVFrameSideDataType */
 public static final int
     /**
      * The data is the AVPanScan struct defined in libavcodec.
      */
-    AV_FRAME_DATA_PANSCAN = 0;
+    AV_FRAME_DATA_PANSCAN = 0,
+    /**
+     * ATSC A53 Part 4 Closed Captions.
+     * A53 CC bitstream is stored as uint8_t in AVFrameSideData.data.
+     * The number of bytes of CC data is AVFrameSideData.size.
+     */
+    AV_FRAME_DATA_A53_CC = 1,
+    /**
+     * Stereoscopic 3d metadata.
+     * The data is the AVStereo3D struct defined in libavutil/stereo3d.h.
+     */
+    AV_FRAME_DATA_STEREO3D = 2,
+    /**
+     * The data is the AVMatrixEncoding enum defined in libavutil/channel_layout.h.
+     */
+    AV_FRAME_DATA_MATRIXENCODING = 3,
+    /**
+     * Metadata relevant to a downmix procedure.
+     * The data is the AVDownmixInfo struct defined in libavutil/downmix_info.h.
+     */
+    AV_FRAME_DATA_DOWNMIX_INFO = 4;
 
 public static class AVFrameSideData extends Pointer {
     static { Loader.load(); }
@@ -2297,6 +2401,26 @@ public static final int AV_NUM_DATA_POINTERS = 8;
     @MemberGetter public native @Cast("AVFrameSideData**") PointerPointer side_data();
     public native int nb_side_data(); public native AVFrame nb_side_data(int nb_side_data);
 
+/**
+ * @defgroup lavu_frame_flags AV_FRAME_FLAGS
+ * Flags describing additional frame properties.
+ *
+ * @{
+ */
+
+/**
+ * The frame data may be corrupted, e.g. due to decoding errors.
+ */
+public static final int AV_FRAME_FLAG_CORRUPT =       (1 << 0);
+/**
+ * @}
+ */
+
+    /**
+     * Frame flags, a combination of @ref lavu_frame_flags
+     */
+    public native int flags(); public native AVFrame flags(int flags);
+
     /**
      * frame timestamp estimated using various heuristics, in stream time base
      * Code outside libavcodec should access this field using:
@@ -2453,7 +2577,7 @@ public static native void av_frame_free(@Cast("AVFrame**") PointerPointer frame)
 public static native void av_frame_free(@ByPtrPtr AVFrame frame);
 
 /**
- * Setup a new reference to the data described by a given frame.
+ * Set up a new reference to the data described by the source frame.
  *
  * Copy frame properties from src to dst and create a new reference for each
  * AVBufferRef from src.
@@ -2463,7 +2587,7 @@ public static native void av_frame_free(@ByPtrPtr AVFrame frame);
  *
  * @return 0 on success, a negative AVERROR on error
  */
-public static native int av_frame_ref(AVFrame dst, AVFrame src);
+public static native int av_frame_ref(AVFrame dst, @Const AVFrame src);
 
 /**
  * Create a new frame that references the same data as src.
@@ -2472,7 +2596,7 @@ public static native int av_frame_ref(AVFrame dst, AVFrame src);
  *
  * @return newly created AVFrame on success, NULL on error.
  */
-public static native AVFrame av_frame_clone(AVFrame src);
+public static native AVFrame av_frame_clone(@Const AVFrame src);
 
 /**
  * Unreference all the buffers referenced by frame and reset the frame fields.
@@ -2531,6 +2655,19 @@ public static native int av_frame_is_writable(AVFrame frame);
 public static native int av_frame_make_writable(AVFrame frame);
 
 /**
+ * Copy the frame data from src to dst.
+ *
+ * This function does not allocate anything, dst must be already initialized and
+ * allocated with the same parameters as src.
+ *
+ * This function only copies the frame data (i.e. the contents of the data /
+ * extended data arrays), not any other properties.
+ *
+ * @return >= 0 on success, a negative AVERROR on error.
+ */
+public static native int av_frame_copy(AVFrame dst, @Const AVFrame src);
+
+/**
  * Copy only "metadata" fields from src to dst.
  *
  * Metadata for the purpose of this function are those fields that do not affect
@@ -2569,6 +2706,10 @@ public static native AVFrameSideData av_frame_new_side_data(AVFrame frame,
  */
 public static native AVFrameSideData av_frame_get_side_data(@Const AVFrame frame,
                                         @Cast("AVFrameSideDataType") int type);
+
+/**
+ * @}
+ */
 
 // #endif /* AVUTIL_FRAME_H */
 
@@ -2673,9 +2814,13 @@ public static final int
     AV_PIX_FMT_YUVJ422P = 13,
     /** planar YUV 4:4:4, 24bpp, full scale (JPEG), deprecated in favor of PIX_FMT_YUV444P and setting color_range */
     AV_PIX_FMT_YUVJ444P = 14,
+// #if FF_API_XVMC
     /** XVideo Motion Acceleration via common packet passing */
     AV_PIX_FMT_XVMC_MPEG2_MC = 15,
-    AV_PIX_FMT_XVMC_MPEG2_IDCT = 16,
+    AV_PIX_FMT_XVMC_MPEG2_IDCT = 16;
+public static final int AV_PIX_FMT_XVMC = AV_PIX_FMT_XVMC_MPEG2_IDCT;
+// #endif
+public static final int /* FF_API_XVMC */
     /** packed YUV 4:2:2, 16bpp, Cb Y0 Cr Y1 */
     AV_PIX_FMT_UYVY422 = 17,
     /** packed YUV 4:1:1, 12bpp, Cb Y0 Y1 Cr Y2 Y3 */
@@ -2990,6 +3135,8 @@ public static final int
     AV_PIX_FMT_BAYER_GRBG16LE = 0x123+4 + 36,
     /** bayer, GRGR..(odd line), BGBG..(even line), 16-bit samples, big-endian */
     AV_PIX_FMT_BAYER_GRBG16BE = 0x123+4 + 37,
+// #if !FF_API_XVMC
+// #endif /* !FF_API_XVMC */
 
     /** number of pixel formats, DO NOT USE THIS if you want to link with shared libav* because the number of formats might differ between versions */
     AV_PIX_FMT_NB = 0x123+4 + 38;
@@ -3613,7 +3760,11 @@ public static final int
     AV_MATRIX_ENCODING_NONE = 0,
     AV_MATRIX_ENCODING_DOLBY = 1,
     AV_MATRIX_ENCODING_DPLII = 2,
-    AV_MATRIX_ENCODING_NB = 3;
+    AV_MATRIX_ENCODING_DPLIIX = 3,
+    AV_MATRIX_ENCODING_DPLIIZ = 4,
+    AV_MATRIX_ENCODING_DOLBYEX = 5,
+    AV_MATRIX_ENCODING_DOLBYHEADPHONE = 6,
+    AV_MATRIX_ENCODING_NB = 7;
 
 /**
  * @}
@@ -3803,6 +3954,12 @@ public static final int AV_CPU_FLAG_CMOV =      0x1001000;
 // #endif
 /** AVX2 functions: requires OS support even if YMM registers aren't used */
 public static final int AV_CPU_FLAG_AVX2 =         0x8000;
+/** Haswell FMA3 functions */
+public static final int AV_CPU_FLAG_FMA3 =        0x10000;
+/** Bit Manipulation Instruction Set 1 */
+public static final int AV_CPU_FLAG_BMI1 =        0x20000;
+/** Bit Manipulation Instruction Set 2 */
+public static final int AV_CPU_FLAG_BMI2 =        0x40000;
 
 /** standard */
 public static final int AV_CPU_FLAG_ALTIVEC =      0x0001;
@@ -3919,31 +4076,34 @@ public static native int av_cpu_count();
  * entries and finally av_dict_free() to free the dictionary
  * and all its contents.
  *
- * @code
- * AVDictionary *d = NULL;                // "create" an empty dictionary
- * av_dict_set(&d, "foo", "bar", 0);      // add an entry
- *
- * char *k = av_strdup("key");            // if your strings are already allocated,
- * char *v = av_strdup("value");          // you can avoid copying them like this
- * av_dict_set(&d, k, v, AV_DICT_DONT_STRDUP_KEY | AV_DICT_DONT_STRDUP_VAL);
- *
- * AVDictionaryEntry *t = NULL;
- * while (t = av_dict_get(d, "", t, AV_DICT_IGNORE_SUFFIX)) {
- *     <....>                             // iterate over all entries in d
- * }
- *
- * av_dict_free(&d);
- * @endcode
+ @code
+   AVDictionary *d = NULL;           // "create" an empty dictionary
+   AVDictionaryEntry *t = NULL;
+
+   av_dict_set(&d, "foo", "bar", 0); // add an entry
+
+   char *k = av_strdup("key");       // if your strings are already allocated,
+   char *v = av_strdup("value");     // you can avoid copying them like this
+   av_dict_set(&d, k, v, AV_DICT_DONT_STRDUP_KEY | AV_DICT_DONT_STRDUP_VAL);
+
+   while (t = av_dict_get(d, "", t, AV_DICT_IGNORE_SUFFIX)) {
+       <....>                             // iterate over all entries in d
+   }
+   av_dict_free(&d);
+ @endcode
  *
  */
 
+/** Only get an entry with exact-case key match. Only relevant in av_dict_get(). */
 public static final int AV_DICT_MATCH_CASE =      1;
+/** Return first entry in a dictionary whose first part corresponds to the search key,
+                                         ignoring the suffix of the found key string. Only relevant in av_dict_get(). */
 public static final int AV_DICT_IGNORE_SUFFIX =   2;
 /** Take ownership of a key that's been
-                                         allocated with av_malloc() and children. */
+                                         allocated with av_malloc() or another memory allocation function. */
 public static final int AV_DICT_DONT_STRDUP_KEY = 4;
 /** Take ownership of a value that's been
-                                         allocated with av_malloc() and chilren. */
+                                         allocated with av_malloc() or another memory allocation function. */
 public static final int AV_DICT_DONT_STRDUP_VAL = 8;
 /** Don't overwrite existing entries. */
 public static final int AV_DICT_DONT_OVERWRITE = 16;
@@ -3974,10 +4134,17 @@ public static class AVDictionaryEntry extends Pointer {
 /**
  * Get a dictionary entry with matching key.
  *
+ * The returned entry key or value must not be changed, or it will
+ * cause undefined behavior.
+ *
+ * To iterate through all the dictionary entries, you can set the matching key
+ * to the null string "" and set the AV_DICT_IGNORE_SUFFIX flag.
+ *
  * @param prev Set to the previous matching element to find the next.
  *             If set to NULL the first matching element is returned.
- * @param flags Allows case as well as suffix-insensitive comparisons.
- * @return Found entry or NULL, changing key or value leads to undefined behavior.
+ * @param key matching key
+ * @param flags a collection of AV_DICT_* flags controlling how the entry is retrieved
+ * @return found entry or NULL in case no matching entry was found in the dictionary
  */
 public static native AVDictionaryEntry av_dict_get(AVDictionary m, @Cast("const char*") BytePointer key, @Const AVDictionaryEntry prev, int flags);
 public static native AVDictionaryEntry av_dict_get(AVDictionary m, String key, @Const AVDictionaryEntry prev, int flags);
@@ -4005,7 +4172,10 @@ public static native int av_dict_set(@ByPtrPtr AVDictionary pm, @Cast("const cha
 public static native int av_dict_set(@ByPtrPtr AVDictionary pm, String key, String value, int flags);
 
 /**
- * Parse the key/value pairs list and add to a dictionary.
+ * Parse the key/value pairs list and add the parsed entries to a dictionary.
+ *
+ * In case of failure, all the successfully set entries are stored in
+ * *pm. You may need to manually free the created dictionary.
  *
  * @param key_val_sep  a 0-terminated list of characters used to separate
  *                     key from value
@@ -4368,11 +4538,22 @@ public static class AVOption extends Pointer {
 public static final int AV_OPT_FLAG_ENCODING_PARAM =  1;
 /** a generic parameter which can be set by the user for demuxing or decoding */
 public static final int AV_OPT_FLAG_DECODING_PARAM =  2;
+// #if FF_API_OPT_TYPE_METADATA
 /** some data extracted or inserted into the file like title, comment, ... */
 public static final int AV_OPT_FLAG_METADATA =        4;
+// #endif
 public static final int AV_OPT_FLAG_AUDIO_PARAM =     8;
 public static final int AV_OPT_FLAG_VIDEO_PARAM =     16;
 public static final int AV_OPT_FLAG_SUBTITLE_PARAM =  32;
+/**
+ * The option is inteded for exporting values to the caller.
+ */
+public static final int AV_OPT_FLAG_EXPORT =          64;
+/**
+ * The option may not be set through the AVOptions API, only read.
+ * This flag only makes sense when AV_OPT_FLAG_EXPORT is also set.
+ */
+public static final int AV_OPT_FLAG_READONLY =        128;
 /** a generic parameter which can be set by the user for filtering */
 public static final int AV_OPT_FLAG_FILTERING_PARAM = (1<<16);
 //FIXME think about enc-audio, ... style flags
@@ -5629,6 +5810,300 @@ public static native int avpriv_set_systematic_pal2(@Cast("uint32_t*") int[] pal
 
 
 // #endif /* AVUTIL_IMGUTILS_H */
+
+
+// Parsed from /usr/local/include/libavutil/downmix_info.h
+
+/*
+ * Copyright (c) 2014 Tim Walker <tdskywalker@gmail.com>
+ *
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+// #ifndef AVUTIL_DOWNMIX_INFO_H
+// #define AVUTIL_DOWNMIX_INFO_H
+
+// #include "frame.h"
+
+/**
+ * @file
+ * audio downmix medatata
+ */
+
+/**
+ * @addtogroup lavu_audio
+ * @{
+ */
+
+/**
+ * @defgroup downmix_info Audio downmix metadata
+ * @{
+ */
+
+/**
+ * Possible downmix types.
+ */
+/** enum AVDownmixType */
+public static final int
+    /** Not indicated. */
+    AV_DOWNMIX_TYPE_UNKNOWN = 0,
+    /** Lo/Ro 2-channel downmix (Stereo). */
+    AV_DOWNMIX_TYPE_LORO = 1,
+    /** Lt/Rt 2-channel downmix, Dolby Surround compatible. */
+    AV_DOWNMIX_TYPE_LTRT = 2,
+    /** Lt/Rt 2-channel downmix, Dolby Pro Logic II compatible. */
+    AV_DOWNMIX_TYPE_DPLII = 3,
+    /** Number of downmix types. Not part of ABI. */
+    AV_DOWNMIX_TYPE_NB = 4;
+
+/**
+ * This structure describes optional metadata relevant to a downmix procedure.
+ *
+ * All fields are set by the decoder to the value indicated in the audio
+ * bitstream (if present), or to a "sane" default otherwise.
+ */
+public static class AVDownmixInfo extends Pointer {
+    static { Loader.load(); }
+    public AVDownmixInfo() { allocate(); }
+    public AVDownmixInfo(int size) { allocateArray(size); }
+    public AVDownmixInfo(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public AVDownmixInfo position(int position) {
+        return (AVDownmixInfo)super.position(position);
+    }
+
+    /**
+     * Type of downmix preferred by the mastering engineer.
+     */
+    public native @Cast("AVDownmixType") int preferred_downmix_type(); public native AVDownmixInfo preferred_downmix_type(int preferred_downmix_type);
+
+    /**
+     * Absolute scale factor representing the nominal level of the center
+     * channel during a regular downmix.
+     */
+    public native double center_mix_level(); public native AVDownmixInfo center_mix_level(double center_mix_level);
+
+    /**
+     * Absolute scale factor representing the nominal level of the center
+     * channel during an Lt/Rt compatible downmix.
+     */
+    public native double center_mix_level_ltrt(); public native AVDownmixInfo center_mix_level_ltrt(double center_mix_level_ltrt);
+
+    /**
+     * Absolute scale factor representing the nominal level of the surround
+     * channels during a regular downmix.
+     */
+    public native double surround_mix_level(); public native AVDownmixInfo surround_mix_level(double surround_mix_level);
+
+    /**
+     * Absolute scale factor representing the nominal level of the surround
+     * channels during an Lt/Rt compatible downmix.
+     */
+    public native double surround_mix_level_ltrt(); public native AVDownmixInfo surround_mix_level_ltrt(double surround_mix_level_ltrt);
+
+    /**
+     * Absolute scale factor representing the level at which the LFE data is
+     * mixed into L/R channels during downmixing.
+     */
+    public native double lfe_mix_level(); public native AVDownmixInfo lfe_mix_level(double lfe_mix_level);
+}
+
+/**
+ * Get a frame's AV_FRAME_DATA_DOWNMIX_INFO side data for editing.
+ *
+ * The side data is created and added to the frame if it's absent.
+ *
+ * @param frame the frame for which the side data is to be obtained.
+ *
+ * @return the AVDownmixInfo structure to be edited by the caller.
+ */
+public static native AVDownmixInfo av_downmix_info_update_side_data(AVFrame frame);
+
+/**
+ * @}
+ */
+
+/**
+ * @}
+ */
+
+// #endif /* AVUTIL_DOWNMIX_INFO_H */
+
+
+// Parsed from /usr/local/include/libavutil/stereo3d.h
+
+/*
+ * Copyright (c) 2013 Vittorio Giovara <vittorio.giovara@gmail.com>
+ *
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+// #include <stdint.h>
+
+// #include "frame.h"
+
+/**
+ * List of possible 3D Types
+ */
+/** enum AVStereo3DType */
+public static final int
+    /**
+     * Video is not stereoscopic (and metadata has to be there).
+     */
+    AV_STEREO3D_2D = 0,
+
+    /**
+     * Views are next to each other.
+     *
+     *    LLLLRRRR
+     *    LLLLRRRR
+     *    LLLLRRRR
+     *    ...
+     */
+    AV_STEREO3D_SIDEBYSIDE = 1,
+
+    /**
+     * Views are on top of each other.
+     *
+     *    LLLLLLLL
+     *    LLLLLLLL
+     *    RRRRRRRR
+     *    RRRRRRRR
+     */
+    AV_STEREO3D_TOPBOTTOM = 2,
+
+    /**
+     * Views are alternated temporally.
+     *
+     *     frame0   frame1   frame2   ...
+     *    LLLLLLLL RRRRRRRR LLLLLLLL
+     *    LLLLLLLL RRRRRRRR LLLLLLLL
+     *    LLLLLLLL RRRRRRRR LLLLLLLL
+     *    ...      ...      ...
+     */
+    AV_STEREO3D_FRAMESEQUENCE = 3,
+
+    /**
+     * Views are packed in a checkerboard-like structure per pixel.
+     *
+     *    LRLRLRLR
+     *    RLRLRLRL
+     *    LRLRLRLR
+     *    ...
+     */
+    AV_STEREO3D_CHECKERBOARD = 4,
+
+    /**
+     * Views are next to each other, but when upscaling
+     * apply a checkerboard pattern.
+     *
+     *     LLLLRRRR          L L L L    R R R R
+     *     LLLLRRRR    =>     L L L L  R R R R
+     *     LLLLRRRR          L L L L    R R R R
+     *     LLLLRRRR           L L L L  R R R R
+     */
+    AV_STEREO3D_SIDEBYSIDE_QUINCUNX = 5,
+
+    /**
+     * Views are packed per line, as if interlaced.
+     *
+     *    LLLLLLLL
+     *    RRRRRRRR
+     *    LLLLLLLL
+     *    ...
+     */
+    AV_STEREO3D_LINES = 6,
+
+    /**
+     * Views are packed per column.
+     *
+     *    LRLRLRLR
+     *    LRLRLRLR
+     *    LRLRLRLR
+     *    ...
+     */
+    AV_STEREO3D_COLUMNS = 7;
+
+
+/**
+ * Inverted views, Right/Bottom represents the left view.
+ */
+public static final int AV_STEREO3D_FLAG_INVERT =     (1 << 0);
+
+/**
+ * Stereo 3D type: this structure describes how two videos are packed
+ * within a single video surface, with additional information as needed.
+ *
+ * @note The struct must be allocated with av_stereo3d_alloc() and
+ *       its size is not a part of the public ABI.
+ */
+public static class AVStereo3D extends Pointer {
+    static { Loader.load(); }
+    public AVStereo3D() { allocate(); }
+    public AVStereo3D(int size) { allocateArray(size); }
+    public AVStereo3D(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public AVStereo3D position(int position) {
+        return (AVStereo3D)super.position(position);
+    }
+
+    /**
+     * How views are packed within the video.
+     */
+    public native @Cast("AVStereo3DType") int type(); public native AVStereo3D type(int type);
+
+    /**
+     * Additional information about the frame packing.
+     */
+    public native int flags(); public native AVStereo3D flags(int flags);
+}
+
+/**
+ * Allocate an AVStereo3D structure and set its fields to default values.
+ * The resulting struct can be freed using av_freep().
+ *
+ * @return An AVStereo3D filled with default values or NULL on failure.
+ */
+public static native AVStereo3D av_stereo3d_alloc();
+
+/**
+ * Allocate a complete AVFrameSideData and add it to the frame.
+ *
+ * @param frame The frame which side data is added to.
+ *
+ * @return The AVStereo3D structure to be filled by caller.
+ */
+public static native AVStereo3D av_stereo3d_create_side_data(AVFrame frame);
 
 
 }

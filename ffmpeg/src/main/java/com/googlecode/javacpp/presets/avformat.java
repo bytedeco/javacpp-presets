@@ -33,8 +33,7 @@ import com.googlecode.javacpp.annotation.Properties;
     @Platform(value="windows", preload="avformat-55") })
 public class avformat implements Parser.InfoMapper {
     public void map(Parser.InfoMap infoMap) {
-        new avcodec().map(infoMap);
-        infoMap.put(new Parser.Info("AVPROBE_SCORE_RETRY").translate(false))
-               .put(new Parser.Info("FF_API_PKT_DUMP", "LIBAVFORMAT_VERSION_MAJOR <= 54").define(false));
+        infoMap.put(new Parser.Info("AVPROBE_SCORE_RETRY", "AVPROBE_SCORE_STREAM_RETRY").translate(false))
+               .put(new Parser.Info("LIBAVFORMAT_VERSION_MAJOR <= 54").define(false));
     }
 }

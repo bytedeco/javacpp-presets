@@ -57,6 +57,11 @@ public class avcodec extends com.googlecode.javacpp.presets.avcodec {
 
 // #include "version.h"
 
+// #if FF_API_FAST_MALLOC
+// to provide fast_*alloc
+// #include "libavutil/mem.h"
+// #endif
+
 /**
  * @defgroup libavc Encoding/Decoding Library
  * @{
@@ -122,7 +127,9 @@ public static final int
     AV_CODEC_ID_MPEG1VIDEO = 1,
     /** preferred ID for MPEG-1/2 video decoding */
     AV_CODEC_ID_MPEG2VIDEO = 2,
+// #if FF_API_XVMC
     AV_CODEC_ID_MPEG2VIDEO_XVMC = 3,
+// #endif /* FF_API_XVMC */
     AV_CODEC_ID_H261 = 4,
     AV_CODEC_ID_H263 = 5,
     AV_CODEC_ID_RV10 = 6,
@@ -292,7 +299,10 @@ public static final int
     AV_CODEC_ID_AIC = 170,
     AV_CODEC_ID_ESCAPE130_DEPRECATED = 171,
     AV_CODEC_ID_G2M_DEPRECATED = 172,
-    AV_CODEC_ID_WEBP_DEPRECATED = 173;
+    AV_CODEC_ID_WEBP_DEPRECATED = 173,
+    AV_CODEC_ID_HNM4_VIDEO = 174,
+    AV_CODEC_ID_HEVC_DEPRECATED = 175,
+    AV_CODEC_ID_FIC = 176;
 public static native @MemberGetter int AV_CODEC_ID_BRENDER_PIX();
 public static final int
 
@@ -370,7 +380,6 @@ public static final int
 public static native @MemberGetter int AV_CODEC_ID_HEVC();
 public static final int
     AV_CODEC_ID_HEVC       = AV_CODEC_ID_HEVC();
-
 public static final int AV_CODEC_ID_H265 = AV_CODEC_ID_HEVC;
 public static final int
 
@@ -651,7 +660,10 @@ public static final int
     AV_CODEC_ID_SMPTE_KLV  = AV_CODEC_ID_SMPTE_KLV();
 public static native @MemberGetter int AV_CODEC_ID_DVD_NAV();
 public static final int
-    AV_CODEC_ID_DVD_NAV    = AV_CODEC_ID_DVD_NAV(),
+    AV_CODEC_ID_DVD_NAV    = AV_CODEC_ID_DVD_NAV();
+public static native @MemberGetter int AV_CODEC_ID_TIMED_ID3();
+public static final int
+    AV_CODEC_ID_TIMED_ID3  = AV_CODEC_ID_TIMED_ID3(),
 
 
     /** codec_id is not known (like AV_CODEC_ID_NONE) but lavf should attempt to identify it */
@@ -805,21 +817,41 @@ public static final int
     /** functionally identical to above */
     AVCOL_PRI_SMPTE240M   = 7,
     AVCOL_PRI_FILM        = 8,
+    /** ITU-R BT2020 */
+    AVCOL_PRI_BT2020      = 9,
     /** Not part of ABI */
-    AVCOL_PRI_NB = 9;
+    AVCOL_PRI_NB = 10;
 
 /** enum AVColorTransferCharacteristic */
 public static final int
     /** also ITU-R BT1361 */
-    AVCOL_TRC_BT709       = 1,
-    AVCOL_TRC_UNSPECIFIED = 2,
+    AVCOL_TRC_BT709        = 1,
+    AVCOL_TRC_UNSPECIFIED  = 2,
     /** also ITU-R BT470M / ITU-R BT1700 625 PAL & SECAM */
-    AVCOL_TRC_GAMMA22     = 4,
+    AVCOL_TRC_GAMMA22      = 4,
     /** also ITU-R BT470BG */
-    AVCOL_TRC_GAMMA28     = 5,
-    AVCOL_TRC_SMPTE240M   = 7,
+    AVCOL_TRC_GAMMA28      = 5,
+    /** also ITU-R BT601-6 525 or 625 / ITU-R BT1358 525 or 625 / ITU-R BT1700 NTSC */
+    AVCOL_TRC_SMPTE170M    = 6,
+    AVCOL_TRC_SMPTE240M    = 7,
+    /** "Linear transfer characteristics" */
+    AVCOL_TRC_LINEAR       = 8,
+    /** "Logarithmic transfer characteristic (100:1 range)" */
+    AVCOL_TRC_LOG          = 9,
+    /** "Logarithmic transfer characteristic (100 * Sqrt( 10 ) : 1 range)" */
+    AVCOL_TRC_LOG_SQRT     = 10,
+    /** IEC 61966-2-4 */
+    AVCOL_TRC_IEC61966_2_4 = 11,
+    /** ITU-R BT1361 Extended Colour Gamut */
+    AVCOL_TRC_BT1361_ECG   = 12,
+    /** IEC 61966-2-1 (sRGB or sYCC) */
+    AVCOL_TRC_IEC61966_2_1 = 13,
+    /** ITU-R BT2020 for 10 bit system */
+    AVCOL_TRC_BT2020_10    = 14,
+    /** ITU-R BT2020 for 12 bit system */
+    AVCOL_TRC_BT2020_12    = 15,
     /** Not part of ABI */
-    AVCOL_TRC_NB = 8;
+    AVCOL_TRC_NB = 16;
 
 /**
  *  X   X      3 4 X      X are luma samples,
@@ -875,7 +907,12 @@ public static class RcOverride extends Pointer {
     public native float quality_factor(); public native RcOverride quality_factor(float quality_factor);
 }
 
+// #if FF_API_MAX_BFRAMES
+/**
+ * @deprecated there is no libavcodec-wide limit on the number of B-frames
+ */
 public static final int FF_MAX_B_FRAMES = 16;
+// #endif
 
 /* encoding support
    These flags can be passed in AVCodecContext.flags before initialization.
@@ -891,6 +928,8 @@ public static final int CODEC_FLAG_UNALIGNED = 0x0001;
 public static final int CODEC_FLAG_QSCALE = 0x0002;
 /** 4 MV per MB allowed / advanced prediction for H.263. */
 public static final int CODEC_FLAG_4MV =    0x0004;
+/** Output even those frames that might be corrupted */
+public static final int CODEC_FLAG_OUTPUT_CORRUPT = 0x0008;
 /** Use qpel MC. */
 public static final int CODEC_FLAG_QPEL =   0x0010;
 /** Use GMC. */
@@ -909,8 +948,13 @@ public static final int CODEC_FLAG_PASS1 =           0x0200;
 public static final int CODEC_FLAG_PASS2 =           0x0400;
 /** Only decode/encode grayscale. */
 public static final int CODEC_FLAG_GRAY =            0x2000;
-/** Don't draw edges. */
+// #if FF_API_EMU_EDGE
+/**
+ * @deprecated edges are not used/required anymore. I.e. this flag is now always
+ * set.
+ */
 public static final int CODEC_FLAG_EMU_EDGE =        0x4000;
+// #endif
 /** error[?] variables will be set during encoding. */
 public static final int CODEC_FLAG_PSNR =            0x8000;
 public static final int CODEC_FLAG_TRUNCATED =       0x00010000; /** Input bitstream might be truncated at a random
@@ -965,8 +1009,16 @@ public static final int CODEC_CAP_DRAW_HORIZ_BAND = 0x0001;
  */
 public static final int CODEC_CAP_DR1 =             0x0002;
 public static final int CODEC_CAP_TRUNCATED =       0x0008;
-/* Codec can export data for HW decoding (XvMC). */
+// #if FF_API_XVMC
+/* Codec can export data for HW decoding. This flag indicates that
+ * the codec would call get_format() with list that might contain HW accelerated
+ * pixel formats (XvMC, VDPAU, VAAPI, etc). The application can pick any of them
+ * including raw image format.
+ * The application can use the passed context to determine bitstream version,
+ * chroma format, resolution etc.
+ */
 public static final int CODEC_CAP_HWACCEL =         0x0010;
+// #endif /* FF_API_XVMC */
 /**
  * Encoder or decoder requires flushing with NULL input at the end in order to
  * give the complete and correct output.
@@ -1023,12 +1075,12 @@ public static final int CODEC_CAP_EXPERIMENTAL =     0x0200;
  * Codec should fill in channel configuration and samplerate instead of container
  */
 public static final int CODEC_CAP_CHANNEL_CONF =     0x0400;
-
+// #if FF_API_NEG_LINESIZES
 /**
- * Codec is able to deal with negative linesizes
+ * @deprecated no codecs use this capability
  */
 public static final int CODEC_CAP_NEG_LINESIZES =    0x0800;
-
+// #endif
 /**
  * Codec supports frame-level multithreading.
  */
@@ -1058,6 +1110,7 @@ public static final int CODEC_CAP_INTRA_ONLY =       0x40000000;
  */
 public static final int CODEC_CAP_LOSSLESS =         0x80000000;
 
+// #if FF_API_MB_TYPE
 //The following defines may change, don't expect compatibility if you use them.
 public static final int MB_TYPE_INTRA4x4 =   0x0001;
 public static final int MB_TYPE_INTRA16x16 = 0x0002; //FIXME H.264-specific
@@ -1081,6 +1134,7 @@ public static final int MB_TYPE_L0L1 =       (MB_TYPE_L0   | MB_TYPE_L1);
 public static final int MB_TYPE_QUANT =      0x00010000;
 public static final int MB_TYPE_CBP =        0x00020000;
 //Note bits 24-31 are reserved for codec specific use (h264 ref0, mpeg1 0mv, ...)
+// #endif
 
 /**
  * Pan Scan area.
@@ -1122,10 +1176,12 @@ public static class AVPanScan extends Pointer {
     @MemberGetter public native @Cast("int16_t(*)[2]") @Name("position") ShortPointer _position();
 }
 
+// #if FF_API_QSCALE_TYPE
 public static final int FF_QSCALE_TYPE_MPEG1 = 0;
 public static final int FF_QSCALE_TYPE_MPEG2 = 1;
 public static final int FF_QSCALE_TYPE_H264 =  2;
 public static final int FF_QSCALE_TYPE_VP56 =  3;
+// #endif
 
 // #if FF_API_GET_BUFFER
 public static final int FF_BUFFER_TYPE_INTERNAL = 1;
@@ -1251,7 +1307,14 @@ public static final int
      * The optional settings (rendering instructions) that immediately
      * follow the timestamp specifier of a WebVTT cue.
      */
-    AV_PKT_DATA_WEBVTT_SETTINGS = 76;
+    AV_PKT_DATA_WEBVTT_SETTINGS = 76,
+
+    /**
+     * A list of zero terminated key/value strings. There is no end marker for
+     * the list, so it is required to rely on the side data size to stop. This
+     * side data includes updated metadata which appeared in the stream.
+     */
+    AV_PKT_DATA_METADATA_UPDATE = 77;
 
 /**
  * This structure stores compressed data. It is typically exported by demuxers
@@ -1593,7 +1656,9 @@ public static final int FF_COMPRESSION_DEFAULT = -1;
     public native int coded_width(); public native AVCodecContext coded_width(int coded_width);
     public native int coded_height(); public native AVCodecContext coded_height(int coded_height);
 
+// #if FF_API_ASPECT_EXTENDED
 public static final int FF_ASPECT_EXTENDED = 15;
+// #endif
 
     /**
      * the number of pictures in a group of pictures, or 0 for intra_only
@@ -1937,12 +2002,15 @@ public static final int SLICE_FLAG_ALLOW_FIELD =    0x0002;
 /** allow draw_horiz_band() with 1 component at a time (SVQ1) */
 public static final int SLICE_FLAG_ALLOW_PLANE =    0x0004;
 
+// #if FF_API_XVMC
     /**
      * XVideo Motion Acceleration
      * - encoding: forbidden
      * - decoding: set by decoder
+     * @deprecated XvMC doesn't need it anymore.
      */
-    public native int xvmc_acceleration(); public native AVCodecContext xvmc_acceleration(int xvmc_acceleration);
+    public native @Deprecated int xvmc_acceleration(); public native AVCodecContext xvmc_acceleration(int xvmc_acceleration);
+// #endif /* FF_API_XVMC */
 
     /**
      * macroblock decision mode
@@ -2413,11 +2481,10 @@ public static final int FF_MB_DECISION_RD =     2;
      * If AV_GET_BUFFER_FLAG_REF is set in flags then the frame may be reused
      * (read and/or written to if it is writable) later by libavcodec.
      *
-     * If CODEC_FLAG_EMU_EDGE is not set in s->flags, the buffer must contain an
-     * edge of the size returned by avcodec_get_edge_width() on all sides.
-     *
      * avcodec_align_dimensions2() should be used to find the required width and
      * height, as they normally need to be rounded up to the next multiple of 16.
+     *
+     * Some decoders do not support linesizes changing between frames.
      *
      * If frame multithreading is used and thread_safe_callbacks is set,
      * this callback may be called from a different thread, but not from more
@@ -2718,13 +2785,17 @@ public static final int FF_CODER_TYPE_DEFLATE =   4;
     public native int workaround_bugs(); public native AVCodecContext workaround_bugs(int workaround_bugs);
 /** autodetection */
 public static final int FF_BUG_AUTODETECT =       1;
+// #if FF_API_OLD_MSMPEG4
 public static final int FF_BUG_OLD_MSMPEG4 =      2;
+// #endif
 public static final int FF_BUG_XVID_ILACE =       4;
 public static final int FF_BUG_UMP4 =             8;
 public static final int FF_BUG_NO_PADDING =       16;
 public static final int FF_BUG_AMV =              32;
+// #if FF_API_AC_VLC
 /** Will be removed, libavcodec can now handle these non-compliant files by default. */
 public static final int FF_BUG_AC_VLC =           0;
+// #endif
 public static final int FF_BUG_QPEL_CHROMA =      64;
 public static final int FF_BUG_STD_QPEL =         128;
 public static final int FF_BUG_QPEL_CHROMA2 =     256;
@@ -2779,7 +2850,12 @@ public static final int FF_DEBUG_RC =          2;
 public static final int FF_DEBUG_BITSTREAM =   4;
 public static final int FF_DEBUG_MB_TYPE =     8;
 public static final int FF_DEBUG_QP =          16;
+// #if FF_API_DEBUG_MV
+/**
+ * @deprecated this option does nothing
+ */
 public static final int FF_DEBUG_MV =          32;
+// #endif
 public static final int FF_DEBUG_DCT_COEFF =   0x00000040;
 public static final int FF_DEBUG_SKIP =        0x00000080;
 public static final int FF_DEBUG_STARTCODE =   0x00000100;
@@ -2787,13 +2863,19 @@ public static final int FF_DEBUG_PTS =         0x00000200;
 public static final int FF_DEBUG_ER =          0x00000400;
 public static final int FF_DEBUG_MMCO =        0x00000800;
 public static final int FF_DEBUG_BUGS =        0x00001000;
+// #if FF_API_DEBUG_MV
+/** only access through AVOptions from outside libavcodec */
 public static final int FF_DEBUG_VIS_QP =      0x00002000;
+/** only access through AVOptions from outside libavcodec */
 public static final int FF_DEBUG_VIS_MB_TYPE = 0x00004000;
+// #endif
 public static final int FF_DEBUG_BUFFERS =     0x00008000;
 public static final int FF_DEBUG_THREADS =     0x00010000;
 
+// #if FF_API_DEBUG_MV
     /**
      * debug
+     * Code outside libavcodec should access this field using AVOptions
      * - encoding: Set by user.
      * - decoding: Set by user.
      */
@@ -2801,6 +2883,7 @@ public static final int FF_DEBUG_THREADS =     0x00010000;
 public static final int FF_DEBUG_VIS_MV_P_FOR =  0x00000001; //visualize forward predicted MVs of P frames
 public static final int FF_DEBUG_VIS_MV_B_FOR =  0x00000002; //visualize forward predicted MVs of B frames
 public static final int FF_DEBUG_VIS_MV_B_BACK = 0x00000004; //visualize backward predicted MVs of B frames
+// #endif
 
     /**
      * Error recognition; may misdetect some more or less valid parts as errors.
@@ -2808,7 +2891,13 @@ public static final int FF_DEBUG_VIS_MV_B_BACK = 0x00000004; //visualize backwar
      * - decoding: Set by user.
      */
     public native int err_recognition(); public native AVCodecContext err_recognition(int err_recognition);
-/** verify embedded CRCs */
+
+/**
+ * Verify checksums embedded in the bitstream (could be of either encoded or
+ * decoded data, depending on the codec) and print an error message on mismatch.
+ * If AV_EF_EXPLODE is also set, a mismatching checksum will result in the
+ * decoder returning an error.
+ */
 public static final int AV_EF_CRCCHECK =  (1<<0);
 /** detect bitstream specification deviations */
 public static final int AV_EF_BITSTREAM = (1<<1);
@@ -2895,7 +2984,9 @@ public static final int FF_IDCT_SIMPLEARMV6 =   17;
 public static final int FF_IDCT_SIMPLEVIS =     18;
 public static final int FF_IDCT_FAAN =          20;
 public static final int FF_IDCT_SIMPLENEON =    22;
+// #if FF_API_ARCH_ALPHA
 public static final int FF_IDCT_SIMPLEALPHA =   23;
+// #endif
 
     /**
      * bits per sample/pixel from the demuxer (needed for huffyuv).
@@ -2925,7 +3016,7 @@ public static final int FF_IDCT_SIMPLEALPHA =   23;
     /**
      * the picture in the bitstream
      * - encoding: Set by libavcodec.
-     * - decoding: Set by libavcodec.
+     * - decoding: unused
      */
     public native AVFrame coded_frame(); public native AVCodecContext coded_frame(AVFrame coded_frame);
 
@@ -3027,13 +3118,12 @@ public static final int FF_THREAD_SLICE =   2;
     }
     public native Execute2_AVCodecContext_Func_AVCodecContext_Pointer_int_int_Pointer_IntPointer_int execute2(); public native AVCodecContext execute2(Execute2_AVCodecContext_Func_AVCodecContext_Pointer_int_int_Pointer_IntPointer_int execute2);
 
+// #if FF_API_THREAD_OPAQUE
     /**
-     * thread opaque
-     * Can be used by execute() to store some per AVCodecContext stuff.
-     * - encoding: set by execute()
-     * - decoding: set by execute()
+     * @deprecated this field should not be used from outside of lavc
      */
-    public native Pointer thread_opaque(); public native AVCodecContext thread_opaque(Pointer thread_opaque);
+    public native @Deprecated Pointer thread_opaque(); public native AVCodecContext thread_opaque(Pointer thread_opaque);
+// #endif
 
     /**
      * noise vs. sse weight for the nsse comparsion function
@@ -3120,6 +3210,11 @@ public static final int FF_PROFILE_JPEG2000_CSTREAM_NO_RESTRICTION =  2;
 public static final int FF_PROFILE_JPEG2000_DCINEMA_2K =              3;
 public static final int FF_PROFILE_JPEG2000_DCINEMA_4K =              4;
 
+
+public static final int FF_PROFILE_HEVC_MAIN =                        1;
+public static final int FF_PROFILE_HEVC_MAIN_10 =                     2;
+public static final int FF_PROFILE_HEVC_MAIN_STILL_PICTURE =          3;
+
     /**
      * level
      * - encoding: Set by user.
@@ -3160,21 +3255,20 @@ public static final int FF_LEVEL_UNKNOWN = -99;
     public native @Cast("uint8_t*") BytePointer subtitle_header(); public native AVCodecContext subtitle_header(BytePointer subtitle_header);
     public native int subtitle_header_size(); public native AVCodecContext subtitle_header_size(int subtitle_header_size);
 
+// #if FF_API_ERROR_RATE
     /**
-     * Simulates errors in the bitstream to test error concealment.
-     * - encoding: Set by user.
-     * - decoding: unused
+     * @deprecated use the 'error_rate' private AVOption of the mpegvideo
+     * encoders
      */
-    public native int error_rate(); public native AVCodecContext error_rate(int error_rate);
+    public native @Deprecated int error_rate(); public native AVCodecContext error_rate(int error_rate);
+// #endif
 
+// #if FF_API_CODEC_PKT
     /**
-     * Current packet as passed into the decoder, to avoid having
-     * to pass the packet into every function. Currently only valid
-     * inside lavc and get/release_buffer callbacks.
-     * - decoding: set by avcodec_decode_*, read by get_buffer() for setting pkt_pts
-     * - encoding: unused
+     * @deprecated this field is not supposed to be accessed from outside lavc
      */
-    public native AVPacket pkt(); public native AVCodecContext pkt(AVPacket pkt);
+    public native @Deprecated AVPacket pkt(); public native AVCodecContext pkt(AVPacket pkt);
+// #endif
 
     /**
      * VBV delay coded in the last frame (in periods of a 27 MHz clock).
@@ -3257,6 +3351,17 @@ public static final int FF_SUB_CHARENC_MODE_PRE_DECODER =  1;
      * - encoding: set by libavcodec
      */
     public native int seek_preroll(); public native AVCodecContext seek_preroll(int seek_preroll);
+
+// #if !FF_API_DEBUG_MV
+// #endif
+
+    /**
+     * custom intra quantization matrix
+     * Code outside libavcodec should access this field using av_codec_g/set_chroma_intra_matrix()
+     * - encoding: Set by user, can be NULL.
+     * - decoding: unused.
+     */
+    public native @Cast("uint16_t*") ShortPointer chroma_intra_matrix(); public native AVCodecContext chroma_intra_matrix(ShortPointer chroma_intra_matrix);
 }
 
 public static native @ByVal AVRational av_codec_get_pkt_timebase(@Const AVCodecContext avctx);
@@ -3270,6 +3375,11 @@ public static native void av_codec_set_lowres(AVCodecContext avctx, int val);
 
 public static native int av_codec_get_seek_preroll(@Const AVCodecContext avctx);
 public static native void av_codec_set_seek_preroll(AVCodecContext avctx, int val);
+
+public static native @Cast("uint16_t*") ShortPointer av_codec_get_chroma_intra_matrix(@Const AVCodecContext avctx);
+public static native void av_codec_set_chroma_intra_matrix(AVCodecContext avctx, @Cast("uint16_t*") ShortPointer val);
+public static native void av_codec_set_chroma_intra_matrix(AVCodecContext avctx, @Cast("uint16_t*") ShortBuffer val);
+public static native void av_codec_set_chroma_intra_matrix(AVCodecContext avctx, @Cast("uint16_t*") short[] val);
 
 /**
  * AVProfile.
@@ -3475,6 +3585,11 @@ public static class AVCodec extends Pointer {
 
 public static native int av_codec_get_max_lowres(@Const AVCodec codec);
 
+@Opaque public static class MpegEncContext extends Pointer {
+    public MpegEncContext() { }
+    public MpegEncContext(Pointer p) { super(p); }
+}
+
 /**
  * AVHWAccel.
  */
@@ -3553,6 +3668,7 @@ public static class AVHWAccel extends Pointer {
      *
      * Meaningful slice information (codec specific) is guaranteed to
      * be parsed at this point. This function is mandatory.
+     * The only exception is XvMC, that works on MB level.
      *
      * @param avctx the codec context
      * @param buf the slice data buffer base
@@ -3594,6 +3710,24 @@ public static class AVHWAccel extends Pointer {
      * AVCodecContext.release_buffer().
      */
     public native int priv_data_size(); public native AVHWAccel priv_data_size(int priv_data_size);
+
+    /**
+     * Called for every Macroblock in a slice.
+     *
+     * XvMC uses it to replace the ff_MPV_decode_mb().
+     * Instead of decoding to raw picture, MB parameters are
+     * stored in an array provided by the video driver.
+     *
+     * @param s the mpeg context
+     */
+    public static class Decode_mb_MpegEncContext extends FunctionPointer {
+        static { Loader.load(); }
+        public    Decode_mb_MpegEncContext(Pointer p) { super(p); }
+        protected Decode_mb_MpegEncContext() { allocate(); }
+        private native void allocate();
+        public native void call(MpegEncContext s);
+    }
+    public native Decode_mb_MpegEncContext decode_mb(); public native AVHWAccel decode_mb(Decode_mb_MpegEncContext decode_mb);
 }
 
 /**
@@ -3760,10 +3894,6 @@ public static native void avcodec_register(AVCodec codec);
  */
 public static native void avcodec_register_all();
 
-
-// #if FF_API_ALLOC_CONTEXT
-// #endif
-
 /**
  * Allocate an AVCodecContext and set its fields to default values.  The
  * resulting struct can be deallocated by calling avcodec_close() on it followed
@@ -3829,21 +3959,20 @@ public static native @Const AVClass avcodec_get_subtitle_rect_class();
  */
 public static native int avcodec_copy_context(AVCodecContext dest, @Const AVCodecContext src);
 
+// #if FF_API_AVFRAME_LAVC
 /**
- * Allocate an AVFrame and set its fields to default values.  The resulting
- * struct must be freed using avcodec_free_frame().
- *
- * @return An AVFrame filled with default values or NULL on failure.
- * @see avcodec_get_frame_defaults
+ * @deprecated use av_frame_alloc()
  */
-public static native AVFrame avcodec_alloc_frame();
+public static native @Deprecated AVFrame avcodec_alloc_frame();
 
 /**
  * Set the fields of the given AVFrame to default values.
  *
  * @param frame The AVFrame of which the fields should be set to default values.
+ *
+ * @deprecated use av_frame_unref()
  */
-public static native void avcodec_get_frame_defaults(AVFrame frame);
+public static native @Deprecated void avcodec_get_frame_defaults(AVFrame frame);
 
 /**
  * Free the frame and any dynamically allocated objects in it,
@@ -3854,11 +3983,11 @@ public static native void avcodec_get_frame_defaults(AVFrame frame);
  * @warning this function does NOT free the data buffers themselves
  * (it does not know how, since they might have been allocated with
  *  a custom get_buffer()).
+ *
+ * @deprecated use av_frame_free()
  */
-public static native void avcodec_free_frame(@Cast("AVFrame**") PointerPointer frame);
-public static native void avcodec_free_frame(@ByPtrPtr AVFrame frame);
-
-// #if FF_API_AVCODEC_OPEN
+public static native @Deprecated void avcodec_free_frame(@Cast("AVFrame**") PointerPointer frame);
+public static native @Deprecated void avcodec_free_frame(@ByPtrPtr AVFrame frame);
 // #endif
 
 /**
@@ -4056,6 +4185,29 @@ public static native int av_packet_merge_side_data(AVPacket pkt);
 
 public static native int av_packet_split_side_data(AVPacket pkt);
 
+/**
+ * Pack a dictionary for use in side_data.
+ *
+ * @param dict The dictionary to pack.
+ * @param size pointer to store the size of the returned data
+ * @return pointer to data if successful, NULL otherwise
+ */
+public static native @Cast("uint8_t*") BytePointer av_packet_pack_dictionary(AVDictionary dict, IntPointer size);
+public static native @Cast("uint8_t*") ByteBuffer av_packet_pack_dictionary(AVDictionary dict, IntBuffer size);
+public static native @Cast("uint8_t*") byte[] av_packet_pack_dictionary(AVDictionary dict, int[] size);
+/**
+ * Unpack a dictionary from side_data.
+ *
+ * @param data data from side_data
+ * @param size size of the data
+ * @param dict the metadata storage dictionary
+ * @return 0 on success, < 0 on failure
+ */
+public static native int av_packet_unpack_dictionary(@Cast("const uint8_t*") BytePointer data, int size, @Cast("AVDictionary**") PointerPointer dict);
+public static native int av_packet_unpack_dictionary(@Cast("const uint8_t*") BytePointer data, int size, @ByPtrPtr AVDictionary dict);
+public static native int av_packet_unpack_dictionary(@Cast("const uint8_t*") ByteBuffer data, int size, @ByPtrPtr AVDictionary dict);
+public static native int av_packet_unpack_dictionary(@Cast("const uint8_t*") byte[] data, int size, @ByPtrPtr AVDictionary dict);
+
 
 /**
  * Convenience function to free all the side data stored.
@@ -4156,14 +4308,19 @@ public static native @Deprecated int avcodec_default_reget_buffer(AVCodecContext
  */
 public static native int avcodec_default_get_buffer2(AVCodecContext s, AVFrame frame, int flags);
 
+// #if FF_API_EMU_EDGE
 /**
  * Return the amount of padding in pixels which the get_buffer callback must
  * provide around the edge of the image for codecs which do not have the
  * CODEC_FLAG_EMU_EDGE flag.
  *
  * @return Required padding in pixels.
+ *
+ * @deprecated CODEC_FLAG_EMU_EDGE is deprecated, so this function is no longer
+ * needed
  */
-public static native @Cast("unsigned") int avcodec_get_edge_width();
+public static native @Cast("unsigned") @Deprecated int avcodec_get_edge_width();
+// #endif
 
 /**
  * Modify width and height values so that they will result in a memory
@@ -4171,8 +4328,6 @@ public static native @Cast("unsigned") int avcodec_get_edge_width();
  * padding.
  *
  * May only be used if a codec with CODEC_CAP_DR1 has been opened.
- * If CODEC_FLAG_EMU_EDGE is not set, the dimensions must have been increased
- * according to avcodec_get_edge_width() before.
  */
 public static native void avcodec_align_dimensions(AVCodecContext s, IntPointer width, IntPointer height);
 public static native void avcodec_align_dimensions(AVCodecContext s, IntBuffer width, IntBuffer height);
@@ -4184,8 +4339,6 @@ public static native void avcodec_align_dimensions(AVCodecContext s, int[] width
  * line sizes are a multiple of the respective linesize_align[i].
  *
  * May only be used if a codec with CODEC_CAP_DR1 has been opened.
- * If CODEC_FLAG_EMU_EDGE is not set, the dimensions must have been increased
- * according to avcodec_get_edge_width() before.
  */
 public static native void avcodec_align_dimensions2(AVCodecContext s, IntPointer width, IntPointer height,
                                IntPointer linesize_align);
@@ -5318,12 +5471,19 @@ public static native @Cast("AVPixelFormat") int avcodec_default_get_format(AVCod
  * @}
  */
 
-public static native void avcodec_set_dimensions(AVCodecContext s, int width, int height);
+// #if FF_API_SET_DIMENSIONS
+/**
+ * @deprecated this function is not supposed to be used from outside of lavc
+ */
+public static native @Deprecated void avcodec_set_dimensions(AVCodecContext s, int width, int height);
+// #endif
 
 /**
  * Put a string representing the codec tag codec_tag in buf.
  *
+ * @param buf       buffer to place codec tag in
  * @param buf_size size in bytes of buf
+ * @param codec_tag codec tag to assign
  * @return the length of the string that would have been generated if
  * enough space had been available, excluding the trailing null
  */
@@ -5600,31 +5760,6 @@ public static native void av_bitstream_filter_close(AVBitStreamFilterContext bsf
 public static native AVBitStreamFilter av_bitstream_filter_next(AVBitStreamFilter f);
 
 /* memory */
-
-/**
- * Reallocate the given block if it is not large enough, otherwise do nothing.
- *
- * @see av_realloc
- */
-public static native Pointer av_fast_realloc(Pointer ptr, @Cast("unsigned int*") IntPointer size, @Cast("size_t") long min_size);
-public static native Pointer av_fast_realloc(Pointer ptr, @Cast("unsigned int*") IntBuffer size, @Cast("size_t") long min_size);
-public static native Pointer av_fast_realloc(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
-
-/**
- * Allocate a buffer, reusing the given one if large enough.
- *
- * Contrary to av_fast_realloc the current buffer contents might not be
- * preserved and on error the old buffer is freed, thus no special
- * handling to avoid memleaks is necessary.
- *
- * @param ptr pointer to pointer to already allocated buffer, overwritten with pointer to new buffer
- * @param size size of the buffer *ptr points to
- * @param min_size minimum size of *ptr buffer after returning, *ptr will be NULL and
- *                 *size 0 if an error occurred.
- */
-public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") IntPointer size, @Cast("size_t") long min_size);
-public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") IntBuffer size, @Cast("size_t") long min_size);
-public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
 
 /**
  * Same behaviour av_fast_malloc but the buffer has additional
@@ -5927,9 +6062,11 @@ public static final int
 
 /**
  * Set up DCT.
+ *
  * @param nbits           size of the input array:
  *                        (1 << nbits)     for DCT-II, DCT-III and DST-I
  *                        (1 << nbits) + 1 for DCT-I
+ * @param type            the type of transform
  *
  * @note the first element of the input of DST-I is ignored
  */

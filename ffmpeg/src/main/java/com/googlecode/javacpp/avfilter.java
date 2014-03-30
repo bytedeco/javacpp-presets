@@ -563,6 +563,12 @@ public static class AVFilterPad extends Pointer {
      */
     public native int needs_fifo(); public native AVFilterPad needs_fifo(int needs_fifo);
 
+    /**
+     * The filter expects writable frames from its input link,
+     * duplicating data buffers if needed.
+     *
+     * input pads only.
+     */
     public native int needs_writable(); public native AVFilterPad needs_writable(int needs_writable);
 }
 // #endif
@@ -1326,6 +1332,8 @@ public static native int avfilter_register(AVFilter filter);
  * @return     the filter definition, if any matching one is registered.
  *             NULL if none found.
  */
+// #if !FF_API_NOCONST_GET_NAME
+// #endif
 public static native AVFilter avfilter_get_by_name(@Cast("const char*") BytePointer name);
 public static native AVFilter avfilter_get_by_name(String name);
 
@@ -1937,10 +1945,17 @@ public static native int avfilter_graph_request_oldest(AVFilterGraph graph);
 
 /**
  * @file
+ * @ingroup lavfi_buffersink
  * memory buffer sink API for audio and video
  */
 
 // #include "avfilter.h"
+
+/**
+ * @defgroup lavfi_buffersink Buffer sink API
+ * @ingroup lavfi
+ * @{
+ */
 
 // #if FF_API_AVFILTERBUFFER
 /**
@@ -2105,8 +2120,12 @@ public static native @ByVal AVRational av_buffersink_get_frame_rate(AVFilterCont
  * @param frame pointer to an allocated frame that will be filled with data.
  *              The data must be freed using av_frame_unref() / av_frame_free()
  *
- * @return >= 0 in case of success, a negative AVERROR code in case of
- *         failure.
+ * @return
+ *         - >= 0 if a frame was successfully returned.
+ *         - AVERROR(EAGAIN) if no frames are available at this point; more
+ *           input frames must be added to the filtergraph to get more output.
+ *         - AVERROR_EOF if there will be no more output frames on this sink.
+ *         - A different negative AVERROR code in other failure cases.
  */
 public static native int av_buffersink_get_frame(AVFilterContext ctx, AVFrame frame);
 
@@ -2121,10 +2140,17 @@ public static native int av_buffersink_get_frame(AVFilterContext ctx, AVFrame fr
  *              frame will contain exactly nb_samples audio samples, except at
  *              the end of stream, when it can contain less than nb_samples.
  *
+ * @return The return codes have the same meaning as for
+ *         av_buffersink_get_samples().
+ *
  * @warning do not mix this function with av_buffersink_get_frame(). Use only one or
  * the other with a single sink, not both.
  */
 public static native int av_buffersink_get_samples(AVFilterContext ctx, AVFrame frame, int nb_samples);
+
+/**
+ * @}
+ */
 
 // #endif /* AVFILTER_BUFFERSINK_H */
 
@@ -2155,11 +2181,18 @@ public static native int av_buffersink_get_samples(AVFilterContext ctx, AVFrame 
 
 /**
  * @file
+ * @ingroup lavfi_buffersrc
  * Memory buffer source API.
  */
 
 // #include "libavcodec/avcodec.h"
 // #include "avfilter.h"
+
+/**
+ * @defgroup lavfi_buffersrc Buffer source API
+ * @ingroup lavfi
+ * @{
+ */
 
 /** enum  */
 public static final int
@@ -2211,21 +2244,22 @@ public static native @Cast("unsigned") int av_buffersrc_get_nb_failed_requests(A
 
 // #if FF_API_AVFILTERBUFFER
 /**
- * Add a buffer to the filtergraph s.
+ * Add a buffer to a filtergraph.
  *
+ * @param ctx an instance of the buffersrc filter
  * @param buf buffer containing frame data to be passed down the filtergraph.
  * This function will take ownership of buf, the user must not free it.
  * A NULL buf signals EOF -- i.e. no more frames will be sent to this filter.
  *
  * @deprecated use av_buffersrc_write_frame() or av_buffersrc_add_frame()
  */
-public static native @Deprecated int av_buffersrc_buffer(AVFilterContext s, AVFilterBufferRef buf);
+public static native @Deprecated int av_buffersrc_buffer(AVFilterContext ctx, AVFilterBufferRef buf);
 // #endif
 
 /**
  * Add a frame to the buffer source.
  *
- * @param s an instance of the buffersrc filter.
+ * @param ctx   an instance of the buffersrc filter
  * @param frame frame to be added. If the frame is reference counted, this
  * function will make a new reference to it. Otherwise the frame data will be
  * copied.
@@ -2235,12 +2269,12 @@ public static native @Deprecated int av_buffersrc_buffer(AVFilterContext s, AVFi
  * This function is equivalent to av_buffersrc_add_frame_flags() with the
  * AV_BUFFERSRC_FLAG_KEEP_REF flag.
  */
-public static native int av_buffersrc_write_frame(AVFilterContext s, @Const AVFrame frame);
+public static native int av_buffersrc_write_frame(AVFilterContext ctx, @Const AVFrame frame);
 
 /**
  * Add a frame to the buffer source.
  *
- * @param s an instance of the buffersrc filter.
+ * @param ctx   an instance of the buffersrc filter
  * @param frame frame to be added. If the frame is reference counted, this
  * function will take ownership of the reference(s) and reset the frame.
  * Otherwise the frame data will be copied. If this function returns an error,
@@ -2275,6 +2309,10 @@ public static native int av_buffersrc_add_frame(AVFilterContext ctx, AVFrame fra
 public static native int av_buffersrc_add_frame_flags(AVFilterContext buffer_src,
                                  AVFrame frame, int flags);
 
+
+/**
+ * @}
+ */
 
 // #endif /* AVFILTER_BUFFERSRC_H */
 

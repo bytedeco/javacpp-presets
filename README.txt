@@ -25,7 +25,7 @@ To rebuild the source code on the Java side, please note that the project files 
 
 Each child module in turn relies on its corresponding native library being installed in the directory specified in its `.java` configuration file or, by default, on the native system in `/usr/local/`, or `C:/MinGW/local/` (under Windows), or `${platform.root}/../` (for Android):
  * OpenCV 2.4.8  http://opencv.org/downloads.html
- * FFmpeg 2.1.x  http://ffmpeg.org/download.html
+ * FFmpeg 2.2.x  http://ffmpeg.org/download.html
  * PGR FlyCapture 1.7 or newer (Windows only)  http://www.ptgrey.com/products/pgrflycapture/
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
  * libfreenect 0.4  https://github.com/OpenKinect/libfreenect
@@ -102,7 +102,7 @@ Please post your suggestions and patches [http://code.google.com/p/javacpp/issue
  * Updated `cppbuild.sh` scripts with support for the "android-x86" platform (issue javacv:411), thanks to Xavier Hallade
  * Added presets for PGR FlyCapture 1.7
  * Fixed compilation errors on Android, Mac OS X, and Windows
- * Upgraded to FFmpeg 2.1.4, libdc1394 2.2.2, and libfreenect 0.4
+ * Upgraded to FFmpeg 2.2, libdc1394 2.2.2, and libfreenect 0.4
  * Introduced build scripts, based on the CPPJARs package of JavaCV, to install native C/C++ libraries
  * Ported various helper classes and methods from JavaCV
  * Inserted missing dependency entries in the `pom.xml` files of the child modules
