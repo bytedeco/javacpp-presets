@@ -118,16 +118,16 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         public AbstractArray() { }
         public AbstractArray(Pointer p) { super(p); }
 
-        protected abstract int arrayChannels();
-        protected abstract int arrayDepth();
-        protected abstract int arrayOrigin();
-        protected abstract void arrayOrigin(int origin);
-        protected abstract int arrayWidth();
-        protected abstract int arrayHeight();
-        protected abstract IplROI arrayROI();
-        protected abstract int arraySize();
-        protected abstract BytePointer arrayData();
-        protected abstract int arrayStep();
+        public abstract int arrayChannels();
+        public abstract int arrayDepth();
+        public abstract int arrayOrigin();
+        public abstract void arrayOrigin(int origin);
+        public abstract int arrayWidth();
+        public abstract int arrayHeight();
+        public abstract IplROI arrayROI();
+        public abstract int arraySize();
+        public abstract BytePointer arrayData();
+        public abstract int arrayStep();
 
         protected BufferedImage cloneBufferedImage() {
             if (bufferedImage == null) {
@@ -790,16 +790,16 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         public CvArr() { }
         public CvArr(Pointer p) { super(p); }
 
-        @Override protected int arrayChannels()          { throw new UnsupportedOperationException(); }
-        @Override protected int arrayDepth()             { throw new UnsupportedOperationException(); }
-        @Override protected int arrayOrigin()            { throw new UnsupportedOperationException(); }
-        @Override protected void arrayOrigin(int origin) { throw new UnsupportedOperationException(); }
-        @Override protected int arrayWidth()             { throw new UnsupportedOperationException(); }
-        @Override protected int arrayHeight()            { throw new UnsupportedOperationException(); }
-        @Override protected IplROI arrayROI()            { throw new UnsupportedOperationException(); }
-        @Override protected int arraySize()              { throw new UnsupportedOperationException(); }
-        @Override protected BytePointer arrayData()      { throw new UnsupportedOperationException(); }
-        @Override protected int arrayStep()              { throw new UnsupportedOperationException(); }
+        @Override public int arrayChannels()          { throw new UnsupportedOperationException(); }
+        @Override public int arrayDepth()             { throw new UnsupportedOperationException(); }
+        @Override public int arrayOrigin()            { throw new UnsupportedOperationException(); }
+        @Override public void arrayOrigin(int origin) { throw new UnsupportedOperationException(); }
+        @Override public int arrayWidth()             { throw new UnsupportedOperationException(); }
+        @Override public int arrayHeight()            { throw new UnsupportedOperationException(); }
+        @Override public IplROI arrayROI()            { throw new UnsupportedOperationException(); }
+        @Override public int arraySize()              { throw new UnsupportedOperationException(); }
+        @Override public BytePointer arrayData()      { throw new UnsupportedOperationException(); }
+        @Override public int arrayStep()              { throw new UnsupportedOperationException(); }
     }
 
     @Name("CvArr*")
@@ -1034,16 +1034,16 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         public abstract BytePointer imageData();
         public abstract int widthStep();
 
-        @Override protected int arrayChannels() { return nChannels(); }
-        @Override protected int arrayDepth() { return depth(); }
-        @Override protected int arrayOrigin() { return origin(); }
-        @Override protected void arrayOrigin(int origin) { origin(origin); }
-        @Override protected int arrayWidth() { return width(); }
-        @Override protected int arrayHeight() { return height(); }
-        @Override protected IplROI arrayROI() { return roi(); }
-        @Override protected int arraySize() { return imageSize(); }
-        @Override protected BytePointer arrayData() { return imageData(); }
-        @Override protected int arrayStep() { return widthStep(); }
+        @Override public int arrayChannels() { return nChannels(); }
+        @Override public int arrayDepth() { return depth(); }
+        @Override public int arrayOrigin() { return origin(); }
+        @Override public void arrayOrigin(int origin) { origin(origin); }
+        @Override public int arrayWidth() { return width(); }
+        @Override public int arrayHeight() { return height(); }
+        @Override public IplROI arrayROI() { return roi(); }
+        @Override public int arraySize() { return imageSize(); }
+        @Override public BytePointer arrayData() { return imageData(); }
+        @Override public int arrayStep() { return widthStep(); }
 
         public CvMat asCvMat() {
             CvMat mat = new CvMat();
@@ -1191,8 +1191,8 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
             return cols()*elemSize()*channels() + (rows > 1 ? step()*(rows-1) : 0);
         }
 
-        @Override protected int arrayChannels() { return channels(); }
-        @Override protected int arrayDepth() {
+        @Override public int arrayChannels() { return channels(); }
+        @Override public int arrayDepth() {
             switch (depth()) {
                 case CV_8U : return IPL_DEPTH_8U;
                 case CV_8S : return IPL_DEPTH_8S;
@@ -1205,14 +1205,14 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
             }
             return -1;
         }
-        @Override protected int arrayOrigin() { return 0; }
-        @Override protected void arrayOrigin(int origin) { }
-        @Override protected int arrayWidth() { return cols(); }
-        @Override protected int arrayHeight() { return rows(); }
-        @Override protected IplROI arrayROI() { return null; }
-        @Override protected int arraySize() { return size(); }
-        @Override protected BytePointer arrayData() { return data_ptr(); }
-        @Override protected int arrayStep() { return step(); }
+        @Override public int arrayOrigin() { return 0; }
+        @Override public void arrayOrigin(int origin) { }
+        @Override public int arrayWidth() { return cols(); }
+        @Override public int arrayHeight() { return rows(); }
+        @Override public IplROI arrayROI() { return null; }
+        @Override public int arraySize() { return size(); }
+        @Override public BytePointer arrayData() { return data_ptr(); }
+        @Override public int arrayStep() { return step(); }
 
         public void reset() {
             fullSize = 0;
@@ -2345,8 +2345,8 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         public abstract int size(int i);
         public abstract int step(int i);
 
-        protected int arrayChannels() { return channels(); }
-        protected int arrayDepth() {
+        @Override public int arrayChannels() { return channels(); }
+        @Override public int arrayDepth() {
             switch (depth()) {
                 case CV_8U : return IPL_DEPTH_8U;
                 case CV_8S : return IPL_DEPTH_8S;
@@ -2359,14 +2359,14 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
             }
             return -1;
         }
-        protected int arrayOrigin() { return 0; }
-        protected void arrayOrigin(int origin) { }
-        protected int arrayWidth() { return cols(); }
-        protected int arrayHeight() { return rows(); }
-        protected IplROI arrayROI() { return null; }
-        protected int arraySize() { return step(0)*size(0); }
-        protected BytePointer arrayData() { return data(); }
-        protected int arrayStep() { return step(0); }
+        @Override public int arrayOrigin() { return 0; }
+        @Override public void arrayOrigin(int origin) { }
+        @Override public int arrayWidth() { return cols(); }
+        @Override public int arrayHeight() { return rows(); }
+        @Override public IplROI arrayROI() { return null; }
+        @Override public int arraySize() { return step(0)*size(0); }
+        @Override public BytePointer arrayData() { return data(); }
+        @Override public int arrayStep() { return step(0); }
 
         public static final Mat EMPTY = new Mat();
     }
