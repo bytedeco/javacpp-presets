@@ -171,6 +171,7 @@ public class opencv_core implements Parser.InfoMapper {
                .put(new Parser.Info("cv::Rect_<int>").pointerTypes("Rect").base("IntPointer"))
                .put(new Parser.Info("cv::Rect_<float>").pointerTypes("Rectf").base("FloatPointer"))
                .put(new Parser.Info("cv::Rect_<double>").pointerTypes("Rectd").base("DoublePointer"))
+               .put(new Parser.Info("cv::RotatedRect").pointerTypes("RotatedRect").base("FloatPointer"))
                .put(new Parser.Info("cv::Scalar_<double>").pointerTypes("Scalar").base("DoublePointer"))
 
                .put(new Parser.Info("cv::Vec2i").pointerTypes("Point"))

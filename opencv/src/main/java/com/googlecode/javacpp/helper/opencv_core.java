@@ -1539,7 +1539,7 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         }
     }
 
-    public static abstract class AbstractCvRect extends Pointer {
+    public static abstract class AbstractCvRect extends IntPointer {
         public AbstractCvRect() { }
         public AbstractCvRect(Pointer p) { super(p); }
 
@@ -1571,7 +1571,7 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         }
     }
 
-    public static abstract class AbstractCvPoint extends Pointer {
+    public static abstract class AbstractCvPoint extends IntPointer {
         public AbstractCvPoint() { }
         public AbstractCvPoint(Pointer p) { super(p); }
 
@@ -1593,11 +1593,11 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         public abstract int x(); public abstract CvPoint x(int x);
         public abstract int y(); public abstract CvPoint y(int y);
 
-        public int[] get() {
-            int[] pts = new int[capacity == 0 ? 2 : 2*capacity];
-            get(pts);
-            return pts;
-        }
+//        public int[] get() {
+//            int[] pts = new int[capacity == 0 ? 2 : 2*capacity];
+//            get(pts);
+//            return pts;
+//        }
         public CvPoint get(int[] pts) {
             return get(pts, 0, pts.length);
         }
@@ -1607,14 +1607,14 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
                 pts[offset + i*2  ] = x();
                 pts[offset + i*2+1] = y();
             }
-            return position(0);
+            return (CvPoint)position(0);
         }
 
         public final CvPoint put(int[] pts, int offset, int length) {
             for (int i = 0; i < length/2; i++) {
                 position(i); put(pts[offset + i*2], pts[offset + i*2+1]);
             }
-            return position(0);
+            return (CvPoint)position(0);
         }
         public final CvPoint put(int ... pts) {
             return put(pts, 0, pts.length);
@@ -1668,7 +1668,7 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         public static final CvPoint ZERO = new CvPoint().x(0).y(0);
     }
 
-    public static abstract class AbstractCvPoint2D32f extends Pointer {
+    public static abstract class AbstractCvPoint2D32f extends FloatPointer {
         public AbstractCvPoint2D32f() { }
         public AbstractCvPoint2D32f(Pointer p) { super(p); }
 
@@ -1683,11 +1683,11 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         public abstract float x(); public abstract CvPoint2D32f x(float x);
         public abstract float y(); public abstract CvPoint2D32f y(float y);
 
-        public double[] get() {
-            double[] pts = new double[capacity == 0 ? 2 : 2*capacity];
-            get(pts);
-            return pts;
-        }
+//        public double[] get() {
+//            double[] pts = new double[capacity == 0 ? 2 : 2*capacity];
+//            get(pts);
+//            return pts;
+//        }
         public CvPoint2D32f get(double[] pts) {
             return get(pts, 0, pts.length);
         }
@@ -1697,14 +1697,14 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
                 pts[offset + i*2  ] = x();
                 pts[offset + i*2+1] = y();
             }
-            return position(0);
+            return (CvPoint2D32f)position(0);
         }
 
         public final CvPoint2D32f put(double[] pts, int offset, int length) {
             for (int i = 0; i < length/2; i++) {
                 position(i); put(pts[offset + i*2], pts[offset + i*2+1]);
             }
-            return position(0);
+            return (CvPoint2D32f)position(0);
         }
         public final CvPoint2D32f put(double ... pts) {
             return put(pts, 0, pts.length);
@@ -1742,7 +1742,7 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         }
     }
 
-    public static abstract class AbstractCvPoint3D32f extends Pointer {
+    public static abstract class AbstractCvPoint3D32f extends FloatPointer {
         public AbstractCvPoint3D32f() { }
         public AbstractCvPoint3D32f(Pointer p) { super(p); }
 
@@ -1758,11 +1758,11 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         public abstract float y(); public abstract CvPoint3D32f y(float y);
         public abstract float z(); public abstract CvPoint3D32f z(float z);
 
-        public double[] get() {
-            double[] pts = new double[capacity == 0 ? 3 : 3*capacity];
-            get(pts);
-            return pts;
-        }
+//        public double[] get() {
+//            double[] pts = new double[capacity == 0 ? 3 : 3*capacity];
+//            get(pts);
+//            return pts;
+//        }
         public CvPoint3D32f get(double[] pts) {
             return get(pts, 0, pts.length);
         }
@@ -1773,14 +1773,14 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
                 pts[offset + i*3+1] = y();
                 pts[offset + i*3+2] = z();
             }
-            return position(0);
+            return (CvPoint3D32f)position(0);
         }
 
         public final CvPoint3D32f put(double[] pts, int offset, int length) {
             for (int i = 0; i < length/3; i++) {
                 position(i); put(pts[offset + i*3], pts[offset + i*3+1], pts[offset + i*3+2]);
             }
-            return position(0);
+            return (CvPoint3D32f)position(0);
         }
         public final CvPoint3D32f put(double ... pts) {
             return put(pts, 0, pts.length);
@@ -1818,7 +1818,7 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         }
     }
 
-    public static abstract class AbstractCvPoint2D64f extends Pointer {
+    public static abstract class AbstractCvPoint2D64f extends DoublePointer {
         public AbstractCvPoint2D64f() { }
         public AbstractCvPoint2D64f(Pointer p) { super(p); }
 
@@ -1833,11 +1833,11 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         public abstract double x(); public abstract CvPoint2D64f x(double x);
         public abstract double y(); public abstract CvPoint2D64f y(double y);
 
-        public double[] get() {
-            double[] pts = new double[capacity == 0 ? 2 : 2*capacity];
-            get(pts);
-            return pts;
-        }
+//        public double[] get() {
+//            double[] pts = new double[capacity == 0 ? 2 : 2*capacity];
+//            get(pts);
+//            return pts;
+//        }
         public CvPoint2D64f get(double[] pts) {
             return get(pts, 0, pts.length);
         }
@@ -1847,14 +1847,14 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
                 pts[offset + i*2  ] = x();
                 pts[offset + i*2+1] = y();
             }
-            return position(0);
+            return (CvPoint2D64f)position(0);
         }
 
         public final CvPoint2D64f put(double[] pts, int offset, int length) {
             for (int i = 0; i < length/2; i++) {
                 position(i); put(pts[offset + i*2], pts[offset + i*2+1]);
             }
-            return position(0);
+            return (CvPoint2D64f)position(0);
         }
         public final CvPoint2D64f put(double ... pts) {
             return put(pts, 0, pts.length);
@@ -1892,7 +1892,7 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         }
     }
 
-    public static abstract class AbstractCvPoint3D64f extends Pointer {
+    public static abstract class AbstractCvPoint3D64f extends DoublePointer {
         public AbstractCvPoint3D64f() { }
         public AbstractCvPoint3D64f(Pointer p) { super(p); }
 
@@ -1908,11 +1908,11 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         public abstract double y(); public abstract CvPoint3D64f y(double y);
         public abstract double z(); public abstract CvPoint3D64f z(double z);
 
-        public double[] get() {
-            double[] pts = new double[capacity == 0 ? 3 : 3*capacity];
-            get(pts);
-            return pts;
-        }
+//        public double[] get() {
+//            double[] pts = new double[capacity == 0 ? 3 : 3*capacity];
+//            get(pts);
+//            return pts;
+//        }
         public CvPoint3D64f get(double[] pts) {
             return get(pts, 0, pts.length);
         }
@@ -1923,14 +1923,14 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
                 pts[offset + i*3+1] = y();
                 pts[offset + i*3+2] = z();
             }
-            return position(0);
+            return (CvPoint3D64f)position(0);
         }
 
         public final CvPoint3D64f put(double[] pts, int offset, int length) {
             for (int i = 0; i < length/3; i++) {
                 position(i); put(pts[offset + i*3], pts[offset + i*3+1], pts[offset + i*3+2]);
             }
-            return position(0);
+            return (CvPoint3D64f)position(0);
         }
         public final CvPoint3D64f put(double ... pts) {
             return put(pts, 0, pts.length);
@@ -1968,7 +1968,7 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         }
     }
 
-    public static abstract class AbstractCvSize extends Pointer {
+    public static abstract class AbstractCvSize extends IntPointer {
         public AbstractCvSize() { }
         public AbstractCvSize(Pointer p) { super(p); }
 
@@ -1999,7 +1999,7 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         public static final CvSize ZERO = new CvSize().width(0).height(0);
     }
 
-    public static abstract class AbstractCvSize2D32f extends Pointer {
+    public static abstract class AbstractCvSize2D32f extends FloatPointer {
         public AbstractCvSize2D32f() { }
         public AbstractCvSize2D32f(Pointer p) { super(p); }
 
@@ -2029,7 +2029,7 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         }
     }
 
-    public static abstract class AbstractCvBox2D extends Pointer {
+    public static abstract class AbstractCvBox2D extends FloatPointer {
         public AbstractCvBox2D() { }
         public AbstractCvBox2D(Pointer p) { super(p); }
 
@@ -2060,7 +2060,7 @@ public class opencv_core extends com.googlecode.javacpp.presets.opencv_core {
         }
     }
 
-    public static abstract class AbstractCvScalar extends Pointer {
+    public static abstract class AbstractCvScalar extends DoublePointer {
         public AbstractCvScalar() { }
         public AbstractCvScalar(Pointer p) { super(p); }
 

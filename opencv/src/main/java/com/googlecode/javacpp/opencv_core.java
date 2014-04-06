@@ -5782,7 +5782,7 @@ public static final int DFT_INVERSE= 1, DFT_SCALE= 2, DFT_ROWS= 4, DFT_COMPLEX_O
   Each rectangle is described by the center point (mass center), length of each side
   (represented by cv::Size2f structure) and the rotation angle in degrees.
 */
-@Namespace("cv") @NoOffset public static class RotatedRect extends Pointer {
+@Namespace("cv") @NoOffset public static class RotatedRect extends FloatPointer {
     static { Loader.load(); }
     public RotatedRect(Pointer p) { super(p); }
     public RotatedRect(int size) { allocateArray(size); }

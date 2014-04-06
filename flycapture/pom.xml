@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>flycapture</artifactId>
-  <version>1.7.17</version>
+  <version>1.7.17-${project.parent.version}</version>
   <packaging>jar</packaging>
   <name>JavaCPP Presets for PGR FlyCapture</name>
 

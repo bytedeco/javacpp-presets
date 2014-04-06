@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>libfreenect</artifactId>
-  <version>0.4</version>
+  <version>0.4-${project.parent.version}</version>
   <packaging>jar</packaging>
   <name>JavaCPP Presets for libfreenect</name>
 

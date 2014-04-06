@@ -10,7 +10,7 @@
   </parent>
 
   <artifactId>videoinput</artifactId>
-  <version>0.200</version>
+  <version>0.200-${project.parent.version}</version>
   <packaging>jar</packaging>
   <name>JavaCPP Presets for videoInput</name>
 

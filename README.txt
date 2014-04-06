@@ -1,14 +1,14 @@
 =JavaCPP Presets=
 
 ==Introduction==
-The JavaCPP Presets module contains Java configuration and interface classes for widely used C/C++ libraries. The configuration files in the `com.googlecode.javacpp.presets` package are used by the `Parser` to create from C/C++ header files the Java interface files targeting the `com.googlecode.javacpp` package, which is turn are used by the `Generator` and the native C++ compiler to produce the required JNI libraries.
+The JavaCPP Presets module contains Java configuration and interface classes for widely used C/C++ libraries. The configuration files in the `com.googlecode.javacpp.presets` package are used by the `Parser` to create from C/C++ header files the Java interface files targeting the `com.googlecode.javacpp` package, which is turn are used by the `Generator` and the native C++ compiler to produce the required JNI libraries. Moreover, utility classes make their functionality easier to use on the Java platform, including Android.
 
 More details to come shortly... In the meantime, please feel free to ask questions on [http://groups.google.com/group/javacpp-project the mailing list].
 
 
 ==Required Software==
-To use JavaCPP Presets, you will need to download and install the following software:
- * An implementation of Java SE 6 or 7
+To use the JavaCPP Presets, you will need to download and install the following software:
+ * An implementation of Java SE 6 or newer
   * OpenJDK  http://openjdk.java.net/install/  or
   * Sun JDK  http://www.oracle.com/technetwork/java/javase/downloads/  or
   * IBM JDK  http://www.ibm.com/developerworks/java/jdk/  or
@@ -23,7 +23,7 @@ To rebuild the source code on the Java side, please note that the project files 
  * Maven 2 or 3  http://maven.apache.org/download.html
  * JavaCPP 0.8  http://code.google.com/p/javacpp/
 
-Each child module in turn relies on its corresponding native library being installed in the directory specified in its `.java` configuration file or, by default, on the native system in `/usr/local/`, or `C:/MinGW/local/` (under Windows), or `${platform.root}/../` (for Android):
+Each child module in turn relies on its corresponding native library being installed in the directory specified in its `.java` configuration file or, by default, on the native system in `/usr/local/`, or `C:/MinGW/local/` (under Windows), or `${platform.root}/../local/` (for Android):
  * OpenCV 2.4.8  http://opencv.org/downloads.html
  * FFmpeg 2.2.x  http://ffmpeg.org/download.html
  * PGR FlyCapture 1.7 or newer (Windows only)  http://www.ptgrey.com/products/pgrflycapture/
@@ -32,7 +32,7 @@ Each child module in turn relies on its corresponding native library being insta
  * videoInput 0.200  https://github.com/ofTheo/videoInput/tree/update2013
  * ARToolKitPlus 2.3.0  https://launchpad.net/artoolkitplus
 
-We can accomplished that with the included [#CPPBuild_Scripts], explained below. Once everything installed, simply execute
+We can accomplish that with the included [#CPPBuild_Scripts], explained below. Once everything installed, simply execute
 {{{
     $ mvn install --projects opencv,ffmpeg,flycapture,libdc1394,libfreenect,videoinput,artoolkitplus,distribution
 }}}
@@ -42,7 +42,7 @@ in the root directory, by specifying only the desired child modules in the comma
 ==CPPBuild Scripts==
 Required software to build native libraries on the C/C++ side:
  * A recent version of Linux, Mac OS X, or Windows with MSYS and the Windows SDK
- * Android NDK r9d  http://developer.android.com/sdk/ndk/
+ * Android NDK r7 or newer  http://developer.android.com/sdk/ndk/
 
 Then, execute:
 {{{
@@ -70,11 +70,11 @@ Thanks to Jose Gómez for testing this out!
 ==Quick Start==
 Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, `flycapture*.jar`, `libdc1394*.jar`, `libfreenect*.jar`, `videoinput*.jar`, and `artoolkitplus*.jar`), in addition to `javacpp.jar`, somewhere in your CLASSPATH, or point your `pom.xml` file to the Maven repository http://maven2.javacpp.googlecode.com/git/, when the binary files are present. The JAR files found in these artifacts are meant to be used with [http://code.google.com/p/javacpp/ JavaCPP]. They were built on Fedora 20, so they may not work on all distributions of Linux, especially older ones. The binaries for Android were compiled for ARMv7 processors featuring an FPU, so they will not work on ancient devices such as the HTC Magic or some others with an ARMv6 CPU. Here are some more specific instructions for common cases:
 
-NetBeans (Java SE 6 or 7):
+NetBeans (Java SE 6 or newer):
  # In the Projects window, right-click the Libraries node of your project, and select "Add JAR/Folder...".
  # Locate the JAR files, select them, and click OK.
 
-Eclipse (Java SE 6 or 7):
+Eclipse (Java SE 6 or newer):
  # Navigate to Project > Properties > Java Build Path > Libraries and click "Add External JARs...".
  # Locate the JAR files, select them, and click OK.
 
@@ -84,9 +84,11 @@ Eclipse (Android 2.2 or newer):
  # Copy `javacpp.jar`, `opencv.jar`, `ffmpeg.jar`, and `artoolkitplus.jar` into the newly created "libs" folder.
  # Extract all the `*.so` files from `opencv-android-arm.jar`, `ffmpeg-android-arm.jar`, and `artoolkitplus-android-arm.jar` directly into the newly created "libs/armeabi" folder, without creating any of the subdirectories found in the JAR files.
  # Navigate to Project > Properties > Java Build Path > Libraries and click "Add JARs...".
- # Select all of `javacpp.jar`, `ffmpeg.jar`, and `artoolkitplus.jar` from the newly created "libs" folder.
+ # Select all of `javacpp.jar`, `opencv.jar`, `ffmpeg.jar`, and `artoolkitplus.jar` from the newly created "libs" folder.
 
-After that, we can access almost transparently the corresponding C/C++ APIs through the interface classes found in the `com.googlecode.javacpp` package. Indeed, the `Parser` translates the code comments from the C/C++ header files into the Java interface files, (almost) ready to be consumed by Javadoc.
+After that, we can access almost transparently the corresponding C/C++ APIs through the interface classes found in the `com.googlecode.javacpp` package. Indeed, the `Parser` translates the code comments from the C/C++ header files into the Java interface files, (almost) ready to be consumed by Javadoc. However, since their translation still leaves to be desired, one may wish to refer to the original documentation pages. For instance, the ones for OpenCV and FFmpeg can be found online at:
+ * [http://docs.opencv.org/ OpenCV documentation]
+ * [http://ffmpeg.org/doxygen/ FFmpeg documentation]
 
 
 ==How Can I Help?==
@@ -99,6 +101,7 @@ Please post your suggestions and patches [http://code.google.com/p/javacpp/issue
 
 ==Changes==
 
+ * Appended the version of the parent artifact to the ones of the child modules, in an effort to avoid conflicts
  * Updated `cppbuild.sh` scripts with support for the "android-x86" platform (issue javacv:411), thanks to Xavier Hallade
  * Added presets for PGR FlyCapture 1.7
  * Fixed compilation errors on Android, Mac OS X, and Windows
