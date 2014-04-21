@@ -4,7 +4,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 if [[ $PLATFORM == windows* ]]; then
-    FFMPEG_VERSION=2.2
+    FFMPEG_VERSION=2.2.1
     download http://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-$FFMPEG_VERSION-win32-dev.7z ffmpeg-$FFMPEG_VERSION-win32-dev.7z
     download http://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-$FFMPEG_VERSION-win64-dev.7z ffmpeg-$FFMPEG_VERSION-win64-dev.7z
     download http://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-$FFMPEG_VERSION-win32-shared.7z ffmpeg-$FFMPEG_VERSION-win32-shared.7z
@@ -15,7 +15,7 @@ if [[ $PLATFORM == windows* ]]; then
     mkdir -p $INSTALL_DIR/include
     unzip -o msinttypes-r26.zip -d $INSTALL_DIR/include
 else
-    FFMPEG_VERSION=2.2
+    FFMPEG_VERSION=2.2.1
     download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
     download ftp://ftp.videolan.org/pub/videolan/x264/snapshots/last_stable_x264.tar.bz2 last_stable_x264.tar.bz2
 
@@ -74,12 +74,12 @@ case $PLATFORM in
         make -j4
         sudo make install
         BADPATH=/usr/local/lib
-        LIBS="libavcodec.55.dylib libavdevice.55.dylib libavfilter.3.dylib libavformat.55.dylib libavutil.52.dylib libpostproc.52.dylib libswresample.0.dylib libswscale.2.dylib"
+        LIBS="libavcodec.55.dylib libavdevice.55.dylib libavfilter.4.dylib libavformat.55.dylib libavutil.52.dylib libpostproc.52.dylib libswresample.0.dylib libswscale.2.dylib"
         for f in $LIBS; do sudo install_name_tool $BADPATH/$f -id @rpath/$f \
             -add_rpath /usr/local/lib/ -add_rpath /opt/local/lib/ -add_rpath @loader_path/. \
             -change $BADPATH/libavcodec.55.dylib @rpath/libavcodec.55.dylib \
             -change $BADPATH/libavdevice.55.dylib @rpath/libavdevice.55.dylib \
-            -change $BADPATH/libavfilter.3.dylib @rpath/libavfilter.3.dylib \
+            -change $BADPATH/libavfilter.4.dylib @rpath/libavfilter.4.dylib \
             -change $BADPATH/libavformat.55.dylib @rpath/libavformat.55.dylib \
             -change $BADPATH/libavutil.52.dylib @rpath/libavutil.52.dylib \
             -change $BADPATH/libpostproc.52.dylib @rpath/libpostproc.52.dylib \
@@ -91,7 +91,7 @@ case $PLATFORM in
         7za x -y ffmpeg-$FFMPEG_VERSION-win32-shared.7z
         patch -Np1 -d ffmpeg-$FFMPEG_VERSION-win32-dev/ < ../ffmpeg-$FFMPEG_VERSION-win32-dev.patch
         # http://ffmpeg.org/platform.html#Linking-to-FFmpeg-with-Microsoft-Visual-C_002b_002b
-        LIBS=(avcodec-55 avdevice-55 avfilter-3 avformat-55 avutil-52 postproc-52 swresample-0 swscale-2)
+        LIBS=(avcodec-55 avdevice-55 avfilter-4 avformat-55 avutil-52 postproc-52 swresample-0 swscale-2)
         for LIB in ${LIBS[@]}; do
             lib /def:ffmpeg-$FFMPEG_VERSION-win32-dev/lib/$LIB.def /out:ffmpeg-$FFMPEG_VERSION-win32-dev/lib/$LIB.lib /machine:x86
         done
@@ -107,7 +107,7 @@ case $PLATFORM in
         7za x -y ffmpeg-$FFMPEG_VERSION-win64-shared.7z
         patch -Np1 -d ffmpeg-$FFMPEG_VERSION-win64-dev/ < ../ffmpeg-$FFMPEG_VERSION-win64-dev.patch
         # http://ffmpeg.org/platform.html#Linking-to-FFmpeg-with-Microsoft-Visual-C_002b_002b
-        LIBS=(avcodec-55 avdevice-55 avfilter-3 avformat-55 avutil-52 postproc-52 swresample-0 swscale-2)
+        LIBS=(avcodec-55 avdevice-55 avfilter-4 avformat-55 avutil-52 postproc-52 swresample-0 swscale-2)
         for LIB in ${LIBS[@]}; do
             lib /def:ffmpeg-$FFMPEG_VERSION-win64-dev/lib/$LIB.def /out:ffmpeg-$FFMPEG_VERSION-win64-dev/lib/$LIB.lib /machine:x64
         done

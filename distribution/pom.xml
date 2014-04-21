@@ -4,11 +4,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>com.googlecode.javacpp.presets</groupId>
+    <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
     <version>0.8-SNAPSHOT</version>
   </parent>
 
+  <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>distribution</artifactId>
   <packaging>pom</packaging>
   <name>JavaCPP Presets Distribution</name>

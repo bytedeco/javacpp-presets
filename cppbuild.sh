@@ -87,14 +87,14 @@ fi
 for PROJECT in ${PROJECTS[@]}; do
     case $OPERATION in
         install)
-            echo "Installing $PROJECT"
+            echo "Installing \"$PROJECT\""
             mkdir $PROJECT/cppbuild
             cd $PROJECT/cppbuild
             source ../cppbuild.sh
             cd ../..
             ;;
         clean)
-            echo "Cleaning $PROJECT"
+            echo "Cleaning \"$PROJECT\""
             rm -Rf $PROJECT/cppbuild
             ;;
     esac
