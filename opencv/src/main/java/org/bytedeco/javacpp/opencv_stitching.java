@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.8-SNAPSHOT
+// Targeted by JavaCPP version 0.8
 
 package org.bytedeco.javacpp;
 
@@ -86,11 +86,8 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 // #define __OPENCV_STITCHING_WARPERS_HPP__
 
 // #include "opencv2/core/core.hpp"
+// #include "opencv2/core/gpumat.hpp"
 // #include "opencv2/imgproc/imgproc.hpp"
-// #include "opencv2/opencv_modules.hpp"
-// #if defined(HAVE_OPENCV_GPU) && !defined(ANDROID)
-// # include "opencv2/gpu/gpu.hpp"
-// #endif
 
 @Namespace("cv::detail") public static class RotationWarper extends Pointer {
     static { Loader.load(); }
@@ -516,7 +513,6 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 }
 
 
-// #if defined(HAVE_OPENCV_GPU) && !defined(ANDROID)
 @Platform(not="android") @Name("cv::detail::PlaneWarperGpu") @NoOffset public static class DetailPlaneWarperGpu extends RotationWarper {
     static { Loader.load(); }
     public DetailPlaneWarperGpu(Pointer p) { super(p); }
@@ -591,7 +587,6 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     public native @ByVal Point warp(@Const @ByRef GpuMat src, @Const @ByRef Mat K, @Const @ByRef Mat R, int interp_mode, int border_mode,
                    @ByRef GpuMat dst);
 }
-// #endif
 
 
 @Namespace("cv::detail") public static class SphericalPortraitProjector extends Pointer {
@@ -739,11 +734,12 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 // #define __OPENCV_STITCHING_MATCHERS_HPP__
 
 // #include "opencv2/core/core.hpp"
+// #include "opencv2/core/gpumat.hpp"
 // #include "opencv2/features2d/features2d.hpp"
 
 // #include "opencv2/opencv_modules.hpp"
 
-// #if defined(HAVE_OPENCV_NONFREE) && defined(HAVE_OPENCV_GPU) && !defined(ANDROID)
+// #if defined(HAVE_OPENCV_NONFREE)
 //     #include "opencv2/nonfree/gpu.hpp"
 // #endif
 
@@ -809,7 +805,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 }
 
 
-// #if defined(HAVE_OPENCV_NONFREE) && defined(HAVE_OPENCV_GPU) && !defined(ANDROID)
+// #if defined(HAVE_OPENCV_NONFREE)
 @Platform(not="android") @Namespace("cv::detail") @NoOffset public static class SurfFeaturesFinderGpu extends FeaturesFinder {
     static { Loader.load(); }
     public SurfFeaturesFinderGpu(Pointer p) { super(p); }
@@ -1483,7 +1479,7 @@ public static final int
 
 // #include <set>
 // #include "opencv2/core/core.hpp"
-// #include "opencv2/opencv_modules.hpp"
+// #include "opencv2/core/gpumat.hpp"
 
 @Namespace("cv::detail") public static class SeamFinder extends Pointer {
     static { Loader.load(); }
@@ -1595,7 +1591,6 @@ public static final int
 }
 
 
-// #if defined(HAVE_OPENCV_GPU) && !defined(ANDROID)
 @Platform(not="android") @Namespace("cv::detail") @NoOffset public static class GraphCutSeamFinderGpu extends GraphCutSeamFinderBase {
     static { Loader.load(); }
     public GraphCutSeamFinderGpu(Pointer p) { super(p); }
@@ -1618,7 +1613,6 @@ public static final int
                   @ByRef MatVector masks);
     public native void findInPair(@Cast("size_t") long first, @Cast("size_t") long second, @ByVal Rect roi);
 }
-// #endif
 
 
  // namespace cv
@@ -2072,7 +2066,6 @@ public static final int
 
 
 
-// #if defined(HAVE_OPENCV_GPU) && !defined(ANDROID)
 @Platform(not="android") @Namespace("cv") public static class PlaneWarperGpu extends WarperCreator {
     static { Loader.load(); }
     public PlaneWarperGpu() { allocate(); }
@@ -2116,7 +2109,6 @@ public static final int
 
     public native @Ptr RotationWarper create(float scale);
 }
-// #endif
 
  // namespace cv
 

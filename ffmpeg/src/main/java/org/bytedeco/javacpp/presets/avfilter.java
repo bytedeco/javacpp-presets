@@ -32,7 +32,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit={avformat.class, postproc.class, swresample.class, swscale.class}, target="org.bytedeco.javacpp.avfilter", value={
     @Platform(cinclude={"<libavfilter/avfilter.h>", "<libavfilter/buffersink.h>", "<libavfilter/buffersrc.h>"}, link="avfilter@.4"),
-    @Platform(value="windows", preload="avfilter-4") })
+    @Platform(value="windows", link="avfilter-4") })
 public class avfilter implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("AVFilterPool", "AVFilterCommand", "AVFilterChannelLayouts").cast().pointerTypes("Pointer"))

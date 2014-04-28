@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "<libavutil/downmix_info.h>", "<libavutil/stereo3d.h>"},
         includepath={"/usr/local/include/ffmpeg/", "/opt/local/include/ffmpeg/", "/usr/include/ffmpeg/"},
         link="avutil@.52", compiler={"default", "nodeprecated"}),
-    @Platform(value="windows", includepath={"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, preload="avutil-52") })
+    @Platform(value="windows", includepath={"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, link="avutil-52") })
 public class avutil implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("AV_NOPTS_VALUE").cppTypes("int64_t").translate(false))

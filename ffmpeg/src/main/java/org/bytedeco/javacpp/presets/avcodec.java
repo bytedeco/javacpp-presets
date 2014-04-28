@@ -32,7 +32,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit=avutil.class, target="org.bytedeco.javacpp.avcodec", value={
     @Platform(cinclude={"<libavcodec/avcodec.h>", "<libavcodec/avfft.h>"}, link="avcodec@.55"),
-    @Platform(value="windows", preload="avcodec-55") })
+    @Platform(value="windows", link="avcodec-55") })
 public class avcodec implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("!FF_API_LOWRES", "!FF_API_DEBUG_MV").define(false))

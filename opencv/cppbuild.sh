@@ -4,12 +4,12 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 if [[ $PLATFORM == windows* ]]; then
-    OPENCV_VERSION=2.4.8
+    OPENCV_VERSION=2.4.9
     download http://downloads.sourceforge.net/project/opencvlibrary/opencv-win/$OPENCV_VERSION/opencv-$OPENCV_VERSION.exe opencv-$OPENCV_VERSION.exe
 
     INSTALL_DIR=/C/
 else
-    OPENCV_VERSION=2.4.8
+    OPENCV_VERSION=2.4.9
     download https://github.com/Itseez/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
 
     tar -xzvf opencv-$OPENCV_VERSION.tar.gz

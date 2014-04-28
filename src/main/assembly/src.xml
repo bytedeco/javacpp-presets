@@ -6,12 +6,10 @@
   </formats>
   <fileSets>
     <fileSet>
-      <directory>${project.parent.basedir}</directory>
-      <outputDirectory>/</outputDirectory>
+      <directory>${project.basedir}</directory>
       <useDefaultExcludes>true</useDefaultExcludes>
       <excludes>
-        <exclude>**/*.log</exclude>
-        <!-- TODO: use expresssions instead: ${project.parent.build.directory}, etc -->
+        <!-- TODO: use expresssions instead: ${project.build.sourceDirectory}, etc -->
         <exclude>**/target/**</exclude>
         <exclude>**/cppbuild/**</exclude>
       </excludes>

@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.8-SNAPSHOT
+// Targeted by JavaCPP version 0.8
 
 package org.bytedeco.javacpp;
 
@@ -1211,7 +1211,7 @@ public static native int cvFindContours( CvArr image, CvMemStorage storage, @ByP
                             int method/*CV_DEFAULT(CV_CHAIN_APPROX_SIMPLE)*/,
                             @ByVal @Cast("CvPoint*") int[] offset/*CV_DEFAULT(cvPoint(0,0))*/);
 
-/* Initalizes contour retrieving process.
+/* Initializes contour retrieving process.
    Calls cvStartFindContours.
    Calls cvFindNextContour until null pointer is returned
    or some other condition becomes true.
@@ -1253,7 +1253,7 @@ public static native CvSeq cvApproxChains( CvSeq src_seq, CvMemStorage storage,
                             int recursive/*CV_DEFAULT(0)*/);
 public static native CvSeq cvApproxChains( CvSeq src_seq, CvMemStorage storage);
 
-/* Initalizes Freeman chain reader.
+/* Initializes Freeman chain reader.
    The reader is used to iteratively get coordinates of all the chain points.
    If the Freeman codes should be read as is, a simple sequence reader should be used */
 public static native void cvStartReadChainPoints( CvChain chain, CvChainPtReader reader );
@@ -1622,10 +1622,10 @@ public static native void cvCornerMinEigenVal( @Const CvArr image, CvArr eigenva
 
 /* Harris corner detector:
    Calculates det(M) - k*(trace(M)^2), where M is 2x2 gradient covariation matrix for each pixel */
-public static native void cvCornerHarris( @Const CvArr image, CvArr harris_responce,
+public static native void cvCornerHarris( @Const CvArr image, CvArr harris_response,
                              int block_size, int aperture_size/*CV_DEFAULT(3)*/,
                              double k/*CV_DEFAULT(0.04)*/ );
-public static native void cvCornerHarris( @Const CvArr image, CvArr harris_responce,
+public static native void cvCornerHarris( @Const CvArr image, CvArr harris_response,
                              int block_size );
 
 /* Adjust corner position using some sort of gradient search */

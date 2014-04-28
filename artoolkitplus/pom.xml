@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>0.8-SNAPSHOT</version>
+    <version>0.8</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -19,7 +19,6 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
-      <version>${project.parent.version}</version>
     </dependency>
   </dependencies>
 
@@ -40,6 +39,12 @@
       </plugin>
       <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
       </plugin>
     </plugins>
   </build>

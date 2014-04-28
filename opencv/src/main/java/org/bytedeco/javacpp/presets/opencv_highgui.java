@@ -32,7 +32,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit=opencv_imgproc.class, value={
     @Platform(include={"<opencv2/highgui/highgui_c.h>","<opencv2/highgui/highgui.hpp>"}, link="opencv_highgui@.2.4"),
-    @Platform(value="windows", link="opencv_highgui248", preload={"opencv_ffmpeg248", "opencv_ffmpeg248_64"}) },
+    @Platform(value="windows", link="opencv_highgui249", preload={"opencv_ffmpeg249", "opencv_ffmpeg249_64"}) },
         target="org.bytedeco.javacpp.opencv_highgui", helper="org.bytedeco.javacpp.helper.opencv_highgui")
 public class opencv_highgui implements InfoMapper {
     public void map(InfoMap infoMap) {

@@ -10,8 +10,8 @@ More details to come shortly... In the meantime, please feel free to ask questio
 
 Downloads
 ---------
- * JavaCPP Presets 0.8 binary package  [javacpp-presets-0.8-bin.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets/distribution/0.8/distribution-0.8-bin.zip)
- * JavaCPP Presets 0.8 source package  [javacpp-presets-0.8-src.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets/distribution/0.8/distribution-0.8-src.zip)
+ * JavaCPP Presets 0.8 binary package  [javacpp-presets-0.8-bin.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets/0.8/javacpp-presets-0.8-bin.zip) (121 MB)
+ * JavaCPP Presets 0.8 source package  [javacpp-presets-0.8-src.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets/0.8/javacpp-presets-0.8-src.zip) (708 KB)
 
 The binary package contains builds for Linux, Mac OS X, Windows, and Android.
 
@@ -36,7 +36,7 @@ To rebuild the source code on the Java side, please note that the project files 
 
 Each child module in turn relies on its corresponding native library being installed in the directory specified in its `.java` configuration file or, by default, on the native system in `/usr/local/`, or `C:/MinGW/local/` (under Windows), or `${platform.root}/../local/` (for Android):
 
- * OpenCV 2.4.8  http://opencv.org/downloads.html
+ * OpenCV 2.4.9  http://opencv.org/downloads.html
  * FFmpeg 2.2.x  http://ffmpeg.org/download.html
  * PGR FlyCapture 1.7 or newer (Windows only)  http://www.ptgrey.com/products/pgrflycapture/
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
@@ -83,7 +83,7 @@ Thanks to Jose Gómez for testing this out!
 
 Quick Start
 -----------
-Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, `flycapture*.jar`, `libdc1394*.jar`, `libfreenect*.jar`, `videoinput*.jar`, and `artoolkitplus*.jar`), in addition to `javacpp.jar`, somewhere in your CLASSPATH, or point your build file to the [Maven Central Repository](http://search.maven.org/), when the binary files are present. The JAR files found in these artifacts are meant to be used with [JavaCPP](https://github.com/bytedeco/javacpp). They were built on Fedora 20, so they may not work on all distributions of Linux, especially older ones. The binaries for Android were compiled for ARMv7 processors featuring an FPU, so they will not work on ancient devices such as the HTC Magic or some others with an ARMv6 CPU. Here are some more specific instructions for common cases:
+Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, `flycapture*.jar`, `libdc1394*.jar`, `libfreenect*.jar`, `videoinput*.jar`, and `artoolkitplus*.jar`), in addition to `javacpp.jar`, somewhere in your CLASSPATH, or point your build file to the [Maven Central Repository](http://search.maven.org/#search|ga|1|bytedeco), when the binary files are present. The JAR files found in these artifacts are meant to be used with [JavaCPP](https://github.com/bytedeco/javacpp). They were built on Fedora 20, so they may not work on all distributions of Linux, especially older ones. The binaries for Android were compiled for ARMv7 processors featuring an FPU, so they will not work on ancient devices such as the HTC Magic or some others with an ARMv6 CPU. Here are some more specific instructions for common cases:
 
 NetBeans (Java SE 6 or newer):
 
@@ -123,7 +123,7 @@ To contribute, please fork and create pull requests, or post your suggestions [a
 
 
 ----
-Original author: Samuel Audet &lt;samuel.audet `at` gmail.com&gt;  
+Original author: Samuel Audet [samuel.audet `at` gmail.com](mailto:samuel.audet at gmail.com)  
 Project site: https://github.com/bytedeco/javacpp-presets  
 Discussion group: http://groups.google.com/group/javacpp-project
 

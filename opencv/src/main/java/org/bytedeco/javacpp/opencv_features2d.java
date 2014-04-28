@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.8-SNAPSHOT
+// Targeted by JavaCPP version 0.8
 
 package org.bytedeco.javacpp;
 
@@ -637,12 +637,12 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 
 /** detects corners using FAST algorithm by E. Rosten */
 @Namespace("cv") public static native void FAST( @ByVal Mat image, @StdVector KeyPoint keypoints,
-                      int threshold, @Cast("bool") boolean nonmaxSupression/*=true*/ );
+                      int threshold, @Cast("bool") boolean nonmaxSuppression/*=true*/ );
 @Namespace("cv") public static native void FAST( @ByVal Mat image, @StdVector KeyPoint keypoints,
                       int threshold );
 
 @Namespace("cv") public static native void FASTX( @ByVal Mat image, @StdVector KeyPoint keypoints,
-                      int threshold, @Cast("bool") boolean nonmaxSupression, int type );
+                      int threshold, @Cast("bool") boolean nonmaxSuppression, int type );
 
 @Namespace("cv") @NoOffset public static class FastFeatureDetector extends FeatureDetector {
     static { Loader.load(); }

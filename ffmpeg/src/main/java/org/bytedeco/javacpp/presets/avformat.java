@@ -32,7 +32,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit=avcodec.class, target="org.bytedeco.javacpp.avformat", value={
     @Platform(cinclude={"<libavformat/avio.h>", "<libavformat/avformat.h>"}, link="avformat@.55"),
-    @Platform(value="windows", preload="avformat-55") })
+    @Platform(value="windows", link="avformat-55") })
 public class avformat implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("AVPROBE_SCORE_RETRY", "AVPROBE_SCORE_STREAM_RETRY").translate(false))
