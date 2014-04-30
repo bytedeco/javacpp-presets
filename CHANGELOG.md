@@ -1,4 +1,7 @@
 
+ * Add missing `native_camera` modules of `opencv_highgui` for Android
+ * Fix functions from `opencv_stitching` not accepting a `MatVector` as apparently intended by the API (issue javacv:466)
+
 ### April 28, 2014 version 0.8
  * Move from Google Code to GitHub as main source code repository
  * Rename the `com.googlecode.javacpp` package to `org.bytedeco.javacpp`

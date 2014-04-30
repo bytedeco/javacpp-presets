@@ -2228,14 +2228,14 @@ public static final int
     public native @Ptr Blender blender();
     public native void setBlender(@Ptr Blender b);
 
-    public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal Mat images);
-    public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal Mat images, @Const @ByRef RectVectorVector rois);
+    public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal MatVector images);
+    public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal MatVector images, @Const @ByRef RectVectorVector rois);
 
     public native @Cast("cv::Stitcher::Status") int composePanorama(@ByVal Mat pano);
-    public native @Cast("cv::Stitcher::Status") int composePanorama(@ByVal Mat images, @ByVal Mat pano);
+    public native @Cast("cv::Stitcher::Status") int composePanorama(@ByVal MatVector images, @ByVal Mat pano);
 
-    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal Mat images, @ByVal Mat pano);
-    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal Mat images, @Const @ByRef RectVectorVector rois, @ByVal Mat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal MatVector images, @ByVal Mat pano);
+    public native @Cast("cv::Stitcher::Status") int stitch(@ByVal MatVector images, @Const @ByRef RectVectorVector rois, @ByVal Mat pano);
 
     public native @StdVector IntPointer component();
     public native @StdVector CameraParams cameras();
