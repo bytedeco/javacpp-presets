@@ -2297,13 +2297,18 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         public AbstractMat() { }
         public AbstractMat(Pointer p) { super(p); }
 
-        public void createFrom(BufferedImage image) {
-            createFrom(image, 1.0);
+        public static Mat createFrom(BufferedImage image) {
+            return createFrom(image, 1.0);
         }
-        public void createFrom(BufferedImage image, double gamma) {
-            createFrom(image, gamma, false);
+        public static Mat createFrom(BufferedImage image, double gamma) {
+            return createFrom(image, gamma, false);
         }
-        public void createFrom(BufferedImage image, double gamma, boolean flipChannels) {
+        public static Mat createFrom(BufferedImage image, double gamma, boolean flipChannels) {
+            Mat m = new Mat();
+            m.copyFrom(image, gamma, flipChannels, null);
+            return m;
+        }
+        @Override public void copyFrom(BufferedImage image, double gamma, boolean flipChannels, Rectangle roi) {
             if (image == null) {
                 release();
                 return;
@@ -2331,7 +2336,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
                 }
             }
             create(image.getWidth(), image.getHeight(), CV_MAKETYPE(depth, numChannels));
-            copyFrom(image, gamma, flipChannels);
+            super.copyFrom(image, gamma, flipChannels, roi);
         }
 
         public abstract void create(int rows, int cols, int type);
