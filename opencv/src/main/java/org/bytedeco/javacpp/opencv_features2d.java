@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.8
+// Targeted by JavaCPP version 0.8-2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -290,8 +290,8 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
     public native @Cast("bool") boolean empty();
 
     // Create feature detector by detector name.
-    public native @Ptr FeatureDetector create( @StdString BytePointer detectorType );
-    public native @Ptr FeatureDetector create( @StdString String detectorType );
+    public static native @Ptr FeatureDetector create( @StdString BytePointer detectorType );
+    public static native @Ptr FeatureDetector create( @StdString String detectorType );
 }
 
 
@@ -332,8 +332,8 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 
     public native @Cast("bool") boolean empty();
 
-    public native @Ptr DescriptorExtractor create( @StdString BytePointer descriptorExtractorType );
-    public native @Ptr DescriptorExtractor create( @StdString String descriptorExtractorType );
+    public static native @Ptr DescriptorExtractor create( @StdString BytePointer descriptorExtractorType );
+    public static native @Ptr DescriptorExtractor create( @StdString String descriptorExtractorType );
 }
 
 
@@ -368,8 +368,8 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
     public native void compute( @Const @ByRef Mat image, @StdVector KeyPoint keypoints, @ByRef Mat descriptors );
 
     // Create feature detector and descriptor extractor by name.
-    public native @Ptr Feature2D create( @StdString BytePointer name );
-    public native @Ptr Feature2D create( @StdString String name );
+    public static native @Ptr Feature2D create( @StdString BytePointer name );
+    public static native @Ptr Feature2D create( @StdString String name );
 }
 
 /**
@@ -848,8 +848,8 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 
     public native @Ptr AdjusterAdapter clone();
 
-    public native @Ptr AdjusterAdapter create( @StdString BytePointer detectorType );
-    public native @Ptr AdjusterAdapter create( @StdString String detectorType );
+    public static native @Ptr AdjusterAdapter create( @StdString BytePointer detectorType );
+    public static native @Ptr AdjusterAdapter create( @StdString String detectorType );
 }
 /** \brief an adaptively adjusting detector that iteratively detects until the desired number
  * of features are detected.
@@ -1197,8 +1197,8 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
     public native @Ptr DescriptorMatcher clone( @Cast("bool") boolean emptyTrainData/*=false*/ );
     public native @Ptr DescriptorMatcher clone( );
 
-    public native @Ptr DescriptorMatcher create( @StdString BytePointer descriptorMatcherType );
-    public native @Ptr DescriptorMatcher create( @StdString String descriptorMatcherType );
+    public static native @Ptr DescriptorMatcher create( @StdString BytePointer descriptorMatcherType );
+    public static native @Ptr DescriptorMatcher create( @StdString String descriptorMatcherType );
 }
 
 /*
@@ -1390,12 +1390,12 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
     public native @Ptr GenericDescriptorMatcher clone( @Cast("bool") boolean emptyTrainData/*=false*/ );
     public native @Ptr GenericDescriptorMatcher clone( );
 
-    public native @Ptr GenericDescriptorMatcher create( @StdString BytePointer genericDescritptorMatcherType,
+    public static native @Ptr GenericDescriptorMatcher create( @StdString BytePointer genericDescritptorMatcherType,
                                                      @StdString BytePointer paramsFilename/*=string()*/ );
-    public native @Ptr GenericDescriptorMatcher create( @StdString BytePointer genericDescritptorMatcherType );
-    public native @Ptr GenericDescriptorMatcher create( @StdString String genericDescritptorMatcherType,
+    public static native @Ptr GenericDescriptorMatcher create( @StdString BytePointer genericDescritptorMatcherType );
+    public static native @Ptr GenericDescriptorMatcher create( @StdString String genericDescritptorMatcherType,
                                                      @StdString String paramsFilename/*=string()*/ );
-    public native @Ptr GenericDescriptorMatcher create( @StdString String genericDescritptorMatcherType );
+    public static native @Ptr GenericDescriptorMatcher create( @StdString String genericDescritptorMatcherType );
 }
 
 

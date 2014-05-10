@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.8
+// Targeted by JavaCPP version 0.8-2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -8879,8 +8879,8 @@ public static class ConvertScaleData extends FunctionPointer {
     }
 
     public static native void getList(@ByRef StringVector algorithms);
-    public native @Ptr Algorithm _create(@StdString BytePointer name);
-    public native @Ptr Algorithm _create(@StdString String name);
+    public static native @Ptr Algorithm _create(@StdString BytePointer name);
+    public static native @Ptr Algorithm _create(@StdString String name);
 
     public native AlgorithmInfo info();
 }

@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.8
+// Targeted by JavaCPP version 0.8-2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 

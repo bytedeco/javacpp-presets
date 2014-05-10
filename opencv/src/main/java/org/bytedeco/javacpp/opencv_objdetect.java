@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.8
+// Targeted by JavaCPP version 0.8-2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -602,7 +602,7 @@ public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
     public native double calcOrd(int featureIdx);
     public native int calcCat(int featureIdx);
 
-    public native @Ptr FeatureEvaluator create(int type);
+    public static native @Ptr FeatureEvaluator create(int type);
 }
 
 
@@ -861,8 +861,8 @@ public static final int
                                      @ByVal Size paddingTL/*=Size()*/, @ByVal Size paddingBR/*=Size()*/);
     public native void computeGradient(@Const @ByRef Mat img, @ByRef Mat grad, @ByRef Mat angleOfs);
 
-    public native @StdVector FloatPointer getDefaultPeopleDetector();
-    public native @StdVector FloatPointer getDaimlerPeopleDetector();
+    public static native @StdVector FloatPointer getDefaultPeopleDetector();
+    public static native @StdVector FloatPointer getDaimlerPeopleDetector();
 
     public native @ByRef Size winSize(); public native HOGDescriptor winSize(Size winSize);
     public native @ByRef Size blockSize(); public native HOGDescriptor blockSize(Size blockSize);

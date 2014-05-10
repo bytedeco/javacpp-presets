@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.8
+// Targeted by JavaCPP version 0.8-2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -2357,7 +2357,7 @@ public static final int
     public GeneralizedHough() { }
     public GeneralizedHough(Pointer p) { super(p); }
 
-    public native @Ptr GeneralizedHough create(int method);
+    public static native @Ptr GeneralizedHough create(int method);
 
     /** set template to search */
     public native void setTemplate(@ByVal Mat templ, int cannyThreshold/*=100*/, @ByVal Point templCenter/*=Point(-1, -1)*/);

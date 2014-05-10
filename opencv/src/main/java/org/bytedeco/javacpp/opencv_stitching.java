@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.8
+// Targeted by JavaCPP version 0.8-2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -1361,7 +1361,7 @@ public static final int
 
     /** enum cv::detail::ExposureCompensator:: */
     public static final int NO = 0, GAIN = 1, GAIN_BLOCKS = 2;
-    public native @Ptr ExposureCompensator createDefault(int type);
+    public static native @Ptr ExposureCompensator createDefault(int type);
 
     public native void feed(@StdVector Point corners, @Const @ByRef MatVector images,
                   @Const @ByRef MatVector masks);
@@ -1685,8 +1685,8 @@ public static final int
 
     /** enum cv::detail::Blender:: */
     public static final int NO = 0, FEATHER = 1, MULTI_BAND = 2;
-    public native @Ptr Blender createDefault(int type, @Cast("bool") boolean try_gpu/*=false*/);
-    public native @Ptr Blender createDefault(int type);
+    public static native @Ptr Blender createDefault(int type, @Cast("bool") boolean try_gpu/*=false*/);
+    public static native @Ptr Blender createDefault(int type);
 
     public native void prepare(@StdVector Point corners, @StdVector Size sizes);
     public native void prepare(@ByVal Rect dst_roi);
