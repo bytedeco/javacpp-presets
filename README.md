@@ -5,7 +5,7 @@ Introduction
 ------------
 The JavaCPP Presets module contains Java configuration and interface classes for widely used C/C++ libraries. The configuration files in the `org.bytedeco.javacpp.presets` package are used by the `Parser` to create from C/C++ header files the Java interface files targeting the `org.bytedeco.javacpp` package, which is turn are used by the `Generator` and the native C++ compiler to produce the required JNI libraries. Moreover, helper classes make their functionality easier to use on the Java platform, including Android.
 
-More details to come shortly... In the meantime, please feel free to ask questions on [the mailing list](http://groups.google.com/group/javacpp-project).
+Please refer to the wiki page for more information about how to [create new presets](https://github.com/bytedeco/javacpp-presets/wiki/Create-New-Presets). Since additional documentation is currently lacking, please also feel free to ask questions on [the mailing list](http://groups.google.com/group/javacpp-project).
 
 
 Downloads
@@ -123,8 +123,8 @@ To contribute, please fork and create pull requests, or post your suggestions [a
 
 
 ----
-Original author: Samuel Audet [samuel.audet `at` gmail.com](mailto:samuel.audet at gmail.com)  
-Project site: https://github.com/bytedeco/javacpp-presets  
+Project lead: Samuel Audet [samuel.audet `at` gmail.com](mailto:samuel.audet at gmail.com)  
+Developer site: https://github.com/bytedeco/javacpp-presets  
 Discussion group: http://groups.google.com/group/javacpp-project
 
 Licensed under the GNU General Public License version 2 (GPLv2) **with Classpath exception**.  
