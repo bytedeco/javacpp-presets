@@ -37,6 +37,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class opencv_imgproc implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CvMoments").base("AbstractCvMoments"))
+               .put(new Info("_CvContourScanner").pointerTypes("CvContourScanner"))
+               .put(new Info("CvContourScanner").valueTypes("CvContourScanner").pointerTypes("@ByPtrPtr CvContourScanner"))
                .put(new Info("cvCalcBackProject").cppTypes("void", "IplImage**", "CvArr*", "CvHistogram*"))
                .put(new Info("cvCalcBackProjectPatch").cppTypes("void", "IplImage**", "CvArr*", "CvSize", "CvHistogram*", "int", "double"))
                .put(new Info("cv::Vec4f", "cv::Vec6f").cast().pointerTypes("FloatPointer"));

@@ -362,6 +362,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 // #  if defined __cplusplus
 // #    define CV_INLINE inline
 // #  elif defined _MSC_VER
+// #    define CV_INLINE __inline
 // #  else
 // #    define CV_INLINE static
 // #  endif

@@ -474,7 +474,7 @@ public static final int
 Internal structure that is used for sequental retrieving contours from the image.
 It supports both hierarchical and plane variants of Suzuki algorithm.
 */
-@Opaque public static class CvContourScanner extends Pointer {
+@Name("_CvContourScanner") @Opaque public static class CvContourScanner extends Pointer {
     public CvContourScanner() { }
     public CvContourScanner(Pointer p) { super(p); }
 }
@@ -1216,34 +1216,34 @@ public static native int cvFindContours( CvArr image, CvMemStorage storage, @ByP
    Calls cvFindNextContour until null pointer is returned
    or some other condition becomes true.
    Calls cvEndFindContours at the end. */
-public static native @ByVal CvContourScanner cvStartFindContours( CvArr image, CvMemStorage storage,
+public static native CvContourScanner cvStartFindContours( CvArr image, CvMemStorage storage,
                             int header_size/*CV_DEFAULT(sizeof(CvContour))*/,
                             int mode/*CV_DEFAULT(CV_RETR_LIST)*/,
                             int method/*CV_DEFAULT(CV_CHAIN_APPROX_SIMPLE)*/,
                             @ByVal CvPoint offset/*CV_DEFAULT(cvPoint(0,0))*/);
-public static native @ByVal CvContourScanner cvStartFindContours( CvArr image, CvMemStorage storage);
-public static native @ByVal CvContourScanner cvStartFindContours( CvArr image, CvMemStorage storage,
+public static native CvContourScanner cvStartFindContours( CvArr image, CvMemStorage storage);
+public static native CvContourScanner cvStartFindContours( CvArr image, CvMemStorage storage,
                             int header_size/*CV_DEFAULT(sizeof(CvContour))*/,
                             int mode/*CV_DEFAULT(CV_RETR_LIST)*/,
                             int method/*CV_DEFAULT(CV_CHAIN_APPROX_SIMPLE)*/,
                             @ByVal @Cast("CvPoint*") IntBuffer offset/*CV_DEFAULT(cvPoint(0,0))*/);
-public static native @ByVal CvContourScanner cvStartFindContours( CvArr image, CvMemStorage storage,
+public static native CvContourScanner cvStartFindContours( CvArr image, CvMemStorage storage,
                             int header_size/*CV_DEFAULT(sizeof(CvContour))*/,
                             int mode/*CV_DEFAULT(CV_RETR_LIST)*/,
                             int method/*CV_DEFAULT(CV_CHAIN_APPROX_SIMPLE)*/,
                             @ByVal @Cast("CvPoint*") int[] offset/*CV_DEFAULT(cvPoint(0,0))*/);
 
 /* Retrieves next contour */
-public static native CvSeq cvFindNextContour( @ByVal CvContourScanner scanner );
+public static native CvSeq cvFindNextContour( CvContourScanner scanner );
 
 
 /* Substitutes the last retrieved contour with the new one
    (if the substitutor is null, the last retrieved contour is removed from the tree) */
-public static native void cvSubstituteContour( @ByVal CvContourScanner scanner, CvSeq new_contour );
+public static native void cvSubstituteContour( CvContourScanner scanner, CvSeq new_contour );
 
 
 /* Releases contour scanner and returns pointer to the first outer contour */
-public static native CvSeq cvEndFindContours( CvContourScanner scanner );
+public static native CvSeq cvEndFindContours( @ByPtrPtr CvContourScanner scanner );
 
 /* Approximates a single Freeman chain or a tree of chains to polygonal curves */
 public static native CvSeq cvApproxChains( CvSeq src_seq, CvMemStorage storage,
