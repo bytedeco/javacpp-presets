@@ -117,7 +117,7 @@ Contributions of any kind are highly welcome! At the moment, the `Parser` has li
  * Improving the `Parser`
  * Providing builds for more platforms, most notably `linux-arm`
  * Replacing the Bash/Maven build combo by something better (Gradle?)
- * Adding new presets as child modules for other C/C++ libraries (LLVM, OpenMesh, PCL, Tesseract, etc.)
+ * Adding new presets as child modules for other C/C++ libraries (FFTW, GSL, LLVM, OpenNI, OpenMesh, PCL, Tesseract, etc.)
 
 To contribute, please fork and create pull requests, or post your suggestions [as a new "issue"](https://github.com/bytedeco/javacpp-presets/issues). Thank you very much in advance for your contribution!
 

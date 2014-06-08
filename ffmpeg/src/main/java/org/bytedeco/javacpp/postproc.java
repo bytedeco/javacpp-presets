@@ -99,12 +99,12 @@ public static native void pp_postprocess(@Cast("const uint8_t**") @ByPtrPtr Byte
 public static native void pp_postprocess(@Cast("const uint8_t**") @ByPtrPtr ByteBuffer src, @Const IntBuffer srcStride,
                      @Cast("uint8_t**") @ByPtrPtr ByteBuffer dst, @Const IntBuffer dstStride,
                      int horizontalSize, int verticalSize,
-                     @Const BytePointer QP_store,  int QP_stride,
+                     @Const ByteBuffer QP_store,  int QP_stride,
                      pp_mode mode, pp_context ppContext, int pict_type);
 public static native void pp_postprocess(@Cast("const uint8_t**") @ByPtrPtr byte[] src, @Const int[] srcStride,
                      @Cast("uint8_t**") @ByPtrPtr byte[] dst, @Const int[] dstStride,
                      int horizontalSize, int verticalSize,
-                     @Const BytePointer QP_store,  int QP_stride,
+                     @Const byte[] QP_store,  int QP_stride,
                      pp_mode mode, pp_context ppContext, int pict_type);
 
 

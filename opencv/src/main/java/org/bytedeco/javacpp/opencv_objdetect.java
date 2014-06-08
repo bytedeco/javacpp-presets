@@ -249,9 +249,9 @@ public static final int CV_HAAR_DO_ROUGH_SEARCH =     8;
 
 public static native CvSeq cvHaarDetectObjects( @Const CvArr image,
                      CvHaarClassifierCascade cascade, CvMemStorage storage,
-                     double scale_factor/*CV_DEFAULT(1.1)*/,
-                     int min_neighbors/*CV_DEFAULT(3)*/, int flags/*CV_DEFAULT(0)*/,
-                     @ByVal CvSize min_size/*CV_DEFAULT(cvSize(0,0))*/, @ByVal CvSize max_size/*CV_DEFAULT(cvSize(0,0))*/);
+                     double scale_factor/*=1.1*/,
+                     int min_neighbors/*=3*/, int flags/*=0*/,
+                     @ByVal CvSize min_size/*=cvSize(0,0)*/, @ByVal CvSize max_size/*=cvSize(0,0)*/);
 public static native CvSeq cvHaarDetectObjects( @Const CvArr image,
                      CvHaarClassifierCascade cascade, CvMemStorage storage);
 
@@ -262,15 +262,15 @@ public static native void cvSetImagesForHaarClassifierCascade( CvHaarClassifierC
 
 /* runs the cascade on the specified window */
 public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
-                                       @ByVal CvPoint pt, int start_stage/*CV_DEFAULT(0)*/);
+                                       @ByVal CvPoint pt, int start_stage/*=0*/);
 public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
                                        @ByVal CvPoint pt);
 public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
-                                       @ByVal @Cast("CvPoint*") IntBuffer pt, int start_stage/*CV_DEFAULT(0)*/);
+                                       @ByVal @Cast("CvPoint*") IntBuffer pt, int start_stage/*=0*/);
 public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
                                        @ByVal @Cast("CvPoint*") IntBuffer pt);
 public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
-                                       @ByVal @Cast("CvPoint*") int[] pt, int start_stage/*CV_DEFAULT(0)*/);
+                                       @ByVal @Cast("CvPoint*") int[] pt, int start_stage/*=0*/);
 public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
                                        @ByVal @Cast("CvPoint*") int[] pt);
 
@@ -432,8 +432,8 @@ public static native void cvReleaseLatentSvmDetector(@ByPtrPtr CvLatentSvmDetect
 public static native CvSeq cvLatentSvmDetectObjects(IplImage image,
                                 CvLatentSvmDetector detector,
                                 CvMemStorage storage,
-                                float overlap_threshold/*CV_DEFAULT(0.5f)*/,
-                                int numThreads/*CV_DEFAULT(-1)*/);
+                                float overlap_threshold/*=0.5f*/,
+                                int numThreads/*=-1*/);
 public static native CvSeq cvLatentSvmDetectObjects(IplImage image,
                                 CvLatentSvmDetector detector,
                                 CvMemStorage storage);
@@ -443,9 +443,9 @@ public static native CvSeq cvLatentSvmDetectObjects(IplImage image,
 public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
                      CvHaarClassifierCascade cascade, CvMemStorage storage,
                      @StdVector IntPointer rejectLevels, @StdVector DoublePointer levelWeightds,
-                     double scale_factor/*CV_DEFAULT(1.1)*/,
-                     int min_neighbors/*CV_DEFAULT(3)*/, int flags/*CV_DEFAULT(0)*/,
-                     @ByVal CvSize min_size/*CV_DEFAULT(cvSize(0,0))*/, @ByVal CvSize max_size/*CV_DEFAULT(cvSize(0,0))*/,
+                     double scale_factor/*=1.1*/,
+                     int min_neighbors/*=3*/, int flags/*=0*/,
+                     @ByVal CvSize min_size/*=cvSize(0,0)*/, @ByVal CvSize max_size/*=cvSize(0,0)*/,
                      @Cast("bool") boolean outputRejectLevels/*=false*/ );
 public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
                      CvHaarClassifierCascade cascade, CvMemStorage storage,
@@ -453,9 +453,9 @@ public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
 public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
                      CvHaarClassifierCascade cascade, CvMemStorage storage,
                      @StdVector IntBuffer rejectLevels, @StdVector DoubleBuffer levelWeightds,
-                     double scale_factor/*CV_DEFAULT(1.1)*/,
-                     int min_neighbors/*CV_DEFAULT(3)*/, int flags/*CV_DEFAULT(0)*/,
-                     @ByVal CvSize min_size/*CV_DEFAULT(cvSize(0,0))*/, @ByVal CvSize max_size/*CV_DEFAULT(cvSize(0,0))*/,
+                     double scale_factor/*=1.1*/,
+                     int min_neighbors/*=3*/, int flags/*=0*/,
+                     @ByVal CvSize min_size/*=cvSize(0,0)*/, @ByVal CvSize max_size/*=cvSize(0,0)*/,
                      @Cast("bool") boolean outputRejectLevels/*=false*/ );
 public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
                      CvHaarClassifierCascade cascade, CvMemStorage storage,
@@ -463,9 +463,9 @@ public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
 public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
                      CvHaarClassifierCascade cascade, CvMemStorage storage,
                      @StdVector int[] rejectLevels, @StdVector double[] levelWeightds,
-                     double scale_factor/*CV_DEFAULT(1.1)*/,
-                     int min_neighbors/*CV_DEFAULT(3)*/, int flags/*CV_DEFAULT(0)*/,
-                     @ByVal CvSize min_size/*CV_DEFAULT(cvSize(0,0))*/, @ByVal CvSize max_size/*CV_DEFAULT(cvSize(0,0))*/,
+                     double scale_factor/*=1.1*/,
+                     int min_neighbors/*=3*/, int flags/*=0*/,
+                     @ByVal CvSize min_size/*=cvSize(0,0)*/, @ByVal CvSize max_size/*=cvSize(0,0)*/,
                      @Cast("bool") boolean outputRejectLevels/*=false*/ );
 public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
                      CvHaarClassifierCascade cascade, CvMemStorage storage,

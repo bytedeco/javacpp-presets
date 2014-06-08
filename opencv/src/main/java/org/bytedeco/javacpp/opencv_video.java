@@ -237,7 +237,7 @@ public static native void cvUpdateMotionHistory( @Const CvArr silhouette, CvArr 
    a mask indicating where the gradient is valid */
 public static native void cvCalcMotionGradient( @Const CvArr mhi, CvArr mask, CvArr orientation,
                                      double delta1, double delta2,
-                                     int aperture_size/*CV_DEFAULT(3)*/);
+                                     int aperture_size/*=3*/);
 public static native void cvCalcMotionGradient( @Const CvArr mhi, CvArr mask, CvArr orientation,
                                      double delta1, double delta2);
 
@@ -262,7 +262,7 @@ public static native CvSeq cvSegmentMotion( @Const CvArr mhi, CvArr seg_mask,
    from the object histogram back project (extension of meanshift) */
 public static native int cvCamShift( @Const CvArr prob_image, @ByVal CvRect window,
                         @ByVal CvTermCriteria criteria, CvConnectedComp comp,
-                        CvBox2D box/*CV_DEFAULT(NULL)*/ );
+                        CvBox2D box/*=NULL*/ );
 public static native int cvCamShift( @Const CvArr prob_image, @ByVal CvRect window,
                         @ByVal CvTermCriteria criteria, CvConnectedComp comp );
 
@@ -332,7 +332,7 @@ public static class CvKalman extends AbstractCvKalman {
 
 /* Creates Kalman filter and sets A, B, Q, R and state to some initial values */
 public static native CvKalman cvCreateKalman( int dynam_params, int measure_params,
-                                 int control_params/*CV_DEFAULT(0)*/);
+                                 int control_params/*=0*/);
 public static native CvKalman cvCreateKalman( int dynam_params, int measure_params);
 
 /* Releases Kalman filter state */
@@ -341,7 +341,7 @@ public static native void cvReleaseKalman( @ByPtrPtr CvKalman kalman);
 
 /* Updates Kalman filter by time (predicts future state of the system) */
 public static native @Const CvMat cvKalmanPredict( CvKalman kalman,
-                                      @Const CvMat control/*CV_DEFAULT(NULL)*/);
+                                      @Const CvMat control/*=NULL*/);
 public static native @Const CvMat cvKalmanPredict( CvKalman kalman);
 
 /* Updates Kalman filter by measurement

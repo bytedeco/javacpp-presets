@@ -125,9 +125,9 @@ public static final int
 
 public static native int cvFindFundamentalMat( @Const CvMat points1, @Const CvMat points2,
                                  CvMat fundamental_matrix,
-                                 int method/*CV_DEFAULT(CV_FM_RANSAC)*/,
-                                 double param1/*CV_DEFAULT(3.)*/, double param2/*CV_DEFAULT(0.99)*/,
-                                 CvMat status/*CV_DEFAULT(NULL)*/ );
+                                 int method/*=CV_FM_RANSAC*/,
+                                 double param1/*=3.*/, double param2/*=0.99*/,
+                                 CvMat status/*=NULL*/ );
 public static native int cvFindFundamentalMat( @Const CvMat points1, @Const CvMat points2,
                                  CvMat fundamental_matrix );
 
@@ -157,9 +157,9 @@ public static native void cvGetOptimalNewCameraMatrix( @Const CvMat camera_matri
                                          @Const CvMat dist_coeffs,
                                          @ByVal CvSize image_size, double alpha,
                                          CvMat new_camera_matrix,
-                                         @ByVal CvSize new_imag_size/*CV_DEFAULT(cvSize(0,0))*/,
-                                         CvRect valid_pixel_ROI/*CV_DEFAULT(0)*/,
-                                         int center_principal_point/*CV_DEFAULT(0)*/);
+                                         @ByVal CvSize new_imag_size/*=cvSize(0,0)*/,
+                                         CvRect valid_pixel_ROI/*=0*/,
+                                         int center_principal_point/*=0*/);
 public static native void cvGetOptimalNewCameraMatrix( @Const CvMat camera_matrix,
                                          @Const CvMat dist_coeffs,
                                          @ByVal CvSize image_size, double alpha,
@@ -167,59 +167,59 @@ public static native void cvGetOptimalNewCameraMatrix( @Const CvMat camera_matri
 
 /* Converts rotation vector to rotation matrix or vice versa */
 public static native int cvRodrigues2( @Const CvMat src, CvMat dst,
-                         CvMat jacobian/*CV_DEFAULT(0)*/ );
+                         CvMat jacobian/*=0*/ );
 public static native int cvRodrigues2( @Const CvMat src, CvMat dst );
 
 /* Finds perspective transformation between the object plane and image (view) plane */
 public static native int cvFindHomography( @Const CvMat src_points,
                              @Const CvMat dst_points,
                              CvMat homography,
-                             int method/*CV_DEFAULT(0)*/,
-                             double ransacReprojThreshold/*CV_DEFAULT(3)*/,
-                             CvMat mask/*CV_DEFAULT(0)*/);
+                             int method/*=0*/,
+                             double ransacReprojThreshold/*=3*/,
+                             CvMat mask/*=0*/);
 public static native int cvFindHomography( @Const CvMat src_points,
                              @Const CvMat dst_points,
                              CvMat homography);
 
 /* Computes RQ decomposition for 3x3 matrices */
 public static native void cvRQDecomp3x3( @Const CvMat matrixM, CvMat matrixR, CvMat matrixQ,
-                           CvMat matrixQx/*CV_DEFAULT(NULL)*/,
-                           CvMat matrixQy/*CV_DEFAULT(NULL)*/,
-                           CvMat matrixQz/*CV_DEFAULT(NULL)*/,
-                           CvPoint3D64f eulerAngles/*CV_DEFAULT(NULL)*/);
+                           CvMat matrixQx/*=NULL*/,
+                           CvMat matrixQy/*=NULL*/,
+                           CvMat matrixQz/*=NULL*/,
+                           CvPoint3D64f eulerAngles/*=NULL*/);
 public static native void cvRQDecomp3x3( @Const CvMat matrixM, CvMat matrixR, CvMat matrixQ);
 public static native void cvRQDecomp3x3( @Const CvMat matrixM, CvMat matrixR, CvMat matrixQ,
-                           CvMat matrixQx/*CV_DEFAULT(NULL)*/,
-                           CvMat matrixQy/*CV_DEFAULT(NULL)*/,
-                           CvMat matrixQz/*CV_DEFAULT(NULL)*/,
-                           @Cast("CvPoint3D64f*") DoubleBuffer eulerAngles/*CV_DEFAULT(NULL)*/);
+                           CvMat matrixQx/*=NULL*/,
+                           CvMat matrixQy/*=NULL*/,
+                           CvMat matrixQz/*=NULL*/,
+                           @Cast("CvPoint3D64f*") DoubleBuffer eulerAngles/*=NULL*/);
 public static native void cvRQDecomp3x3( @Const CvMat matrixM, CvMat matrixR, CvMat matrixQ,
-                           CvMat matrixQx/*CV_DEFAULT(NULL)*/,
-                           CvMat matrixQy/*CV_DEFAULT(NULL)*/,
-                           CvMat matrixQz/*CV_DEFAULT(NULL)*/,
-                           @Cast("CvPoint3D64f*") double[] eulerAngles/*CV_DEFAULT(NULL)*/);
+                           CvMat matrixQx/*=NULL*/,
+                           CvMat matrixQy/*=NULL*/,
+                           CvMat matrixQz/*=NULL*/,
+                           @Cast("CvPoint3D64f*") double[] eulerAngles/*=NULL*/);
 
 /* Computes projection matrix decomposition */
 public static native void cvDecomposeProjectionMatrix( @Const CvMat projMatr, CvMat calibMatr,
                                          CvMat rotMatr, CvMat posVect,
-                                         CvMat rotMatrX/*CV_DEFAULT(NULL)*/,
-                                         CvMat rotMatrY/*CV_DEFAULT(NULL)*/,
-                                         CvMat rotMatrZ/*CV_DEFAULT(NULL)*/,
-                                         CvPoint3D64f eulerAngles/*CV_DEFAULT(NULL)*/);
+                                         CvMat rotMatrX/*=NULL*/,
+                                         CvMat rotMatrY/*=NULL*/,
+                                         CvMat rotMatrZ/*=NULL*/,
+                                         CvPoint3D64f eulerAngles/*=NULL*/);
 public static native void cvDecomposeProjectionMatrix( @Const CvMat projMatr, CvMat calibMatr,
                                          CvMat rotMatr, CvMat posVect);
 public static native void cvDecomposeProjectionMatrix( @Const CvMat projMatr, CvMat calibMatr,
                                          CvMat rotMatr, CvMat posVect,
-                                         CvMat rotMatrX/*CV_DEFAULT(NULL)*/,
-                                         CvMat rotMatrY/*CV_DEFAULT(NULL)*/,
-                                         CvMat rotMatrZ/*CV_DEFAULT(NULL)*/,
-                                         @Cast("CvPoint3D64f*") DoubleBuffer eulerAngles/*CV_DEFAULT(NULL)*/);
+                                         CvMat rotMatrX/*=NULL*/,
+                                         CvMat rotMatrY/*=NULL*/,
+                                         CvMat rotMatrZ/*=NULL*/,
+                                         @Cast("CvPoint3D64f*") DoubleBuffer eulerAngles/*=NULL*/);
 public static native void cvDecomposeProjectionMatrix( @Const CvMat projMatr, CvMat calibMatr,
                                          CvMat rotMatr, CvMat posVect,
-                                         CvMat rotMatrX/*CV_DEFAULT(NULL)*/,
-                                         CvMat rotMatrY/*CV_DEFAULT(NULL)*/,
-                                         CvMat rotMatrZ/*CV_DEFAULT(NULL)*/,
-                                         @Cast("CvPoint3D64f*") double[] eulerAngles/*CV_DEFAULT(NULL)*/);
+                                         CvMat rotMatrX/*=NULL*/,
+                                         CvMat rotMatrY/*=NULL*/,
+                                         CvMat rotMatrZ/*=NULL*/,
+                                         @Cast("CvPoint3D64f*") double[] eulerAngles/*=NULL*/);
 
 /* Computes d(AB)/dA and d(AB)/dB */
 public static native void cvCalcMatMulDeriv( @Const CvMat A, @Const CvMat B, CvMat dABdA, CvMat dABdB );
@@ -229,10 +229,10 @@ public static native void cvCalcMatMulDeriv( @Const CvMat A, @Const CvMat B, CvM
 public static native void cvComposeRT( @Const CvMat _rvec1, @Const CvMat _tvec1,
                          @Const CvMat _rvec2, @Const CvMat _tvec2,
                          CvMat _rvec3, CvMat _tvec3,
-                         CvMat dr3dr1/*CV_DEFAULT(0)*/, CvMat dr3dt1/*CV_DEFAULT(0)*/,
-                         CvMat dr3dr2/*CV_DEFAULT(0)*/, CvMat dr3dt2/*CV_DEFAULT(0)*/,
-                         CvMat dt3dr1/*CV_DEFAULT(0)*/, CvMat dt3dt1/*CV_DEFAULT(0)*/,
-                         CvMat dt3dr2/*CV_DEFAULT(0)*/, CvMat dt3dt2/*CV_DEFAULT(0)*/ );
+                         CvMat dr3dr1/*=0*/, CvMat dr3dt1/*=0*/,
+                         CvMat dr3dr2/*=0*/, CvMat dr3dt2/*=0*/,
+                         CvMat dt3dr1/*=0*/, CvMat dt3dt1/*=0*/,
+                         CvMat dt3dr2/*=0*/, CvMat dt3dt2/*=0*/ );
 public static native void cvComposeRT( @Const CvMat _rvec1, @Const CvMat _tvec1,
                          @Const CvMat _rvec2, @Const CvMat _tvec2,
                          CvMat _rvec3, CvMat _tvec3 );
@@ -242,10 +242,10 @@ public static native void cvComposeRT( @Const CvMat _rvec1, @Const CvMat _tvec1,
 public static native void cvProjectPoints2( @Const CvMat object_points, @Const CvMat rotation_vector,
                               @Const CvMat translation_vector, @Const CvMat camera_matrix,
                               @Const CvMat distortion_coeffs, CvMat image_points,
-                              CvMat dpdrot/*CV_DEFAULT(NULL)*/, CvMat dpdt/*CV_DEFAULT(NULL)*/,
-                              CvMat dpdf/*CV_DEFAULT(NULL)*/, CvMat dpdc/*CV_DEFAULT(NULL)*/,
-                              CvMat dpddist/*CV_DEFAULT(NULL)*/,
-                              double aspect_ratio/*CV_DEFAULT(0)*/);
+                              CvMat dpdrot/*=NULL*/, CvMat dpdt/*=NULL*/,
+                              CvMat dpdf/*=NULL*/, CvMat dpdc/*=NULL*/,
+                              CvMat dpddist/*=NULL*/,
+                              double aspect_ratio/*=0*/);
 public static native void cvProjectPoints2( @Const CvMat object_points, @Const CvMat rotation_vector,
                               @Const CvMat translation_vector, @Const CvMat camera_matrix,
                               @Const CvMat distortion_coeffs, CvMat image_points);
@@ -258,7 +258,7 @@ public static native void cvFindExtrinsicCameraParams2( @Const CvMat object_poin
                                           @Const CvMat distortion_coeffs,
                                           CvMat rotation_vector,
                                           CvMat translation_vector,
-                                          int use_extrinsic_guess/*CV_DEFAULT(0)*/ );
+                                          int use_extrinsic_guess/*=0*/ );
 public static native void cvFindExtrinsicCameraParams2( @Const CvMat object_points,
                                           @Const CvMat image_points,
                                           @Const CvMat camera_matrix,
@@ -272,7 +272,7 @@ public static native void cvInitIntrinsicParams2D( @Const CvMat object_points,
                                      @Const CvMat image_points,
                                      @Const CvMat npoints, @ByVal CvSize image_size,
                                      CvMat camera_matrix,
-                                     double aspect_ratio/*CV_DEFAULT(1.)*/ );
+                                     double aspect_ratio/*=1.*/ );
 public static native void cvInitIntrinsicParams2D( @Const CvMat object_points,
                                      @Const CvMat image_points,
                                      @Const CvMat npoints, @ByVal CvSize image_size,
@@ -294,20 +294,20 @@ public static native int cvCheckChessboard(IplImage src, @ByVal CvSize size);
     /* Detects corners on a chessboard calibration pattern */
 public static native int cvFindChessboardCorners( @Const Pointer image, @ByVal CvSize pattern_size,
                                     CvPoint2D32f corners,
-                                    IntPointer corner_count/*CV_DEFAULT(NULL)*/,
-                                    int flags/*CV_DEFAULT(CV_CALIB_CB_ADAPTIVE_THRESH+CV_CALIB_CB_NORMALIZE_IMAGE)*/ );
+                                    IntPointer corner_count/*=NULL*/,
+                                    int flags/*=CV_CALIB_CB_ADAPTIVE_THRESH+CV_CALIB_CB_NORMALIZE_IMAGE*/ );
 public static native int cvFindChessboardCorners( @Const Pointer image, @ByVal CvSize pattern_size,
                                     CvPoint2D32f corners );
 public static native int cvFindChessboardCorners( @Const Pointer image, @ByVal CvSize pattern_size,
                                     @Cast("CvPoint2D32f*") FloatBuffer corners,
-                                    IntBuffer corner_count/*CV_DEFAULT(NULL)*/,
-                                    int flags/*CV_DEFAULT(CV_CALIB_CB_ADAPTIVE_THRESH+CV_CALIB_CB_NORMALIZE_IMAGE)*/ );
+                                    IntBuffer corner_count/*=NULL*/,
+                                    int flags/*=CV_CALIB_CB_ADAPTIVE_THRESH+CV_CALIB_CB_NORMALIZE_IMAGE*/ );
 public static native int cvFindChessboardCorners( @Const Pointer image, @ByVal CvSize pattern_size,
                                     @Cast("CvPoint2D32f*") FloatBuffer corners );
 public static native int cvFindChessboardCorners( @Const Pointer image, @ByVal CvSize pattern_size,
                                     @Cast("CvPoint2D32f*") float[] corners,
-                                    int[] corner_count/*CV_DEFAULT(NULL)*/,
-                                    int flags/*CV_DEFAULT(CV_CALIB_CB_ADAPTIVE_THRESH+CV_CALIB_CB_NORMALIZE_IMAGE)*/ );
+                                    int[] corner_count/*=NULL*/,
+                                    int flags/*=CV_CALIB_CB_ADAPTIVE_THRESH+CV_CALIB_CB_NORMALIZE_IMAGE*/ );
 public static native int cvFindChessboardCorners( @Const Pointer image, @ByVal CvSize pattern_size,
                                     @Cast("CvPoint2D32f*") float[] corners );
 
@@ -343,11 +343,11 @@ public static native double cvCalibrateCamera2( @Const CvMat object_points,
                                 @ByVal CvSize image_size,
                                 CvMat camera_matrix,
                                 CvMat distortion_coeffs,
-                                CvMat rotation_vectors/*CV_DEFAULT(NULL)*/,
-                                CvMat translation_vectors/*CV_DEFAULT(NULL)*/,
-                                int flags/*CV_DEFAULT(0)*/,
-                                @ByVal CvTermCriteria term_crit/*CV_DEFAULT(cvTermCriteria(
-                                    CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,30,DBL_EPSILON))*/ );
+                                CvMat rotation_vectors/*=NULL*/,
+                                CvMat translation_vectors/*=NULL*/,
+                                int flags/*=0*/,
+                                @ByVal CvTermCriteria term_crit/*=cvTermCriteria(
+                                    CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,30,DBL_EPSILON)*/ );
 public static native double cvCalibrateCamera2( @Const CvMat object_points,
                                 @Const CvMat image_points,
                                 @Const CvMat point_counts,
@@ -359,33 +359,33 @@ public static native double cvCalibrateCamera2( @Const CvMat object_points,
    cvCalibrateCamera2 */
 public static native void cvCalibrationMatrixValues( @Const CvMat camera_matrix,
                                 @ByVal CvSize image_size,
-                                double aperture_width/*CV_DEFAULT(0)*/,
-                                double aperture_height/*CV_DEFAULT(0)*/,
-                                DoublePointer fovx/*CV_DEFAULT(NULL)*/,
-                                DoublePointer fovy/*CV_DEFAULT(NULL)*/,
-                                DoublePointer focal_length/*CV_DEFAULT(NULL)*/,
-                                CvPoint2D64f principal_point/*CV_DEFAULT(NULL)*/,
-                                DoublePointer pixel_aspect_ratio/*CV_DEFAULT(NULL)*/);
+                                double aperture_width/*=0*/,
+                                double aperture_height/*=0*/,
+                                DoublePointer fovx/*=NULL*/,
+                                DoublePointer fovy/*=NULL*/,
+                                DoublePointer focal_length/*=NULL*/,
+                                CvPoint2D64f principal_point/*=NULL*/,
+                                DoublePointer pixel_aspect_ratio/*=NULL*/);
 public static native void cvCalibrationMatrixValues( @Const CvMat camera_matrix,
                                 @ByVal CvSize image_size);
 public static native void cvCalibrationMatrixValues( @Const CvMat camera_matrix,
                                 @ByVal CvSize image_size,
-                                double aperture_width/*CV_DEFAULT(0)*/,
-                                double aperture_height/*CV_DEFAULT(0)*/,
-                                DoubleBuffer fovx/*CV_DEFAULT(NULL)*/,
-                                DoubleBuffer fovy/*CV_DEFAULT(NULL)*/,
-                                DoubleBuffer focal_length/*CV_DEFAULT(NULL)*/,
-                                @Cast("CvPoint2D64f*") DoubleBuffer principal_point/*CV_DEFAULT(NULL)*/,
-                                DoubleBuffer pixel_aspect_ratio/*CV_DEFAULT(NULL)*/);
+                                double aperture_width/*=0*/,
+                                double aperture_height/*=0*/,
+                                DoubleBuffer fovx/*=NULL*/,
+                                DoubleBuffer fovy/*=NULL*/,
+                                DoubleBuffer focal_length/*=NULL*/,
+                                @Cast("CvPoint2D64f*") DoubleBuffer principal_point/*=NULL*/,
+                                DoubleBuffer pixel_aspect_ratio/*=NULL*/);
 public static native void cvCalibrationMatrixValues( @Const CvMat camera_matrix,
                                 @ByVal CvSize image_size,
-                                double aperture_width/*CV_DEFAULT(0)*/,
-                                double aperture_height/*CV_DEFAULT(0)*/,
-                                double[] fovx/*CV_DEFAULT(NULL)*/,
-                                double[] fovy/*CV_DEFAULT(NULL)*/,
-                                double[] focal_length/*CV_DEFAULT(NULL)*/,
-                                @Cast("CvPoint2D64f*") double[] principal_point/*CV_DEFAULT(NULL)*/,
-                                double[] pixel_aspect_ratio/*CV_DEFAULT(NULL)*/);
+                                double aperture_width/*=0*/,
+                                double aperture_height/*=0*/,
+                                double[] fovx/*=NULL*/,
+                                double[] fovy/*=NULL*/,
+                                double[] focal_length/*=NULL*/,
+                                @Cast("CvPoint2D64f*") double[] principal_point/*=NULL*/,
+                                double[] pixel_aspect_ratio/*=NULL*/);
 
 public static final int CV_CALIB_FIX_INTRINSIC =  256;
 public static final int CV_CALIB_SAME_FOCAL_LENGTH = 512;
@@ -398,10 +398,10 @@ public static native double cvStereoCalibrate( @Const CvMat object_points, @Cons
                                CvMat camera_matrix1, CvMat dist_coeffs1,
                                CvMat camera_matrix2, CvMat dist_coeffs2,
                                @ByVal CvSize image_size, CvMat R, CvMat T,
-                               CvMat E/*CV_DEFAULT(0)*/, CvMat F/*CV_DEFAULT(0)*/,
-                               @ByVal CvTermCriteria term_crit/*CV_DEFAULT(cvTermCriteria(
-                                   CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,30,1e-6))*/,
-                               int flags/*CV_DEFAULT(CV_CALIB_FIX_INTRINSIC)*/);
+                               CvMat E/*=0*/, CvMat F/*=0*/,
+                               @ByVal CvTermCriteria term_crit/*=cvTermCriteria(
+                                   CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,30,1e-6)*/,
+                               int flags/*=CV_CALIB_FIX_INTRINSIC*/);
 public static native double cvStereoCalibrate( @Const CvMat object_points, @Const CvMat image_points1,
                                @Const CvMat image_points2, @Const CvMat npoints,
                                CvMat camera_matrix1, CvMat dist_coeffs1,
@@ -416,12 +416,12 @@ public static native void cvStereoRectify( @Const CvMat camera_matrix1, @Const C
                              @Const CvMat dist_coeffs1, @Const CvMat dist_coeffs2,
                              @ByVal CvSize image_size, @Const CvMat R, @Const CvMat T,
                              CvMat R1, CvMat R2, CvMat P1, CvMat P2,
-                             CvMat Q/*CV_DEFAULT(0)*/,
-                             int flags/*CV_DEFAULT(CV_CALIB_ZERO_DISPARITY)*/,
-                             double alpha/*CV_DEFAULT(-1)*/,
-                             @ByVal CvSize new_image_size/*CV_DEFAULT(cvSize(0,0))*/,
-                             CvRect valid_pix_ROI1/*CV_DEFAULT(0)*/,
-                             CvRect valid_pix_ROI2/*CV_DEFAULT(0)*/);
+                             CvMat Q/*=0*/,
+                             int flags/*=CV_CALIB_ZERO_DISPARITY*/,
+                             double alpha/*=-1*/,
+                             @ByVal CvSize new_image_size/*=cvSize(0,0)*/,
+                             CvRect valid_pix_ROI1/*=0*/,
+                             CvRect valid_pix_ROI2/*=0*/);
 public static native void cvStereoRectify( @Const CvMat camera_matrix1, @Const CvMat camera_matrix2,
                              @Const CvMat dist_coeffs1, @Const CvMat dist_coeffs2,
                              @ByVal CvSize image_size, @Const CvMat R, @Const CvMat T,
@@ -432,7 +432,7 @@ public static native void cvStereoRectify( @Const CvMat camera_matrix1, @Const C
 public static native int cvStereoRectifyUncalibrated( @Const CvMat points1, @Const CvMat points2,
                                         @Const CvMat F, @ByVal CvSize img_size,
                                         CvMat H1, CvMat H2,
-                                        double threshold/*CV_DEFAULT(5)*/);
+                                        double threshold/*=5*/);
 public static native int cvStereoRectifyUncalibrated( @Const CvMat points1, @Const CvMat points2,
                                         @Const CvMat F, @ByVal CvSize img_size,
                                         CvMat H1, CvMat H2);
@@ -493,8 +493,8 @@ public static final int CV_STEREO_BM_BASIC = 0;
 public static final int CV_STEREO_BM_FISH_EYE = 1;
 public static final int CV_STEREO_BM_NARROW = 2;
 
-public static native CvStereoBMState cvCreateStereoBMState(int preset/*CV_DEFAULT(CV_STEREO_BM_BASIC)*/,
-                                              int numberOfDisparities/*CV_DEFAULT(0)*/);
+public static native CvStereoBMState cvCreateStereoBMState(int preset/*=CV_STEREO_BM_BASIC*/,
+                                              int numberOfDisparities/*=0*/);
 public static native CvStereoBMState cvCreateStereoBMState();
 
 public static native void cvReleaseStereoBMState( @Cast("CvStereoBMState**") PointerPointer state );
@@ -508,14 +508,14 @@ public static native @ByVal CvRect cvGetValidDisparityROI( @ByVal CvRect roi1, @
 
 public static native void cvValidateDisparity( CvArr disparity, @Const CvArr cost,
                                  int minDisparity, int numberOfDisparities,
-                                 int disp12MaxDiff/*CV_DEFAULT(1)*/ );
+                                 int disp12MaxDiff/*=1*/ );
 public static native void cvValidateDisparity( CvArr disparity, @Const CvArr cost,
                                  int minDisparity, int numberOfDisparities );
 
 /* Reprojects the computed disparity image to the 3D space using the specified 4x4 matrix */
 public static native void cvReprojectImageTo3D( @Const CvArr disparityImage,
                                    CvArr _3dImage, @Const CvMat Q,
-                                   int handleMissingValues/*CV_DEFAULT(0)*/ );
+                                   int handleMissingValues/*=0*/ );
 public static native void cvReprojectImageTo3D( @Const CvArr disparityImage,
                                    CvArr _3dImage, @Const CvMat Q );
 

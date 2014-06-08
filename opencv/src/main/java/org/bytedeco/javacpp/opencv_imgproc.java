@@ -491,13 +491,13 @@ public static class CvChainPtReader extends CvSeqReader {
         return (CvChainPtReader)super.position(position);
     }
 
-    public native int header_size(); public native CvChainPtReader header_size(int header_size);                                       
-    public native CvSeq seq(); public native CvChainPtReader seq(CvSeq seq);        /* sequence, beign read */             
-    public native CvSeqBlock block(); public native CvChainPtReader block(CvSeqBlock block);      /* current block */                    
-    public native @Cast("schar*") BytePointer ptr(); public native CvChainPtReader ptr(BytePointer ptr);        /* pointer to element be read next */  
+    public native int header_size(); public native CvChainPtReader header_size(int header_size);
+    public native CvSeq seq(); public native CvChainPtReader seq(CvSeq seq);        /* sequence, beign read */
+    public native CvSeqBlock block(); public native CvChainPtReader block(CvSeqBlock block);      /* current block */
+    public native @Cast("schar*") BytePointer ptr(); public native CvChainPtReader ptr(BytePointer ptr);        /* pointer to element be read next */
     public native @Cast("schar*") BytePointer block_min(); public native CvChainPtReader block_min(BytePointer block_min);  /* pointer to the beginning of block */
-    public native @Cast("schar*") BytePointer block_max(); public native CvChainPtReader block_max(BytePointer block_max);  /* pointer to the end of block */      
-    public native int delta_index(); public native CvChainPtReader delta_index(int delta_index);/* = seq->first->start_index   */      
+    public native @Cast("schar*") BytePointer block_max(); public native CvChainPtReader block_max(BytePointer block_max);  /* pointer to the end of block */
+    public native int delta_index(); public native CvChainPtReader delta_index(int delta_index);/* = seq->first->start_index   */
     public native @Cast("schar*") BytePointer prev_elem(); public native CvChainPtReader prev_elem(BytePointer prev_elem);  /* pointer to previous element */
     public native @Cast("char") byte code(); public native CvChainPtReader code(byte code);
     public native @ByRef CvPoint pt(); public native CvChainPtReader pt(CvPoint pt);
@@ -541,9 +541,9 @@ public static class CvQuadEdge2D extends Pointer {
         return (CvQuadEdge2D)super.position(position);
     }
 
-    public native int flags(); public native CvQuadEdge2D flags(int flags);                     
+    public native int flags(); public native CvQuadEdge2D flags(int flags);
     public native CvSubdiv2DPoint pt(int i); public native CvQuadEdge2D pt(int i, CvSubdiv2DPoint pt);
-    @MemberGetter public native @Cast("CvSubdiv2DPoint**") PointerPointer pt(); 
+    @MemberGetter public native @Cast("CvSubdiv2DPoint**") PointerPointer pt();
     public native @Cast("CvSubdiv2DEdge") long next(int i); public native CvQuadEdge2D next(int i, long next);
     @MemberGetter public native @Cast("CvSubdiv2DEdge*") SizeTPointer next();
 }
@@ -559,9 +559,9 @@ public static class CvSubdiv2DPoint extends Pointer {
         return (CvSubdiv2DPoint)super.position(position);
     }
 
-    public native int flags(); public native CvSubdiv2DPoint flags(int flags);      
-    public native @Cast("CvSubdiv2DEdge") long first(); public native CvSubdiv2DPoint first(long first);      
-    public native @ByRef CvPoint2D32f pt(); public native CvSubdiv2DPoint pt(CvPoint2D32f pt);         
+    public native int flags(); public native CvSubdiv2DPoint flags(int flags);
+    public native @Cast("CvSubdiv2DEdge") long first(); public native CvSubdiv2DPoint first(long first);
+    public native @ByRef CvPoint2D32f pt(); public native CvSubdiv2DPoint pt(CvPoint2D32f pt);
     public native int id(); public native CvSubdiv2DPoint id(int id);
 }
 
@@ -584,27 +584,27 @@ public static class CvSubdiv2D extends Pointer {
         return (CvSubdiv2D)super.position(position);
     }
 
-    public native int flags(); public native CvSubdiv2D flags(int flags);             /* Miscellaneous flags.     */      
-    public native int header_size(); public native CvSubdiv2D header_size(int header_size);       /* Size of sequence header. */      
-    public native CvSeq h_prev(); public native CvSubdiv2D h_prev(CvSeq h_prev); /* Previous sequence.       */      
-    public native CvSeq h_next(); public native CvSubdiv2D h_next(CvSeq h_next); /* Next sequence.           */      
-    public native CvSeq v_prev(); public native CvSubdiv2D v_prev(CvSeq v_prev); /* 2nd previous sequence.   */      
-    public native CvSeq v_next(); public native CvSubdiv2D v_next(CvSeq v_next);                                           
-    public native int total(); public native CvSubdiv2D total(int total);          /* Total number of elements.            */  
-    public native int elem_size(); public native CvSubdiv2D elem_size(int elem_size);      /* Size of sequence element in bytes.   */  
-    public native @Cast("schar*") BytePointer block_max(); public native CvSubdiv2D block_max(BytePointer block_max);      /* Maximal bound of the last block.     */  
-    public native @Cast("schar*") BytePointer ptr(); public native CvSubdiv2D ptr(BytePointer ptr);            /* Current write pointer.               */  
-    public native int delta_elems(); public native CvSubdiv2D delta_elems(int delta_elems);    /* Grow seq this many at a time.        */  
-    public native CvMemStorage storage(); public native CvSubdiv2D storage(CvMemStorage storage);    /* Where the seq is stored.             */  
-    public native CvSeqBlock free_blocks(); public native CvSubdiv2D free_blocks(CvSeqBlock free_blocks);  /* Free blocks list.                    */  
-    public native CvSeqBlock first(); public native CvSubdiv2D first(CvSeqBlock first);        /* Pointer to the first sequence block. */     
-    public native CvSetElem free_elems(); public native CvSubdiv2D free_elems(CvSetElem free_elems);   
-    public native int active_count(); public native CvSubdiv2D active_count(int active_count);          
-    public native CvSet edges(); public native CvSubdiv2D edges(CvSet edges);           
-    public native int quad_edges(); public native CvSubdiv2D quad_edges(int quad_edges);            
-    public native int is_geometry_valid(); public native CvSubdiv2D is_geometry_valid(int is_geometry_valid);     
-    public native @Cast("CvSubdiv2DEdge") long recent_edge(); public native CvSubdiv2D recent_edge(long recent_edge); 
-    public native @ByRef CvPoint2D32f topleft(); public native CvSubdiv2D topleft(CvPoint2D32f topleft);      
+    public native int flags(); public native CvSubdiv2D flags(int flags);             /* Miscellaneous flags.     */
+    public native int header_size(); public native CvSubdiv2D header_size(int header_size);       /* Size of sequence header. */
+    public native CvSeq h_prev(); public native CvSubdiv2D h_prev(CvSeq h_prev); /* Previous sequence.       */
+    public native CvSeq h_next(); public native CvSubdiv2D h_next(CvSeq h_next); /* Next sequence.           */
+    public native CvSeq v_prev(); public native CvSubdiv2D v_prev(CvSeq v_prev); /* 2nd previous sequence.   */
+    public native CvSeq v_next(); public native CvSubdiv2D v_next(CvSeq v_next);
+    public native int total(); public native CvSubdiv2D total(int total);          /* Total number of elements.            */
+    public native int elem_size(); public native CvSubdiv2D elem_size(int elem_size);      /* Size of sequence element in bytes.   */
+    public native @Cast("schar*") BytePointer block_max(); public native CvSubdiv2D block_max(BytePointer block_max);      /* Maximal bound of the last block.     */
+    public native @Cast("schar*") BytePointer ptr(); public native CvSubdiv2D ptr(BytePointer ptr);            /* Current write pointer.               */
+    public native int delta_elems(); public native CvSubdiv2D delta_elems(int delta_elems);    /* Grow seq this many at a time.        */
+    public native CvMemStorage storage(); public native CvSubdiv2D storage(CvMemStorage storage);    /* Where the seq is stored.             */
+    public native CvSeqBlock free_blocks(); public native CvSubdiv2D free_blocks(CvSeqBlock free_blocks);  /* Free blocks list.                    */
+    public native CvSeqBlock first(); public native CvSubdiv2D first(CvSeqBlock first);        /* Pointer to the first sequence block. */
+    public native CvSetElem free_elems(); public native CvSubdiv2D free_elems(CvSetElem free_elems);
+    public native int active_count(); public native CvSubdiv2D active_count(int active_count);
+    public native CvSet edges(); public native CvSubdiv2D edges(CvSet edges);
+    public native int quad_edges(); public native CvSubdiv2D quad_edges(int quad_edges);
+    public native int is_geometry_valid(); public native CvSubdiv2D is_geometry_valid(int is_geometry_valid);
+    public native @Cast("CvSubdiv2DEdge") long recent_edge(); public native CvSubdiv2D recent_edge(long recent_edge);
+    public native @ByRef CvPoint2D32f topleft(); public native CvSubdiv2D topleft(CvPoint2D32f topleft);
     public native @ByRef CvPoint2D32f bottomright(); public native CvSubdiv2D bottomright(CvPoint2D32f bottomright);
 }
 
@@ -821,22 +821,22 @@ public static final int
 
 /* Adds image to accumulator */
 public static native void cvAcc( @Const CvArr image, CvArr sum,
-                   @Const CvArr mask/*CV_DEFAULT(NULL)*/ );
+                   @Const CvArr mask/*=NULL*/ );
 public static native void cvAcc( @Const CvArr image, CvArr sum );
 
 /* Adds squared image to accumulator */
 public static native void cvSquareAcc( @Const CvArr image, CvArr sqsum,
-                         @Const CvArr mask/*CV_DEFAULT(NULL)*/ );
+                         @Const CvArr mask/*=NULL*/ );
 public static native void cvSquareAcc( @Const CvArr image, CvArr sqsum );
 
 /* Adds a product of two images to accumulator */
 public static native void cvMultiplyAcc( @Const CvArr image1, @Const CvArr image2, CvArr acc,
-                           @Const CvArr mask/*CV_DEFAULT(NULL)*/ );
+                           @Const CvArr mask/*=NULL*/ );
 public static native void cvMultiplyAcc( @Const CvArr image1, @Const CvArr image2, CvArr acc );
 
 /* Adds image to accumulator with weights: acc = acc*(1-alpha) + image*alpha */
 public static native void cvRunningAvg( @Const CvArr image, CvArr acc, double alpha,
-                          @Const CvArr mask/*CV_DEFAULT(NULL)*/ );
+                          @Const CvArr mask/*=NULL*/ );
 public static native void cvRunningAvg( @Const CvArr image, CvArr acc, double alpha );
 
 /****************************************************************************************\
@@ -846,40 +846,40 @@ public static native void cvRunningAvg( @Const CvArr image, CvArr acc, double al
 /* Copies source 2D array inside of the larger destination array and
    makes a border of the specified type (IPL_BORDER_*) around the copied area. */
 public static native void cvCopyMakeBorder( @Const CvArr src, CvArr dst, @ByVal CvPoint offset,
-                              int bordertype, @ByVal CvScalar value/*CV_DEFAULT(cvScalarAll(0))*/);
+                              int bordertype, @ByVal CvScalar value/*=cvScalarAll(0)*/);
 public static native void cvCopyMakeBorder( @Const CvArr src, CvArr dst, @ByVal CvPoint offset,
                               int bordertype);
 public static native void cvCopyMakeBorder( @Const CvArr src, CvArr dst, @ByVal @Cast("CvPoint*") IntBuffer offset,
-                              int bordertype, @ByVal CvScalar value/*CV_DEFAULT(cvScalarAll(0))*/);
+                              int bordertype, @ByVal CvScalar value/*=cvScalarAll(0)*/);
 public static native void cvCopyMakeBorder( @Const CvArr src, CvArr dst, @ByVal @Cast("CvPoint*") IntBuffer offset,
                               int bordertype);
 public static native void cvCopyMakeBorder( @Const CvArr src, CvArr dst, @ByVal @Cast("CvPoint*") int[] offset,
-                              int bordertype, @ByVal CvScalar value/*CV_DEFAULT(cvScalarAll(0))*/);
+                              int bordertype, @ByVal CvScalar value/*=cvScalarAll(0)*/);
 public static native void cvCopyMakeBorder( @Const CvArr src, CvArr dst, @ByVal @Cast("CvPoint*") int[] offset,
                               int bordertype);
 
 /* Smoothes array (removes noise) */
 public static native void cvSmooth( @Const CvArr src, CvArr dst,
-                      int smoothtype/*CV_DEFAULT(CV_GAUSSIAN)*/,
-                      int size1/*CV_DEFAULT(3)*/,
-                      int size2/*CV_DEFAULT(0)*/,
-                      double sigma1/*CV_DEFAULT(0)*/,
-                      double sigma2/*CV_DEFAULT(0)*/);
+                      int smoothtype/*=CV_GAUSSIAN*/,
+                      int size1/*=3*/,
+                      int size2/*=0*/,
+                      double sigma1/*=0*/,
+                      double sigma2/*=0*/);
 public static native void cvSmooth( @Const CvArr src, CvArr dst);
 
 /* Convolves the image with the kernel */
 public static native void cvFilter2D( @Const CvArr src, CvArr dst, @Const CvMat kernel,
-                        @ByVal CvPoint anchor/*CV_DEFAULT(cvPoint(-1,-1))*/);
+                        @ByVal CvPoint anchor/*=cvPoint(-1,-1)*/);
 public static native void cvFilter2D( @Const CvArr src, CvArr dst, @Const CvMat kernel);
 public static native void cvFilter2D( @Const CvArr src, CvArr dst, @Const CvMat kernel,
-                        @ByVal @Cast("CvPoint*") IntBuffer anchor/*CV_DEFAULT(cvPoint(-1,-1))*/);
+                        @ByVal @Cast("CvPoint*") IntBuffer anchor/*=cvPoint(-1,-1)*/);
 public static native void cvFilter2D( @Const CvArr src, CvArr dst, @Const CvMat kernel,
-                        @ByVal @Cast("CvPoint*") int[] anchor/*CV_DEFAULT(cvPoint(-1,-1))*/);
+                        @ByVal @Cast("CvPoint*") int[] anchor/*=cvPoint(-1,-1)*/);
 
 /* Finds integral image: SUM(X,Y) = sum(x<X,y<Y)I(x,y) */
 public static native void cvIntegral( @Const CvArr image, CvArr sum,
-                       CvArr sqsum/*CV_DEFAULT(NULL)*/,
-                       CvArr tilted_sum/*CV_DEFAULT(NULL)*/);
+                       CvArr sqsum/*=NULL*/,
+                       CvArr tilted_sum/*=NULL*/);
 public static native void cvIntegral( @Const CvArr image, CvArr sum);
 
 /*
@@ -888,7 +888,7 @@ public static native void cvIntegral( @Const CvArr image, CvArr sum);
    dst_height = floor(src_height/2)[+1]
 */
 public static native void cvPyrDown( @Const CvArr src, CvArr dst,
-                        int filter/*CV_DEFAULT(CV_GAUSSIAN_5x5)*/ );
+                        int filter/*=CV_GAUSSIAN_5x5*/ );
 public static native void cvPyrDown( @Const CvArr src, CvArr dst );
 
 /*
@@ -897,15 +897,15 @@ public static native void cvPyrDown( @Const CvArr src, CvArr dst );
    dst_height = src_height*2
 */
 public static native void cvPyrUp( @Const CvArr src, CvArr dst,
-                      int filter/*CV_DEFAULT(CV_GAUSSIAN_5x5)*/ );
+                      int filter/*=CV_GAUSSIAN_5x5*/ );
 public static native void cvPyrUp( @Const CvArr src, CvArr dst );
 
 /* Builds pyramid for an image */
 public static native @Cast("CvMat**") PointerPointer cvCreatePyramid( @Const CvArr img, int extra_layers, double rate,
-                                @Const CvSize layer_sizes/*CV_DEFAULT(0)*/,
-                                CvArr bufarr/*CV_DEFAULT(0)*/,
-                                int calc/*CV_DEFAULT(1)*/,
-                                int filter/*CV_DEFAULT(CV_GAUSSIAN_5x5)*/ );
+                                @Const CvSize layer_sizes/*=0*/,
+                                CvArr bufarr/*=0*/,
+                                int calc/*=1*/,
+                                int filter/*=CV_GAUSSIAN_5x5*/ );
 public static native @ByPtrPtr CvMat cvCreatePyramid( @Const CvArr img, int extra_layers, double rate );
 
 /* Releases pyramid */
@@ -914,8 +914,8 @@ public static native void cvReleasePyramid( @Cast("CvMat***") PointerPointer pyr
 
 /* Filters image using meanshift algorithm */
 public static native void cvPyrMeanShiftFiltering( @Const CvArr src, CvArr dst,
-    double sp, double sr, int max_level/*CV_DEFAULT(1)*/,
-    @ByVal CvTermCriteria termcrit/*CV_DEFAULT(cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,5,1))*/);
+    double sp, double sr, int max_level/*=1*/,
+    @ByVal CvTermCriteria termcrit/*=cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,5,1)*/);
 public static native void cvPyrMeanShiftFiltering( @Const CvArr src, CvArr dst,
     double sp, double sr);
 
@@ -927,13 +927,13 @@ public static native void cvWatershed( @Const CvArr image, CvArr markers );
    Scharr can be used only for the first dx or dy derivative */
 public static native void cvSobel( @Const CvArr src, CvArr dst,
                     int xorder, int yorder,
-                    int aperture_size/*CV_DEFAULT(3)*/);
+                    int aperture_size/*=3*/);
 public static native void cvSobel( @Const CvArr src, CvArr dst,
                     int xorder, int yorder);
 
 /* Calculates the image Laplacian: (d2/dx + d2/dy)I */
 public static native void cvLaplace( @Const CvArr src, CvArr dst,
-                      int aperture_size/*CV_DEFAULT(3)*/ );
+                      int aperture_size/*=3*/ );
 public static native void cvLaplace( @Const CvArr src, CvArr dst );
 
 /* Converts input array pixels from one color space to another */
@@ -942,13 +942,13 @@ public static native void cvCvtColor( @Const CvArr src, CvArr dst, int code );
 
 /* Resizes image (input array is resized to fit the destination array) */
 public static native void cvResize( @Const CvArr src, CvArr dst,
-                       int interpolation/*CV_DEFAULT( CV_INTER_LINEAR )*/);
+                       int interpolation/*=CV_INTER_LINEAR*/);
 public static native void cvResize( @Const CvArr src, CvArr dst);
 
 /* Warps image with affine transform */
 public static native void cvWarpAffine( @Const CvArr src, CvArr dst, @Const CvMat map_matrix,
-                           int flags/*CV_DEFAULT(CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS)*/,
-                           @ByVal CvScalar fillval/*CV_DEFAULT(cvScalarAll(0))*/ );
+                           int flags/*=CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS*/,
+                           @ByVal CvScalar fillval/*=cvScalarAll(0)*/ );
 public static native void cvWarpAffine( @Const CvArr src, CvArr dst, @Const CvMat map_matrix );
 
 /* Computes affine transform matrix for mapping src[i] to dst[i] (i=0,1,2) */
@@ -972,8 +972,8 @@ public static native CvMat cv2DRotationMatrix( @ByVal @Cast("CvPoint2D32f*") flo
 
 /* Warps image with perspective (projective) transform */
 public static native void cvWarpPerspective( @Const CvArr src, CvArr dst, @Const CvMat map_matrix,
-                                int flags/*CV_DEFAULT(CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS)*/,
-                                @ByVal CvScalar fillval/*CV_DEFAULT(cvScalarAll(0))*/ );
+                                int flags/*=CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS*/,
+                                @ByVal CvScalar fillval/*=cvScalarAll(0)*/ );
 public static native void cvWarpPerspective( @Const CvArr src, CvArr dst, @Const CvMat map_matrix );
 
 /* Computes perspective transform matrix for mapping src[i] to dst[i] (i=0,1,2,3) */
@@ -990,8 +990,8 @@ public static native CvMat cvGetPerspectiveTransform( @Cast("const CvPoint2D32f*
 /* Performs generic geometric transformation using the specified coordinate maps */
 public static native void cvRemap( @Const CvArr src, CvArr dst,
                       @Const CvArr mapx, @Const CvArr mapy,
-                      int flags/*CV_DEFAULT(CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS)*/,
-                      @ByVal CvScalar fillval/*CV_DEFAULT(cvScalarAll(0))*/ );
+                      int flags/*=CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS*/,
+                      @ByVal CvScalar fillval/*=cvScalarAll(0)*/ );
 public static native void cvRemap( @Const CvArr src, CvArr dst,
                       @Const CvArr mapx, @Const CvArr mapy );
 
@@ -1002,34 +1002,34 @@ public static native void cvConvertMaps( @Const CvArr mapx, @Const CvArr mapy,
 /* Performs forward or inverse log-polar image transform */
 public static native void cvLogPolar( @Const CvArr src, CvArr dst,
                          @ByVal CvPoint2D32f center, double M,
-                         int flags/*CV_DEFAULT(CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS)*/);
+                         int flags/*=CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS*/);
 public static native void cvLogPolar( @Const CvArr src, CvArr dst,
                          @ByVal CvPoint2D32f center, double M);
 public static native void cvLogPolar( @Const CvArr src, CvArr dst,
                          @ByVal @Cast("CvPoint2D32f*") FloatBuffer center, double M,
-                         int flags/*CV_DEFAULT(CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS)*/);
+                         int flags/*=CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS*/);
 public static native void cvLogPolar( @Const CvArr src, CvArr dst,
                          @ByVal @Cast("CvPoint2D32f*") FloatBuffer center, double M);
 public static native void cvLogPolar( @Const CvArr src, CvArr dst,
                          @ByVal @Cast("CvPoint2D32f*") float[] center, double M,
-                         int flags/*CV_DEFAULT(CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS)*/);
+                         int flags/*=CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS*/);
 public static native void cvLogPolar( @Const CvArr src, CvArr dst,
                          @ByVal @Cast("CvPoint2D32f*") float[] center, double M);
 
 /* Performs forward or inverse linear-polar image transform */
 public static native void cvLinearPolar( @Const CvArr src, CvArr dst,
                          @ByVal CvPoint2D32f center, double maxRadius,
-                         int flags/*CV_DEFAULT(CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS)*/);
+                         int flags/*=CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS*/);
 public static native void cvLinearPolar( @Const CvArr src, CvArr dst,
                          @ByVal CvPoint2D32f center, double maxRadius);
 public static native void cvLinearPolar( @Const CvArr src, CvArr dst,
                          @ByVal @Cast("CvPoint2D32f*") FloatBuffer center, double maxRadius,
-                         int flags/*CV_DEFAULT(CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS)*/);
+                         int flags/*=CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS*/);
 public static native void cvLinearPolar( @Const CvArr src, CvArr dst,
                          @ByVal @Cast("CvPoint2D32f*") FloatBuffer center, double maxRadius);
 public static native void cvLinearPolar( @Const CvArr src, CvArr dst,
                          @ByVal @Cast("CvPoint2D32f*") float[] center, double maxRadius,
-                         int flags/*CV_DEFAULT(CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS)*/);
+                         int flags/*=CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS*/);
 public static native void cvLinearPolar( @Const CvArr src, CvArr dst,
                          @ByVal @Cast("CvPoint2D32f*") float[] center, double maxRadius);
 
@@ -1037,7 +1037,7 @@ public static native void cvLinearPolar( @Const CvArr src, CvArr dst,
 public static native void cvUndistort2( @Const CvArr src, CvArr dst,
                           @Const CvMat camera_matrix,
                           @Const CvMat distortion_coeffs,
-                          @Const CvMat new_camera_matrix/*CV_DEFAULT(0)*/ );
+                          @Const CvMat new_camera_matrix/*=0*/ );
 public static native void cvUndistort2( @Const CvArr src, CvArr dst,
                           @Const CvMat camera_matrix,
                           @Const CvMat distortion_coeffs );
@@ -1059,8 +1059,8 @@ public static native void cvInitUndistortRectifyMap( @Const CvMat camera_matrix,
 public static native void cvUndistortPoints( @Const CvMat src, CvMat dst,
                                @Const CvMat camera_matrix,
                                @Const CvMat dist_coeffs,
-                               @Const CvMat R/*CV_DEFAULT(0)*/,
-                               @Const CvMat P/*CV_DEFAULT(0)*/);
+                               @Const CvMat R/*=0*/,
+                               @Const CvMat P/*=0*/);
 public static native void cvUndistortPoints( @Const CvMat src, CvMat dst,
                                @Const CvMat camera_matrix,
                                @Const CvMat dist_coeffs);
@@ -1068,16 +1068,16 @@ public static native void cvUndistortPoints( @Const CvMat src, CvMat dst,
 /* creates structuring element used for morphological operations */
 public static native IplConvKernel cvCreateStructuringElementEx(
             int cols, int rows, int anchor_x, int anchor_y,
-            int shape, IntPointer values/*CV_DEFAULT(NULL)*/ );
+            int shape, IntPointer values/*=NULL*/ );
 public static native IplConvKernel cvCreateStructuringElementEx(
             int cols, int rows, int anchor_x, int anchor_y,
             int shape );
 public static native IplConvKernel cvCreateStructuringElementEx(
             int cols, int rows, int anchor_x, int anchor_y,
-            int shape, IntBuffer values/*CV_DEFAULT(NULL)*/ );
+            int shape, IntBuffer values/*=NULL*/ );
 public static native IplConvKernel cvCreateStructuringElementEx(
             int cols, int rows, int anchor_x, int anchor_y,
-            int shape, int[] values/*CV_DEFAULT(NULL)*/ );
+            int shape, int[] values/*=NULL*/ );
 
 /* releases structuring element */
 public static native void cvReleaseStructuringElement( @Cast("IplConvKernel**") PointerPointer element );
@@ -1086,27 +1086,27 @@ public static native void cvReleaseStructuringElement( @ByPtrPtr IplConvKernel e
 /* erodes input image (applies minimum filter) one or more times.
    If element pointer is NULL, 3x3 rectangular element is used */
 public static native void cvErode( @Const CvArr src, CvArr dst,
-                      IplConvKernel element/*CV_DEFAULT(NULL)*/,
-                      int iterations/*CV_DEFAULT(1)*/ );
+                      IplConvKernel element/*=NULL*/,
+                      int iterations/*=1*/ );
 public static native void cvErode( @Const CvArr src, CvArr dst );
 
 /* dilates input image (applies maximum filter) one or more times.
    If element pointer is NULL, 3x3 rectangular element is used */
 public static native void cvDilate( @Const CvArr src, CvArr dst,
-                       IplConvKernel element/*CV_DEFAULT(NULL)*/,
-                       int iterations/*CV_DEFAULT(1)*/ );
+                       IplConvKernel element/*=NULL*/,
+                       int iterations/*=1*/ );
 public static native void cvDilate( @Const CvArr src, CvArr dst );
 
 /* Performs complex morphological transformation */
 public static native void cvMorphologyEx( @Const CvArr src, CvArr dst,
                              CvArr temp, IplConvKernel element,
-                             int operation, int iterations/*CV_DEFAULT(1)*/ );
+                             int operation, int iterations/*=1*/ );
 public static native void cvMorphologyEx( @Const CvArr src, CvArr dst,
                              CvArr temp, IplConvKernel element,
                              int operation );
 
 /* Calculates all spatial and central moments up to the 3rd order */
-public static native void cvMoments( @Const CvArr arr, CvMoments moments, int binary/*CV_DEFAULT(0)*/);
+public static native void cvMoments( @Const CvArr arr, CvMoments moments, int binary/*=0*/);
 public static native void cvMoments( @Const CvArr arr, CvMoments moments);
 
 /* Retrieve particular spatial, central or normalized central moments */
@@ -1123,13 +1123,13 @@ public static native void cvGetHuMoments( CvMoments moments, CvHuMoments hu_mome
 /* Fetches pixels that belong to the specified line segment and stores them to the buffer.
    Returns the number of retrieved points. */
 public static native int cvSampleLine( @Const CvArr image, @ByVal CvPoint pt1, @ByVal CvPoint pt2, Pointer buffer,
-                          int connectivity/*CV_DEFAULT(8)*/);
+                          int connectivity/*=8*/);
 public static native int cvSampleLine( @Const CvArr image, @ByVal CvPoint pt1, @ByVal CvPoint pt2, Pointer buffer);
 public static native int cvSampleLine( @Const CvArr image, @ByVal @Cast("CvPoint*") IntBuffer pt1, @ByVal @Cast("CvPoint*") IntBuffer pt2, Pointer buffer,
-                          int connectivity/*CV_DEFAULT(8)*/);
+                          int connectivity/*=8*/);
 public static native int cvSampleLine( @Const CvArr image, @ByVal @Cast("CvPoint*") IntBuffer pt1, @ByVal @Cast("CvPoint*") IntBuffer pt2, Pointer buffer);
 public static native int cvSampleLine( @Const CvArr image, @ByVal @Cast("CvPoint*") int[] pt1, @ByVal @Cast("CvPoint*") int[] pt2, Pointer buffer,
-                          int connectivity/*CV_DEFAULT(8)*/);
+                          int connectivity/*=8*/);
 public static native int cvSampleLine( @Const CvArr image, @ByVal @Cast("CvPoint*") int[] pt1, @ByVal @Cast("CvPoint*") int[] pt2, Pointer buffer);
 
 /* Retrieves the rectangular image region with specified center from the input array.
@@ -1158,30 +1158,30 @@ public static native void cvMatchTemplate( @Const CvArr image, @Const CvArr temp
 public static native float cvCalcEMD2( @Const CvArr signature1,
                           @Const CvArr signature2,
                           int distance_type,
-                          CvDistanceFunction distance_func/*CV_DEFAULT(NULL)*/,
-                          @Const CvArr cost_matrix/*CV_DEFAULT(NULL)*/,
-                          CvArr flow/*CV_DEFAULT(NULL)*/,
-                          FloatPointer lower_bound/*CV_DEFAULT(NULL)*/,
-                          Pointer userdata/*CV_DEFAULT(NULL)*/);
+                          CvDistanceFunction distance_func/*=NULL*/,
+                          @Const CvArr cost_matrix/*=NULL*/,
+                          CvArr flow/*=NULL*/,
+                          FloatPointer lower_bound/*=NULL*/,
+                          Pointer userdata/*=NULL*/);
 public static native float cvCalcEMD2( @Const CvArr signature1,
                           @Const CvArr signature2,
                           int distance_type);
 public static native float cvCalcEMD2( @Const CvArr signature1,
                           @Const CvArr signature2,
                           int distance_type,
-                          CvDistanceFunction distance_func/*CV_DEFAULT(NULL)*/,
-                          @Const CvArr cost_matrix/*CV_DEFAULT(NULL)*/,
-                          CvArr flow/*CV_DEFAULT(NULL)*/,
-                          FloatBuffer lower_bound/*CV_DEFAULT(NULL)*/,
-                          Pointer userdata/*CV_DEFAULT(NULL)*/);
+                          CvDistanceFunction distance_func/*=NULL*/,
+                          @Const CvArr cost_matrix/*=NULL*/,
+                          CvArr flow/*=NULL*/,
+                          FloatBuffer lower_bound/*=NULL*/,
+                          Pointer userdata/*=NULL*/);
 public static native float cvCalcEMD2( @Const CvArr signature1,
                           @Const CvArr signature2,
                           int distance_type,
-                          CvDistanceFunction distance_func/*CV_DEFAULT(NULL)*/,
-                          @Const CvArr cost_matrix/*CV_DEFAULT(NULL)*/,
-                          CvArr flow/*CV_DEFAULT(NULL)*/,
-                          float[] lower_bound/*CV_DEFAULT(NULL)*/,
-                          Pointer userdata/*CV_DEFAULT(NULL)*/);
+                          CvDistanceFunction distance_func/*=NULL*/,
+                          @Const CvArr cost_matrix/*=NULL*/,
+                          CvArr flow/*=NULL*/,
+                          float[] lower_bound/*=NULL*/,
+                          Pointer userdata/*=NULL*/);
 
 /****************************************************************************************\
 *                              Contours retrieving                                       *
@@ -1190,26 +1190,26 @@ public static native float cvCalcEMD2( @Const CvArr signature1,
 /* Retrieves outer and optionally inner boundaries of white (non-zero) connected
    components in the black (zero) background */
 public static native int cvFindContours( CvArr image, CvMemStorage storage, @Cast("CvSeq**") PointerPointer first_contour,
-                            int header_size/*CV_DEFAULT(sizeof(CvContour))*/,
-                            int mode/*CV_DEFAULT(CV_RETR_LIST)*/,
-                            int method/*CV_DEFAULT(CV_CHAIN_APPROX_SIMPLE)*/,
-                            @ByVal CvPoint offset/*CV_DEFAULT(cvPoint(0,0))*/);
+                            int header_size/*=sizeof(CvContour)*/,
+                            int mode/*=CV_RETR_LIST*/,
+                            int method/*=CV_CHAIN_APPROX_SIMPLE*/,
+                            @ByVal CvPoint offset/*=cvPoint(0,0)*/);
 public static native int cvFindContours( CvArr image, CvMemStorage storage, @ByPtrPtr CvSeq first_contour);
 public static native int cvFindContours( CvArr image, CvMemStorage storage, @ByPtrPtr CvSeq first_contour,
-                            int header_size/*CV_DEFAULT(sizeof(CvContour))*/,
-                            int mode/*CV_DEFAULT(CV_RETR_LIST)*/,
-                            int method/*CV_DEFAULT(CV_CHAIN_APPROX_SIMPLE)*/,
-                            @ByVal CvPoint offset/*CV_DEFAULT(cvPoint(0,0))*/);
+                            int header_size/*=sizeof(CvContour)*/,
+                            int mode/*=CV_RETR_LIST*/,
+                            int method/*=CV_CHAIN_APPROX_SIMPLE*/,
+                            @ByVal CvPoint offset/*=cvPoint(0,0)*/);
 public static native int cvFindContours( CvArr image, CvMemStorage storage, @ByPtrPtr CvSeq first_contour,
-                            int header_size/*CV_DEFAULT(sizeof(CvContour))*/,
-                            int mode/*CV_DEFAULT(CV_RETR_LIST)*/,
-                            int method/*CV_DEFAULT(CV_CHAIN_APPROX_SIMPLE)*/,
-                            @ByVal @Cast("CvPoint*") IntBuffer offset/*CV_DEFAULT(cvPoint(0,0))*/);
+                            int header_size/*=sizeof(CvContour)*/,
+                            int mode/*=CV_RETR_LIST*/,
+                            int method/*=CV_CHAIN_APPROX_SIMPLE*/,
+                            @ByVal @Cast("CvPoint*") IntBuffer offset/*=cvPoint(0,0)*/);
 public static native int cvFindContours( CvArr image, CvMemStorage storage, @ByPtrPtr CvSeq first_contour,
-                            int header_size/*CV_DEFAULT(sizeof(CvContour))*/,
-                            int mode/*CV_DEFAULT(CV_RETR_LIST)*/,
-                            int method/*CV_DEFAULT(CV_CHAIN_APPROX_SIMPLE)*/,
-                            @ByVal @Cast("CvPoint*") int[] offset/*CV_DEFAULT(cvPoint(0,0))*/);
+                            int header_size/*=sizeof(CvContour)*/,
+                            int mode/*=CV_RETR_LIST*/,
+                            int method/*=CV_CHAIN_APPROX_SIMPLE*/,
+                            @ByVal @Cast("CvPoint*") int[] offset/*=cvPoint(0,0)*/);
 
 /* Initializes contour retrieving process.
    Calls cvStartFindContours.
@@ -1217,21 +1217,21 @@ public static native int cvFindContours( CvArr image, CvMemStorage storage, @ByP
    or some other condition becomes true.
    Calls cvEndFindContours at the end. */
 public static native CvContourScanner cvStartFindContours( CvArr image, CvMemStorage storage,
-                            int header_size/*CV_DEFAULT(sizeof(CvContour))*/,
-                            int mode/*CV_DEFAULT(CV_RETR_LIST)*/,
-                            int method/*CV_DEFAULT(CV_CHAIN_APPROX_SIMPLE)*/,
-                            @ByVal CvPoint offset/*CV_DEFAULT(cvPoint(0,0))*/);
+                            int header_size/*=sizeof(CvContour)*/,
+                            int mode/*=CV_RETR_LIST*/,
+                            int method/*=CV_CHAIN_APPROX_SIMPLE*/,
+                            @ByVal CvPoint offset/*=cvPoint(0,0)*/);
 public static native CvContourScanner cvStartFindContours( CvArr image, CvMemStorage storage);
 public static native CvContourScanner cvStartFindContours( CvArr image, CvMemStorage storage,
-                            int header_size/*CV_DEFAULT(sizeof(CvContour))*/,
-                            int mode/*CV_DEFAULT(CV_RETR_LIST)*/,
-                            int method/*CV_DEFAULT(CV_CHAIN_APPROX_SIMPLE)*/,
-                            @ByVal @Cast("CvPoint*") IntBuffer offset/*CV_DEFAULT(cvPoint(0,0))*/);
+                            int header_size/*=sizeof(CvContour)*/,
+                            int mode/*=CV_RETR_LIST*/,
+                            int method/*=CV_CHAIN_APPROX_SIMPLE*/,
+                            @ByVal @Cast("CvPoint*") IntBuffer offset/*=cvPoint(0,0)*/);
 public static native CvContourScanner cvStartFindContours( CvArr image, CvMemStorage storage,
-                            int header_size/*CV_DEFAULT(sizeof(CvContour))*/,
-                            int mode/*CV_DEFAULT(CV_RETR_LIST)*/,
-                            int method/*CV_DEFAULT(CV_CHAIN_APPROX_SIMPLE)*/,
-                            @ByVal @Cast("CvPoint*") int[] offset/*CV_DEFAULT(cvPoint(0,0))*/);
+                            int header_size/*=sizeof(CvContour)*/,
+                            int mode/*=CV_RETR_LIST*/,
+                            int method/*=CV_CHAIN_APPROX_SIMPLE*/,
+                            @ByVal @Cast("CvPoint*") int[] offset/*=cvPoint(0,0)*/);
 
 /* Retrieves next contour */
 public static native CvSeq cvFindNextContour( CvContourScanner scanner );
@@ -1247,10 +1247,10 @@ public static native CvSeq cvEndFindContours( @ByPtrPtr CvContourScanner scanner
 
 /* Approximates a single Freeman chain or a tree of chains to polygonal curves */
 public static native CvSeq cvApproxChains( CvSeq src_seq, CvMemStorage storage,
-                            int method/*CV_DEFAULT(CV_CHAIN_APPROX_SIMPLE)*/,
-                            double parameter/*CV_DEFAULT(0)*/,
-                            int minimal_perimeter/*CV_DEFAULT(0)*/,
-                            int recursive/*CV_DEFAULT(0)*/);
+                            int method/*=CV_CHAIN_APPROX_SIMPLE*/,
+                            double parameter/*=0*/,
+                            int minimal_perimeter/*=0*/,
+                            int recursive/*=0*/);
 public static native CvSeq cvApproxChains( CvSeq src_seq, CvMemStorage storage);
 
 /* Initializes Freeman chain reader.
@@ -1271,15 +1271,15 @@ public static native @ByVal CvPoint cvReadChainPoint( CvChainPtReader reader );
 public static native CvSeq cvApproxPoly( @Const Pointer src_seq,
                              int header_size, CvMemStorage storage,
                              int method, double eps,
-                             int recursive/*CV_DEFAULT(0)*/);
+                             int recursive/*=0*/);
 public static native CvSeq cvApproxPoly( @Const Pointer src_seq,
                              int header_size, CvMemStorage storage,
                              int method, double eps);
 
 /* Calculates perimeter of a contour or length of a part of contour */
 public static native double cvArcLength( @Const Pointer curve,
-                            @ByVal CvSlice slice/*CV_DEFAULT(CV_WHOLE_SEQ)*/,
-                            int is_closed/*CV_DEFAULT(-1)*/);
+                            @ByVal CvSlice slice/*=CV_WHOLE_SEQ*/,
+                            int is_closed/*=-1*/);
 public static native double cvArcLength( @Const Pointer curve);
 
 public static native double cvContourPerimeter( @Const Pointer contour );
@@ -1287,18 +1287,18 @@ public static native double cvContourPerimeter( @Const Pointer contour );
 
 /* Calculates contour bounding rectangle (update=1) or
    just retrieves pre-calculated rectangle (update=0) */
-public static native @ByVal CvRect cvBoundingRect( CvArr points, int update/*CV_DEFAULT(0)*/ );
+public static native @ByVal CvRect cvBoundingRect( CvArr points, int update/*=0*/ );
 public static native @ByVal CvRect cvBoundingRect( CvArr points );
 
 /* Calculates area of a contour or contour segment */
 public static native double cvContourArea( @Const CvArr contour,
-                              @ByVal CvSlice slice/*CV_DEFAULT(CV_WHOLE_SEQ)*/,
-                              int oriented/*CV_DEFAULT(0)*/);
+                              @ByVal CvSlice slice/*=CV_WHOLE_SEQ*/,
+                              int oriented/*=0*/);
 public static native double cvContourArea( @Const CvArr contour);
 
 /* Finds minimum area rotated rectangle bounding a set of points */
 public static native @ByVal CvBox2D cvMinAreaRect2( @Const CvArr points,
-                                CvMemStorage storage/*CV_DEFAULT(NULL)*/);
+                                CvMemStorage storage/*=NULL*/);
 public static native @ByVal CvBox2D cvMinAreaRect2( @Const CvArr points);
 
 /* Finds minimum enclosing circle for a set of points */
@@ -1311,15 +1311,15 @@ public static native int cvMinEnclosingCircle( @Const CvArr points,
 
 /* Compares two contours by matching their moments */
 public static native double cvMatchShapes( @Const Pointer object1, @Const Pointer object2,
-                              int method, double parameter/*CV_DEFAULT(0)*/);
+                              int method, double parameter/*=0*/);
 public static native double cvMatchShapes( @Const Pointer object1, @Const Pointer object2,
                               int method);
 
 /* Calculates exact convex hull of 2d point set */
 public static native CvSeq cvConvexHull2( @Const CvArr input,
-                             Pointer hull_storage/*CV_DEFAULT(NULL)*/,
-                             int orientation/*CV_DEFAULT(CV_CLOCKWISE)*/,
-                             int return_points/*CV_DEFAULT(0)*/);
+                             Pointer hull_storage/*=NULL*/,
+                             int orientation/*=CV_CLOCKWISE*/,
+                             int return_points/*=0*/);
 public static native CvSeq cvConvexHull2( @Const CvArr input);
 
 /* Checks whether the contour is convex or not (returns 1 if convex, 0 if not) */
@@ -1328,7 +1328,7 @@ public static native int cvCheckContourConvexity( @Const CvArr contour );
 
 /* Finds convexity defects for the contour */
 public static native CvSeq cvConvexityDefects( @Const CvArr contour, @Const CvArr convexhull,
-                                   CvMemStorage storage/*CV_DEFAULT(NULL)*/);
+                                   CvMemStorage storage/*=NULL*/);
 public static native CvSeq cvConvexityDefects( @Const CvArr contour, @Const CvArr convexhull);
 
 /* Fits ellipse into a set of 2d points */
@@ -1365,57 +1365,57 @@ public static native double cvPointPolygonTest( @Const CvArr contour,
 
 /* Creates new histogram */
 public static native CvHistogram cvCreateHist( int dims, IntPointer sizes, int type,
-                                   @Cast("float**") PointerPointer ranges/*CV_DEFAULT(NULL)*/,
-                                   int uniform/*CV_DEFAULT(1)*/);
+                                   @Cast("float**") PointerPointer ranges/*=NULL*/,
+                                   int uniform/*=1*/);
 public static native CvHistogram cvCreateHist( int dims, IntPointer sizes, int type);
 public static native CvHistogram cvCreateHist( int dims, IntPointer sizes, int type,
-                                   @ByPtrPtr FloatPointer ranges/*CV_DEFAULT(NULL)*/,
-                                   int uniform/*CV_DEFAULT(1)*/);
+                                   @ByPtrPtr FloatPointer ranges/*=NULL*/,
+                                   int uniform/*=1*/);
 public static native CvHistogram cvCreateHist( int dims, IntBuffer sizes, int type,
-                                   @ByPtrPtr FloatBuffer ranges/*CV_DEFAULT(NULL)*/,
-                                   int uniform/*CV_DEFAULT(1)*/);
+                                   @ByPtrPtr FloatBuffer ranges/*=NULL*/,
+                                   int uniform/*=1*/);
 public static native CvHistogram cvCreateHist( int dims, IntBuffer sizes, int type);
 public static native CvHistogram cvCreateHist( int dims, int[] sizes, int type,
-                                   @ByPtrPtr float[] ranges/*CV_DEFAULT(NULL)*/,
-                                   int uniform/*CV_DEFAULT(1)*/);
+                                   @ByPtrPtr float[] ranges/*=NULL*/,
+                                   int uniform/*=1*/);
 public static native CvHistogram cvCreateHist( int dims, int[] sizes, int type);
 
 /* Assignes histogram bin ranges */
 public static native void cvSetHistBinRanges( CvHistogram hist, @Cast("float**") PointerPointer ranges,
-                                int uniform/*CV_DEFAULT(1)*/);
+                                int uniform/*=1*/);
 public static native void cvSetHistBinRanges( CvHistogram hist, @ByPtrPtr FloatPointer ranges);
 public static native void cvSetHistBinRanges( CvHistogram hist, @ByPtrPtr FloatPointer ranges,
-                                int uniform/*CV_DEFAULT(1)*/);
+                                int uniform/*=1*/);
 public static native void cvSetHistBinRanges( CvHistogram hist, @ByPtrPtr FloatBuffer ranges,
-                                int uniform/*CV_DEFAULT(1)*/);
+                                int uniform/*=1*/);
 public static native void cvSetHistBinRanges( CvHistogram hist, @ByPtrPtr FloatBuffer ranges);
 public static native void cvSetHistBinRanges( CvHistogram hist, @ByPtrPtr float[] ranges,
-                                int uniform/*CV_DEFAULT(1)*/);
+                                int uniform/*=1*/);
 public static native void cvSetHistBinRanges( CvHistogram hist, @ByPtrPtr float[] ranges);
 
 /* Creates histogram header for array */
 public static native CvHistogram cvMakeHistHeaderForArray(
                             int dims, IntPointer sizes, CvHistogram hist,
-                            FloatPointer data, @Cast("float**") PointerPointer ranges/*CV_DEFAULT(NULL)*/,
-                            int uniform/*CV_DEFAULT(1)*/);
+                            FloatPointer data, @Cast("float**") PointerPointer ranges/*=NULL*/,
+                            int uniform/*=1*/);
 public static native CvHistogram cvMakeHistHeaderForArray(
                             int dims, IntPointer sizes, CvHistogram hist,
                             FloatPointer data);
 public static native CvHistogram cvMakeHistHeaderForArray(
                             int dims, IntPointer sizes, CvHistogram hist,
-                            FloatPointer data, @ByPtrPtr FloatPointer ranges/*CV_DEFAULT(NULL)*/,
-                            int uniform/*CV_DEFAULT(1)*/);
+                            FloatPointer data, @ByPtrPtr FloatPointer ranges/*=NULL*/,
+                            int uniform/*=1*/);
 public static native CvHistogram cvMakeHistHeaderForArray(
                             int dims, IntBuffer sizes, CvHistogram hist,
-                            FloatBuffer data, @ByPtrPtr FloatBuffer ranges/*CV_DEFAULT(NULL)*/,
-                            int uniform/*CV_DEFAULT(1)*/);
+                            FloatBuffer data, @ByPtrPtr FloatBuffer ranges/*=NULL*/,
+                            int uniform/*=1*/);
 public static native CvHistogram cvMakeHistHeaderForArray(
                             int dims, IntBuffer sizes, CvHistogram hist,
                             FloatBuffer data);
 public static native CvHistogram cvMakeHistHeaderForArray(
                             int dims, int[] sizes, CvHistogram hist,
-                            float[] data, @ByPtrPtr float[] ranges/*CV_DEFAULT(NULL)*/,
-                            int uniform/*CV_DEFAULT(1)*/);
+                            float[] data, @ByPtrPtr float[] ranges/*=NULL*/,
+                            int uniform/*=1*/);
 public static native CvHistogram cvMakeHistHeaderForArray(
                             int dims, int[] sizes, CvHistogram hist,
                             float[] data);
@@ -1430,20 +1430,20 @@ public static native void cvClearHist( CvHistogram hist );
 /* Finds indices and values of minimum and maximum histogram bins */
 public static native void cvGetMinMaxHistValue( @Const CvHistogram hist,
                                    FloatPointer min_value, FloatPointer max_value,
-                                   IntPointer min_idx/*CV_DEFAULT(NULL)*/,
-                                   IntPointer max_idx/*CV_DEFAULT(NULL)*/);
+                                   IntPointer min_idx/*=NULL*/,
+                                   IntPointer max_idx/*=NULL*/);
 public static native void cvGetMinMaxHistValue( @Const CvHistogram hist,
                                    FloatPointer min_value, FloatPointer max_value);
 public static native void cvGetMinMaxHistValue( @Const CvHistogram hist,
                                    FloatBuffer min_value, FloatBuffer max_value,
-                                   IntBuffer min_idx/*CV_DEFAULT(NULL)*/,
-                                   IntBuffer max_idx/*CV_DEFAULT(NULL)*/);
+                                   IntBuffer min_idx/*=NULL*/,
+                                   IntBuffer max_idx/*=NULL*/);
 public static native void cvGetMinMaxHistValue( @Const CvHistogram hist,
                                    FloatBuffer min_value, FloatBuffer max_value);
 public static native void cvGetMinMaxHistValue( @Const CvHistogram hist,
                                    float[] min_value, float[] max_value,
-                                   int[] min_idx/*CV_DEFAULT(NULL)*/,
-                                   int[] max_idx/*CV_DEFAULT(NULL)*/);
+                                   int[] min_idx/*=NULL*/,
+                                   int[] max_idx/*=NULL*/);
 public static native void cvGetMinMaxHistValue( @Const CvHistogram hist,
                                    float[] min_value, float[] max_value);
 
@@ -1477,20 +1477,20 @@ public static native void cvCalcBayesianProb( @ByPtrPtr CvHistogram src, int num
 
 /* Calculates array histogram */
 public static native void cvCalcArrHist( @Cast("CvArr**") PointerPointer arr, CvHistogram hist,
-                            int accumulate/*CV_DEFAULT(0)*/,
-                            @Const CvArr mask/*CV_DEFAULT(NULL)*/ );
+                            int accumulate/*=0*/,
+                            @Const CvArr mask/*=NULL*/ );
 public static native void cvCalcArrHist( @ByPtrPtr CvArr arr, CvHistogram hist );
 public static native void cvCalcArrHist( @ByPtrPtr CvArr arr, CvHistogram hist,
-                            int accumulate/*CV_DEFAULT(0)*/,
-                            @Const CvArr mask/*CV_DEFAULT(NULL)*/ );
+                            int accumulate/*=0*/,
+                            @Const CvArr mask/*=NULL*/ );
 
 public static native void cvCalcHist( @Cast("IplImage**") PointerPointer image, CvHistogram hist,
-                             int accumulate/*CV_DEFAULT(0)*/,
-                             @Const CvArr mask/*CV_DEFAULT(NULL)*/ );
+                             int accumulate/*=0*/,
+                             @Const CvArr mask/*=NULL*/ );
 public static native void cvCalcHist( @ByPtrPtr IplImage image, CvHistogram hist );
 public static native void cvCalcHist( @ByPtrPtr IplImage image, CvHistogram hist,
-                             int accumulate/*CV_DEFAULT(0)*/,
-                             @Const CvArr mask/*CV_DEFAULT(NULL)*/ );
+                             int accumulate/*=0*/,
+                             @Const CvArr mask/*=NULL*/ );
 
 /* Calculates back project */
 public static native void cvCalcArrBackProject( @Cast("CvArr**") PointerPointer image, CvArr dst,
@@ -1515,7 +1515,7 @@ public static native void cvCalcBackProjectPatch(@ByPtrPtr IplImage image, CvArr
 
 /* calculates probabilistic density (divides one histogram by another) */
 public static native void cvCalcProbDensity( @Const CvHistogram hist1, @Const CvHistogram hist2,
-                                CvHistogram dst_hist, double scale/*CV_DEFAULT(255)*/ );
+                                CvHistogram dst_hist, double scale/*=255*/ );
 public static native void cvCalcProbDensity( @Const CvHistogram hist1, @Const CvHistogram hist2,
                                 CvHistogram dst_hist );
 
@@ -1525,24 +1525,24 @@ public static native void cvEqualizeHist( @Const CvArr src, CvArr dst );
 
 /* Applies distance transform to binary image */
 public static native void cvDistTransform( @Const CvArr src, CvArr dst,
-                              int distance_type/*CV_DEFAULT(CV_DIST_L2)*/,
-                              int mask_size/*CV_DEFAULT(3)*/,
-                              @Const FloatPointer mask/*CV_DEFAULT(NULL)*/,
-                              CvArr labels/*CV_DEFAULT(NULL)*/,
-                              int labelType/*CV_DEFAULT(CV_DIST_LABEL_CCOMP)*/);
+                              int distance_type/*=CV_DIST_L2*/,
+                              int mask_size/*=3*/,
+                              @Const FloatPointer mask/*=NULL*/,
+                              CvArr labels/*=NULL*/,
+                              int labelType/*=CV_DIST_LABEL_CCOMP*/);
 public static native void cvDistTransform( @Const CvArr src, CvArr dst);
 public static native void cvDistTransform( @Const CvArr src, CvArr dst,
-                              int distance_type/*CV_DEFAULT(CV_DIST_L2)*/,
-                              int mask_size/*CV_DEFAULT(3)*/,
-                              @Const FloatBuffer mask/*CV_DEFAULT(NULL)*/,
-                              CvArr labels/*CV_DEFAULT(NULL)*/,
-                              int labelType/*CV_DEFAULT(CV_DIST_LABEL_CCOMP)*/);
+                              int distance_type/*=CV_DIST_L2*/,
+                              int mask_size/*=3*/,
+                              @Const FloatBuffer mask/*=NULL*/,
+                              CvArr labels/*=NULL*/,
+                              int labelType/*=CV_DIST_LABEL_CCOMP*/);
 public static native void cvDistTransform( @Const CvArr src, CvArr dst,
-                              int distance_type/*CV_DEFAULT(CV_DIST_L2)*/,
-                              int mask_size/*CV_DEFAULT(3)*/,
-                              @Const float[] mask/*CV_DEFAULT(NULL)*/,
-                              CvArr labels/*CV_DEFAULT(NULL)*/,
-                              int labelType/*CV_DEFAULT(CV_DIST_LABEL_CCOMP)*/);
+                              int distance_type/*=CV_DIST_L2*/,
+                              int mask_size/*=3*/,
+                              @Const float[] mask/*=NULL*/,
+                              CvArr labels/*=NULL*/,
+                              int labelType/*=CV_DIST_LABEL_CCOMP*/);
 
 
 /* Applies fixed-level threshold to grayscale image.
@@ -1557,35 +1557,35 @@ public static native double cvThreshold( @Const CvArr src, CvArr dst,
    neighborhood size (3, 5, 7 etc.),
    and a constant subtracted from mean (...,-3,-2,-1,0,1,2,3,...) */
 public static native void cvAdaptiveThreshold( @Const CvArr src, CvArr dst, double max_value,
-                                  int adaptive_method/*CV_DEFAULT(CV_ADAPTIVE_THRESH_MEAN_C)*/,
-                                  int threshold_type/*CV_DEFAULT(CV_THRESH_BINARY)*/,
-                                  int block_size/*CV_DEFAULT(3)*/,
-                                  double param1/*CV_DEFAULT(5)*/);
+                                  int adaptive_method/*=CV_ADAPTIVE_THRESH_MEAN_C*/,
+                                  int threshold_type/*=CV_THRESH_BINARY*/,
+                                  int block_size/*=3*/,
+                                  double param1/*=5*/);
 public static native void cvAdaptiveThreshold( @Const CvArr src, CvArr dst, double max_value);
 
 /* Fills the connected component until the color difference gets large enough */
 public static native void cvFloodFill( CvArr image, @ByVal CvPoint seed_point,
-                          @ByVal CvScalar new_val, @ByVal CvScalar lo_diff/*CV_DEFAULT(cvScalarAll(0))*/,
-                          @ByVal CvScalar up_diff/*CV_DEFAULT(cvScalarAll(0))*/,
-                          CvConnectedComp comp/*CV_DEFAULT(NULL)*/,
-                          int flags/*CV_DEFAULT(4)*/,
-                          CvArr mask/*CV_DEFAULT(NULL)*/);
+                          @ByVal CvScalar new_val, @ByVal CvScalar lo_diff/*=cvScalarAll(0)*/,
+                          @ByVal CvScalar up_diff/*=cvScalarAll(0)*/,
+                          CvConnectedComp comp/*=NULL*/,
+                          int flags/*=4*/,
+                          CvArr mask/*=NULL*/);
 public static native void cvFloodFill( CvArr image, @ByVal CvPoint seed_point,
                           @ByVal CvScalar new_val);
 public static native void cvFloodFill( CvArr image, @ByVal @Cast("CvPoint*") IntBuffer seed_point,
-                          @ByVal CvScalar new_val, @ByVal CvScalar lo_diff/*CV_DEFAULT(cvScalarAll(0))*/,
-                          @ByVal CvScalar up_diff/*CV_DEFAULT(cvScalarAll(0))*/,
-                          CvConnectedComp comp/*CV_DEFAULT(NULL)*/,
-                          int flags/*CV_DEFAULT(4)*/,
-                          CvArr mask/*CV_DEFAULT(NULL)*/);
+                          @ByVal CvScalar new_val, @ByVal CvScalar lo_diff/*=cvScalarAll(0)*/,
+                          @ByVal CvScalar up_diff/*=cvScalarAll(0)*/,
+                          CvConnectedComp comp/*=NULL*/,
+                          int flags/*=4*/,
+                          CvArr mask/*=NULL*/);
 public static native void cvFloodFill( CvArr image, @ByVal @Cast("CvPoint*") IntBuffer seed_point,
                           @ByVal CvScalar new_val);
 public static native void cvFloodFill( CvArr image, @ByVal @Cast("CvPoint*") int[] seed_point,
-                          @ByVal CvScalar new_val, @ByVal CvScalar lo_diff/*CV_DEFAULT(cvScalarAll(0))*/,
-                          @ByVal CvScalar up_diff/*CV_DEFAULT(cvScalarAll(0))*/,
-                          CvConnectedComp comp/*CV_DEFAULT(NULL)*/,
-                          int flags/*CV_DEFAULT(4)*/,
-                          CvArr mask/*CV_DEFAULT(NULL)*/);
+                          @ByVal CvScalar new_val, @ByVal CvScalar lo_diff/*=cvScalarAll(0)*/,
+                          @ByVal CvScalar up_diff/*=cvScalarAll(0)*/,
+                          CvConnectedComp comp/*=NULL*/,
+                          int flags/*=4*/,
+                          CvArr mask/*=NULL*/);
 public static native void cvFloodFill( CvArr image, @ByVal @Cast("CvPoint*") int[] seed_point,
                           @ByVal CvScalar new_val);
 
@@ -1595,7 +1595,7 @@ public static native void cvFloodFill( CvArr image, @ByVal @Cast("CvPoint*") int
 
 /* Runs canny edge detector */
 public static native void cvCanny( @Const CvArr image, CvArr edges, double threshold1,
-                      double threshold2, int aperture_size/*CV_DEFAULT(3)*/ );
+                      double threshold2, int aperture_size/*=3*/ );
 public static native void cvCanny( @Const CvArr image, CvArr edges, double threshold1,
                       double threshold2 );
 
@@ -1603,28 +1603,28 @@ public static native void cvCanny( @Const CvArr image, CvArr edges, double thres
    Dx^2 * Dyy + Dxx * Dy^2 - 2 * Dx * Dy * Dxy.
    Applying threshold to the result gives coordinates of corners */
 public static native void cvPreCornerDetect( @Const CvArr image, CvArr corners,
-                               int aperture_size/*CV_DEFAULT(3)*/ );
+                               int aperture_size/*=3*/ );
 public static native void cvPreCornerDetect( @Const CvArr image, CvArr corners );
 
 /* Calculates eigen values and vectors of 2x2
    gradient covariation matrix at every image pixel */
 public static native void cvCornerEigenValsAndVecs( @Const CvArr image, CvArr eigenvv,
-                                       int block_size, int aperture_size/*CV_DEFAULT(3)*/ );
+                                       int block_size, int aperture_size/*=3*/ );
 public static native void cvCornerEigenValsAndVecs( @Const CvArr image, CvArr eigenvv,
                                        int block_size );
 
 /* Calculates minimal eigenvalue for 2x2 gradient covariation matrix at
    every image pixel */
 public static native void cvCornerMinEigenVal( @Const CvArr image, CvArr eigenval,
-                                  int block_size, int aperture_size/*CV_DEFAULT(3)*/ );
+                                  int block_size, int aperture_size/*=3*/ );
 public static native void cvCornerMinEigenVal( @Const CvArr image, CvArr eigenval,
                                   int block_size );
 
 /* Harris corner detector:
    Calculates det(M) - k*(trace(M)^2), where M is 2x2 gradient covariation matrix for each pixel */
 public static native void cvCornerHarris( @Const CvArr image, CvArr harris_response,
-                             int block_size, int aperture_size/*CV_DEFAULT(3)*/,
-                             double k/*CV_DEFAULT(0.04)*/ );
+                             int block_size, int aperture_size/*=3*/,
+                             double k/*=0.04*/ );
 public static native void cvCornerHarris( @Const CvArr image, CvArr harris_response,
                              int block_size );
 
@@ -1645,10 +1645,10 @@ public static native void cvGoodFeaturesToTrack( @Const CvArr image, CvArr eig_i
                                     CvArr temp_image, CvPoint2D32f corners,
                                     IntPointer corner_count, double quality_level,
                                     double min_distance,
-                                    @Const CvArr mask/*CV_DEFAULT(NULL)*/,
-                                    int block_size/*CV_DEFAULT(3)*/,
-                                    int use_harris/*CV_DEFAULT(0)*/,
-                                    double k/*CV_DEFAULT(0.04)*/ );
+                                    @Const CvArr mask/*=NULL*/,
+                                    int block_size/*=3*/,
+                                    int use_harris/*=0*/,
+                                    double k/*=0.04*/ );
 public static native void cvGoodFeaturesToTrack( @Const CvArr image, CvArr eig_image,
                                     CvArr temp_image, CvPoint2D32f corners,
                                     IntPointer corner_count, double quality_level,
@@ -1657,10 +1657,10 @@ public static native void cvGoodFeaturesToTrack( @Const CvArr image, CvArr eig_i
                                     CvArr temp_image, @Cast("CvPoint2D32f*") FloatBuffer corners,
                                     IntBuffer corner_count, double quality_level,
                                     double min_distance,
-                                    @Const CvArr mask/*CV_DEFAULT(NULL)*/,
-                                    int block_size/*CV_DEFAULT(3)*/,
-                                    int use_harris/*CV_DEFAULT(0)*/,
-                                    double k/*CV_DEFAULT(0.04)*/ );
+                                    @Const CvArr mask/*=NULL*/,
+                                    int block_size/*=3*/,
+                                    int use_harris/*=0*/,
+                                    double k/*=0.04*/ );
 public static native void cvGoodFeaturesToTrack( @Const CvArr image, CvArr eig_image,
                                     CvArr temp_image, @Cast("CvPoint2D32f*") FloatBuffer corners,
                                     IntBuffer corner_count, double quality_level,
@@ -1669,10 +1669,10 @@ public static native void cvGoodFeaturesToTrack( @Const CvArr image, CvArr eig_i
                                     CvArr temp_image, @Cast("CvPoint2D32f*") float[] corners,
                                     int[] corner_count, double quality_level,
                                     double min_distance,
-                                    @Const CvArr mask/*CV_DEFAULT(NULL)*/,
-                                    int block_size/*CV_DEFAULT(3)*/,
-                                    int use_harris/*CV_DEFAULT(0)*/,
-                                    double k/*CV_DEFAULT(0.04)*/ );
+                                    @Const CvArr mask/*=NULL*/,
+                                    int block_size/*=3*/,
+                                    int use_harris/*=0*/,
+                                    double k/*=0.04*/ );
 public static native void cvGoodFeaturesToTrack( @Const CvArr image, CvArr eig_image,
                                     CvArr temp_image, @Cast("CvPoint2D32f*") float[] corners,
                                     int[] corner_count, double quality_level,
@@ -1687,17 +1687,17 @@ public static native void cvGoodFeaturesToTrack( @Const CvArr image, CvArr eig_i
    param1 ~ srn, param2 ~ stn - for multi-scale */
 public static native CvSeq cvHoughLines2( CvArr image, Pointer line_storage, int method,
                               double rho, double theta, int threshold,
-                              double param1/*CV_DEFAULT(0)*/, double param2/*CV_DEFAULT(0)*/);
+                              double param1/*=0*/, double param2/*=0*/);
 public static native CvSeq cvHoughLines2( CvArr image, Pointer line_storage, int method,
                               double rho, double theta, int threshold);
 
 /* Finds circles in the image */
 public static native CvSeq cvHoughCircles( CvArr image, Pointer circle_storage,
                               int method, double dp, double min_dist,
-                              double param1/*CV_DEFAULT(100)*/,
-                              double param2/*CV_DEFAULT(100)*/,
-                              int min_radius/*CV_DEFAULT(0)*/,
-                              int max_radius/*CV_DEFAULT(0)*/);
+                              double param1/*=100*/,
+                              double param2/*=100*/,
+                              int min_radius/*=0*/,
+                              int max_radius/*=0*/);
 public static native CvSeq cvHoughCircles( CvArr image, Pointer circle_storage,
                               int method, double dp, double min_dist);
 

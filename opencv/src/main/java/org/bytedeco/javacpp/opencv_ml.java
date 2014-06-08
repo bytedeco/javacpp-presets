@@ -2274,12 +2274,12 @@ public static class CvERTrees extends CvRTrees {
 /* Generates <sample> from multivariate normal distribution, where <mean> - is an
    average row vector, <cov> - symmetric covariation matrix */
 public static native void cvRandMVNormal( CvMat mean, CvMat cov, CvMat sample,
-                           @Cast("CvRNG*") LongPointer rng/*CV_DEFAULT(0)*/ );
+                           @Cast("CvRNG*") LongPointer rng/*=0*/ );
 public static native void cvRandMVNormal( CvMat mean, CvMat cov, CvMat sample );
 public static native void cvRandMVNormal( CvMat mean, CvMat cov, CvMat sample,
-                           @Cast("CvRNG*") LongBuffer rng/*CV_DEFAULT(0)*/ );
+                           @Cast("CvRNG*") LongBuffer rng/*=0*/ );
 public static native void cvRandMVNormal( CvMat mean, CvMat cov, CvMat sample,
-                           @Cast("CvRNG*") long[] rng/*CV_DEFAULT(0)*/ );
+                           @Cast("CvRNG*") long[] rng/*=0*/ );
 
 /* Generates sample from gaussian mixture distribution */
 public static native void cvRandGaussMixture( @Cast("CvMat**") PointerPointer means,
@@ -2287,7 +2287,7 @@ public static native void cvRandGaussMixture( @Cast("CvMat**") PointerPointer me
                                FloatPointer weights,
                                int clsnum,
                                CvMat sample,
-                               CvMat sampClasses/*CV_DEFAULT(0)*/ );
+                               CvMat sampClasses/*=0*/ );
 public static native void cvRandGaussMixture( @ByPtrPtr CvMat means,
                                @ByPtrPtr CvMat covs,
                                FloatPointer weights,
@@ -2298,13 +2298,13 @@ public static native void cvRandGaussMixture( @ByPtrPtr CvMat means,
                                FloatPointer weights,
                                int clsnum,
                                CvMat sample,
-                               CvMat sampClasses/*CV_DEFAULT(0)*/ );
+                               CvMat sampClasses/*=0*/ );
 public static native void cvRandGaussMixture( @ByPtrPtr CvMat means,
                                @ByPtrPtr CvMat covs,
                                FloatBuffer weights,
                                int clsnum,
                                CvMat sample,
-                               CvMat sampClasses/*CV_DEFAULT(0)*/ );
+                               CvMat sampClasses/*=0*/ );
 public static native void cvRandGaussMixture( @ByPtrPtr CvMat means,
                                @ByPtrPtr CvMat covs,
                                FloatBuffer weights,
@@ -2315,7 +2315,7 @@ public static native void cvRandGaussMixture( @ByPtrPtr CvMat means,
                                float[] weights,
                                int clsnum,
                                CvMat sample,
-                               CvMat sampClasses/*CV_DEFAULT(0)*/ );
+                               CvMat sampClasses/*=0*/ );
 public static native void cvRandGaussMixture( @ByPtrPtr CvMat means,
                                @ByPtrPtr CvMat covs,
                                float[] weights,
