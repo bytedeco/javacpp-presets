@@ -1,4 +1,5 @@
 
+ * Add presets for FFTW 3.3.4
  * Fix missing `static` keyword on methods annotated with an `@Adapter` ([issue #3](https://github.com/bytedeco/javacpp-presets/issues/3))
  * Turn `Mat.createFrom()` into a static factory method, and make `Mat.copyFrom()` call `Mat.create()` as appropriate ([issue #1](https://github.com/bytedeco/javacpp-presets/issues/1))
  * Add missing `native_camera` modules of `opencv_highgui` for Android

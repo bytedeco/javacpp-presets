@@ -34,6 +34,7 @@
     <module>libfreenect</module>
     <module>videoinput</module>
     <module>artoolkitplus</module>
+    <module>fftw</module>
   </modules>
 
   <scm>
