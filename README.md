@@ -37,8 +37,10 @@ To rebuild the source code on the Java side, please note that the project files 
 Each child module in turn relies on its corresponding native libraries being already installed in the `cppbuild` subdirectory by a prior execution of the included [CPPBuild Scripts](#cppbuild-scripts), explained below. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified in the `.java` configuration files directly. The following versions are supported:
 
  * OpenCV 2.4.9  http://opencv.org/downloads.html
- * FFmpeg 2.3.x  http://ffmpeg.org/download.html
+ * Libav master  http://libav.org/download.html
  * FlyCapture 2.6.x  http://ww2.ptgrey.com/sdk/flycap
+ * FFmpeg 2.3.x  http://ffmpeg.org/download.html
+ * PGR FlyCapture 1.7 or newer (Windows only)  http://www.ptgrey.com/products/pgrflycapture/
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
  * libfreenect 0.5  https://github.com/OpenKinect/libfreenect
  * videoInput 0.200  https://github.com/ofTheo/videoInput/tree/update2013
@@ -52,7 +54,7 @@ Each child module in turn relies on its corresponding native libraries being alr
 
 Once everything installed and configured, simply execute
 ```bash
-$ mvn install --projects opencv,ffmpeg,flycapture,libdc1394,libfreenect,videoinput,artoolkitplus,etc.
+$ mvn install --projects opencv,libav,ffmpeg,flycapture,libdc1394,libfreenect,videoinput,artoolkitplus,etc.
 ```
 inside the directory containing the parent `pom.xml` file, by specifying only the desired child modules in the command. Please refer to the comments inside the `pom.xml` file for further details.
 
@@ -129,9 +131,9 @@ To contribute, please fork and create pull requests, or post your suggestions [a
 
 
 ----
-Project lead: Samuel Audet [samuel.audet `at` gmail.com](mailto:samuel.audet at gmail.com)  
-Developer site: https://github.com/bytedeco/javacpp-presets  
+Project lead: Samuel Audet [samuel.audet `at` gmail.com](mailto:samuel.audet at gmail.com)
+Developer site: https://github.com/bytedeco/javacpp-presets
 Discussion group: http://groups.google.com/group/javacpp-project
 
-Licensed under the GNU General Public License version 2 (GPLv2) **with Classpath exception**.  
+Licensed under the GNU General Public License version 2 (GPLv2) **with Classpath exception**.
 Please refer to LICENSE.txt or http://www.gnu.org/software/classpath/license.html for details.
