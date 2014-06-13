@@ -61,7 +61,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                      "C:/Program Files/Point Grey Research/FlyCapture2/bin64/FC1/"}) })
 public class PGRFlyCapture implements InfoMapper {
     public void map(InfoMap infoMap) {
-          infoMap.put(new Info("PGRFLYCAPTURE_API", "PGRFLYCAPTURE_CALL_CONVEN").cppTypes().annotations())
+          infoMap.put(new Info("windows.h").skip())
+                 .put(new Info("PGRFLYCAPTURE_API", "PGRFLYCAPTURE_CALL_CONVEN").cppTypes().annotations().cppText(""))
                  .put(new Info("FlyCaptureContext").valueTypes("FlyCaptureContext").pointerTypes("@Cast(\"FlyCaptureContext*\") @ByPtrPtr FlyCaptureContext"))
                  .put(new Info("FlyCaptureImage").base("AbstractFlyCaptureImage"))
                  .put(new Info("FlyCaptureInfoEx::iInitialized", "FlyCaptureDriverInfo",
