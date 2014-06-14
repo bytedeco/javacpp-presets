@@ -11,9 +11,9 @@
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>flycapture</artifactId>
-  <version>1.7.17-${project.parent.version}</version>
+  <version>2.6.3.4-${project.parent.version}</version>
   <packaging>jar</packaging>
-  <name>JavaCPP Presets for PGR FlyCapture</name>
+  <name>JavaCPP Presets for Point Grey's FlyCapture</name>
 
   <properties>
     <!-- Skip on non-Windows system (see profile below) -->

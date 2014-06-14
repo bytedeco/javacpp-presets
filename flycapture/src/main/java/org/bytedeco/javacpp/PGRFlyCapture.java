@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.8-SNAPSHOT
+// Targeted by JavaCPP version 0.8-2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 public class PGRFlyCapture extends org.bytedeco.javacpp.presets.PGRFlyCapture {
     static { Loader.load(); }
 
-// Parsed from C:\Program Files\Point Grey Research\PGR FlyCapture\include\PGRFlyCapture.h
+// Parsed from <PGRFlyCapture.h>
 
 //=============================================================================
 // Copyright © 2001-2006 Point Grey Research, Inc. All Rights Reserved.
@@ -40,7 +40,7 @@ public class PGRFlyCapture extends org.bytedeco.javacpp.presets.PGRFlyCapture {
 //=============================================================================
 
 //=============================================================================
-// $Id: PGRFlyCapture.h,v 1.227 2008/03/10 22:23:13 release Exp $
+// $Id: PGRFlyCapture.h,v 1.1 2009-04-30 17:29:30 soowei Exp $
 //=============================================================================
 // #ifndef __PGRFLYCAPTURE_H__
 // #define __PGRFLYCAPTURE_H__
@@ -62,7 +62,7 @@ public class PGRFlyCapture extends org.bytedeco.javacpp.presets.PGRFlyCapture {
 // Description:
 //  The version of the library.
 //
-public static final int PGRFLYCAPTURE_VERSION = 107317;
+public static final int PGRFLYCAPTURE_VERSION = 108107;
 
 
 //
@@ -256,7 +256,7 @@ public static final int
    // 30 fps.
    FLYCAPTURE_FRAMERATE_30 = 4,
    // Deprecated.  Please use Custom image.
-   FLYCAPTURE_FRAMERATE_50 = 5,
+   FLYCAPTURE_FRAMERATE_UNUSED = 5,
    // 60 fps.
    FLYCAPTURE_FRAMERATE_60 = 6,
    // 120 fps.
@@ -357,6 +357,7 @@ public static final int
    FLYCAPTURE_BUMBLEBEE2 = 11,
    FLYCAPTURE_BUMBLEBEEXB3 = 12,
    FLYCAPTURE_GRASSHOPPER = 13,
+   FLYCAPTURE_CHAMELEON = 14,
    FLYCAPTURE_UNKNOWN = -1,
 
    // Unused member to force this enum to compile to 32 bits.
@@ -386,16 +387,18 @@ public static final int
    FLYCAPTURE_S200 = 1,
    // 400Mbits/sec.
    FLYCAPTURE_S400 = 2,
+   // 480Mbits/sec. USB
+   FLYCAPTURE_S480 = 3,
    // 800Mbits/sec.
-   FLYCAPTURE_S800 = 3,
+   FLYCAPTURE_S800 = 4,
    // 1600Mbits/sec.
-   FLYCAPTURE_S1600 = 4,
+   FLYCAPTURE_S1600 = 5,
    // 3200Mbits/sec.
-   FLYCAPTURE_S3200 = 5,
+   FLYCAPTURE_S3200 = 6,
    // The fastest speed available.
-   FLYCAPTURE_S_FASTEST = 6,
+   FLYCAPTURE_S_FASTEST = 7,
    // Any speed that is available.
-   FLYCAPTURE_ANY = 7,
+   FLYCAPTURE_ANY = 8,
    FLYCAPTURE_SPEED_UNKNOWN = -1,
    // Unused member to force this enum to compile to 32 bits.
    FLYCAPTURE_SPEED_FORCE_QUADLET   =  0x7FFFFFFF;
@@ -441,6 +444,8 @@ public static class FlyCaptureInfoEx extends Pointer {
    public native int iBusNum(); public native FlyCaptureInfoEx iBusNum(int iBusNum);
    // Camera max bus speed
    public native @Cast("FlyCaptureBusSpeed") int CameraMaxBusSpeed(); public native FlyCaptureInfoEx CameraMaxBusSpeed(int CameraMaxBusSpeed);
+   // Flag indicating that the camera is already initialized
+   
 
    // Reserved for future data.
    public native @Cast("unsigned long") int ulReserved(int i); public native FlyCaptureInfoEx ulReserved(int i, int ulReserved);
@@ -448,6 +453,10 @@ public static class FlyCaptureInfoEx extends Pointer {
 
 }
 
+//
+// Description:
+//  This structure stores some extra driver info not stored on FlyCaptureInfoEx
+//
 
 //
 // Description:
@@ -468,6 +477,8 @@ public static final int
    FLYCAPTURE_EDGE_SENSING = 1,
    // Nearest neighbor de-mosaicing.  This algorithm is significantly
    // faster than edge sensing, at the cost of accuracy.
+   // Please note The Nearest Neighbor method has been remapped internally to 
+   // Nearest Neighbor Fast due to observed artifacts with the original method.
    FLYCAPTURE_NEAREST_NEIGHBOR = 2,
    // Faster, less accurate nearest neighbor de-mosaicing.
    FLYCAPTURE_NEAREST_NEIGHBOR_FAST = 3,
@@ -475,7 +486,10 @@ public static final int
    // reproduction.  This method is so processor intensive that it
    // might not keep up with the camera's frame rate.  Best used for
    // offline processing where accurate color reproduction is required.
-   FLYCAPTURE_RIGOROUS = 4;
+   FLYCAPTURE_RIGOROUS = 4,   
+   // High quality linear interpolation. This algorithm provides similar
+   // results to Rigorous, but is up to 30 times faster.
+   FLYCAPTURE_HQLINEAR = 5;
 
 
 //
@@ -866,6 +880,22 @@ public static native @Cast("FlyCaptureError") int flycaptureGetCameraInfo(
                         FlyCaptureContext context,
                         FlyCaptureInfoEx pInfo );
 
+//-----------------------------------------------------------------------------
+//
+// Name: flycaptureGetCameraInfo()
+//
+// Description:
+//   Retrieves information about the camera.
+//
+// Arguments:
+//   context - The FlyCaptureContext associated with the camera.
+//   pInfo   - Receives the camera information.
+//
+// Returns:
+//   A FlyCaptureError indicating the success or failure of the function.
+//
+
+
 
 //-----------------------------------------------------------------------------
 // Name: flycaptureGetBusSpeed()
@@ -1151,6 +1181,8 @@ public static native @Cast("FlyCaptureError") int flycaptureGetColorProcessingMe
 //   flycaptureGetColorProcessingMethod()
 //
 // Remarks:
+//  The Nearest Neighbor method has been remapped internally to Nearest
+//  Neighbor Fast due to observed artifacts with the original method.
 //  This function is only applicable when using the SDK and driver with cameras
 //  that do not do on board color processing. See the definition of
 //  FlyCaptureColorMethod for detailed descriptions of the available modes.
@@ -2425,24 +2457,15 @@ public static native @Cast("FlyCaptureError") int flycaptureSetCameraRegisterBro
 public static native @Cast("FlyCaptureError") int flycaptureGetMemoryChannel(
                               FlyCaptureContext context,
                               @Cast("unsigned int*") IntPointer puiCurrentChannel,
-                              @Cast("unsigned int*") IntPointer puiNumChannels/*=NULL*/ );
-public static native @Cast("FlyCaptureError") int flycaptureGetMemoryChannel(
-                              FlyCaptureContext context,
-                              @Cast("unsigned int*") IntPointer puiCurrentChannel );
+                              @Cast("unsigned int*") IntPointer puiNumChannels );
 public static native @Cast("FlyCaptureError") int flycaptureGetMemoryChannel(
                               FlyCaptureContext context,
                               @Cast("unsigned int*") IntBuffer puiCurrentChannel,
-                              @Cast("unsigned int*") IntBuffer puiNumChannels/*=NULL*/ );
-public static native @Cast("FlyCaptureError") int flycaptureGetMemoryChannel(
-                              FlyCaptureContext context,
-                              @Cast("unsigned int*") IntBuffer puiCurrentChannel );
+                              @Cast("unsigned int*") IntBuffer puiNumChannels );
 public static native @Cast("FlyCaptureError") int flycaptureGetMemoryChannel(
                               FlyCaptureContext context,
                               @Cast("unsigned int*") int[] puiCurrentChannel,
-                              @Cast("unsigned int*") int[] puiNumChannels/*=NULL*/ );
-public static native @Cast("FlyCaptureError") int flycaptureGetMemoryChannel(
-                              FlyCaptureContext context,
-                              @Cast("unsigned int*") int[] puiCurrentChannel );
+                              @Cast("unsigned int*") int[] puiNumChannels );
 
 
 //-----------------------------------------------------------------------------
@@ -2875,7 +2898,7 @@ public static native @Cast("FlyCaptureError") int flycaptureQueryStrobe(
 //   context        - The context associated with the camera to be queried.
 //   pbAvailable    - NULL or a parameter which indicates if the LUT is supported
 //   puiNumChannels - NULL or a parameter which indicates the number of
-//                    available channels.  NOTE: some cameras will return
+//                    available channels.  NOTE some cameras will return
 //                    available, but zero channels.  Typically, these cameras
 //                    will have a single channel and not support turning the
 //                    LUT off.
@@ -3000,7 +3023,7 @@ public static native @Cast("FlyCaptureError") int flycaptureGetLookUpTableChanne
 // #endif // #ifndef __PGRFLYCAPTURE_H__
 
 
-// Parsed from C:\Program Files\Point Grey Research\PGR FlyCapture\include\PGRFlyCapturePlus.h
+// Parsed from <PGRFlyCapturePlus.h>
 
 //=============================================================================
 // Copyright © 2001-2006 Point Grey Research, Inc. All Rights Reserved.
@@ -3033,7 +3056,7 @@ public static native @Cast("FlyCaptureError") int flycaptureGetLookUpTableChanne
 //=============================================================================
 
 //=============================================================================
-// $Id: PGRFlyCapturePlus.h,v 1.43 2007/11/08 02:21:30 demos Exp $
+// $Id: PGRFlyCapturePlus.h,v 1.1 2009-04-30 17:29:30 soowei Exp $
 //=============================================================================
 // #ifndef __PGRFLYCAPTUREPLUS_H__
 // #define __PGRFLYCAPTUREPLUS_H__
@@ -3287,6 +3310,47 @@ public static native @Cast("FlyCaptureError") int flycaptureInitializePlus(
                          @Cast("unsigned long") int ulBusIndex,
                          @Cast("unsigned long") int ulNumBuffers,
                          @Cast("unsigned char**") @ByPtrPtr byte[] arpBuffers );
+
+//-----------------------------------------------------------------------------
+//
+// Name:  flycaptureInitializeFromSerialNumberPlus()
+//
+// Description:
+//   Identical behaviour to flycaptureInitializeFromSerialNumber(), except that the user has
+//   the option of specifying the number of buffers to use, and optionally
+//   allocate those buffers outside the library.
+//
+// Arguments:
+//   context      - The context associated with the camera to be accessed.
+//   serialNumber - The serial number of the FlyCapture camera system to be initialized.
+//   ulNumBuffers - The number of buffers to expect or allocate.  For lock next
+//                  mode, the minimum number of buffers is 2.  For lock latest
+//                  mode, the minimum number of buffers is 4.  The maximum 
+//                  number of buffers is only limited by system memory.
+//   arpBuffers   - An array of pointers to buffers.  If this argument is NULL
+//                  the library will allocate and free the buffers internally,
+//                  otherwise the caller is responsible for allocation and 
+//                  deallocation.  No boundary checking is done on these 
+//                  images, if you are supplying your own buffers, they must
+//                  be large enough to hold the largest image you are 
+//                  expecting.
+//
+//				    When allocating your own buffers, you must take padding into
+//					account.  The maximum amount of padding required is 1 packet,
+//					which can be up to 4096 bytes for 1394a and 8192 bytes for 1394b.
+//					Adding this padding to the image size will ensure the buffer
+//					is large enough to accomodate the image.
+//
+// Returns:
+//   A FlyCaptureError indicating the success or failure of the function.
+//
+// Remarks:
+//   If you don't care about the number of buffers being allocated, use either of the
+//   other initialize methods in pgrflycapture.h.
+//
+// See Also:
+//   flycaptureInitialize(), flycaptureInitializeFromSerialNumber(), flycaptureInitializePlus()
+//
 
 
 //=============================================================================
@@ -4006,7 +4070,7 @@ public static native @Cast("FlyCaptureError") int flycaptureWriteRegisterBlock(
 // #endif // #ifndef __PGRFLYCAPTUREPLUS_H__
 
 
-// Parsed from C:\Program Files\Point Grey Research\PGR FlyCapture\include\PGRFlyCaptureMessaging.h
+// Parsed from <PGRFlyCaptureMessaging.h>
 
 //=============================================================================
 // Copyright © 2006 Point Grey Research, Inc. All Rights Reserved.
@@ -4037,7 +4101,7 @@ public static native @Cast("FlyCaptureError") int flycaptureWriteRegisterBlock(
 //=============================================================================
 
 //=============================================================================
-// $Id: PGRFlyCaptureMessaging.h,v 1.13 2006/10/20 23:25:49 mgibbons Exp $
+// $Id: PGRFlyCaptureMessaging.h,v 1.1 2009-04-30 17:29:30 soowei Exp $
 //=============================================================================
 // #ifndef __PGRFLYCAPTUREMESSAGING_H__
 // #define __PGRFLYCAPTUREMESSAGING_H__
