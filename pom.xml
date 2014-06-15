@@ -159,7 +159,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>       
+      </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
         <version>2.4</version>
@@ -399,6 +399,70 @@
         <platform.root>${user.home}/android/android-ndk/</platform.root>
         <platform.compiler>toolchains/x86-4.6/prebuilt/${os.name}-${os.arch}/bin/i686-linux-android-g++</platform.compiler>
       </properties>
+    </profile>
+
+    <profile>
+      <id>platform-dependency</id>
+      <activation>
+        <property>
+          <name>platform.dependency</name>
+        </property>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>${project.artifactId}</artifactId>
+          <version>${project.version}</version>
+          <classifier>${platform.dependency}</classifier>
+        </dependency>
+      </dependencies>
+    </profile>
+
+    <profile>
+      <id>platform-dependencies</id>
+      <activation>
+        <property>
+          <name>platform.dependencies</name>
+        </property>
+      </activation>
+      <dependencies>
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>${project.artifactId}</artifactId>
+          <version>${project.version}</version>
+          <classifier>${platform}</classifier>
+        </dependency>
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>${project.artifactId}</artifactId>
+          <version>${project.version}</version>
+          <classifier>linux-x86</classifier>
+        </dependency>
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>${project.artifactId}</artifactId>
+          <version>${project.version}</version>
+          <classifier>linux-x86_64</classifier>
+        </dependency>
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>${project.artifactId}</artifactId>
+          <version>${project.version}</version>
+          <classifier>macosx-x86_64</classifier>
+        </dependency>
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>${project.artifactId}</artifactId>
+          <version>${project.version}</version>
+          <classifier>windows-x86</classifier>
+        </dependency>
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>${project.artifactId}</artifactId>
+          <version>${project.version}</version>
+          <classifier>windows-x86_64</classifier>
+        </dependency>
+      </dependencies>
     </profile>
 
     <!-- If someone knows a better way to do this, please do let me know! -->
