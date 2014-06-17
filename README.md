@@ -43,10 +43,12 @@ Each child module in turn relies on its corresponding native library being insta
  * OpenKinect libfreenect 0.4  https://github.com/OpenKinect/libfreenect
  * videoInput 0.200  https://github.com/ofTheo/videoInput/tree/update2013
  * ARToolKitPlus 2.3.0  https://launchpad.net/artoolkitplus
+ * FFTW 3.3.4  http://www.fftw.org/download.html
+ * GSL 1.16  http://www.gnu.org/software/gsl/
 
 We can accomplish that with the included [CPPBuild Scripts](#cppbuild-scripts), explained below. Once everything installed, simply execute
 ```bash
-$ mvn install --projects opencv,ffmpeg,flycapture,libdc1394,libfreenect,videoinput,artoolkitplus
+$ mvn install --projects opencv,ffmpeg,flycapture,libdc1394,libfreenect,videoinput,artoolkitplus,etc.
 ```
 in the root directory, by specifying only the desired child modules in the command. Please refer to the comments inside the parent `pom.xml` file for further details.
 
@@ -83,7 +85,7 @@ Thanks to Jose Gómez for testing this out!
 
 Quick Start
 -----------
-Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, `flycapture*.jar`, `libdc1394*.jar`, `libfreenect*.jar`, `videoinput*.jar`, and `artoolkitplus*.jar`), in addition to `javacpp.jar`, somewhere in your CLASSPATH, or point your build file to the [Maven Central Repository](http://search.maven.org/#search|ga|1|bytedeco), when the binary files are present. The JAR files found in these artifacts are meant to be used with [JavaCPP](https://github.com/bytedeco/javacpp). They were built on Fedora 20, so they may not work on all distributions of Linux, especially older ones. The binaries for Android were compiled for ARMv7 processors featuring an FPU, so they will not work on ancient devices such as the HTC Magic or some others with an ARMv6 CPU. Here are some more specific instructions for common cases:
+Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, `flycapture*.jar`, `libdc1394*.jar`, `libfreenect*.jar`, `videoinput*.jar`, and `artoolkitplus*.jar`, etc.), in addition to `javacpp.jar`, somewhere in your CLASSPATH, or point your build file to the [Maven Central Repository](http://search.maven.org/#search|ga|1|bytedeco), when the binary files are present. The JAR files found in these artifacts are meant to be used with [JavaCPP](https://github.com/bytedeco/javacpp). They were built on Fedora 20, so they may not work on all distributions of Linux, especially older ones. The binaries for Android were compiled for ARMv7 processors featuring an FPU, so they will not work on ancient devices such as the HTC Magic or some others with an ARMv6 CPU. Here are some more specific instructions for common cases:
 
 NetBeans (Java SE 6 or newer):
 

@@ -81,7 +81,7 @@ function download {
 }
 
 if [[ ${#PROJECTS[@]} -eq 0 ]]; then
-    PROJECTS=(opencv ffmpeg flycapture libdc1394 libfreenect videoinput artoolkitplus)
+    PROJECTS=(opencv ffmpeg flycapture libdc1394 libfreenect videoinput artoolkitplus fftw gsl)
 fi
 
 for PROJECT in ${PROJECTS[@]}; do

@@ -35,6 +35,7 @@
     <module>videoinput</module>
     <module>artoolkitplus</module>
     <module>fftw</module>
+    <module>gsl</module>
   </modules>
 
   <scm>
