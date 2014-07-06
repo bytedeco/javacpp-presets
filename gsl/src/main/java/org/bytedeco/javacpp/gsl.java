@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 public class gsl extends org.bytedeco.javacpp.presets.gsl {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/gsl/gsl_types.h
+// Parsed from gsl/gsl_types.h
 
 /* gsl_types.h
  * 
@@ -54,7 +54,7 @@ public class gsl extends org.bytedeco.javacpp.presets.gsl {
 // #endif /* __GSL_TYPES_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_errno.h
+// Parsed from gsl/gsl_errno.h
 
 /* err/gsl_errno.h
  * 
@@ -219,7 +219,7 @@ public static native @Cast("FILE*") Pointer gsl_set_stream(@Cast("FILE*") Pointe
 // #endif /* __GSL_ERRNO_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_ieee_utils.h
+// Parsed from gsl/gsl_ieee_utils.h
 
 /* ieee-utils/gsl_ieee_utils.h
  * 
@@ -360,7 +360,7 @@ public static native int gsl_ieee_set_mode(int precision, int rounding, int exce
 
 
 
-// Parsed from /usr/local/include/gsl/gsl_inline.h
+// Parsed from gsl/gsl_inline.h
 
 /* gsl_inline.h
  * 
@@ -431,7 +431,7 @@ public static native int gsl_ieee_set_mode(int precision, int rounding, int exce
 // #endif /* __GSL_INLINE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_message.h
+// Parsed from gsl/gsl_message.h
 
 /* err/gsl_message.h
  * 
@@ -511,7 +511,7 @@ public static final int
 
 
 
-// Parsed from /usr/local/include/gsl/gsl_complex.h
+// Parsed from gsl/gsl_complex.h
 
 /* complex/gsl_complex.h
  * 
@@ -618,7 +618,7 @@ public static class gsl_complex_float extends FloatPointer {
 // #endif /* __GSL_COMPLEX_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_complex_math.h
+// Parsed from gsl/gsl_complex_math.h
 
 /* complex/gsl_complex_math.h
  * 
@@ -754,7 +754,7 @@ public static native @ByVal gsl_complex gsl_complex_arccoth(@ByVal gsl_complex a
 // #endif /* __GSL_COMPLEX_MATH_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_check_range.h
+// Parsed from gsl/gsl_check_range.h
 
 /* vector/gsl_check_range.h
  * 
@@ -808,7 +808,7 @@ public static native int gsl_check_range(); public static native void gsl_check_
 // #endif /* __GSL_CHECK_RANGE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sys.h
+// Parsed from gsl/gsl_sys.h
 
 /* sys/gsl_sys.h
  * 
@@ -871,7 +871,7 @@ public static native int gsl_fcmp(double x1, double x2, double epsilon);
 // #endif /* __GSL_SYS_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_machine.h
+// Parsed from gsl/gsl_machine.h
 
 /* Author:  B. Gough and G. Jungman */
 // #ifndef __GSL_MACHINE_H__
@@ -979,7 +979,7 @@ public static final double GSL_LOG_MACH_EPS =       (-34.54);
 // #endif /* __GSL_MACHINE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_precision.h
+// Parsed from gsl/gsl_precision.h
 
 /* gsl_precision.h
  * 
@@ -1047,7 +1047,7 @@ public static final int _GSL_PREC_T_NUM = 3;
 // #endif /* __GSL_PRECISION_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_nan.h
+// Parsed from gsl/gsl_nan.h
 
 /* gsl_nan.h
  * 
@@ -1093,7 +1093,7 @@ public static final double GSL_NEGZERO = (-0.0);
 // #endif /* __GSL_NAN_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_pow_int.h
+// Parsed from gsl/gsl_pow_int.h
 
 /* gsl_pow_int.h
  * 
@@ -1144,7 +1144,7 @@ public static native double gsl_pow_uint(double x, @Cast("unsigned int") int n);
 // #endif /* __GSL_POW_INT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_min.h
+// Parsed from gsl/gsl_min.h
 
 /* min/gsl_min.h
  * 
@@ -1295,7 +1295,7 @@ public static native int gsl_min_find_bracket(gsl_function f,double[] x_minimum,
 // #endif /* __GSL_MIN_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_minmax.h
+// Parsed from gsl/gsl_minmax.h
 
 /* gsl_minmax.h
  * 
@@ -1359,7 +1359,7 @@ public static native @Cast("long double") double GSL_MIN_LDBL(@Cast("long double
 // #endif /* __GSL_POW_INT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_math.h
+// Parsed from gsl/gsl_math.h
 
 /* gsl_math.h
  * 
@@ -1592,7 +1592,7 @@ public static class gsl_function_vec_struct extends Pointer {
 // #endif /* __GSL_MATH_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_mode.h
+// Parsed from gsl/gsl_mode.h
 
 /* gsl_mode.h
  * 
@@ -1672,7 +1672,7 @@ public static final int GSL_MODE_DEFAULT =  0;
 // #endif /* __GSL_MODE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_test.h
+// Parsed from gsl/gsl_test.h
 
 /* err/gsl_test.h
  * 
@@ -1737,7 +1737,7 @@ public static native int gsl_test_summary();
 // #endif /* __GSL_TEST_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_version.h
+// Parsed from gsl/gsl_version.h
 
 // #ifndef __GSL_VERSION_H__
 // #define __GSL_VERSION_H__
@@ -1762,7 +1762,7 @@ public static final int GSL_MINOR_VERSION = 16;
 // #endif /* __GSL_VERSION_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_block.h
+// Parsed from gsl/gsl_block.h
 
 // #ifndef __GSL_BLOCK_H__
 // #define __GSL_BLOCK_H__
@@ -1790,7 +1790,7 @@ public static final int GSL_MINOR_VERSION = 16;
 // #endif /* __GSL_BLOCK_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_block_complex_double.h
+// Parsed from gsl/gsl_block_complex_double.h
 
 /* block/gsl_block_complex_double.h
  * 
@@ -1877,7 +1877,7 @@ public static native DoublePointer gsl_block_complex_data(@Const gsl_block_compl
 // #endif /* __GSL_BLOCK_COMPLEX_DOUBLE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_block_complex_float.h
+// Parsed from gsl/gsl_block_complex_float.h
 
 /* block/gsl_block_complex_float.h
  * 
@@ -1964,7 +1964,7 @@ public static native FloatPointer gsl_block_complex_float_data(@Const gsl_block_
 // #endif /* __GSL_BLOCK_COMPLEX_FLOAT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_block_double.h
+// Parsed from gsl/gsl_block_double.h
 
 /* block/gsl_block_double.h
  * 
@@ -2051,7 +2051,7 @@ public static native DoublePointer gsl_block_data(@Const gsl_block b);
 // #endif /* __GSL_BLOCK_DOUBLE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_block_float.h
+// Parsed from gsl/gsl_block_float.h
 
 /* block/gsl_block_float.h
  * 
@@ -2138,7 +2138,7 @@ public static native FloatPointer gsl_block_float_data(@Const gsl_block_float b)
 // #endif /* __GSL_BLOCK_FLOAT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_block_ulong.h
+// Parsed from gsl/gsl_block_ulong.h
 
 /* block/gsl_block_ulong.h
  * 
@@ -2215,7 +2215,7 @@ public static native @Cast("unsigned long*") CLongPointer gsl_block_ulong_data(@
 // #endif /* __GSL_BLOCK_ULONG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_block_long.h
+// Parsed from gsl/gsl_block_long.h
 
 /* block/gsl_block_long.h
  * 
@@ -2292,7 +2292,7 @@ public static native CLongPointer gsl_block_long_data(@Const gsl_block_long b);
 // #endif /* __GSL_BLOCK_LONG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_block_uint.h
+// Parsed from gsl/gsl_block_uint.h
 
 /* block/gsl_block_uint.h
  * 
@@ -2379,7 +2379,7 @@ public static native @Cast("unsigned int*") IntPointer gsl_block_uint_data(@Cons
 // #endif /* __GSL_BLOCK_UINT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_block_int.h
+// Parsed from gsl/gsl_block_int.h
 
 /* block/gsl_block_int.h
  * 
@@ -2466,7 +2466,7 @@ public static native IntPointer gsl_block_int_data(@Const gsl_block_int b);
 // #endif /* __GSL_BLOCK_INT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_block_ushort.h
+// Parsed from gsl/gsl_block_ushort.h
 
 /* block/gsl_block_ushort.h
  * 
@@ -2553,7 +2553,7 @@ public static native @Cast("unsigned short*") ShortPointer gsl_block_ushort_data
 // #endif /* __GSL_BLOCK_USHORT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_block_short.h
+// Parsed from gsl/gsl_block_short.h
 
 /* block/gsl_block_short.h
  * 
@@ -2640,7 +2640,7 @@ public static native ShortPointer gsl_block_short_data(@Const gsl_block_short b)
 // #endif /* __GSL_BLOCK_SHORT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_block_uchar.h
+// Parsed from gsl/gsl_block_uchar.h
 
 /* block/gsl_block_uchar.h
  * 
@@ -2727,7 +2727,7 @@ public static native @Cast("unsigned char*") BytePointer gsl_block_uchar_data(@C
 // #endif /* __GSL_BLOCK_UCHAR_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_block_char.h
+// Parsed from gsl/gsl_block_char.h
 
 /* block/gsl_block_char.h
  * 
@@ -2809,7 +2809,7 @@ public static native @Cast("char*") BytePointer gsl_block_char_data(@Const gsl_b
 // #endif /* __GSL_BLOCK_CHAR_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_vector_complex.h
+// Parsed from gsl/gsl_vector_complex.h
 
 // #ifndef __GSL_VECTOR_COMPLEX_H__
 // #define __GSL_VECTOR_COMPLEX_H__
@@ -2829,7 +2829,7 @@ public static native @Cast("char*") BytePointer gsl_block_char_data(@Const gsl_b
 // #endif /* __GSL_VECTOR_COMPLEX_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_vector.h
+// Parsed from gsl/gsl_vector.h
 
 // #ifndef __GSL_VECTOR_H__
 // #define __GSL_VECTOR_H__
@@ -2858,7 +2858,7 @@ public static native @Cast("char*") BytePointer gsl_block_char_data(@Const gsl_b
 // #endif /* __GSL_VECTOR_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_vector_complex_double.h
+// Parsed from gsl/gsl_vector_complex_double.h
 
 /* vector/gsl_vector_complex_double.h
  * 
@@ -3082,7 +3082,7 @@ public static native int gsl_vector_complex_add_constant(gsl_vector_complex a, @
 // #endif /* __GSL_VECTOR_COMPLEX_DOUBLE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_vector_complex_float.h
+// Parsed from gsl/gsl_vector_complex_float.h
 
 /* vector/gsl_vector_complex_float.h
  * 
@@ -3306,7 +3306,7 @@ public static native int gsl_vector_complex_float_add_constant(gsl_vector_comple
 // #endif /* __GSL_VECTOR_COMPLEX_FLOAT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_vector_double.h
+// Parsed from gsl/gsl_vector_double.h
 
 /* vector/gsl_vector_double.h
  * 
@@ -3516,7 +3516,7 @@ public static native int gsl_vector_isnonneg(@Const gsl_vector v);
 
 
 
-// Parsed from /usr/local/include/gsl/gsl_vector_float.h
+// Parsed from gsl/gsl_vector_float.h
 
 /* vector/gsl_vector_float.h
  * 
@@ -3726,7 +3726,7 @@ public static native int gsl_vector_float_isnonneg(@Const gsl_vector_float v);
 
 
 
-// Parsed from /usr/local/include/gsl/gsl_vector_ulong.h
+// Parsed from gsl/gsl_vector_ulong.h
 
 /* vector/gsl_vector_ulong.h
  * 
@@ -3918,7 +3918,7 @@ public static native int gsl_vector_ulong_isnonneg(@Const gsl_vector_ulong v);
 
 
 
-// Parsed from /usr/local/include/gsl/gsl_vector_long.h
+// Parsed from gsl/gsl_vector_long.h
 
 /* vector/gsl_vector_long.h
  * 
@@ -4110,7 +4110,7 @@ public static native int gsl_vector_long_isnonneg(@Const gsl_vector_long v);
 
 
 
-// Parsed from /usr/local/include/gsl/gsl_vector_uint.h
+// Parsed from gsl/gsl_vector_uint.h
 
 /* vector/gsl_vector_uint.h
  * 
@@ -4320,7 +4320,7 @@ public static native int gsl_vector_uint_isnonneg(@Const gsl_vector_uint v);
 
 
 
-// Parsed from /usr/local/include/gsl/gsl_vector_int.h
+// Parsed from gsl/gsl_vector_int.h
 
 /* vector/gsl_vector_int.h
  * 
@@ -4530,7 +4530,7 @@ public static native int gsl_vector_int_isnonneg(@Const gsl_vector_int v);
 
 
 
-// Parsed from /usr/local/include/gsl/gsl_vector_ushort.h
+// Parsed from gsl/gsl_vector_ushort.h
 
 /* vector/gsl_vector_ushort.h
  * 
@@ -4740,7 +4740,7 @@ public static native int gsl_vector_ushort_isnonneg(@Const gsl_vector_ushort v);
 
 
 
-// Parsed from /usr/local/include/gsl/gsl_vector_short.h
+// Parsed from gsl/gsl_vector_short.h
 
 /* vector/gsl_vector_short.h
  * 
@@ -4950,7 +4950,7 @@ public static native int gsl_vector_short_isnonneg(@Const gsl_vector_short v);
 
 
 
-// Parsed from /usr/local/include/gsl/gsl_vector_uchar.h
+// Parsed from gsl/gsl_vector_uchar.h
 
 /* vector/gsl_vector_uchar.h
  * 
@@ -5160,7 +5160,7 @@ public static native int gsl_vector_uchar_isnonneg(@Const gsl_vector_uchar v);
 
 
 
-// Parsed from /usr/local/include/gsl/gsl_vector_char.h
+// Parsed from gsl/gsl_vector_char.h
 
 /* vector/gsl_vector_char.h
  * 
@@ -5366,7 +5366,7 @@ public static native int gsl_vector_char_isnonneg(@Const gsl_vector_char v);
 
 
 
-// Parsed from /usr/local/include/gsl/gsl_matrix.h
+// Parsed from gsl/gsl_matrix.h
 
 // #ifndef __GSL_MATRIX_H__
 // #define __GSL_MATRIX_H__
@@ -5395,7 +5395,7 @@ public static native int gsl_vector_char_isnonneg(@Const gsl_vector_char v);
 // #endif /* __GSL_MATRIX_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_matrix_complex_double.h
+// Parsed from gsl/gsl_matrix_complex_double.h
 
 /* matrix/gsl_matrix_complex_double.h
  * 
@@ -5680,7 +5680,7 @@ public static native int gsl_matrix_complex_set_col(gsl_matrix_complex m, @Cast(
 // #endif /* __GSL_MATRIX_COMPLEX_DOUBLE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_matrix_complex_float.h
+// Parsed from gsl/gsl_matrix_complex_float.h
 
 /* matrix/gsl_matrix_complex_float.h
  * 
@@ -5965,7 +5965,7 @@ public static native int gsl_matrix_complex_float_set_col(gsl_matrix_complex_flo
 // #endif /* __GSL_MATRIX_COMPLEX_FLOAT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_matrix_double.h
+// Parsed from gsl/gsl_matrix_double.h
 
 /* matrix/gsl_matrix_double.h
  * 
@@ -6258,7 +6258,7 @@ public static native int gsl_matrix_set_col(gsl_matrix m, @Cast("const size_t") 
 // #endif /* __GSL_MATRIX_DOUBLE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_matrix_float.h
+// Parsed from gsl/gsl_matrix_float.h
 
 /* matrix/gsl_matrix_float.h
  * 
@@ -6551,7 +6551,7 @@ public static native int gsl_matrix_float_set_col(gsl_matrix_float m, @Cast("con
 // #endif /* __GSL_MATRIX_FLOAT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_matrix_ulong.h
+// Parsed from gsl/gsl_matrix_ulong.h
 
 /* matrix/gsl_matrix_ulong.h
  * 
@@ -6814,7 +6814,7 @@ public static native int gsl_matrix_ulong_set_col(gsl_matrix_ulong m, @Cast("con
 // #endif /* __GSL_MATRIX_ULONG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_matrix_long.h
+// Parsed from gsl/gsl_matrix_long.h
 
 /* matrix/gsl_matrix_long.h
  * 
@@ -7077,7 +7077,7 @@ public static native int gsl_matrix_long_set_col(gsl_matrix_long m, @Cast("const
 // #endif /* __GSL_MATRIX_LONG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_matrix_uint.h
+// Parsed from gsl/gsl_matrix_uint.h
 
 /* matrix/gsl_matrix_uint.h
  * 
@@ -7370,7 +7370,7 @@ public static native int gsl_matrix_uint_set_col(gsl_matrix_uint m, @Cast("const
 // #endif /* __GSL_MATRIX_UINT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_matrix_int.h
+// Parsed from gsl/gsl_matrix_int.h
 
 /* matrix/gsl_matrix_int.h
  * 
@@ -7663,7 +7663,7 @@ public static native int gsl_matrix_int_set_col(gsl_matrix_int m, @Cast("const s
 // #endif /* __GSL_MATRIX_INT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_matrix_ushort.h
+// Parsed from gsl/gsl_matrix_ushort.h
 
 /* matrix/gsl_matrix_ushort.h
  * 
@@ -7956,7 +7956,7 @@ public static native int gsl_matrix_ushort_set_col(gsl_matrix_ushort m, @Cast("c
 // #endif /* __GSL_MATRIX_USHORT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_matrix_short.h
+// Parsed from gsl/gsl_matrix_short.h
 
 /* matrix/gsl_matrix_short.h
  * 
@@ -8249,7 +8249,7 @@ public static native int gsl_matrix_short_set_col(gsl_matrix_short m, @Cast("con
 // #endif /* __GSL_MATRIX_SHORT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_matrix_uchar.h
+// Parsed from gsl/gsl_matrix_uchar.h
 
 /* matrix/gsl_matrix_uchar.h
  * 
@@ -8542,7 +8542,7 @@ public static native int gsl_matrix_uchar_set_col(gsl_matrix_uchar m, @Cast("con
 // #endif /* __GSL_MATRIX_UCHAR_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_matrix_char.h
+// Parsed from gsl/gsl_matrix_char.h
 
 /* matrix/gsl_matrix_char.h
  * 
@@ -8828,7 +8828,7 @@ public static native int gsl_matrix_char_set_col(gsl_matrix_char m, @Cast("const
 // #endif /* __GSL_MATRIX_CHAR_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_cblas.h
+// Parsed from gsl/gsl_cblas.h
 
 /* blas/gsl_cblas.h
  * 
@@ -9874,7 +9874,7 @@ public static native void cblas_xerbla(int p, String rout, String form);
 // #endif /* __GSL_CBLAS_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_blas_types.h
+// Parsed from gsl/gsl_blas_types.h
 
 /* blas/gsl_blas_types.h
  * 
@@ -9917,7 +9917,7 @@ public static native void cblas_xerbla(int p, String rout, String form);
 // #endif /* __GSL_BLAS_TYPES_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_blas.h
+// Parsed from gsl/gsl_blas.h
 
 /* blas/gsl_blas.h
  * 
@@ -10572,7 +10572,7 @@ public static native int gsl_blas_zher2k(@Cast("CBLAS_UPLO_t") int Uplo,
 // #endif /* __GSL_BLAS_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_bspline.h
+// Parsed from gsl/gsl_bspline.h
 
 /* bspline/gsl_bspline.h
  *
@@ -10704,7 +10704,7 @@ public static native int gsl_bspline_deriv_eval_nonzero(double x,
 // #endif /* __GSL_BSPLINE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_cdf.h
+// Parsed from gsl/gsl_cdf.h
 
 /* cdf/gsl_cdf.h
  * 
@@ -10872,7 +10872,7 @@ public static native double gsl_cdf_hypergeometric_Q(@Cast("const unsigned int")
 // #endif /* __GSL_CDF_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_chebyshev.h
+// Parsed from gsl/gsl_chebyshev.h
 
 /* cheb/gsl_chebyshev.h
  * 
@@ -11023,7 +11023,7 @@ public static native int gsl_cheb_calc_integ(gsl_cheb_series integ, @Const gsl_c
 // #endif /* __GSL_CHEBYSHEV_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_combination.h
+// Parsed from gsl/gsl_combination.h
 
 /* combination/gsl_combination.h
  * based on permutation/gsl_permutation.h by Brian Gough
@@ -11113,7 +11113,7 @@ public static native int gsl_combination_prev(gsl_combination c);
 // #endif /* __GSL_COMBINATION_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_deriv.h
+// Parsed from gsl/gsl_deriv.h
 
 /* deriv/gsl_deriv.h
  * 
@@ -11179,7 +11179,7 @@ public static native int gsl_deriv_forward(@Const gsl_function f,
 // #endif /* __GSL_DERIV_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_dht.h
+// Parsed from gsl/gsl_dht.h
 
 /* dht/gsl_dht.h
  * 
@@ -11278,7 +11278,7 @@ public static native int gsl_dht_apply(@Const gsl_dht t, double[] f_in, double[]
 // #endif /* __GSL_DHT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_diff.h
+// Parsed from gsl/gsl_diff.h
 
 /* diff/gsl_diff.h
  * 
@@ -11346,7 +11346,7 @@ public static native int gsl_diff_forward(@Const gsl_function f,
 // #endif /* __GSL_DIFF_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_eigen.h
+// Parsed from gsl/gsl_eigen.h
 
 /* eigen/gsl_eigen.h
  * 
@@ -11850,7 +11850,7 @@ public static native int gsl_eigen_invert_jacobi(@Const gsl_matrix matrix,
 // #endif /* __GSL_EIGEN_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_fit.h
+// Parsed from gsl/gsl_fit.h
 
 /* fit/gsl_fit.h
  * 
@@ -11999,7 +11999,7 @@ public static native int gsl_fit_mul_est(double x,
 // #endif /* __GSL_FIT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permutation.h
+// Parsed from gsl/gsl_permutation.h
 
 /* permutation/gsl_permutation.h
  * 
@@ -12097,7 +12097,7 @@ public static native @Cast("size_t") long gsl_permutation_canonical_cycles(@Cons
 // #endif /* __GSL_PERMUTATION_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_heapsort.h
+// Parsed from gsl/gsl_heapsort.h
 
 /* sort/gsl_heapsort.h
  * 
@@ -12145,7 +12145,7 @@ public static native int gsl_heapsort_index(@Cast("size_t*") SizeTPointer p, @Co
 // #endif /* __GSL_HEAPSORT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_histogram2d.h
+// Parsed from gsl/gsl_histogram2d.h
 
 /* histogram/gsl_histogram2d.h
  * 
@@ -12342,7 +12342,7 @@ public static native int gsl_histogram2d_pdf_sample(@Const gsl_histogram2d_pdf p
 
 
 
-// Parsed from /usr/local/include/gsl/gsl_histogram.h
+// Parsed from gsl/gsl_histogram.h
 
 /* histogram/gsl_histogram.h
  * 
@@ -12493,7 +12493,7 @@ public static native double gsl_histogram_pdf_sample(@Const gsl_histogram_pdf p,
 // #endif /* __GSL_HISTOGRAM_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_integration.h
+// Parsed from gsl/gsl_integration.h
 
 /* integration/gsl_integration.h
  * 
@@ -13058,7 +13058,7 @@ public static native int gsl_integration_cquad(@Const gsl_function f, double a, 
 // #endif /* __GSL_INTEGRATION_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_interp.h
+// Parsed from gsl/gsl_interp.h
 
 /* interpolation/gsl_interp.h
  * 
@@ -13371,7 +13371,7 @@ public static native @Cast("size_t") long gsl_interp_accel_find(gsl_interp_accel
 // #endif /* __GSL_INTERP_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_linalg.h
+// Parsed from gsl/gsl_linalg.h
 
 /* linalg/gsl_linalg.h
  * 
@@ -14001,7 +14001,7 @@ public static native int gsl_linalg_balance_columns(gsl_matrix A, gsl_vector D);
 // #endif /* __GSL_LINALG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_poly.h
+// Parsed from gsl/gsl_poly.h
 
 /* poly/gsl_poly.h
  * 
@@ -14166,7 +14166,7 @@ public static native int gsl_poly_complex_solve(@Const double[] a, @Cast("size_t
 // #endif /* __GSL_POLY_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_rng.h
+// Parsed from gsl/gsl_rng.h
 
 /* rng/gsl_rng.h
  * 
@@ -14368,7 +14368,7 @@ public static native @Const gsl_rng_type gsl_rng_env_setup();
 // #endif /* __GSL_RNG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_qrng.h
+// Parsed from gsl/gsl_qrng.h
 
 /* Author: G. Jungman + modifications from O. Teytaud
  */
@@ -14511,7 +14511,7 @@ public static native int gsl_qrng_get(@Const gsl_qrng q, double[] x);
 // #endif /* !__GSL_QRNG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_randist.h
+// Parsed from gsl/gsl_randist.h
 
 /* randist/gsl_randist.h
  * 
@@ -14739,7 +14739,7 @@ public static native double gsl_ran_discrete_pdf(@Cast("size_t") long k, @Const 
 // #endif /* __GSL_RANDIST_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_roots.h
+// Parsed from gsl/gsl_roots.h
 
 /* roots/gsl_roots.h
  * 
@@ -14916,7 +14916,7 @@ public static native int gsl_root_test_delta(double x1, double x0, double epsabs
 // #endif /* __GSL_ROOTS_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_siman.h
+// Parsed from gsl/gsl_siman.h
 
 /* siman/gsl_siman.h
  * 
@@ -15050,7 +15050,7 @@ public static native void gsl_siman_solve_many(@Const gsl_rng r, Pointer x0_p, g
 // #endif /* __GSL_SIMAN_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_spline.h
+// Parsed from gsl/gsl_spline.h
 
 /* interpolation/gsl_spline.h
  * 
@@ -15178,7 +15178,7 @@ public static native void gsl_spline_free(gsl_spline spline);
 // #endif /* __GSL_INTERP_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sum.h
+// Parsed from gsl/gsl_sum.h
 
 /* sum/gsl_sum.h
  * 
@@ -15411,7 +15411,7 @@ public static native int gsl_sum_levin_utrunc_step(double term,
 // #endif /* __GSL_SUM_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_wavelet.h
+// Parsed from gsl/gsl_wavelet.h
 
 /* wavelet/gsl_wavelet.h
  * 
@@ -15559,7 +15559,7 @@ public static native int gsl_wavelet_transform_inverse(@Const gsl_wavelet w,
 // #endif /* __GSL_WAVELET_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_wavelet2d.h
+// Parsed from gsl/gsl_wavelet2d.h
 
 /* wavelet/gsl_wavelet.h
  * 
@@ -15710,7 +15710,7 @@ public static native int gsl_wavelet2d_nstransform_matrix_inverse(@Const gsl_wav
 // #endif /* __GSL_WAVELET2D_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_const.h
+// Parsed from gsl/gsl_const.h
 
 /* const/gsl_const.h
  * 
@@ -15745,7 +15745,7 @@ public static native int gsl_wavelet2d_nstransform_matrix_inverse(@Const gsl_wav
 // #endif /* __GSL_CONST__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_const_num.h
+// Parsed from gsl/gsl_const_num.h
 
 /* const/gsl_const_num.h
  * 
@@ -15792,7 +15792,7 @@ public static final double GSL_CONST_NUM_YOCTO = (1e-24); /* 1 */
 // #endif /* __GSL_CONST_NUM__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_const_cgs.h
+// Parsed from gsl/gsl_const_cgs.h
 
 /* const/gsl_const_cgs.h
  * 
@@ -15912,7 +15912,7 @@ public static final double GSL_CONST_CGS_THOMSON_CROSS_SECTION = (6.65245893699e
 // #endif /* __GSL_CONST_CGS__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_const_mks.h
+// Parsed from gsl/gsl_const_mks.h
 
 /* const/gsl_const_mks.h
  * 
@@ -16042,7 +16042,7 @@ public static final double GSL_CONST_MKS_GAUSS = (1e-4); /* kg / A s^2 */
 // #endif /* __GSL_CONST_MKS__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_const_cgsm.h
+// Parsed from gsl/gsl_const_cgsm.h
 
 /* const/gsl_const_cgsm.h
  * 
@@ -16168,7 +16168,7 @@ public static final double GSL_CONST_CGSM_ELECTRON_CHARGE = (1.602176487e-20); /
 // #endif /* __GSL_CONST_CGSM__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_const_mksa.h
+// Parsed from gsl/gsl_const_mksa.h
 
 /* const/gsl_const_mksa.h
  * 
@@ -16298,7 +16298,7 @@ public static final double GSL_CONST_MKSA_GAUSS = (1e-4); /* kg / A s^2 */
 // #endif /* __GSL_CONST_MKSA__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_fft.h
+// Parsed from gsl/gsl_fft.h
 
 /* fft/gsl_fft.h
  * 
@@ -16339,7 +16339,7 @@ public static final int
 // #endif /* __GSL_FFT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_fft_complex_float.h
+// Parsed from gsl/gsl_fft_complex_float.h
 
 /* fft/gsl_fft_complex_float.h
  * 
@@ -16586,7 +16586,7 @@ public static native int gsl_fft_complex_float_transform(@Cast("gsl_complex_pack
 
 
 
-// Parsed from /usr/local/include/gsl/gsl_fft_complex.h
+// Parsed from gsl/gsl_fft_complex.h
 
 /* fft/gsl_fft_complex.h
  * 
@@ -16830,7 +16830,7 @@ public static native int gsl_fft_complex_transform(@Cast("gsl_complex_packed_arr
 // #endif /* __GSL_FFT_COMPLEX_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_fft_halfcomplex_float.h
+// Parsed from gsl/gsl_fft_halfcomplex_float.h
 
 /* fft/gsl_fft_halfcomplex_float.h
  * 
@@ -16957,7 +16957,7 @@ public static native int gsl_fft_halfcomplex_float_radix2_unpack(@Const float[] 
 // #endif /* __GSL_FFT_HALFCOMPLEX_FLOAT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_fft_halfcomplex.h
+// Parsed from gsl/gsl_fft_halfcomplex.h
 
 /* fft/gsl_fft_halfcomplex.h
  * 
@@ -17084,7 +17084,7 @@ public static native int gsl_fft_halfcomplex_radix2_unpack(@Const double[] halfc
 // #endif /* __GSL_FFT_HALFCOMPLEX_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_fft_real_float.h
+// Parsed from gsl/gsl_fft_real_float.h
 
 /* fft/gsl_fft_real_float.h
  * 
@@ -17193,7 +17193,7 @@ public static native int gsl_fft_real_float_unpack(@Const float[] real_float_coe
 // #endif /* __GSL_FFT_REAL_FLOAT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_fft_real.h
+// Parsed from gsl/gsl_fft_real.h
 
 /* fft/gsl_fft_real.h
  * 
@@ -17303,7 +17303,7 @@ public static native int gsl_fft_real_unpack(@Const double[] real_coefficient,
 // #endif /* __GSL_FFT_REAL_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_dft_complex_float.h
+// Parsed from gsl/gsl_dft_complex_float.h
 
 /* fft/gsl_dft_complex_float.h
  * 
@@ -17372,7 +17372,7 @@ public static native int gsl_dft_complex_float_transform(@Const float[] data, @C
 // #endif /* __GSL_DFT_COMPLEX_FLOAT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_dft_complex.h
+// Parsed from gsl/gsl_dft_complex.h
 
 /* fft/gsl_dft_complex.h
  * 
@@ -17441,7 +17441,7 @@ public static native int gsl_dft_complex_transform(@Const double[] data, @Cast("
 // #endif /* __GSL_DFT_COMPLEX_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_monte.h
+// Parsed from gsl/gsl_monte.h
 
 /* monte/gsl_monte.h
  * 
@@ -17513,7 +17513,7 @@ public static class gsl_monte_function_struct extends Pointer {
 // #endif /* __GSL_MONTE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_monte_plain.h
+// Parsed from gsl/gsl_monte_plain.h
 
 /* monte/gsl_monte_plain.h
  * 
@@ -17599,7 +17599,7 @@ public static native void gsl_monte_plain_free(gsl_monte_plain_state state);
 // #endif /* __GSL_MONTE_PLAIN_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_monte_miser.h
+// Parsed from gsl/gsl_monte_miser.h
 
 /* monte/gsl_monte_miser.h
  * 
@@ -17726,7 +17726,7 @@ public static native void gsl_monte_miser_params_set(gsl_monte_miser_state state
 // #endif /* __GSL_MONTE_MISER_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_monte_vegas.h
+// Parsed from gsl/gsl_monte_vegas.h
 
 /* monte/gsl_monte_vegas.h
  * 
@@ -17884,7 +17884,7 @@ public static native void gsl_monte_vegas_params_set(gsl_monte_vegas_state state
 
 
 
-// Parsed from /usr/local/include/gsl/gsl_multifit.h
+// Parsed from gsl/gsl_multifit.h
 
 /* multifit/gsl_multifit.h
  * 
@@ -18229,7 +18229,7 @@ public static native int gsl_multifit_robust_est(@Const gsl_vector x, @Const gsl
 // #endif /* __GSL_MULTIFIT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_multifit_nlin.h
+// Parsed from gsl/gsl_multifit_nlin.h
 
 /* multifit_nlin/gsl_multifit_nlin.h
  * 
@@ -18546,7 +18546,7 @@ public static native int gsl_multifit_fdfsolver_dif_fdf(@Const gsl_vector x, gsl
 // #endif /* __GSL_MULTIFIT_NLIN_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_multimin.h
+// Parsed from gsl/gsl_multimin.h
 
 /* multimin/gsl_multimin.h
  * 
@@ -18897,7 +18897,7 @@ public static native double gsl_multimin_fdfminimizer_minimum(@Const gsl_multimi
 // #endif /* __GSL_MULTIMIN_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_multiroots.h
+// Parsed from gsl/gsl_multiroots.h
 
 /* multiroots/gsl_multiroots.h
  * 
@@ -19206,7 +19206,7 @@ public static native int gsl_multiroot_test_residual(@Const gsl_vector f, double
 // #endif /* __GSL_MULTIROOTS_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_multiset.h
+// Parsed from gsl/gsl_multiset.h
 
 /* multiset/gsl_multiset.h
  * based on combination/gsl_combination.h by Szymon Jaroszewicz
@@ -19297,7 +19297,7 @@ public static native int gsl_multiset_prev(gsl_multiset c);
 // #endif /* __GSL_MULTISET_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_ntuple.h
+// Parsed from gsl/gsl_ntuple.h
 
 /* histogram/ntuple.h
  * 
@@ -19423,7 +19423,7 @@ public static native int gsl_ntuple_close(gsl_ntuple ntuple);
 
 
 
-// Parsed from /usr/local/include/gsl/gsl_odeiv2.h
+// Parsed from gsl/gsl_odeiv2.h
 
 /* ode-initval/odeiv2.h
  * 
@@ -19985,7 +19985,7 @@ public static native void gsl_odeiv2_driver_free(gsl_odeiv2_driver state);
 // #endif /* __GSL_ODEIV2_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_odeiv.h
+// Parsed from gsl/gsl_odeiv.h
 
 /* ode-initval/gsl_odeiv.h
  * 
@@ -20344,7 +20344,7 @@ public static native void gsl_odeiv_evolve_free(gsl_odeiv_evolve e);
 // #endif /* __GSL_ODEIV_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute.h
+// Parsed from gsl/gsl_permute.h
 
 // #ifndef __GSL_PERMUTE_H__
 // #define __GSL_PERMUTE_H__
@@ -20372,7 +20372,7 @@ public static native void gsl_odeiv_evolve_free(gsl_odeiv_evolve e);
 // #endif /* __GSL_PERMUTE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_complex_double.h
+// Parsed from gsl/gsl_permute_complex_double.h
 
 /* permutation/gsl_permute_complex_double.h
  * 
@@ -20419,7 +20419,7 @@ public static native int gsl_permute_complex_inverse(@Cast("const size_t*") Size
 // #endif /* __GSL_PERMUTE_COMPLEX_DOUBLE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_complex_float.h
+// Parsed from gsl/gsl_permute_complex_float.h
 
 /* permutation/gsl_permute_complex_float.h
  * 
@@ -20466,7 +20466,7 @@ public static native int gsl_permute_complex_float_inverse(@Cast("const size_t*"
 // #endif /* __GSL_PERMUTE_COMPLEX_FLOAT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_double.h
+// Parsed from gsl/gsl_permute_double.h
 
 /* permutation/gsl_permute_double.h
  * 
@@ -20512,7 +20512,7 @@ public static native int gsl_permute_inverse(@Cast("const size_t*") SizeTPointer
 // #endif /* __GSL_PERMUTE_DOUBLE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_float.h
+// Parsed from gsl/gsl_permute_float.h
 
 /* permutation/gsl_permute_float.h
  * 
@@ -20558,7 +20558,7 @@ public static native int gsl_permute_float_inverse(@Cast("const size_t*") SizeTP
 // #endif /* __GSL_PERMUTE_FLOAT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_ulong.h
+// Parsed from gsl/gsl_permute_ulong.h
 
 /* permutation/gsl_permute_ulong.h
  * 
@@ -20600,7 +20600,7 @@ public static native int gsl_permute_ulong_inverse(@Cast("const size_t*") SizeTP
 // #endif /* __GSL_PERMUTE_ULONG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_long.h
+// Parsed from gsl/gsl_permute_long.h
 
 /* permutation/gsl_permute_long.h
  * 
@@ -20642,7 +20642,7 @@ public static native int gsl_permute_long_inverse(@Cast("const size_t*") SizeTPo
 // #endif /* __GSL_PERMUTE_LONG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_uint.h
+// Parsed from gsl/gsl_permute_uint.h
 
 /* permutation/gsl_permute_uint.h
  * 
@@ -20688,7 +20688,7 @@ public static native int gsl_permute_uint_inverse(@Cast("const size_t*") SizeTPo
 // #endif /* __GSL_PERMUTE_UINT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_int.h
+// Parsed from gsl/gsl_permute_int.h
 
 /* permutation/gsl_permute_int.h
  * 
@@ -20734,7 +20734,7 @@ public static native int gsl_permute_int_inverse(@Cast("const size_t*") SizeTPoi
 // #endif /* __GSL_PERMUTE_INT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_ushort.h
+// Parsed from gsl/gsl_permute_ushort.h
 
 /* permutation/gsl_permute_ushort.h
  * 
@@ -20780,7 +20780,7 @@ public static native int gsl_permute_ushort_inverse(@Cast("const size_t*") SizeT
 // #endif /* __GSL_PERMUTE_USHORT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_short.h
+// Parsed from gsl/gsl_permute_short.h
 
 /* permutation/gsl_permute_short.h
  * 
@@ -20826,7 +20826,7 @@ public static native int gsl_permute_short_inverse(@Cast("const size_t*") SizeTP
 // #endif /* __GSL_PERMUTE_SHORT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_uchar.h
+// Parsed from gsl/gsl_permute_uchar.h
 
 /* permutation/gsl_permute_uchar.h
  * 
@@ -20872,7 +20872,7 @@ public static native int gsl_permute_uchar_inverse(@Cast("const size_t*") SizeTP
 // #endif /* __GSL_PERMUTE_UCHAR_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_char.h
+// Parsed from gsl/gsl_permute_char.h
 
 /* permutation/gsl_permute_char.h
  * 
@@ -20918,7 +20918,7 @@ public static native int gsl_permute_char_inverse(@Cast("const size_t*") SizeTPo
 // #endif /* __GSL_PERMUTE_CHAR_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_vector.h
+// Parsed from gsl/gsl_permute_vector.h
 
 // #ifndef __GSL_PERMUTE_VECTOR_H__
 // #define __GSL_PERMUTE_VECTOR_H__
@@ -20946,7 +20946,7 @@ public static native int gsl_permute_char_inverse(@Cast("const size_t*") SizeTPo
 // #endif /* __GSL_PERMUTE_VECTOR_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_vector_complex_double.h
+// Parsed from gsl/gsl_permute_vector_complex_double.h
 
 /* permutation/gsl_permute_vector_complex_double.h
  * 
@@ -20989,7 +20989,7 @@ public static native int gsl_permute_vector_complex_inverse(@Const gsl_permutati
 // #endif /* __GSL_PERMUTE_VECTOR_COMPLEX_DOUBLE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_vector_complex_float.h
+// Parsed from gsl/gsl_permute_vector_complex_float.h
 
 /* permutation/gsl_permute_vector_complex_float.h
  * 
@@ -21032,7 +21032,7 @@ public static native int gsl_permute_vector_complex_float_inverse(@Const gsl_per
 // #endif /* __GSL_PERMUTE_VECTOR_COMPLEX_FLOAT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_vector_double.h
+// Parsed from gsl/gsl_permute_vector_double.h
 
 /* permutation/gsl_permute_vector_double.h
  * 
@@ -21075,7 +21075,7 @@ public static native int gsl_permute_vector_inverse(@Const gsl_permutation p, gs
 // #endif /* __GSL_PERMUTE_VECTOR_DOUBLE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_vector_float.h
+// Parsed from gsl/gsl_permute_vector_float.h
 
 /* permutation/gsl_permute_vector_float.h
  * 
@@ -21118,7 +21118,7 @@ public static native int gsl_permute_vector_float_inverse(@Const gsl_permutation
 // #endif /* __GSL_PERMUTE_VECTOR_FLOAT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_vector_ulong.h
+// Parsed from gsl/gsl_permute_vector_ulong.h
 
 /* permutation/gsl_permute_vector_ulong.h
  * 
@@ -21161,7 +21161,7 @@ public static native int gsl_permute_vector_ulong_inverse(@Const gsl_permutation
 // #endif /* __GSL_PERMUTE_VECTOR_ULONG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_vector_long.h
+// Parsed from gsl/gsl_permute_vector_long.h
 
 /* permutation/gsl_permute_vector_long.h
  * 
@@ -21204,7 +21204,7 @@ public static native int gsl_permute_vector_long_inverse(@Const gsl_permutation 
 // #endif /* __GSL_PERMUTE_VECTOR_LONG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_vector_uint.h
+// Parsed from gsl/gsl_permute_vector_uint.h
 
 /* permutation/gsl_permute_vector_uint.h
  * 
@@ -21247,7 +21247,7 @@ public static native int gsl_permute_vector_uint_inverse(@Const gsl_permutation 
 // #endif /* __GSL_PERMUTE_VECTOR_UINT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_vector_int.h
+// Parsed from gsl/gsl_permute_vector_int.h
 
 /* permutation/gsl_permute_vector_int.h
  * 
@@ -21290,7 +21290,7 @@ public static native int gsl_permute_vector_int_inverse(@Const gsl_permutation p
 // #endif /* __GSL_PERMUTE_VECTOR_INT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_vector_ushort.h
+// Parsed from gsl/gsl_permute_vector_ushort.h
 
 /* permutation/gsl_permute_vector_ushort.h
  * 
@@ -21333,7 +21333,7 @@ public static native int gsl_permute_vector_ushort_inverse(@Const gsl_permutatio
 // #endif /* __GSL_PERMUTE_VECTOR_USHORT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_vector_short.h
+// Parsed from gsl/gsl_permute_vector_short.h
 
 /* permutation/gsl_permute_vector_short.h
  * 
@@ -21376,7 +21376,7 @@ public static native int gsl_permute_vector_short_inverse(@Const gsl_permutation
 // #endif /* __GSL_PERMUTE_VECTOR_SHORT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_vector_uchar.h
+// Parsed from gsl/gsl_permute_vector_uchar.h
 
 /* permutation/gsl_permute_vector_uchar.h
  * 
@@ -21419,7 +21419,7 @@ public static native int gsl_permute_vector_uchar_inverse(@Const gsl_permutation
 // #endif /* __GSL_PERMUTE_VECTOR_UCHAR_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_permute_vector_char.h
+// Parsed from gsl/gsl_permute_vector_char.h
 
 /* permutation/gsl_permute_vector_char.h
  * 
@@ -21462,7 +21462,7 @@ public static native int gsl_permute_vector_char_inverse(@Const gsl_permutation 
 // #endif /* __GSL_PERMUTE_VECTOR_CHAR_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_specfunc.h
+// Parsed from gsl/gsl_specfunc.h
 
 /* Author:  G. Jungman */
 
@@ -21476,7 +21476,7 @@ public static native int gsl_permute_vector_char_inverse(@Const gsl_permutation 
 // #endif /* __GSL_SPECFUNC_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf.h
+// Parsed from gsl/gsl_sf.h
 
 /* Author:  G. Jungman */
 
@@ -21519,7 +21519,7 @@ public static native int gsl_permute_vector_char_inverse(@Const gsl_permutation 
 // #endif /* __GSL_SF_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_result.h
+// Parsed from gsl/gsl_sf_result.h
 
 /* specfunc/gsl_sf_result.h
  * 
@@ -21601,7 +21601,7 @@ public static native int gsl_sf_result_smash_e(@Const gsl_sf_result_e10 re, gsl_
 // #endif /* __GSL_SF_RESULT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_airy.h
+// Parsed from gsl/gsl_sf_airy.h
 
 /* specfunc/gsl_sf_airy.h
  * 
@@ -21737,7 +21737,7 @@ public static native double gsl_sf_airy_zero_Bi_deriv(@Cast("unsigned int") int 
 // #endif /* __GSL_SF_AIRY_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_bessel.h
+// Parsed from gsl/gsl_sf_bessel.h
 
 /* specfunc/gsl_sf_bessel.h
  * 
@@ -22307,7 +22307,7 @@ public static native double gsl_sf_bessel_zero_Jnu(double nu, @Cast("unsigned in
 // #endif /* __GSL_SF_BESSEL_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_clausen.h
+// Parsed from gsl/gsl_sf_clausen.h
 
 /* specfunc/gsl_sf_clausen.h
  * 
@@ -22356,7 +22356,7 @@ public static native double gsl_sf_clausen(double x);
 // #endif /* __GSL_SF_CLAUSEN_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_coulomb.h
+// Parsed from gsl/gsl_sf_coulomb.h
 
 /* specfunc/gsl_sf_coulomb.h
  * 
@@ -22542,7 +22542,7 @@ public static native int gsl_sf_coulomb_CL_array(double Lmin, int kmax, double e
 // #endif /* __GSL_SF_COULOMB_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_coupling.h
+// Parsed from gsl/gsl_sf_coupling.h
 
 /* specfunc/gsl_sf_coupling.h
  * 
@@ -22664,7 +22664,7 @@ public static native double gsl_sf_coupling_6j_INCORRECT(int two_ja, int two_jb,
 // #endif /* __GSL_SF_COUPLING_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_dawson.h
+// Parsed from gsl/gsl_sf_dawson.h
 
 /* specfunc/gsl_sf_dawson.h
  * 
@@ -22713,7 +22713,7 @@ public static native double gsl_sf_dawson(double x);
 // #endif /* __GSL_SF_DAWSON_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_debye.h
+// Parsed from gsl/gsl_sf_debye.h
 
 /* specfunc/gsl_sf_debye.h
  * 
@@ -22801,7 +22801,7 @@ public static native double gsl_sf_debye_6(double x);
 // #endif /* __GSL_SF_DEBYE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_dilog.h
+// Parsed from gsl/gsl_sf_dilog.h
 
 /* specfunc/gsl_sf_dilog.h
  * 
@@ -22925,7 +22925,7 @@ public static native int gsl_sf_complex_spence_xy_e(
 // #endif /* __GSL_SF_DILOG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_elementary.h
+// Parsed from gsl/gsl_sf_elementary.h
 
 /* specfunc/gsl_sf_elementary.h
  * 
@@ -22979,7 +22979,7 @@ public static native int gsl_sf_multiply_err_e(double x, double dx, double y, do
 // #endif /* __GSL_SF_ELEMENTARY_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_ellint.h
+// Parsed from gsl/gsl_sf_ellint.h
 
 /* specfunc/gsl_sf_ellint.h
  * 
@@ -23088,7 +23088,7 @@ public static native double gsl_sf_ellint_RJ(double x, double y, double z, doubl
 // #endif /* __GSL_SF_ELLINT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_elljac.h
+// Parsed from gsl/gsl_sf_elljac.h
 
 /* specfunc/gsl_sf_elljac.h
  * 
@@ -23135,7 +23135,7 @@ public static native int gsl_sf_elljac_e(double u, double m, double[] sn, double
 // #endif /* __GSL_SF_ELLJAC_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_erf.h
+// Parsed from gsl/gsl_sf_erf.h
 
 /* specfunc/gsl_sf_erf.h
  * 
@@ -23223,7 +23223,7 @@ public static native double gsl_sf_hazard(double x);
 // #endif /* __GSL_SF_ERF_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_exp.h
+// Parsed from gsl/gsl_sf_exp.h
 
 /* specfunc/gsl_sf_exp.h
  * 
@@ -23355,7 +23355,7 @@ public static native int gsl_sf_exp_mult_err_e10_e(double x, double dx, double y
 // #endif /* __GSL_SF_EXP_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_expint.h
+// Parsed from gsl/gsl_sf_expint.h
 
 /* specfunc/gsl_sf_expint.h
  * 
@@ -23519,7 +23519,7 @@ public static native double gsl_sf_atanint(double x);
 // #endif /* __GSL_SF_EXPINT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_fermi_dirac.h
+// Parsed from gsl/gsl_sf_fermi_dirac.h
 
 /* specfunc/gsl_sf_fermi_dirac.h
  * 
@@ -23642,7 +23642,7 @@ public static native double gsl_sf_fermi_dirac_inc_0(double x, double b);
 // #endif /* __GSL_SF_FERMI_DIRAC_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_gamma.h
+// Parsed from gsl/gsl_sf_gamma.h
 
 /* specfunc/gsl_sf_gamma.h
  * 
@@ -23939,7 +23939,7 @@ public static final int GSL_SF_DOUBLEFACT_NMAX = 297;
 // #endif /* __GSL_SF_GAMMA_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_gegenbauer.h
+// Parsed from gsl/gsl_sf_gegenbauer.h
 
 /* specfunc/gsl_sf_gegenbauer.h
  * 
@@ -24011,7 +24011,7 @@ public static native int gsl_sf_gegenpoly_array(int nmax, double lambda, double 
 // #endif /* __GSL_SF_GEGENBAUER_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_hyperg.h
+// Parsed from gsl/gsl_sf_hyperg.h
 
 /* specfunc/gsl_sf_hyperg.h
  * 
@@ -24162,7 +24162,7 @@ public static native double gsl_sf_hyperg_2F0(double a, double b, double x);
 // #endif /* __GSL_SF_HYPERG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_laguerre.h
+// Parsed from gsl/gsl_sf_laguerre.h
 
 /* specfunc/gsl_sf_laguerre.h
  * 
@@ -24227,7 +24227,7 @@ public static native double gsl_sf_laguerre_n(int n, double a, double x);
 // #endif /* __GSL_SF_LAGUERRE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_lambert.h
+// Parsed from gsl/gsl_sf_lambert.h
 
 /* specfunc/gsl_sf_lambert.h
  * 
@@ -24293,7 +24293,7 @@ public static native double gsl_sf_lambert_Wm1(double x);
 // #endif /* __GSL_SF_LAMBERT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_legendre.h
+// Parsed from gsl/gsl_sf_legendre.h
 
 /* specfunc/gsl_sf_legendre.h
  * 
@@ -24661,7 +24661,7 @@ public static native int gsl_sf_legendre_H3d_array(int lmax, double lambda, doub
 // #endif /* __GSL_SF_LEGENDRE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_log.h
+// Parsed from gsl/gsl_sf_log.h
 
 /* specfunc/gsl_sf_log.h
  * 
@@ -24741,7 +24741,7 @@ public static native double gsl_sf_log_1plusx_mx(double x);
 // #endif /* __GSL_SF_LOG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_mathieu.h
+// Parsed from gsl/gsl_sf_mathieu.h
 
 /* specfunc/gsl_sf_mathieu.h
  * 
@@ -24886,7 +24886,7 @@ public static native int gsl_sf_mathieu_Ms_array(int kind, int nmin, int nmax, d
 // #endif /* !__GSL_SF_MATHIEU_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_pow_int.h
+// Parsed from gsl/gsl_sf_pow_int.h
 
 /* specfunc/gsl_sf_pow_int.h
  * 
@@ -24932,7 +24932,7 @@ public static native double gsl_sf_pow_int(double x, int n);
 // #endif /* __GSL_SF_POW_INT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_psi.h
+// Parsed from gsl/gsl_sf_psi.h
 
 /* specfunc/gsl_sf_psi.h
  * 
@@ -25042,7 +25042,7 @@ public static native double gsl_sf_psi_n(int n, double x);
 // #endif /* __GSL_SF_PSI_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_synchrotron.h
+// Parsed from gsl/gsl_sf_synchrotron.h
 
 /* specfunc/gsl_sf_synchrotron.h
  * 
@@ -25099,7 +25099,7 @@ public static native double gsl_sf_synchrotron_2(double x);
 // #endif /* __GSL_SF_SYNCHROTRON_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_transport.h
+// Parsed from gsl/gsl_sf_transport.h
 
 /* specfunc/gsl_sf_transport.h
  * 
@@ -25174,7 +25174,7 @@ public static native double gsl_sf_transport_5(double x);
 // #endif /* __GSL_SF_TRANSPORT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_trig.h
+// Parsed from gsl/gsl_sf_trig.h
 
 /* specfunc/gsl_sf_trig.h
  * 
@@ -25327,7 +25327,7 @@ public static native int gsl_sf_angle_restrict_pos_err_e(double theta, gsl_sf_re
 // #endif /* __GSL_SF_TRIG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sf_zeta.h
+// Parsed from gsl/gsl_sf_zeta.h
 
 /* specfunc/gsl_sf_zeta.h
  * 
@@ -25436,7 +25436,7 @@ public static native double gsl_sf_eta(double s);
 // #endif /* __GSL_SF_ZETA_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort.h
+// Parsed from gsl/gsl_sort.h
 
 // #ifndef __GSL_SORT_H__
 // #define __GSL_SORT_H__
@@ -25460,7 +25460,7 @@ public static native double gsl_sf_eta(double s);
 // #endif /* __GSL_SORT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_double.h
+// Parsed from gsl/gsl_sort_double.h
 
 /* sort/gsl_sort_double.h
  * 
@@ -25523,7 +25523,7 @@ public static native int gsl_sort_largest_index(@Cast("size_t*") SizeTPointer p,
 // #endif /* __GSL_SORT_DOUBLE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_float.h
+// Parsed from gsl/gsl_sort_float.h
 
 /* sort/gsl_sort_float.h
  * 
@@ -25586,7 +25586,7 @@ public static native int gsl_sort_float_largest_index(@Cast("size_t*") SizeTPoin
 // #endif /* __GSL_SORT_FLOAT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_ulong.h
+// Parsed from gsl/gsl_sort_ulong.h
 
 /* sort/gsl_sort_ulong.h
  * 
@@ -25635,7 +25635,7 @@ public static native int gsl_sort_ulong_largest_index(@Cast("size_t*") SizeTPoin
 // #endif /* __GSL_SORT_ULONG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_long.h
+// Parsed from gsl/gsl_sort_long.h
 
 /* sort/gsl_sort_long.h
  * 
@@ -25684,7 +25684,7 @@ public static native int gsl_sort_long_largest_index(@Cast("size_t*") SizeTPoint
 // #endif /* __GSL_SORT_LONG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_uint.h
+// Parsed from gsl/gsl_sort_uint.h
 
 /* sort/gsl_sort_uint.h
  * 
@@ -25747,7 +25747,7 @@ public static native int gsl_sort_uint_largest_index(@Cast("size_t*") SizeTPoint
 // #endif /* __GSL_SORT_UINT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_int.h
+// Parsed from gsl/gsl_sort_int.h
 
 /* sort/gsl_sort_int.h
  * 
@@ -25810,7 +25810,7 @@ public static native int gsl_sort_int_largest_index(@Cast("size_t*") SizeTPointe
 // #endif /* __GSL_SORT_INT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_ushort.h
+// Parsed from gsl/gsl_sort_ushort.h
 
 /* sort/gsl_sort_ushort.h
  * 
@@ -25873,7 +25873,7 @@ public static native int gsl_sort_ushort_largest_index(@Cast("size_t*") SizeTPoi
 // #endif /* __GSL_SORT_USHORT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_short.h
+// Parsed from gsl/gsl_sort_short.h
 
 /* sort/gsl_sort_short.h
  * 
@@ -25936,7 +25936,7 @@ public static native int gsl_sort_short_largest_index(@Cast("size_t*") SizeTPoin
 // #endif /* __GSL_SORT_SHORT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_uchar.h
+// Parsed from gsl/gsl_sort_uchar.h
 
 /* sort/gsl_sort_uchar.h
  * 
@@ -25999,7 +25999,7 @@ public static native int gsl_sort_uchar_largest_index(@Cast("size_t*") SizeTPoin
 // #endif /* __GSL_SORT_UCHAR_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_char.h
+// Parsed from gsl/gsl_sort_char.h
 
 /* sort/gsl_sort_char.h
  * 
@@ -26065,7 +26065,7 @@ public static native int gsl_sort_char_largest_index(@Cast("size_t*") SizeTPoint
 // #endif /* __GSL_SORT_CHAR_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_vector.h
+// Parsed from gsl/gsl_sort_vector.h
 
 // #ifndef __GSL_SORT_VECTOR_H__
 // #define __GSL_SORT_VECTOR_H__
@@ -26089,7 +26089,7 @@ public static native int gsl_sort_char_largest_index(@Cast("size_t*") SizeTPoint
 // #endif /* __GSL_SORT_VECTOR_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_vector_double.h
+// Parsed from gsl/gsl_sort_vector_double.h
 
 /* sort/gsl_sort_vector_double.h
  * 
@@ -26143,7 +26143,7 @@ public static native int gsl_sort_vector_largest_index(@Cast("size_t*") SizeTPoi
 // #endif /* __GSL_SORT_VECTOR_DOUBLE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_vector_float.h
+// Parsed from gsl/gsl_sort_vector_float.h
 
 /* sort/gsl_sort_vector_float.h
  * 
@@ -26197,7 +26197,7 @@ public static native int gsl_sort_vector_float_largest_index(@Cast("size_t*") Si
 // #endif /* __GSL_SORT_VECTOR_FLOAT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_vector_ulong.h
+// Parsed from gsl/gsl_sort_vector_ulong.h
 
 /* sort/gsl_sort_vector_ulong.h
  * 
@@ -26247,7 +26247,7 @@ public static native int gsl_sort_vector_ulong_largest_index(@Cast("size_t*") Si
 // #endif /* __GSL_SORT_VECTOR_ULONG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_vector_long.h
+// Parsed from gsl/gsl_sort_vector_long.h
 
 /* sort/gsl_sort_vector_long.h
  * 
@@ -26297,7 +26297,7 @@ public static native int gsl_sort_vector_long_largest_index(@Cast("size_t*") Siz
 // #endif /* __GSL_SORT_VECTOR_LONG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_vector_uint.h
+// Parsed from gsl/gsl_sort_vector_uint.h
 
 /* sort/gsl_sort_vector_uint.h
  * 
@@ -26351,7 +26351,7 @@ public static native int gsl_sort_vector_uint_largest_index(@Cast("size_t*") Siz
 // #endif /* __GSL_SORT_VECTOR_UINT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_vector_int.h
+// Parsed from gsl/gsl_sort_vector_int.h
 
 /* sort/gsl_sort_vector_int.h
  * 
@@ -26405,7 +26405,7 @@ public static native int gsl_sort_vector_int_largest_index(@Cast("size_t*") Size
 // #endif /* __GSL_SORT_VECTOR_INT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_vector_ushort.h
+// Parsed from gsl/gsl_sort_vector_ushort.h
 
 /* sort/gsl_sort_vector_ushort.h
  * 
@@ -26459,7 +26459,7 @@ public static native int gsl_sort_vector_ushort_largest_index(@Cast("size_t*") S
 // #endif /* __GSL_SORT_VECTOR_USHORT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_vector_short.h
+// Parsed from gsl/gsl_sort_vector_short.h
 
 /* sort/gsl_sort_vector_short.h
  * 
@@ -26513,7 +26513,7 @@ public static native int gsl_sort_vector_short_largest_index(@Cast("size_t*") Si
 // #endif /* __GSL_SORT_VECTOR_SHORT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_vector_uchar.h
+// Parsed from gsl/gsl_sort_vector_uchar.h
 
 /* sort/gsl_sort_vector_uchar.h
  * 
@@ -26567,7 +26567,7 @@ public static native int gsl_sort_vector_uchar_largest_index(@Cast("size_t*") Si
 // #endif /* __GSL_SORT_VECTOR_UCHAR_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_sort_vector_char.h
+// Parsed from gsl/gsl_sort_vector_char.h
 
 /* sort/gsl_sort_vector_char.h
  * 
@@ -26621,7 +26621,7 @@ public static native int gsl_sort_vector_char_largest_index(@Cast("size_t*") Siz
 // #endif /* __GSL_SORT_VECTOR_CHAR_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_statistics.h
+// Parsed from gsl/gsl_statistics.h
 
 // #ifndef __GSL_STATISTICS_H__
 // #define __GSL_STATISTICS_H__
@@ -26645,7 +26645,7 @@ public static native int gsl_sort_vector_char_largest_index(@Cast("size_t*") Siz
 // #endif /* __GSL_STATISTICS_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_statistics_double.h
+// Parsed from gsl/gsl_statistics_double.h
 
 /* statistics/gsl_statistics_double.h
  * 
@@ -26835,7 +26835,7 @@ public static native double gsl_stats_quantile_from_sorted_data(@Const double[] 
 // #endif /* __GSL_STATISTICS_DOUBLE_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_statistics_float.h
+// Parsed from gsl/gsl_statistics_float.h
 
 /* statistics/gsl_statistics_float.h
  * 
@@ -27025,7 +27025,7 @@ public static native double gsl_stats_float_quantile_from_sorted_data(@Const flo
 // #endif /* __GSL_STATISTICS_FLOAT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_statistics_ulong.h
+// Parsed from gsl/gsl_statistics_ulong.h
 
 /* statistics/gsl_statistics_ulong.h
  * 
@@ -27105,7 +27105,7 @@ public static native double gsl_stats_ulong_quantile_from_sorted_data(@Cast("con
 // #endif /* __GSL_STATISTICS_ULONG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_statistics_long.h
+// Parsed from gsl/gsl_statistics_long.h
 
 /* statistics/gsl_statistics_long.h
  * 
@@ -27185,7 +27185,7 @@ public static native double gsl_stats_long_quantile_from_sorted_data(@Const CLon
 // #endif /* __GSL_STATISTICS_LONG_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_statistics_uint.h
+// Parsed from gsl/gsl_statistics_uint.h
 
 /* statistics/gsl_statistics_uint.h
  * 
@@ -27325,7 +27325,7 @@ public static native double gsl_stats_uint_quantile_from_sorted_data(@Cast("cons
 // #endif /* __GSL_STATISTICS_UINT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_statistics_int.h
+// Parsed from gsl/gsl_statistics_int.h
 
 /* statistics/gsl_statistics_int.h
  * 
@@ -27465,7 +27465,7 @@ public static native double gsl_stats_int_quantile_from_sorted_data(@Const int[]
 // #endif /* __GSL_STATISTICS_INT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_statistics_ushort.h
+// Parsed from gsl/gsl_statistics_ushort.h
 
 /* statistics/gsl_statistics_ushort.h
  * 
@@ -27605,7 +27605,7 @@ public static native double gsl_stats_ushort_quantile_from_sorted_data(@Cast("co
 // #endif /* __GSL_STATISTICS_USHORT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_statistics_short.h
+// Parsed from gsl/gsl_statistics_short.h
 
 /* statistics/gsl_statistics_short.h
  * 
@@ -27745,7 +27745,7 @@ public static native double gsl_stats_short_quantile_from_sorted_data(@Const sho
 // #endif /* __GSL_STATISTICS_SHORT_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_statistics_uchar.h
+// Parsed from gsl/gsl_statistics_uchar.h
 
 /* statistics/gsl_statistics_uchar.h
  * 
@@ -27885,7 +27885,7 @@ public static native double gsl_stats_uchar_quantile_from_sorted_data(@Cast("con
 // #endif /* __GSL_STATISTICS_UCHAR_H__ */
 
 
-// Parsed from /usr/local/include/gsl/gsl_statistics_char.h
+// Parsed from gsl/gsl_statistics_char.h
 
 /* statistics/gsl_statistics_char.h
  * 

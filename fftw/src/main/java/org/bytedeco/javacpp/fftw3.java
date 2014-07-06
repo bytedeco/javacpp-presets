@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 public class fftw3 extends org.bytedeco.javacpp.presets.fftw3 {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/fftw3.h
+// Parsed from <fftw3.h>
 
 /*
  * Copyright (c) 2003, 2007-14 Matteo Frigo

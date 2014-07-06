@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Samuel Audet
+ * Copyright (C) 2013,2014 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -31,10 +31,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(target="org.bytedeco.javacpp.videoInputLib", value={
-    @Platform(include={"<videoInput.h>", "<videoInput.cpp>"},
-        includepath={"C:/videoInput-update2013/videoInputSrcAndDemos/libs/videoInput/",
-                     "C:/videoInput-update2013/videoInputSrcAndDemos/libs/DShow/Include/"},
-        link={"ole32", "oleaut32", "amstrmid", "strmiids", "uuid"}) })
+    @Platform(include={"<videoInput.h>", "<videoInput.cpp>"}, link={"ole32", "oleaut32", "amstrmid", "strmiids", "uuid"}) })
 public class videoInputLib implements InfoMapper {
     public void map(InfoMap infoMap) {
           infoMap.put(new Info("videoInput.cpp").skip())

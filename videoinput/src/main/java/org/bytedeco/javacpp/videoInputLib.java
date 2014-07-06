@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.8-SNAPSHOT
+// Targeted by JavaCPP version 0.8-2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -33,7 +33,7 @@ public class videoInputLib extends org.bytedeco.javacpp.presets.videoInputLib {
     }
 }
 
-// Parsed from C:\videoInput-update2013\videoInputSrcAndDemos\libs\videoInput\videoInput.h
+// Parsed from <videoInput.h>
 
 // #ifndef _VIDEOINPUT
 // #define _VIDEOINPUT

@@ -11,7 +11,7 @@ import static org.bytedeco.javacpp.avutil.*;
 public class swresample extends org.bytedeco.javacpp.presets.swresample {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/libswresample/swresample.h
+// Parsed from <libswresample/swresample.h>
 
 /*
  * Copyright (C) 2011-2013 Michael Niedermayer (michaelni@gmx.at)

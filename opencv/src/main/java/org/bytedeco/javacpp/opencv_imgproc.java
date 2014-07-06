@@ -11,7 +11,7 @@ import static org.bytedeco.javacpp.opencv_core.*;
 public class opencv_imgproc extends org.bytedeco.javacpp.helper.opencv_imgproc {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/opencv2/imgproc/types_c.h
+// Parsed from <opencv2/imgproc/types_c.h>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -764,7 +764,7 @@ public static final int
 // #endif
 
 
-// Parsed from /usr/local/include/opencv2/imgproc/imgproc_c.h
+// Parsed from <opencv2/imgproc/imgproc_c.h>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1715,7 +1715,7 @@ public static native void cvFitLine( @Const CvArr points, int dist_type, double 
 // #endif
 
 
-// Parsed from /usr/local/include/opencv2/imgproc/imgproc.hpp
+// Parsed from <opencv2/imgproc/imgproc.hpp>
 
 /** \file imgproc.hpp
  \brief The Image Processing

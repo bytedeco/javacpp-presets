@@ -11,7 +11,7 @@ import static org.bytedeco.javacpp.opencv_core.*;
 public class opencv_flann extends org.bytedeco.javacpp.presets.opencv_flann {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/opencv2/flann/defines.h
+// Parsed from <opencv2/flann/defines.h>
 
 /***********************************************************************
  * Software License Agreement (BSD License)
@@ -181,7 +181,7 @@ public static final int
 // #endif /* OPENCV_FLANN_DEFINES_H_ */
 
 
-// Parsed from /usr/local/include/opencv2/flann/miniflann.hpp
+// Parsed from <opencv2/flann/miniflann.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //

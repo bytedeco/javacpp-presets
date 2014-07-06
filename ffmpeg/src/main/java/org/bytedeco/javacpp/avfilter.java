@@ -16,7 +16,7 @@ import static org.bytedeco.javacpp.swscale.*;
 public class avfilter extends org.bytedeco.javacpp.presets.avfilter {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/libavfilter/avfilter.h
+// Parsed from <libavfilter/avfilter.h>
 
 /*
  * filter layer
@@ -1920,7 +1920,7 @@ public static native int avfilter_graph_request_oldest(AVFilterGraph graph);
 // #endif /* AVFILTER_AVFILTER_H */
 
 
-// Parsed from /usr/local/include/libavfilter/buffersink.h
+// Parsed from <libavfilter/buffersink.h>
 
 /*
  * This file is part of FFmpeg.
@@ -2155,7 +2155,7 @@ public static native int av_buffersink_get_samples(AVFilterContext ctx, AVFrame 
 // #endif /* AVFILTER_BUFFERSINK_H */
 
 
-// Parsed from /usr/local/include/libavfilter/buffersrc.h
+// Parsed from <libavfilter/buffersrc.h>
 
 /*
  *

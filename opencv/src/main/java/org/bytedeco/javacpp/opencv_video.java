@@ -12,7 +12,7 @@ import static org.bytedeco.javacpp.opencv_imgproc.*;
 public class opencv_video extends org.bytedeco.javacpp.helper.opencv_video {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/opencv2/video/video.hpp
+// Parsed from <opencv2/video/video.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -72,7 +72,7 @@ public class opencv_video extends org.bytedeco.javacpp.helper.opencv_video {
 // #endif //__OPENCV_VIDEO_HPP__
 
 
-// Parsed from /usr/local/include/opencv2/video/tracking.hpp
+// Parsed from <opencv2/video/tracking.hpp>
 
 /** \file tracking.hpp
  \brief The Object and Feature Tracking
@@ -529,7 +529,7 @@ public static final int
 // #endif
 
 
-// Parsed from /usr/local/include/opencv2/video/background_segm.hpp
+// Parsed from <opencv2/video/background_segm.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //

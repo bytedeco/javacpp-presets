@@ -38,7 +38,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     @Index public native @ByRef byte second(@Cast("size_t") long i);  public native MatBytePairVector second(@Cast("size_t") long i, byte second);
 }
 
-// Parsed from /usr/local/include/opencv2/stitching/detail/warpers.hpp
+// Parsed from <opencv2/stitching/detail/warpers.hpp>
 
  /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -686,7 +686,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 // #endif // __OPENCV_STITCHING_WARPERS_HPP__
 
 
-// Parsed from /usr/local/include/opencv2/stitching/detail/matchers.hpp
+// Parsed from <opencv2/stitching/detail/matchers.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -896,7 +896,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 // #endif // __OPENCV_STITCHING_MATCHERS_HPP__
 
 
-// Parsed from /usr/local/include/opencv2/stitching/detail/util.hpp
+// Parsed from <opencv2/stitching/detail/util.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1066,7 +1066,7 @@ public static final int ENABLE_LOG = 0;
 // #endif // __OPENCV_STITCHING_UTIL_HPP__
 
 
-// Parsed from /usr/local/include/opencv2/stitching/detail/camera.hpp
+// Parsed from <opencv2/stitching/detail/camera.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1145,7 +1145,7 @@ public static final int ENABLE_LOG = 0;
 // #endif // #ifndef __OPENCV_STITCHING_CAMERA_HPP__
 
 
-// Parsed from /usr/local/include/opencv2/stitching/detail/motion_estimators.hpp
+// Parsed from <opencv2/stitching/detail/motion_estimators.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1304,7 +1304,7 @@ public static final int
 // #endif // __OPENCV_STITCHING_MOTION_ESTIMATORS_HPP__
 
 
-// Parsed from /usr/local/include/opencv2/stitching/detail/exposure_compensate.hpp
+// Parsed from <opencv2/stitching/detail/exposure_compensate.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1430,7 +1430,7 @@ public static final int
 // #endif // __OPENCV_STITCHING_EXPOSURE_COMPENSATE_HPP__
 
 
-// Parsed from /usr/local/include/opencv2/stitching/detail/seam_finders.hpp
+// Parsed from <opencv2/stitching/detail/seam_finders.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1620,7 +1620,7 @@ public static final int
 // #endif // __OPENCV_STITCHING_SEAM_FINDERS_HPP__
 
 
-// Parsed from /usr/local/include/opencv2/stitching/detail/blenders.hpp
+// Parsed from <opencv2/stitching/detail/blenders.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1768,7 +1768,7 @@ public static final int
 // #endif // __OPENCV_STITCHING_BLENDERS_HPP__
 
 
-// Parsed from /usr/local/include/opencv2/stitching/detail/autocalib.hpp
+// Parsed from <opencv2/stitching/detail/autocalib.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1842,7 +1842,7 @@ public static final int
 // #endif // __OPENCV_STITCHING_AUTOCALIB_HPP__
 
 
-// Parsed from /usr/local/include/opencv2/stitching/warpers.hpp
+// Parsed from <opencv2/stitching/warpers.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -2115,7 +2115,7 @@ public static final int
 // #endif // __OPENCV_STITCHING_WARPER_CREATORS_HPP__
 
 
-// Parsed from /usr/local/include/opencv2/stitching/stitcher.hpp
+// Parsed from <opencv2/stitching/stitcher.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //

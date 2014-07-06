@@ -11,7 +11,7 @@ import static org.bytedeco.javacpp.avutil.*;
 public class swscale extends org.bytedeco.javacpp.presets.swscale {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/libswscale/swscale.h
+// Parsed from <libswscale/swscale.h>
 
 /*
  * Copyright (C) 2001-2011 Michael Niedermayer <michaelni@gmx.at>

@@ -11,7 +11,7 @@ import static org.bytedeco.javacpp.avutil.*;
 public class postproc extends org.bytedeco.javacpp.presets.postproc {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/libpostproc/postprocess.h
+// Parsed from <libpostproc/postprocess.h>
 
 /*
  * Copyright (C) 2001-2003 Michael Niedermayer (michaelni@gmx.at)

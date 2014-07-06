@@ -61,7 +61,7 @@ public class opencv_objdetect extends org.bytedeco.javacpp.helper.opencv_objdete
     }
 }
 
-// Parsed from /usr/local/include/opencv2/objdetect/objdetect.hpp
+// Parsed from <opencv2/objdetect/objdetect.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //

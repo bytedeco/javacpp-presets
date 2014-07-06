@@ -5,24 +5,26 @@ fi
 
 if [[ $PLATFORM == windows* ]]; then
     FFMPEG_VERSION=2.2.1
-    download http://ffmpeg.zeranoe.com/builds/win32/dev/ffmpeg-$FFMPEG_VERSION-win32-dev.7z ffmpeg-$FFMPEG_VERSION-win32-dev.7z
-    download http://ffmpeg.zeranoe.com/builds/win64/dev/ffmpeg-$FFMPEG_VERSION-win64-dev.7z ffmpeg-$FFMPEG_VERSION-win64-dev.7z
-    download http://ffmpeg.zeranoe.com/builds/win32/shared/ffmpeg-$FFMPEG_VERSION-win32-shared.7z ffmpeg-$FFMPEG_VERSION-win32-shared.7z
-    download http://ffmpeg.zeranoe.com/builds/win64/shared/ffmpeg-$FFMPEG_VERSION-win64-shared.7z ffmpeg-$FFMPEG_VERSION-win64-shared.7z
+    [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
+    download http://ffmpeg.zeranoe.com/builds/win$BITS/dev/ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z
+    download http://ffmpeg.zeranoe.com/builds/win$BITS/shared/ffmpeg-$FFMPEG_VERSION-win$BITS-shared.7z ffmpeg-$FFMPEG_VERSION-win$BITS-shared.7z
     download http://msinttypes.googlecode.com/files/msinttypes-r26.zip msinttypes-r26.zip
 
-    INSTALL_DIR=/C/MinGW/local
-    mkdir -p $INSTALL_DIR/include
-    unzip -o msinttypes-r26.zip -d $INSTALL_DIR/include
+    mkdir -p $PLATFORM
+    cd $PLATFORM
+    7za x -y ../ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z
+    7za x -y ../ffmpeg-$FFMPEG_VERSION-win$BITS-shared.7z
+    patch -Np1 -d ffmpeg-$FFMPEG_VERSION-win$BITS-dev/ < ../../ffmpeg-$FFMPEG_VERSION-win$BITS-dev.patch
 else
     FFMPEG_VERSION=2.2.1
     download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
     download ftp://ftp.videolan.org/pub/videolan/x264/snapshots/last_stable_x264.tar.bz2 last_stable_x264.tar.bz2
 
-    tar -xjvf ffmpeg-$FFMPEG_VERSION.tar.bz2
-    mv ffmpeg-$FFMPEG_VERSION ffmpeg-$FFMPEG_VERSION-$PLATFORM
-    cd ffmpeg-$FFMPEG_VERSION-$PLATFORM
-    tar -xjvf ../last_stable_x264.tar.bz2
+    mkdir -p $PLATFORM
+    cd $PLATFORM
+    tar -xjvf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
+    cd ffmpeg-$FFMPEG_VERSION
+    tar -xjvf ../../last_stable_x264.tar.bz2
     X264=`echo x264-snapshot-*`
 fi
 
@@ -32,8 +34,7 @@ case $PLATFORM in
         ./configure --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=arm-linux --extra-cflags="-DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="-nostdlib -Wl,--fix-cortex-a8 -lgcc -ldl -lz -lm -lc"
         make -j4
         cd ..
-        patch -Np1 < ../../ffmpeg-$FFMPEG_VERSION-android.patch
-        ./configure --prefix="$ANDROID_NDK/../local/" --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-outdev=sdl --enable-libx264 --extra-cflags="-I$X264" --extra-ldflags="-L$X264" --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=arm --extra-cflags="-DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="-nostdlib -Wl,--fix-cortex-a8" --extra-libs="-lgcc -ldl -lz -lm -lc" --disable-symver --disable-programs --libdir="$ANDROID_NDK/../local/lib/armeabi/" --shlibdir="$ANDROID_NDK/../local/lib/armeabi/"
+        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-outdev=sdl --enable-libx264 --extra-cflags="-I$X264" --extra-ldflags="-L$X264" --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=arm --extra-cflags="-DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="-nostdlib -Wl,--fix-cortex-a8" --extra-libs="-lgcc -ldl -lz -lm -lc" --disable-symver --disable-programs
         make -j4
         make install
         ;;
@@ -42,8 +43,7 @@ case $PLATFORM in
         ./configure --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=i686-linux --extra-cflags="-DANDROID -fPIC -ffunction-sections -funwind-tables -mtune=atom -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="-nostdlib -lgcc -ldl -lz -lm -lc"
         make -j4
         cd ..
-        patch -Np1 < ../../ffmpeg-$FFMPEG_VERSION-android.patch
-        ./configure --prefix="$ANDROID_NDK/../local/" --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-outdev=sdl --enable-libx264 --extra-cflags="-I$X264" --extra-ldflags="-L$X264" --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=atom --extra-cflags="-DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="-nostdlib" --extra-libs="-lgcc -ldl -lz -lm -lc" --disable-symver --disable-programs --libdir="$ANDROID_NDK/../local/lib/x86/" --shlibdir="$ANDROID_NDK/../local/lib/x86/"
+        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-outdev=sdl --enable-libx264 --extra-cflags="-I$X264" --extra-ldflags="-L$X264" --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=atom --extra-cflags="-DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="-nostdlib" --extra-libs="-lgcc -ldl -lz -lm -lc" --disable-symver --disable-programs
         make -j4
         make install
         ;;
@@ -52,30 +52,30 @@ case $PLATFORM in
         ./configure --enable-static --enable-pic --host=i686-linux
         make -j4
         cd ..
-        ./configure --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-outdev=sdl --enable-libx264 --extra-cflags="-I$X264" --extra-ldflags="-L$X264" --cc="gcc -m32" --extra-ldflags="-ldl" --libdir=/usr/local/lib32/ --shlibdir=/usr/local/lib32/
+        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-outdev=sdl --enable-libx264 --extra-cflags="-I$X264" --extra-ldflags="-L$X264" --cc="gcc -m32" --extra-ldflags="-ldl"
         make -j4
-        sudo make install
+        make install
         ;;
     linux-x86_64)
         cd $X264
         ./configure --enable-static --enable-pic
         make -j4
         cd ..
-        ./configure --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-outdev=sdl --enable-libx264 --extra-cflags="-I$X264" --extra-ldflags="-L$X264" --extra-ldflags="-ldl" --libdir=/usr/local/lib64/ --shlibdir=/usr/local/lib64/
+        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-outdev=sdl --enable-libx264 --extra-cflags="-I$X264" --extra-ldflags="-L$X264" --extra-ldflags="-ldl"
         make -j4
-        sudo make install
+        make install
         ;;
     macosx-x86_64)
         cd $X264
         ./configure --enable-static --enable-pic
         make -j4
         cd ..
-        ./configure --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-outdev=sdl --enable-libx264 --extra-cflags="-I$X264" --extra-ldflags="-L$X264" --extra-ldflags="-Wl,-headerpad_max_install_names -ldl"
+        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-outdev=sdl --enable-libx264 --extra-cflags="-I$X264" --extra-ldflags="-L$X264" --extra-ldflags="-Wl,-headerpad_max_install_names -ldl"
         make -j4
-        sudo make install
-        BADPATH=/usr/local/lib
+        make install
+        BADPATH=../lib
         LIBS="libavcodec.55.dylib libavdevice.55.dylib libavfilter.4.dylib libavformat.55.dylib libavutil.52.dylib libpostproc.52.dylib libswresample.0.dylib libswscale.2.dylib"
-        for f in $LIBS; do sudo install_name_tool $BADPATH/$f -id @rpath/$f \
+        for f in $LIBS; do install_name_tool $BADPATH/$f -id @rpath/$f \
             -add_rpath /usr/local/lib/ -add_rpath /opt/local/lib/ -add_rpath @loader_path/. \
             -change $BADPATH/libavcodec.55.dylib @rpath/libavcodec.55.dylib \
             -change $BADPATH/libavdevice.55.dylib @rpath/libavdevice.55.dylib \
@@ -87,42 +87,32 @@ case $PLATFORM in
             -change $BADPATH/libswscale.2.dylib @rpath/libswscale.2.dylib; done
         ;;
     windows-x86)
-        7za x -y ffmpeg-$FFMPEG_VERSION-win32-dev.7z
-        7za x -y ffmpeg-$FFMPEG_VERSION-win32-shared.7z
-        patch -Np1 -d ffmpeg-$FFMPEG_VERSION-win32-dev/ < ../ffmpeg-$FFMPEG_VERSION-win32-dev.patch
         # http://ffmpeg.org/platform.html#Linking-to-FFmpeg-with-Microsoft-Visual-C_002b_002b
         LIBS=(avcodec-55 avdevice-55 avfilter-4 avformat-55 avutil-52 postproc-52 swresample-0 swscale-2)
         for LIB in ${LIBS[@]}; do
             lib /def:ffmpeg-$FFMPEG_VERSION-win32-dev/lib/$LIB.def /out:ffmpeg-$FFMPEG_VERSION-win32-dev/lib/$LIB.lib /machine:x86
         done
-        rm -Rf ffmpeg-$FFMPEG_VERSION-win32-dev/lib32
-        rm -Rf ffmpeg-$FFMPEG_VERSION-win32-shared/bin32
-        mv ffmpeg-$FFMPEG_VERSION-win32-dev/lib ffmpeg-$FFMPEG_VERSION-win32-dev/lib32
-        mv ffmpeg-$FFMPEG_VERSION-win32-shared/bin ffmpeg-$FFMPEG_VERSION-win32-shared/bin32
-        cp -a ffmpeg-$FFMPEG_VERSION-win32-dev/* $INSTALL_DIR
-        cp -a ffmpeg-$FFMPEG_VERSION-win32-shared/* $INSTALL_DIR
+        cp -r ffmpeg-$FFMPEG_VERSION-win32-dev/include .
+        cp -r ffmpeg-$FFMPEG_VERSION-win32-dev/lib .
+        cp -r ffmpeg-$FFMPEG_VERSION-win32-shared/bin .
+        cd include
+        unzip -o ../../msinttypes-r26.zip
         ;;
     windows-x86_64)
-        7za x -y ffmpeg-$FFMPEG_VERSION-win64-dev.7z
-        7za x -y ffmpeg-$FFMPEG_VERSION-win64-shared.7z
-        patch -Np1 -d ffmpeg-$FFMPEG_VERSION-win64-dev/ < ../ffmpeg-$FFMPEG_VERSION-win64-dev.patch
         # http://ffmpeg.org/platform.html#Linking-to-FFmpeg-with-Microsoft-Visual-C_002b_002b
         LIBS=(avcodec-55 avdevice-55 avfilter-4 avformat-55 avutil-52 postproc-52 swresample-0 swscale-2)
         for LIB in ${LIBS[@]}; do
             lib /def:ffmpeg-$FFMPEG_VERSION-win64-dev/lib/$LIB.def /out:ffmpeg-$FFMPEG_VERSION-win64-dev/lib/$LIB.lib /machine:x64
         done
-        rm -Rf ffmpeg-$FFMPEG_VERSION-win64-dev/lib64
-        rm -Rf ffmpeg-$FFMPEG_VERSION-win64-shared/bin64
-        mv ffmpeg-$FFMPEG_VERSION-win64-dev/lib ffmpeg-$FFMPEG_VERSION-win64-dev/lib64
-        mv ffmpeg-$FFMPEG_VERSION-win64-shared/bin ffmpeg-$FFMPEG_VERSION-win64-shared/bin64
-        cp -a ffmpeg-$FFMPEG_VERSION-win64-dev/* $INSTALL_DIR
-        cp -a ffmpeg-$FFMPEG_VERSION-win64-shared/* $INSTALL_DIR
+        cp -r ffmpeg-$FFMPEG_VERSION-win64-dev/include .
+        cp -r ffmpeg-$FFMPEG_VERSION-win64-dev/lib .
+        cp -r ffmpeg-$FFMPEG_VERSION-win64-shared/bin .
+        cd include
+        unzip -o ../../msinttypes-r26.zip
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
         ;;
 esac
 
-if [[ $PLATFORM != windows* ]]; then
-    cd ..
-fi
+cd ../..

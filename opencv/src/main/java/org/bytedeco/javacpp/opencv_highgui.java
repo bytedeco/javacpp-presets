@@ -12,7 +12,7 @@ import static org.bytedeco.javacpp.opencv_imgproc.*;
 public class opencv_highgui extends org.bytedeco.javacpp.helper.opencv_highgui {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/opencv2/highgui/highgui_c.h
+// Parsed from <opencv2/highgui/highgui_c.h>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -870,7 +870,7 @@ public static final int HG_AUTOSIZE = CV_WINDOW_AUTOSIZE;
 // #endif
 
 
-// Parsed from /usr/local/include/opencv2/highgui/highgui.hpp
+// Parsed from <opencv2/highgui/highgui.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //

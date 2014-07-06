@@ -22,7 +22,7 @@ import static org.bytedeco.javacpp.opencv_nonfree.*;
 public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videostab {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/opencv2/videostab/frame_source.hpp
+// Parsed from <opencv2/videostab/frame_source.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -125,7 +125,7 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 // #endif
 
 
-// Parsed from /usr/local/include/opencv2/videostab/log.hpp
+// Parsed from <opencv2/videostab/log.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -219,7 +219,7 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 // #endif
 
 
-// Parsed from /usr/local/include/opencv2/videostab/fast_marching.hpp
+// Parsed from <opencv2/videostab/fast_marching.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -295,7 +295,7 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 // #endif
 
 
-// Parsed from /usr/local/include/opencv2/videostab/optical_flow.hpp
+// Parsed from <opencv2/videostab/optical_flow.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -433,7 +433,7 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 // #endif
 
 
-// Parsed from /usr/local/include/opencv2/videostab/global_motion.hpp
+// Parsed from <opencv2/videostab/global_motion.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -589,7 +589,7 @@ public static final int
 // #endif
 
 
-// Parsed from /usr/local/include/opencv2/videostab/motion_stabilizing.hpp
+// Parsed from <opencv2/videostab/motion_stabilizing.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -695,7 +695,7 @@ public static final int
 // #endif
 
 
-// Parsed from /usr/local/include/opencv2/videostab/inpainting.hpp
+// Parsed from <opencv2/videostab/inpainting.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -903,7 +903,7 @@ public static final int
 // #endif
 
 
-// Parsed from /usr/local/include/opencv2/videostab/deblurring.hpp
+// Parsed from <opencv2/videostab/deblurring.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1018,7 +1018,7 @@ public static final int
 // #endif
 
 
-// Parsed from /usr/local/include/opencv2/videostab/stabilizer.hpp
+// Parsed from <opencv2/videostab/stabilizer.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1163,7 +1163,7 @@ public static final int
 // #endif
 
 
-// Parsed from /usr/local/include/opencv2/videostab/videostab.hpp
+// Parsed from <opencv2/videostab/videostab.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //

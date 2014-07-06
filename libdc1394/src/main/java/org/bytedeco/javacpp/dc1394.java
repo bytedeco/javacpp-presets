@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 public class dc1394 extends org.bytedeco.javacpp.presets.dc1394 {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/dc1394/dc1394.h
+// Parsed from <dc1394/dc1394.h>
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -70,7 +70,7 @@ public class dc1394 extends org.bytedeco.javacpp.presets.dc1394 {
 // #endif
 
 
-// Parsed from /usr/local/include/dc1394/types.h
+// Parsed from <dc1394/types.h>
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -260,7 +260,7 @@ public static final int
 // #endif
 
 
-// Parsed from /usr/local/include/dc1394/log.h
+// Parsed from <dc1394/log.h>
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -536,7 +536,7 @@ public static native void dc1394_log_debug(String format);
 // #endif
 
 
-// Parsed from /usr/local/include/dc1394/camera.h
+// Parsed from <dc1394/camera.h>
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -825,7 +825,7 @@ public static native @Cast("dc1394error_t") int dc1394_camera_print_info(dc1394c
 // #endif
 
 
-// Parsed from /usr/local/include/dc1394/control.h
+// Parsed from <dc1394/control.h>
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -1376,7 +1376,7 @@ public static native @Cast("dc1394error_t") int dc1394_memory_load(dc1394camera_
 // #endif /* __DC1394_CONTROL_H__ */
 
 
-// Parsed from /usr/local/include/dc1394/capture.h
+// Parsed from <dc1394/capture.h>
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -1505,7 +1505,7 @@ public static native void dc1394_capture_set_callback(dc1394camera_t camera,
 // #endif
 
 
-// Parsed from /usr/local/include/dc1394/conversions.h
+// Parsed from <dc1394/conversions.h>
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -1730,7 +1730,7 @@ public static native @Cast("dc1394error_t") int dc1394_deinterlace_stereo_frames
 
 
 
-// Parsed from /usr/local/include/dc1394/format7.h
+// Parsed from <dc1394/format7.h>
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -2016,7 +2016,7 @@ public static native @Cast("dc1394error_t") int dc1394_format7_get_roi(dc1394cam
 // #endif
 
 
-// Parsed from /usr/local/include/dc1394/iso.h
+// Parsed from <dc1394/iso.h>
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -2189,7 +2189,7 @@ public static native @Cast("dc1394error_t") int dc1394_iso_release_all(dc1394cam
 // #endif
 
 
-// Parsed from /usr/local/include/dc1394/register.h
+// Parsed from <dc1394/register.h>
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -2430,7 +2430,7 @@ public static native @Cast("dc1394error_t") int dc1394_set_strobe_register(dc139
 // #endif /* __DC1394_REGISTER_H__ */
 
 
-// Parsed from /usr/local/include/dc1394/video.h
+// Parsed from <dc1394/video.h>
 
 /*
  * 1394-Based Digital Camera Control Library
@@ -2730,7 +2730,7 @@ public static native @Cast("dc1394error_t") int dc1394_video_get_bandwidth_usage
 // #endif
 
 
-// Parsed from /usr/local/include/dc1394/utils.h
+// Parsed from <dc1394/utils.h>
 
 /*
  * 1394-Based Digital Camera Control Library

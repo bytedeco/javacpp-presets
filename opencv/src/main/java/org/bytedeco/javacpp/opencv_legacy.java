@@ -18,7 +18,7 @@ import static org.bytedeco.javacpp.opencv_ml.*;
 public class opencv_legacy extends org.bytedeco.javacpp.helper.opencv_legacy {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/opencv2/legacy/blobtrack.hpp
+// Parsed from <opencv2/legacy/blobtrack.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1017,7 +1017,7 @@ public static native void cvTestSeqSetFrame(CvTestSeq pTestSeq, int n);
 /* End of file. */
 
 
-// Parsed from /usr/local/include/opencv2/legacy/compat.hpp
+// Parsed from <opencv2/legacy/compat.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -2070,7 +2070,7 @@ public static native CvSeq cvGetStarKeypoints( @Const CvArr img, CvMemStorage st
 // #endif
 
 
-// Parsed from /usr/local/include/opencv2/legacy/legacy.hpp
+// Parsed from <opencv2/legacy/legacy.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //

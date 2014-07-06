@@ -11,7 +11,7 @@ import static org.bytedeco.javacpp.opencv_core.*;
 public class opencv_superres extends org.bytedeco.javacpp.presets.opencv_superres {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/opencv2/superres/superres.hpp
+// Parsed from <opencv2/superres/superres.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -107,7 +107,7 @@ public class opencv_superres extends org.bytedeco.javacpp.presets.opencv_superre
 // #endif // __OPENCV_SUPERRES_HPP__
 
 
-// Parsed from /usr/local/include/opencv2/superres/optical_flow.hpp
+// Parsed from <opencv2/superres/optical_flow.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //

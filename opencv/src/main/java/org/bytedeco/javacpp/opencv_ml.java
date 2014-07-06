@@ -23,7 +23,7 @@ public class opencv_ml extends org.bytedeco.javacpp.presets.opencv_ml {
     public native StringIntMap put(@StdString BytePointer i, int value);
 }
 
-// Parsed from /usr/local/include/opencv2/ml/ml.hpp
+// Parsed from <opencv2/ml/ml.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //

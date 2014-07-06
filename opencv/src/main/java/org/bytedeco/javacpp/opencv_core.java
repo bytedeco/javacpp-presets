@@ -231,7 +231,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     }
 }
 
-// Parsed from /usr/local/include/opencv2/core/types_c.h
+// Parsed from <opencv2/core/types_c.h>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -2350,7 +2350,7 @@ public static class CvModuleInfo extends Pointer {
 /* End of file. */
 
 
-// Parsed from /usr/local/include/opencv2/core/core_c.h
+// Parsed from <opencv2/core/core_c.h>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -4778,7 +4778,7 @@ public static final String cvFuncName = "";
 // #endif
 
 
-// Parsed from /usr/local/include/opencv2/core/core.hpp
+// Parsed from <opencv2/core/core.hpp>
 
 /** \file core.hpp
     \brief The Core Functionality

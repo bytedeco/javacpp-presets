@@ -1,6 +1,8 @@
 #!/bin/bash
 # Scripts to build and install native C++ libraries
 
+set -eu
+
 KERNEL=(`uname -s | tr [A-Z] [a-z]`)
 ARCH=(`uname -m | tr [A-Z] [a-z]`)
 case $KERNEL in
@@ -52,13 +54,13 @@ while [[ $# > 0 ]]; do
 done
 echo "Targeting platform \"$PLATFORM\""
 
-if [[ -z "$OPERATION" ]]; then
+if [[ -z ${OPERATION:-} ]]; then
     echo "Usage: ANDROID_NDK=/path/to/android-ndk/ bash cppbuild.sh [-platform <name>] [<install | clean>] [projects]"
     echo "where platform includes: android-arm, android-x86, linux-x86, linux-x86_64, macosx-x86_64, windows-x86, windows-x86_64, etc."
     exit 1
 fi
 
-if [[ -z "$ANDROID_NDK" ]]; then
+if [[ -z ${ANDROID_NDK:-} ]]; then
     ANDROID_NDK=~/projects/android/android-ndk/
 fi
 export ANDROID_NDK
@@ -77,10 +79,10 @@ esac
 function download {
     COMMAND="curl -C - -L $1 -o $2"
     echo "$COMMAND"
-    $COMMAND
+    $COMMAND || true
 }
 
-if [[ ${#PROJECTS[@]} -eq 0 ]]; then
+if [[ -z ${PROJECTS:-} ]]; then
     PROJECTS=(opencv ffmpeg flycapture libdc1394 libfreenect videoinput artoolkitplus fftw gsl)
 fi
 
@@ -88,7 +90,7 @@ for PROJECT in ${PROJECTS[@]}; do
     case $OPERATION in
         install)
             echo "Installing \"$PROJECT\""
-            mkdir $PROJECT/cppbuild
+            mkdir -p $PROJECT/cppbuild
             cd $PROJECT/cppbuild
             source ../cppbuild.sh
             cd ../..

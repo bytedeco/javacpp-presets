@@ -12,7 +12,7 @@ import static org.bytedeco.javacpp.opencv_imgproc.*;
 public class opencv_photo extends org.bytedeco.javacpp.presets.opencv_photo {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/opencv2/photo/photo_c.h
+// Parsed from <opencv2/photo/photo_c.h>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -82,7 +82,7 @@ public static native void cvInpaint( @Const CvArr src, @Const CvArr inpaint_mask
 // #endif //__OPENCV_PHOTO_C_H__
 
 
-// Parsed from /usr/local/include/opencv2/photo/photo.hpp
+// Parsed from <opencv2/photo/photo.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //

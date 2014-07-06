@@ -38,15 +38,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(value={
     @Platform(include={"<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/core.hpp>", "opencv_adapters.h"}, link="opencv_core@.2.4", preload="tbb"),
-    @Platform(value="android", includepath="../sdk/native/jni/include/"),
-    @Platform(value="android-arm", linkpath="../sdk/native/libs/armeabi-v7a/"),
-    @Platform(value="android-x86", linkpath="../sdk/native/libs/x86/"),
-    @Platform(value="windows", define="_WIN32_WINNT 0x0502", includepath="C:/opencv/build/include/",
-        link="opencv_core249", preload={"msvcr100", "msvcp100"}),
-    @Platform(value="windows-x86",    linkpath="C:/opencv/build/x86/vc10/lib/", preloadpath={"C:/opencv/build/x86/vc10/bin/",
-            "C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/redist/x86/Microsoft.VC100.CRT/"}),
-    @Platform(value="windows-x86_64", linkpath="C:/opencv/build/x64/vc10/lib/", preloadpath={"C:/opencv/build/x64/vc10/bin/",
-            "C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/redist/x64/Microsoft.VC100.CRT/"}) },
+    @Platform(value="windows", define="_WIN32_WINNT 0x0502", link="opencv_core249", preload={"msvcr100", "msvcp100"}),
+    @Platform(value="windows-x86", preloadpath={"C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/redist/x86/Microsoft.VC100.CRT/"}),
+    @Platform(value="windows-x86_64", preloadpath={"C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/redist/x64/Microsoft.VC100.CRT/"}) },
         target="org.bytedeco.javacpp.opencv_core", helper="org.bytedeco.javacpp.helper.opencv_core")
 public class opencv_core implements InfoMapper {
     public void map(InfoMap infoMap) {

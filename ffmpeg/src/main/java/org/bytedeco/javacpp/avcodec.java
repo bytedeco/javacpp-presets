@@ -11,7 +11,7 @@ import static org.bytedeco.javacpp.avutil.*;
 public class avcodec extends org.bytedeco.javacpp.presets.avcodec {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/libavcodec/avcodec.h
+// Parsed from <libavcodec/avcodec.h>
 
 /*
  * copyright (c) 2001 Fabrice Bellard
@@ -5933,7 +5933,7 @@ public static native @Const AVCodecDescriptor avcodec_descriptor_get_by_name(Str
 // #endif /* AVCODEC_AVCODEC_H */
 
 
-// Parsed from /usr/local/include/libavcodec/avfft.h
+// Parsed from <libavcodec/avfft.h>
 
 /*
  * This file is part of FFmpeg.

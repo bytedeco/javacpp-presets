@@ -59,7 +59,7 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
     }
 }
 
-// Parsed from /usr/local/include/opencv2/contrib/contrib.hpp
+// Parsed from <opencv2/contrib/contrib.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1145,7 +1145,7 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 // #endif
 
 
-// Parsed from /usr/local/include/opencv2/contrib/detection_based_tracker.hpp
+// Parsed from <opencv2/contrib/detection_based_tracker.hpp>
 
 // #pragma once
 
@@ -1202,7 +1202,7 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 // #endif
 
 
-// Parsed from /usr/local/include/opencv2/contrib/hybridtracker.hpp
+// Parsed from <opencv2/contrib/hybridtracker.hpp>
 
 //*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -1424,7 +1424,7 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 // #endif
 
 
-// Parsed from /usr/local/include/opencv2/contrib/retina.hpp
+// Parsed from <opencv2/contrib/retina.hpp>
 
 /*#******************************************************************************
  ** IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
@@ -1790,7 +1790,7 @@ public static final int
 // #endif /* __OPENCV_CONTRIB_RETINA_HPP__ */
 
 
-// Parsed from /usr/local/include/opencv2/contrib/openfabmap.hpp
+// Parsed from <opencv2/contrib/openfabmap.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //

@@ -17,7 +17,7 @@ import static org.bytedeco.javacpp.avfilter.*;
 public class avdevice extends org.bytedeco.javacpp.presets.avdevice {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/libavdevice/avdevice.h
+// Parsed from <libavdevice/avdevice.h>
 
 /*
  * This file is part of FFmpeg.

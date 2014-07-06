@@ -5,88 +5,89 @@ fi
 
 if [[ $PLATFORM == windows* ]]; then
     FFTW_VERSION=3.3.4
-    download ftp://ftp.fftw.org/pub/fftw/fftw-$FFTW_VERSION-dll32.zip fftw-$FFTW_VERSION-dll32.zip
-    download ftp://ftp.fftw.org/pub/fftw/fftw-$FFTW_VERSION-dll64.zip fftw-$FFTW_VERSION-dll64.zip
+    [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
+    download ftp://ftp.fftw.org/pub/fftw/fftw-$FFTW_VERSION-dll$BITS.zip fftw-$FFTW_VERSION-dll$BITS.zip
 
-    INSTALL_DIR=/C/MinGW/local
-    mkdir -p $INSTALL_DIR/include $INSTALL_DIR/lib32 $INSTALL_DIR/lib64 $INSTALL_DIR/bin32 $INSTALL_DIR/bin64
+    mkdir -p $PLATFORM
+    cd $PLATFORM
+    mkdir -p include lib bin
+    unzip -o ../fftw-$FFTW_VERSION-dll$BITS.zip -d fftw-$FFTW_VERSION-dll$BITS
+    cd fftw-$FFTW_VERSION-dll$BITS
 else
     FFTW_VERSION=3.3.4
     download http://www.fftw.org/fftw-$FFTW_VERSION.tar.gz fftw-$FFTW_VERSION.tar.gz
 
-    tar -xzvf fftw-$FFTW_VERSION.tar.gz
-    mv fftw-$FFTW_VERSION fftw-$FFTW_VERSION-$PLATFORM
-    cd fftw-$FFTW_VERSION-$PLATFORM
+    mkdir -p $PLATFORM
+    cd $PLATFORM
+    INSTALL_PATH=`pwd`
+    tar -xzvf ../fftw-$FFTW_VERSION.tar.gz
+    cd fftw-$FFTW_VERSION
 fi
 
 case $PLATFORM in
     android-arm)
-        ./configure --enable-shared --enable-threads --with-combined-threads --host="arm-linux-androideabi" --prefix="$ANDROID_NDK/../local/" --libdir="$ANDROID_NDK/../local/lib/armeabi/" --with-sysroot="$ANDROID_ROOT" CC="$ANDROID_BIN-gcc" STRIP="$ANDROID_BIN-strip" CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" LDFLAGS="-nostdlib -Wl,--fix-cortex-a8" LIBS="-lgcc -ldl -lz -lm -lc"
+        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT" CC="$ANDROID_BIN-gcc" STRIP="$ANDROID_BIN-strip" CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" LDFLAGS="-nostdlib -Wl,--fix-cortex-a8" LIBS="-lgcc -ldl -lz -lm -lc"
         make -j4
         make install-strip
-        ./configure --enable-shared --enable-threads --with-combined-threads --host="arm-linux-androideabi" --prefix="$ANDROID_NDK/../local/" --libdir="$ANDROID_NDK/../local/lib/armeabi/" --with-sysroot="$ANDROID_ROOT" CC="$ANDROID_BIN-gcc" STRIP="$ANDROID_BIN-strip" CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" LDFLAGS="-nostdlib -Wl,--fix-cortex-a8" LIBS="-lgcc -ldl -lz -lm -lc" --enable-float
+        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT" CC="$ANDROID_BIN-gcc" STRIP="$ANDROID_BIN-strip" CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" LDFLAGS="-nostdlib -Wl,--fix-cortex-a8" LIBS="-lgcc -ldl -lz -lm -lc" --enable-float
         make -j4
         make install-strip
         ;;
      android-x86)
-        ./configure --enable-shared --enable-threads --with-combined-threads --enable-sse2 --host="i686-linux-android" --prefix="$ANDROID_NDK/../local/" --libdir="$ANDROID_NDK/../local/lib/x86/" --with-sysroot="$ANDROID_ROOT" CC="$ANDROID_BIN-gcc" STRIP="$ANDROID_BIN-strip" CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" LDFLAGS="-nostdlib" LIBS="-lgcc -ldl -lz -lm -lc"
+        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --enable-sse2 --host="i686-linux-android" --with-sysroot="$ANDROID_ROOT" CC="$ANDROID_BIN-gcc" STRIP="$ANDROID_BIN-strip" CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" LDFLAGS="-nostdlib" LIBS="-lgcc -ldl -lz -lm -lc"
         make -j4
         make install-strip
-        ./configure --enable-shared --enable-threads --with-combined-threads --enable-sse2 --host="i686-linux-android" --prefix="$ANDROID_NDK/../local/" --libdir="$ANDROID_NDK/../local/lib/x86/" --with-sysroot="$ANDROID_ROOT" CC="$ANDROID_BIN-gcc" STRIP="$ANDROID_BIN-strip" CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" LDFLAGS="-nostdlib" LIBS="-lgcc -ldl -lz -lm -lc" --enable-float
+        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --enable-sse2 --host="i686-linux-android" --with-sysroot="$ANDROID_ROOT" CC="$ANDROID_BIN-gcc" STRIP="$ANDROID_BIN-strip" CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" LDFLAGS="-nostdlib" LIBS="-lgcc -ldl -lz -lm -lc" --enable-float
         make -j4
         make install-strip
         ;;
     linux-x86)
-        ./configure --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx --prefix=/usr/local/ --libdir=/usr/local/lib32/ CC="gcc -m32"
+        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="gcc -m32"
         make -j4
-        sudo make install-strip
-        ./configure --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx --prefix=/usr/local/ --libdir=/usr/local/lib32/ CC="gcc -m32" --enable-float
+        make install-strip
+        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx CC="gcc -m32" --enable-float
         make -j4
-        sudo make install-strip
+        make install-strip
         ;;
     linux-x86_64)
-        ./configure --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx --prefix=/usr/local/ --libdir=/usr/local/lib64/
+        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx
         make -j4
-        sudo make install-strip
-        ./configure --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx --prefix=/usr/local/ --libdir=/usr/local/lib64/ --enable-float
+        make install-strip
+        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-avx --enable-float
         make -j4
-        sudo make install-strip
+        make install-strip
         ;;
     macosx-x86_64)
-        ./configure --enable-shared --enable-threads --with-combined-threads --enable-sse2
+        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --enable-sse2
         make -j4
-        sudo make install-strip
-        ./configure --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-float
+        make install-strip
+        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --enable-sse2 --enable-float
         make -j4
-        sudo make install-strip
+        make install-strip
         ;;
     windows-x86)
-        unzip -o fftw-$FFTW_VERSION-dll32.zip -d fftw-$FFTW_VERSION-dll32
         # http://www.fftw.org/install/windows.html
         LIBS=(libfftw3-3 libfftw3f-3 libfftw3l-3)
         for LIB in ${LIBS[@]}; do
-            lib /def:fftw-$FFTW_VERSION-dll32/$LIB.def /out:fftw-$FFTW_VERSION-dll32/$LIB.lib /machine:x86
+            lib /def:$LIB.def /out:$LIB.lib /machine:x86
         done
-        cp -a fftw-$FFTW_VERSION-dll32/*.h $INSTALL_DIR/include
-        cp -a fftw-$FFTW_VERSION-dll32/*.lib $INSTALL_DIR/lib32
-        cp -a fftw-$FFTW_VERSION-dll32/*.dll $INSTALL_DIR/bin32
+        cp *.h ../include
+        cp *.lib ../lib
+        cp *.dll ../bin
         ;;
     windows-x86_64)
-        unzip -o fftw-$FFTW_VERSION-dll64.zip -d fftw-$FFTW_VERSION-dll64
         # http://www.fftw.org/install/windows.html
         LIBS=(libfftw3-3 libfftw3f-3 libfftw3l-3)
         for LIB in ${LIBS[@]}; do
-            lib /def:fftw-$FFTW_VERSION-dll64/$LIB.def /out:fftw-$FFTW_VERSION-dll64/$LIB.lib /machine:x64
+            lib /def:$LIB.def /out:$LIB.lib /machine:x64
         done
-        cp -a fftw-$FFTW_VERSION-dll64/*.h $INSTALL_DIR/include
-        cp -a fftw-$FFTW_VERSION-dll64/*.lib $INSTALL_DIR/lib64
-        cp -a fftw-$FFTW_VERSION-dll64/*.dll $INSTALL_DIR/bin64
+        cp *.h ../include
+        cp *.lib ../lib
+        cp *.dll ../bin
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
         ;;
 esac
 
-if [[ $PLATFORM != windows* ]]; then
-    cd ..
-fi
+cd ../..

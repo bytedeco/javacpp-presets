@@ -12,7 +12,7 @@ import static org.bytedeco.javacpp.avcodec.*;
 public class avformat extends org.bytedeco.javacpp.presets.avformat {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/libavformat/avio.h
+// Parsed from <libavformat/avio.h>
 
 /*
  * copyright (c) 2001 Fabrice Bellard
@@ -684,7 +684,7 @@ public static native long avio_seek_time(AVIOContext h, int stream_index,
 // #endif /* AVFORMAT_AVIO_H */
 
 
-// Parsed from /usr/local/include/libavformat/avformat.h
+// Parsed from <libavformat/avformat.h>
 
 /*
  * copyright (c) 2001 Fabrice Bellard

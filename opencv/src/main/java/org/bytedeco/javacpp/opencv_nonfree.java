@@ -21,7 +21,7 @@ import static org.bytedeco.javacpp.opencv_legacy.*;
 public class opencv_nonfree extends org.bytedeco.javacpp.presets.opencv_nonfree {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/opencv2/nonfree/nonfree.hpp
+// Parsed from <opencv2/nonfree/nonfree.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -79,7 +79,7 @@ public class opencv_nonfree extends org.bytedeco.javacpp.presets.opencv_nonfree 
 /* End of file. */
 
 
-// Parsed from /usr/local/include/opencv2/nonfree/features2d.hpp
+// Parsed from <opencv2/nonfree/features2d.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //

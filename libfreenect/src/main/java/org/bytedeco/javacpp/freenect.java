@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 public class freenect extends org.bytedeco.javacpp.presets.freenect {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/libfreenect/libfreenect.h
+// Parsed from <libfreenect/libfreenect.h>
 
 /*
  * This file is part of the OpenKinect Project. http://www.openkinect.org
@@ -839,7 +839,7 @@ public static native void freenect_set_fw_address_k4w(freenect_context ctx, @Cas
 // #endif
 
 
-// Parsed from /usr/local/include/libfreenect/libfreenect_registration.h
+// Parsed from <libfreenect/libfreenect_registration.h>
 
 /*
  * This file is part of the OpenKinect Project. http://www.openkinect.org
@@ -1011,7 +1011,7 @@ public static native void freenect_camera_to_world(freenect_device dev,
 // #endif
 
 
-// Parsed from /usr/local/include/libfreenect/libfreenect_audio.h
+// Parsed from <libfreenect/libfreenect_audio.h>
 
 /*
  * This file is part of the OpenKinect Project. http://www.openkinect.org
@@ -1149,7 +1149,7 @@ public static native int freenect_stop_audio(freenect_device dev);
 // #endif
 
 
-// Parsed from /usr/local/include/libfreenect/libfreenect_sync.h
+// Parsed from <libfreenect/libfreenect_sync.h>
 
 /*
  * This file is part of the OpenKinect Project. http://www.openkinect.org

@@ -33,17 +33,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(target="org.bytedeco.javacpp.freenect", value={
-    @Platform(not="android", include={"<libfreenect.h>", "<libfreenect_registration.h>", "<libfreenect_audio.h>", "<libfreenect_sync.h>"},
-        includepath={"/usr/local/include/libfreenect/", "/opt/local/include/libfreenect/", "/usr/include/libfreenect/"},
+    @Platform(not="android", include={"<libfreenect/libfreenect.h>", "<libfreenect/libfreenect_registration.h>", "<libfreenect/libfreenect_audio.h>", "<libfreenect/libfreenect_sync.h>"},
         link={"freenect@0.4", "freenect_sync@0.4"}, preload="libusb-1.0"),
-    @Platform(value="windows", include={"<libfreenect.h>", "<libfreenect_registration.h>", "<libfreenect_sync.h>"},
+    @Platform(value="windows", include={"<libfreenect/libfreenect.h>", "<libfreenect/libfreenect_registration.h>", "<libfreenect/libfreenect_sync.h>"},
         link={"freenect", "freenect_sync", "pthreadVC2"}),
-    @Platform(value="windows-x86", includepath="C:/Program Files (x86)/libfreenect/include/libfreenect/",
-        linkpath={"C:/pthreads-w32-2-9-1-release/Pre-built.2/lib/x86", "C:/Program Files (x86)/libfreenect/lib/"},
-        preload="libusb0_x86", preloadpath="C:/libusb-win32-bin-1.2.6.0/bin/x86/"),
-    @Platform(value="windows-x86_64", includepath="C:/Program Files/libfreenect/include/libfreenect/",
-        linkpath={"C:/pthreads-w32-2-9-1-release/Pre-built.2/lib/x64", "C:/Program Files/libfreenect/lib/"},
-        preload="libusb0", preloadpath="C:/libusb-win32-bin-1.2.6.0/bin/amd64/") })
+    @Platform(value="windows-x86",    preload="libusb0_x86"),
+    @Platform(value="windows-x86_64", preload="libusb0") })
 public class freenect implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("FREENECTAPI").cppTypes().annotations());

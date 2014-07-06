@@ -133,6 +133,9 @@
             </property>
           </propertyKeysAndValues>
           <classPath>${project.build.outputDirectory}</classPath>
+          <includePath>${basedir}/cppbuild/${platform}/include/</includePath>
+          <linkPath>${basedir}/cppbuild/${platform}/lib/</linkPath>
+          <preloadPath>${basedir}/cppbuild/${platform}/bin/</preloadPath>
         </configuration>
         <executions>
           <execution>

@@ -73,7 +73,7 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
     }
 }
 
-// Parsed from /usr/local/include/opencv2/features2d/features2d.hpp
+// Parsed from <opencv2/features2d/features2d.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //

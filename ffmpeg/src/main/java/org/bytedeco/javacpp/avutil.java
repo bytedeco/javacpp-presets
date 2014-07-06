@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 public class avutil extends org.bytedeco.javacpp.presets.avutil {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/libavutil/avutil.h
+// Parsed from <libavutil/avutil.h>
 
 /*
  * copyright (c) 2006 Michael Niedermayer <michaelni@gmx.at>
@@ -357,7 +357,7 @@ public static native @Cast("FILE*") Pointer av_fopen_utf8(String path, String mo
 // #endif /* AVUTIL_AVUTIL_H */
 
 
-// Parsed from /usr/local/include/libavutil/error.h
+// Parsed from <libavutil/error.h>
 
 /*
  * This file is part of FFmpeg.
@@ -516,7 +516,7 @@ public static native @Cast("char*") byte[] av_make_error_string(@Cast("char*") b
 // #endif /* AVUTIL_ERROR_H */
 
 
-// Parsed from /usr/local/include/libavutil/mem.h
+// Parsed from <libavutil/mem.h>
 
 /*
  * copyright (c) 2006 Michael Niedermayer <michaelni@gmx.at>
@@ -879,7 +879,7 @@ public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") int
 // #endif /* AVUTIL_MEM_H */
 
 
-// Parsed from /usr/local/include/libavutil/mathematics.h
+// Parsed from <libavutil/mathematics.h>
 
 /*
  * copyright (c) 2005-2012 Michael Niedermayer <michaelni@gmx.at>
@@ -1057,7 +1057,7 @@ public static native long av_add_stable(@ByVal AVRational ts_tb, long ts, @ByVal
 // #endif /* AVUTIL_MATHEMATICS_H */
 
 
-// Parsed from /usr/local/include/libavutil/rational.h
+// Parsed from <libavutil/rational.h>
 
 /*
  * rational numbers
@@ -1224,7 +1224,7 @@ public static native int av_find_nearest_q_idx(@ByVal AVRational q, @Const AVRat
 // #endif /* AVUTIL_RATIONAL_H */
 
 
-// Parsed from /usr/local/include/libavutil/log.h
+// Parsed from <libavutil/log.h>
 
 /*
  * copyright (c) 2006 Michael Niedermayer <michaelni@gmx.at>
@@ -1615,7 +1615,7 @@ public static native void av_log_set_flags(int arg);
 // #endif /* AVUTIL_LOG_H */
 
 
-// Parsed from /usr/local/include/libavutil/buffer.h
+// Parsed from <libavutil/buffer.h>
 
 /*
  * This file is part of FFmpeg.
@@ -1949,7 +1949,7 @@ public static native AVBufferRef av_buffer_pool_get(AVBufferPool pool);
 // #endif /* AVUTIL_BUFFER_H */
 
 
-// Parsed from /usr/local/include/libavutil/frame.h
+// Parsed from <libavutil/frame.h>
 
 /*
  *
@@ -2714,7 +2714,7 @@ public static native AVFrameSideData av_frame_get_side_data(@Const AVFrame frame
 // #endif /* AVUTIL_FRAME_H */
 
 
-// Parsed from /usr/local/include/libavutil/pixfmt.h
+// Parsed from <libavutil/pixfmt.h>
 
 /*
  * copyright (c) 2006 Michael Niedermayer <michaelni@gmx.at>
@@ -3325,7 +3325,7 @@ public static final int PIX_FMT_GBRP16 = AV_PIX_FMT_GBRP16;
 // #endif /* AVUTIL_PIXFMT_H */
 
 
-// Parsed from /usr/local/include/libavutil/samplefmt.h
+// Parsed from <libavutil/samplefmt.h>
 
 /*
  * This file is part of FFmpeg.
@@ -3639,7 +3639,7 @@ public static native int av_samples_set_silence(@Cast("uint8_t**") @ByPtrPtr byt
 // #endif /* AVUTIL_SAMPLEFMT_H */
 
 
-// Parsed from /usr/local/include/libavutil/channel_layout.h
+// Parsed from <libavutil/channel_layout.h>
 
 /*
  * Copyright (c) 2006 Michael Niedermayer <michaelni@gmx.at>
@@ -3882,7 +3882,7 @@ public static native int av_get_standard_channel_layout(@Cast("unsigned") int in
 // #endif /* AVUTIL_CHANNEL_LAYOUT_H */
 
 
-// Parsed from /usr/local/include/libavutil/cpu.h
+// Parsed from <libavutil/cpu.h>
 
 /*
  * Copyright (c) 2000, 2001, 2002 Fabrice Bellard
@@ -4026,7 +4026,7 @@ public static native int av_cpu_count();
 // #endif /* AVUTIL_CPU_H */
 
 
-// Parsed from /usr/local/include/libavutil/dict.h
+// Parsed from <libavutil/dict.h>
 
 /*
  *
@@ -4222,7 +4222,7 @@ public static native void av_dict_free(@ByPtrPtr AVDictionary m);
 // #endif /* AVUTIL_DICT_H */
 
 
-// Parsed from /usr/local/include/libavutil/opt.h
+// Parsed from <libavutil/opt.h>
 
 /*
  * AVOptions
@@ -5204,7 +5204,7 @@ public static native int av_opt_query_ranges_default(@ByPtrPtr AVOptionRanges ar
 // #endif /* AVUTIL_OPT_H */
 
 
-// Parsed from /usr/local/include/libavutil/audioconvert.h
+// Parsed from <libavutil/audioconvert.h>
 
 
 // #include "version.h"
@@ -5214,7 +5214,7 @@ public static native int av_opt_query_ranges_default(@ByPtrPtr AVOptionRanges ar
 // #endif
 
 
-// Parsed from /usr/local/include/libavutil/pixdesc.h
+// Parsed from <libavutil/pixdesc.h>
 
 /*
  * pixel format descriptor
@@ -5555,7 +5555,7 @@ public static native @Cast("AVPixelFormat") int av_pix_fmt_swap_endianness(@Cast
 // #endif /* AVUTIL_PIXDESC_H */
 
 
-// Parsed from /usr/local/include/libavutil/imgutils.h
+// Parsed from <libavutil/imgutils.h>
 
 /*
  * This file is part of FFmpeg.
@@ -5812,7 +5812,7 @@ public static native int avpriv_set_systematic_pal2(@Cast("uint32_t*") int[] pal
 // #endif /* AVUTIL_IMGUTILS_H */
 
 
-// Parsed from /usr/local/include/libavutil/downmix_info.h
+// Parsed from <libavutil/downmix_info.h>
 
 /*
  * Copyright (c) 2014 Tim Walker <tdskywalker@gmail.com>
@@ -5945,7 +5945,7 @@ public static native AVDownmixInfo av_downmix_info_update_side_data(AVFrame fram
 // #endif /* AVUTIL_DOWNMIX_INFO_H */
 
 
-// Parsed from /usr/local/include/libavutil/stereo3d.h
+// Parsed from <libavutil/stereo3d.h>
 
 /*
  * Copyright (c) 2013 Vittorio Giovara <vittorio.giovara@gmail.com>

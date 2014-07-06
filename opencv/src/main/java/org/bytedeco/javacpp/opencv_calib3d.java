@@ -15,7 +15,7 @@ import static org.bytedeco.javacpp.opencv_features2d.*;
 public class opencv_calib3d extends org.bytedeco.javacpp.helper.opencv_calib3d {
     static { Loader.load(); }
 
-// Parsed from /usr/local/include/opencv2/calib3d/calib3d.hpp
+// Parsed from <opencv2/calib3d/calib3d.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //

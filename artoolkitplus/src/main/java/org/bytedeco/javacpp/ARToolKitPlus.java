@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 public class ARToolKitPlus extends org.bytedeco.javacpp.presets.ARToolKitPlus {
     static { Loader.load(); }
 
-// Parsed from /home/saudet/projects/bytedeco/javacpp-presets/artoolkitplus/target/classes/org/bytedeco/javacpp/ARToolKitPlus_plus.h
+// Parsed from ARToolKitPlus_plus.h
 
 // #include <assert.h>
 // #include <ARToolKitPlus/arBitFieldPattern.h>
@@ -52,7 +52,7 @@ public static final int MAX_PATTERNS = 256;
 
 
 
-// Parsed from /usr/local/include/ARToolKitPlus/ARToolKitPlus.h
+// Parsed from <ARToolKitPlus/ARToolKitPlus.h>
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -144,7 +144,7 @@ public static final int
 // #endif //__ARTOOLKITPLUS_HEADERFILE__
 
 
-// Parsed from /usr/local/include/ARToolKitPlus/config.h
+// Parsed from <ARToolKitPlus/config.h>
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -278,7 +278,7 @@ public static final int P_MAX =       500;
 
 
 
-// Parsed from /usr/local/include/ARToolKitPlus/ar.h
+// Parsed from <ARToolKitPlus/ar.h>
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -379,7 +379,7 @@ public static final int P_MAX =       500;
 // #endif  //__ARTOOLKITAR_HEADERFILE__
 
 
-// Parsed from /usr/local/include/ARToolKitPlus/arMulti.h
+// Parsed from <ARToolKitPlus/arMulti.h>
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -462,7 +462,7 @@ public static final int P_MAX =       500;
 // #endif // __ARTOOLKITMULTI_HEADERFILE__
 
 
-// Parsed from /usr/local/include/ARToolKitPlus/matrix.h
+// Parsed from <ARToolKitPlus/matrix.h>
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -539,7 +539,7 @@ public static final int P_MAX =       500;
 // #endif // __ARTOOLKITMATRIX_HEADERFILE__
 
 
-// Parsed from /usr/local/include/ARToolKitPlus/vector.h
+// Parsed from <ARToolKitPlus/vector.h>
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -593,7 +593,7 @@ public static final int P_MAX =       500;
 // #endif // __ARTOOLKITVECTOR_HEADERFILE__
 
 
-// Parsed from /usr/local/include/ARToolKitPlus/Camera.h
+// Parsed from <ARToolKitPlus/Camera.h>
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -662,7 +662,7 @@ public static final int P_MAX =       500;
  // namespace ARToolKitPlus
 
 
-// Parsed from /usr/local/include/ARToolKitPlus/extra/BCH.h
+// Parsed from <ARToolKitPlus/extra/BCH.h>
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -759,7 +759,7 @@ public static final int BCH_MAX_SQ =   8;  // SQRT(MAX_LUT) -- (?)
 // #endif // __BCH_CODE__H__
 
 
-// Parsed from /usr/local/include/ARToolKitPlus/extra/Hull.h
+// Parsed from <ARToolKitPlus/extra/Hull.h>
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -838,7 +838,7 @@ public static final int BCH_MAX_SQ =   8;  // SQRT(MAX_LUT) -- (?)
 // #endif //__ARTOOLKITPLUS_HULL_HEADERFILE__
 
 
-// Parsed from /usr/local/include/ARToolKitPlus/extra/rpp.h
+// Parsed from <ARToolKitPlus/extra/rpp.h>
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -881,7 +881,7 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
 // #endif // __LINK_WITH_RPP__
 
 
-// Parsed from /usr/local/include/ARToolKitPlus/Tracker.h
+// Parsed from <ARToolKitPlus/Tracker.h>
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -1194,7 +1194,7 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
 // #endif //__ARTOOLKIT_TRACKERIMPL_HEADERFILE__
 
 
-// Parsed from /usr/local/include/ARToolKitPlus/TrackerMultiMarker.h
+// Parsed from <ARToolKitPlus/TrackerMultiMarker.h>
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -1326,7 +1326,7 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
  // namespace ARToolKitPlus
 
 
-// Parsed from /usr/local/include/ARToolKitPlus/TrackerSingleMarker.h
+// Parsed from <ARToolKitPlus/TrackerSingleMarker.h>
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -1456,7 +1456,7 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
  // namespace ARToolKitPlus
 
 
-// Parsed from /usr/local/include/ARToolKitPlus/arBitFieldPattern.h
+// Parsed from <ARToolKitPlus/arBitFieldPattern.h>
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
@@ -1544,7 +1544,7 @@ public static final int
 // #endif //__ARBITFIELDPATTERN_HEADERFILE__
 
 
-// Parsed from /usr/local/include/ARToolKitPlus/arGetInitRot2Sub.h
+// Parsed from <ARToolKitPlus/arGetInitRot2Sub.h>
 
 /**
  * Copyright (C) 2010  ARToolkitPlus Authors
