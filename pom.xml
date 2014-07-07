@@ -36,6 +36,7 @@
     <module>artoolkitplus</module>
     <module>fftw</module>
     <module>gsl</module>
+    <module>llvm</module>
   </modules>
 
   <scm>

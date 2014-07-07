@@ -45,6 +45,7 @@ Each child module in turn relies on its corresponding native libraries being alr
  * ARToolKitPlus 2.3.0  https://launchpad.net/artoolkitplus
  * FFTW 3.3.4  http://www.fftw.org/download.html
  * GSL 1.16  http://www.gnu.org/software/gsl/
+ * LLVM 3.4.2  http://llvm.org/releases/download.html
 
 Once everything installed and configured, simply execute
 ```bash
