@@ -91,9 +91,9 @@ for PROJECT in ${PROJECTS[@]}; do
         install)
             echo "Installing \"$PROJECT\""
             mkdir -p $PROJECT/cppbuild
-            cd $PROJECT/cppbuild
+            pushd $PROJECT/cppbuild
             source ../cppbuild.sh
-            cd ../..
+            popd
             ;;
         clean)
             echo "Cleaning \"$PROJECT\""
