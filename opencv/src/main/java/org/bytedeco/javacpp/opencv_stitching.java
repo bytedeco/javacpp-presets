@@ -1026,7 +1026,7 @@ public static final int ENABLE_LOG = 0;
     public native float weight(); public native GraphEdge weight(float weight);
 }
 
-   
+
 
 
 @Namespace("cv::detail") @NoOffset public static class Graph extends Pointer {

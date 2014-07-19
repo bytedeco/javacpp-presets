@@ -985,7 +985,7 @@ public static native @ByVal CvDataMatrixCodeDeque cvFindDataMatrix(CvMat im);
   public native void write(@ByRef FileStorage fs);
 }
 
-   
+
 
 @Namespace("cv::linemod") public static class Template extends Pointer {
     static { Loader.load(); }
@@ -1040,7 +1040,7 @@ public static native @ByVal CvDataMatrixCodeDeque cvFindDataMatrix(CvMat im);
   public native void pyrDown();
 }
 
-  
+
 
 /**
  * \brief Interface for modalities that plug into the LINE template matching representation.
@@ -1206,7 +1206,7 @@ public static native @ByVal CvDataMatrixCodeDeque cvFindDataMatrix(CvMat im);
   public native int template_id(); public native Match template_id(int template_id);
 }
 
-     
+
 
 /**
  * \brief Object detector using the LINE template matching algorithm with any set of

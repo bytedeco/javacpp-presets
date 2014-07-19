@@ -10,10 +10,10 @@
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
-  <artifactId>llvm</artifactId>
-  <version>3.4.2-${project.parent.version}</version>
+  <artifactId>leptonica</artifactId>
+  <version>1.71-${project.parent.version}</version>
   <packaging>jar</packaging>
-  <name>JavaCPP Presets for LLVM</name>
+  <name>JavaCPP Presets for Leptonica</name>
 
   <dependencies>
     <dependency>

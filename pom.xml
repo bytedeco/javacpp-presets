@@ -37,6 +37,8 @@
     <module>fftw</module>
     <module>gsl</module>
     <module>llvm</module>
+    <module>leptonica</module>
+    <module>tesseract</module>
   </modules>
 
   <scm>

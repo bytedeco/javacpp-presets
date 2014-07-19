@@ -42,7 +42,7 @@ public class fftw3 implements InfoMapper {
                .put(new Info("fftwl_plan_s").pointerTypes("fftwl_plan")).put(new Info("fftwl_plan").valueTypes("fftwl_plan"))
                .put(new Info("fftwq_plan_s").pointerTypes("fftwq_plan")).put(new Info("fftwq_plan").valueTypes("fftwq_plan"))
                .put(new Info("fftw_version").annotations("@Platform(not=\"windows\")").javaNames("fftw_version"))
-               .put(new Info("fftw_cc").annotations("@Platform(not=\"windows\")").javaNames("fftw_fftw_cc"))
+               .put(new Info("fftw_cc").annotations("@Platform(not=\"windows\")").javaNames("fftw_cc"))
                .put(new Info("fftw_codelet_optim").annotations("@Platform(not=\"windows\")").javaNames("fftw_codelet_optim"))
                .put(new Info("fftwf_version").annotations("@Platform(not=\"windows\")").javaNames("fftwf_version"))
                .put(new Info("fftwf_cc").annotations("@Platform(not=\"windows\")").javaNames("fftwf_cc"))

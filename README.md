@@ -37,8 +37,8 @@ To rebuild the source code on the Java side, please note that the project files 
 Each child module in turn relies on its corresponding native libraries being already installed in the `cppbuild` subdirectory by a prior execution of the included [CPPBuild Scripts](#cppbuild-scripts), explained below. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified in the `.java` configuration files directly. The following versions are supported:
 
  * OpenCV 2.4.9  http://opencv.org/downloads.html
- * FFmpeg 2.2.x  http://ffmpeg.org/download.html
- * PGR FlyCapture 1.7 or newer (Windows only)  http://www.ptgrey.com/products/pgrflycapture/
+ * FFmpeg 2.3.x  http://ffmpeg.org/download.html
+ * FlyCapture 1.7 or newer (Windows only)  http://ww2.ptgrey.com/sdk/flycap
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
  * OpenKinect libfreenect 0.4  https://github.com/OpenKinect/libfreenect
  * videoInput 0.200  https://github.com/ofTheo/videoInput/tree/update2013
@@ -46,6 +46,8 @@ Each child module in turn relies on its corresponding native libraries being alr
  * FFTW 3.3.4  http://www.fftw.org/download.html
  * GSL 1.16  http://www.gnu.org/software/gsl/
  * LLVM 3.4.2  http://llvm.org/releases/download.html
+ * Leptonica 1.71  http://www.leptonica.org/download.html
+ * Tesseract 3.03-rc1  https://code.google.com/p/tesseract-ocr/
 
 Once everything installed and configured, simply execute
 ```bash
@@ -120,7 +122,7 @@ Contributions of any kind are highly welcome! At the moment, the `Parser` has li
  * Improving the `Parser`
  * Providing builds for more platforms, most notably `linux-arm`
  * Replacing the Bash/Maven build combo by something better (Gradle?)
- * Adding new presets as child modules for other C/C++ libraries (LLVM, OpenNI, OpenMesh, PCL, Tesseract, etc.)
+ * Adding new presets as child modules for other C/C++ libraries (OpenNI, OpenMesh, PCL, etc.)
 
 To contribute, please fork and create pull requests, or post your suggestions [as a new "issue"](https://github.com/bytedeco/javacpp-presets/issues). Thank you very much in advance for your contribution!
 
