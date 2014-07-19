@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Samuel Audet
+ * Copyright (C) 2013,2014 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -32,8 +32,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(target="org.bytedeco.javacpp.avutil", value={
     @Platform(define="__STDC_CONSTANT_MACROS", cinclude={"<libavutil/avutil.h>", "<libavutil/error.h>", "<libavutil/mem.h>",
-        "<libavutil/mathematics.h>", "<libavutil/rational.h>", "<libavutil/log.h>", "<libavutil/buffer.h>", "<libavutil/frame.h>",
-        "<libavutil/pixfmt.h>", "<libavutil/samplefmt.h>", "<libavutil/channel_layout.h>", "<libavutil/cpu.h>", "<libavutil/dict.h>",
+        "<libavutil/mathematics.h>", "<libavutil/rational.h>", "<libavutil/log.h>", "<libavutil/buffer.h>", "<libavutil/pixfmt.h>",
+        "<libavutil/frame.h>", "<libavutil/samplefmt.h>", "<libavutil/channel_layout.h>", "<libavutil/cpu.h>", "<libavutil/dict.h>",
         "<libavutil/opt.h>", "<libavutil/audioconvert.h>", "<libavutil/pixdesc.h>", "<libavutil/imgutils.h>",
         "<libavutil/downmix_info.h>", "<libavutil/stereo3d.h>"},
         includepath={"/usr/local/include/ffmpeg/", "/opt/local/include/ffmpeg/", "/usr/include/ffmpeg/"},
@@ -44,6 +44,7 @@ public class avutil implements InfoMapper {
         infoMap.put(new Info("AV_NOPTS_VALUE").cppTypes("int64_t").translate(false))
                .put(new Info("AV_TIME_BASE_Q", "PixelFormat", "CodecID").cppTypes())
                .put(new Info("av_const").annotations("@Const"))
+               .put(new Info("FF_CONST_AVUTIL53").annotations())
                .put(new Info("av_malloc_attrib", "av_alloc_size", "av_always_inline").cppTypes().annotations())
                .put(new Info("attribute_deprecated").annotations("@Deprecated"))
                .put(new Info("AVPanScan", "AVCodecContext").cast().pointerTypes("Pointer"))

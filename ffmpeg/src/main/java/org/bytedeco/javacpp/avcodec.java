@@ -302,7 +302,16 @@ public static final int
     AV_CODEC_ID_WEBP_DEPRECATED = 173,
     AV_CODEC_ID_HNM4_VIDEO = 174,
     AV_CODEC_ID_HEVC_DEPRECATED = 175,
-    AV_CODEC_ID_FIC = 176;
+    AV_CODEC_ID_FIC = 176,
+    AV_CODEC_ID_ALIAS_PIX = 177,
+    AV_CODEC_ID_BRENDER_PIX_DEPRECATED = 178,
+    AV_CODEC_ID_PAF_VIDEO_DEPRECATED = 179,
+    AV_CODEC_ID_EXR_DEPRECATED = 180,
+    AV_CODEC_ID_VP7_DEPRECATED = 181,
+    AV_CODEC_ID_SANM_DEPRECATED = 182,
+    AV_CODEC_ID_SGIRLE_DEPRECATED = 183,
+    AV_CODEC_ID_MVC1_DEPRECATED = 184,
+    AV_CODEC_ID_MVC2_DEPRECATED = 185;
 public static native @MemberGetter int AV_CODEC_ID_BRENDER_PIX();
 public static final int
 
@@ -380,8 +389,9 @@ public static final int
 public static native @MemberGetter int AV_CODEC_ID_HEVC();
 public static final int
     AV_CODEC_ID_HEVC       = AV_CODEC_ID_HEVC();
-public static final int AV_CODEC_ID_H265 = AV_CODEC_ID_HEVC;
+public static native @MemberGetter int AV_CODEC_ID_VP7();
 public static final int
+    AV_CODEC_ID_VP7        = AV_CODEC_ID_VP7(),
 
     /* various PCM "codecs" */
     /** A dummy id pointing at the start of audio codecs */
@@ -456,7 +466,11 @@ public static final int
     AV_CODEC_ID_ADPCM_EA_MAXIS_XA =  0x11000 + 26,
     AV_CODEC_ID_ADPCM_IMA_ISS =  0x11000 + 27,
     AV_CODEC_ID_ADPCM_G722 =  0x11000 + 28,
-    AV_CODEC_ID_ADPCM_IMA_APC =  0x11000 + 29;
+    AV_CODEC_ID_ADPCM_IMA_APC =  0x11000 + 29,
+    AV_CODEC_ID_ADPCM_VIMA_DEPRECATED =  0x11000 + 30;
+public static native @MemberGetter int AV_CODEC_ID_ADPCM_VIMA();
+public static final int
+    AV_CODEC_ID_ADPCM_VIMA = AV_CODEC_ID_ADPCM_VIMA();
 public static native @MemberGetter int AV_CODEC_ID_VIMA();
 public static final int
     AV_CODEC_ID_VIMA       = AV_CODEC_ID_VIMA();
@@ -559,7 +573,9 @@ public static final int
     AV_CODEC_ID_OPUS_DEPRECATED =  0x15000 + 61,
     AV_CODEC_ID_COMFORT_NOISE =  0x15000 + 62,
     AV_CODEC_ID_TAK_DEPRECATED =  0x15000 + 63,
-    AV_CODEC_ID_METASOUND =  0x15000 + 64;
+    AV_CODEC_ID_METASOUND =  0x15000 + 64,
+    AV_CODEC_ID_PAF_AUDIO_DEPRECATED =  0x15000 + 65,
+    AV_CODEC_ID_ON2AVC =  0x15000 + 66;
 public static native @MemberGetter int AV_CODEC_ID_FFWAVESYNTH();
 public static final int
     AV_CODEC_ID_FFWAVESYNTH = AV_CODEC_ID_FFWAVESYNTH();
@@ -583,7 +599,19 @@ public static final int
     AV_CODEC_ID_EVRC        = AV_CODEC_ID_EVRC();
 public static native @MemberGetter int AV_CODEC_ID_SMV();
 public static final int
-    AV_CODEC_ID_SMV         = AV_CODEC_ID_SMV(),
+    AV_CODEC_ID_SMV         = AV_CODEC_ID_SMV();
+public static native @MemberGetter int AV_CODEC_ID_DSD_LSBF();
+public static final int
+    AV_CODEC_ID_DSD_LSBF    = AV_CODEC_ID_DSD_LSBF();
+public static native @MemberGetter int AV_CODEC_ID_DSD_MSBF();
+public static final int
+    AV_CODEC_ID_DSD_MSBF    = AV_CODEC_ID_DSD_MSBF();
+public static native @MemberGetter int AV_CODEC_ID_DSD_LSBF_PLANAR();
+public static final int
+    AV_CODEC_ID_DSD_LSBF_PLANAR = AV_CODEC_ID_DSD_LSBF_PLANAR();
+public static native @MemberGetter int AV_CODEC_ID_DSD_MSBF_PLANAR();
+public static final int
+    AV_CODEC_ID_DSD_MSBF_PLANAR = AV_CODEC_ID_DSD_MSBF_PLANAR(),
 
     /* subtitle codecs */
     /** A dummy ID pointing at the start of subtitle codecs. */
@@ -663,7 +691,10 @@ public static final int
     AV_CODEC_ID_DVD_NAV    = AV_CODEC_ID_DVD_NAV();
 public static native @MemberGetter int AV_CODEC_ID_TIMED_ID3();
 public static final int
-    AV_CODEC_ID_TIMED_ID3  = AV_CODEC_ID_TIMED_ID3(),
+    AV_CODEC_ID_TIMED_ID3  = AV_CODEC_ID_TIMED_ID3();
+public static native @MemberGetter int AV_CODEC_ID_BIN_DATA();
+public static final int
+    AV_CODEC_ID_BIN_DATA   = AV_CODEC_ID_BIN_DATA(),
 
 
     /** codec_id is not known (like AV_CODEC_ID_NONE) but lavf should attempt to identify it */
@@ -714,6 +745,14 @@ public static class AVCodecDescriptor extends Pointer {
      * Codec properties, a combination of AV_CODEC_PROP_* flags.
      */
     public native int props(); public native AVCodecDescriptor props(int props);
+
+    /**
+     * MIME type(s) associated with the codec.
+     * May be NULL; if not, a NULL-terminated array of MIME types.
+     * The first item is always non-NULL and is the preferred MIME type.
+     */
+    @MemberGetter public native @Cast("const char*") BytePointer mime_types(int i);
+    @MemberGetter public native @Cast("const char*const*") PointerPointer mime_types();
 }
 
 /**
@@ -750,7 +789,7 @@ public static final int AV_CODEC_PROP_TEXT_SUB =      (1 << 17);
  * Note: If the first 23 bits of the additional bytes are not 0, then damaged
  * MPEG bitstreams could cause overread and segfault.
  */
-public static final int FF_INPUT_BUFFER_PADDING_SIZE = 16;
+public static final int FF_INPUT_BUFFER_PADDING_SIZE = 32;
 
 /**
  * @ingroup lavc_encoding
@@ -799,79 +838,12 @@ public static final int
     AVDISCARD_NONREF  = 8,
     /** discard all bidirectional frames */
     AVDISCARD_BIDIR   = 16,
+    /** discard all non intra frames */
+    AVDISCARD_NONINTRA= 24,
     /** discard all frames except keyframes */
     AVDISCARD_NONKEY  = 32,
     /** discard all */
     AVDISCARD_ALL     = 48;
-
-/** enum AVColorPrimaries */
-public static final int
-    /** also ITU-R BT1361 / IEC 61966-2-4 / SMPTE RP177 Annex B */
-    AVCOL_PRI_BT709       = 1,
-    AVCOL_PRI_UNSPECIFIED = 2,
-    AVCOL_PRI_BT470M      = 4,
-    /** also ITU-R BT601-6 625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM */
-    AVCOL_PRI_BT470BG     = 5,
-    /** also ITU-R BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC */
-    AVCOL_PRI_SMPTE170M   = 6,
-    /** functionally identical to above */
-    AVCOL_PRI_SMPTE240M   = 7,
-    AVCOL_PRI_FILM        = 8,
-    /** ITU-R BT2020 */
-    AVCOL_PRI_BT2020      = 9,
-    /** Not part of ABI */
-    AVCOL_PRI_NB = 10;
-
-/** enum AVColorTransferCharacteristic */
-public static final int
-    /** also ITU-R BT1361 */
-    AVCOL_TRC_BT709        = 1,
-    AVCOL_TRC_UNSPECIFIED  = 2,
-    /** also ITU-R BT470M / ITU-R BT1700 625 PAL & SECAM */
-    AVCOL_TRC_GAMMA22      = 4,
-    /** also ITU-R BT470BG */
-    AVCOL_TRC_GAMMA28      = 5,
-    /** also ITU-R BT601-6 525 or 625 / ITU-R BT1358 525 or 625 / ITU-R BT1700 NTSC */
-    AVCOL_TRC_SMPTE170M    = 6,
-    AVCOL_TRC_SMPTE240M    = 7,
-    /** "Linear transfer characteristics" */
-    AVCOL_TRC_LINEAR       = 8,
-    /** "Logarithmic transfer characteristic (100:1 range)" */
-    AVCOL_TRC_LOG          = 9,
-    /** "Logarithmic transfer characteristic (100 * Sqrt( 10 ) : 1 range)" */
-    AVCOL_TRC_LOG_SQRT     = 10,
-    /** IEC 61966-2-4 */
-    AVCOL_TRC_IEC61966_2_4 = 11,
-    /** ITU-R BT1361 Extended Colour Gamut */
-    AVCOL_TRC_BT1361_ECG   = 12,
-    /** IEC 61966-2-1 (sRGB or sYCC) */
-    AVCOL_TRC_IEC61966_2_1 = 13,
-    /** ITU-R BT2020 for 10 bit system */
-    AVCOL_TRC_BT2020_10    = 14,
-    /** ITU-R BT2020 for 12 bit system */
-    AVCOL_TRC_BT2020_12    = 15,
-    /** Not part of ABI */
-    AVCOL_TRC_NB = 16;
-
-/**
- *  X   X      3 4 X      X are luma samples,
- *             1 2        1-6 are possible chroma positions
- *  X   X      5 6 X      0 is undefined/unknown position
- */
-/** enum AVChromaLocation */
-public static final int
-    AVCHROMA_LOC_UNSPECIFIED = 0,
-    /** mpeg2/4, h264 default */
-    AVCHROMA_LOC_LEFT        = 1,
-    /** mpeg1, jpeg, h263 */
-    AVCHROMA_LOC_CENTER      = 2,
-    /** DV */
-    AVCHROMA_LOC_TOPLEFT     = 3,
-    AVCHROMA_LOC_TOP         = 4,
-    AVCHROMA_LOC_BOTTOMLEFT  = 5,
-    AVCHROMA_LOC_BOTTOM      = 6,
-    /** Not part of ABI */
-    AVCHROMA_LOC_NB = 7;
 
 /** enum AVAudioServiceType */
 public static final int
@@ -932,16 +904,27 @@ public static final int CODEC_FLAG_4MV =    0x0004;
 public static final int CODEC_FLAG_OUTPUT_CORRUPT = 0x0008;
 /** Use qpel MC. */
 public static final int CODEC_FLAG_QPEL =   0x0010;
+// #if FF_API_GMC
+/**
+ * @deprecated use the "gmc" private option of the libxvid encoder
+ */
 /** Use GMC. */
 public static final int CODEC_FLAG_GMC =    0x0020;
-/** Always try a MB with MV=<0,0>. */
-public static final int CODEC_FLAG_MV0 =    0x0040;
+// #endif
+// #if FF_API_MV0
 /**
- * The parent program guarantees that the input for B-frames containing
- * streams is not written to for at least s->max_b_frames+1 frames, if
- * this is not set the input will be copied.
+ * @deprecated use the flag "mv0" in the "mpv_flags" private option of the
+ * mpegvideo encoders
+ */
+public static final int CODEC_FLAG_MV0 =    0x0040;
+// #endif
+// #if FF_API_INPUT_PRESERVED
+/**
+ * @deprecated passing reference-counted frames to the encoders replaces this
+ * flag
  */
 public static final int CODEC_FLAG_INPUT_PRESERVED = 0x0100;
+// #endif
 /** Use internal 2pass ratecontrol in first pass mode. */
 public static final int CODEC_FLAG_PASS1 =           0x0200;
 /** Use internal 2pass ratecontrol in second pass mode. */
@@ -959,8 +942,13 @@ public static final int CODEC_FLAG_EMU_EDGE =        0x4000;
 public static final int CODEC_FLAG_PSNR =            0x8000;
 public static final int CODEC_FLAG_TRUNCATED =       0x00010000; /** Input bitstream might be truncated at a random
                                                   location instead of only at frame boundaries. */
-/** Normalize adaptive quantization. */
+// #if FF_API_NORMALIZE_AQP
+/**
+ * @deprecated use the flag "naq" in the "mpv_flags" private option of the
+ * mpegvideo encoders
+ */
 public static final int CODEC_FLAG_NORMALIZE_AQP =  0x00020000;
+// #endif
 /** Use interlaced DCT. */
 public static final int CODEC_FLAG_INTERLACED_DCT = 0x00040000;
 /** Force low delay. */
@@ -1253,6 +1241,21 @@ public static final int
     AV_PKT_DATA_H263_MB_INFO = 3,
 
     /**
+     * This side data should be associated with an audio stream and contains
+     * ReplayGain information in form of the AVReplayGain struct.
+     */
+    AV_PKT_DATA_REPLAYGAIN = 4,
+
+    /**
+     * This side data contains a 3x3 transformation matrix describing an affine
+     * transformation that needs to be applied to the decoded video frames for
+     * correct presentation.
+     *
+     * See libavutil/display.h for a detailed description of the data.
+     */
+    AV_PKT_DATA_DISPLAYMATRIX = 5,
+
+    /**
      * Recommmends skipping the specified number of samples
      * @code
      * u32le number of samples to skip from start of this packet
@@ -1315,6 +1318,22 @@ public static final int
      * side data includes updated metadata which appeared in the stream.
      */
     AV_PKT_DATA_METADATA_UPDATE = 77;
+
+public static class AVPacketSideData extends Pointer {
+    static { Loader.load(); }
+    public AVPacketSideData() { allocate(); }
+    public AVPacketSideData(int size) { allocateArray(size); }
+    public AVPacketSideData(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public AVPacketSideData position(int position) {
+        return (AVPacketSideData)super.position(position);
+    }
+
+    public native @Cast("uint8_t*") BytePointer data(); public native AVPacketSideData data(BytePointer data);
+    public native int size(); public native AVPacketSideData size(int size);
+    public native @Cast("AVPacketSideDataType") int type(); public native AVPacketSideData type(int type);
+}
 
 /**
  * This structure stores compressed data. It is typically exported by demuxers
@@ -1382,9 +1401,7 @@ public static class AVPacket extends Pointer {
      * Additional packet data that can be provided by the container.
      * Packet can contain several types of side information.
      */
-        @Name({"side_data", ".data"}) public native @Cast("uint8_t*") BytePointer side_data_data(int i); public native AVPacket side_data_data(int i, BytePointer side_data_data);
-        @Name({"side_data", ".size"}) public native int side_data_size(int i); public native AVPacket side_data_size(int i, int side_data_size);
-        @Name({"side_data", ".type"}) public native @Cast("AVPacketSideDataType") int side_data_type(int i); public native AVPacket side_data_type(int i, int side_data_type);
+    public native AVPacketSideData side_data(); public native AVPacket side_data(AVPacketSideData side_data);
     public native int side_data_elems(); public native AVPacket side_data_elems(int side_data_elems);
 
     /**
@@ -1483,8 +1500,13 @@ public static class AVCodecContext extends Pointer {
 
     public native @Cast("AVMediaType") int codec_type(); public native AVCodecContext codec_type(int codec_type); /* see AVMEDIA_TYPE_xxx */
     @MemberGetter public native @Const AVCodec codec();
-    public native @Cast("char") byte codec_name(int i); public native AVCodecContext codec_name(int i, byte codec_name);
-    @MemberGetter public native @Cast("char*") BytePointer codec_name();
+// #if FF_API_CODEC_NAME
+    /**
+     * @deprecated this field is not used for anything in libavcodec
+     */
+    public native @Cast("char") @Deprecated byte codec_name(int i); public native AVCodecContext codec_name(int i, byte codec_name);
+    @MemberGetter public native @Cast("char*") @Deprecated BytePointer codec_name();
+// #endif
     public native @Cast("AVCodecID") int codec_id(); public native AVCodecContext codec_id(int codec_id); /* see AV_CODEC_ID_xxx */
 
     /**
@@ -1617,12 +1639,17 @@ public static final int FF_COMPRESSION_DEFAULT = -1;
      *   encoded input.
      *
      * Audio:
-     *   For encoding, this is the number of "priming" samples added to the
-     *   beginning of the stream. The decoded output will be delayed by this
-     *   many samples relative to the input to the encoder. Note that this
-     *   field is purely informational and does not directly affect the pts
-     *   output by the encoder, which should always be based on the actual
-     *   presentation time, including any delay.
+     *   For encoding, this is the number of "priming" samples added by the
+     *   encoder to the beginning of the stream. The decoded output will be
+     *   delayed by this many samples relative to the input to the encoder (or
+     *   more, if the decoder adds its own padding).
+     *   The timestamps on the output packets are adjusted by the encoder so
+     *   that they always refer to the first sample of the data actually
+     *   contained in the packet, including any added padding.
+     *   E.g. if the timebase is 1/samplerate and the timestamp of the first
+     *   input sample is 0, the timestamp of the first output packet will be
+     *   -delay.
+     *
      *   For decoding, this is the number of samples the decoder needs to
      *   output before the decoder's output is valid. When seeking, you should
      *   start decoding this many samples prior to your desired seek point.
@@ -2561,7 +2588,7 @@ public static final int FF_MB_DECISION_RD =     2;
 
     /**
      * ratecontrol qmin qmax limiting method
-     * 0-> clipping, 1-> use a nice continuous function to limit qscale wthin qmin/qmax.
+     * 0-> clipping, 1-> use a nice continuous function to limit qscale within qmin/qmax.
      * - encoding: Set by user.
      * - decoding: unused
      */
@@ -2595,7 +2622,7 @@ public static final int FF_MB_DECISION_RD =     2;
     /**
      * maximum bitrate
      * - encoding: Set by user.
-     * - decoding: unused
+     * - decoding: Set by libavcodec.
      */
     public native int rc_max_rate(); public native AVCodecContext rc_max_rate(int rc_max_rate);
 
@@ -2656,14 +2683,14 @@ public static final int FF_CODER_TYPE_DEFLATE =   4;
     public native int context_model(); public native AVCodecContext context_model(int context_model);
 
     /**
-     * minimum Lagrange multipler
+     * minimum Lagrange multiplier
      * - encoding: Set by user.
      * - decoding: unused
      */
     public native int lmin(); public native AVCodecContext lmin(int lmin);
 
     /**
-     * maximum Lagrange multipler
+     * maximum Lagrange multiplier
      * - encoding: Set by user.
      * - decoding: unused
      */
@@ -2838,6 +2865,7 @@ public static final int FF_COMPLIANCE_EXPERIMENTAL = -2;
     public native int error_concealment(); public native AVCodecContext error_concealment(int error_concealment);
 public static final int FF_EC_GUESS_MVS =   1;
 public static final int FF_EC_DEBLOCK =     2;
+public static final int FF_EC_FAVOR_INTER = 256;
 
     /**
      * debug
@@ -2871,6 +2899,7 @@ public static final int FF_DEBUG_VIS_MB_TYPE = 0x00004000;
 // #endif
 public static final int FF_DEBUG_BUFFERS =     0x00008000;
 public static final int FF_DEBUG_THREADS =     0x00010000;
+public static final int FF_DEBUG_NOMC =        0x01000000;
 
 // #if FF_API_DEBUG_MV
     /**
@@ -2906,9 +2935,11 @@ public static final int AV_EF_BUFFER =    (1<<2);
 /** abort decoding on minor error detection */
 public static final int AV_EF_EXPLODE =   (1<<3);
 
+/** ignore errors and continue */
+public static final int AV_EF_IGNORE_ERR = (1<<15);
 /** consider things that violate the spec, are fast to calculate and have not been seen in the wild as errors */
 public static final int AV_EF_CAREFUL =    (1<<16);
-/** consider all spec non compliancies as errors */
+/** consider all spec non compliances as errors */
 public static final int AV_EF_COMPLIANT =  (1<<17);
 /** consider things that a sane encoder should not do as an error */
 public static final int AV_EF_AGGRESSIVE = (1<<18);
@@ -2975,18 +3006,23 @@ public static final int FF_IDCT_SIMPLE =        2;
 public static final int FF_IDCT_SIMPLEMMX =     3;
 public static final int FF_IDCT_ARM =           7;
 public static final int FF_IDCT_ALTIVEC =       8;
+// #if FF_API_ARCH_SH4
 public static final int FF_IDCT_SH4 =           9;
+// #endif
 public static final int FF_IDCT_SIMPLEARM =     10;
 public static final int FF_IDCT_IPP =           13;
 public static final int FF_IDCT_XVIDMMX =       14;
 public static final int FF_IDCT_SIMPLEARMV5TE = 16;
 public static final int FF_IDCT_SIMPLEARMV6 =   17;
+// #if FF_API_ARCH_SPARC
 public static final int FF_IDCT_SIMPLEVIS =     18;
+// #endif
 public static final int FF_IDCT_FAAN =          20;
 public static final int FF_IDCT_SIMPLENEON =    22;
 // #if FF_API_ARCH_ALPHA
 public static final int FF_IDCT_SIMPLEALPHA =   23;
 // #endif
+public static final int FF_IDCT_SIMPLEAUTO =    128;
 
     /**
      * bits per sample/pixel from the demuxer (needed for huffyuv).
@@ -3126,7 +3162,7 @@ public static final int FF_THREAD_SLICE =   2;
 // #endif
 
     /**
-     * noise vs. sse weight for the nsse comparsion function
+     * noise vs. sse weight for the nsse comparison function
      * - encoding: Set by user.
      * - decoding: unused
      */
@@ -3214,6 +3250,7 @@ public static final int FF_PROFILE_JPEG2000_DCINEMA_4K =              4;
 public static final int FF_PROFILE_HEVC_MAIN =                        1;
 public static final int FF_PROFILE_HEVC_MAIN_10 =                     2;
 public static final int FF_PROFILE_HEVC_MAIN_STILL_PICTURE =          3;
+public static final int FF_PROFILE_HEVC_REXT =                        4;
 
     /**
      * level
@@ -3277,6 +3314,21 @@ public static final int FF_LEVEL_UNKNOWN = -99;
      * - decoding: unused.
      */
     public native @Cast("uint64_t") long vbv_delay(); public native AVCodecContext vbv_delay(long vbv_delay);
+
+    /**
+     * Encoding only. Allow encoders to output packets that do not contain any
+     * encoded data, only side data.
+     *
+     * Some encoders need to output such packets, e.g. to update some stream
+     * parameters at the end of encoding.
+     *
+     * All callers are strongly recommended to set this option to 1 and update
+     * their code to deal with such packets, since this behaviour may become
+     * always enabled in the future (then this option will be deprecated and
+     * later removed). To avoid ABI issues when this happens, the callers should
+     * use AVOptions to set this field.
+     */
+    public native int side_data_only_packets(); public native AVCodecContext side_data_only_packets(int side_data_only_packets);
 
     /**
      * Timebase in which pkt_dts/pts and AVPacket.dts/pts are.
@@ -3638,7 +3690,26 @@ public static class AVHWAccel extends Pointer {
      */
     public native int capabilities(); public native AVHWAccel capabilities(int capabilities);
 
+    /*****************************************************************
+     * No fields below this line are part of the public API. They
+     * may not be used outside of libavcodec and can be changed and
+     * removed at will.
+     * New public fields should be added right above.
+     *****************************************************************
+     */
     public native AVHWAccel next(); public native AVHWAccel next(AVHWAccel next);
+
+    /**
+     * Allocate a custom buffer
+     */
+    public static class Alloc_frame_AVCodecContext_AVFrame extends FunctionPointer {
+        static { Loader.load(); }
+        public    Alloc_frame_AVCodecContext_AVFrame(Pointer p) { super(p); }
+        protected Alloc_frame_AVCodecContext_AVFrame() { allocate(); }
+        private native void allocate();
+        public native int call(AVCodecContext avctx, AVFrame frame);
+    }
+    public native Alloc_frame_AVCodecContext_AVFrame alloc_frame(); public native AVHWAccel alloc_frame(Alloc_frame_AVCodecContext_AVFrame alloc_frame);
 
     /**
      * Called at the beginning of each frame or field picture.
@@ -3703,13 +3774,13 @@ public static class AVHWAccel extends Pointer {
     public native End_frame_AVCodecContext end_frame(); public native AVHWAccel end_frame(End_frame_AVCodecContext end_frame);
 
     /**
-     * Size of HW accelerator private data.
+     * Size of per-frame hardware accelerator private data.
      *
      * Private data is allocated with av_mallocz() before
      * AVCodecContext.get_buffer() and deallocated after
      * AVCodecContext.release_buffer().
      */
-    public native int priv_data_size(); public native AVHWAccel priv_data_size(int priv_data_size);
+    public native int frame_priv_data_size(); public native AVHWAccel frame_priv_data_size(int frame_priv_data_size);
 
     /**
      * Called for every Macroblock in a slice.
@@ -3728,6 +3799,43 @@ public static class AVHWAccel extends Pointer {
         public native void call(MpegEncContext s);
     }
     public native Decode_mb_MpegEncContext decode_mb(); public native AVHWAccel decode_mb(Decode_mb_MpegEncContext decode_mb);
+
+    /**
+     * Initialize the hwaccel private data.
+     *
+     * This will be called from ff_get_format(), after hwaccel and
+     * hwaccel_context are set and the hwaccel private data in AVCodecInternal
+     * is allocated.
+     */
+    public static class Init_AVCodecContext extends FunctionPointer {
+        static { Loader.load(); }
+        public    Init_AVCodecContext(Pointer p) { super(p); }
+        protected Init_AVCodecContext() { allocate(); }
+        private native void allocate();
+        public native int call(AVCodecContext avctx);
+    }
+    public native Init_AVCodecContext init(); public native AVHWAccel init(Init_AVCodecContext init);
+
+    /**
+     * Uninitialize the hwaccel private data.
+     *
+     * This will be called from get_format() or avcodec_close(), after hwaccel
+     * and hwaccel_context are already uninitialized.
+     */
+    public static class Uninit_AVCodecContext extends FunctionPointer {
+        static { Loader.load(); }
+        public    Uninit_AVCodecContext(Pointer p) { super(p); }
+        protected Uninit_AVCodecContext() { allocate(); }
+        private native void allocate();
+        public native int call(AVCodecContext avctx);
+    }
+    public native Uninit_AVCodecContext uninit(); public native AVHWAccel uninit(Uninit_AVCodecContext uninit);
+
+    /**
+     * Size of the private data to allocate in
+     * AVCodecInternal.hwaccel_priv_data.
+     */
+    public native int priv_data_size(); public native AVHWAccel priv_data_size(int priv_data_size);
 }
 
 /**
@@ -3895,9 +4003,8 @@ public static native void avcodec_register(AVCodec codec);
 public static native void avcodec_register_all();
 
 /**
- * Allocate an AVCodecContext and set its fields to default values.  The
- * resulting struct can be deallocated by calling avcodec_close() on it followed
- * by av_free().
+ * Allocate an AVCodecContext and set its fields to default values. The
+ * resulting struct should be freed with avcodec_free_context().
  *
  * @param codec if non-NULL, allocate private data and initialize defaults
  *              for the given codec. It is illegal to then call avcodec_open2()
@@ -3910,6 +4017,13 @@ public static native void avcodec_register_all();
  * @see avcodec_get_context_defaults
  */
 public static native AVCodecContext avcodec_alloc_context3(@Const AVCodec codec);
+
+/**
+ * Free the codec context and everything associated with it and write NULL to
+ * the provided pointer.
+ */
+public static native void avcodec_free_context(@Cast("AVCodecContext**") PointerPointer avctx);
+public static native void avcodec_free_context(@ByPtrPtr AVCodecContext avctx);
 
 /**
  * Set the fields of the given AVCodecContext to default values corresponding
@@ -4128,14 +4242,14 @@ public static native int av_dup_packet(AVPacket pkt);
  *
  * @return 0 on success, negative AVERROR on fail
  */
-public static native int av_copy_packet(AVPacket dst, AVPacket src);
+public static native int av_copy_packet(AVPacket dst, @Const AVPacket src);
 
 /**
  * Copy packet side data
  *
  * @return 0 on success, negative AVERROR on fail
  */
-public static native int av_copy_packet_side_data(AVPacket dst, AVPacket src);
+public static native int av_copy_packet_side_data(AVPacket dst, @Const AVPacket src);
 
 /**
  * Free a packet.
@@ -4233,7 +4347,7 @@ public static native void av_packet_free_side_data(AVPacket pkt);
  *
  * @return 0 on success, a negative AVERROR on error.
  */
-public static native int av_packet_ref(AVPacket dst, AVPacket src);
+public static native int av_packet_ref(AVPacket dst, @Const AVPacket src);
 
 /**
  * Wipe the packet.
@@ -4268,6 +4382,19 @@ public static native void av_packet_move_ref(AVPacket dst, AVPacket src);
  *
  */
 public static native int av_packet_copy_props(AVPacket dst, @Const AVPacket src);
+
+/**
+ * Convert valid timing fields (timestamps / durations) in a packet from one
+ * timebase to another. Timestamps with unknown values (AV_NOPTS_VALUE) will be
+ * ignored.
+ *
+ * @param pkt packet on which the conversion will be performed
+ * @param tb_src source timebase, in which the timing fields in pkt are
+ *               expressed
+ * @param tb_dst destination timebase, to which the timing fields will be
+ *               converted
+ */
+public static native void av_packet_rescale_ts(AVPacket pkt, @ByVal AVRational tb_src, @ByVal AVRational tb_dst);
 
 /**
  * @}
@@ -4561,8 +4688,8 @@ public static native int avcodec_decode_video2(AVCodecContext avctx, AVFrame pic
  * marked with CODEC_CAP_DELAY, then no subtitles will be returned.
  *
  * @param avctx the codec context
- * @param[out] sub The AVSubtitle in which the decoded subtitle will be stored, must be
-                   freed with avsubtitle_free if *got_sub_ptr is set.
+ * @param[out] sub The Preallocated AVSubtitle in which the decoded subtitle will be stored,
+ *                 must be freed with avsubtitle_free if *got_sub_ptr is set.
  * @param[in,out] got_sub_ptr Zero if no subtitle could be decompressed, otherwise, it is nonzero.
  * @param[in] avpkt The input AVPacket containing the input buffer.
  */
@@ -5354,36 +5481,8 @@ public static native void avcodec_get_chroma_sub_sample(@Cast("AVPixelFormat") i
  */
 public static native @Cast("unsigned int") int avcodec_pix_fmt_to_codec_tag(@Cast("AVPixelFormat") int pix_fmt);
 
-/** loss due to resolution change */
-public static final int FF_LOSS_RESOLUTION =  0x0001;
-/** loss due to color depth change */
-public static final int FF_LOSS_DEPTH =       0x0002;
-/** loss due to color space conversion */
-public static final int FF_LOSS_COLORSPACE =  0x0004;
-/** loss of alpha bits */
-public static final int FF_LOSS_ALPHA =       0x0008;
-/** loss due to color quantization */
-public static final int FF_LOSS_COLORQUANT =  0x0010;
-/** loss of chroma (e.g. RGB to gray conversion) */
-public static final int FF_LOSS_CHROMA =      0x0020;
-
 /**
- * Compute what kind of losses will occur when converting from one specific
- * pixel format to another.
- * When converting from one pixel format to another, information loss may occur.
- * For example, when converting from RGB24 to GRAY, the color information will
- * be lost. Similarly, other losses occur when converting from some formats to
- * other formats. These losses can involve loss of chroma, but also loss of
- * resolution, loss of color depth, loss due to the color space conversion, loss
- * of the alpha bits or loss due to color quantization.
- * avcodec_get_fix_fmt_loss() informs you about the various types of losses
- * which will occur when converting from one pixel format to another.
- *
- * @param[in] dst_pix_fmt destination pixel format
- * @param[in] src_pix_fmt source pixel format
- * @param[in] has_alpha Whether the source pixel format alpha channel is used.
- * @return Combination of flags informing you what kind of losses will occur
- * (maximum loss for an invalid dst_pix_fmt).
+ * @deprecated see av_get_pix_fmt_loss()
  */
 public static native int avcodec_get_pix_fmt_loss(@Cast("AVPixelFormat") int dst_pix_fmt, @Cast("AVPixelFormat") int src_pix_fmt,
                              int has_alpha);
@@ -5416,34 +5515,7 @@ public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt_of_lis
                                             int has_alpha, int[] loss_ptr);
 
 /**
- * Find the best pixel format to convert to given a certain source pixel
- * format and a selection of two destination pixel formats. When converting from
- * one pixel format to another, information loss may occur.  For example, when converting
- * from RGB24 to GRAY, the color information will be lost. Similarly, other losses occur when
- * converting from some formats to other formats. avcodec_find_best_pix_fmt_of_2() selects which of
- * the given pixel formats should be used to suffer the least amount of loss.
- *
- * If one of the destination formats is AV_PIX_FMT_NONE the other pixel format (if valid) will be
- * returned.
- *
- * @code
- * src_pix_fmt = AV_PIX_FMT_YUV420P;
- * dst_pix_fmt1= AV_PIX_FMT_RGB24;
- * dst_pix_fmt2= AV_PIX_FMT_GRAY8;
- * dst_pix_fmt3= AV_PIX_FMT_RGB8;
- * loss= FF_LOSS_CHROMA; // don't care about chroma loss, so chroma loss will be ignored.
- * dst_pix_fmt = avcodec_find_best_pix_fmt_of_2(dst_pix_fmt1, dst_pix_fmt2, src_pix_fmt, alpha, &loss);
- * dst_pix_fmt = avcodec_find_best_pix_fmt_of_2(dst_pix_fmt, dst_pix_fmt3, src_pix_fmt, alpha, &loss);
- * @endcode
- *
- * @param[in] dst_pix_fmt1 One of the two destination pixel formats to choose from
- * @param[in] dst_pix_fmt2 The other of the two destination pixel formats to choose from
- * @param[in] src_pix_fmt Source pixel format
- * @param[in] has_alpha Whether the source pixel format alpha channel is used.
- * @param[in, out] loss_ptr Combination of loss flags. In: selects which of the losses to ignore, i.e.
- *                               NULL or value of zero means we care about all losses. Out: the loss
- *                               that occurs when converting from src to selected dst pixel format.
- * @return The best pixel format to convert to or -1 if none was found.
+ * @deprecated see av_find_best_pix_fmt_of_2()
  */
 public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt_of_2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
                                             @Cast("AVPixelFormat") int src_pix_fmt, int has_alpha, IntPointer loss_ptr);
@@ -5705,7 +5777,7 @@ public static native AVBitStreamFilterContext av_bitstream_filter_init(String na
  * @return >= 0 in case of success, or a negative error code in case of failure
  *
  * If the return value is positive, an output buffer is allocated and
- * is availble in *poutbuf, and is distinct from the input buffer.
+ * is available in *poutbuf, and is distinct from the input buffer.
  *
  * If the return value is 0, the output buffer is not allocated and
  * should be considered identical to the input buffer, or in case

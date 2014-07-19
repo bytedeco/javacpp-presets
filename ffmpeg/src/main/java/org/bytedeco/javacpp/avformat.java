@@ -242,6 +242,13 @@ public static class AVIOContext extends Pointer {
      * This field is internal to libavformat and access from outside is not allowed.
      */
     public native int writeout_count(); public native AVIOContext writeout_count(int writeout_count);
+
+    /**
+     * Original buffer size
+     * used internally after probing and ensure seekback to reset the buffer size
+     * This field is internal to libavformat and access from outside is not allowed.
+     */
+    public native int orig_buffer_size(); public native AVIOContext orig_buffer_size(int orig_buffer_size);
 }
 
 /* unbuffered I/O */
@@ -882,7 +889,7 @@ public static native long avio_seek_time(AVIOContext h, int stream_index,
  *   the @ref AVStream.codec "stream codec context" information, such as the
  *   codec @ref AVCodecContext.codec_type "type", @ref AVCodecContext.codec_id
  *   "id" and other parameters (e.g. width / height, the pixel or sample format,
- *   etc.) as known. The @ref AVCodecContext.time_base "codec timebase" should
+ *   etc.) as known. The @ref AVStream.time_base "stream timebase" should
  *   be set to the timebase that the caller desires to use for this stream (note
  *   that the timebase actually used by the muxer can be different, as will be
  *   described later).
@@ -906,8 +913,8 @@ public static native long avio_seek_time(AVIOContext h, int stream_index,
  * a single muxing context, they should not be mixed). Do note that the timing
  * information on the packets sent to the muxer must be in the corresponding
  * AVStream's timebase. That timebase is set by the muxer (in the
- * avformat_write_header() step) and may be different from the timebase the
- * caller set on the codec context.
+ * avformat_write_header() step) and may be different from the timebase
+ * requested by the caller.
  *
  * Once all the data has been written, the caller must call av_write_trailer()
  * to flush any buffered packets and finalize the output file, then close the IO
@@ -950,6 +957,10 @@ public static native long avio_seek_time(AVIOContext h, int stream_index,
 @Opaque public static class AVDeviceInfoList extends Pointer {
     public AVDeviceInfoList() { }
     public AVDeviceInfoList(Pointer p) { super(p); }
+}
+@Opaque public static class AVDeviceCapabilitiesQuery extends Pointer {
+    public AVDeviceCapabilitiesQuery() { }
+    public AVDeviceCapabilitiesQuery(Pointer p) { super(p); }
 }
 
 /**
@@ -1056,6 +1067,7 @@ public static native int av_get_packet(AVIOContext s, AVPacket pkt, int size);
  */
 public static native int av_append_packet(AVIOContext s, AVPacket pkt, int size);
 
+// #if FF_API_LAVF_FRAC
 /*************************************************/
 /* fractional numbers for exact pts handling */
 
@@ -1078,6 +1090,7 @@ public static class AVFrac extends Pointer {
     public native long num(); public native AVFrac num(long num);
     public native long den(); public native AVFrac den(long den);
 }
+// #endif
 
 /*************************************************/
 /* input/output formats */
@@ -1346,6 +1359,30 @@ public static class AVOutputFormat extends Pointer {
         public native int call(AVFormatContext s, AVDeviceInfoList device_list);
     }
     public native Get_device_list_AVFormatContext_AVDeviceInfoList get_device_list(); public native AVOutputFormat get_device_list(Get_device_list_AVFormatContext_AVDeviceInfoList get_device_list);
+    /**
+     * Initialize device capabilities submodule.
+     * @see avdevice_capabilities_create() for more details.
+     */
+    public static class Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery extends FunctionPointer {
+        static { Loader.load(); }
+        public    Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery(Pointer p) { super(p); }
+        protected Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery() { allocate(); }
+        private native void allocate();
+        public native int call(AVFormatContext s, AVDeviceCapabilitiesQuery caps);
+    }
+    public native Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery create_device_capabilities(); public native AVOutputFormat create_device_capabilities(Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery create_device_capabilities);
+    /**
+     * Free device capabilities submodule.
+     * @see avdevice_capabilities_free() for more details.
+     */
+    public static class Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery extends FunctionPointer {
+        static { Loader.load(); }
+        public    Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery(Pointer p) { super(p); }
+        protected Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery() { allocate(); }
+        private native void allocate();
+        public native int call(AVFormatContext s, AVDeviceCapabilitiesQuery caps);
+    }
+    public native Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery free_device_capabilities(); public native AVOutputFormat free_device_capabilities(Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery free_device_capabilities);
 }
 /**
  * @}
@@ -1562,6 +1599,32 @@ public static class AVInputFormat extends Pointer {
         public native int call(AVFormatContext s, AVDeviceInfoList device_list);
     }
     public native Get_device_list_AVFormatContext_AVDeviceInfoList get_device_list(); public native AVInputFormat get_device_list(Get_device_list_AVFormatContext_AVDeviceInfoList get_device_list);
+
+    /**
+     * Initialize device capabilities submodule.
+     * @see avdevice_capabilities_create() for more details.
+     */
+    public static class Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery extends FunctionPointer {
+        static { Loader.load(); }
+        public    Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery(Pointer p) { super(p); }
+        protected Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery() { allocate(); }
+        private native void allocate();
+        public native int call(AVFormatContext s, AVDeviceCapabilitiesQuery caps);
+    }
+    public native Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery create_device_capabilities(); public native AVInputFormat create_device_capabilities(Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery create_device_capabilities);
+
+    /**
+     * Free device capabilities submodule.
+     * @see avdevice_capabilities_free() for more details.
+     */
+    public static class Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery extends FunctionPointer {
+        static { Loader.load(); }
+        public    Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery(Pointer p) { super(p); }
+        protected Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery() { allocate(); }
+        private native void allocate();
+        public native int call(AVFormatContext s, AVDeviceCapabilitiesQuery caps);
+    }
+    public native Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery free_device_capabilities(); public native AVInputFormat free_device_capabilities(Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery free_device_capabilities);
 }
 /**
  * @}
@@ -1695,19 +1758,24 @@ public static class AVStream extends Pointer {
     public native AVCodecContext codec(); public native AVStream codec(AVCodecContext codec);
     public native Pointer priv_data(); public native AVStream priv_data(Pointer priv_data);
 
+// #if FF_API_LAVF_FRAC
     /**
-     * encoding: pts generation when outputting stream
+     * @deprecated this field is unused
      */
-    public native @ByRef AVFrac pts(); public native AVStream pts(AVFrac pts);
+    public native @Deprecated @ByRef AVFrac pts(); public native AVStream pts(AVFrac pts);
+// #endif
 
     /**
      * This is the fundamental unit of time (in seconds) in terms
      * of which frame timestamps are represented.
      *
      * decoding: set by libavformat
-     * encoding: set by libavformat in avformat_write_header. The muxer may use the
-     * user-provided value of @ref AVCodecContext.time_base "codec->time_base"
-     * as a hint.
+     * encoding: May be set by the caller before avformat_write_header() to
+     *           provide a hint to the muxer about the desired timebase. In
+     *           avformat_write_header(), the muxer will overwrite this field
+     *           with the timebase that will actually be used for the timestamps
+     *           written into the file (which may or may not be related to the
+     *           user-provided one, depending on the format).
      */
     public native @ByRef AVRational time_base(); public native AVStream time_base(AVRational time_base);
 
@@ -1748,6 +1816,10 @@ public static class AVStream extends Pointer {
 
     /**
      * Average framerate
+     *
+     * - demuxing: May be set by libavformat when creating the stream or in
+     *             avformat_find_stream_info().
+     * - muxing: May be set by the caller before avformat_write_header().
      */
     public native @ByRef AVRational avg_frame_rate(); public native AVStream avg_frame_rate(AVRational avg_frame_rate);
 
@@ -1759,6 +1831,30 @@ public static class AVStream extends Pointer {
      * encoding: unused
      */
     public native @ByRef AVPacket attached_pic(); public native AVStream attached_pic(AVPacket attached_pic);
+
+    /**
+     * An array of side data that applies to the whole stream (i.e. the
+     * container does not allow it to change between packets).
+     *
+     * There may be no overlap between the side data in this array and side data
+     * in the packets. I.e. a given side data is either exported by the muxer
+     * (demuxing) / set by the caller (muxing) in this array, then it never
+     * appears in the packets, or the side data is exported / sent through
+     * the packets (always in the first packet where the value becomes known or
+     * changes), then it does not appear in this array.
+     *
+     * - demuxing: Set by libavformat when the stream is created.
+     * - muxing: May be set by the caller before avformat_write_header().
+     *
+     * Freed by libavformat in avformat_free_context().
+     *
+     * @see av_format_inject_global_side_data()
+     */
+    public native AVPacketSideData side_data(); public native AVStream side_data(AVPacketSideData side_data);
+    /**
+     * The number of elements in the AVStream.side_data array.
+     */
+    public native int nb_side_data(); public native AVStream nb_side_data(int nb_side_data);
 
     /*****************************************************************
      * All fields below this line are not part of the public API. They
@@ -1779,6 +1875,12 @@ public static final int MAX_STD_TIMEBASES = (60*12+6);
         @Name({"info", ".duration_error"}) @MemberGetter public native @Cast("double*") DoublePointer info_duration_error(int i);
         @Name({"info", ".codec_info_duration"}) public native long info_codec_info_duration(int i); public native AVStream info_codec_info_duration(int i, long info_codec_info_duration);
         @Name({"info", ".codec_info_duration_fields"}) public native long info_codec_info_duration_fields(int i); public native AVStream info_codec_info_duration_fields(int i, long info_codec_info_duration_fields);
+
+        /**
+         * 0  -> decoder has not been searched for yet.
+         * >0 -> decoder found
+         * <0 -> decoder with codec_id == -found_decoder has not been found
+         */
         @Name({"info", ".found_decoder"}) public native int info_found_decoder(int i); public native AVStream info_found_decoder(int i, int info_found_decoder);
 
         @Name({"info", ".last_duration"}) public native long info_last_duration(int i); public native AVStream info_last_duration(int i, long info_last_duration);
@@ -1933,10 +2035,23 @@ public static final int MAX_REORDER_DELAY = 16;
     public native @Cast("uint8_t") byte dts_ordered(); public native AVStream dts_ordered(byte dts_ordered);
     public native @Cast("uint8_t") byte dts_misordered(); public native AVStream dts_misordered(byte dts_misordered);
 
+    /**
+     * Internal data to inject global side data
+     */
+    public native int inject_global_side_data(); public native AVStream inject_global_side_data(int inject_global_side_data);
+
 }
 
 public static native @ByVal AVRational av_stream_get_r_frame_rate(@Const AVStream s);
 public static native void av_stream_set_r_frame_rate(AVStream s, @ByVal AVRational r);
+public static native AVCodecParserContext av_stream_get_parser(@Const AVStream s);
+
+/**
+ * Returns the pts of the last muxed packet + its duration
+ *
+ * the retuned value is undefined when used with a demuxer.
+ */
+public static native long av_stream_get_end_pts(@Const AVStream st);
 
 public static final int AV_PROGRAM_RUNNING = 1;
 
@@ -2105,7 +2220,10 @@ public static class AVFormatContext extends Pointer {
     public native AVIOContext pb(); public native AVFormatContext pb(AVIOContext pb);
 
     /* stream info */
-    /** Format-specific flags, see AVFMTCTX_xx */
+    /**
+     * Flags signalling stream properties. A combination of AVFMTCTX_*.
+     * Set by libavformat.
+     */
     public native int ctx_flags(); public native AVFormatContext ctx_flags(int ctx_flags);
 
     /**
@@ -2166,6 +2284,10 @@ public static class AVFormatContext extends Pointer {
     public native @Cast("unsigned int") int packet_size(); public native AVFormatContext packet_size(int packet_size);
     public native int max_delay(); public native AVFormatContext max_delay(int max_delay);
 
+    /**
+     * Flags modifying the (de)muxer behaviour. A combination of AVFMT_FLAG_*.
+     * Set by the user before avformat_open_input() / avformat_write_header().
+     */
     public native int flags(); public native AVFormatContext flags(int flags);
 /** Generate missing pts even if it requires parsing future frames. */
 public static final int AVFMT_FLAG_GENPTS =       0x0001;
@@ -2187,6 +2309,13 @@ public static final int AVFMT_FLAG_CUSTOM_IO =    0x0080;
 public static final int AVFMT_FLAG_DISCARD_CORRUPT =  0x0100;
 /** Flush the AVIOContext every packet. */
 public static final int AVFMT_FLAG_FLUSH_PACKETS =    0x0200;
+/**
+ * When muxing, try to avoid writing any random/volatile data to the output.
+ * This includes any random IDs, real-time timestamps/dates, muxer version, etc.
+ *
+ * This flag is mainly intended for testing.
+ */
+public static final int AVFMT_FLAG_BITEXACT =         0x0400;
 /** Enable RTP MP4A-LATM payload */
 public static final int AVFMT_FLAG_MP4A_LATM =    0x8000;
 /** try to interleave outputted packets by dts (using this flag can slow demuxing down) */
@@ -2204,11 +2333,9 @@ public static final int AVFMT_FLAG_KEEP_SIDE_DATA = 0x40000;
     public native @Cast("unsigned int") int probesize(); public native AVFormatContext probesize(int probesize);
 
     /**
-     * Maximum duration (in AV_TIME_BASE units) of the data read
-     * from input in avformat_find_stream_info().
-     * Demuxing only, set by the caller before avformat_find_stream_info().
+     * @deprecated deprecated in favor of max_analyze_duration2
      */
-    public native int max_analyze_duration(); public native AVFormatContext max_analyze_duration(int max_analyze_duration);
+    public native @Deprecated int max_analyze_duration(); public native AVFormatContext max_analyze_duration(int max_analyze_duration);
 
     @MemberGetter public native @Cast("const uint8_t*") BytePointer key();
     public native int keylen(); public native AVFormatContext keylen(int keylen);
@@ -2282,7 +2409,12 @@ public static final int AVFMT_FLAG_KEEP_SIDE_DATA = 0x40000;
      * Start time of the stream in real world time, in microseconds
      * since the Unix epoch (00:00 1st January 1970). That is, pts=0 in the
      * stream was captured at this real world time.
-     * Muxing only, set by the caller before avformat_write_header().
+     * - muxing: Set by the caller before avformat_write_header(). If set to
+     *           either 0 or AV_NOPTS_VALUE, then the current wall-time will
+     *           be used.
+     * - demuxing: Set by libavformat. AV_NOPTS_VALUE if unknown. Note that
+     *             the value may become known after some number of frames
+     *             have been received.
      */
     public native long start_time_realtime(); public native AVFormatContext start_time_realtime(long start_time_realtime);
 
@@ -2334,6 +2466,12 @@ public static final int FF_FDEBUG_TS =        0x0001;
      * Muxing only, set by the caller before avformat_write_header().
      */
     public native long max_interleave_delta(); public native AVFormatContext max_interleave_delta(long max_interleave_delta);
+
+    /**
+     * Allow non-standard and experimental extension
+     * @see AVCodecContext.strict_std_compliance
+     */
+    public native int strict_std_compliance(); public native AVFormatContext strict_std_compliance(int strict_std_compliance);
 
     /**
      * Transport stream id.
@@ -2404,7 +2542,7 @@ public static final int FF_FDEBUG_TS =        0x0001;
      * - encoding: unused
      * - decoding: Set by user via AVOptions (NO direct access)
      */
-    public native @Cast("unsigned int") int skip_initial_bytes(); public native AVFormatContext skip_initial_bytes(int skip_initial_bytes);
+    public native long skip_initial_bytes(); public native AVFormatContext skip_initial_bytes(long skip_initial_bytes);
 
     /**
      * Correct single timestamp overflows
@@ -2435,6 +2573,13 @@ public static final int FF_FDEBUG_TS =        0x0001;
      * - decoding: set by avformat, read by user via av_format_get_probe_score() (NO direct access)
      */
     public native int probe_score(); public native AVFormatContext probe_score(int probe_score);
+
+    /**
+     * number of bytes to read maximally to identify format.
+     * - encoding: unused
+     * - decoding: set by user through AVOPtions (NO direct access)
+     */
+    public native int format_probesize(); public native AVFormatContext format_probesize(int format_probesize);
 
     /*****************************************************************
      * All fields below this line are not part of the public API. They
@@ -2549,6 +2694,15 @@ public static final int RAW_PACKET_BUFFER_SIZE = 2500000;
      * Muxing: set by user via AVOptions (NO direct access)
      */
     public native long output_ts_offset(); public native AVFormatContext output_ts_offset(long output_ts_offset);
+
+    /**
+     * Maximum duration (in AV_TIME_BASE units) of the data read
+     * from input in avformat_find_stream_info().
+     * Demuxing only, set by the caller before avformat_find_stream_info()
+     * via AVOptions (NO direct access).
+     * Can be set to 0 to let avformat choose using a heuristic.
+     */
+    public native long max_analyze_duration2(); public native AVFormatContext max_analyze_duration2(long max_analyze_duration2);
 }
 
 public static native int av_format_get_probe_score(@Const AVFormatContext s);
@@ -2564,6 +2718,12 @@ public static native Pointer av_format_get_opaque(@Const AVFormatContext s);
 public static native void av_format_set_opaque(AVFormatContext s, Pointer opaque);
 public static native av_format_control_message av_format_get_control_message_cb(@Const AVFormatContext s);
 public static native void av_format_set_control_message_cb(AVFormatContext s, av_format_control_message callback);
+
+/**
+ * This function will cause global side data to be injected in the next packet
+ * of each stream as well as after any subsequent seek.
+ */
+public static native void av_format_inject_global_side_data(AVFormatContext s);
 
 /**
  * Returns the method used to set ctx->duration.
@@ -2695,6 +2855,21 @@ public static native @Const AVClass avformat_get_class();
  * @return newly created stream or NULL on error.
  */
 public static native AVStream avformat_new_stream(AVFormatContext s, @Const AVCodec c);
+
+/**
+ * Get side information from stream.
+ *
+ * @param stream stream
+ * @param type desired side information type
+ * @param size pointer for side information size to store (optional)
+ * @return pointer to data if present or NULL otherwise
+ */
+public static native @Cast("uint8_t*") BytePointer av_stream_get_side_data(AVStream stream,
+                                 @Cast("AVPacketSideDataType") int type, IntPointer size);
+public static native @Cast("uint8_t*") ByteBuffer av_stream_get_side_data(AVStream stream,
+                                 @Cast("AVPacketSideDataType") int type, IntBuffer size);
+public static native @Cast("uint8_t*") byte[] av_stream_get_side_data(AVStream stream,
+                                 @Cast("AVPacketSideDataType") int type, int[] size);
 
 public static native AVProgram av_new_program(AVFormatContext s, int id);
 
@@ -3335,7 +3510,7 @@ public static native void av_hex_dump_log(Pointer avcl, int level, @Cast("const 
  * @param dump_payload True if the payload must be displayed, too.
  * @param st AVStream that the packet belongs to
  */
-public static native void av_pkt_dump2(@Cast("FILE*") Pointer f, AVPacket pkt, int dump_payload, AVStream st);
+public static native void av_pkt_dump2(@Cast("FILE*") Pointer f, @Const AVPacket pkt, int dump_payload, @Const AVStream st);
 
 
 /**
@@ -3349,8 +3524,8 @@ public static native void av_pkt_dump2(@Cast("FILE*") Pointer f, AVPacket pkt, i
  * @param dump_payload True if the payload must be displayed, too.
  * @param st AVStream that the packet belongs to
  */
-public static native void av_pkt_dump_log2(Pointer avcl, int level, AVPacket pkt, int dump_payload,
-                      AVStream st);
+public static native void av_pkt_dump_log2(Pointer avcl, int level, @Const AVPacket pkt, int dump_payload,
+                      @Const AVStream st);
 
 /**
  * Get the AVCodecID for the given codec tag tag.
@@ -3474,6 +3649,16 @@ public static native void av_url_split(@Cast("char*") byte[] proto,         int 
                   String url);
 
 
+/**
+ * Print detailed information about the input or output format, such as
+ * duration, bitrate, streams, container, programs, metadata, side data,
+ * codec and time base.
+ *
+ * @param ic        the context to analyze
+ * @param index     index of the stream to dump information about
+ * @param url       the URL to print, such as source or destination file
+ * @param is_output Select whether the specified context is an input(0) or output(1)
+ */
 public static native void av_dump_format(AVFormatContext ic,
                     int index,
                     @Cast("const char*") BytePointer url,

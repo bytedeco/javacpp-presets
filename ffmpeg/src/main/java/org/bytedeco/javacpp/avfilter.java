@@ -307,7 +307,7 @@ public static class AVFilterBufferRef extends Pointer {
 /**
  * Copy properties of src to dst, without copying the actual data
  */
-public static native @Deprecated void avfilter_copy_buffer_ref_props(AVFilterBufferRef dst, AVFilterBufferRef src);
+public static native @Deprecated void avfilter_copy_buffer_ref_props(AVFilterBufferRef dst, @Const AVFilterBufferRef src);
 
 /**
  * Add a new reference to a buffer.
@@ -927,7 +927,7 @@ public static class AVFilterContext extends Pointer {
      * allowed threading types. I.e. a threading type needs to be set in both
      * to be allowed.
      *
-     * After the filter is initialzed, libavfilter sets this field to the
+     * After the filter is initialized, libavfilter sets this field to the
      * threading type that is actually used (0 for no multithreading).
      */
     public native int thread_type(); public native AVFilterContext thread_type(int thread_type);
@@ -1117,7 +1117,7 @@ public static class AVFilterLink extends Pointer {
 
     /**
      * True if the link is closed.
-     * If set, all attemps of start_frame, filter_frame or request_frame
+     * If set, all attempts of start_frame, filter_frame or request_frame
      * will fail with AVERROR_EOF, and if necessary the reference will be
      * destroyed.
      * If request_frame returns AVERROR_EOF, this flag is set on the
@@ -1624,7 +1624,7 @@ public static native AVFilterGraph avfilter_graph_alloc();
  *
  * @return the context of the newly created filter instance (note that it is
  *         also retrievable directly through AVFilterGraph.filters or with
- *         avfilter_graph_get_filter()) on success or NULL or failure.
+ *         avfilter_graph_get_filter()) on success or NULL on failure.
  */
 public static native AVFilterContext avfilter_graph_alloc_filter(AVFilterGraph graph,
                                              @Const AVFilter filter,
@@ -1634,14 +1634,15 @@ public static native AVFilterContext avfilter_graph_alloc_filter(AVFilterGraph g
                                              String name);
 
 /**
- * Get a filter instance with name name from graph.
+ * Get a filter instance identified by instance name from graph.
  *
+ * @param graph filter graph to search through.
+ * @param name filter instance name (should be unique in the graph).
  * @return the pointer to the found filter instance or NULL if it
  * cannot be found.
  */
-public static native AVFilterContext avfilter_graph_get_filter(AVFilterGraph graph, @Cast("char*") BytePointer name);
-public static native AVFilterContext avfilter_graph_get_filter(AVFilterGraph graph, @Cast("char*") ByteBuffer name);
-public static native AVFilterContext avfilter_graph_get_filter(AVFilterGraph graph, @Cast("char*") byte[] name);
+public static native AVFilterContext avfilter_graph_get_filter(AVFilterGraph graph, @Cast("const char*") BytePointer name);
+public static native AVFilterContext avfilter_graph_get_filter(AVFilterGraph graph, String name);
 
 // #if FF_API_AVFILTER_OPEN
 /**
@@ -1871,7 +1872,7 @@ public static native int avfilter_graph_send_command(AVFilterGraph graph, String
  *               "all" sends to all filters
  *               otherwise it can be a filter or filter instance name
  *               which will send the command to all matching filters.
- * @param cmd    the command to sent, for handling simplicity all commands must be alphanummeric only
+ * @param cmd    the command to sent, for handling simplicity all commands must be alphanumeric only
  * @param arg    the argument for the command
  * @param ts     time at which the command should be sent to the filter
  *
@@ -2295,7 +2296,7 @@ public static native int av_buffersrc_add_frame(AVFilterContext ctx, AVFrame fra
  * Add a frame to the buffer source.
  *
  * By default, if the frame is reference-counted, this function will take
- * ownership of the reference(s) and reset the frame. This can be controled
+ * ownership of the reference(s) and reset the frame. This can be controlled
  * using the flags.
  *
  * If this function returns an error, the input frame is not touched.

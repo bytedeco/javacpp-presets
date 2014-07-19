@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Samuel Audet
+ * Copyright (C) 2013,2014 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -22,6 +22,7 @@ package org.bytedeco.javacpp.presets;
 
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
+import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
@@ -34,5 +35,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value="windows", link="avdevice-55") })
 public class avdevice implements InfoMapper {
     public void map(InfoMap infoMap) {
+        infoMap.put(new Info("av_input_audio_device_next").annotations("@Platform(not=\"windows\")").javaNames("av_input_audio_device_next"))
+               .put(new Info("av_input_video_device_next").annotations("@Platform(not=\"windows\")").javaNames("av_input_video_device_next"))
+               .put(new Info("av_output_audio_device_next").annotations("@Platform(not=\"windows\")").javaNames("av_output_audio_device_next"))
+               .put(new Info("av_output_video_device_next").annotations("@Platform(not=\"windows\")").javaNames("av_output_video_device_next"))
+               .put(new Info("av_device_capabilities").skip());
     }
 }

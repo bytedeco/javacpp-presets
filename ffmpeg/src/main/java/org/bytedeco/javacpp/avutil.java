@@ -164,6 +164,12 @@ public class avutil extends org.bytedeco.javacpp.presets.avutil {
  * @{
  *
  * @}
+ *
+ * @defgroup version_utils Library Version Macros
+ *
+ * @{
+ *
+ * @}
  */
 
 
@@ -308,10 +314,10 @@ public static native @Cast("char") byte av_get_picture_type_char(@Cast("AVPictur
 
 // #include "common.h"
 // #include "error.h"
+// #include "rational.h"
 // #include "version.h"
 // #include "macros.h"
 // #include "mathematics.h"
-// #include "rational.h"
 // #include "log.h"
 // #include "pixfmt.h"
 
@@ -348,6 +354,11 @@ public static native @Cast("unsigned") int av_int_list_length_for_size(@Cast("un
  */
 public static native @Cast("FILE*") Pointer av_fopen_utf8(@Cast("const char*") BytePointer path, @Cast("const char*") BytePointer mode);
 public static native @Cast("FILE*") Pointer av_fopen_utf8(String path, String mode);
+
+/**
+ * Return the fractional representation of the internal time base.
+ */
+public static native @ByVal AVRational av_get_time_base_q();
 
 /**
  * @}
@@ -787,11 +798,28 @@ public static native void av_freep(Pointer ptr);
  * @param tab_ptr pointer to the array to grow
  * @param nb_ptr  pointer to the number of elements in the array
  * @param elem    element to add
- * @see av_dynarray2_add()
+ * @see av_dynarray_add_nofree(), av_dynarray2_add()
  */
 public static native void av_dynarray_add(Pointer tab_ptr, IntPointer nb_ptr, Pointer elem);
 public static native void av_dynarray_add(Pointer tab_ptr, IntBuffer nb_ptr, Pointer elem);
 public static native void av_dynarray_add(Pointer tab_ptr, int[] nb_ptr, Pointer elem);
+
+/**
+ * Add an element to a dynamic array.
+ *
+ * Function has the same functionality as av_dynarray_add(),
+ * but it doesn't free memory on fails. It returns error code
+ * instead and leave current buffer untouched.
+ *
+ * @param tab_ptr pointer to the array to grow
+ * @param nb_ptr  pointer to the number of elements in the array
+ * @param elem    element to add
+ * @return >=0 on success, negative otherwise.
+ * @see av_dynarray_add(), av_dynarray2_add()
+ */
+public static native int av_dynarray_add_nofree(Pointer tab_ptr, IntPointer nb_ptr, Pointer elem);
+public static native int av_dynarray_add_nofree(Pointer tab_ptr, IntBuffer nb_ptr, Pointer elem);
+public static native int av_dynarray_add_nofree(Pointer tab_ptr, int[] nb_ptr, Pointer elem);
 
 /**
  * Add an element of size elem_size to a dynamic array.
@@ -812,7 +840,7 @@ public static native void av_dynarray_add(Pointer tab_ptr, int[] nb_ptr, Pointer
  *                  the new added element is not filled.
  * @return          pointer to the data of the element to copy in the new allocated space.
  *                  If NULL, the new allocated space is left uninitialized."
- * @see av_dynarray_add()
+ * @see av_dynarray_add(), av_dynarray_add_nofree()
  */
 public static native Pointer av_dynarray2_add(@Cast("void**") PointerPointer tab_ptr, IntPointer nb_ptr, @Cast("size_t") long elem_size,
                        @Cast("const uint8_t*") BytePointer elem_data);
@@ -1039,7 +1067,7 @@ public static native long av_rescale_delta(@ByVal AVRational in_tb, long in_ts, 
 /**
  * Add a value to a timestamp.
  *
- * This function gurantees that when the same value is repeatly added that
+ * This function guarantees that when the same value is repeatly added that
  * no accumulation of rounding errors occurs.
  *
  * @param ts Input timestamp
@@ -1266,8 +1294,14 @@ public static final int
     AV_CLASS_CATEGORY_BITSTREAM_FILTER = 8,
     AV_CLASS_CATEGORY_SWSCALER = 9,
     AV_CLASS_CATEGORY_SWRESAMPLER = 10,
+    AV_CLASS_CATEGORY_DEVICE_VIDEO_OUTPUT = 40,
+    AV_CLASS_CATEGORY_DEVICE_VIDEO_INPUT = 41,
+    AV_CLASS_CATEGORY_DEVICE_AUDIO_OUTPUT = 42,
+    AV_CLASS_CATEGORY_DEVICE_AUDIO_INPUT = 43,
+    AV_CLASS_CATEGORY_DEVICE_OUTPUT = 44,
+    AV_CLASS_CATEGORY_DEVICE_INPUT = 45,
     /** not part of ABI/API */
-    AV_CLASS_CATEGORY_NB = 11;
+    AV_CLASS_CATEGORY_NB = 46;
 
 /**
  * Describe the class of an AVClass context structure. That is an
@@ -1458,6 +1492,16 @@ public static final int AV_LOG_MAX_OFFSET = (AV_LOG_DEBUG - AV_LOG_QUIET);
  */
 
 /**
+ * Sets additional colors for extended debugging sessions.
+ * @code
+   av_log(ctx, AV_LOG_DEBUG|AV_LOG_C(134), "Message in purple\n");
+   @endcode
+ * Requires 256color terminal support. Uses outside debugging is not
+ * recommended.
+ */
+// #define AV_LOG_C(x) (x << 8)
+
+/**
  * Send the specified message to the log if the level is less than or equal
  * to the current av_log_level. By default, all logging messages are sent to
  * stderr. This behavior can be altered by setting a different logging callback
@@ -1606,7 +1650,17 @@ public static native void av_log_format_line(Pointer ptr, int level, String fmt,
  * call av_log(NULL, AV_LOG_QUIET, "%s", ""); at the end
  */
 public static final int AV_LOG_SKIP_REPEATED = 1;
+
+/**
+ * Include the log severity in messages originating from codecs.
+ *
+ * Results in messages such as:
+ * [rawvideo @ 0xDEADBEEF] [error] encode did not produce valid pts
+ */
+public static final int AV_LOG_PRINT_LEVEL = 2;
+
 public static native void av_log_set_flags(int arg);
+public static native int av_log_get_flags();
 
 /**
  * @}
@@ -1949,771 +2003,6 @@ public static native AVBufferRef av_buffer_pool_get(AVBufferPool pool);
 // #endif /* AVUTIL_BUFFER_H */
 
 
-// Parsed from <libavutil/frame.h>
-
-/*
- *
- * This file is part of FFmpeg.
- *
- * FFmpeg is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * FFmpeg is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with FFmpeg; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- */
-
-/**
- * @file
- * @ingroup lavu_frame
- * reference-counted frame API
- */
-
-// #ifndef AVUTIL_FRAME_H
-// #define AVUTIL_FRAME_H
-
-// #include <stdint.h>
-
-// #include "avutil.h"
-// #include "buffer.h"
-// #include "dict.h"
-// #include "rational.h"
-// #include "samplefmt.h"
-// #include "version.h"
-
-
-/** enum AVColorSpace */
-public static final int
-    AVCOL_SPC_RGB         = 0,
-    /** also ITU-R BT1361 / IEC 61966-2-4 xvYCC709 / SMPTE RP177 Annex B */
-    AVCOL_SPC_BT709       = 1,
-    AVCOL_SPC_UNSPECIFIED = 2,
-    AVCOL_SPC_FCC         = 4,
-    /** also ITU-R BT601-6 625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM / IEC 61966-2-4 xvYCC601 */
-    AVCOL_SPC_BT470BG     = 5,
-    /** also ITU-R BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC / functionally identical to above */
-    AVCOL_SPC_SMPTE170M   = 6,
-    AVCOL_SPC_SMPTE240M   = 7,
-    /** Used by Dirac / VC-2 and H.264 FRext, see ITU-T SG16 */
-    AVCOL_SPC_YCOCG       = 8,
-    /** ITU-R BT2020 non-constant luminance system */
-    AVCOL_SPC_BT2020_NCL  = 9,
-    /** ITU-R BT2020 constant luminance system */
-    AVCOL_SPC_BT2020_CL   = 10,
-    /** Not part of ABI */
-    AVCOL_SPC_NB = 11;
-public static final int AVCOL_SPC_YCGCO = AVCOL_SPC_YCOCG;
-
-/** enum AVColorRange */
-public static final int
-    AVCOL_RANGE_UNSPECIFIED = 0,
-    /** the normal 219*2^(n-8) "MPEG" YUV ranges */
-    AVCOL_RANGE_MPEG        = 1,
-    /** the normal     2^n-1   "JPEG" YUV ranges */
-    AVCOL_RANGE_JPEG        = 2,
-    /** Not part of ABI */
-    AVCOL_RANGE_NB = 3;
-
-
-/**
- * @defgroup lavu_frame AVFrame
- * @ingroup lavu_data
- *
- * @{
- * AVFrame is an abstraction for reference-counted raw multimedia data.
- */
-
-/** enum AVFrameSideDataType */
-public static final int
-    /**
-     * The data is the AVPanScan struct defined in libavcodec.
-     */
-    AV_FRAME_DATA_PANSCAN = 0,
-    /**
-     * ATSC A53 Part 4 Closed Captions.
-     * A53 CC bitstream is stored as uint8_t in AVFrameSideData.data.
-     * The number of bytes of CC data is AVFrameSideData.size.
-     */
-    AV_FRAME_DATA_A53_CC = 1,
-    /**
-     * Stereoscopic 3d metadata.
-     * The data is the AVStereo3D struct defined in libavutil/stereo3d.h.
-     */
-    AV_FRAME_DATA_STEREO3D = 2,
-    /**
-     * The data is the AVMatrixEncoding enum defined in libavutil/channel_layout.h.
-     */
-    AV_FRAME_DATA_MATRIXENCODING = 3,
-    /**
-     * Metadata relevant to a downmix procedure.
-     * The data is the AVDownmixInfo struct defined in libavutil/downmix_info.h.
-     */
-    AV_FRAME_DATA_DOWNMIX_INFO = 4;
-
-public static class AVFrameSideData extends Pointer {
-    static { Loader.load(); }
-    public AVFrameSideData() { allocate(); }
-    public AVFrameSideData(int size) { allocateArray(size); }
-    public AVFrameSideData(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVFrameSideData position(int position) {
-        return (AVFrameSideData)super.position(position);
-    }
-
-    public native @Cast("AVFrameSideDataType") int type(); public native AVFrameSideData type(int type);
-    public native @Cast("uint8_t*") BytePointer data(); public native AVFrameSideData data(BytePointer data);
-    public native int size(); public native AVFrameSideData size(int size);
-    public native AVDictionary metadata(); public native AVFrameSideData metadata(AVDictionary metadata);
-}
-
-/**
- * This structure describes decoded (raw) audio or video data.
- *
- * AVFrame must be allocated using av_frame_alloc(). Note that this only
- * allocates the AVFrame itself, the buffers for the data must be managed
- * through other means (see below).
- * AVFrame must be freed with av_frame_free().
- *
- * AVFrame is typically allocated once and then reused multiple times to hold
- * different data (e.g. a single AVFrame to hold frames received from a
- * decoder). In such a case, av_frame_unref() will free any references held by
- * the frame and reset it to its original clean state before it
- * is reused again.
- *
- * The data described by an AVFrame is usually reference counted through the
- * AVBuffer API. The underlying buffer references are stored in AVFrame.buf /
- * AVFrame.extended_buf. An AVFrame is considered to be reference counted if at
- * least one reference is set, i.e. if AVFrame.buf[0] != NULL. In such a case,
- * every single data plane must be contained in one of the buffers in
- * AVFrame.buf or AVFrame.extended_buf.
- * There may be a single buffer for all the data, or one separate buffer for
- * each plane, or anything in between.
- *
- * sizeof(AVFrame) is not a part of the public ABI, so new fields may be added
- * to the end with a minor bump.
- * Similarly fields that are marked as to be only accessed by
- * av_opt_ptr() can be reordered. This allows 2 forks to add fields
- * without breaking compatibility with each other.
- */
-public static class AVFrame extends Pointer {
-    static { Loader.load(); }
-    public AVFrame() { allocate(); }
-    public AVFrame(int size) { allocateArray(size); }
-    public AVFrame(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVFrame position(int position) {
-        return (AVFrame)super.position(position);
-    }
-
-public static final int AV_NUM_DATA_POINTERS = 8;
-    /**
-     * pointer to the picture/channel planes.
-     * This might be different from the first allocated byte
-     *
-     * Some decoders access areas outside 0,0 - width,height, please
-     * see avcodec_align_dimensions2(). Some filters and swscale can read
-     * up to 16 bytes beyond the planes, if these filters are to be used,
-     * then 16 extra bytes must be allocated.
-     */
-    public native @Cast("uint8_t*") BytePointer data(int i); public native AVFrame data(int i, BytePointer data);
-    @MemberGetter public native @Cast("uint8_t**") PointerPointer data();
-
-    /**
-     * For video, size in bytes of each picture line.
-     * For audio, size in bytes of each plane.
-     *
-     * For audio, only linesize[0] may be set. For planar audio, each channel
-     * plane must be the same size.
-     *
-     * For video the linesizes should be multiplies of the CPUs alignment
-     * preference, this is 16 or 32 for modern desktop CPUs.
-     * Some code requires such alignment other code can be slower without
-     * correct alignment, for yet other it makes no difference.
-     *
-     * @note The linesize may be larger than the size of usable data -- there
-     * may be extra padding present for performance reasons.
-     */
-    public native int linesize(int i); public native AVFrame linesize(int i, int linesize);
-    @MemberGetter public native IntPointer linesize();
-
-    /**
-     * pointers to the data planes/channels.
-     *
-     * For video, this should simply point to data[].
-     *
-     * For planar audio, each channel has a separate data pointer, and
-     * linesize[0] contains the size of each channel buffer.
-     * For packed audio, there is just one data pointer, and linesize[0]
-     * contains the total size of the buffer for all channels.
-     *
-     * Note: Both data and extended_data should always be set in a valid frame,
-     * but for planar audio with more channels that can fit in data,
-     * extended_data must be used in order to access all channels.
-     */
-    public native @Cast("uint8_t*") BytePointer extended_data(int i); public native AVFrame extended_data(int i, BytePointer extended_data);
-    @MemberGetter public native @Cast("uint8_t**") PointerPointer extended_data();
-
-    /**
-     * width and height of the video frame
-     */
-    public native int width(); public native AVFrame width(int width);
-    public native int height(); public native AVFrame height(int height);
-
-    /**
-     * number of audio samples (per channel) described by this frame
-     */
-    public native int nb_samples(); public native AVFrame nb_samples(int nb_samples);
-
-    /**
-     * format of the frame, -1 if unknown or unset
-     * Values correspond to enum AVPixelFormat for video frames,
-     * enum AVSampleFormat for audio)
-     */
-    public native int format(); public native AVFrame format(int format);
-
-    /**
-     * 1 -> keyframe, 0-> not
-     */
-    public native int key_frame(); public native AVFrame key_frame(int key_frame);
-
-    /**
-     * Picture type of the frame.
-     */
-    public native @Cast("AVPictureType") int pict_type(); public native AVFrame pict_type(int pict_type);
-
-// #if FF_API_AVFRAME_LAVC
-    public native @Cast("uint8_t*") @Deprecated BytePointer base(int i); public native AVFrame base(int i, BytePointer base);
-    @MemberGetter public native @Cast("uint8_t**") @Deprecated PointerPointer base();
-// #endif
-
-    /**
-     * Sample aspect ratio for the video frame, 0/1 if unknown/unspecified.
-     */
-    public native @ByRef AVRational sample_aspect_ratio(); public native AVFrame sample_aspect_ratio(AVRational sample_aspect_ratio);
-
-    /**
-     * Presentation timestamp in time_base units (time when frame should be shown to user).
-     */
-    public native long pts(); public native AVFrame pts(long pts);
-
-    /**
-     * PTS copied from the AVPacket that was decoded to produce this frame.
-     */
-    public native long pkt_pts(); public native AVFrame pkt_pts(long pkt_pts);
-
-    /**
-     * DTS copied from the AVPacket that triggered returning this frame. (if frame threading isnt used)
-     * This is also the Presentation time of this AVFrame calculated from
-     * only AVPacket.dts values without pts values.
-     */
-    public native long pkt_dts(); public native AVFrame pkt_dts(long pkt_dts);
-
-    /**
-     * picture number in bitstream order
-     */
-    public native int coded_picture_number(); public native AVFrame coded_picture_number(int coded_picture_number);
-    /**
-     * picture number in display order
-     */
-    public native int display_picture_number(); public native AVFrame display_picture_number(int display_picture_number);
-
-    /**
-     * quality (between 1 (good) and FF_LAMBDA_MAX (bad))
-     */
-    public native int quality(); public native AVFrame quality(int quality);
-
-// #if FF_API_AVFRAME_LAVC
-    public native @Deprecated int reference(); public native AVFrame reference(int reference);
-
-    /**
-     * QP table
-     */
-    public native @Deprecated BytePointer qscale_table(); public native AVFrame qscale_table(BytePointer qscale_table);
-    /**
-     * QP store stride
-     */
-    public native @Deprecated int qstride(); public native AVFrame qstride(int qstride);
-
-    public native @Deprecated int qscale_type(); public native AVFrame qscale_type(int qscale_type);
-
-    /**
-     * mbskip_table[mb]>=1 if MB didn't change
-     * stride= mb_width = (width+15)>>4
-     */
-    public native @Cast("uint8_t*") @Deprecated BytePointer mbskip_table(); public native AVFrame mbskip_table(BytePointer mbskip_table);
-
-    /**
-     * motion vector table
-     * @code
-     * example:
-     * int mv_sample_log2= 4 - motion_subsample_log2;
-     * int mb_width= (width+15)>>4;
-     * int mv_stride= (mb_width << mv_sample_log2) + 1;
-     * motion_val[direction][x + y*mv_stride][0->mv_x, 1->mv_y];
-     * @endcode
-     */
-    public native @Deprecated short motion_val(int i, int j, int k); public native AVFrame motion_val(int i, int j, int k, short motion_val);
-    @MemberGetter public native @Cast("int16_t(*)[2]") @Deprecated ShortPointer motion_val();
-
-    /**
-     * macroblock type table
-     * mb_type_base + mb_width + 2
-     */
-    public native @Cast("uint32_t*") @Deprecated IntPointer mb_type(); public native AVFrame mb_type(IntPointer mb_type);
-
-    /**
-     * DCT coefficients
-     */
-    public native @Deprecated ShortPointer dct_coeff(); public native AVFrame dct_coeff(ShortPointer dct_coeff);
-
-    /**
-     * motion reference frame index
-     * the order in which these are stored can depend on the codec.
-     */
-    public native @Deprecated BytePointer ref_index(int i); public native AVFrame ref_index(int i, BytePointer ref_index);
-    @MemberGetter public native @Cast("int8_t**") @Deprecated PointerPointer ref_index();
-// #endif
-
-    /**
-     * for some private data of the user
-     */
-    public native Pointer opaque(); public native AVFrame opaque(Pointer opaque);
-
-    /**
-     * error
-     */
-    public native @Cast("uint64_t") long error(int i); public native AVFrame error(int i, long error);
-    @MemberGetter public native @Cast("uint64_t*") LongPointer error();
-
-// #if FF_API_AVFRAME_LAVC
-    public native @Deprecated int type(); public native AVFrame type(int type);
-// #endif
-
-    /**
-     * When decoding, this signals how much the picture must be delayed.
-     * extra_delay = repeat_pict / (2*fps)
-     */
-    public native int repeat_pict(); public native AVFrame repeat_pict(int repeat_pict);
-
-    /**
-     * The content of the picture is interlaced.
-     */
-    public native int interlaced_frame(); public native AVFrame interlaced_frame(int interlaced_frame);
-
-    /**
-     * If the content is interlaced, is top field displayed first.
-     */
-    public native int top_field_first(); public native AVFrame top_field_first(int top_field_first);
-
-    /**
-     * Tell user application that palette has changed from previous frame.
-     */
-    public native int palette_has_changed(); public native AVFrame palette_has_changed(int palette_has_changed);
-
-// #if FF_API_AVFRAME_LAVC
-    public native @Deprecated int buffer_hints(); public native AVFrame buffer_hints(int buffer_hints);
-
-    /**
-     * Pan scan.
-     */
-    public native @Cast("AVPanScan*") @Deprecated Pointer pan_scan(); public native AVFrame pan_scan(Pointer pan_scan);
-// #endif
-
-    /**
-     * reordered opaque 64bit (generally an integer or a double precision float
-     * PTS but can be anything).
-     * The user sets AVCodecContext.reordered_opaque to represent the input at
-     * that time,
-     * the decoder reorders values as needed and sets AVFrame.reordered_opaque
-     * to exactly one of the values provided by the user through AVCodecContext.reordered_opaque
-     * @deprecated in favor of pkt_pts
-     */
-    public native long reordered_opaque(); public native AVFrame reordered_opaque(long reordered_opaque);
-
-// #if FF_API_AVFRAME_LAVC
-    /**
-     * @deprecated this field is unused
-     */
-    public native @Deprecated Pointer hwaccel_picture_private(); public native AVFrame hwaccel_picture_private(Pointer hwaccel_picture_private);
-
-    public native @Cast("AVCodecContext*") @Deprecated Pointer owner(); public native AVFrame owner(Pointer owner);
-    public native @Deprecated Pointer thread_opaque(); public native AVFrame thread_opaque(Pointer thread_opaque);
-
-    /**
-     * log2 of the size of the block which a single vector in motion_val represents:
-     * (4->16x16, 3->8x8, 2-> 4x4, 1-> 2x2)
-     */
-    public native @Cast("uint8_t") @Deprecated byte motion_subsample_log2(); public native AVFrame motion_subsample_log2(byte motion_subsample_log2);
-// #endif
-
-    /**
-     * Sample rate of the audio data.
-     */
-    public native int sample_rate(); public native AVFrame sample_rate(int sample_rate);
-
-    /**
-     * Channel layout of the audio data.
-     */
-    public native @Cast("uint64_t") long channel_layout(); public native AVFrame channel_layout(long channel_layout);
-
-    /**
-     * AVBuffer references backing the data for this frame. If all elements of
-     * this array are NULL, then this frame is not reference counted.
-     *
-     * There may be at most one AVBuffer per data plane, so for video this array
-     * always contains all the references. For planar audio with more than
-     * AV_NUM_DATA_POINTERS channels, there may be more buffers than can fit in
-     * this array. Then the extra AVBufferRef pointers are stored in the
-     * extended_buf array.
-     */
-    public native AVBufferRef buf(int i); public native AVFrame buf(int i, AVBufferRef buf);
-    @MemberGetter public native @Cast("AVBufferRef**") PointerPointer buf();
-
-    /**
-     * For planar audio which requires more than AV_NUM_DATA_POINTERS
-     * AVBufferRef pointers, this array will hold all the references which
-     * cannot fit into AVFrame.buf.
-     *
-     * Note that this is different from AVFrame.extended_data, which always
-     * contains all the pointers. This array only contains the extra pointers,
-     * which cannot fit into AVFrame.buf.
-     *
-     * This array is always allocated using av_malloc() by whoever constructs
-     * the frame. It is freed in av_frame_unref().
-     */
-    public native AVBufferRef extended_buf(int i); public native AVFrame extended_buf(int i, AVBufferRef extended_buf);
-    @MemberGetter public native @Cast("AVBufferRef**") PointerPointer extended_buf();
-    /**
-     * Number of elements in extended_buf.
-     */
-    public native int nb_extended_buf(); public native AVFrame nb_extended_buf(int nb_extended_buf);
-
-    public native AVFrameSideData side_data(int i); public native AVFrame side_data(int i, AVFrameSideData side_data);
-    @MemberGetter public native @Cast("AVFrameSideData**") PointerPointer side_data();
-    public native int nb_side_data(); public native AVFrame nb_side_data(int nb_side_data);
-
-/**
- * @defgroup lavu_frame_flags AV_FRAME_FLAGS
- * Flags describing additional frame properties.
- *
- * @{
- */
-
-/**
- * The frame data may be corrupted, e.g. due to decoding errors.
- */
-public static final int AV_FRAME_FLAG_CORRUPT =       (1 << 0);
-/**
- * @}
- */
-
-    /**
-     * Frame flags, a combination of @ref lavu_frame_flags
-     */
-    public native int flags(); public native AVFrame flags(int flags);
-
-    /**
-     * frame timestamp estimated using various heuristics, in stream time base
-     * Code outside libavcodec should access this field using:
-     * av_frame_get_best_effort_timestamp(frame)
-     * - encoding: unused
-     * - decoding: set by libavcodec, read by user.
-     */
-    public native long best_effort_timestamp(); public native AVFrame best_effort_timestamp(long best_effort_timestamp);
-
-    /**
-     * reordered pos from the last AVPacket that has been input into the decoder
-     * Code outside libavcodec should access this field using:
-     * av_frame_get_pkt_pos(frame)
-     * - encoding: unused
-     * - decoding: Read by user.
-     */
-    public native long pkt_pos(); public native AVFrame pkt_pos(long pkt_pos);
-
-    /**
-     * duration of the corresponding packet, expressed in
-     * AVStream->time_base units, 0 if unknown.
-     * Code outside libavcodec should access this field using:
-     * av_frame_get_pkt_duration(frame)
-     * - encoding: unused
-     * - decoding: Read by user.
-     */
-    public native long pkt_duration(); public native AVFrame pkt_duration(long pkt_duration);
-
-    /**
-     * metadata.
-     * Code outside libavcodec should access this field using:
-     * av_frame_get_metadata(frame)
-     * - encoding: Set by user.
-     * - decoding: Set by libavcodec.
-     */
-    public native AVDictionary metadata(); public native AVFrame metadata(AVDictionary metadata);
-
-    /**
-     * decode error flags of the frame, set to a combination of
-     * FF_DECODE_ERROR_xxx flags if the decoder produced a frame, but there
-     * were errors during the decoding.
-     * Code outside libavcodec should access this field using:
-     * av_frame_get_decode_error_flags(frame)
-     * - encoding: unused
-     * - decoding: set by libavcodec, read by user.
-     */
-    public native int decode_error_flags(); public native AVFrame decode_error_flags(int decode_error_flags);
-public static final int FF_DECODE_ERROR_INVALID_BITSTREAM =   1;
-public static final int FF_DECODE_ERROR_MISSING_REFERENCE =   2;
-
-    /**
-     * number of audio channels, only used for audio.
-     * Code outside libavcodec should access this field using:
-     * av_frame_get_channels(frame)
-     * - encoding: unused
-     * - decoding: Read by user.
-     */
-    public native int channels(); public native AVFrame channels(int channels);
-
-    /**
-     * size of the corresponding packet containing the compressed
-     * frame. It must be accessed using av_frame_get_pkt_size() and
-     * av_frame_set_pkt_size().
-     * It is set to a negative value if unknown.
-     * - encoding: unused
-     * - decoding: set by libavcodec, read by user.
-     */
-    public native int pkt_size(); public native AVFrame pkt_size(int pkt_size);
-
-    /**
-     * YUV colorspace type.
-     * It must be accessed using av_frame_get_colorspace() and
-     * av_frame_set_colorspace().
-     * - encoding: Set by user
-     * - decoding: Set by libavcodec
-     */
-    public native @Cast("AVColorSpace") int colorspace(); public native AVFrame colorspace(int colorspace);
-
-    /**
-     * MPEG vs JPEG YUV range.
-     * It must be accessed using av_frame_get_color_range() and
-     * av_frame_set_color_range().
-     * - encoding: Set by user
-     * - decoding: Set by libavcodec
-     */
-    public native @Cast("AVColorRange") int color_range(); public native AVFrame color_range(int color_range);
-
-
-    /**
-     * Not to be accessed directly from outside libavutil
-     */
-    public native AVBufferRef qp_table_buf(); public native AVFrame qp_table_buf(AVBufferRef qp_table_buf);
-}
-
-/**
- * Accessors for some AVFrame fields.
- * The position of these field in the structure is not part of the ABI,
- * they should not be accessed directly outside libavcodec.
- */
-public static native long av_frame_get_best_effort_timestamp(@Const AVFrame frame);
-public static native void av_frame_set_best_effort_timestamp(AVFrame frame, long val);
-public static native long av_frame_get_pkt_duration(@Const AVFrame frame);
-public static native void av_frame_set_pkt_duration(AVFrame frame, long val);
-public static native long av_frame_get_pkt_pos(@Const AVFrame frame);
-public static native void av_frame_set_pkt_pos(AVFrame frame, long val);
-public static native long av_frame_get_channel_layout(@Const AVFrame frame);
-public static native void av_frame_set_channel_layout(AVFrame frame, long val);
-public static native int av_frame_get_channels(@Const AVFrame frame);
-public static native void av_frame_set_channels(AVFrame frame, int val);
-public static native int av_frame_get_sample_rate(@Const AVFrame frame);
-public static native void av_frame_set_sample_rate(AVFrame frame, int val);
-public static native AVDictionary av_frame_get_metadata(@Const AVFrame frame);
-public static native void av_frame_set_metadata(AVFrame frame, AVDictionary val);
-public static native int av_frame_get_decode_error_flags(@Const AVFrame frame);
-public static native void av_frame_set_decode_error_flags(AVFrame frame, int val);
-public static native int av_frame_get_pkt_size(@Const AVFrame frame);
-public static native void av_frame_set_pkt_size(AVFrame frame, int val);
-public static native @Cast("AVDictionary**") PointerPointer avpriv_frame_get_metadatap(AVFrame frame);
-public static native BytePointer av_frame_get_qp_table(AVFrame f, IntPointer stride, IntPointer type);
-public static native ByteBuffer av_frame_get_qp_table(AVFrame f, IntBuffer stride, IntBuffer type);
-public static native byte[] av_frame_get_qp_table(AVFrame f, int[] stride, int[] type);
-public static native int av_frame_set_qp_table(AVFrame f, AVBufferRef buf, int stride, int type);
-public static native @Cast("AVColorSpace") int av_frame_get_colorspace(@Const AVFrame frame);
-public static native void av_frame_set_colorspace(AVFrame frame, @Cast("AVColorSpace") int val);
-public static native @Cast("AVColorRange") int av_frame_get_color_range(@Const AVFrame frame);
-public static native void av_frame_set_color_range(AVFrame frame, @Cast("AVColorRange") int val);
-
-/**
- * Get the name of a colorspace.
- * @return a static string identifying the colorspace; can be NULL.
- */
-public static native @Cast("const char*") BytePointer av_get_colorspace_name(@Cast("AVColorSpace") int val);
-
-/**
- * Allocate an AVFrame and set its fields to default values.  The resulting
- * struct must be freed using av_frame_free().
- *
- * @return An AVFrame filled with default values or NULL on failure.
- *
- * @note this only allocates the AVFrame itself, not the data buffers. Those
- * must be allocated through other means, e.g. with av_frame_get_buffer() or
- * manually.
- */
-public static native AVFrame av_frame_alloc();
-
-/**
- * Free the frame and any dynamically allocated objects in it,
- * e.g. extended_data. If the frame is reference counted, it will be
- * unreferenced first.
- *
- * @param frame frame to be freed. The pointer will be set to NULL.
- */
-public static native void av_frame_free(@Cast("AVFrame**") PointerPointer frame);
-public static native void av_frame_free(@ByPtrPtr AVFrame frame);
-
-/**
- * Set up a new reference to the data described by the source frame.
- *
- * Copy frame properties from src to dst and create a new reference for each
- * AVBufferRef from src.
- *
- * If src is not reference counted, new buffers are allocated and the data is
- * copied.
- *
- * @return 0 on success, a negative AVERROR on error
- */
-public static native int av_frame_ref(AVFrame dst, @Const AVFrame src);
-
-/**
- * Create a new frame that references the same data as src.
- *
- * This is a shortcut for av_frame_alloc()+av_frame_ref().
- *
- * @return newly created AVFrame on success, NULL on error.
- */
-public static native AVFrame av_frame_clone(@Const AVFrame src);
-
-/**
- * Unreference all the buffers referenced by frame and reset the frame fields.
- */
-public static native void av_frame_unref(AVFrame frame);
-
-/**
- * Move everythnig contained in src to dst and reset src.
- */
-public static native void av_frame_move_ref(AVFrame dst, AVFrame src);
-
-/**
- * Allocate new buffer(s) for audio or video data.
- *
- * The following fields must be set on frame before calling this function:
- * - format (pixel format for video, sample format for audio)
- * - width and height for video
- * - nb_samples and channel_layout for audio
- *
- * This function will fill AVFrame.data and AVFrame.buf arrays and, if
- * necessary, allocate and fill AVFrame.extended_data and AVFrame.extended_buf.
- * For planar formats, one buffer will be allocated for each plane.
- *
- * @param frame frame in which to store the new buffers.
- * @param align required buffer size alignment
- *
- * @return 0 on success, a negative AVERROR on error.
- */
-public static native int av_frame_get_buffer(AVFrame frame, int align);
-
-/**
- * Check if the frame data is writable.
- *
- * @return A positive value if the frame data is writable (which is true if and
- * only if each of the underlying buffers has only one reference, namely the one
- * stored in this frame). Return 0 otherwise.
- *
- * If 1 is returned the answer is valid until av_buffer_ref() is called on any
- * of the underlying AVBufferRefs (e.g. through av_frame_ref() or directly).
- *
- * @see av_frame_make_writable(), av_buffer_is_writable()
- */
-public static native int av_frame_is_writable(AVFrame frame);
-
-/**
- * Ensure that the frame data is writable, avoiding data copy if possible.
- *
- * Do nothing if the frame is writable, allocate new buffers and copy the data
- * if it is not.
- *
- * @return 0 on success, a negative AVERROR on error.
- *
- * @see av_frame_is_writable(), av_buffer_is_writable(),
- * av_buffer_make_writable()
- */
-public static native int av_frame_make_writable(AVFrame frame);
-
-/**
- * Copy the frame data from src to dst.
- *
- * This function does not allocate anything, dst must be already initialized and
- * allocated with the same parameters as src.
- *
- * This function only copies the frame data (i.e. the contents of the data /
- * extended data arrays), not any other properties.
- *
- * @return >= 0 on success, a negative AVERROR on error.
- */
-public static native int av_frame_copy(AVFrame dst, @Const AVFrame src);
-
-/**
- * Copy only "metadata" fields from src to dst.
- *
- * Metadata for the purpose of this function are those fields that do not affect
- * the data layout in the buffers.  E.g. pts, sample rate (for audio) or sample
- * aspect ratio (for video), but not width/height or channel layout.
- * Side data is also copied.
- */
-public static native int av_frame_copy_props(AVFrame dst, @Const AVFrame src);
-
-/**
- * Get the buffer reference a given data plane is stored in.
- *
- * @param plane index of the data plane of interest in frame->extended_data.
- *
- * @return the buffer reference that contains the plane or NULL if the input
- * frame is not valid.
- */
-public static native AVBufferRef av_frame_get_plane_buffer(AVFrame frame, int plane);
-
-/**
- * Add a new side data to a frame.
- *
- * @param frame a frame to which the side data should be added
- * @param type type of the added side data
- * @param size size of the side data
- *
- * @return newly added side data on success, NULL on error
- */
-public static native AVFrameSideData av_frame_new_side_data(AVFrame frame,
-                                        @Cast("AVFrameSideDataType") int type,
-                                        int size);
-
-/**
- * @return a pointer to the side data of a given type on success, NULL if there
- * is no side data with such type in this frame.
- */
-public static native AVFrameSideData av_frame_get_side_data(@Const AVFrame frame,
-                                        @Cast("AVFrameSideDataType") int type);
-
-/**
- * @}
- */
-
-// #endif /* AVUTIL_FRAME_H */
-
-
 // Parsed from <libavutil/pixfmt.h>
 
 /*
@@ -3047,6 +2336,27 @@ public static final int /* FF_API_XVMC */
     /** interleaved chroma YUV 4:2:2, 20bpp, (1 Cr & Cb sample per 2x1 Y samples), big-endian */
     AV_PIX_FMT_NV20BE = 114,
 
+    /**
+     * duplicated pixel formats for compatibility with libav.
+     * FFmpeg supports these formats since Sat Sep 24 06:01:45 2011 +0200 (commits 9569a3c9f41387a8c7d1ce97d8693520477a66c3)
+     * also see Fri Nov 25 01:38:21 2011 +0100 92afb431621c79155fcb7171d26f137eb1bee028
+     * Libav added them Sun Mar 16 23:05:47 2014 +0100 with incompatible values (commit 1481d24c3a0abf81e1d7a514547bd5305232be30)
+     */
+    /** packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian */
+    AV_PIX_FMT_RGBA64BE_LIBAV = 115,
+    /** packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as little-endian */
+    AV_PIX_FMT_RGBA64LE_LIBAV = 116,
+    /** packed RGBA 16:16:16:16, 64bpp, 16B, 16G, 16R, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian */
+    AV_PIX_FMT_BGRA64BE_LIBAV = 117,
+    /** packed RGBA 16:16:16:16, 64bpp, 16B, 16G, 16R, 16A, the 2-byte value for each R/G/B/A component is stored as little-endian */
+    AV_PIX_FMT_BGRA64LE_LIBAV = 118,
+
+    /** packed YUV 4:2:2, 16bpp, Y0 Cr Y1 Cb */
+    AV_PIX_FMT_YVYU422 = 119,
+
+    /** HW acceleration through VDA, data[3] contains a CVPixelBufferRef */
+    AV_PIX_FMT_VDA = 120,
+
 // #ifndef AV_PIX_FMT_ABI_GIT_MASTER
     /** packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian */
     AV_PIX_FMT_RGBA64BE= 0x123,
@@ -3181,6 +2491,8 @@ public static native @MemberGetter int AV_PIX_FMT_RGB555();
 public static final int AV_PIX_FMT_RGB555 = AV_PIX_FMT_RGB555();
 public static native @MemberGetter int AV_PIX_FMT_RGB444();
 public static final int AV_PIX_FMT_RGB444 = AV_PIX_FMT_RGB444();
+public static native @MemberGetter int AV_PIX_FMT_RGBA64();
+public static final int AV_PIX_FMT_RGBA64 = AV_PIX_FMT_RGBA64();
 public static native @MemberGetter int AV_PIX_FMT_BGR48();
 public static final int AV_PIX_FMT_BGR48 = AV_PIX_FMT_BGR48();
 public static native @MemberGetter int AV_PIX_FMT_BGR565();
@@ -3189,6 +2501,8 @@ public static native @MemberGetter int AV_PIX_FMT_BGR555();
 public static final int AV_PIX_FMT_BGR555 = AV_PIX_FMT_BGR555();
 public static native @MemberGetter int AV_PIX_FMT_BGR444();
 public static final int AV_PIX_FMT_BGR444 = AV_PIX_FMT_BGR444();
+public static native @MemberGetter int AV_PIX_FMT_BGRA64();
+public static final int AV_PIX_FMT_BGRA64 = AV_PIX_FMT_BGRA64();
 
 public static native @MemberGetter int AV_PIX_FMT_YUV420P9();
 public static final int AV_PIX_FMT_YUV420P9 = AV_PIX_FMT_YUV420P9();
@@ -3221,10 +2535,6 @@ public static final int AV_PIX_FMT_YUV422P16 = AV_PIX_FMT_YUV422P16();
 public static native @MemberGetter int AV_PIX_FMT_YUV444P16();
 public static final int AV_PIX_FMT_YUV444P16 = AV_PIX_FMT_YUV444P16();
 
-public static native @MemberGetter int AV_PIX_FMT_RGBA64();
-public static final int AV_PIX_FMT_RGBA64 = AV_PIX_FMT_RGBA64();
-public static native @MemberGetter int AV_PIX_FMT_BGRA64();
-public static final int AV_PIX_FMT_BGRA64 = AV_PIX_FMT_BGRA64();
 public static native @MemberGetter int AV_PIX_FMT_GBRP9();
 public static final int AV_PIX_FMT_GBRP9 = AV_PIX_FMT_GBRP9();
 public static native @MemberGetter int AV_PIX_FMT_GBRP10();
@@ -3271,6 +2581,7 @@ public static native @MemberGetter int AV_PIX_FMT_XYZ12();
 public static final int AV_PIX_FMT_XYZ12 = AV_PIX_FMT_XYZ12();
 public static native @MemberGetter int AV_PIX_FMT_NV20();
 public static final int AV_PIX_FMT_NV20 = AV_PIX_FMT_NV20();
+
 
 // #if FF_API_PIX_FMT
 // #define PixelFormat AVPixelFormat
@@ -3322,7 +2633,884 @@ public static final int PIX_FMT_GBRP14 = AV_PIX_FMT_GBRP14;
 public static final int PIX_FMT_GBRP16 = AV_PIX_FMT_GBRP16;
 // #endif
 
+/**
+  * Chromaticity coordinates of the source primaries.
+  */
+/** enum AVColorPrimaries */
+public static final int
+    /** also ITU-R BT1361 / IEC 61966-2-4 / SMPTE RP177 Annex B */
+    AVCOL_PRI_BT709       = 1,
+    AVCOL_PRI_UNSPECIFIED = 2,
+    AVCOL_PRI_RESERVED    = 3,
+    AVCOL_PRI_BT470M      = 4,
+    /** also ITU-R BT601-6 625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM */
+    AVCOL_PRI_BT470BG     = 5,
+    /** also ITU-R BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC */
+    AVCOL_PRI_SMPTE170M   = 6,
+    /** functionally identical to above */
+    AVCOL_PRI_SMPTE240M   = 7,
+    AVCOL_PRI_FILM        = 8,
+    /** ITU-R BT2020 */
+    AVCOL_PRI_BT2020      = 9,
+    /** Not part of ABI */
+    AVCOL_PRI_NB = 10;
+
+/**
+ * Color Transfer Characteristic.
+ */
+/** enum AVColorTransferCharacteristic */
+public static final int
+    /** also ITU-R BT1361 */
+    AVCOL_TRC_BT709        = 1,
+    AVCOL_TRC_UNSPECIFIED  = 2,
+    AVCOL_TRC_RESERVED     = 3,
+    /** also ITU-R BT470M / ITU-R BT1700 625 PAL & SECAM */
+    AVCOL_TRC_GAMMA22      = 4,
+    /** also ITU-R BT470BG */
+    AVCOL_TRC_GAMMA28      = 5,
+    /** also ITU-R BT601-6 525 or 625 / ITU-R BT1358 525 or 625 / ITU-R BT1700 NTSC */
+    AVCOL_TRC_SMPTE170M    = 6,
+    AVCOL_TRC_SMPTE240M    = 7,
+    /** "Linear transfer characteristics" */
+    AVCOL_TRC_LINEAR       = 8,
+    /** "Logarithmic transfer characteristic (100:1 range)" */
+    AVCOL_TRC_LOG          = 9,
+    /** "Logarithmic transfer characteristic (100 * Sqrt(10) : 1 range)" */
+    AVCOL_TRC_LOG_SQRT     = 10,
+    /** IEC 61966-2-4 */
+    AVCOL_TRC_IEC61966_2_4 = 11,
+    /** ITU-R BT1361 Extended Colour Gamut */
+    AVCOL_TRC_BT1361_ECG   = 12,
+    /** IEC 61966-2-1 (sRGB or sYCC) */
+    AVCOL_TRC_IEC61966_2_1 = 13,
+    /** ITU-R BT2020 for 10 bit system */
+    AVCOL_TRC_BT2020_10    = 14,
+    /** ITU-R BT2020 for 12 bit system */
+    AVCOL_TRC_BT2020_12    = 15,
+    /** Not part of ABI */
+    AVCOL_TRC_NB = 16;
+
+/**
+ * YUV colorspace type.
+ */
+/** enum AVColorSpace */
+public static final int
+    AVCOL_SPC_RGB         = 0,
+    /** also ITU-R BT1361 / IEC 61966-2-4 xvYCC709 / SMPTE RP177 Annex B */
+    AVCOL_SPC_BT709       = 1,
+    AVCOL_SPC_UNSPECIFIED = 2,
+    AVCOL_SPC_RESERVED    = 3,
+    AVCOL_SPC_FCC         = 4,
+    /** also ITU-R BT601-6 625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM / IEC 61966-2-4 xvYCC601 */
+    AVCOL_SPC_BT470BG     = 5,
+    /** also ITU-R BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC / functionally identical to above */
+    AVCOL_SPC_SMPTE170M   = 6,
+    AVCOL_SPC_SMPTE240M   = 7,
+    /** Used by Dirac / VC-2 and H.264 FRext, see ITU-T SG16 */
+    AVCOL_SPC_YCOCG       = 8,
+    /** ITU-R BT2020 non-constant luminance system */
+    AVCOL_SPC_BT2020_NCL  = 9,
+    /** ITU-R BT2020 constant luminance system */
+    AVCOL_SPC_BT2020_CL   = 10,
+    /** Not part of ABI */
+    AVCOL_SPC_NB = 11;
+public static final int AVCOL_SPC_YCGCO = AVCOL_SPC_YCOCG;
+
+
+/**
+ * MPEG vs JPEG YUV range.
+ */
+/** enum AVColorRange */
+public static final int
+    AVCOL_RANGE_UNSPECIFIED = 0,
+    /** the normal 219*2^(n-8) "MPEG" YUV ranges */
+    AVCOL_RANGE_MPEG        = 1,
+    /** the normal     2^n-1   "JPEG" YUV ranges */
+    AVCOL_RANGE_JPEG        = 2,
+    /** Not part of ABI */
+    AVCOL_RANGE_NB = 3;
+
+/**
+ * Location of chroma samples.
+ *
+ *  X   X      3 4 X      X are luma samples,
+ *             1 2        1-6 are possible chroma positions
+ *  X   X      5 6 X      0 is undefined/unknown position
+ */
+/** enum AVChromaLocation */
+public static final int
+    AVCHROMA_LOC_UNSPECIFIED = 0,
+    /** mpeg2/4, h264 default */
+    AVCHROMA_LOC_LEFT        = 1,
+    /** mpeg1, jpeg, h263 */
+    AVCHROMA_LOC_CENTER      = 2,
+    /** DV */
+    AVCHROMA_LOC_TOPLEFT     = 3,
+    AVCHROMA_LOC_TOP         = 4,
+    AVCHROMA_LOC_BOTTOMLEFT  = 5,
+    AVCHROMA_LOC_BOTTOM      = 6,
+    /** Not part of ABI */
+    AVCHROMA_LOC_NB = 7;
+
 // #endif /* AVUTIL_PIXFMT_H */
+
+
+// Parsed from <libavutil/frame.h>
+
+/*
+ *
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+/**
+ * @file
+ * @ingroup lavu_frame
+ * reference-counted frame API
+ */
+
+// #ifndef AVUTIL_FRAME_H
+// #define AVUTIL_FRAME_H
+
+// #include <stdint.h>
+
+// #include "avutil.h"
+// #include "buffer.h"
+// #include "dict.h"
+// #include "rational.h"
+// #include "samplefmt.h"
+// #include "pixfmt.h"
+// #include "version.h"
+
+
+/**
+ * @defgroup lavu_frame AVFrame
+ * @ingroup lavu_data
+ *
+ * @{
+ * AVFrame is an abstraction for reference-counted raw multimedia data.
+ */
+
+/** enum AVFrameSideDataType */
+public static final int
+    /**
+     * The data is the AVPanScan struct defined in libavcodec.
+     */
+    AV_FRAME_DATA_PANSCAN = 0,
+    /**
+     * ATSC A53 Part 4 Closed Captions.
+     * A53 CC bitstream is stored as uint8_t in AVFrameSideData.data.
+     * The number of bytes of CC data is AVFrameSideData.size.
+     */
+    AV_FRAME_DATA_A53_CC = 1,
+    /**
+     * Stereoscopic 3d metadata.
+     * The data is the AVStereo3D struct defined in libavutil/stereo3d.h.
+     */
+    AV_FRAME_DATA_STEREO3D = 2,
+    /**
+     * The data is the AVMatrixEncoding enum defined in libavutil/channel_layout.h.
+     */
+    AV_FRAME_DATA_MATRIXENCODING = 3,
+    /**
+     * Metadata relevant to a downmix procedure.
+     * The data is the AVDownmixInfo struct defined in libavutil/downmix_info.h.
+     */
+    AV_FRAME_DATA_DOWNMIX_INFO = 4,
+    /**
+     * ReplayGain information in the form of the AVReplayGain struct.
+     */
+    AV_FRAME_DATA_REPLAYGAIN = 5,
+    /**
+     * This side data contains a 3x3 transformation matrix describing an affine
+     * transformation that needs to be applied to the frame for correct
+     * presentation.
+     *
+     * See libavutil/display.h for a detailed description of the data.
+     */
+    AV_FRAME_DATA_DISPLAYMATRIX = 6;
+
+public static class AVFrameSideData extends Pointer {
+    static { Loader.load(); }
+    public AVFrameSideData() { allocate(); }
+    public AVFrameSideData(int size) { allocateArray(size); }
+    public AVFrameSideData(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public AVFrameSideData position(int position) {
+        return (AVFrameSideData)super.position(position);
+    }
+
+    public native @Cast("AVFrameSideDataType") int type(); public native AVFrameSideData type(int type);
+    public native @Cast("uint8_t*") BytePointer data(); public native AVFrameSideData data(BytePointer data);
+    public native int size(); public native AVFrameSideData size(int size);
+    public native AVDictionary metadata(); public native AVFrameSideData metadata(AVDictionary metadata);
+}
+
+/**
+ * This structure describes decoded (raw) audio or video data.
+ *
+ * AVFrame must be allocated using av_frame_alloc(). Note that this only
+ * allocates the AVFrame itself, the buffers for the data must be managed
+ * through other means (see below).
+ * AVFrame must be freed with av_frame_free().
+ *
+ * AVFrame is typically allocated once and then reused multiple times to hold
+ * different data (e.g. a single AVFrame to hold frames received from a
+ * decoder). In such a case, av_frame_unref() will free any references held by
+ * the frame and reset it to its original clean state before it
+ * is reused again.
+ *
+ * The data described by an AVFrame is usually reference counted through the
+ * AVBuffer API. The underlying buffer references are stored in AVFrame.buf /
+ * AVFrame.extended_buf. An AVFrame is considered to be reference counted if at
+ * least one reference is set, i.e. if AVFrame.buf[0] != NULL. In such a case,
+ * every single data plane must be contained in one of the buffers in
+ * AVFrame.buf or AVFrame.extended_buf.
+ * There may be a single buffer for all the data, or one separate buffer for
+ * each plane, or anything in between.
+ *
+ * sizeof(AVFrame) is not a part of the public ABI, so new fields may be added
+ * to the end with a minor bump.
+ * Similarly fields that are marked as to be only accessed by
+ * av_opt_ptr() can be reordered. This allows 2 forks to add fields
+ * without breaking compatibility with each other.
+ */
+public static class AVFrame extends Pointer {
+    static { Loader.load(); }
+    public AVFrame() { allocate(); }
+    public AVFrame(int size) { allocateArray(size); }
+    public AVFrame(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public AVFrame position(int position) {
+        return (AVFrame)super.position(position);
+    }
+
+public static final int AV_NUM_DATA_POINTERS = 8;
+    /**
+     * pointer to the picture/channel planes.
+     * This might be different from the first allocated byte
+     *
+     * Some decoders access areas outside 0,0 - width,height, please
+     * see avcodec_align_dimensions2(). Some filters and swscale can read
+     * up to 16 bytes beyond the planes, if these filters are to be used,
+     * then 16 extra bytes must be allocated.
+     */
+    public native @Cast("uint8_t*") BytePointer data(int i); public native AVFrame data(int i, BytePointer data);
+    @MemberGetter public native @Cast("uint8_t**") PointerPointer data();
+
+    /**
+     * For video, size in bytes of each picture line.
+     * For audio, size in bytes of each plane.
+     *
+     * For audio, only linesize[0] may be set. For planar audio, each channel
+     * plane must be the same size.
+     *
+     * For video the linesizes should be multiplies of the CPUs alignment
+     * preference, this is 16 or 32 for modern desktop CPUs.
+     * Some code requires such alignment other code can be slower without
+     * correct alignment, for yet other it makes no difference.
+     *
+     * @note The linesize may be larger than the size of usable data -- there
+     * may be extra padding present for performance reasons.
+     */
+    public native int linesize(int i); public native AVFrame linesize(int i, int linesize);
+    @MemberGetter public native IntPointer linesize();
+
+    /**
+     * pointers to the data planes/channels.
+     *
+     * For video, this should simply point to data[].
+     *
+     * For planar audio, each channel has a separate data pointer, and
+     * linesize[0] contains the size of each channel buffer.
+     * For packed audio, there is just one data pointer, and linesize[0]
+     * contains the total size of the buffer for all channels.
+     *
+     * Note: Both data and extended_data should always be set in a valid frame,
+     * but for planar audio with more channels that can fit in data,
+     * extended_data must be used in order to access all channels.
+     */
+    public native @Cast("uint8_t*") BytePointer extended_data(int i); public native AVFrame extended_data(int i, BytePointer extended_data);
+    @MemberGetter public native @Cast("uint8_t**") PointerPointer extended_data();
+
+    /**
+     * width and height of the video frame
+     */
+    public native int width(); public native AVFrame width(int width);
+    public native int height(); public native AVFrame height(int height);
+
+    /**
+     * number of audio samples (per channel) described by this frame
+     */
+    public native int nb_samples(); public native AVFrame nb_samples(int nb_samples);
+
+    /**
+     * format of the frame, -1 if unknown or unset
+     * Values correspond to enum AVPixelFormat for video frames,
+     * enum AVSampleFormat for audio)
+     */
+    public native int format(); public native AVFrame format(int format);
+
+    /**
+     * 1 -> keyframe, 0-> not
+     */
+    public native int key_frame(); public native AVFrame key_frame(int key_frame);
+
+    /**
+     * Picture type of the frame.
+     */
+    public native @Cast("AVPictureType") int pict_type(); public native AVFrame pict_type(int pict_type);
+
+// #if FF_API_AVFRAME_LAVC
+    public native @Cast("uint8_t*") @Deprecated BytePointer base(int i); public native AVFrame base(int i, BytePointer base);
+    @MemberGetter public native @Cast("uint8_t**") @Deprecated PointerPointer base();
+// #endif
+
+    /**
+     * Sample aspect ratio for the video frame, 0/1 if unknown/unspecified.
+     */
+    public native @ByRef AVRational sample_aspect_ratio(); public native AVFrame sample_aspect_ratio(AVRational sample_aspect_ratio);
+
+    /**
+     * Presentation timestamp in time_base units (time when frame should be shown to user).
+     */
+    public native long pts(); public native AVFrame pts(long pts);
+
+    /**
+     * PTS copied from the AVPacket that was decoded to produce this frame.
+     */
+    public native long pkt_pts(); public native AVFrame pkt_pts(long pkt_pts);
+
+    /**
+     * DTS copied from the AVPacket that triggered returning this frame. (if frame threading isn't used)
+     * This is also the Presentation time of this AVFrame calculated from
+     * only AVPacket.dts values without pts values.
+     */
+    public native long pkt_dts(); public native AVFrame pkt_dts(long pkt_dts);
+
+    /**
+     * picture number in bitstream order
+     */
+    public native int coded_picture_number(); public native AVFrame coded_picture_number(int coded_picture_number);
+    /**
+     * picture number in display order
+     */
+    public native int display_picture_number(); public native AVFrame display_picture_number(int display_picture_number);
+
+    /**
+     * quality (between 1 (good) and FF_LAMBDA_MAX (bad))
+     */
+    public native int quality(); public native AVFrame quality(int quality);
+
+// #if FF_API_AVFRAME_LAVC
+    public native @Deprecated int reference(); public native AVFrame reference(int reference);
+
+    /**
+     * QP table
+     */
+    public native @Deprecated BytePointer qscale_table(); public native AVFrame qscale_table(BytePointer qscale_table);
+    /**
+     * QP store stride
+     */
+    public native @Deprecated int qstride(); public native AVFrame qstride(int qstride);
+
+    public native @Deprecated int qscale_type(); public native AVFrame qscale_type(int qscale_type);
+
+    /**
+     * mbskip_table[mb]>=1 if MB didn't change
+     * stride= mb_width = (width+15)>>4
+     */
+    public native @Cast("uint8_t*") @Deprecated BytePointer mbskip_table(); public native AVFrame mbskip_table(BytePointer mbskip_table);
+
+    /**
+     * motion vector table
+     * @code
+     * example:
+     * int mv_sample_log2= 4 - motion_subsample_log2;
+     * int mb_width= (width+15)>>4;
+     * int mv_stride= (mb_width << mv_sample_log2) + 1;
+     * motion_val[direction][x + y*mv_stride][0->mv_x, 1->mv_y];
+     * @endcode
+     */
+    public native short motion_val(int i, int j, int k); public native AVFrame motion_val(int i, int j, int k, short motion_val);
+    @MemberGetter public native @Cast("int16_t(*)[2]") ShortPointer motion_val();
+
+    /**
+     * macroblock type table
+     * mb_type_base + mb_width + 2
+     */
+    public native @Cast("uint32_t*") @Deprecated IntPointer mb_type(); public native AVFrame mb_type(IntPointer mb_type);
+
+    /**
+     * DCT coefficients
+     */
+    public native @Deprecated ShortPointer dct_coeff(); public native AVFrame dct_coeff(ShortPointer dct_coeff);
+
+    /**
+     * motion reference frame index
+     * the order in which these are stored can depend on the codec.
+     */
+    public native @Deprecated BytePointer ref_index(int i); public native AVFrame ref_index(int i, BytePointer ref_index);
+    @MemberGetter public native @Cast("int8_t**") @Deprecated PointerPointer ref_index();
+// #endif
+
+    /**
+     * for some private data of the user
+     */
+    public native Pointer opaque(); public native AVFrame opaque(Pointer opaque);
+
+    /**
+     * error
+     */
+    public native @Cast("uint64_t") long error(int i); public native AVFrame error(int i, long error);
+    @MemberGetter public native @Cast("uint64_t*") LongPointer error();
+
+// #if FF_API_AVFRAME_LAVC
+    public native @Deprecated int type(); public native AVFrame type(int type);
+// #endif
+
+    /**
+     * When decoding, this signals how much the picture must be delayed.
+     * extra_delay = repeat_pict / (2*fps)
+     */
+    public native int repeat_pict(); public native AVFrame repeat_pict(int repeat_pict);
+
+    /**
+     * The content of the picture is interlaced.
+     */
+    public native int interlaced_frame(); public native AVFrame interlaced_frame(int interlaced_frame);
+
+    /**
+     * If the content is interlaced, is top field displayed first.
+     */
+    public native int top_field_first(); public native AVFrame top_field_first(int top_field_first);
+
+    /**
+     * Tell user application that palette has changed from previous frame.
+     */
+    public native int palette_has_changed(); public native AVFrame palette_has_changed(int palette_has_changed);
+
+// #if FF_API_AVFRAME_LAVC
+    public native @Deprecated int buffer_hints(); public native AVFrame buffer_hints(int buffer_hints);
+
+    /**
+     * Pan scan.
+     */
+    public native @Cast("AVPanScan*") @Deprecated Pointer pan_scan(); public native AVFrame pan_scan(Pointer pan_scan);
+// #endif
+
+    /**
+     * reordered opaque 64bit (generally an integer or a double precision float
+     * PTS but can be anything).
+     * The user sets AVCodecContext.reordered_opaque to represent the input at
+     * that time,
+     * the decoder reorders values as needed and sets AVFrame.reordered_opaque
+     * to exactly one of the values provided by the user through AVCodecContext.reordered_opaque
+     * @deprecated in favor of pkt_pts
+     */
+    public native long reordered_opaque(); public native AVFrame reordered_opaque(long reordered_opaque);
+
+// #if FF_API_AVFRAME_LAVC
+    /**
+     * @deprecated this field is unused
+     */
+    public native @Deprecated Pointer hwaccel_picture_private(); public native AVFrame hwaccel_picture_private(Pointer hwaccel_picture_private);
+
+    public native @Cast("AVCodecContext*") @Deprecated Pointer owner(); public native AVFrame owner(Pointer owner);
+    public native @Deprecated Pointer thread_opaque(); public native AVFrame thread_opaque(Pointer thread_opaque);
+
+    /**
+     * log2 of the size of the block which a single vector in motion_val represents:
+     * (4->16x16, 3->8x8, 2-> 4x4, 1-> 2x2)
+     */
+    public native @Cast("uint8_t") byte motion_subsample_log2(); public native AVFrame motion_subsample_log2(byte motion_subsample_log2);
+// #endif
+
+    /**
+     * Sample rate of the audio data.
+     */
+    public native int sample_rate(); public native AVFrame sample_rate(int sample_rate);
+
+    /**
+     * Channel layout of the audio data.
+     */
+    public native @Cast("uint64_t") long channel_layout(); public native AVFrame channel_layout(long channel_layout);
+
+    /**
+     * AVBuffer references backing the data for this frame. If all elements of
+     * this array are NULL, then this frame is not reference counted.
+     *
+     * There may be at most one AVBuffer per data plane, so for video this array
+     * always contains all the references. For planar audio with more than
+     * AV_NUM_DATA_POINTERS channels, there may be more buffers than can fit in
+     * this array. Then the extra AVBufferRef pointers are stored in the
+     * extended_buf array.
+     */
+    public native AVBufferRef buf(int i); public native AVFrame buf(int i, AVBufferRef buf);
+    @MemberGetter public native @Cast("AVBufferRef**") PointerPointer buf();
+
+    /**
+     * For planar audio which requires more than AV_NUM_DATA_POINTERS
+     * AVBufferRef pointers, this array will hold all the references which
+     * cannot fit into AVFrame.buf.
+     *
+     * Note that this is different from AVFrame.extended_data, which always
+     * contains all the pointers. This array only contains the extra pointers,
+     * which cannot fit into AVFrame.buf.
+     *
+     * This array is always allocated using av_malloc() by whoever constructs
+     * the frame. It is freed in av_frame_unref().
+     */
+    public native AVBufferRef extended_buf(int i); public native AVFrame extended_buf(int i, AVBufferRef extended_buf);
+    @MemberGetter public native @Cast("AVBufferRef**") PointerPointer extended_buf();
+    /**
+     * Number of elements in extended_buf.
+     */
+    public native int nb_extended_buf(); public native AVFrame nb_extended_buf(int nb_extended_buf);
+
+    public native AVFrameSideData side_data(int i); public native AVFrame side_data(int i, AVFrameSideData side_data);
+    @MemberGetter public native @Cast("AVFrameSideData**") PointerPointer side_data();
+    public native int nb_side_data(); public native AVFrame nb_side_data(int nb_side_data);
+
+/**
+ * @defgroup lavu_frame_flags AV_FRAME_FLAGS
+ * Flags describing additional frame properties.
+ *
+ * @{
+ */
+
+/**
+ * The frame data may be corrupted, e.g. due to decoding errors.
+ */
+public static final int AV_FRAME_FLAG_CORRUPT =       (1 << 0);
+/**
+ * @}
+ */
+
+    /**
+     * Frame flags, a combination of @ref lavu_frame_flags
+     */
+    public native int flags(); public native AVFrame flags(int flags);
+
+// #if FF_API_AVFRAME_COLORSPACE
+    /**
+     * MPEG vs JPEG YUV range.
+     * It must be accessed using av_frame_get_color_range() and
+     * av_frame_set_color_range().
+     * - encoding: Set by user
+     * - decoding: Set by libavcodec
+     */
+    public native @Cast("AVColorRange") int color_range(); public native AVFrame color_range(int color_range);
+
+    public native @Cast("AVColorPrimaries") int color_primaries(); public native AVFrame color_primaries(int color_primaries);
+
+    public native @Cast("AVColorTransferCharacteristic") int color_trc(); public native AVFrame color_trc(int color_trc);
+
+    /**
+     * YUV colorspace type.
+     * It must be accessed using av_frame_get_colorspace() and
+     * av_frame_set_colorspace().
+     * - encoding: Set by user
+     * - decoding: Set by libavcodec
+     */
+    public native @Cast("AVColorSpace") int colorspace(); public native AVFrame colorspace(int colorspace);
+
+    public native @Cast("AVChromaLocation") int chroma_location(); public native AVFrame chroma_location(int chroma_location);
+// #endif
+
+    /**
+     * frame timestamp estimated using various heuristics, in stream time base
+     * Code outside libavcodec should access this field using:
+     * av_frame_get_best_effort_timestamp(frame)
+     * - encoding: unused
+     * - decoding: set by libavcodec, read by user.
+     */
+    public native long best_effort_timestamp(); public native AVFrame best_effort_timestamp(long best_effort_timestamp);
+
+    /**
+     * reordered pos from the last AVPacket that has been input into the decoder
+     * Code outside libavcodec should access this field using:
+     * av_frame_get_pkt_pos(frame)
+     * - encoding: unused
+     * - decoding: Read by user.
+     */
+    public native long pkt_pos(); public native AVFrame pkt_pos(long pkt_pos);
+
+    /**
+     * duration of the corresponding packet, expressed in
+     * AVStream->time_base units, 0 if unknown.
+     * Code outside libavcodec should access this field using:
+     * av_frame_get_pkt_duration(frame)
+     * - encoding: unused
+     * - decoding: Read by user.
+     */
+    public native long pkt_duration(); public native AVFrame pkt_duration(long pkt_duration);
+
+    /**
+     * metadata.
+     * Code outside libavcodec should access this field using:
+     * av_frame_get_metadata(frame)
+     * - encoding: Set by user.
+     * - decoding: Set by libavcodec.
+     */
+    public native AVDictionary metadata(); public native AVFrame metadata(AVDictionary metadata);
+
+    /**
+     * decode error flags of the frame, set to a combination of
+     * FF_DECODE_ERROR_xxx flags if the decoder produced a frame, but there
+     * were errors during the decoding.
+     * Code outside libavcodec should access this field using:
+     * av_frame_get_decode_error_flags(frame)
+     * - encoding: unused
+     * - decoding: set by libavcodec, read by user.
+     */
+    public native int decode_error_flags(); public native AVFrame decode_error_flags(int decode_error_flags);
+public static final int FF_DECODE_ERROR_INVALID_BITSTREAM =   1;
+public static final int FF_DECODE_ERROR_MISSING_REFERENCE =   2;
+
+    /**
+     * number of audio channels, only used for audio.
+     * Code outside libavcodec should access this field using:
+     * av_frame_get_channels(frame)
+     * - encoding: unused
+     * - decoding: Read by user.
+     */
+    public native int channels(); public native AVFrame channels(int channels);
+
+    /**
+     * size of the corresponding packet containing the compressed
+     * frame. It must be accessed using av_frame_get_pkt_size() and
+     * av_frame_set_pkt_size().
+     * It is set to a negative value if unknown.
+     * - encoding: unused
+     * - decoding: set by libavcodec, read by user.
+     */
+    public native int pkt_size(); public native AVFrame pkt_size(int pkt_size);
+
+    /**
+     * Not to be accessed directly from outside libavutil
+     */
+    public native AVBufferRef qp_table_buf(); public native AVFrame qp_table_buf(AVBufferRef qp_table_buf);
+}
+
+/**
+ * Accessors for some AVFrame fields.
+ * The position of these field in the structure is not part of the ABI,
+ * they should not be accessed directly outside libavcodec.
+ */
+public static native long av_frame_get_best_effort_timestamp(@Const AVFrame frame);
+public static native void av_frame_set_best_effort_timestamp(AVFrame frame, long val);
+public static native long av_frame_get_pkt_duration(@Const AVFrame frame);
+public static native void av_frame_set_pkt_duration(AVFrame frame, long val);
+public static native long av_frame_get_pkt_pos(@Const AVFrame frame);
+public static native void av_frame_set_pkt_pos(AVFrame frame, long val);
+public static native long av_frame_get_channel_layout(@Const AVFrame frame);
+public static native void av_frame_set_channel_layout(AVFrame frame, long val);
+public static native int av_frame_get_channels(@Const AVFrame frame);
+public static native void av_frame_set_channels(AVFrame frame, int val);
+public static native int av_frame_get_sample_rate(@Const AVFrame frame);
+public static native void av_frame_set_sample_rate(AVFrame frame, int val);
+public static native AVDictionary av_frame_get_metadata(@Const AVFrame frame);
+public static native void av_frame_set_metadata(AVFrame frame, AVDictionary val);
+public static native int av_frame_get_decode_error_flags(@Const AVFrame frame);
+public static native void av_frame_set_decode_error_flags(AVFrame frame, int val);
+public static native int av_frame_get_pkt_size(@Const AVFrame frame);
+public static native void av_frame_set_pkt_size(AVFrame frame, int val);
+public static native @Cast("AVDictionary**") PointerPointer avpriv_frame_get_metadatap(AVFrame frame);
+public static native BytePointer av_frame_get_qp_table(AVFrame f, IntPointer stride, IntPointer type);
+public static native ByteBuffer av_frame_get_qp_table(AVFrame f, IntBuffer stride, IntBuffer type);
+public static native byte[] av_frame_get_qp_table(AVFrame f, int[] stride, int[] type);
+public static native int av_frame_set_qp_table(AVFrame f, AVBufferRef buf, int stride, int type);
+public static native @Cast("AVColorSpace") int av_frame_get_colorspace(@Const AVFrame frame);
+public static native void av_frame_set_colorspace(AVFrame frame, @Cast("AVColorSpace") int val);
+public static native @Cast("AVColorRange") int av_frame_get_color_range(@Const AVFrame frame);
+public static native void av_frame_set_color_range(AVFrame frame, @Cast("AVColorRange") int val);
+
+/**
+ * Get the name of a colorspace.
+ * @return a static string identifying the colorspace; can be NULL.
+ */
+public static native @Cast("const char*") BytePointer av_get_colorspace_name(@Cast("AVColorSpace") int val);
+
+/**
+ * Allocate an AVFrame and set its fields to default values.  The resulting
+ * struct must be freed using av_frame_free().
+ *
+ * @return An AVFrame filled with default values or NULL on failure.
+ *
+ * @note this only allocates the AVFrame itself, not the data buffers. Those
+ * must be allocated through other means, e.g. with av_frame_get_buffer() or
+ * manually.
+ */
+public static native AVFrame av_frame_alloc();
+
+/**
+ * Free the frame and any dynamically allocated objects in it,
+ * e.g. extended_data. If the frame is reference counted, it will be
+ * unreferenced first.
+ *
+ * @param frame frame to be freed. The pointer will be set to NULL.
+ */
+public static native void av_frame_free(@Cast("AVFrame**") PointerPointer frame);
+public static native void av_frame_free(@ByPtrPtr AVFrame frame);
+
+/**
+ * Set up a new reference to the data described by the source frame.
+ *
+ * Copy frame properties from src to dst and create a new reference for each
+ * AVBufferRef from src.
+ *
+ * If src is not reference counted, new buffers are allocated and the data is
+ * copied.
+ *
+ * @return 0 on success, a negative AVERROR on error
+ */
+public static native int av_frame_ref(AVFrame dst, @Const AVFrame src);
+
+/**
+ * Create a new frame that references the same data as src.
+ *
+ * This is a shortcut for av_frame_alloc()+av_frame_ref().
+ *
+ * @return newly created AVFrame on success, NULL on error.
+ */
+public static native AVFrame av_frame_clone(@Const AVFrame src);
+
+/**
+ * Unreference all the buffers referenced by frame and reset the frame fields.
+ */
+public static native void av_frame_unref(AVFrame frame);
+
+/**
+ * Move everythnig contained in src to dst and reset src.
+ */
+public static native void av_frame_move_ref(AVFrame dst, AVFrame src);
+
+/**
+ * Allocate new buffer(s) for audio or video data.
+ *
+ * The following fields must be set on frame before calling this function:
+ * - format (pixel format for video, sample format for audio)
+ * - width and height for video
+ * - nb_samples and channel_layout for audio
+ *
+ * This function will fill AVFrame.data and AVFrame.buf arrays and, if
+ * necessary, allocate and fill AVFrame.extended_data and AVFrame.extended_buf.
+ * For planar formats, one buffer will be allocated for each plane.
+ *
+ * @param frame frame in which to store the new buffers.
+ * @param align required buffer size alignment
+ *
+ * @return 0 on success, a negative AVERROR on error.
+ */
+public static native int av_frame_get_buffer(AVFrame frame, int align);
+
+/**
+ * Check if the frame data is writable.
+ *
+ * @return A positive value if the frame data is writable (which is true if and
+ * only if each of the underlying buffers has only one reference, namely the one
+ * stored in this frame). Return 0 otherwise.
+ *
+ * If 1 is returned the answer is valid until av_buffer_ref() is called on any
+ * of the underlying AVBufferRefs (e.g. through av_frame_ref() or directly).
+ *
+ * @see av_frame_make_writable(), av_buffer_is_writable()
+ */
+public static native int av_frame_is_writable(AVFrame frame);
+
+/**
+ * Ensure that the frame data is writable, avoiding data copy if possible.
+ *
+ * Do nothing if the frame is writable, allocate new buffers and copy the data
+ * if it is not.
+ *
+ * @return 0 on success, a negative AVERROR on error.
+ *
+ * @see av_frame_is_writable(), av_buffer_is_writable(),
+ * av_buffer_make_writable()
+ */
+public static native int av_frame_make_writable(AVFrame frame);
+
+/**
+ * Copy the frame data from src to dst.
+ *
+ * This function does not allocate anything, dst must be already initialized and
+ * allocated with the same parameters as src.
+ *
+ * This function only copies the frame data (i.e. the contents of the data /
+ * extended data arrays), not any other properties.
+ *
+ * @return >= 0 on success, a negative AVERROR on error.
+ */
+public static native int av_frame_copy(AVFrame dst, @Const AVFrame src);
+
+/**
+ * Copy only "metadata" fields from src to dst.
+ *
+ * Metadata for the purpose of this function are those fields that do not affect
+ * the data layout in the buffers.  E.g. pts, sample rate (for audio) or sample
+ * aspect ratio (for video), but not width/height or channel layout.
+ * Side data is also copied.
+ */
+public static native int av_frame_copy_props(AVFrame dst, @Const AVFrame src);
+
+/**
+ * Get the buffer reference a given data plane is stored in.
+ *
+ * @param plane index of the data plane of interest in frame->extended_data.
+ *
+ * @return the buffer reference that contains the plane or NULL if the input
+ * frame is not valid.
+ */
+public static native AVBufferRef av_frame_get_plane_buffer(AVFrame frame, int plane);
+
+/**
+ * Add a new side data to a frame.
+ *
+ * @param frame a frame to which the side data should be added
+ * @param type type of the added side data
+ * @param size size of the side data
+ *
+ * @return newly added side data on success, NULL on error
+ */
+public static native AVFrameSideData av_frame_new_side_data(AVFrame frame,
+                                        @Cast("AVFrameSideDataType") int type,
+                                        int size);
+
+/**
+ * @return a pointer to the side data of a given type on success, NULL if there
+ * is no side data with such type in this frame.
+ */
+public static native AVFrameSideData av_frame_get_side_data(@Const AVFrame frame,
+                                        @Cast("AVFrameSideDataType") int type);
+
+/**
+ * If side data of the supplied type exists in the frame, free it and remove it
+ * from the frame.
+ */
+public static native void av_frame_remove_side_data(AVFrame frame, @Cast("AVFrameSideDataType") int type);
+
+/**
+ * @}
+ */
+
+// #endif /* AVUTIL_FRAME_H */
 
 
 // Parsed from <libavutil/samplefmt.h>
@@ -3354,26 +3542,36 @@ public static final int PIX_FMT_GBRP16 = AV_PIX_FMT_GBRP16;
 // #include "attributes.h"
 
 /**
- * Audio Sample Formats
+ * @addtogroup lavu_audio
+ * @{
+ *
+ * @defgroup lavu_sampfmts Audio sample formats
+ *
+ * Audio sample format enumeration and related convenience functions.
+ * @{
+ *
+ */
+
+/**
+ * Audio sample formats
+ *
+ * - The data described by the sample format is always in native-endian order.
+ *   Sample values can be expressed by native C types, hence the lack of a signed
+ *   24-bit sample format even though it is a common raw audio data format.
+ *
+ * - The floating-point formats are based on full volume being in the range
+ *   [-1.0, 1.0]. Any values outside this range are beyond full volume level.
+ *
+ * - The data layout as used in av_samples_fill_arrays() and elsewhere in FFmpeg
+ *   (such as AVFrame in libavcodec) is as follows:
  *
  * @par
- * The data described by the sample format is always in native-endian order.
- * Sample values can be expressed by native C types, hence the lack of a signed
- * 24-bit sample format even though it is a common raw audio data format.
- *
- * @par
- * The floating-point formats are based on full volume being in the range
- * [-1.0, 1.0]. Any values outside this range are beyond full volume level.
- *
- * @par
- * The data layout as used in av_samples_fill_arrays() and elsewhere in FFmpeg
- * (such as AVFrame in libavcodec) is as follows:
- *
  * For planar sample formats, each audio channel is in a separate data plane,
  * and linesize is the buffer size, in bytes, for a single plane. All data
  * planes must be the same size. For packed sample formats, only the first data
  * plane is used, and samples for each channel are interleaved. In this case,
  * linesize is the buffer size, in bytes, for the 1 plane.
+ *
  */
 /** enum AVSampleFormat */
 public static final int
@@ -3502,6 +3700,15 @@ public static native int av_samples_get_buffer_size(IntBuffer linesize, int nb_c
                                @Cast("AVSampleFormat") int sample_fmt, int align);
 public static native int av_samples_get_buffer_size(int[] linesize, int nb_channels, int nb_samples,
                                @Cast("AVSampleFormat") int sample_fmt, int align);
+
+/**
+ * @}
+ *
+ * @defgroup lavu_sampmanip Samples manipulation
+ *
+ * Functions that manipulate audio samples
+ * @{
+ */
 
 /**
  * Fill plane data pointers and linesize for samples with sample
@@ -3636,6 +3843,10 @@ public static native int av_samples_set_silence(@Cast("uint8_t**") @ByPtrPtr Byt
 public static native int av_samples_set_silence(@Cast("uint8_t**") @ByPtrPtr byte[] audio_data, int offset, int nb_samples,
                            int nb_channels, @Cast("AVSampleFormat") int sample_fmt);
 
+/**
+ * @}
+ * @}
+ */
 // #endif /* AVUTIL_SAMPLEFMT_H */
 
 
@@ -3724,7 +3935,7 @@ public static final long AV_CH_LAYOUT_NATIVE =          0x8000000000000000L;
 
 /**
  * @}
- * @defgroup channel_mask_c Audio channel convenience macros
+ * @defgroup channel_mask_c Audio channel layouts
  * @{
  * */
 public static final int AV_CH_LAYOUT_MONO =              (AV_CH_FRONT_CENTER);
@@ -3765,10 +3976,6 @@ public static final int
     AV_MATRIX_ENCODING_DOLBYEX = 5,
     AV_MATRIX_ENCODING_DOLBYHEADPHONE = 6,
     AV_MATRIX_ENCODING_NB = 7;
-
-/**
- * @}
- */
 
 /**
  * Return a channel layout id that matches name, or 0 if no match is found.
@@ -3877,6 +4084,7 @@ public static native int av_get_standard_channel_layout(@Cast("unsigned") int in
 
 /**
  * @}
+ * @}
  */
 
 // #endif /* AVUTIL_CHANNEL_LAYOUT_H */
@@ -3970,6 +4178,7 @@ public static final int AV_CPU_FLAG_ARMV6T2 =      (1 << 2);
 public static final int AV_CPU_FLAG_VFP =          (1 << 3);
 public static final int AV_CPU_FLAG_VFPV3 =        (1 << 4);
 public static final int AV_CPU_FLAG_NEON =         (1 << 5);
+public static final int AV_CPU_FLAG_ARMV8 =        (1 << 6);
 
 /**
  * Return the flags which specify extensions supported by the CPU.
@@ -4061,6 +4270,8 @@ public static native int av_cpu_count();
 // #ifndef AVUTIL_DICT_H
 // #define AVUTIL_DICT_H
 
+// #include "version.h"
+
 /**
  * @addtogroup lavu_dict AVDictionary
  * @ingroup lavu_data
@@ -4146,8 +4357,10 @@ public static class AVDictionaryEntry extends Pointer {
  * @param flags a collection of AV_DICT_* flags controlling how the entry is retrieved
  * @return found entry or NULL in case no matching entry was found in the dictionary
  */
-public static native AVDictionaryEntry av_dict_get(AVDictionary m, @Cast("const char*") BytePointer key, @Const AVDictionaryEntry prev, int flags);
-public static native AVDictionaryEntry av_dict_get(AVDictionary m, String key, @Const AVDictionaryEntry prev, int flags);
+public static native AVDictionaryEntry av_dict_get(AVDictionary m, @Cast("const char*") BytePointer key,
+                               @Const AVDictionaryEntry prev, int flags);
+public static native AVDictionaryEntry av_dict_get(AVDictionary m, String key,
+                               @Const AVDictionaryEntry prev, int flags);
 
 /**
  * Get number of entries in dictionary.
@@ -4581,18 +4794,28 @@ public static class AVOptionRange extends Pointer {
     }
 
     @MemberGetter public native @Cast("const char*") BytePointer str();
-    /** For string ranges this represents the min/max length, for dimensions this represents the min/max pixel count */
+    /**
+     * Value range.
+     * For string ranges this represents the min/max length.
+     * For dimensions this represents the min/max pixel count or width/height in multi-component case.
+     */
     public native double value_min(); public native AVOptionRange value_min(double value_min);
     public native double value_max(); public native AVOptionRange value_max(double value_max);
-    /** For string this represents the unicode range for chars, 0-127 limits to ASCII */
+    /**
+     * Value's component range.
+     * For string this represents the unicode range for chars, 0-127 limits to ASCII.
+     */
     public native double component_min(); public native AVOptionRange component_min(double component_min);
     public native double component_max(); public native AVOptionRange component_max(double component_max);
-    /** if set to 1 the struct encodes a range, if set to 0 a single value */
+    /**
+     * Range flag.
+     * If set to 1 the struct encodes a range, if set to 0 a single value.
+     */
     public native int is_range(); public native AVOptionRange is_range(int is_range);
 }
 
 /**
- * List of AVOptionRange structs
+ * List of AVOptionRange structs.
  */
 public static class AVOptionRanges extends Pointer {
     static { Loader.load(); }
@@ -4605,9 +4828,46 @@ public static class AVOptionRanges extends Pointer {
         return (AVOptionRanges)super.position(position);
     }
 
+    /**
+     * Array of option ranges.
+     *
+     * Most of option types use just one component.
+     * Following describes multi-component option types:
+     *
+     * AV_OPT_TYPE_IMAGE_SIZE:
+     * component index 0: range of pixel count (width * height).
+     * component index 1: range of width.
+     * component index 2: range of height.
+     *
+     * @note To obtain multi-component version of this structure, user must
+     *       provide AV_OPT_MULTI_COMPONENT_RANGE to av_opt_query_ranges or
+     *       av_opt_query_ranges_default function.
+     *
+     * Multi-component range can be read as in following example:
+     *
+     * @code
+     * int range_index, component_index;
+     * AVOptionRanges *ranges;
+     * AVOptionRange *range[3]; //may require more than 3 in the future.
+     * av_opt_query_ranges(&ranges, obj, key, AV_OPT_MULTI_COMPONENT_RANGE);
+     * for (range_index = 0; range_index < ranges->nb_ranges; range_index++) {
+     *     for (component_index = 0; component_index < ranges->nb_components; component_index++)
+     *         range[component_index] = ranges->range[ranges->nb_ranges * component_index + range_index];
+     *     //do something with range here.
+     * }
+     * av_opt_freep_ranges(&ranges);
+     * @endcode
+     */
     public native AVOptionRange range(int i); public native AVOptionRanges range(int i, AVOptionRange range);
     @MemberGetter public native @Cast("AVOptionRange**") PointerPointer range();
+    /**
+     * Number of ranges per component.
+     */
     public native int nb_ranges(); public native AVOptionRanges nb_ranges(int nb_ranges);
+    /**
+     * Number of componentes.
+     */
+    public native int nb_components(); public native AVOptionRanges nb_components(int nb_components);
 }
 
 
@@ -4812,6 +5072,25 @@ public static native int av_opt_flag_is_set(Pointer obj, String field_name, Stri
 public static native int av_opt_set_dict(Pointer obj, @Cast("AVDictionary**") PointerPointer options);
 public static native int av_opt_set_dict(Pointer obj, @ByPtrPtr AVDictionary options);
 
+
+/**
+ * Set all the options from a given dictionary on an object.
+ *
+ * @param obj a struct whose first element is a pointer to AVClass
+ * @param options options to process. This dictionary will be freed and replaced
+ *                by a new one containing all options not found in obj.
+ *                Of course this new dictionary needs to be freed by caller
+ *                with av_dict_free().
+ * @param search_flags A combination of AV_OPT_SEARCH_*.
+ *
+ * @return 0 on success, a negative AVERROR if some option was found in obj,
+ *         but could not be set.
+ *
+ * @see av_dict_copy()
+ */
+public static native int av_opt_set_dict2(Pointer obj, @Cast("AVDictionary**") PointerPointer options, int search_flags);
+public static native int av_opt_set_dict2(Pointer obj, @ByPtrPtr AVDictionary options, int search_flags);
+
 /**
  * Extract a key-value pair from the beginning of a string.
  *
@@ -4929,6 +5208,13 @@ public static final int AV_OPT_SEARCH_CHILDREN =   0x0001;
  *  object.
  */
 public static final int AV_OPT_SEARCH_FAKE_OBJ =   0x0002;
+
+/**
+ *  Allows av_opt_query_ranges and av_opt_query_ranges_default to return more than
+ *  one component for certain option types.
+ *  @see AVOptionRanges for details.
+ */
+public static final int AV_OPT_MULTI_COMPONENT_RANGE = 0x1000;
 
 /**
  * Look for an option in an object. Consider only options which
@@ -5171,14 +5457,17 @@ public static native void av_opt_freep_ranges(@ByPtrPtr AVOptionRanges ranges);
  *
  * @param flags is a bitmask of flags, undefined flags should not be set and should be ignored
  *              AV_OPT_SEARCH_FAKE_OBJ indicates that the obj is a double pointer to a AVClass instead of a full instance
+ *              AV_OPT_MULTI_COMPONENT_RANGE indicates that function may return more than one component, @see AVOptionRanges
  *
  * The result must be freed with av_opt_freep_ranges.
  *
- * @return >= 0 on success, a negative errro code otherwise
+ * @return number of compontents returned on success, a negative errro code otherwise
  */
 public static native int av_opt_query_ranges(@Cast("AVOptionRanges**") PointerPointer arg0, Pointer obj, @Cast("const char*") BytePointer key, int flags);
 public static native int av_opt_query_ranges(@ByPtrPtr AVOptionRanges arg0, Pointer obj, @Cast("const char*") BytePointer key, int flags);
 public static native int av_opt_query_ranges(@ByPtrPtr AVOptionRanges arg0, Pointer obj, String key, int flags);
+
+public static native int av_opt_copy(Pointer dest, Pointer src);
 
 /**
  * Get a default list of allowed ranges for the given option.
@@ -5188,10 +5477,11 @@ public static native int av_opt_query_ranges(@ByPtrPtr AVOptionRanges arg0, Poin
  *
  * @param flags is a bitmask of flags, undefined flags should not be set and should be ignored
  *              AV_OPT_SEARCH_FAKE_OBJ indicates that the obj is a double pointer to a AVClass instead of a full instance
+ *              AV_OPT_MULTI_COMPONENT_RANGE indicates that function may return more than one component, @see AVOptionRanges
  *
  * The result must be freed with av_opt_free_ranges.
  *
- * @return >= 0 on success, a negative errro code otherwise
+ * @return number of compontents returned on success, a negative errro code otherwise
  */
 public static native int av_opt_query_ranges_default(@Cast("AVOptionRanges**") PointerPointer arg0, Pointer obj, @Cast("const char*") BytePointer key, int flags);
 public static native int av_opt_query_ranges_default(@ByPtrPtr AVOptionRanges arg0, Pointer obj, @Cast("const char*") BytePointer key, int flags);
@@ -5515,9 +5805,9 @@ public static native @Cast("AVPixelFormat") int av_pix_fmt_desc_get_id(@Const AV
  * Utility function to access log2_chroma_w log2_chroma_h from
  * the pixel format AVPixFmtDescriptor.
  *
- * See avcodec_get_chroma_sub_sample() for a function that asserts a
+ * See av_get_chroma_sub_sample() for a function that asserts a
  * valid pixel format instead of returning an error code.
- * Its recommanded that you use avcodec_get_chroma_sub_sample unless
+ * Its recommended that you use avcodec_get_chroma_sub_sample unless
  * you do check the return code!
  *
  * @param[in]  pix_fmt the pixel format
@@ -5551,7 +5841,65 @@ public static native void ff_check_pixfmt_descriptors();
  */
 public static native @Cast("AVPixelFormat") int av_pix_fmt_swap_endianness(@Cast("AVPixelFormat") int pix_fmt);
 
+/** loss due to resolution change */
+public static final int FF_LOSS_RESOLUTION =  0x0001;
+/** loss due to color depth change */
+public static final int FF_LOSS_DEPTH =       0x0002;
+/** loss due to color space conversion */
+public static final int FF_LOSS_COLORSPACE =  0x0004;
+/** loss of alpha bits */
+public static final int FF_LOSS_ALPHA =       0x0008;
+/** loss due to color quantization */
+public static final int FF_LOSS_COLORQUANT =  0x0010;
+/** loss of chroma (e.g. RGB to gray conversion) */
+public static final int FF_LOSS_CHROMA =      0x0020;
 
+/**
+ * Compute what kind of losses will occur when converting from one specific
+ * pixel format to another.
+ * When converting from one pixel format to another, information loss may occur.
+ * For example, when converting from RGB24 to GRAY, the color information will
+ * be lost. Similarly, other losses occur when converting from some formats to
+ * other formats. These losses can involve loss of chroma, but also loss of
+ * resolution, loss of color depth, loss due to the color space conversion, loss
+ * of the alpha bits or loss due to color quantization.
+ * av_get_fix_fmt_loss() informs you about the various types of losses
+ * which will occur when converting from one pixel format to another.
+ *
+ * @param[in] dst_pix_fmt destination pixel format
+ * @param[in] src_pix_fmt source pixel format
+ * @param[in] has_alpha Whether the source pixel format alpha channel is used.
+ * @return Combination of flags informing you what kind of losses will occur
+ * (maximum loss for an invalid dst_pix_fmt).
+ */
+public static native int av_get_pix_fmt_loss(@Cast("AVPixelFormat") int dst_pix_fmt,
+                        @Cast("AVPixelFormat") int src_pix_fmt,
+                        int has_alpha);
+
+/**
+ * Compute what kind of losses will occur when converting from one specific
+ * pixel format to another.
+ * When converting from one pixel format to another, information loss may occur.
+ * For example, when converting from RGB24 to GRAY, the color information will
+ * be lost. Similarly, other losses occur when converting from some formats to
+ * other formats. These losses can involve loss of chroma, but also loss of
+ * resolution, loss of color depth, loss due to the color space conversion, loss
+ * of the alpha bits or loss due to color quantization.
+ * av_get_fix_fmt_loss() informs you about the various types of losses
+ * which will occur when converting from one pixel format to another.
+ *
+ * @param[in] dst_pix_fmt destination pixel format
+ * @param[in] src_pix_fmt source pixel format
+ * @param[in] has_alpha Whether the source pixel format alpha channel is used.
+ * @return Combination of flags informing you what kind of losses will occur
+ * (maximum loss for an invalid dst_pix_fmt).
+ */
+public static native @Cast("AVPixelFormat") int av_find_best_pix_fmt_of_2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
+                                             @Cast("AVPixelFormat") int src_pix_fmt, int has_alpha, IntPointer loss_ptr);
+public static native @Cast("AVPixelFormat") int av_find_best_pix_fmt_of_2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
+                                             @Cast("AVPixelFormat") int src_pix_fmt, int has_alpha, IntBuffer loss_ptr);
+public static native @Cast("AVPixelFormat") int av_find_best_pix_fmt_of_2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
+                                             @Cast("AVPixelFormat") int src_pix_fmt, int has_alpha, int[] loss_ptr);
 // #endif /* AVUTIL_PIXDESC_H */
 
 
@@ -5588,6 +5936,7 @@ public static native @Cast("AVPixelFormat") int av_pix_fmt_swap_endianness(@Cast
 
 // #include "avutil.h"
 // #include "pixdesc.h"
+// #include "rational.h"
 
 /**
  * Compute the max pixel step for each plane of an image with a
@@ -5800,6 +6149,20 @@ public static native int av_image_copy_to_buffer(@Cast("uint8_t*") byte[] dst, i
  */
 public static native int av_image_check_size(@Cast("unsigned int") int w, @Cast("unsigned int") int h, int log_offset, Pointer log_ctx);
 
+/**
+ * Check if the given sample aspect ratio of an image is valid.
+ *
+ * It is considered invalid if the denominator is 0 or if applying the ratio
+ * to the image size would make the smaller dimension less than 1. If the
+ * sar numerator is 0, it is considered unknown and will return as valid.
+ *
+ * @param w width of the image
+ * @param h height of the image
+ * @param sar sample aspect ratio of the image
+ * @return 0 if valid, a negative AVERROR code otherwise
+ */
+public static native int av_image_check_sar(@Cast("unsigned int") int w, @Cast("unsigned int") int h, @ByVal AVRational sar);
+
 public static native int avpriv_set_systematic_pal2(@Cast("uint32_t*") IntPointer pal, @Cast("AVPixelFormat") int pix_fmt);
 public static native int avpriv_set_systematic_pal2(@Cast("uint32_t*") IntBuffer pal, @Cast("AVPixelFormat") int pix_fmt);
 public static native int avpriv_set_systematic_pal2(@Cast("uint32_t*") int[] pal, @Cast("AVPixelFormat") int pix_fmt);
@@ -5926,11 +6289,12 @@ public static class AVDownmixInfo extends Pointer {
 /**
  * Get a frame's AV_FRAME_DATA_DOWNMIX_INFO side data for editing.
  *
- * The side data is created and added to the frame if it's absent.
+ * If the side data is absent, it is created and added to the frame.
  *
- * @param frame the frame for which the side data is to be obtained.
+ * @param frame the frame for which the side data is to be obtained or created
  *
- * @return the AVDownmixInfo structure to be edited by the caller.
+ * @return the AVDownmixInfo structure to be edited by the caller, or NULL if
+ *         the structure cannot be allocated.
  */
 public static native AVDownmixInfo av_downmix_info_update_side_data(AVFrame frame);
 
@@ -5966,6 +6330,9 @@ public static native AVDownmixInfo av_downmix_info_update_side_data(AVFrame fram
  * License along with FFmpeg; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
+
+// #ifndef AVUTIL_STEREO3D_H
+// #define AVUTIL_STEREO3D_H
 
 // #include <stdint.h>
 
@@ -6104,6 +6471,8 @@ public static native AVStereo3D av_stereo3d_alloc();
  * @return The AVStereo3D structure to be filled by caller.
  */
 public static native AVStereo3D av_stereo3d_create_side_data(AVFrame frame);
+
+// #endif /* AVUTIL_STEREO3D_H */
 
 
 }
