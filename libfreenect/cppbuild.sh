@@ -3,7 +3,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit 1
 fi
 
-LIBFREENECT_VERSION=0.4.0
+LIBFREENECT_VERSION=0.5.0
 download https://github.com/OpenKinect/libfreenect/archive/v$LIBFREENECT_VERSION.zip libfreenect-$LIBFREENECT_VERSION.zip
 
 mkdir -p $PLATFORM
@@ -24,22 +24,22 @@ cd libfreenect-$LIBFREENECT_VERSION
 
 case $PLATFORM in
     linux-x86)
-        CC="gcc -m32" CXX="g++ -m32" cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_AUDIO=ON -DCMAKE_INSTALL_PREFIX=.. -DLIB_SUFFIX=
+        CC="gcc -m32" CXX="g++ -m32" cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
         make -j4
         make install
         ;;
     linux-x86_64)
-        cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_AUDIO=ON -DCMAKE_INSTALL_PREFIX=.. -DLIB_SUFFIX=
+        CC="gcc -m64" CXX="g++ -m64" cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
         make -j4
         make install
         ;;
     macosx-x86_64)
-        cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_AUDIO=ON -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=.. -DLIB_SUFFIX=
+        cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=..
         make -j4
         make install
         ;;
     windows-x86)
-        cmake -DCMAKE_BUILD_TYPE=Release -DLIBUSB_1_INCLUDE_DIR="../libusb-win32-bin-1.2.6.0/include" -DLIBUSB_1_LIBRARY="../libusb-win32-bin-1.2.6.0/lib/msvc/libusb.lib" -DTHREADS_PTHREADS_INCLUDE_DIR="../pthreads-w32-2-9-1-release/Pre-built.2/include" -DTHREADS_PTHREADS_WIN32_LIBRARY="../pthreads-w32-2-9-1-release/Pre-built.2/lib/x86/pthreadVC2.lib" -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=.. -DLIB_SUFFIX=
+        cmake -DCMAKE_BUILD_TYPE=Release -DLIBUSB_1_INCLUDE_DIR="../libusb-win32-bin-1.2.6.0/include" -DLIBUSB_1_LIBRARY="../libusb-win32-bin-1.2.6.0/lib/msvc/libusb.lib" -DTHREADS_PTHREADS_INCLUDE_DIR="../pthreads-w32-2-9-1-release/Pre-built.2/include" -DTHREADS_PTHREADS_WIN32_LIBRARY="../pthreads-w32-2-9-1-release/Pre-built.2/lib/x86/pthreadVC2.lib" -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=..
         nmake
         nmake install
         cp -r ../libusb-win32-bin-1.2.6.0/lib/msvc/* ../lib
@@ -48,7 +48,7 @@ case $PLATFORM in
         cp -r ../pthreads-w32-2-9-1-release/Pre-built.2/dll/x86/* ../bin
         ;;
     windows-x86_64)
-        cmake -DCMAKE_BUILD_TYPE=Release -DLIBUSB_1_INCLUDE_DIR="../libusb-win32-bin-1.2.6.0/include" -DLIBUSB_1_LIBRARY="../libusb-win32-bin-1.2.6.0/lib/msvc_x64/libusb.lib" -DTHREADS_PTHREADS_INCLUDE_DIR="../pthreads-w32-2-9-1-release/Pre-built.2/include" -DTHREADS_PTHREADS_WIN32_LIBRARY="../pthreads-w32-2-9-1-release/Pre-built.2/lib/x64/pthreadVC2.lib" -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=.. -DLIB_SUFFIX=
+        cmake -DCMAKE_BUILD_TYPE=Release -DLIBUSB_1_INCLUDE_DIR="../libusb-win32-bin-1.2.6.0/include" -DLIBUSB_1_LIBRARY="../libusb-win32-bin-1.2.6.0/lib/msvc_x64/libusb.lib" -DTHREADS_PTHREADS_INCLUDE_DIR="../pthreads-w32-2-9-1-release/Pre-built.2/include" -DTHREADS_PTHREADS_WIN32_LIBRARY="../pthreads-w32-2-9-1-release/Pre-built.2/lib/x64/pthreadVC2.lib" -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=..
         nmake
         nmake install
         cp -r ../libusb-win32-bin-1.2.6.0/lib/msvc_x64/* ../lib

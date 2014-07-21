@@ -1,0 +1,362 @@
+diff -ru libfreenect-0.5.0/CMakeLists.txt libfreenect-0.5.0-windows/CMakeLists.txt
+--- libfreenect-0.5.0/CMakeLists.txt	2014-07-21 03:04:00.000000000 +0900
++++ libfreenect-0.5.0-windows/CMakeLists.txt	2014-07-21 13:57:24.522782590 +0900
+@@ -127,7 +127,9 @@
+ 
+ if(WIN32)
+   include_directories("${CMAKE_CURRENT_SOURCE_DIR}/platform/windows")
+-endif()
++  include_directories("${CMAKE_CURRENT_SOURCE_DIR}/platform/windows/libusb10emu")
++  include_directories("${CMAKE_CURRENT_SOURCE_DIR}/platform/windows/libusb10emu/libusb-1.0")
++endif(WIN32)
+ 
+ # Add library project
+ add_subdirectory (src)
+diff -ru libfreenect-0.5.0/src/CMakeLists.txt libfreenect-0.5.0-windows/src/CMakeLists.txt
+--- libfreenect-0.5.0/src/CMakeLists.txt	2014-07-21 03:04:00.000000000 +0900
++++ libfreenect-0.5.0-windows/src/CMakeLists.txt	2014-07-21 14:04:12.087524831 +0900
+@@ -5,26 +5,11 @@
+ include_directories (${CMAKE_CURRENT_SOURCE_DIR})
+ 
+ include_directories(${LIBUSB_1_INCLUDE_DIRS})
+-LIST(APPEND SRC core.c tilt.c cameras.c flags.c usb_libusb10.c registration.c)
++LIST(APPEND SRC core.c tilt.c cameras.c flags.c usb_libusb10.c registration.c ../platform/windows/libusb10emu/libusb-1.0/failguard.cpp ../platform/windows/libusb10emu/libusb-1.0/libusbemu.cpp)
+ IF(WIN32)
+   set_source_files_properties(${SRC} PROPERTIES LANGUAGE CXX)
+ ENDIF(WIN32)
+ 
+-# Audio
+-include(FindPythonInterp)
+-LIST(APPEND SRC audio.c loader.c)
+-IF(BUILD_REDIST_PACKAGE)
+-  # If this build is intended for a redistributable package, we can't include audios.bin, so we should include fwfetcher.py
+-  # and the package should run "python fwfetcher.py $INSTALL_PREFIX/share" as a postinst hook
+-  install (FILES "fwfetcher.py" DESTINATION "${CMAKE_INSTALL_PREFIX}/share")
+-ELSE(BUILD_REDIST_PACKAGE)
+-  # If the install is local only, we can just run fwfetcher.py and install the audios.bin firmware to the system folder
+-  add_custom_target(firmware ALL
+-      COMMAND ${PYTHON_EXECUTABLE} "${CMAKE_CURRENT_SOURCE_DIR}/fwfetcher.py" "../audios.bin"
+-      DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/fwfetcher.py")
+-  install (FILES "${CMAKE_CURRENT_BINARY_DIR}/../audios.bin" DESTINATION "${CMAKE_INSTALL_PREFIX}/share/libfreenect")
+-ENDIF()
+-
+ add_library (freenect SHARED ${SRC})
+ set_target_properties ( freenect PROPERTIES
+   VERSION ${PROJECT_VER}
+@@ -32,16 +17,16 @@
+ install (TARGETS freenect
+   DESTINATION "${PROJECT_LIBRARY_INSTALL_DIR}")
+ 
+-add_library (freenectstatic STATIC ${SRC})
+-set_target_properties (freenectstatic PROPERTIES OUTPUT_NAME freenect)
+-IF(UNIX AND NOT APPLE)
+-  SET_TARGET_PROPERTIES (freenectstatic PROPERTIES COMPILE_FLAGS "-fPIC")
+-ENDIF()
+-install (TARGETS freenectstatic
+-  DESTINATION "${PROJECT_LIBRARY_INSTALL_DIR}")
++# add_library (freenectstatic STATIC ${SRC})
++# set_target_properties (freenectstatic PROPERTIES OUTPUT_NAME freenect)
++# IF(UNIX AND NOT APPLE)
++#  SET_TARGET_PROPERTIES (freenectstatic PROPERTIES COMPILE_FLAGS "-fPIC")
++#ENDIF()
++#install (TARGETS freenectstatic
++#  DESTINATION "${PROJECT_LIBRARY_INSTALL_DIR}")
+ 
+ target_link_libraries (freenect ${LIBUSB_1_LIBRARIES})
+-target_link_libraries (freenectstatic ${LIBUSB_1_LIBRARIES})
++#target_link_libraries (freenectstatic ${LIBUSB_1_LIBRARIES})
+ 
+ # Install the header files
+ install (FILES "../include/libfreenect.h" "../include/libfreenect_registration.h" "../include/libfreenect_audio.h"
+diff -ru libfreenect-0.5.0/src/core.c libfreenect-0.5.0-windows/src/core.c
+--- libfreenect-0.5.0/src/core.c	2014-07-21 03:04:00.000000000 +0900
++++ libfreenect-0.5.0-windows/src/core.c	2014-07-21 14:05:28.670978373 +0900
+@@ -89,11 +89,6 @@
+ 			freenect_stop_video(dev);
+ 			freenect_stop_depth(dev);
+ 		}
+-		if (dev->usb_audio.device_dead) {
+-			FN_ERROR("USB audio marked dead, stopping streams\n");
+-			res = -1; // Or something else to tell the user that the device just vanished.
+-			freenect_stop_audio(dev);
+-		}
+ 		dev = dev->next;
+ 	}
+ 	return res;
+diff -ru libfreenect-0.5.0/src/usb_libusb10.c libfreenect-0.5.0-windows/src/usb_libusb10.c
+--- libfreenect-0.5.0/src/usb_libusb10.c	2014-07-21 03:04:00.000000000 +0900
++++ libfreenect-0.5.0-windows/src/usb_libusb10.c	2014-07-21 14:05:06.564558787 +0900
+@@ -68,42 +68,6 @@
+ 
+ FN_INTERNAL libusb_device * fnusb_find_connected_audio_device(libusb_device * camera, libusb_device ** deviceList, int cnt)
+ {
+-	if (cnt <= 0) return NULL;
+-
+-	int cameraBusNo = libusb_get_bus_number(camera);
+-	if (cameraBusNo < 0) return NULL;
+-	libusb_device * cameraParent = libusb_get_parent(camera);
+-
+-	int i = 0;
+-	for (i = 0; i < cnt; i++)
+-	{
+-		struct libusb_device_descriptor desc;
+-		int res = libusb_get_device_descriptor (deviceList[i], &desc);
+-		if (res < 0)
+-		{
+-			continue;
+-		}
+-
+-		if (desc.idVendor == VID_MICROSOFT)
+-		{
+-			// make sure its some type of Kinect audio device
+-			if ((desc.idProduct == PID_NUI_AUDIO || fnusb_is_pid_k4w_audio(desc.idProduct)))
+-			{
+-				int audioBusNo = libusb_get_bus_number(deviceList[i]);
+-				if (audioBusNo == cameraBusNo)
+-				{
+-					// we have a match!
+-					// let's double check
+-					libusb_device * audioParent = libusb_get_parent(deviceList[i]);
+-					if (cameraParent == audioParent)
+-					{
+-						return deviceList[i];
+-					}
+-				}
+-			}
+-		}
+-	}
+-
+ 	return NULL;
+ }
+ 
+@@ -324,7 +288,6 @@
+ 						{
+ 							// we need to do this as it is possible that the device was not closed properly in a previous session
+ 							// if we don't do this and the device wasn't closed properly - it can cause infinite hangs on LED and TILT functions
+-							libusb_reset_device(audioHandle);
+ 							libusb_close(audioHandle);
+ 
+ 							res = libusb_open(audioDevice, &audioHandle);
+@@ -437,169 +400,6 @@
+ 				nr_mot++;
+ 			}
+ 		}
+-
+-		// Search for the audio
+-		if ((ctx->enabled_subdevices & FREENECT_DEVICE_AUDIO) && !dev->usb_audio.dev && (desc.idProduct == PID_NUI_AUDIO || fnusb_is_pid_k4w_audio(desc.idProduct)))
+-		{
+-			// If the index given by the user matches our audio index
+-			if (nr_audio == index)
+-			{
+-				res = libusb_open (devs[i], &dev->usb_audio.dev);
+-				if (res < 0 || !dev->usb_audio.dev)
+-				{
+-					FN_ERROR("Could not open audio: %d\n", res);
+-					dev->usb_audio.dev = NULL;
+-					break;
+-				}
+-				res = libusb_claim_interface (dev->usb_audio.dev, 0);
+-				if (res < 0)
+-				{
+-					FN_ERROR("Could not claim interface on audio: %d\n", res);
+-					libusb_close(dev->usb_audio.dev);
+-					dev->usb_audio.dev = NULL;
+-					break;
+-				}
+-
+-				// Using the device handle that we've claimed, see if this
+-				// device has already uploaded firmware (has 2 interfaces).
+-				// If not, save the serial number (by reading the appropriate
+-				// descriptor), upload the firmware, and then enter a loop
+-				// waiting for a device with the same serial number to
+-				// reappear.
+-				int num_interfaces = fnusb_num_interfaces(&dev->usb_audio);
+-                
+-				if (num_interfaces >= 2)
+-				{
+-					if (dev->device_does_motor_control_with_audio)
+-					{
+-						dev->motor_control_with_audio_enabled = 1;
+-					}
+-				}
+-				else
+-				{
+-					// Read the serial number from the string descriptor and save it.
+-					unsigned char string_desc[256]; // String descriptors are at most 256 bytes
+-					res = libusb_get_string_descriptor_ascii(dev->usb_audio.dev, desc.iSerialNumber, string_desc, 256);
+-					if (res < 0)
+-					{
+-						FN_ERROR("Failed to retrieve serial number for audio device in bootloader state\n");
+-						break;
+-					}
+-					char* audio_serial = strdup((char*)string_desc);
+-                
+-					FN_SPEW("Uploading firmware to audio device in bootloader state.\n");
+-                    
+-					// Check if we can load from memory - otherwise load from disk
+-					if (desc.idProduct == PID_NUI_AUDIO && ctx->fn_fw_nui_ptr && ctx->fn_fw_nui_size > 0)
+-					{
+-						FN_SPEW("loading firmware from memory\n");
+-						res = upload_firmware_from_memory(&dev->usb_audio, ctx->fn_fw_nui_ptr, ctx->fn_fw_nui_size);
+-					}
+-					else if (desc.idProduct == PID_K4W_AUDIO && ctx->fn_fw_k4w_ptr && ctx->fn_fw_k4w_size > 0)
+-					{
+-						FN_SPEW("loading firmware from memory\n");
+-						res = upload_firmware_from_memory(&dev->usb_audio, ctx->fn_fw_k4w_ptr, ctx->fn_fw_k4w_size);
+-					}
+-					else
+-					{
+-						res = upload_firmware(&dev->usb_audio, "audios.bin");
+-					}
+-
+-					if (res < 0)
+-					{
+-						FN_ERROR("upload_firmware failed: %d\n", res);
+-						break;
+-					}
+-					libusb_close(dev->usb_audio.dev);
+-					dev->usb_audio.dev = NULL;
+-					// Wait for the device to reappear.
+-					int loops = 0;
+-					for (loops = 0; loops < 10; loops++)
+-					{
+-						FN_SPEW("Try %d: Looking for new audio device matching serial %s\n", loops, audio_serial);
+-						// Scan devices.
+-						libusb_device **new_dev_list;
+-						int dev_index;
+-						ssize_t num_new_devs = libusb_get_device_list(ctx->usb.ctx, &new_dev_list);
+-						for (dev_index = 0; dev_index < num_new_devs; ++dev_index)
+-						{
+-							struct libusb_device_descriptor new_dev_desc;
+-							int r;
+-							r = libusb_get_device_descriptor (new_dev_list[dev_index], &new_dev_desc);
+-							if (r < 0)
+-								continue;
+-							// If this dev is a Kinect audio device, open device, read serial, and compare.
+-							if (new_dev_desc.idVendor == VID_MICROSOFT && (new_dev_desc.idProduct == PID_NUI_AUDIO || fnusb_is_pid_k4w_audio(desc.idProduct)))
+-							{
+-								FN_SPEW("Matched VID/PID!\n");
+-								libusb_device_handle* new_dev_handle;
+-								// Open device
+-								r = libusb_open(new_dev_list[dev_index], &new_dev_handle);
+-								if (r < 0)
+-									continue;
+-								// Read serial
+-								r = libusb_get_string_descriptor_ascii(new_dev_handle, new_dev_desc.iSerialNumber, string_desc, 256);
+-								if (r < 0)
+-								{
+-									FN_SPEW("Lost new audio device while fetching serial number.\n");
+-									libusb_close(new_dev_handle);
+-									continue;
+-								}
+-								// Compare to expected serial
+-								if (r == strlen(audio_serial) && strcmp((char*)string_desc, audio_serial) == 0)
+-								{
+-									// We found it!
+-									r = libusb_claim_interface(new_dev_handle, 0);
+-									if (r != 0)
+-									{
+-										// Ouch, found the device but couldn't claim the interface.
+-										FN_SPEW("Device with serial %s reappeared but couldn't claim interface 0\n", audio_serial);
+-										libusb_close(new_dev_handle);
+-										continue;
+-									}
+-									// Save the device handle.
+-									dev->usb_audio.dev = new_dev_handle;
+-
+-                                    // Verify that we've actually found a device running the right firmware.
+-									num_interfaces = fnusb_num_interfaces(&dev->usb_audio);
+-
+-									if (num_interfaces >= 2)
+-									{
+-										if (dev->device_does_motor_control_with_audio)
+-										{
+-											dev->motor_control_with_audio_enabled = 1;
+-										}
+-									}
+-									else
+-									{
+-										FN_SPEW("Opened audio with matching serial but too few interfaces.\n");
+-										dev->usb_audio.dev = NULL;
+-										libusb_close(new_dev_handle);
+-										continue;
+-									}									break;
+-								}
+-								else
+-								{
+-									FN_SPEW("Got serial %s, expected serial %s\n", (char*)string_desc, audio_serial);
+-								}
+-							}
+-						}
+-
+-						libusb_free_device_list(new_dev_list, 1);
+-						// If we found the right device, break out of this loop.
+-						if (dev->usb_audio.dev)
+-							break;
+-						// Sleep for a second to give the device more time to reenumerate.
+-						sleep(1);
+-					}
+-					free(audio_serial);
+-				}
+-			}
+-			else
+-			{
+-				nr_audio++;
+-			}
+-		}
+ 	}
+ 
+ 	libusb_free_device_list (devs, 1);  // free the list, unref the devices in it
+@@ -670,7 +470,7 @@
+ 	return 0;
+ }
+ 
+-static void LIBUSB_CALL iso_callback(struct libusb_transfer *xfer)
++static void iso_callback(struct libusb_transfer *xfer)
+ {
+ 	int i;
+ 	fnusb_isoc_stream *strm = (fnusb_isoc_stream*)xfer->user_data;
+@@ -832,13 +632,5 @@
+ 
+ FN_INTERNAL int fnusb_num_interfaces(fnusb_dev *dev) {
+ 	int retval = 0;
+-	int res;
+-	libusb_device* d = libusb_get_device(dev->dev);
+-	struct libusb_config_descriptor* config;
+-	res = libusb_get_active_config_descriptor(d, &config);
+-	if (res < 0) // Something went wrong
+-		return res;
+-	retval = config->bNumInterfaces;
+-	libusb_free_config_descriptor(config);
+ 	return retval;
+ }
+diff -ru libfreenect-0.5.0/wrappers/c_sync/CMakeLists.txt libfreenect-0.5.0-windows/wrappers/c_sync/CMakeLists.txt
+--- libfreenect-0.5.0/wrappers/c_sync/CMakeLists.txt	2014-07-21 03:04:00.000000000 +0900
++++ libfreenect-0.5.0-windows/wrappers/c_sync/CMakeLists.txt	2014-07-21 13:21:40.631014917 +0900
+@@ -9,19 +9,19 @@
+ find_package(Threads REQUIRED)
+ include_directories(${THREADS_PTHREADS_INCLUDE_DIR})
+ 
+-add_library (freenect_sync SHARED libfreenect_sync.c)
++# add_library (freenect_sync SHARED libfreenect_sync.c)
+ add_library (freenect_sync_static STATIC libfreenect_sync.c)
+ set_target_properties (freenect_sync_static PROPERTIES OUTPUT_NAME freenect_sync)
+ 
+-set_target_properties (freenect_sync PROPERTIES
+-  VERSION ${PROJECT_VER}
+-  SOVERSION ${PROJECT_APIVER})
++# set_target_properties (freenect_sync PROPERTIES
++#  VERSION ${PROJECT_VER}
++#  SOVERSION ${PROJECT_APIVER})
+ 
+-target_link_libraries (freenect_sync freenect ${CMAKE_THREAD_LIBS_INIT})
++# target_link_libraries (freenect_sync freenect ${CMAKE_THREAD_LIBS_INIT})
+ target_link_libraries (freenect_sync_static freenect ${CMAKE_THREAD_LIBS_INIT})
+ 
+-install (TARGETS freenect_sync
+-  DESTINATION "${PROJECT_LIBRARY_INSTALL_DIR}")
++# install (TARGETS freenect_sync
++#   DESTINATION "${PROJECT_LIBRARY_INSTALL_DIR}")
+ install (TARGETS freenect_sync_static
+   DESTINATION "${PROJECT_LIBRARY_INSTALL_DIR}")
+ install (FILES "libfreenect_sync.h"

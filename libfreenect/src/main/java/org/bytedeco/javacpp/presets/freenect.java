@@ -34,14 +34,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(target="org.bytedeco.javacpp.freenect", value={
     @Platform(not="android", include={"<libfreenect/libfreenect.h>", "<libfreenect/libfreenect_registration.h>", "<libfreenect/libfreenect_audio.h>", "<libfreenect/libfreenect_sync.h>"},
-        link={"freenect@0.4", "freenect_sync@0.4"}, preload="libusb-1.0"),
+        link={"freenect@0.5", "freenect_sync@0.5"}, preload="libusb-1.0"),
     @Platform(value="windows", include={"<libfreenect/libfreenect.h>", "<libfreenect/libfreenect_registration.h>", "<libfreenect/libfreenect_sync.h>"},
         link={"freenect", "freenect_sync", "pthreadVC2"}),
     @Platform(value="windows-x86",    preload="libusb0_x86"),
     @Platform(value="windows-x86_64", preload="libusb0") })
 public class freenect implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("FREENECTAPI").cppTypes().annotations());
+        infoMap.put(new Info("FREENECTAPI", "FREENECTAPI_SYNC").cppTypes().annotations());
     }
 
     public static class timeval extends Pointer {

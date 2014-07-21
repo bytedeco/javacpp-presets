@@ -40,7 +40,7 @@ Each child module in turn relies on its corresponding native libraries being alr
  * FFmpeg 2.3.x  http://ffmpeg.org/download.html
  * FlyCapture 2.6.x  http://ww2.ptgrey.com/sdk/flycap
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
- * OpenKinect libfreenect 0.4  https://github.com/OpenKinect/libfreenect
+ * libfreenect 0.5  https://github.com/OpenKinect/libfreenect
  * videoInput 0.200  https://github.com/ofTheo/videoInput/tree/update2013
  * ARToolKitPlus 2.3.0  https://launchpad.net/artoolkitplus
  * FFTW 3.3.4  http://www.fftw.org/download.html

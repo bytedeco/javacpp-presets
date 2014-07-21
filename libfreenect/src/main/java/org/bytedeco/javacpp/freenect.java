@@ -88,10 +88,8 @@ public static class freenect_device_attributes extends Pointer {
         return (freenect_device_attributes)super.position(position);
     }
 
-	/** Next device in the linked list */
-	public native freenect_device_attributes next(); public native freenect_device_attributes next(freenect_device_attributes next);
-	/** Serial number of this device's camera subdevice */
-	@MemberGetter public native @Cast("const char*") BytePointer camera_serial();
+	public native freenect_device_attributes next(); public native freenect_device_attributes next(freenect_device_attributes next); // Next device in the linked list
+	@MemberGetter public native @Cast("const char*") BytePointer camera_serial();               // Serial number of camera or audio subdevice
 }
 
 /** Enumeration of available resolutions.
@@ -1181,13 +1179,33 @@ public static native int freenect_stop_audio(freenect_device dev);
 // #include "libfreenect.h"
 // #include <stdint.h>
 
+
+/** If Win32, export all functions for DLL usage */
+// #ifndef _WIN32
+/** DLLExport information for windows, set to nothing on other platforms */
+//   #define FREENECTAPI_SYNC
+/** DLLExport information for windows, set to nothing on other platforms */
+// #else
+//   #ifdef __cplusplus
+//     #define FREENECTAPI_SYNC extern "C" __declspec(dllexport)
+//   #else
+    // this is required when building from a Win32 port of gcc without being
+    // forced to compile all of the library files (.c) with g++...
+//     #define FREENECTAPI_SYNC __declspec(dllexport)
+//   #endif
+// #endif
+
 // #ifdef __cplusplus
 // #endif
 
-public static native int freenect_sync_get_video(@Cast("void**") PointerPointer video, @Cast("uint32_t*") IntPointer timestamp, int index, @Cast("freenect_video_format") int fmt);
-public static native int freenect_sync_get_video(@Cast("void**") @ByPtrPtr Pointer video, @Cast("uint32_t*") IntPointer timestamp, int index, @Cast("freenect_video_format") int fmt);
-public static native int freenect_sync_get_video(@Cast("void**") @ByPtrPtr Pointer video, @Cast("uint32_t*") IntBuffer timestamp, int index, @Cast("freenect_video_format") int fmt);
-public static native int freenect_sync_get_video(@Cast("void**") @ByPtrPtr Pointer video, @Cast("uint32_t*") int[] timestamp, int index, @Cast("freenect_video_format") int fmt);
+public static native int freenect_sync_get_video_with_res(@Cast("void**") PointerPointer video, @Cast("uint32_t*") IntPointer timestamp, int index,
+        @Cast("freenect_resolution") int res, @Cast("freenect_video_format") int fmt);
+public static native int freenect_sync_get_video_with_res(@Cast("void**") @ByPtrPtr Pointer video, @Cast("uint32_t*") IntPointer timestamp, int index,
+        @Cast("freenect_resolution") int res, @Cast("freenect_video_format") int fmt);
+public static native int freenect_sync_get_video_with_res(@Cast("void**") @ByPtrPtr Pointer video, @Cast("uint32_t*") IntBuffer timestamp, int index,
+        @Cast("freenect_resolution") int res, @Cast("freenect_video_format") int fmt);
+public static native int freenect_sync_get_video_with_res(@Cast("void**") @ByPtrPtr Pointer video, @Cast("uint32_t*") int[] timestamp, int index,
+        @Cast("freenect_resolution") int res, @Cast("freenect_video_format") int fmt);
 /*  Synchronous video function, starts the runloop if it isn't running
 
     The returned buffer is valid until this function is called again, after which the buffer must not
@@ -1197,17 +1215,30 @@ public static native int freenect_sync_get_video(@Cast("void**") @ByPtrPtr Point
         video: Populated with a pointer to a video buffer with a size of the requested type
         timestamp: Populated with the associated timestamp
         index: Device index (0 is the first)
+        res: Valid resolution
         fmt: Valid format
 
     Returns:
         Nonzero on error.
 */
 
+public static native int freenect_sync_get_video(@Cast("void**") PointerPointer video, @Cast("uint32_t*") IntPointer timestamp, int index, @Cast("freenect_video_format") int fmt);
+public static native int freenect_sync_get_video(@Cast("void**") @ByPtrPtr Pointer video, @Cast("uint32_t*") IntPointer timestamp, int index, @Cast("freenect_video_format") int fmt);
+public static native int freenect_sync_get_video(@Cast("void**") @ByPtrPtr Pointer video, @Cast("uint32_t*") IntBuffer timestamp, int index, @Cast("freenect_video_format") int fmt);
+public static native int freenect_sync_get_video(@Cast("void**") @ByPtrPtr Pointer video, @Cast("uint32_t*") int[] timestamp, int index, @Cast("freenect_video_format") int fmt);
+/*  Does the exact same as above, but with a default resolution,
+    so backwards compatibilty is maintained.
+    The Resolution is kept at the default FREENECT_RESOLUTION_MEDIUM
+*/
 
-public static native int freenect_sync_get_depth(@Cast("void**") PointerPointer depth, @Cast("uint32_t*") IntPointer timestamp, int index, @Cast("freenect_depth_format") int fmt);
-public static native int freenect_sync_get_depth(@Cast("void**") @ByPtrPtr Pointer depth, @Cast("uint32_t*") IntPointer timestamp, int index, @Cast("freenect_depth_format") int fmt);
-public static native int freenect_sync_get_depth(@Cast("void**") @ByPtrPtr Pointer depth, @Cast("uint32_t*") IntBuffer timestamp, int index, @Cast("freenect_depth_format") int fmt);
-public static native int freenect_sync_get_depth(@Cast("void**") @ByPtrPtr Pointer depth, @Cast("uint32_t*") int[] timestamp, int index, @Cast("freenect_depth_format") int fmt);
+public static native int freenect_sync_get_depth_with_res(@Cast("void**") PointerPointer depth, @Cast("uint32_t*") IntPointer timestamp, int index,
+        @Cast("freenect_resolution") int res, @Cast("freenect_depth_format") int fmt);
+public static native int freenect_sync_get_depth_with_res(@Cast("void**") @ByPtrPtr Pointer depth, @Cast("uint32_t*") IntPointer timestamp, int index,
+        @Cast("freenect_resolution") int res, @Cast("freenect_depth_format") int fmt);
+public static native int freenect_sync_get_depth_with_res(@Cast("void**") @ByPtrPtr Pointer depth, @Cast("uint32_t*") IntBuffer timestamp, int index,
+        @Cast("freenect_resolution") int res, @Cast("freenect_depth_format") int fmt);
+public static native int freenect_sync_get_depth_with_res(@Cast("void**") @ByPtrPtr Pointer depth, @Cast("uint32_t*") int[] timestamp, int index,
+        @Cast("freenect_resolution") int res, @Cast("freenect_depth_format") int fmt);
 /*  Synchronous depth function, starts the runloop if it isn't running
 
     The returned buffer is valid until this function is called again, after which the buffer must not
@@ -1217,10 +1248,20 @@ public static native int freenect_sync_get_depth(@Cast("void**") @ByPtrPtr Point
         depth: Populated with a pointer to a depth buffer with a size of the requested type
         timestamp: Populated with the associated timestamp
         index: Device index (0 is the first)
+        res: Valid resolution
         fmt: Valid format
 
     Returns:
         Nonzero on error.
+*/
+
+public static native int freenect_sync_get_depth(@Cast("void**") PointerPointer depth, @Cast("uint32_t*") IntPointer timestamp, int index, @Cast("freenect_depth_format") int fmt);
+public static native int freenect_sync_get_depth(@Cast("void**") @ByPtrPtr Pointer depth, @Cast("uint32_t*") IntPointer timestamp, int index, @Cast("freenect_depth_format") int fmt);
+public static native int freenect_sync_get_depth(@Cast("void**") @ByPtrPtr Pointer depth, @Cast("uint32_t*") IntBuffer timestamp, int index, @Cast("freenect_depth_format") int fmt);
+public static native int freenect_sync_get_depth(@Cast("void**") @ByPtrPtr Pointer depth, @Cast("uint32_t*") int[] timestamp, int index, @Cast("freenect_depth_format") int fmt);
+/*  Again, a wrapper function to keep backward compatibility.
+    The Resolution is kept at the default FREENECT_RESOLUTION_MEDIUM
+
 */
 
 public static native int freenect_sync_set_tilt_degs(int angle, int index);
@@ -1257,6 +1298,13 @@ public static native int freenect_sync_set_led(@Cast("freenect_led_options") int
         Nonzero on error.
 */
 
+public static native int freenect_sync_camera_to_world(int cx, int cy, int wz, DoublePointer wx, DoublePointer wy, int index);
+public static native int freenect_sync_camera_to_world(int cx, int cy, int wz, DoubleBuffer wx, DoubleBuffer wy, int index);
+public static native int freenect_sync_camera_to_world(int cx, int cy, int wz, double[] wx, double[] wy, int index);
+/*  Camera to world mapping, starts the runloop if it isn't running
+
+    Wraps libfreenect_registration.h function of same name.
+*/
 
 public static native void freenect_sync_stop();
 // #ifdef __cplusplus
