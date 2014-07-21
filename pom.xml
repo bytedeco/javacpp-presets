@@ -29,12 +29,12 @@
   <modules>
     <module>opencv</module>
     <module>ffmpeg</module>
-    <module>flandmark</module>
     <module>flycapture</module>
     <module>libdc1394</module>
     <module>libfreenect</module>
     <module>videoinput</module>
     <module>artoolkitplus</module>
+    <module>flandmark</module>
     <module>fftw</module>
     <module>gsl</module>
     <module>llvm</module>
@@ -394,6 +394,12 @@
 
     <profile>
       <id>android-arm</id>
+      <activation>
+        <property>
+          <name>platform</name>
+          <value>android-arm</value>
+        </property>
+      </activation>
       <properties>
         <platform>android-arm</platform>
         <platform.root>${user.home}/android/android-ndk/</platform.root>
@@ -402,6 +408,12 @@
     </profile>
     <profile>
       <id>android-x86</id>
+      <activation>
+        <property>
+          <name>platform</name>
+          <value>android-x86</value>
+        </property>
+      </activation>
       <properties>
         <platform>android-x86</platform>
         <platform.root>${user.home}/android/android-ndk/</platform.root>

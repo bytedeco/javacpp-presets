@@ -10,7 +10,7 @@ if [[ $PLATFORM == windows* ]]; then
 
     mkdir -p $PLATFORM
     cd $PLATFORM
-    7za x -y ../opencv-$OPENCV_VERSION.exe opencv/build/include opencv/build/$BITS/vc10/lib opencv/build/$BITS/vc10/bin
+    7za x -y ../opencv-$OPENCV_VERSION.exe opencv/build/OpenCV* opencv/build/include opencv/build/$BITS/vc10/lib opencv/build/$BITS/vc10/bin
     cd opencv
 else
     OPENCV_VERSION=2.4.9

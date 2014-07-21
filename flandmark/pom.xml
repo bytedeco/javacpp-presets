@@ -11,32 +11,20 @@
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>flandmark</artifactId>
-  <version>1.7-${project.parent.version}</version>
+  <version>1.07-${project.parent.version}</version>
   <packaging>jar</packaging>
   <name>JavaCPP Presets for flandmark</name>
 
-  <properties>
-    <!-- Skip on non-Windows system (see profile below) -->
-    <generate-sources.skip>true</generate-sources.skip>
-    <process-classes.skip>true</process-classes.skip>
-  </properties>
-
   <dependencies>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>opencv</artifactId>
+      <version>2.4.9-${project.parent.version}</version>
+    </dependency>
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
     </dependency>
-      <dependency>
-          <groupId>org.bytedeco.javacpp-presets</groupId>
-          <artifactId>opencv</artifactId>
-          <version>2.4.9-0.8-2-SNAPSHOT</version>
-      </dependency>
-      <dependency>
-           <groupId>org.bytedeco.javacpp-presets</groupId>
-           <artifactId>opencv</artifactId>
-           <version>2.4.9-0.8-2-SNAPSHOT</version>
-           <classifier>${platform}</classifier>
-         </dependency>
   </dependencies>
 
   <build>
@@ -46,26 +34,44 @@
       </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <encoding>ISO-8859-1</encoding>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
         <configuration>
-          <environmentVariables>
-            <!-- Hack required for Windows SDK v7.1 -->
-            <CL>&quot;/I${env.SDKDIR}/Include/&quot;</CL>
-          </environmentVariables>
+          <classPaths>
+            <classPath>${basedir}/../opencv/target/classes/</classPath>
+            <classPath>${project.build.outputDirectory}</classPath>
+          </classPaths>
+          <includePaths>
+            <includePath>${basedir}/../opencv/target/classes/org/bytedeco/javacpp/</includePath>
+            <includePath>${basedir}/../opencv/cppbuild/${platform}/include/opencv/</includePath>
+            <includePath>${basedir}/../opencv/cppbuild/${platform}/include/</includePath>
+            <includePath>${basedir}/cppbuild/${platform}/include/</includePath>
+          </includePaths>
+          <linkPaths>
+            <linkPath>${basedir}/../opencv/cppbuild/${platform}/lib/</linkPath>
+            <linkPath>${basedir}/cppbuild/${platform}/lib/</linkPath>
+          </linkPaths>
+          <preloadPaths>
+            <preloadPath>${basedir}/../opencv/cppbuild/${platform}/bin/</preloadPath>
+            <preloadPath>${basedir}/cppbuild/${platform}/bin/</preloadPath>
+          </preloadPaths>
         </configuration>
-          <dependencies>
-          <dependency>
-              <groupId>org.bytedeco.javacpp-presets</groupId>
-              <artifactId>opencv</artifactId>
-              <version>2.4.9-0.8-2-SNAPSHOT</version>
-          </dependency>
-          </dependencies>
+        <executions>
+          <execution>
+            <id>generate-sources</id>
+            <configuration>
+              <classOrPackageName>org.bytedeco.javacpp.presets.flandmark</classOrPackageName>
+            </configuration>
+          </execution>
+          <execution>
+            <id>process-classes</id>
+            <configuration>
+              <classOrPackageName>org.bytedeco.javacpp.flandmark</classOrPackageName>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
@@ -78,24 +84,8 @@
       </plugin>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <configuration>
-          <encoding>ISO-8859-1</encoding>
-        </configuration>
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>windows</id>
-      <activation>
-        <os><family>windows</family></os>
-      </activation>
-      <properties>
-        <generate-sources.skip>false</generate-sources.skip>
-        <process-classes.skip>false</process-classes.skip>
-      </properties>
-    </profile>
-  </profiles>
 
 </project>

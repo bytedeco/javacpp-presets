@@ -2,15 +2,17 @@
 
 package org.bytedeco.javacpp;
 
-import static org.bytedeco.javacpp.opencv_core.*;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.opencv_core.*;
+import static org.bytedeco.javacpp.opencv_imgproc.*;
+
 public class flandmark extends org.bytedeco.javacpp.presets.flandmark {
     static { Loader.load(); }
 
-// Parsed from <flandmark_detector.h>
+// Parsed from flandmark_detector.h
 
 /*
  * This program is free software; you can redistribute it and/or modify
@@ -306,6 +308,48 @@ public static native int flandmark_detect(IplImage img, int[] bbox, FLANDMARK_Mo
 public static native int flandmark_detect(IplImage img, int[] bbox, FLANDMARK_Model model, double[] landmarks);
 
 // #endif // __LIBFLD_DETECTOR_H_
+
+
+// Parsed from liblbp.h
+
+/*
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Written (W) 2012 Vojtech Franc, Michal Uricar
+ * Copyright (C) 2012 Vojtech Franc, Michal Uricar
+ */
+
+// #ifndef _liblbp_h
+// #define _liblbp_h
+
+// #include "msvc-compat.h"
+
+// #define LIBLBP_INDEX(ROW,COL,NUM_ROWS) ((COL)*(NUM_ROWS)+(ROW))
+// #define LIBLBP_MIN(A,B) ((A) > (B) ? (B) : (A))
+
+//typedef long unsigned int t_index;
+
+public static native void liblbp_pyr_features_sparse(@Cast("t_index*") IntPointer vec, @Cast("uint32_t") int vec_nDim, @Cast("uint32_t*") IntPointer img, @Cast("uint16_t") short img_nRows, @Cast("uint16_t") short img_nCols );
+public static native void liblbp_pyr_features_sparse(@Cast("t_index*") IntBuffer vec, @Cast("uint32_t") int vec_nDim, @Cast("uint32_t*") IntBuffer img, @Cast("uint16_t") short img_nRows, @Cast("uint16_t") short img_nCols );
+public static native void liblbp_pyr_features_sparse(@Cast("t_index*") int[] vec, @Cast("uint32_t") int vec_nDim, @Cast("uint32_t*") int[] img, @Cast("uint16_t") short img_nRows, @Cast("uint16_t") short img_nCols );
+public static native void liblbp_pyr_features(@Cast("char*") BytePointer vec, @Cast("uint32_t") int vec_nDim, @Cast("uint32_t*") IntPointer img, @Cast("uint16_t") short img_nRows, @Cast("uint16_t") short img_nCols );
+public static native void liblbp_pyr_features(@Cast("char*") ByteBuffer vec, @Cast("uint32_t") int vec_nDim, @Cast("uint32_t*") IntBuffer img, @Cast("uint16_t") short img_nRows, @Cast("uint16_t") short img_nCols );
+public static native void liblbp_pyr_features(@Cast("char*") byte[] vec, @Cast("uint32_t") int vec_nDim, @Cast("uint32_t*") int[] img, @Cast("uint16_t") short img_nRows, @Cast("uint16_t") short img_nCols );
+public static native double liblbp_pyr_dotprod(DoublePointer vec, @Cast("uint32_t") int vec_nDim, @Cast("uint32_t*") IntPointer img, @Cast("uint16_t") short img_nRows, @Cast("uint16_t") short img_nCols);
+public static native double liblbp_pyr_dotprod(DoubleBuffer vec, @Cast("uint32_t") int vec_nDim, @Cast("uint32_t*") IntBuffer img, @Cast("uint16_t") short img_nRows, @Cast("uint16_t") short img_nCols);
+public static native double liblbp_pyr_dotprod(double[] vec, @Cast("uint32_t") int vec_nDim, @Cast("uint32_t*") int[] img, @Cast("uint16_t") short img_nRows, @Cast("uint16_t") short img_nCols);
+public static native void liblbp_pyr_addvec(LongPointer vec, @Cast("uint32_t") int vec_nDim, @Cast("uint32_t*") IntPointer img, @Cast("uint16_t") short img_nRows, @Cast("uint16_t") short img_nCols);
+public static native void liblbp_pyr_addvec(LongBuffer vec, @Cast("uint32_t") int vec_nDim, @Cast("uint32_t*") IntBuffer img, @Cast("uint16_t") short img_nRows, @Cast("uint16_t") short img_nCols);
+public static native void liblbp_pyr_addvec(long[] vec, @Cast("uint32_t") int vec_nDim, @Cast("uint32_t*") int[] img, @Cast("uint16_t") short img_nRows, @Cast("uint16_t") short img_nCols);
+public static native void liblbp_pyr_subvec(LongPointer vec, @Cast("uint32_t") int vec_nDim, @Cast("uint32_t*") IntPointer img, @Cast("uint16_t") short img_nRows, @Cast("uint16_t") short img_nCols);
+public static native void liblbp_pyr_subvec(LongBuffer vec, @Cast("uint32_t") int vec_nDim, @Cast("uint32_t*") IntBuffer img, @Cast("uint16_t") short img_nRows, @Cast("uint16_t") short img_nCols);
+public static native void liblbp_pyr_subvec(long[] vec, @Cast("uint32_t") int vec_nDim, @Cast("uint32_t*") int[] img, @Cast("uint16_t") short img_nRows, @Cast("uint16_t") short img_nCols);
+public static native @Cast("uint32_t") int liblbp_pyr_get_dim(@Cast("uint16_t") short img_nRows, @Cast("uint16_t") short img_nCols, @Cast("uint16_t") short nPyramids);
+
+// #endif
 
 
 }

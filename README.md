@@ -43,8 +43,9 @@ Each child module in turn relies on its corresponding native libraries being alr
  * libfreenect 0.5  https://github.com/OpenKinect/libfreenect
  * videoInput 0.200  https://github.com/ofTheo/videoInput/tree/update2013
  * ARToolKitPlus 2.3.0  https://launchpad.net/artoolkitplus
+ * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * FFTW 3.3.4  http://www.fftw.org/download.html
- * GSL 1.16  http://www.gnu.org/software/gsl/
+ * GSL 1.16  http://www.gnu.org/software/gsl/#downloading
  * LLVM 3.4.2  http://llvm.org/releases/download.html
  * Leptonica 1.71  http://www.leptonica.org/download.html
  * Tesseract 3.03-rc1  https://code.google.com/p/tesseract-ocr/
