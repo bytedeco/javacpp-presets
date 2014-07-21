@@ -821,8 +821,8 @@ public static native int fftw_alignment_of( DoubleBuffer p);
 public static native int fftw_alignment_of( double[] p);
 @MemberGetter public static native @Platform(not="windows") byte fftw_version(int i);
 @MemberGetter public static native @Platform(not="windows") @Cast("const char*") BytePointer fftw_version();
-@MemberGetter public static native @Name("fftw_cc") @Platform(not="windows") byte fftw_fftw_cc(int i);
-@MemberGetter public static native @Name("fftw_cc") @Platform(not="windows") @Cast("const char*") BytePointer fftw_fftw_cc();
+@MemberGetter public static native @Platform(not="windows") byte fftw_cc(int i);
+@MemberGetter public static native @Platform(not="windows") @Cast("const char*") BytePointer fftw_cc();
 @MemberGetter public static native @Platform(not="windows") byte fftw_codelet_optim(int i);
 @MemberGetter public static native @Platform(not="windows") @Cast("const char*") BytePointer fftw_codelet_optim();
 

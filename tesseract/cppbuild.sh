@@ -15,7 +15,7 @@ if [[ $PLATFORM == windows* ]]; then
     mv include ..
     mv lib ..
 else
-    TESSERACT_VERSION=3.03-rc1
+    TESSERACT_VERSION=3.03
     download "https://drive.google.com/uc?export=download&id=0B7l10Bj_LprhSGN2bTYwemVRREU" tesseract-$TESSERACT_VERSION.tar.gz
 
     mkdir -p $PLATFORM

@@ -56,7 +56,7 @@ public class opencv_highgui implements InfoMapper {
                .put(new Info("cvvShowImage").cppTypes("void", "const char*", "CvArr*"))
                .put(new Info("cvvResizeWindow").cppTypes("void", "const char*", "int", "int"))
                .put(new Info("cvvDestroyWindow").cppTypes("void", "const char*"))
-               .put(new Info("cvvCreateTrackbar").cppTypes("int", "const char*", "const char*", "int*", "int", "CvTrackbarCallback*"))
+               .put(new Info("cvvCreateTrackbar").cppTypes("int", "const char*", "const char*", "int*", "int", "CvTrackbarCallback"))
                .put(new Info("cvvLoadImage").cppTypes("IplImage*", "const char*"))
                .put(new Info("cvvSaveImage").cppTypes("int", "const char*", "CvArr*", "int*"))
                .put(new Info("cvvAddSearchPath", "cvAddSearchPath").cppTypes("void", "const char*"))

@@ -32,6 +32,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(target="org.bytedeco.javacpp.fftw3", value={
     @Platform(include="<fftw3.h>", link={"fftw3@.3", "fftw3f@.3"}),
+    @Platform(value="android", link={"fftw3", "fftw3f"}),
     @Platform(value="windows", link={"libfftw3-3", "libfftw3f-3"}) })
 public class fftw3 implements InfoMapper {
     public void map(InfoMap infoMap) {

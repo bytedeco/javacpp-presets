@@ -56,7 +56,7 @@ public class opencv_legacy implements InfoMapper {
                .put(new Info("cvMeanMask").cppTypes("double", "CvArr*", "CvArr*"))
                .put(new Info("cvMean_StdDevMask").cppTypes("void", "CvArr*", "CvArr*", "double*", "double*"))
                .put(new Info("cvNormMask").cppTypes("double", "CvArr*", "CvArr*", "CvArr*", "int"))
-               .put(new Info("cvRemoveMemoryManager").cppTypes("void", "CvAllocFunc*", "CvFreeFunc*", "void*"))
+               .put(new Info("cvRemoveMemoryManager").cppTypes("void", "CvAllocFunc", "CvFreeFunc", "void*"))
                .put(new Info("cvCopyImage").cppTypes("void", "CvArr*", "CvArr*"))
                .put(new Info("cvReleaseMatHeader").cppTypes("void", "CvMat**"))
                .put(new Info("cvQueryHistValue_1D").cppTypes("float", "CvHistogram*", "int"))
