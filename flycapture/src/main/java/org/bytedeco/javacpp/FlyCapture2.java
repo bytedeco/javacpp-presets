@@ -2200,7 +2200,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      * Handle that is returned when registering a callback. It is required
      * when unregistering the callback.
      */
-    @Opaque @Namespace("FlyCapture2") public static class CallbackHandle extends Pointer {
+    @Namespace("FlyCapture2") @Opaque public static class CallbackHandle extends Pointer {
         public CallbackHandle() { }
         public CallbackHandle(Pointer p) { super(p); }
     }    
@@ -3804,7 +3804,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public static native @ByVal Error StartSyncCapture( 
                     @Cast("unsigned int") int numCameras,
                     @Cast("const FlyCapture2::Camera**") PointerPointer ppCameras, 
-                    @Const @Cast("FlyCapture2::ImageEventCallback*") @ByPtrPtr ImageEventCallback pCallbackFns/*=NULL*/,
+                    @Cast("FlyCapture2::ImageEventCallback*") @ByPtrPtr ImageEventCallback pCallbackFns/*=NULL*/,
                     @Cast("const void**") PointerPointer pCallbackDataArray/*=NULL*/ );
         public static native @ByVal Error StartSyncCapture( 
                     @Cast("unsigned int") int numCameras,
@@ -3812,7 +3812,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public static native @ByVal Error StartSyncCapture( 
                     @Cast("unsigned int") int numCameras,
                     @Const @ByPtrPtr Camera ppCameras, 
-                    @Const @Cast("FlyCapture2::ImageEventCallback*") @ByPtrPtr ImageEventCallback pCallbackFns/*=NULL*/,
+                    @Cast("FlyCapture2::ImageEventCallback*") @ByPtrPtr ImageEventCallback pCallbackFns/*=NULL*/,
                     @Cast("const void**") @ByPtrPtr Pointer pCallbackDataArray/*=NULL*/ );        
         public native @ByVal Error RetrieveBuffer( Image pImage );        
         public native @ByVal Error StopCapture();        
@@ -4394,7 +4394,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public static native @ByVal Error StartSyncCapture( 
                     @Cast("unsigned int") int numCameras,
                     @Cast("const FlyCapture2::GigECamera**") PointerPointer ppCameras, 
-                    @Const @Cast("FlyCapture2::ImageEventCallback*") @ByPtrPtr ImageEventCallback pCallbackFns/*=NULL*/,
+                    @Cast("FlyCapture2::ImageEventCallback*") @ByPtrPtr ImageEventCallback pCallbackFns/*=NULL*/,
                     @Cast("const void**") PointerPointer pCallbackDataArray/*=NULL*/ );
         public static native @ByVal Error StartSyncCapture( 
                     @Cast("unsigned int") int numCameras,
@@ -4402,7 +4402,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public static native @ByVal Error StartSyncCapture( 
                     @Cast("unsigned int") int numCameras,
                     @Const @ByPtrPtr GigECamera ppCameras, 
-                    @Const @Cast("FlyCapture2::ImageEventCallback*") @ByPtrPtr ImageEventCallback pCallbackFns/*=NULL*/,
+                    @Cast("FlyCapture2::ImageEventCallback*") @ByPtrPtr ImageEventCallback pCallbackFns/*=NULL*/,
                     @Cast("const void**") @ByPtrPtr Pointer pCallbackDataArray/*=NULL*/ );        
         public native @ByVal Error RetrieveBuffer( Image pImage );        
         public native @ByVal Error StopCapture();        

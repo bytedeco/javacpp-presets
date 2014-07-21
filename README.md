@@ -38,7 +38,7 @@ Each child module in turn relies on its corresponding native libraries being alr
 
  * OpenCV 2.4.9  http://opencv.org/downloads.html
  * FFmpeg 2.3.x  http://ffmpeg.org/download.html
- * FlyCapture 1.7 or newer (Windows only)  http://ww2.ptgrey.com/sdk/flycap
+ * FlyCapture 2.6.x  http://ww2.ptgrey.com/sdk/flycap
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
  * OpenKinect libfreenect 0.4  https://github.com/OpenKinect/libfreenect
  * videoInput 0.200  https://github.com/ofTheo/videoInput/tree/update2013

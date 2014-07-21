@@ -34,32 +34,29 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 /**
- * Wrapper for Point Grey FlyCapture2_C library (the C API v.2).
+ * Wrapper for Point Grey FlyCapture2 library (the C++ API v.2).
  *
  * @author Jarek Sacha
  */
 @Properties(target = "org.bytedeco.javacpp.FlyCapture2", value = {
+        @Platform(value = {"linux", "windows"}, include = {"<FlyCapture2Platform.h>", "<FlyCapture2Defs.h>",
+                "<Error.h>", "<BusManager.h>", "<CameraBase.h>", "<Camera.h>", "<GigECamera.h>", "<Image.h>",
+                "<Utilities.h>", "<AVIRecorder.h>", "<TopologyNode.h>", "<ImageStatistics.h>"}),
+        @Platform(value = "linux", link = "flycapture@.2", includepath = "/usr/include/flycapture/"),
         @Platform(value = "windows", link = "FlyCapture2",
-                include = {"<FlyCapture2Platform.h>", "<FlyCapture2Defs.h>", "<Error.h>", "<BusManager.h>",
-                        "<CameraBase.h>", "<Camera.h>", "<GigECamera.h>", "<Image.h>", "<Utilities.h>",
-                        "<AVIRecorder.h>", "<TopologyNode.h>", "<ImageStatistics.h>"},
-                includepath = {"C:/Program Files/Point Grey Research/FlyCapture2/include/"}),
-        @Platform(value = "windows-x86",
-                linkpath = {"C:/Program Files/Point Grey Research/FlyCapture2/lib/"},
-                define = {"WIN32"},
-                preloadpath = {"C:/Program Files/Point Grey Research/FlyCapture2/bin/"}),
-        @Platform(value = "windows-x86_64",
-                linkpath = {"C:/Program Files/Point Grey Research/FlyCapture2/lib64/"},
-                define = {"WIN64"},
-                preloadpath = {"C:/Program Files/Point Grey Research/FlyCapture2/bin64/"})})
+                includepath = "C:/Program Files/Point Grey Research/FlyCapture2/include/"),
+        @Platform(value = "windows-x86",    define = "WIN32",
+                linkpath    = "C:/Program Files/Point Grey Research/FlyCapture2/lib/",
+                preloadpath = "C:/Program Files/Point Grey Research/FlyCapture2/bin/"),
+        @Platform(value = "windows-x86_64", define = "WIN64",
+                linkpath    = "C:/Program Files/Point Grey Research/FlyCapture2/lib64/",
+                preloadpath = "C:/Program Files/Point Grey Research/FlyCapture2/bin64/") })
 public class FlyCapture2 implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("FLYCAPTURE2_API", "FLYCAPTURE2_LOCAL").cppTypes().annotations().cppText(""))
-                .put(new Info("defined(WIN32) || defined(WIN64)").define(true))
-                .put(new Info("ErrorType").cast().valueTypes("int"))
-                .put(new Info("FlyCapture2::ImageEventCallback").valueTypes("ImageEventCallback")
-                        .pointerTypes("@Cast(\"FlyCapture2::ImageEventCallback*\") @ByPtrPtr ImageEventCallback"))
-                .put(new Info("FlyCapture2::CameraBase::GetRegisterString", "FlyCapture2::CameraBase::StartSyncCapture").skip());
-
+               .put(new Info("defined(WIN32) || defined(WIN64)").define())
+               .put(new Info("FlyCapture2::ImageEventCallback").valueTypes("ImageEventCallback")
+                       .pointerTypes("@Cast(\"FlyCapture2::ImageEventCallback*\") @ByPtrPtr ImageEventCallback"))
+               .put(new Info("FlyCapture2::CameraBase::GetRegisterString", "FlyCapture2::CameraBase::StartSyncCapture").skip());
     }
 }

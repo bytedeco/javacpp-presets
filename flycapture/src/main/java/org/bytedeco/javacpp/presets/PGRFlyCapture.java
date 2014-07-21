@@ -23,8 +23,6 @@
  * as long as it is distributed as part of a substantially larger package,
  * and not as a standalone wrapper to the FlyCapture library.
  *
- * ****** IMPORTANT: Some functions are commented out to cover the
- * ****** common API from the FlyCapture SDK version 1.7 to 2.x.
  */
 
 package org.bytedeco.javacpp.presets;
@@ -61,15 +59,17 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                      "C:/Program Files/Point Grey Research/FlyCapture2/bin64/FC1/"}) })
 public class PGRFlyCapture implements InfoMapper {
     public void map(InfoMap infoMap) {
-          infoMap.put(new Info("windows.h").skip())
-                 .put(new Info("PGRFLYCAPTURE_API", "PGRFLYCAPTURE_CALL_CONVEN").cppTypes().annotations().cppText(""))
-                 .put(new Info("FlyCaptureContext").valueTypes("FlyCaptureContext").pointerTypes("@Cast(\"FlyCaptureContext*\") @ByPtrPtr FlyCaptureContext"))
-                 .put(new Info("FlyCaptureImage").base("AbstractFlyCaptureImage"))
-                 .put(new Info("FlyCaptureInfoEx::iInitialized", "FlyCaptureDriverInfo",
-                               "flycaptureGetDriverInfo", "flycaptureInitializeFromSerialNumberPlus",
-                               "flycaptureInitializeNotify", "flycaptureLockNextEvent", "flycaptureUnlockEvent").skip())
-                 .put(new Info("OVERLAPPED").cast().pointerTypes("Pointer"))
-                 .put(new Info("long", "unsigned long", "ULONG").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"));
+        infoMap.put(new Info("windows.h").skip())
+               .put(new Info("PGRFLYCAPTURE_API", "PGRFLYCAPTURE_CALL_CONVEN").cppTypes().annotations().cppText(""))
+               .put(new Info("FlyCaptureContext").valueTypes("FlyCaptureContext")
+                       .pointerTypes("@Cast(\"FlyCaptureContext*\") @ByPtrPtr FlyCaptureContext"))
+               .put(new Info("FlyCaptureCallback").valueTypes("FlyCaptureCallback")
+                       .pointerTypes("@Cast(\"FlyCaptureCallback*\") @ByPtrPtr FlyCaptureCallback"))
+               .put(new Info("FlyCaptureImage").base("AbstractFlyCaptureImage"))
+               .put(new Info("flycaptureInitializeNotify", "flycaptureLockNextEvent", "flycaptureUnlockEvent").skip())
+               .put(new Info("OVERLAPPED").cast().pointerTypes("Pointer"))
+               .put(new Info("long", "unsigned long", "ULONG").cast().valueTypes("int")
+                       .pointerTypes("IntPointer", "IntBuffer", "int[]"));
     }
 
     public static abstract class AbstractFlyCaptureImage extends Pointer {

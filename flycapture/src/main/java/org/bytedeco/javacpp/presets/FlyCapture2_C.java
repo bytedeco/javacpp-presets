@@ -39,25 +39,26 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Jarek Sacha
  */
 @Properties(target = "org.bytedeco.javacpp.FlyCapture2_C", value = {
+        @Platform(value = {"linux", "windows"}, include = {"<FlyCapture2Defs_C.h>", "<FlyCapture2_C.h>"}),
+        @Platform(value = "linux", link = "flycapture-c@.2", includepath = "/usr/include/flycapture/C/"),
         @Platform(value = "windows", link = "FlyCapture2_C", preload = {"libiomp5md", "FlyCapture2"},
-                include = {"<FlyCapture2Defs_C.h>", "<FlyCapture2_C.h>"},
-                includepath = {"C:/Program Files/Point Grey Research/FlyCapture2/include/C/"}),
+                includepath =  "C:/Program Files/Point Grey Research/FlyCapture2/include/C/"),
         @Platform(value = "windows-x86",
-                linkpath = {"C:/Program Files/Point Grey Research/FlyCapture2/lib/C/"},
+                linkpath    =  "C:/Program Files/Point Grey Research/FlyCapture2/lib/C/",
                 preloadpath = {"C:/Program Files/Point Grey Research/FlyCapture2/bin/",
-                        "C:/Program Files/Point Grey Research/FlyCapture2/bin/C/"}),
+                               "C:/Program Files/Point Grey Research/FlyCapture2/bin/C/"}),
         @Platform(value = "windows-x86_64",
-                linkpath = {"C:/Program Files/Point Grey Research/FlyCapture2/lib64/C/"},
+                linkpath    =  "C:/Program Files/Point Grey Research/FlyCapture2/lib64/C/",
                 preloadpath = {"C:/Program Files/Point Grey Research/FlyCapture2/bin64/",
-                        "C:/Program Files/Point Grey Research/FlyCapture2/bin64/C/"})})
+                               "C:/Program Files/Point Grey Research/FlyCapture2/bin64/C/"}) })
 public class FlyCapture2_C implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("FLYCAPTURE2_C_API", "FLYCAPTURE2_C_CALL_CONVEN").cppTypes().annotations().cppText(""))
-                .put(new Info("fc2TriggerDelayInfo").cast().pointerTypes("fc2PropertyInfo"))
-                .put(new Info("fc2TriggerDelay").cast().pointerTypes("fc2Property"))
-                .put(new Info("fc2ImageEventCallback").valueTypes("fc2ImageEventCallback")
-                        .pointerTypes("@Cast(\"fc2ImageEventCallback*\") @ByPtrPtr fc2ImageEventCallback"))
-                .put(new Info("fc2Context").valueTypes("fc2Context")
-                        .pointerTypes("@Cast(\"fc2Context*\") @ByPtrPtr fc2Context"));
+               .put(new Info("fc2TriggerDelayInfo").cast().pointerTypes("fc2PropertyInfo"))
+               .put(new Info("fc2TriggerDelay").cast().pointerTypes("fc2Property"))
+               .put(new Info("fc2ImageEventCallback").valueTypes("fc2ImageEventCallback")
+                       .pointerTypes("@Cast(\"fc2ImageEventCallback*\") @ByPtrPtr fc2ImageEventCallback"))
+               .put(new Info("fc2Context").valueTypes("fc2Context")
+                       .pointerTypes("@Cast(\"fc2Context*\") @ByPtrPtr fc2Context"));
     }
 }

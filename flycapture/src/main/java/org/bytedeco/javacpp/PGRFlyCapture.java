@@ -445,7 +445,7 @@ public static class FlyCaptureInfoEx extends Pointer {
    // Camera max bus speed
    public native @Cast("FlyCaptureBusSpeed") int CameraMaxBusSpeed(); public native FlyCaptureInfoEx CameraMaxBusSpeed(int CameraMaxBusSpeed);
    // Flag indicating that the camera is already initialized
-   
+   public native int iInitialized(); public native FlyCaptureInfoEx iInitialized(int iInitialized);
 
    // Reserved for future data.
    public native @Cast("unsigned long") int ulReserved(int i); public native FlyCaptureInfoEx ulReserved(int i, int ulReserved);
@@ -457,6 +457,25 @@ public static class FlyCaptureInfoEx extends Pointer {
 // Description:
 //  This structure stores some extra driver info not stored on FlyCaptureInfoEx
 //
+public static class FlyCaptureDriverInfo extends Pointer {
+    static { Loader.load(); }
+    public FlyCaptureDriverInfo() { allocate(); }
+    public FlyCaptureDriverInfo(int size) { allocateArray(size); }
+    public FlyCaptureDriverInfo(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public FlyCaptureDriverInfo position(int position) {
+        return (FlyCaptureDriverInfo)super.position(position);
+    }
+
+   // Null-terminated driver name for attached camera.
+   public native @Cast("char") byte pszDriverName(int i); public native FlyCaptureDriverInfo pszDriverName(int i, byte pszDriverName);
+   @MemberGetter public native @Cast("char*") BytePointer pszDriverName();
+   //  Null-terminated driver Driver version
+   public native @Cast("char") byte pszVersion(int i); public native FlyCaptureDriverInfo pszVersion(int i, byte pszVersion);
+   @MemberGetter public native @Cast("char*") BytePointer pszVersion();
+
+}
 
 //
 // Description:
@@ -754,7 +773,7 @@ public static native @Cast("FlyCaptureError") int flycaptureBusEnumerateCamerasE
 //
 public static native @Cast("FlyCaptureError") int flycaptureModifyCallback(
                          FlyCaptureContext context,
-                         FlyCaptureCallback pfnCallback,
+                         @Cast("FlyCaptureCallback*") @ByPtrPtr FlyCaptureCallback pfnCallback,
                          Pointer pParam,
                          @Cast("bool") boolean bAdd );
 
@@ -894,7 +913,9 @@ public static native @Cast("FlyCaptureError") int flycaptureGetCameraInfo(
 // Returns:
 //   A FlyCaptureError indicating the success or failure of the function.
 //
-
+public static native @Cast("FlyCaptureError") int flycaptureGetDriverInfo(
+                        FlyCaptureContext context,
+                        FlyCaptureDriverInfo pInfo );
 
 
 //-----------------------------------------------------------------------------
@@ -3351,7 +3372,26 @@ public static native @Cast("FlyCaptureError") int flycaptureInitializePlus(
 // See Also:
 //   flycaptureInitialize(), flycaptureInitializeFromSerialNumber(), flycaptureInitializePlus()
 //
-
+public static native @Cast("FlyCaptureError") int flycaptureInitializeFromSerialNumberPlus(
+                         FlyCaptureContext context,
+                         @Cast("FlyCaptureCameraSerialNumber") int serialNumber,
+                         @Cast("unsigned long") int ulNumBuffers,
+                         @Cast("unsigned char**") PointerPointer arpBuffers );
+public static native @Cast("FlyCaptureError") int flycaptureInitializeFromSerialNumberPlus(
+                         FlyCaptureContext context,
+                         @Cast("FlyCaptureCameraSerialNumber") int serialNumber,
+                         @Cast("unsigned long") int ulNumBuffers,
+                         @Cast("unsigned char**") @ByPtrPtr BytePointer arpBuffers );
+public static native @Cast("FlyCaptureError") int flycaptureInitializeFromSerialNumberPlus(
+                         FlyCaptureContext context,
+                         @Cast("FlyCaptureCameraSerialNumber") int serialNumber,
+                         @Cast("unsigned long") int ulNumBuffers,
+                         @Cast("unsigned char**") @ByPtrPtr ByteBuffer arpBuffers );
+public static native @Cast("FlyCaptureError") int flycaptureInitializeFromSerialNumberPlus(
+                         FlyCaptureContext context,
+                         @Cast("FlyCaptureCameraSerialNumber") int serialNumber,
+                         @Cast("unsigned long") int ulNumBuffers,
+                         @Cast("unsigned char**") @ByPtrPtr byte[] arpBuffers );
 
 //=============================================================================
 // Control Functions

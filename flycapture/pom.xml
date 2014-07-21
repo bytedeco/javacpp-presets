@@ -13,13 +13,7 @@
   <artifactId>flycapture</artifactId>
   <version>2.6.3.4-${project.parent.version}</version>
   <packaging>jar</packaging>
-  <name>JavaCPP Presets for Point Grey's FlyCapture</name>
-
-  <properties>
-    <!-- Skip on non-Windows system (see profile below) -->
-    <generate-sources.skip>true</generate-sources.skip>
-    <process-classes.skip>true</process-classes.skip>
-  </properties>
+  <name>JavaCPP Presets for FlyCapture</name>
 
   <dependencies>
     <dependency>
@@ -72,18 +66,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>windows</id>
-      <activation>
-        <os><family>windows</family></os>
-      </activation>
-      <properties>
-        <generate-sources.skip>false</generate-sources.skip>
-        <process-classes.skip>false</process-classes.skip>
-      </properties>
-    </profile>
-  </profiles>
 
 </project>
