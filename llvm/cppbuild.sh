@@ -23,7 +23,7 @@ case $PLATFORM in
         make -j4
         make install
         ;;
-    macosx-x86_64)
+    macosx-*)
         ./configure --prefix=$INSTALL_PATH --enable-shared --enable-optimized
         make -j4
         make install

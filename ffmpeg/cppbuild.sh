@@ -67,7 +67,7 @@ case $PLATFORM in
         make -j4
         make install
         ;;
-    macosx-x86_64)
+    macosx-*)
         cd $X264
         ./configure --enable-static --enable-pic
         make -j4

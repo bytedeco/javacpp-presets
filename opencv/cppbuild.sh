@@ -49,8 +49,8 @@ case $PLATFORM in
         make -j4
         make install/strip
         ;;
-    macosx-x86_64)
-        patch -Np1 < ../../../opencv-$OPENCV_VERSION-macosx-x86_64.patch
+    macosx-*)
+        patch -Np1 < ../../../opencv-$OPENCV_VERSION-macosx.patch
         cmake -DCMAKE_INSTALL_PREFIX=.. -DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_JASPER=ON -DBUILD_JPEG=ON -DBUILD_OPENEXR=ON -DBUILD_PNG=ON -DBUILD_TBB=ON -DBUILD_TIFF=ON -DBUILD_ZLIB=ON -DBUILD_opencv_java=OFF -DBUILD_opencv_python=OFF -DENABLE_PRECOMPILED_HEADERS=OFF -DWITH_1394=OFF -DWITH_FFMPEG=OFF -DWITH_GSTREAMER=OFF -DWITH_TBB=ON -DWITH_CUDA=OFF -DWITH_OPENCL=OFF -DCMAKE_SHARED_LINKER_FLAGS="-Wl,-headerpad_max_install_names"
         make -j4
         make install/strip

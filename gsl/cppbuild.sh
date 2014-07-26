@@ -45,7 +45,7 @@ case $PLATFORM in
         make -j4
         make install-strip
         ;;
-    macosx-x86_64)
+    macosx-*)
         ./configure --prefix=$INSTALL_PATH
         make -j4
         make install-strip

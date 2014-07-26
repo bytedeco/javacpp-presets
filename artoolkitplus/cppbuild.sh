@@ -33,7 +33,7 @@ case $PLATFORM in
         make -j4
         make install
         ;;
-    macosx-x86_64)
+    macosx-*)
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
         make -j4
         make install

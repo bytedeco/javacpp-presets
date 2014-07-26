@@ -40,7 +40,7 @@ case $PLATFORM in
         cp libflandmark/*.h ../include
         cp libflandmark/*.a ../lib
         ;;
-    macosx-x86_64)
+    macosx-*)
         cmake -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
         make -j4 flandmark_static
         cp libflandmark/*.h ../include

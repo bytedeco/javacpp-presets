@@ -23,7 +23,7 @@ case $PLATFORM in
         make -j4
         make install-strip
         ;;
-    macosx-x86_64)
+    macosx-*)
         LIBUSB_CFLAGS=-I/usr/local/include/libusb-1.0/ LIBUSB_LIBS=-I/usr/local/lib/ ./configure --prefix=$INSTALL_PATH
         make -j4
         make install-strip
