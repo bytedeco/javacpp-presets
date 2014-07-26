@@ -41,7 +41,7 @@ case $PLATFORM in
         cp libflandmark/*.a ../lib
         ;;
     macosx-*)
-        cmake -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
+        CXX="g++ -fpermissive" cmake -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
         make -j4 flandmark_static
         cp libflandmark/*.h ../include
         cp libflandmark/*.a ../lib

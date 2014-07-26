@@ -29,7 +29,7 @@ case $PLATFORM in
         make install
         ;;
     linux-x86_64)
-        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
+        CC="gcc -m64" CXX="g++ -m64" cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
         make -j4
         make install
         ;;

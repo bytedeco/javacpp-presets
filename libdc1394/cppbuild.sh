@@ -19,7 +19,7 @@ case $PLATFORM in
         make install-strip
         ;;
     linux-x86_64)
-        ./configure --prefix=$INSTALL_PATH
+        CC="gcc -m64" ./configure --prefix=$INSTALL_PATH
         make -j4
         make install-strip
         ;;

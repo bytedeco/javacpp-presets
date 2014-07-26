@@ -63,7 +63,7 @@ case $PLATFORM in
         ./configure --enable-static --enable-pic
         make -j4
         cd ..
-        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-outdev=sdl --enable-libx264 --extra-cflags="-I$X264" --extra-ldflags="-L$X264" --extra-ldflags="-ldl"
+        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-outdev=sdl --enable-libx264 --extra-cflags="-I$X264" --extra-ldflags="-L$X264" --cc="gcc -m64" --extra-ldflags="-ldl"
         make -j4
         make install
         ;;
