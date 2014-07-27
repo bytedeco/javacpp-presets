@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>0.8-2-SNAPSHOT</version>
+    <version>0.9</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -14,6 +14,11 @@
   <version>2.6.3.4-${project.parent.version}</version>
   <packaging>jar</packaging>
   <name>JavaCPP Presets for FlyCapture</name>
+
+  <properties>
+    <!-- Skip on non-Windows system (see profile below) -->
+    <generate-sources.skip>true</generate-sources.skip>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -66,5 +71,17 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>windows</id>
+      <activation>
+        <os><family>windows</family></os>
+      </activation>
+      <properties>
+        <generate-sources.skip>false</generate-sources.skip>
+      </properties>
+    </profile>
+  </profiles>
 
 </project>

@@ -54,11 +54,11 @@ case $PLATFORM in
         cd usr/i686-w64-mingw32/sys-root/mingw
         echo LIBRARY libgsl-0.dll > libgsl-0.def
         echo EXPORTS >> libgsl-0.def
-        dumpbin //exports bin/libgsl-0.dll | tail -n +20 | head -n -15 | cut -c27- >> libgsl-0.def
+        dumpbin //exports bin/libgsl-0.dll | tail -n +20 | head -n -13 | cut -c27- >> libgsl-0.def
         lib /def:libgsl-0.def /out:libgsl-0.lib /machine:x86
         echo LIBRARY libgslcblas-0.dll > libgslcblas-0.def
         echo EXPORTS >> libgslcblas-0.def
-        dumpbin //exports bin/libgslcblas-0.dll | tail -n +20 | head -n -15 | cut -c27- >> libgslcblas-0.def
+        dumpbin //exports bin/libgslcblas-0.dll | tail -n +20 | head -n -13 | cut -c27- >> libgslcblas-0.def
         lib /def:libgslcblas-0.def /out:libgslcblas-0.lib /machine:x86
         cp -r include/* ../../../../include
         cp *.lib ../../../../lib

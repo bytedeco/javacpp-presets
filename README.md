@@ -10,10 +10,36 @@ Please refer to the wiki page for more information about how to [create new pres
 
 Downloads
 ---------
- * JavaCPP Presets 0.8 binary package  [javacpp-presets-0.8-bin.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets/0.8/javacpp-presets-0.8-bin.zip) (121 MB)
- * JavaCPP Presets 0.8 source package  [javacpp-presets-0.8-src.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets/0.8/javacpp-presets-0.8-src.zip) (708 KB)
+ * JavaCPP Presets 0.9 binary archive  [javacpp-presets-0.9-bin.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets/0.9/javacpp-presets-0.9-bin.zip) (198 MB)
+ * JavaCPP Presets 0.9 source archive  [javacpp-presets-0.9-src.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets/0.9/javacpp-presets-0.9-src.zip) (1156 KB)
 
-The binary package contains builds for Linux, Mac OS X, Windows, and Android.
+The binary archive contains builds for Linux, Mac OS X, Windows, and Android.
+
+
+We can also have everything downloaded and installed automatically with:
+
+ * Maven (inside the `pom.xml` file)
+```xml
+  <dependency>
+    <groupId>org.bytedeco.javacpp-presets</groupId>
+    <artifactId>${moduleName}</artifactId>
+    <version>${moduleVersion}-0.9</version>
+  </dependency>
+```
+
+ * Gradle (inside the `build.gradle` file)
+```groovy
+  dependencies {
+    compile group: 'org.bytedeco.javacpp-presets', name: moduleName, version: moduleVersion + '-0.9'
+  }
+```
+
+* SBT (inside the `build.sbt` file)
+```scala
+  libraryDependencies += "org.bytedeco.javacpp-presets" % moduleName % moduleVersion + "-0.9"
+```
+
+where the `moduleName` and `moduleVersion` variables correspond to the desired module. Additionally, we need to either set the `platform.dependency` property to something like `android-arm`, or set the `platform.dependencies` one to `true` to get all the binaries for Linux, Mac OS X, and Windows.
 
 
 Required Software
@@ -32,7 +58,7 @@ Build Instructions
 To rebuild the source code on the Java side, please note that the project files were created for:
 
  * Maven 2 or 3  http://maven.apache.org/download.html
- * JavaCPP 0.8  https://github.com/bytedeco/javacpp
+ * JavaCPP 0.9  https://github.com/bytedeco/javacpp
 
 Each child module in turn relies on its corresponding native libraries being already installed in the `cppbuild` subdirectory by a prior execution of the included [CPPBuild Scripts](#cppbuild-scripts), explained below. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified in the `.java` configuration files directly. The following versions are supported:
 

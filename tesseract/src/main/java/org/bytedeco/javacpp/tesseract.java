@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.8-2-SNAPSHOT
+// Targeted by JavaCPP version 0.9
 
 package org.bytedeco.javacpp;
 
@@ -535,8 +535,7 @@ public static final double MAX_FLOAT32 = ((float)3.40282347e+38);
 
 public static final int MIN_INT8 =  0x80;
 public static final int MIN_INT16 = 0x8000;
-public static native @MemberGetter int MIN_INT32();
-public static final int MIN_INT32 = MIN_INT32();
+public static final int MIN_INT32 = 0x80000000;
 public static final int MIN_UINT8 = 0x00;
 public static final int MIN_UINT16 =  0x0000;
 public static final int MIN_UINT32 =  0x00000000;
