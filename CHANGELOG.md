@@ -1,4 +1,5 @@
 
+ * Add a `README.md` file to each presets with links to original project, Java API documentation, and sample usage
  * Add missing overloaded methods with `PointerPointer` parameters in LLVM module
 
 ### July 27, 2014 version 0.9
