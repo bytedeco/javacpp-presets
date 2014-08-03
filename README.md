@@ -10,10 +10,12 @@ Please refer to the wiki page for more information about how to [create new pres
 
 Downloads
 ---------
+To install manually the JAR files, obtain the following archives and follow the instructions in the [Manual Installation](#manual-installation) section below.
+
  * JavaCPP Presets 0.9 binary archive  [javacpp-presets-0.9-bin.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets/0.9/javacpp-presets-0.9-bin.zip) (198 MB)
  * JavaCPP Presets 0.9 source archive  [javacpp-presets-0.9-src.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets/0.9/javacpp-presets-0.9-src.zip) (1156 KB)
 
-The binary archive contains builds for Linux, Mac OS X, Windows, and Android.
+The binary archive contains builds for Linux, Mac OS X, Windows, and Android. The JAR files for specific child modules or platforms can also be obtained individually from the [Maven Central Repository](http://search.maven.org/#search|ga|1|bytedeco).
 
 
 We can also have everything downloaded and installed automatically with:
@@ -60,7 +62,7 @@ To rebuild the source code on the Java side, please note that the project files 
  * Maven 2 or 3  http://maven.apache.org/download.html
  * JavaCPP 0.9  https://github.com/bytedeco/javacpp
 
-Each child module in turn relies on its corresponding native libraries being already installed in the `cppbuild` subdirectory by a prior execution of the included [CPPBuild Scripts](#cppbuild-scripts), explained below. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified in the `.java` configuration files directly. The following versions are supported:
+Each child module in turn relies on its corresponding native libraries being already installed in the `cppbuild` subdirectory created by a prior execution of the included [CPPBuild Scripts](#cppbuild-scripts), explained below. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified in the `.java` configuration files directly. The following versions are supported:
 
  * OpenCV 2.4.9  http://opencv.org/downloads.html
  * FFmpeg 2.3.x  http://ffmpeg.org/download.html
@@ -85,16 +87,16 @@ inside the directory containing the parent `pom.xml` file, by specifying only th
 
 CPPBuild Scripts
 ----------------
-To build native libraries on the native C/C++ side, additional software is required:
+Before running the Maven build, however, we recommend to install the native libraries on the native C/C++ side with the `cppbuild.sh` scripts. In this case, additional software is required:
 
  * A recent version of Linux, Mac OS X, or Windows with MSYS and the Windows SDK
  * Android NDK r7 or newer  http://developer.android.com/sdk/ndk/  (required only for Android builds)
 
 With the above in working order, simply execute
 ```bash
-$ ANDROID_NDK=/path/to/android-ndk/ bash cppbuild.sh [-platform <name>] [<install | clean>] [projects]
+$ ANDROID_NDK=/path/to/android-ndk/ bash cppbuild.sh [-platform <name>] <install | clean> [projects]
 ```
-where potential platform names include: `android-arm`, `android-x86`, `linux-x86`, `linux-x86_64`, `macosx-x86_64`, `windows-x86`, `windows-x86_64`, etc. (The `ANDROID_NDK` variable is required only for Android builds.)
+where possible platform names are: `android-arm`, `android-x86`, `linux-x86`, `linux-x86_64`, `macosx-x86_64`, `windows-x86`, `windows-x86_64`, etc. (The `ANDROID_NDK` variable is required only for Android builds.) Please note that the scripts download source archives from appropriate sites as necessary.
 
 To compile binaries for an Android device with no FPU, first make sure this is what you want. Without FPU, the performance of either OpenCV or FFmpeg is bound to be unacceptable. If you still wish to continue down that road, then replace "armeabi-v7a" by "armeabi" and "-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16" with "-march=armv5te -mtune=xscale -msoft-float", inside various files.
 
@@ -113,9 +115,9 @@ Although JavaCPP can pick up native libraries installed on the system, the scrip
 Thanks to Jose Gómez for testing this out!
 
 
-Quick Start
------------
-Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, `flycapture*.jar`, `libdc1394*.jar`, `libfreenect*.jar`, `videoinput*.jar`, and `artoolkitplus*.jar`, etc.), in addition to `javacpp.jar`, somewhere in your CLASSPATH, or point your build file to the [Maven Central Repository](http://search.maven.org/#search|ga|1|bytedeco), when the binary files are present. The JAR files found in these artifacts are meant to be used with [JavaCPP](https://github.com/bytedeco/javacpp). They were built on Fedora 20, so they may not work on all distributions of Linux, especially older ones. The binaries for Android were compiled for ARMv7 processors featuring an FPU, so they will not work on ancient devices such as the HTC Magic or some others with an ARMv6 CPU. Here are some more specific instructions for common cases:
+Manual Installation
+-------------------
+Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, `flycapture*.jar`, `libdc1394*.jar`, `libfreenect*.jar`, `videoinput*.jar`, and `artoolkitplus*.jar`, etc.), in addition to `javacpp.jar`, somewhere in your CLASSPATH. The JAR files available as pre-built artifacts are meant to be used with [JavaCPP](https://github.com/bytedeco/javacpp). They were built on Fedora 20, so they may not work on all distributions of Linux, especially older ones. The binaries for Android were compiled for ARMv7 processors featuring an FPU, so they will not work on ancient devices such as the HTC Magic or some others with an ARMv6 CPU. Here are some more specific instructions for common cases:
 
 NetBeans (Java SE 6 or newer):
 
