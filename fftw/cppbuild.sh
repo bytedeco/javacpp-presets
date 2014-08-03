@@ -1,6 +1,10 @@
+#!/bin/bash
+# This file is meant to be included by the parent cppbuild.sh script
 if [[ -z "$PLATFORM" ]]; then
-    echo "This file is meant to be included by the parent cppbuild.sh script"
-    exit 1
+    pushd ..
+    bash cppbuild.sh "$@" fftw
+    popd
+    exit
 fi
 
 if [[ $PLATFORM == windows* ]]; then
