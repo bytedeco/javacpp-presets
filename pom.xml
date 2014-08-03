@@ -28,6 +28,7 @@
 
   <modules>
     <module>opencv</module>
+    <module>libav</module>
     <module>ffmpeg</module>
     <module>flycapture</module>
     <module>libdc1394</module>
