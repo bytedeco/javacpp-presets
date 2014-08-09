@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Samuel Audet
+ * Copyright (C) 2013,2014 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -30,7 +30,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit=avutil.class, target="org.bytedeco.javacpp.avcodec", value={
+@Properties(inherit=swresample.class, target="org.bytedeco.javacpp.avcodec", value={
     @Platform(cinclude={"<libavcodec/avcodec.h>", "<libavcodec/avfft.h>"}, link="avcodec@.55"),
     @Platform(value="windows", link="avcodec-55") })
 public class avcodec implements InfoMapper {
