@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.9
+// Targeted by JavaCPP version 0.9.1-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -70,7 +70,7 @@ public static final int MAX_STRING_LENGTH =   512;
  * A context to the FlyCapture2 C library. It must be created before
  * performing any calls to the library.
  */ 
-@Opaque public static class fc2Context extends Pointer {
+@Namespace @Name("void") @Opaque public static class fc2Context extends Pointer {
     public fc2Context() { }
     public fc2Context(Pointer p) { super(p); }
 }
@@ -79,7 +79,7 @@ public static final int MAX_STRING_LENGTH =   512;
  * A context to the FlyCapture2 C GUI library. It must be created before
  * performing any calls to the library.
  */ 
-@Opaque public static class fc2GuiContext extends Pointer {
+@Namespace @Name("void") @Opaque public static class fc2GuiContext extends Pointer {
     public fc2GuiContext() { }
     public fc2GuiContext(Pointer p) { super(p); }
 }
@@ -87,7 +87,7 @@ public static final int MAX_STRING_LENGTH =   512;
 /**
  * An internal pointer used in the fc2Image structure.
  */ 
-@Opaque public static class fc2ImageImpl extends Pointer {
+@Namespace @Name("void") @Opaque public static class fc2ImageImpl extends Pointer {
     public fc2ImageImpl() { }
     public fc2ImageImpl(Pointer p) { super(p); }
 }
@@ -95,7 +95,7 @@ public static final int MAX_STRING_LENGTH =   512;
 /**
  * A context referring to the AVI recorder object.
  */ 
-@Opaque public static class fc2AVIContext extends Pointer {
+@Namespace @Name("void") @Opaque public static class fc2AVIContext extends Pointer {
     public fc2AVIContext() { }
     public fc2AVIContext(Pointer p) { super(p); }
 }
@@ -103,7 +103,7 @@ public static final int MAX_STRING_LENGTH =   512;
 /**
  * A context referring to the ImageStatistics object.
  */ 
-@Opaque public static class fc2ImageStatisticsContext extends Pointer {
+@Namespace @Name("void") @Opaque public static class fc2ImageStatisticsContext extends Pointer {
     public fc2ImageStatisticsContext() { }
     public fc2ImageStatisticsContext(Pointer p) { super(p); }
 }
@@ -625,7 +625,7 @@ public static class fc2Image extends Pointer {
     public native @Cast("fc2PixelFormat") int format(); public native fc2Image format(int format);
     public native @Cast("fc2BayerTileFormat") int bayerFormat(); public native fc2Image bayerFormat(int bayerFormat);
 
-    public native @ByRef fc2ImageImpl imageImpl(); public native fc2Image imageImpl(fc2ImageImpl imageImpl);
+    public native fc2ImageImpl imageImpl(); public native fc2Image imageImpl(fc2ImageImpl imageImpl);
 
 }
 
@@ -1445,7 +1445,7 @@ public static class fc2H264Option extends Pointer {
 // Callbacks
 //=============================================================================
 
-@Opaque public static class fc2CallbackHandle extends Pointer {
+@Namespace @Name("void") @Opaque public static class fc2CallbackHandle extends Pointer {
     public fc2CallbackHandle() { }
     public fc2CallbackHandle(Pointer p) { super(p); }
 }
@@ -1736,7 +1736,7 @@ public static native @Cast("fc2Error") int fc2RegisterCallback(
     fc2BusEventCallback enumCallback,
     @Cast("fc2BusCallbackType") int callbackType,
     Pointer pParameter,
-    fc2CallbackHandle pCallbackHandle );
+    @ByPtrPtr fc2CallbackHandle pCallbackHandle );
 
 /**
  * Unregister a callback function.
@@ -1748,7 +1748,7 @@ public static native @Cast("fc2Error") int fc2RegisterCallback(
  */
 public static native @Cast("fc2Error") int fc2UnregisterCallback(
     fc2Context context,
-    @ByVal fc2CallbackHandle callbackHandle );
+    fc2CallbackHandle callbackHandle );
 
 /**
  * Force a rescan of the buses. This does not trigger a bus reset.
@@ -3369,7 +3369,7 @@ public static native @ByVal fc2TimeStamp fc2GetImageTimeStamp(
  */
 public static native @Cast("fc2Error") int fc2CalculateImageStatistics(
     fc2Image pImage,
-    fc2ImageStatisticsContext pImageStatisticsContext );
+    @ByPtrPtr fc2ImageStatisticsContext pImageStatisticsContext );
 
 /**
  * Create a statistics context.
@@ -3379,7 +3379,7 @@ public static native @Cast("fc2Error") int fc2CalculateImageStatistics(
  * @return A fc2Error indicating the success or failure of the function.
  */
 public static native @Cast("fc2Error") int fc2CreateImageStatistics(
-    fc2ImageStatisticsContext pImageStatisticsContext );
+    @ByPtrPtr fc2ImageStatisticsContext pImageStatisticsContext );
 
 /**
  * Destroy a statistics context.
@@ -3389,7 +3389,7 @@ public static native @Cast("fc2Error") int fc2CreateImageStatistics(
  * @return A fc2Error indicating the success or failure of the function.
  */
 public static native @Cast("fc2Error") int fc2DestroyImageStatistics(
-    @ByVal fc2ImageStatisticsContext imageStatisticsContext );
+    fc2ImageStatisticsContext imageStatisticsContext );
 
 /**
  * Get the status of a statistics channel.
@@ -3403,15 +3403,15 @@ public static native @Cast("fc2Error") int fc2DestroyImageStatistics(
  * @return An Error indicating the success or failure of the function.
  */
 public static native @Cast("const fc2Error") int fc2GetChannelStatus(
-	@ByVal fc2ImageStatisticsContext imageStatisticsContext,
+	fc2ImageStatisticsContext imageStatisticsContext,
 	@Cast("fc2StatisticsChannel") int channel,
 	@Cast("BOOL*") IntPointer pEnabled );
 public static native @Cast("const fc2Error") int fc2GetChannelStatus(
-	@ByVal fc2ImageStatisticsContext imageStatisticsContext,
+	fc2ImageStatisticsContext imageStatisticsContext,
 	@Cast("fc2StatisticsChannel") int channel,
 	@Cast("BOOL*") IntBuffer pEnabled );
 public static native @Cast("const fc2Error") int fc2GetChannelStatus(
-	@ByVal fc2ImageStatisticsContext imageStatisticsContext,
+	fc2ImageStatisticsContext imageStatisticsContext,
 	@Cast("fc2StatisticsChannel") int channel,
 	@Cast("BOOL*") int[] pEnabled );
 
@@ -3427,7 +3427,7 @@ public static native @Cast("const fc2Error") int fc2GetChannelStatus(
  * @return An Error indicating the success or failure of the function.
  */
 public static native @Cast("fc2Error") int fc2SetChannelStatus( 
-	@ByVal fc2ImageStatisticsContext imageStatisticsContext,
+	fc2ImageStatisticsContext imageStatisticsContext,
 	@Cast("fc2StatisticsChannel") int channel,
 	@Cast("BOOL") int enabled );
 
@@ -3447,7 +3447,7 @@ public static native @Cast("fc2Error") int fc2SetChannelStatus(
  * @return A fc2Error indicating the success or failure of the function.
  */
 public static native @Cast("fc2Error") int fc2GetImageStatistics(
-    @ByVal fc2ImageStatisticsContext imageStatisticsContext,
+    fc2ImageStatisticsContext imageStatisticsContext,
     @Cast("fc2StatisticsChannel") int channel,
     @Cast("unsigned int*") IntPointer pRangeMin,
     @Cast("unsigned int*") IntPointer pRangeMax,
@@ -3457,7 +3457,7 @@ public static native @Cast("fc2Error") int fc2GetImageStatistics(
     FloatPointer pPixelValueMean,
     @Cast("int**") PointerPointer ppHistogram );
 public static native @Cast("fc2Error") int fc2GetImageStatistics(
-    @ByVal fc2ImageStatisticsContext imageStatisticsContext,
+    fc2ImageStatisticsContext imageStatisticsContext,
     @Cast("fc2StatisticsChannel") int channel,
     @Cast("unsigned int*") IntPointer pRangeMin,
     @Cast("unsigned int*") IntPointer pRangeMax,
@@ -3467,7 +3467,7 @@ public static native @Cast("fc2Error") int fc2GetImageStatistics(
     FloatPointer pPixelValueMean,
     @ByPtrPtr IntPointer ppHistogram );
 public static native @Cast("fc2Error") int fc2GetImageStatistics(
-    @ByVal fc2ImageStatisticsContext imageStatisticsContext,
+    fc2ImageStatisticsContext imageStatisticsContext,
     @Cast("fc2StatisticsChannel") int channel,
     @Cast("unsigned int*") IntBuffer pRangeMin,
     @Cast("unsigned int*") IntBuffer pRangeMax,
@@ -3477,7 +3477,7 @@ public static native @Cast("fc2Error") int fc2GetImageStatistics(
     FloatBuffer pPixelValueMean,
     @ByPtrPtr IntBuffer ppHistogram );
 public static native @Cast("fc2Error") int fc2GetImageStatistics(
-    @ByVal fc2ImageStatisticsContext imageStatisticsContext,
+    fc2ImageStatisticsContext imageStatisticsContext,
     @Cast("fc2StatisticsChannel") int channel,
     @Cast("unsigned int*") int[] pRangeMin,
     @Cast("unsigned int*") int[] pRangeMax,
@@ -3495,7 +3495,7 @@ public static native @Cast("fc2Error") int fc2GetImageStatistics(
  * @return A fc2Error indicating the success or failure of the function.
  */
 public static native @Cast("fc2Error") int fc2CreateAVI(
-    fc2AVIContext pAVIContext );
+    @ByPtrPtr fc2AVIContext pAVIContext );
 
 /**
  * Open an AVI file in preparation for writing Images to disk.
@@ -3509,11 +3509,11 @@ public static native @Cast("fc2Error") int fc2CreateAVI(
  * @return A fc2Error indicating the success or failure of the function.
  */
 public static native @Cast("fc2Error") int fc2AVIOpen( 
-    @ByVal fc2AVIContext AVIContext,
+    fc2AVIContext AVIContext,
     @Cast("const char*") BytePointer pFileName, 
     fc2AVIOption pOption );
 public static native @Cast("fc2Error") int fc2AVIOpen( 
-    @ByVal fc2AVIContext AVIContext,
+    fc2AVIContext AVIContext,
     String pFileName, 
     fc2AVIOption pOption );
 
@@ -3529,11 +3529,11 @@ public static native @Cast("fc2Error") int fc2AVIOpen(
  * @return A fc2Error indicating the success or failure of the function.
  */
 public static native @Cast("fc2Error") int fc2MJPGOpen( 
-    @ByVal fc2AVIContext AVIContext,
+    fc2AVIContext AVIContext,
     @Cast("const char*") BytePointer pFileName, 
     fc2MJPGOption pOption );
 public static native @Cast("fc2Error") int fc2MJPGOpen( 
-    @ByVal fc2AVIContext AVIContext,
+    fc2AVIContext AVIContext,
     String pFileName, 
     fc2MJPGOption pOption );
 
@@ -3549,11 +3549,11 @@ public static native @Cast("fc2Error") int fc2MJPGOpen(
  * @return A fc2Error indicating the success or failure of the function.
  */
 public static native @Cast("fc2Error") int fc2H264Open( 
-    @ByVal fc2AVIContext AVIContext,
+    fc2AVIContext AVIContext,
     @Cast("const char*") BytePointer pFileName, 
     fc2H264Option pOption );
 public static native @Cast("fc2Error") int fc2H264Open( 
-    @ByVal fc2AVIContext AVIContext,
+    fc2AVIContext AVIContext,
     String pFileName, 
     fc2H264Option pOption );
 
@@ -3566,7 +3566,7 @@ public static native @Cast("fc2Error") int fc2H264Open(
  * @return A fc2Error indicating the success or failure of the function.
  */
 public static native @Cast("fc2Error") int fc2AVIAppend( 
-    @ByVal fc2AVIContext AVIContext,
+    fc2AVIContext AVIContext,
     fc2Image pImage );
 
 /**
@@ -3577,7 +3577,7 @@ public static native @Cast("fc2Error") int fc2AVIAppend(
  * @return A fc2Error indicating the success or failure of the function.
  */
 public static native @Cast("fc2Error") int fc2AVIClose(
-    @ByVal fc2AVIContext AVIContext );
+    fc2AVIContext AVIContext );
 
 /**
  * Destroy a AVI context.
@@ -3587,7 +3587,7 @@ public static native @Cast("fc2Error") int fc2AVIClose(
  * @return A fc2Error indicating the success or failure of the function.
  */
 public static native @Cast("fc2Error") int fc2DestroyAVI(
-    @ByVal fc2AVIContext AVIContext );
+    fc2AVIContext AVIContext );
 
 /**
  * Get system information.

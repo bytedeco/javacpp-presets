@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.9
+// Targeted by JavaCPP version 0.9.1-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -3703,7 +3703,7 @@ public static native int LLVMWriteBitcodeToFileHandle(LLVMModuleRef M, int Handl
 /**
  * An opaque reference to a disassembler context.
  */
-@Opaque public static class LLVMDisasmContextRef extends Pointer {
+@Namespace @Name("void") @Opaque public static class LLVMDisasmContextRef extends Pointer {
     public LLVMDisasmContextRef() { }
     public LLVMDisasmContextRef(Pointer p) { super(p); }
 }
@@ -3862,10 +3862,10 @@ public static final int LLVMDisassembler_ReferenceType_Out_Objc_Class_Ref = 8;
  * returns NULL. This function is equivalent to calling LLVMCreateDisasmCPU()
  * with an empty CPU name.
  */
-public static native @ByVal LLVMDisasmContextRef LLVMCreateDisasm(@Cast("const char*") BytePointer TripleName, Pointer DisInfo,
+public static native LLVMDisasmContextRef LLVMCreateDisasm(@Cast("const char*") BytePointer TripleName, Pointer DisInfo,
                                       int TagType, LLVMOpInfoCallback GetOpInfo,
                                       LLVMSymbolLookupCallback SymbolLookUp);
-public static native @ByVal LLVMDisasmContextRef LLVMCreateDisasm(String TripleName, Pointer DisInfo,
+public static native LLVMDisasmContextRef LLVMCreateDisasm(String TripleName, Pointer DisInfo,
                                       int TagType, LLVMOpInfoCallback GetOpInfo,
                                       LLVMSymbolLookupCallback SymbolLookUp);
 
@@ -3876,11 +3876,11 @@ public static native @ByVal LLVMDisasmContextRef LLVMCreateDisasm(String TripleN
  * above.  These can all be passed * as NULL.  If successful, this returns a
  * disassembler context.  If not, it returns NULL.
  */
-public static native @ByVal LLVMDisasmContextRef LLVMCreateDisasmCPU(@Cast("const char*") BytePointer Triple, @Cast("const char*") BytePointer CPU,
+public static native LLVMDisasmContextRef LLVMCreateDisasmCPU(@Cast("const char*") BytePointer Triple, @Cast("const char*") BytePointer CPU,
                                          Pointer DisInfo, int TagType,
                                          LLVMOpInfoCallback GetOpInfo,
                                          LLVMSymbolLookupCallback SymbolLookUp);
-public static native @ByVal LLVMDisasmContextRef LLVMCreateDisasmCPU(String Triple, String CPU,
+public static native LLVMDisasmContextRef LLVMCreateDisasmCPU(String Triple, String CPU,
                                          Pointer DisInfo, int TagType,
                                          LLVMOpInfoCallback GetOpInfo,
                                          LLVMSymbolLookupCallback SymbolLookUp);
@@ -3889,7 +3889,7 @@ public static native @ByVal LLVMDisasmContextRef LLVMCreateDisasmCPU(String Trip
  * Set the disassembler's options.  Returns 1 if it can set the Options and 0
  * otherwise.
  */
-public static native int LLVMSetDisasmOptions(@ByVal LLVMDisasmContextRef DC, @Cast("uint64_t") long Options);
+public static native int LLVMSetDisasmOptions(LLVMDisasmContextRef DC, @Cast("uint64_t") long Options);
 
 /* The option to produce marked up assembly. */
 public static final int LLVMDisassembler_Option_UseMarkup = 1;
@@ -3905,7 +3905,7 @@ public static final int LLVMDisassembler_Option_PrintLatency = 16;
 /**
  * Dispose of a disassembler context.
  */
-public static native void LLVMDisasmDispose(@ByVal LLVMDisasmContextRef DC);
+public static native void LLVMDisasmDispose(LLVMDisasmContextRef DC);
 
 /**
  * Disassemble a single instruction using the disassembler context specified in
@@ -3917,13 +3917,13 @@ public static native void LLVMDisasmDispose(@ByVal LLVMDisasmContextRef DC);
  * function returns the number of bytes in the instruction or zero if there was
  * no valid instruction.
  */
-public static native @Cast("size_t") long LLVMDisasmInstruction(@ByVal LLVMDisasmContextRef DC, @Cast("uint8_t*") BytePointer Bytes,
+public static native @Cast("size_t") long LLVMDisasmInstruction(LLVMDisasmContextRef DC, @Cast("uint8_t*") BytePointer Bytes,
                              @Cast("uint64_t") long BytesSize, @Cast("uint64_t") long PC,
                              @Cast("char*") BytePointer OutString, @Cast("size_t") long OutStringSize);
-public static native @Cast("size_t") long LLVMDisasmInstruction(@ByVal LLVMDisasmContextRef DC, @Cast("uint8_t*") ByteBuffer Bytes,
+public static native @Cast("size_t") long LLVMDisasmInstruction(LLVMDisasmContextRef DC, @Cast("uint8_t*") ByteBuffer Bytes,
                              @Cast("uint64_t") long BytesSize, @Cast("uint64_t") long PC,
                              @Cast("char*") ByteBuffer OutString, @Cast("size_t") long OutStringSize);
-public static native @Cast("size_t") long LLVMDisasmInstruction(@ByVal LLVMDisasmContextRef DC, @Cast("uint8_t*") byte[] Bytes,
+public static native @Cast("size_t") long LLVMDisasmInstruction(LLVMDisasmContextRef DC, @Cast("uint8_t*") byte[] Bytes,
                              @Cast("uint64_t") long BytesSize, @Cast("uint64_t") long PC,
                              @Cast("char*") byte[] OutString, @Cast("size_t") long OutStringSize);
 
@@ -4133,7 +4133,7 @@ public static native @Cast("LLVMBool") int LLVMLinkModules(LLVMModuleRef Dest, L
  */
 
   /** This provides a dummy type for pointers to the LTO object. */
-  @Opaque public static class llvm_lto_t extends Pointer {
+  @Namespace @Name("void") @Opaque public static class llvm_lto_t extends Pointer {
       public llvm_lto_t() { }
       public llvm_lto_t(Pointer p) { super(p); }
   }

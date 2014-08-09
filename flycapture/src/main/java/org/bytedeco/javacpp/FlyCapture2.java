@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.9
+// Targeted by JavaCPP version 0.9.1-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -2200,7 +2200,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      * Handle that is returned when registering a callback. It is required
      * when unregistering the callback.
      */
-    @Namespace("FlyCapture2") @Opaque public static class CallbackHandle extends Pointer {
+    @Namespace @Name("void") @Opaque public static class CallbackHandle extends Pointer {
         public CallbackHandle() { }
         public CallbackHandle(Pointer p) { super(p); }
     }    
@@ -2480,7 +2480,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     BusEventCallback busEventCallback, 
                     @Cast("FlyCapture2::BusCallbackType") int callbackType,
                     Pointer pParameter,
-                    CallbackHandle pCallbackHandle );
+                    @ByPtrPtr CallbackHandle pCallbackHandle );
         
         /**
          * Unregister a callback function.
@@ -2491,7 +2491,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
          *
          * @return An Error indicating the success or failure of the function.
          */ 
-        public native @ByVal Error UnregisterCallback( @ByVal CallbackHandle callbackHandle );
+        public native @ByVal Error UnregisterCallback( CallbackHandle callbackHandle );
 
         /**
          * Force a rescan of the buses. This does not trigger a bus reset.

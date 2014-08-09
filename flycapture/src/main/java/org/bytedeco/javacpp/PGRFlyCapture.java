@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.9
+// Targeted by JavaCPP version 0.9.1-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -69,7 +69,7 @@ public static final int PGRFLYCAPTURE_VERSION = 108107;
 // Description:
 //   Context pointer for the PGRFlyCapture library.
 //
-@Opaque public static class FlyCaptureContext extends Pointer {
+@Namespace @Name("void") @Opaque public static class FlyCaptureContext extends Pointer {
     public FlyCaptureContext() { }
     public FlyCaptureContext(Pointer p) { super(p); }
 }

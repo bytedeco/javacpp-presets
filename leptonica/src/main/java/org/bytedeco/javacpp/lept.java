@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.9
+// Targeted by JavaCPP version 0.9.1-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -155,7 +155,7 @@ public class lept extends org.bytedeco.javacpp.presets.lept {
 //   #include <stdint.h>
 //   #define LEPT_DLL
 // #endif  /* _WIN32 */
-@Opaque public static class L_TIMER extends Pointer {
+@Namespace @Name("void") @Opaque public static class L_TIMER extends Pointer {
     public L_TIMER() { }
     public L_TIMER(Pointer p) { super(p); }
 }
@@ -4342,7 +4342,7 @@ public static final int
     public native @Cast("l_int32") int index(); public native L_REGPARAMS index(int index);     /* index into saved files for this test; 0-based    */
     public native @Cast("l_int32") int success(); public native L_REGPARAMS success(int success);   /* overall result of the test                       */
     public native @Cast("l_int32") int display(); public native L_REGPARAMS display(int display);   /* 1 if in display mode; 0 otherwise                */
-    public native @ByRef L_TIMER tstart(); public native L_REGPARAMS tstart(L_TIMER tstart);    /* marks beginning of the reg test                  */
+    public native L_TIMER tstart(); public native L_REGPARAMS tstart(L_TIMER tstart);    /* marks beginning of the reg test                  */
 }
 
 
@@ -8851,8 +8851,8 @@ public static native @Cast("l_uint32") int convertGrayCodeToBinary( @Cast("l_uin
 public static native @Cast("char*") BytePointer getLeptonicaVersion(  );
 public static native void startTimer( );
 public static native @Cast("l_float32") float stopTimer( );
-public static native @ByVal L_TIMER startTimerNested( );
-public static native @Cast("l_float32") float stopTimerNested( @ByVal L_TIMER rusage_start );
+public static native L_TIMER startTimerNested( );
+public static native @Cast("l_float32") float stopTimerNested( L_TIMER rusage_start );
 public static native void l_getCurrentTime( @Cast("l_int32*") IntPointer sec, @Cast("l_int32*") IntPointer usec );
 public static native void l_getCurrentTime( @Cast("l_int32*") IntBuffer sec, @Cast("l_int32*") IntBuffer usec );
 public static native void l_getCurrentTime( @Cast("l_int32*") int[] sec, @Cast("l_int32*") int[] usec );

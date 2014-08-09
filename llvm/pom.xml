@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>0.9</version>
+    <version>0.9.1-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>llvm</artifactId>
-  <version>3.4.2-${project.parent.version}.1-SNAPSHOT</version>
+  <version>3.4.2-${project.parent.version}</version>
   <packaging>jar</packaging>
   <name>JavaCPP Presets for LLVM</name>
 
