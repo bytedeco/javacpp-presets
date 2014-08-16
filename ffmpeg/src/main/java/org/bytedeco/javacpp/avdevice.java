@@ -97,7 +97,7 @@ public static native void avdevice_register_all();
  * if d is non-NULL, returns the next registered input audio/video device after d
  * or NULL if d is the last one.
  */
-public static native @Platform(not="windows") AVInputFormat av_input_audio_device_next(AVInputFormat d);
+
 
 /**
  * Video input devices iterator.
@@ -106,7 +106,7 @@ public static native @Platform(not="windows") AVInputFormat av_input_audio_devic
  * if d is non-NULL, returns the next registered input audio/video device after d
  * or NULL if d is the last one.
  */
-public static native @Platform(not="windows") AVInputFormat av_input_video_device_next(AVInputFormat d);
+
 
 /**
  * Audio output devices iterator.
@@ -115,7 +115,7 @@ public static native @Platform(not="windows") AVInputFormat av_input_video_devic
  * if d is non-NULL, returns the next registered output audio/video device after d
  * or NULL if d is the last one.
  */
-public static native @Platform(not="windows") AVOutputFormat av_output_audio_device_next(AVOutputFormat d);
+
 
 /**
  * Video output devices iterator.
@@ -124,7 +124,7 @@ public static native @Platform(not="windows") AVOutputFormat av_output_audio_dev
  * if d is non-NULL, returns the next registered output audio/video device after d
  * or NULL if d is the last one.
  */
-public static native @Platform(not="windows") AVOutputFormat av_output_video_device_next(AVOutputFormat d);
+
 
 public static class AVDeviceRect extends Pointer {
     static { Loader.load(); }

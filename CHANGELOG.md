@@ -1,4 +1,5 @@
 
+ * Skip functions that are not actually implemented in `avdevice`, causing load failures on Android
  * Update presets for FFmpeg where `avcodec` now inherits from `swresample` ([issue #13](https://github.com/bytedeco/javacpp-presets/issues/13))
  * Add a `README.md` file to each presets with links to original project, Java API documentation, and sample usage
  * Add missing overloaded methods with `PointerPointer` parameters in LLVM module
