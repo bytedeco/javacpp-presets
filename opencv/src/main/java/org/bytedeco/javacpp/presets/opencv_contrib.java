@@ -30,7 +30,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit={opencv_calib3d.class, opencv_objdetect.class, opencv_video.class, opencv_ml.class}, value={
+@Properties(inherit={opencv_calib3d.class, opencv_objdetect.class, opencv_video.class, opencv_ml.class, opencv_nonfree.class}, value={
     @Platform(include={"<opencv2/contrib/contrib.hpp>", "<opencv2/contrib/detection_based_tracker.hpp>",
         "<opencv2/contrib/hybridtracker.hpp>", "<opencv2/contrib/retina.hpp>", "<opencv2/contrib/openfabmap.hpp>"},
         link="opencv_contrib@.2.4", preload={"opencv_gpu@.2.4", "opencv_ocl@.2.4"}),

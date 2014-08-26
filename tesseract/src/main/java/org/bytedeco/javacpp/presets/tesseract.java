@@ -45,6 +45,7 @@ public class tesseract implements InfoMapper {
                .put(new Info("STRING_IS_PROTECTED").define(false))
                .put(new Info("BOOL").cast().valueTypes("boolean").pointerTypes("IntPointer").define())
                .put(new Info("TESS_CAPI_INCLUDE_BASEAPI").define())
+               .put(new Info("MIN_INT32").javaText("public static final int MIN_INT32 = 0x80000000;"))
 
                .put(new Info("Pix").pointerTypes("PIX").skip())
                .put(new Info("Pta").pointerTypes("PTA").skip())
@@ -52,24 +53,24 @@ public class tesseract implements InfoMapper {
                .put(new Info("Pixa").pointerTypes("PIXA").skip())
                .put(new Info("Boxa").pointerTypes("BOXA").skip())
 
-               .put(new Info("TessResultCallback1<bool,int>").pointerTypes("DeleteCallback").define())
+               .put(new Info("TessResultCallback1<bool,int>").pointerTypes("DeleteCallback").define().virtualize())
 
-               .put(new Info("TessCallback1<char>").pointerTypes("CharClearCallback").define())
-               .put(new Info("TessResultCallback2<bool,char const&,char const&>").pointerTypes("CharCompareCallback").define())
-               .put(new Info("TessResultCallback2<bool,FILE*,char const&>").pointerTypes("CharWriteCallback").define())
-               .put(new Info("TessResultCallback3<bool,FILE*,char*,bool>").pointerTypes("CharReadCallback").define())
+               .put(new Info("TessCallback1<char>").pointerTypes("CharClearCallback").define().virtualize())
+               .put(new Info("TessResultCallback2<bool,char const&,char const&>").pointerTypes("CharCompareCallback").define().virtualize())
+               .put(new Info("TessResultCallback2<bool,FILE*,char const&>").pointerTypes("CharWriteCallback").define().virtualize())
+               .put(new Info("TessResultCallback3<bool,FILE*,char*,bool>").pointerTypes("CharReadCallback").define().virtualize())
                .put(new Info("GenericVector<char>").pointerTypes("CharGenericVector").define())
 
-               .put(new Info("TessCallback1<STRING>").pointerTypes("StringClearCallback").define())
-               .put(new Info("TessResultCallback2<bool,STRING const&,STRING const&>").pointerTypes("StringCompareCallback").define())
-               .put(new Info("TessResultCallback2<bool,FILE*,STRING const&>").pointerTypes("StringWriteCallback").define())
-               .put(new Info("TessResultCallback3<bool,FILE*,STRING*,bool>").pointerTypes("StringReadCallback").define())
+               .put(new Info("TessCallback1<STRING>").pointerTypes("StringClearCallback").define().virtualize())
+               .put(new Info("TessResultCallback2<bool,STRING const&,STRING const&>").pointerTypes("StringCompareCallback").define().virtualize())
+               .put(new Info("TessResultCallback2<bool,FILE*,STRING const&>").pointerTypes("StringWriteCallback").define().virtualize())
+               .put(new Info("TessResultCallback3<bool,FILE*,STRING*,bool>").pointerTypes("StringReadCallback").define().virtualize())
                .put(new Info("GenericVector<STRING>").pointerTypes("StringGenericVector").define())
 
-               .put(new Info("TessCallback1<int>").pointerTypes("IntClearCallback").define())
-               .put(new Info("TessResultCallback2<bool,int const&,int const&>").pointerTypes("IntCompareCallback").define())
-               .put(new Info("TessResultCallback2<bool,FILE*,int const&>").pointerTypes("IntWriteCallback").define())
-               .put(new Info("TessResultCallback3<bool,FILE*,int*,bool>").pointerTypes("IntReadCallback").define())
+               .put(new Info("TessCallback1<int>").pointerTypes("IntClearCallback").define().virtualize())
+               .put(new Info("TessResultCallback2<bool,int const&,int const&>").pointerTypes("IntCompareCallback").define().virtualize())
+               .put(new Info("TessResultCallback2<bool,FILE*,int const&>").pointerTypes("IntWriteCallback").define().virtualize())
+               .put(new Info("TessResultCallback3<bool,FILE*,int*,bool>").pointerTypes("IntReadCallback").define().virtualize())
                .put(new Info("GenericVector<int>").pointerTypes("IntGenericVector").define())
                .put(new Info("GenericVector<StrongScriptDirection>").cast().pointerTypes("IntGenericVector"))
                .put(new Info("GenericVectorEqEq<int>").pointerTypes("IntGenericVectorEqEq").define())
@@ -80,8 +81,8 @@ public class tesseract implements InfoMapper {
                              "GenericVector<STRING>::bool_binary_search", "GenericVector<STRING>::choose_nth_item", "GenericVector<STRING>::dot_product",
                              "GenericVector<STRING>::sort", "GenericVectorEqEq<int>::GenericVectorEqEq<int>(int)").skip())
 
-               .put(new Info("TessCallback3<const UNICHARSET&,int,PAGE_RES*>").pointerTypes("TruthCallback3").define())
-               .put(new Info("TessCallback4<const UNICHARSET&,int,tesseract::PageIterator*,Pix*>").pointerTypes("TruthCallback4").define())
+               .put(new Info("TessCallback3<const UNICHARSET&,int,PAGE_RES*>").pointerTypes("TruthCallback3").define().virtualize())
+               .put(new Info("TessCallback4<const UNICHARSET&,int,tesseract::PageIterator*,Pix*>").pointerTypes("TruthCallback4").define().virtualize())
 
                .put(new Info("list_rec").cppText("#define list_rec LIST"))
                .put(new Info("INT_FEATURE_ARRAY").valueTypes("INT_FEATURE_STRUCT"))

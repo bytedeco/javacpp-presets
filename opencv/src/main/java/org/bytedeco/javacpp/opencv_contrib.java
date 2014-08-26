@@ -16,6 +16,9 @@ import static org.bytedeco.javacpp.opencv_calib3d.*;
 import static org.bytedeco.javacpp.opencv_objdetect.*;
 import static org.bytedeco.javacpp.opencv_video.*;
 import static org.bytedeco.javacpp.opencv_ml.*;
+import static org.bytedeco.javacpp.opencv_photo.*;
+import static org.bytedeco.javacpp.opencv_legacy.*;
+import static org.bytedeco.javacpp.opencv_nonfree.*;
 
 public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib {
     static { Loader.load(); }
