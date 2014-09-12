@@ -15,11 +15,6 @@
   <packaging>jar</packaging>
   <name>JavaCPP Presets for FlyCapture</name>
 
-  <properties>
-    <!-- Skip on non-Windows system (see profile below) -->
-    <generate-sources.skip>true</generate-sources.skip>
-  </properties>
-
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -41,18 +36,6 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
-        <executions>
-          <execution>
-            <id>process-classes</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>build</goal>
-            </goals>
-            <configuration>
-              <copyLibs>false</copyLibs>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
@@ -71,17 +54,5 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>windows</id>
-      <activation>
-        <os><family>windows</family></os>
-      </activation>
-      <properties>
-        <generate-sources.skip>false</generate-sources.skip>
-      </properties>
-    </profile>
-  </profiles>
 
 </project>
