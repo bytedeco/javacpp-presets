@@ -1,4 +1,5 @@
 
+ * Force OpenCV to build with GCC 4.6, as newer versions are known to hang on Android 2.2 ([issue android:43819](https://code.google.com/p/android/issues/detail?id=43819))
  * Upgrade presets for videoInput, where the latest code got merged into the master branch
  * Add callbacks for Tesseract according to new functionality in JavaCPP
  * Fix missing dependency of `opencv_contrib` on `opencv_nonfree`
