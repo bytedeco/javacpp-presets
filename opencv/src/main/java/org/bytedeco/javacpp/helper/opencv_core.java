@@ -115,6 +115,7 @@ import static org.bytedeco.javacpp.opencv_core.cvScalar;
 public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
 
     public static abstract class AbstractArray extends Pointer {
+        static { Loader.load(); }
         public AbstractArray() { }
         public AbstractArray(Pointer p) { super(p); }
 
@@ -1540,6 +1541,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
     }
 
     public static abstract class AbstractCvRect extends IntPointer {
+        static { Loader.load(); }
         public AbstractCvRect() { }
         public AbstractCvRect(Pointer p) { super(p); }
 
@@ -1572,6 +1574,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
     }
 
     public static abstract class AbstractCvPoint extends IntPointer {
+        static { Loader.load(); }
         public AbstractCvPoint() { }
         public AbstractCvPoint(Pointer p) { super(p); }
 
@@ -1669,6 +1672,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
     }
 
     public static abstract class AbstractCvPoint2D32f extends FloatPointer {
+        static { Loader.load(); }
         public AbstractCvPoint2D32f() { }
         public AbstractCvPoint2D32f(Pointer p) { super(p); }
 
@@ -1743,6 +1747,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
     }
 
     public static abstract class AbstractCvPoint3D32f extends FloatPointer {
+        static { Loader.load(); }
         public AbstractCvPoint3D32f() { }
         public AbstractCvPoint3D32f(Pointer p) { super(p); }
 
@@ -1819,6 +1824,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
     }
 
     public static abstract class AbstractCvPoint2D64f extends DoublePointer {
+        static { Loader.load(); }
         public AbstractCvPoint2D64f() { }
         public AbstractCvPoint2D64f(Pointer p) { super(p); }
 
@@ -1893,6 +1899,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
     }
 
     public static abstract class AbstractCvPoint3D64f extends DoublePointer {
+        static { Loader.load(); }
         public AbstractCvPoint3D64f() { }
         public AbstractCvPoint3D64f(Pointer p) { super(p); }
 
@@ -1969,6 +1976,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
     }
 
     public static abstract class AbstractCvSize extends IntPointer {
+        static { Loader.load(); }
         public AbstractCvSize() { }
         public AbstractCvSize(Pointer p) { super(p); }
 
@@ -2000,6 +2008,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
     }
 
     public static abstract class AbstractCvSize2D32f extends FloatPointer {
+        static { Loader.load(); }
         public AbstractCvSize2D32f() { }
         public AbstractCvSize2D32f(Pointer p) { super(p); }
 
@@ -2030,6 +2039,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
     }
 
     public static abstract class AbstractCvBox2D extends FloatPointer {
+        static { Loader.load(); }
         public AbstractCvBox2D() { }
         public AbstractCvBox2D(Pointer p) { super(p); }
 
@@ -2061,6 +2071,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
     }
 
     public static abstract class AbstractCvScalar extends DoublePointer {
+        static { Loader.load(); }
         public AbstractCvScalar() { }
         public AbstractCvScalar(Pointer p) { super(p); }
 
@@ -2135,6 +2146,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
     }
 
     public static abstract class AbstractCvMemStorage extends Pointer {
+        static { Loader.load(); }
         public AbstractCvMemStorage() { }
         public AbstractCvMemStorage(Pointer p) { super(p); }
 
