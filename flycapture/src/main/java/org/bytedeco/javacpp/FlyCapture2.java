@@ -92,7 +92,7 @@ public class FlyCapture2 extends org.bytedeco.javacpp.presets.FlyCapture2 {
 //=============================================================================
 
 //=============================================================================
-// $Id: FlyCapture2Defs.h 164425 2013-05-29 23:41:08Z rang $
+// $Id: FlyCapture2Defs.h 200437 2014-06-27 22:00:28Z warrenm $
 //=============================================================================
 
 // #ifndef PGR_FC2_FLYCAPTURE2DEFS_H
@@ -223,6 +223,8 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         PGRERROR_BUFFER_TOO_SMALL = 40,
         /** There is an image consistency error. */
         PGRERROR_IMAGE_CONSISTENCY_ERROR = 41,
+		/** The installed driver is not compatible with the library. */
+		PGRERROR_INCOMPATIBLE_DRIVER = 42,
         PGRERROR_FORCE_32BITS =  FULL_32BIT_VALUE;  
 
     /** The type of bus callback to register a callback function for. */
@@ -885,8 +887,8 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
          */
         public native @Cast("unsigned int") int registerTimeout(); public native GigEConfig registerTimeout(int registerTimeout);
 
-        public GigEConfig() { allocate(); }
-        private native void allocate();
+		public GigEConfig() { allocate(); }
+		private native void allocate();
     }
 
     /** Format 7 information for a single mode. */
@@ -2172,7 +2174,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 //=============================================================================
 
 //=============================================================================
-// $Id: BusManager.h 145342 2012-06-22 16:47:25Z rang $
+// $Id: BusManager.h 199388 2014-06-18 18:19:05Z mgara $
 //=============================================================================
 
 // #ifndef PGR_FC2_BUSMANAGER_H
@@ -2535,9 +2537,8 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 		/**
          * Force a camera on the network to be assigned an IP address
          * on the same subnet as the netowrk adapters that it is connected to. 
-         * This is useful in situations where a GigE Vision camera is using 
-         * Persistent IP addresses and the application's subnet is different from 
-         * the device.
+         * This is useful in situations where GigE Vision cameras are using IP 
+		 * addresses in a subnet different from the host's subnet.
          *
          * @return An Error indicating the success or failure of the function.
          */
@@ -2545,11 +2546,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 
         /**
          * Discover all cameras connected to the network even if they reside
-         * on a different subnet. This is useful in situations where a GigE
-         * camera is using Persistent IP and the application's subnet is
-         * different from the device subnet. After discovering the camera,  
-         * it is easy to use ForceIPAddressToCamera() to set a different IP 
-         * configuration.
+         * on a different subnet. This is useful in situations where GigE Vision 
+		 * cameras are using IP addresses in a subnet different from the host's 
+		 * subnet. After discovering the camera, it is easy to use 
+		 * ForceIPAddressToCamera() to set a different IP configuration.
          *
          * @param gigECameras Pointer to an array of CameraInfo structures.
          * @param arraySize Size of the array. Number of discovered cameras
@@ -5349,7 +5349,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 //=============================================================================
 
 //=============================================================================
-// $Id: Utilities.h 112716 2011-05-13 16:37:36Z soowei $
+// $Id: Utilities.h 201275 2014-07-09 00:14:30Z warrenm $
 //=============================================================================
 
 // #ifndef PGR_FC2_UTILITIES_H_
@@ -5357,6 +5357,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 
 // #include "FlyCapture2Platform.h"
 // #include "FlyCapture2Defs.h"
+// #include <string>
 
     /** Possible operating systems. */ 
 	/** enum FlyCapture2::OSType */
@@ -5461,6 +5462,27 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public Utilities(Pointer p) { super(p); }
     
 		
+		/**
+         * Check for driver compatibility for the given camera guid.
+         *
+         * @param guid Pointer to the guid of the device to check.
+         *
+         * @return PGR_NO_ERROR if the library is compatible with the currently 
+		 *         loaded driver, otherwise an error indicating the type of failure.
+         */ 
+		public static native @ByVal Error CheckDriver(@Const PGRGuid guid);
+
+		/**
+         * Get the driver's name for a device
+         *
+         * @param guid Pointer to the guid of the device to check.
+		 * @param deviceName The device name will be returned in this string
+         *
+         * @return An Error indicating the success or failure of the function.
+         */ 
+		public static native @ByVal Error GetDriverDeviceName(@Const PGRGuid guid, @StdString BytePointer deviceName);
+		public static native @ByVal Error GetDriverDeviceName(@Const PGRGuid guid, @StdString String deviceName);
+
         /**
          * Get system information.
          *

@@ -219,6 +219,8 @@ public static final int
     FC2_ERROR_BUFFER_TOO_SMALL = 40,
     /** There is an image consistency error. */
     FC2_ERROR_IMAGE_CONSISTENCY_ERROR = 41,
+	/** The installed driver is not compatible with the library. */
+	FC2_ERROR_INCOMPATIBLE_DRIVER = 42,
     FC2_ERROR_FORCE_32BITS =  FULL_32BIT_VALUE;  
 
 /** enum fc2BusCallbackType */
@@ -1619,6 +1621,21 @@ public static native @Cast("fc2Error") int fc2GetCameraFromIndex(
     fc2Context context,
     @Cast("unsigned int") int index,
     fc2PGRGuid pGuid );
+
+
+/**
+* Gets the PGRGuid for a camera with the specified IPv4 address.
+*
+* @param context The fc2Context to be used.
+* @param ipAddress IP address to get GUID for.
+* @param pGuid Unique PGRGuid for the camera.
+*
+* @return A fc2Error indicating the success or failure of the function.
+*/
+public static native @Cast("fc2Error") int fc2GetCameraFromIPAddress(
+	fc2Context context,
+	@ByVal fc2IPAddress ipAddress,
+	fc2PGRGuid pGuid);
 
 /**
  * Gets the PGRGuid for a camera on the PC. It uniquely identifies
