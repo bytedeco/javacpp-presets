@@ -30,8 +30,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit=avutil.class, target="org.bytedeco.javacpp.swresample", value={
-    @Platform(cinclude="<libswresample/swresample.h>", link="swresample@.0"),
-    @Platform(value="windows", link="swresample-0") })
+    @Platform(cinclude="<libswresample/swresample.h>", link="swresample@.1"),
+    @Platform(value="windows", link="swresample-1") })
 public class swresample implements InfoMapper {
     public void map(InfoMap infoMap) {
     }

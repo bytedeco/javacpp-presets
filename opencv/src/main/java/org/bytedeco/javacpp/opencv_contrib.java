@@ -30,6 +30,7 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
     public RectIntPairVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef RectIntPairVector put(@ByRef RectIntPairVector x);
 
     public native long size();
     public native void resize(@Cast("size_t") long n);
@@ -46,6 +47,7 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
     public FloatValArray(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef FloatValArray put(@ByRef FloatValArray x);
 
     public native long size();
     public native void resize(@Cast("size_t") long n);

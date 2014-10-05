@@ -214,7 +214,6 @@ public static native int sws_init_context(SwsContext sws_context, SwsFilter srcF
  */
 public static native void sws_freeContext(SwsContext swsContext);
 
-// #if FF_API_SWS_GETCONTEXT
 /**
  * Allocate and return an SwsContext. You need it to perform
  * scaling/conversion operations using sws_scale().
@@ -229,7 +228,6 @@ public static native void sws_freeContext(SwsContext swsContext);
  * @return a pointer to an allocated context, or NULL in case of error
  * @note this function is to be removed after a saner alternative is
  *       written
- * @deprecated Use sws_getCachedContext() instead.
  */
 public static native SwsContext sws_getContext(int srcW, int srcH, @Cast("AVPixelFormat") int srcFormat,
                                   int dstW, int dstH, @Cast("AVPixelFormat") int dstFormat,
@@ -243,7 +241,6 @@ public static native SwsContext sws_getContext(int srcW, int srcH, @Cast("AVPixe
                                   int dstW, int dstH, @Cast("AVPixelFormat") int dstFormat,
                                   int flags, SwsFilter srcFilter,
                                   SwsFilter dstFilter, @Const double[] param);
-// #endif
 
 /**
  * Scale the image slice in srcSlice and put the resulting scaled

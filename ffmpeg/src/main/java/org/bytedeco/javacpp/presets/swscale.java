@@ -30,8 +30,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit=avutil.class, target="org.bytedeco.javacpp.swscale", value={
-    @Platform(cinclude="<libswscale/swscale.h>", link="swscale@.2"),
-    @Platform(value="windows", link="swscale-2") })
+    @Platform(cinclude="<libswscale/swscale.h>", link="swscale@.3"),
+    @Platform(value="windows", link="swscale-3") })
 public class swscale implements InfoMapper {
     public void map(InfoMap infoMap) {
     }

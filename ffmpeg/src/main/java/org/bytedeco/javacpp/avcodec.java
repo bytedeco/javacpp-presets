@@ -772,6 +772,16 @@ public static final int AV_CODEC_PROP_LOSSY =         (1 << 1);
  */
 public static final int AV_CODEC_PROP_LOSSLESS =      (1 << 2);
 /**
+ * Codec supports frame reordering. That is, the coded order (the order in which
+ * the encoded packets are output by the encoders / stored / input to the
+ * decoders) may be different from the presentation order of the corresponding
+ * frames.
+ *
+ * For codecs that do not have this property set, PTS and DTS should always be
+ * equal.
+ */
+public static final int AV_CODEC_PROP_REORDER =       (1 << 3);
+/**
  * Subtitle codec is bitmap based
  * Decoded AVSubtitle data can be read from the AVSubtitleRect->pict field.
  */
@@ -981,6 +991,8 @@ public static final int CODEC_FLAG2_IGNORE_CROP =   0x00010000;
 public static final int CODEC_FLAG2_CHUNKS =        0x00008000;
 /** Show all frames before the first keyframe */
 public static final int CODEC_FLAG2_SHOW_ALL =      0x00400000;
+/** Export motion vectors through frame side data */
+public static final int CODEC_FLAG2_EXPORT_MVS =    0x10000000;
 
 /* Unsupported options :
  *              Syntax Arithmetic coding (SAC)
@@ -1255,6 +1267,12 @@ public static final int
      * See libavutil/display.h for a detailed description of the data.
      */
     AV_PKT_DATA_DISPLAYMATRIX = 5,
+
+    /**
+     * This side data should be associated with a video stream and contains
+     * Stereoscopic 3D information in form of the AVStereo3D struct.
+     */
+    AV_PKT_DATA_STEREO3D = 6,
 
     /**
      * Recommmends skipping the specified number of samples
@@ -1976,6 +1994,7 @@ public static final int FF_CMP_CHROMA = 256;
      */
     public native int me_subpel_quality(); public native AVCodecContext me_subpel_quality(int me_subpel_quality);
 
+// #if FF_API_AFD
     /**
      * DTG active format information (additional aspect ratio
      * information only used in DVB MPEG-2 transport streams)
@@ -1983,8 +2002,9 @@ public static final int FF_CMP_CHROMA = 256;
      *
      * - encoding: unused
      * - decoding: Set by decoder.
+     * @deprecated Deprecated in favor of AVSideData
      */
-    public native int dtg_active_format(); public native AVCodecContext dtg_active_format(int dtg_active_format);
+    public native @Deprecated int dtg_active_format(); public native AVCodecContext dtg_active_format(int dtg_active_format);
 public static final int FF_DTG_AFD_SAME =         8;
 public static final int FF_DTG_AFD_4_3 =          9;
 public static final int FF_DTG_AFD_16_9 =         10;
@@ -1992,6 +2012,7 @@ public static final int FF_DTG_AFD_14_9 =         11;
 public static final int FF_DTG_AFD_4_3_SP_14_9 =  13;
 public static final int FF_DTG_AFD_16_9_SP_14_9 = 14;
 public static final int FF_DTG_AFD_SP_4_3 =       15;
+// #endif /* FF_API_AFD */
 
     /**
      * maximum motion estimation search range in subpel units
@@ -2183,12 +2204,14 @@ public static final int FF_MB_DECISION_RD =     2;
      */
     public native int chromaoffset(); public native AVCodecContext chromaoffset(int chromaoffset);
 
+// #if FF_API_UNUSED_MEMBERS
     /**
      * Multiplied by qscale for each frame and added to scene_change_score.
      * - encoding: Set by user.
      * - decoding: unused
      */
-    public native int scenechange_factor(); public native AVCodecContext scenechange_factor(int scenechange_factor);
+    public native @Deprecated int scenechange_factor(); public native AVCodecContext scenechange_factor(int scenechange_factor);
+// #endif
 
     /**
      *
@@ -2668,7 +2691,9 @@ public static final int FF_CODER_TYPE_VLC =       0;
 public static final int FF_CODER_TYPE_AC =        1;
 public static final int FF_CODER_TYPE_RAW =       2;
 public static final int FF_CODER_TYPE_RLE =       3;
+// #if FF_API_UNUSED_MEMBERS
 public static final int FF_CODER_TYPE_DEFLATE =   4;
+// #endif /* FF_API_UNUSED_MEMBERS */
     /**
      * coder type
      * - encoding: Set by user.
@@ -2888,7 +2913,9 @@ public static final int FF_DEBUG_MV =          32;
 public static final int FF_DEBUG_DCT_COEFF =   0x00000040;
 public static final int FF_DEBUG_SKIP =        0x00000080;
 public static final int FF_DEBUG_STARTCODE =   0x00000100;
+// #if FF_API_UNUSED_MEMBERS
 public static final int FF_DEBUG_PTS =         0x00000200;
+// #endif /* FF_API_UNUSED_MEMBERS */
 public static final int FF_DEBUG_ER =          0x00000400;
 public static final int FF_DEBUG_MMCO =        0x00000800;
 public static final int FF_DEBUG_BUGS =        0x00001000;
@@ -2949,7 +2976,6 @@ public static final int AV_EF_AGGRESSIVE = (1<<18);
     /**
      * opaque 64bit number (generally a PTS) that will be reordered and
      * output in AVFrame.reordered_opaque
-     * @deprecated in favor of pkt_pts
      * - encoding: unused
      * - decoding: Set by user.
      */
@@ -2990,7 +3016,9 @@ public static final int AV_EF_AGGRESSIVE = (1<<18);
     public native int dct_algo(); public native AVCodecContext dct_algo(int dct_algo);
 public static final int FF_DCT_AUTO =    0;
 public static final int FF_DCT_FASTINT = 1;
+// #if FF_API_UNUSED_MEMBERS
 public static final int FF_DCT_INT =     2;
+// #endif /* FF_API_UNUSED_MEMBERS */
 public static final int FF_DCT_MMX =     3;
 public static final int FF_DCT_ALTIVEC = 5;
 public static final int FF_DCT_FAAN =    6;
@@ -3011,8 +3039,13 @@ public static final int FF_IDCT_ALTIVEC =       8;
 public static final int FF_IDCT_SH4 =           9;
 // #endif
 public static final int FF_IDCT_SIMPLEARM =     10;
+// #if FF_API_UNUSED_MEMBERS
 public static final int FF_IDCT_IPP =           13;
+// #endif /* FF_API_UNUSED_MEMBERS */
+public static final int FF_IDCT_XVID =          14;
+// #if FF_API_IDCT_XVIDMMX
 public static final int FF_IDCT_XVIDMMX =       14;
+// #endif /* FF_API_IDCT_XVIDMMX */
 public static final int FF_IDCT_SIMPLEARMV5TE = 16;
 public static final int FF_IDCT_SIMPLEARMV6 =   17;
 // #if FF_API_ARCH_SPARC
@@ -3786,7 +3819,7 @@ public static class AVHWAccel extends Pointer {
     /**
      * Called for every Macroblock in a slice.
      *
-     * XvMC uses it to replace the ff_MPV_decode_mb().
+     * XvMC uses it to replace the ff_mpv_decode_mb().
      * Instead of decoding to raw picture, MB parameters are
      * stored in an array provided by the video driver.
      *
@@ -4940,7 +4973,7 @@ public static class AVCodecParser extends Pointer {
     public native AVCodecParser next(); public native AVCodecParser next(AVCodecParser next);
 }
 
-public static native AVCodecParser av_parser_next(AVCodecParser c);
+public static native AVCodecParser av_parser_next(@Const AVCodecParser c);
 
 public static native void av_register_codec_parser(AVCodecParser parser);
 public static native AVCodecParserContext av_parser_init(int codec_id);
@@ -5830,7 +5863,7 @@ public static native void av_bitstream_filter_close(AVBitStreamFilterContext bsf
  * This function can be used to iterate over all registered bitstream
  * filters.
  */
-public static native AVBitStreamFilter av_bitstream_filter_next(AVBitStreamFilter f);
+public static native AVBitStreamFilter av_bitstream_filter_next(@Const AVBitStreamFilter f);
 
 /* memory */
 
@@ -5904,7 +5937,7 @@ public static native void av_register_hwaccel(AVHWAccel hwaccel);
  * if hwaccel is non-NULL, returns the next registered hardware accelerator
  * after hwaccel, or NULL if hwaccel is the last one.
  */
-public static native AVHWAccel av_hwaccel_next(AVHWAccel hwaccel);
+public static native AVHWAccel av_hwaccel_next(@Const AVHWAccel hwaccel);
 
 
 /**

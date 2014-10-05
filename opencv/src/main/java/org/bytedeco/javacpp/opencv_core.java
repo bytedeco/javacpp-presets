@@ -17,6 +17,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     public ByteVectorVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef ByteVectorVector put(@ByRef ByteVectorVector x);
 
     public native long size();
     public native void resize(@Cast("size_t") long n);
@@ -46,6 +47,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     public IntVectorVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef IntVectorVector put(@ByRef IntVectorVector x);
 
     public native long size();
     public native void resize(@Cast("size_t") long n);
@@ -75,6 +77,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     public StringVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef StringVector put(@ByRef StringVector x);
 
     public native long size();
     public native void resize(@Cast("size_t") long n);
@@ -99,6 +102,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     public PointVectorVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef PointVectorVector put(@ByRef PointVectorVector x);
 
     public native long size();
     public native void resize(@Cast("size_t") long n);
@@ -128,6 +132,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     public Point2fVectorVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef Point2fVectorVector put(@ByRef Point2fVectorVector x);
 
     public native long size();
     public native void resize(@Cast("size_t") long n);
@@ -157,6 +162,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     public Point2dVectorVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef Point2dVectorVector put(@ByRef Point2dVectorVector x);
 
     public native long size();
     public native void resize(@Cast("size_t") long n);
@@ -186,6 +192,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     public RectVectorVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef RectVectorVector put(@ByRef RectVectorVector x);
 
     public native long size();
     public native void resize(@Cast("size_t") long n);
@@ -215,6 +222,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     public MatVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef MatVector put(@ByRef MatVector x);
 
     public native long size();
     public native void resize(@Cast("size_t") long n);

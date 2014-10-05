@@ -31,11 +31,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit={avformat.class, postproc.class, swresample.class, swscale.class}, target="org.bytedeco.javacpp.avfilter", value={
-    @Platform(cinclude={"<libavfilter/avfilter.h>", "<libavfilter/buffersink.h>", "<libavfilter/buffersrc.h>"}, link="avfilter@.4"),
-    @Platform(value="windows", link="avfilter-4") })
+    @Platform(cinclude={"<libavfilter/avfilter.h>", "<libavfilter/buffersink.h>", "<libavfilter/buffersrc.h>"}, link="avfilter@.5"),
+    @Platform(value="windows", link="avfilter-5") })
 public class avfilter implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("AVFilterPool", "AVFilterCommand", "AVFilterChannelLayouts").cast().pointerTypes("Pointer"))
-               .put(new Info("!FF_API_FOO_COUNT", "AV_HAVE_INCOMPATIBLE_LIBAV_ABI || !FF_API_OLD_GRAPH_PARSE").define(false));
+               .put(new Info("AV_HAVE_INCOMPATIBLE_LIBAV_ABI || !FF_API_OLD_GRAPH_PARSE").define(true))
+               .put(new Info("!FF_API_FOO_COUNT").define(false));
     }
 }

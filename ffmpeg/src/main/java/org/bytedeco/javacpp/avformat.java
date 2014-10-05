@@ -441,7 +441,13 @@ public static native long avio_size(AVIOContext s);
  * feof() equivalent for AVIOContext.
  * @return non zero if and only if end of file
  */
-public static native int url_feof(AVIOContext s);
+public static native int avio_feof(AVIOContext s);
+// #if FF_API_URL_FEOF
+/**
+ * @deprecated use avio_feof()
+ */
+public static native @Deprecated int url_feof(AVIOContext s);
+// #endif
 
 /** @warning currently size is limited */
 public static native int avio_printf(AVIOContext s, @Cast("const char*") BytePointer fmt);
@@ -688,6 +694,20 @@ public static native int avio_pause(AVIOContext h, int pause);
  */
 public static native long avio_seek_time(AVIOContext h, int stream_index,
                        long timestamp, int flags);
+
+/* Avoid a warning. The header can not be included because it breaks c++. */
+@Opaque public static class AVBPrint extends Pointer {
+    public AVBPrint() { }
+    public AVBPrint(Pointer p) { super(p); }
+}
+
+/**
+ * Read contents of h into print buffer, up to max_size bytes, or up to EOF.
+ *
+ * @return 0 for success (max_size bytes read or EOF reached), negative error
+ * code otherwise
+ */
+public static native int avio_read_to_bprint(AVIOContext h, AVBPrint pb, @Cast("size_t") long max_size);
 
 // #endif /* AVFORMAT_AVIO_H */
 
@@ -998,6 +1018,11 @@ public static native long avio_seek_time(AVIOContext h, int stream_index,
  *    -  sorting  -- a modified version of a tag that should be used for
  *       sorting will have '-sort' appended. E.g. artist="The Beatles",
  *       artist-sort="Beatles, The".
+ * - Some protocols and demuxers support metadata updates. After a successful
+ *   call to av_read_packet(), AVFormatContext.event_flags or AVStream.event_flags
+ *   will be updated to indicate if metadata changed. In order to detect metadata
+ *   changes on a stream, you need to loop through all streams in the AVFormatContext
+ *   and check their individual event_flags.
  *
  * -  Demuxers attempt to export metadata in a generic format, however tags
  *    with no generic equivalents are left as they are stored in the container.
@@ -1120,6 +1145,8 @@ public static class AVProbeData extends Pointer {
     public native @Cast("unsigned char*") BytePointer buf(); public native AVProbeData buf(BytePointer buf);
     /** Size of buf except extra allocated bytes */
     public native int buf_size(); public native AVProbeData buf_size(int buf_size);
+    /** mime_type, when known. */
+    public native @Cast("uint8_t*") BytePointer mime_type(); public native AVProbeData mime_type(BytePointer mime_type);
 }
 
 public static native @MemberGetter int AVPROBE_SCORE_RETRY();
@@ -1129,6 +1156,8 @@ public static final int AVPROBE_SCORE_STREAM_RETRY = AVPROBE_SCORE_STREAM_RETRY(
 
 /** score for file extension */
 public static final int AVPROBE_SCORE_EXTENSION =  50;
+/** score for file mime type */
+public static final int AVPROBE_SCORE_MIME =       75;
 /** maximum score */
 public static final int AVPROBE_SCORE_MAX =       100;
 
@@ -1436,6 +1465,13 @@ public static class AVInputFormat extends Pointer {
 
     /** AVClass for the private context */
     @MemberGetter public native @Const AVClass priv_class();
+
+    /**
+     * Comma-separated list of mime types.
+     * It is used check for matching mime types while probing.
+     * @see av_probe_input_format2
+     */
+    @MemberGetter public native @Cast("const char*") BytePointer mime_type();
 
     /*****************************************************************
      * No fields below this line are part of the public API. They
@@ -1857,6 +1893,15 @@ public static class AVStream extends Pointer {
      */
     public native int nb_side_data(); public native AVStream nb_side_data(int nb_side_data);
 
+    /**
+     * Flags for the user to detect events happening on the stream. Flags must
+     * be cleared by the user once the event has been handled.
+     * A combination of AVSTREAM_EVENT_FLAG_*.
+     */
+    public native int event_flags(); public native AVStream event_flags(int event_flags);
+/** The call resulted in updated metadata. */
+public static final int AVSTREAM_EVENT_FLAG_METADATA_UPDATED = 0x0001;
+
     /*****************************************************************
      * All fields below this line are not part of the public API. They
      * may not be used outside of libavformat and can be changed and
@@ -1897,11 +1942,6 @@ public static final int MAX_STD_TIMEBASES = (60*12+6);
     /** number of bits in pts (used for wrapping control) */
     public native int pts_wrap_bits(); public native AVStream pts_wrap_bits(int pts_wrap_bits);
 
-// #if FF_API_REFERENCE_DTS
-    /* a hack to keep ABI compatibility for ffmpeg and other applications, which accesses parser even
-     * though it should not */
-    public native long do_not_use(); public native AVStream do_not_use(long do_not_use);
-// #endif
     // Timestamp generation support:
     /**
      * Timestamp corresponding to the last dts sync point.
@@ -2327,9 +2367,7 @@ public static final int AVFMT_FLAG_PRIV_OPT =    0x20000;
 public static final int AVFMT_FLAG_KEEP_SIDE_DATA = 0x40000;
 
     /**
-     * Maximum size of the data read from input for determining
-     * the input container format.
-     * Demuxing only, set by the caller before avformat_open_input().
+     * @deprecated deprecated in favor of probesize2
      */
     public native @Cast("unsigned int") int probesize(); public native AVFormatContext probesize(int probesize);
 
@@ -2473,6 +2511,22 @@ public static final int FF_FDEBUG_TS =        0x0001;
      * @see AVCodecContext.strict_std_compliance
      */
     public native int strict_std_compliance(); public native AVFormatContext strict_std_compliance(int strict_std_compliance);
+
+    /**
+     * Flags for the user to detect events happening on the file. Flags must
+     * be cleared by the user once the event has been handled.
+     * A combination of AVFMT_EVENT_FLAG_*.
+     */
+    public native int event_flags(); public native AVFormatContext event_flags(int event_flags);
+/** The call resulted in updated metadata. */
+public static final int AVFMT_EVENT_FLAG_METADATA_UPDATED = 0x0001;
+
+    /**
+     * Maximum number of packets to read while waiting for the first timestamp.
+     * Decoding only.
+     */
+    public native int max_ts_probe(); public native AVFormatContext max_ts_probe(int max_ts_probe);
+
 
     /**
      * Transport stream id.
@@ -2704,6 +2758,14 @@ public static final int RAW_PACKET_BUFFER_SIZE = 2500000;
      * Can be set to 0 to let avformat choose using a heuristic.
      */
     public native long max_analyze_duration2(); public native AVFormatContext max_analyze_duration2(long max_analyze_duration2);
+
+    /**
+     * Maximum size of the data read from input for determining
+     * the input container format.
+     * Demuxing only, set by the caller before avformat_open_input()
+     * via AVOptions (NO direct access).
+     */
+    public native long probesize2(); public native AVFormatContext probesize2(long probesize2);
 }
 
 public static native int av_format_get_probe_score(@Const AVFormatContext s);
@@ -2806,14 +2868,14 @@ public static native int avformat_network_deinit();
  * if f is non-NULL, returns the next registered input format after f
  * or NULL if f is the last one.
  */
-public static native AVInputFormat av_iformat_next(AVInputFormat f);
+public static native AVInputFormat av_iformat_next(@Const AVInputFormat f);
 
 /**
  * If f is NULL, returns the first registered output format,
  * if f is non-NULL, returns the next registered output format after f
  * or NULL if f is the last one.
  */
-public static native AVOutputFormat av_oformat_next(AVOutputFormat f);
+public static native AVOutputFormat av_oformat_next(@Const AVOutputFormat f);
 
 /**
  * Allocate an AVFormatContext.
@@ -2880,15 +2942,6 @@ public static native AVProgram av_new_program(AVFormatContext s, int id);
 
 
 // #if FF_API_ALLOC_OUTPUT_CONTEXT
-/**
- * @deprecated deprecated in favor of avformat_alloc_output_context2()
- */
-public static native @Deprecated AVFormatContext avformat_alloc_output_context(@Cast("const char*") BytePointer format,
-                                               AVOutputFormat oformat,
-                                               @Cast("const char*") BytePointer filename);
-public static native @Deprecated AVFormatContext avformat_alloc_output_context(String format,
-                                               AVOutputFormat oformat,
-                                               String filename);
 // #endif
 
 /**
@@ -3026,22 +3079,6 @@ public static native int avformat_open_input(@ByPtrPtr AVFormatContext ps, Strin
 public static native @Deprecated int av_demuxer_open(AVFormatContext ic);
 
 // #if FF_API_FORMAT_PARAMETERS
-/**
- * Read packets of a media file to get stream information. This
- * is useful for file formats with no headers such as MPEG. This
- * function also computes the real framerate in case of MPEG-2 repeat
- * frame mode.
- * The logical file position is not changed by this function;
- * examined packets may be buffered for later processing.
- *
- * @param ic media file handle
- * @return >=0 if OK, AVERROR_xxx on error
- * @todo Let the user decide somehow what information is needed so that
- *       we do not waste time getting stuff the user does not need.
- *
- * @deprecated use avformat_find_stream_info.
- */
-public static native @Deprecated int av_find_stream_info(AVFormatContext ic);
 // #endif
 
 /**
@@ -3118,20 +3155,6 @@ public static native int av_find_best_stream(AVFormatContext ic,
                         int flags);
 
 // #if FF_API_READ_PACKET
-/**
- * @deprecated use AVFMT_FLAG_NOFILLIN | AVFMT_FLAG_NOPARSE to read raw
- * unprocessed packets
- *
- * Read a transport packet from a media file.
- *
- * This function is obsolete and should never be used.
- * Use av_read_frame() instead.
- *
- * @param s media file handle
- * @param pkt is filled
- * @return 0 if OK, AVERROR_xxx on error
- */
-public static native @Deprecated int av_read_packet(AVFormatContext s, AVPacket pkt);
 // #endif
 
 /**
@@ -3220,13 +3243,6 @@ public static native int av_read_play(AVFormatContext s);
 public static native int av_read_pause(AVFormatContext s);
 
 // #if FF_API_CLOSE_INPUT_FILE
-/**
- * @deprecated use avformat_close_input()
- * Close a media file (but not its codecs).
- *
- * @param s media file handle
- */
-public static native @Deprecated void av_close_input_file(AVFormatContext s);
 // #endif
 
 /**
@@ -3240,25 +3256,9 @@ public static native void avformat_close_input(@ByPtrPtr AVFormatContext s);
  */
 
 // #if FF_API_NEW_STREAM
-/**
- * Add a new stream to a media file.
- *
- * Can only be called in the read_header() function. If the flag
- * AVFMTCTX_NOHEADER is in the format context, then new streams
- * can be added in read_packet too.
- *
- * @param s media file handle
- * @param id file-format-dependent stream ID
- */
-public static native @Deprecated AVStream av_new_stream(AVFormatContext s, int id);
 // #endif
 
 // #if FF_API_SET_PTS_INFO
-/**
- * @deprecated this function is not supposed to be called outside of lavf
- */
-public static native @Deprecated void av_set_pts_info(AVStream s, int pts_wrap_bits,
-                     @Cast("unsigned int") int pts_num, @Cast("unsigned int") int pts_den);
 // #endif
 
 /** seek backward */
@@ -3745,7 +3745,8 @@ public static native int av_match_ext(String filename, String extensions);
  * @return 1 if codec with ID codec_id can be stored in ofmt, 0 if it cannot.
  *         A negative number if this information is not available.
  */
-public static native int avformat_query_codec(AVOutputFormat ofmt, @Cast("AVCodecID") int codec_id, int std_compliance);
+public static native int avformat_query_codec(@Const AVOutputFormat ofmt, @Cast("AVCodecID") int codec_id,
+                         int std_compliance);
 
 /**
  * @defgroup riff_fourcc RIFF FourCCs

@@ -480,6 +480,10 @@ public static native @MemberGetter int AVERROR_UNKNOWN();
 public static final int AVERROR_UNKNOWN = AVERROR_UNKNOWN();
 /** Requested feature is flagged experimental. Set strict_std_compliance if you really want to use it. */
 public static final int AVERROR_EXPERIMENTAL =       (-0x2bb2afa8);
+/** Input changed between calls. Reconfiguration is required. (can be OR-ed with AVERROR_OUTPUT_CHANGED) */
+public static final int AVERROR_INPUT_CHANGED =      (-0x636e6701);
+/** Output changed between calls. Reconfiguration is required. (can be OR-ed with AVERROR_INPUT_CHANGED) */
+public static final int AVERROR_OUTPUT_CHANGED =     (-0x636e6702);
 
 public static final int AV_ERROR_MAX_STRING_SIZE = 64;
 
@@ -763,6 +767,17 @@ public static native @Cast("char*") BytePointer av_strdup(@Cast("const char*") B
 public static native @Cast("char*") ByteBuffer av_strdup(String s);
 
 /**
+ * Duplicate a substring of the string s.
+ * @param s string to be duplicated
+ * @param len the maximum length of the resulting string (not counting the
+ *            terminating byte).
+ * @return Pointer to a newly-allocated string containing a
+ * copy of s or NULL if the string cannot be allocated.
+ */
+public static native @Cast("char*") BytePointer av_strndup(@Cast("const char*") BytePointer s, @Cast("size_t") long len);
+public static native @Cast("char*") ByteBuffer av_strndup(String s, @Cast("size_t") long len);
+
+/**
  * Duplicate the buffer p.
  * @param p buffer to be duplicated
  * @return Pointer to a newly allocated buffer containing a
@@ -775,6 +790,7 @@ public static native Pointer av_memdup(@Const Pointer p, @Cast("size_t") long si
  * av_realloc() and set the pointer pointing to it to NULL.
  * @param ptr Pointer to the pointer to the memory block which should
  * be freed.
+ * @note passing a pointer to a NULL pointer is safe and leads to no action.
  * @see av_free()
  */
 public static native void av_freep(Pointer ptr);
@@ -1302,6 +1318,16 @@ public static final int
     AV_CLASS_CATEGORY_DEVICE_INPUT = 45,
     /** not part of ABI/API */
     AV_CLASS_CATEGORY_NB = 46;
+
+// #define AV_IS_INPUT_DEVICE(category)
+//     (((category) == AV_CLASS_CATEGORY_DEVICE_VIDEO_INPUT) ||
+//      ((category) == AV_CLASS_CATEGORY_DEVICE_AUDIO_INPUT) ||
+//      ((category) == AV_CLASS_CATEGORY_DEVICE_INPUT))
+
+// #define AV_IS_OUTPUT_DEVICE(category)
+//     (((category) == AV_CLASS_CATEGORY_DEVICE_VIDEO_OUTPUT) ||
+//      ((category) == AV_CLASS_CATEGORY_DEVICE_AUDIO_OUTPUT) ||
+//      ((category) == AV_CLASS_CATEGORY_DEVICE_OUTPUT))
 
 /**
  * Describe the class of an AVClass context structure. That is an
@@ -2220,11 +2246,17 @@ public static final int /* FF_API_XVMC */
     /** packed BGR 4:4:4, 16bpp, (msb)4A 4B 4G 4R(lsb), big-endian, most significant bits to 1 */
     AV_PIX_FMT_BGR444BE = 65,
     /** 8bit gray, 8bit alpha */
-    AV_PIX_FMT_GRAY8A = 66,
+    AV_PIX_FMT_YA8 = 66,
+
+    /** alias for AV_PIX_FMT_YA8 */
+    AV_PIX_FMT_Y400A =  AV_PIX_FMT_YA8,
+    /** alias for AV_PIX_FMT_YA8 */
+    AV_PIX_FMT_GRAY8A=  AV_PIX_FMT_YA8,
+
     /** packed RGB 16:16:16, 48bpp, 16B, 16G, 16R, the 2-byte value for each R/G/B component is stored as big-endian */
-    AV_PIX_FMT_BGR48BE = 67,
+    AV_PIX_FMT_BGR48BE =  AV_PIX_FMT_YA8 + 1,
     /** packed RGB 16:16:16, 48bpp, 16B, 16G, 16R, the 2-byte value for each R/G/B component is stored as little-endian */
-    AV_PIX_FMT_BGR48LE = 68,
+    AV_PIX_FMT_BGR48LE =  AV_PIX_FMT_YA8 + 2,
 
     /**
      * The following 12 formats have the disadvantage of needing 1 format for each bit depth.
@@ -2232,48 +2264,48 @@ public static final int /* FF_API_XVMC */
      * If you want to support multiple bit depths, then using AV_PIX_FMT_YUV420P16* with the bpp stored separately is better.
      */
     /** planar YUV 4:2:0, 13.5bpp, (1 Cr & Cb sample per 2x2 Y samples), big-endian */
-    AV_PIX_FMT_YUV420P9BE = 69,
+    AV_PIX_FMT_YUV420P9BE =  AV_PIX_FMT_YA8 + 3,
     /** planar YUV 4:2:0, 13.5bpp, (1 Cr & Cb sample per 2x2 Y samples), little-endian */
-    AV_PIX_FMT_YUV420P9LE = 70,
+    AV_PIX_FMT_YUV420P9LE =  AV_PIX_FMT_YA8 + 4,
     /** planar YUV 4:2:0, 15bpp, (1 Cr & Cb sample per 2x2 Y samples), big-endian */
-    AV_PIX_FMT_YUV420P10BE = 71,
+    AV_PIX_FMT_YUV420P10BE =  AV_PIX_FMT_YA8 + 5,
     /** planar YUV 4:2:0, 15bpp, (1 Cr & Cb sample per 2x2 Y samples), little-endian */
-    AV_PIX_FMT_YUV420P10LE = 72,
+    AV_PIX_FMT_YUV420P10LE =  AV_PIX_FMT_YA8 + 6,
     /** planar YUV 4:2:2, 20bpp, (1 Cr & Cb sample per 2x1 Y samples), big-endian */
-    AV_PIX_FMT_YUV422P10BE = 73,
+    AV_PIX_FMT_YUV422P10BE =  AV_PIX_FMT_YA8 + 7,
     /** planar YUV 4:2:2, 20bpp, (1 Cr & Cb sample per 2x1 Y samples), little-endian */
-    AV_PIX_FMT_YUV422P10LE = 74,
+    AV_PIX_FMT_YUV422P10LE =  AV_PIX_FMT_YA8 + 8,
     /** planar YUV 4:4:4, 27bpp, (1 Cr & Cb sample per 1x1 Y samples), big-endian */
-    AV_PIX_FMT_YUV444P9BE = 75,
+    AV_PIX_FMT_YUV444P9BE =  AV_PIX_FMT_YA8 + 9,
     /** planar YUV 4:4:4, 27bpp, (1 Cr & Cb sample per 1x1 Y samples), little-endian */
-    AV_PIX_FMT_YUV444P9LE = 76,
+    AV_PIX_FMT_YUV444P9LE =  AV_PIX_FMT_YA8 + 10,
     /** planar YUV 4:4:4, 30bpp, (1 Cr & Cb sample per 1x1 Y samples), big-endian */
-    AV_PIX_FMT_YUV444P10BE = 77,
+    AV_PIX_FMT_YUV444P10BE =  AV_PIX_FMT_YA8 + 11,
     /** planar YUV 4:4:4, 30bpp, (1 Cr & Cb sample per 1x1 Y samples), little-endian */
-    AV_PIX_FMT_YUV444P10LE = 78,
+    AV_PIX_FMT_YUV444P10LE =  AV_PIX_FMT_YA8 + 12,
     /** planar YUV 4:2:2, 18bpp, (1 Cr & Cb sample per 2x1 Y samples), big-endian */
-    AV_PIX_FMT_YUV422P9BE = 79,
+    AV_PIX_FMT_YUV422P9BE =  AV_PIX_FMT_YA8 + 13,
     /** planar YUV 4:2:2, 18bpp, (1 Cr & Cb sample per 2x1 Y samples), little-endian */
-    AV_PIX_FMT_YUV422P9LE = 80,
+    AV_PIX_FMT_YUV422P9LE =  AV_PIX_FMT_YA8 + 14,
     /** hardware decoding through VDA */
-    AV_PIX_FMT_VDA_VLD = 81,
+    AV_PIX_FMT_VDA_VLD =  AV_PIX_FMT_YA8 + 15,
 
 // #ifdef AV_PIX_FMT_ABI_GIT_MASTER
 // #endif
     /** planar GBR 4:4:4 24bpp */
-    AV_PIX_FMT_GBRP = 82,
+    AV_PIX_FMT_GBRP =  AV_PIX_FMT_YA8 + 16,
     /** planar GBR 4:4:4 27bpp, big-endian */
-    AV_PIX_FMT_GBRP9BE = 83,
+    AV_PIX_FMT_GBRP9BE =  AV_PIX_FMT_YA8 + 17,
     /** planar GBR 4:4:4 27bpp, little-endian */
-    AV_PIX_FMT_GBRP9LE = 84,
+    AV_PIX_FMT_GBRP9LE =  AV_PIX_FMT_YA8 + 18,
     /** planar GBR 4:4:4 30bpp, big-endian */
-    AV_PIX_FMT_GBRP10BE = 85,
+    AV_PIX_FMT_GBRP10BE =  AV_PIX_FMT_YA8 + 19,
     /** planar GBR 4:4:4 30bpp, little-endian */
-    AV_PIX_FMT_GBRP10LE = 86,
+    AV_PIX_FMT_GBRP10LE =  AV_PIX_FMT_YA8 + 20,
     /** planar GBR 4:4:4 48bpp, big-endian */
-    AV_PIX_FMT_GBRP16BE = 87,
+    AV_PIX_FMT_GBRP16BE =  AV_PIX_FMT_YA8 + 21,
     /** planar GBR 4:4:4 48bpp, little-endian */
-    AV_PIX_FMT_GBRP16LE = 88,
+    AV_PIX_FMT_GBRP16LE =  AV_PIX_FMT_YA8 + 22,
 
     /**
      * duplicated pixel formats for compatibility with libav.
@@ -2281,60 +2313,60 @@ public static final int /* FF_API_XVMC */
      * Libav added them Oct 12 2012 with incompatible values (commit 6d5600e85)
      */
     /** planar YUV 4:2:2 24bpp, (1 Cr & Cb sample per 2x1 Y & A samples) */
-    AV_PIX_FMT_YUVA422P_LIBAV = 89,
+    AV_PIX_FMT_YUVA422P_LIBAV =  AV_PIX_FMT_YA8 + 23,
     /** planar YUV 4:4:4 32bpp, (1 Cr & Cb sample per 1x1 Y & A samples) */
-    AV_PIX_FMT_YUVA444P_LIBAV = 90,
+    AV_PIX_FMT_YUVA444P_LIBAV =  AV_PIX_FMT_YA8 + 24,
 
     /** planar YUV 4:2:0 22.5bpp, (1 Cr & Cb sample per 2x2 Y & A samples), big-endian */
-    AV_PIX_FMT_YUVA420P9BE = 91,
+    AV_PIX_FMT_YUVA420P9BE =  AV_PIX_FMT_YA8 + 25,
     /** planar YUV 4:2:0 22.5bpp, (1 Cr & Cb sample per 2x2 Y & A samples), little-endian */
-    AV_PIX_FMT_YUVA420P9LE = 92,
+    AV_PIX_FMT_YUVA420P9LE =  AV_PIX_FMT_YA8 + 26,
     /** planar YUV 4:2:2 27bpp, (1 Cr & Cb sample per 2x1 Y & A samples), big-endian */
-    AV_PIX_FMT_YUVA422P9BE = 93,
+    AV_PIX_FMT_YUVA422P9BE =  AV_PIX_FMT_YA8 + 27,
     /** planar YUV 4:2:2 27bpp, (1 Cr & Cb sample per 2x1 Y & A samples), little-endian */
-    AV_PIX_FMT_YUVA422P9LE = 94,
+    AV_PIX_FMT_YUVA422P9LE =  AV_PIX_FMT_YA8 + 28,
     /** planar YUV 4:4:4 36bpp, (1 Cr & Cb sample per 1x1 Y & A samples), big-endian */
-    AV_PIX_FMT_YUVA444P9BE = 95,
+    AV_PIX_FMT_YUVA444P9BE =  AV_PIX_FMT_YA8 + 29,
     /** planar YUV 4:4:4 36bpp, (1 Cr & Cb sample per 1x1 Y & A samples), little-endian */
-    AV_PIX_FMT_YUVA444P9LE = 96,
+    AV_PIX_FMT_YUVA444P9LE =  AV_PIX_FMT_YA8 + 30,
     /** planar YUV 4:2:0 25bpp, (1 Cr & Cb sample per 2x2 Y & A samples, big-endian) */
-    AV_PIX_FMT_YUVA420P10BE = 97,
+    AV_PIX_FMT_YUVA420P10BE =  AV_PIX_FMT_YA8 + 31,
     /** planar YUV 4:2:0 25bpp, (1 Cr & Cb sample per 2x2 Y & A samples, little-endian) */
-    AV_PIX_FMT_YUVA420P10LE = 98,
+    AV_PIX_FMT_YUVA420P10LE =  AV_PIX_FMT_YA8 + 32,
     /** planar YUV 4:2:2 30bpp, (1 Cr & Cb sample per 2x1 Y & A samples, big-endian) */
-    AV_PIX_FMT_YUVA422P10BE = 99,
+    AV_PIX_FMT_YUVA422P10BE =  AV_PIX_FMT_YA8 + 33,
     /** planar YUV 4:2:2 30bpp, (1 Cr & Cb sample per 2x1 Y & A samples, little-endian) */
-    AV_PIX_FMT_YUVA422P10LE = 100,
+    AV_PIX_FMT_YUVA422P10LE =  AV_PIX_FMT_YA8 + 34,
     /** planar YUV 4:4:4 40bpp, (1 Cr & Cb sample per 1x1 Y & A samples, big-endian) */
-    AV_PIX_FMT_YUVA444P10BE = 101,
+    AV_PIX_FMT_YUVA444P10BE =  AV_PIX_FMT_YA8 + 35,
     /** planar YUV 4:4:4 40bpp, (1 Cr & Cb sample per 1x1 Y & A samples, little-endian) */
-    AV_PIX_FMT_YUVA444P10LE = 102,
+    AV_PIX_FMT_YUVA444P10LE =  AV_PIX_FMT_YA8 + 36,
     /** planar YUV 4:2:0 40bpp, (1 Cr & Cb sample per 2x2 Y & A samples, big-endian) */
-    AV_PIX_FMT_YUVA420P16BE = 103,
+    AV_PIX_FMT_YUVA420P16BE =  AV_PIX_FMT_YA8 + 37,
     /** planar YUV 4:2:0 40bpp, (1 Cr & Cb sample per 2x2 Y & A samples, little-endian) */
-    AV_PIX_FMT_YUVA420P16LE = 104,
+    AV_PIX_FMT_YUVA420P16LE =  AV_PIX_FMT_YA8 + 38,
     /** planar YUV 4:2:2 48bpp, (1 Cr & Cb sample per 2x1 Y & A samples, big-endian) */
-    AV_PIX_FMT_YUVA422P16BE = 105,
+    AV_PIX_FMT_YUVA422P16BE =  AV_PIX_FMT_YA8 + 39,
     /** planar YUV 4:2:2 48bpp, (1 Cr & Cb sample per 2x1 Y & A samples, little-endian) */
-    AV_PIX_FMT_YUVA422P16LE = 106,
+    AV_PIX_FMT_YUVA422P16LE =  AV_PIX_FMT_YA8 + 40,
     /** planar YUV 4:4:4 64bpp, (1 Cr & Cb sample per 1x1 Y & A samples, big-endian) */
-    AV_PIX_FMT_YUVA444P16BE = 107,
+    AV_PIX_FMT_YUVA444P16BE =  AV_PIX_FMT_YA8 + 41,
     /** planar YUV 4:4:4 64bpp, (1 Cr & Cb sample per 1x1 Y & A samples, little-endian) */
-    AV_PIX_FMT_YUVA444P16LE = 108,
+    AV_PIX_FMT_YUVA444P16LE =  AV_PIX_FMT_YA8 + 42,
 
     /** HW acceleration through VDPAU, Picture.data[3] contains a VdpVideoSurface */
-    AV_PIX_FMT_VDPAU = 109,
+    AV_PIX_FMT_VDPAU =  AV_PIX_FMT_YA8 + 43,
 
     /** packed XYZ 4:4:4, 36 bpp, (msb) 12X, 12Y, 12Z (lsb), the 2-byte value for each X/Y/Z is stored as little-endian, the 4 lower bits are set to 0 */
-    AV_PIX_FMT_XYZ12LE = 110,
+    AV_PIX_FMT_XYZ12LE =  AV_PIX_FMT_YA8 + 44,
     /** packed XYZ 4:4:4, 36 bpp, (msb) 12X, 12Y, 12Z (lsb), the 2-byte value for each X/Y/Z is stored as big-endian, the 4 lower bits are set to 0 */
-    AV_PIX_FMT_XYZ12BE = 111,
+    AV_PIX_FMT_XYZ12BE =  AV_PIX_FMT_YA8 + 45,
     /** interleaved chroma YUV 4:2:2, 16bpp, (1 Cr & Cb sample per 2x1 Y samples) */
-    AV_PIX_FMT_NV16 = 112,
+    AV_PIX_FMT_NV16 =  AV_PIX_FMT_YA8 + 46,
     /** interleaved chroma YUV 4:2:2, 20bpp, (1 Cr & Cb sample per 2x1 Y samples), little-endian */
-    AV_PIX_FMT_NV20LE = 113,
+    AV_PIX_FMT_NV20LE =  AV_PIX_FMT_YA8 + 47,
     /** interleaved chroma YUV 4:2:2, 20bpp, (1 Cr & Cb sample per 2x1 Y samples), big-endian */
-    AV_PIX_FMT_NV20BE = 114,
+    AV_PIX_FMT_NV20BE =  AV_PIX_FMT_YA8 + 48,
 
     /**
      * duplicated pixel formats for compatibility with libav.
@@ -2343,19 +2375,25 @@ public static final int /* FF_API_XVMC */
      * Libav added them Sun Mar 16 23:05:47 2014 +0100 with incompatible values (commit 1481d24c3a0abf81e1d7a514547bd5305232be30)
      */
     /** packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian */
-    AV_PIX_FMT_RGBA64BE_LIBAV = 115,
+    AV_PIX_FMT_RGBA64BE_LIBAV =  AV_PIX_FMT_YA8 + 49,
     /** packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as little-endian */
-    AV_PIX_FMT_RGBA64LE_LIBAV = 116,
+    AV_PIX_FMT_RGBA64LE_LIBAV =  AV_PIX_FMT_YA8 + 50,
     /** packed RGBA 16:16:16:16, 64bpp, 16B, 16G, 16R, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian */
-    AV_PIX_FMT_BGRA64BE_LIBAV = 117,
+    AV_PIX_FMT_BGRA64BE_LIBAV =  AV_PIX_FMT_YA8 + 51,
     /** packed RGBA 16:16:16:16, 64bpp, 16B, 16G, 16R, 16A, the 2-byte value for each R/G/B/A component is stored as little-endian */
-    AV_PIX_FMT_BGRA64LE_LIBAV = 118,
+    AV_PIX_FMT_BGRA64LE_LIBAV =  AV_PIX_FMT_YA8 + 52,
 
     /** packed YUV 4:2:2, 16bpp, Y0 Cr Y1 Cb */
-    AV_PIX_FMT_YVYU422 = 119,
+    AV_PIX_FMT_YVYU422 =  AV_PIX_FMT_YA8 + 53,
 
     /** HW acceleration through VDA, data[3] contains a CVPixelBufferRef */
-    AV_PIX_FMT_VDA = 120,
+    AV_PIX_FMT_VDA =  AV_PIX_FMT_YA8 + 54,
+
+    /** 16bit gray, 16bit alpha (big-endian) */
+    AV_PIX_FMT_YA16BE =  AV_PIX_FMT_YA8 + 55,
+    /** 16bit gray, 16bit alpha (little-endian) */
+    AV_PIX_FMT_YA16LE =  AV_PIX_FMT_YA8 + 56,
+
 
 // #ifndef AV_PIX_FMT_ABI_GIT_MASTER
     /** packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian */
@@ -2459,7 +2497,7 @@ public static final int /* FF_API_XVMC */
 // #endif
 
 
-public static final int AV_PIX_FMT_Y400A = AV_PIX_FMT_GRAY8A;
+// #define AV_PIX_FMT_Y400A AV_PIX_FMT_GRAY8A
 public static final int AV_PIX_FMT_GBR24P = AV_PIX_FMT_GBRP;
 
 // #if AV_HAVE_BIGENDIAN
@@ -2483,6 +2521,8 @@ public static final int AV_PIX_FMT_0BGR32 = AV_PIX_FMT_0BGR32();
 
 public static native @MemberGetter int AV_PIX_FMT_GRAY16();
 public static final int AV_PIX_FMT_GRAY16 = AV_PIX_FMT_GRAY16();
+public static native @MemberGetter int AV_PIX_FMT_YA16();
+public static final int AV_PIX_FMT_YA16 = AV_PIX_FMT_YA16();
 public static native @MemberGetter int AV_PIX_FMT_RGB48();
 public static final int AV_PIX_FMT_RGB48 = AV_PIX_FMT_RGB48();
 public static native @MemberGetter int AV_PIX_FMT_RGB565();
@@ -2841,7 +2881,29 @@ public static final int
      *
      * See libavutil/display.h for a detailed description of the data.
      */
-    AV_FRAME_DATA_DISPLAYMATRIX = 6;
+    AV_FRAME_DATA_DISPLAYMATRIX = 6,
+    /**
+     * Active Format Description data consisting of a single byte as specified
+     * in ETSI TS 101 154 using AVActiveFormatDescription enum.
+     */
+    AV_FRAME_DATA_AFD = 7,
+    /**
+     * Motion vectors exported by some codecs (on demand through the export_mvs
+     * flag set in the libavcodec AVCodecContext flags2 option).
+     * The data is the AVMotionVector struct defined in
+     * libavutil/motion_vector.h.
+     */
+    AV_FRAME_DATA_MOTION_VECTORS = 8;
+
+/** enum AVActiveFormatDescription */
+public static final int
+    AV_AFD_SAME         = 8,
+    AV_AFD_4_3          = 9,
+    AV_AFD_16_9         = 10,
+    AV_AFD_14_9         = 11,
+    AV_AFD_4_3_SP_14_9  = 13,
+    AV_AFD_16_9_SP_14_9 = 14,
+    AV_AFD_SP_4_3       = 15;
 
 public static class AVFrameSideData extends Pointer {
     static { Loader.load(); }
@@ -2920,7 +2982,7 @@ public static final int AV_NUM_DATA_POINTERS = 8;
      * For audio, only linesize[0] may be set. For planar audio, each channel
      * plane must be the same size.
      *
-     * For video the linesizes should be multiplies of the CPUs alignment
+     * For video the linesizes should be multiples of the CPUs alignment
      * preference, this is 16 or 32 for modern desktop CPUs.
      * Some code requires such alignment other code can be slower without
      * correct alignment, for yet other it makes no difference.
@@ -3207,7 +3269,6 @@ public static final int AV_FRAME_FLAG_CORRUPT =       (1 << 0);
      */
     public native int flags(); public native AVFrame flags(int flags);
 
-// #if FF_API_AVFRAME_COLORSPACE
     /**
      * MPEG vs JPEG YUV range.
      * It must be accessed using av_frame_get_color_range() and
@@ -3231,7 +3292,6 @@ public static final int AV_FRAME_FLAG_CORRUPT =       (1 << 0);
     public native @Cast("AVColorSpace") int colorspace(); public native AVFrame colorspace(int colorspace);
 
     public native @Cast("AVChromaLocation") int chroma_location(); public native AVFrame chroma_location(int chroma_location);
-// #endif
 
     /**
      * frame timestamp estimated using various heuristics, in stream time base
@@ -3507,6 +3567,11 @@ public static native AVFrameSideData av_frame_get_side_data(@Const AVFrame frame
 public static native void av_frame_remove_side_data(AVFrame frame, @Cast("AVFrameSideDataType") int type);
 
 /**
+ * @return a string identifying the side data type
+ */
+public static native @Cast("const char*") BytePointer av_frame_side_data_name(@Cast("AVFrameSideDataType") int type);
+
+/**
  * @}
  */
 
@@ -3661,10 +3726,6 @@ public static native @Cast("char*") ByteBuffer av_get_sample_fmt_string(@Cast("c
 public static native @Cast("char*") byte[] av_get_sample_fmt_string(@Cast("char*") byte[] buf, int buf_size, @Cast("AVSampleFormat") int sample_fmt);
 
 // #if FF_API_GET_BITS_PER_SAMPLE_FMT
-/**
- * @deprecated Use av_get_bytes_per_sample() instead.
- */
-public static native @Deprecated int av_get_bits_per_sample_fmt(@Cast("AVSampleFormat") int sample_fmt);
 // #endif
 
 /**
@@ -4179,6 +4240,7 @@ public static final int AV_CPU_FLAG_VFP =          (1 << 3);
 public static final int AV_CPU_FLAG_VFPV3 =        (1 << 4);
 public static final int AV_CPU_FLAG_NEON =         (1 << 5);
 public static final int AV_CPU_FLAG_ARMV8 =        (1 << 6);
+public static final int AV_CPU_FLAG_SETEND =       (1 <<16);
 
 /**
  * Return the flags which specify extensions supported by the CPU.
@@ -4269,6 +4331,8 @@ public static native int av_cpu_count();
 
 // #ifndef AVUTIL_DICT_H
 // #define AVUTIL_DICT_H
+
+// #include <stdint.h>
 
 // #include "version.h"
 
@@ -4373,6 +4437,9 @@ public static native int av_dict_count(@Const AVDictionary m);
 /**
  * Set the given entry in *pm, overwriting an existing entry.
  *
+ * Note: If AV_DICT_DONT_STRDUP_KEY or AV_DICT_DONT_STRDUP_VAL is set,
+ * these arguments will be freed on error.
+ *
  * @param pm pointer to a pointer to a dictionary struct. If *pm is NULL
  * a dictionary struct is allocated and put in *pm.
  * @param key entry key to add to *pm (will be av_strduped depending on flags)
@@ -4383,6 +4450,16 @@ public static native int av_dict_count(@Const AVDictionary m);
 public static native int av_dict_set(@Cast("AVDictionary**") PointerPointer pm, @Cast("const char*") BytePointer key, @Cast("const char*") BytePointer value, int flags);
 public static native int av_dict_set(@ByPtrPtr AVDictionary pm, @Cast("const char*") BytePointer key, @Cast("const char*") BytePointer value, int flags);
 public static native int av_dict_set(@ByPtrPtr AVDictionary pm, String key, String value, int flags);
+
+/**
+ * Convenience wrapper for av_dict_set that converts the value to a string
+ * and stores it.
+ *
+ * Note: If AV_DICT_DONT_STRDUP_KEY is set, key will be freed on error.
+ */
+public static native int av_dict_set_int(@Cast("AVDictionary**") PointerPointer pm, @Cast("const char*") BytePointer key, long value, int flags);
+public static native int av_dict_set_int(@ByPtrPtr AVDictionary pm, @Cast("const char*") BytePointer key, long value, int flags);
+public static native int av_dict_set_int(@ByPtrPtr AVDictionary pm, String key, long value, int flags);
 
 /**
  * Parse the key/value pairs list and add the parsed entries to a dictionary.
@@ -4667,6 +4744,7 @@ public static final int
     AV_OPT_TYPE_RATIONAL = 6,
     /** offset must point to a pointer immediately followed by an int for the length */
     AV_OPT_TYPE_BINARY = 7,
+    AV_OPT_TYPE_DICT = 8,
     AV_OPT_TYPE_CONST = 128;
 public static native @MemberGetter int AV_OPT_TYPE_IMAGE_SIZE();
 public static final int
@@ -4872,22 +4950,6 @@ public static class AVOptionRanges extends Pointer {
 
 
 // #if FF_API_FIND_OPT
-/**
- * Look for an option in obj. Look only for the options which
- * have the flags set as specified in mask and flags (that is,
- * for which it is the case that (opt->flags & mask) == flags).
- *
- * @param[in] obj a pointer to a struct whose first element is a
- * pointer to an AVClass
- * @param[in] name the name of the option to look for
- * @param[in] unit the unit of the option to look for, or any if NULL
- * @return a pointer to the option found, or NULL if no option
- * has been found
- *
- * @deprecated use av_opt_find.
- */
-public static native @Const @Deprecated AVOption av_find_opt(Pointer obj, @Cast("const char*") BytePointer name, @Cast("const char*") BytePointer unit, int mask, int flags);
-public static native @Const @Deprecated AVOption av_find_opt(Pointer obj, String name, String unit, int mask, int flags);
 // #endif
 
 // #if FF_API_OLD_AVOPTIONS
@@ -5040,7 +5102,7 @@ public static native int av_opt_set_from_string(Pointer ctx, String opts,
                            @Cast("const char*const*") @ByPtrPtr byte[] shorthand,
                            String key_val_sep, String pairs_sep);
 /**
- * Free all string and binary options in obj.
+ * Free all allocated objects in obj.
  */
 public static native void av_opt_free(Pointer obj);
 
@@ -5348,6 +5410,12 @@ public static native int av_opt_set_video_rate(Pointer obj, @Cast("const char*")
 public static native int av_opt_set_video_rate(Pointer obj, String name, @ByVal AVRational val, int search_flags);
 public static native int av_opt_set_channel_layout(Pointer obj, @Cast("const char*") BytePointer name, long ch_layout, int search_flags);
 public static native int av_opt_set_channel_layout(Pointer obj, String name, long ch_layout, int search_flags);
+/**
+ * @note Any old dictionary present is discarded and replaced with a copy of the new one. The
+ * caller still owns val is and responsible for freeing it.
+ */
+public static native int av_opt_set_dict_val(Pointer obj, @Cast("const char*") BytePointer name, @Const AVDictionary val, int search_flags);
+public static native int av_opt_set_dict_val(Pointer obj, String name, @Const AVDictionary val, int search_flags);
 
 /**
  * Set a binary option to an integer list.
@@ -5364,6 +5432,7 @@ public static native int av_opt_set_channel_layout(Pointer obj, String name, lon
 //      AVERROR(EINVAL) :
 //      av_opt_set_bin(obj, name, (const uint8_t *)(val),
 //                     av_int_list_length(val, term) * sizeof(*(val)), flags))
+
 /**
  * @}
  */
@@ -5430,6 +5499,13 @@ public static native int av_opt_get_channel_layout(Pointer obj, @Cast("const cha
 public static native int av_opt_get_channel_layout(Pointer obj, String name, int search_flags, LongPointer ch_layout);
 public static native int av_opt_get_channel_layout(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, LongBuffer ch_layout);
 public static native int av_opt_get_channel_layout(Pointer obj, String name, int search_flags, long[] ch_layout);
+/**
+ * @param[out] out_val The returned dictionary is a copy of the actual value and must
+ * be freed with av_dict_free() by the caller
+ */
+public static native int av_opt_get_dict_val(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, @Cast("AVDictionary**") PointerPointer out_val);
+public static native int av_opt_get_dict_val(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, @ByPtrPtr AVDictionary out_val);
+public static native int av_opt_get_dict_val(Pointer obj, String name, int search_flags, @ByPtrPtr AVDictionary out_val);
 /**
  * @}
  */
@@ -5546,7 +5622,9 @@ public static class AVComponentDescriptor extends Pointer {
         return (AVComponentDescriptor)super.position(position);
     }
 
-    /** which of the 4 planes contains the component */
+    /**
+     * Which of the 4 planes contains the component.
+     */
     public native @Cast("uint16_t") @NoOffset short plane(); public native AVComponentDescriptor plane(short plane);
 
     /**
@@ -5560,9 +5638,16 @@ public static class AVComponentDescriptor extends Pointer {
      * Elements are bits for bitstream formats, bytes otherwise.
      */
     public native @Cast("uint16_t") @NoOffset short offset_plus1(); public native AVComponentDescriptor offset_plus1(short offset_plus1);
-    /** number of least significant bits that must be shifted away to get the value */
+
+    /**
+     * Number of least significant bits that must be shifted away
+     * to get the value.
+     */
     public native @Cast("uint16_t") @NoOffset short shift(); public native AVComponentDescriptor shift(short shift);
-    /** number of bits in the component minus 1 */
+
+    /**
+     * Number of bits in the component minus 1.
+     */
     public native @Cast("uint16_t") @NoOffset short depth_minus1(); public native AVComponentDescriptor depth_minus1(short depth_minus1);
 }
 
@@ -5620,6 +5705,11 @@ public static class AVPixFmtDescriptor extends Pointer {
      */
     public native @ByRef AVComponentDescriptor comp(int i); public native AVPixFmtDescriptor comp(int i, AVComponentDescriptor comp);
     @MemberGetter public native AVComponentDescriptor comp();
+
+    /**
+     * Alternative comma-separated names.
+     */
+    @MemberGetter public native @Cast("const char*") BytePointer alias();
 }
 
 /**
@@ -5695,14 +5785,18 @@ public static final int PIX_FMT_ALPHA =     AV_PIX_FMT_FLAG_ALPHA;
  * component c in data[1] to dst, rather than the palette indexes in
  * data[0]. The behavior is undefined if the format is not paletted.
  */
-public static native void av_read_image_line(@Cast("uint16_t*") ShortPointer dst, @Cast("const uint8_t**") PointerPointer data, @Const IntPointer linesize,
-                        @Const AVPixFmtDescriptor desc, int x, int y, int c, int w, int read_pal_component);
-public static native void av_read_image_line(@Cast("uint16_t*") ShortPointer dst, @Cast("const uint8_t**") @ByPtrPtr BytePointer data, @Const IntPointer linesize,
-                        @Const AVPixFmtDescriptor desc, int x, int y, int c, int w, int read_pal_component);
-public static native void av_read_image_line(@Cast("uint16_t*") ShortBuffer dst, @Cast("const uint8_t**") @ByPtrPtr ByteBuffer data, @Const IntBuffer linesize,
-                        @Const AVPixFmtDescriptor desc, int x, int y, int c, int w, int read_pal_component);
-public static native void av_read_image_line(@Cast("uint16_t*") short[] dst, @Cast("const uint8_t**") @ByPtrPtr byte[] data, @Const int[] linesize,
-                        @Const AVPixFmtDescriptor desc, int x, int y, int c, int w, int read_pal_component);
+public static native void av_read_image_line(@Cast("uint16_t*") ShortPointer dst, @Cast("const uint8_t**") PointerPointer data,
+                        @Const IntPointer linesize, @Const AVPixFmtDescriptor desc,
+                        int x, int y, int c, int w, int read_pal_component);
+public static native void av_read_image_line(@Cast("uint16_t*") ShortPointer dst, @Cast("const uint8_t**") @ByPtrPtr BytePointer data,
+                        @Const IntPointer linesize, @Const AVPixFmtDescriptor desc,
+                        int x, int y, int c, int w, int read_pal_component);
+public static native void av_read_image_line(@Cast("uint16_t*") ShortBuffer dst, @Cast("const uint8_t**") @ByPtrPtr ByteBuffer data,
+                        @Const IntBuffer linesize, @Const AVPixFmtDescriptor desc,
+                        int x, int y, int c, int w, int read_pal_component);
+public static native void av_read_image_line(@Cast("uint16_t*") short[] dst, @Cast("const uint8_t**") @ByPtrPtr byte[] data,
+                        @Const int[] linesize, @Const AVPixFmtDescriptor desc,
+                        int x, int y, int c, int w, int read_pal_component);
 
 /**
  * Write the values from src to the pixel format component c of an
@@ -5718,14 +5812,18 @@ public static native void av_read_image_line(@Cast("uint16_t*") short[] dst, @Ca
  * @param w the width of the line to write, that is the number of
  * values to write to the image line
  */
-public static native void av_write_image_line(@Cast("const uint16_t*") ShortPointer src, @Cast("uint8_t**") PointerPointer data, @Const IntPointer linesize,
-                         @Const AVPixFmtDescriptor desc, int x, int y, int c, int w);
-public static native void av_write_image_line(@Cast("const uint16_t*") ShortPointer src, @Cast("uint8_t**") @ByPtrPtr BytePointer data, @Const IntPointer linesize,
-                         @Const AVPixFmtDescriptor desc, int x, int y, int c, int w);
-public static native void av_write_image_line(@Cast("const uint16_t*") ShortBuffer src, @Cast("uint8_t**") @ByPtrPtr ByteBuffer data, @Const IntBuffer linesize,
-                         @Const AVPixFmtDescriptor desc, int x, int y, int c, int w);
-public static native void av_write_image_line(@Cast("const uint16_t*") short[] src, @Cast("uint8_t**") @ByPtrPtr byte[] data, @Const int[] linesize,
-                         @Const AVPixFmtDescriptor desc, int x, int y, int c, int w);
+public static native void av_write_image_line(@Cast("const uint16_t*") ShortPointer src, @Cast("uint8_t**") PointerPointer data,
+                         @Const IntPointer linesize, @Const AVPixFmtDescriptor desc,
+                         int x, int y, int c, int w);
+public static native void av_write_image_line(@Cast("const uint16_t*") ShortPointer src, @Cast("uint8_t**") @ByPtrPtr BytePointer data,
+                         @Const IntPointer linesize, @Const AVPixFmtDescriptor desc,
+                         int x, int y, int c, int w);
+public static native void av_write_image_line(@Cast("const uint16_t*") ShortBuffer src, @Cast("uint8_t**") @ByPtrPtr ByteBuffer data,
+                         @Const IntBuffer linesize, @Const AVPixFmtDescriptor desc,
+                         int x, int y, int c, int w);
+public static native void av_write_image_line(@Cast("const uint16_t*") short[] src, @Cast("uint8_t**") @ByPtrPtr byte[] data,
+                         @Const int[] linesize, @Const AVPixFmtDescriptor desc,
+                         int x, int y, int c, int w);
 
 /**
  * Return the pixel format corresponding to name.
@@ -5759,9 +5857,12 @@ public static native @Cast("const char*") BytePointer av_get_pix_fmt_name(@Cast(
  * corresponding info string, or a negative value to print the
  * corresponding header.
  */
-public static native @Cast("char*") BytePointer av_get_pix_fmt_string(@Cast("char*") BytePointer buf, int buf_size, @Cast("AVPixelFormat") int pix_fmt);
-public static native @Cast("char*") ByteBuffer av_get_pix_fmt_string(@Cast("char*") ByteBuffer buf, int buf_size, @Cast("AVPixelFormat") int pix_fmt);
-public static native @Cast("char*") byte[] av_get_pix_fmt_string(@Cast("char*") byte[] buf, int buf_size, @Cast("AVPixelFormat") int pix_fmt);
+public static native @Cast("char*") BytePointer av_get_pix_fmt_string(@Cast("char*") BytePointer buf, int buf_size,
+                            @Cast("AVPixelFormat") int pix_fmt);
+public static native @Cast("char*") ByteBuffer av_get_pix_fmt_string(@Cast("char*") ByteBuffer buf, int buf_size,
+                            @Cast("AVPixelFormat") int pix_fmt);
+public static native @Cast("char*") byte[] av_get_pix_fmt_string(@Cast("char*") byte[] buf, int buf_size,
+                            @Cast("AVPixelFormat") int pix_fmt);
 
 /**
  * Return the number of bits per pixel used by the pixel format
@@ -5829,7 +5930,7 @@ public static native int av_pix_fmt_get_chroma_sub_sample(@Cast("AVPixelFormat")
  */
 public static native int av_pix_fmt_count_planes(@Cast("AVPixelFormat") int pix_fmt);
 
-public static native void ff_check_pixfmt_descriptors();
+
 
 /**
  * Utility function to swap the endianness of a pixel format.
@@ -6070,7 +6171,7 @@ public static native void av_image_copy(@Cast("uint8_t**") @ByPtrPtr byte[] dst_
  * line sizes will be set.  If a planar format is specified, several
  * pointers will be set pointing to the different picture planes and
  * the line sizes of the different planes will be stored in the
- * lines_sizes array. Call with src == NULL to get the required
+ * lines_sizes array. Call with !src to get the required
  * size for the src buffer.
  *
  * To allocate the buffer and fill in the dst_data and dst_linesize in
@@ -6162,10 +6263,6 @@ public static native int av_image_check_size(@Cast("unsigned int") int w, @Cast(
  * @return 0 if valid, a negative AVERROR code otherwise
  */
 public static native int av_image_check_sar(@Cast("unsigned int") int w, @Cast("unsigned int") int h, @ByVal AVRational sar);
-
-public static native int avpriv_set_systematic_pal2(@Cast("uint32_t*") IntPointer pal, @Cast("AVPixelFormat") int pix_fmt);
-public static native int avpriv_set_systematic_pal2(@Cast("uint32_t*") IntBuffer pal, @Cast("AVPixelFormat") int pix_fmt);
-public static native int avpriv_set_systematic_pal2(@Cast("uint32_t*") int[] pal, @Cast("AVPixelFormat") int pix_fmt);
 
 /**
  * @}

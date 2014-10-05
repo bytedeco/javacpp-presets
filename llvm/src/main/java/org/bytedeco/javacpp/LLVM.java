@@ -9,6 +9,64 @@ import org.bytedeco.javacpp.annotation.*;
 public class LLVM extends org.bytedeco.javacpp.presets.LLVM {
     static { Loader.load(); }
 
+// Parsed from <llvm-c/Support.h>
+
+/*===-- llvm-c/Support.h - Support C Interface --------------------*- C -*-===*\
+|*                                                                            *|
+|*                     The LLVM Compiler Infrastructure                       *|
+|*                                                                            *|
+|* This file is distributed under the University of Illinois Open Source      *|
+|* License. See LICENSE.TXT for details.                                      *|
+|*                                                                            *|
+|*===----------------------------------------------------------------------===*|
+|*                                                                            *|
+|* This file defines the C interface to the LLVM support library.             *|
+|*                                                                            *|
+\*===----------------------------------------------------------------------===*/
+
+// #ifndef LLVM_C_SUPPORT_H
+// #define LLVM_C_SUPPORT_H
+
+// #include "llvm/Support/DataTypes.h"
+
+// #ifdef __cplusplus
+// #endif
+
+/**
+ * @defgroup LLVMCSupportTypes Types and Enumerations
+ *
+ * @{
+ */
+
+/**
+ * Used to pass regions of memory through LLVM interfaces.
+ *
+ * @see llvm::MemoryBuffer
+ */
+@Name("LLVMOpaqueMemoryBuffer") @Opaque public static class LLVMMemoryBufferRef extends Pointer {
+    public LLVMMemoryBufferRef() { }
+    public LLVMMemoryBufferRef(Pointer p) { super(p); }
+}
+
+/**
+ * @}
+ */
+
+/**
+ * This function permanently loads the dynamic library at the given path.
+ * It is safe to call this function multiple times for the same library.
+ *
+ * @see sys::DynamicLibrary::LoadLibraryPermanently()
+  */
+public static native @Cast("LLVMBool") int LLVMLoadLibraryPermanently(@Cast("const char*") BytePointer Filename);
+public static native @Cast("LLVMBool") int LLVMLoadLibraryPermanently(String Filename);
+
+// #ifdef __cplusplus
+// #endif
+
+// #endif
+
+
 // Parsed from <llvm-c/Core.h>
 
 /*===-- llvm-c/Core.h - Core Library C Interface ------------------*- C -*-===*\
@@ -28,7 +86,7 @@ public class LLVM extends org.bytedeco.javacpp.presets.LLVM {
 // #ifndef LLVM_C_CORE_H
 // #define LLVM_C_CORE_H
 
-// #include "llvm/Support/DataTypes.h"
+// #include "llvm-c/Support.h"
 
 // #ifdef __cplusplus
 // #endif
@@ -145,16 +203,6 @@ public class LLVM extends org.bytedeco.javacpp.presets.LLVM {
     public LLVMModuleProviderRef(Pointer p) { super(p); }
 }
 
-/**
- * Used to provide a module to JIT or interpreter.
- *
- * @see llvm::MemoryBuffer
- */
-@Name("LLVMOpaqueMemoryBuffer") @Opaque public static class LLVMMemoryBufferRef extends Pointer {
-    public LLVMMemoryBufferRef() { }
-    public LLVMMemoryBufferRef(Pointer p) { super(p); }
-}
-
 /** @see llvm::PassManagerBase */
 @Name("LLVMOpaquePassManager") @Opaque public static class LLVMPassManagerRef extends Pointer {
     public LLVMPassManagerRef() { }
@@ -174,6 +222,15 @@ public class LLVM extends org.bytedeco.javacpp.presets.LLVM {
 @Name("LLVMOpaqueUse") @Opaque public static class LLVMUseRef extends Pointer {
     public LLVMUseRef() { }
     public LLVMUseRef(Pointer p) { super(p); }
+}
+
+
+/**
+ * @see llvm::DiagnosticInfo
+ */
+@Name("LLVMOpaqueDiagnosticInfo") @Opaque public static class LLVMDiagnosticInfoRef extends Pointer {
+    public LLVMDiagnosticInfoRef() { }
+    public LLVMDiagnosticInfoRef(Pointer p) { super(p); }
 }
 
 /** enum LLVMAttribute */
@@ -211,7 +268,11 @@ public static final int
     LLVMAddressSafety = 1ULL << 32,
     LLVMStackProtectStrongAttribute = 1ULL<<33,
     LLVMCold = 1ULL << 34,
-    LLVMOptimizeNone = 1ULL << 35
+    LLVMOptimizeNone = 1ULL << 35,
+    LLVMInAllocaAttribute = 1ULL << 36,
+    LLVMNonNullAttribute = 1ULL << 37,
+    LLVMJumpTableAttribute = 1ULL << 38,
+    LLVMDereferenceableAttribute = 1ULL << 39,
     */
 
 /** enum LLVMOpcode */
@@ -351,9 +412,9 @@ public static final int
   LLVMInternalLinkage = 8,
   /** Like Internal, but omit from symbol table */
   LLVMPrivateLinkage = 9,
-  /** Function to be imported from DLL */
+  /** Obsolete */
   LLVMDLLImportLinkage = 10,
-  /** Function to be accessible from DLL */
+  /** Obsolete */
   LLVMDLLExportLinkage = 11,
   /** ExternalWeak linkage description */
   LLVMExternalWeakLinkage = 12,
@@ -374,6 +435,14 @@ public static final int
   LLVMHiddenVisibility = 1,
   /** The GV is protected */
   LLVMProtectedVisibility = 2;
+
+/** enum LLVMDLLStorageClass */
+public static final int
+  LLVMDefaultStorageClass   = 0,
+  /** Function to be imported from DLL. */
+  LLVMDLLImportStorageClass = 1,
+  /** Function to be accessible from DLL. */
+  LLVMDLLExportStorageClass = 2;
 
 /** enum LLVMCallConv */
 public static final int
@@ -525,6 +594,13 @@ public static final int
                              the old one */
     LLVMAtomicRMWBinOpUMin = 10;
 
+/** enum LLVMDiagnosticSeverity */
+public static final int
+    LLVMDSError = 0,
+    LLVMDSWarning = 1,
+    LLVMDSRemark = 2,
+    LLVMDSNote = 3;
+
 /**
  * @}
  */
@@ -587,6 +663,21 @@ public static native void LLVMEnablePrettyStackTrace();
  * @{
  */
 
+public static class LLVMDiagnosticHandler extends FunctionPointer {
+    static { Loader.load(); }
+    public    LLVMDiagnosticHandler(Pointer p) { super(p); }
+    protected LLVMDiagnosticHandler() { allocate(); }
+    private native void allocate();
+    public native void call(LLVMDiagnosticInfoRef arg0, Pointer arg1);
+}
+public static class LLVMYieldCallback extends FunctionPointer {
+    static { Loader.load(); }
+    public    LLVMYieldCallback(Pointer p) { super(p); }
+    protected LLVMYieldCallback() { allocate(); }
+    private native void allocate();
+    public native void call(LLVMContextRef arg0, Pointer arg1);
+}
+
 /**
  * Create a new context.
  *
@@ -601,12 +692,42 @@ public static native LLVMContextRef LLVMContextCreate();
 public static native LLVMContextRef LLVMGetGlobalContext();
 
 /**
+ * Set the diagnostic handler for this context.
+ */
+public static native void LLVMContextSetDiagnosticHandler(LLVMContextRef C,
+                                     LLVMDiagnosticHandler Handler,
+                                     Pointer DiagnosticContext);
+
+/**
+ * Set the yield callback function for this context.
+ *
+ * @see LLVMContext::setYieldCallback()
+ */
+public static native void LLVMContextSetYieldCallback(LLVMContextRef C, LLVMYieldCallback Callback,
+                                 Pointer OpaqueHandle);
+
+/**
  * Destroy a context instance.
  *
  * This should be called for every call to LLVMContextCreate() or memory
  * will be leaked.
  */
 public static native void LLVMContextDispose(LLVMContextRef C);
+
+/**
+ * Return a string representation of the DiagnosticInfo. Use
+ * LLVMDisposeMessage to free the string.
+ *
+ * @see DiagnosticInfo::print()
+ */
+public static native @Cast("char*") BytePointer LLVMGetDiagInfoDescription(LLVMDiagnosticInfoRef DI);
+
+/**
+ * Return an enum LLVMDiagnosticSeverity.
+ *
+ * @see DiagnosticInfo::getSeverity()
+ */
+public static native @Cast("LLVMDiagnosticSeverity") int LLVMGetDiagInfoSeverity(LLVMDiagnosticInfoRef DI);
 
 public static native @Cast("unsigned") int LLVMGetMDKindIDInContext(LLVMContextRef C, @Cast("const char*") BytePointer Name,
                                   @Cast("unsigned") int SLen);
@@ -1296,9 +1417,10 @@ public static native LLVMTypeRef LLVMX86MMXType();
 //       macro(ConstantStruct)
 //       macro(ConstantVector)
 //       macro(GlobalValue)
-//         macro(Function)
 //         macro(GlobalAlias)
-//         macro(GlobalVariable)
+//         macro(GlobalObject)
+//           macro(Function)
+//           macro(GlobalVariable)
 //       macro(UndefValue)
 //     macro(Instruction)
 //       macro(BinaryOperator)
@@ -1447,8 +1569,9 @@ public static native LLVMValueRef LLVMIsAConstantPointerNull(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAConstantStruct(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAConstantVector(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAGlobalValue(LLVMValueRef Val);
-public static native LLVMValueRef LLVMIsAFunction(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAGlobalAlias(LLVMValueRef Val);
+public static native LLVMValueRef LLVMIsAGlobalObject(LLVMValueRef Val);
+public static native LLVMValueRef LLVMIsAFunction(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAGlobalVariable(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAUndefValue(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAInstruction(LLVMValueRef Val);
@@ -1981,6 +2104,10 @@ public static native void LLVMSetSection(LLVMValueRef Global, @Cast("const char*
 public static native void LLVMSetSection(LLVMValueRef Global, String Section);
 public static native @Cast("LLVMVisibility") int LLVMGetVisibility(LLVMValueRef Global);
 public static native void LLVMSetVisibility(LLVMValueRef Global, @Cast("LLVMVisibility") int Viz);
+public static native @Cast("LLVMDLLStorageClass") int LLVMGetDLLStorageClass(LLVMValueRef Global);
+public static native void LLVMSetDLLStorageClass(LLVMValueRef Global, @Cast("LLVMDLLStorageClass") int Class);
+public static native @Cast("LLVMBool") int LLVMHasUnnamedAddr(LLVMValueRef Global);
+public static native void LLVMSetUnnamedAddr(LLVMValueRef Global, @Cast("LLVMBool") int HasUnnamedAddr);
 
 /**
  * @defgroup LLVMCCoreValueWithAlignment Values with alignment
@@ -1991,6 +2118,7 @@ public static native void LLVMSetVisibility(LLVMValueRef Global, @Cast("LLVMVisi
 
 /**
  * Obtain the preferred alignment of the value.
+ * @see llvm::AllocaInst::getAlignment()
  * @see llvm::LoadInst::getAlignment()
  * @see llvm::StoreInst::getAlignment()
  * @see llvm::GlobalValue::getAlignment()
@@ -1999,6 +2127,7 @@ public static native @Cast("unsigned") int LLVMGetAlignment(LLVMValueRef V);
 
 /**
  * Set the preferred alignment of the value.
+ * @see llvm::AllocaInst::setAlignment()
  * @see llvm::LoadInst::setAlignment()
  * @see llvm::StoreInst::setAlignment()
  * @see llvm::GlobalValue::setAlignment()
@@ -3153,7 +3282,11 @@ public static native LLVMValueRef LLVMBuildPtrDiff(LLVMBuilderRef arg0, LLVMValu
                               LLVMValueRef RHS, @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMBuildPtrDiff(LLVMBuilderRef arg0, LLVMValueRef LHS,
                               LLVMValueRef RHS, String Name);
-public static native LLVMValueRef LLVMBuildAtomicRMW(LLVMBuilderRef B,@Cast("LLVMAtomicRMWBinOp") int op,
+public static native LLVMValueRef LLVMBuildFence(LLVMBuilderRef B, @Cast("LLVMAtomicOrdering") int ordering,
+                            @Cast("LLVMBool") int singleThread, @Cast("const char*") BytePointer Name);
+public static native LLVMValueRef LLVMBuildFence(LLVMBuilderRef B, @Cast("LLVMAtomicOrdering") int ordering,
+                            @Cast("LLVMBool") int singleThread, String Name);
+public static native LLVMValueRef LLVMBuildAtomicRMW(LLVMBuilderRef B, @Cast("LLVMAtomicRMWBinOp") int op,
                                 LLVMValueRef PTR, LLVMValueRef Val,
                                 @Cast("LLVMAtomicOrdering") int ordering,
                                 @Cast("LLVMBool") int singleThread);
@@ -3319,16 +3452,13 @@ public static native void LLVMDisposePassManager(LLVMPassManagerRef PM);
  * @{
  */
 
-/** Allocate and initialize structures needed to make LLVM safe for
-    multithreading. The return value indicates whether multithreaded
-    initialization succeeded. Must be executed in isolation from all
-    other LLVM api calls.
-    @see llvm::llvm_start_multithreaded */
+/** Deprecated: Multi-threading can only be enabled/disabled with the compile
+    time define LLVM_ENABLE_THREADS.  This function always returns
+    LLVMIsMultithreaded(). */
 public static native @Cast("LLVMBool") int LLVMStartMultithreaded();
 
-/** Deallocate structures necessary to make LLVM safe for multithreading.
-    Must be executed in isolation from all other LLVM api calls.
-    @see llvm::llvm_stop_multithreaded */
+/** Deprecated: Multi-threading can only be enabled/disabled with the compile
+    time define LLVM_ENABLE_THREADS. */
 public static native void LLVMStopMultithreaded();
 
 /** Check whether LLVM is executing in thread-safe mode or not.
@@ -3800,6 +3930,16 @@ public static final int LLVMDisassembler_VariantKind_ARM_HI16 = 1; /* :upper16: 
 public static final int LLVMDisassembler_VariantKind_ARM_LO16 = 2; /* :lower16: */
 
 /**
+ * The ARM64 target VariantKinds.
+ */
+public static final int LLVMDisassembler_VariantKind_ARM64_PAGE =       1; /* @page */
+public static final int LLVMDisassembler_VariantKind_ARM64_PAGEOFF =    2; /* @pageoff */
+public static final int LLVMDisassembler_VariantKind_ARM64_GOTPAGE =    3; /* @gotpage */
+public static final int LLVMDisassembler_VariantKind_ARM64_GOTPAGEOFF = 4; /* @gotpageoff */
+public static final int LLVMDisassembler_VariantKind_ARM64_TLVP =       5; /* @tvlppage */
+public static final int LLVMDisassembler_VariantKind_ARM64_TLVOFF =     6; /* @tvlppageoff */
+
+/**
  * The type for the symbol lookup function.  This may be called by the
  * disassembler for things like adding a comment for a PC plus a constant
  * offset load instruction to use a symbol name instead of a load address value.
@@ -3833,6 +3973,17 @@ public static final int LLVMDisassembler_ReferenceType_In_Branch = 1;
 /* The input reference is from a PC relative load instruction. */
 public static final int LLVMDisassembler_ReferenceType_In_PCrel_Load = 2;
 
+/* The input reference is from an ARM64::ADRP instruction. */
+public static final long LLVMDisassembler_ReferenceType_In_ARM64_ADRP = 0x100000001L;
+/* The input reference is from an ARM64::ADDXri instruction. */
+public static final long LLVMDisassembler_ReferenceType_In_ARM64_ADDXri = 0x100000002L;
+/* The input reference is from an ARM64::LDRXui instruction. */
+public static final long LLVMDisassembler_ReferenceType_In_ARM64_LDRXui = 0x100000003L;
+/* The input reference is from an ARM64::LDRXl instruction. */
+public static final long LLVMDisassembler_ReferenceType_In_ARM64_LDRXl = 0x100000004L;
+/* The input reference is from an ARM64::ADR instruction. */
+public static final long LLVMDisassembler_ReferenceType_In_ARM64_ADR = 0x100000005L;
+
 /* The output reference is to as symbol stub. */
 public static final int LLVMDisassembler_ReferenceType_Out_SymbolStub = 1;
 /* The output reference is to a symbol address in a literal pool. */
@@ -3850,6 +4001,9 @@ public static final int LLVMDisassembler_ReferenceType_Out_Objc_Message_Ref = 6;
 public static final int LLVMDisassembler_ReferenceType_Out_Objc_Selector_Ref = 7;
 /* The output reference is to a Objective-C class ref. */
 public static final int LLVMDisassembler_ReferenceType_Out_Objc_Class_Ref = 8;
+
+/* The output reference is to a C++ symbol name. */
+public static final int LLVMDisassembler_ReferenceType_DeMangled_Name = 9;
 
 // #ifdef __cplusplus
 // #endif /* !defined(__cplusplus) */
@@ -4019,7 +4173,7 @@ public static native void LLVMInitializeTarget(LLVMPassRegistryRef R);
  * Read LLVM IR from a memory buffer and convert it into an in-memory Module
  * object. Returns 0 on success.
  * Optionally returns a human-readable description of any errors that
- * occured during parsing IR. OutMessage must be disposed with
+ * occurred during parsing IR. OutMessage must be disposed with
  * LLVMDisposeMessage.
  *
  * @see llvm::ParseIR()
@@ -4215,8 +4369,11 @@ public static native @Cast("LLVMBool") int LLVMLinkModules(LLVMModuleRef Dest, L
  * @{
  */
 
-public static final int LTO_API_VERSION = 5;
+public static final int LTO_API_VERSION = 10;
 
+/**
+ * \since prior to LTO_API_VERSION=3
+ */
 /** enum lto_symbol_attributes */
 public static final int
     LTO_SYMBOL_ALIGNMENT_MASK              =  0x0000001F, /* log2 of alignment */
@@ -4237,26 +4394,32 @@ public static final int
     LTO_SYMBOL_SCOPE_DEFAULT               =  0x00001800,
     LTO_SYMBOL_SCOPE_DEFAULT_CAN_BE_HIDDEN =  0x00002800;
 
+/**
+ * \since prior to LTO_API_VERSION=3
+ */
 /** enum lto_debug_model */
 public static final int
     LTO_DEBUG_MODEL_NONE         = 0,
     LTO_DEBUG_MODEL_DWARF        = 1;
 
+/**
+ * \since prior to LTO_API_VERSION=3
+ */
 /** enum lto_codegen_model */
 public static final int
     LTO_CODEGEN_PIC_MODEL_STATIC         = 0,
     LTO_CODEGEN_PIC_MODEL_DYNAMIC        = 1,
-    LTO_CODEGEN_PIC_MODEL_DYNAMIC_NO_PIC = 2;
-
+    LTO_CODEGEN_PIC_MODEL_DYNAMIC_NO_PIC = 2,
+    LTO_CODEGEN_PIC_MODEL_DEFAULT        = 3;
 
 /** opaque reference to a loaded object module */
-@Name("LTOModule") @Opaque public static class lto_module_t extends Pointer {
+@Name("LLVMOpaqueLTOModule") @Opaque public static class lto_module_t extends Pointer {
     public lto_module_t() { }
     public lto_module_t(Pointer p) { super(p); }
 }
 
 /** opaque reference to a code generator */
-@Name("LTOCodeGenerator") @Opaque public static class lto_code_gen_t extends Pointer {
+@Name("LLVMOpaqueLTOCodeGenerator") @Opaque public static class lto_code_gen_t extends Pointer {
     public lto_code_gen_t() { }
     public lto_code_gen_t(Pointer p) { super(p); }
 }
@@ -4266,17 +4429,23 @@ public static final int
 
 /**
  * Returns a printable string.
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native @Cast("const char*") BytePointer lto_get_version();
 
 
 /**
  * Returns the last error string or NULL if last operation was successful.
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native @Cast("const char*") BytePointer lto_get_error_message();
 
 /**
  * Checks if a file is a loadable object file.
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native @Cast("lto_bool_t") boolean lto_module_is_object_file(@Cast("const char*") BytePointer path);
 public static native @Cast("lto_bool_t") boolean lto_module_is_object_file(String path);
@@ -4284,6 +4453,8 @@ public static native @Cast("lto_bool_t") boolean lto_module_is_object_file(Strin
 
 /**
  * Checks if a file is a loadable object compiled for requested target.
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native @Cast("lto_bool_t") boolean lto_module_is_object_file_for_target(@Cast("const char*") BytePointer path,
                                      @Cast("const char*") BytePointer target_triple_prefix);
@@ -4293,12 +4464,16 @@ public static native @Cast("lto_bool_t") boolean lto_module_is_object_file_for_t
 
 /**
  * Checks if a buffer is a loadable object file.
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native @Cast("lto_bool_t") boolean lto_module_is_object_file_in_memory(@Const Pointer mem, @Cast("size_t") long length);
 
 
 /**
  * Checks if a buffer is a loadable object compiled for requested target.
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native @Cast("lto_bool_t") boolean lto_module_is_object_file_in_memory_for_target(@Const Pointer mem, @Cast("size_t") long length,
                                               @Cast("const char*") BytePointer target_triple_prefix);
@@ -4309,6 +4484,8 @@ public static native @Cast("lto_bool_t") boolean lto_module_is_object_file_in_me
 /**
  * Loads an object file from disk.
  * Returns NULL on error (check lto_get_error_message() for details).
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native lto_module_t lto_module_create(@Cast("const char*") BytePointer path);
 public static native lto_module_t lto_module_create(String path);
@@ -4317,12 +4494,27 @@ public static native lto_module_t lto_module_create(String path);
 /**
  * Loads an object file from memory.
  * Returns NULL on error (check lto_get_error_message() for details).
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native lto_module_t lto_module_create_from_memory(@Const Pointer mem, @Cast("size_t") long length);
 
 /**
+ * Loads an object file from memory with an extra path argument.
+ * Returns NULL on error (check lto_get_error_message() for details).
+ *
+ * \since prior to LTO_API_VERSION=9
+ */
+public static native lto_module_t lto_module_create_from_memory_with_path(@Const Pointer mem, @Cast("size_t") long length,
+                                        @Cast("const char*") BytePointer path);
+public static native lto_module_t lto_module_create_from_memory_with_path(@Const Pointer mem, @Cast("size_t") long length,
+                                        String path);
+
+/**
  * Loads an object file from disk. The seek point of fd is not preserved.
  * Returns NULL on error (check lto_get_error_message() for details).
+ *
+ * \since LTO_API_VERSION=5
  */
 public static native lto_module_t lto_module_create_from_fd(int fd, @Cast("const char*") BytePointer path, @Cast("size_t") long file_size);
 public static native lto_module_t lto_module_create_from_fd(int fd, String path, @Cast("size_t") long file_size);
@@ -4330,27 +4522,33 @@ public static native lto_module_t lto_module_create_from_fd(int fd, String path,
 /**
  * Loads an object file from disk. The seek point of fd is not preserved.
  * Returns NULL on error (check lto_get_error_message() for details).
+ *
+ * \since LTO_API_VERSION=5
  */
 public static native lto_module_t lto_module_create_from_fd_at_offset(int fd, @Cast("const char*") BytePointer path, @Cast("size_t") long file_size,
                                     @Cast("size_t") long map_size, @Cast("off_t") long offset);
 public static native lto_module_t lto_module_create_from_fd_at_offset(int fd, String path, @Cast("size_t") long file_size,
                                     @Cast("size_t") long map_size, @Cast("off_t") long offset);
 
-
 /**
  * Frees all memory internally allocated by the module.
  * Upon return the lto_module_t is no longer valid.
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native void lto_module_dispose(lto_module_t mod);
 
-
 /**
  * Returns triple string which the object module was compiled under.
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native @Cast("const char*") BytePointer lto_module_get_target_triple(lto_module_t mod);
 
 /**
  * Sets triple string with which the object will be codegened.
+ *
+ * \since LTO_API_VERSION=4
  */
 public static native void lto_module_set_target_triple(lto_module_t mod, @Cast("const char*") BytePointer triple);
 public static native void lto_module_set_target_triple(lto_module_t mod, String triple);
@@ -4358,48 +4556,130 @@ public static native void lto_module_set_target_triple(lto_module_t mod, String 
 
 /**
  * Returns the number of symbols in the object module.
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native @Cast("unsigned int") int lto_module_get_num_symbols(lto_module_t mod);
 
 
 /**
  * Returns the name of the ith symbol in the object module.
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native @Cast("const char*") BytePointer lto_module_get_symbol_name(lto_module_t mod, @Cast("unsigned int") int index);
 
 
 /**
  * Returns the attributes of the ith symbol in the object module.
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native @Cast("lto_symbol_attributes") int lto_module_get_symbol_attribute(lto_module_t mod, @Cast("unsigned int") int index);
 
 
 /**
+ * Returns the number of dependent libraries in the object module.
+ *
+ * \since LTO_API_VERSION=8
+ */
+public static native @Cast("unsigned int") int lto_module_get_num_deplibs(lto_module_t mod);
+
+
+/**
+ * Returns the ith dependent library in the module.
+ *
+ * \since LTO_API_VERSION=8
+ */
+public static native @Cast("const char*") BytePointer lto_module_get_deplib(lto_module_t mod, @Cast("unsigned int") int index);
+
+
+/**
+ * Returns the number of linker options in the object module.
+ *
+ * \since LTO_API_VERSION=8
+ */
+public static native @Cast("unsigned int") int lto_module_get_num_linkeropts(lto_module_t mod);
+
+
+/**
+ * Returns the ith linker option in the module.
+ *
+ * \since LTO_API_VERSION=8
+ */
+public static native @Cast("const char*") BytePointer lto_module_get_linkeropt(lto_module_t mod, @Cast("unsigned int") int index);
+
+
+/**
+ * Diagnostic severity.
+ *
+ * \since LTO_API_VERSION=7
+ */
+/** enum lto_codegen_diagnostic_severity_t */
+public static final int
+  LTO_DS_ERROR = 0,
+  LTO_DS_WARNING = 1,
+  LTO_DS_REMARK = 3, // Added in LTO_API_VERSION=10.
+  LTO_DS_NOTE = 2;
+
+/**
+ * Diagnostic handler type.
+ * \p severity defines the severity.
+ * \p diag is the actual diagnostic.
+ * The diagnostic is not prefixed by any of severity keyword, e.g., 'error: '.
+ * \p ctxt is used to pass the context set with the diagnostic handler.
+ *
+ * \since LTO_API_VERSION=7
+ */
+public static class lto_diagnostic_handler_t extends FunctionPointer {
+    static { Loader.load(); }
+    public    lto_diagnostic_handler_t(Pointer p) { super(p); }
+    protected lto_diagnostic_handler_t() { allocate(); }
+    private native void allocate();
+    public native void call(
+    @Cast("lto_codegen_diagnostic_severity_t") int severity, @Cast("const char*") BytePointer diag, Pointer ctxt);
+}
+
+/**
+ * Set a diagnostic handler and the related context (void *).
+ * This is more general than lto_get_error_message, as the diagnostic handler
+ * can be called at anytime within lto.
+ *
+ * \since LTO_API_VERSION=7
+ */
+public static native void lto_codegen_set_diagnostic_handler(lto_code_gen_t arg0,
+                                               lto_diagnostic_handler_t arg1,
+                                               Pointer arg2);
+
+/**
  * Instantiates a code generator.
  * Returns NULL on error (check lto_get_error_message() for details).
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native lto_code_gen_t lto_codegen_create();
-
 
 /**
  * Frees all code generator and all memory it internally allocated.
  * Upon return the lto_code_gen_t is no longer valid.
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native void lto_codegen_dispose(lto_code_gen_t arg0);
-
-
 
 /**
  * Add an object module to the set of modules for which code will be generated.
  * Returns true on error (check lto_get_error_message() for details).
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native @Cast("lto_bool_t") boolean lto_codegen_add_module(lto_code_gen_t cg, lto_module_t mod);
-
-
 
 /**
  * Sets if debug info should be generated.
  * Returns true on error (check lto_get_error_message() for details).
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native @Cast("lto_bool_t") boolean lto_codegen_set_debug_model(lto_code_gen_t cg, @Cast("lto_debug_model") int arg1);
 
@@ -4407,12 +4687,16 @@ public static native @Cast("lto_bool_t") boolean lto_codegen_set_debug_model(lto
 /**
  * Sets which PIC code model to generated.
  * Returns true on error (check lto_get_error_message() for details).
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native @Cast("lto_bool_t") boolean lto_codegen_set_pic_model(lto_code_gen_t cg, @Cast("lto_codegen_model") int arg1);
 
 
 /**
  * Sets the cpu to generate code for.
+ *
+ * \since LTO_API_VERSION=4
  */
 public static native void lto_codegen_set_cpu(lto_code_gen_t cg, @Cast("const char*") BytePointer cpu);
 public static native void lto_codegen_set_cpu(lto_code_gen_t cg, String cpu);
@@ -4421,12 +4705,16 @@ public static native void lto_codegen_set_cpu(lto_code_gen_t cg, String cpu);
 /**
  * Sets the location of the assembler tool to run. If not set, libLTO
  * will use gcc to invoke the assembler.
+ *
+ * \since LTO_API_VERSION=3
  */
 public static native void lto_codegen_set_assembler_path(lto_code_gen_t cg, @Cast("const char*") BytePointer path);
 public static native void lto_codegen_set_assembler_path(lto_code_gen_t cg, String path);
 
 /**
  * Sets extra arguments that libLTO should pass to the assembler.
+ *
+ * \since LTO_API_VERSION=4
  */
 public static native void lto_codegen_set_assembler_args(lto_code_gen_t cg, @Cast("const char**") PointerPointer args,
                                int nargs);
@@ -4438,8 +4726,11 @@ public static native void lto_codegen_set_assembler_args(lto_code_gen_t cg, @Cas
                                int nargs);
 
 /**
- * Tells LTO optimization passes that this symbol must be preserved
- * because it is referenced by native code or a command line option.
+ * Adds to a list of all global symbols that must exist in the final generated
+ * code. If a function is not listed there, it might be inlined into every usage
+ * and optimized away.
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native void lto_codegen_add_must_preserve_symbol(lto_code_gen_t cg, @Cast("const char*") BytePointer symbol);
 public static native void lto_codegen_add_must_preserve_symbol(lto_code_gen_t cg, String symbol);
@@ -4448,6 +4739,8 @@ public static native void lto_codegen_add_must_preserve_symbol(lto_code_gen_t cg
  * Writes a new object file at the specified path that contains the
  * merged contents of all modules added so far.
  * Returns true on error (check lto_get_error_message() for details).
+ *
+ * \since LTO_API_VERSION=5
  */
 public static native @Cast("lto_bool_t") boolean lto_codegen_write_merged_modules(lto_code_gen_t cg, @Cast("const char*") BytePointer path);
 public static native @Cast("lto_bool_t") boolean lto_codegen_write_merged_modules(lto_code_gen_t cg, String path);
@@ -4459,12 +4752,16 @@ public static native @Cast("lto_bool_t") boolean lto_codegen_write_merged_module
  * lto_code_gen_t and will be freed when lto_codegen_dispose()
  * is called, or lto_codegen_compile() is called again.
  * On failure, returns NULL (check lto_get_error_message() for details).
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native @Const Pointer lto_codegen_compile(lto_code_gen_t cg, @Cast("size_t*") SizeTPointer length);
 
 /**
  * Generates code for all added modules into one native object file.
  * The name of the file is written to name. Returns true on error.
+ *
+ * \since LTO_API_VERSION=5
  */
 public static native @Cast("lto_bool_t") boolean lto_codegen_compile_to_file(lto_code_gen_t cg, @Cast("const char**") PointerPointer name);
 public static native @Cast("lto_bool_t") boolean lto_codegen_compile_to_file(lto_code_gen_t cg, @Cast("const char**") @ByPtrPtr BytePointer name);
@@ -4474,6 +4771,8 @@ public static native @Cast("lto_bool_t") boolean lto_codegen_compile_to_file(lto
 
 /**
  * Sets options to help debug codegen bugs.
+ *
+ * \since prior to LTO_API_VERSION=3
  */
 public static native void lto_codegen_debug_options(lto_code_gen_t cg, @Cast("const char*") BytePointer arg1);
 public static native void lto_codegen_debug_options(lto_code_gen_t cg, String arg1);
@@ -4481,6 +4780,8 @@ public static native void lto_codegen_debug_options(lto_code_gen_t cg, String ar
 /**
  * Initializes LLVM disassemblers.
  * FIXME: This doesn't really belong here.
+ *
+ * \since LTO_API_VERSION=5
  */
 public static native void lto_initialize_disassembler();
 
@@ -4587,7 +4888,6 @@ public static native void LLVMMoveToNextRelocation(LLVMRelocationIteratorRef RI)
 // SymbolRef accessors
 public static native @Cast("const char*") BytePointer LLVMGetSymbolName(LLVMSymbolIteratorRef SI);
 public static native @Cast("uint64_t") long LLVMGetSymbolAddress(LLVMSymbolIteratorRef SI);
-public static native @Cast("uint64_t") long LLVMGetSymbolFileOffset(LLVMSymbolIteratorRef SI);
 public static native @Cast("uint64_t") long LLVMGetSymbolSize(LLVMSymbolIteratorRef SI);
 
 // RelocationRef accessors
@@ -4606,44 +4906,6 @@ public static native @Cast("const char*") BytePointer LLVMGetRelocationValueStri
 
 // #ifdef __cplusplus
 // #endif /* defined(__cplusplus) */
-
-// #endif
-
-
-// Parsed from <llvm-c/Support.h>
-
-/*===-- llvm-c/Support.h - Support C Interface --------------------*- C -*-===*\
-|*                                                                            *|
-|*                     The LLVM Compiler Infrastructure                       *|
-|*                                                                            *|
-|* This file is distributed under the University of Illinois Open Source      *|
-|* License. See LICENSE.TXT for details.                                      *|
-|*                                                                            *|
-|*===----------------------------------------------------------------------===*|
-|*                                                                            *|
-|* This file defines the C interface to the LLVM support library.             *|
-|*                                                                            *|
-\*===----------------------------------------------------------------------===*/
-
-// #ifndef LLVM_C_SUPPORT_H
-// #define LLVM_C_SUPPORT_H
-
-// #include "llvm-c/Core.h"
-
-// #ifdef __cplusplus
-// #endif
-
-/**
- * This function permanently loads the dynamic library at the given path.
- * It is safe to call this function multiple times for the same library.
- *
- * @see sys::DynamicLibrary::LoadLibraryPermanently()
-  */
-public static native @Cast("LLVMBool") int LLVMLoadLibraryPermanently(@Cast("const char*") BytePointer Filename);
-public static native @Cast("LLVMBool") int LLVMLoadLibraryPermanently(String Filename);
-
-// #ifdef __cplusplus
-// #endif
 
 // #endif
 
@@ -4962,7 +5224,7 @@ public static native LLVMTargetRef LLVMGetFirstTarget();
 public static native LLVMTargetRef LLVMGetNextTarget(LLVMTargetRef T);
 
 /*===-- Target ------------------------------------------------------------===*/
-/** Finds the target corresponding to the given name and stores it in \p T. 
+/** Finds the target corresponding to the given name and stores it in \p T.
   Returns 0 on success. */
 public static native LLVMTargetRef LLVMGetTargetFromName(@Cast("const char*") BytePointer Name);
 public static native LLVMTargetRef LLVMGetTargetFromName(String Name);
@@ -5070,6 +5332,9 @@ public static native @Cast("LLVMBool") int LLVMTargetMachineEmitToMemoryBuffer(L
 /** Get a triple for the host machine as a string. The result needs to be
   disposed with LLVMDisposeMessage. */
 public static native @Cast("char*") BytePointer LLVMGetDefaultTargetTriple();
+
+/** Adds the target-specific analysis passes to the pass manager. */
+public static native void LLVMAddAnalysisPasses(LLVMTargetMachineRef T, LLVMPassManagerRef PM);
 
 // #ifdef __cplusplus
 // #endif
@@ -5450,6 +5715,7 @@ public static native Pointer LLVMRecompileAndRelinkFunction(LLVMExecutionEngineR
                                      LLVMValueRef Fn);
 
 public static native LLVMTargetDataRef LLVMGetExecutionEngineTargetData(LLVMExecutionEngineRef EE);
+public static native LLVMTargetMachineRef LLVMGetExecutionEngineTargetMachine(LLVMExecutionEngineRef EE);
 
 public static native void LLVMAddGlobalMapping(LLVMExecutionEngineRef EE, LLVMValueRef Global,
                           Pointer Addr);
@@ -5631,7 +5897,6 @@ public static native void LLVMAddStripSymbolsPass(LLVMPassManagerRef PM);
 }
 
 // #ifdef __cplusplus
-// #include "llvm/Transforms/IPO/PassManagerBuilder.h"
 // #endif
 
 /**
@@ -5736,6 +6001,12 @@ public static native void LLVMAddCFGSimplificationPass(LLVMPassManagerRef PM);
 
 /** See llvm::createDeadStoreEliminationPass function. */
 public static native void LLVMAddDeadStoreEliminationPass(LLVMPassManagerRef PM);
+
+/** See llvm::createScalarizerPass function. */
+public static native void LLVMAddScalarizerPass(LLVMPassManagerRef PM);
+
+/** See llvm::createMergedLoadStoreMotionPass function. */
+public static native void LLVMAddMergedLoadStoreMotionPass(LLVMPassManagerRef PM);
 
 /** See llvm::createGVNPass function. */
 public static native void LLVMAddGVNPass(LLVMPassManagerRef PM);

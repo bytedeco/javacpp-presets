@@ -30,6 +30,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     public MatBytePairVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef MatBytePairVector put(@ByRef MatBytePairVector x);
 
     public native long size();
     public native void resize(@Cast("size_t") long n);

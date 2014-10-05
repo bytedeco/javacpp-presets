@@ -7,13 +7,13 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LLVM_VERSION=3.4.2
-download http://llvm.org/releases/$LLVM_VERSION/llvm-$LLVM_VERSION.src.tar.gz llvm-$LLVM_VERSION.src.tar.gz
+LLVM_VERSION=3.5.0
+download http://llvm.org/releases/$LLVM_VERSION/llvm-$LLVM_VERSION.src.tar.xz llvm-$LLVM_VERSION.src.tar.xz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
-tar -xzvf ../llvm-$LLVM_VERSION.src.tar.gz
+tar -xJvf ../llvm-$LLVM_VERSION.src.tar.xz
 cd llvm-$LLVM_VERSION.src
 
 case $PLATFORM in

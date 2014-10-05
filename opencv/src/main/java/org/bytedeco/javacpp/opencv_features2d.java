@@ -23,6 +23,7 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
     public KeyPointVectorVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef KeyPointVectorVector put(@ByRef KeyPointVectorVector x);
 
     public native long size();
     public native void resize(@Cast("size_t") long n);
@@ -52,6 +53,7 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
     public DMatchVectorVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef DMatchVectorVector put(@ByRef DMatchVectorVector x);
 
     public native long size();
     public native void resize(@Cast("size_t") long n);

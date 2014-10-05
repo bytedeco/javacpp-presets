@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 if [[ $PLATFORM == windows* ]]; then
-    FFMPEG_VERSION=20140716-git-faafd1e
+    FFMPEG_VERSION=20141005-git-e079d43
     [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
     download http://ffmpeg.zeranoe.com/builds/win$BITS/dev/ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z
     download http://ffmpeg.zeranoe.com/builds/win$BITS/shared/ffmpeg-$FFMPEG_VERSION-win$BITS-shared.7z ffmpeg-$FFMPEG_VERSION-win$BITS-shared.7z
@@ -20,7 +20,7 @@ if [[ $PLATFORM == windows* ]]; then
     7za x -y ../ffmpeg-$FFMPEG_VERSION-win$BITS-shared.7z
     patch -Np1 -d ffmpeg-$FFMPEG_VERSION-win$BITS-dev/ < ../../ffmpeg-$FFMPEG_VERSION-windows.patch
 else
-    FFMPEG_VERSION=2.3
+    FFMPEG_VERSION=2.4.2
     download http://downloads.sourceforge.net/project/lame/lame/3.99/lame-3.99.5.tar.gz lame-3.99.5.tar.gz
     download ftp://ftp.videolan.org/pub/videolan/x264/snapshots/last_stable_x264.tar.bz2 last_stable_x264.tar.bz2
     download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
@@ -108,21 +108,21 @@ case $PLATFORM in
         make -j4
         make install
         BADPATH=../lib
-        LIBS="libavcodec.55.dylib libavdevice.55.dylib libavfilter.4.dylib libavformat.55.dylib libavutil.52.dylib libpostproc.52.dylib libswresample.0.dylib libswscale.2.dylib"
+        LIBS="libavcodec.56.dylib libavdevice.56.dylib libavfilter.5.dylib libavformat.56.dylib libavutil.54.dylib libpostproc.53.dylib libswresample.1.dylib libswscale.3.dylib"
         for f in $LIBS; do install_name_tool $BADPATH/$f -id @rpath/$f \
             -add_rpath /usr/local/lib/ -add_rpath /opt/local/lib/ -add_rpath @loader_path/. \
-            -change $BADPATH/libavcodec.55.dylib @rpath/libavcodec.55.dylib \
-            -change $BADPATH/libavdevice.55.dylib @rpath/libavdevice.55.dylib \
-            -change $BADPATH/libavfilter.4.dylib @rpath/libavfilter.4.dylib \
-            -change $BADPATH/libavformat.55.dylib @rpath/libavformat.55.dylib \
-            -change $BADPATH/libavutil.52.dylib @rpath/libavutil.52.dylib \
-            -change $BADPATH/libpostproc.52.dylib @rpath/libpostproc.52.dylib \
-            -change $BADPATH/libswresample.0.dylib @rpath/libswresample.0.dylib \
-            -change $BADPATH/libswscale.2.dylib @rpath/libswscale.2.dylib; done
+            -change $BADPATH/libavcodec.56.dylib @rpath/libavcodec.56.dylib \
+            -change $BADPATH/libavdevice.56.dylib @rpath/libavdevice.56.dylib \
+            -change $BADPATH/libavfilter.5.dylib @rpath/libavfilter.5.dylib \
+            -change $BADPATH/libavformat.56.dylib @rpath/libavformat.56.dylib \
+            -change $BADPATH/libavutil.54.dylib @rpath/libavutil.54.dylib \
+            -change $BADPATH/libpostproc.53.dylib @rpath/libpostproc.53.dylib \
+            -change $BADPATH/libswresample.1.dylib @rpath/libswresample.1.dylib \
+            -change $BADPATH/libswscale.3.dylib @rpath/libswscale.3.dylib; done
         ;;
     windows-x86)
         # http://ffmpeg.org/platform.html#Linking-to-FFmpeg-with-Microsoft-Visual-C_002b_002b
-        LIBS=(avcodec-55 avdevice-55 avfilter-4 avformat-55 avutil-52 postproc-52 swresample-0 swscale-2)
+        LIBS=(avcodec-56 avdevice-56 avfilter-5 avformat-56 avutil-54 postproc-53 swresample-1 swscale-3)
         for LIB in ${LIBS[@]}; do
             lib /def:ffmpeg-$FFMPEG_VERSION-win32-dev/lib/$LIB.def /out:ffmpeg-$FFMPEG_VERSION-win32-dev/lib/$LIB.lib /machine:x86
         done
@@ -134,7 +134,7 @@ case $PLATFORM in
         ;;
     windows-x86_64)
         # http://ffmpeg.org/platform.html#Linking-to-FFmpeg-with-Microsoft-Visual-C_002b_002b
-        LIBS=(avcodec-55 avdevice-55 avfilter-4 avformat-55 avutil-52 postproc-52 swresample-0 swscale-2)
+        LIBS=(avcodec-56 avdevice-56 avfilter-5 avformat-56 avutil-54 postproc-53 swresample-1 swscale-3)
         for LIB in ${LIBS[@]}; do
             lib /def:ffmpeg-$FFMPEG_VERSION-win64-dev/lib/$LIB.def /out:ffmpeg-$FFMPEG_VERSION-win64-dev/lib/$LIB.lib /machine:x64
         done

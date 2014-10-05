@@ -31,8 +31,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit=avutil.class, target="org.bytedeco.javacpp.postproc", value={
-    @Platform(cinclude="<libpostproc/postprocess.h>", link="postproc@.52"),
-    @Platform(value="windows", link="postproc-52") })
+    @Platform(cinclude="<libpostproc/postprocess.h>", link="postproc@.53"),
+    @Platform(value="windows", link="postproc-53") })
 public class postproc implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("QP_STORE_T").cppTypes().valueTypes("byte").pointerTypes("BytePointer"))

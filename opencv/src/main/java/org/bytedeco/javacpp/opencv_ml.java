@@ -16,6 +16,7 @@ public class opencv_ml extends org.bytedeco.javacpp.presets.opencv_ml {
     public StringIntMap(Pointer p) { super(p); }
     public StringIntMap()       { allocate();  }
     private native void allocate();
+    public native @Name("operator=") @ByRef StringIntMap put(@ByRef StringIntMap x);
 
     public native long size();
 

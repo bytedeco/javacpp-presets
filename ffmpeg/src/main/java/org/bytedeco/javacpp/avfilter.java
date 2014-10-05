@@ -1761,30 +1761,31 @@ public static native void avfilter_inout_free(@Cast("AVFilterInOut**") PointerPo
 public static native void avfilter_inout_free(@ByPtrPtr AVFilterInOut inout);
 
 // #if AV_HAVE_INCOMPATIBLE_LIBAV_ABI || !FF_API_OLD_GRAPH_PARSE
-// #else
 /**
  * Add a graph described by a string to a graph.
  *
+ * @note The caller must provide the lists of inputs and outputs,
+ * which therefore must be known before calling the function.
+ *
+ * @note The inputs parameter describes inputs of the already existing
+ * part of the graph; i.e. from the point of view of the newly created
+ * part, they are outputs. Similarly the outputs parameter describes
+ * outputs of the already existing filters, which are provided as
+ * inputs to the parsed filters.
+ *
  * @param graph   the filter graph where to link the parsed graph context
  * @param filters string to be parsed
- * @param inputs  pointer to a linked list to the inputs of the graph, may be NULL.
- *                If non-NULL, *inputs is updated to contain the list of open inputs
- *                after the parsing, should be freed with avfilter_inout_free().
- * @param outputs pointer to a linked list to the outputs of the graph, may be NULL.
- *                If non-NULL, *outputs is updated to contain the list of open outputs
- *                after the parsing, should be freed with avfilter_inout_free().
- * @return non negative on success, a negative AVERROR code on error
- * @deprecated Use avfilter_graph_parse_ptr() instead.
+ * @param inputs  linked list to the inputs of the graph
+ * @param outputs linked list to the outputs of the graph
+ * @return zero on success, a negative AVERROR code on error
  */
-public static native @Deprecated int avfilter_graph_parse(AVFilterGraph graph, @Cast("const char*") BytePointer filters,
-                         @Cast("AVFilterInOut**") PointerPointer inputs, @Cast("AVFilterInOut**") PointerPointer outputs,
+public static native int avfilter_graph_parse(AVFilterGraph graph, @Cast("const char*") BytePointer filters,
+                         AVFilterInOut inputs, AVFilterInOut outputs,
                          Pointer log_ctx);
-public static native @Deprecated int avfilter_graph_parse(AVFilterGraph graph, @Cast("const char*") BytePointer filters,
-                         @ByPtrPtr AVFilterInOut inputs, @ByPtrPtr AVFilterInOut outputs,
+public static native int avfilter_graph_parse(AVFilterGraph graph, String filters,
+                         AVFilterInOut inputs, AVFilterInOut outputs,
                          Pointer log_ctx);
-public static native @Deprecated int avfilter_graph_parse(AVFilterGraph graph, String filters,
-                         @ByPtrPtr AVFilterInOut inputs, @ByPtrPtr AVFilterInOut outputs,
-                         Pointer log_ctx);
+// #else
 // #endif
 
 /**

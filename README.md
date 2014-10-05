@@ -38,6 +38,7 @@ We can also have everything downloaded and installed automatically with:
 
 * SBT (inside the `build.sbt` file)
 ```scala
+  classpathTypes += "maven-plugin"
   libraryDependencies += "org.bytedeco.javacpp-presets" % moduleName % moduleVersion + "-0.9"
 ```
 
@@ -65,16 +66,16 @@ To rebuild the source code on the Java side, please note that the project files 
 Each child module in turn relies on its corresponding native libraries being already installed in the `cppbuild` subdirectory created by a prior execution of the included [CPPBuild Scripts](#cppbuild-scripts), explained below. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified in the `.java` configuration files directly. The following versions are supported:
 
  * OpenCV 2.4.9  http://opencv.org/downloads.html
- * FFmpeg 2.3.x  http://ffmpeg.org/download.html
+ * FFmpeg 2.4.x  http://ffmpeg.org/download.html
  * FlyCapture 2.6.x  http://ww2.ptgrey.com/sdk/flycap
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
  * libfreenect 0.5  https://github.com/OpenKinect/libfreenect
- * videoInput 0.200  https://github.com/ofTheo/videoInput/tree/update2013
+ * videoInput 0.200  https://github.com/ofTheo/videoInput/
  * ARToolKitPlus 2.3.0  https://launchpad.net/artoolkitplus
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * FFTW 3.3.4  http://www.fftw.org/download.html
  * GSL 1.16  http://www.gnu.org/software/gsl/#downloading
- * LLVM 3.4.2  http://llvm.org/releases/download.html
+ * LLVM 3.5.0  http://llvm.org/releases/download.html
  * Leptonica 1.71  http://www.leptonica.org/download.html
  * Tesseract 3.03-rc1  https://code.google.com/p/tesseract-ocr/
 

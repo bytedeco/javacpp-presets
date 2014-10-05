@@ -21,6 +21,7 @@ public class opencv_objdetect extends org.bytedeco.javacpp.helper.opencv_objdete
     public CvDataMatrixCodeDeque(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef CvDataMatrixCodeDeque put(@ByRef CvDataMatrixCodeDeque x);
 
     public native long size();
     public native void resize(@Cast("size_t") long n);
@@ -45,6 +46,7 @@ public class opencv_objdetect extends org.bytedeco.javacpp.helper.opencv_objdete
     public ModalityVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef ModalityVector put(@ByRef ModalityVector x);
 
     public native long size();
     public native void resize(@Cast("size_t") long n);
