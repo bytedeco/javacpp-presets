@@ -20,18 +20,6 @@
 
 package org.bytedeco.javacpp.helper;
 
-import org.bytedeco.javacpp.BytePointer;
-import org.bytedeco.javacpp.DoublePointer;
-import org.bytedeco.javacpp.FloatPointer;
-import org.bytedeco.javacpp.IntPointer;
-import org.bytedeco.javacpp.Loader;
-import org.bytedeco.javacpp.LongPointer;
-import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.javacpp.PointerPointer;
-import org.bytedeco.javacpp.ShortPointer;
-import org.bytedeco.javacpp.annotation.Name;
-import org.bytedeco.javacpp.annotation.Opaque;
-import org.bytedeco.javacpp.annotation.ValueGetter;
 import java.awt.Rectangle;
 import java.awt.Transparency;
 import java.awt.color.ColorSpace;
@@ -51,11 +39,36 @@ import java.awt.image.Raster;
 import java.awt.image.SampleModel;
 import java.awt.image.SinglePixelPackedSampleModel;
 import java.awt.image.WritableRaster;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.nio.ShortBuffer;
+import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.javacpp.DoublePointer;
+import org.bytedeco.javacpp.FloatPointer;
+import org.bytedeco.javacpp.IntPointer;
+import org.bytedeco.javacpp.Loader;
+import org.bytedeco.javacpp.LongPointer;
+import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.PointerPointer;
+import org.bytedeco.javacpp.ShortPointer;
+import org.bytedeco.javacpp.annotation.Name;
+import org.bytedeco.javacpp.annotation.Opaque;
+import org.bytedeco.javacpp.annotation.ValueGetter;
+import org.bytedeco.javacpp.indexer.ByteArrayIndexer;
+import org.bytedeco.javacpp.indexer.ByteBufferIndexer;
+import org.bytedeco.javacpp.indexer.DoubleArrayIndexer;
+import org.bytedeco.javacpp.indexer.DoubleBufferIndexer;
+import org.bytedeco.javacpp.indexer.FloatArrayIndexer;
+import org.bytedeco.javacpp.indexer.FloatBufferIndexer;
+import org.bytedeco.javacpp.indexer.Indexable;
+import org.bytedeco.javacpp.indexer.Indexer;
+import org.bytedeco.javacpp.indexer.IntArrayIndexer;
+import org.bytedeco.javacpp.indexer.IntBufferIndexer;
+import org.bytedeco.javacpp.indexer.ShortArrayIndexer;
+import org.bytedeco.javacpp.indexer.ShortBufferIndexer;
 
 // required by javac to resolve circular dependencies
 import org.bytedeco.javacpp.opencv_core.*;
@@ -114,7 +127,7 @@ import static org.bytedeco.javacpp.opencv_core.cvScalar;
 
 public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
 
-    public static abstract class AbstractArray extends Pointer {
+    public static abstract class AbstractArray extends Pointer implements Indexable {
         static { Loader.load(); }
         public AbstractArray() { }
         public AbstractArray(Pointer p) { super(p); }
@@ -129,6 +142,108 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         public abstract int arraySize();
         public abstract BytePointer arrayData();
         public abstract int arrayStep();
+
+        /** @return {@code createBuffer(0)} */
+        public <B extends Buffer> B createBuffer() {
+            return createBuffer(0);
+        }
+        /** @return {@link #arrayData()} wrapped in a {@link Buffer} of appropriate type starting at given index */
+        public <B extends Buffer> B createBuffer(int index) {
+            BytePointer ptr = arrayData();
+            int size = arraySize();
+            switch (arrayDepth()) {
+                case IPL_DEPTH_8U:
+                case IPL_DEPTH_8S:  return (B)ptr.position(index).capacity(size).asBuffer();
+                case IPL_DEPTH_16U:
+                case IPL_DEPTH_16S: return (B)new ShortPointer(ptr).position(index).capacity(size/2).asBuffer();
+                case IPL_DEPTH_32S: return (B)new IntPointer(ptr).position(index).capacity(size/4).asBuffer();
+                case IPL_DEPTH_32F: return (B)new FloatPointer(ptr).position(index).capacity(size/4).asBuffer();
+                case IPL_DEPTH_64F: return (B)new DoublePointer(ptr).position(index).capacity(size/8).asBuffer();
+                case IPL_DEPTH_1U:
+                default: assert false;
+            }
+            return null;
+        }
+
+        /** @return {@code createIndexer(true)} */
+        public <I extends Indexer> I createIndexer() {
+            return createIndexer(true);
+        }
+        @Override public <I extends Indexer> I createIndexer(boolean direct) {
+            int[] sizes = { arrayHeight(), arrayWidth(), arrayChannels() };
+            int[] strides = { arrayStep(), arrayChannels(), 1 };
+            switch (arrayDepth()) {
+                case IPL_DEPTH_8U:
+                case IPL_DEPTH_8S:
+                    if (direct) {
+                        return (I)new ByteBufferIndexer((ByteBuffer)createBuffer(), sizes, strides);
+                    } else {
+                        byte[] array = new byte[arraySize()];
+                        final BytePointer ptr = arrayData().get(array);
+                        return (I)new ByteArrayIndexer(array, sizes, strides) {
+                            @Override public void release() {
+                                ptr.put(array);
+                            }
+                        };
+                    }
+                case IPL_DEPTH_16U:
+                case IPL_DEPTH_16S:
+                    strides[0] /= 2;
+                    if (direct) {
+                        return (I)new ShortBufferIndexer((ShortBuffer)createBuffer(), sizes, strides);
+                    } else {
+                        short[] array = new short[arraySize()];
+                        final ShortPointer ptr = new ShortPointer(arrayData()).get(array);
+                        return (I)new ShortArrayIndexer(array, sizes, strides) {
+                            @Override public void release() {
+                                ptr.put(array);
+                            }
+                        };
+                    }
+                case IPL_DEPTH_32S:
+                    strides[0] /= 4;
+                    if (direct) {
+                        return (I)new IntBufferIndexer((IntBuffer)createBuffer(), sizes, strides);
+                    } else {
+                        int[] array = new int[arraySize()];
+                        final IntPointer ptr = new IntPointer(arrayData()).get(array);
+                        return (I)new IntArrayIndexer(array, sizes, strides) {
+                            @Override public void release() {
+                                ptr.put(array);
+                            }
+                        };
+                    }
+                case IPL_DEPTH_32F:
+                    strides[0] /= 4;
+                    if (direct) {
+                        return (I)new FloatBufferIndexer((FloatBuffer)createBuffer(), sizes, strides);
+                    } else {
+                        float[] array = new float[arraySize()];
+                        final FloatPointer ptr = new FloatPointer(arrayData()).get(array);
+                        return (I)new FloatArrayIndexer(array, sizes, strides) {
+                            @Override public void release() {
+                                ptr.put(array);
+                            }
+                        };
+                    }
+                case IPL_DEPTH_64F:
+                    strides[0] /= 8;
+                    if (direct) {
+                        return (I)new DoubleBufferIndexer((DoubleBuffer)createBuffer(), sizes, strides);
+                    } else {
+                        double[] array = new double[arraySize()];
+                        final DoublePointer ptr = new DoublePointer(arrayData()).get(array);
+                        return (I)new DoubleArrayIndexer(array, sizes, strides) {
+                            @Override public void release() {
+                                ptr.put(array);
+                            }
+                        };
+                    }
+                case IPL_DEPTH_1U:
+                default: assert false;
+            }
+            return null;
+        }
 
         protected BufferedImage cloneBufferedImage() {
             if (bufferedImage == null) {
@@ -162,16 +277,16 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
 
         public CvSize cvSize() { return org.bytedeco.javacpp.opencv_core.cvSize(arrayWidth(), arrayHeight()); }
 
-        public ByteBuffer   getByteBuffer  (int index) { return arrayData().position(index).capacity(arraySize()).asByteBuffer(); }
-        public ShortBuffer  getShortBuffer (int index) { return getByteBuffer(index*2).asShortBuffer();  }
-        public IntBuffer    getIntBuffer   (int index) { return getByteBuffer(index*4).asIntBuffer();    }
-        public FloatBuffer  getFloatBuffer (int index) { return getByteBuffer(index*4).asFloatBuffer();  }
-        public DoubleBuffer getDoubleBuffer(int index) { return getByteBuffer(index*8).asDoubleBuffer(); }
-        public ByteBuffer   getByteBuffer()   { return getByteBuffer  (0); }
-        public ShortBuffer  getShortBuffer()  { return getShortBuffer (0); }
-        public IntBuffer    getIntBuffer()    { return getIntBuffer   (0); }
-        public FloatBuffer  getFloatBuffer()  { return getFloatBuffer (0); }
-        public DoubleBuffer getDoubleBuffer() { return getDoubleBuffer(0); }
+        @Deprecated public ByteBuffer   getByteBuffer  (int index) { return arrayData().position(index).capacity(arraySize()).asByteBuffer(); }
+        @Deprecated public ShortBuffer  getShortBuffer (int index) { return getByteBuffer(index*2).asShortBuffer();  }
+        @Deprecated public IntBuffer    getIntBuffer   (int index) { return getByteBuffer(index*4).asIntBuffer();    }
+        @Deprecated public FloatBuffer  getFloatBuffer (int index) { return getByteBuffer(index*4).asFloatBuffer();  }
+        @Deprecated public DoubleBuffer getDoubleBuffer(int index) { return getByteBuffer(index*8).asDoubleBuffer(); }
+        @Deprecated public ByteBuffer   getByteBuffer()   { return getByteBuffer  (0); }
+        @Deprecated public ShortBuffer  getShortBuffer()  { return getShortBuffer (0); }
+        @Deprecated public IntBuffer    getIntBuffer()    { return getIntBuffer   (0); }
+        @Deprecated public FloatBuffer  getFloatBuffer()  { return getFloatBuffer (0); }
+        @Deprecated public DoubleBuffer getDoubleBuffer() { return getDoubleBuffer(0); }
 
         public static final byte[]
                 gamma22    = new byte[256],

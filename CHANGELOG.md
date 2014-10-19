@@ -1,4 +1,6 @@
 
+ * Include new `createIndexer()` method in `CvMat`, `IplImage`, `Mat`, etc. for easy and efficient multidimensional access of data ([issue #317](http://code.google.com/p/javacv/issues/detail?id=317))
+ * Deprecate `get*Buffer()` methods in favor of a better named and generic `createBuffer()` method
  * Fix `java.lang.UnsatisfiedLinkError` when allocating `opencv_core.Mat`, among others ([issue javacv:9](https://github.com/bytedeco/javacv/issues/9) and [issue javacv:28](https://github.com/bytedeco/javacv/issues/28))
  * Force OpenCV to build with GCC 4.6, as newer versions are known to hang on Android 2.2 ([issue android:43819](https://code.google.com/p/android/issues/detail?id=43819))
  * Upgrade presets for FFmpeg 2.4.2, LLVM 3.5.0, videoInput, where the latest code got merged into the master branch
