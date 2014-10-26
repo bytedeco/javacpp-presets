@@ -34,6 +34,10 @@ public class opencv_objdetect extends org.bytedeco.javacpp.presets.opencv_objdet
         public AbstractCvHaarClassifierCascade() { }
         public AbstractCvHaarClassifierCascade(Pointer p) { super(p); }
 
+        /**
+         * Calls cvLoadHaarClassifierCascade(), and registers a deallocator.
+         * @return CvHaarClassifierCascade loaded. Do not call cvReleaseHaarClassifierCascade() on it.
+         */
         public static CvHaarClassifierCascade load(String directory,
                 CvSize orig_window_size) {
             CvHaarClassifierCascade h = cvLoadHaarClassifierCascade(directory,
@@ -44,6 +48,9 @@ public class opencv_objdetect extends org.bytedeco.javacpp.presets.opencv_objdet
             return h;
         }
 
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
         public void release() {
             deallocate();
         }

@@ -92,7 +92,7 @@ public class FlyCapture2 extends org.bytedeco.javacpp.presets.FlyCapture2 {
 //=============================================================================
 
 //=============================================================================
-// $Id: FlyCapture2Defs.h 200437 2014-06-27 22:00:28Z warrenm $
+// $Id: FlyCapture2Defs.h 208258 2014-09-19 20:33:21Z erich $
 //=============================================================================
 
 // #ifndef PGR_FC2_FLYCAPTURE2DEFS_H
@@ -843,7 +843,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Network interface index used (or to use). */
         public native @Cast("unsigned int") int networkInterfaceIndex(); public native GigEStreamChannel networkInterfaceIndex(int networkInterfaceIndex);
         /** Host port on the PC where the camera will send the data stream. */
-        public native @Cast("unsigned int") int hostPost(); public native GigEStreamChannel hostPost(int hostPost);
+		public native @Cast("unsigned int") int hostPort(); public native GigEStreamChannel hostPort(int hostPort);
         /** Disable IP fragmentation of packets. */
         public native @Cast("bool") boolean doNotFragment(); public native GigEStreamChannel doNotFragment(boolean doNotFragment);
         /** Packet size, in bytes. */
@@ -854,9 +854,12 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @ByRef IPAddress destinationIpAddress(); public native GigEStreamChannel destinationIpAddress(IPAddress destinationIpAddress);
         /** Source UDP port of the stream channel. Read only. */
         public native @Cast("unsigned int") int sourcePort(); public native GigEStreamChannel sourcePort(int sourcePort);
+		/** Host port on the PC where the camera will send the data stream. 
+			This is deprecated, use hostPort instead. */
+		public native @Cast("unsigned int*") @ByRef IntPointer hostPost(); public native GigEStreamChannel hostPost(IntPointer hostPost);
 
-        public GigEStreamChannel() { allocate(); }
-        private native void allocate();
+		public GigEStreamChannel() { allocate(); }
+		private native void allocate();
     }
 
     /** 
@@ -1995,7 +1998,13 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 
 		public AVIOption() { allocate(); }
 		private native void allocate();
-    } 
+    }    
+
+	/*@}*/ 
+
+    /*@}*/ 
+
+// 	#pragma deprecated(hostPost)
 
 
 // #endif // PGR_FC2_FLYCAPTURE2DEFS_H

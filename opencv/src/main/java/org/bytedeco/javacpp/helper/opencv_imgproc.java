@@ -61,6 +61,10 @@ public class opencv_imgproc extends org.bytedeco.javacpp.presets.opencv_imgproc 
         public AbstractIplConvKernel() { }
         public AbstractIplConvKernel(Pointer p) { super(p); }
 
+        /**
+         * Calls cvCreateStructuringElementEx(), and registers a deallocator.
+         * @return IplConvKernel created. Do not call cvReleaseStructuringElement() on it.
+         */
         public static IplConvKernel create(int cols, int rows,
                 int anchor_x, int anchor_y, int shape, int[] values/*=null*/) {
             IplConvKernel p = cvCreateStructuringElementEx(cols, rows,
@@ -71,6 +75,9 @@ public class opencv_imgproc extends org.bytedeco.javacpp.presets.opencv_imgproc 
             return p;
         }
 
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
         public void release() {
             deallocate();
         }
@@ -84,6 +91,10 @@ public class opencv_imgproc extends org.bytedeco.javacpp.presets.opencv_imgproc 
         public AbstractCvHistogram() { }
         public AbstractCvHistogram(Pointer p) { super(p); }
 
+        /**
+         * Calls cvCreateHist(), and registers a deallocator.
+         * @return CvHistogram created. Do not call cvReleaseHist() on it.
+         */
         public static CvHistogram create(int dims, int[] sizes, int type,
                 float[][] ranges/*=null*/, int uniform/*=1*/) {
             CvHistogram h = cvCreateHist(dims, sizes, type, ranges, uniform);
@@ -93,6 +104,9 @@ public class opencv_imgproc extends org.bytedeco.javacpp.presets.opencv_imgproc 
             return h;
         }
 
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
         public void release() {
             deallocate();
         }

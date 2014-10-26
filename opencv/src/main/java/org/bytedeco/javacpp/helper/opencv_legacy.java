@@ -94,6 +94,10 @@ public class opencv_legacy extends org.bytedeco.javacpp.presets.opencv_legacy {
         public AbstractCvImgObsInfo() { }
         public AbstractCvImgObsInfo(Pointer p) { super(p); }
 
+        /**
+         * Calls cvCreateObsInfo(), and registers a deallocator.
+         * @return CvImgObsInfo created. Do not call cvReleaseObsInfo() on it.
+         */
         public static CvImgObsInfo create(CvSize numObs, int obsSize) {
             CvImgObsInfo p = cvCreateObsInfo(numObs, obsSize);
             if (p != null) {
@@ -102,6 +106,9 @@ public class opencv_legacy extends org.bytedeco.javacpp.presets.opencv_legacy {
             return p;
         }
 
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
         public void release() {
             deallocate();
         }
@@ -115,6 +122,10 @@ public class opencv_legacy extends org.bytedeco.javacpp.presets.opencv_legacy {
         public AbstractCvEHMM() { }
         public AbstractCvEHMM(Pointer p) { super(p); }
 
+        /**
+         * Calls cvCreate2DHMM(), and registers a deallocator.
+         * @return CvEHMM created. Do not call cvRelease2DHMM() on it.
+         */
         public static CvEHMM create(int[] stateNumber, int[] numMix, int obsSize) {
             CvEHMM p = cvCreate2DHMM(stateNumber, numMix, obsSize);
             if (p != null) {
@@ -123,6 +134,9 @@ public class opencv_legacy extends org.bytedeco.javacpp.presets.opencv_legacy {
             return p;
         }
 
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
         public void release() {
             deallocate();
         }
@@ -136,9 +150,17 @@ public class opencv_legacy extends org.bytedeco.javacpp.presets.opencv_legacy {
         public AbstractCvGLCM() { }
         public AbstractCvGLCM(Pointer p) { super(p); }
 
+        /**
+         * Calls cvCreateGLCM(), and registers a deallocator.
+         * @return CvGLCM created. Do not call cvReleaseGLCM() on it.
+         */
         public static CvGLCM create(IplImage srcImage, int stepMagnitude) {
             return create(srcImage, stepMagnitude, null, 0, CV_GLCM_OPTIMIZATION_NONE);
         }
+        /**
+         * Calls cvCreateGLCM(), and registers a deallocator.
+         * @return CvGLCM created. Do not call cvReleaseGLCM() on it.
+         */
         public static CvGLCM create(IplImage srcImage, int stepMagnitude,
                 int[] stepDirections/*=null*/, int numStepDirections/*=0*/,
                 int optimizationType/*=CV_GLCM_OPTIMIZATION_NONE*/) {
@@ -150,6 +172,9 @@ public class opencv_legacy extends org.bytedeco.javacpp.presets.opencv_legacy {
             return p;
         }
 
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
         public void release() {
             deallocate();
         }
@@ -163,6 +188,10 @@ public class opencv_legacy extends org.bytedeco.javacpp.presets.opencv_legacy {
         public AbstractCvFaceTracker() { }
         public AbstractCvFaceTracker(Pointer p) { super(p); }
 
+        /**
+         * Calls cvInitFaceTracker(), and registers a deallocator.
+         * @return CvFaceTracker created. Do not call cvReleaseFaceTracker() on it.
+         */
         public static CvFaceTracker create(CvFaceTracker pFaceTracking,
                 IplImage imgGray, CvRect pRects, int nRects) {
             CvFaceTracker p = cvInitFaceTracker(new CvFaceTracker(), imgGray, pRects, nRects);
@@ -172,6 +201,9 @@ public class opencv_legacy extends org.bytedeco.javacpp.presets.opencv_legacy {
             return p;
         }
 
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
         public void release() {
             deallocate();
         }
@@ -185,6 +217,10 @@ public class opencv_legacy extends org.bytedeco.javacpp.presets.opencv_legacy {
         public AbstractCvConDensation() { }
         public AbstractCvConDensation(Pointer p) { super(p); }
 
+        /**
+         * Calls cvCreateConDensation(), and registers a deallocator.
+         * @return CvConDensation created. Do not call cvReleaseConDensation() on it.
+         */
         public static CvConDensation create(int dynam_params, int measure_params,
                 int sample_count) {
             CvConDensation c = cvCreateConDensation(dynam_params, measure_params, sample_count);
@@ -194,6 +230,9 @@ public class opencv_legacy extends org.bytedeco.javacpp.presets.opencv_legacy {
             return c;
         }
 
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
         public void release() {
             deallocate();
         }
@@ -207,6 +246,10 @@ public class opencv_legacy extends org.bytedeco.javacpp.presets.opencv_legacy {
         public AbstractCvBGStatModel() { }
         public AbstractCvBGStatModel(Pointer p) { super(p); }
 
+        /**
+         * Calls cvCreateFGDStatModel(), and registers a deallocator.
+         * @return CvBGStatModel created. Do not call cvReleaseBGStatModel() on it.
+         */
         public static CvBGStatModel create(IplImage first_frame, CvFGDStatModelParams parameters) {
             CvBGStatModel m = cvCreateFGDStatModel(first_frame, parameters);
             if (m != null) {
@@ -214,6 +257,10 @@ public class opencv_legacy extends org.bytedeco.javacpp.presets.opencv_legacy {
             }
             return m;
         }
+        /**
+         * Calls cvCreateGaussianBGModel(), and registers a deallocator.
+         * @return CvBGStatModel created. Do not call cvReleaseBGStatModel() on it.
+         */
         public static CvBGStatModel create(IplImage first_frame, CvGaussBGStatModelParams parameters) {
             CvBGStatModel m = cvCreateGaussianBGModel(first_frame, parameters);
             if (m != null) {
@@ -222,6 +269,9 @@ public class opencv_legacy extends org.bytedeco.javacpp.presets.opencv_legacy {
             return m;
         }
 
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
         public void release2() {
             deallocate();
         }
@@ -235,6 +285,10 @@ public class opencv_legacy extends org.bytedeco.javacpp.presets.opencv_legacy {
         public AbstractCvBGCodeBookModel() { }
         public AbstractCvBGCodeBookModel(Pointer p) { super(p); }
 
+        /**
+         * Calls cvCreateBGCodeBookModel(), and registers a deallocator.
+         * @return CvBGCodeBookModel created. Do not call cvReleaseBGCodeBookModel() on it.
+         */
         public static CvBGCodeBookModel create() {
             CvBGCodeBookModel m = cvCreateBGCodeBookModel();
             if (m != null) {
@@ -243,6 +297,9 @@ public class opencv_legacy extends org.bytedeco.javacpp.presets.opencv_legacy {
             return m;
         }
 
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
         public void release() {
             deallocate();
         }

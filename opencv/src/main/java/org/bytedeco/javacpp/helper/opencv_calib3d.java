@@ -36,6 +36,10 @@ public class opencv_calib3d extends org.bytedeco.javacpp.presets.opencv_calib3d 
         public AbstractCvPOSITObject() { }
         public AbstractCvPOSITObject(Pointer p) { super(p); }
 
+        /**
+         * Calls cvCreatePOSITObject(), and registers a deallocator.
+         * @return CvPOSITObject created. Do not call cvReleasePOSITObject() on it.
+         */
         public static CvPOSITObject create(CvPoint3D32f points, int point_count) {
             CvPOSITObject p = cvCreatePOSITObject(points, point_count);
             if (p != null) {
@@ -44,6 +48,9 @@ public class opencv_calib3d extends org.bytedeco.javacpp.presets.opencv_calib3d 
             return p;
         }
 
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
         public void release() {
             deallocate();
         }
@@ -61,6 +68,10 @@ public class opencv_calib3d extends org.bytedeco.javacpp.presets.opencv_calib3d 
             return (CvStereoBMState)super.position(position);
         }
 
+        /**
+         * Calls cvCreateStereoBMState(), and registers a deallocator.
+         * @return CvStereoBMState created. Do not call cvReleaseStereoBMState() on it.
+         */
         public static CvStereoBMState create(int preset, int numberOfDisparities) {
             CvStereoBMState p = cvCreateStereoBMState(preset, numberOfDisparities);
             if (p != null) {
@@ -68,6 +79,10 @@ public class opencv_calib3d extends org.bytedeco.javacpp.presets.opencv_calib3d 
             }
             return p;
         }
+
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
         public void release() {
             deallocate();
         }

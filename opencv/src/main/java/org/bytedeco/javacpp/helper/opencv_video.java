@@ -33,6 +33,10 @@ public class opencv_video extends org.bytedeco.javacpp.presets.opencv_video {
         public AbstractCvKalman() { }
         public AbstractCvKalman(Pointer p) { super(p); }
 
+        /**
+         * Calls cvCreateKalman(), and registers a deallocator.
+         * @return CvKalman created. Do not call cvReleaseKalman() on it.
+         */
         public static CvKalman create(int dynam_params, int measure_params,
                 int control_params/*=0*/) {
             CvKalman k = cvCreateKalman(dynam_params, measure_params, control_params);
@@ -42,6 +46,9 @@ public class opencv_video extends org.bytedeco.javacpp.presets.opencv_video {
             return k;
         }
 
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
         public void release() {
             deallocate();
         }

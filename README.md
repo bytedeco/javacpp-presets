@@ -36,13 +36,13 @@ We can also have everything downloaded and installed automatically with:
   }
 ```
 
-* SBT (inside the `build.sbt` file)
+ * SBT (inside the `build.sbt` file)
 ```scala
   classpathTypes += "maven-plugin"
   libraryDependencies += "org.bytedeco.javacpp-presets" % moduleName % moduleVersion + "-0.9"
 ```
 
-where the `moduleName` and `moduleVersion` variables correspond to the desired module. Additionally, we need to either set the `platform.dependency` system property (via the `-D` command line option) to something like `android-arm`, or set the `platform.dependencies` one to `true` to get all the binaries for Linux, Mac OS X, and Windows.
+where the `moduleName` and `moduleVersion` variables correspond to the desired module. Additionally, we need to either set the `platform.dependency` system property (via the `-D` command line option) to something like `android-arm`, or set the `platform.dependencies` one to `true` to get all the binaries for Linux, Mac OS X, and Windows. On build systems where this does not work, we need to add the platform-specific artifacts manually.
 
 
 Required Software
@@ -55,10 +55,43 @@ To use the JavaCPP Presets, you will need to download and install the following 
    * IBM JDK  http://www.ibm.com/developerworks/java/jdk/  or
    * Java SE for Mac OS X  http://developer.apple.com/java/  etc.
 
+Further, in the case of Android, the JavaCPP Presets also rely on:
+
+ * Android SDK API 8 or newer  http://developer.android.com/sdk/
+
+
+Manual Installation
+-------------------
+Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, `flycapture*.jar`, `libdc1394*.jar`, `libfreenect*.jar`, `videoinput*.jar`, `artoolkitplus*.jar`, etc.), in addition to `javacpp.jar`, somewhere in your CLASSPATH. The JAR files available as pre-built artifacts are meant to be used with [JavaCPP](https://github.com/bytedeco/javacpp). They were built on Fedora 20, so they may not work on all distributions of Linux, especially older ones. The binaries for Android were compiled for ARMv7 processors featuring an FPU, so they will not work on ancient devices such as the HTC Magic or some others with an ARMv6 CPU. Here are some more specific instructions for common cases:
+
+NetBeans (Java SE 6 or newer):
+
+ 1. In the Projects window, right-click the Libraries node of your project, and select "Add JAR/Folder...".
+ 2. Locate the JAR files, select them, and click OK.
+
+Eclipse (Java SE 6 or newer):
+
+ 1. Navigate to Project > Properties > Java Build Path > Libraries and click "Add External JARs...".
+ 2. Locate the JAR files, select them, and click OK.
+
+Eclipse (Android 2.2 or newer):
+
+ 1. Follow the instructions on this page: http://developer.android.com/training/basics/firstapp/
+ 2. Go to File > New > Folder, select your project as parent folder, type "libs/armeabi" as Folder name, and click Finish.
+ 3. Copy `javacpp.jar`, `opencv.jar`, `ffmpeg.jar`, `artoolkitplus.jar`, etc. into the newly created "libs" folder.
+ 4. Extract all the `*.so` files from `opencv-android-arm.jar`, `ffmpeg-android-arm.jar`, `artoolkitplus-android-arm.jar`, etc. directly into the newly created "libs/armeabi" folder, without creating any of the subdirectories found in the JAR files.
+ 5. Navigate to Project > Properties > Java Build Path > Libraries and click "Add JARs...".
+ 6. Select all of `javacpp.jar`, `opencv.jar`, `ffmpeg.jar`, `artoolkitplus.jar`, etc. from the newly created "libs" folder.
+
+After that, we can access almost transparently the corresponding C/C++ APIs through the interface classes found in the `org.bytedeco.javacpp` package. Indeed, the `Parser` translates the code comments from the C/C++ header files into the Java interface files, (almost) ready to be consumed by Javadoc. However, since their translation still leaves to be desired, one may wish to refer to the original documentation pages. For instance, the ones for OpenCV and FFmpeg can be found online at:
+
+ * [OpenCV documentation](http://docs.opencv.org/)
+ * [FFmpeg documentation](http://ffmpeg.org/doxygen/)
+
 
 Build Instructions
 ------------------
-To rebuild the source code on the Java side, please note that the project files were created for:
+If the binary files available above are not enough for your needs, you might need to rebuild them from the source code. To this end, the project files on the Java side were created for:
 
  * Maven 2 or 3  http://maven.apache.org/download.html
  * JavaCPP 0.9  https://github.com/bytedeco/javacpp
@@ -67,7 +100,7 @@ Each child module in turn relies on its corresponding native libraries being alr
 
  * OpenCV 2.4.9  http://opencv.org/downloads.html
  * FFmpeg 2.4.x  http://ffmpeg.org/download.html
- * FlyCapture 2.6.x  http://ww2.ptgrey.com/sdk/flycap
+ * FlyCapture 2.7.x  http://ww2.ptgrey.com/sdk/flycap
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
  * libfreenect 0.5  https://github.com/OpenKinect/libfreenect
  * videoInput 0.200  https://github.com/ofTheo/videoInput/
@@ -114,35 +147,6 @@ Although JavaCPP can pick up native libraries installed on the system, the scrip
 ```
 
 Thanks to Jose Gómez for testing this out!
-
-
-Manual Installation
--------------------
-Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, `flycapture*.jar`, `libdc1394*.jar`, `libfreenect*.jar`, `videoinput*.jar`, and `artoolkitplus*.jar`, etc.), in addition to `javacpp.jar`, somewhere in your CLASSPATH. The JAR files available as pre-built artifacts are meant to be used with [JavaCPP](https://github.com/bytedeco/javacpp). They were built on Fedora 20, so they may not work on all distributions of Linux, especially older ones. The binaries for Android were compiled for ARMv7 processors featuring an FPU, so they will not work on ancient devices such as the HTC Magic or some others with an ARMv6 CPU. Here are some more specific instructions for common cases:
-
-NetBeans (Java SE 6 or newer):
-
- 1. In the Projects window, right-click the Libraries node of your project, and select "Add JAR/Folder...".
- 2. Locate the JAR files, select them, and click OK.
-
-Eclipse (Java SE 6 or newer):
-
- 1. Navigate to Project > Properties > Java Build Path > Libraries and click "Add External JARs...".
- 2. Locate the JAR files, select them, and click OK.
-
-Eclipse (Android 2.2 or newer):
-
- 1. Follow the instructions on this page: http://developer.android.com/training/basics/firstapp/
- 2. Go to File > New > Folder, select your project as parent folder, type "libs/armeabi" as Folder name, and click Finish.
- 3. Copy `javacpp.jar`, `opencv.jar`, `ffmpeg.jar`, and `artoolkitplus.jar` into the newly created "libs" folder.
- 4. Extract all the `*.so` files from `opencv-android-arm.jar`, `ffmpeg-android-arm.jar`, and `artoolkitplus-android-arm.jar` directly into the newly created "libs/armeabi" folder, without creating any of the subdirectories found in the JAR files.
- 5. Navigate to Project > Properties > Java Build Path > Libraries and click "Add JARs...".
- 6. Select all of `javacpp.jar`, `opencv.jar`, `ffmpeg.jar`, and `artoolkitplus.jar` from the newly created "libs" folder.
-
-After that, we can access almost transparently the corresponding C/C++ APIs through the interface classes found in the `org.bytedeco.javacpp` package. Indeed, the `Parser` translates the code comments from the C/C++ header files into the Java interface files, (almost) ready to be consumed by Javadoc. However, since their translation still leaves to be desired, one may wish to refer to the original documentation pages. For instance, the ones for OpenCV and FFmpeg can be found online at:
-
- * [OpenCV documentation](http://docs.opencv.org/)
- * [FFmpeg documentation](http://ffmpeg.org/doxygen/)
 
 
 How Can I Help?

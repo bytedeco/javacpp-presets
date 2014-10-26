@@ -1014,6 +1014,10 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         public AbstractIplImage() { }
         public AbstractIplImage(Pointer p) { super(p); }
 
+        /**
+         * Calls cvCreateImage(), and registers a deallocator.
+         * @return IplImage created. Do not call cvReleaseImage() on it.
+         */
         public static IplImage create(CvSize size, int depth, int channels) {
             IplImage i = cvCreateImage(size, depth, channels);
             if (i != null) {
@@ -1021,9 +1025,17 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             }
             return i;
         }
+        /**
+         * Calls cvCreateImage(), and registers a deallocator.
+         * @return IplImage created. Do not call cvReleaseImage() on it.
+         */
         public static IplImage create(int width, int height, int depth, int channels) {
             return create(org.bytedeco.javacpp.opencv_core.cvSize(width, height), depth, channels);
         }
+        /**
+         * Calls cvCreateImage(), and registers a deallocator. Also assigns {@link #origin()}.
+         * @return IplImage created. Do not call cvReleaseImage() on it.
+         */
         public static IplImage create(CvSize size, int depth, int channels, int origin) {
             IplImage i = create(size, depth, channels);
             if (i != null) {
@@ -1031,6 +1043,10 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             }
             return i;
         }
+        /**
+         * Calls cvCreateImage(), and registers a deallocator. Also assigns {@link #origin()}.
+         * @return IplImage created. Do not call cvReleaseImage() on it.
+         */
         public static IplImage create(int width, int height, int depth, int channels, int origin) {
             IplImage i = create(width, height, depth, channels);
             if (i != null) {
@@ -1039,6 +1055,10 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             return i;
         }
 
+        /**
+         * Calls cvCreateImageHeader(), and registers a deallocator.
+         * @return IplImage created. Do not call cvReleaseImageHeader() on it.
+         */
         public static IplImage createHeader(CvSize size, int depth, int channels) {
             IplImage i = cvCreateImageHeader(size, depth, channels);
             if (i != null) {
@@ -1046,9 +1066,17 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             }
             return i;
         }
+        /**
+         * Calls cvCreateImageHeader(), and registers a deallocator.
+         * @return IplImage created. Do not call cvReleaseImageHeader() on it.
+         */
         public static IplImage createHeader(int width, int height, int depth, int channels) {
             return createHeader(org.bytedeco.javacpp.opencv_core.cvSize(width, height), depth, channels);
         }
+        /**
+         * Calls cvCreateImageHeader(), and registers a deallocator. Also assigns {@link #origin()}.
+         * @return IplImage created. Do not call cvReleaseImageHeader() on it.
+         */
         public static IplImage createHeader(CvSize size, int depth, int channels, int origin) {
             IplImage i = createHeader(size, depth, channels);
             if (i != null) {
@@ -1056,6 +1084,10 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             }
             return i;
         }
+        /**
+         * Calls cvCreateImageHeader(), and registers a deallocator. Also assigns {@link #origin()}.
+         * @return IplImage created. Do not call cvReleaseImageHeader() on it.
+         */
         public static IplImage createHeader(int width, int height, int depth, int channels, int origin) {
             IplImage i = createHeader(width, height, depth, channels);
             if (i != null) {
@@ -1064,9 +1096,17 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             return i;
         }
 
+        /**
+         * Creates an IplImage based on another IplImage.
+         * @return IplImage created. Do not call cvReleaseImage() on it.
+         */
         public static IplImage createCompatible(IplImage template) {
             return createIfNotCompatible(null, template);
         }
+        /**
+         * Creates an IplImage based on another IplImage, unless the template is OK.
+         * @return template or IplImage created. Do not call cvReleaseImage() on it.
+         */
         public static IplImage createIfNotCompatible(IplImage image, IplImage template) {
             if (image == null || image.width() != template.width() || image.height() != template.height() ||
                     image.depth() != template.depth() || image.nChannels() != template.nChannels()) {
@@ -1080,12 +1120,24 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             return image;
         }
 
+        /**
+         * Creates an IplImage based on a BufferedImage.
+         * @return IplImage created. Do not call cvReleaseImage() on it.
+         */
         public static IplImage createFrom(BufferedImage image) {
             return createFrom(image, 1.0);
         }
+        /**
+         * Creates an IplImage based on a BufferedImage, and given gamma.
+         * @return IplImage created. Do not call cvReleaseImage() on it.
+         */
         public static IplImage createFrom(BufferedImage image, double gamma) {
             return createFrom(image, gamma, false);
         }
+        /**
+         * Creates an IplImage based on a BufferedImage, given gamma, and inverted channels flag.
+         * @return IplImage created. Do not call cvReleaseImage() on it.
+         */
         public static IplImage createFrom(BufferedImage image, double gamma, boolean flipChannels) {
             if (image == null) {
                 return null;
@@ -1117,6 +1169,10 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             return i;
         }
 
+        /**
+         * Calls cvCloneImage(), and registers a deallocator.
+         * @return IplImage cloned. Do not call cvReleaseImage() on it.
+         */
         @Override public IplImage clone() {
             IplImage i = cvCloneImage((IplImage)this);
             if (i != null) {
@@ -1128,6 +1184,9 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             return i;
         }
 
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
         public void release() {
             deallocate();
         }
@@ -1181,6 +1240,10 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         public AbstractCvMat() { }
         public AbstractCvMat(Pointer p) { super(p); }
 
+        /**
+         * Calls cvCreateMat(), and registers a deallocator.
+         * @return CvMat created. Do not call cvReleaseMat() on it.
+         */
         public static CvMat create(int rows, int cols, int type) {
             CvMat m = cvCreateMat(rows, cols, type);
             if (m != null) {
@@ -1189,13 +1252,25 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             }
             return m;
         }
+        /**
+         * Calls cvCreateMat(), and registers a deallocator.
+         * @return CvMat created. Do not call cvReleaseMat() on it.
+         */
         public static CvMat create(int rows, int cols, int depth, int channels) {
             return create(rows, cols, CV_MAKETYPE(depth, channels));
         }
+        /**
+         * Calls cvCreateMat(rows, cols, CV_64F, 1), and registers a deallocator.
+         * @return CvMat created. Do not call cvReleaseMat() on it.
+         */
         public static CvMat create(int rows, int cols) {
             return create(rows, cols, CV_64F, 1);
         }
 
+        /**
+         * Calls cvCreateMatHeader(), and registers a deallocator.
+         * @return CvMat created. Do not call cvReleaseMat() on it.
+         */
         public static CvMat createHeader(int rows, int cols, int type) {
             CvMat m = cvCreateMatHeader(rows, cols, type);
             if (m != null) {
@@ -1204,9 +1279,17 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             }
             return m;
         }
+        /**
+         * Calls cvCreateMatHeader(), and registers a deallocator.
+         * @return CvMat created. Do not call cvReleaseMat() on it.
+         */
         public static CvMat createHeader(int rows, int cols, int depth, int channels) {
             return createHeader(rows, cols, CV_MAKETYPE(depth, channels));
         }
+        /**
+         * Calls cvCreateMatHeader(rows, cols, CV_64F, 1), and registers a deallocator.
+         * @return CvMat created. Do not call cvReleaseMat() on it.
+         */
         public static CvMat createHeader(int rows, int cols) {
             return createHeader(rows, cols, CV_64F, 1);
         }
@@ -1235,6 +1318,10 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             return createHeaderThreadLocal(rows, cols, CV_64F, 1);
         }
 
+        /**
+         * Calls cvCloneMat(), and registers a deallocator.
+         * @return CvMat cloned. Do not call cvReleaseMat() on it.
+         */
         @Override public CvMat clone() {
             CvMat m = cvCloneMat((CvMat)this);
             if (m != null) {
@@ -1243,6 +1330,9 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             return m;
         }
 
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
         public void release() {
             deallocate();
         }
@@ -1602,6 +1692,10 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         public AbstractCvMatND() { }
         public AbstractCvMatND(Pointer p) { super(p); }
 
+        /**
+         * Calls CvMatND(), and registers a deallocator.
+         * @return CvMatND created. Do not call cvReleaseMatND() on it.
+         */
         public static CvMatND create(int dims, int[] sizes, int type) {
             CvMatND m = cvCreateMatND(dims, sizes, type);
             if (m != null) {
@@ -1610,6 +1704,10 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             return m;
         }
 
+        /**
+         * Calls cvCloneMatND(), and registers a deallocator.
+         * @return CvMatND cloned. Do not call cvReleaseMatND() on it.
+         */
         @Override public CvMatND clone() {
             CvMatND m = cvCloneMatND((CvMatND)this);
             if (m != null) {
@@ -1618,6 +1716,9 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             return m;
         }
 
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
         public void release() {
             deallocate();
         }
@@ -1631,6 +1732,10 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         public AbstractCvSparseMat() { }
         public AbstractCvSparseMat(Pointer p) { super(p); }
 
+        /**
+         * Calls cvCreateSparseMat(), and registers a deallocator.
+         * @return CvSparseMat created. Do not call cvReleaseSparseMat() on it.
+         */
         public static CvSparseMat create(int dims, int[] sizes, int type) {
             CvSparseMat m = cvCreateSparseMat(dims, sizes, type);
             if (m != null) {
@@ -1639,6 +1744,10 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             return m;
         }
 
+        /**
+         * Calls cvCloneSparseMat(), and registers a deallocator.
+         * @return CvSparseMat cloned. Do not call cvReleaseSparseMat() on it.
+         */
         @Override public CvSparseMat clone() {
             CvSparseMat m = cvCloneSparseMat((CvSparseMat)this);
             if (m != null) {
@@ -1646,6 +1755,9 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             }
             return m;
         }
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
         public void release() {
             deallocate();
         }
@@ -2265,6 +2377,10 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         public AbstractCvMemStorage() { }
         public AbstractCvMemStorage(Pointer p) { super(p); }
 
+        /**
+         * Calls cvCreateMemStorage(), and registers a deallocator.
+         * @return CvMemStorage created. Do not call cvReleaseMemStorage() on it.
+         */
         public static CvMemStorage create(int block_size) {
             CvMemStorage m = cvCreateMemStorage(block_size);
             if (m != null) {
@@ -2272,10 +2388,17 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             }
             return m;
         }
+        /**
+         * Calls cvCreateMemStorage(0), and registers a deallocator.
+         * @return CvMemStorage created. Do not call cvReleaseMemStorage() on it.
+         */
         public static CvMemStorage create() {
             return create(0);
         }
 
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
         public void release() {
             deallocate();
         }
@@ -2318,9 +2441,17 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         public AbstractCvFileStorage() { }
         public AbstractCvFileStorage(Pointer p) { super(p); }
 
+        /**
+         * Calls cvOpenFileStorage(), and registers a deallocator. Uses default encoding.
+         * @return CvFileStorage opened. Do not call cvReleaseFileStorage() on it.
+         */
         public static CvFileStorage open(String filename, CvMemStorage memstorage, int flags) {
             return open(filename, memstorage, flags, null);
         }
+        /**
+         * Calls cvOpenFileStorage(), and registers a deallocator.
+         * @return CvFileStorage opened. Do not call cvReleaseFileStorage() on it.
+         */
         public static CvFileStorage open(String filename, CvMemStorage memstorage, int flags, String encoding) {
             CvFileStorage f = cvOpenFileStorage(filename, memstorage, flags, encoding);
             if (f != null) {
@@ -2329,6 +2460,9 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             return f;
         }
 
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
         public void release() {
             deallocate();
         }
@@ -2342,6 +2476,10 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         public AbstractCvGraphScanner() { }
         public AbstractCvGraphScanner(Pointer p) { super(p); }
 
+        /**
+         * Calls cvCreateGraphScanner(), and registers a deallocator.
+         * @return CvGraphScanner created. Do not call cvReleaseGraphScanner() on it.
+         */
         public static CvGraphScanner create(CvGraph graph,
                 CvGraphVtx vtx/*=null*/, int mask/*=CV_GRAPH_ALL_ITEMS*/) {
             CvGraphScanner g = cvCreateGraphScanner(graph, vtx, mask);
@@ -2350,6 +2488,9 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             }
             return g;
         }
+        /**
+         * Calls the deallocator, if registered, otherwise has no effect.
+         */
         public void release() {
             deallocate();
         }
