@@ -86,11 +86,11 @@ case $PLATFORM in
         make -j4
         make install
         cd ../$X264
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --host=x86_64-linux
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=x86_64-linux
         make -j4
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-outdev=sdl --enable-libmp3lame --enable-libx264 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -ldl"
+        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libx264 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -ldl"
         make -j4
         make install
         ;;
