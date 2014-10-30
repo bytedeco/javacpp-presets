@@ -17,12 +17,14 @@ TGTDIR="$BASEDIR/osinst.$DISTNAME.$DISTARCH"
 CACHEDIR="$BASEDIR/.cache"
 M2REPODIR="$CACHEDIR/m2repo"
 INCHROOT="$1"
+export CCACHE_DIR="$CACHEDIR/ccache"
 
 if ! NCPUS=$(grep -c ^proc /proc/cpuinfo); then
     NCPUS=4
 fi
-
 if (( NCPUS > 4 )); then NCPUS=4; fi
+
+if [[ ! -e "$CACHEDIR" ]]; then mkdir -p "$CACHEDIR"; fi
 
 if [[ -n "$INCHROOT" ]]; then
     export PATH="/usr/local/bin:$PATH"
@@ -61,22 +63,36 @@ if [[ "$INCHROOT" == "build" ]]; then
     exit 0 
 fi
 
+connectDir() {
+    local outsideDir="$1"
+    local insideDir="$2"
+    if mount | grep "$TGTDIR$insideDir"; then return 0; fi
+    if [[ ! -e "$outsideDir" ]]; then mkdir -p "$outsideDir"; fi
+    sudo mount -o bind "$outsideDir" "$TGTDIR$insideDir" || :
+    if mount | grep "$TGTDIR$insideDir"; then return 0; fi
+    sudo mkdir -p "$TGTDIR$insideDir"
+    sudo mount -o bind "$outsideDir" "$TGTDIR$insideDir"
+}
+
+disconnectDir() {
+    local insideDir="$1"
+    if ! mount | grep "$TGTDIR$insideDir"; then return 0; fi
+    sudo umount "$TGTDIR$insideDir"
+}
+
 connect_chroot() {
     if ! mount | grep "$TGTDIR/proc"; then
+        if [[ ! -e "$TGTDIR/proc" ]]; then sudo mkdir -p "$TGTDIR/proc"; fi
         sudo mount -t proc proc "$TGTDIR/proc"
     fi
-#    if ! mount | grep "$TGTDIR/dev"; then
-#        sudo mount -o bind /etc "$TGTDIR/dev"
-#    fi
+    connectDir "$CACHEDIR" "/build/.cache"
+    connectDir "$CACHEDIR/debs" "/var/cache/apt/archives"
 }
 
 release_chroot() {
-    if mount | grep "$TGTDIR/proc"; then
-        sudo umount "$TGTDIR/proc"
-    fi
-#    if mount | grep "$TGTDIR/dev"; then
-#        sudo umount "$TGTDIR/dev"
-#    fi
+    disconnectDir "/proc"
+    disconnectDir "/build/.cache"
+    disconnectDir "/var/cache/apt/archives"
 }
 
 chroot_do() {
@@ -132,7 +148,7 @@ deb $DISTURL $DISTNAME-security main restricted universe
 " > "/etc/apt/sources.list"
     apt-get update
     apt-get -y dist-upgrade
-    apt-get -y install openjdk-7-jdk maven build-essential curl cmake
+    apt-get -y install openjdk-7-jdk maven build-essential curl cmake ccache
     install_yasm
     useradd -u $freeuid -d /build build
     exit 0
@@ -149,19 +165,21 @@ trap "release_chroot" EXIT
 if ! test -e "$TGTDIR/.installed"; then
     sudo rm -rf "$TGTDIR"
     sudo mkdir -p "$TGTDIR"
-    if [[ -e "$CACHEDIR" ]]; then
-        sudo mkdir -p "$TGTDIR/.cache"
-        sudo rsync -a --exclude=/debs/ "$CACHEDIR/" "$TGTDIR/.cache"
-    fi    
-    if [[ -e "$CACHEDIR/debs" ]]; then
-        sudo mkdir -p "$TGTDIR/var/cache/apt/archives"
-        sudo rsync -a "$CACHEDIR/debs/" "$TGTDIR/var/cache/apt/archives"
-    fi
+    connect_chroot
+    sudo ln -sf build/.cache "$TGTDIR/.cache"
+#    if [[ -e "$CACHEDIR" ]]; then
+#        sudo mkdir -p "$TGTDIR/.cache"
+#        sudo rsync -a --exclude=/debs/ "$CACHEDIR/" "$TGTDIR/.cache"
+#    fi    
+#    if [[ -e "$CACHEDIR/debs" ]]; then
+#        sudo mkdir -p "$TGTDIR/var/cache/apt/archives"
+#        sudo rsync -a "$CACHEDIR/debs/" "$TGTDIR/var/cache/apt/archives"
+#    fi
     if ! which debootstrap; then
         sudo apt-get update
         sudo apt-get install debootstrap
     fi
-    sudo debootstrap --arch="$DISTARCH" --variant=minbase --keep-debootstrap-dir \
+    sudo debootstrap --arch="$DISTARCH" --variant=minbase \
         --keyring="$DISTKEYRING" "$DISTNAME" "$TGTDIR" "$DISTURL"
     sudo cp "$0" "$TGTDIR/inchroot.sh"
     chroot_do chmod 755 "inchroot.sh"
@@ -169,21 +187,16 @@ if ! test -e "$TGTDIR/.installed"; then
     # for more security, select a uid that is not used inside the host system
     freeuid=11723; while grep $freeuid /etc/passwd; do let 'freeuid++'; done
     chroot_do "./inchroot.sh" install $freeuid
-    mkdir -p "$CACHEDIR/debs"
-    sudo rsync -a "$TGTDIR/var/cache/apt/archives/" "$CACHEDIR/debs"
-    sudo rsync -a "$TGTDIR/.cache/" "$CACHEDIR/."
-    chroot_do rm -rf .cache
+#    mkdir -p "$CACHEDIR/debs"
+#    sudo rsync -a "$TGTDIR/var/cache/apt/archives/" "$CACHEDIR/debs"
+#    sudo rsync -a "$TGTDIR/.cache/" "$CACHEDIR/."
+#    chroot_do rm -rf .cache
     chroot_do touch .installed
 fi
 
-sudo rsync -av --del --exclude="/osinst*/" --exclude="/.cache/debs/" "$BASEDIR/" "$TGTDIR/build"
+sudo rsync -av -del --exclude=/.cache/ --exclude=/osinst.*/ "$BASEDIR/" "$TGTDIR/build"
 chroot_do chown -R build build
 sudo cp "$0" "$TGTDIR/inchroot.sh"
 chroot_do chmod 755 "inchroot.sh"
-exitcode=0
-if ! chroot_do su - build -c "/inchroot.sh build"; then
-    exitcode=1
-fi
-sudo rsync -a "$TGTDIR/build/.cache/" "$CACHEDIR/."
-exit $exitcode
+chroot_do su - build -c "/inchroot.sh build"
 
