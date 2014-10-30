@@ -75,10 +75,32 @@ case $PLATFORM in
         ;;
 esac
 
+export CACHEDIR=$(pwd)/.cache
+mkdir -p "$CACHEDIR"
+
 function download {
-    COMMAND="curl -C - -L $1 -o $2"
-    echo "$COMMAND"
-    $COMMAND || true
+    local url="$1"
+    local destfile="$2"
+    local cachefile="$CACHEDIR/${destfile##*/}"
+    local tmpfile="$cachefile.tmp"
+    if ! test -e "$cachefile"; then
+        rm -f "$tmpfile"
+        if curl -L -o "$tmpfile" "$url"; then
+            mv -f "$tmpfile" "$cachefile"
+        else
+            echo "failed to retrieve $url" >&2
+            exit 1
+        fi
+    fi
+    cp -vf "$cachefile" "$destfile"
+    return 0
+}
+
+function getgit {
+    local project="$1"
+    local tagname="$2"
+    local destfile="$3"
+    download "https://codeload.github.com/$project/tar.gz/$tagname" "$destfile"
 }
 
 function install_yasm {
@@ -88,9 +110,9 @@ function install_yasm {
     mkdir -p tools/bin
     pushd tools
     if [[ ! -e "$toolsbindir/yasm" ]]; then
-        git clone https://github.com/yasm/yasm.git
-        cd yasm
-        git checkout v1.3.0
+        getgit yasm/yasm v1.3.0 yasm.tgz
+        tar xzf yasm.tgz
+        cd yasm-1.3.0
         cmake .
         make -j4
         make install DESTDIR="$curdir/tools"

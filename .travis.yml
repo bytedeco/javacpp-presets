@@ -1,1 +1,5 @@
 script: sudo -E ./travis_run.sh
+cache:
+  directories:
+  - .cache
+
