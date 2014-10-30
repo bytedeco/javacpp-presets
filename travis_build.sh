@@ -180,6 +180,10 @@ sudo rsync -av --del --exclude="/osinst*/" --exclude="/.cache/debs/" "$BASEDIR/"
 chroot_do chown -R build build
 sudo cp "$0" "$TGTDIR/inchroot.sh"
 chroot_do chmod 755 "inchroot.sh"
-chroot_do su - build -c "/inchroot.sh build"
+exitcode=0
+if ! chroot_do su - build -c "/inchroot.sh build"; then
+    exitcode=1
+fi
 sudo rsync -a "$TGTDIR/build/.cache/" "$CACHEDIR/."
+exit $exitcode
 
