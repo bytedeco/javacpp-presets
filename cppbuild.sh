@@ -108,32 +108,6 @@ function getgit {
     download "https://codeload.github.com/$project/tar.gz/$tagname" "$destfile"
 }
 
-function install_yasm {
-    local curdir=$(pwd)
-    local toolsbindir="$curdir/tools/usr/local/bin"
-    local toolslibdir="$curdir/tools/usr/local/lib"
-    mkdir -p tools/bin
-    pushd tools
-    if [[ ! -e "$toolsbindir/yasm" ]]; then
-        getgit yasm/yasm v1.3.0 yasm.tgz
-        tar xzf yasm.tgz
-        cd yasm-1.3.0
-        cmake .
-        make -j$NCPUS
-        make install DESTDIR="$curdir/tools"
-    fi
-    export PATH="$toolsbindir:$PATH"
-    export LD_LIBRARY_PATH="$toolslibdir:$LD_LIBRARY_PATH"
-    yasm --version
-    popd
-}
-
-case $PLATFORM in
-    linux*)
-        install_yasm
-        ;;
-esac
-
 if [[ -z ${PROJECTS:-} ]]; then
     PROJECTS=(opencv ffmpeg flycapture libdc1394 libfreenect videoinput artoolkitplus flandmark fftw gsl llvm leptonica tesseract)
 fi

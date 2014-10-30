@@ -1,6 +1,6 @@
 script: ./travis_run.sh
 cache:
   directories:
-  - .cache
-  - $HOME/.m2
+    - .cache
+    - $HOME/.m2
 
