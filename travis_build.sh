@@ -120,7 +120,7 @@ deb $DISTURL $DISTNAME-security main restricted universe
 " > "/etc/apt/sources.list"
     apt-get update
     apt-get -y dist-upgrade
-    apt-get -y install openjdk-7-jdk maven build-essential
+    apt-get -y install openjdk-7-jdk maven build-essential curl
     install_yasm
     useradd -u $freeuid -d /build build
     touch .installed
