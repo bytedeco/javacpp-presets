@@ -80,7 +80,7 @@ function download {
     local tmpfile="$cachefile.tmp"
     if ! test -e "$cachefile"; then
         rm -f "$tmpfile"
-        if ! test -e "$CACHEDIR"; then mkdir -p "$CACHEDIR"; fi
+        mkdir -p "$CACHEDIR"
         if curl -L -o "$tmpfile" "$url"; then
             mv -f "$tmpfile" "$cachefile"
         else
