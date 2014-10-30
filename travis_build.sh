@@ -1,8 +1,6 @@
 #!/bin/bash
 
-# TODO:
-# - use travis-ci's directory caching for downloads
-# - use travis-ci's apt caching for debootstrap
+# TODO: expire items in .cache/
 
 set -Eex
 set -o pipefail
@@ -17,6 +15,7 @@ PROJECTS="opencv ffmpeg"
 BASEDIR="$(pwd)"
 TGTDIR="$BASEDIR/osinst.$DISTNAME.$DISTARCH"
 CACHEDIR="$BASEDIR/.cache"
+M2REPODIR="$CACHEDIR/m2repo"
 INCHROOT="$1"
 
 if ! NCPUS=$(grep -c ^proc /proc/cpuinfo); then
@@ -38,8 +37,8 @@ if [[ "$INCHROOT" == "build" ]]; then
     whoami
     uname -a
     free
-    df -h
-    cat /proc/cpuinfo
+    df -h || :
+    cat /proc/cpuinfo || :
 
     export JAVA_HOME="/usr/lib/jvm/java-7-openjdk-amd64"
     export PATH="$JAVA_HOME/bin:$PATH"
@@ -54,7 +53,10 @@ if [[ "$INCHROOT" == "build" ]]; then
     for project in $PROJECTS; do
         bash cppbuild.sh -platform linux-x86_64 install $project
     done
-    mvn -V -B install -Djava.awt.headless=true --projects "${PROJECTS// /,}",tests
+    mvn -V -B install \
+        -Djava.awt.headless=true \
+        -Dmaven.repo.local="$M2REPODIR" \
+        --projects "${PROJECTS// /,}",tests
 
     exit 0 
 fi
@@ -133,7 +135,6 @@ deb $DISTURL $DISTNAME-security main restricted universe
     apt-get -y install openjdk-7-jdk maven build-essential curl cmake
     install_yasm
     useradd -u $freeuid -d /build build
-    touch .installed
     exit 0
 fi
 
@@ -147,6 +148,15 @@ trap "release_chroot" EXIT
 
 if ! test -e "$TGTDIR/.installed"; then
     sudo rm -rf "$TGTDIR"
+    sudo mkdir -p "$TGTDIR"
+    if [[ -e "$CACHEDIR" ]]; then
+        sudo mkdir -p "$TGTDIR/.cache"
+        sudo rsync -a --exclude=/debs/ "$CACHEDIR/" "$TGTDIR/.cache"
+    fi    
+    if [[ -e "$CACHEDIR/debs" ]]; then
+        sudo mkdir -p "$TGTDIR/var/cache/apt/archives"
+        sudo rsync -a "$CACHEDIR/debs/" "$TGTDIR/var/cache/apt/archives"
+    fi
     if ! which debootstrap; then
         sudo apt-get update
         sudo apt-get install debootstrap
@@ -159,11 +169,17 @@ if ! test -e "$TGTDIR/.installed"; then
     # for more security, select a uid that is not used inside the host system
     freeuid=11723; while grep $freeuid /etc/passwd; do let 'freeuid++'; done
     chroot_do "./inchroot.sh" install $freeuid
+    mkdir -p "$CACHEDIR/debs"
+    sudo rsync -a "$TGTDIR/var/cache/apt/archives/" "$CACHEDIR/debs"
+    sudo rsync -a "$TGTDIR/.cache/" "$CACHEDIR/."
+    chroot_do rm -rf .cache
+    chroot_do touch .installed
 fi
 
-sudo rsync -av --del --exclude="/osinst*/" "$BASEDIR/" "$TGTDIR/build"
+sudo rsync -av --del --exclude="/osinst*/" --exclude="/.cache/debs/" "$BASEDIR/" "$TGTDIR/build"
 chroot_do chown -R build build
 sudo cp "$0" "$TGTDIR/inchroot.sh"
 chroot_do chmod 755 "inchroot.sh"
 chroot_do su - build -c "/inchroot.sh build"
+sudo rsync -a "$TGTDIR/build/.cache/" "$CACHEDIR/."
 

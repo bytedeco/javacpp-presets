@@ -2,5 +2,4 @@ script: ./travis_build.sh
 cache:
   directories:
     - .cache
-    - $HOME/.m2
 
