@@ -9,6 +9,9 @@ export TZ=UTC
 distname=precise
 tgtdir="$(pwd)/osinst"
 
+set
+whoami
+uname -a
 java -version
 mvn -V clean
 for m in opencv ffmpeg; do

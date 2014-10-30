@@ -19,27 +19,27 @@ patch -Np1 < ../../../ARToolKitPlus-$ARTOOLKITPLUS_VERSION.patch
 case $PLATFORM in
     android-arm)
         cmake -DCMAKE_TOOLCHAIN_FILE=android-arm.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
-        make -j4
+        make -j$NCPUS
         make install
         ;;
      android-x86)
         cmake -DCMAKE_TOOLCHAIN_FILE=android-x86.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
-        make -j4
+        make -j$NCPUS
         make install
         ;;
     linux-x86)
         CC="gcc -m32" CXX="g++ -m32" cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
-        make -j4
+        make -j$NCPUS
         make install
         ;;
     linux-x86_64)
         CC="gcc -m64" CXX="g++ -m64" cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
-        make -j4
+        make -j$NCPUS
         make install
         ;;
     macosx-*)
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
-        make -j4
+        make -j$NCPUS
         make install
         ;;
     windows-x86)

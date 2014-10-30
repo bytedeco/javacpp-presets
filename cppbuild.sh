@@ -2,6 +2,11 @@
 # Scripts to build and install native C++ libraries
 set -eux
 
+if ! NCPUS=$(grep -c ^proc /proc/cpuinfo); then
+    NCPUS=4
+fi
+export NCPUS
+
 KERNEL=(`uname -s | tr [A-Z] [a-z]`)
 ARCH=(`uname -m | tr [A-Z] [a-z]`)
 case $KERNEL in
@@ -114,7 +119,7 @@ function install_yasm {
         tar xzf yasm.tgz
         cd yasm-1.3.0
         cmake .
-        make -j4
+        make -j$NCPUS
         make install DESTDIR="$curdir/tools"
     fi
     export PATH="$toolsbindir:$PATH"
