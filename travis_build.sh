@@ -41,7 +41,7 @@ if [[ "$INCHROOT" == "build" ]]; then
     free
     df -h || :
     du -sh "$CACHEDIR" || :
-    cat /proc/cpuinfo || :
+    cat /proc/cpuinfo | tail -n50
 
     export JAVA_HOME="/usr/lib/jvm/java-7-openjdk-amd64"
     export PATH="$JAVA_HOME/bin:$PATH"
