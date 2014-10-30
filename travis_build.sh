@@ -99,7 +99,7 @@ release_chroot() {
 
 chroot_do() {
     connect_chroot
-    sudo chroot "$TGTDIR" "$@"
+    sudo -E chroot "$TGTDIR" "$@"
 }
 
 function download {
