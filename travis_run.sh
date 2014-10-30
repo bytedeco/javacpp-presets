@@ -3,6 +3,9 @@
 set -Eeux
 set -o pipefail
 
+export LC_ALL=C
+export TZ=UTC
+
 distname=precise
 tgtdir="$(pwd)/osinst"
 
