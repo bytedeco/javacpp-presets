@@ -5,6 +5,7 @@ set -eux
 if ! NCPUS=$(grep -c ^proc /proc/cpuinfo); then
     NCPUS=4
 fi
+if (( NCPUS > 4 )); then NCPUS=4; fi
 export NCPUS
 
 KERNEL=(`uname -s | tr [A-Z] [a-z]`)

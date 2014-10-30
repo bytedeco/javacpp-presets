@@ -23,6 +23,8 @@ if ! NCPUS=$(grep -c ^proc /proc/cpuinfo); then
     NCPUS=4
 fi
 
+if (( NCPUS > 4 )); then NCPUS=4; fi
+
 if [[ -n "$INCHROOT" ]]; then
     export PATH="/usr/local/bin:$PATH"
     export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
@@ -35,6 +37,9 @@ if [[ "$INCHROOT" == "build" ]]; then
     pwd
     whoami
     uname -a
+    free
+    df -h
+    cat /proc/cpuinfo
 
     export JAVA_HOME="/usr/lib/jvm/java-7-openjdk-amd64"
     export PATH="$JAVA_HOME/bin:$PATH"
@@ -146,7 +151,7 @@ if ! test -e "$TGTDIR/.installed"; then
         sudo apt-get update
         sudo apt-get install debootstrap
     fi
-    sudo debootstrap --arch="$DISTARCH" --variant=minbase \
+    sudo debootstrap --arch="$DISTARCH" --variant=minbase --keep-debootstrap-dir \
         --keyring="$DISTKEYRING" "$DISTNAME" "$TGTDIR" "$DISTURL"
     sudo cp "$0" "$TGTDIR/inchroot.sh"
     chroot_do chmod 755 "inchroot.sh"
