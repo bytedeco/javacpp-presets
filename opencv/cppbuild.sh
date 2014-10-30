@@ -22,7 +22,7 @@ else
 
     mkdir -p $PLATFORM
     cd $PLATFORM
-    tar -xzvf ../opencv-$OPENCV_VERSION.tar.gz
+    tar -xzf ../opencv-$OPENCV_VERSION.tar.gz
     cd opencv-$OPENCV_VERSION
 fi
 

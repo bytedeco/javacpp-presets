@@ -30,9 +30,9 @@ else
     mkdir -p $PLATFORM
     cd $PLATFORM
     INSTALL_PATH=`pwd`
-    tar -xzvf ../lame-3.99.5.tar.gz
-    tar -xjvf ../last_stable_x264.tar.bz2
-    tar -xjvf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
+    tar -xzf ../lame-3.99.5.tar.gz
+    tar -xjf ../last_stable_x264.tar.bz2
+    tar -xjf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
     LAME=lame-3.99.5
     X264=`echo x264-snapshot-*`
 fi
