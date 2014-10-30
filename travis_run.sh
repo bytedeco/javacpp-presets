@@ -109,8 +109,8 @@ function install_yasm {
     yasm --version
 }
 
-
 if [[ "$INCHROOT" == "install" ]]; then
+    freeuid="$2"
     echo "deb $DISTURL $DISTNAME main restricted universe
 deb $DISTURL $DISTNAME-updates main restricted universe
 deb $DISTURL $DISTNAME-security main restricted universe
@@ -119,7 +119,7 @@ deb $DISTURL $DISTNAME-security main restricted universe
     apt-get -y dist-upgrade
     apt-get -y install openjdk-7-jdk maven build-essential
     install_yasm
-    useradd -d /build build
+    useradd -u $freeuid -d /build build
     touch .installed
     exit 0
 fi
@@ -142,7 +142,10 @@ if ! test -e "$TGTDIR/.installed"; then
         --keyring="$DISTKEYRING" "$DISTNAME" "$TGTDIR" "$DISTURL"
     sudo cp "$0" "$TGTDIR/inchroot.sh"
     chroot_do chmod 755 "inchroot.sh"
-    chroot_do "./inchroot.sh" install
+
+    # for more security, select a uid that is not used inside the host system
+    freeuid=11723; while grep $freeuid /etc/passwd; do let 'freeuid++'; done
+    chroot_do "./inchroot.sh" install $freeuid
 fi
 
 sudo rsync -av --del --exclude=/osinst/ "$BASEDIR/" "$TGTDIR/build"
