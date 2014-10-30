@@ -1,6 +1,6 @@
 #!/bin/bash
 # Scripts to build and install native C++ libraries
-set -eu
+set -eux
 
 KERNEL=(`uname -s | tr [A-Z] [a-z]`)
 ARCH=(`uname -m | tr [A-Z] [a-z]`)
@@ -80,6 +80,32 @@ function download {
     echo "$COMMAND"
     $COMMAND || true
 }
+
+function install_yasm {
+    local curdir=$(pwd)
+    local toolsbindir="$curdir/tools/usr/local/bin"
+    local toolslibdir="$curdir/tools/usr/local/lib"
+    mkdir -p tools/bin
+    pushd tools
+    if [[ ! -e "$toolsbindir/yasm" ]]; then
+        git clone https://github.com/yasm/yasm.git
+        cd yasm
+        git checkout v1.3.0
+        cmake .
+        make -j4
+        make install DESTDIR="$curdir/tools"
+    fi
+    export PATH="$toolsbindir:$PATH"
+    export LD_LIBRARY_PATH="$toolslibdir:$LD_LIBRARY_PATH"
+    yasm --version
+    popd
+}
+
+case $PLATFORM in
+    linux*)
+        install_yasm
+        ;;
+esac
 
 if [[ -z ${PROJECTS:-} ]]; then
     PROJECTS=(opencv ffmpeg flycapture libdc1394 libfreenect videoinput artoolkitplus flandmark fftw gsl llvm leptonica tesseract)
