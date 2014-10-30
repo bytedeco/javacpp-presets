@@ -2,4 +2,8 @@ script: ./travis_build.sh
 cache:
   directories:
     - .cache
+env:
+  - DISTNAME=precise
+  - DISTNAME=lucid
+  - DISTNAME=trusty
 
