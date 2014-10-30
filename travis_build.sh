@@ -46,6 +46,7 @@ if [[ "$INCHROOT" == "build" ]]; then
     export JAVA_HOME="/usr/lib/jvm/java-7-openjdk-amd64"
     export PATH="$JAVA_HOME/bin:$PATH"
     export LD_LIBRARY_PATH="$JAVA_HOME/lib:$LD_LIBRARY_PATH"
+    export MAVEN_OPTS="-Dmaven.repo.local=$M2REPODIR -Djava.awt.headless=true -Dmaven.test.failure.ignore=false"
 
     which java
     java -version
@@ -57,8 +58,6 @@ if [[ "$INCHROOT" == "build" ]]; then
         bash cppbuild.sh -platform linux-x86_64 install $project
     done
     mvn -V -B install \
-        -Djava.awt.headless=true \
-        -Dmaven.repo.local="$M2REPODIR" \
         --projects "${PROJECTS// /,}",tests
 
     exit 0 
