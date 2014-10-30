@@ -164,6 +164,14 @@ fi
 
 trap "release_chroot" EXIT
 
+aptinst() {
+    local testbin="$1"
+    local prog="$2"
+    if [[ -z "$prog" ]]; then prog="$testbin"; fi
+    if which $testbin; then return 0; fi
+    sudo apt-get install $prog
+}
+
 if ! test -e "$TGTDIR/.installed"; then
     sudo rm -rf "$TGTDIR"
     sudo mkdir -p "$TGTDIR"
@@ -177,6 +185,9 @@ if ! test -e "$TGTDIR/.installed"; then
 #        sudo mkdir -p "$TGTDIR/var/cache/apt/archives"
 #        sudo rsync -a "$CACHEDIR/debs/" "$TGTDIR/var/cache/apt/archives"
 #    fi
+    sudo apt-get update
+    aptinst debootstrap
+    aptinst gpgv gpgv
     if ! which debootstrap; then
         sudo apt-get update
         sudo apt-get install debootstrap
