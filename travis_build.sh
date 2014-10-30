@@ -10,7 +10,7 @@ set -o pipefail
 export LC_ALL=C
 export TZ=UTC
 DISTNAME=precise
-DISTURL="http://de.archive.ubuntu.com/ubuntu"
+DISTURL="http://archive.ubuntu.com/ubuntu"
 DISTKEYRING="/usr/share/keyrings/ubuntu-archive-keyring.gpg"
 DISTARCH="amd64"
 PROJECTS="opencv ffmpeg"
