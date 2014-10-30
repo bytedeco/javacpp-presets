@@ -10,6 +10,7 @@ distname=precise
 tgtdir="$(pwd)/osinst"
 
 set
+pwd
 whoami
 uname -a
 java -version
