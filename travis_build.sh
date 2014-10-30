@@ -37,12 +37,11 @@ if [[ "$INCHROOT" == "build" ]]; then
     which javac
     javac -version
     which mvn
-    #mvn -V clean
 
     for project in $PROJECTS; do
         bash cppbuild.sh -platform linux-x86_64 install $project
     done
-    mvn -V install --projects "${PROJECTS// /,}"
+    mvn -V install -Djava.awt.headless=true --projects "${PROJECTS// /,}",tests
 
     exit 0 
 fi

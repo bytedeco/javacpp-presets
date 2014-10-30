@@ -1,4 +1,4 @@
-script: ./travis_run.sh
+script: ./travis_build.sh
 cache:
   directories:
     - .cache
