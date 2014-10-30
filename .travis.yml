@@ -6,4 +6,5 @@ env:
   - DISTNAME=precise
   - DISTNAME=lucid
   - DISTNAME=trusty
+  - DISTNAME=utopic
 
