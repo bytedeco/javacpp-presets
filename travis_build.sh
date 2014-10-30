@@ -107,7 +107,7 @@ function install_yasm {
         cd yasm-1.3.0
         cmake .
         make -j$NCPUS
-        make install DESTDIR="$curdir/tools"
+        make install
         cd ..
     fi
     yasm --version
