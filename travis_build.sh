@@ -23,6 +23,10 @@ if ! NCPUS=$(grep -c ^proc /proc/cpuinfo); then
     NCPUS=4
 fi
 
+if [[ -n "$INCHROOT" ]]; then
+    export PATH="/usr/local/bin:$PATH"
+    export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
+fi
 
 if [[ "$INCHROOT" == "build" ]]; then
     set -Eex
@@ -45,7 +49,7 @@ if [[ "$INCHROOT" == "build" ]]; then
     for project in $PROJECTS; do
         bash cppbuild.sh -platform linux-x86_64 install $project
     done
-    mvn -V install -Djava.awt.headless=true --projects "${PROJECTS// /,}",tests
+    mvn -V -B install -Djava.awt.headless=true --projects "${PROJECTS// /,}",tests
 
     exit 0 
 fi
