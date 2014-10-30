@@ -26,4 +26,5 @@
 /leptonica/cppbuild/
 /tesseract/cppbuild/
 /tools/
+/.cache/
 

@@ -12,7 +12,7 @@ tgtdir="$(pwd)/osinst"
 java -version
 mvn -V clean
 for m in opencv ffmpeg; do
-    bash cppbuild.sh -platform x86_64 install $m
+    bash cppbuild.sh -platform linux-x86_64 install $m
 done
 mvn -V install --projects opencv,ffmpeg
 

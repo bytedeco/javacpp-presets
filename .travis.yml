@@ -1,3 +1,5 @@
+language: java
+before_install: sudo install debootstrap
 script: sudo -E ./travis_run.sh
 cache:
   directories:
