@@ -7,6 +7,8 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
+X264STATICOPTS="--enable-static --disable-opencl --disable-avs --disable-cli --disable-ffms --disable-gpac --disable-lavf --disable-swscale"
+
 if [[ $PLATFORM == windows* ]]; then
     FFMPEG_VERSION=20140716-git-faafd1e
     [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
@@ -86,7 +88,7 @@ case $PLATFORM in
         make -j4
         make install
         cd ../$X264
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --host=x86_64-linux
+        ./configure --prefix=$INSTALL_PATH $X264STATICOPTS --enable-pic --host=x86_64-linux
         make -j4
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
