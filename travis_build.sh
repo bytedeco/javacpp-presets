@@ -9,13 +9,13 @@ set -o pipefail
 
 export LC_ALL=C
 export TZ=UTC
-DISTNAME=precise
+DISTNAME="precise"
 DISTURL="http://archive.ubuntu.com/ubuntu"
 DISTKEYRING="/usr/share/keyrings/ubuntu-archive-keyring.gpg"
 DISTARCH="amd64"
 PROJECTS="opencv ffmpeg"
 BASEDIR="$(pwd)"
-TGTDIR="$BASEDIR/osinst"
+TGTDIR="$BASEDIR/osinst.$DISTNAME.$DISTARCH"
 CACHEDIR="$BASEDIR/.cache"
 INCHROOT="$1"
 
@@ -80,6 +80,7 @@ function download {
     local tmpfile="$cachefile.tmp"
     if ! test -e "$cachefile"; then
         rm -f "$tmpfile"
+        if ! test -e "$CACHEDIR"; then mkdir -p "$CACHEDIR"; fi
         if curl -L -o "$tmpfile" "$url"; then
             mv -f "$tmpfile" "$cachefile"
         else
@@ -151,7 +152,7 @@ if ! test -e "$TGTDIR/.installed"; then
     chroot_do "./inchroot.sh" install $freeuid
 fi
 
-sudo rsync -av --del --exclude=/osinst/ "$BASEDIR/" "$TGTDIR/build"
+sudo rsync -av --del --exclude="/osinst*/" "$BASEDIR/" "$TGTDIR/build"
 chroot_do chown -R build build
 sudo cp "$0" "$TGTDIR/inchroot.sh"
 chroot_do chmod 755 "inchroot.sh"
