@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# TODO:
+# - use travis-ci's directory caching for downloads
+# - use travis-ci's apt caching for debootstrap
+
 set -Eex
 set -o pipefail
 
