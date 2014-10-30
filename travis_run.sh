@@ -6,10 +6,12 @@ set -o pipefail
 distname=precise
 tgtdir="$(pwd)/osinst"
 
+java -version
+mvn -V clean
 for m in opencv ffmpeg; do
     bash cppbuild.sh -platform x86_64 install $m
 done
-mvn install --projects opencv,ffmpeg
+mvn -V install --projects opencv,ffmpeg
 
 exit 0 
 
