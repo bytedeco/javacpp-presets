@@ -77,7 +77,7 @@ public class FFmpegTest extends Base {
      *
      * @throws org.bytedeco.javacv.FrameRecorder.Exception
      */
-    @Ignore
+    //@Ignore
     @Test
     public void test() throws FrameRecorder.Exception {
         File outFile = getTempFile(FFmpegTest.class.getName() + ".avi");
