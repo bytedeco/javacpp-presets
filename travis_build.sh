@@ -26,6 +26,8 @@ if (( NCPUS > 4 )); then NCPUS=4; fi
 
 if [[ ! -e "$CACHEDIR" ]]; then mkdir -p "$CACHEDIR"; fi
 
+du -sh "$CACHEDIR" || :
+
 if [[ -n "$INCHROOT" ]]; then
     export PATH="/usr/local/bin:$PATH"
     export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
