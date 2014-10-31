@@ -3,10 +3,10 @@ cache:
   directories:
     - .cache
 env:
-  - DISTNAME=precise
+  - DISTNAME=squeeze
   - DISTNAME=lucid
+  - DISTNAME=wheezy
+  - DISTNAME=precise
 #  - DISTNAME=trusty
   - DISTNAME=utopic
-  - DISTNAME=wheezy
-  - DISTNAME=squeeze
 
