@@ -5,6 +5,6 @@ cache:
 env:
   - DISTNAME=precise
   - DISTNAME=lucid
-  - DISTNAME=trusty
+#  - DISTNAME=trusty
   - DISTNAME=utopic
 
