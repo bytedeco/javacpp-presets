@@ -7,4 +7,6 @@ env:
   - DISTNAME=lucid
 #  - DISTNAME=trusty
   - DISTNAME=utopic
+  - DISTNAME=wheezy
+  - DISTNAME=squeeze
 

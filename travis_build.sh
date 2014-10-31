@@ -8,16 +8,18 @@ set -o pipefail
 export LC_ALL=C
 export TZ=UTC
 export DISTNAME="${DISTNAME:-precise}"
+BASEDIR="$(pwd)"
 DISTURL="http://archive.ubuntu.com/ubuntu"
-DISTKEYRING="/usr/share/keyrings/ubuntu-archive-keyring.gpg"
+DISTKEYRING="$BASEDIR/ubuntu-archive-keyring.gpg"
 export DISTARCH="${DISTARCH:-amd64}"
 DISTPARTS="main universe" # main restricted universe multiverse
 PROJECTS="opencv ffmpeg"
-BASEDIR="$(pwd)"
 TGTDIR="$BASEDIR/osinst.$DISTNAME.$DISTARCH"
 CACHEDIR="$BASEDIR/.cache"
 M2REPODIR="$CACHEDIR/m2repo"
 INCHROOT="$1"
+DEBOOTSTRAPOPTS=""
+ISDEBIAN=0
 export CCACHE_DIR="$CACHEDIR/ccache"
 
 if ! NCPUS=$(grep -c ^proc /proc/cpuinfo); then
@@ -28,6 +30,16 @@ if (( NCPUS > 4 )); then NCPUS=4; fi
 if [[ ! -e "$CACHEDIR" ]]; then mkdir -p "$CACHEDIR"; fi
 
 du -sh "$CACHEDIR" || :
+
+# check if we want to install a debian flavor
+DEBURL="http://ftp.debian.org/debian"
+DEBKEYRING="$BASEDIR/debian-archive-keyring.gpg"
+if [[ "$DISTNAME" == "wheezy" ]] || [[ "$DISTNAME" == "squeeze" ]]; then
+    DISTURL="$DEBURL"
+    DISTKEYRING="$DEBKEYRING"
+    DISTPARTS="main contrib" # main non-free contrib
+    ISDEBIAN=1
+fi
 
 if [[ -n "$INCHROOT" ]]; then
     export PATH="/usr/local/bin:$PATH"
@@ -153,17 +165,16 @@ function getgit {
 }
 
 function install_yasm {
-    local curdir=$(pwd)
-    if [[ ! -e "/usr/local/bin/yasm" ]]; then
-        getgit yasm/yasm v1.3.0
-        tar xzf yasm-v1.3.0.tar.gz
-        cd yasm-1.3.0
-        cmake .
-        make -j$NCPUS
-        make install
-        cd ..
-    fi
+    if [[ -e "/usr/local/bin/yasm" ]]; then return 0; fi
+    local tmpd=$(mktemp -d)
+    pushd "$tmpd"
+    getgit yasm/yasm v1.3.0
+    tar xzf yasm-v1.3.0.tar.gz --strip-components=1
+    cmake .
+    make -j$NCPUS
+    make install
     yasm --version
+    popd
 }
 
 install_maven() {
@@ -188,11 +199,18 @@ install_cmake() {
 if [[ "$INCHROOT" == "install" ]]; then
     freeuid="$2"
     if ! test -e /.debs.done; then
-        echo "deb $DISTURL $DISTNAME $DISTPARTS
+        if (( ISDEBIAN )); then
+            echo "deb $DISTURL $DISTNAME $DISTPARTS
+deb $DISTURL $DISTNAME-updates   $DISTPARTS
+deb http://security.debian.org/ $DISTNAME/updates $DISTPARTS
+" > "/etc/apt/sources.list"
+        else
+            echo "deb $DISTURL $DISTNAME $DISTPARTS
 deb $DISTURL $DISTNAME-updates   $DISTPARTS
 deb $DISTURL $DISTNAME-security  $DISTPARTS
 #deb $DISTURL $DISTNAME-backports $DISTPARTS
 " > "/etc/apt/sources.list"
+        fi
         apt-get -y install gpgv
         apt-get update
         apt-get -y dist-upgrade
@@ -237,9 +255,14 @@ if ! test -e "$TGTDIR/.installed"; then
     sudo ln -sf build/.cache "$TGTDIR/.cache"
     aptinst debootstrap
     sudo debootstrap --arch="$DISTARCH" --variant=minbase \
+        $DEBOOTSTRAPOPTS \
         --keyring="$DISTKEYRING" "$DISTNAME" "$TGTDIR" "$DISTURL"
     sudo cp "$0" "$TGTDIR/inchroot.sh"
     chroot_do chmod 755 "inchroot.sh"
+
+    if (( ISDEBIAN )); then
+        sudo cp /etc/resolv.conf "$TGTDIR/etc/resolv.conf"
+    fi
 
     # for more security, select a uid that is not used inside the host system
     freeuid=11723; while grep $freeuid /etc/passwd; do let 'freeuid++'; done
