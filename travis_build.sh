@@ -11,6 +11,7 @@ export DISTNAME="${DISTNAME:-precise}"
 DISTURL="http://archive.ubuntu.com/ubuntu"
 DISTKEYRING="/usr/share/keyrings/ubuntu-archive-keyring.gpg"
 export DISTARCH="${DISTARCH:-amd64}"
+DISTPARTS="main universe" # main restricted universe multiverse
 PROJECTS="opencv ffmpeg"
 BASEDIR="$(pwd)"
 TGTDIR="$BASEDIR/osinst.$DISTNAME.$DISTARCH"
@@ -33,6 +34,23 @@ if [[ -n "$INCHROOT" ]]; then
     export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 fi
 
+init_build_env() {
+    export JAVA_HOME="/usr/lib/jvm/java-7-openjdk-amd64"
+    if [[ ! -e "$JAVA_HOME" ]]; then
+        export JAVA_HOME="/usr/lib/jvm/java-6-openjdk-amd64"
+    fi
+    export PATH="$JAVA_HOME/bin:/opt/maven/bin:/usr/lib/ccache:$PATH"
+    export LD_LIBRARY_PATH="$JAVA_HOME/lib:$LD_LIBRARY_PATH"
+    export MAVEN_OPTS="-Dmaven.repo.local=$M2REPODIR -Djava.awt.headless=true -Dmaven.test.failure.ignore=false"
+
+}
+
+if [[ "$INCHROOT" == "enter_stage2" ]]; then
+    init_build_env
+    su - build -c /bin/bash -l
+    exit 0
+fi
+
 if [[ "$INCHROOT" == "build" ]]; then
     set -Eex
 
@@ -45,16 +63,15 @@ if [[ "$INCHROOT" == "build" ]]; then
     du -sh "$CACHEDIR" || :
     cat /proc/cpuinfo | tail -n50
 
-    export JAVA_HOME="/usr/lib/jvm/java-7-openjdk-amd64"
-    export PATH="$JAVA_HOME/bin:$PATH"
-    export LD_LIBRARY_PATH="$JAVA_HOME/lib:$LD_LIBRARY_PATH"
-    export MAVEN_OPTS="-Dmaven.repo.local=$M2REPODIR -Djava.awt.headless=true -Dmaven.test.failure.ignore=false"
+    init_build_env
 
     which java
     java -version
     which javac
     javac -version
     which mvn
+
+    ls -l /usr/bin/g++*
 
     for project in $PROJECTS; do
         bash cppbuild.sh -platform linux-x86_64 install $project
@@ -105,6 +122,9 @@ chroot_do() {
 function download {
     local url="$1"
     local destfile="$2"
+    if [[ -z "$destfile" ]]; then
+        destfile="${url##*/}"
+    fi
     local cachefile="$CACHEDIR/${destfile##*/}"
     local tmpfile="$cachefile.tmp"
     if ! test -e "$cachefile"; then
@@ -125,14 +145,17 @@ function getgit {
     local project="$1"
     local tagname="$2"
     local destfile="$3"
+    if [[ -z "$destfile" ]]; then
+        destfile="${project##*/}-$tagname.tar.gz"
+    fi
     download "https://codeload.github.com/$project/tar.gz/$tagname" "$destfile"
 }
 
 function install_yasm {
     local curdir=$(pwd)
     if [[ ! -e "/usr/local/bin/yasm" ]]; then
-        getgit yasm/yasm v1.3.0 yasm.tgz
-        tar xzf yasm.tgz
+        getgit yasm/yasm v1.3.0
+        tar xzf yasm-v1.3.0.tar.gz
         cd yasm-1.3.0
         cmake .
         make -j$NCPUS
@@ -142,56 +165,75 @@ function install_yasm {
     yasm --version
 }
 
+install_maven() {
+    mkdir -p /opt/maven
+    pushd /opt/maven
+    download http://ftp-stud.hs-esslingen.de/pub/Mirrors/ftp.apache.org/dist/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.tar.gz
+    tar xzf apache-maven-3.2.3-bin.tar.gz --strip-components=1
+    popd
+}
+
+install_cmake() {
+    local tmpd=$(mktemp -d)
+    pushd "$tmpd"
+    download http://www.cmake.org/files/v2.8/cmake-2.8.12.2.tar.gz
+    tar xzf cmake-2.8.12.2.tar.gz --strip-components=1
+    ./configure --parallel=$NCPUS
+    make -j$NCPUS
+    make install
+    popd
+}
+
 if [[ "$INCHROOT" == "install" ]]; then
     freeuid="$2"
-    echo "deb $DISTURL $DISTNAME main restricted universe
-deb $DISTURL $DISTNAME-updates main restricted universe
-deb $DISTURL $DISTNAME-security main restricted universe
+    if ! test -e /.debs.done; then
+        echo "deb $DISTURL $DISTNAME $DISTPARTS
+deb $DISTURL $DISTNAME-updates   $DISTPARTS
+deb $DISTURL $DISTNAME-security  $DISTPARTS
+#deb $DISTURL $DISTNAME-backports $DISTPARTS
 " > "/etc/apt/sources.list"
-    apt-get update
-    apt-get -y dist-upgrade
-    apt-get -y install openjdk-7-jdk maven build-essential curl cmake ccache
+        apt-get -y install gpgv
+        apt-get update
+        apt-get -y dist-upgrade
+        apt-get -y install openjdk-7-jdk || apt-get -y install openjdk-6-jdk
+        apt-get -y install build-essential curl ccache # cmake
+        touch /.debs.done
+    fi
+    install_cmake
     install_yasm
+    install_maven
     useradd -u $freeuid -d /build build
     exit 0
 fi
 
-if [[ -n "$INCHROOT" ]]; then
-    echo "unknown chroot cmd: $INCHROOT" >&2
-    exit 1
+trap "release_chroot" EXIT
+
+if [[ "$INCHROOT" == "enter" ]]; then
+    chroot_do su - build -c "/build/${0##*/} enter_stage2"
 fi
 
-
-trap "release_chroot" EXIT
+aptUpdated=""
 
 aptinst() {
     local testbin="$1"
     local prog="$2"
     if [[ -z "$prog" ]]; then prog="$testbin"; fi
     if which $testbin; then return 0; fi
+    if [[ -z "$aptUpdated" ]]; then
+        sudo apt-get update
+        aptUpdated=1
+    fi        
     sudo apt-get install $prog
 }
 
 if ! test -e "$TGTDIR/.installed"; then
-    sudo rm -rf "$TGTDIR"
-    sudo mkdir -p "$TGTDIR"
+    if ! "$TGTDIR/.debs.done"; then
+        sudo rm -rf "$TGTDIR"
+        sudo mkdir -p "$TGTDIR"
+    fi
     connect_chroot
     sudo ln -sf build/.cache "$TGTDIR/.cache"
-#    if [[ -e "$CACHEDIR" ]]; then
-#        sudo mkdir -p "$TGTDIR/.cache"
-#        sudo rsync -a --exclude=/debs/ "$CACHEDIR/" "$TGTDIR/.cache"
-#    fi    
-#    if [[ -e "$CACHEDIR/debs" ]]; then
-#        sudo mkdir -p "$TGTDIR/var/cache/apt/archives"
-#        sudo rsync -a "$CACHEDIR/debs/" "$TGTDIR/var/cache/apt/archives"
-#    fi
-    sudo apt-get update
     aptinst debootstrap
-    aptinst gpgv gpgv
-    if ! which debootstrap; then
-        sudo apt-get update
-        sudo apt-get install debootstrap
-    fi
     sudo debootstrap --arch="$DISTARCH" --variant=minbase \
         --keyring="$DISTKEYRING" "$DISTNAME" "$TGTDIR" "$DISTURL"
     sudo cp "$0" "$TGTDIR/inchroot.sh"
@@ -200,16 +242,10 @@ if ! test -e "$TGTDIR/.installed"; then
     # for more security, select a uid that is not used inside the host system
     freeuid=11723; while grep $freeuid /etc/passwd; do let 'freeuid++'; done
     chroot_do "./inchroot.sh" install $freeuid
-#    mkdir -p "$CACHEDIR/debs"
-#    sudo rsync -a "$TGTDIR/var/cache/apt/archives/" "$CACHEDIR/debs"
-#    sudo rsync -a "$TGTDIR/.cache/" "$CACHEDIR/."
-#    chroot_do rm -rf .cache
     chroot_do touch .installed
 fi
 
-sudo rsync -av -del --exclude=/.cache/ --exclude=/osinst.*/ "$BASEDIR/" "$TGTDIR/build"
+sudo rsync -av -del --exclude=/.cache/ --exclude=/.git/ --exclude=/osinst.*/ "$BASEDIR/" "$TGTDIR/build"
 chroot_do chown -R build build
-sudo cp "$0" "$TGTDIR/inchroot.sh"
-chroot_do chmod 755 "inchroot.sh"
-chroot_do su - build -c "/inchroot.sh build"
+chroot_do su - build -c "/build/${0##*/} build"
 
