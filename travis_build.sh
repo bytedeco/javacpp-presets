@@ -245,7 +245,7 @@ if ! test -e "$TGTDIR/.installed"; then
     chroot_do touch .installed
 fi
 
-sudo rsync -av -del --exclude=/.cache/ --exclude=/.git/ --exclude=/osinst.*/ "$BASEDIR/" "$TGTDIR/build"
+sudo rsync -av --delete --exclude=/.cache/ --exclude=/.git/ --exclude=/osinst.*/ "$BASEDIR/" "$TGTDIR/build"
 chroot_do chown -R build build
 chroot_do su - build -c "/build/${0##*/} build"
 
