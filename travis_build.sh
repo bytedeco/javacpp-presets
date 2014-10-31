@@ -37,7 +37,7 @@ fi
 init_build_env() {
     export JAVA_HOME="/usr/lib/jvm/java-7-openjdk-amd64"
     if [[ ! -e "$JAVA_HOME" ]]; then
-        export JAVA_HOME="/usr/lib/jvm/java-6-openjdk-amd64"
+        export JAVA_HOME="/usr/lib/jvm/java-6-openjdk"
     fi
     export PATH="$JAVA_HOME/bin:/opt/maven/bin:/usr/lib/ccache:$PATH"
     export LD_LIBRARY_PATH="$JAVA_HOME/lib:$LD_LIBRARY_PATH"
@@ -47,7 +47,7 @@ init_build_env() {
 
 if [[ "$INCHROOT" == "enter_stage2" ]]; then
     init_build_env
-    su - build -c /bin/bash -l
+    /bin/bash
     exit 0
 fi
 
@@ -71,12 +71,13 @@ if [[ "$INCHROOT" == "build" ]]; then
     javac -version
     which mvn
 
-    ls -l /usr/bin/g++*
+    which g++
 
     for project in $PROJECTS; do
         bash cppbuild.sh -platform linux-x86_64 install $project
     done
     mvn -V -B install \
+        -Dmaven.repo.local=$M2REPODIR -Djava.awt.headless=true -Dmaven.test.failure.ignore=false \
         --projects "${PROJECTS// /,}",tests
 
     exit 0 
@@ -209,7 +210,8 @@ fi
 trap "release_chroot" EXIT
 
 if [[ "$INCHROOT" == "enter" ]]; then
-    chroot_do su - build -c "/build/${0##*/} enter_stage2"
+    chroot_do "/build/${0##*/}" enter_stage2
+    exit 0
 fi
 
 aptUpdated=""
