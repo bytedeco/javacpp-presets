@@ -54,7 +54,13 @@ init_build_env() {
     export PATH="$JAVA_HOME/bin:/opt/maven/bin:/usr/lib/ccache:$PATH"
     export LD_LIBRARY_PATH="$JAVA_HOME/lib:$LD_LIBRARY_PATH"
     export MAVEN_OPTS="-Dmaven.repo.local=$M2REPODIR -Djava.awt.headless=true -Dmaven.test.failure.ignore=false"
+}
 
+dump_stdumps() {
+    find "$BASEDIR" -name 'hs_err_pid*.log' | while read l; do
+        echo "$l:"
+        cat "$l"
+    done
 }
 
 if [[ "$INCHROOT" == "enter_stage2" ]]; then
@@ -84,15 +90,20 @@ if [[ "$INCHROOT" == "build" ]]; then
     which mvn
 
     which g++ | grep cache
+    failed=0
 
     for project in $PROJECTS; do
-        bash cppbuild.sh -platform linux-x86_64 install $project
+        bash cppbuild.sh -platform linux-x86_64 install $project || failed=1
     done
-    mvn -V -B install \
-        -Dmaven.repo.local=$M2REPODIR -Djava.awt.headless=true -Dmaven.test.failure.ignore=false \
-        --projects "${PROJECTS// /,}",tests
+    if ! (( failed )); then
+        mvn -V -B install \
+            -Dmaven.repo.local=$M2REPODIR -Djava.awt.headless=true -Dmaven.test.failure.ignore=false \
+            --projects "${PROJECTS// /,}",tests || failed=1
+    fi
 
-    exit 0 
+    dump_stdumps
+
+    exit $failed
 fi
 
 connectDir() {
