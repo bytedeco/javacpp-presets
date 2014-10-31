@@ -70,7 +70,7 @@ if [[ "$INCHROOT" == "build" ]]; then
     pwd
     whoami
     uname -a
-    free
+    free || :
     df -h || :
     du -sh "$CACHEDIR" || :
     cat /proc/cpuinfo | tail -n50
@@ -83,7 +83,7 @@ if [[ "$INCHROOT" == "build" ]]; then
     javac -version
     which mvn
 
-    which g++
+    which g++ | grep cache
 
     for project in $PROJECTS; do
         bash cppbuild.sh -platform linux-x86_64 install $project
@@ -215,7 +215,7 @@ deb $DISTURL $DISTNAME-security  $DISTPARTS
         apt-get update
         apt-get -y dist-upgrade
         apt-get -y install openjdk-7-jdk || apt-get -y install openjdk-6-jdk
-        apt-get -y install build-essential curl ccache # cmake
+        apt-get -y install build-essential curl ccache python # cmake
         touch /.debs.done
     fi
     install_cmake
@@ -228,7 +228,11 @@ fi
 trap "release_chroot" EXIT
 
 if [[ "$INCHROOT" == "enter" ]]; then
-    chroot_do "/build/${0##*/}" enter_stage2
+    if [[ -e "$TGTDIR/build/${0##*/}" ]]; then
+        chroot_do "/build/${0##*/}" enter_stage2
+    else
+        chroot_do /bin/bash
+    fi
     exit 0
 fi
 
@@ -254,9 +258,11 @@ if ! test -e "$TGTDIR/.installed"; then
     connect_chroot
     sudo ln -sf build/.cache "$TGTDIR/.cache"
     aptinst debootstrap
-    sudo debootstrap --arch="$DISTARCH" --variant=minbase \
-        $DEBOOTSTRAPOPTS \
-        --keyring="$DISTKEYRING" "$DISTNAME" "$TGTDIR" "$DISTURL"
+    if ! "$TGTDIR/.debs.done"; then
+        sudo debootstrap --arch="$DISTARCH" --variant=minbase \
+            $DEBOOTSTRAPOPTS \
+            --keyring="$DISTKEYRING" "$DISTNAME" "$TGTDIR" "$DISTURL"
+    fi
     sudo cp "$0" "$TGTDIR/inchroot.sh"
     chroot_do chmod 755 "inchroot.sh"
 
