@@ -1,4 +1,5 @@
 
+ * Replace `install_name_tool` hack to set `@rpath` on Mac OS X with patches to do it properly on install ([issue javacpp#6](https://github.com/bytedeco/javacpp/issues/6))
  * Disable DocLint, which prevents the build from succeeding on Java 8 ([issue javacpp#5](https://github.com/bytedeco/javacpp/issues/5))
  * Disable OpenCL detection when building FFmpeg, causing link failures ([issue #19](https://github.com/bytedeco/javacpp-presets/issues/19))
  * Document a bit the `create()` factory methods in the `helper` package of the OpenCV module, and their relationship with the `release()` methods

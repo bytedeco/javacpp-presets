@@ -145,7 +145,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
 
         /** @return {@code createBuffer(0)} */
         public <B extends Buffer> B createBuffer() {
-            return createBuffer(0);
+            return (B)createBuffer(0);
         }
         /** @return {@link #arrayData()} wrapped in a {@link Buffer} of appropriate type starting at given index */
         public <B extends Buffer> B createBuffer(int index) {
@@ -167,7 +167,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
 
         /** @return {@code createIndexer(true)} */
         public <I extends Indexer> I createIndexer() {
-            return createIndexer(true);
+            return (I)createIndexer(true);
         }
         @Override public <I extends Indexer> I createIndexer(boolean direct) {
             int[] sizes = { arrayHeight(), arrayWidth(), arrayChannels() };

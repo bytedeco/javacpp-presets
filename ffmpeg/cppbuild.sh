@@ -104,21 +104,10 @@ case $PLATFORM in
         make -j4
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
+        patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-macosx.patch
         ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-runtime-cpudetect --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libx264 --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -Wl,-headerpad_max_install_names -ldl"
         make -j4
         make install
-        BADPATH=../lib
-        LIBS="libavcodec.56.dylib libavdevice.56.dylib libavfilter.5.dylib libavformat.56.dylib libavutil.54.dylib libpostproc.53.dylib libswresample.1.dylib libswscale.3.dylib"
-        for f in $LIBS; do install_name_tool $BADPATH/$f -id @rpath/$f \
-            -add_rpath /usr/local/lib/ -add_rpath /opt/local/lib/ -add_rpath @loader_path/. \
-            -change $BADPATH/libavcodec.56.dylib @rpath/libavcodec.56.dylib \
-            -change $BADPATH/libavdevice.56.dylib @rpath/libavdevice.56.dylib \
-            -change $BADPATH/libavfilter.5.dylib @rpath/libavfilter.5.dylib \
-            -change $BADPATH/libavformat.56.dylib @rpath/libavformat.56.dylib \
-            -change $BADPATH/libavutil.54.dylib @rpath/libavutil.54.dylib \
-            -change $BADPATH/libpostproc.53.dylib @rpath/libpostproc.53.dylib \
-            -change $BADPATH/libswresample.1.dylib @rpath/libswresample.1.dylib \
-            -change $BADPATH/libswscale.3.dylib @rpath/libswscale.3.dylib; done
         ;;
     windows-x86)
         # http://ffmpeg.org/platform.html#Linking-to-FFmpeg-with-Microsoft-Visual-C_002b_002b
