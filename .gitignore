@@ -25,4 +25,7 @@
 /llvm/cppbuild/
 /leptonica/cppbuild/
 /tesseract/cppbuild/
+/tools/
+/.cache/
+/osinst*/
 

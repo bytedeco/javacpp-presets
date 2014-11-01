@@ -163,3 +163,5 @@ Discussion group: http://groups.google.com/group/javacpp-project
 
 Licensed under the GNU General Public License version 2 (GPLv2) **with Classpath exception**.  
 Please refer to LICENSE.txt or http://www.gnu.org/software/classpath/license.html for details.
+
+[![Build Status](https://travis-ci.org/jjYBdx4IL/javacpp-presets.png?branch=master)](https://travis-ci.org/jjYBdx4IL/javacpp-presets)

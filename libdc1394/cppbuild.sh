@@ -19,17 +19,17 @@ cd libdc1394-$LIBDC1394_VERSION
 case $PLATFORM in
     linux-x86)
         CC="gcc -m32" ./configure --prefix=$INSTALL_PATH
-        make -j4
+        make -j$NCPUS
         make install-strip
         ;;
     linux-x86_64)
         CC="gcc -m64" ./configure --prefix=$INSTALL_PATH
-        make -j4
+        make -j$NCPUS
         make install-strip
         ;;
     macosx-*)
         LIBUSB_CFLAGS=-I/usr/local/include/libusb-1.0/ LIBUSB_LIBS=-L/usr/local/lib/ ./configure --prefix=$INSTALL_PATH
-        make -j4
+        make -j$NCPUS
         make install-strip
         ;;
     *)

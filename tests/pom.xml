@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.bytedeco</groupId>
+        <artifactId>javacpp-presets</artifactId>
+        <version>0.9</version>
+    </parent>
+
+    <properties>
+        <lib.directory>${project.build.directory}/dependency/org/bytedeco/javacpp/${platform}/</lib.directory>
+    </properties>
+
+    <groupId>org.bytedeco</groupId>
+    <artifactId>javacpp-presets-tests</artifactId>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.7</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.9</version>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <!--<goal>unpack-dependencies</goal>-->
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <!--<includeClassifiers>${platform}</includeClassifiers>-->
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.bytedeco.javacpp-presets</groupId>
+                                    <artifactId>opencv</artifactId>
+                                    <version>2.4.9-${project.parent.version}</version>
+                                    <classifier>${platform}</classifier>
+                                    <type>jar</type>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.bytedeco.javacpp-presets</groupId>
+                                    <artifactId>ffmpeg</artifactId>
+                                    <version>2.3-${project.parent.version}</version>
+                                    <classifier>${platform}</classifier>
+                                    <type>jar</type>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.17</version>
+                <configuration>
+                    <argLine>-Djava.library.path=${lib.directory}</argLine>
+                    <forkCount>1</forkCount>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <name>JavaCPP Presets Tests</name>
+</project>

@@ -40,6 +40,7 @@
     <module>llvm</module>
     <module>leptonica</module>
     <module>tesseract</module>
+    <module>tests</module>
   </modules>
 
   <scm>
@@ -269,6 +270,7 @@
             </configuration>
           </execution>
         </executions>
+        <inherited>false</inherited>
       </plugin>
       <plugin>
         <artifactId>maven-install-plugin</artifactId>

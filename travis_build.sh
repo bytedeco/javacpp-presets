@@ -1,0 +1,301 @@
+#!/bin/bash
+
+# TODO: expire items in .cache/
+
+set -Eex
+set -o pipefail
+
+export LC_ALL=C
+export TZ=UTC
+export DISTNAME="${DISTNAME:-precise}"
+BASEDIR="$(pwd)"
+DISTURL="http://archive.ubuntu.com/ubuntu"
+DISTKEYRING="$BASEDIR/ubuntu-archive-keyring.gpg"
+export DISTARCH="${DISTARCH:-amd64}"
+DISTPARTS="main universe" # main restricted universe multiverse
+PROJECTS="opencv ffmpeg"
+TGTDIR="$BASEDIR/osinst.$DISTNAME.$DISTARCH"
+CACHEDIR="$BASEDIR/.cache"
+M2REPODIR="$CACHEDIR/m2repo"
+INCHROOT="$1"
+DEBOOTSTRAPOPTS=""
+ISDEBIAN=0
+export CCACHE_DIR="$CACHEDIR/ccache"
+
+if ! NCPUS=$(grep -c ^proc /proc/cpuinfo); then
+    NCPUS=4
+fi
+if (( NCPUS > 4 )); then NCPUS=4; fi
+
+if [[ ! -e "$CACHEDIR" ]]; then mkdir -p "$CACHEDIR"; fi
+
+du -sh "$CACHEDIR" || :
+
+# check if we want to install a debian flavor
+DEBURL="http://ftp.debian.org/debian"
+DEBKEYRING="$BASEDIR/debian-archive-keyring.gpg"
+if [[ "$DISTNAME" == "wheezy" ]] || [[ "$DISTNAME" == "squeeze" ]]; then
+    DISTURL="$DEBURL"
+    DISTKEYRING="$DEBKEYRING"
+    DISTPARTS="main contrib" # main non-free contrib
+    ISDEBIAN=1
+fi
+
+if [[ -n "$INCHROOT" ]]; then
+    export PATH="/usr/local/bin:$PATH"
+    export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
+fi
+
+init_build_env() {
+    export JAVA_HOME="/usr/lib/jvm/java-7-openjdk-amd64"
+    if [[ ! -e "$JAVA_HOME" ]]; then
+        export JAVA_HOME="/usr/lib/jvm/java-6-openjdk"
+    fi
+    export PATH="$JAVA_HOME/bin:/opt/maven/bin:/usr/lib/ccache:$PATH"
+    export LD_LIBRARY_PATH="$JAVA_HOME/lib:$LD_LIBRARY_PATH"
+    export MAVEN_OPTS="-Dmaven.repo.local=$M2REPODIR -Djava.awt.headless=true -Dmaven.test.failure.ignore=false"
+}
+
+dump_stdumps() {
+    find "$BASEDIR" -name 'hs_err_pid*.log' | while read l; do
+        echo "$l:"
+        cat "$l"
+    done
+}
+
+if [[ "$INCHROOT" == "enter_stage2" ]]; then
+    init_build_env
+    /bin/bash
+    exit 0
+fi
+
+mvnCmd() {
+    mvn -V -B "-Dmaven.repo.local=$M2REPODIR" \
+        -Djava.awt.headless=true -Dmaven.test.failure.ignore=false \
+        "$@" || return 1
+    return 0
+}
+
+if [[ "$INCHROOT" == "build" ]]; then
+    set -Eex
+
+    set
+    pwd
+    whoami
+    uname -a
+    free || :
+    df -h || :
+    du -sh "$CACHEDIR" || :
+    cat /proc/cpuinfo | tail -n50
+
+    init_build_env
+
+    which java
+    java -version
+    which javac
+    javac -version
+    which mvn
+
+    which g++ | grep cache
+    failed=0
+
+    mvnCmd clean install -f javacpp
+
+    for project in $PROJECTS; do
+        bash cppbuild.sh -platform linux-x86_64 install $project || failed=1
+    done
+    if ! (( failed )); then
+        mvnCmd install --projects "${PROJECTS// /,}",tests || failed=1
+    fi
+
+    dump_stdumps
+
+    exit $failed
+fi
+
+connectDir() {
+    local outsideDir="$1"
+    local insideDir="$2"
+    if mount | grep "$TGTDIR$insideDir"; then return 0; fi
+    if [[ ! -e "$outsideDir" ]]; then mkdir -p "$outsideDir"; fi
+    sudo mount -o bind "$outsideDir" "$TGTDIR$insideDir" || :
+    if mount | grep "$TGTDIR$insideDir"; then return 0; fi
+    sudo mkdir -p "$TGTDIR$insideDir"
+    sudo mount -o bind "$outsideDir" "$TGTDIR$insideDir"
+}
+
+disconnectDir() {
+    local insideDir="$1"
+    if ! mount | grep "$TGTDIR$insideDir"; then return 0; fi
+    sudo umount "$TGTDIR$insideDir"
+}
+
+connect_chroot() {
+    if ! mount | grep "$TGTDIR/proc"; then
+        if [[ ! -e "$TGTDIR/proc" ]]; then sudo mkdir -p "$TGTDIR/proc"; fi
+        sudo mount -t proc proc "$TGTDIR/proc"
+    fi
+    connectDir "$CACHEDIR" "/build/.cache"
+    connectDir "$CACHEDIR/debs" "/var/cache/apt/archives"
+}
+
+release_chroot() {
+    disconnectDir "/proc"
+    disconnectDir "/build/.cache"
+    disconnectDir "/var/cache/apt/archives"
+}
+
+chroot_do() {
+    connect_chroot
+    sudo -E chroot "$TGTDIR" "$@"
+}
+
+function download {
+    local url="$1"
+    local destfile="$2"
+    if [[ -z "$destfile" ]]; then
+        destfile="${url##*/}"
+    fi
+    local cachefile="$CACHEDIR/${destfile##*/}"
+    local tmpfile="$cachefile.tmp"
+    if ! test -e "$cachefile"; then
+        rm -f "$tmpfile"
+        mkdir -p "$CACHEDIR"
+        if curl -L -o "$tmpfile" "$url"; then
+            mv -f "$tmpfile" "$cachefile"
+        else
+            echo "failed to retrieve $url" >&2
+            exit 1
+        fi
+    fi
+    cp -vf "$cachefile" "$destfile"
+    return 0
+}
+
+function getgit {
+    local project="$1"
+    local tagname="$2"
+    local destfile="$3"
+    if [[ -z "$destfile" ]]; then
+        destfile="${project##*/}-$tagname.tar.gz"
+    fi
+    download "https://codeload.github.com/$project/tar.gz/$tagname" "$destfile"
+}
+
+function install_yasm {
+    if [[ -e "/usr/local/bin/yasm" ]]; then return 0; fi
+    local tmpd=$(mktemp -d)
+    pushd "$tmpd"
+    getgit yasm/yasm v1.3.0
+    tar xzf yasm-v1.3.0.tar.gz --strip-components=1
+    cmake .
+    make -j$NCPUS
+    make install
+    yasm --version
+    popd
+}
+
+install_maven() {
+    mkdir -p /opt/maven
+    pushd /opt/maven
+    download http://ftp-stud.hs-esslingen.de/pub/Mirrors/ftp.apache.org/dist/maven/maven-3/3.2.3/binaries/apache-maven-3.2.3-bin.tar.gz
+    tar xzf apache-maven-3.2.3-bin.tar.gz --strip-components=1
+    popd
+}
+
+install_cmake() {
+    local tmpd=$(mktemp -d)
+    pushd "$tmpd"
+    download http://www.cmake.org/files/v2.8/cmake-2.8.12.2.tar.gz
+    tar xzf cmake-2.8.12.2.tar.gz --strip-components=1
+    ./configure --parallel=$NCPUS
+    make -j$NCPUS
+    make install
+    popd
+}
+
+if [[ "$INCHROOT" == "install" ]]; then
+    freeuid="$2"
+    if ! test -e /.debs.done; then
+        if (( ISDEBIAN )); then
+            echo "deb $DISTURL $DISTNAME $DISTPARTS
+deb $DISTURL $DISTNAME-updates   $DISTPARTS
+deb http://security.debian.org/ $DISTNAME/updates $DISTPARTS
+" > "/etc/apt/sources.list"
+        else
+            echo "deb $DISTURL $DISTNAME $DISTPARTS
+deb $DISTURL $DISTNAME-updates   $DISTPARTS
+deb $DISTURL $DISTNAME-security  $DISTPARTS
+#deb $DISTURL $DISTNAME-backports $DISTPARTS
+" > "/etc/apt/sources.list"
+        fi
+        apt-get -y install gpgv
+        apt-get update
+        apt-get -y dist-upgrade
+        apt-get -y install openjdk-7-jdk || apt-get -y install openjdk-6-jdk
+        apt-get -y install build-essential curl ccache python # cmake
+        touch /.debs.done
+    fi
+    install_cmake
+    install_yasm
+    install_maven
+    useradd -u $freeuid -d /build build
+    exit 0
+fi
+
+trap "release_chroot" EXIT
+
+if [[ "$INCHROOT" == "enter" ]]; then
+    if [[ -e "$TGTDIR/build/${0##*/}" ]]; then
+        chroot_do "/build/${0##*/}" enter_stage2
+    else
+        chroot_do /bin/bash
+    fi
+    exit 0
+fi
+
+aptUpdated=""
+
+aptinst() {
+    local testbin="$1"
+    local prog="$2"
+    if [[ -z "$prog" ]]; then prog="$testbin"; fi
+    if which $testbin; then return 0; fi
+    if [[ -z "$aptUpdated" ]]; then
+        sudo apt-get update
+        aptUpdated=1
+    fi        
+    sudo apt-get install $prog
+}
+
+if ! test -e "$TGTDIR/.installed"; then
+    if ! "$TGTDIR/.debs.done"; then
+        sudo rm -rf "$TGTDIR"
+        sudo mkdir -p "$TGTDIR"
+    fi
+    connect_chroot
+    sudo ln -sf build/.cache "$TGTDIR/.cache"
+    aptinst debootstrap
+    if ! "$TGTDIR/.debs.done"; then
+        sudo debootstrap --arch="$DISTARCH" --variant=minbase \
+            $DEBOOTSTRAPOPTS \
+            --keyring="$DISTKEYRING" "$DISTNAME" "$TGTDIR" "$DISTURL"
+    fi
+    sudo cp "$0" "$TGTDIR/inchroot.sh"
+    chroot_do chmod 755 "inchroot.sh"
+
+    if (( ISDEBIAN )); then
+        sudo cp /etc/resolv.conf "$TGTDIR/etc/resolv.conf"
+    fi
+
+    # for more security, select a uid that is not used inside the host system
+    freeuid=11723; while grep $freeuid /etc/passwd; do let 'freeuid++'; done
+    chroot_do "./inchroot.sh" install $freeuid
+    chroot_do touch .installed
+fi
+
+git clone https://github.com/jjYBdx4IL/javacpp.git
+sudo rsync -av --delete --exclude=/.cache/ --exclude=/.git/ --exclude=/osinst.*/ "$BASEDIR/" "$TGTDIR/build"
+chroot_do chown -R build build
+chroot_do su - build -c "/build/${0##*/} build"
+

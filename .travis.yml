@@ -1,0 +1,13 @@
+script: ./travis_build.sh
+cache:
+  directories:
+    - .cache
+env:
+  - DISTNAME=squeeze
+  - DISTNAME=lucid
+  - DISTNAME=wheezy
+  - DISTNAME=precise
+#  - DISTNAME=trusty
+  - DISTNAME=utopic
+
+

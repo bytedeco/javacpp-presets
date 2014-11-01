@@ -29,17 +29,17 @@ cd libfreenect-$LIBFREENECT_VERSION
 case $PLATFORM in
     linux-x86)
         CC="gcc -m32" CXX="g++ -m32" cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
-        make -j4
+        make -j$NCPUS
         make install
         ;;
     linux-x86_64)
         CC="gcc -m64" CXX="g++ -m64" cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
-        make -j4
+        make -j$NCPUS
         make install
         ;;
     macosx-*)
         cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=..
-        make -j4
+        make -j$NCPUS
         make install
         ;;
     windows-x86)

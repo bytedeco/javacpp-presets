@@ -1,6 +1,12 @@
 #!/bin/bash
 # Scripts to build and install native C++ libraries
-set -eu
+set -eux
+
+if ! NCPUS=$(grep -c ^proc /proc/cpuinfo); then
+    NCPUS=4
+fi
+if (( NCPUS > 4 )); then NCPUS=4; fi
+export NCPUS
 
 KERNEL=(`uname -s | tr [A-Z] [a-z]`)
 ARCH=(`uname -m | tr [A-Z] [a-z]`)
@@ -75,10 +81,32 @@ case $PLATFORM in
         ;;
 esac
 
+export CACHEDIR=$(pwd)/.cache
+mkdir -p "$CACHEDIR"
+
 function download {
-    COMMAND="curl -C - -L $1 -o $2"
-    echo "$COMMAND"
-    $COMMAND || true
+    local url="$1"
+    local destfile="$2"
+    local cachefile="$CACHEDIR/${destfile##*/}"
+    local tmpfile="$cachefile.tmp"
+    if ! test -e "$cachefile"; then
+        rm -f "$tmpfile"
+        if curl -L -o "$tmpfile" "$url"; then
+            mv -f "$tmpfile" "$cachefile"
+        else
+            echo "failed to retrieve $url" >&2
+            exit 1
+        fi
+    fi
+    cp -vf "$cachefile" "$destfile"
+    return 0
+}
+
+function getgit {
+    local project="$1"
+    local tagname="$2"
+    local destfile="$3"
+    download "https://codeload.github.com/$project/tar.gz/$tagname" "$destfile"
 }
 
 if [[ -z ${PROJECTS:-} ]]; then
