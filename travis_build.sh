@@ -69,6 +69,13 @@ if [[ "$INCHROOT" == "enter_stage2" ]]; then
     exit 0
 fi
 
+mvnCmd() {
+    mvn -V -B "-Dmaven.repo.local=$M2REPODIR" \
+        -Djava.awt.headless=true -Dmaven.test.failure.ignore=false \
+        "$@" || return 1
+    return 0
+}
+
 if [[ "$INCHROOT" == "build" ]]; then
     set -Eex
 
@@ -92,13 +99,13 @@ if [[ "$INCHROOT" == "build" ]]; then
     which g++ | grep cache
     failed=0
 
+    mvnCmd clean install -f javacpp
+
     for project in $PROJECTS; do
         bash cppbuild.sh -platform linux-x86_64 install $project || failed=1
     done
     if ! (( failed )); then
-        mvn -V -B install \
-            -Dmaven.repo.local=$M2REPODIR -Djava.awt.headless=true -Dmaven.test.failure.ignore=false \
-            --projects "${PROJECTS// /,}",tests || failed=1
+        mvnCmd install --projects "${PROJECTS// /,}",tests || failed=1
     fi
 
     dump_stdumps
@@ -287,6 +294,7 @@ if ! test -e "$TGTDIR/.installed"; then
     chroot_do touch .installed
 fi
 
+git clone https://github.com/jjYBdx4IL/javacpp.git
 sudo rsync -av --delete --exclude=/.cache/ --exclude=/.git/ --exclude=/osinst.*/ "$BASEDIR/" "$TGTDIR/build"
 chroot_do chown -R build build
 chroot_do su - build -c "/build/${0##*/} build"
