@@ -11,6 +11,7 @@ import org.bytedeco.javacpp.opencv_core;
 import static org.bytedeco.javacpp.opencv_core.*;
 import org.bytedeco.javacv.CanvasFrame;
 import static org.junit.Assert.*;
+import org.junit.BeforeClass;
 
 /**
  * Derived from
@@ -21,6 +22,11 @@ public class Base {
 
     private static final GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
     protected static final File tempDir = new File("target", "temp");
+
+    @BeforeClass
+    public static void beforeClass() {
+        org.bytedeco.javacpp.Loader.enableVerbose();
+    }
 
     protected static File getTempFile(String filename) {
         File f = new File(tempDir, filename);
