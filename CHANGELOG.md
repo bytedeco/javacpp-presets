@@ -1,4 +1,6 @@
 
+ * Disable DocLint, which prevents the build from succeeding on Java 8 ([issue javacpp#5](https://github.com/bytedeco/javacpp/issues/5))
+ * Disable OpenCL detection when building FFmpeg, causing link failures ([issue #19](https://github.com/bytedeco/javacpp-presets/issues/19))
  * Document a bit the `create()` factory methods in the `helper` package of the OpenCV module, and their relationship with the `release()` methods
  * Include new `createIndexer()` method in `CvMat`, `IplImage`, `Mat`, etc. for easy and efficient multidimensional access of data ([issue #317](http://code.google.com/p/javacv/issues/detail?id=317))
  * Deprecate `get*Buffer()` methods in favor of a better named and generic `createBuffer()` method
