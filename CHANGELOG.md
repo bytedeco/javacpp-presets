@@ -7,9 +7,9 @@
  * Deprecate `get*Buffer()` methods in favor of a better named and generic `createBuffer()` method
  * Fix `java.lang.UnsatisfiedLinkError` when allocating `opencv_core.Mat`, among others ([issue javacv:9](https://github.com/bytedeco/javacv/issues/9) and [issue javacv:28](https://github.com/bytedeco/javacv/issues/28))
  * Force OpenCV to build with GCC 4.6, as newer versions are known to hang on Android 2.2 ([issue android:43819](https://code.google.com/p/android/issues/detail?id=43819))
- * Upgrade presets for FFmpeg 2.4.2, FlyCapture 2.7.3.13, LLVM 3.5.0, and videoInput 0.200, where the latest code got merged into the master branch
+ * Upgrade presets for OpenCV 2.4.10, FFmpeg 2.4.2, FlyCapture 2.7.3.13, LLVM 3.5.0, and videoInput 0.200, where the latest code got merged into the master branch
  * Add callbacks for Tesseract according to new functionality in JavaCPP
- * Fix missing dependency of `opencv_contrib` on `opencv_nonfree`
+ * Fix missing dependency of `opencv_contrib` on `opencv_nonfree` ([issue javacv:490](https://code.google.com/p/javacv/issues/detail?id=490))
  * Skip functions that are not actually implemented in `avdevice`, causing load failures on Android
  * Update presets for FFmpeg where `avcodec` now inherits from `swresample` ([issue #13](https://github.com/bytedeco/javacpp-presets/issues/13))
  * Add a `README.md` file to each presets with links to original project, Java API documentation, and sample usage

@@ -64,6 +64,7 @@ public class opencv_calib3d extends org.bytedeco.javacpp.helper.opencv_calib3d {
 
 // #include "opencv2/core/core.hpp"
 // #include "opencv2/features2d/features2d.hpp"
+// #include "opencv2/core/affine.hpp"
 
 // #ifdef __cplusplus
 // #endif
@@ -1016,11 +1017,83 @@ public static final int
                                    double ransacThreshold/*=3*/, double confidence/*=0.99*/);
 @Namespace("cv") public static native int estimateAffine3D(@ByVal Mat src, @ByVal Mat dst,
                                    @ByVal Mat out, @ByVal Mat inliers);
+    /** enum cv::fisheye:: */
+    public static final int
+        FISHEYE_CALIB_USE_INTRINSIC_GUESS   = 1,
+        FISHEYE_CALIB_RECOMPUTE_EXTRINSIC   = 2,
+        FISHEYE_CALIB_CHECK_COND            = 4,
+        FISHEYE_CALIB_FIX_SKEW              = 8,
+        FISHEYE_CALIB_FIX_K1                = 16,
+        FISHEYE_CALIB_FIX_K2                = 32,
+        FISHEYE_CALIB_FIX_K3                = 64,
+        FISHEYE_CALIB_FIX_K4                = 128,
+        FISHEYE_CALIB_FIX_INTRINSIC         = 256;
+
+    /** projects 3D points using fisheye model */
+    @Namespace("cv::fisheye") public static native void projectPoints(@ByVal Mat objectPoints, @ByVal Mat imagePoints, @Const @ByRef Mat affine,
+            @ByVal Mat K, @ByVal Mat D, double alpha/*=0*/, @ByVal Mat jacobian/*=noArray()*/);
+    @Namespace("cv::fisheye") public static native void projectPoints(@ByVal Mat objectPoints, @ByVal Mat imagePoints, @Const @ByRef Mat affine,
+            @ByVal Mat K, @ByVal Mat D);
+
+    /** projects points using fisheye model */
+    @Namespace("cv::fisheye") public static native void projectPoints(@ByVal Mat objectPoints, @ByVal Mat imagePoints, @ByVal Mat rvec, @ByVal Mat tvec,
+            @ByVal Mat K, @ByVal Mat D, double alpha/*=0*/, @ByVal Mat jacobian/*=noArray()*/);
+
+    /** distorts 2D points using fisheye model */
+    @Namespace("cv::fisheye") public static native void distortPoints(@ByVal Mat undistorted, @ByVal Mat distorted, @ByVal Mat K, @ByVal Mat D, double alpha/*=0*/);
+    @Namespace("cv::fisheye") public static native void distortPoints(@ByVal Mat undistorted, @ByVal Mat distorted, @ByVal Mat K, @ByVal Mat D);
+
+    /** undistorts 2D points using fisheye model */
+    @Namespace("cv::fisheye") public static native void undistortPoints(@ByVal Mat distorted, @ByVal Mat undistorted,
+            @ByVal Mat K, @ByVal Mat D, @ByVal Mat R/*=noArray()*/, @ByVal Mat P/*=noArray()*/);
+    @Namespace("cv::fisheye") public static native void undistortPoints(@ByVal Mat distorted, @ByVal Mat undistorted,
+            @ByVal Mat K, @ByVal Mat D);
+
+    /** computing undistortion and rectification maps for image transform by cv::remap()
+     *  If D is empty zero distortion is used, if R or P is empty identity matrixes are used */
+    @Namespace("cv::fisheye") public static native void initUndistortRectifyMap(@ByVal Mat K, @ByVal Mat D, @ByVal Mat R, @ByVal Mat P,
+            @Const @ByRef Size size, int m1type, @ByVal Mat map1, @ByVal Mat map2);
+
+    /** undistorts image, optionally changes resolution and camera matrix. If Knew zero identity matrix is used */
+    @Namespace("cv::fisheye") public static native void undistortImage(@ByVal Mat distorted, @ByVal Mat undistorted,
+            @ByVal Mat K, @ByVal Mat D, @ByVal Mat Knew/*=cv::noArray()*/, @Const @ByRef Size new_size/*=Size()*/);
+    @Namespace("cv::fisheye") public static native void undistortImage(@ByVal Mat distorted, @ByVal Mat undistorted,
+            @ByVal Mat K, @ByVal Mat D);
+
+    /** estimates new camera matrix for undistortion or rectification */
+    @Namespace("cv::fisheye") public static native void estimateNewCameraMatrixForUndistortRectify(@ByVal Mat K, @ByVal Mat D, @Const @ByRef Size image_size, @ByVal Mat R,
+            @ByVal Mat P, double balance/*=0.0*/, @Const @ByRef Size new_size/*=Size()*/, double fov_scale/*=1.0*/);
+    @Namespace("cv::fisheye") public static native void estimateNewCameraMatrixForUndistortRectify(@ByVal Mat K, @ByVal Mat D, @Const @ByRef Size image_size, @ByVal Mat R,
+            @ByVal Mat P);
+
+    /** performs camera calibaration */
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
+            @ByVal Mat K, @ByVal Mat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs, int flags/*=0*/,
+                @ByVal TermCriteria criteria/*=TermCriteria(TermCriteria::COUNT + TermCriteria::EPS, 100, DBL_EPSILON)*/);
+    @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
+            @ByVal Mat K, @ByVal Mat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs);
+
+    /** stereo rectification estimation */
+    @Namespace("cv::fisheye") public static native void stereoRectify(@ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @Const @ByRef Size imageSize, @ByVal Mat R, @ByVal Mat tvec,
+            @ByVal Mat R1, @ByVal Mat R2, @ByVal Mat P1, @ByVal Mat P2, @ByVal Mat Q, int flags, @Const @ByRef Size newImageSize/*=Size()*/,
+            double balance/*=0.0*/, double fov_scale/*=1.0*/);
+    @Namespace("cv::fisheye") public static native void stereoRectify(@ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @Const @ByRef Size imageSize, @ByVal Mat R, @ByVal Mat tvec,
+            @ByVal Mat R1, @ByVal Mat R2, @ByVal Mat P1, @ByVal Mat P2, @ByVal Mat Q, int flags);
+
+    /** performs stereo calibaration */
+    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+                                      @ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @ByVal Size imageSize,
+                                      @ByVal Mat R, @ByVal Mat T, int flags/*=CALIB_FIX_INTRINSIC*/,
+                                      @ByVal TermCriteria criteria/*=TermCriteria(TermCriteria::COUNT + TermCriteria::EPS, 100, DBL_EPSILON)*/);
+    @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
+                                      @ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @ByVal Size imageSize,
+                                      @ByVal Mat R, @ByVal Mat T);
+
+
 
 
 
 // #endif
-
 // #endif
 
 

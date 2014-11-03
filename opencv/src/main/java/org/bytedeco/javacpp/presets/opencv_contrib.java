@@ -36,12 +36,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         link="opencv_contrib@.2.4", preload={"opencv_gpu@.2.4", "opencv_ocl@.2.4"}),
     @Platform(value="windows", include={"<opencv2/contrib/contrib.hpp>",
         "<opencv2/contrib/hybridtracker.hpp>", "<opencv2/contrib/retina.hpp>", "<opencv2/contrib/openfabmap.hpp>"},
-        link="opencv_contrib249", preload={"opencv_gpu249", "opencv_ocl249"}) },
+        link="opencv_contrib2410", preload={"opencv_gpu2410", "opencv_ocl2410"}) },
         target="org.bytedeco.javacpp.opencv_contrib")
 public class opencv_contrib implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info().javaText("import org.bytedeco.javacpp.annotation.Index;"))
                .put(new Info("std::vector<std::vector<cv::Vec2i> >").cast().pointerTypes("PointVectorVector"))
+               .put(new Info("std::map<int,std::string>").pointerTypes("IntStringMap").define())
                .put(new Info("std::vector<std::pair<cv::Rect_<int>,int> >").pointerTypes("RectIntPairVector").define())
                .put(new Info("std::valarray<float>").pointerTypes("FloatValArray").define())
                .put(new Info("CvFuzzyMeanShiftTracker::kernel", "cv::Mesh3D::allzero",

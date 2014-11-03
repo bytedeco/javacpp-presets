@@ -32,7 +32,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit={opencv_calib3d.class, opencv_features2d.class, opencv_video.class, opencv_ml.class}, value={
     @Platform(include={"<opencv2/legacy/blobtrack.hpp>", "<opencv2/legacy/compat.hpp>", "<opencv2/legacy/legacy.hpp>"}, link="opencv_legacy@.2.4"),
-    @Platform(value="windows", link="opencv_legacy249") },
+    @Platform(value="windows", link="opencv_legacy2410") },
         target="org.bytedeco.javacpp.opencv_legacy", helper="org.bytedeco.javacpp.helper.opencv_legacy")
 public class opencv_legacy implements InfoMapper {
     public void map(InfoMap infoMap) {

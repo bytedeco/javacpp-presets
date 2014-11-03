@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         opencv_photo.class, opencv_ml.class, opencv_legacy.class, opencv_video.class}, value={
     @Platform(include={"<opencv2/nonfree/nonfree.hpp>", "<opencv2/nonfree/features2d.hpp>"},
         link="opencv_nonfree@.2.4", preload={"opencv_gpu@.2.4", "opencv_ocl@.2.4"}),
-    @Platform(value="windows", link="opencv_nonfree249", preload={"opencv_gpu249", "opencv_ocl249"}) },
+    @Platform(value="windows", link="opencv_nonfree2410", preload={"opencv_gpu2410", "opencv_ocl2410"}) },
         target="org.bytedeco.javacpp.opencv_nonfree")
 public class opencv_nonfree implements InfoMapper {
     public void map(InfoMap infoMap) {

@@ -32,7 +32,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit=opencv_imgproc.class, value={
     @Platform(include={"<opencv2/highgui/highgui_c.h>","<opencv2/highgui/highgui.hpp>"}, link="opencv_highgui@.2.4"),
-    @Platform(value="windows", link="opencv_highgui249", preload={"opencv_ffmpeg249", "opencv_ffmpeg249_64"}),
+    @Platform(value="windows", link="opencv_highgui2410", preload={"opencv_ffmpeg2410", "opencv_ffmpeg2410_64"}),
     @Platform(value="android", preload={"native_camera_r2.2.0", "native_camera_r2.3.3", "native_camera_r3.0.1", "native_camera_r4.0.0", "native_camera_r4.0.3",
                                         "native_camera_r4.1.1", "native_camera_r4.2.0", "native_camera_r4.3.0", "native_camera_r4.4.0"}) },
         target="org.bytedeco.javacpp.opencv_highgui", helper="org.bytedeco.javacpp.helper.opencv_highgui")

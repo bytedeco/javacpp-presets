@@ -23,6 +23,19 @@ import static org.bytedeco.javacpp.opencv_nonfree.*;
 public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib {
     static { Loader.load(); }
 
+@Name("std::map<int,std::string>") public static class IntStringMap extends Pointer {
+    static { Loader.load(); }
+    public IntStringMap(Pointer p) { super(p); }
+    public IntStringMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef IntStringMap put(@ByRef IntStringMap x);
+
+    public native long size();
+
+    @Index public native @StdString BytePointer get(int i);
+    public native IntStringMap put(int i, BytePointer value);
+}
+
 @Name("std::vector<std::pair<cv::Rect_<int>,int> >") public static class RectIntPairVector extends Pointer {
     static { Loader.load(); }
     public RectIntPairVector(Pointer p) { super(p); }
@@ -1111,6 +1124,15 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
         // Deserializes this object from a given cv::FileStorage.
         public native void load(@Const @ByRef FileStorage fs);
 
+        // Sets additional information as pairs label - info.
+        public native void setLabelsInfo(@Const @ByRef IntStringMap labelsInfo);
+
+        // Gets string information by label
+        public native @StdString BytePointer getLabelInfo(int label);
+
+        // Gets labels by string
+        public native @StdVector IntPointer getLabelsByString(@StdString BytePointer str);
+        public native @StdVector IntBuffer getLabelsByString(@StdString String str);
     }
 
     @Namespace("cv") public static native @Ptr FaceRecognizer createEigenFaceRecognizer(int num_components/*=0*/, double threshold/*=DBL_MAX*/);

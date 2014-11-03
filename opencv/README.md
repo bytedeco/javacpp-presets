@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * OpenCV 2.4.9  http://opencv.org/
+ * OpenCV 2.4.10  http://opencv.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -40,7 +40,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>opencv</artifactId>
-            <version>2.4.9-0.9</version>
+            <version>2.4.10-0.9.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

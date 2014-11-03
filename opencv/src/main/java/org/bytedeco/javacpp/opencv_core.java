@@ -4561,6 +4561,7 @@ public static final int CV_CPU_SSE4_1 =  6;
 public static final int CV_CPU_SSE4_2 =  7;
 public static final int CV_CPU_POPCNT =  8;
 public static final int CV_CPU_AVX =    10;
+public static final int CV_CPU_AVX2 =   11;
 public static final int CV_HARDWARE_MAX_FEATURE = 255;
 
 public static native int cvCheckHardwareSupport(int feature);
@@ -5070,6 +5071,7 @@ public static final int DFT_INVERSE= 1, DFT_SCALE= 2, DFT_ROWS= 4, DFT_COMPLEX_O
   - CV_CPU_SSE4_2 - SSE 4.2
   - CV_CPU_POPCNT - POPCOUNT
   - CV_CPU_AVX - AVX
+  - CV_CPU_AVX2 - AVX2
 
   \note {Note that the function output is not static. Once you called cv::useOptimized(false),
   most of the hardware acceleration is disabled and thus the function will returns false,
@@ -6918,9 +6920,9 @@ public static class BinaryFunc extends FunctionPointer {
 
 /** implements generalized matrix product algorithm GEMM from BLAS */
 @Namespace("cv") public static native void gemm(@ByVal Mat src1, @ByVal Mat src2, double alpha,
-                       @ByVal Mat src3, double gamma, @ByVal Mat dst, int flags/*=0*/);
+                       @ByVal Mat src3, double beta, @ByVal Mat dst, int flags/*=0*/);
 @Namespace("cv") public static native void gemm(@ByVal Mat src1, @ByVal Mat src2, double alpha,
-                       @ByVal Mat src3, double gamma, @ByVal Mat dst);
+                       @ByVal Mat src3, double beta, @ByVal Mat dst);
 /** multiplies matrix by its transposition from the left or from the right */
 @Namespace("cv") public static native void mulTransposed( @ByVal Mat src, @ByVal Mat dst, @Cast("bool") boolean aTa,
                                  @ByVal Mat delta/*=noArray()*/,
@@ -7243,6 +7245,11 @@ public static final int
 @Namespace("cv") public static native void line(@ByRef Mat img, @ByVal Point pt1, @ByVal Point pt2, @Const @ByRef Scalar color,
                      int thickness/*=1*/, int lineType/*=8*/, int shift/*=0*/);
 @Namespace("cv") public static native void line(@ByRef Mat img, @ByVal Point pt1, @ByVal Point pt2, @Const @ByRef Scalar color);
+
+/** draws an arrow from pt1 to pt2 in the image */
+@Namespace("cv") public static native void arrowedLine(@ByRef Mat img, @ByVal Point pt1, @ByVal Point pt2, @Const @ByRef Scalar color,
+                     int thickness/*=1*/, int line_type/*=8*/, int shift/*=0*/, double tipLength/*=0.1*/);
+@Namespace("cv") public static native void arrowedLine(@ByRef Mat img, @ByVal Point pt1, @ByVal Point pt2, @Const @ByRef Scalar color);
 
 /** draws the rectangle outline or a solid rectangle with the opposite corners pt1 and pt2 in the image */
 @Namespace("cv") public static native void rectangle(@ByRef Mat img, @ByVal Point pt1, @ByVal Point pt2,

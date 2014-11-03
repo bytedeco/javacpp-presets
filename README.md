@@ -98,7 +98,7 @@ If the binary files available above are not enough for your needs, you might nee
 
 Each child module in turn relies on its corresponding native libraries being already installed in the `cppbuild` subdirectory created by a prior execution of the included [CPPBuild Scripts](#cppbuild-scripts), explained below. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified in the `.java` configuration files directly. The following versions are supported:
 
- * OpenCV 2.4.9  http://opencv.org/downloads.html
+ * OpenCV 2.4.10  http://opencv.org/downloads.html
  * FFmpeg 2.4.x  http://ffmpeg.org/download.html
  * FlyCapture 2.7.x  http://ww2.ptgrey.com/sdk/flycap
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/

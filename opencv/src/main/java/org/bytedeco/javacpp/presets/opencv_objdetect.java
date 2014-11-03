@@ -32,7 +32,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit=opencv_highgui.class, value={
     @Platform(include="<opencv2/objdetect/objdetect.hpp>", link="opencv_objdetect@.2.4"),
-    @Platform(value="windows", link="opencv_objdetect249") },
+    @Platform(value="windows", link="opencv_objdetect2410") },
         target="org.bytedeco.javacpp.opencv_objdetect", helper="org.bytedeco.javacpp.helper.opencv_objdetect")
 public class opencv_objdetect implements InfoMapper {
     public void map(InfoMap infoMap) {

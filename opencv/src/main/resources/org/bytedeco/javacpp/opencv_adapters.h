@@ -20,6 +20,9 @@
 
 #include <opencv2/core/core_c.h>
 #include <opencv2/core/core.hpp>
+#define explicit // Make all constructors of Affine3<T> implicit
+#include <opencv2/core/affine.hpp>
+#undef explicit
 
 #ifdef _WIN32
 #include <windows.h>

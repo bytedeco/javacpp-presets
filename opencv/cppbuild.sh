@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 if [[ $PLATFORM == windows* ]]; then
-    OPENCV_VERSION=2.4.9
+    OPENCV_VERSION=2.4.10
     [[ $PLATFORM == *64 ]] && BITS=x64 || BITS=x86
     download http://downloads.sourceforge.net/project/opencvlibrary/opencv-win/$OPENCV_VERSION/opencv-$OPENCV_VERSION.exe opencv-$OPENCV_VERSION.exe
 
@@ -17,7 +17,7 @@ if [[ $PLATFORM == windows* ]]; then
     7za x -y ../opencv-$OPENCV_VERSION.exe opencv/build/OpenCV* opencv/build/include opencv/build/$BITS/vc10/lib opencv/build/$BITS/vc10/bin
     cd opencv
 else
-    OPENCV_VERSION=2.4.9
+    OPENCV_VERSION=2.4.10
     download https://github.com/Itseez/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
 
     mkdir -p $PLATFORM

@@ -1802,7 +1802,7 @@ public static final int BORDER_REPLICATE= IPL_BORDER_REPLICATE, BORDER_CONSTANT=
 
     /** the default constructor */
     /** the destructor */
-    /** the filtering operator. Must be overrided in the derived classes. The horizontal border interpolation is done outside of the class. */
+    /** the filtering operator. Must be overridden in the derived classes. The horizontal border interpolation is done outside of the class. */
     public native @Name("operator()") void apply(@Cast("const uchar*") BytePointer src, @Cast("uchar*") BytePointer dst,
                                 int width, int cn);
     public native @Name("operator()") void apply(@Cast("const uchar*") ByteBuffer src, @Cast("uchar*") ByteBuffer dst,
@@ -1834,7 +1834,7 @@ public static final int BORDER_REPLICATE= IPL_BORDER_REPLICATE, BORDER_CONSTANT=
 
     /** the default constructor */
     /** the destructor */
-    /** the filtering operator. Must be overrided in the derived classes. The vertical border interpolation is done outside of the class. */
+    /** the filtering operator. Must be overridden in the derived classes. The vertical border interpolation is done outside of the class. */
     public native @Name("operator()") void apply(@Cast("const uchar**") PointerPointer src, @Cast("uchar*") BytePointer dst, int dststep,
                                 int dstcount, int width);
     public native @Name("operator()") void apply(@Cast("const uchar**") @ByPtrPtr BytePointer src, @Cast("uchar*") BytePointer dst, int dststep,

@@ -277,15 +277,25 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
 
         public CvSize cvSize() { return org.bytedeco.javacpp.opencv_core.cvSize(arrayWidth(), arrayHeight()); }
 
+        /** @see #createBuffer(int) */
         @Deprecated public ByteBuffer   getByteBuffer  (int index) { return arrayData().position(index).capacity(arraySize()).asByteBuffer(); }
+        /** @see #createBuffer(int) */
         @Deprecated public ShortBuffer  getShortBuffer (int index) { return getByteBuffer(index*2).asShortBuffer();  }
+        /** @see #createBuffer(int) */
         @Deprecated public IntBuffer    getIntBuffer   (int index) { return getByteBuffer(index*4).asIntBuffer();    }
+        /** @see #createBuffer(int) */
         @Deprecated public FloatBuffer  getFloatBuffer (int index) { return getByteBuffer(index*4).asFloatBuffer();  }
+        /** @see #createBuffer(int) */
         @Deprecated public DoubleBuffer getDoubleBuffer(int index) { return getByteBuffer(index*8).asDoubleBuffer(); }
+        /** @see #createBuffer() */
         @Deprecated public ByteBuffer   getByteBuffer()   { return getByteBuffer  (0); }
+        /** @see #createBuffer() */
         @Deprecated public ShortBuffer  getShortBuffer()  { return getShortBuffer (0); }
+        /** @see #createBuffer() */
         @Deprecated public IntBuffer    getIntBuffer()    { return getIntBuffer   (0); }
+        /** @see #createBuffer() */
         @Deprecated public FloatBuffer  getFloatBuffer()  { return getFloatBuffer (0); }
+        /** @see #createBuffer() */
         @Deprecated public DoubleBuffer getDoubleBuffer() { return getDoubleBuffer(0); }
 
         public static final byte[]
