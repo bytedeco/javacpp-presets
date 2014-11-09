@@ -26,8 +26,7 @@ Here is a simple example of LLVM ported to Java from this C source file:
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/Fac.java` source files below, simply execute on the command line:
 ```bash
- $ mvn install
- $ mvn exec:java -Dplatform.dependencies -Dexec.mainClass=Fac
+ $ mvn package exec:java -Dplatform.dependencies -Dexec.mainClass=Fac
 ```
 
 ### The `pom.xml` build file

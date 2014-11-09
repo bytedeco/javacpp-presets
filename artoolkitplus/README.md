@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * ARToolKitPlus 2.3.0  https://launchpad.net/artoolkitplus
+ * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -26,8 +26,7 @@ Here is a simple example of ARToolKitPlus ported to Java from this C++ source fi
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/MultiMain.java` source files below, simply execute on the command line:
 ```bash
- $ mvn install
- $ mvn exec:java -Dplatform.dependencies -Dexec.mainClass=MultiMain
+ $ mvn package exec:java -Dplatform.dependencies -Dexec.mainClass=MultiMain
 ```
 
 ### The `pom.xml` build file
@@ -41,7 +40,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>artoolkitplus</artifactId>
-            <version>2.3.0-0.9</version>
+            <version>2.3.1-0.9</version>
         </dependency>
     </dependencies>
 </project>

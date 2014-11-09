@@ -26,8 +26,7 @@ Here is a simple example of flandmark ported to Java from this C++ source file a
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/SimpleExample.java` source files below, simply execute on the command line:
 ```bash
- $ mvn install
- $ mvn exec:java -Dplatform.dependencies -Dexec.mainClass=SimpleExample -Dexec.args="<path_to_input_image> <face_bbox - 4int> [<path_to_output_image>]"
+ $ mvn package exec:java -Dplatform.dependencies -Dexec.mainClass=SimpleExample -Dexec.args="<path_to_input_image> <face_bbox - 4int> [<path_to_output_image>]"
 ```
 
 ### The `pom.xml` build file

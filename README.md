@@ -100,11 +100,11 @@ Each child module in turn relies on its corresponding native libraries being alr
 
  * OpenCV 2.4.10  http://opencv.org/downloads.html
  * FFmpeg 2.4.x  http://ffmpeg.org/download.html
- * FlyCapture 2.7.x  http://ww2.ptgrey.com/sdk/flycap
+ * FlyCapture 2.7.x  http://www.ptgrey.com/flycapture-sdk
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
- * libfreenect 0.5  https://github.com/OpenKinect/libfreenect
+ * libfreenect 0.5.1  https://github.com/OpenKinect/libfreenect
  * videoInput 0.200  https://github.com/ofTheo/videoInput/
- * ARToolKitPlus 2.3.0  https://launchpad.net/artoolkitplus
+ * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * FFTW 3.3.4  http://www.fftw.org/download.html
  * GSL 1.16  http://www.gnu.org/software/gsl/#downloading

@@ -25,8 +25,7 @@ Here is a simple example of videoInput ported to Java from the "Example Usage" i
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/ExampleUsage.java` source files below, simply execute on the command line:
 ```bash
- $ mvn install
- $ mvn exec:java -Dplatform.dependencies -Dexec.mainClass=ExampleUsage
+ $ mvn package exec:java -Dplatform.dependencies -Dexec.mainClass=ExampleUsage
 ```
 
 ### The `pom.xml` build file

@@ -1,13 +1,13 @@
 
- * Replace `install_name_tool` hack to set `@rpath` on Mac OS X with patches to do it properly on install ([issue javacpp#6](https://github.com/bytedeco/javacpp/issues/6))
- * Disable DocLint, which prevents the build from succeeding on Java 8 ([issue javacpp#5](https://github.com/bytedeco/javacpp/issues/5))
+ * Replace `install_name_tool` hack to set `@rpath` on Mac OS X with patches to do it properly on install ([issue bytedeco/javacpp#6](https://github.com/bytedeco/javacpp/issues/6) and [issue bytedeco/javacv#49](https://github.com/bytedeco/javacv/issues/49))
+ * Disable DocLint, which prevents the build from succeeding on Java 8 ([issue bytedeco/javacpp#5](https://github.com/bytedeco/javacpp/issues/5))
  * Disable OpenCL detection when building FFmpeg, causing link failures ([issue #19](https://github.com/bytedeco/javacpp-presets/issues/19))
  * Document a bit the `create()` factory methods in the `helper` package of the OpenCV module, and their relationship with the `release()` methods
  * Include new `createIndexer()` method in `CvMat`, `IplImage`, `Mat`, etc. for easy and efficient multidimensional access of data ([issue #317](http://code.google.com/p/javacv/issues/detail?id=317))
  * Deprecate `get*Buffer()` methods in favor of a better named and generic `createBuffer()` method
- * Fix `java.lang.UnsatisfiedLinkError` when allocating `opencv_core.Mat`, among others ([issue javacv:9](https://github.com/bytedeco/javacv/issues/9) and [issue javacv:28](https://github.com/bytedeco/javacv/issues/28))
+ * Fix `java.lang.UnsatisfiedLinkError` when allocating `opencv_core.Mat`, among others ([issue bytedeco/javacv#9](https://github.com/bytedeco/javacv/issues/9) and [issue bytedeco/javacv#28](https://github.com/bytedeco/javacv/issues/28))
  * Force OpenCV to build with GCC 4.6, as newer versions are known to hang on Android 2.2 ([issue android:43819](https://code.google.com/p/android/issues/detail?id=43819))
- * Upgrade presets for OpenCV 2.4.10, FFmpeg 2.4.2, FlyCapture 2.7.3.13, LLVM 3.5.0, and videoInput 0.200, where the latest code got merged into the master branch
+ * Upgrade presets for OpenCV 2.4.10, FFmpeg 2.4.3, FlyCapture 2.7.3.13, libfreenect 0.5.1, ARToolKitPlus 2.3.1, LLVM 3.5.0, and videoInput 0.200, where the latest code got merged into the master branch
  * Add callbacks for Tesseract according to new functionality in JavaCPP
  * Fix missing dependency of `opencv_contrib` on `opencv_nonfree` ([issue javacv:490](https://code.google.com/p/javacv/issues/detail?id=490))
  * Skip functions that are not actually implemented in `avdevice`, causing load failures on Android

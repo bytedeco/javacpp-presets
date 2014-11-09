@@ -57,18 +57,13 @@ import org.bytedeco.javacpp.ShortPointer;
 import org.bytedeco.javacpp.annotation.Name;
 import org.bytedeco.javacpp.annotation.Opaque;
 import org.bytedeco.javacpp.annotation.ValueGetter;
-import org.bytedeco.javacpp.indexer.ByteArrayIndexer;
-import org.bytedeco.javacpp.indexer.ByteBufferIndexer;
-import org.bytedeco.javacpp.indexer.DoubleArrayIndexer;
-import org.bytedeco.javacpp.indexer.DoubleBufferIndexer;
-import org.bytedeco.javacpp.indexer.FloatArrayIndexer;
-import org.bytedeco.javacpp.indexer.FloatBufferIndexer;
+import org.bytedeco.javacpp.indexer.ByteIndexer;
+import org.bytedeco.javacpp.indexer.DoubleIndexer;
+import org.bytedeco.javacpp.indexer.FloatIndexer;
 import org.bytedeco.javacpp.indexer.Indexable;
 import org.bytedeco.javacpp.indexer.Indexer;
-import org.bytedeco.javacpp.indexer.IntArrayIndexer;
-import org.bytedeco.javacpp.indexer.IntBufferIndexer;
-import org.bytedeco.javacpp.indexer.ShortArrayIndexer;
-import org.bytedeco.javacpp.indexer.ShortBufferIndexer;
+import org.bytedeco.javacpp.indexer.IntIndexer;
+import org.bytedeco.javacpp.indexer.ShortIndexer;
 
 // required by javac to resolve circular dependencies
 import org.bytedeco.javacpp.opencv_core.*;
@@ -170,75 +165,27 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             return (I)createIndexer(true);
         }
         @Override public <I extends Indexer> I createIndexer(boolean direct) {
+            BytePointer ptr = arrayData();
+            int size = arraySize();
             int[] sizes = { arrayHeight(), arrayWidth(), arrayChannels() };
             int[] strides = { arrayStep(), arrayChannels(), 1 };
             switch (arrayDepth()) {
                 case IPL_DEPTH_8U:
                 case IPL_DEPTH_8S:
-                    if (direct) {
-                        return (I)new ByteBufferIndexer((ByteBuffer)createBuffer(), sizes, strides);
-                    } else {
-                        byte[] array = new byte[arraySize()];
-                        final BytePointer ptr = arrayData().get(array);
-                        return (I)new ByteArrayIndexer(array, sizes, strides) {
-                            @Override public void release() {
-                                ptr.put(array);
-                            }
-                        };
-                    }
+                    return (I)ByteIndexer.create(ptr.capacity(size), sizes, strides, direct);
                 case IPL_DEPTH_16U:
                 case IPL_DEPTH_16S:
                     strides[0] /= 2;
-                    if (direct) {
-                        return (I)new ShortBufferIndexer((ShortBuffer)createBuffer(), sizes, strides);
-                    } else {
-                        short[] array = new short[arraySize()];
-                        final ShortPointer ptr = new ShortPointer(arrayData()).get(array);
-                        return (I)new ShortArrayIndexer(array, sizes, strides) {
-                            @Override public void release() {
-                                ptr.put(array);
-                            }
-                        };
-                    }
+                    return (I)ShortIndexer.create(new ShortPointer(ptr).capacity(size/2), sizes, strides, direct);
                 case IPL_DEPTH_32S:
                     strides[0] /= 4;
-                    if (direct) {
-                        return (I)new IntBufferIndexer((IntBuffer)createBuffer(), sizes, strides);
-                    } else {
-                        int[] array = new int[arraySize()];
-                        final IntPointer ptr = new IntPointer(arrayData()).get(array);
-                        return (I)new IntArrayIndexer(array, sizes, strides) {
-                            @Override public void release() {
-                                ptr.put(array);
-                            }
-                        };
-                    }
+                    return (I)IntIndexer.create(new IntPointer(ptr).capacity(size/4), sizes, strides, direct);
                 case IPL_DEPTH_32F:
                     strides[0] /= 4;
-                    if (direct) {
-                        return (I)new FloatBufferIndexer((FloatBuffer)createBuffer(), sizes, strides);
-                    } else {
-                        float[] array = new float[arraySize()];
-                        final FloatPointer ptr = new FloatPointer(arrayData()).get(array);
-                        return (I)new FloatArrayIndexer(array, sizes, strides) {
-                            @Override public void release() {
-                                ptr.put(array);
-                            }
-                        };
-                    }
+                    return (I)FloatIndexer.create(new FloatPointer(ptr).capacity(size/4), sizes, strides, direct);
                 case IPL_DEPTH_64F:
                     strides[0] /= 8;
-                    if (direct) {
-                        return (I)new DoubleBufferIndexer((DoubleBuffer)createBuffer(), sizes, strides);
-                    } else {
-                        double[] array = new double[arraySize()];
-                        final DoublePointer ptr = new DoublePointer(arrayData()).get(array);
-                        return (I)new DoubleArrayIndexer(array, sizes, strides) {
-                            @Override public void release() {
-                                ptr.put(array);
-                            }
-                        };
-                    }
+                    return (I)DoubleIndexer.create(new DoublePointer(ptr).capacity(size/8), sizes, strides, direct);
                 case IPL_DEPTH_1U:
                 default: assert false;
             }

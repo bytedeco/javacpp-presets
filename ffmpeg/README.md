@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * FFmpeg 2.4.2  http://ffmpeg.org/
+ * FFmpeg 2.4.3  http://ffmpeg.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -25,8 +25,7 @@ Here is a simple example of FFmpeg ported to Java from this C source file:
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/Tutorial01.java` source files below, simply execute on the command line:
 ```bash
- $ mvn install
- $ mvn exec:java -Dplatform.dependencies -Dexec.mainClass=Tutorial01 -Dexec.args="myvideofile.mpg"
+ $ mvn package exec:java -Dplatform.dependencies -Dexec.mainClass=Tutorial01 -Dexec.args="myvideofile.mpg"
 ```
 
 ### The `pom.xml` build file
@@ -40,7 +39,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>ffmpeg</artifactId>
-            <version>2.4.2-0.9.1-SNAPSHOT</version>
+            <version>2.4.3-0.9.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

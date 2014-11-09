@@ -13,7 +13,9 @@ download http://llvm.org/releases/$LLVM_VERSION/llvm-$LLVM_VERSION.src.tar.xz ll
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
-tar -xJvf ../llvm-$LLVM_VERSION.src.tar.xz
+xz -dk ../llvm-$LLVM_VERSION.src.tar.xz
+tar -xvf ../llvm-$LLVM_VERSION.src.tar
+rm ../llvm-$LLVM_VERSION.src.tar
 cd llvm-$LLVM_VERSION.src
 
 case $PLATFORM in

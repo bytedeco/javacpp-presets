@@ -1,4 +1,4 @@
-FFmpeg:
+#FFmpeg:
 
 Most files in FFmpeg are under the GNU Lesser General Public License version 2.1
 or later (LGPL v2.1+). Read the file COPYING.LGPLv2.1 for details. Some other
@@ -10,11 +10,12 @@ version 2 or later (GPL v2+). See the file COPYING.GPLv2 for details. None of
 these parts are used by default, you have to explicitly pass --enable-gpl to
 configure to activate them. In this case, FFmpeg's license changes to GPL v2+.
 
-Specifically, the GPL parts of FFmpeg are
+Specifically, the GPL parts of FFmpeg are:
 
 - libpostproc
 - libmpcodecs
 - optional x86 optimizations in the files
+  libavcodec/x86/flac_dsp_gpl.asm
   libavcodec/x86/idct_mmx.c
 - libutvideo encoding/decoding wrappers in
   libavcodec/libutvideo*.cpp
@@ -33,6 +34,7 @@ Specifically, the GPL parts of FFmpeg are
     - vf_geq.c
     - vf_histeq.c
     - vf_hqdn3d.c
+    - vf_interlace.c
     - vf_kerndeint.c
     - vf_mcdeint.c
     - vf_mp.c
@@ -47,7 +49,6 @@ Specifically, the GPL parts of FFmpeg are
     - vf_stereo3d.c
     - vf_super2xsai.c
     - vf_tinterlace.c
-    - vf_yadif.c
     - vsrc_mptestsrc.c
 
 Should you, for whatever reason, prefer to use version 3 of the (L)GPL, then
@@ -80,6 +81,7 @@ The following libraries are under GPL:
     - libutvideo
     - libvidstab
     - libx264
+    - libx265
     - libxavs
     - libxvid
 When combining them with FFmpeg, FFmpeg needs to be licensed as GPL as well by

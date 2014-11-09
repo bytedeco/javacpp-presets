@@ -1,8 +1,8 @@
-diff -ruN ARToolKitPlus-2.3.0/android-arm.cmake ARToolKitPlus-2.3.0-patch/android-arm.cmake
---- ARToolKitPlus-2.3.0/android-arm.cmake	1970-01-01 09:00:00.000000000 +0900
-+++ ARToolKitPlus-2.3.0-patch/android-arm.cmake	2014-03-29 15:07:21.800951170 +0900
+diff -ruN ARToolKitPlus-2.3.1/android-arm.cmake ARToolKitPlus-2.3.1-patch/android-arm.cmake
+--- ARToolKitPlus-2.3.1/android-arm.cmake	1970-01-01 09:00:00.000000000 +0900
++++ ARToolKitPlus-2.3.1-patch/android-arm.cmake	2014-11-08 22:39:16.482271782 +0900
 @@ -0,0 +1,26 @@
-+# CMake toolchain to build ARToolKitPlus 2.3.0 for Android 2.2. Sample usage:
++# CMake toolchain to build ARToolKitPlus 2.3.1 for Android 2.2. Sample usage:
 +#
 +# ANDROID_BIN=`pwd`/../android-ndk-r9d/toolchains/arm-linux-androideabi-4.6/prebuilt/linux-x86_64/bin/arm-linux-androideabi \
 +# ANDROID_CPP=`pwd`/../android-ndk-r9d/sources/cxx-stl/gnu-libstdc++/4.6/ \
@@ -28,11 +28,11 @@ diff -ruN ARToolKitPlus-2.3.0/android-arm.cmake ARToolKitPlus-2.3.0-patch/androi
 +add_definitions("-DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300")
 +
 +include_directories("$ENV{ANDROID_CPP}/include/" "$ENV{ANDROID_CPP}/libs/armeabi-v7a/include/" "$ENV{ANDROID_ROOT}/usr/include/")
-diff -ruN ARToolKitPlus-2.3.0/android-x86.cmake ARToolKitPlus-2.3.0-patch/android-x86.cmake
---- ARToolKitPlus-2.3.0/android-x86.cmake	1970-01-01 09:00:00.000000000 +0900
-+++ ARToolKitPlus-2.3.0-patch/android-x86.cmake	2014-03-29 15:07:21.800951170 +0900
+diff -ruN ARToolKitPlus-2.3.1/android-x86.cmake ARToolKitPlus-2.3.1-patch/android-x86.cmake
+--- ARToolKitPlus-2.3.1/android-x86.cmake	1970-01-01 09:00:00.000000000 +0900
++++ ARToolKitPlus-2.3.1-patch/android-x86.cmake	2014-11-08 22:39:20.021341230 +0900
 @@ -0,0 +1,23 @@
-+# CMake toolchain to build ARToolKitPlus 2.3.0 for Android 2.2. Sample usage:
++# CMake toolchain to build ARToolKitPlus 2.3.1 for Android 2.2. Sample usage:
 +#
 +# ANDROID_BIN=`pwd`/../android-ndk/toolchains/x86-4.6/prebuilt/linux-x86_64/bin/i686-linux-android \
 +# ANDROID_CPP=`pwd`/../android-ndk/sources/cxx-stl/gnu-libstdc++/4.6/ \
@@ -55,22 +55,23 @@ diff -ruN ARToolKitPlus-2.3.0/android-x86.cmake ARToolKitPlus-2.3.0-patch/androi
 +add_definitions("-DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -mtune=atom -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300")
 +
 +include_directories("$ENV{ANDROID_CPP}/include/" "$ENV{ANDROID_CPP}/libs/x86/include/" "$ENV{ANDROID_ROOT}/usr/include/")
-diff -ruN ARToolKitPlus-2.3.0/CMakeLists.txt ARToolKitPlus-2.3.0-patch/CMakeLists.txt
---- ARToolKitPlus-2.3.0/CMakeLists.txt	2012-09-15 21:36:20.000000000 +0900
-+++ ARToolKitPlus-2.3.0-patch/CMakeLists.txt	2014-03-29 15:07:39.107253725 +0900
-@@ -8,9 +8,9 @@
+diff -ruN ARToolKitPlus-2.3.1/CMakeLists.txt ARToolKitPlus-2.3.1-patch/CMakeLists.txt
+--- ARToolKitPlus-2.3.1/CMakeLists.txt	2014-10-06 04:46:01.000000000 +0900
++++ ARToolKitPlus-2.3.1-patch/CMakeLists.txt	2014-11-08 22:37:34.997280327 +0900
+@@ -8,8 +8,10 @@
  option(ARTK_USE_BOOST "Compile with boost (OpenCV calibration file support)" FALSE)
  
  if(WIN32)
 -	add_definitions(-D_CRT_SECURE_NO_WARNINGS -DAR_LIBRARY)
+-endif()
 +	add_definitions(-D_CRT_SECURE_NO_WARNINGS -DAR_STATIC)
- else(WIN32)
--    add_definitions(-Wall -O3)
-+    add_definitions(-Wall -O3 -fPIC)
- endif(WIN32)
++else(WIN32)
++	add_definitions(-Wall -O3 -fPIC)
++endif(WIN32)
  
- if(ARTK_USE_BOOST)
-@@ -29,18 +29,18 @@
+ if (CMAKE_BUILD_TYPE STREQUAL "")
+   set(CMAKE_BUILD_TYPE "release" CACHE STRING "" FORCE)
+@@ -31,7 +33,7 @@
  	${AR_SOURCE_DIR}/src/librpp/*.cpp
  	)
  
@@ -79,16 +80,13 @@ diff -ruN ARToolKitPlus-2.3.0/CMakeLists.txt ARToolKitPlus-2.3.0-patch/CMakeList
  
  if(ARTK_BUILD_EXAMPLES)
      add_subdirectory(bin/)
- endif(ARTK_BUILD_EXAMPLES)
+@@ -39,8 +41,8 @@
  
  # make install
--set(CMAKE_INSTALL_PREFIX /usr)
-+# set(CMAKE_INSTALL_PREFIX /usr)
- 
  install(TARGETS ARToolKitPlus 
 -LIBRARY DESTINATION lib  
 -ARCHIVE DESTINATION lib
-+LIBRARY DESTINATION lib${LIB_SUFFIX} 
++LIBRARY DESTINATION lib${LIB_SUFFIX}
 +ARCHIVE DESTINATION lib${LIB_SUFFIX}
  RUNTIME DESTINATION bin)
  
