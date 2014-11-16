@@ -1377,7 +1377,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         @Override public BytePointer arrayData() { return data_ptr(); }
         @Override public int arrayStep() { return step(); }
 
-        public void reset() {
+        /** @see #createBuffer() */
+        @Deprecated public void reset() {
             fullSize = 0;
             byteBuffer = null;
             shortBuffer = null;
@@ -1393,35 +1394,35 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         private IntBuffer intBuffer = null;
         private FloatBuffer floatBuffer = null;
         private DoubleBuffer doubleBuffer = null;
-        public ByteBuffer getByteBuffer() {
+        @Deprecated public ByteBuffer getByteBuffer() {
             if (byteBuffer == null) {
                 byteBuffer = data_ptr().capacity(fullSize()).asBuffer();
             }
             byteBuffer.position(0);
             return byteBuffer;
         }
-        public ShortBuffer getShortBuffer() {
+        @Deprecated public ShortBuffer getShortBuffer() {
             if (shortBuffer == null) {
                 shortBuffer = data_s().capacity(fullSize()/2).asBuffer();
             }
             shortBuffer.position(0);
             return shortBuffer;
         }
-        public IntBuffer getIntBuffer() {
+        @Deprecated public IntBuffer getIntBuffer() {
             if (intBuffer == null) {
                 intBuffer = data_i().capacity(fullSize()/4).asBuffer();
             }
             intBuffer.position(0);
             return intBuffer;
         }
-        public FloatBuffer getFloatBuffer() {
+        @Deprecated public FloatBuffer getFloatBuffer() {
             if (floatBuffer == null) {
                 floatBuffer = data_fl().capacity(fullSize()/4).asBuffer();
             }
             floatBuffer.position(0);
             return floatBuffer;
         }
-        public DoubleBuffer getDoubleBuffer() {
+        @Deprecated public DoubleBuffer getDoubleBuffer() {
             if (doubleBuffer == null) {
                 doubleBuffer = data_db().capacity(fullSize()/8).asBuffer();
             }
@@ -1429,7 +1430,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             return doubleBuffer;
         }
 
-        public double get(int i) {
+        /** @see #createIndexer() */
+        @Deprecated public double get(int i) {
             switch (depth()) {
                 case CV_8U:  return getByteBuffer()  .get(i)&0xFF;
                 case CV_8S:  return getByteBuffer()  .get(i);
@@ -1442,14 +1444,17 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             }
             return Double.NaN;
         }
-        public double get(int i, int j) {
+        /** @see #createIndexer() */
+        @Deprecated public double get(int i, int j) {
             return get(i*step()/elemSize() + j*channels());
         }
 
-        public double get(int i, int j, int k) {
+        /** @see #createIndexer() */
+        @Deprecated public double get(int i, int j, int k) {
             return get(i*step()/elemSize() + j*channels() + k);
         }
-        public synchronized CvMat get(int index, double[] vv, int offset, int length) {
+        /** @see #createIndexer() */
+        @Deprecated public synchronized CvMat get(int index, double[] vv, int offset, int length) {
             int d = depth();
             switch (d) {
                 case CV_8U:
@@ -1498,19 +1503,23 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             }
             return (CvMat)this;
         }
-        public CvMat get(int index, double[] vv) {
+        /** @see #createIndexer() */
+        @Deprecated public CvMat get(int index, double[] vv) {
             return get(index, vv, 0, vv.length);
         }
-        public CvMat get(double[] vv) {
+        /** @see #createIndexer() */
+        @Deprecated public CvMat get(double[] vv) {
             return get(0, vv);
         }
-        public double[] get() {
+        /** @see #createIndexer() */
+        @Deprecated public double[] get() {
             double[] vv = new double[fullSize()/elemSize()];
             get(vv);
             return vv;
         }
 
-        public CvMat put(int i, double v) {
+        /** @see #createIndexer() */
+        @Deprecated public CvMat put(int i, double v) {
             switch (depth()) {
                 case CV_8U:
                 case CV_8S:  getByteBuffer()  .put(i, (byte)(int)v);  break;
@@ -1523,13 +1532,16 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             }
             return (CvMat)this;
         }
-        public CvMat put(int i, int j, double v) {
+        /** @see #createIndexer() */
+        @Deprecated public CvMat put(int i, int j, double v) {
             return put(i*step()/elemSize() + j*channels(), v);
         }
-        public CvMat put(int i, int j, int k, double v) {
+        /** @see #createIndexer() */
+        @Deprecated public CvMat put(int i, int j, int k, double v) {
             return put(i*step()/elemSize() + j*channels() + k, v);
         }
-        public synchronized CvMat put(int index, double[] vv, int offset, int length) {
+        /** @see #createIndexer() */
+        @Deprecated public synchronized CvMat put(int index, double[] vv, int offset, int length) {
             switch (depth()) {
                 case CV_8U:
                 case CV_8S:
@@ -1570,10 +1582,12 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             }
             return (CvMat)this;
         }
-        public CvMat put(int index, double ... vv) {
+        /** @see #createIndexer() */
+        @Deprecated public CvMat put(int index, double ... vv) {
             return put(index, vv, 0, vv.length);
         }
-        public CvMat put(double ... vv) {
+        /** @see #createIndexer() */
+        @Deprecated public CvMat put(double ... vv) {
             return put(0, vv);
         }
 

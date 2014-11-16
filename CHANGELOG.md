@@ -1,4 +1,5 @@
 
+ * Deprecate slow `get()` and `put()` methods of `CvMat` in favor of the fast ones from `createIndexer()` ([issue javacv:317](http://code.google.com/p/javacv/issues/detail?id=317))
  * Include `operations.hpp` and `mat.hpp` in `opencv_core` to get a few important functions such as `read()` and `write()` for `FileStorage`
  * Replace `install_name_tool` hack to set `@rpath` on Mac OS X with patches to do it properly on install ([issue bytedeco/javacpp#6](https://github.com/bytedeco/javacpp/issues/6) and [issue bytedeco/javacv#49](https://github.com/bytedeco/javacv/issues/49))
  * Disable DocLint, which prevents the build from succeeding on Java 8 ([issue bytedeco/javacpp#5](https://github.com/bytedeco/javacpp/issues/5))
