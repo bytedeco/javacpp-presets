@@ -37,7 +37,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(value={
-    @Platform(include={"<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/core.hpp>", "opencv_adapters.h"}, link="opencv_core@.2.4", preload="tbb"),
+    @Platform(include={"<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/core.hpp>",
+                       "<opencv2/core/operations.hpp>", "<opencv2/core/mat.hpp>", "opencv_adapters.h"}, link="opencv_core@.2.4", preload="tbb"),
     @Platform(value="windows", define="_WIN32_WINNT 0x0502", link="opencv_core2410", preload={"msvcr100", "msvcp100"}),
     @Platform(value="windows-x86", preloadpath={"C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/redist/x86/Microsoft.VC100.CRT/"}),
     @Platform(value="windows-x86_64", preloadpath={"C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/redist/x64/Microsoft.VC100.CRT/"}) },
@@ -143,6 +144,13 @@ public class opencv_core implements InfoMapper {
                      + "private native void allocate(int rows, int cols, int type, Pointer data, @Cast(\"size_t\") long step/*=AUTO_STEP*/);\n"
                      + "private Pointer data; // a reference to prevent deallocation\n"
                      + "public Mat(int rows, int cols, int type, Pointer data) { this(rows, cols, type, data, AUTO_STEP); }\n"
+                     + "public Mat(byte ... b) { this(b, false); }\n"
+                     + "public Mat(byte[] b, boolean signed) { this(new BytePointer(b), signed); }\n"
+                     + "public Mat(short ... s) { this(s, true); }\n"
+                     + "public Mat(short[] s, boolean signed) { this(new ShortPointer(s), signed); }\n"
+                     + "public Mat(int ... n) { this(new IntPointer(n)); }\n"
+                     + "public Mat(double ... d) { this(new DoublePointer(d)); }\n"
+                     + "public Mat(float ... f) { this(new FloatPointer(f)); }\n"
                      + "public Mat(BytePointer p, boolean signed) { this(p.limit - p.position, 1, signed ? CV_8SC1 : CV_8UC1, p); }\n"
                      + "public Mat(ShortPointer p, boolean signed) { this(p.limit - p.position, 1, signed ? CV_16SC1 : CV_16UC1, p); }\n"
                      + "public Mat(IntPointer p) { this(p.limit - p.position, 1, CV_32SC1, p); }\n"
@@ -173,6 +181,24 @@ public class opencv_core implements InfoMapper {
                .put(new Info("cv::Vec2i").pointerTypes("Point"))
                .put(new Info("cv::Vec2d").pointerTypes("Point2d"))
                .put(new Info("cv::Vec3d").pointerTypes("Point3d"))
+
+               .put(new Info("defined __INTEL_COMPILER && !(defined WIN32 || defined _WIN32)", "defined __GNUC__",
+                             "defined WIN32 || defined _WIN32 || defined WINCE").define(false))
+
+               .put(new Info("cv::saturate_cast<uchar>").javaNames("saturateCastUchar"))
+               .put(new Info("cv::saturate_cast<schar>").javaNames("saturateCastSchar"))
+               .put(new Info("cv::saturate_cast<ushort>").javaNames("saturateCastUshort"))
+               .put(new Info("cv::saturate_cast<short>").javaNames("saturateCastShort"))
+               .put(new Info("cv::saturate_cast<int>").javaNames("saturateCastInt"))
+               .put(new Info("cv::saturate_cast<unsigned>").javaNames("saturateCastUnsigned"))
+
+               .put(new Info("cv::normL2Sqr", "cv::normL1").skip())
+
+               .put(new Info("cv::Formatted(cv::Mat&, cv::Formatter*, int*)").javaText(
+                       "public Formatted(@Const @ByRef Mat m, @Const Formatter fmt,\n"
+                     + "              @StdVector IntPointer params) { allocate(m, fmt, params); }\n"
+                     + "private native void allocate(@Const @ByRef Mat m, @Const Formatter fmt,\n"
+                     + "              @Cast({\"\", \"std::vector<int>&\"}) @StdVector IntPointer params);"))
 
                .put(new Info("cv::Ptr").annotations("@Ptr"));
     }

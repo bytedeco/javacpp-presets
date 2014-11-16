@@ -4900,11 +4900,6 @@ public static final String cvFuncName = "";
         public GpuMat(Pointer p) { super(p); }
     }
 
-
-@Namespace("cv") @Opaque public static class MatExpr extends Pointer {
-    public MatExpr() { }
-    public MatExpr(Pointer p) { super(p); }
-}
 @Namespace("cv") @Opaque public static class MatOp_Base extends Pointer {
     public MatOp_Base() { }
     public MatOp_Base(Pointer p) { super(p); }
@@ -4995,7 +4990,6 @@ public static final int DFT_INVERSE= 1, DFT_SCALE= 2, DFT_ROWS= 4, DFT_COMPLEX_O
 
 
 // #if defined __GNUC__
-// #define CV_Func __func__
 // #elif defined _MSC_VER
 // #define CV_Func __FUNCTION__
 // #else
@@ -6254,6 +6248,13 @@ public static final int MAGIC_MASK= 0xFFFF0000, TYPE_MASK= 0x00000FFF, DEPTH_MAS
     private native void allocate(int rows, int cols, int type, Pointer data, @Cast("size_t") long step/*=AUTO_STEP*/);
     private Pointer data; // a reference to prevent deallocation
     public Mat(int rows, int cols, int type, Pointer data) { this(rows, cols, type, data, AUTO_STEP); }
+    public Mat(byte ... b) { this(b, false); }
+    public Mat(byte[] b, boolean signed) { this(new BytePointer(b), signed); }
+    public Mat(short ... s) { this(s, true); }
+    public Mat(short[] s, boolean signed) { this(new ShortPointer(s), signed); }
+    public Mat(int ... n) { this(new IntPointer(n)); }
+    public Mat(double ... d) { this(new DoublePointer(d)); }
+    public Mat(float ... f) { this(new FloatPointer(f)); }
     public Mat(BytePointer p, boolean signed) { this(p.limit - p.position, 1, signed ? CV_8SC1 : CV_8UC1, p); }
     public Mat(ShortPointer p, boolean signed) { this(p.limit - p.position, 1, signed ? CV_16SC1 : CV_16UC1, p); }
     public Mat(IntPointer p) { this(p.limit - p.position, 1, CV_32SC1, p); }
@@ -9120,6 +9121,2016 @@ public static class ConvertScaleData extends FunctionPointer {
 // #include "opencv2/core/mat.hpp"
 
 // #endif /*__OPENCV_CORE_HPP__*/
+
+
+// Parsed from <opencv2/core/operations.hpp>
+
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+//
+//  By downloading, copying, installing or using the software you agree to this license.
+//  If you do not agree to this license, do not download, install,
+//  copy or use the software.
+//
+//
+//                           License Agreement
+//                For Open Source Computer Vision Library
+//
+// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
+// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
+// Third party copyrights are property of their respective owners.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+//   * Redistribution's of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//
+//   * Redistribution's in binary form must reproduce the above copyright notice,
+//     this list of conditions and the following disclaimer in the documentation
+//     and/or other materials provided with the distribution.
+//
+//   * The name of the copyright holders may not be used to endorse or promote products
+//     derived from this software without specific prior written permission.
+//
+// This software is provided by the copyright holders and contributors "as is" and
+// any express or implied warranties, including, but not limited to, the implied
+// warranties of merchantability and fitness for a particular purpose are disclaimed.
+// In no event shall the Intel Corporation or contributors be liable for any direct,
+// indirect, incidental, special, exemplary, or consequential damages
+// (including, but not limited to, procurement of substitute goods or services;
+// loss of use, data, or profits; or business interruption) however caused
+// and on any theory of liability, whether in contract, strict liability,
+// or tort (including negligence or otherwise) arising in any way out of
+// the use of this software, even if advised of the possibility of such damage.
+//
+//M*/
+
+// #ifndef __OPENCV_CORE_OPERATIONS_HPP__
+// #define __OPENCV_CORE_OPERATIONS_HPP__
+
+// #ifndef SKIP_INCLUDES
+//   #include <string.h>
+//   #include <limits.h>
+// #endif // SKIP_INCLUDES
+
+
+// #ifdef __cplusplus
+
+/////// exchange-add operation for atomic operations on reference counters ///////
+// #if defined __INTEL_COMPILER && !(defined WIN32 || defined _WIN32)   // atomic increment on the linux version of the Intel(tm) compiler
+// #elif defined __GNUC__
+
+// #elif defined WIN32 || defined _WIN32 || defined WINCE
+
+// #else
+  public static native int CV_XADD(IntPointer addr, int delta);
+  public static native int CV_XADD(IntBuffer addr, int delta);
+  public static native int CV_XADD(int[] addr, int delta);
+// #endif
+
+// #include <limits>
+
+// #ifdef _MSC_VER
+// # pragma warning(push)
+// # pragma warning(disable:4127) //conditional expression is constant
+// #endif
+
+
+/////////////// saturate_cast (used in image & signal processing) ///////////////////
+
+@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte saturateCastUchar(@Cast("uchar") byte v);
+
+@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte saturateCastSchar(@Cast("uchar") byte v);
+
+@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short saturateCastUshort(@Cast("uchar") byte v);
+
+@Namespace("cv") public static native @Name("saturate_cast<short>") short saturateCastShort(@Cast("uchar") byte v);
+
+@Namespace("cv") public static native @Name("saturate_cast<int>") int saturateCastInt(@Cast("uchar") byte v);
+
+@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int saturateCastUnsigned(@Cast("uchar") byte v);
+@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte saturateCastUchar(@Cast("ushort") short v);
+@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte saturateCastSchar(@Cast("ushort") short v);
+@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short saturateCastUshort(@Cast("ushort") short v);
+@Namespace("cv") public static native @Name("saturate_cast<short>") short saturateCastShort(@Cast("ushort") short v);
+@Namespace("cv") public static native @Name("saturate_cast<int>") int saturateCastInt(@Cast("ushort") short v);
+@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int saturateCastUnsigned(@Cast("ushort") short v);
+@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte saturateCastUchar(@Cast("unsigned") int v);
+@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte saturateCastSchar(@Cast("unsigned") int v);
+@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short saturateCastUshort(@Cast("unsigned") int v);
+@Namespace("cv") public static native @Name("saturate_cast<short>") short saturateCastShort(@Cast("unsigned") int v);
+@Namespace("cv") public static native @Name("saturate_cast<int>") int saturateCastInt(@Cast("unsigned") int v);
+@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int saturateCastUnsigned(@Cast("unsigned") int v);
+@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte saturateCastUchar(float v);
+@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte saturateCastSchar(float v);
+@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short saturateCastUshort(float v);
+@Namespace("cv") public static native @Name("saturate_cast<short>") short saturateCastShort(float v);
+@Namespace("cv") public static native @Name("saturate_cast<int>") int saturateCastInt(float v);
+@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int saturateCastUnsigned(float v);
+@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte saturateCastUchar(double v);
+@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte saturateCastSchar(double v);
+@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short saturateCastUshort(double v);
+@Namespace("cv") public static native @Name("saturate_cast<short>") short saturateCastShort(double v);
+@Namespace("cv") public static native @Name("saturate_cast<int>") int saturateCastInt(double v);
+@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int saturateCastUnsigned(double v);
+
+// we intentionally do not clip negative numbers, to make -1 become 0xffffffff etc.
+
+@Namespace("cv") public static native int fast_abs(@Cast("uchar") byte v);
+@Namespace("cv") public static native int fast_abs(@Cast("ushort") short v);
+@Namespace("cv") public static native int fast_abs(int v);
+@Namespace("cv") public static native float fast_abs(float v);
+@Namespace("cv") public static native double fast_abs(double v);
+
+//////////////////////////////// Matx /////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@Namespace("cv") public static native int LU(FloatPointer A, @Cast("size_t") long astep, int m, FloatPointer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv") public static native int LU(FloatBuffer A, @Cast("size_t") long astep, int m, FloatBuffer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv") public static native int LU(float[] A, @Cast("size_t") long astep, int m, float[] b, @Cast("size_t") long bstep, int n);
+@Namespace("cv") public static native int LU(DoublePointer A, @Cast("size_t") long astep, int m, DoublePointer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv") public static native int LU(DoubleBuffer A, @Cast("size_t") long astep, int m, DoubleBuffer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv") public static native int LU(double[] A, @Cast("size_t") long astep, int m, double[] b, @Cast("size_t") long bstep, int n);
+@Namespace("cv") public static native @Cast("bool") boolean Cholesky(FloatPointer A, @Cast("size_t") long astep, int m, FloatPointer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv") public static native @Cast("bool") boolean Cholesky(FloatBuffer A, @Cast("size_t") long astep, int m, FloatBuffer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv") public static native @Cast("bool") boolean Cholesky(float[] A, @Cast("size_t") long astep, int m, float[] b, @Cast("size_t") long bstep, int n);
+@Namespace("cv") public static native @Cast("bool") boolean Cholesky(DoublePointer A, @Cast("size_t") long astep, int m, DoublePointer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv") public static native @Cast("bool") boolean Cholesky(DoubleBuffer A, @Cast("size_t") long astep, int m, DoubleBuffer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv") public static native @Cast("bool") boolean Cholesky(double[] A, @Cast("size_t") long astep, int m, double[] b, @Cast("size_t") long bstep, int n);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@Namespace("cv") public static native float normL2Sqr_(@Const FloatPointer a, @Const FloatPointer b, int n);
+@Namespace("cv") public static native float normL2Sqr_(@Const FloatBuffer a, @Const FloatBuffer b, int n);
+@Namespace("cv") public static native float normL2Sqr_(@Const float[] a, @Const float[] b, int n);
+@Namespace("cv") public static native float normL1_(@Const FloatPointer a, @Const FloatPointer b, int n);
+@Namespace("cv") public static native float normL1_(@Const FloatBuffer a, @Const FloatBuffer b, int n);
+@Namespace("cv") public static native float normL1_(@Const float[] a, @Const float[] b, int n);
+@Namespace("cv") public static native int normL1_(@Cast("const uchar*") BytePointer a, @Cast("const uchar*") BytePointer b, int n);
+@Namespace("cv") public static native int normL1_(@Cast("const uchar*") ByteBuffer a, @Cast("const uchar*") ByteBuffer b, int n);
+@Namespace("cv") public static native int normL1_(@Cast("const uchar*") byte[] a, @Cast("const uchar*") byte[] b, int n);
+@Namespace("cv") public static native int normHamming(@Cast("const uchar*") BytePointer a, @Cast("const uchar*") BytePointer b, int n);
+@Namespace("cv") public static native int normHamming(@Cast("const uchar*") ByteBuffer a, @Cast("const uchar*") ByteBuffer b, int n);
+@Namespace("cv") public static native int normHamming(@Cast("const uchar*") byte[] a, @Cast("const uchar*") byte[] b, int n);
+@Namespace("cv") public static native int normHamming(@Cast("const uchar*") BytePointer a, @Cast("const uchar*") BytePointer b, int n, int cellSize);
+@Namespace("cv") public static native int normHamming(@Cast("const uchar*") ByteBuffer a, @Cast("const uchar*") ByteBuffer b, int n, int cellSize);
+@Namespace("cv") public static native int normHamming(@Cast("const uchar*") byte[] a, @Cast("const uchar*") byte[] b, int n, int cellSize);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////// short vector (Vec) /////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////// Complex //////////////////////////////
+
+
+
+
+
+
+//////////////////////////////// 2D Point ////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////// 3D Point ////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////// Size ////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////// Rect ////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////// Scalar_ ///////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////// Range /////////////////////////////////
+
+
+
+
+
+
+
+
+
+@Namespace("cv") public static native @Cast("bool") @Name("operator==") boolean equals(@Const @ByRef Range r1, @Const @ByRef Range r2);
+
+@Namespace("cv") public static native @Cast("bool") @Name("operator!=") boolean notEquals(@Const @ByRef Range r1, @Const @ByRef Range r2);
+
+@Namespace("cv") public static native @Cast("bool") @Name("operator!") boolean not(@Const @ByRef Range r);
+
+@Namespace("cv") public static native @ByVal @Name("operator&") Range and(@Const @ByRef Range r1, @Const @ByRef Range r2);
+
+@Namespace("cv") public static native @ByRef @Name("operator&=") Range andPut(@ByRef Range r1, @Const @ByRef Range r2);
+
+@Namespace("cv") public static native @ByVal @Name("operator+") Range add(@Const @ByRef Range r1, int delta);
+
+@Namespace("cv") public static native @ByVal @Name("operator+") Range add(int delta, @Const @ByRef Range r1);
+
+@Namespace("cv") public static native @ByVal @Name("operator-") Range subtract(@Const @ByRef Range r1, int delta);
+
+
+
+
+
+//////////////////////////////// Vector ////////////////////////////////
+
+// template vector class. It is similar to STL's vector,
+// with a few important differences:
+//   1) it can be created on top of user-allocated data w/o copying it
+//   2) vector b = a means copying the header,
+//      not the underlying data (use clone() to make a deep copy)
+
+// Multiply-with-Carry RNG
+
+
+
+
+
+
+
+
+
+
+
+
+// * (2^32-1)^-1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////// AutoBuffer ////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////// Ptr ////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//// specializied implementations of Ptr::delete_obj() for classic OpenCV types
+
+
+
+
+
+
+
+
+//////////////////////////////////////// XML & YAML I/O ////////////////////////////////////
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @StdString BytePointer name, int value );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @StdString String name, int value );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @StdString BytePointer name, float value );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @StdString String name, float value );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @StdString BytePointer name, double value );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @StdString String name, double value );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @StdString BytePointer name, @StdString BytePointer value );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @StdString String name, @StdString String value );
+
+@Namespace("cv") public static native void writeScalar( @ByRef FileStorage fs, int value );
+@Namespace("cv") public static native void writeScalar( @ByRef FileStorage fs, float value );
+@Namespace("cv") public static native void writeScalar( @ByRef FileStorage fs, double value );
+@Namespace("cv") public static native void writeScalar( @ByRef FileStorage fs, @StdString BytePointer value );
+@Namespace("cv") public static native void writeScalar( @ByRef FileStorage fs, @StdString String value );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, int value );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, float value );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, double value );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @StdString BytePointer value );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @StdString String value );
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @Const @ByRef Range r );
+
+@Namespace("cv") @NoOffset public static class WriteStructContext extends Pointer {
+    static { Loader.load(); }
+    public WriteStructContext() { }
+    public WriteStructContext(Pointer p) { super(p); }
+
+    public WriteStructContext(@ByRef FileStorage _fs, @StdString BytePointer name,
+            int flags, @StdString BytePointer typeName/*=string()*/) { allocate(_fs, name, flags, typeName); }
+    private native void allocate(@ByRef FileStorage _fs, @StdString BytePointer name,
+            int flags, @StdString BytePointer typeName/*=string()*/);
+    public WriteStructContext(@ByRef FileStorage _fs, @StdString BytePointer name,
+            int flags) { allocate(_fs, name, flags); }
+    private native void allocate(@ByRef FileStorage _fs, @StdString BytePointer name,
+            int flags);
+    public WriteStructContext(@ByRef FileStorage _fs, @StdString String name,
+            int flags, @StdString String typeName/*=string()*/) { allocate(_fs, name, flags, typeName); }
+    private native void allocate(@ByRef FileStorage _fs, @StdString String name,
+            int flags, @StdString String typeName/*=string()*/);
+    public WriteStructContext(@ByRef FileStorage _fs, @StdString String name,
+            int flags) { allocate(_fs, name, flags); }
+    private native void allocate(@ByRef FileStorage _fs, @StdString String name,
+            int flags);
+    public native FileStorage fs(); public native WriteStructContext fs(FileStorage fs);
+}
+
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @StdString BytePointer name, @Const @ByRef Range r );
+@Namespace("cv") public static native void write(@ByRef FileStorage fs, @StdString String name, @Const @ByRef Range r );
+
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @StdString BytePointer name, @Const @ByRef Mat value );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @StdString String name, @Const @ByRef Mat value );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @StdString BytePointer name, @Const @ByRef SparseMat value );
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @StdString String name, @Const @ByRef SparseMat value );
+
+@Namespace("cv") public static native @ByRef @Name("operator<<") FileStorage shiftLeft(@ByRef FileStorage fs, @StdString BytePointer str);
+@Namespace("cv") public static native @ByRef @Name("operator<<") FileStorage shiftLeft(@ByRef FileStorage fs, @StdString String str);
+
+@Namespace("cv") public static native @ByRef @Name("operator<<") FileStorage shiftLeft(@ByRef FileStorage fs, @Cast("char*") ByteBuffer value);
+@Namespace("cv") public static native @ByRef @Name("operator<<") FileStorage shiftLeft(@ByRef FileStorage fs, @Cast("char*") byte[] value);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef IntPointer value, int default_value);
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef IntBuffer value, int default_value);
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef int[] value, int default_value);
+
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("bool*") @ByRef BoolPointer value, @Cast("bool") boolean default_value);
+
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("uchar*") @ByRef BytePointer value, @Cast("uchar") byte default_value);
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("uchar*") @ByRef ByteBuffer value, @Cast("uchar") byte default_value);
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("uchar*") @ByRef byte[] value, @Cast("uchar") byte default_value);
+
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("ushort*") @ByRef ShortPointer value, @Cast("ushort") short default_value);
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("ushort*") @ByRef ShortBuffer value, @Cast("ushort") short default_value);
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("ushort*") @ByRef short[] value, @Cast("ushort") short default_value);
+
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef FloatPointer value, float default_value);
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef FloatBuffer value, float default_value);
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef float[] value, float default_value);
+
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef DoublePointer value, double default_value);
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef DoubleBuffer value, double default_value);
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef double[] value, double default_value);
+
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @StdString BytePointer value, @StdString BytePointer default_value);
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @StdString String value, @StdString String default_value);
+
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef Range value, @Const @ByRef Range default_value);
+
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef Mat mat, @Const @ByRef Mat default_mat/*=Mat()*/ );
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef Mat mat );
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef SparseMat mat, @Const @ByRef SparseMat default_mat/*=SparseMat()*/ );
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef SparseMat mat );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@Namespace("cv") public static native @Cast("bool") @Name("operator==") boolean equals(@Const @ByRef FileNodeIterator it1, @Const @ByRef FileNodeIterator it2);
+
+@Namespace("cv") public static native @Cast("bool") @Name("operator!=") boolean notEquals(@Const @ByRef FileNodeIterator it1, @Const @ByRef FileNodeIterator it2);
+
+@Namespace("cv") public static native @Cast("ptrdiff_t") @Name("operator-") long subtract(@Const @ByRef FileNodeIterator it1, @Const @ByRef FileNodeIterator it2);
+
+@Namespace("cv") public static native @Cast("bool") @Name("operator<") boolean lessThan(@Const @ByRef FileNodeIterator it1, @Const @ByRef FileNodeIterator it2);
+
+
+
+//////////////////////////////////////// Various algorithms ////////////////////////////////////
+
+/****************************************************************************************\
+
+  Generic implementation of QuickSort algorithm
+  Use it as: vector<_Tp> a; ... sort(a,<less_than_predictor>);
+
+  The current implementation was derived from *BSD system qsort():
+
+    * Copyright (c) 1992, 1993
+    *  The Regents of the University of California.  All rights reserved.
+    *
+    * Redistribution and use in source and binary forms, with or without
+    * modification, are permitted provided that the following conditions
+    * are met:
+    * 1. Redistributions of source code must retain the above copyright
+    *    notice, this list of conditions and the following disclaimer.
+    * 2. Redistributions in binary form must reproduce the above copyright
+    *    notice, this list of conditions and the following disclaimer in the
+    *    documentation and/or other materials provided with the distribution.
+    * 3. All advertising materials mentioning features or use of this software
+    *    must display the following acknowledgement:
+    *  This product includes software developed by the University of
+    *  California, Berkeley and its contributors.
+    * 4. Neither the name of the University nor the names of its contributors
+    *    may be used to endorse or promote products derived from this software
+    *    without specific prior written permission.
+    *
+    * THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND
+    * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+    * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+    * ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE
+    * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+    * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+    * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+    * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+    * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+    * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+    * SUCH DAMAGE.
+
+\****************************************************************************************/
+
+
+// This function splits the input sequence or set into one or more equivalence classes and
+// returns the vector of labels - 0-based class indexes for each element.
+// predicate(a,b) returns true if the two sequence elements certainly belong to the same class.
+//
+// The algorithm is described in "Introduction to Algorithms"
+// by Cormen, Leiserson and Rivest, the chapter "Data structures for disjoint sets"
+
+
+//////////////////////////////////////////////////////////////////////////////
+
+// bridge C++ => C Seq API
+@Namespace("cv") public static native @Cast("schar*") BytePointer seqPush( CvSeq seq, @Const Pointer element/*=0*/);
+@Namespace("cv") public static native @Cast("schar*") BytePointer seqPush( CvSeq seq);
+@Namespace("cv") public static native @Cast("schar*") BytePointer seqPushFront( CvSeq seq, @Const Pointer element/*=0*/);
+@Namespace("cv") public static native @Cast("schar*") BytePointer seqPushFront( CvSeq seq);
+@Namespace("cv") public static native void seqPop( CvSeq seq, Pointer element/*=0*/);
+@Namespace("cv") public static native void seqPop( CvSeq seq);
+@Namespace("cv") public static native void seqPopFront( CvSeq seq, Pointer element/*=0*/);
+@Namespace("cv") public static native void seqPopFront( CvSeq seq);
+@Namespace("cv") public static native void seqPopMulti( CvSeq seq, Pointer elements,
+                              int count, int in_front/*=0*/ );
+@Namespace("cv") public static native void seqPopMulti( CvSeq seq, Pointer elements,
+                              int count );
+@Namespace("cv") public static native void seqRemove( CvSeq seq, int index );
+@Namespace("cv") public static native void clearSeq( CvSeq seq );
+@Namespace("cv") public static native @Cast("schar*") BytePointer getSeqElem( @Const CvSeq seq, int index );
+@Namespace("cv") public static native void seqRemoveSlice( CvSeq seq, @ByVal CvSlice slice );
+@Namespace("cv") public static native void seqInsertSlice( CvSeq seq, int before_index, @Const CvArr from_arr );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@Namespace("cv") public static class Formatter extends Pointer {
+    static { Loader.load(); }
+    public Formatter() { }
+    public Formatter(Pointer p) { super(p); }
+
+    public native void write(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Mat m, @Const IntPointer params/*=0*/, int nparams/*=0*/);
+    public native void write(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Mat m);
+    public native void write(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Mat m, @Const IntBuffer params/*=0*/, int nparams/*=0*/);
+    public native void write(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Mat m, @Const int[] params/*=0*/, int nparams/*=0*/);
+    public native void write(@Cast("std::ostream*") @ByRef Pointer out, @Const Pointer data, int nelems, int type,
+                           @Const IntPointer params/*=0*/, int nparams/*=0*/);
+    public native void write(@Cast("std::ostream*") @ByRef Pointer out, @Const Pointer data, int nelems, int type);
+    public native void write(@Cast("std::ostream*") @ByRef Pointer out, @Const Pointer data, int nelems, int type,
+                           @Const IntBuffer params/*=0*/, int nparams/*=0*/);
+    public native void write(@Cast("std::ostream*") @ByRef Pointer out, @Const Pointer data, int nelems, int type,
+                           @Const int[] params/*=0*/, int nparams/*=0*/);
+    public static native @Const Formatter get(@Cast("const char*") BytePointer fmt/*=""*/);
+    public static native @Const Formatter get();
+    public static native @Const Formatter get(String fmt/*=""*/);
+    public static native @Const Formatter setDefault(@Const Formatter fmt);
+}
+
+
+@Namespace("cv") @NoOffset public static class Formatted extends Pointer {
+    static { Loader.load(); }
+    public Formatted() { }
+    public Formatted(Pointer p) { super(p); }
+
+    public Formatted(@Const @ByRef Mat m, @Const Formatter fmt,
+                  @StdVector IntPointer params) { allocate(m, fmt, params); }
+    private native void allocate(@Const @ByRef Mat m, @Const Formatter fmt,
+                  @Cast({"", "std::vector<int>&"}) @StdVector IntPointer params);
+    public native @ByRef Mat mtx(); public native Formatted mtx(Mat mtx);
+    @MemberGetter public native @Const Formatter fmt();
+    public native @StdVector IntPointer params(); public native Formatted params(IntPointer params);
+}
+
+@Namespace("cv") public static native @ByVal Formatted format(@Const @ByRef Mat mtx, @Cast("const char*") BytePointer fmt,
+                               @StdVector IntPointer params/*=vector<int>()*/);
+@Namespace("cv") public static native @ByVal Formatted format(@Const @ByRef Mat mtx, @Cast("const char*") BytePointer fmt);
+@Namespace("cv") public static native @ByVal Formatted format(@Const @ByRef Mat mtx, String fmt,
+                               @StdVector IntBuffer params/*=vector<int>()*/);
+@Namespace("cv") public static native @ByVal Formatted format(@Const @ByRef Mat mtx, String fmt);
+@Namespace("cv") public static native @ByVal Formatted format(@Const @ByRef Mat mtx, @Cast("const char*") BytePointer fmt,
+                               @StdVector int[] params/*=vector<int>()*/);
+@Namespace("cv") public static native @ByVal Formatted format(@Const @ByRef Mat mtx, String fmt,
+                               @StdVector IntPointer params/*=vector<int>()*/);
+@Namespace("cv") public static native @ByVal Formatted format(@Const @ByRef Mat mtx, @Cast("const char*") BytePointer fmt,
+                               @StdVector IntBuffer params/*=vector<int>()*/);
+@Namespace("cv") public static native @ByVal Formatted format(@Const @ByRef Mat mtx, String fmt,
+                               @StdVector int[] params/*=vector<int>()*/);
+
+/** \brief prints Mat to the output stream in Matlab notation
+ * use like
+ @verbatim
+ Mat my_mat = Mat::eye(3,3,CV_32F);
+ std::cout << my_mat;
+ @endverbatim
+ */
+@Namespace("cv") public static native @Cast("std::ostream*") @ByRef @Name("operator<<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Mat mtx);
+
+/** \brief prints Mat to the output stream allows in the specified notation (see format)
+ * use like
+ @verbatim
+ Mat my_mat = Mat::eye(3,3,CV_32F);
+ std::cout << my_mat;
+ @endverbatim
+ */
+@Namespace("cv") public static native @Cast("std::ostream*") @ByRef @Name("operator<<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer out, @Const @ByRef Formatted fmtd);
+
+
+/** Writes a Matx to an output stream.
+ */
+
+/** Writes a point to an output stream in Matlab notation
+ */
+
+/** Writes a point to an output stream in Matlab notation
+ */
+
+/** Writes a Vec to an output stream. Format example : [10, 20, 30]
+ */
+
+/** Writes a Size_ to an output stream. Format example : [640 x 480]
+ */
+
+/** Writes a Rect_ to an output stream. Format example : [640 x 480 from (10, 20)]
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// #ifdef _MSC_VER
+// # pragma warning(pop)
+// #endif
+
+// #endif // __cplusplus
+// #endif
+
+
+// Parsed from <opencv2/core/mat.hpp>
+
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+//
+//  By downloading, copying, installing or using the software you agree to this license.
+//  If you do not agree to this license, do not download, install,
+//  copy or use the software.
+//
+//
+//                           License Agreement
+//                For Open Source Computer Vision Library
+//
+// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
+// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
+// Third party copyrights are property of their respective owners.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+//   * Redistribution's of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//
+//   * Redistribution's in binary form must reproduce the above copyright notice,
+//     this list of conditions and the following disclaimer in the documentation
+//     and/or other materials provided with the distribution.
+//
+//   * The name of the copyright holders may not be used to endorse or promote products
+//     derived from this software without specific prior written permission.
+//
+// This software is provided by the copyright holders and contributors "as is" and
+// any express or implied warranties, including, but not limited to, the implied
+// warranties of merchantability and fitness for a particular purpose are disclaimed.
+// In no event shall the Intel Corporation or contributors be liable for any direct,
+// indirect, incidental, special, exemplary, or consequential damages
+// (including, but not limited to, procurement of substitute goods or services;
+// loss of use, data, or profits; or business interruption) however caused
+// and on any theory of liability, whether in contract, strict liability,
+// or tort (including negligence or otherwise) arising in any way out of
+// the use of this software, even if advised of the possibility of such damage.
+//
+//M*/
+
+// #ifndef __OPENCV_CORE_MATRIX_OPERATIONS_HPP__
+// #define __OPENCV_CORE_MATRIX_OPERATIONS_HPP__
+
+// #ifndef SKIP_INCLUDES
+// #include <limits.h>
+// #include <string.h>
+// #endif // SKIP_INCLUDES
+
+// #ifdef __cplusplus
+
+//////////////////////////////// Mat ////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@Namespace("cv") public static native @ByVal Mat cvarrToMatND(@Const CvArr arr, @Cast("bool") boolean copyData/*=false*/, int coiMode/*=0*/);
+@Namespace("cv") public static native @ByVal Mat cvarrToMatND(@Const CvArr arr);
+
+///////////////////////////////////////////// SVD //////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////// Mat_<_Tp> ////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////// Input/Output Arrays /////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////////// Matrix Expressions /////////////////////////////////////////
+
+@Namespace("cv") public static class MatOp extends Pointer {
+    static { Loader.load(); }
+    public MatOp() { }
+    public MatOp(Pointer p) { super(p); }
+
+
+    public native @Cast("bool") boolean elementWise(@Const @ByRef MatExpr expr);
+    public native void assign(@Const @ByRef MatExpr expr, @ByRef Mat m, int type/*=-1*/);
+    public native void assign(@Const @ByRef MatExpr expr, @ByRef Mat m);
+    public native void roi(@Const @ByRef MatExpr expr, @Const @ByRef Range rowRange,
+                         @Const @ByRef Range colRange, @ByRef MatExpr res);
+    public native void diag(@Const @ByRef MatExpr expr, int d, @ByRef MatExpr res);
+    public native void augAssignAdd(@Const @ByRef MatExpr expr, @ByRef Mat m);
+    public native void augAssignSubtract(@Const @ByRef MatExpr expr, @ByRef Mat m);
+    public native void augAssignMultiply(@Const @ByRef MatExpr expr, @ByRef Mat m);
+    public native void augAssignDivide(@Const @ByRef MatExpr expr, @ByRef Mat m);
+    public native void augAssignAnd(@Const @ByRef MatExpr expr, @ByRef Mat m);
+    public native void augAssignOr(@Const @ByRef MatExpr expr, @ByRef Mat m);
+    public native void augAssignXor(@Const @ByRef MatExpr expr, @ByRef Mat m);
+
+    public native void add(@Const @ByRef MatExpr expr1, @Const @ByRef MatExpr expr2, @ByRef MatExpr res);
+    public native void add(@Const @ByRef MatExpr expr1, @Const @ByRef Scalar s, @ByRef MatExpr res);
+
+    public native void subtract(@Const @ByRef MatExpr expr1, @Const @ByRef MatExpr expr2, @ByRef MatExpr res);
+    public native void subtract(@Const @ByRef Scalar s, @Const @ByRef MatExpr expr, @ByRef MatExpr res);
+
+    public native void multiply(@Const @ByRef MatExpr expr1, @Const @ByRef MatExpr expr2, @ByRef MatExpr res, double scale/*=1*/);
+    public native void multiply(@Const @ByRef MatExpr expr1, @Const @ByRef MatExpr expr2, @ByRef MatExpr res);
+    public native void multiply(@Const @ByRef MatExpr expr1, double s, @ByRef MatExpr res);
+
+    public native void divide(@Const @ByRef MatExpr expr1, @Const @ByRef MatExpr expr2, @ByRef MatExpr res, double scale/*=1*/);
+    public native void divide(@Const @ByRef MatExpr expr1, @Const @ByRef MatExpr expr2, @ByRef MatExpr res);
+    public native void divide(double s, @Const @ByRef MatExpr expr, @ByRef MatExpr res);
+
+    public native void abs(@Const @ByRef MatExpr expr, @ByRef MatExpr res);
+
+    public native void transpose(@Const @ByRef MatExpr expr, @ByRef MatExpr res);
+    public native void matmul(@Const @ByRef MatExpr expr1, @Const @ByRef MatExpr expr2, @ByRef MatExpr res);
+    public native void invert(@Const @ByRef MatExpr expr, int method, @ByRef MatExpr res);
+
+    public native @ByVal Size size(@Const @ByRef MatExpr expr);
+    public native int type(@Const @ByRef MatExpr expr);
+}
+
+
+@Namespace("cv") @NoOffset public static class MatExpr extends Pointer {
+    static { Loader.load(); }
+    public MatExpr(Pointer p) { super(p); }
+    public MatExpr(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public MatExpr position(int position) {
+        return (MatExpr)super.position(position);
+    }
+
+    public MatExpr() { allocate(); }
+    private native void allocate();
+    public MatExpr(@Const MatOp _op, int _flags, @Const @ByRef Mat _a/*=Mat()*/, @Const @ByRef Mat _b/*=Mat()*/,
+                @Const @ByRef Mat _c/*=Mat()*/, double _alpha/*=1*/, double _beta/*=1*/, @Const @ByRef Scalar _s/*=Scalar()*/) { allocate(_op, _flags, _a, _b, _c, _alpha, _beta, _s); }
+    private native void allocate(@Const MatOp _op, int _flags, @Const @ByRef Mat _a/*=Mat()*/, @Const @ByRef Mat _b/*=Mat()*/,
+                @Const @ByRef Mat _c/*=Mat()*/, double _alpha/*=1*/, double _beta/*=1*/, @Const @ByRef Scalar _s/*=Scalar()*/);
+    public MatExpr(@Const MatOp _op, int _flags) { allocate(_op, _flags); }
+    private native void allocate(@Const MatOp _op, int _flags);
+    public MatExpr(@Const @ByRef Mat m) { allocate(m); }
+    private native void allocate(@Const @ByRef Mat m);
+    public native @ByVal @Name("operator cv::Mat") Mat asMat();
+
+    public native @ByVal MatExpr row(int y);
+    public native @ByVal MatExpr col(int x);
+    public native @ByVal MatExpr diag(int d/*=0*/);
+    public native @ByVal MatExpr diag();
+    public native @ByVal @Name("operator()") MatExpr apply( @Const @ByRef Range rowRange, @Const @ByRef Range colRange );
+    public native @ByVal @Name("operator()") MatExpr apply( @Const @ByRef Rect roi );
+
+    public native @ByVal Mat cross(@Const @ByRef Mat m);
+    public native double dot(@Const @ByRef Mat m);
+
+    public native @ByVal MatExpr t();
+    public native @ByVal MatExpr inv(int method/*=DECOMP_LU*/);
+    public native @ByVal MatExpr inv();
+    public native @ByVal MatExpr mul(@Const @ByRef MatExpr e, double scale/*=1*/);
+    public native @ByVal MatExpr mul(@Const @ByRef MatExpr e);
+    public native @ByVal MatExpr mul(@Const @ByRef Mat m, double scale/*=1*/);
+    public native @ByVal MatExpr mul(@Const @ByRef Mat m);
+
+    public native @ByVal Size size();
+    public native int type();
+
+    @MemberGetter public native @Const MatOp op();
+    public native int flags(); public native MatExpr flags(int flags);
+
+    public native @ByRef Mat a(); public native MatExpr a(Mat a);
+    public native @ByRef Mat b(); public native MatExpr b(Mat b);
+    public native @ByRef Mat c(); public native MatExpr c(Mat c);
+    public native double alpha(); public native MatExpr alpha(double alpha);
+    public native double beta(); public native MatExpr beta(double beta);
+    public native @ByRef Scalar s(); public native MatExpr s(Scalar s);
+}
+
+
+@Namespace("cv") public static native @ByVal @Name("operator+") MatExpr add(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator+") MatExpr add(@Const @ByRef Mat a, @Const @ByRef Scalar s);
+@Namespace("cv") public static native @ByVal @Name("operator+") MatExpr add(@Const @ByRef Scalar s, @Const @ByRef Mat a);
+@Namespace("cv") public static native @ByVal @Name("operator+") MatExpr add(@Const @ByRef MatExpr e, @Const @ByRef Mat m);
+@Namespace("cv") public static native @ByVal @Name("operator+") MatExpr add(@Const @ByRef Mat m, @Const @ByRef MatExpr e);
+@Namespace("cv") public static native @ByVal @Name("operator+") MatExpr add(@Const @ByRef MatExpr e, @Const @ByRef Scalar s);
+@Namespace("cv") public static native @ByVal @Name("operator+") MatExpr add(@Const @ByRef Scalar s, @Const @ByRef MatExpr e);
+@Namespace("cv") public static native @ByVal @Name("operator+") MatExpr add(@Const @ByRef MatExpr e1, @Const @ByRef MatExpr e2);
+
+@Namespace("cv") public static native @ByVal @Name("operator-") MatExpr subtract(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator-") MatExpr subtract(@Const @ByRef Mat a, @Const @ByRef Scalar s);
+@Namespace("cv") public static native @ByVal @Name("operator-") MatExpr subtract(@Const @ByRef Scalar s, @Const @ByRef Mat a);
+@Namespace("cv") public static native @ByVal @Name("operator-") MatExpr subtract(@Const @ByRef MatExpr e, @Const @ByRef Mat m);
+@Namespace("cv") public static native @ByVal @Name("operator-") MatExpr subtract(@Const @ByRef Mat m, @Const @ByRef MatExpr e);
+@Namespace("cv") public static native @ByVal @Name("operator-") MatExpr subtract(@Const @ByRef MatExpr e, @Const @ByRef Scalar s);
+@Namespace("cv") public static native @ByVal @Name("operator-") MatExpr subtract(@Const @ByRef Scalar s, @Const @ByRef MatExpr e);
+@Namespace("cv") public static native @ByVal @Name("operator-") MatExpr subtract(@Const @ByRef MatExpr e1, @Const @ByRef MatExpr e2);
+
+@Namespace("cv") public static native @ByVal @Name("operator-") MatExpr subtract(@Const @ByRef Mat m);
+@Namespace("cv") public static native @ByVal @Name("operator-") MatExpr subtract(@Const @ByRef MatExpr e);
+
+@Namespace("cv") public static native @ByVal @Name("operator*") MatExpr multiply(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator*") MatExpr multiply(@Const @ByRef Mat a, double s);
+@Namespace("cv") public static native @ByVal @Name("operator*") MatExpr multiply(double s, @Const @ByRef Mat a);
+@Namespace("cv") public static native @ByVal @Name("operator*") MatExpr multiply(@Const @ByRef MatExpr e, @Const @ByRef Mat m);
+@Namespace("cv") public static native @ByVal @Name("operator*") MatExpr multiply(@Const @ByRef Mat m, @Const @ByRef MatExpr e);
+@Namespace("cv") public static native @ByVal @Name("operator*") MatExpr multiply(@Const @ByRef MatExpr e, double s);
+@Namespace("cv") public static native @ByVal @Name("operator*") MatExpr multiply(double s, @Const @ByRef MatExpr e);
+@Namespace("cv") public static native @ByVal @Name("operator*") MatExpr multiply(@Const @ByRef MatExpr e1, @Const @ByRef MatExpr e2);
+
+@Namespace("cv") public static native @ByVal @Name("operator/") MatExpr divide(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator/") MatExpr divide(@Const @ByRef Mat a, double s);
+@Namespace("cv") public static native @ByVal @Name("operator/") MatExpr divide(double s, @Const @ByRef Mat a);
+@Namespace("cv") public static native @ByVal @Name("operator/") MatExpr divide(@Const @ByRef MatExpr e, @Const @ByRef Mat m);
+@Namespace("cv") public static native @ByVal @Name("operator/") MatExpr divide(@Const @ByRef Mat m, @Const @ByRef MatExpr e);
+@Namespace("cv") public static native @ByVal @Name("operator/") MatExpr divide(@Const @ByRef MatExpr e, double s);
+@Namespace("cv") public static native @ByVal @Name("operator/") MatExpr divide(double s, @Const @ByRef MatExpr e);
+@Namespace("cv") public static native @ByVal @Name("operator/") MatExpr divide(@Const @ByRef MatExpr e1, @Const @ByRef MatExpr e2);
+
+@Namespace("cv") public static native @ByVal @Name("operator<") MatExpr lessThan(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator<") MatExpr lessThan(@Const @ByRef Mat a, double s);
+@Namespace("cv") public static native @ByVal @Name("operator<") MatExpr lessThan(double s, @Const @ByRef Mat a);
+
+@Namespace("cv") public static native @ByVal @Name("operator<=") MatExpr lessThanEquals(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator<=") MatExpr lessThanEquals(@Const @ByRef Mat a, double s);
+@Namespace("cv") public static native @ByVal @Name("operator<=") MatExpr lessThanEquals(double s, @Const @ByRef Mat a);
+
+@Namespace("cv") public static native @ByVal @Name("operator==") MatExpr equals(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator==") MatExpr equals(@Const @ByRef Mat a, double s);
+@Namespace("cv") public static native @ByVal @Name("operator==") MatExpr equals(double s, @Const @ByRef Mat a);
+
+@Namespace("cv") public static native @ByVal @Name("operator!=") MatExpr notEquals(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator!=") MatExpr notEquals(@Const @ByRef Mat a, double s);
+@Namespace("cv") public static native @ByVal @Name("operator!=") MatExpr notEquals(double s, @Const @ByRef Mat a);
+
+@Namespace("cv") public static native @ByVal @Name("operator>=") MatExpr greaterThanEquals(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator>=") MatExpr greaterThanEquals(@Const @ByRef Mat a, double s);
+@Namespace("cv") public static native @ByVal @Name("operator>=") MatExpr greaterThanEquals(double s, @Const @ByRef Mat a);
+
+@Namespace("cv") public static native @ByVal @Name("operator>") MatExpr greaterThan(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator>") MatExpr greaterThan(@Const @ByRef Mat a, double s);
+@Namespace("cv") public static native @ByVal @Name("operator>") MatExpr greaterThan(double s, @Const @ByRef Mat a);
+
+@Namespace("cv") public static native @ByVal MatExpr min(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal MatExpr min(@Const @ByRef Mat a, double s);
+@Namespace("cv") public static native @ByVal MatExpr min(double s, @Const @ByRef Mat a);
+
+@Namespace("cv") public static native @ByVal MatExpr max(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal MatExpr max(@Const @ByRef Mat a, double s);
+@Namespace("cv") public static native @ByVal MatExpr max(double s, @Const @ByRef Mat a);
+
+
+@Namespace("cv") public static native @ByVal @Name("operator&") MatExpr and(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator&") MatExpr and(@Const @ByRef Mat a, @Const @ByRef Scalar s);
+@Namespace("cv") public static native @ByVal @Name("operator&") MatExpr and(@Const @ByRef Scalar s, @Const @ByRef Mat a);
+
+@Namespace("cv") public static native @ByVal @Name("operator|") MatExpr or(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator|") MatExpr or(@Const @ByRef Mat a, @Const @ByRef Scalar s);
+@Namespace("cv") public static native @ByVal @Name("operator|") MatExpr or(@Const @ByRef Scalar s, @Const @ByRef Mat a);
+
+@Namespace("cv") public static native @ByVal @Name("operator^") MatExpr xor(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator^") MatExpr xor(@Const @ByRef Mat a, @Const @ByRef Scalar s);
+@Namespace("cv") public static native @ByVal @Name("operator^") MatExpr xor(@Const @ByRef Scalar s, @Const @ByRef Mat a);
+
+@Namespace("cv") public static native @ByVal @Name("operator~") MatExpr not(@Const @ByRef Mat m);
+
+@Namespace("cv") public static native @ByVal MatExpr abs(@Const @ByRef Mat m);
+@Namespace("cv") public static native @ByVal MatExpr abs(@Const @ByRef MatExpr e);
+
+////////////////////////////// Augmenting algebraic operations //////////////////////////////////
+
+
+
+
+
+
+
+@Namespace("cv") public static native @ByRef @Name("operator+=") Mat addPut(@Const @ByRef Mat a, @Const @ByRef Mat b);
+
+@Namespace("cv") public static native @ByRef @Name("operator+=") Mat addPut(@Const @ByRef Mat a, @Const @ByRef Scalar s);
+
+@Namespace("cv") public static native @ByRef @Name("operator+=") Mat addPut(@Const @ByRef Mat a, @Const @ByRef MatExpr b);
+
+@Namespace("cv") public static native @ByRef @Name("operator-=") Mat subtractPut(@Const @ByRef Mat a, @Const @ByRef Mat b);
+
+@Namespace("cv") public static native @ByRef @Name("operator-=") Mat subtractPut(@Const @ByRef Mat a, @Const @ByRef Scalar s);
+
+@Namespace("cv") public static native @ByRef @Name("operator-=") Mat subtractPut(@Const @ByRef Mat a, @Const @ByRef MatExpr b);
+
+@Namespace("cv") public static native @ByRef @Name("operator*=") Mat multiplyPut(@Const @ByRef Mat a, @Const @ByRef Mat b);
+
+@Namespace("cv") public static native @ByRef @Name("operator*=") Mat multiplyPut(@Const @ByRef Mat a, double s);
+
+@Namespace("cv") public static native @ByRef @Name("operator*=") Mat multiplyPut(@Const @ByRef Mat a, @Const @ByRef MatExpr b);
+
+@Namespace("cv") public static native @ByRef @Name("operator/=") Mat dividePut(@Const @ByRef Mat a, @Const @ByRef Mat b);
+
+@Namespace("cv") public static native @ByRef @Name("operator/=") Mat dividePut(@Const @ByRef Mat a, double s);
+
+@Namespace("cv") public static native @ByRef @Name("operator/=") Mat dividePut(@Const @ByRef Mat a, @Const @ByRef MatExpr b);
+
+////////////////////////////// Logical operations ///////////////////////////////
+
+@Namespace("cv") public static native @ByRef @Name("operator&=") Mat andPut(@Const @ByRef Mat a, @Const @ByRef Mat b);
+
+@Namespace("cv") public static native @ByRef @Name("operator&=") Mat andPut(@Const @ByRef Mat a, @Const @ByRef Scalar s);
+
+@Namespace("cv") public static native @ByRef @Name("operator|=") Mat orPut(@Const @ByRef Mat a, @Const @ByRef Mat b);
+
+@Namespace("cv") public static native @ByRef @Name("operator|=") Mat orPut(@Const @ByRef Mat a, @Const @ByRef Scalar s);
+
+@Namespace("cv") public static native @ByRef @Name("operator^=") Mat xorPut(@Const @ByRef Mat a, @Const @ByRef Mat b);
+
+@Namespace("cv") public static native @ByRef @Name("operator^=") Mat xorPut(@Const @ByRef Mat a, @Const @ByRef Scalar s);
+
+/////////////////////////////// Miscellaneous operations //////////////////////////////
+
+//////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////// Iterators & Comma initializers //////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@Namespace("cv") public static native @Cast("bool") @Name("operator==") boolean equals(@Const @ByRef MatConstIterator a, @Const @ByRef MatConstIterator b);
+
+@Namespace("cv") public static native @Cast("bool") @Name("operator<") boolean lessThan(@Const @ByRef MatConstIterator a, @Const @ByRef MatConstIterator b);
+
+@Namespace("cv") public static native @Cast("bool") @Name("operator>") boolean greaterThan(@Const @ByRef MatConstIterator a, @Const @ByRef MatConstIterator b);
+
+@Namespace("cv") public static native @Cast("bool") @Name("operator<=") boolean lessThanEquals(@Const @ByRef MatConstIterator a, @Const @ByRef MatConstIterator b);
+
+@Namespace("cv") public static native @Cast("bool") @Name("operator>=") boolean greaterThanEquals(@Const @ByRef MatConstIterator a, @Const @ByRef MatConstIterator b);
+
+@Namespace("cv") public static native @Cast("ptrdiff_t") @Name("operator-") long subtract(@Const @ByRef MatConstIterator b, @Const @ByRef MatConstIterator a);
+
+@Namespace("cv") public static native @ByVal @Name("operator+") MatConstIterator add(@Const @ByRef MatConstIterator a, @Cast("ptrdiff_t") long ofs);
+
+@Namespace("cv") public static native @ByVal @Name("operator+") MatConstIterator add(@Cast("ptrdiff_t") long ofs, @Const @ByRef MatConstIterator a);
+
+@Namespace("cv") public static native @ByVal @Name("operator-") MatConstIterator subtract(@Const @ByRef MatConstIterator a, @Cast("ptrdiff_t") long ofs);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////// SparseMat ////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@Namespace("cv") public static native @Cast("bool") @Name("operator==") boolean equals(@Const @ByRef SparseMatConstIterator it1, @Const @ByRef SparseMatConstIterator it2);
+
+@Namespace("cv") public static native @Cast("bool") @Name("operator!=") boolean notEquals(@Const @ByRef SparseMatConstIterator it1, @Const @ByRef SparseMatConstIterator it2);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// #endif
+// #endif
 
 
 }
