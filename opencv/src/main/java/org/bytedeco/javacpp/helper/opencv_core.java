@@ -2574,7 +2574,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
                     default: assert false;
                 }
             }
-            create(image.getWidth(), image.getHeight(), CV_MAKETYPE(depth, numChannels));
+            create(image.getHeight(), image.getWidth(), CV_MAKETYPE(depth, numChannels));
             super.copyFrom(image, gamma, flipChannels, roi);
         }
 
