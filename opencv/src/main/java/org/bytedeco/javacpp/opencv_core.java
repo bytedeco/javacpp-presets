@@ -9927,10 +9927,7 @@ public static class ConvertScaleData extends FunctionPointer {
 @Namespace("cv") public static native void seqPop( CvSeq seq);
 @Namespace("cv") public static native void seqPopFront( CvSeq seq, Pointer element/*=0*/);
 @Namespace("cv") public static native void seqPopFront( CvSeq seq);
-@Namespace("cv") public static native void seqPopMulti( CvSeq seq, Pointer elements,
-                              int count, int in_front/*=0*/ );
-@Namespace("cv") public static native void seqPopMulti( CvSeq seq, Pointer elements,
-                              int count );
+
 @Namespace("cv") public static native void seqRemove( CvSeq seq, int index );
 @Namespace("cv") public static native void clearSeq( CvSeq seq );
 @Namespace("cv") public static native @Cast("schar*") BytePointer getSeqElem( @Const CvSeq seq, int index );

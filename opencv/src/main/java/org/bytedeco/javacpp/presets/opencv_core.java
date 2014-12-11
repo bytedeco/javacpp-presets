@@ -192,7 +192,7 @@ public class opencv_core implements InfoMapper {
                .put(new Info("cv::saturate_cast<int>").javaNames("saturateCastInt"))
                .put(new Info("cv::saturate_cast<unsigned>").javaNames("saturateCastUnsigned"))
 
-               .put(new Info("cv::normL2Sqr", "cv::normL1").skip())
+               .put(new Info("cv::normL2Sqr", "cv::normL1", "cv::seqPopMulti").skip())
 
                .put(new Info("cv::Formatted(cv::Mat&, cv::Formatter*, int*)").javaText(
                        "public Formatted(@Const @ByRef Mat m, @Const Formatter fmt,\n"
