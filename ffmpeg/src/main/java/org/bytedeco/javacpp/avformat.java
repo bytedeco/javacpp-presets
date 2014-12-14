@@ -285,6 +285,9 @@ public static native int avio_check(String url, int flags);
  *
  * @param buffer Memory block for input/output operations via AVIOContext.
  *        The buffer must be allocated with av_malloc() and friends.
+ *        It may be freed and replaced with a new buffer by libavformat.
+ *        AVIOContext.buffer holds the buffer currently in use,
+ *        which must be later freed with av_free().
  * @param buffer_size The buffer size is very important for performance.
  *        For protocols with fixed blocksize it should be set to this blocksize.
  *        For others a typical size is a cache page, e.g. 4kb.
@@ -454,10 +457,14 @@ public static native int avio_printf(AVIOContext s, @Cast("const char*") BytePoi
 public static native int avio_printf(AVIOContext s, String fmt);
 
 /**
- * Force flushing of buffered data to the output s.
+ * Force flushing of buffered data.
  *
- * Force the buffered data to be immediately written to the output,
+ * For write streams, force the buffered data to be immediately written to the output,
  * without to wait to fill the internal buffer.
+ *
+ * For read streams, discard all currently buffered data, and advance the
+ * reported file position to that of the underlying stream. This does not
+ * read new data, and does not perform any seeks.
  */
 public static native void avio_flush(AVIOContext s);
 
@@ -1146,7 +1153,7 @@ public static class AVProbeData extends Pointer {
     /** Size of buf except extra allocated bytes */
     public native int buf_size(); public native AVProbeData buf_size(int buf_size);
     /** mime_type, when known. */
-    public native @Cast("uint8_t*") BytePointer mime_type(); public native AVProbeData mime_type(BytePointer mime_type);
+    @MemberGetter public native @Cast("const char*") BytePointer mime_type();
 }
 
 public static native @MemberGetter int AVPROBE_SCORE_RETRY();
@@ -1913,7 +1920,7 @@ public static final int AVSTREAM_EVENT_FLAG_METADATA_UPDATED = 0x0001;
     /**
      * Stream information used internally by av_find_stream_info()
      */
-public static final int MAX_STD_TIMEBASES = (60*12+6);
+public static final int MAX_STD_TIMEBASES = (30*12+7+6);
         @Name({"info", ".last_dts"}) public native long info_last_dts(int i); public native AVStream info_last_dts(int i, long info_last_dts);
         @Name({"info", ".duration_gcd"}) public native long info_duration_gcd(int i); public native AVStream info_duration_gcd(int i, long info_duration_gcd);
         @Name({"info", ".duration_count"}) public native int info_duration_count(int i); public native AVStream info_duration_count(int i, int info_duration_count);
@@ -2028,6 +2035,21 @@ public static final int MAX_REORDER_DELAY = 16;
     public native int skip_samples(); public native AVStream skip_samples(int skip_samples);
 
     /**
+     * If not 0, the first audio sample that should be discarded from the stream.
+     * This is broken by design (needs global sample count), but can't be
+     * avoided for broken by design formats such as mp3 with ad-hoc gapless
+     * audio support.
+     */
+    public native long first_discard_sample(); public native AVStream first_discard_sample(long first_discard_sample);
+
+    /**
+     * The sample after last sample that is intended to be discarded after
+     * first_discard_sample. Works on frame boundaries only. Used to prevent
+     * early EOF if the gapless info is broken (considered concatenated mp3s).
+     */
+    public native long last_discard_sample(); public native AVStream last_discard_sample(long last_discard_sample);
+
+    /**
      * Number of internally decoded frames, used internally in libavformat, do not access
      * its lifetime differs from info which is why it is not in that structure.
      */
@@ -2081,11 +2103,28 @@ public static final int MAX_REORDER_DELAY = 16;
      */
     public native int inject_global_side_data(); public native AVStream inject_global_side_data(int inject_global_side_data);
 
+    /**
+     * String containing paris of key and values describing recommended encoder configuration.
+     * Paris are separated by ','.
+     * Keys are separated from values by '='.
+     */
+    public native @Cast("char*") BytePointer recommended_encoder_configuration(); public native AVStream recommended_encoder_configuration(BytePointer recommended_encoder_configuration);
+
+    /**
+     * display aspect ratio (0 if unknown)
+     * - encoding: unused
+     * - decoding: Set by libavformat to calculate sample_aspect_ratio internally
+     */
+    public native @ByRef AVRational display_aspect_ratio(); public native AVStream display_aspect_ratio(AVRational display_aspect_ratio);
 }
 
 public static native @ByVal AVRational av_stream_get_r_frame_rate(@Const AVStream s);
 public static native void av_stream_set_r_frame_rate(AVStream s, @ByVal AVRational r);
 public static native AVCodecParserContext av_stream_get_parser(@Const AVStream s);
+public static native @Cast("char*") BytePointer av_stream_get_recommended_encoder_configuration(@Const AVStream s);
+public static native void av_stream_set_recommended_encoder_configuration(AVStream s, @Cast("char*") BytePointer configuration);
+public static native void av_stream_set_recommended_encoder_configuration(AVStream s, @Cast("char*") ByteBuffer configuration);
+public static native void av_stream_set_recommended_encoder_configuration(AVStream s, @Cast("char*") byte[] configuration);
 
 /**
  * Returns the pts of the last muxed packet + its duration
@@ -2527,6 +2566,21 @@ public static final int AVFMT_EVENT_FLAG_METADATA_UPDATED = 0x0001;
      */
     public native int max_ts_probe(); public native AVFormatContext max_ts_probe(int max_ts_probe);
 
+    /**
+     * Avoid negative timestamps during muxing.
+     * Any value of the AVFMT_AVOID_NEG_TS_* constants.
+     * Note, this only works when using av_interleaved_write_frame. (interleave_packet_per_dts is in use)
+     * - muxing: Set by user
+     * - demuxing: unused
+     */
+    public native int avoid_negative_ts(); public native AVFormatContext avoid_negative_ts(int avoid_negative_ts);
+/** Enabled when required by target format */
+public static final int AVFMT_AVOID_NEG_TS_AUTO =             -1;
+/** Shift timestamps so they are non negative */
+public static final int AVFMT_AVOID_NEG_TS_MAKE_NON_NEGATIVE = 1;
+/** Shift timestamps so that they start at 0 */
+public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
+
 
     /**
      * Transport stream id.
@@ -2565,17 +2619,6 @@ public static final int AVFMT_EVENT_FLAG_METADATA_UPDATED = 0x0001;
      * - decoding: Set by user via AVOptions (NO direct access)
      */
     public native int use_wallclock_as_timestamps(); public native AVFormatContext use_wallclock_as_timestamps(int use_wallclock_as_timestamps);
-
-    /**
-     * Avoid negative timestamps during muxing.
-     *  0 -> allow negative timestamps
-     *  1 -> avoid negative timestamps
-     * -1 -> choose automatically (default)
-     * Note, this only works when interleave_packet_per_dts is in use.
-     * - encoding: Set by user via AVOptions (NO direct access)
-     * - decoding: unused
-     */
-    public native int avoid_negative_ts(); public native AVFormatContext avoid_negative_ts(int avoid_negative_ts);
 
     /**
      * avio flags, used to force AVIO_FLAG_DIRECT.
@@ -2635,6 +2678,22 @@ public static final int AVFMT_EVENT_FLAG_METADATA_UPDATED = 0x0001;
      * - decoding: set by user through AVOPtions (NO direct access)
      */
     public native int format_probesize(); public native AVFormatContext format_probesize(int format_probesize);
+
+    /**
+     * ',' separated list of allowed decoders.
+     * If NULL then all are allowed
+     * - encoding: unused
+     * - decoding: set by user through AVOptions (NO direct access)
+     */
+    public native @Cast("char*") BytePointer codec_whitelist(); public native AVFormatContext codec_whitelist(BytePointer codec_whitelist);
+
+    /**
+     * ',' separated list of allowed demuxers.
+     * If NULL then all are allowed
+     * - encoding: unused
+     * - decoding: set by user through AVOptions (NO direct access)
+     */
+    public native @Cast("char*") BytePointer format_whitelist(); public native AVFormatContext format_whitelist(BytePointer format_whitelist);
 
     /*****************************************************************
      * All fields below this line are not part of the public API. They
@@ -2766,6 +2825,16 @@ public static final int RAW_PACKET_BUFFER_SIZE = 2500000;
      * via AVOptions (NO direct access).
      */
     public native long probesize2(); public native AVFormatContext probesize2(long probesize2);
+
+    /**
+     * dump format separator.
+     * can be ", " or "\n      " or anything else
+     * Code outside libavformat should access this field using AVOptions
+     * (NO direct access).
+     * - muxing: Set by user.
+     * - demuxing: Set by user.
+     */
+    public native @Cast("uint8_t*") BytePointer dump_separator(); public native AVFormatContext dump_separator(BytePointer dump_separator);
 }
 
 public static native int av_format_get_probe_score(@Const AVFormatContext s);
@@ -2941,9 +3010,6 @@ public static native AVProgram av_new_program(AVFormatContext s, int id);
  */
 
 
-// #if FF_API_ALLOC_OUTPUT_CONTEXT
-// #endif
-
 /**
  * Allocate an AVFormatContext for an output format.
  * avformat_free_context() can be used to free the context and
@@ -3078,9 +3144,6 @@ public static native int avformat_open_input(@ByPtrPtr AVFormatContext ps, Strin
 
 public static native @Deprecated int av_demuxer_open(AVFormatContext ic);
 
-// #if FF_API_FORMAT_PARAMETERS
-// #endif
-
 /**
  * Read packets of a media file to get stream information. This
  * is useful for file formats with no headers such as MPEG. This
@@ -3153,9 +3216,6 @@ public static native int av_find_best_stream(AVFormatContext ic,
                         int related_stream,
                         @ByPtrPtr AVCodec decoder_ret,
                         int flags);
-
-// #if FF_API_READ_PACKET
-// #endif
 
 /**
  * Return the next frame of a stream.
@@ -3242,9 +3302,6 @@ public static native int av_read_play(AVFormatContext s);
  */
 public static native int av_read_pause(AVFormatContext s);
 
-// #if FF_API_CLOSE_INPUT_FILE
-// #endif
-
 /**
  * Close an opened input AVFormatContext. Free it and all its contents
  * and set *s to NULL.
@@ -3254,12 +3311,6 @@ public static native void avformat_close_input(@ByPtrPtr AVFormatContext s);
 /**
  * @}
  */
-
-// #if FF_API_NEW_STREAM
-// #endif
-
-// #if FF_API_SET_PTS_INFO
-// #endif
 
 /** seek backward */
 public static final int AVSEEK_FLAG_BACKWARD = 1;

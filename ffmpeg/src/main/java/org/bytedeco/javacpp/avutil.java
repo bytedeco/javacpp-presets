@@ -484,6 +484,19 @@ public static final int AVERROR_EXPERIMENTAL =       (-0x2bb2afa8);
 public static final int AVERROR_INPUT_CHANGED =      (-0x636e6701);
 /** Output changed between calls. Reconfiguration is required. (can be OR-ed with AVERROR_INPUT_CHANGED) */
 public static final int AVERROR_OUTPUT_CHANGED =     (-0x636e6702);
+/* HTTP & RTSP errors */
+public static native @MemberGetter int AVERROR_HTTP_BAD_REQUEST();
+public static final int AVERROR_HTTP_BAD_REQUEST = AVERROR_HTTP_BAD_REQUEST();
+public static native @MemberGetter int AVERROR_HTTP_UNAUTHORIZED();
+public static final int AVERROR_HTTP_UNAUTHORIZED = AVERROR_HTTP_UNAUTHORIZED();
+public static native @MemberGetter int AVERROR_HTTP_FORBIDDEN();
+public static final int AVERROR_HTTP_FORBIDDEN = AVERROR_HTTP_FORBIDDEN();
+public static native @MemberGetter int AVERROR_HTTP_NOT_FOUND();
+public static final int AVERROR_HTTP_NOT_FOUND = AVERROR_HTTP_NOT_FOUND();
+public static native @MemberGetter int AVERROR_HTTP_OTHER_4XX();
+public static final int AVERROR_HTTP_OTHER_4XX = AVERROR_HTTP_OTHER_4XX();
+public static native @MemberGetter int AVERROR_HTTP_SERVER_ERROR();
+public static final int AVERROR_HTTP_SERVER_ERROR = AVERROR_HTTP_SERVER_ERROR();
 
 public static final int AV_ERROR_MAX_STRING_SIZE = 64;
 
@@ -2678,17 +2691,21 @@ public static final int PIX_FMT_GBRP16 = AV_PIX_FMT_GBRP16;
   */
 /** enum AVColorPrimaries */
 public static final int
+    AVCOL_PRI_RESERVED0   = 0,
     /** also ITU-R BT1361 / IEC 61966-2-4 / SMPTE RP177 Annex B */
     AVCOL_PRI_BT709       = 1,
     AVCOL_PRI_UNSPECIFIED = 2,
     AVCOL_PRI_RESERVED    = 3,
+    /** also FCC Title 47 Code of Federal Regulations 73.682 (a)(20) */
     AVCOL_PRI_BT470M      = 4,
+
     /** also ITU-R BT601-6 625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM */
     AVCOL_PRI_BT470BG     = 5,
     /** also ITU-R BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC */
     AVCOL_PRI_SMPTE170M   = 6,
     /** functionally identical to above */
     AVCOL_PRI_SMPTE240M   = 7,
+    /** colour filters using Illuminant C */
     AVCOL_PRI_FILM        = 8,
     /** ITU-R BT2020 */
     AVCOL_PRI_BT2020      = 9,
@@ -2700,6 +2717,7 @@ public static final int
  */
 /** enum AVColorTransferCharacteristic */
 public static final int
+    AVCOL_TRC_RESERVED0    = 0,
     /** also ITU-R BT1361 */
     AVCOL_TRC_BT709        = 1,
     AVCOL_TRC_UNSPECIFIED  = 2,
@@ -2735,11 +2753,13 @@ public static final int
  */
 /** enum AVColorSpace */
 public static final int
+    /** order of coefficients is actually GBR, also IEC 61966-2-1 (sRGB) */
     AVCOL_SPC_RGB         = 0,
     /** also ITU-R BT1361 / IEC 61966-2-4 xvYCC709 / SMPTE RP177 Annex B */
     AVCOL_SPC_BT709       = 1,
     AVCOL_SPC_UNSPECIFIED = 2,
     AVCOL_SPC_RESERVED    = 3,
+    /** FCC Title 47 Code of Federal Regulations 73.682 (a)(20) */
     AVCOL_SPC_FCC         = 4,
     /** also ITU-R BT601-6 625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM / IEC 61966-2-4 xvYCC601 */
     AVCOL_SPC_BT470BG     = 5,
@@ -2893,7 +2913,19 @@ public static final int
      * The data is the AVMotionVector struct defined in
      * libavutil/motion_vector.h.
      */
-    AV_FRAME_DATA_MOTION_VECTORS = 8;
+    AV_FRAME_DATA_MOTION_VECTORS = 8,
+    /**
+     * Recommmends skipping the specified number of samples. This is exported
+     * only if the "skip_manual" AVOption is set in libavcodec.
+     * This has the same format as AV_PKT_DATA_SKIP_SAMPLES.
+     * @code
+     * u32le number of samples to skip from start of this packet
+     * u32le number of samples to skip from end of this packet
+     * u8    reason for start skip
+     * u8    reason for end   skip (0=padding silence, 1=convergence)
+     * @endcode
+     */
+    AV_FRAME_DATA_SKIP_SAMPLES = 9;
 
 /** enum AVActiveFormatDescription */
 public static final int
@@ -3725,9 +3757,6 @@ public static native @Cast("char*") BytePointer av_get_sample_fmt_string(@Cast("
 public static native @Cast("char*") ByteBuffer av_get_sample_fmt_string(@Cast("char*") ByteBuffer buf, int buf_size, @Cast("AVSampleFormat") int sample_fmt);
 public static native @Cast("char*") byte[] av_get_sample_fmt_string(@Cast("char*") byte[] buf, int buf_size, @Cast("AVSampleFormat") int sample_fmt);
 
-// #if FF_API_GET_BITS_PER_SAMPLE_FMT
-// #endif
-
 /**
  * Return number of bytes per sample.
  *
@@ -4421,9 +4450,9 @@ public static class AVDictionaryEntry extends Pointer {
  * @param flags a collection of AV_DICT_* flags controlling how the entry is retrieved
  * @return found entry or NULL in case no matching entry was found in the dictionary
  */
-public static native AVDictionaryEntry av_dict_get(AVDictionary m, @Cast("const char*") BytePointer key,
+public static native AVDictionaryEntry av_dict_get(@Const AVDictionary m, @Cast("const char*") BytePointer key,
                                @Const AVDictionaryEntry prev, int flags);
-public static native AVDictionaryEntry av_dict_get(AVDictionary m, String key,
+public static native AVDictionaryEntry av_dict_get(@Const AVDictionary m, String key,
                                @Const AVDictionaryEntry prev, int flags);
 
 /**
@@ -4495,8 +4524,8 @@ public static native int av_dict_parse_string(@ByPtrPtr AVDictionary pm, String 
  * @param flags flags to use when setting entries in *dst
  * @note metadata is read using the AV_DICT_IGNORE_SUFFIX flag
  */
-public static native void av_dict_copy(@Cast("AVDictionary**") PointerPointer dst, AVDictionary src, int flags);
-public static native void av_dict_copy(@ByPtrPtr AVDictionary dst, AVDictionary src, int flags);
+public static native void av_dict_copy(@Cast("AVDictionary**") PointerPointer dst, @Const AVDictionary src, int flags);
+public static native void av_dict_copy(@ByPtrPtr AVDictionary dst, @Const AVDictionary src, int flags);
 
 /**
  * Free all the memory allocated for an AVDictionary struct
@@ -4504,6 +4533,30 @@ public static native void av_dict_copy(@ByPtrPtr AVDictionary dst, AVDictionary 
  */
 public static native void av_dict_free(@Cast("AVDictionary**") PointerPointer m);
 public static native void av_dict_free(@ByPtrPtr AVDictionary m);
+
+/**
+ * Get dictionary entries as a string.
+ *
+ * Create a string containing dictionary's entries.
+ * Such string may be passed back to av_dict_parse_string().
+ * @note String is escaped with backslashes ('\').
+ *
+ * @param[in]  m             dictionary
+ * @param[out] buffer        Pointer to buffer that will be allocated with string containg entries.
+ *                           Buffer must be freed by the caller when is no longer needed.
+ * @param[in]  key_val_sep   character used to separate key from value
+ * @param[in]  pairs_sep     character used to separate two pairs from each other
+ * @return                   >= 0 on success, negative on error
+ * @warning Separators cannot be neither '\\' nor '\0'. They also cannot be the same.
+ */
+public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**") PointerPointer buffer,
+                       byte key_val_sep, byte pairs_sep);
+public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**") @ByPtrPtr BytePointer buffer,
+                       byte key_val_sep, byte pairs_sep);
+public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**") @ByPtrPtr ByteBuffer buffer,
+                       byte key_val_sep, byte pairs_sep);
+public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**") @ByPtrPtr byte[] buffer,
+                       byte key_val_sep, byte pairs_sep);
 
 /**
  * @}
@@ -4549,6 +4602,7 @@ public static native void av_dict_free(@ByPtrPtr AVDictionary m);
 // #include "log.h"
 // #include "pixfmt.h"
 // #include "samplefmt.h"
+// #include "version.h"
 
 /**
  * @defgroup avoptions AVOptions
@@ -4949,9 +5003,6 @@ public static class AVOptionRanges extends Pointer {
 }
 
 
-// #if FF_API_FIND_OPT
-// #endif
-
 // #if FF_API_OLD_AVOPTIONS
 /**
  * Set the field of obj with the given name to value.
@@ -5045,7 +5096,7 @@ public static native @Deprecated void av_opt_set_defaults2(Pointer s, int mask, 
  * @return the number of successfully set key/value pairs, or a negative
  * value corresponding to an AVERROR code in case of error:
  * AVERROR(EINVAL) if opts cannot be parsed,
- * the error code issued by av_set_string3() if a key/value pair
+ * the error code issued by av_opt_set() if a key/value pair
  * cannot be set
  */
 public static native int av_set_options_string(Pointer ctx, @Cast("const char*") BytePointer opts,
@@ -5296,7 +5347,7 @@ public static final int AV_OPT_MULTI_COMPONENT_RANGE = 0x1000;
  *         was found.
  *
  * @note Options found with AV_OPT_SEARCH_CHILDREN flag may not be settable
- * directly with av_set_string3(). Use special calls which take an options
+ * directly with av_opt_set(). Use special calls which take an options
  * AVDictionary (e.g. avformat_open_input()) to set options found with this
  * flag.
  */
@@ -5543,6 +5594,16 @@ public static native int av_opt_query_ranges(@Cast("AVOptionRanges**") PointerPo
 public static native int av_opt_query_ranges(@ByPtrPtr AVOptionRanges arg0, Pointer obj, @Cast("const char*") BytePointer key, int flags);
 public static native int av_opt_query_ranges(@ByPtrPtr AVOptionRanges arg0, Pointer obj, String key, int flags);
 
+/**
+ * Copy options from src object into dest object.
+ *
+ * Options that require memory allocation (e.g. string or binary) are malloc'ed in dest object.
+ * Original memory allocated for such options is freed unless both src and dest options points to the same memory.
+ *
+ * @param dest Object to copy from
+ * @param src  Object to copy into
+ * @return 0 on success, negative on error
+ */
 public static native int av_opt_copy(Pointer dest, Pointer src);
 
 /**
@@ -5563,6 +5624,65 @@ public static native int av_opt_query_ranges_default(@Cast("AVOptionRanges**") P
 public static native int av_opt_query_ranges_default(@ByPtrPtr AVOptionRanges arg0, Pointer obj, @Cast("const char*") BytePointer key, int flags);
 public static native int av_opt_query_ranges_default(@ByPtrPtr AVOptionRanges arg0, Pointer obj, String key, int flags);
 
+/**
+ * Check if given option is set to its default value.
+ *
+ * Options o must belong to the obj. This function must not be called to check child's options state.
+ * @see av_opt_is_set_to_default_by_name().
+ *
+ * @param obj  AVClass object to check option on
+ * @param o    option to be checked
+ * @return     >0 when option is set to its default,
+ *              0 when option is not set its default,
+ *             <0 on error
+ */
+public static native int av_opt_is_set_to_default(Pointer obj, @Const AVOption o);
+
+/**
+ * Check if given option is set to its default value.
+ *
+ * @param obj          AVClass object to check option on
+ * @param name         option name
+ * @param search_flags combination of AV_OPT_SEARCH_*
+ * @return             >0 when option is set to its default,
+ *                     0 when option is not set its default,
+ *                     <0 on error
+ */
+public static native int av_opt_is_set_to_default_by_name(Pointer obj, @Cast("const char*") BytePointer name, int search_flags);
+public static native int av_opt_is_set_to_default_by_name(Pointer obj, String name, int search_flags);
+
+
+/** Serialize options that are not set to default values only. */
+public static final int AV_OPT_SERIALIZE_SKIP_DEFAULTS =              0x00000001;
+/** Serialize options that exactly match opt_flags only. */
+public static final int AV_OPT_SERIALIZE_OPT_FLAGS_EXACT =            0x00000002;
+
+/**
+ * Serialize object's options.
+ *
+ * Create a string containing object's serialized options.
+ * Such string may be passed back to av_opt_set_from_string() in order to restore option values.
+ * A key/value or pairs separator occurring in the serialized value or
+ * name string are escaped through the av_escape() function.
+ *
+ * @param[in]  obj           AVClass object to serialize
+ * @param[in]  opt_flags     serialize options with all the specified flags set (AV_OPT_FLAG)
+ * @param[in]  flags         combination of AV_OPT_SERIALIZE_* flags
+ * @param[out] buffer        Pointer to buffer that will be allocated with string containg serialized options.
+ *                           Buffer must be freed by the caller when is no longer needed.
+ * @param[in]  key_val_sep   character used to separate key from value
+ * @param[in]  pairs_sep     character used to separate two pairs from each other
+ * @return                   >= 0 on success, negative on error
+ * @warning Separators cannot be neither '\\' nor '\0'. They also cannot be the same.
+ */
+public static native int av_opt_serialize(Pointer obj, int opt_flags, int flags, @Cast("char**") PointerPointer buffer,
+                     byte key_val_sep, byte pairs_sep);
+public static native int av_opt_serialize(Pointer obj, int opt_flags, int flags, @Cast("char**") @ByPtrPtr BytePointer buffer,
+                     byte key_val_sep, byte pairs_sep);
+public static native int av_opt_serialize(Pointer obj, int opt_flags, int flags, @Cast("char**") @ByPtrPtr ByteBuffer buffer,
+                     byte key_val_sep, byte pairs_sep);
+public static native int av_opt_serialize(Pointer obj, int opt_flags, int flags, @Cast("char**") @ByPtrPtr byte[] buffer,
+                     byte key_val_sep, byte pairs_sep);
 /**
  * @}
  */
@@ -6001,6 +6121,32 @@ public static native @Cast("AVPixelFormat") int av_find_best_pix_fmt_of_2(@Cast(
                                              @Cast("AVPixelFormat") int src_pix_fmt, int has_alpha, IntBuffer loss_ptr);
 public static native @Cast("AVPixelFormat") int av_find_best_pix_fmt_of_2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
                                              @Cast("AVPixelFormat") int src_pix_fmt, int has_alpha, int[] loss_ptr);
+
+/**
+ * @return the name for provided color range or NULL if unknown.
+ */
+public static native @Cast("const char*") BytePointer av_color_range_name(@Cast("AVColorRange") int range);
+
+/**
+ * @return the name for provided color primaries or NULL if unknown.
+ */
+public static native @Cast("const char*") BytePointer av_color_primaries_name(@Cast("AVColorPrimaries") int primaries);
+
+/**
+ * @return the name for provided color transfer or NULL if unknown.
+ */
+public static native @Cast("const char*") BytePointer av_color_transfer_name(@Cast("AVColorTransferCharacteristic") int transfer);
+
+/**
+ * @return the name for provided color space or NULL if unknown.
+ */
+public static native @Cast("const char*") BytePointer av_color_space_name(@Cast("AVColorSpace") int space);
+
+/**
+ * @return the name for provided chroma location or NULL if unknown.
+ */
+public static native @Cast("const char*") BytePointer av_chroma_location_name(@Cast("AVChromaLocation") int location);
+
 // #endif /* AVUTIL_PIXDESC_H */
 
 

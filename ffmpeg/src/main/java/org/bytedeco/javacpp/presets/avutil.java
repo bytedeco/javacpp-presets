@@ -44,7 +44,7 @@ public class avutil implements InfoMapper {
         infoMap.put(new Info("AV_NOPTS_VALUE").cppTypes("int64_t").translate(false))
                .put(new Info("AV_TIME_BASE_Q", "PixelFormat", "CodecID").cppTypes())
                .put(new Info("av_const").annotations("@Const"))
-               .put(new Info("FF_CONST_AVUTIL53").annotations())
+               .put(new Info("FF_CONST_AVUTIL55").annotations())
                .put(new Info("av_malloc_attrib", "av_alloc_size", "av_always_inline").cppTypes().annotations())
                .put(new Info("attribute_deprecated").annotations("@Deprecated"))
                .put(new Info("AVPanScan", "AVCodecContext").cast().pointerTypes("Pointer"))

@@ -132,6 +132,7 @@ public static final int PP_FORMAT_420 =    (0x00000011|PP_FORMAT);
 public static final int PP_FORMAT_422 =    (0x00000001|PP_FORMAT);
 public static final int PP_FORMAT_411 =    (0x00000002|PP_FORMAT);
 public static final int PP_FORMAT_444 =    (0x00000000|PP_FORMAT);
+public static final int PP_FORMAT_440 =    (0x00000010|PP_FORMAT);
 
 /** MPEG2 style QScale */
 public static final int PP_PICT_TYPE_QP2 =  0x00000010;
