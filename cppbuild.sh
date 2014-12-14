@@ -60,7 +60,7 @@ if [[ -z ${OPERATION:-} ]]; then
 fi
 
 if [[ -z ${ANDROID_NDK:-} ]]; then
-    ANDROID_NDK=~/projects/android/android-ndk/
+    ANDROID_NDK=~/Android/android-ndk/
 fi
 export ANDROID_NDK
 export ANDROID_CPP="$ANDROID_NDK/sources/cxx-stl/gnu-libstdc++/4.6/"
@@ -76,9 +76,10 @@ case $PLATFORM in
 esac
 
 function download {
-    COMMAND="curl -C - -L $1 -o $2"
-    echo "$COMMAND"
-    $COMMAND || true
+    if [[ ! -e $2 ]]; then
+        echo "Downloading $1"
+        curl -L $1 -o $2
+    fi
 }
 
 if [[ -z ${PROJECTS:-} ]]; then

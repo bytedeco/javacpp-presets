@@ -49,4 +49,16 @@
     </plugins>
   </build>
 
+  <profiles>
+    <profile>
+      <id>mingw</id>
+      <activation>
+        <os><family>windows</family></os>
+      </activation>
+      <properties>
+        <platform.properties>${platform}-mingw</platform.properties>
+      </properties>
+    </profile>
+  </profiles>
+
 </project>

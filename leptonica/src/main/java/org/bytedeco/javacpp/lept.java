@@ -481,21 +481,6 @@ public static native @Cast("l_int32") int LeptMsgSeverity(); public static nativ
 //              (void)0)
 
 // #if 0  /* Alternative method for controlling L_* message output */
-//   #define L_ERROR(a,...)
-//     { if (L_SEVERITY_ERROR >= MINIMUM_SEVERITY &&
-//           L_SEVERITY_ERROR >= LeptMsgSeverity)
-//           fprintf(stderr, "Error in %s: " a, __VA_ARGS__)
-//     }
-//   #define L_WARNING(a,...)
-//     { if (L_SEVERITY_WARNING >= MINIMUM_SEVERITY &&
-//           L_SEVERITY_WARNING >= LeptMsgSeverity)
-//           fprintf(stderr, "Warning in %s: " a, __VA_ARGS__)
-//     }
-//   #define L_INFO(a,...)
-//     { if (L_SEVERITY_INFO >= MINIMUM_SEVERITY &&
-//           L_SEVERITY_INFO >= LeptMsgSeverity)
-//              fprintf(stderr, "Info in %s: " a, __VA_ARGS__)
-//     }
 // #endif
 
 // #endif  /* NO_CONSOLE_IO */
@@ -1969,12 +1954,12 @@ public static final int
     GPLOT_LOG_SCALE_Y   = 2,
     GPLOT_LOG_SCALE_X_Y = 3;
 
-@MemberGetter public static native @Platform(not="windows") @Cast("const char*") BytePointer gplotstylenames(int i);
-@MemberGetter public static native @Cast("const char**") @Platform(not="windows") PointerPointer gplotstylenames();  /* used in gnuplot cmd file */
-@MemberGetter public static native @Platform(not="windows") @Cast("const char*") BytePointer gplotfilestyles(int i);
-@MemberGetter public static native @Cast("const char**") @Platform(not="windows") PointerPointer gplotfilestyles();  /* used in simple file input */
-@MemberGetter public static native @Platform(not="windows") @Cast("const char*") BytePointer gplotfileoutputs(int i);
-@MemberGetter public static native @Cast("const char**") @Platform(not="windows") PointerPointer gplotfileoutputs(); /* used in simple file input */
+@MemberGetter public static native @Cast("const char*") BytePointer gplotstylenames(int i);
+@MemberGetter public static native @Cast("const char**") PointerPointer gplotstylenames();  /* used in gnuplot cmd file */
+@MemberGetter public static native @Cast("const char*") BytePointer gplotfilestyles(int i);
+@MemberGetter public static native @Cast("const char**") PointerPointer gplotfilestyles();  /* used in simple file input */
+@MemberGetter public static native @Cast("const char*") BytePointer gplotfileoutputs(int i);
+@MemberGetter public static native @Cast("const char**") PointerPointer gplotfileoutputs(); /* used in simple file input */
 
 @Name("GPlot") public static class GPLOT extends Pointer {
     static { Loader.load(); }

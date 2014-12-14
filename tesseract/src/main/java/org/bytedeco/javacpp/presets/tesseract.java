@@ -31,13 +31,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(target="org.bytedeco.javacpp.tesseract", inherit=lept.class, value={
-    @Platform(not="windows", define="TESS_CAPI_INCLUDE_BASEAPI", include={"tesseract/platform.h", "tesseract/apitypes.h", "tesseract/thresholder.h",
+    @Platform(define="TESS_CAPI_INCLUDE_BASEAPI", include={"tesseract/platform.h", "tesseract/apitypes.h", "tesseract/thresholder.h",
         "tesseract/unichar.h", "tesseract/host.h", "tesseract/tesscallback.h", "tesseract/publictypes.h", "tesseract/pageiterator.h",
         "tesseract/resultiterator.h", "tesseract/strngs.h", "tesseract/genericvector.h", "tesseract/baseapi.h", "tesseract/capi.h"}, link="tesseract@.3"),
     @Platform(value="android", link="tesseract"),
-    @Platform(value="windows-x86", not="windows-x86_64", define="TESS_CAPI_INCLUDE_BASEAPI", include={"tesseract/platform.h", "tesseract/apitypes.h", "tesseract/thresholder.h",
-        "tesseract/unichar.h", "tesseract/host.h", "tesseract/tesscallback.h", "tesseract/publictypes.h", "tesseract/pageiterator.h",
-        "tesseract/resultiterator.h", "tesseract/strngs.h", "tesseract/genericvector.h", "tesseract/baseapi.h", "tesseract/capi.h"}, link="libtesseract302") })
+    @Platform(value="windows", link="libtesseract", preload="libtesseract-3") })
 public class tesseract implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("__NATIVE__", "ultoa", "snprintf", "vsnprintf", "SIGNED",

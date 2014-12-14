@@ -31,15 +31,15 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(target="org.bytedeco.javacpp.lept", value={
-    @Platform(not="windows", include={"leptonica/alltypes.h", "leptonica/environ.h", "leptonica/array.h", "leptonica/bbuffer.h", "leptonica/heap.h", "leptonica/list.h",
+    @Platform(include={"leptonica/alltypes.h", "leptonica/environ.h", "leptonica/array.h", "leptonica/bbuffer.h", "leptonica/heap.h", "leptonica/list.h",
         "leptonica/ptra.h", "leptonica/queue.h", "leptonica/stack.h", "leptonica/arrayaccess.h", "leptonica/bmf.h", "leptonica/ccbord.h",
         "leptonica/dewarp.h", "leptonica/gplot.h", "leptonica/imageio.h", "leptonica/jbclass.h", "leptonica/morph.h", "leptonica/pix.h",
         "leptonica/recog.h", "leptonica/regutils.h", "leptonica/sudoku.h", "leptonica/watershed.h", "leptonica/allheaders.h"}, link="lept@.4"),
     @Platform(value="android", link="lept"),
-    @Platform(value="windows-x86", not="windows-x86_64", include={"leptonica/alltypes.h", "leptonica/environ.h", "leptonica/array.h", "leptonica/bbuffer.h", "leptonica/heap.h", "leptonica/list.h",
-        "leptonica/ptra.h", "leptonica/queue.h", "leptonica/stack.h", "leptonica/arrayaccess.h", "leptonica/bmf.h", "leptonica/ccbord.h",
-        "leptonica/dewarp.h", "leptonica/gplot.h", "leptonica/imageio.h", "leptonica/jbclass.h", "leptonica/morph.h", "leptonica/pix.h",
-        "leptonica/regutils.h", "leptonica/sudoku.h", "leptonica/watershed.h", "leptonica/allheaders.h", "leptonica/leptprotos.h"}, link="liblept168") })
+    @Platform(value="windows", link="liblept", preload={"libwinpthread-1", "libgcc_s_sjlj-1", "libgcc_s_seh-1", "libstdc++-6",
+        "zlib1", "libgif-6", "libjpeg-62", "libpng16-16", "libtiff-5", "libwebp-5", "liblept-4"}),
+    @Platform(value="windows-x86", preloadpath={"C:/Program Files (x86)/mingw-w64/i686-4.9.1-posix-sjlj-rt_v3-rev3/mingw32/bin/"}),
+    @Platform(value="windows-x86_64", preloadpath={"C:/Program Files/mingw-w64/x86_64-4.9.1-posix-seh-rt_v3-rev3/mingw64/bin/"}) })
 public class lept implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("LEPT_DLL", "L_END_LIST").cppTypes().annotations())
@@ -95,10 +95,6 @@ public class lept implements InfoMapper {
                .put(new Info("L_Rdid").pointerTypes("L_RDID"))
                .put(new Info("L_RegParams").pointerTypes("L_REGPARAMS"))
                .put(new Info("L_Sudoku").pointerTypes("L_SUDOKU"))
-               .put(new Info("L_WShed").pointerTypes("L_WSHED"))
-
-               .put(new Info("gplotstylenames").annotations("@Platform(not=\"windows\")").javaNames("gplotstylenames"))
-               .put(new Info("gplotfilestyles").annotations("@Platform(not=\"windows\")").javaNames("gplotfilestyles"))
-               .put(new Info("gplotfileoutputs").annotations("@Platform(not=\"windows\")").javaNames("gplotfileoutputs"));
+               .put(new Info("L_WShed").pointerTypes("L_WSHED"));
     }
 }

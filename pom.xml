@@ -68,6 +68,7 @@
     <platform>${os.name}-${os.arch}</platform> <!-- For Android: -Dplatform=android-arm                                        -->
     <platform.root></platform.root>            <!--              -Dplatform.root=/path/to/android-ndk/                         -->
     <platform.compiler></platform.compiler>    <!--              -Dplatform.compiler=/path/to/arm-linux-androideabi-g++        -->
+    <platform.properties>${platform}</platform.properties>
   </properties>
 
   <dependencyManagement>
@@ -125,7 +126,7 @@
         <artifactId>javacpp</artifactId>
         <version>${project.parent.version}</version>
         <configuration>
-          <properties>${platform}</properties>
+          <properties>${platform.properties}</properties>
           <propertyKeysAndValues>
             <property>
               <name>platform.root</name>
@@ -419,7 +420,7 @@
       </activation>
       <properties>
         <platform>android-arm</platform>
-        <platform.root>${user.home}/android/android-ndk/</platform.root>
+        <platform.root>${user.home}/Android/android-ndk/</platform.root>
         <platform.compiler>toolchains/arm-linux-androideabi-4.6/prebuilt/${os.name}-${os.arch}/bin/arm-linux-androideabi-g++</platform.compiler>
       </properties>
     </profile>
@@ -433,7 +434,7 @@
       </activation>
       <properties>
         <platform>android-x86</platform>
-        <platform.root>${user.home}/android/android-ndk/</platform.root>
+        <platform.root>${user.home}/Android/android-ndk/</platform.root>
         <platform.compiler>toolchains/x86-4.6/prebuilt/${os.name}-${os.arch}/bin/i686-linux-android-g++</platform.compiler>
       </properties>
     </profile>

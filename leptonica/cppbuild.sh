@@ -8,14 +8,37 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 if [[ $PLATFORM == windows* ]]; then
-    LEPTONICA_VERSION=1.68
+    LEPTONICA_VERSION=1.71-1
     [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
-    download http://www.leptonica.org/source/leptonica-$LEPTONICA_VERSION-win$BITS-lib-include-dirs.zip leptonica-$LEPTONICA_VERSION-win$BITS-lib-include-dirs.zip
+    download http://mirrors.kernel.org/fedora/releases/21/Everything/x86_64/os/Packages/m/mingw$BITS-leptonica-$LEPTONICA_VERSION.fc21.noarch.rpm mingw$BITS-leptonica-$LEPTONICA_VERSION.fc21.noarch.rpm
+    download http://mirrors.kernel.org/fedora/releases/21/Everything/x86_64/os/Packages/m/mingw$BITS-giflib-5.0.5-2.fc21.noarch.rpm mingw$BITS-giflib-5.0.5-2.fc21.noarch.rpm
+    download http://mirrors.kernel.org/fedora/releases/21/Everything/x86_64/os/Packages/m/mingw$BITS-libjpeg-turbo-1.3.1-3.fc21.noarch.rpm mingw$BITS-libjpeg-turbo-1.3.1-3.fc21.noarch.rpm
+    download http://mirrors.kernel.org/fedora/releases/21/Everything/x86_64/os/Packages/m/mingw$BITS-libpng-1.6.10-2.fc21.noarch.rpm mingw$BITS-libpng-1.6.10-2.fc21.noarch.rpm
+    download http://mirrors.kernel.org/fedora/releases/21/Everything/x86_64/os/Packages/m/mingw$BITS-libtiff-4.0.3-5.fc21.noarch.rpm mingw$BITS-libtiff-4.0.3-5.fc21.noarch.rpm
+    download http://mirrors.kernel.org/fedora/releases/21/Everything/x86_64/os/Packages/m/mingw$BITS-libwebp-0.4.2-1.fc21.noarch.rpm mingw$BITS-libwebp-0.4.2-1.fc21.noarch.rpm
+    download http://mirrors.kernel.org/fedora/releases/21/Everything/x86_64/os/Packages/m/mingw$BITS-zlib-1.2.8-3.fc21.noarch.rpm mingw$BITS-zlib-1.2.8-3.fc21.noarch.rpm
+
+    function extract {
+        /C/Program\ Files/7-Zip/7z x -y $1
+    }
+    extract mingw$BITS-leptonica-*.rpm
+    extract mingw$BITS-giflib-*.rpm
+    extract mingw$BITS-libjpeg-turbo-*.rpm
+    extract mingw$BITS-libpng-*.rpm
+    extract mingw$BITS-libtiff-*.rpm
+    extract mingw$BITS-libwebp-*.rpm
+    extract mingw$BITS-zlib-*.rpm
 
     mkdir -p $PLATFORM
     cd $PLATFORM
-    unzip -o ../leptonica-$LEPTONICA_VERSION-win$BITS-lib-include-dirs.zip
-    cd include
+    rm -Rf include lib bin
+    extract ../mingw$BITS-leptonica-*.cpio
+    extract ../mingw$BITS-giflib-*.cpio
+    extract ../mingw$BITS-libjpeg-turbo-*.cpio
+    extract ../mingw$BITS-libpng-*.cpio
+    extract ../mingw$BITS-libtiff-*.cpio
+    extract ../mingw$BITS-libwebp-*.cpio
+    extract ../mingw$BITS-zlib-*.cpio
 else
     LEPTONICA_VERSION=1.71
     download http://www.leptonica.org/source/leptonica-$LEPTONICA_VERSION.tar.gz leptonica-$LEPTONICA_VERSION.tar.gz
@@ -54,8 +77,10 @@ case $PLATFORM in
         make install-strip
         ;;
     windows-x86)
+        mv usr/i686-w64-mingw32/sys-root/mingw/* .
         ;;
     windows-x86_64)
+        mv usr/x86_64-w64-mingw32/sys-root/mingw/* .
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
