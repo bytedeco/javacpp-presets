@@ -1,4 +1,5 @@
 
+ * Update instructions in the `README.md` file for manual installation in Android Studio
  * Include presets for Leptonica 1.71 and Tesseract 3.03-rc1 on Windows too
  * Fix `Mat.createFrom(BufferedImage)` ([issue #30](https://github.com/bytedeco/javacpp-presets/issues/30))
  * Add Speex and OpenSSL in the `cppbuild.sh` for FFmpeg to support common RTMPS streams, among other things ([issue #2](https://github.com/bytedeco/javacpp-presets/issues/2))

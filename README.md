@@ -62,7 +62,7 @@ Further, in the case of Android, the JavaCPP Presets also rely on:
 
 Manual Installation
 -------------------
-Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, `flycapture*.jar`, `libdc1394*.jar`, `libfreenect*.jar`, `videoinput*.jar`, `artoolkitplus*.jar`, etc.), in addition to `javacpp.jar`, somewhere in your CLASSPATH. The JAR files available as pre-built artifacts are meant to be used with [JavaCPP](https://github.com/bytedeco/javacpp). They were built on Fedora 20, so they may not work on all distributions of Linux, especially older ones. The binaries for Android were compiled for ARMv7 processors featuring an FPU, so they will not work on ancient devices such as the HTC Magic or some others with an ARMv6 CPU. Here are some more specific instructions for common cases:
+Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, etc.), in addition to `javacpp.jar`, somewhere in your CLASSPATH. The JAR files available as pre-built artifacts are meant to be used with [JavaCPP](https://github.com/bytedeco/javacpp). They were built on Fedora 20, so they may not work on all distributions of Linux, especially older ones. The binaries for Android were compiled for ARMv7 processors featuring an FPU, so they will not work on ancient devices such as the HTC Magic or some others with an ARMv6 CPU. Here are some more specific instructions for common cases:
 
 NetBeans (Java SE 6 or newer):
 
@@ -74,14 +74,12 @@ Eclipse (Java SE 6 or newer):
  1. Navigate to Project > Properties > Java Build Path > Libraries and click "Add External JARs...".
  2. Locate the JAR files, select them, and click OK.
 
-Eclipse (Android 2.2 or newer):
+IntelliJ IDEA (Android 2.2 or newer):
 
  1. Follow the instructions on this page: http://developer.android.com/training/basics/firstapp/
- 2. Go to File > New > Folder, select your project as parent folder, type "libs/armeabi" as Folder name, and click Finish.
- 3. Copy `javacpp.jar`, `opencv.jar`, `ffmpeg.jar`, `artoolkitplus.jar`, etc. into the newly created "libs" folder.
- 4. Extract all the `*.so` files from `opencv-android-arm.jar`, `ffmpeg-android-arm.jar`, `artoolkitplus-android-arm.jar`, etc. directly into the newly created "libs/armeabi" folder, without creating any of the subdirectories found in the JAR files.
- 5. Navigate to Project > Properties > Java Build Path > Libraries and click "Add JARs...".
- 6. Select all of `javacpp.jar`, `opencv.jar`, `ffmpeg.jar`, `artoolkitplus.jar`, etc. from the newly created "libs" folder.
+ 2. Copy all the JAR files into the `app/libs` subdirectory.
+ 3. Navigate to File > Project Structure > app > Dependencies, click `+`, and select "2 File dependency".
+ 4. Select all the JAR files from the `libs` subdirectory.
 
 After that, we can access almost transparently the corresponding C/C++ APIs through the interface classes found in the `org.bytedeco.javacpp` package. Indeed, the `Parser` translates the code comments from the C/C++ header files into the Java interface files, (almost) ready to be consumed by Javadoc. However, since their translation still leaves to be desired, one may wish to refer to the original documentation pages. For instance, the ones for OpenCV and FFmpeg can be found online at:
 
@@ -99,7 +97,7 @@ If the binary files available above are not enough for your needs, you might nee
 Each child module in turn relies on its corresponding native libraries being already installed in the `cppbuild` subdirectory created by a prior execution of the included [CPPBuild Scripts](#cppbuild-scripts), explained below. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified in the `.java` configuration files directly. The following versions are supported:
 
  * OpenCV 2.4.10  http://opencv.org/downloads.html
- * FFmpeg 2.4.x  http://ffmpeg.org/download.html
+ * FFmpeg 2.5.x  http://ffmpeg.org/download.html
  * FlyCapture 2.7.x  http://www.ptgrey.com/flycapture-sdk
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
  * libfreenect 0.5.1  https://github.com/OpenKinect/libfreenect
