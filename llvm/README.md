@@ -35,18 +35,18 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.llvm</groupId>
     <artifactId>fac</artifactId>
-    <version>0.9.1-SNAPSHOT</version>
+    <version>0.10</version>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>llvm</artifactId>
-            <version>3.5.0-0.9.1-SNAPSHOT</version>
+            <version>3.5.0-0.10</version>
         </dependency>
     </dependencies>
 </project>
 ```
 
-### The `src/main/java/Example.java` source file
+### The `src/main/java/Fac.java` source file
 ```java
 // General stuff
 import org.bytedeco.javacpp.*;

@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.9.1-SNAPSHOT
+// Targeted by JavaCPP version 0.10
 
 package org.bytedeco.javacpp;
 
@@ -17,6 +17,7 @@ public class videoInputLib extends org.bytedeco.javacpp.presets.videoInputLib {
     public StringVector(long n) { allocate(n); }
     private native void allocate();
     private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef StringVector put(@ByRef StringVector x);
 
     public native long size();
     public native void resize(@Cast("size_t") long n);

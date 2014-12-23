@@ -11,7 +11,7 @@
       <outputDirectory>/</outputDirectory>
       <includes>
         <include>CHANGELOG*</include>
-        <include>README*</include>
+        <include>**/README*</include>
         <include>**/APACHE*</include>
         <include>**/COPYING*</include>
         <include>**/GPL*</include>
@@ -19,6 +19,9 @@
         <include>**/*license*</include>
         <include>NOTICE*</include>
       </includes>
+      <excludes>
+        <exclude>**/cppbuild/**</exclude>
+      </excludes>
     </fileSet>
     <fileSet>
       <directory>${project.build.directory}</directory>

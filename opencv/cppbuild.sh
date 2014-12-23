@@ -17,13 +17,16 @@ if [[ $PLATFORM == windows* ]]; then
     7za x -y ../opencv-$OPENCV_VERSION.exe opencv/build/OpenCV* opencv/build/include opencv/build/$BITS/vc10/lib opencv/build/$BITS/vc10/bin
     cd opencv
 else
+    TBB=tbb41_20130116oss_src
     OPENCV_VERSION=2.4.10
+    download https://www.threadingbuildingblocks.org/sites/default/files/software_releases/source/$TBB.tgz $TBB.tgz
     download https://github.com/Itseez/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
 
     mkdir -p $PLATFORM
     cd $PLATFORM
     tar -xzvf ../opencv-$OPENCV_VERSION.tar.gz
     cd opencv-$OPENCV_VERSION
+    cp -a ../../$TBB.tgz 3rdparty/tbb
 fi
 
 case $PLATFORM in

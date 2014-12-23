@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.bytedeco</groupId>
   <artifactId>javacpp-presets</artifactId>
-  <version>0.9.1-SNAPSHOT</version>
+  <version>0.10</version>
   <packaging>pom</packaging>
 
   <name>JavaCPP Presets</name>
@@ -436,6 +436,19 @@
         <platform>android-x86</platform>
         <platform.root>${user.home}/Android/android-ndk/</platform.root>
         <platform.compiler>toolchains/x86-4.6/prebuilt/${os.name}-${os.arch}/bin/i686-linux-android-g++</platform.compiler>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>platform-dependency-true</id>
+      <activation>
+        <property>
+          <name>platform.dependency</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <properties>
+        <platform.dependency>${platform}</platform.dependency>
       </properties>
     </profile>
 
