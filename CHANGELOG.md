@@ -2,7 +2,7 @@
  * Update instructions in the `README.md` file for manual installation in Android Studio
  * Include presets for Leptonica 1.71 and Tesseract 3.03-rc1 on Windows too
  * Fix `Mat.createFrom(BufferedImage)` ([issue #30](https://github.com/bytedeco/javacpp-presets/issues/30))
- * Add Speex and OpenSSL in the `cppbuild.sh` for FFmpeg to support common RTMPS streams, among other things ([issue #2](https://github.com/bytedeco/javacpp-presets/issues/2))
+ * Add Speex, OpenCORE (AMR-NB and AMR-WB), and OpenSSL in the `cppbuild.sh` script for FFmpeg to support common RTMPS streams, among other things ([issue #2](https://github.com/bytedeco/javacpp-presets/issues/2) and [issue bytedeco/javacv#71](https://github.com/bytedeco/javacv/issues/71))
  * Deprecate slow `get()` and `put()` methods of `CvMat` in favor of the fast ones from `createIndexer()` ([issue javacv:317](http://code.google.com/p/javacv/issues/detail?id=317))
  * Include `operations.hpp` and `mat.hpp` in `opencv_core` to get a few important functions such as `read()` and `write()` for `FileStorage`
  * Replace `install_name_tool` hack to set `@rpath` on Mac OS X with patches to do it properly on install ([issue bytedeco/javacpp#6](https://github.com/bytedeco/javacpp/issues/6) and [issue bytedeco/javacv#49](https://github.com/bytedeco/javacv/issues/49))

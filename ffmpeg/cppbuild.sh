@@ -22,10 +22,12 @@ if [[ $PLATFORM == windows* ]]; then
 else
     LAME=lame-3.99.5
     SPEEX=speex-1.2rc1
+    OPENCORE_AMR=opencore-amr-0.1.3
     OPENSSL=openssl-1.0.1j
     FFMPEG_VERSION=2.5.1
     download http://downloads.sourceforge.net/project/lame/lame/3.99/$LAME.tar.gz $LAME.tar.gz
     download http://downloads.xiph.org/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
+    download http://sourceforge.net/projects/opencore-amr/files/opencore-amr/$OPENCORE_AMR.tar.gz/download $OPENCORE_AMR.tar.gz
     download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
     download ftp://ftp.videolan.org/pub/videolan/x264/snapshots/last_stable_x264.tar.bz2 last_stable_x264.tar.bz2
     download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
@@ -35,6 +37,7 @@ else
     INSTALL_PATH=`pwd`
     tar -xzvf ../$LAME.tar.gz
     tar -xzvf ../$SPEEX.tar.gz
+    tar -xzvf ../$OPENCORE_AMR.tar.gz
     tar -xzvf ../$OPENSSL.tar.gz
     tar -xjvf ../last_stable_x264.tar.bz2
     tar -xjvf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
@@ -54,7 +57,12 @@ case $PLATFORM in
         make install
         cd ../include
         make install
-        cd ../../$OPENSSL
+        cd ../../$OPENCORE_AMR
+        BUILD_FLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux CC="$ANDROID_BIN-gcc" CXX="$ANDROID_BIN-g++" RANLIB="$ANDROID_BIN-ranlib" CFLAGS="$BUILD_FLAGS" CXXFLAGS="$BUILD_FLAGS" LDFLAGS="-nostdlib -Wl,--fix-cortex-a8" LIBS="-lgcc -ldl -lz -lm -lc"
+        make -j4
+        make install
+        cd ../$OPENSSL
         CROSS_COMPILE="$ANDROID_BIN-" ./Configure android-armv7 -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300 no-shared --prefix=$INSTALL_PATH
         ANDROID_DEV="$ANDROID_ROOT/usr" make
         make install
@@ -64,7 +72,7 @@ case $PLATFORM in
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-android.patch
-        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-openssl --enable-libx264 --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=arm --extra-cflags="-I../include/ -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="-L../lib/ -nostdlib -Wl,--fix-cortex-a8" --extra-libs="-lgcc -ldl -lz -lm -lc" --disable-symver --disable-programs
+        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=arm --extra-cflags="-I../include/ -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="-L../lib/ -nostdlib -Wl,--fix-cortex-a8" --extra-libs="-lgcc -ldl -lz -lm -lc" --disable-symver --disable-programs
         make -j4
         make install
         ;;
@@ -80,7 +88,12 @@ case $PLATFORM in
         make install
         cd ../include
         make install
-        cd ../../$OPENSSL
+        cd ../../$OPENCORE_AMR
+        BUILD_FLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CC="$ANDROID_BIN-gcc" CXX="$ANDROID_BIN-g++" RANLIB="$ANDROID_BIN-ranlib" CFLAGS="$BUILD_FLAGS" CXXFLAGS="$BUILD_FLAGS" LDFLAGS="-nostdlib" LIBS="-lgcc -ldl -lz -lm -lc"
+        make -j4
+        make install
+        cd ../$OPENSSL
         CROSS_COMPILE="$ANDROID_BIN-" ./Configure android-x86 -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300 no-shared --prefix=$INSTALL_PATH
         ANDROID_DEV="$ANDROID_ROOT/usr" make
         make install
@@ -90,7 +103,7 @@ case $PLATFORM in
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-android.patch
-        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-openssl --enable-libx264 --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=atom --extra-cflags="-I../include/ -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="-L../lib/ -nostdlib" --extra-libs="-lgcc -ldl -lz -lm -lc" --disable-symver --disable-programs
+        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=atom --extra-cflags="-I../include/ -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="-L../lib/ -nostdlib" --extra-libs="-lgcc -ldl -lz -lm -lc" --disable-symver --disable-programs
         make -j4
         make install
         ;;
@@ -103,6 +116,10 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32"
         make -j4
         make install
+        cd ../$OPENCORE_AMR
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32" CXXFLAGS="-m32"
+        make -j4
+        make install
         cd ../$OPENSSL
         ./Configure linux-elf -m32 -fPIC no-shared --prefix=$INSTALL_PATH
         make
@@ -112,7 +129,7 @@ case $PLATFORM in
         make -j4
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-openssl --enable-libx264 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -ldl"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -ldl"
         make -j4
         make install
         ;;
@@ -125,6 +142,10 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
         make -j4
         make install
+        cd ../$OPENCORE_AMR
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64" CXXFLAGS="-m64"
+        make -j4
+        make install
         cd ../$OPENSSL
         ./Configure linux-x86_64 -fPIC no-shared --prefix=$INSTALL_PATH
         make
@@ -134,7 +155,7 @@ case $PLATFORM in
         make -j4
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-openssl --enable-libx264 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -ldl"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -ldl"
         make -j4
         make install
         ;;
@@ -144,6 +165,10 @@ case $PLATFORM in
         make -j4
         make install
         cd ../$SPEEX
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
+        make -j4
+        make install
+        cd ../$OPENCORE_AMR
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
         make -j4
         make install
@@ -157,7 +182,7 @@ case $PLATFORM in
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-macosx.patch
-        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-openssl --enable-libx264 --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -Wl,-headerpad_max_install_names -ldl"
+        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -Wl,-headerpad_max_install_names -ldl"
         make -j4
         make install
         ;;
