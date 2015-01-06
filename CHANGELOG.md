@@ -1,4 +1,6 @@
 
+ * Append `@Documented` to annotation types to have them picked up by Javadoc
+
 ### December 23, 2014 version 0.10
  * Update instructions in the `README.md` file for manual installation in Android Studio
  * Include presets for Leptonica 1.71 and Tesseract 3.03-rc1 on Windows too

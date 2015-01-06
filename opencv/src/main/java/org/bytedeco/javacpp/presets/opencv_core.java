@@ -20,6 +20,7 @@
 
 package org.bytedeco.javacpp.presets;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -203,7 +204,8 @@ public class opencv_core implements InfoMapper {
                .put(new Info("cv::Ptr").annotations("@Ptr"));
     }
 
-    @Retention(RetentionPolicy.RUNTIME) @Target({ElementType.METHOD, ElementType.PARAMETER})
+    @Documented @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.METHOD, ElementType.PARAMETER})
     @Cast({"cv::Ptr", "&"}) @Adapter("PtrAdapter") public @interface Ptr {
         /** @return template type */
         String value() default "";
