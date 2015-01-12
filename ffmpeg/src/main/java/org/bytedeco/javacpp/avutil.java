@@ -2147,8 +2147,8 @@ public static final int
     AV_PIX_FMT_XVMC_MPEG2_MC = 15,
     AV_PIX_FMT_XVMC_MPEG2_IDCT = 16;
 public static final int AV_PIX_FMT_XVMC = AV_PIX_FMT_XVMC_MPEG2_IDCT;
-// #endif
-public static final int /* FF_API_XVMC */
+public static final int
+// #endif /* FF_API_XVMC */
     /** packed YUV 4:2:2, 16bpp, Cb Y0 Cr Y1 */
     AV_PIX_FMT_UYVY422 = 17,
     /** packed YUV 4:1:1, 12bpp, Cb Y0 Y1 Cr Y2 Y3 */
@@ -4222,13 +4222,15 @@ public static final int AV_CPU_FLAG_3DNOW =        0x0004;
 public static final int AV_CPU_FLAG_SSE =          0x0008;
 /** PIV SSE2 functions */
 public static final int AV_CPU_FLAG_SSE2 =         0x0010;
-/** SSE2 supported, but usually not faster *  than regular MMX/SSE (e.g. Core1) */
+/** SSE2 supported, but usually not faster
+ *  than regular MMX/SSE (e.g. Core1) */
 public static final int AV_CPU_FLAG_SSE2SLOW = 0x40000000;
 /** AMD 3DNowExt */
 public static final int AV_CPU_FLAG_3DNOWEXT =     0x0020;
 /** Prescott SSE3 functions */
 public static final int AV_CPU_FLAG_SSE3 =         0x0040;
-/** SSE3 supported, but usually not faster *  than regular MMX/SSE (e.g. Core1) */
+/** SSE3 supported, but usually not faster
+ *  than regular MMX/SSE (e.g. Core1) */
 public static final int AV_CPU_FLAG_SSE3SLOW = 0x20000000;
 /** Conroe SSSE3 functions */
 public static final int AV_CPU_FLAG_SSSE3 =        0x0080;

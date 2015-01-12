@@ -5606,13 +5606,11 @@ public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt_of_2(@
 public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt_of_2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
                                             @Cast("AVPixelFormat") int src_pix_fmt, int has_alpha, int[] loss_ptr);
 
-// #if AV_HAVE_INCOMPATIBLE_LIBAV_ABI
-// #else
-public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
+public static native @Cast("AVPixelFormat") @Deprecated int avcodec_find_best_pix_fmt2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
                                             @Cast("AVPixelFormat") int src_pix_fmt, int has_alpha, IntPointer loss_ptr);
-public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
+public static native @Cast("AVPixelFormat") @Deprecated int avcodec_find_best_pix_fmt2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
                                             @Cast("AVPixelFormat") int src_pix_fmt, int has_alpha, IntBuffer loss_ptr);
-public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
+public static native @Cast("AVPixelFormat") @Deprecated int avcodec_find_best_pix_fmt2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
                                             @Cast("AVPixelFormat") int src_pix_fmt, int has_alpha, int[] loss_ptr);
 // #endif
 

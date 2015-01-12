@@ -1204,10 +1204,11 @@ public static final int AVFMT_NO_BYTE_SEEK =  0x8000;
 public static final int AVFMT_ALLOW_FLUSH =  0x10000;
 // #if LIBAVFORMAT_VERSION_MAJOR <= 54
 // #else
-public static final int AVFMT_TS_NONSTRICT = 0x20000;
+
 /** Format does not require strictly
                                         increasing timestamps, but they must
                                         still be monotonic */
+public static final int AVFMT_TS_NONSTRICT = 0x20000;
 // #endif
 /** Format allows muxing negative
                                         timestamps. If not set the timestamp

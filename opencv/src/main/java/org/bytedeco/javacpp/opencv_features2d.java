@@ -199,7 +199,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
     public native @ByRef Point2f pt(); public native KeyPoint pt(Point2f pt);
     /** diameter of the meaningful keypoint neighborhood */
     public native float size(); public native KeyPoint size(float size);
-    /** computed orientation of the keypoint (-1 if not applicable); *  it's in [0,360) degrees and measured relative to *  image coordinate system, ie in clockwise. */
+    /** computed orientation of the keypoint (-1 if not applicable);
+     *  it's in [0,360) degrees and measured relative to
+     *  image coordinate system, ie in clockwise. */
     public native float angle(); public native KeyPoint angle(float angle);
     /** the response by which the most strong keypoints have been selected. Can be used for the further sorting or subsampling */
     public native float response(); public native KeyPoint response(float response);

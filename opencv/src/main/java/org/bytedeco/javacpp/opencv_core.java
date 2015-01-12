@@ -6214,8 +6214,8 @@ public static final int MAGIC_MASK= 0xFFFF0000, TYPE_MASK= 0x00000FFF, DEPTH_MAS
     /** default constructor */
     public Mat() { allocate(); }
     private native void allocate();
-    /** constructs 2D matrix of the specified size and type
-    // (_type is CV_8UC1, CV_64FC3, CV_32SC(12) etc.) */
+    /** constructs 2D matrix of the specified size and type */
+    // (_type is CV_8UC1, CV_64FC3, CV_32SC(12) etc.)
     public Mat(int rows, int cols, int type) { allocate(rows, cols, type); }
     private native void allocate(int rows, int cols, int type);
     public Mat(@ByVal Size size, int type) { allocate(size, type); }
@@ -6325,10 +6325,10 @@ public static final int MAGIC_MASK= 0xFFFF0000, TYPE_MASK= 0x00000FFF, DEPTH_MAS
     /** ... for the specified column span */
     public native @ByVal Mat colRange(int startcol, int endcol);
     public native @ByVal Mat colRange(@Const @ByRef Range r);
-    /** ... for the specified diagonal
+    /** ... for the specified diagonal */
     // (d=0 - the main diagonal,
     //  >0 - a diagonal from the lower half,
-    //  <0 - a diagonal from the upper half) */
+    //  <0 - a diagonal from the upper half)
     public native @ByVal Mat diag(int d/*=0*/);
     public native @ByVal Mat diag();
     /** constructs a square diagonal matrix which main diagonal is vector "d" */
@@ -6336,8 +6336,8 @@ public static final int MAGIC_MASK= 0xFFFF0000, TYPE_MASK= 0x00000FFF, DEPTH_MAS
 
     /** returns deep copy of the matrix, i.e. the data is copied */
     public native @ByVal Mat clone();
-    /** copies the matrix content to "m".
-    // It calls m.create(this->size(), this->type()). */
+    /** copies the matrix content to "m". */
+    // It calls m.create(this->size(), this->type()).
     public native void copyTo( @ByVal Mat m );
     /** copies those matrix elements to "m" that are marked with non-zero mask elements. */
     public native void copyTo( @ByVal Mat m, @ByVal Mat mask );
@@ -6353,8 +6353,8 @@ public static final int MAGIC_MASK= 0xFFFF0000, TYPE_MASK= 0x00000FFF, DEPTH_MAS
     /** sets some of the matrix elements to s, according to the mask */
     public native @ByRef Mat setTo(@ByVal Mat value, @ByVal Mat mask/*=noArray()*/);
     public native @ByRef Mat setTo(@ByVal Mat value);
-    /** creates alternative matrix header for the same data, with different
-    // number of channels and/or different number of rows. see cvReshape. */
+    /** creates alternative matrix header for the same data, with different */
+    // number of channels and/or different number of rows. see cvReshape.
     public native @ByVal Mat reshape(int cn, int rows/*=0*/);
     public native @ByVal Mat reshape(int cn);
     public native @ByVal Mat reshape(int cn, int newndims, @Const IntPointer newsz);
@@ -6385,8 +6385,8 @@ public static final int MAGIC_MASK= 0xFFFF0000, TYPE_MASK= 0x00000FFF, DEPTH_MAS
     public static native @ByVal MatExpr eye(int rows, int cols, int type);
     public static native @ByVal MatExpr eye(@ByVal Size size, int type);
 
-    /** allocates new matrix data unless the matrix already has specified size and type.
-    // previous data is unreferenced if needed. */
+    /** allocates new matrix data unless the matrix already has specified size and type. */
+    // previous data is unreferenced if needed.
     public native void create(int rows, int cols, int type);
     public native void create(@ByVal Size size, int type);
     public native void create(int ndims, @Const IntPointer sizes, int type);
@@ -6395,8 +6395,8 @@ public static final int MAGIC_MASK= 0xFFFF0000, TYPE_MASK= 0x00000FFF, DEPTH_MAS
 
     /** increases the reference counter; use with care to avoid memleaks */
     public native void addref();
-    /** decreases reference counter;
-    // deallocates the data when reference counter reaches 0. */
+    /** decreases reference counter; */
+    // deallocates the data when reference counter reaches 0.
     public native void release();
 
     /** deallocates the matrix data */
@@ -6422,8 +6422,8 @@ public static final int MAGIC_MASK= 0xFFFF0000, TYPE_MASK= 0x00000FFF, DEPTH_MAS
     public native void locateROI( @ByRef Size wholeSize, @ByRef Point ofs );
     /** moves/resizes the current matrix ROI inside the parent matrix. */
     public native @ByRef Mat adjustROI( int dtop, int dbottom, int dleft, int dright );
-    /** extracts a rectangular sub-matrix
-    // (this is a generalized form of row, rowRange etc.) */
+    /** extracts a rectangular sub-matrix */
+    // (this is a generalized form of row, rowRange etc.)
     public native @ByVal @Name("operator()") Mat apply( @ByVal Range rowRange, @ByVal Range colRange );
     public native @ByVal @Name("operator()") Mat apply( @Const @ByRef Rect roi );
     public native @ByVal @Name("operator()") Mat apply( @Const Range ranges );
@@ -6435,16 +6435,16 @@ public static final int MAGIC_MASK= 0xFFFF0000, TYPE_MASK= 0x00000FFF, DEPTH_MAS
     /** converts header to IplImage; no data is copied */
     public native @ByVal @Name("operator IplImage") IplImage asIplImage();
 
-    /** returns true iff the matrix data is continuous
+    /** returns true iff the matrix data is continuous */
     // (i.e. when there are no gaps between successive rows).
-    // similar to CV_IS_MAT_CONT(cvmat->type) */
+    // similar to CV_IS_MAT_CONT(cvmat->type)
     public native @Cast("bool") boolean isContinuous();
 
     /** returns true if the matrix is a submatrix of another matrix */
     public native @Cast("bool") boolean isSubmatrix();
 
-    /** returns element size in bytes,
-    // similar to CV_ELEM_SIZE(cvmat->type) */
+    /** returns element size in bytes, */
+    // similar to CV_ELEM_SIZE(cvmat->type)
     public native @Cast("size_t") long elemSize();
     /** returns the size of element channel in bytes. */
     public native @Cast("size_t") long elemSize1();
@@ -6488,8 +6488,8 @@ public static final int MAGIC_MASK= 0xFFFF0000, TYPE_MASK= 0x00000FFF, DEPTH_MAS
 
     /** special versions for 2D arrays (especially convenient for referencing image pixels) */
 
-    /** template methods for iteration over matrix elements.
-    // the iterators take care of skipping gaps in the end of rows (if any) */
+    /** template methods for iteration over matrix elements. */
+    // the iterators take care of skipping gaps in the end of rows (if any)
 
     /** enum cv::Mat:: */
     public static final int MAGIC_VAL= 0x42FF0000, AUTO_STEP= 0, CONTINUOUS_FLAG= CV_MAT_CONT_FLAG, SUBMATRIX_FLAG= CV_SUBMAT_FLAG;
@@ -6509,8 +6509,8 @@ public static final int MAGIC_MASK= 0xFFFF0000, TYPE_MASK= 0x00000FFF, DEPTH_MAS
     /** pointer to the data */
     public native @Cast("uchar*") BytePointer data(); public native Mat data(BytePointer data);
 
-    /** pointer to the reference counter;
-    // when matrix points to user-allocated data, the pointer is NULL */
+    /** pointer to the reference counter; */
+    // when matrix points to user-allocated data, the pointer is NULL
     public native IntPointer refcount(); public native Mat refcount(IntPointer refcount);
 
     /** helper fields used in locateROI and adjustROI */

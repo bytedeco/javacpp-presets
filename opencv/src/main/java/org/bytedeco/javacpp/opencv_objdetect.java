@@ -1357,7 +1357,7 @@ public static native @ByVal CvDataMatrixCodeDeque cvFindDataMatrix(CvMat im);
  */
 @Namespace("cv::linemod") public static native @Ptr Detector getDefaultLINEMOD();
 
-
+ // namespace linemod
  // namespace cv
 
 // #endif

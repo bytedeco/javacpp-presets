@@ -5198,7 +5198,7 @@ public static final int
     public native int GetPCADimLow();
     public native int GetPCADimHigh();
 
-    public native @Cast("CvMat**") PointerPointer GetPCACoeffs(); // the number of pca components to use for comparison
+    public native @Cast("CvMat**") PointerPointer GetPCACoeffs();
 }
 
 
@@ -5483,7 +5483,7 @@ public static final int
                                          String feature_label);
 
     // GetObjectFeatureCount: returns the number of object features
-    public native int GetObjectFeatureCount(); // the number of the positive features
+    public native int GetObjectFeatureCount();
 
 }
 

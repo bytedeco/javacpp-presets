@@ -749,7 +749,7 @@ public static native @ByVal gsl_complex gsl_complex_arcsech(@ByVal gsl_complex a
 public static native @ByVal gsl_complex gsl_complex_arccsch(@ByVal gsl_complex a);  /* r=arccsch(a) */
 public static native @ByVal gsl_complex gsl_complex_arctanh(@ByVal gsl_complex a);  /* r=arctanh(a) */
 public static native @ByVal gsl_complex gsl_complex_arctanh_real(double a);  /* r=arctanh(a) */
-public static native @ByVal gsl_complex gsl_complex_arccoth(@ByVal gsl_complex a);
+public static native @ByVal gsl_complex gsl_complex_arccoth(@ByVal gsl_complex a);  /* r=arccoth(a) */
 
 // #endif /* __GSL_COMPLEX_MATH_H__ */
 
@@ -1354,7 +1354,7 @@ public static native @Cast("long double") double GSL_MIN_LDBL(@Cast("long double
 // #define GSL_MIN_DBL(a,b)   GSL_MIN(a,b)
 // #define GSL_MAX_LDBL(a,b)  GSL_MAX(a,b)
 // #define GSL_MIN_LDBL(a,b)  GSL_MIN(a,b)
-// #endif
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_POW_INT_H__ */
 
@@ -3077,7 +3077,7 @@ public static native int gsl_vector_complex_add_constant(gsl_vector_complex a, @
 // #ifdef HAVE_INLINE
 
 
-// #endif
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_VECTOR_COMPLEX_DOUBLE_H__ */
 
@@ -3301,7 +3301,7 @@ public static native int gsl_vector_complex_float_add_constant(gsl_vector_comple
 // #ifdef HAVE_INLINE
 
 
-// #endif
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_VECTOR_COMPLEX_FLOAT_H__ */
 
@@ -3509,7 +3509,7 @@ public static native int gsl_vector_isnonneg(@Const gsl_vector v);
 /* */ public static native @Const DoublePointer gsl_vector_const_ptr(@Const gsl_vector v, @Cast("const size_t") long i);
 
 // #ifdef HAVE_INLINE
-// #endif
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_VECTOR_DOUBLE_H__ */
 
@@ -3719,7 +3719,7 @@ public static native int gsl_vector_float_isnonneg(@Const gsl_vector_float v);
 /* */ public static native @Const FloatPointer gsl_vector_float_const_ptr(@Const gsl_vector_float v, @Cast("const size_t") long i);
 
 // #ifdef HAVE_INLINE
-// #endif
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_VECTOR_FLOAT_H__ */
 
@@ -3911,7 +3911,7 @@ public static native int gsl_vector_ulong_isnonneg(@Const gsl_vector_ulong v);
 /* */ public static native @Cast("const unsigned long*") CLongPointer gsl_vector_ulong_const_ptr(@Const gsl_vector_ulong v, @Cast("const size_t") long i);
 
 // #ifdef HAVE_INLINE
-// #endif
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_VECTOR_ULONG_H__ */
 
@@ -4103,7 +4103,7 @@ public static native int gsl_vector_long_isnonneg(@Const gsl_vector_long v);
 /* */ public static native @Const CLongPointer gsl_vector_long_const_ptr(@Const gsl_vector_long v, @Cast("const size_t") long i);
 
 // #ifdef HAVE_INLINE
-// #endif
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_VECTOR_LONG_H__ */
 
@@ -4313,7 +4313,7 @@ public static native int gsl_vector_uint_isnonneg(@Const gsl_vector_uint v);
 /* */ public static native @Cast("const unsigned int*") IntPointer gsl_vector_uint_const_ptr(@Const gsl_vector_uint v, @Cast("const size_t") long i);
 
 // #ifdef HAVE_INLINE
-// #endif
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_VECTOR_UINT_H__ */
 
@@ -4523,7 +4523,7 @@ public static native int gsl_vector_int_isnonneg(@Const gsl_vector_int v);
 /* */ public static native @Const IntPointer gsl_vector_int_const_ptr(@Const gsl_vector_int v, @Cast("const size_t") long i);
 
 // #ifdef HAVE_INLINE
-// #endif
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_VECTOR_INT_H__ */
 
@@ -4733,7 +4733,7 @@ public static native int gsl_vector_ushort_isnonneg(@Const gsl_vector_ushort v);
 /* */ public static native @Cast("const unsigned short*") ShortPointer gsl_vector_ushort_const_ptr(@Const gsl_vector_ushort v, @Cast("const size_t") long i);
 
 // #ifdef HAVE_INLINE
-// #endif
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_VECTOR_USHORT_H__ */
 
@@ -4943,7 +4943,7 @@ public static native int gsl_vector_short_isnonneg(@Const gsl_vector_short v);
 /* */ public static native @Const ShortPointer gsl_vector_short_const_ptr(@Const gsl_vector_short v, @Cast("const size_t") long i);
 
 // #ifdef HAVE_INLINE
-// #endif
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_VECTOR_SHORT_H__ */
 
@@ -5153,7 +5153,7 @@ public static native int gsl_vector_uchar_isnonneg(@Const gsl_vector_uchar v);
 /* */ public static native @Cast("const unsigned char*") BytePointer gsl_vector_uchar_const_ptr(@Const gsl_vector_uchar v, @Cast("const size_t") long i);
 
 // #ifdef HAVE_INLINE
-// #endif
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_VECTOR_UCHAR_H__ */
 
@@ -5359,7 +5359,7 @@ public static native int gsl_vector_char_isnonneg(@Const gsl_vector_char v);
 /* */ public static native @Cast("const char*") BytePointer gsl_vector_char_const_ptr(@Const gsl_vector_char v, @Cast("const size_t") long i);
 
 // #ifdef HAVE_INLINE
-// #endif
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_VECTOR_CHAR_H__ */
 
@@ -5675,7 +5675,7 @@ public static native int gsl_matrix_complex_set_col(gsl_matrix_complex m, @Cast(
 
 // #ifdef HAVE_INLINE 
 
-// #endif
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_MATRIX_COMPLEX_DOUBLE_H__ */
 
@@ -5960,7 +5960,7 @@ public static native int gsl_matrix_complex_float_set_col(gsl_matrix_complex_flo
 
 // #ifdef HAVE_INLINE 
 
-// #endif
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_MATRIX_COMPLEX_FLOAT_H__ */
 
@@ -9913,6 +9913,8 @@ public static native void cblas_xerbla(int p, String rout, String form);
 // #else
 // #endif
 
+/* typedef  gsl_complex  COMPLEX; */
+
 
 // #endif /* __GSL_BLAS_TYPES_H__ */
 
@@ -11108,7 +11110,7 @@ public static native int gsl_combination_prev(gsl_combination c);
 
 // #ifdef HAVE_INLINE
 
-// #endif
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_COMBINATION_H__ */
 
@@ -12092,7 +12094,7 @@ public static native @Cast("size_t") long gsl_permutation_canonical_cycles(@Cons
 
 // #ifdef HAVE_INLINE
 
-// #endif
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_PERMUTATION_H__ */
 
@@ -13366,7 +13368,7 @@ public static native @Cast("size_t") long gsl_interp_accel_find(gsl_interp_accel
 public static native @Cast("size_t") long gsl_interp_accel_find(gsl_interp_accel a, @Const double[] x_array, @Cast("size_t") long size, double x);
 
 // #ifdef HAVE_INLINE
-// #endif
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_INTERP_H__ */
 
@@ -14363,7 +14365,7 @@ public static native @Const gsl_rng_type gsl_rng_env_setup();
    efficiency slightly but avoids having to check for the out of range
    value.  Note that range is typically O(2^32) so the addition of 1
    is negligible in most usage. */
-// #endif
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_RNG_H__ */
 
@@ -14505,7 +14507,7 @@ public static native int gsl_qrng_get(@Const gsl_qrng q, double[] x);
 
 // #ifdef HAVE_INLINE
 
-// #endif
+// #endif /* HAVE_INLINE */
 
 
 // #endif /* !__GSL_QRNG_H__ */
@@ -16335,6 +16337,12 @@ public static final double GSL_CONST_MKSA_GAUSS = (1e-4); /* kg / A s^2 */
 /** enum gsl_fft_direction */
 public static final int
     gsl_fft_forward = -1, gsl_fft_backward = 1;
+
+/* this gives the sign in the formula
+
+   h(f) = \sum x(t) exp(+/- 2 pi i f t) 
+       
+   where - is the forward transform direction and + the inverse direction */
 
 // #endif /* __GSL_FFT_H__ */
 
@@ -19292,7 +19300,7 @@ public static native int gsl_multiset_prev(gsl_multiset c);
 
 // #ifdef HAVE_INLINE
 
-// #endif
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_MULTISET_H__ */
 
@@ -22659,7 +22667,7 @@ public static native int gsl_sf_coupling_6j_INCORRECT_e(int two_ja, int two_jb, 
 public static native double gsl_sf_coupling_6j_INCORRECT(int two_ja, int two_jb, int two_jc,
                                     int two_jd, int two_je, int two_jf
                                     );
-// #endif
+// #endif /* !GSL_DISABLE_DEPRECATED */
 
 // #endif /* __GSL_SF_COUPLING_H__ */
 

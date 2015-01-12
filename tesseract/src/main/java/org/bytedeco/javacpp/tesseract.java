@@ -404,7 +404,7 @@ public static final int
 
     // Iterator equality operators.
     
-      // Pointer into the string.
+    
   }
 
   // Create a start/end iterator pointing to a string. Note that these methods
@@ -1383,7 +1383,8 @@ public static final int
 public static final int
   /** Orientation and script detection only. */
   PSM_OSD_ONLY = 0,
-  /** Automatic page segmentation with orientation and *  script detection. (OSD) */
+  /** Automatic page segmentation with orientation and
+ *  script detection. (OSD) */
   PSM_AUTO_OSD = 1,
   /** Automatic page segmentation, but no OSD, or OCR. */
   PSM_AUTO_ONLY = 2,
@@ -1391,7 +1392,8 @@ public static final int
   PSM_AUTO = 3,
   /** Assume a single column of text of variable sizes. */
   PSM_SINGLE_COLUMN = 4,
-  /** Assume a single uniform block of vertically *  aligned text. */
+  /** Assume a single uniform block of vertically
+ *  aligned text. */
   PSM_SINGLE_BLOCK_VERT_TEXT = 5,
   /** Assume a single uniform block of text. (Default.) */
   PSM_SINGLE_BLOCK = 6,

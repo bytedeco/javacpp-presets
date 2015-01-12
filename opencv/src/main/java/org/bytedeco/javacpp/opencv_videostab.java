@@ -119,7 +119,7 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
     public native double fps();
 }
 
-
+ // namespace videostab
  // namespace cv
 
 // #endif
@@ -213,7 +213,7 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
     public native void print(String format);
 }
 
-
+ // namespace videostab
  // namespace cv
 
 // #endif
@@ -284,10 +284,10 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
     public FastMarchingMethod() { allocate(); }
     private native void allocate();
 
-    public native @ByVal Mat distanceMap(); // narrow band size
+    public native @ByVal Mat distanceMap();
 }
 
-
+ // namespace videostab
  // namespace cv
 
 // #include "fast_marching_inl.hpp"
@@ -427,7 +427,7 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 }
 // #endif
 
-
+ // namespace videostab
  // namespace cv
 
 // #endif
@@ -583,7 +583,7 @@ public static final int
 
 @Namespace("cv::videostab") public static native @ByVal Mat getMotion(int from, int to, @Const @ByRef MatVector motions);
 
-
+ // namespace videostab
  // namespace cv
 
 // #endif
@@ -689,7 +689,7 @@ public static final int
 
 @Namespace("cv::videostab") public static native float estimateOptimalTrimRatio(@Const @ByRef Mat M, @ByVal Size size);
 
-
+ // namespace videostab
  // namespace
 
 // #endif
@@ -897,7 +897,7 @@ public static final int
         @Const @ByRef Mat flowMask, @Const @ByRef Mat flowX, @Const @ByRef Mat flowY, @Const @ByRef Mat frame1, @Const @ByRef Mat mask1,
         float distThresh, @ByRef Mat frame0, @ByRef Mat mask0);
 
-
+ // namespace videostab
  // namespace cv
 
 // #endif
@@ -1012,7 +1012,7 @@ public static final int
     public native void deblur(int idx, @ByRef Mat frame);
 }
 
-
+ // namespace videostab
  // namespace cv
 
 // #endif
@@ -1157,7 +1157,7 @@ public static final int
     public native @ByVal MatVector motions();
 }
 
-
+ // namespace videostab
  // namespace cv
 
 // #endif

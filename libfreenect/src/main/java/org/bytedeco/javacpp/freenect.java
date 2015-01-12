@@ -285,8 +285,8 @@ public static class freenect_raw_tilt_state extends Pointer {
 /** If Win32, export all functions for DLL usage */
 // #ifndef _WIN32
 /** DLLExport information for windows, set to nothing on other platforms */
-//   #define FREENECTAPI
 /** DLLExport information for windows, set to nothing on other platforms */
+//   #define FREENECTAPI
 // #else
 //   #ifdef __cplusplus
 //     #define FREENECTAPI extern "C" __declspec(dllexport)
@@ -1183,8 +1183,8 @@ public static native int freenect_stop_audio(freenect_device dev);
 /** If Win32, export all functions for DLL usage */
 // #ifndef _WIN32
 /** DLLExport information for windows, set to nothing on other platforms */
-//   #define FREENECTAPI_SYNC
 /** DLLExport information for windows, set to nothing on other platforms */
+//   #define FREENECTAPI_SYNC
 // #else
 //   #ifdef __cplusplus
 //     #define FREENECTAPI_SYNC extern "C" __declspec(dllexport)

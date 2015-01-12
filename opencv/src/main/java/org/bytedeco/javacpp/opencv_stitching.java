@@ -679,7 +679,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     private native void allocate(float scale);
 }
 
-
+ // namespace detail
  // namespace cv
 
 // #include "warpers_inl.hpp"
@@ -891,7 +891,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     public native void collectGarbage();
 }
 
-
+ // namespace detail
  // namespace cv
 
 // #endif // __OPENCV_STITCHING_MATCHERS_HPP__
@@ -1059,7 +1059,7 @@ public static final int ENABLE_LOG = 0;
 
 @Namespace("cv::detail") public static native @ByRef IntPointer stitchingLogLevel();
 
-
+ // namespace detail
  // namespace cv
 
 // #include "util_inl.hpp"
@@ -1140,7 +1140,7 @@ public static final int ENABLE_LOG = 0;
     public native @ByRef Mat t(); public native CameraParams t(Mat t); // Translation
 }
 
-
+ // namespace detail
  // namespace cv
 
 // #endif // #ifndef __OPENCV_STITCHING_CAMERA_HPP__
@@ -1299,7 +1299,7 @@ public static final int
 @Namespace("cv::detail") public static native void findMaxSpanningTree(int num_images, @StdVector MatchesInfo pairwise_matches,
                                     @ByRef Graph span_tree, @StdVector int[] centers);
 
-
+ // namespace detail
  // namespace cv
 
 // #endif // __OPENCV_STITCHING_MOTION_ESTIMATORS_HPP__
@@ -1425,7 +1425,7 @@ public static final int
     public native void apply(int index, @ByVal Point corner, @ByRef Mat image, @Const @ByRef Mat mask);
 }
 
-
+ // namespace detail
  // namespace cv
 
 // #endif // __OPENCV_STITCHING_EXPOSURE_COMPENSATE_HPP__
@@ -1615,7 +1615,7 @@ public static final int
     public native void findInPair(@Cast("size_t") long first, @Cast("size_t") long second, @ByVal Rect roi);
 }
 
-
+ // namespace detail
  // namespace cv
 
 // #endif // __OPENCV_STITCHING_SEAM_FINDERS_HPP__
@@ -1745,7 +1745,7 @@ public static final int
 
     public native void prepare(@ByVal Rect dst_roi);
     public native void feed(@Const @ByRef Mat img, @Const @ByRef Mat mask, @ByVal Point tl);
-    public native void blend(@ByRef Mat dst, @ByRef Mat dst_mask); //CV_32F or CV_16S
+    public native void blend(@ByRef Mat dst, @ByRef Mat dst_mask);
 }
 
 
@@ -1763,7 +1763,7 @@ public static final int
 @Namespace("cv::detail") public static native void restoreImageFromLaplacePyr(@ByRef MatVector pyr);
 @Namespace("cv::detail") public static native void restoreImageFromLaplacePyrGpu(@ByRef MatVector pyr);
 
-
+ // namespace detail
  // namespace cv
 
 // #endif // __OPENCV_STITCHING_BLENDERS_HPP__
@@ -1837,7 +1837,7 @@ public static final int
 
 @Namespace("cv::detail") public static native @Cast("bool") boolean calibrateRotatingCamera(@Const @ByRef MatVector Hs, @ByRef Mat K);
 
-
+ // namespace detail
  // namespace cv
 
 // #endif // __OPENCV_STITCHING_AUTOCALIB_HPP__

@@ -1333,9 +1333,8 @@ public static native int avfilter_register(AVFilter filter);
  *             NULL if none found.
  */
 // #if !FF_API_NOCONST_GET_NAME
-// #endif
-public static native AVFilter avfilter_get_by_name(@Cast("const char*") BytePointer name);
-public static native AVFilter avfilter_get_by_name(String name);
+public static native @Const AVFilter avfilter_get_by_name(@Cast("const char*") BytePointer name);
+public static native @Const AVFilter avfilter_get_by_name(String name);
 
 /**
  * Iterate over all registered filters.

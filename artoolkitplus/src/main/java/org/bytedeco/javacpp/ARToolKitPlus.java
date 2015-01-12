@@ -530,7 +530,7 @@ public static final int P_MAX =       500;
 @Namespace("ARToolKitPlus::Matrix") public static native int mul(ARMat dest, ARMat a, ARMat b);
 @Namespace("ARToolKitPlus::Matrix") public static native int selfInv(ARMat m);
 
-
+ // namespace Matrix
 
 
  // namespace ARToolKitPlus

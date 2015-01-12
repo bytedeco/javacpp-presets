@@ -476,8 +476,8 @@ public static final int
                            @ByVal Mat flow, double pyr_scale, int levels, int winsize,
                            int iterations, int poly_n, double poly_sigma, int flags );
 
-/** estimates the best-fit Euqcidean, similarity, affine or perspective transformation
-// that maps one 2D point set to another or one image to another. */
+/** estimates the best-fit Euqcidean, similarity, affine or perspective transformation */
+// that maps one 2D point set to another or one image to another.
 @Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal Mat src, @ByVal Mat dst,
                                          @Cast("bool") boolean fullAffine);
 
@@ -682,10 +682,6 @@ public static final int
     public native void initialize(@ByVal Size frameSize, int frameType);
 
     public native AlgorithmInfo info();
-    // Tau - shadow threshold. The shadow is detected if the pixel is darker
-    //version of the background. Tau is a threshold on how much darker the shadow can be.
-    //Tau= 0.5 means that if pixel is more than 2 times darker then it is not shadow
-    //See: Prati,Mikic,Trivedi,Cucchiarra,"Detecting Moving Shadows...",IEEE PAMI,2003.
 }
 
 /**
