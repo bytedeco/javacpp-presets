@@ -1,4 +1,5 @@
 
+ * Include missing `ltrresultiterator.h` header file in the presets for Tesseract ([issue #36](https://github.com/bytedeco/javacpp-presets/issues/36))
  * Append `@Documented` to annotation types to have them picked up by Javadoc
 
 ### December 23, 2014 version 0.10
