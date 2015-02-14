@@ -1,4 +1,6 @@
 
+ * Switch from `IntPointer` to `BoolPointer` for the `BOOL*` pointer type of Leptonica ([issue #36](https://github.com/bytedeco/javacpp-presets/issues/36))
+ * Add `preload` for `gif`, `jpeg`, `png`, `tiff`, and `webp` libraries in presets for Leptonica ([issue #36](https://github.com/bytedeco/javacpp-presets/issues/36))
  * Include missing `ltrresultiterator.h` header file in the presets for Tesseract ([issue #36](https://github.com/bytedeco/javacpp-presets/issues/36))
  * Append `@Documented` to annotation types to have them picked up by Javadoc
 

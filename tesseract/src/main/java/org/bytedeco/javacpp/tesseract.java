@@ -4181,8 +4181,8 @@ public static native @Cast("BOOL") boolean TessBaseAPIGetIntVariable(   @Const T
 public static native @Cast("BOOL") boolean TessBaseAPIGetIntVariable(   @Const TessBaseAPI handle, String name, IntPointer value);
 public static native @Cast("BOOL") boolean TessBaseAPIGetIntVariable(   @Const TessBaseAPI handle, @Cast("const char*") BytePointer name, IntBuffer value);
 public static native @Cast("BOOL") boolean TessBaseAPIGetIntVariable(   @Const TessBaseAPI handle, String name, int[] value);
-public static native @Cast("BOOL") boolean TessBaseAPIGetBoolVariable(  @Const TessBaseAPI handle, @Cast("const char*") BytePointer name, @Cast("BOOL*") IntPointer value);
-public static native @Cast("BOOL") boolean TessBaseAPIGetBoolVariable(  @Const TessBaseAPI handle, String name, @Cast("BOOL*") IntPointer value);
+public static native @Cast("BOOL") boolean TessBaseAPIGetBoolVariable(  @Const TessBaseAPI handle, @Cast("const char*") BytePointer name, @Cast("BOOL*") BoolPointer value);
+public static native @Cast("BOOL") boolean TessBaseAPIGetBoolVariable(  @Const TessBaseAPI handle, String name, @Cast("BOOL*") BoolPointer value);
 public static native @Cast("BOOL") boolean TessBaseAPIGetDoubleVariable(@Const TessBaseAPI handle, @Cast("const char*") BytePointer name, DoublePointer value);
 public static native @Cast("BOOL") boolean TessBaseAPIGetDoubleVariable(@Const TessBaseAPI handle, String name, DoubleBuffer value);
 public static native @Cast("BOOL") boolean TessBaseAPIGetDoubleVariable(@Const TessBaseAPI handle, @Cast("const char*") BytePointer name, double[] value);
@@ -4492,15 +4492,15 @@ public static native @Cast("const TessPageIterator*") PageIterator TessResultIte
 public static native @Cast("char*") BytePointer TessResultIteratorGetUTF8Text(@Cast("const TessResultIterator*") ResultIterator handle, @Cast("TessPageIteratorLevel") int level);
 public static native float TessResultIteratorConfidence(@Cast("const TessResultIterator*") ResultIterator handle, @Cast("TessPageIteratorLevel") int level);
 
-public static native @Cast("const char*") BytePointer TessResultIteratorWordFontAttributes(@Cast("const TessResultIterator*") ResultIterator handle, @Cast("BOOL*") IntPointer is_bold, @Cast("BOOL*") IntPointer is_italic,
-                                                              @Cast("BOOL*") IntPointer is_underlined, @Cast("BOOL*") IntPointer is_monospace, @Cast("BOOL*") IntPointer is_serif,
-                                                              @Cast("BOOL*") IntPointer is_smallcaps, IntPointer pointsize, IntPointer font_id);
-public static native String TessResultIteratorWordFontAttributes(@Cast("const TessResultIterator*") ResultIterator handle, @Cast("BOOL*") IntPointer is_bold, @Cast("BOOL*") IntPointer is_italic,
-                                                              @Cast("BOOL*") IntPointer is_underlined, @Cast("BOOL*") IntPointer is_monospace, @Cast("BOOL*") IntPointer is_serif,
-                                                              @Cast("BOOL*") IntPointer is_smallcaps, IntBuffer pointsize, IntBuffer font_id);
-public static native @Cast("const char*") BytePointer TessResultIteratorWordFontAttributes(@Cast("const TessResultIterator*") ResultIterator handle, @Cast("BOOL*") IntPointer is_bold, @Cast("BOOL*") IntPointer is_italic,
-                                                              @Cast("BOOL*") IntPointer is_underlined, @Cast("BOOL*") IntPointer is_monospace, @Cast("BOOL*") IntPointer is_serif,
-                                                              @Cast("BOOL*") IntPointer is_smallcaps, int[] pointsize, int[] font_id);
+public static native @Cast("const char*") BytePointer TessResultIteratorWordFontAttributes(@Cast("const TessResultIterator*") ResultIterator handle, @Cast("BOOL*") BoolPointer is_bold, @Cast("BOOL*") BoolPointer is_italic,
+                                                              @Cast("BOOL*") BoolPointer is_underlined, @Cast("BOOL*") BoolPointer is_monospace, @Cast("BOOL*") BoolPointer is_serif,
+                                                              @Cast("BOOL*") BoolPointer is_smallcaps, IntPointer pointsize, IntPointer font_id);
+public static native String TessResultIteratorWordFontAttributes(@Cast("const TessResultIterator*") ResultIterator handle, @Cast("BOOL*") BoolPointer is_bold, @Cast("BOOL*") BoolPointer is_italic,
+                                                              @Cast("BOOL*") BoolPointer is_underlined, @Cast("BOOL*") BoolPointer is_monospace, @Cast("BOOL*") BoolPointer is_serif,
+                                                              @Cast("BOOL*") BoolPointer is_smallcaps, IntBuffer pointsize, IntBuffer font_id);
+public static native @Cast("const char*") BytePointer TessResultIteratorWordFontAttributes(@Cast("const TessResultIterator*") ResultIterator handle, @Cast("BOOL*") BoolPointer is_bold, @Cast("BOOL*") BoolPointer is_italic,
+                                                              @Cast("BOOL*") BoolPointer is_underlined, @Cast("BOOL*") BoolPointer is_monospace, @Cast("BOOL*") BoolPointer is_serif,
+                                                              @Cast("BOOL*") BoolPointer is_smallcaps, int[] pointsize, int[] font_id);
 
 public static native @Cast("BOOL") boolean TessResultIteratorWordIsFromDictionary(@Cast("const TessResultIterator*") ResultIterator handle);
 public static native @Cast("BOOL") boolean TessResultIteratorWordIsNumeric(@Cast("const TessResultIterator*") ResultIterator handle);

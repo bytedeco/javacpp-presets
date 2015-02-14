@@ -41,7 +41,7 @@ public class tesseract implements InfoMapper {
         infoMap.put(new Info("__NATIVE__", "ultoa", "snprintf", "vsnprintf", "SIGNED",
                              "TESS_API", "TESS_LOCAL", "_TESS_FILE_BASENAME_", "TESS_CALL").cppTypes().annotations().cppText(""))
                .put(new Info("STRING_IS_PROTECTED").define(false))
-               .put(new Info("BOOL").cast().valueTypes("boolean").pointerTypes("IntPointer").define())
+               .put(new Info("BOOL").cast().valueTypes("boolean").pointerTypes("BoolPointer").define())
                .put(new Info("TESS_CAPI_INCLUDE_BASEAPI").define())
                .put(new Info("MIN_INT32").javaText("public static final int MIN_INT32 = 0x80000000;"))
 
