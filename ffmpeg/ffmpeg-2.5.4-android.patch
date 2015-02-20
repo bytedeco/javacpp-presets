@@ -1,8 +1,8 @@
-diff -ruN ffmpeg-2.4.3/configure ffmpeg-2.4.3-android/configure
---- ffmpeg-2.4.3/configure	2014-11-02 10:47:33.000000000 +0900
-+++ ffmpeg-2.4.3-android/configure	2014-11-16 15:42:17.803121217 +0900
-@@ -4839,7 +4839,7 @@
-                                  require smbclient libsmbclient.h smbc_init -lsmbclient; }
+diff -ruN ffmpeg-2.5.4/configure ffmpeg-2.5.4-android/configure
+--- ffmpeg-2.5.4/configure	2015-02-14 00:56:33.000000000 +0900
++++ ffmpeg-2.5.4-android/configure	2015-02-20 23:49:04.739388778 +0900
+@@ -4885,7 +4885,7 @@
+                                require smbclient libsmbclient.h smbc_init -lsmbclient; }
  enabled libsoxr           && require libsoxr soxr.h soxr_create -lsoxr
  enabled libssh            && require_pkg_config libssh libssh/sftp.h sftp_init
 -enabled libspeex          && require_pkg_config speex speex/speex.h speex_decoder_init -lspeex
@@ -10,9 +10,18 @@ diff -ruN ffmpeg-2.4.3/configure ffmpeg-2.4.3-android/configure
  enabled libstagefright_h264 && require_cpp libstagefright_h264 "binder/ProcessState.h media/stagefright/MetaData.h
      media/stagefright/MediaBufferGroup.h media/stagefright/MediaDebug.h media/stagefright/MediaDefs.h
      media/stagefright/OMXClient.h media/stagefright/OMXCodec.h" android::OMXClient -lstagefright -lmedia -lutils -lbinder -lgnustl_static
-diff -ruN ffmpeg-2.4.3/library.mak ffmpeg-2.4.3-android/library.mak
---- ffmpeg-2.4.3/library.mak	2014-11-02 10:47:36.000000000 +0900
-+++ ffmpeg-2.4.3-android/library.mak	2014-11-16 15:41:51.826622161 +0900
+@@ -4913,7 +4913,7 @@
+                                  warn "using libx264 without pkg-config"; } } &&
+                              { check_cpp_condition x264.h "X264_BUILD >= 118" ||
+                                die "ERROR: libx264 must be installed and version must be >= 0.118."; }
+-enabled libx265           && require_pkg_config x265 x265.h x265_encoder_encode &&
++enabled libx265           && require x265 x265.h x265_encoder_encode -lx265 &&
+                              { check_cpp_condition x265.h "X265_BUILD >= 17" ||
+                                die "ERROR: libx265 version must be >= 17."; }
+ enabled libxavs           && require libxavs xavs.h xavs_encoder_encode -lxavs
+diff -ruN ffmpeg-2.5.4/library.mak ffmpeg-2.5.4-android/library.mak
+--- ffmpeg-2.5.4/library.mak	2015-02-14 00:56:25.000000000 +0900
++++ ffmpeg-2.5.4-android/library.mak	2015-02-20 23:48:46.564033472 +0900
 @@ -48,16 +48,13 @@
  $(TESTPROGS) $(TOOLS): %$(EXESUF): %.o $(EXEOBJS)
  	$$(LD) $(LDFLAGS) $(LDEXEFLAGS) $$(LD_O) $$(filter %.o,$$^) $$(THISLIB) $(FFEXTRALIBS) $$(ELIBS)

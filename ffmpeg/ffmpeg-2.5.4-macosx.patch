@@ -1,7 +1,7 @@
-diff -ruN ffmpeg-2.4.3/configure ffmpeg-2.4.3-macosx/configure
---- ffmpeg-2.4.3/configure	2014-11-02 10:47:33.000000000 +0900
-+++ ffmpeg-2.4.3-macosx/configure	2014-11-16 22:51:24.000000000 +0900
-@@ -4006,7 +4006,7 @@
+diff -ruN ffmpeg-2.5.4/configure ffmpeg-2.5.4-macosx/configure
+--- ffmpeg-2.5.4/configure	2015-02-14 00:56:33.000000000 +0900
++++ ffmpeg-2.5.4-macosx/configure	2015-02-20 23:51:52.349665360 +0900
+@@ -4034,7 +4034,7 @@
          ;;
      darwin)
          enabled ppc && add_asflags -force_cpusubtype_ALL
@@ -10,8 +10,8 @@ diff -ruN ffmpeg-2.4.3/configure ffmpeg-2.4.3-macosx/configure
          enabled x86_32 && append SHFLAGS -Wl,-read_only_relocs,suppress
          strip="${strip} -x"
          add_ldflags -Wl,-dynamic,-search_paths_first
-@@ -4839,7 +4839,7 @@
-                                  require smbclient libsmbclient.h smbc_init -lsmbclient; }
+@@ -4885,7 +4885,7 @@
+                                require smbclient libsmbclient.h smbc_init -lsmbclient; }
  enabled libsoxr           && require libsoxr soxr.h soxr_create -lsoxr
  enabled libssh            && require_pkg_config libssh libssh/sftp.h sftp_init
 -enabled libspeex          && require_pkg_config speex speex/speex.h speex_decoder_init -lspeex
@@ -19,3 +19,12 @@ diff -ruN ffmpeg-2.4.3/configure ffmpeg-2.4.3-macosx/configure
  enabled libstagefright_h264 && require_cpp libstagefright_h264 "binder/ProcessState.h media/stagefright/MetaData.h
      media/stagefright/MediaBufferGroup.h media/stagefright/MediaDebug.h media/stagefright/MediaDefs.h
      media/stagefright/OMXClient.h media/stagefright/OMXCodec.h" android::OMXClient -lstagefright -lmedia -lutils -lbinder -lgnustl_static
+@@ -4913,7 +4913,7 @@
+                                  warn "using libx264 without pkg-config"; } } &&
+                              { check_cpp_condition x264.h "X264_BUILD >= 118" ||
+                                die "ERROR: libx264 must be installed and version must be >= 0.118."; }
+-enabled libx265           && require_pkg_config x265 x265.h x265_encoder_encode &&
++enabled libx265           && require x265 x265.h x265_encoder_encode -lx265 &&
+                              { check_cpp_condition x265.h "X265_BUILD >= 17" ||
+                                die "ERROR: libx265 version must be >= 17."; }
+ enabled libxavs           && require libxavs xavs.h xavs_encoder_encode -lxavs
