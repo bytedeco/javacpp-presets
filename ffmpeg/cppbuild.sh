@@ -45,8 +45,6 @@ else
     tar -xzvf ../$X265.tar.gz
     tar -xjvf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
     X264=`echo x264-snapshot-*`
-
-    patch -Np0 < ../../$X265.patch || true
 fi
 
 case $PLATFORM in
@@ -76,12 +74,13 @@ case $PLATFORM in
         make -j4
         make install
         cd ../$X265
+        patch -Np1 < ../../../$X265-android.patch || true
         cmake -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DCMAKE_TOOLCHAIN_FILE=android-arm.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
         make -j4
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-android.patch
-        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --enable-libx265 --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=arm --extra-cflags="-I../include/ -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="$ANDROID_ROOT/usr/lib/crtbegin_dynamic.o -L../lib/ -L$ANDROID_CPP/libs/armeabi/ -nostdlib -Wl,--fix-cortex-a8" --extra-libs="-lgnustl_static -lgcc -ldl -lz -lm -lc" --disable-symver --disable-programs
+        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-iconv --disable-libxcb --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --enable-libx265 --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=arm --extra-cflags="-I../include/ -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="$ANDROID_ROOT/usr/lib/crtbegin_dynamic.o -L../lib/ -L$ANDROID_CPP/libs/armeabi/ -nostdlib -Wl,--fix-cortex-a8" --extra-libs="-lgnustl_static -lgcc -ldl -lz -lm -lc" --disable-symver --disable-programs
         make -j4
         make install
         ;;
@@ -111,12 +110,13 @@ case $PLATFORM in
         make -j4
         make install
         cd ../$X265
+        patch -Np1 < ../../../$X265-android.patch || true
         cmake -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DCMAKE_TOOLCHAIN_FILE=android-x86.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
         make -j4 x265-static
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-android.patch
-        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --enable-libx265 --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=atom --extra-cflags="-I../include/ -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="$ANDROID_ROOT/usr/lib/crtbegin_dynamic.o -L../lib/ -L$ANDROID_CPP/libs/x86/ -nostdlib" --extra-libs="-lgnustl_static -lgcc -ldl -lz -lm -lc" --disable-symver --disable-programs
+        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-iconv --disable-libxcb --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --enable-libx265 --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=atom --extra-cflags="-I../include/ -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="$ANDROID_ROOT/usr/lib/crtbegin_dynamic.o -L../lib/ -L$ANDROID_CPP/libs/x86/ -nostdlib" --extra-libs="-lgnustl_static -lgcc -ldl -lz -lm -lc" --disable-symver --disable-programs
         make -j4
         make install
         ;;
@@ -146,7 +146,7 @@ case $PLATFORM in
         make -j4
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --enable-libx265 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -lstdc++ -ldl"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-iconv --disable-libxcb --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --enable-libx265 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -lstdc++ -ldl"
         make -j4
         make install
         ;;
@@ -176,7 +176,7 @@ case $PLATFORM in
         make -j4
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --enable-libx265 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -lstdc++ -ldl"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-iconv --disable-libxcb --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --enable-libx265 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -lstdc++ -ldl"
         make -j4
         make install
         ;;
@@ -207,7 +207,7 @@ case $PLATFORM in
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-macosx.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --enable-libx265 --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -Wl,-headerpad_max_install_names -lstdc++ -ldl"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-iconv --disable-libxcb --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --enable-libx265 --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -Wl,-headerpad_max_install_names -lstdc++ -ldl"
         make -j4
         make install
         ;;

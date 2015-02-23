@@ -1,4 +1,5 @@
 
+ * Disable iconv, XCB, and SDL for more portables builds of FFmpeg
  * Avoid versioning of Leptonica libraries, which breaks Tesseract on Android ([issue #38](https://github.com/bytedeco/javacpp-presets/issues/38))
  * Add x265 in the `cppbuild.sh` script for FFmpeg, thanks to Mark Bolstad ([issue bytedeco/javacv#41](https://github.com/bytedeco/javacv/issues/41))
  * Upgrade presets for FFmpeg 2.5.4, OpenSSL 1.0.2
