@@ -1,0 +1,33 @@
+diff -ruN tesseract-3.03/api/Makefile.am tesseract-3.03-android/api/Makefile.am
+--- tesseract-3.03/api/Makefile.am	2014-01-24 07:51:24.000000000 +0900
++++ tesseract-3.03-android/api/Makefile.am	2015-02-24 21:11:57.588323059 +0900
+@@ -20,7 +20,7 @@
+ noinst_LTLIBRARIES = libtesseract_api.la
+ else
+ lib_LTLIBRARIES += libtesseract_api.la
+-libtesseract_api_la_LDFLAGS = -version-info $(GENERIC_LIBRARY_VERSION)
++libtesseract_api_la_LDFLAGS = -avoid-version
+ libtesseract_api_la_LIBADD = \
+     ../ccmain/libtesseract_main.la \
+     ../cube/libtesseract_cube.la \
+diff -ruN tesseract-3.03/api/Makefile.in tesseract-3.03-android/api/Makefile.in
+--- tesseract-3.03/api/Makefile.in	2014-02-05 09:04:29.000000000 +0900
++++ tesseract-3.03-android/api/Makefile.in	2015-02-24 21:12:24.921849154 +0900
+@@ -298,7 +298,7 @@
+ include_HEADERS = apitypes.h baseapi.h capi.h renderer.h
+ lib_LTLIBRARIES = $(am__append_3) libtesseract.la
+ @USING_MULTIPLELIBS_FALSE@noinst_LTLIBRARIES = libtesseract_api.la
+-@USING_MULTIPLELIBS_TRUE@libtesseract_api_la_LDFLAGS = -version-info $(GENERIC_LIBRARY_VERSION)
++@USING_MULTIPLELIBS_TRUE@libtesseract_api_la_LDFLAGS = -avoid-version
+ @USING_MULTIPLELIBS_TRUE@libtesseract_api_la_LIBADD = \
+ @USING_MULTIPLELIBS_TRUE@    ../ccmain/libtesseract_main.la \
+ @USING_MULTIPLELIBS_TRUE@    ../cube/libtesseract_cube.la \
+@@ -315,7 +315,7 @@
+ 
+ libtesseract_api_la_CPPFLAGS = $(AM_CPPFLAGS) $(am__append_4)
+ libtesseract_api_la_SOURCES = baseapi.cpp capi.cpp pdfrenderer.cpp renderer.cpp
+-libtesseract_la_LDFLAGS = -version-info $(GENERIC_LIBRARY_VERSION) \
++libtesseract_la_LDFLAGS = -avoid-version \
+ 	$(am__append_8)
+ libtesseract_la_SOURCES = 
+ # Dummy C++ source to cause C++ linking.

@@ -35,7 +35,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "leptonica/ptra.h", "leptonica/queue.h", "leptonica/stack.h", "leptonica/arrayaccess.h", "leptonica/bmf.h", "leptonica/ccbord.h",
         "leptonica/dewarp.h", "leptonica/gplot.h", "leptonica/imageio.h", "leptonica/jbclass.h", "leptonica/morph.h", "leptonica/pix.h",
         "leptonica/recog.h", "leptonica/regutils.h", "leptonica/sudoku.h", "leptonica/watershed.h", "leptonica/allheaders.h"}, link="lept@.4",
-        preloadpath="/usr/lib/", preload={"gif@.4", "jpeg@.62", "png16@.16", "tiff@.5", "webp@.5"}),
+        preload={"gif@.4", "jpeg@.62", "png16@.16", "tiff@.5", "webp@.5"}),
     @Platform(value="linux-x86", preloadpath={"/usr/lib32/", "/usr/lib/"}),
     @Platform(value="linux-x86_64", preloadpath={"/usr/lib64/", "/usr/lib/"}),
     @Platform(value="android", link="lept"),
