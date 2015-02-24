@@ -146,7 +146,7 @@ case $PLATFORM in
         make -j4
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-iconv --disable-libxcb --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --enable-libx265 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -lstdc++ -ldl"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-iconv --disable-libxcb --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --enable-libx265 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
         make -j4
         make install
         ;;
@@ -172,11 +172,11 @@ case $PLATFORM in
         make -j4
         make install
         cd ../$X265
-        CC="gcc -m64" CXX="g++ -m64" cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        CC="gcc -m64" CXX="g++ -m64" cmake -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
         make -j4
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-iconv --disable-libxcb --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --enable-libx265 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -lstdc++ -ldl"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-iconv --disable-libxcb --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --enable-libx265 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
         make -j4
         make install
         ;;
@@ -202,12 +202,12 @@ case $PLATFORM in
         make -j4
         make install
         cd ../$X265
-        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        cmake -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
         make -j4
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-macosx.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-iconv --disable-libxcb --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --enable-libx265 --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -Wl,-headerpad_max_install_names -lstdc++ -ldl"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-iconv --disable-libxcb --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libx264 --enable-libx265 --extra-cflags="-I../include/" --extra-ldflags="-L../lib/ -Wl,-headerpad_max_install_names" --extra-libs="-lstdc++ -ldl"
         make -j4
         make install
         ;;
