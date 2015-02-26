@@ -410,6 +410,7 @@
       </build>
     </profile>
 
+    <!-- Provide convenient profiles to set commonly used paths for Android -->
     <profile>
       <id>android-arm</id>
       <activation>
@@ -439,17 +440,22 @@
       </properties>
     </profile>
 
+    <!-- Include platform dependency by default for modules without a C++ build script file -->
     <profile>
-      <id>platform-dependency-true</id>
+      <id>platform-dependency-default</id>
       <activation>
-        <property>
-          <name>platform.dependency</name>
-          <value>true</value>
-        </property>
+        <file>
+          <missing>${user.dir}/cppbuild.sh</missing>
+        </file>
       </activation>
-      <properties>
-        <platform.dependency>${platform}</platform.dependency>
-      </properties>
+      <dependencies>
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>${project.artifactId}</artifactId>
+          <version>${project.version}</version>
+          <classifier>${platform}</classifier>
+        </dependency>
+      </dependencies>
     </profile>
 
     <profile>
@@ -464,7 +470,7 @@
           <groupId>${project.groupId}</groupId>
           <artifactId>${project.artifactId}</artifactId>
           <version>${project.version}</version>
-          <classifier>${platform.dependency}</classifier>
+          <classifier>${platform}</classifier>
         </dependency>
       </dependencies>
     </profile>
@@ -482,6 +488,18 @@
           <artifactId>${project.artifactId}</artifactId>
           <version>${project.version}</version>
           <classifier>${platform}</classifier>
+        </dependency>
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>${project.artifactId}</artifactId>
+          <version>${project.version}</version>
+          <classifier>android-arm</classifier>
+        </dependency>
+        <dependency>
+          <groupId>${project.groupId}</groupId>
+          <artifactId>${project.artifactId}</artifactId>
+          <version>${project.version}</version>
+          <classifier>android-x86</classifier>
         </dependency>
         <dependency>
           <groupId>${project.groupId}</groupId>

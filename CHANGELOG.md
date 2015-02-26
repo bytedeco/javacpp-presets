@@ -1,4 +1,5 @@
 
+ * Remove the need to set manually the `platform.dependency` system property for downstream modules without a `cppbuild.sh` file
  * Fix failing `cppbuild.sh` for FFmpeg on Ubuntu ([issue #32](https://github.com/bytedeco/javacpp-presets/issues/32))
  * Disable iconv, XCB, and SDL for more portables builds of FFmpeg
  * Avoid versioning of Leptonica and Tesseract libraries, preventing them from working on Android ([issue #38](https://github.com/bytedeco/javacpp-presets/issues/38))
