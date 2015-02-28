@@ -31,7 +31,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit=opencv_imgproc.class, value={
     @Platform(include={"<opencv2/photo/photo_c.h>", "<opencv2/photo/photo.hpp>"}, link="opencv_photo@.2.4"),
-    @Platform(value="windows", link="opencv_photo2410") },
+    @Platform(value="windows", link="opencv_photo2411") },
         target="org.bytedeco.javacpp.opencv_photo")
 public class opencv_photo implements InfoMapper {
     public void map(InfoMap infoMap) {

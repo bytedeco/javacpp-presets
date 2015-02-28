@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.10
+// Targeted by JavaCPP version 0.11-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -386,7 +386,7 @@ public static native @Const CvMat cvKalmanUpdateByMeasurement(CvKalman arg1, CvM
 /**
  Kalman filter.
 
- The class implements standard Kalman filter \u005Curl{http://en.wikipedia.org/wiki/Kalman_filter}.
+ The class implements standard Kalman filter http://en.wikipedia.org/wiki/Kalman_filter.
  However, you can modify KalmanFilter::transitionMatrix, KalmanFilter::controlMatrix and
  KalmanFilter::measurementMatrix to get the extended Kalman filter functionality.
 */
@@ -718,6 +718,7 @@ public static final int
      * model.
      * @param image Input image
      * @param fgmask Output mask image representing foreground and background pixels
+     * @param learningRate Determines how quickly features are "forgotten" from histograms
      */
     public native @Name("operator()") void apply(@ByVal Mat image, @ByVal Mat fgmask, double learningRate/*=-1.0*/);
     public native @Name("operator()") void apply(@ByVal Mat image, @ByVal Mat fgmask);

@@ -64,6 +64,8 @@ import org.bytedeco.javacpp.indexer.Indexable;
 import org.bytedeco.javacpp.indexer.Indexer;
 import org.bytedeco.javacpp.indexer.IntIndexer;
 import org.bytedeco.javacpp.indexer.ShortIndexer;
+import org.bytedeco.javacpp.indexer.UByteIndexer;
+import org.bytedeco.javacpp.indexer.UShortIndexer;
 
 // required by javac to resolve circular dependencies
 import org.bytedeco.javacpp.opencv_core.*;
@@ -171,9 +173,12 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             int[] strides = { arrayStep(), arrayChannels(), 1 };
             switch (arrayDepth()) {
                 case IPL_DEPTH_8U:
+                    return (I)UByteIndexer.create(ptr.capacity(size), sizes, strides, direct);
                 case IPL_DEPTH_8S:
                     return (I)ByteIndexer.create(ptr.capacity(size), sizes, strides, direct);
                 case IPL_DEPTH_16U:
+                    strides[0] /= 2;
+                    return (I)UShortIndexer.create(new ShortPointer(ptr).capacity(size/2), sizes, strides, direct);
                 case IPL_DEPTH_16S:
                     strides[0] /= 2;
                     return (I)ShortIndexer.create(new ShortPointer(ptr).capacity(size/2), sizes, strides, direct);
@@ -850,8 +855,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
                 return super.toString();
             } else {
                 try {
-                    return "AbstractArray[width=" + arrayWidth() + ",height=" + arrayHeight()
-                                      + ",depth=" + arrayDepth() + ",channels=" + arrayChannels() + "]";
+                    return getClass().getName() + "[width=" + arrayWidth() + ",height=" + arrayHeight()
+                                                + ",depth=" + arrayDepth() + ",channels=" + arrayChannels() + "]";
                 } catch (Exception e) {
                     return super.toString();
                 }
@@ -1181,15 +1186,6 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             CvMat mat = new CvMat();
             cvGetMat(this, mat, (IntPointer)null, 0);
             return mat;
-        }
-
-        @Override public String toString() {
-            if (isNull()) {
-                return super.toString();
-            } else {
-                return "IplImage[width=" + width() + ",height=" + height() +
-                               ",depth=" + depth() + ",nChannels=" + nChannels() + "]";
-            }
         }
     }
 

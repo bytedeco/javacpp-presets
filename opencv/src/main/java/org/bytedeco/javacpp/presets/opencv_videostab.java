@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "<opencv2/videostab/optical_flow.hpp>", "<opencv2/videostab/global_motion.hpp>", "<opencv2/videostab/motion_stabilizing.hpp>",
         "<opencv2/videostab/inpainting.hpp>", "<opencv2/videostab/deblurring.hpp>", "<opencv2/videostab/stabilizer.hpp>",
         "<opencv2/videostab/videostab.hpp>"}, link="opencv_videostab@.2.4", preload={"opencv_gpu@.2.4", "opencv_ocl@.2.4"}),
-    @Platform(value="windows", link="opencv_videostab2410", preload={"opencv_gpu2410", "opencv_ocl2410"}) },
+    @Platform(value="windows", link="opencv_videostab2411", preload={"opencv_gpu2411", "opencv_ocl2411"}) },
         target="org.bytedeco.javacpp.opencv_videostab")
 public class opencv_videostab implements InfoMapper {
     public void map(InfoMap infoMap) {

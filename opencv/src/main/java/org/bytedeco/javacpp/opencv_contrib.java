@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.10
+// Targeted by JavaCPP version 0.11-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -863,6 +863,7 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
         *\param center the transformation center: where the output precision is maximal
         *\param R the number of rings of the cortical image (default value 70 pixel)
         *\param ro0 the radius of the blind spot (default value 3 pixel)
+        *\param interp interpolation algorithm
         *\param full \a 1 (default value) means that the retinal image (the inverse transform) is computed within the circumscribing circle.
         *            \a 0 means that the retinal image is computed within the inscribed circle.
         *\param S the number of sectors of the cortical image (default value 70 pixel).
@@ -1545,7 +1546,7 @@ public static final int
 }
 
 /**
- * @class Retina a wrapper class which allows the Gipsa/Listic Labs model to be used.
+ * a wrapper class which allows the Gipsa/Listic Labs model to be used.
  * This retina model allows spatio-temporal image processing (applied on still images, video sequences).
  * As a summary, these are the retina model properties:
  * => It applies a spectral whithening (mid-frequency details enhancement)
@@ -1688,7 +1689,6 @@ public static final int
      * => if the xml file does not exist, then default setup is applied
      * => warning, Exceptions are thrown if read XML file is not valid
      * @param newParameters : a parameters structures updated with the new target configuration
-         * @param applyDefaultSetupOnFailure : set to true if an error must be thrown on error
      */
     public native void setup(@ByVal RetinaParameters newParameters);
 
@@ -1705,7 +1705,7 @@ public static final int
 
     /**
      * write xml/yml formated parameters information
-     * @rparam fs : the filename of the xml file that will be open and writen with formatted parameters information
+     * @param fs : the filename of the xml file that will be open and writen with formatted parameters information
      */
     public native void write( @StdString BytePointer fs );
     public native void write( @StdString String fs );
@@ -1732,7 +1732,7 @@ public static final int
      * @param HcellsSpatialConstant: the spatial constant of the first order low pass filter of the horizontal cells, use it to cut low spatial frequencies (local luminance), unit is pixels, typical value is 5 pixel, this value is also used for local contrast computing when computing the local contrast adaptation at the ganglion cells level (Inner Plexiform Layer parvocellular channel model)
      * @param ganglionCellsSensitivity: the compression strengh of the ganglion cells local adaptation output, set a value between 160 and 250 for best results, a high value increases more the low value sensitivity... and the output saturates faster, recommended value: 230
      */
-    public native void setupOPLandIPLParvoChannel(@Cast("const bool") boolean colorMode/*=true*/, @Cast("const bool") boolean normaliseOutput/*=true*/, float photoreceptorsLocalAdaptationSensitivity/*=0.7*/, float photoreceptorsTemporalConstant/*=0.5*/, float photoreceptorsSpatialConstant/*=0.53*/, float horizontalCellsGain/*=0*/, float HcellsTemporalConstant/*=1*/, float HcellsSpatialConstant/*=7*/, float ganglionCellsSensitivity/*=0.7*/);
+    public native void setupOPLandIPLParvoChannel(@Cast("const bool") boolean colorMode/*=true*/, @Cast("const bool") boolean normaliseOutput/*=true*/, float photoreceptorsLocalAdaptationSensitivity/*=0.7f*/, float photoreceptorsTemporalConstant/*=0.5f*/, float photoreceptorsSpatialConstant/*=0.53f*/, float horizontalCellsGain/*=0*/, float HcellsTemporalConstant/*=1*/, float HcellsSpatialConstant/*=7*/, float ganglionCellsSensitivity/*=0.7f*/);
     public native void setupOPLandIPLParvoChannel();
 
     /**
@@ -1747,7 +1747,7 @@ public static final int
      * @param localAdaptintegration_tau: specifies the temporal constant of the low pas filter involved in the computation of the local "motion mean" for the local adaptation computation
      * @param localAdaptintegration_k: specifies the spatial constant of the low pas filter involved in the computation of the local "motion mean" for the local adaptation computation
      */
-    public native void setupIPLMagnoChannel(@Cast("const bool") boolean normaliseOutput/*=true*/, float parasolCells_beta/*=0*/, float parasolCells_tau/*=0*/, float parasolCells_k/*=7*/, float amacrinCellsTemporalCutFrequency/*=1.2*/, float V0CompressionParameter/*=0.95*/, float localAdaptintegration_tau/*=0*/, float localAdaptintegration_k/*=7*/);
+    public native void setupIPLMagnoChannel(@Cast("const bool") boolean normaliseOutput/*=true*/, float parasolCells_beta/*=0*/, float parasolCells_tau/*=0*/, float parasolCells_k/*=7*/, float amacrinCellsTemporalCutFrequency/*=1.2f*/, float V0CompressionParameter/*=0.95f*/, float localAdaptintegration_tau/*=0*/, float localAdaptintegration_k/*=7*/);
     public native void setupIPLMagnoChannel();
 
     /**

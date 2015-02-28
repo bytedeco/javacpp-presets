@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.10
+// Targeted by JavaCPP version 0.11-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -5196,11 +5196,6 @@ public static final int DFT_INVERSE= 1, DFT_SCALE= 2, DFT_ROWS= 4, DFT_COMPLEX_O
 */
 
 
-/**
-  \typedef
-*/
-
-
 //////////////////////////////// Point_ ////////////////////////////////
 
 /**
@@ -5774,13 +5769,6 @@ public static final int DFT_INVERSE= 1, DFT_SCALE= 2, DFT_ROWS= 4, DFT_COMPLEX_O
 
 
 /**
-  \typedef
-
-  shorter aliases for the most popular cv::Point_<>, cv::Size_<> and cv::Rect_<> specializations
-*/
-
-
-/**
   The rotated 2D rectangle.
 
   The class represents rotated (i.e. not up-right) rectangles on a plane.
@@ -5934,7 +5922,6 @@ public static final int DFT_INVERSE= 1, DFT_SCALE= 2, DFT_ROWS= 4, DFT_COMPLEX_O
   \note{Another good property of the class is that the operations on the reference counter are atomic,
   i.e. it is safe to use the class in multi-threaded applications}
 */
-
 
 //////////////////////// Input/Output Array Arguments /////////////////////////////////
 
@@ -6138,8 +6125,6 @@ public static final int MAGIC_MASK= 0xFFFF0000, TYPE_MASK= 0x00000FFF, DEPTH_MAS
    cv::Mat::rows contains the number of matrix rows and cv::Mat::cols - the number of matrix columns. There is yet another member,
    cv::Mat::step that is used to actually compute address of a matrix element. cv::Mat::step is needed because the matrix can be
    a part of another matrix or because there can some padding space in the end of each row for a proper alignment.
-
-   \image html roi.png
 
    Given these parameters, address of the matrix element M_{ij} is computed as following:
 
@@ -6854,7 +6839,7 @@ public static class BinaryFunc extends FunctionPointer {
 /** set mask elements for those array elements which are within the element-specific bounding box (dst = lowerb <= src && src < upperb) */
 @Namespace("cv") public static native void inRange(@ByVal Mat src, @ByVal Mat lowerb,
                           @ByVal Mat upperb, @ByVal Mat dst);
-/** compares elements of two arrays (dst = src1 <cmpop> src2) */
+/** compares elements of two arrays (dst = src1 \<cmpop\> src2) */
 @Namespace("cv") public static native void compare(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst, int cmpop);
 /** computes per-element minimum of two arrays (dst = min(src1, src2)) */
 @Namespace("cv") public static native void min(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst);
@@ -7474,7 +7459,7 @@ public static final int
 
  While cv::Mat is sufficient in most cases, cv::Mat_ can be more convenient if you use a lot of element
  access operations and if you know matrix type at compile time.
- Note that cv::Mat::at<_Tp>(int y, int x) and cv::Mat_<_Tp>::operator ()(int y, int x) do absolutely the
+ Note that cv::Mat::at\<_Tp\>(int y, int x) and cv::Mat_\<_Tp\>::operator ()(int y, int x) do absolutely the
  same thing and run at the same speed, but the latter is certainly shorter:
 
  \code
@@ -7952,6 +7937,7 @@ public static class ConvertScaleData extends FunctionPointer {
     public native void convertTo( @ByRef SparseMat m, int rtype );
     /** converts sparse matrix to dense n-dim matrix with optional type conversion and scaling.
     /**
+      \param m Destination matrix
       \param rtype The output matrix data type. When it is =-1, the output array will have the same data type as (*this)
       \param alpha The scale factor
       \param beta The optional delta added to the scaled values before the conversion
@@ -9290,8 +9276,9 @@ public static class ConvertScaleData extends FunctionPointer {
 
 
 
+/** @cond IGNORED */
 
-
+/** @endcond */
 
 
 

@@ -40,7 +40,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(value={
     @Platform(include={"<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/core.hpp>",
                        "<opencv2/core/operations.hpp>", "<opencv2/core/mat.hpp>", "opencv_adapters.h"}, link="opencv_core@.2.4", preload="tbb"),
-    @Platform(value="windows", define="_WIN32_WINNT 0x0502", link="opencv_core2410", preload={"msvcr100", "msvcp100"}),
+    @Platform(value="windows", define="_WIN32_WINNT 0x0502", link="opencv_core2411", preload={"msvcr100", "msvcp100"}),
     @Platform(value="windows-x86", preloadpath={"C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/redist/x86/Microsoft.VC100.CRT/"}),
     @Platform(value="windows-x86_64", preloadpath={"C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/redist/x64/Microsoft.VC100.CRT/"}) },
         target="org.bytedeco.javacpp.opencv_core", helper="org.bytedeco.javacpp.helper.opencv_core")

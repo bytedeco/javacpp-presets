@@ -36,7 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         link="opencv_contrib@.2.4", preload={"opencv_gpu@.2.4", "opencv_ocl@.2.4"}),
     @Platform(value="windows", include={"<opencv2/contrib/contrib.hpp>",
         "<opencv2/contrib/hybridtracker.hpp>", "<opencv2/contrib/retina.hpp>", "<opencv2/contrib/openfabmap.hpp>"},
-        link="opencv_contrib2410", preload={"opencv_gpu2410", "opencv_ocl2410"}) },
+        link="opencv_contrib2411", preload={"opencv_gpu2411", "opencv_ocl2411"}) },
         target="org.bytedeco.javacpp.opencv_contrib")
 public class opencv_contrib implements InfoMapper {
     public void map(InfoMap infoMap) {

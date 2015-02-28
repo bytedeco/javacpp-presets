@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.10
+// Targeted by JavaCPP version 0.11-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -506,7 +506,7 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
          * @param orientationNormalized enable orientation normalization
          * @param scaleNormalized enable scale normalization
          * @param patternScale scaling of the description pattern
-         * @param nbOctave number of octaves covered by the detected keypoints
+         * @param nOctaves number of octaves covered by the detected keypoints
          * @param selectedPairs (optional) user defined selected pairs
     */
     public FREAK( @Cast("bool") boolean orientationNormalized/*=true*/,
@@ -901,6 +901,8 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 
     /**\param init_thresh the initial threshold to start with, default = 20
      * \param nonmax whether to use non max or not for fast feature detection
+     * \param min_thresh
+     * \param max_thresh
      */
     public FastAdjuster(int init_thresh/*=20*/, @Cast("bool") boolean nonmax/*=true*/, int min_thresh/*=1*/, int max_thresh/*=200*/) { allocate(init_thresh, nonmax, min_thresh, max_thresh); }
     private native void allocate(int init_thresh/*=20*/, @Cast("bool") boolean nonmax/*=true*/, int min_thresh/*=1*/, int max_thresh/*=200*/);

@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit=opencv_core.class, value={
     @Platform(include={"<opencv2/superres/superres.hpp>", "<opencv2/superres/optical_flow.hpp>"},
         link="opencv_superres@.2.4", preload={"opencv_gpu@.2.4", "opencv_ocl@.2.4"}),
-    @Platform(value="windows", link="opencv_superres2410", preload={"opencv_gpu2410", "opencv_ocl2410"}) },
+    @Platform(value="windows", link="opencv_superres2411", preload={"opencv_gpu2411", "opencv_ocl2411"}) },
         target="org.bytedeco.javacpp.opencv_superres")
 public class opencv_superres implements InfoMapper {
     public void map(InfoMap infoMap) {
