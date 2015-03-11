@@ -1,4 +1,5 @@
 
+ * Add presets for Caffe ([issue #34](https://github.com/bytedeco/javacpp-presets/issues/34))
  * Let `createBuffer()` return `UByteIndexer` and `UShortIndexer` when appropriate for unsigned data types
  * Remove the need to set manually the `platform.dependency` system property for downstream modules without a `cppbuild.sh` file
  * Fix failing `cppbuild.sh` for FFmpeg on Ubuntu ([issue #32](https://github.com/bytedeco/javacpp-presets/issues/32))
