@@ -2813,6 +2813,15 @@ public static final int
   public native PowerParameter release_power_param();
   public native void set_allocated_power_param(PowerParameter power_param);
 
+  // optional .caffe.PReLUParameter prelu_param = 131;
+  public native @Cast("bool") boolean has_prelu_param();
+  public native void clear_prelu_param();
+  @MemberGetter public static native int kPreluParamFieldNumber();
+  public native @Const @ByRef PReLUParameter prelu_param();
+  public native PReLUParameter mutable_prelu_param();
+  public native PReLUParameter release_prelu_param();
+  public native void set_allocated_prelu_param(PReLUParameter prelu_param);
+
   // optional .caffe.PythonParameter python_param = 130;
   public native @Cast("bool") boolean has_python_param();
   public native void clear_python_param();
@@ -6684,6 +6693,76 @@ public static final int
   public native HDF5OutputParameter release_hdf5_output_param();
   public native void set_allocated_hdf5_output_param(HDF5OutputParameter hdf5_output_param);
 }
+// -------------------------------------------------------------------
+
+@Namespace("caffe") @NoOffset public static class PReLUParameter extends Pointer {
+    static { Loader.load(); }
+    public PReLUParameter(Pointer p) { super(p); }
+    public PReLUParameter(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public PReLUParameter position(int position) {
+        return (PReLUParameter)super.position(position);
+    }
+
+  public PReLUParameter() { allocate(); }
+  private native void allocate();
+
+  public PReLUParameter(@Const @ByRef PReLUParameter from) { allocate(from); }
+  private native void allocate(@Const @ByRef PReLUParameter from);
+
+  public native @ByRef @Name("operator=") PReLUParameter put(@Const @ByRef PReLUParameter from);
+
+  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+
+  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef PReLUParameter default_instance();
+
+  public native void Swap(PReLUParameter other);
+
+  // implements Message ----------------------------------------------
+
+  public native PReLUParameter New();
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef PReLUParameter from);
+  public native void MergeFrom(@Const @ByRef PReLUParameter from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native int ByteSize();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+  public native void SerializeWithCachedSizes(
+        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+  public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
+  public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional .caffe.FillerParameter filler = 1;
+  public native @Cast("bool") boolean has_filler();
+  public native void clear_filler();
+  @MemberGetter public static native int kFillerFieldNumber();
+  public native @Const @ByRef FillerParameter filler();
+  public native FillerParameter mutable_filler();
+  public native FillerParameter release_filler();
+  public native void set_allocated_filler(FillerParameter filler);
+
+  // optional bool channel_shared = 2 [default = false];
+  public native @Cast("bool") boolean has_channel_shared();
+  public native void clear_channel_shared();
+  @MemberGetter public static native int kChannelSharedFieldNumber();
+  public native @Cast("bool") boolean channel_shared();
+  public native void set_channel_shared(@Cast("bool") boolean value);
+}
 // ===================================================================
 
 
@@ -7838,6 +7917,16 @@ public static final int
 
 
 // optional .caffe.PowerParameter power_param = 122;
+
+
+
+
+
+
+
+
+
+// optional .caffe.PReLUParameter prelu_param = 131;
 
 
 
@@ -9921,6 +10010,28 @@ public static final int
 // optional .caffe.HDF5OutputParameter hdf5_output_param = 1001;
 
 
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// PReLUParameter
+
+// optional .caffe.FillerParameter filler = 1;
+
+
+
+
+
+
+
+
+
+// optional bool channel_shared = 2 [default = false];
 
 
 
@@ -13233,6 +13344,59 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public native @Cast("const char*") BytePointer type();
 }
 
+/**
+ * @brief Parameterized Rectified Linear Unit non-linearity @f$
+ *        y_i = \max(0, x_i) + a_i \min(0, x_i)
+ *        @f$. The differences from ReLULayer are 1) negative slopes are
+ *        learnable though backprop and 2) negative slopes can vary across
+ *        channels. The number of axes of input blob should be greater than or
+ *        equal to 2. The 1st axis (0-based) is seen as channels.
+ */
+@Name("caffe::PReLULayer<float>") @NoOffset public static class FloatPReLULayer extends FloatNeuronLayer {
+    static { Loader.load(); }
+    public FloatPReLULayer() { }
+    public FloatPReLULayer(Pointer p) { super(p); }
+
+  /**
+   * @param param provides PReLUParameter prelu_param,
+   *     with PReLULayer options:
+   *   - filler (\b optional, FillerParameter,
+   *     default {'type': constant 'value':0.25}).
+   *   - channel_shared (\b optional, default false).
+   *     negative slopes are shared across channels.
+   */
+
+  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+
+  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+
+  public native @Cast("const char*") BytePointer type();
+}
+@Name("caffe::PReLULayer<double>") @NoOffset public static class DoublePReLULayer extends DoubleNeuronLayer {
+    static { Loader.load(); }
+    public DoublePReLULayer() { }
+    public DoublePReLULayer(Pointer p) { super(p); }
+
+  /**
+   * @param param provides PReLUParameter prelu_param,
+   *     with PReLULayer options:
+   *   - filler (\b optional, FillerParameter,
+   *     default {'type': constant 'value':0.25}).
+   *   - channel_shared (\b optional, default false).
+   *     negative slopes are shared across channels.
+   */
+
+  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+
+  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+
+  public native @Cast("const char*") BytePointer type();
+}
+
   // namespace caffe
 
 // #endif  // CAFFE_NEURON_LAYERS_HPP_
@@ -14864,6 +15028,415 @@ public static final int HDF5_NUM_DIMS = 4;
   // namespace caffe
 
 // #endif  // CAFFE_RNG_HPP_
+
+
+// Parsed from caffe/util/im2col.hpp
+
+// #ifndef _CAFFE_UTIL_IM2COL_HPP_
+// #define _CAFFE_UTIL_IM2COL_HPP_
+
+@Namespace("caffe") public static native @Name("im2col_cpu<float>") void im2col_cpu_float(@Const FloatPointer data_im, int channels,
+    int height, int width, int kernel_h, int kernel_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, FloatPointer data_col);
+@Namespace("caffe") public static native @Name("im2col_cpu<float>") void im2col_cpu_float(@Const FloatBuffer data_im, int channels,
+    int height, int width, int kernel_h, int kernel_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, FloatBuffer data_col);
+@Namespace("caffe") public static native @Name("im2col_cpu<float>") void im2col_cpu_float(@Const float[] data_im, int channels,
+    int height, int width, int kernel_h, int kernel_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, float[] data_col);
+
+@Namespace("caffe") public static native @Name("im2col_cpu<double>") void im2col_cpu_double(@Const DoublePointer data_im, int channels,
+    int height, int width, int kernel_h, int kernel_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, DoublePointer data_col);
+@Namespace("caffe") public static native @Name("im2col_cpu<double>") void im2col_cpu_double(@Const DoubleBuffer data_im, int channels,
+    int height, int width, int kernel_h, int kernel_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, DoubleBuffer data_col);
+@Namespace("caffe") public static native @Name("im2col_cpu<double>") void im2col_cpu_double(@Const double[] data_im, int channels,
+    int height, int width, int kernel_h, int kernel_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, double[] data_col);
+
+@Namespace("caffe") public static native @Name("col2im_cpu<float>") void col2im_cpu_float(@Const FloatPointer data_col, int channels,
+    int height, int width, int patch_h, int patch_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, FloatPointer data_im);
+@Namespace("caffe") public static native @Name("col2im_cpu<float>") void col2im_cpu_float(@Const FloatBuffer data_col, int channels,
+    int height, int width, int patch_h, int patch_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, FloatBuffer data_im);
+@Namespace("caffe") public static native @Name("col2im_cpu<float>") void col2im_cpu_float(@Const float[] data_col, int channels,
+    int height, int width, int patch_h, int patch_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, float[] data_im);
+
+@Namespace("caffe") public static native @Name("col2im_cpu<double>") void col2im_cpu_double(@Const DoublePointer data_col, int channels,
+    int height, int width, int patch_h, int patch_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, DoublePointer data_im);
+@Namespace("caffe") public static native @Name("col2im_cpu<double>") void col2im_cpu_double(@Const DoubleBuffer data_col, int channels,
+    int height, int width, int patch_h, int patch_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, DoubleBuffer data_im);
+@Namespace("caffe") public static native @Name("col2im_cpu<double>") void col2im_cpu_double(@Const double[] data_col, int channels,
+    int height, int width, int patch_h, int patch_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, double[] data_im);
+
+@Namespace("caffe") public static native @Name("im2col_gpu<float>") void im2col_gpu_float(@Const FloatPointer data_im, int channels,
+    int height, int width, int kernel_h, int kernel_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, FloatPointer data_col);
+@Namespace("caffe") public static native @Name("im2col_gpu<float>") void im2col_gpu_float(@Const FloatBuffer data_im, int channels,
+    int height, int width, int kernel_h, int kernel_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, FloatBuffer data_col);
+@Namespace("caffe") public static native @Name("im2col_gpu<float>") void im2col_gpu_float(@Const float[] data_im, int channels,
+    int height, int width, int kernel_h, int kernel_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, float[] data_col);
+
+@Namespace("caffe") public static native @Name("im2col_gpu<double>") void im2col_gpu_double(@Const DoublePointer data_im, int channels,
+    int height, int width, int kernel_h, int kernel_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, DoublePointer data_col);
+@Namespace("caffe") public static native @Name("im2col_gpu<double>") void im2col_gpu_double(@Const DoubleBuffer data_im, int channels,
+    int height, int width, int kernel_h, int kernel_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, DoubleBuffer data_col);
+@Namespace("caffe") public static native @Name("im2col_gpu<double>") void im2col_gpu_double(@Const double[] data_im, int channels,
+    int height, int width, int kernel_h, int kernel_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, double[] data_col);
+
+@Namespace("caffe") public static native @Name("col2im_gpu<float>") void col2im_gpu_float(@Const FloatPointer data_col, int channels,
+    int height, int width, int patch_h, int patch_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, FloatPointer data_im);
+@Namespace("caffe") public static native @Name("col2im_gpu<float>") void col2im_gpu_float(@Const FloatBuffer data_col, int channels,
+    int height, int width, int patch_h, int patch_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, FloatBuffer data_im);
+@Namespace("caffe") public static native @Name("col2im_gpu<float>") void col2im_gpu_float(@Const float[] data_col, int channels,
+    int height, int width, int patch_h, int patch_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, float[] data_im);
+
+@Namespace("caffe") public static native @Name("col2im_gpu<double>") void col2im_gpu_double(@Const DoublePointer data_col, int channels,
+    int height, int width, int patch_h, int patch_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, DoublePointer data_im);
+@Namespace("caffe") public static native @Name("col2im_gpu<double>") void col2im_gpu_double(@Const DoubleBuffer data_col, int channels,
+    int height, int width, int patch_h, int patch_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, DoubleBuffer data_im);
+@Namespace("caffe") public static native @Name("col2im_gpu<double>") void col2im_gpu_double(@Const double[] data_col, int channels,
+    int height, int width, int patch_h, int patch_w,
+    int pad_h, int pad_w, int stride_h,
+    int stride_w, double[] data_im);
+
+  // namespace caffe
+
+// #endif  // CAFFE_UTIL_IM2COL_HPP_
+
+
+// Parsed from caffe/util/insert_splits.hpp
+
+// #ifndef _CAFFE_UTIL_INSERT_SPLITS_HPP_
+// #define _CAFFE_UTIL_INSERT_SPLITS_HPP_
+
+// #include <string>
+
+// #include "caffe/proto/caffe.pb.h"
+
+// Copy NetParameters with SplitLayers added to replace any shared bottom
+// blobs with unique bottom blobs provided by the SplitLayer.
+@Namespace("caffe") public static native void InsertSplits(@Const @ByRef NetParameter param, NetParameter param_split);
+
+@Namespace("caffe") public static native void ConfigureSplitLayer(@StdString BytePointer layer_name, @StdString BytePointer blob_name,
+    int blob_idx, int split_count, float loss_weight,
+    LayerParameter split_layer_param);
+@Namespace("caffe") public static native void ConfigureSplitLayer(@StdString String layer_name, @StdString String blob_name,
+    int blob_idx, int split_count, float loss_weight,
+    LayerParameter split_layer_param);
+
+@Namespace("caffe") public static native @StdString BytePointer SplitLayerName(@StdString BytePointer layer_name, @StdString BytePointer blob_name,
+    int blob_idx);
+@Namespace("caffe") public static native @StdString String SplitLayerName(@StdString String layer_name, @StdString String blob_name,
+    int blob_idx);
+
+@Namespace("caffe") public static native @StdString BytePointer SplitBlobName(@StdString BytePointer layer_name, @StdString BytePointer blob_name,
+    int blob_idx, int split_idx);
+@Namespace("caffe") public static native @StdString String SplitBlobName(@StdString String layer_name, @StdString String blob_name,
+    int blob_idx, int split_idx);
+
+  // namespace caffe
+
+// #endif  // CAFFE_UTIL_INSERT_SPLITS_HPP_
+
+
+// Parsed from caffe/util/mkl_alternate.hpp
+
+// #ifndef CAFFE_UTIL_MKL_ALTERNATE_H_
+// #define CAFFE_UTIL_MKL_ALTERNATE_H_
+
+// #ifdef USE_MKL
+
+// #include <mkl.h>
+
+// #else  // If use MKL, simply include the MKL header
+// #include <cblas.h>
+// #include <math.h>
+
+// Functions that caffe uses but are not present if MKL is not linked.
+
+// A simple way to define the vsl unary functions. The operation should
+// be in the form e.g. y[i] = sqrt(a[i])
+// #define DEFINE_VSL_UNARY_FUNC(name, operation)
+//   template<typename Dtype>
+//   void v##name(const int n, const Dtype* a, Dtype* y) {
+//     CHECK_GT(n, 0); CHECK(a); CHECK(y);
+//     for (int i = 0; i < n; ++i) { operation; }
+//   }
+//   inline void vs##name(
+//     const int n, const float* a, float* y) {
+//     v##name<float>(n, a, y);
+//   }
+//   inline void vd##name(
+//       const int n, const double* a, double* y) {
+//     v##name<double>(n, a, y);
+//   }
+  public static native void vsSqr(
+      int n, @Const FloatPointer a, FloatPointer y);
+  public static native void vsSqr(
+      int n, @Const FloatBuffer a, FloatBuffer y);
+  public static native void vsSqr(
+      int n, @Const float[] a, float[] y);
+  public static native void vdSqr(
+        int n, @Const DoublePointer a, DoublePointer y);
+  public static native void vdSqr(
+        int n, @Const DoubleBuffer a, DoubleBuffer y);
+  public static native void vdSqr(
+        int n, @Const double[] a, double[] y);
+  public static native void vsExp(
+      int n, @Const FloatPointer a, FloatPointer y);
+  public static native void vsExp(
+      int n, @Const FloatBuffer a, FloatBuffer y);
+  public static native void vsExp(
+      int n, @Const float[] a, float[] y);
+  public static native void vdExp(
+        int n, @Const DoublePointer a, DoublePointer y);
+  public static native void vdExp(
+        int n, @Const DoubleBuffer a, DoubleBuffer y);
+  public static native void vdExp(
+        int n, @Const double[] a, double[] y);
+  public static native void vsAbs(
+      int n, @Const FloatPointer a, FloatPointer y);
+  public static native void vsAbs(
+      int n, @Const FloatBuffer a, FloatBuffer y);
+  public static native void vsAbs(
+      int n, @Const float[] a, float[] y);
+  public static native void vdAbs(
+        int n, @Const DoublePointer a, DoublePointer y);
+  public static native void vdAbs(
+        int n, @Const DoubleBuffer a, DoubleBuffer y);
+  public static native void vdAbs(
+        int n, @Const double[] a, double[] y);
+
+// A simple way to define the vsl unary functions with singular parameter b.
+// The operation should be in the form e.g. y[i] = pow(a[i], b)
+// #define DEFINE_VSL_UNARY_FUNC_WITH_PARAM(name, operation)
+//   template<typename Dtype>
+//   void v##name(const int n, const Dtype* a, const Dtype b, Dtype* y) {
+//     CHECK_GT(n, 0); CHECK(a); CHECK(y);
+//     for (int i = 0; i < n; ++i) { operation; }
+//   }
+//   inline void vs##name(
+//     const int n, const float* a, const float b, float* y) {
+//     v##name<float>(n, a, b, y);
+//   }
+//   inline void vd##name(
+//       const int n, const double* a, const float b, double* y) {
+//     v##name<double>(n, a, b, y);
+//   }
+  public static native void vsPowx(
+      int n, @Const FloatPointer a, float b, FloatPointer y);
+  public static native void vsPowx(
+      int n, @Const FloatBuffer a, float b, FloatBuffer y);
+  public static native void vsPowx(
+      int n, @Const float[] a, float b, float[] y);
+  public static native void vdPowx(
+        int n, @Const DoublePointer a, float b, DoublePointer y);
+  public static native void vdPowx(
+        int n, @Const DoubleBuffer a, float b, DoubleBuffer y);
+  public static native void vdPowx(
+        int n, @Const double[] a, float b, double[] y);
+
+// A simple way to define the vsl binary functions. The operation should
+// be in the form e.g. y[i] = a[i] + b[i]
+// #define DEFINE_VSL_BINARY_FUNC(name, operation)
+//   template<typename Dtype>
+//   void v##name(const int n, const Dtype* a, const Dtype* b, Dtype* y) {
+//     CHECK_GT(n, 0); CHECK(a); CHECK(b); CHECK(y);
+//     for (int i = 0; i < n; ++i) { operation; }
+//   }
+//   inline void vs##name(
+//     const int n, const float* a, const float* b, float* y) {
+//     v##name<float>(n, a, b, y);
+//   }
+//   inline void vd##name(
+//       const int n, const double* a, const double* b, double* y) {
+//     v##name<double>(n, a, b, y);
+//   }
+  public static native void vsAdd(
+      int n, @Const FloatPointer a, @Const FloatPointer b, FloatPointer y);
+  public static native void vsAdd(
+      int n, @Const FloatBuffer a, @Const FloatBuffer b, FloatBuffer y);
+  public static native void vsAdd(
+      int n, @Const float[] a, @Const float[] b, float[] y);
+  public static native void vdAdd(
+        int n, @Const DoublePointer a, @Const DoublePointer b, DoublePointer y);
+  public static native void vdAdd(
+        int n, @Const DoubleBuffer a, @Const DoubleBuffer b, DoubleBuffer y);
+  public static native void vdAdd(
+        int n, @Const double[] a, @Const double[] b, double[] y);
+  public static native void vsSub(
+      int n, @Const FloatPointer a, @Const FloatPointer b, FloatPointer y);
+  public static native void vsSub(
+      int n, @Const FloatBuffer a, @Const FloatBuffer b, FloatBuffer y);
+  public static native void vsSub(
+      int n, @Const float[] a, @Const float[] b, float[] y);
+  public static native void vdSub(
+        int n, @Const DoublePointer a, @Const DoublePointer b, DoublePointer y);
+  public static native void vdSub(
+        int n, @Const DoubleBuffer a, @Const DoubleBuffer b, DoubleBuffer y);
+  public static native void vdSub(
+        int n, @Const double[] a, @Const double[] b, double[] y);
+  public static native void vsMul(
+      int n, @Const FloatPointer a, @Const FloatPointer b, FloatPointer y);
+  public static native void vsMul(
+      int n, @Const FloatBuffer a, @Const FloatBuffer b, FloatBuffer y);
+  public static native void vsMul(
+      int n, @Const float[] a, @Const float[] b, float[] y);
+  public static native void vdMul(
+        int n, @Const DoublePointer a, @Const DoublePointer b, DoublePointer y);
+  public static native void vdMul(
+        int n, @Const DoubleBuffer a, @Const DoubleBuffer b, DoubleBuffer y);
+  public static native void vdMul(
+        int n, @Const double[] a, @Const double[] b, double[] y);
+  public static native void vsDiv(
+      int n, @Const FloatPointer a, @Const FloatPointer b, FloatPointer y);
+  public static native void vsDiv(
+      int n, @Const FloatBuffer a, @Const FloatBuffer b, FloatBuffer y);
+  public static native void vsDiv(
+      int n, @Const float[] a, @Const float[] b, float[] y);
+  public static native void vdDiv(
+        int n, @Const DoublePointer a, @Const DoublePointer b, DoublePointer y);
+  public static native void vdDiv(
+        int n, @Const DoubleBuffer a, @Const DoubleBuffer b, DoubleBuffer y);
+  public static native void vdDiv(
+        int n, @Const double[] a, @Const double[] b, double[] y);
+
+// In addition, MKL comes with an additional function axpby that is not present
+// in standard blas. We will simply use a two-step (inefficient, of course) way
+// to mimic that.
+public static native void cblas_saxpby(int N, float alpha, @Const FloatPointer X,
+                         int incX, float beta, FloatPointer Y,
+                         int incY);
+public static native void cblas_saxpby(int N, float alpha, @Const FloatBuffer X,
+                         int incX, float beta, FloatBuffer Y,
+                         int incY);
+public static native void cblas_saxpby(int N, float alpha, @Const float[] X,
+                         int incX, float beta, float[] Y,
+                         int incY);
+public static native void cblas_daxpby(int N, double alpha, @Const DoublePointer X,
+                         int incX, double beta, DoublePointer Y,
+                         int incY);
+public static native void cblas_daxpby(int N, double alpha, @Const DoubleBuffer X,
+                         int incX, double beta, DoubleBuffer Y,
+                         int incY);
+public static native void cblas_daxpby(int N, double alpha, @Const double[] X,
+                         int incX, double beta, double[] Y,
+                         int incY);
+
+// #endif  // USE_MKL
+// #endif  // CAFFE_UTIL_MKL_ALTERNATE_H_
+
+
+// Parsed from caffe/util/upgrade_proto.hpp
+
+// #ifndef CAFFE_UTIL_UPGRADE_PROTO_H_
+// #define CAFFE_UTIL_UPGRADE_PROTO_H_
+
+// #include <string>
+
+// #include "caffe/proto/caffe.pb.h"
+
+// Return true iff the net is not the current version.
+@Namespace("caffe") public static native @Cast("bool") boolean NetNeedsUpgrade(@Const @ByRef NetParameter net_param);
+
+// Return true iff any layer contains parameters specified using
+// deprecated V0LayerParameter.
+@Namespace("caffe") public static native @Cast("bool") boolean NetNeedsV0ToV1Upgrade(@Const @ByRef NetParameter net_param);
+
+// Perform all necessary transformations to upgrade a V0NetParameter into a
+// NetParameter (including upgrading padding layers and LayerParameters).
+@Namespace("caffe") public static native @Cast("bool") boolean UpgradeV0Net(@Const @ByRef NetParameter v0_net_param, NetParameter net_param);
+
+// Upgrade NetParameter with padding layers to pad-aware conv layers.
+// For any padding layer, remove it and put its pad parameter in any layers
+// taking its top blob as input.
+// Error if any of these above layers are not-conv layers.
+@Namespace("caffe") public static native void UpgradeV0PaddingLayers(@Const @ByRef NetParameter param,
+                            NetParameter param_upgraded_pad);
+
+// Upgrade a single V0LayerConnection to the V1LayerParameter format.
+@Namespace("caffe") public static native @Cast("bool") boolean UpgradeV0LayerParameter(@Const @ByRef V1LayerParameter v0_layer_connection,
+                             V1LayerParameter layer_param);
+
+@Namespace("caffe") public static native @Cast("caffe::V1LayerParameter_LayerType") int UpgradeV0LayerType(@StdString BytePointer type);
+@Namespace("caffe") public static native @Cast("caffe::V1LayerParameter_LayerType") int UpgradeV0LayerType(@StdString String type);
+
+// Return true iff any layer contains deprecated data transformation parameters.
+@Namespace("caffe") public static native @Cast("bool") boolean NetNeedsDataUpgrade(@Const @ByRef NetParameter net_param);
+
+// Perform all necessary transformations to upgrade old transformation fields
+// into a TransformationParameter.
+@Namespace("caffe") public static native void UpgradeNetDataTransformation(NetParameter net_param);
+
+// Return true iff the Net contains any layers specified as V1LayerParameters.
+@Namespace("caffe") public static native @Cast("bool") boolean NetNeedsV1ToV2Upgrade(@Const @ByRef NetParameter net_param);
+
+// Perform all necessary transformations to upgrade a NetParameter with
+// deprecated V1LayerParameters.
+@Namespace("caffe") public static native @Cast("bool") boolean UpgradeV1Net(@Const @ByRef NetParameter v1_net_param, NetParameter net_param);
+
+@Namespace("caffe") public static native @Cast("bool") boolean UpgradeV1LayerParameter(@Const @ByRef V1LayerParameter v1_layer_param,
+                             LayerParameter layer_param);
+
+@Namespace("caffe") public static native @Cast("const char*") BytePointer UpgradeV1LayerType(@Cast("const caffe::V1LayerParameter_LayerType") int type);
+
+// Check for deprecations and upgrade the NetParameter as needed.
+@Namespace("caffe") public static native @Cast("bool") boolean UpgradeNetAsNeeded(@StdString BytePointer param_file, NetParameter param);
+@Namespace("caffe") public static native @Cast("bool") boolean UpgradeNetAsNeeded(@StdString String param_file, NetParameter param);
+
+// Read parameters from a file into a NetParameter proto message.
+@Namespace("caffe") public static native void ReadNetParamsFromTextFileOrDie(@StdString BytePointer param_file,
+                                    NetParameter param);
+@Namespace("caffe") public static native void ReadNetParamsFromTextFileOrDie(@StdString String param_file,
+                                    NetParameter param);
+@Namespace("caffe") public static native void ReadNetParamsFromBinaryFileOrDie(@StdString BytePointer param_file,
+                                      NetParameter param);
+@Namespace("caffe") public static native void ReadNetParamsFromBinaryFileOrDie(@StdString String param_file,
+                                      NetParameter param);
+
+  // namespace caffe
+
+// #endif   // CAFFE_UTIL_UPGRADE_PROTO_H_
 
 
 }

@@ -35,7 +35,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "caffe/common.hpp", "caffe/proto/caffe.pb.h", "caffe/util/math_functions.hpp", "caffe/syncedmem.hpp", "caffe/blob.hpp",
         "caffe/data_transformer.hpp", "caffe/filler.hpp", "caffe/internal_thread.hpp", "caffe/data_layers.hpp", // "caffe/layer_factory.hpp",
         "caffe/layer.hpp", "caffe/loss_layers.hpp", "caffe/neuron_layers.hpp", "caffe/common_layers.hpp", "caffe/net.hpp", "caffe/solver.hpp",
-        "caffe/vision_layers.hpp", "caffe/util/benchmark.hpp", "caffe/util/db.hpp", "caffe/util/io.hpp", "caffe/util/rng.hpp"},
+        "caffe/vision_layers.hpp", "caffe/util/benchmark.hpp", "caffe/util/db.hpp", "caffe/util/io.hpp", "caffe/util/rng.hpp", // "caffe/util/cudnn.hpp",
+        "caffe/util/im2col.hpp", "caffe/util/insert_splits.hpp", "caffe/util/mkl_alternate.hpp", "caffe/util/upgrade_proto.hpp"},
         includepath="/usr/local/cuda/include", link="caffe") })
 public class caffe implements InfoMapper {
     public void map(InfoMap infoMap) {
@@ -61,7 +62,8 @@ public class caffe implements InfoMapper {
                 "caffe_gpu_axpby", "caffe_gpu_memcpy", "caffe_gpu_set", "caffe_gpu_memset", "caffe_gpu_add_scalar", "caffe_gpu_scal", "caffe_gpu_add",
                 "caffe_gpu_sub", "caffe_gpu_mul", "caffe_gpu_div", "caffe_gpu_abs", "caffe_gpu_exp", "caffe_gpu_powx", "caffe_gpu_rng_uniform",
                 "caffe_gpu_rng_gaussian", "caffe_gpu_rng_bernoulli", "caffe_gpu_dot", "caffe_gpu_hamming_distance", "caffe_gpu_asum", "caffe_gpu_sign",
-                "caffe_gpu_sgnbit", "caffe_gpu_fabs", "caffe_gpu_scale", "hdf5_load_nd_dataset_helper", "hdf5_load_nd_dataset", "hdf5_save_nd_dataset" };
+                "caffe_gpu_sgnbit", "caffe_gpu_fabs", "caffe_gpu_scale", "hdf5_load_nd_dataset_helper", "hdf5_load_nd_dataset", "hdf5_save_nd_dataset",
+                "im2col_cpu", "col2im_cpu", "im2col_gpu", "col2im_gpu" };
         for (String t : functionTemplates) {
             infoMap.put(new Info("caffe::" + t + "<float>").javaNames(t + "_float"))
                    .put(new Info("caffe::" + t + "<double>").javaNames(t + "_double"));
@@ -71,7 +73,7 @@ public class caffe implements InfoMapper {
                 "BaseDataLayer", "BasePrefetchingDataLayer", "DataLayer", "DummyDataLayer", "HDF5DataLayer", "HDF5OutputLayer", "ImageDataLayer", "MemoryDataLayer",
                 "WindowDataLayer", "Layer", "LayerRegistry", "LayerRegisterer", "AccuracyLayer", "LossLayer", "ContrastiveLossLayer", "EuclideanLossLayer", "HingeLossLayer",
                 "InfogainLossLayer", "MultinomialLogisticLossLayer", "SigmoidCrossEntropyLossLayer", "SoftmaxWithLossLayer", "NeuronLayer", "AbsValLayer", "BNLLLayer",
-                "DropoutLayer", "ExpLayer", "PowerLayer", "ReLULayer", "SigmoidLayer", "TanHLayer", "ThresholdLayer", "ArgMaxLayer", "ConcatLayer", "EltwiseLayer",
+                "DropoutLayer", "ExpLayer", "PowerLayer", "ReLULayer", "SigmoidLayer", "TanHLayer", "ThresholdLayer", "PReLULayer", "ArgMaxLayer", "ConcatLayer", "EltwiseLayer",
                 "FlattenLayer", "InnerProductLayer", "MVNLayer", "SilenceLayer", "SoftmaxLayer", "SplitLayer", "SliceLayer", "Net", "Solver", "SGDSolver", "NesterovSolver",
                 "AdaGradSolver", "BaseConvolutionLayer", "ConvolutionLayer", "DeconvolutionLayer", "Im2colLayer", "LRNLayer", "PoolingLayer",
                 /* "CuDNNReLULayer", "CuDNNSigmoidLayer", "CuDNNTanHLayer", "CuDNNSoftmaxLayer", "CuDNNConvolutionLayer", "CuDNNPoolingLayer" */ };
