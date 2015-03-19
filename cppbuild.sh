@@ -2,6 +2,8 @@
 # Scripts to build and install native C++ libraries
 set -eu
 
+[[ -z ${CMAKE:-} ]] && CMAKE=cmake
+
 KERNEL=(`uname -s | tr [A-Z] [a-z]`)
 ARCH=(`uname -m | tr [A-Z] [a-z]`)
 case $KERNEL in

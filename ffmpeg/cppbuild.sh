@@ -75,7 +75,7 @@ case $PLATFORM in
         make install
         cd ../$X265
         patch -Np1 < ../../../$X265-android.patch || true
-        cmake -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DCMAKE_TOOLCHAIN_FILE=android-arm.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        $CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DCMAKE_TOOLCHAIN_FILE=android-arm.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
         make -j4
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
@@ -111,7 +111,7 @@ case $PLATFORM in
         make install
         cd ../$X265
         patch -Np1 < ../../../$X265-android.patch || true
-        cmake -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DCMAKE_TOOLCHAIN_FILE=android-x86.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        $CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DCMAKE_TOOLCHAIN_FILE=android-x86.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
         make -j4 x265-static
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
@@ -142,7 +142,7 @@ case $PLATFORM in
         make -j4
         make install
         cd ../$X265
-        CC="gcc -m32" CXX="g++ -m32" cmake -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        CC="gcc -m32" CXX="g++ -m32" $CMAKE -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
         make -j4
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
@@ -172,7 +172,7 @@ case $PLATFORM in
         make -j4
         make install
         cd ../$X265
-        CC="gcc -m64" CXX="g++ -m64" cmake -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        CC="gcc -m64" CXX="g++ -m64" $CMAKE -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
         make -j4
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
@@ -202,7 +202,7 @@ case $PLATFORM in
         make -j4
         make install
         cd ../$X265
-        cmake -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        $CMAKE -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
         make -j4
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
