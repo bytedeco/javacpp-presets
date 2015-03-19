@@ -112,9 +112,9 @@ Each child module in turn relies on its corresponding native libraries being alr
 
 Once everything installed and configured, simply execute
 ```bash
-$ mvn install --projects opencv,ffmpeg,flycapture,libdc1394,libfreenect,videoinput,artoolkitplus,etc.
+$ mvn install --projects .,opencv,ffmpeg,flycapture,libdc1394,libfreenect,videoinput,artoolkitplus,etc.
 ```
-inside the directory containing the parent `pom.xml` file, by specifying only the desired child modules in the command. Please refer to the comments inside the `pom.xml` file for further details.
+inside the directory containing the parent `pom.xml` file, by specifying only the desired child modules in the command, but **without the leading period "." in the comma-separated list of projects, the parent `poml.xml` file itself might not get installed.** Please refer to the comments inside the `pom.xml` file for further details.
 
 
 CPPBuild Scripts

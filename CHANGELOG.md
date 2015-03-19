@@ -1,4 +1,6 @@
 
+ * Emphasize the need to install separately the parent `pom.xml` file ([issue #42](https://github.com/bytedeco/javacpp-presets/issues/42))
+ * Make CMake configurable via `CMAKE` variable in `cppbuild.sh` ([pull #41](https://github.com/bytedeco/javacpp-presets/pull/41))
  * Add presets for Caffe ([issue #34](https://github.com/bytedeco/javacpp-presets/issues/34))
  * Let `createBuffer()` return `UByteIndexer` and `UShortIndexer` when appropriate for unsigned data types
  * Remove the need to set manually the `platform.dependency` system property for downstream modules without a `cppbuild.sh` file
