@@ -1,4 +1,5 @@
 
+ * Segregate methods using `java.awt` classes into the new `Java2DFrameConverter` class of JavaCV ([issue #12](https://github.com/bytedeco/javacpp-presets/issues/12))
  * Emphasize the need to install separately the parent `pom.xml` file ([issue #42](https://github.com/bytedeco/javacpp-presets/issues/42))
  * Make CMake configurable via `CMAKE` variable in `cppbuild.sh` ([pull #41](https://github.com/bytedeco/javacpp-presets/pull/41))
  * Add presets for Caffe ([issue #34](https://github.com/bytedeco/javacpp-presets/issues/34))
