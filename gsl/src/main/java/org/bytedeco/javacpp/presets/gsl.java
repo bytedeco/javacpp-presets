@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Samuel Audet
+ * Copyright (C) 2014,2015 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(target="org.bytedeco.javacpp.gsl", value={
     @Platform(include={"gsl/gsl_types.h", "gsl/gsl_errno.h", "gsl/gsl_ieee_utils.h", "gsl/gsl_inline.h", "gsl/gsl_message.h", "gsl/gsl_complex.h",
         "gsl/gsl_complex_math.h", "gsl/gsl_check_range.h", "gsl/gsl_sys.h", "gsl/gsl_machine.h", "gsl/gsl_precision.h", "gsl/gsl_nan.h", "gsl/gsl_pow_int.h",
-        "gsl/gsl_min.h", "gsl/gsl_minmax.h", "gsl/gsl_math.h", "gsl/gsl_mode.h", "gsl/gsl_test.h", "gsl/gsl_version.h",
+        "gsl/gsl_math.h", "gsl/gsl_min.h", "gsl/gsl_minmax.h", "gsl/gsl_mode.h", "gsl/gsl_test.h", "gsl/gsl_version.h",
 
         "gsl/gsl_block.h", /*"gsl/gsl_block_complex_long_double.h"*/ "gsl/gsl_block_complex_double.h", "gsl/gsl_block_complex_float.h",
         /*"gsl/gsl_block_long_double.h", */ "gsl/gsl_block_double.h", "gsl/gsl_block_float.h", "gsl/gsl_block_ulong.h", "gsl/gsl_block_long.h",
@@ -105,6 +105,39 @@ public class gsl implements InfoMapper {
                .put(new Info("gsl_complex").base("DoublePointer"))
                .put(new Info("gsl_complex_float").base("FloatPointer"))
                .put(new Info("GSL_COMPLEX_ONE", "GSL_COMPLEX_ZERO", "GSL_COMPLEX_NEGONE").cppTypes("gsl_complex"))
-               .put(new Info("GSL_MACH_EPS").cppTypes("double").translate());
+               .put(new Info("GSL_MACH_EPS").cppTypes("double").translate())
+               .put(new Info("gsl_function_struct").pointerTypes("gsl_function"))
+               .put(new Info("gsl_function_fdf_struct").pointerTypes("gsl_function_fdf"))
+               .put(new Info("gsl_function_vec_struct").pointerTypes("gsl_function_vec"))
+               .put(new Info("gsl_block_complex_struct").pointerTypes("gsl_block_complex"))
+               .put(new Info("gsl_block_complex_float_struct").pointerTypes("gsl_block_complex_float"))
+               .put(new Info("gsl_block_struct").pointerTypes("gsl_block"))
+               .put(new Info("gsl_block_float_struct").pointerTypes("gsl_block_float"))
+               .put(new Info("gsl_block_ulong_struct").pointerTypes("gsl_block_ulong"))
+               .put(new Info("gsl_block_long_struct").pointerTypes("gsl_block_long"))
+               .put(new Info("gsl_block_uint_struct").pointerTypes("gsl_block_uint"))
+               .put(new Info("gsl_block_int_struct").pointerTypes("gsl_block_int"))
+               .put(new Info("gsl_block_ushort_struct").pointerTypes("gsl_block_ushort"))
+               .put(new Info("gsl_block_short_struct").pointerTypes("gsl_block_short"))
+               .put(new Info("gsl_block_uchar_struct").pointerTypes("gsl_block_uchar"))
+               .put(new Info("gsl_block_char_struct").pointerTypes("gsl_block_char"))
+               .put(new Info("gsl_cheb_series_struct").pointerTypes("gsl_cheb_series"))
+               .put(new Info("gsl_combination_struct").pointerTypes("gsl_combination"))
+               .put(new Info("gsl_dht_struct").pointerTypes("gsl_dht"))
+               .put(new Info("gsl_permutation_struct").pointerTypes("gsl_permutation"))
+               .put(new Info("gsl_monte_function_struct").pointerTypes("gsl_monte_function"))
+               .put(new Info("gsl_multifit_function_struct").pointerTypes("gsl_multifit_function"))
+               .put(new Info("gsl_multifit_function_fdf_struct").pointerTypes("gsl_multifit_function_fdf"))
+               .put(new Info("gsl_multimin_function_struct").pointerTypes("gsl_multimin_function"))
+               .put(new Info("gsl_multimin_function_fdf_struct").pointerTypes("gsl_multimin_function_fdf"))
+               .put(new Info("gsl_multiroot_function_struct").pointerTypes("gsl_multiroot_function"))
+               .put(new Info("gsl_multiroot_function_fdf_struct").pointerTypes("gsl_multiroot_function_fdf"))
+               .put(new Info("gsl_multiset_struct").pointerTypes("gsl_multiset"))
+               .put(new Info("gsl_odeiv2_step_struct").pointerTypes("gsl_odeiv2_step"))
+               .put(new Info("gsl_odeiv2_control_struct").pointerTypes("gsl_odeiv2_control"))
+               .put(new Info("gsl_odeiv2_evolve_struct").pointerTypes("gsl_odeiv2_evolve"))
+               .put(new Info("gsl_odeiv2_driver_struct").pointerTypes("gsl_odeiv2_driver"))
+               .put(new Info("gsl_sf_result_struct").pointerTypes("gsl_sf_result"))
+               .put(new Info("gsl_sf_result_e10_struct").pointerTypes("gsl_sf_result_e10"));
     }
 }

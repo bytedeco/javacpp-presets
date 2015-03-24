@@ -1144,6 +1144,224 @@ public static native double gsl_pow_uint(double x, @Cast("unsigned int") int n);
 // #endif /* __GSL_POW_INT_H__ */
 
 
+// Parsed from gsl/gsl_math.h
+
+/* gsl_math.h
+ * 
+ * Copyright (C) 1996, 1997, 1998, 1999, 2000, 2004, 2007 Gerard Jungman, Brian Gough
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_MATH_H__
+// #define __GSL_MATH_H__
+// #include <math.h>
+// #include <gsl/gsl_sys.h>
+// #include <gsl/gsl_inline.h>
+// #include <gsl/gsl_machine.h>
+// #include <gsl/gsl_precision.h>
+// #include <gsl/gsl_nan.h>
+// #include <gsl/gsl_pow_int.h>
+// #include <gsl/gsl_minmax.h>
+
+// #ifndef M_E
+public static final double M_E =        2.71828182845904523536028747135;      /* e */
+// #endif
+
+// #ifndef M_LOG2E
+public static final double M_LOG2E =    1.44269504088896340735992468100;      /* log_2 (e) */
+// #endif
+
+// #ifndef M_LOG10E
+public static final double M_LOG10E =   0.43429448190325182765112891892;      /* log_10 (e) */
+// #endif
+
+// #ifndef M_SQRT2
+public static final double M_SQRT2 =    1.41421356237309504880168872421;      /* sqrt(2) */
+// #endif
+
+// #ifndef M_SQRT1_2
+public static final double M_SQRT1_2 =  0.70710678118654752440084436210;      /* sqrt(1/2) */
+// #endif
+
+
+// #ifndef M_SQRT3
+public static final double M_SQRT3 =    1.73205080756887729352744634151;      /* sqrt(3) */
+// #endif
+
+// #ifndef M_PI
+public static final double M_PI =       3.14159265358979323846264338328;      /* pi */
+// #endif
+
+// #ifndef M_PI_2
+public static final double M_PI_2 =     1.57079632679489661923132169164;      /* pi/2 */
+// #endif
+
+// #ifndef M_PI_4
+public static final double M_PI_4 =     0.78539816339744830961566084582;     /* pi/4 */
+// #endif
+
+// #ifndef M_SQRTPI
+public static final double M_SQRTPI =   1.77245385090551602729816748334;      /* sqrt(pi) */
+// #endif
+
+// #ifndef M_2_SQRTPI
+public static final double M_2_SQRTPI = 1.12837916709551257389615890312;      /* 2/sqrt(pi) */
+// #endif
+
+// #ifndef M_1_PI
+public static final double M_1_PI =     0.31830988618379067153776752675;      /* 1/pi */
+// #endif
+
+// #ifndef M_2_PI
+public static final double M_2_PI =     0.63661977236758134307553505349;      /* 2/pi */
+// #endif
+
+// #ifndef M_LN10
+public static final double M_LN10 =     2.30258509299404568401799145468;      /* ln(10) */
+// #endif
+
+// #ifndef M_LN2
+public static final double M_LN2 =      0.69314718055994530941723212146;      /* ln(2) */
+// #endif
+
+// #ifndef M_LNPI
+public static final double M_LNPI =     1.14472988584940017414342735135;      /* ln(pi) */
+// #endif
+
+// #ifndef M_EULER
+public static final double M_EULER =    0.57721566490153286060651209008;      /* Euler constant */
+// #endif
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+
+/* other needlessly compulsive abstractions */
+
+// #define GSL_IS_ODD(n)  ((n) & 1)
+// #define GSL_IS_EVEN(n) (!(GSL_IS_ODD(n)))
+// #define GSL_SIGN(x)    ((x) >= 0.0 ? 1 : -1)
+
+/* Return nonzero if x is a real number, i.e. non NaN or infinite. */
+// #define GSL_IS_REAL(x) (gsl_finite(x))
+
+/* Definition of an arbitrary function with parameters */
+
+@Name("gsl_function_struct") public static class gsl_function extends Pointer {
+    static { Loader.load(); }
+    public gsl_function() { allocate(); }
+    public gsl_function(int size) { allocateArray(size); }
+    public gsl_function(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public gsl_function position(int position) {
+        return (gsl_function)super.position(position);
+    }
+
+  public static class Function_double_Pointer extends FunctionPointer {
+      static { Loader.load(); }
+      public    Function_double_Pointer(Pointer p) { super(p); }
+      protected Function_double_Pointer() { allocate(); }
+      private native void allocate();
+      public native double call(double x, Pointer params);
+  }
+  public native Function_double_Pointer function(); public native gsl_function function(Function_double_Pointer function);
+  public native Pointer params(); public native gsl_function params(Pointer params);
+}
+
+// #define GSL_FN_EVAL(F,x) (*((F)->function))(x,(F)->params)
+
+/* Definition of an arbitrary function returning two values, r1, r2 */
+
+@Name("gsl_function_fdf_struct") public static class gsl_function_fdf extends Pointer {
+    static { Loader.load(); }
+    public gsl_function_fdf() { allocate(); }
+    public gsl_function_fdf(int size) { allocateArray(size); }
+    public gsl_function_fdf(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public gsl_function_fdf position(int position) {
+        return (gsl_function_fdf)super.position(position);
+    }
+
+  public static class F_double_Pointer extends FunctionPointer {
+      static { Loader.load(); }
+      public    F_double_Pointer(Pointer p) { super(p); }
+      protected F_double_Pointer() { allocate(); }
+      private native void allocate();
+      public native double call(double x, Pointer params);
+  }
+  public native F_double_Pointer f(); public native gsl_function_fdf f(F_double_Pointer f);
+  public static class Df_double_Pointer extends FunctionPointer {
+      static { Loader.load(); }
+      public    Df_double_Pointer(Pointer p) { super(p); }
+      protected Df_double_Pointer() { allocate(); }
+      private native void allocate();
+      public native double call(double x, Pointer params);
+  }
+  public native Df_double_Pointer df(); public native gsl_function_fdf df(Df_double_Pointer df);
+  public static class Fdf_double_Pointer_DoublePointer_DoublePointer extends FunctionPointer {
+      static { Loader.load(); }
+      public    Fdf_double_Pointer_DoublePointer_DoublePointer(Pointer p) { super(p); }
+      protected Fdf_double_Pointer_DoublePointer_DoublePointer() { allocate(); }
+      private native void allocate();
+      public native void call(double x, Pointer params, DoublePointer f, DoublePointer df);
+  }
+  public native Fdf_double_Pointer_DoublePointer_DoublePointer fdf(); public native gsl_function_fdf fdf(Fdf_double_Pointer_DoublePointer_DoublePointer fdf);
+  public native Pointer params(); public native gsl_function_fdf params(Pointer params);
+}
+
+// #define GSL_FN_FDF_EVAL_F(FDF,x) (*((FDF)->f))(x,(FDF)->params)
+// #define GSL_FN_FDF_EVAL_DF(FDF,x) (*((FDF)->df))(x,(FDF)->params)
+// #define GSL_FN_FDF_EVAL_F_DF(FDF,x,y,dy) (*((FDF)->fdf))(x,(FDF)->params,(y),(dy))
+
+
+/* Definition of an arbitrary vector-valued function with parameters */
+
+@Name("gsl_function_vec_struct") public static class gsl_function_vec extends Pointer {
+    static { Loader.load(); }
+    public gsl_function_vec() { allocate(); }
+    public gsl_function_vec(int size) { allocateArray(size); }
+    public gsl_function_vec(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public gsl_function_vec position(int position) {
+        return (gsl_function_vec)super.position(position);
+    }
+
+  public static class Function_double_DoublePointer_Pointer extends FunctionPointer {
+      static { Loader.load(); }
+      public    Function_double_DoublePointer_Pointer(Pointer p) { super(p); }
+      protected Function_double_DoublePointer_Pointer() { allocate(); }
+      private native void allocate();
+      public native int call(double x, DoublePointer y, Pointer params);
+  }
+  public native Function_double_DoublePointer_Pointer function(); public native gsl_function_vec function(Function_double_DoublePointer_Pointer function);
+  public native Pointer params(); public native gsl_function_vec params(Pointer params);
+}
+
+// #define GSL_FN_VEC_EVAL(F,x,y) (*((F)->function))(x,y,(F)->params)
+
+// #endif /* __GSL_MATH_H__ */
+
+
 // Parsed from gsl/gsl_min.h
 
 /* min/gsl_min.h
@@ -1357,239 +1575,6 @@ public static native @Cast("long double") double GSL_MIN_LDBL(@Cast("long double
 // #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_POW_INT_H__ */
-
-
-// Parsed from gsl/gsl_math.h
-
-/* gsl_math.h
- * 
- * Copyright (C) 1996, 1997, 1998, 1999, 2000, 2004, 2007 Gerard Jungman, Brian Gough
- * 
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or (at
- * your option) any later version.
- * 
- * This program is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-// #ifndef __GSL_MATH_H__
-// #define __GSL_MATH_H__
-// #include <math.h>
-// #include <gsl/gsl_sys.h>
-// #include <gsl/gsl_inline.h>
-// #include <gsl/gsl_machine.h>
-// #include <gsl/gsl_precision.h>
-// #include <gsl/gsl_nan.h>
-// #include <gsl/gsl_pow_int.h>
-// #include <gsl/gsl_minmax.h>
-
-// #ifndef M_E
-public static final double M_E =        2.71828182845904523536028747135;      /* e */
-// #endif
-
-// #ifndef M_LOG2E
-public static final double M_LOG2E =    1.44269504088896340735992468100;      /* log_2 (e) */
-// #endif
-
-// #ifndef M_LOG10E
-public static final double M_LOG10E =   0.43429448190325182765112891892;      /* log_10 (e) */
-// #endif
-
-// #ifndef M_SQRT2
-public static final double M_SQRT2 =    1.41421356237309504880168872421;      /* sqrt(2) */
-// #endif
-
-// #ifndef M_SQRT1_2
-public static final double M_SQRT1_2 =  0.70710678118654752440084436210;      /* sqrt(1/2) */
-// #endif
-
-
-// #ifndef M_SQRT3
-public static final double M_SQRT3 =    1.73205080756887729352744634151;      /* sqrt(3) */
-// #endif
-
-// #ifndef M_PI
-public static final double M_PI =       3.14159265358979323846264338328;      /* pi */
-// #endif
-
-// #ifndef M_PI_2
-public static final double M_PI_2 =     1.57079632679489661923132169164;      /* pi/2 */
-// #endif
-
-// #ifndef M_PI_4
-public static final double M_PI_4 =     0.78539816339744830961566084582;     /* pi/4 */
-// #endif
-
-// #ifndef M_SQRTPI
-public static final double M_SQRTPI =   1.77245385090551602729816748334;      /* sqrt(pi) */
-// #endif
-
-// #ifndef M_2_SQRTPI
-public static final double M_2_SQRTPI = 1.12837916709551257389615890312;      /* 2/sqrt(pi) */
-// #endif
-
-// #ifndef M_1_PI
-public static final double M_1_PI =     0.31830988618379067153776752675;      /* 1/pi */
-// #endif
-
-// #ifndef M_2_PI
-public static final double M_2_PI =     0.63661977236758134307553505349;      /* 2/pi */
-// #endif
-
-// #ifndef M_LN10
-public static final double M_LN10 =     2.30258509299404568401799145468;      /* ln(10) */
-// #endif
-
-// #ifndef M_LN2
-public static final double M_LN2 =      0.69314718055994530941723212146;      /* ln(2) */
-// #endif
-
-// #ifndef M_LNPI
-public static final double M_LNPI =     1.14472988584940017414342735135;      /* ln(pi) */
-// #endif
-
-// #ifndef M_EULER
-public static final double M_EULER =    0.57721566490153286060651209008;      /* Euler constant */
-// #endif
-
-// #undef __BEGIN_DECLS
-// #undef __END_DECLS
-// #ifdef __cplusplus
-// # define __BEGIN_DECLS extern "C" {
-// # define __END_DECLS }
-// #else
-// #endif
-
-/* other needlessly compulsive abstractions */
-
-// #define GSL_IS_ODD(n)  ((n) & 1)
-// #define GSL_IS_EVEN(n) (!(GSL_IS_ODD(n)))
-// #define GSL_SIGN(x)    ((x) >= 0.0 ? 1 : -1)
-
-/* Return nonzero if x is a real number, i.e. non NaN or infinite. */
-// #define GSL_IS_REAL(x) (gsl_finite(x))
-
-/* Definition of an arbitrary function with parameters */
-
-public static class gsl_function_struct extends Pointer {
-    static { Loader.load(); }
-    public gsl_function_struct() { allocate(); }
-    public gsl_function_struct(int size) { allocateArray(size); }
-    public gsl_function_struct(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_function_struct position(int position) {
-        return (gsl_function_struct)super.position(position);
-    }
-
-  public static class Function_double_Pointer extends FunctionPointer {
-      static { Loader.load(); }
-      public    Function_double_Pointer(Pointer p) { super(p); }
-      protected Function_double_Pointer() { allocate(); }
-      private native void allocate();
-      public native double call(double x, Pointer params);
-  }
-  public native Function_double_Pointer function(); public native gsl_function_struct function(Function_double_Pointer function);
-  public native Pointer params(); public native gsl_function_struct params(Pointer params);
-}
-
-@Opaque public static class gsl_function extends Pointer {
-    public gsl_function() { }
-    public gsl_function(Pointer p) { super(p); }
-}
-
-// #define GSL_FN_EVAL(F,x) (*((F)->function))(x,(F)->params)
-
-/* Definition of an arbitrary function returning two values, r1, r2 */
-
-public static class gsl_function_fdf_struct extends Pointer {
-    static { Loader.load(); }
-    public gsl_function_fdf_struct() { allocate(); }
-    public gsl_function_fdf_struct(int size) { allocateArray(size); }
-    public gsl_function_fdf_struct(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_function_fdf_struct position(int position) {
-        return (gsl_function_fdf_struct)super.position(position);
-    }
-
-  public static class F_double_Pointer extends FunctionPointer {
-      static { Loader.load(); }
-      public    F_double_Pointer(Pointer p) { super(p); }
-      protected F_double_Pointer() { allocate(); }
-      private native void allocate();
-      public native double call(double x, Pointer params);
-  }
-  public native F_double_Pointer f(); public native gsl_function_fdf_struct f(F_double_Pointer f);
-  public static class Df_double_Pointer extends FunctionPointer {
-      static { Loader.load(); }
-      public    Df_double_Pointer(Pointer p) { super(p); }
-      protected Df_double_Pointer() { allocate(); }
-      private native void allocate();
-      public native double call(double x, Pointer params);
-  }
-  public native Df_double_Pointer df(); public native gsl_function_fdf_struct df(Df_double_Pointer df);
-  public static class Fdf_double_Pointer_DoublePointer_DoublePointer extends FunctionPointer {
-      static { Loader.load(); }
-      public    Fdf_double_Pointer_DoublePointer_DoublePointer(Pointer p) { super(p); }
-      protected Fdf_double_Pointer_DoublePointer_DoublePointer() { allocate(); }
-      private native void allocate();
-      public native void call(double x, Pointer params, DoublePointer f, DoublePointer df);
-  }
-  public native Fdf_double_Pointer_DoublePointer_DoublePointer fdf(); public native gsl_function_fdf_struct fdf(Fdf_double_Pointer_DoublePointer_DoublePointer fdf);
-  public native Pointer params(); public native gsl_function_fdf_struct params(Pointer params);
-}
-
-@Opaque public static class gsl_function_fdf extends Pointer {
-    public gsl_function_fdf() { }
-    public gsl_function_fdf(Pointer p) { super(p); }
-}
-
-// #define GSL_FN_FDF_EVAL_F(FDF,x) (*((FDF)->f))(x,(FDF)->params)
-// #define GSL_FN_FDF_EVAL_DF(FDF,x) (*((FDF)->df))(x,(FDF)->params)
-// #define GSL_FN_FDF_EVAL_F_DF(FDF,x,y,dy) (*((FDF)->fdf))(x,(FDF)->params,(y),(dy))
-
-
-/* Definition of an arbitrary vector-valued function with parameters */
-
-public static class gsl_function_vec_struct extends Pointer {
-    static { Loader.load(); }
-    public gsl_function_vec_struct() { allocate(); }
-    public gsl_function_vec_struct(int size) { allocateArray(size); }
-    public gsl_function_vec_struct(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_function_vec_struct position(int position) {
-        return (gsl_function_vec_struct)super.position(position);
-    }
-
-  public static class Function_double_DoublePointer_Pointer extends FunctionPointer {
-      static { Loader.load(); }
-      public    Function_double_DoublePointer_Pointer(Pointer p) { super(p); }
-      protected Function_double_DoublePointer_Pointer() { allocate(); }
-      private native void allocate();
-      public native int call(double x, DoublePointer y, Pointer params);
-  }
-  public native Function_double_DoublePointer_Pointer function(); public native gsl_function_vec_struct function(Function_double_DoublePointer_Pointer function);
-  public native Pointer params(); public native gsl_function_vec_struct params(Pointer params);
-}
-
-@Opaque public static class gsl_function_vec extends Pointer {
-    public gsl_function_vec() { }
-    public gsl_function_vec(Pointer p) { super(p); }
-}
-
-// #define GSL_FN_VEC_EVAL(F,x,y) (*((F)->function))(x,y,(F)->params)
-
-// #endif /* __GSL_MATH_H__ */
 
 
 // Parsed from gsl/gsl_mode.h
@@ -1825,24 +1810,19 @@ public static final int GSL_MINOR_VERSION = 16;
 // #else
 // #endif
 
-public static class gsl_block_complex_struct extends Pointer {
+@Name("gsl_block_complex_struct") public static class gsl_block_complex extends Pointer {
     static { Loader.load(); }
-    public gsl_block_complex_struct() { allocate(); }
-    public gsl_block_complex_struct(int size) { allocateArray(size); }
-    public gsl_block_complex_struct(Pointer p) { super(p); }
+    public gsl_block_complex() { allocate(); }
+    public gsl_block_complex(int size) { allocateArray(size); }
+    public gsl_block_complex(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_block_complex_struct position(int position) {
-        return (gsl_block_complex_struct)super.position(position);
+    @Override public gsl_block_complex position(int position) {
+        return (gsl_block_complex)super.position(position);
     }
 
-  public native @Cast("size_t") long size(); public native gsl_block_complex_struct size(long size);
-  public native DoublePointer data(); public native gsl_block_complex_struct data(DoublePointer data);
-}
-
-@Opaque public static class gsl_block_complex extends Pointer {
-    public gsl_block_complex() { }
-    public gsl_block_complex(Pointer p) { super(p); }
+  public native @Cast("size_t") long size(); public native gsl_block_complex size(long size);
+  public native DoublePointer data(); public native gsl_block_complex data(DoublePointer data);
 }
 
 public static native gsl_block_complex gsl_block_complex_alloc(@Cast("const size_t") long n);
@@ -1912,24 +1892,19 @@ public static native DoublePointer gsl_block_complex_data(@Const gsl_block_compl
 // #else
 // #endif
 
-public static class gsl_block_complex_float_struct extends Pointer {
+@Name("gsl_block_complex_float_struct") public static class gsl_block_complex_float extends Pointer {
     static { Loader.load(); }
-    public gsl_block_complex_float_struct() { allocate(); }
-    public gsl_block_complex_float_struct(int size) { allocateArray(size); }
-    public gsl_block_complex_float_struct(Pointer p) { super(p); }
+    public gsl_block_complex_float() { allocate(); }
+    public gsl_block_complex_float(int size) { allocateArray(size); }
+    public gsl_block_complex_float(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_block_complex_float_struct position(int position) {
-        return (gsl_block_complex_float_struct)super.position(position);
+    @Override public gsl_block_complex_float position(int position) {
+        return (gsl_block_complex_float)super.position(position);
     }
 
-  public native @Cast("size_t") long size(); public native gsl_block_complex_float_struct size(long size);
-  public native FloatPointer data(); public native gsl_block_complex_float_struct data(FloatPointer data);
-}
-
-@Opaque public static class gsl_block_complex_float extends Pointer {
-    public gsl_block_complex_float() { }
-    public gsl_block_complex_float(Pointer p) { super(p); }
+  public native @Cast("size_t") long size(); public native gsl_block_complex_float size(long size);
+  public native FloatPointer data(); public native gsl_block_complex_float data(FloatPointer data);
 }
 
 public static native gsl_block_complex_float gsl_block_complex_float_alloc(@Cast("const size_t") long n);
@@ -1999,24 +1974,19 @@ public static native FloatPointer gsl_block_complex_float_data(@Const gsl_block_
 // #else
 // #endif
 
-public static class gsl_block_struct extends Pointer {
+@Name("gsl_block_struct") public static class gsl_block extends Pointer {
     static { Loader.load(); }
-    public gsl_block_struct() { allocate(); }
-    public gsl_block_struct(int size) { allocateArray(size); }
-    public gsl_block_struct(Pointer p) { super(p); }
+    public gsl_block() { allocate(); }
+    public gsl_block(int size) { allocateArray(size); }
+    public gsl_block(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_block_struct position(int position) {
-        return (gsl_block_struct)super.position(position);
+    @Override public gsl_block position(int position) {
+        return (gsl_block)super.position(position);
     }
 
-  public native @Cast("size_t") long size(); public native gsl_block_struct size(long size);
-  public native DoublePointer data(); public native gsl_block_struct data(DoublePointer data);
-}
-
-@Opaque public static class gsl_block extends Pointer {
-    public gsl_block() { }
-    public gsl_block(Pointer p) { super(p); }
+  public native @Cast("size_t") long size(); public native gsl_block size(long size);
+  public native DoublePointer data(); public native gsl_block data(DoublePointer data);
 }
 
 public static native gsl_block gsl_block_alloc(@Cast("const size_t") long n);
@@ -2086,24 +2056,19 @@ public static native DoublePointer gsl_block_data(@Const gsl_block b);
 // #else
 // #endif
 
-public static class gsl_block_float_struct extends Pointer {
+@Name("gsl_block_float_struct") public static class gsl_block_float extends Pointer {
     static { Loader.load(); }
-    public gsl_block_float_struct() { allocate(); }
-    public gsl_block_float_struct(int size) { allocateArray(size); }
-    public gsl_block_float_struct(Pointer p) { super(p); }
+    public gsl_block_float() { allocate(); }
+    public gsl_block_float(int size) { allocateArray(size); }
+    public gsl_block_float(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_block_float_struct position(int position) {
-        return (gsl_block_float_struct)super.position(position);
+    @Override public gsl_block_float position(int position) {
+        return (gsl_block_float)super.position(position);
     }
 
-  public native @Cast("size_t") long size(); public native gsl_block_float_struct size(long size);
-  public native FloatPointer data(); public native gsl_block_float_struct data(FloatPointer data);
-}
-
-@Opaque public static class gsl_block_float extends Pointer {
-    public gsl_block_float() { }
-    public gsl_block_float(Pointer p) { super(p); }
+  public native @Cast("size_t") long size(); public native gsl_block_float size(long size);
+  public native FloatPointer data(); public native gsl_block_float data(FloatPointer data);
 }
 
 public static native gsl_block_float gsl_block_float_alloc(@Cast("const size_t") long n);
@@ -2173,24 +2138,19 @@ public static native FloatPointer gsl_block_float_data(@Const gsl_block_float b)
 // #else
 // #endif
 
-public static class gsl_block_ulong_struct extends Pointer {
+@Name("gsl_block_ulong_struct") public static class gsl_block_ulong extends Pointer {
     static { Loader.load(); }
-    public gsl_block_ulong_struct() { allocate(); }
-    public gsl_block_ulong_struct(int size) { allocateArray(size); }
-    public gsl_block_ulong_struct(Pointer p) { super(p); }
+    public gsl_block_ulong() { allocate(); }
+    public gsl_block_ulong(int size) { allocateArray(size); }
+    public gsl_block_ulong(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_block_ulong_struct position(int position) {
-        return (gsl_block_ulong_struct)super.position(position);
+    @Override public gsl_block_ulong position(int position) {
+        return (gsl_block_ulong)super.position(position);
     }
 
-  public native @Cast("size_t") long size(); public native gsl_block_ulong_struct size(long size);
-  public native @Cast("unsigned long*") CLongPointer data(); public native gsl_block_ulong_struct data(CLongPointer data);
-}
-
-@Opaque public static class gsl_block_ulong extends Pointer {
-    public gsl_block_ulong() { }
-    public gsl_block_ulong(Pointer p) { super(p); }
+  public native @Cast("size_t") long size(); public native gsl_block_ulong size(long size);
+  public native @Cast("unsigned long*") CLongPointer data(); public native gsl_block_ulong data(CLongPointer data);
 }
 
 public static native gsl_block_ulong gsl_block_ulong_alloc(@Cast("const size_t") long n);
@@ -2250,24 +2210,19 @@ public static native @Cast("unsigned long*") CLongPointer gsl_block_ulong_data(@
 // #else
 // #endif
 
-public static class gsl_block_long_struct extends Pointer {
+@Name("gsl_block_long_struct") public static class gsl_block_long extends Pointer {
     static { Loader.load(); }
-    public gsl_block_long_struct() { allocate(); }
-    public gsl_block_long_struct(int size) { allocateArray(size); }
-    public gsl_block_long_struct(Pointer p) { super(p); }
+    public gsl_block_long() { allocate(); }
+    public gsl_block_long(int size) { allocateArray(size); }
+    public gsl_block_long(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_block_long_struct position(int position) {
-        return (gsl_block_long_struct)super.position(position);
+    @Override public gsl_block_long position(int position) {
+        return (gsl_block_long)super.position(position);
     }
 
-  public native @Cast("size_t") long size(); public native gsl_block_long_struct size(long size);
-  public native CLongPointer data(); public native gsl_block_long_struct data(CLongPointer data);
-}
-
-@Opaque public static class gsl_block_long extends Pointer {
-    public gsl_block_long() { }
-    public gsl_block_long(Pointer p) { super(p); }
+  public native @Cast("size_t") long size(); public native gsl_block_long size(long size);
+  public native CLongPointer data(); public native gsl_block_long data(CLongPointer data);
 }
 
 public static native gsl_block_long gsl_block_long_alloc(@Cast("const size_t") long n);
@@ -2327,24 +2282,19 @@ public static native CLongPointer gsl_block_long_data(@Const gsl_block_long b);
 // #else
 // #endif
 
-public static class gsl_block_uint_struct extends Pointer {
+@Name("gsl_block_uint_struct") public static class gsl_block_uint extends Pointer {
     static { Loader.load(); }
-    public gsl_block_uint_struct() { allocate(); }
-    public gsl_block_uint_struct(int size) { allocateArray(size); }
-    public gsl_block_uint_struct(Pointer p) { super(p); }
+    public gsl_block_uint() { allocate(); }
+    public gsl_block_uint(int size) { allocateArray(size); }
+    public gsl_block_uint(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_block_uint_struct position(int position) {
-        return (gsl_block_uint_struct)super.position(position);
+    @Override public gsl_block_uint position(int position) {
+        return (gsl_block_uint)super.position(position);
     }
 
-  public native @Cast("size_t") long size(); public native gsl_block_uint_struct size(long size);
-  public native @Cast("unsigned int*") IntPointer data(); public native gsl_block_uint_struct data(IntPointer data);
-}
-
-@Opaque public static class gsl_block_uint extends Pointer {
-    public gsl_block_uint() { }
-    public gsl_block_uint(Pointer p) { super(p); }
+  public native @Cast("size_t") long size(); public native gsl_block_uint size(long size);
+  public native @Cast("unsigned int*") IntPointer data(); public native gsl_block_uint data(IntPointer data);
 }
 
 public static native gsl_block_uint gsl_block_uint_alloc(@Cast("const size_t") long n);
@@ -2414,24 +2364,19 @@ public static native @Cast("unsigned int*") IntPointer gsl_block_uint_data(@Cons
 // #else
 // #endif
 
-public static class gsl_block_int_struct extends Pointer {
+@Name("gsl_block_int_struct") public static class gsl_block_int extends Pointer {
     static { Loader.load(); }
-    public gsl_block_int_struct() { allocate(); }
-    public gsl_block_int_struct(int size) { allocateArray(size); }
-    public gsl_block_int_struct(Pointer p) { super(p); }
+    public gsl_block_int() { allocate(); }
+    public gsl_block_int(int size) { allocateArray(size); }
+    public gsl_block_int(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_block_int_struct position(int position) {
-        return (gsl_block_int_struct)super.position(position);
+    @Override public gsl_block_int position(int position) {
+        return (gsl_block_int)super.position(position);
     }
 
-  public native @Cast("size_t") long size(); public native gsl_block_int_struct size(long size);
-  public native IntPointer data(); public native gsl_block_int_struct data(IntPointer data);
-}
-
-@Opaque public static class gsl_block_int extends Pointer {
-    public gsl_block_int() { }
-    public gsl_block_int(Pointer p) { super(p); }
+  public native @Cast("size_t") long size(); public native gsl_block_int size(long size);
+  public native IntPointer data(); public native gsl_block_int data(IntPointer data);
 }
 
 public static native gsl_block_int gsl_block_int_alloc(@Cast("const size_t") long n);
@@ -2501,24 +2446,19 @@ public static native IntPointer gsl_block_int_data(@Const gsl_block_int b);
 // #else
 // #endif
 
-public static class gsl_block_ushort_struct extends Pointer {
+@Name("gsl_block_ushort_struct") public static class gsl_block_ushort extends Pointer {
     static { Loader.load(); }
-    public gsl_block_ushort_struct() { allocate(); }
-    public gsl_block_ushort_struct(int size) { allocateArray(size); }
-    public gsl_block_ushort_struct(Pointer p) { super(p); }
+    public gsl_block_ushort() { allocate(); }
+    public gsl_block_ushort(int size) { allocateArray(size); }
+    public gsl_block_ushort(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_block_ushort_struct position(int position) {
-        return (gsl_block_ushort_struct)super.position(position);
+    @Override public gsl_block_ushort position(int position) {
+        return (gsl_block_ushort)super.position(position);
     }
 
-  public native @Cast("size_t") long size(); public native gsl_block_ushort_struct size(long size);
-  public native @Cast("unsigned short*") ShortPointer data(); public native gsl_block_ushort_struct data(ShortPointer data);
-}
-
-@Opaque public static class gsl_block_ushort extends Pointer {
-    public gsl_block_ushort() { }
-    public gsl_block_ushort(Pointer p) { super(p); }
+  public native @Cast("size_t") long size(); public native gsl_block_ushort size(long size);
+  public native @Cast("unsigned short*") ShortPointer data(); public native gsl_block_ushort data(ShortPointer data);
 }
 
 public static native gsl_block_ushort gsl_block_ushort_alloc(@Cast("const size_t") long n);
@@ -2588,24 +2528,19 @@ public static native @Cast("unsigned short*") ShortPointer gsl_block_ushort_data
 // #else
 // #endif
 
-public static class gsl_block_short_struct extends Pointer {
+@Name("gsl_block_short_struct") public static class gsl_block_short extends Pointer {
     static { Loader.load(); }
-    public gsl_block_short_struct() { allocate(); }
-    public gsl_block_short_struct(int size) { allocateArray(size); }
-    public gsl_block_short_struct(Pointer p) { super(p); }
+    public gsl_block_short() { allocate(); }
+    public gsl_block_short(int size) { allocateArray(size); }
+    public gsl_block_short(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_block_short_struct position(int position) {
-        return (gsl_block_short_struct)super.position(position);
+    @Override public gsl_block_short position(int position) {
+        return (gsl_block_short)super.position(position);
     }
 
-  public native @Cast("size_t") long size(); public native gsl_block_short_struct size(long size);
-  public native ShortPointer data(); public native gsl_block_short_struct data(ShortPointer data);
-}
-
-@Opaque public static class gsl_block_short extends Pointer {
-    public gsl_block_short() { }
-    public gsl_block_short(Pointer p) { super(p); }
+  public native @Cast("size_t") long size(); public native gsl_block_short size(long size);
+  public native ShortPointer data(); public native gsl_block_short data(ShortPointer data);
 }
 
 public static native gsl_block_short gsl_block_short_alloc(@Cast("const size_t") long n);
@@ -2675,24 +2610,19 @@ public static native ShortPointer gsl_block_short_data(@Const gsl_block_short b)
 // #else
 // #endif
 
-public static class gsl_block_uchar_struct extends Pointer {
+@Name("gsl_block_uchar_struct") public static class gsl_block_uchar extends Pointer {
     static { Loader.load(); }
-    public gsl_block_uchar_struct() { allocate(); }
-    public gsl_block_uchar_struct(int size) { allocateArray(size); }
-    public gsl_block_uchar_struct(Pointer p) { super(p); }
+    public gsl_block_uchar() { allocate(); }
+    public gsl_block_uchar(int size) { allocateArray(size); }
+    public gsl_block_uchar(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_block_uchar_struct position(int position) {
-        return (gsl_block_uchar_struct)super.position(position);
+    @Override public gsl_block_uchar position(int position) {
+        return (gsl_block_uchar)super.position(position);
     }
 
-  public native @Cast("size_t") long size(); public native gsl_block_uchar_struct size(long size);
-  public native @Cast("unsigned char*") BytePointer data(); public native gsl_block_uchar_struct data(BytePointer data);
-}
-
-@Opaque public static class gsl_block_uchar extends Pointer {
-    public gsl_block_uchar() { }
-    public gsl_block_uchar(Pointer p) { super(p); }
+  public native @Cast("size_t") long size(); public native gsl_block_uchar size(long size);
+  public native @Cast("unsigned char*") BytePointer data(); public native gsl_block_uchar data(BytePointer data);
 }
 
 public static native gsl_block_uchar gsl_block_uchar_alloc(@Cast("const size_t") long n);
@@ -2762,24 +2692,19 @@ public static native @Cast("unsigned char*") BytePointer gsl_block_uchar_data(@C
 // #else
 // #endif
 
-public static class gsl_block_char_struct extends Pointer {
+@Name("gsl_block_char_struct") public static class gsl_block_char extends Pointer {
     static { Loader.load(); }
-    public gsl_block_char_struct() { allocate(); }
-    public gsl_block_char_struct(int size) { allocateArray(size); }
-    public gsl_block_char_struct(Pointer p) { super(p); }
+    public gsl_block_char() { allocate(); }
+    public gsl_block_char(int size) { allocateArray(size); }
+    public gsl_block_char(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_block_char_struct position(int position) {
-        return (gsl_block_char_struct)super.position(position);
+    @Override public gsl_block_char position(int position) {
+        return (gsl_block_char)super.position(position);
     }
 
-  public native @Cast("size_t") long size(); public native gsl_block_char_struct size(long size);
-  public native @Cast("char*") BytePointer data(); public native gsl_block_char_struct data(BytePointer data);
-}
-
-@Opaque public static class gsl_block_char extends Pointer {
-    public gsl_block_char() { }
-    public gsl_block_char(Pointer p) { super(p); }
+  public native @Cast("size_t") long size(); public native gsl_block_char size(long size);
+  public native @Cast("char*") BytePointer data(); public native gsl_block_char data(BytePointer data);
 }
 
 public static native gsl_block_char gsl_block_char_alloc(@Cast("const size_t") long n);
@@ -10912,22 +10837,22 @@ public static native double gsl_cdf_hypergeometric_Q(@Cast("const unsigned int")
 
 /* data for a Chebyshev series over a given interval */
 
-public static class gsl_cheb_series_struct extends Pointer {
+@Name("gsl_cheb_series_struct") public static class gsl_cheb_series extends Pointer {
     static { Loader.load(); }
-    public gsl_cheb_series_struct() { allocate(); }
-    public gsl_cheb_series_struct(int size) { allocateArray(size); }
-    public gsl_cheb_series_struct(Pointer p) { super(p); }
+    public gsl_cheb_series() { allocate(); }
+    public gsl_cheb_series(int size) { allocateArray(size); }
+    public gsl_cheb_series(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_cheb_series_struct position(int position) {
-        return (gsl_cheb_series_struct)super.position(position);
+    @Override public gsl_cheb_series position(int position) {
+        return (gsl_cheb_series)super.position(position);
     }
 
 
-  public native DoublePointer c(); public native gsl_cheb_series_struct c(DoublePointer c);   /* coefficients                */
-  public native @Cast("size_t") long order(); public native gsl_cheb_series_struct order(long order); /* order of expansion          */
-  public native double a(); public native gsl_cheb_series_struct a(double a);     /* lower interval point        */
-  public native double b(); public native gsl_cheb_series_struct b(double b);     /* upper interval point        */
+  public native DoublePointer c(); public native gsl_cheb_series c(DoublePointer c);   /* coefficients                */
+  public native @Cast("size_t") long order(); public native gsl_cheb_series order(long order); /* order of expansion          */
+  public native double a(); public native gsl_cheb_series a(double a);     /* lower interval point        */
+  public native double b(); public native gsl_cheb_series b(double b);     /* upper interval point        */
 
   /* The following exists (mostly) for the benefit
    * of the implementation. It is an effective single
@@ -10939,15 +10864,11 @@ public static class gsl_cheb_series_struct extends Pointer {
    * It is used explicitly only by the gsl_cheb_eval_mode
    * functions, which are not meant for casual use.
    */
-  public native @Cast("size_t") long order_sp(); public native gsl_cheb_series_struct order_sp(long order_sp);
+  public native @Cast("size_t") long order_sp(); public native gsl_cheb_series order_sp(long order_sp);
 
   /* Additional elements not used by specfunc */
 
-  public native DoublePointer f(); public native gsl_cheb_series_struct f(DoublePointer f);   /* function evaluated at chebyschev points  */
-}
-@Opaque public static class gsl_cheb_series extends Pointer {
-    public gsl_cheb_series() { }
-    public gsl_cheb_series(Pointer p) { super(p); }
+  public native DoublePointer f(); public native gsl_cheb_series f(DoublePointer f);   /* function evaluated at chebyschev points  */
 }
 
 
@@ -11064,25 +10985,20 @@ public static native int gsl_cheb_calc_integ(gsl_cheb_series integ, @Const gsl_c
 // #else
 // #endif
 
-public static class gsl_combination_struct extends Pointer {
+@Name("gsl_combination_struct") public static class gsl_combination extends Pointer {
     static { Loader.load(); }
-    public gsl_combination_struct() { allocate(); }
-    public gsl_combination_struct(int size) { allocateArray(size); }
-    public gsl_combination_struct(Pointer p) { super(p); }
+    public gsl_combination() { allocate(); }
+    public gsl_combination(int size) { allocateArray(size); }
+    public gsl_combination(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_combination_struct position(int position) {
-        return (gsl_combination_struct)super.position(position);
+    @Override public gsl_combination position(int position) {
+        return (gsl_combination)super.position(position);
     }
 
-  public native @Cast("size_t") long n(); public native gsl_combination_struct n(long n);
-  public native @Cast("size_t") long k(); public native gsl_combination_struct k(long k);
-  public native @Cast("size_t*") SizeTPointer data(); public native gsl_combination_struct data(SizeTPointer data);
-}
-
-@Opaque public static class gsl_combination extends Pointer {
-    public gsl_combination() { }
-    public gsl_combination(Pointer p) { super(p); }
+  public native @Cast("size_t") long n(); public native gsl_combination n(long n);
+  public native @Cast("size_t") long k(); public native gsl_combination k(long k);
+  public native @Cast("size_t*") SizeTPointer data(); public native gsl_combination data(SizeTPointer data);
 }
 
 public static native gsl_combination gsl_combination_alloc(@Cast("const size_t") long n, @Cast("const size_t") long k);
@@ -11216,28 +11132,24 @@ public static native int gsl_deriv_forward(@Const gsl_function f,
 // #endif
 
 
-public static class gsl_dht_struct extends Pointer {
+@Name("gsl_dht_struct") public static class gsl_dht extends Pointer {
     static { Loader.load(); }
-    public gsl_dht_struct() { allocate(); }
-    public gsl_dht_struct(int size) { allocateArray(size); }
-    public gsl_dht_struct(Pointer p) { super(p); }
+    public gsl_dht() { allocate(); }
+    public gsl_dht(int size) { allocateArray(size); }
+    public gsl_dht(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_dht_struct position(int position) {
-        return (gsl_dht_struct)super.position(position);
+    @Override public gsl_dht position(int position) {
+        return (gsl_dht)super.position(position);
     }
 
-  public native @Cast("size_t") long size(); public native gsl_dht_struct size(long size);  /* size of the sample arrays to be transformed    */
-  public native double nu(); public native gsl_dht_struct nu(double nu);    /* Bessel function order                          */
-  public native double xmax(); public native gsl_dht_struct xmax(double xmax);  /* the upper limit to the x-sampling domain       */
-  public native double kmax(); public native gsl_dht_struct kmax(double kmax);  /* the upper limit to the k-sampling domain       */
-  public native DoublePointer j(); public native gsl_dht_struct j(DoublePointer j);     /* array of computed J_nu zeros, j_{nu,s} = j[s]  */
-  public native DoublePointer Jjj(); public native gsl_dht_struct Jjj(DoublePointer Jjj);   /* transform numerator, J_nu(j_i j_m / j_N)       */
-  public native DoublePointer J2(); public native gsl_dht_struct J2(DoublePointer J2);    /* transform denominator, J_{nu+1}^2(j_m)         */
-}
-@Opaque public static class gsl_dht extends Pointer {
-    public gsl_dht() { }
-    public gsl_dht(Pointer p) { super(p); }
+  public native @Cast("size_t") long size(); public native gsl_dht size(long size);  /* size of the sample arrays to be transformed    */
+  public native double nu(); public native gsl_dht nu(double nu);    /* Bessel function order                          */
+  public native double xmax(); public native gsl_dht xmax(double xmax);  /* the upper limit to the x-sampling domain       */
+  public native double kmax(); public native gsl_dht kmax(double kmax);  /* the upper limit to the k-sampling domain       */
+  public native DoublePointer j(); public native gsl_dht j(DoublePointer j);     /* array of computed J_nu zeros, j_{nu,s} = j[s]  */
+  public native DoublePointer Jjj(); public native gsl_dht Jjj(DoublePointer Jjj);   /* transform numerator, J_nu(j_i j_m / j_N)       */
+  public native DoublePointer J2(); public native gsl_dht J2(DoublePointer J2);    /* transform denominator, J_{nu+1}^2(j_m)         */
 }
 
 
@@ -12039,24 +11951,19 @@ public static native int gsl_fit_mul_est(double x,
 // #else
 // #endif
 
-public static class gsl_permutation_struct extends Pointer {
+@Name("gsl_permutation_struct") public static class gsl_permutation extends Pointer {
     static { Loader.load(); }
-    public gsl_permutation_struct() { allocate(); }
-    public gsl_permutation_struct(int size) { allocateArray(size); }
-    public gsl_permutation_struct(Pointer p) { super(p); }
+    public gsl_permutation() { allocate(); }
+    public gsl_permutation(int size) { allocateArray(size); }
+    public gsl_permutation(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_permutation_struct position(int position) {
-        return (gsl_permutation_struct)super.position(position);
+    @Override public gsl_permutation position(int position) {
+        return (gsl_permutation)super.position(position);
     }
 
-  public native @Cast("size_t") long size(); public native gsl_permutation_struct size(long size);
-  public native @Cast("size_t*") SizeTPointer data(); public native gsl_permutation_struct data(SizeTPointer data);
-}
-
-@Opaque public static class gsl_permutation extends Pointer {
-    public gsl_permutation() { }
-    public gsl_permutation(Pointer p) { super(p); }
+  public native @Cast("size_t") long size(); public native gsl_permutation size(long size);
+  public native @Cast("size_t*") SizeTPointer data(); public native gsl_permutation data(SizeTPointer data);
 }
 
 public static native gsl_permutation gsl_permutation_alloc(@Cast("const size_t") long n);
@@ -17488,15 +17395,15 @@ public static native int gsl_dft_complex_transform(@Const double[] data, @Cast("
    integration functions, and make it easy to change things.
 */
 
-public static class gsl_monte_function_struct extends Pointer {
+@Name("gsl_monte_function_struct") public static class gsl_monte_function extends Pointer {
     static { Loader.load(); }
-    public gsl_monte_function_struct() { allocate(); }
-    public gsl_monte_function_struct(int size) { allocateArray(size); }
-    public gsl_monte_function_struct(Pointer p) { super(p); }
+    public gsl_monte_function() { allocate(); }
+    public gsl_monte_function(int size) { allocateArray(size); }
+    public gsl_monte_function(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_monte_function_struct position(int position) {
-        return (gsl_monte_function_struct)super.position(position);
+    @Override public gsl_monte_function position(int position) {
+        return (gsl_monte_function)super.position(position);
     }
 
   public static class F_DoublePointer_long_Pointer extends FunctionPointer {
@@ -17506,14 +17413,9 @@ public static class gsl_monte_function_struct extends Pointer {
       private native void allocate();
       public native double call(DoublePointer x_array, @Cast("size_t") long dim, Pointer params);
   }
-  public native F_DoublePointer_long_Pointer f(); public native gsl_monte_function_struct f(F_DoublePointer_long_Pointer f);
-  public native @Cast("size_t") long dim(); public native gsl_monte_function_struct dim(long dim);
-  public native Pointer params(); public native gsl_monte_function_struct params(Pointer params);
-}
-
-@Opaque public static class gsl_monte_function extends Pointer {
-    public gsl_monte_function() { }
-    public gsl_monte_function(Pointer p) { super(p); }
+  public native F_DoublePointer_long_Pointer f(); public native gsl_monte_function f(F_DoublePointer_long_Pointer f);
+  public native @Cast("size_t") long dim(); public native gsl_monte_function dim(long dim);
+  public native Pointer params(); public native gsl_monte_function params(Pointer params);
 }
 
 // #define GSL_MONTE_FN_EVAL(F,x) (*((F)->f))(x,(F)->dim,(F)->params)
@@ -18283,15 +18185,15 @@ public static native int gsl_multifit_covar(@Const gsl_matrix J, double epsrel, 
 
 /* Definition of vector-valued functions with parameters based on gsl_vector */
 
-public static class gsl_multifit_function_struct extends Pointer {
+@Name("gsl_multifit_function_struct") public static class gsl_multifit_function extends Pointer {
     static { Loader.load(); }
-    public gsl_multifit_function_struct() { allocate(); }
-    public gsl_multifit_function_struct(int size) { allocateArray(size); }
-    public gsl_multifit_function_struct(Pointer p) { super(p); }
+    public gsl_multifit_function() { allocate(); }
+    public gsl_multifit_function(int size) { allocateArray(size); }
+    public gsl_multifit_function(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_multifit_function_struct position(int position) {
-        return (gsl_multifit_function_struct)super.position(position);
+    @Override public gsl_multifit_function position(int position) {
+        return (gsl_multifit_function)super.position(position);
     }
 
   public static class F_gsl_vector_Pointer_gsl_vector extends FunctionPointer {
@@ -18301,15 +18203,10 @@ public static class gsl_multifit_function_struct extends Pointer {
       private native void allocate();
       public native int call(@Const gsl_vector x, Pointer params, gsl_vector f);
   }
-  public native F_gsl_vector_Pointer_gsl_vector f(); public native gsl_multifit_function_struct f(F_gsl_vector_Pointer_gsl_vector f);
-  public native @Cast("size_t") long n(); public native gsl_multifit_function_struct n(long n);   /* number of functions */
-  public native @Cast("size_t") long p(); public native gsl_multifit_function_struct p(long p);   /* number of independent variables */
-  public native Pointer params(); public native gsl_multifit_function_struct params(Pointer params);
-}
-
-@Opaque public static class gsl_multifit_function extends Pointer {
-    public gsl_multifit_function() { }
-    public gsl_multifit_function(Pointer p) { super(p); }
+  public native F_gsl_vector_Pointer_gsl_vector f(); public native gsl_multifit_function f(F_gsl_vector_Pointer_gsl_vector f);
+  public native @Cast("size_t") long n(); public native gsl_multifit_function n(long n);   /* number of functions */
+  public native @Cast("size_t") long p(); public native gsl_multifit_function p(long p);   /* number of independent variables */
+  public native Pointer params(); public native gsl_multifit_function params(Pointer params);
 }
 
 // #define GSL_MULTIFIT_FN_EVAL(F,x,y) (*((F)->f))(x,(F)->params,(y))
@@ -18401,15 +18298,15 @@ public static native gsl_vector gsl_multifit_fsolver_position(@Const gsl_multifi
 /* Definition of vector-valued functions and gradient with parameters
    based on gsl_vector */
 
-public static class gsl_multifit_function_fdf_struct extends Pointer {
+@Name("gsl_multifit_function_fdf_struct") public static class gsl_multifit_function_fdf extends Pointer {
     static { Loader.load(); }
-    public gsl_multifit_function_fdf_struct() { allocate(); }
-    public gsl_multifit_function_fdf_struct(int size) { allocateArray(size); }
-    public gsl_multifit_function_fdf_struct(Pointer p) { super(p); }
+    public gsl_multifit_function_fdf() { allocate(); }
+    public gsl_multifit_function_fdf(int size) { allocateArray(size); }
+    public gsl_multifit_function_fdf(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_multifit_function_fdf_struct position(int position) {
-        return (gsl_multifit_function_fdf_struct)super.position(position);
+    @Override public gsl_multifit_function_fdf position(int position) {
+        return (gsl_multifit_function_fdf)super.position(position);
     }
 
   public static class F_gsl_vector_Pointer_gsl_vector extends FunctionPointer {
@@ -18419,7 +18316,7 @@ public static class gsl_multifit_function_fdf_struct extends Pointer {
       private native void allocate();
       public native int call(@Const gsl_vector x, Pointer params, gsl_vector f);
   }
-  public native F_gsl_vector_Pointer_gsl_vector f(); public native gsl_multifit_function_fdf_struct f(F_gsl_vector_Pointer_gsl_vector f);
+  public native F_gsl_vector_Pointer_gsl_vector f(); public native gsl_multifit_function_fdf f(F_gsl_vector_Pointer_gsl_vector f);
   public static class Df_gsl_vector_Pointer_gsl_matrix extends FunctionPointer {
       static { Loader.load(); }
       public    Df_gsl_vector_Pointer_gsl_matrix(Pointer p) { super(p); }
@@ -18427,7 +18324,7 @@ public static class gsl_multifit_function_fdf_struct extends Pointer {
       private native void allocate();
       public native int call(@Const gsl_vector x, Pointer params, gsl_matrix df);
   }
-  public native Df_gsl_vector_Pointer_gsl_matrix df(); public native gsl_multifit_function_fdf_struct df(Df_gsl_vector_Pointer_gsl_matrix df);
+  public native Df_gsl_vector_Pointer_gsl_matrix df(); public native gsl_multifit_function_fdf df(Df_gsl_vector_Pointer_gsl_matrix df);
   public static class Fdf_gsl_vector_Pointer_gsl_vector_gsl_matrix extends FunctionPointer {
       static { Loader.load(); }
       public    Fdf_gsl_vector_Pointer_gsl_vector_gsl_matrix(Pointer p) { super(p); }
@@ -18435,15 +18332,10 @@ public static class gsl_multifit_function_fdf_struct extends Pointer {
       private native void allocate();
       public native int call(@Const gsl_vector x, Pointer params, gsl_vector f, gsl_matrix df);
   }
-  public native Fdf_gsl_vector_Pointer_gsl_vector_gsl_matrix fdf(); public native gsl_multifit_function_fdf_struct fdf(Fdf_gsl_vector_Pointer_gsl_vector_gsl_matrix fdf);
-  public native @Cast("size_t") long n(); public native gsl_multifit_function_fdf_struct n(long n);   /* number of functions */
-  public native @Cast("size_t") long p(); public native gsl_multifit_function_fdf_struct p(long p);   /* number of independent variables */
-  public native Pointer params(); public native gsl_multifit_function_fdf_struct params(Pointer params);
-}
-
-@Opaque public static class gsl_multifit_function_fdf extends Pointer {
-    public gsl_multifit_function_fdf() { }
-    public gsl_multifit_function_fdf(Pointer p) { super(p); }
+  public native Fdf_gsl_vector_Pointer_gsl_vector_gsl_matrix fdf(); public native gsl_multifit_function_fdf fdf(Fdf_gsl_vector_Pointer_gsl_vector_gsl_matrix fdf);
+  public native @Cast("size_t") long n(); public native gsl_multifit_function_fdf n(long n);   /* number of functions */
+  public native @Cast("size_t") long p(); public native gsl_multifit_function_fdf p(long p);   /* number of independent variables */
+  public native Pointer params(); public native gsl_multifit_function_fdf params(Pointer params);
 }
 
 // #define GSL_MULTIFIT_FN_EVAL_F(F,x,y) ((*((F)->f))(x,(F)->params,(y)))
@@ -18598,15 +18490,15 @@ public static native int gsl_multifit_fdfsolver_dif_fdf(@Const gsl_vector x, gsl
 
 /* Definition of an arbitrary real-valued function with gsl_vector input and */
 /* parameters */
-public static class gsl_multimin_function_struct extends Pointer {
+@Name("gsl_multimin_function_struct") public static class gsl_multimin_function extends Pointer {
     static { Loader.load(); }
-    public gsl_multimin_function_struct() { allocate(); }
-    public gsl_multimin_function_struct(int size) { allocateArray(size); }
-    public gsl_multimin_function_struct(Pointer p) { super(p); }
+    public gsl_multimin_function() { allocate(); }
+    public gsl_multimin_function(int size) { allocateArray(size); }
+    public gsl_multimin_function(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_multimin_function_struct position(int position) {
-        return (gsl_multimin_function_struct)super.position(position);
+    @Override public gsl_multimin_function position(int position) {
+        return (gsl_multimin_function)super.position(position);
     }
 
   public static class F_gsl_vector_Pointer extends FunctionPointer {
@@ -18616,29 +18508,24 @@ public static class gsl_multimin_function_struct extends Pointer {
       private native void allocate();
       public native double call(@Const gsl_vector x, Pointer params);
   }
-  public native F_gsl_vector_Pointer f(); public native gsl_multimin_function_struct f(F_gsl_vector_Pointer f);
-  public native @Cast("size_t") long n(); public native gsl_multimin_function_struct n(long n);
-  public native Pointer params(); public native gsl_multimin_function_struct params(Pointer params);
-}
-
-@Opaque public static class gsl_multimin_function extends Pointer {
-    public gsl_multimin_function() { }
-    public gsl_multimin_function(Pointer p) { super(p); }
+  public native F_gsl_vector_Pointer f(); public native gsl_multimin_function f(F_gsl_vector_Pointer f);
+  public native @Cast("size_t") long n(); public native gsl_multimin_function n(long n);
+  public native Pointer params(); public native gsl_multimin_function params(Pointer params);
 }
 
 // #define GSL_MULTIMIN_FN_EVAL(F,x) (*((F)->f))(x,(F)->params)
 
 /* Definition of an arbitrary differentiable real-valued function */
 /* with gsl_vector input and parameters */
-public static class gsl_multimin_function_fdf_struct extends Pointer {
+@Name("gsl_multimin_function_fdf_struct") public static class gsl_multimin_function_fdf extends Pointer {
     static { Loader.load(); }
-    public gsl_multimin_function_fdf_struct() { allocate(); }
-    public gsl_multimin_function_fdf_struct(int size) { allocateArray(size); }
-    public gsl_multimin_function_fdf_struct(Pointer p) { super(p); }
+    public gsl_multimin_function_fdf() { allocate(); }
+    public gsl_multimin_function_fdf(int size) { allocateArray(size); }
+    public gsl_multimin_function_fdf(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_multimin_function_fdf_struct position(int position) {
-        return (gsl_multimin_function_fdf_struct)super.position(position);
+    @Override public gsl_multimin_function_fdf position(int position) {
+        return (gsl_multimin_function_fdf)super.position(position);
     }
 
   public static class F_gsl_vector_Pointer extends FunctionPointer {
@@ -18648,7 +18535,7 @@ public static class gsl_multimin_function_fdf_struct extends Pointer {
       private native void allocate();
       public native double call(@Const gsl_vector x, Pointer params);
   }
-  public native F_gsl_vector_Pointer f(); public native gsl_multimin_function_fdf_struct f(F_gsl_vector_Pointer f);
+  public native F_gsl_vector_Pointer f(); public native gsl_multimin_function_fdf f(F_gsl_vector_Pointer f);
   public static class Df_gsl_vector_Pointer_gsl_vector extends FunctionPointer {
       static { Loader.load(); }
       public    Df_gsl_vector_Pointer_gsl_vector(Pointer p) { super(p); }
@@ -18656,7 +18543,7 @@ public static class gsl_multimin_function_fdf_struct extends Pointer {
       private native void allocate();
       public native void call(@Const gsl_vector x, Pointer params,gsl_vector df);
   }
-  public native Df_gsl_vector_Pointer_gsl_vector df(); public native gsl_multimin_function_fdf_struct df(Df_gsl_vector_Pointer_gsl_vector df);
+  public native Df_gsl_vector_Pointer_gsl_vector df(); public native gsl_multimin_function_fdf df(Df_gsl_vector_Pointer_gsl_vector df);
   public static class Fdf_gsl_vector_Pointer_DoublePointer_gsl_vector extends FunctionPointer {
       static { Loader.load(); }
       public    Fdf_gsl_vector_Pointer_DoublePointer_gsl_vector(Pointer p) { super(p); }
@@ -18664,14 +18551,9 @@ public static class gsl_multimin_function_fdf_struct extends Pointer {
       private native void allocate();
       public native void call(@Const gsl_vector x, Pointer params,DoublePointer f,gsl_vector df);
   }
-  public native Fdf_gsl_vector_Pointer_DoublePointer_gsl_vector fdf(); public native gsl_multimin_function_fdf_struct fdf(Fdf_gsl_vector_Pointer_DoublePointer_gsl_vector fdf);
-  public native @Cast("size_t") long n(); public native gsl_multimin_function_fdf_struct n(long n);
-  public native Pointer params(); public native gsl_multimin_function_fdf_struct params(Pointer params);
-}
-
-@Opaque public static class gsl_multimin_function_fdf extends Pointer {
-    public gsl_multimin_function_fdf() { }
-    public gsl_multimin_function_fdf(Pointer p) { super(p); }
+  public native Fdf_gsl_vector_Pointer_DoublePointer_gsl_vector fdf(); public native gsl_multimin_function_fdf fdf(Fdf_gsl_vector_Pointer_DoublePointer_gsl_vector fdf);
+  public native @Cast("size_t") long n(); public native gsl_multimin_function_fdf n(long n);
+  public native Pointer params(); public native gsl_multimin_function_fdf params(Pointer params);
 }
 
 // #define GSL_MULTIMIN_FN_EVAL_F(F,x) (*((F)->f))(x,(F)->params)
@@ -18945,15 +18827,15 @@ public static native double gsl_multimin_fdfminimizer_minimum(@Const gsl_multimi
 
 /* Definition of vector-valued functions with parameters based on gsl_vector */
 
-public static class gsl_multiroot_function_struct extends Pointer {
+@Name("gsl_multiroot_function_struct") public static class gsl_multiroot_function extends Pointer {
     static { Loader.load(); }
-    public gsl_multiroot_function_struct() { allocate(); }
-    public gsl_multiroot_function_struct(int size) { allocateArray(size); }
-    public gsl_multiroot_function_struct(Pointer p) { super(p); }
+    public gsl_multiroot_function() { allocate(); }
+    public gsl_multiroot_function(int size) { allocateArray(size); }
+    public gsl_multiroot_function(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_multiroot_function_struct position(int position) {
-        return (gsl_multiroot_function_struct)super.position(position);
+    @Override public gsl_multiroot_function position(int position) {
+        return (gsl_multiroot_function)super.position(position);
     }
 
   public static class F_gsl_vector_Pointer_gsl_vector extends FunctionPointer {
@@ -18963,14 +18845,9 @@ public static class gsl_multiroot_function_struct extends Pointer {
       private native void allocate();
       public native int call(@Const gsl_vector x, Pointer params, gsl_vector f);
   }
-  public native F_gsl_vector_Pointer_gsl_vector f(); public native gsl_multiroot_function_struct f(F_gsl_vector_Pointer_gsl_vector f);
-  public native @Cast("size_t") long n(); public native gsl_multiroot_function_struct n(long n);
-  public native Pointer params(); public native gsl_multiroot_function_struct params(Pointer params);
-}
-
-@Opaque public static class gsl_multiroot_function extends Pointer {
-    public gsl_multiroot_function() { }
-    public gsl_multiroot_function(Pointer p) { super(p); }
+  public native F_gsl_vector_Pointer_gsl_vector f(); public native gsl_multiroot_function f(F_gsl_vector_Pointer_gsl_vector f);
+  public native @Cast("size_t") long n(); public native gsl_multiroot_function n(long n);
+  public native Pointer params(); public native gsl_multiroot_function params(Pointer params);
 }
 
 // #define GSL_MULTIROOT_FN_EVAL(F,x,y) (*((F)->f))(x,(F)->params,(y))
@@ -19065,15 +18942,15 @@ public static native gsl_vector gsl_multiroot_fsolver_f(@Const gsl_multiroot_fso
 /* Definition of vector-valued functions and gradient with parameters
    based on gsl_vector */
 
-public static class gsl_multiroot_function_fdf_struct extends Pointer {
+@Name("gsl_multiroot_function_fdf_struct") public static class gsl_multiroot_function_fdf extends Pointer {
     static { Loader.load(); }
-    public gsl_multiroot_function_fdf_struct() { allocate(); }
-    public gsl_multiroot_function_fdf_struct(int size) { allocateArray(size); }
-    public gsl_multiroot_function_fdf_struct(Pointer p) { super(p); }
+    public gsl_multiroot_function_fdf() { allocate(); }
+    public gsl_multiroot_function_fdf(int size) { allocateArray(size); }
+    public gsl_multiroot_function_fdf(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_multiroot_function_fdf_struct position(int position) {
-        return (gsl_multiroot_function_fdf_struct)super.position(position);
+    @Override public gsl_multiroot_function_fdf position(int position) {
+        return (gsl_multiroot_function_fdf)super.position(position);
     }
 
   public static class F_gsl_vector_Pointer_gsl_vector extends FunctionPointer {
@@ -19083,7 +18960,7 @@ public static class gsl_multiroot_function_fdf_struct extends Pointer {
       private native void allocate();
       public native int call(@Const gsl_vector x, Pointer params, gsl_vector f);
   }
-  public native F_gsl_vector_Pointer_gsl_vector f(); public native gsl_multiroot_function_fdf_struct f(F_gsl_vector_Pointer_gsl_vector f);
+  public native F_gsl_vector_Pointer_gsl_vector f(); public native gsl_multiroot_function_fdf f(F_gsl_vector_Pointer_gsl_vector f);
   public static class Df_gsl_vector_Pointer_gsl_matrix extends FunctionPointer {
       static { Loader.load(); }
       public    Df_gsl_vector_Pointer_gsl_matrix(Pointer p) { super(p); }
@@ -19091,7 +18968,7 @@ public static class gsl_multiroot_function_fdf_struct extends Pointer {
       private native void allocate();
       public native int call(@Const gsl_vector x, Pointer params, gsl_matrix df);
   }
-  public native Df_gsl_vector_Pointer_gsl_matrix df(); public native gsl_multiroot_function_fdf_struct df(Df_gsl_vector_Pointer_gsl_matrix df);
+  public native Df_gsl_vector_Pointer_gsl_matrix df(); public native gsl_multiroot_function_fdf df(Df_gsl_vector_Pointer_gsl_matrix df);
   public static class Fdf_gsl_vector_Pointer_gsl_vector_gsl_matrix extends FunctionPointer {
       static { Loader.load(); }
       public    Fdf_gsl_vector_Pointer_gsl_vector_gsl_matrix(Pointer p) { super(p); }
@@ -19099,14 +18976,9 @@ public static class gsl_multiroot_function_fdf_struct extends Pointer {
       private native void allocate();
       public native int call(@Const gsl_vector x, Pointer params, gsl_vector f, gsl_matrix df);
   }
-  public native Fdf_gsl_vector_Pointer_gsl_vector_gsl_matrix fdf(); public native gsl_multiroot_function_fdf_struct fdf(Fdf_gsl_vector_Pointer_gsl_vector_gsl_matrix fdf);
-  public native @Cast("size_t") long n(); public native gsl_multiroot_function_fdf_struct n(long n);
-  public native Pointer params(); public native gsl_multiroot_function_fdf_struct params(Pointer params);
-}
-
-@Opaque public static class gsl_multiroot_function_fdf extends Pointer {
-    public gsl_multiroot_function_fdf() { }
-    public gsl_multiroot_function_fdf(Pointer p) { super(p); }
+  public native Fdf_gsl_vector_Pointer_gsl_vector_gsl_matrix fdf(); public native gsl_multiroot_function_fdf fdf(Fdf_gsl_vector_Pointer_gsl_vector_gsl_matrix fdf);
+  public native @Cast("size_t") long n(); public native gsl_multiroot_function_fdf n(long n);
+  public native Pointer params(); public native gsl_multiroot_function_fdf params(Pointer params);
 }
 
 // #define GSL_MULTIROOT_FN_EVAL_F(F,x,y) ((*((F)->f))(x,(F)->params,(y)))
@@ -19254,25 +19126,20 @@ public static native int gsl_multiroot_test_residual(@Const gsl_vector f, double
 // #else
 // #endif
 
-public static class gsl_multiset_struct extends Pointer {
+@Name("gsl_multiset_struct") public static class gsl_multiset extends Pointer {
     static { Loader.load(); }
-    public gsl_multiset_struct() { allocate(); }
-    public gsl_multiset_struct(int size) { allocateArray(size); }
-    public gsl_multiset_struct(Pointer p) { super(p); }
+    public gsl_multiset() { allocate(); }
+    public gsl_multiset(int size) { allocateArray(size); }
+    public gsl_multiset(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_multiset_struct position(int position) {
-        return (gsl_multiset_struct)super.position(position);
+    @Override public gsl_multiset position(int position) {
+        return (gsl_multiset)super.position(position);
     }
 
-  public native @Cast("size_t") long n(); public native gsl_multiset_struct n(long n);
-  public native @Cast("size_t") long k(); public native gsl_multiset_struct k(long k);
-  public native @Cast("size_t*") SizeTPointer data(); public native gsl_multiset_struct data(SizeTPointer data);
-}
-
-@Opaque public static class gsl_multiset extends Pointer {
-    public gsl_multiset() { }
-    public gsl_multiset(Pointer p) { super(p); }
+  public native @Cast("size_t") long n(); public native gsl_multiset n(long n);
+  public native @Cast("size_t") long k(); public native gsl_multiset k(long k);
+  public native @Cast("size_t*") SizeTPointer data(); public native gsl_multiset data(SizeTPointer data);
 }
 
 public static native gsl_multiset gsl_multiset_alloc(@Cast("const size_t") long n, @Cast("const size_t") long k);
@@ -19523,23 +19390,6 @@ public static native int gsl_ntuple_close(gsl_ntuple ntuple);
 
 /* Type definitions */
 
-@Opaque public static class gsl_odeiv2_step extends Pointer {
-    public gsl_odeiv2_step() { }
-    public gsl_odeiv2_step(Pointer p) { super(p); }
-}
-@Opaque public static class gsl_odeiv2_control extends Pointer {
-    public gsl_odeiv2_control() { }
-    public gsl_odeiv2_control(Pointer p) { super(p); }
-}
-@Opaque public static class gsl_odeiv2_evolve extends Pointer {
-    public gsl_odeiv2_evolve() { }
-    public gsl_odeiv2_evolve(Pointer p) { super(p); }
-}
-@Opaque public static class gsl_odeiv2_driver extends Pointer {
-    public gsl_odeiv2_driver() { }
-    public gsl_odeiv2_driver(Pointer p) { super(p); }
-}
-
 /* Stepper object
  *
  * Opaque object for stepping an ODE system from t to t+h.
@@ -19613,20 +19463,20 @@ public static class gsl_odeiv2_step_type extends Pointer {
   public native Free_Pointer free(); public native gsl_odeiv2_step_type free(Free_Pointer free);
 }
 
-public static class gsl_odeiv2_step_struct extends Pointer {
+@Name("gsl_odeiv2_step_struct") public static class gsl_odeiv2_step extends Pointer {
     static { Loader.load(); }
-    public gsl_odeiv2_step_struct() { allocate(); }
-    public gsl_odeiv2_step_struct(int size) { allocateArray(size); }
-    public gsl_odeiv2_step_struct(Pointer p) { super(p); }
+    public gsl_odeiv2_step() { allocate(); }
+    public gsl_odeiv2_step(int size) { allocateArray(size); }
+    public gsl_odeiv2_step(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_odeiv2_step_struct position(int position) {
-        return (gsl_odeiv2_step_struct)super.position(position);
+    @Override public gsl_odeiv2_step position(int position) {
+        return (gsl_odeiv2_step)super.position(position);
     }
 
   @MemberGetter public native @Const gsl_odeiv2_step_type type();
-  public native @Cast("size_t") long dimension(); public native gsl_odeiv2_step_struct dimension(long dimension);
-  public native Pointer state(); public native gsl_odeiv2_step_struct state(Pointer state);
+  public native @Cast("size_t") long dimension(); public native gsl_odeiv2_step dimension(long dimension);
+  public native Pointer state(); public native gsl_odeiv2_step state(Pointer state);
 }
 
 /* Available stepper types */
@@ -19730,19 +19580,19 @@ public static class gsl_odeiv2_control_type extends Pointer {
   public native Free_Pointer free(); public native gsl_odeiv2_control_type free(Free_Pointer free);
 }
 
-public static class gsl_odeiv2_control_struct extends Pointer {
+@Name("gsl_odeiv2_control_struct") public static class gsl_odeiv2_control extends Pointer {
     static { Loader.load(); }
-    public gsl_odeiv2_control_struct() { allocate(); }
-    public gsl_odeiv2_control_struct(int size) { allocateArray(size); }
-    public gsl_odeiv2_control_struct(Pointer p) { super(p); }
+    public gsl_odeiv2_control() { allocate(); }
+    public gsl_odeiv2_control(int size) { allocateArray(size); }
+    public gsl_odeiv2_control(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_odeiv2_control_struct position(int position) {
-        return (gsl_odeiv2_control_struct)super.position(position);
+    @Override public gsl_odeiv2_control position(int position) {
+        return (gsl_odeiv2_control)super.position(position);
     }
 
   @MemberGetter public native @Const gsl_odeiv2_control_type type();
-  public native Pointer state(); public native gsl_odeiv2_control_struct state(Pointer state);
+  public native Pointer state(); public native gsl_odeiv2_control state(Pointer state);
 }
 
 /* Possible return values for an hadjust() evolution method */
@@ -19839,25 +19689,25 @@ public static native gsl_odeiv2_control gsl_odeiv2_control_scaled_new(double eps
 
 /* Evolution object */
 
-public static class gsl_odeiv2_evolve_struct extends Pointer {
+@Name("gsl_odeiv2_evolve_struct") public static class gsl_odeiv2_evolve extends Pointer {
     static { Loader.load(); }
-    public gsl_odeiv2_evolve_struct() { allocate(); }
-    public gsl_odeiv2_evolve_struct(int size) { allocateArray(size); }
-    public gsl_odeiv2_evolve_struct(Pointer p) { super(p); }
+    public gsl_odeiv2_evolve() { allocate(); }
+    public gsl_odeiv2_evolve(int size) { allocateArray(size); }
+    public gsl_odeiv2_evolve(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_odeiv2_evolve_struct position(int position) {
-        return (gsl_odeiv2_evolve_struct)super.position(position);
+    @Override public gsl_odeiv2_evolve position(int position) {
+        return (gsl_odeiv2_evolve)super.position(position);
     }
 
-  public native @Cast("size_t") long dimension(); public native gsl_odeiv2_evolve_struct dimension(long dimension);
-  public native DoublePointer y0(); public native gsl_odeiv2_evolve_struct y0(DoublePointer y0);
-  public native DoublePointer yerr(); public native gsl_odeiv2_evolve_struct yerr(DoublePointer yerr);
-  public native DoublePointer dydt_in(); public native gsl_odeiv2_evolve_struct dydt_in(DoublePointer dydt_in);
-  public native DoublePointer dydt_out(); public native gsl_odeiv2_evolve_struct dydt_out(DoublePointer dydt_out);
-  public native double last_step(); public native gsl_odeiv2_evolve_struct last_step(double last_step);
-  public native @Cast("unsigned long int") long count(); public native gsl_odeiv2_evolve_struct count(long count);
-  public native @Cast("unsigned long int") long failed_steps(); public native gsl_odeiv2_evolve_struct failed_steps(long failed_steps);
+  public native @Cast("size_t") long dimension(); public native gsl_odeiv2_evolve dimension(long dimension);
+  public native DoublePointer y0(); public native gsl_odeiv2_evolve y0(DoublePointer y0);
+  public native DoublePointer yerr(); public native gsl_odeiv2_evolve yerr(DoublePointer yerr);
+  public native DoublePointer dydt_in(); public native gsl_odeiv2_evolve dydt_in(DoublePointer dydt_in);
+  public native DoublePointer dydt_out(); public native gsl_odeiv2_evolve dydt_out(DoublePointer dydt_out);
+  public native double last_step(); public native gsl_odeiv2_evolve last_step(double last_step);
+  public native @Cast("unsigned long int") long count(); public native gsl_odeiv2_evolve count(long count);
+  public native @Cast("unsigned long int") long failed_steps(); public native gsl_odeiv2_evolve failed_steps(long failed_steps);
   @MemberGetter public native @Const gsl_odeiv2_driver driver();
 }
 
@@ -19905,26 +19755,26 @@ public static native int gsl_odeiv2_evolve_set_driver(gsl_odeiv2_evolve e,
  * evolve objects. 
  */
 
-public static class gsl_odeiv2_driver_struct extends Pointer {
+@Name("gsl_odeiv2_driver_struct") public static class gsl_odeiv2_driver extends Pointer {
     static { Loader.load(); }
-    public gsl_odeiv2_driver_struct() { allocate(); }
-    public gsl_odeiv2_driver_struct(int size) { allocateArray(size); }
-    public gsl_odeiv2_driver_struct(Pointer p) { super(p); }
+    public gsl_odeiv2_driver() { allocate(); }
+    public gsl_odeiv2_driver(int size) { allocateArray(size); }
+    public gsl_odeiv2_driver(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_odeiv2_driver_struct position(int position) {
-        return (gsl_odeiv2_driver_struct)super.position(position);
+    @Override public gsl_odeiv2_driver position(int position) {
+        return (gsl_odeiv2_driver)super.position(position);
     }
 
   @MemberGetter public native @Const gsl_odeiv2_system sys(); /* ODE system */
-  public native gsl_odeiv2_step s(); public native gsl_odeiv2_driver_struct s(gsl_odeiv2_step s);           /* stepper object */
-  public native gsl_odeiv2_control c(); public native gsl_odeiv2_driver_struct c(gsl_odeiv2_control c);        /* control object */
-  public native gsl_odeiv2_evolve e(); public native gsl_odeiv2_driver_struct e(gsl_odeiv2_evolve e);         /* evolve object */
-  public native double h(); public native gsl_odeiv2_driver_struct h(double h);                     /* step size */
-  public native double hmin(); public native gsl_odeiv2_driver_struct hmin(double hmin);                  /* minimum step size allowed */
-  public native double hmax(); public native gsl_odeiv2_driver_struct hmax(double hmax);                  /* maximum step size allowed */
-  public native @Cast("unsigned long int") long n(); public native gsl_odeiv2_driver_struct n(long n);          /* number of steps taken */
-  public native @Cast("unsigned long int") long nmax(); public native gsl_odeiv2_driver_struct nmax(long nmax);       /* Maximum number of steps allowed */
+  public native gsl_odeiv2_step s(); public native gsl_odeiv2_driver s(gsl_odeiv2_step s);           /* stepper object */
+  public native gsl_odeiv2_control c(); public native gsl_odeiv2_driver c(gsl_odeiv2_control c);        /* control object */
+  public native gsl_odeiv2_evolve e(); public native gsl_odeiv2_driver e(gsl_odeiv2_evolve e);         /* evolve object */
+  public native double h(); public native gsl_odeiv2_driver h(double h);                     /* step size */
+  public native double hmin(); public native gsl_odeiv2_driver hmin(double hmin);                  /* minimum step size allowed */
+  public native double hmax(); public native gsl_odeiv2_driver hmax(double hmax);                  /* maximum step size allowed */
+  public native @Cast("unsigned long int") long n(); public native gsl_odeiv2_driver n(long n);          /* number of steps taken */
+  public native @Cast("unsigned long int") long nmax(); public native gsl_odeiv2_driver nmax(long nmax);       /* Maximum number of steps allowed */
 }
 
 /* Driver object methods */
@@ -21561,46 +21411,38 @@ public static native int gsl_permute_vector_char_inverse(@Const gsl_permutation 
 // #else
 // #endif
 
-public static class gsl_sf_result_struct extends Pointer {
+@Name("gsl_sf_result_struct") public static class gsl_sf_result extends Pointer {
     static { Loader.load(); }
-    public gsl_sf_result_struct() { allocate(); }
-    public gsl_sf_result_struct(int size) { allocateArray(size); }
-    public gsl_sf_result_struct(Pointer p) { super(p); }
+    public gsl_sf_result() { allocate(); }
+    public gsl_sf_result(int size) { allocateArray(size); }
+    public gsl_sf_result(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_sf_result_struct position(int position) {
-        return (gsl_sf_result_struct)super.position(position);
+    @Override public gsl_sf_result position(int position) {
+        return (gsl_sf_result)super.position(position);
     }
 
-  public native double val(); public native gsl_sf_result_struct val(double val);
-  public native double err(); public native gsl_sf_result_struct err(double err);
-}
-@Opaque public static class gsl_sf_result extends Pointer {
-    public gsl_sf_result() { }
-    public gsl_sf_result(Pointer p) { super(p); }
+  public native double val(); public native gsl_sf_result val(double val);
+  public native double err(); public native gsl_sf_result err(double err);
 }
 
 // #define GSL_SF_RESULT_SET(r,v,e) do { (r)->val=(v); (r)->err=(e); } while(0)
 
 
-public static class gsl_sf_result_e10_struct extends Pointer {
+@Name("gsl_sf_result_e10_struct") public static class gsl_sf_result_e10 extends Pointer {
     static { Loader.load(); }
-    public gsl_sf_result_e10_struct() { allocate(); }
-    public gsl_sf_result_e10_struct(int size) { allocateArray(size); }
-    public gsl_sf_result_e10_struct(Pointer p) { super(p); }
+    public gsl_sf_result_e10() { allocate(); }
+    public gsl_sf_result_e10(int size) { allocateArray(size); }
+    public gsl_sf_result_e10(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
-    @Override public gsl_sf_result_e10_struct position(int position) {
-        return (gsl_sf_result_e10_struct)super.position(position);
+    @Override public gsl_sf_result_e10 position(int position) {
+        return (gsl_sf_result_e10)super.position(position);
     }
 
-  public native double val(); public native gsl_sf_result_e10_struct val(double val);
-  public native double err(); public native gsl_sf_result_e10_struct err(double err);
-  public native int e10(); public native gsl_sf_result_e10_struct e10(int e10);
-}
-@Opaque public static class gsl_sf_result_e10 extends Pointer {
-    public gsl_sf_result_e10() { }
-    public gsl_sf_result_e10(Pointer p) { super(p); }
+  public native double val(); public native gsl_sf_result_e10 val(double val);
+  public native double err(); public native gsl_sf_result_e10 err(double err);
+  public native int e10(); public native gsl_sf_result_e10 e10(int e10);
 }
 
 
