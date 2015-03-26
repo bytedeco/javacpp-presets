@@ -402,6 +402,13 @@ public static native int avio_put_str16le(AVIOContext s, @Cast("const char*") By
 public static native int avio_put_str16le(AVIOContext s, String str);
 
 /**
+ * Convert an UTF-8 string to UTF-16BE and write it.
+ * @return number of bytes written.
+ */
+public static native int avio_put_str16be(AVIOContext s, @Cast("const char*") BytePointer str);
+public static native int avio_put_str16be(AVIOContext s, String str);
+
+/**
  * Passing this as the "whence" parameter to a seek function causes it to
  * return the filesize without seeking anywhere. Supporting this is optional.
  * If it is not supported then the seek function will return <0.
@@ -921,6 +928,10 @@ public static native int avio_read_to_bprint(AVIOContext h, AVBPrint pb, @Cast("
  *   be set to the timebase that the caller desires to use for this stream (note
  *   that the timebase actually used by the muxer can be different, as will be
  *   described later).
+ * - It is advised to manually initialize only the relevant fields in
+ *   AVCodecContext, rather than using @ref avcodec_copy_context() during
+ *   remuxing: there is no guarantee that the codec context values remain valid
+ *   for both input and output format contexts.
  * - The caller may fill in additional information, such as @ref
  *   AVFormatContext.metadata "global" or @ref AVStream.metadata "per-stream"
  *   metadata, @ref AVFormatContext.chapters "chapters", @ref
@@ -1421,6 +1432,8 @@ public static class AVOutputFormat extends Pointer {
         public native int call(AVFormatContext s, AVDeviceCapabilitiesQuery caps);
     }
     public native Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery free_device_capabilities(); public native AVOutputFormat free_device_capabilities(Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery free_device_capabilities);
+    /** default data codec */
+    public native @Cast("AVCodecID") int data_codec(); public native AVOutputFormat data_codec(int data_codec);
 }
 /**
  * @}
@@ -1516,8 +1529,8 @@ public static class AVInputFormat extends Pointer {
 
     /**
      * Read the format header and initialize the AVFormatContext
-     * structure. Return 0 if OK. Only used in raw format right
-     * now. 'avformat_new_stream' should be called to create new streams.
+     * structure. Return 0 if OK. 'avformat_new_stream' should be
+     * called to create new streams.
      */
     public static class Read_header_AVFormatContext extends FunctionPointer {
         static { Loader.load(); }
@@ -2582,7 +2595,6 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_NON_NEGATIVE = 1;
 /** Shift timestamps so that they start at 0 */
 public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
 
-
     /**
      * Transport stream id.
      * This will be moved into demuxer private options. Thus no API/ABI compatibility
@@ -2696,57 +2708,6 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
      */
     public native @Cast("char*") BytePointer format_whitelist(); public native AVFormatContext format_whitelist(BytePointer format_whitelist);
 
-    /*****************************************************************
-     * All fields below this line are not part of the public API. They
-     * may not be used outside of libavformat and can be changed and
-     * removed at will.
-     * New public fields should be added right above.
-     *****************************************************************
-     */
-
-    /**
-     * This buffer is only needed when packets were already buffered but
-     * not decoded, for example to get the codec parameters in MPEG
-     * streams.
-     */
-    public native AVPacketList packet_buffer(); public native AVFormatContext packet_buffer(AVPacketList packet_buffer);
-    public native AVPacketList packet_buffer_end(); public native AVFormatContext packet_buffer_end(AVPacketList packet_buffer_end);
-
-    /* av_seek_frame() support */
-    /** offset of the first packet */
-    public native long data_offset(); public native AVFormatContext data_offset(long data_offset);
-
-    /**
-     * Raw packets from the demuxer, prior to parsing and decoding.
-     * This buffer is used for buffering packets until the codec can
-     * be identified, as parsing cannot be done without knowing the
-     * codec.
-     */
-    public native AVPacketList raw_packet_buffer(); public native AVFormatContext raw_packet_buffer(AVPacketList raw_packet_buffer);
-    public native AVPacketList raw_packet_buffer_end(); public native AVFormatContext raw_packet_buffer_end(AVPacketList raw_packet_buffer_end);
-    /**
-     * Packets split by the parser get queued here.
-     */
-    public native AVPacketList parse_queue(); public native AVFormatContext parse_queue(AVPacketList parse_queue);
-    public native AVPacketList parse_queue_end(); public native AVFormatContext parse_queue_end(AVPacketList parse_queue_end);
-    /**
-     * Remaining size available for raw_packet_buffer, in bytes.
-     */
-public static final int RAW_PACKET_BUFFER_SIZE = 2500000;
-    public native int raw_packet_buffer_remaining_size(); public native AVFormatContext raw_packet_buffer_remaining_size(int raw_packet_buffer_remaining_size);
-
-    /**
-     * Offset to remap timestamps to be non-negative.
-     * Expressed in timebase units.
-     * @see AVStream.mux_ts_offset
-     */
-    public native long offset(); public native AVFormatContext offset(long offset);
-
-    /**
-     * Timebase for the timestamp offset.
-     */
-    public native @ByRef AVRational offset_timebase(); public native AVFormatContext offset_timebase(AVRational offset_timebase);
-
     /**
      * An opaque field for libavformat internal usage.
      * Must not be accessed in any way by callers.
@@ -2784,6 +2745,14 @@ public static final int RAW_PACKET_BUFFER_SIZE = 2500000;
      * Demuxing: Set by user via av_format_set_subtitle_codec (NO direct access).
      */
     public native AVCodec subtitle_codec(); public native AVFormatContext subtitle_codec(AVCodec subtitle_codec);
+
+    /**
+     * Forced data codec.
+     * This allows forcing a specific decoder, even when there are multiple with
+     * the same codec_id.
+     * Demuxing: Set by user via av_format_set_data_codec (NO direct access).
+     */
+    public native AVCodec data_codec(); public native AVFormatContext data_codec(AVCodec data_codec);
 
     /**
      * Number of bytes to be written as padding in a metadata header.
@@ -2836,6 +2805,12 @@ public static final int RAW_PACKET_BUFFER_SIZE = 2500000;
      * - demuxing: Set by user.
      */
     public native @Cast("uint8_t*") BytePointer dump_separator(); public native AVFormatContext dump_separator(BytePointer dump_separator);
+
+    /**
+     * Forced Data codec_id.
+     * Demuxing: Set by user.
+     */
+    public native @Cast("AVCodecID") int data_codec_id(); public native AVFormatContext data_codec_id(int data_codec_id);
 }
 
 public static native int av_format_get_probe_score(@Const AVFormatContext s);
@@ -2845,6 +2820,8 @@ public static native AVCodec av_format_get_audio_codec(@Const AVFormatContext s)
 public static native void av_format_set_audio_codec(AVFormatContext s, AVCodec c);
 public static native AVCodec av_format_get_subtitle_codec(@Const AVFormatContext s);
 public static native void av_format_set_subtitle_codec(AVFormatContext s, AVCodec c);
+public static native AVCodec av_format_get_data_codec(@Const AVFormatContext s);
+public static native void av_format_set_data_codec(AVFormatContext s, AVCodec c);
 public static native int av_format_get_metadata_header_padding(@Const AVFormatContext s);
 public static native void av_format_set_metadata_header_padding(AVFormatContext s, int c);
 public static native Pointer av_format_get_opaque(@Const AVFormatContext s);
@@ -3289,6 +3266,24 @@ public static native int av_seek_frame(AVFormatContext s, int stream_index, long
  *       ABI compatibility yet!
  */
 public static native int avformat_seek_file(AVFormatContext s, int stream_index, long min_ts, long ts, long max_ts, int flags);
+
+/**
+ * Discard all internally buffered data. This can be useful when dealing with
+ * discontinuities in the byte stream. Generally works only with formats that
+ * can resync. This includes headerless formats like MPEG-TS/TS but should also
+ * work with NUT, Ogg and in a limited way AVI for example.
+ *
+ * The set of streams, the detected duration, stream parameters and codecs do
+ * not change when calling this function. If you want a complete reset, it's
+ * better to open a new AVFormatContext.
+ *
+ * This does not flush the AVIOContext (s->pb). If necessary, call
+ * avio_flush(s->pb) before calling this function.
+ *
+ * @param s media file handle
+ * @return >=0 on success, error code otherwise
+ */
+public static native int avformat_flush(AVFormatContext s);
 
 /**
  * Start playing a network-based stream (e.g. RTSP stream) at the

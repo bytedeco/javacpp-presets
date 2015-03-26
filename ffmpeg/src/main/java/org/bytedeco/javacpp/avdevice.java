@@ -97,7 +97,7 @@ public static native void avdevice_register_all();
  * if d is non-NULL, returns the next registered input audio/video device after d
  * or NULL if d is the last one.
  */
-
+public static native AVInputFormat av_input_audio_device_next(AVInputFormat d);
 
 /**
  * Video input devices iterator.
@@ -106,7 +106,7 @@ public static native void avdevice_register_all();
  * if d is non-NULL, returns the next registered input audio/video device after d
  * or NULL if d is the last one.
  */
-
+public static native AVInputFormat av_input_video_device_next(AVInputFormat d);
 
 /**
  * Audio output devices iterator.
@@ -115,7 +115,7 @@ public static native void avdevice_register_all();
  * if d is non-NULL, returns the next registered output audio/video device after d
  * or NULL if d is the last one.
  */
-
+public static native AVOutputFormat av_output_audio_device_next(AVOutputFormat d);
 
 /**
  * Video output devices iterator.
@@ -124,7 +124,7 @@ public static native void avdevice_register_all();
  * if d is non-NULL, returns the next registered output audio/video device after d
  * or NULL if d is the last one.
  */
-
+public static native AVOutputFormat av_output_video_device_next(AVOutputFormat d);
 
 public static class AVDeviceRect extends Pointer {
     static { Loader.load(); }
@@ -605,6 +605,36 @@ public static native int avdevice_list_devices(AVFormatContext s, @ByPtrPtr AVDe
  */
 public static native void avdevice_free_list_devices(@Cast("AVDeviceInfoList**") PointerPointer device_list);
 public static native void avdevice_free_list_devices(@ByPtrPtr AVDeviceInfoList device_list);
+
+/**
+ * List devices.
+ *
+ * Returns available device names and their parameters.
+ * These are convinient wrappers for avdevice_list_devices().
+ * Device context is allocated and deallocated internally.
+ *
+ * @param device           device format. May be NULL if device name is set.
+ * @param device_name      device name. May be NULL if device format is set.
+ * @param device_options   An AVDictionary filled with device-private options. May be NULL.
+ *                         The same options must be passed later to avformat_write_header() for output
+ *                         devices or avformat_open_input() for input devices, or at any other place
+ *                         that affects device-private options.
+ * @param[out] device_list list of autodetected devices
+ * @return count of autodetected devices, negative on error.
+ * @note device argument takes precedence over device_name when both are set.
+ */
+public static native int avdevice_list_input_sources(AVInputFormat device, @Cast("const char*") BytePointer device_name,
+                                AVDictionary device_options, @Cast("AVDeviceInfoList**") PointerPointer device_list);
+public static native int avdevice_list_input_sources(AVInputFormat device, @Cast("const char*") BytePointer device_name,
+                                AVDictionary device_options, @ByPtrPtr AVDeviceInfoList device_list);
+public static native int avdevice_list_input_sources(AVInputFormat device, String device_name,
+                                AVDictionary device_options, @ByPtrPtr AVDeviceInfoList device_list);
+public static native int avdevice_list_output_sinks(AVOutputFormat device, @Cast("const char*") BytePointer device_name,
+                               AVDictionary device_options, @Cast("AVDeviceInfoList**") PointerPointer device_list);
+public static native int avdevice_list_output_sinks(AVOutputFormat device, @Cast("const char*") BytePointer device_name,
+                               AVDictionary device_options, @ByPtrPtr AVDeviceInfoList device_list);
+public static native int avdevice_list_output_sinks(AVOutputFormat device, String device_name,
+                               AVDictionary device_options, @ByPtrPtr AVDeviceInfoList device_list);
 
 // #endif /* AVDEVICE_AVDEVICE_H */
 

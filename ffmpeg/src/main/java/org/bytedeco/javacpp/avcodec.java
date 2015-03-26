@@ -307,7 +307,8 @@ public static final int
     AV_CODEC_ID_SANM_DEPRECATED = 182,
     AV_CODEC_ID_SGIRLE_DEPRECATED = 183,
     AV_CODEC_ID_MVC1_DEPRECATED = 184,
-    AV_CODEC_ID_MVC2_DEPRECATED = 185;
+    AV_CODEC_ID_MVC2_DEPRECATED = 185,
+    AV_CODEC_ID_HQX = 186;
 public static native @MemberGetter int AV_CODEC_ID_BRENDER_PIX();
 public static final int
 
@@ -472,9 +473,11 @@ public static final int
     AV_CODEC_ID_ADPCM_VIMA = AV_CODEC_ID_ADPCM_VIMA();
 public static native @MemberGetter int AV_CODEC_ID_VIMA();
 public static final int
+// #if FF_API_VIMA_DECODER
     AV_CODEC_ID_VIMA       = AV_CODEC_ID_VIMA();
 public static native @MemberGetter int AV_CODEC_ID_ADPCM_AFC();
 public static final int
+// #endif
     AV_CODEC_ID_ADPCM_AFC  = AV_CODEC_ID_ADPCM_AFC();
 public static native @MemberGetter int AV_CODEC_ID_ADPCM_IMA_OKI();
 public static final int
@@ -574,7 +577,8 @@ public static final int
     AV_CODEC_ID_TAK_DEPRECATED =  0x15000 + 63,
     AV_CODEC_ID_METASOUND =  0x15000 + 64,
     AV_CODEC_ID_PAF_AUDIO_DEPRECATED =  0x15000 + 65,
-    AV_CODEC_ID_ON2AVC =  0x15000 + 66;
+    AV_CODEC_ID_ON2AVC =  0x15000 + 66,
+    AV_CODEC_ID_DSS_SP =  0x15000 + 67;
 public static native @MemberGetter int AV_CODEC_ID_FFWAVESYNTH();
 public static final int
     AV_CODEC_ID_FFWAVESYNTH = AV_CODEC_ID_FFWAVESYNTH();
@@ -1278,6 +1282,12 @@ public static final int
     AV_PKT_DATA_STEREO3D = 6,
 
     /**
+     * This side data should be associated with an audio stream and corresponds
+     * to enum AVAudioServiceType.
+     */
+    AV_PKT_DATA_AUDIO_SERVICE_TYPE = 7,
+
+    /**
      * Recommmends skipping the specified number of samples
      * @code
      * u32le number of samples to skip from start of this packet
@@ -1546,13 +1556,12 @@ public static class AVCodecContext extends Pointer {
      */
     public native @Cast("unsigned int") int codec_tag(); public native AVCodecContext codec_tag(int codec_tag);
 
+// #if FF_API_STREAM_CODEC_TAG
     /**
-     * fourcc from the AVI stream header (LSB first, so "ABCD" -> ('D'<<24) + ('C'<<16) + ('B'<<8) + 'A').
-     * This is used to work around some encoder bugs.
-     * - encoding: unused
-     * - decoding: Set by user, will be converted to uppercase by libavcodec during init.
+     * @deprecated this field is unused
      */
-    public native @Cast("unsigned int") int stream_codec_tag(); public native AVCodecContext stream_codec_tag(int stream_codec_tag);
+    public native @Cast("unsigned int") @Deprecated int stream_codec_tag(); public native AVCodecContext stream_codec_tag(int stream_codec_tag);
+// #endif
 
     public native Pointer priv_data(); public native AVCodecContext priv_data(Pointer priv_data);
 
@@ -3383,6 +3392,13 @@ public static final int FF_LEVEL_UNKNOWN = -99;
     public native @ByRef AVRational framerate(); public native AVCodecContext framerate(AVRational framerate);
 
     /**
+     * Nominal unaccelerated pixel format, see AV_PIX_FMT_xxx.
+     * - encoding: unused.
+     * - decoding: Set by libavcodec before calling get_format()
+     */
+    public native @Cast("AVPixelFormat") int sw_pix_fmt(); public native AVCodecContext sw_pix_fmt(int sw_pix_fmt);
+
+    /**
      * Timebase in which pkt_dts/pts and AVPacket.dts/pts are.
      * Code outside libavcodec should access this field using:
      * av_codec_{get,set}_pkt_timebase(avctx)
@@ -3917,6 +3933,12 @@ public static class AVHWAccel extends Pointer {
 public static final int AV_HWACCEL_FLAG_IGNORE_LEVEL = (1 << 0);
 
 /**
+ * Hardware acceleration can output YUV pixel formats with a different chroma
+ * sampling than 4:2:0 and/or other than 8 bits per component.
+ */
+public static final int AV_HWACCEL_FLAG_ALLOW_HIGH_DEPTH = (1 << 1);
+
+/**
  * @}
  */
 
@@ -4001,7 +4023,7 @@ public static class AVSubtitleRect extends Pointer {
 
     /**
      * data+linesize for the bitmap of this subtitle.
-     * can be set for text/ass as well once they where rendered
+     * can be set for text/ass as well once they are rendered
      */
     public native @ByRef AVPicture pict(); public native AVSubtitleRect pict(AVPicture pict);
     public native @Cast("AVSubtitleType") int type(); public native AVSubtitleRect type(int type);
@@ -4195,6 +4217,9 @@ public static native @Deprecated void avcodec_free_frame(@ByPtrPtr AVFrame frame
  * retrieving a codec.
  *
  * @warning This function is not thread safe!
+ *
+ * @note Always call this function before using decoding routines (such as
+ * @ref avcodec_decode_video2()).
  *
  * @code
  * avcodec_register_all();
@@ -4669,6 +4694,9 @@ public static native @Deprecated int avcodec_decode_audio3(AVCodecContext avctx,
  *          larger than the actual read bytes because some optimized bitstream
  *          readers read 32 or 64 bits at once and could read over the end.
  *
+ * @note The AVCodecContext MUST have been opened with @ref avcodec_open2()
+ * before packets may be fed to the decoder.
+ *
  * @param      avctx the codec context
  * @param[out] frame The AVFrame in which to store decoded audio samples.
  *                   The decoder will allocate a buffer for the decoded frame by
@@ -4716,6 +4744,9 @@ public static native int avcodec_decode_audio4(AVCodecContext avctx, AVFrame fra
  * @note Codecs which have the CODEC_CAP_DELAY capability set have a delay
  * between input and output, these need to be fed with avpkt->data=NULL,
  * avpkt->size=0 at the end to return the remaining frames.
+ *
+ * @note The AVCodecContext MUST have been opened with @ref avcodec_open2()
+ * before packets may be fed to the decoder.
  *
  * @param avctx the codec context
  * @param[out] picture The AVFrame in which the decoded video frame will be stored.
@@ -4768,6 +4799,9 @@ public static native int avcodec_decode_video2(AVCodecContext avctx, AVFrame pic
  * with avpkt->data set to NULL and avpkt->size set to 0 until it stops
  * returning subtitles. It is safe to flush even those decoders that are not
  * marked with CODEC_CAP_DELAY, then no subtitles will be returned.
+ *
+ * @note The AVCodecContext MUST have been opened with @ref avcodec_open2()
+ * before packets may be fed to the decoder.
  *
  * @param avctx the codec context
  * @param[out] sub The Preallocated AVSubtitle in which the decoded subtitle will be stored,
@@ -4967,6 +5001,28 @@ public static final int PARSER_FLAG_USE_CODEC_TS =              0x1000;
      * For example, this corresponds to H.264 PicOrderCnt.
      */
     public native int output_picture_number(); public native AVCodecParserContext output_picture_number(int output_picture_number);
+
+    /**
+     * Dimensions of the decoded video intended for presentation.
+     */
+    public native int width(); public native AVCodecParserContext width(int width);
+    public native int height(); public native AVCodecParserContext height(int height);
+
+    /**
+     * Dimensions of the coded video.
+     */
+    public native int coded_width(); public native AVCodecParserContext coded_width(int coded_width);
+    public native int coded_height(); public native AVCodecParserContext coded_height(int coded_height);
+
+    /**
+     * The format of the coded data, corresponds to enum AVPixelFormat for video
+     * and for enum AVSampleFormat for audio.
+     *
+     * Note that a decoder can have considerable freedom in how exactly it
+     * decodes the data, so the format reported here might be different from the
+     * one returned by a decoder.
+     */
+    public native int format(); public native AVCodecParserContext format(int format);
 }
 
 public static class AVCodecParser extends Pointer {
@@ -4991,6 +5047,8 @@ public static class AVCodecParser extends Pointer {
         public native int call(AVCodecParserContext s);
     }
     public native Parser_init_AVCodecParserContext parser_init(); public native AVCodecParser parser_init(Parser_init_AVCodecParserContext parser_init);
+    /* This callback never returns an error, a negative value means that
+     * the frame start was in a previous packet. */
     public static class Parser_parse_AVCodecParserContext_AVCodecContext_PointerPointer_IntPointer_BytePointer_int extends FunctionPointer {
         static { Loader.load(); }
         public    Parser_parse_AVCodecParserContext_AVCodecContext_PointerPointer_IntPointer_BytePointer_int(Pointer p) { super(p); }

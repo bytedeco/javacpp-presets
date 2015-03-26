@@ -1538,7 +1538,7 @@ public static final int AV_LOG_MAX_OFFSET = (AV_LOG_DEBUG - AV_LOG_QUIET);
  * Requires 256color terminal support. Uses outside debugging is not
  * recommended.
  */
-// #define AV_LOG_C(x) (x << 8)
+// #define AV_LOG_C(x) ((x) << 8)
 
 /**
  * Send the specified message to the log if the level is less than or equal
@@ -2090,11 +2090,11 @@ public static final int AVPALETTE_COUNT = 256;
  * big-endian CPUs.
  *
  * @par
- * When the pixel format is palettized RGB (AV_PIX_FMT_PAL8), the palettized
+ * When the pixel format is palettized RGB32 (AV_PIX_FMT_PAL8), the palettized
  * image data is stored in AVFrame.data[0]. The palette is transported in
  * AVFrame.data[1], is 1024 bytes long (256 4-byte entries) and is
  * formatted the same as in AV_PIX_FMT_RGB32 described above (i.e., it is
- * also endian-specific). Note also that the individual RGB palette
+ * also endian-specific). Note also that the individual RGB32 palette
  * components stored in AVFrame.data[1] should be in the range 0..255.
  * This is important as many custom PAL8 video codecs that were designed
  * to run on the IBM VGA graphics adapter use 6-bit palette components.
@@ -2210,18 +2210,18 @@ public static final int
     AV_PIX_FMT_RGB565BE = 43,
     /** packed RGB 5:6:5, 16bpp, (msb)   5R 6G 5B(lsb), little-endian */
     AV_PIX_FMT_RGB565LE = 44,
-    /** packed RGB 5:5:5, 16bpp, (msb)1A 5R 5G 5B(lsb), big-endian, most significant bit to 0 */
+    /** packed RGB 5:5:5, 16bpp, (msb)1X 5R 5G 5B(lsb), big-endian   , X=unused/undefined */
     AV_PIX_FMT_RGB555BE = 45,
-    /** packed RGB 5:5:5, 16bpp, (msb)1A 5R 5G 5B(lsb), little-endian, most significant bit to 0 */
+    /** packed RGB 5:5:5, 16bpp, (msb)1X 5R 5G 5B(lsb), little-endian, X=unused/undefined */
     AV_PIX_FMT_RGB555LE = 46,
 
     /** packed BGR 5:6:5, 16bpp, (msb)   5B 6G 5R(lsb), big-endian */
     AV_PIX_FMT_BGR565BE = 47,
     /** packed BGR 5:6:5, 16bpp, (msb)   5B 6G 5R(lsb), little-endian */
     AV_PIX_FMT_BGR565LE = 48,
-    /** packed BGR 5:5:5, 16bpp, (msb)1A 5B 5G 5R(lsb), big-endian, most significant bit to 1 */
+    /** packed BGR 5:5:5, 16bpp, (msb)1X 5B 5G 5R(lsb), big-endian   , X=unused/undefined */
     AV_PIX_FMT_BGR555BE = 49,
-    /** packed BGR 5:5:5, 16bpp, (msb)1A 5B 5G 5R(lsb), little-endian, most significant bit to 1 */
+    /** packed BGR 5:5:5, 16bpp, (msb)1X 5B 5G 5R(lsb), little-endian, X=unused/undefined */
     AV_PIX_FMT_BGR555LE = 50,
 
     /** HW acceleration through VA API at motion compensation entry-point, Picture.data[3] contains a vaapi_render_state struct which contains macroblocks as well as various fields extracted from headers */
@@ -2250,13 +2250,13 @@ public static final int
     /** HW decoding through DXVA2, Picture.data[3] contains a LPDIRECT3DSURFACE9 pointer */
     AV_PIX_FMT_DXVA2_VLD = 61,
 
-    /** packed RGB 4:4:4, 16bpp, (msb)4A 4R 4G 4B(lsb), little-endian, most significant bits to 0 */
+    /** packed RGB 4:4:4, 16bpp, (msb)4X 4R 4G 4B(lsb), little-endian, X=unused/undefined */
     AV_PIX_FMT_RGB444LE = 62,
-    /** packed RGB 4:4:4, 16bpp, (msb)4A 4R 4G 4B(lsb), big-endian, most significant bits to 0 */
+    /** packed RGB 4:4:4, 16bpp, (msb)4X 4R 4G 4B(lsb), big-endian,    X=unused/undefined */
     AV_PIX_FMT_RGB444BE = 63,
-    /** packed BGR 4:4:4, 16bpp, (msb)4A 4B 4G 4R(lsb), little-endian, most significant bits to 1 */
+    /** packed BGR 4:4:4, 16bpp, (msb)4X 4B 4G 4R(lsb), little-endian, X=unused/undefined */
     AV_PIX_FMT_BGR444LE = 64,
-    /** packed BGR 4:4:4, 16bpp, (msb)4A 4B 4G 4R(lsb), big-endian, most significant bits to 1 */
+    /** packed BGR 4:4:4, 16bpp, (msb)4X 4B 4G 4R(lsb), big-endian,    X=unused/undefined */
     AV_PIX_FMT_BGR444BE = 65,
     /** 8bit gray, 8bit alpha */
     AV_PIX_FMT_YA8 = 66,
@@ -2407,6 +2407,22 @@ public static final int
     /** 16bit gray, 16bit alpha (little-endian) */
     AV_PIX_FMT_YA16LE =  AV_PIX_FMT_YA8 + 56,
 
+    /**
+     * duplicated pixel formats for compatibility with libav.
+     * FFmpeg supports these formats since May 3 2013 (commit e6d4e687558d08187e7a415a7725e4b1a416f782)
+     * Libav added them Jan 14 2015 with incompatible values (commit 0e6c7dfa650e8b0497bfa7a06394b7a462ddc33a)
+     */
+    /** planar GBRA 4:4:4:4 32bpp */
+    AV_PIX_FMT_GBRAP_LIBAV =  AV_PIX_FMT_YA8 + 57,
+    /** planar GBRA 4:4:4:4 64bpp, big-endian */
+    AV_PIX_FMT_GBRAP16BE_LIBAV =  AV_PIX_FMT_YA8 + 58,
+    /** planar GBRA 4:4:4:4 64bpp, little-endian */
+    AV_PIX_FMT_GBRAP16LE_LIBAV =  AV_PIX_FMT_YA8 + 59,
+    /**
+     *  HW acceleration through QSV, data[3] contains a pointer to the
+     *  mfxFrameSurface1 structure.
+     */
+    AV_PIX_FMT_QSV =  AV_PIX_FMT_YA8 + 60,
 
 // #ifndef AV_PIX_FMT_ABI_GIT_MASTER
     /** packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian */
@@ -2418,13 +2434,13 @@ public static final int
     /** packed RGBA 16:16:16:16, 64bpp, 16B, 16G, 16R, 16A, the 2-byte value for each R/G/B/A component is stored as little-endian */
     AV_PIX_FMT_BGRA64LE = 0x123 + 3,
 // #endif
-    /** packed RGB 8:8:8, 32bpp, 0RGB0RGB... */
+    /** packed RGB 8:8:8, 32bpp, XRGBXRGB...   X=unused/undefined */
     AV_PIX_FMT_0RGB= 0x123+4,
-    /** packed RGB 8:8:8, 32bpp, RGB0RGB0... */
+    /** packed RGB 8:8:8, 32bpp, RGBXRGBX...   X=unused/undefined */
     AV_PIX_FMT_RGB0 = 0x123+4 + 1,
-    /** packed BGR 8:8:8, 32bpp, 0BGR0BGR... */
+    /** packed BGR 8:8:8, 32bpp, XBGRXBGR...   X=unused/undefined */
     AV_PIX_FMT_0BGR = 0x123+4 + 2,
-    /** packed BGR 8:8:8, 32bpp, BGR0BGR0... */
+    /** packed BGR 8:8:8, 32bpp, BGRXBGRX...   X=unused/undefined */
     AV_PIX_FMT_BGR0 = 0x123+4 + 3,
     /** planar YUV 4:4:4 32bpp, (1 Cr & Cb sample per 1x1 Y & A samples) */
     AV_PIX_FMT_YUVA444P = 0x123+4 + 4,
@@ -2925,7 +2941,13 @@ public static final int
      * u8    reason for end   skip (0=padding silence, 1=convergence)
      * @endcode
      */
-    AV_FRAME_DATA_SKIP_SAMPLES = 9;
+    AV_FRAME_DATA_SKIP_SAMPLES = 9,
+
+    /**
+     * This side data must be associated with an audio frame and corresponds to
+     * enum AVAudioServiceType defined in avcodec.h.
+     */
+    AV_FRAME_DATA_AUDIO_SERVICE_TYPE = 10;
 
 /** enum AVActiveFormatDescription */
 public static final int
@@ -3247,7 +3269,9 @@ public static final int AV_NUM_DATA_POINTERS = 8;
 
     /**
      * AVBuffer references backing the data for this frame. If all elements of
-     * this array are NULL, then this frame is not reference counted.
+     * this array are NULL, then this frame is not reference counted. This array
+     * must be filled contiguously -- if buf[i] is non-NULL then buf[j] must
+     * also be non-NULL for all j < i.
      *
      * There may be at most one AVBuffer per data plane, so for video this array
      * always contains all the references. For planar audio with more than
@@ -5821,9 +5845,9 @@ public static class AVPixFmtDescriptor extends Pointer {
      * Parameters that describe how pixels are packed.
      * If the format has 2 or 4 components, then alpha is last.
      * If the format has 1 or 2 components, then luma is 0.
-     * If the format has 3 or 4 components,
-     * if the RGB flag is set then 0 is red, 1 is green and 2 is blue;
-     * otherwise 0 is luma, 1 is chroma-U and 2 is chroma-V.
+     * If the format has 3 or 4 components:
+     *   if the RGB flag is set then 0 is red, 1 is green and 2 is blue;
+     *   otherwise 0 is luma, 1 is chroma-U and 2 is chroma-V.
      */
     public native @ByRef AVComponentDescriptor comp(int i); public native AVPixFmtDescriptor comp(int i, AVComponentDescriptor comp);
     @MemberGetter public native AVComponentDescriptor comp();
@@ -5858,14 +5882,29 @@ public static final int AV_PIX_FMT_FLAG_PLANAR =       (1 << 4);
  * The pixel format contains RGB-like data (as opposed to YUV/grayscale).
  */
 public static final int AV_PIX_FMT_FLAG_RGB =          (1 << 5);
+
 /**
- * The pixel format is "pseudo-paletted". This means that FFmpeg treats it as
- * paletted internally, but the palette is generated by the decoder and is not
- * stored in the file.
+ * The pixel format is "pseudo-paletted". This means that it contains a
+ * fixed palette in the 2nd plane but the palette is fixed/constant for each
+ * PIX_FMT. This allows interpreting the data as if it was PAL8, which can
+ * in some cases be simpler. Or the data can be interpreted purely based on
+ * the pixel format without using the palette.
+ * An example of a pseudo-paletted format is AV_PIX_FMT_GRAY8
  */
 public static final int AV_PIX_FMT_FLAG_PSEUDOPAL =    (1 << 6);
+
 /**
- * The pixel format has an alpha channel.
+ * The pixel format has an alpha channel. This is set on all formats that
+ * support alpha in some way. The exception is AV_PIX_FMT_PAL8, which can
+ * carry alpha as part of the palette. Details are explained in the
+ * AVPixelFormat enum, and are also encoded in the corresponding
+ * AVPixFmtDescriptor.
+ *
+ * The alpha is always straight, never pre-multiplied.
+ *
+ * If a codec or a filter does not support alpha, it should set all alpha to
+ * opaque, or use the equivalent pixel formats without alpha component, e.g.
+ * AV_PIX_FMT_RGB0 (or AV_PIX_FMT_RGB24 etc.) instead of AV_PIX_FMT_RGBA.
  */
 public static final int AV_PIX_FMT_FLAG_ALPHA =        (1 << 7);
 
@@ -6051,8 +6090,6 @@ public static native int av_pix_fmt_get_chroma_sub_sample(@Cast("AVPixelFormat")
  * valid pixel format.
  */
 public static native int av_pix_fmt_count_planes(@Cast("AVPixelFormat") int pix_fmt);
-
-
 
 /**
  * Utility function to swap the endianness of a pixel format.
@@ -6319,7 +6356,7 @@ public static native void av_image_copy(@Cast("uint8_t**") @ByPtrPtr byte[] dst_
  * line sizes will be set.  If a planar format is specified, several
  * pointers will be set pointing to the different picture planes and
  * the line sizes of the different planes will be stored in the
- * lines_sizes array. Call with !src to get the required
+ * lines_sizes array. Call with src == NULL to get the required
  * size for the src buffer.
  *
  * To allocate the buffer and fill in the dst_data and dst_linesize in

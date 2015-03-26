@@ -35,7 +35,6 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value="windows", link="avdevice-56") })
 public class avdevice implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("av_input_audio_device_next", "av_input_video_device_next",
-                             "av_output_audio_device_next", "av_output_video_device_next", "av_device_capabilities").skip());
+        infoMap.put(new Info("av_device_capabilities").skip());
     }
 }
