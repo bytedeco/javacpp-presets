@@ -4071,6 +4071,13 @@ public static final int
   @MemberGetter public static native int kBatchSizeFieldNumber();
   public native @Cast("google::protobuf::uint32") int batch_size();
   public native void set_batch_size(@Cast("google::protobuf::uint32") int value);
+
+  // optional bool shuffle = 3 [default = false];
+  public native @Cast("bool") boolean has_shuffle();
+  public native void clear_shuffle();
+  @MemberGetter public static native int kShuffleFieldNumber();
+  public native @Cast("bool") boolean shuffle();
+  public native void set_shuffle(@Cast("bool") boolean value);
 }
 // -------------------------------------------------------------------
 
@@ -8532,6 +8539,14 @@ public static final int
 
 
 
+// optional bool shuffle = 3 [default = false];
+
+
+
+
+
+
+
 // -------------------------------------------------------------------
 
 // HDF5OutputParameter
@@ -10651,7 +10666,7 @@ public static final int
 // cudaMallocHost and cudaFree functions in order to create pinned memory.
 // However, those codes rely on the existence of a cuda GPU (I don't know
 // why that is a must since allocating memory should not be accessing the
-// GPU resorce, but it just creates an error as of Cuda 5.0) and will cause
+// GPU resource, but it just creates an error as of Cuda 5.0) and will cause
 // problem when running on a machine without GPU. Thus, we simply define
 // these two functions for safety and possible future change if the problem
 // of calling cuda functions disappears in a future version.

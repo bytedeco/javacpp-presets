@@ -156,7 +156,8 @@ public static final int
 	FREENECT_RAW_COLOR          =  1 << 4,
 	// arbitrary bitfields to support flag combination
 	FREENECT_MIRROR_DEPTH       =  1 << 16,
-	FREENECT_MIRROR_VIDEO       =  1 << 17;
+	FREENECT_MIRROR_VIDEO       =  1 << 17,
+	FREENECT_NEAR_MODE          =  1 << 18; // K4W only
 
 /** Possible values for setting each `freenect_flag` */
 /** enum freenect_flag_value */
@@ -1004,6 +1005,15 @@ public static native void freenect_camera_to_world(freenect_device dev,
 	int cx, int cy, int wz, DoubleBuffer wx, DoubleBuffer wy);
 public static native void freenect_camera_to_world(freenect_device dev,
 	int cx, int cy, int wz, double[] wx, double[] wy);
+
+// helper function to map one FREENECT_VIDEO_RGB image to a FREENECT_DEPTH_MM
+// image (inverse mapping to FREENECT_DEPTH_REGISTERED, which is depth -> RGB)
+public static native void freenect_map_rgb_to_depth( freenect_device dev,
+	@Cast("uint16_t*") ShortPointer depth_mm, @Cast("uint8_t*") BytePointer rgb_raw, @Cast("uint8_t*") BytePointer rgb_registered );
+public static native void freenect_map_rgb_to_depth( freenect_device dev,
+	@Cast("uint16_t*") ShortBuffer depth_mm, @Cast("uint8_t*") ByteBuffer rgb_raw, @Cast("uint8_t*") ByteBuffer rgb_registered );
+public static native void freenect_map_rgb_to_depth( freenect_device dev,
+	@Cast("uint16_t*") short[] depth_mm, @Cast("uint8_t*") byte[] rgb_raw, @Cast("uint8_t*") byte[] rgb_registered );
 
 // #ifdef __cplusplus
 // #endif

@@ -1,6 +1,6 @@
-diff -ruN libfreenect-0.5.1/CMakeLists.txt libfreenect-0.5.1-windows/CMakeLists.txt
---- libfreenect-0.5.1/CMakeLists.txt	2014-10-29 04:29:01.000000000 +0900
-+++ libfreenect-0.5.1-windows/CMakeLists.txt	2014-11-09 10:07:53.199475314 +0900
+diff -ruN libfreenect-0.5.2/CMakeLists.txt libfreenect-0.5.2-windows/CMakeLists.txt
+--- libfreenect-0.5.2/CMakeLists.txt	2015-01-27 12:01:37.000000000 +0900
++++ libfreenect-0.5.2-windows/CMakeLists.txt	2015-03-28 15:03:23.958859758 +0900
 @@ -127,7 +127,9 @@
  
  if(WIN32)
@@ -12,18 +12,62 @@ diff -ruN libfreenect-0.5.1/CMakeLists.txt libfreenect-0.5.1-windows/CMakeLists.
  
  # Add library project
  add_subdirectory (src)
-diff -ruN libfreenect-0.5.1/src/CMakeLists.txt libfreenect-0.5.1-windows/src/CMakeLists.txt
---- libfreenect-0.5.1/src/CMakeLists.txt	2014-10-29 04:29:01.000000000 +0900
-+++ libfreenect-0.5.1-windows/src/CMakeLists.txt	2014-11-09 10:09:49.083742261 +0900
-@@ -5,25 +5,11 @@
- include_directories (${CMAKE_CURRENT_SOURCE_DIR})
+diff -ruN libfreenect-0.5.2/platform/windows/unistd.h libfreenect-0.5.2-windows/platform/windows/unistd.h
+--- libfreenect-0.5.2/platform/windows/unistd.h	2015-01-27 12:01:37.000000000 +0900
++++ libfreenect-0.5.2-windows/platform/windows/unistd.h	2015-03-28 15:31:28.733268236 +0900
+@@ -37,15 +37,3 @@
+ typedef long ssize_t;
+ #endif // _SSIZE_T_DEFINED
  
+-
+-static void usleep(__int64 usec)
+-{
+-	// Convert to 100 nanosecond interval, negative for relative time.
+-	LARGE_INTEGER ft;
+-	ft.QuadPart = -(10 * usec);
+-
+-	HANDLE timer = CreateWaitableTimer(NULL, TRUE, NULL);
+-	SetWaitableTimer(timer, &ft, 0, NULL, NULL, 0);
+-	WaitForSingleObject(timer, INFINITE);
+-	CloseHandle(timer);
+-}
+diff -ruN libfreenect-0.5.2/src/cameras.c libfreenect-0.5.2-windows/src/cameras.c
+--- libfreenect-0.5.2/src/cameras.c	2015-01-27 12:01:37.000000000 +0900
++++ libfreenect-0.5.2-windows/src/cameras.c	2015-03-28 15:55:52.422251336 +0900
+@@ -868,12 +868,7 @@
+ 			return -1;
+ 	}
+ 
+-	const unsigned char depth_endpoint = 0x82;
+-	int packet_size = fnusb_get_max_iso_packet_size(&dev->usb_cam, depth_endpoint, DEPTH_PKTBUF);
+-
+-	FN_INFO("[Stream 70] Negotiated packet size %d\n", packet_size);
+-
+-	int res = fnusb_start_iso(&dev->usb_cam, &dev->depth_isoc, depth_process, depth_endpoint, NUM_XFERS, PKTS_PER_XFER, packet_size);
++	int res = fnusb_start_iso(&dev->usb_cam, &dev->depth_isoc, depth_process, 0x82, NUM_XFERS, PKTS_PER_XFER, DEPTH_PKTBUF);
+ 	if (res < 0)
+ 		return res;
+ 
+@@ -1018,12 +1013,7 @@
+ 			break;
+ 	}
+ 
+-	const unsigned char video_endpoint = 0x81;
+-	int packet_size = fnusb_get_max_iso_packet_size(&dev->usb_cam, video_endpoint, VIDEO_PKTBUF);
+-
+-	FN_INFO("[Stream 80] Negotiated packet size %d\n", packet_size);
+-
+-	int res = fnusb_start_iso(&dev->usb_cam, &dev->video_isoc, video_process, video_endpoint, NUM_XFERS, PKTS_PER_XFER, packet_size);
++	int res = fnusb_start_iso(&dev->usb_cam, &dev->video_isoc, video_process, 0x81, NUM_XFERS, PKTS_PER_XFER, VIDEO_PKTBUF);
+ 	if (res < 0)
+ 		return res;
+ 
+diff -ruN libfreenect-0.5.2/src/CMakeLists.txt libfreenect-0.5.2-windows/src/CMakeLists.txt
+--- libfreenect-0.5.2/src/CMakeLists.txt	2015-01-27 12:01:37.000000000 +0900
++++ libfreenect-0.5.2-windows/src/CMakeLists.txt	2015-03-28 15:45:47.386022719 +0900
+@@ -5,21 +5,10 @@
+ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
  include_directories(${LIBUSB_1_INCLUDE_DIRS})
--LIST(APPEND SRC core.c tilt.c cameras.c flags.c usb_libusb10.c registration.c audio.c loader.c)
-+LIST(APPEND SRC core.c tilt.c cameras.c flags.c usb_libusb10.c registration.c ../platform/windows/libusb10emu/libusb-1.0/failguard.cpp ../platform/windows/libusb10emu/libusb-1.0/libusbemu.cpp)
- IF(WIN32)
-   set_source_files_properties(${SRC} PROPERTIES LANGUAGE CXX)
- ENDIF(WIN32)
  
 -# Audio Firmware
 -include(FindPythonInterp)
@@ -39,10 +83,15 @@ diff -ruN libfreenect-0.5.1/src/CMakeLists.txt libfreenect-0.5.1-windows/src/CMa
 -  install (FILES "${CMAKE_CURRENT_BINARY_DIR}/../audios.bin" DESTINATION "${CMAKE_INSTALL_PREFIX}/share/libfreenect")
 -ENDIF()
 -
+-LIST(APPEND SRC core.c tilt.c cameras.c flags.c usb_libusb10.c registration.c audio.c loader.c)
++LIST(APPEND SRC core.c tilt.c cameras.c flags.c usb_libusb10.c registration.c ../platform/windows/libusb10emu/libusb-1.0/failguard.cpp ../platform/windows/libusb10emu/libusb-1.0/libusbemu.cpp)
++ IF(WIN32)
++   set_source_files_properties(${SRC} PROPERTIES LANGUAGE CXX)
++ ENDIF(WIN32)
+ 
  add_library (freenect SHARED ${SRC})
  set_target_properties ( freenect PROPERTIES
-   VERSION ${PROJECT_VER}
-@@ -31,16 +17,16 @@
+@@ -28,16 +17,16 @@
  install (TARGETS freenect
    DESTINATION "${PROJECT_LIBRARY_INSTALL_DIR}")
  
@@ -67,9 +116,9 @@ diff -ruN libfreenect-0.5.1/src/CMakeLists.txt libfreenect-0.5.1-windows/src/CMa
  
  # Install the header files
  install (FILES "../include/libfreenect.h" "../include/libfreenect_registration.h" "../include/libfreenect_audio.h"
-diff -ruN libfreenect-0.5.1/src/core.c libfreenect-0.5.1-windows/src/core.c
---- libfreenect-0.5.1/src/core.c	2014-10-29 04:29:01.000000000 +0900
-+++ libfreenect-0.5.1-windows/src/core.c	2014-11-09 10:07:53.241476136 +0900
+diff -ruN libfreenect-0.5.2/src/core.c libfreenect-0.5.2-windows/src/core.c
+--- libfreenect-0.5.2/src/core.c	2015-01-27 12:01:37.000000000 +0900
++++ libfreenect-0.5.2-windows/src/core.c	2015-03-28 15:41:40.275737520 +0900
 @@ -89,11 +89,6 @@
  			freenect_stop_video(dev);
  			freenect_stop_depth(dev);
@@ -82,9 +131,30 @@ diff -ruN libfreenect-0.5.1/src/core.c libfreenect-0.5.1-windows/src/core.c
  		dev = dev->next;
  	}
  	return res;
-diff -ruN libfreenect-0.5.1/src/usb_libusb10.c libfreenect-0.5.1-windows/src/usb_libusb10.c
---- libfreenect-0.5.1/src/usb_libusb10.c	2014-10-29 04:29:01.000000000 +0900
-+++ libfreenect-0.5.1-windows/src/usb_libusb10.c	2014-11-09 10:07:53.256476429 +0900
+diff -ruN libfreenect-0.5.2/src/flags.c libfreenect-0.5.2-windows/src/flags.c
+--- libfreenect-0.5.2/src/flags.c	2015-01-27 12:01:37.000000000 +0900
++++ libfreenect-0.5.2-windows/src/flags.c	2015-03-28 15:34:44.587228235 +0900
+@@ -63,7 +63,7 @@
+ 			int ret = write_register(dev, 0x0015, 0x0007);
+ 			if (ret < 0)
+ 				return ret;
+-			usleep(100000);
++			Sleep(10);
+ 			return write_register(dev, 0x02EF, 0x0000);
+ 		}
+ 		else
+@@ -71,7 +71,7 @@
+ 			int ret = write_register(dev, 0x0015, 0x001E);
+ 			if (ret < 0)
+ 				return ret;
+-			usleep(100000);
++			Sleep(10);
+ 			return write_register(dev, 0x02EF, 0x0190);
+ 		}
+ 	}
+diff -ruN libfreenect-0.5.2/src/usb_libusb10.c libfreenect-0.5.2-windows/src/usb_libusb10.c
+--- libfreenect-0.5.2/src/usb_libusb10.c	2015-01-27 12:01:37.000000000 +0900
++++ libfreenect-0.5.2-windows/src/usb_libusb10.c	2015-03-28 15:53:31.731336355 +0900
 @@ -68,42 +68,6 @@
  
  FN_INTERNAL libusb_device * fnusb_find_connected_audio_device(libusb_device * camera, libusb_device ** deviceList, int cnt)
@@ -128,7 +198,7 @@ diff -ruN libfreenect-0.5.1/src/usb_libusb10.c libfreenect-0.5.1-windows/src/usb
  	return NULL;
  }
  
-@@ -324,7 +288,6 @@
+@@ -327,7 +291,6 @@
  						{
  							// we need to do this as it is possible that the device was not closed properly in a previous session
  							// if we don't do this and the device wasn't closed properly - it can cause infinite hangs on LED and TILT functions
@@ -136,7 +206,7 @@ diff -ruN libfreenect-0.5.1/src/usb_libusb10.c libfreenect-0.5.1-windows/src/usb
  							libusb_close(audioHandle);
  
  							res = libusb_open(audioDevice, &audioHandle);
-@@ -437,169 +400,6 @@
+@@ -443,172 +406,6 @@
  				nr_mot++;
  			}
  		}
@@ -147,6 +217,9 @@ diff -ruN libfreenect-0.5.1/src/usb_libusb10.c libfreenect-0.5.1-windows/src/usb
 -			// If the index given by the user matches our audio index
 -			if (nr_audio == index)
 -			{
+-				dev->usb_audio.VID = desc.idVendor;
+-				dev->usb_audio.PID = desc.idProduct;
+-
 -				res = libusb_open (devs[i], &dev->usb_audio.dev);
 -				if (res < 0 || !dev->usb_audio.dev)
 -				{
@@ -306,7 +379,7 @@ diff -ruN libfreenect-0.5.1/src/usb_libusb10.c libfreenect-0.5.1-windows/src/usb
  	}
  
  	libusb_free_device_list (devs, 1);  // free the list, unref the devices in it
-@@ -670,7 +470,7 @@
+@@ -679,7 +476,7 @@
  	return 0;
  }
  
@@ -315,7 +388,27 @@ diff -ruN libfreenect-0.5.1/src/usb_libusb10.c libfreenect-0.5.1-windows/src/usb
  {
  	int i;
  	fnusb_isoc_stream *strm = (fnusb_isoc_stream*)xfer->user_data;
-@@ -832,13 +632,5 @@
+@@ -761,19 +558,6 @@
+ 	}
+ }
+ 
+-FN_INTERNAL int fnusb_get_max_iso_packet_size(fnusb_dev *dev, unsigned char endpoint, int default_size)
+-{
+-	freenect_context *ctx = dev->parent->parent;
+-
+-	int size = libusb_get_max_iso_packet_size(libusb_get_device(dev->dev), endpoint);
+-	if (size <= 0)
+-	{
+-		FN_WARNING("libusb_get_max_iso_packet_size() returned %d; using default %d\n", size, default_size);
+-		size = default_size;
+-	}
+-	return size;
+-}
+-
+ FN_INTERNAL int fnusb_start_iso(fnusb_dev *dev, fnusb_isoc_stream *strm, fnusb_iso_cb cb, unsigned char endpoint, int xfers, int pkts, int len)
+ {
+ 	freenect_context *ctx = dev->parent->parent;
+@@ -862,13 +646,5 @@
  
  FN_INTERNAL int fnusb_num_interfaces(fnusb_dev *dev) {
  	int retval = 0;
@@ -329,10 +422,30 @@ diff -ruN libfreenect-0.5.1/src/usb_libusb10.c libfreenect-0.5.1-windows/src/usb
 -	libusb_free_config_descriptor(config);
  	return retval;
  }
-diff -ruN libfreenect-0.5.1/wrappers/c_sync/CMakeLists.txt libfreenect-0.5.1-windows/wrappers/c_sync/CMakeLists.txt
---- libfreenect-0.5.1/wrappers/c_sync/CMakeLists.txt	2014-10-29 04:29:01.000000000 +0900
-+++ libfreenect-0.5.1-windows/wrappers/c_sync/CMakeLists.txt	2014-11-09 10:07:53.272476742 +0900
-@@ -9,19 +9,19 @@
+diff -ruN libfreenect-0.5.2/src/usb_libusb10.h libfreenect-0.5.2-windows/src/usb_libusb10.h
+--- libfreenect-0.5.2/src/usb_libusb10.h	2015-01-27 12:01:37.000000000 +0900
++++ libfreenect-0.5.2-windows/src/usb_libusb10.h	2015-03-28 15:55:03.141221806 +0900
+@@ -87,7 +87,6 @@
+ 
+ int fnusb_start_iso(fnusb_dev *dev, fnusb_isoc_stream *strm, fnusb_iso_cb cb, unsigned char endpoint, int xfers, int pkts, int len);
+ int fnusb_stop_iso(fnusb_dev *dev, fnusb_isoc_stream *strm);
+-int fnusb_get_max_iso_packet_size(fnusb_dev *dev, unsigned char endpoint, int default_size);
+ 
+ int fnusb_control(fnusb_dev *dev, uint8_t bmRequestType, uint8_t bRequest, uint16_t wValue, uint16_t wIndex, uint8_t *data, uint16_t wLength);
+ int fnusb_bulk(fnusb_dev *dev, uint8_t endpoint, uint8_t *data, int len, int *transferred);
+diff -ruN libfreenect-0.5.2/wrappers/c_sync/CMakeLists.txt libfreenect-0.5.2-windows/wrappers/c_sync/CMakeLists.txt
+--- libfreenect-0.5.2/wrappers/c_sync/CMakeLists.txt	2015-01-27 12:01:37.000000000 +0900
++++ libfreenect-0.5.2-windows/wrappers/c_sync/CMakeLists.txt	2015-03-28 15:58:17.594155809 +0900
+@@ -1,24 +1,28 @@
+ ######################################################################################
+ # C Synchronous Interface
+ ######################################################################################
++if (WIN32)
++  set_source_files_properties(libfreenect_sync.c PROPERTIES LANGUAGE CXX)
++  set(THREADS_USE_PTHREADS_WIN32 true)
++endif()
+ 
+ set(THREADS_USE_PTHREADS_WIN32 true)
  find_package(Threads REQUIRED)
  include_directories(${THREADS_PTHREADS_INCLUDE_DIR})
  

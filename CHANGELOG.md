@@ -10,7 +10,7 @@
  * Disable iconv, XCB, and SDL for more portables builds of FFmpeg, but enable `x11grab` and `avfoundation` to allow screen capture ([issue #39](https://github.com/bytedeco/javacpp-presets/issues/39))
  * Avoid versioning of Leptonica and Tesseract libraries, preventing them from working on Android ([issue #38](https://github.com/bytedeco/javacpp-presets/issues/38))
  * Add x265 in the `cppbuild.sh` script for FFmpeg, thanks to Mark Bolstad ([issue bytedeco/javacv#41](https://github.com/bytedeco/javacv/issues/41))
- * Upgrade presets for OpenCV 2.4.11, FFmpeg 2.6.1, OpenSSL 1.0.2a
+ * Upgrade presets for OpenCV 2.4.11, FFmpeg 2.6.1, OpenSSL 1.0.2a, FlyCapture 2.7.3.19, libdc1394 2.2.3, libfreenect 0.5.2, LLVM 3.6.0
  * Switch from `IntPointer` to `BoolPointer` for the `BOOL*` pointer type of Leptonica ([issue #36](https://github.com/bytedeco/javacpp-presets/issues/36))
  * Add `preload` for `gif`, `jpeg`, `png`, `tiff`, and `webp` libraries in presets for Leptonica ([issue #36](https://github.com/bytedeco/javacpp-presets/issues/36))
  * Include missing `ltrresultiterator.h` header file in the presets for Tesseract ([issue #36](https://github.com/bytedeco/javacpp-presets/issues/36))

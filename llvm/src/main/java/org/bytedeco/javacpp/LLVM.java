@@ -61,6 +61,29 @@ public class LLVM extends org.bytedeco.javacpp.presets.LLVM {
 public static native @Cast("LLVMBool") int LLVMLoadLibraryPermanently(@Cast("const char*") BytePointer Filename);
 public static native @Cast("LLVMBool") int LLVMLoadLibraryPermanently(String Filename);
 
+/**
+ * This function parses the given arguments using the LLVM command line parser.
+ * Note that the only stable thing about this function is its signature; you
+ * cannot rely on any particular set of command line arguments being interpreted
+ * the same way across LLVM versions.
+ *
+ * @see llvm::cl::ParseCommandLineOptions()
+ */
+public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") PointerPointer argv,
+                                 @Cast("const char*") BytePointer Overview);
+public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") @ByPtrPtr BytePointer argv,
+                                 @Cast("const char*") BytePointer Overview);
+public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") @ByPtrPtr ByteBuffer argv,
+                                 String Overview);
+public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") @ByPtrPtr byte[] argv,
+                                 @Cast("const char*") BytePointer Overview);
+public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") @ByPtrPtr BytePointer argv,
+                                 String Overview);
+public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") @ByPtrPtr ByteBuffer argv,
+                                 @Cast("const char*") BytePointer Overview);
+public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") @ByPtrPtr byte[] argv,
+                                 String Overview);
+
 // #ifdef __cplusplus
 // #endif
 
@@ -772,6 +795,10 @@ public static native LLVMModuleRef LLVMModuleCreateWithNameInContext(@Cast("cons
                                                 LLVMContextRef C);
 public static native LLVMModuleRef LLVMModuleCreateWithNameInContext(String ModuleID,
                                                 LLVMContextRef C);
+/**
+ * Return an exact copy of the specified module.
+ */
+public static native LLVMModuleRef LLVMCloneModule(LLVMModuleRef M);
 
 /**
  * Destroy a module instance.
@@ -1400,8 +1427,6 @@ public static native LLVMTypeRef LLVMX86MMXType();
 //   macro(Argument)
 //   macro(BasicBlock)
 //   macro(InlineAsm)
-//   macro(MDNode)
-//   macro(MDString)
 //   macro(User)
 //     macro(Constant)
 //       macro(BlockAddress)
@@ -1552,8 +1577,6 @@ public static native @Cast("LLVMBool") int LLVMIsUndef(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAArgument(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsABasicBlock(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAInlineAsm(LLVMValueRef Val);
-public static native LLVMValueRef LLVMIsAMDNode(LLVMValueRef Val);
-public static native LLVMValueRef LLVMIsAMDString(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAUser(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAConstant(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsABlockAddress(LLVMValueRef Val);
@@ -1623,6 +1646,9 @@ public static native LLVMValueRef LLVMIsAZExtInst(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAExtractValueInst(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsALoadInst(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAVAArgInst(LLVMValueRef Val);
+
+public static native LLVMValueRef LLVMIsAMDNode(LLVMValueRef Val);
+public static native LLVMValueRef LLVMIsAMDString(LLVMValueRef Val);
 
 /**
  * @}
@@ -1697,6 +1723,13 @@ public static native LLVMValueRef LLVMGetUsedValue(LLVMUseRef U);
  * @see llvm::User::getOperand()
  */
 public static native LLVMValueRef LLVMGetOperand(LLVMValueRef Val, @Cast("unsigned") int Index);
+
+/**
+ * Obtain the use of an operand at a specific index in a llvm::User value.
+ *
+ * @see llvm::User::getOperandUse()
+ */
+public static native LLVMUseRef LLVMGetOperandUse(LLVMValueRef Val, @Cast("unsigned") int Index);
 
 /**
  * Set an operand at a specific index in a llvm::User value.
@@ -1872,6 +1905,16 @@ public static native @Cast("unsigned long long") long LLVMConstIntGetZExtValue(L
 public static native long LLVMConstIntGetSExtValue(LLVMValueRef ConstantVal);
 
 /**
+ * Obtain the double value for an floating point constant value.
+ * losesInfo indicates if some precision was lost in the conversion.
+ *
+ * @see llvm::ConstantFP::getDoubleValue
+ */
+public static native double LLVMConstRealGetDouble(LLVMValueRef ConstantVal, @Cast("LLVMBool*") IntPointer losesInfo);
+public static native double LLVMConstRealGetDouble(LLVMValueRef ConstantVal, @Cast("LLVMBool*") IntBuffer losesInfo);
+public static native double LLVMConstRealGetDouble(LLVMValueRef ConstantVal, @Cast("LLVMBool*") int[] losesInfo);
+
+/**
  * @}
  */
 
@@ -1906,6 +1949,20 @@ public static native LLVMValueRef LLVMConstString(@Cast("const char*") BytePoint
                              @Cast("LLVMBool") int DontNullTerminate);
 public static native LLVMValueRef LLVMConstString(String Str, @Cast("unsigned") int Length,
                              @Cast("LLVMBool") int DontNullTerminate);
+
+/**
+ * Returns true if the specified constant is an array of i8.
+ *
+ * @see ConstantDataSequential::getAsString()
+ */
+public static native @Cast("LLVMBool") int LLVMIsConstantString(LLVMValueRef c);
+
+/**
+ * Get the given constant data sequential as a string.
+ *
+ * @see ConstantDataSequential::getAsString()
+ */
+public static native @Cast("const char*") BytePointer LLVMGetAsString(LLVMValueRef c, @Cast("size_t*") SizeTPointer out);
 
 /**
  * Create an anonymous ConstantStruct with the specified values.
@@ -1953,6 +2010,13 @@ public static native LLVMValueRef LLVMConstNamedStruct(LLVMTypeRef StructTy,
 public static native LLVMValueRef LLVMConstNamedStruct(LLVMTypeRef StructTy,
                                   @Cast("LLVMValueRef*") PointerPointer ConstantVals,
                                   @Cast("unsigned") int Count);
+
+/**
+ * Get an element at specified index as a constant.
+ *
+ * @see ConstantDataSequential::getElementAsConstant()
+ */
+public static native LLVMValueRef LLVMGetElementAsConstant(LLVMValueRef c, @Cast("unsigned") int idx);
 
 /**
  * Create a ConstantVector from values.
@@ -2775,6 +2839,26 @@ public static native @Cast("LLVMOpcode") int LLVMGetInstructionOpcode(LLVMValueR
 public static native @Cast("LLVMIntPredicate") int LLVMGetICmpPredicate(LLVMValueRef Inst);
 
 /**
+ * Obtain the float predicate of an instruction.
+ *
+ * This is only valid for instructions that correspond to llvm::FCmpInst
+ * or llvm::ConstantExpr whose opcode is llvm::Instruction::FCmp.
+ *
+ * @see llvm::FCmpInst::getPredicate()
+ */
+public static native @Cast("LLVMRealPredicate") int LLVMGetFCmpPredicate(LLVMValueRef Inst);
+
+/**
+ * Create a copy of 'this' instruction that is identical in all ways
+ * except the following:
+ *   * The instruction has no parent
+ *   * The instruction has no name
+ *
+ * @see llvm::Instruction::clone()
+ */
+public static native LLVMValueRef LLVMInstructionClone(LLVMValueRef Inst);
+
+/**
  * @defgroup LLVMCCoreValueInstructionCall Call Sites and Invocations
  *
  * Functions in this group apply to instructions that refer to call
@@ -2835,6 +2919,63 @@ public static native void LLVMSetTailCall(LLVMValueRef CallInst, @Cast("LLVMBool
  */
 
 /**
+ * @defgroup LLVMCCoreValueInstructionTerminator Terminators
+ *
+ * Functions in this group only apply to instructions that map to
+ * llvm::TerminatorInst instances.
+ *
+ * @{
+ */
+
+/**
+ * Return the number of successors that this terminator has.
+ *
+ * @see llvm::TerminatorInst::getNumSuccessors
+ */
+public static native @Cast("unsigned") int LLVMGetNumSuccessors(LLVMValueRef Term);
+
+/**
+ * Return the specified successor.
+ *
+ * @see llvm::TerminatorInst::getSuccessor
+ */
+public static native LLVMBasicBlockRef LLVMGetSuccessor(LLVMValueRef Term, @Cast("unsigned") int i);
+
+/**
+ * Update the specified successor to point at the provided block.
+ *
+ * @see llvm::TerminatorInst::setSuccessor
+ */
+public static native void LLVMSetSuccessor(LLVMValueRef Term, @Cast("unsigned") int i, LLVMBasicBlockRef block);
+
+/**
+ * Return if a branch is conditional.
+ *
+ * This only works on llvm::BranchInst instructions.
+ *
+ * @see llvm::BranchInst::isConditional
+ */
+public static native @Cast("LLVMBool") int LLVMIsConditional(LLVMValueRef Branch);
+
+/**
+ * Return the condition of a branch instruction.
+ *
+ * This only works on llvm::BranchInst instructions.
+ *
+ * @see llvm::BranchInst::getCondition
+ */
+public static native LLVMValueRef LLVMGetCondition(LLVMValueRef Branch);
+
+/**
+ * Set the condition of a branch instruction.
+ *
+ * This only works on llvm::BranchInst instructions.
+ *
+ * @see llvm::BranchInst::setCondition
+ */
+public static native void LLVMSetCondition(LLVMValueRef Branch, LLVMValueRef Cond);
+
+/**
  * Obtain the default destination basic block of a switch instruction.
  *
  * This only works on llvm::SwitchInst instructions.
@@ -2842,6 +2983,10 @@ public static native void LLVMSetTailCall(LLVMValueRef CallInst, @Cast("LLVMBool
  * @see llvm::SwitchInst::getDefaultDest()
  */
 public static native LLVMBasicBlockRef LLVMGetSwitchDefaultDest(LLVMValueRef SwitchInstr);
+
+/**
+ * @}
+ */
 
 /**
  * @defgroup LLVMCCoreValueInstructionPHINode PHI Nodes
@@ -3576,8 +3721,8 @@ public static native void LLVMViewFunctionCFGOnly(LLVMValueRef Fn);
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
 
-// #ifndef LLVM_C_BITCODEREADER_H
-// #define LLVM_C_BITCODEREADER_H
+// #ifndef LLVM_C_BITREADER_H
+// #define LLVM_C_BITREADER_H
 
 // #include "llvm-c/Core.h"
 
@@ -3762,8 +3907,8 @@ public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleProvider(LLVMMemo
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
 
-// #ifndef LLVM_C_BITCODEWRITER_H
-// #define LLVM_C_BITCODEWRITER_H
+// #ifndef LLVM_C_BITWRITER_H
+// #define LLVM_C_BITWRITER_H
 
 // #include "llvm-c/Core.h"
 
@@ -3790,6 +3935,9 @@ public static native int LLVMWriteBitcodeToFD(LLVMModuleRef M, int FD, int Shoul
 /** Deprecated for LLVMWriteBitcodeToFD. Writes a module to an open file
     descriptor. Returns 0 on success. Closes the Handle. */
 public static native int LLVMWriteBitcodeToFileHandle(LLVMModuleRef M, int Handle);
+
+/** Writes a module to a new memory buffer and returns it. */
+public static native LLVMMemoryBufferRef LLVMWriteBitcodeToMemoryBuffer(LLVMModuleRef M);
 
 /**
  * @}
@@ -4013,8 +4161,8 @@ public static final int LLVMDisassembler_ReferenceType_DeMangled_Name = 9;
  * by passing a block of information in the DisInfo parameter and specifying the
  * TagType and callback functions as described above.  These can all be passed
  * as NULL.  If successful, this returns a disassembler context.  If not, it
- * returns NULL. This function is equivalent to calling LLVMCreateDisasmCPU()
- * with an empty CPU name.
+ * returns NULL. This function is equivalent to calling
+ * LLVMCreateDisasmCPUFeatures() with an empty CPU name and feature set.
  */
 public static native LLVMDisasmContextRef LLVMCreateDisasm(@Cast("const char*") BytePointer TripleName, Pointer DisInfo,
                                       int TagType, LLVMOpInfoCallback GetOpInfo,
@@ -4028,7 +4176,8 @@ public static native LLVMDisasmContextRef LLVMCreateDisasm(String TripleName, Po
  * disassembly is supported by passing a block of information in the DisInfo
  * parameter and specifying the TagType and callback functions as described
  * above.  These can all be passed * as NULL.  If successful, this returns a
- * disassembler context.  If not, it returns NULL.
+ * disassembler context.  If not, it returns NULL. This function is equivalent
+ * to calling LLVMCreateDisasmCPUFeatures() with an empty feature set.
  */
 public static native LLVMDisasmContextRef LLVMCreateDisasmCPU(@Cast("const char*") BytePointer Triple, @Cast("const char*") BytePointer CPU,
                                          Pointer DisInfo, int TagType,
@@ -4038,6 +4187,22 @@ public static native LLVMDisasmContextRef LLVMCreateDisasmCPU(String Triple, Str
                                          Pointer DisInfo, int TagType,
                                          LLVMOpInfoCallback GetOpInfo,
                                          LLVMSymbolLookupCallback SymbolLookUp);
+
+/**
+ * Create a disassembler for the TripleName, a specific CPU and specific feature
+ * string.  Symbolic disassembly is supported by passing a block of information
+ * in the DisInfo parameter and specifying the TagType and callback functions as
+ * described above.  These can all be passed * as NULL.  If successful, this
+ * returns a disassembler context.  If not, it returns NULL.
+ */
+public static native LLVMDisasmContextRef LLVMCreateDisasmCPUFeatures(@Cast("const char*") BytePointer Triple, @Cast("const char*") BytePointer CPU,
+                            @Cast("const char*") BytePointer Features, Pointer DisInfo, int TagType,
+                            LLVMOpInfoCallback GetOpInfo,
+                            LLVMSymbolLookupCallback SymbolLookUp);
+public static native LLVMDisasmContextRef LLVMCreateDisasmCPUFeatures(String Triple, String CPU,
+                            String Features, Pointer DisInfo, int TagType,
+                            LLVMOpInfoCallback GetOpInfo,
+                            LLVMSymbolLookupCallback SymbolLookUp);
 
 /**
  * Set the disassembler's options.  Returns 1 if it can set the Options and 0
@@ -4108,8 +4273,8 @@ public static native @Cast("size_t") long LLVMDisasmInstruction(LLVMDisasmContex
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
 
-// #ifndef LLVM_C_INITIALIZEPASSES_H
-// #define LLVM_C_INITIALIZEPASSES_H
+// #ifndef LLVM_C_INITIALIZATION_H
+// #define LLVM_C_INITIALIZATION_H
 
 // #include "llvm-c/Core.h"
 
@@ -4230,6 +4395,7 @@ public static native @Cast("LLVMBool") int LLVMParseIRInContext(LLVMContextRef C
 // #endif
 
 
+/* Note: LLVMLinkerPreserveSource has no effect. */
 /** enum LLVMLinkerMode */
 public static final int
   LLVMLinkerDestroySource = 0, /* Allow source module to be destroyed. */
@@ -4369,7 +4535,7 @@ public static native @Cast("LLVMBool") int LLVMLinkModules(LLVMModuleRef Dest, L
  * @{
  */
 
-public static final int LTO_API_VERSION = 10;
+public static final int LTO_API_VERSION = 11;
 
 /**
  * \since prior to LTO_API_VERSION=3
@@ -4509,6 +4675,37 @@ public static native lto_module_t lto_module_create_from_memory_with_path(@Const
                                         @Cast("const char*") BytePointer path);
 public static native lto_module_t lto_module_create_from_memory_with_path(@Const Pointer mem, @Cast("size_t") long length,
                                         String path);
+
+/**
+ * \brief Loads an object file in its own context.
+ *
+ * Loads an object file in its own LLVMContext.  This function call is
+ * thread-safe.  However, modules created this way should not be merged into an
+ * lto_code_gen_t using \a lto_codegen_add_module().
+ *
+ * Returns NULL on error (check lto_get_error_message() for details).
+ *
+ * \since LTO_API_VERSION=11
+ */
+public static native lto_module_t lto_module_create_in_local_context(@Const Pointer mem, @Cast("size_t") long length,
+                                   @Cast("const char*") BytePointer path);
+public static native lto_module_t lto_module_create_in_local_context(@Const Pointer mem, @Cast("size_t") long length,
+                                   String path);
+
+/**
+ * \brief Loads an object file in the codegen context.
+ *
+ * Loads an object file into the same context as \c cg.  The module is safe to
+ * add using \a lto_codegen_add_module().
+ *
+ * Returns NULL on error (check lto_get_error_message() for details).
+ *
+ * \since LTO_API_VERSION=11
+ */
+public static native lto_module_t lto_module_create_in_codegen_context(@Const Pointer mem, @Cast("size_t") long length,
+                                     @Cast("const char*") BytePointer path, lto_code_gen_t cg);
+public static native lto_module_t lto_module_create_in_codegen_context(@Const Pointer mem, @Cast("size_t") long length,
+                                     String path, lto_code_gen_t cg);
 
 /**
  * Loads an object file from disk. The seek point of fd is not preserved.
@@ -4655,9 +4852,23 @@ public static native void lto_codegen_set_diagnostic_handler(lto_code_gen_t arg0
  * Instantiates a code generator.
  * Returns NULL on error (check lto_get_error_message() for details).
  *
+ * All modules added using \a lto_codegen_add_module() must have been created
+ * in the same context as the codegen.
+ *
  * \since prior to LTO_API_VERSION=3
  */
 public static native lto_code_gen_t lto_codegen_create();
+
+/**
+ * \brief Instantiate a code generator in its own context.
+ *
+ * Instantiates a code generator in its own context.  Modules added via \a
+ * lto_codegen_add_module() must have all been created in the same context,
+ * using \a lto_module_create_in_codegen_context().
+ *
+ * \since LTO_API_VERSION=11
+ */
+public static native lto_code_gen_t lto_codegen_create_in_local_context();
 
 /**
  * Frees all code generator and all memory it internally allocated.
@@ -4670,6 +4881,10 @@ public static native void lto_codegen_dispose(lto_code_gen_t arg0);
 /**
  * Add an object module to the set of modules for which code will be generated.
  * Returns true on error (check lto_get_error_message() for details).
+ *
+ * \c cg and \c mod must both be in the same context.  See \a
+ * lto_codegen_create_in_local_context() and \a
+ * lto_module_create_in_codegen_context().
  *
  * \since prior to LTO_API_VERSION=3
  */
@@ -5379,7 +5594,6 @@ public static native void LLVMAddAnalysisPasses(LLVMTargetMachineRef T, LLVMPass
  * @{
  */
 
-public static native void LLVMLinkInJIT();
 public static native void LLVMLinkInMCJIT();
 public static native void LLVMLinkInInterpreter();
 
@@ -5722,6 +5936,12 @@ public static native void LLVMAddGlobalMapping(LLVMExecutionEngineRef EE, LLVMVa
 
 public static native Pointer LLVMGetPointerToGlobal(LLVMExecutionEngineRef EE, LLVMValueRef Global);
 
+public static native @Cast("uint64_t") long LLVMGetGlobalValueAddress(LLVMExecutionEngineRef EE, @Cast("const char*") BytePointer Name);
+public static native @Cast("uint64_t") long LLVMGetGlobalValueAddress(LLVMExecutionEngineRef EE, String Name);
+
+public static native @Cast("uint64_t") long LLVMGetFunctionAddress(LLVMExecutionEngineRef EE, @Cast("const char*") BytePointer Name);
+public static native @Cast("uint64_t") long LLVMGetFunctionAddress(LLVMExecutionEngineRef EE, String Name);
+
 /*===-- Operations on memory managers -------------------------------------===*/
 
 public static class LLVMMemoryManagerAllocateCodeSectionCallback extends FunctionPointer {
@@ -5996,6 +6216,9 @@ public static native void LLVMPassManagerBuilderPopulateLTOPassManager(LLVMPassM
 /** See llvm::createAggressiveDCEPass function. */
 public static native void LLVMAddAggressiveDCEPass(LLVMPassManagerRef PM);
 
+/** See llvm::createAlignmentFromAssumptionsPass function. */
+public static native void LLVMAddAlignmentFromAssumptionsPass(LLVMPassManagerRef PM);
+
 /** See llvm::createCFGSimplificationPass function. */
 public static native void LLVMAddCFGSimplificationPass(LLVMPassManagerRef PM);
 
@@ -6047,6 +6270,9 @@ public static native void LLVMAddMemCpyOptPass(LLVMPassManagerRef PM);
 /** See llvm::createPartiallyInlineLibCallsPass function. */
 public static native void LLVMAddPartiallyInlineLibCallsPass(LLVMPassManagerRef PM);
 
+/** See llvm::createLowerSwitchPass function. */
+public static native void LLVMAddLowerSwitchPass(LLVMPassManagerRef PM);
+
 /** See llvm::createPromoteMemoryToRegisterPass function. */
 public static native void LLVMAddPromoteMemoryToRegisterPass(LLVMPassManagerRef PM);
 
@@ -6092,6 +6318,9 @@ public static native void LLVMAddLowerExpectIntrinsicPass(LLVMPassManagerRef PM)
 
 /** See llvm::createTypeBasedAliasAnalysisPass function */
 public static native void LLVMAddTypeBasedAliasAnalysisPass(LLVMPassManagerRef PM);
+
+/** See llvm::createScopedNoAliasAAPass function */
+public static native void LLVMAddScopedNoAliasAAPass(LLVMPassManagerRef PM);
 
 /** See llvm::createBasicAliasAnalysisPass function */
 public static native void LLVMAddBasicAliasAnalysisPass(LLVMPassManagerRef PM);
