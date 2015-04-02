@@ -88,8 +88,11 @@ public class opencv_legacy extends org.bytedeco.javacpp.helper.opencv_legacy {
 //struct DefParam;
 public static class CvDefParam extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvDefParam() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvDefParam(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvDefParam(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -113,7 +116,9 @@ public static class CvDefParam extends Pointer {
 
 @NoOffset public static class CvVSModule extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public CvVSModule() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvVSModule(Pointer p) { super(p); }
  /* Constructor and destructor: */ /* EXTERNAL INTERFACE */
     public native @Cast("const char*") BytePointer GetParamName(int index);
@@ -160,7 +165,9 @@ public static native void cvReadStructByName(CvFileStorage fs, CvFileNode node, 
 /* FOREGROUND DETECTOR INTERFACE */
 public static class CvFGDetector extends CvVSModule {
     static { Loader.load(); }
+    /** Empty constructor. */
     public CvFGDetector() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvFGDetector(Pointer p) { super(p); }
 
     public native IplImage GetMask();
@@ -178,8 +185,11 @@ public static native CvFGDetector cvCreateFGDetectorBase(int type, Pointer param
 /* BLOB STRUCTURE*/
 public static class CvBlob extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvBlob() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvBlob(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBlob(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -212,6 +222,7 @@ public static final int CV_BLOB_MINH = 5;
 /* simple BLOBLIST */
 @NoOffset public static class CvBlobSeq extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBlobSeq(Pointer p) { super(p); }
 
     public CvBlobSeq(int BlobSize/*=sizeof(CvBlob)*/) { allocate(BlobSize); }
@@ -237,8 +248,11 @@ public static final int CV_BLOB_MINH = 5;
 /* simple TRACKLIST */
 public static class CvBlobTrack extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvBlobTrack() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvBlobTrack(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBlobTrack(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -253,6 +267,7 @@ public static class CvBlobTrack extends Pointer {
 
 @NoOffset public static class CvBlobTrackSeq extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBlobTrackSeq(Pointer p) { super(p); }
 
     public CvBlobTrackSeq(int TrackSize/*=sizeof(CvBlobTrack)*/) { allocate(TrackSize); }
@@ -275,7 +290,9 @@ public static class CvBlobTrack extends Pointer {
 /* BLOB DETECTOR INTERFACE */
 public static class CvBlobDetector extends CvVSModule {
     static { Loader.load(); }
+    /** Empty constructor. */
     public CvBlobDetector() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBlobDetector(Pointer p) { super(p); }
 
     /* Try to detect new blob entrance based on foreground mask. */
@@ -297,8 +314,11 @@ public static native CvBlobDetector cvCreateBlobDetectorCC();
 
 @NoOffset public static class CvDetectedBlob extends CvBlob {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvDetectedBlob() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvDetectedBlob(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvDetectedBlob(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -315,7 +335,9 @@ public static native @ByVal CvDetectedBlob cvDetectedBlob( float x, float y, flo
 
 @NoOffset public static class CvObjectDetector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvObjectDetector(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvObjectDetector(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvObjectDetector position(int position) {
@@ -365,8 +387,11 @@ public static native @ByVal CvRect cvRectIntersection( @Const @ByVal CvRect r1, 
 
 public static class CvDrawShape extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvDrawShape() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvDrawShape(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvDrawShape(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -394,7 +419,9 @@ public static class CvDrawShape extends Pointer {
 /* Trajectory generation module: */
 public static class CvBlobTrackGen extends CvVSModule {
     static { Loader.load(); }
+    /** Empty constructor. */
     public CvBlobTrackGen() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBlobTrackGen(Pointer p) { super(p); }
 
     public native void SetFileName(@Cast("char*") BytePointer pFileName);
@@ -418,7 +445,9 @@ public static native CvBlobTrackGen cvCreateModuleBlobTrackGenYML();
 /* BLOB TRACKER INTERFACE */
 public static class CvBlobTracker extends CvVSModule {
     static { Loader.load(); }
+    /** Empty constructor. */
     public CvBlobTracker() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBlobTracker(Pointer p) { super(p); }
 
 
@@ -501,7 +530,9 @@ public static native void cvReleaseBlobTracker(@ByPtrPtr CvBlobTracker ppT );
 /*BLOB TRACKER ONE INTERFACE */
 public static class CvBlobTrackerOne extends CvVSModule {
     static { Loader.load(); }
+    /** Empty constructor. */
     public CvBlobTrackerOne() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBlobTrackerOne(Pointer p) { super(p); }
 
     public native void Init(CvBlob pBlobInit, IplImage pImg, IplImage pImgFG/*=NULL*/);
@@ -524,6 +555,7 @@ public static native void cvReleaseBlobTrackerOne(@Cast("CvBlobTrackerOne**") Po
 public static native void cvReleaseBlobTrackerOne(@ByPtrPtr CvBlobTrackerOne ppT );
 public static class CvBlobTrackerOne_Create extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    CvBlobTrackerOne_Create(Pointer p) { super(p); }
     protected CvBlobTrackerOne_Create() { allocate(); }
     private native void allocate();
@@ -539,8 +571,11 @@ public static final int PROFILE_EPANECHNIKOV =    0;
 public static final int PROFILE_DOG =             1;
 public static class CvBlobTrackerParamMS extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvBlobTrackerParamMS() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvBlobTrackerParamMS(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBlobTrackerParamMS(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -561,8 +596,11 @@ public static class CvBlobTrackerParamMS extends Pointer {
 /* Some declarations for specific Likelihood tracker: */
 public static class CvBlobTrackerParamLH extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvBlobTrackerParamLH() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvBlobTrackerParamLH(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBlobTrackerParamLH(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -617,7 +655,9 @@ public static native CvBlobTracker cvCreateBlobTrackerMSPF();
 /* Trajectory postprocessing module: */
 public static class CvBlobTrackPostProc extends CvVSModule {
     static { Loader.load(); }
+    /** Empty constructor. */
     public CvBlobTrackPostProc() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBlobTrackPostProc(Pointer p) { super(p); }
 
     public native void AddBlob(CvBlob pBlob);
@@ -636,7 +676,9 @@ public static native void cvReleaseBlobTrackPostProc(@ByPtrPtr CvBlobTrackPostPr
 /* Trajectory generation module: */
 public static class CvBlobTrackPostProcOne extends CvVSModule {
     static { Loader.load(); }
+    /** Empty constructor. */
     public CvBlobTrackPostProcOne() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBlobTrackPostProcOne(Pointer p) { super(p); }
 
     public native CvBlob Process(CvBlob pBlob);
@@ -646,6 +688,7 @@ public static class CvBlobTrackPostProcOne extends CvVSModule {
 /* Create blob tracking post processing module based on simle module: */
 public static class CvBlobTrackPostProcOne_Create extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    CvBlobTrackPostProcOne_Create(Pointer p) { super(p); }
     protected CvBlobTrackPostProcOne_Create() { allocate(); }
     private native void allocate();
@@ -664,7 +707,9 @@ public static native CvBlobTrackPostProc cvCreateModuleBlobTrackPostProcTimeAver
 /* blob PREDICTOR */
 public static class CvBlobTrackPredictor extends CvVSModule {
     static { Loader.load(); }
+    /** Empty constructor. */
     public CvBlobTrackPredictor() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBlobTrackPredictor(Pointer p) { super(p); }
 
     public native CvBlob Predict();
@@ -678,7 +723,9 @@ public static native CvBlobTrackPredictor cvCreateModuleBlobTrackPredictKalman()
 /* Trajectory analyser module: */
 public static class CvBlobTrackAnalysis extends CvVSModule {
     static { Loader.load(); }
+    /** Empty constructor. */
     public CvBlobTrackAnalysis() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBlobTrackAnalysis(Pointer p) { super(p); }
 
     public native void AddBlob(CvBlob pBlob);
@@ -700,7 +747,9 @@ public static native void cvReleaseBlobTrackAnalysis(@ByPtrPtr CvBlobTrackAnalys
 /* Feature-vector generation module: */
 public static class CvBlobTrackFVGen extends CvVSModule {
     static { Loader.load(); }
+    /** Empty constructor. */
     public CvBlobTrackFVGen() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBlobTrackFVGen(Pointer p) { super(p); }
 
     public native void AddBlob(CvBlob pBlob);
@@ -720,7 +769,9 @@ public static class CvBlobTrackFVGen extends CvVSModule {
 /* Trajectory Analyser module: */
 public static class CvBlobTrackAnalysisOne extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public CvBlobTrackAnalysisOne() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBlobTrackAnalysisOne(Pointer p) { super(p); }
 
     public native int Process(CvBlob pBlob, IplImage pImg, IplImage pFG);
@@ -732,6 +783,7 @@ public static class CvBlobTrackAnalysisOne extends Pointer {
 /* Create blob tracking post processing module based on simle module: */
 public static class CvBlobTrackAnalysisOne_Create extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    CvBlobTrackAnalysisOne_Create(Pointer p) { super(p); }
     protected CvBlobTrackAnalysisOne_Create() { allocate(); }
     private native void allocate();
@@ -779,7 +831,9 @@ public static native CvBlobTrackAnalysis cvCreateModuleBlobTrackAnalysisIOR();
 /* Estimator of human height: */
 public static class CvBlobTrackAnalysisHeight extends CvBlobTrackAnalysis {
     static { Loader.load(); }
+    /** Empty constructor. */
     public CvBlobTrackAnalysisHeight() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBlobTrackAnalysisHeight(Pointer p) { super(p); }
 
     public native double GetHeight(CvBlob pB);
@@ -791,7 +845,9 @@ public static class CvBlobTrackAnalysisHeight extends CvBlobTrackAnalysis {
 /* AUTO BLOB TRACKER INTERFACE -- pipeline of 3 modules: */
 public static class CvBlobTrackerAuto extends CvVSModule {
     static { Loader.load(); }
+    /** Empty constructor. */
     public CvBlobTrackerAuto() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBlobTrackerAuto(Pointer p) { super(p); }
 
     public native void Process(IplImage pImg, IplImage pMask/*=NULL*/);
@@ -816,8 +872,11 @@ public static native void cvReleaseBlobTrackerAuto(@ByPtrPtr CvBlobTrackerAuto p
 /* Parameters of blobtracker auto ver1: */
 public static class CvBlobTrackerAutoParam1 extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvBlobTrackerAutoParam1() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvBlobTrackerAutoParam1(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBlobTrackerAutoParam1(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -858,8 +917,11 @@ public static native CvBlobTrackerAuto cvCreateBlobTrackerAuto(int type, Pointer
 
 public static class CvTracksTimePos extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvTracksTimePos() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvTracksTimePos(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvTracksTimePos(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -893,7 +955,9 @@ public static class CvTracksTimePos extends Pointer {
 /* HIST API */
 public static class CvProb extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public CvProb() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvProb(Pointer p) { super(p); }
 
 
@@ -957,7 +1021,9 @@ public static final int CV_NOISE_SALT_AND_PEPPER =    4;
 
 /*================== GENERATOR OF TEST VIDEO SEQUENCE ===================== */
 @Opaque public static class CvTestSeq extends Pointer {
+    /** Empty constructor. */
     public CvTestSeq() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvTestSeq(Pointer p) { super(p); }
 }
 
@@ -1155,8 +1221,11 @@ public static native void cvCvtPlaneToPix(CvArr arg1, CvArr arg2, CvArr arg3, Cv
 
 public static class CvRandState extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvRandState() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvRandState(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvRandState(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1507,8 +1576,11 @@ public static native void cvPolyLineAA( CvArr img, @Cast("CvPoint**") @ByPtrPtr 
 
 public static class CvPixelPosition8u extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvPixelPosition8u() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvPixelPosition8u(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvPixelPosition8u(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1533,8 +1605,11 @@ public static class CvPixelPosition8u extends Pointer {
 /* this structure differs from the above only in data type */
 public static class CvPixelPosition8s extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvPixelPosition8s() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvPixelPosition8s(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvPixelPosition8s(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1556,8 +1631,11 @@ public static class CvPixelPosition8s extends Pointer {
 /* this structure differs from the CvPixelPosition8u only in data type */
 public static class CvPixelPosition32f extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvPixelPosition32f() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvPixelPosition32f(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvPixelPosition32f(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1900,8 +1978,11 @@ public static native void cvConvertPointsHomogenious(CvMat arg1, CvMat arg2);
 
 public static class CvSURFPoint extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvSURFPoint() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvSURFPoint(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSURFPoint(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1936,8 +2017,11 @@ public static native @ByVal CvSURFPoint cvSURFPoint( @ByVal @Cast("CvPoint2D32f*
 
 public static class CvSURFParams extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvSURFParams() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvSURFParams(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSURFParams(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1976,8 +2060,11 @@ public static native void cvExtractSURF( @Const CvArr img, @Const CvArr mask,
  */
 public static class CvMSERParams extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvMSERParams() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvMSERParams(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvMSERParams(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -2016,8 +2103,11 @@ public static class CvMSERParams extends Pointer {
 
 public static class CvStarKeypoint extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvStarKeypoint() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvStarKeypoint(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvStarKeypoint(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -2036,8 +2126,11 @@ public static native @ByVal CvStarKeypoint cvStarKeypoint(@ByVal @Cast("CvPoint*
 
 public static class CvStarDetectorParams extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvStarDetectorParams() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvStarDetectorParams(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvStarDetectorParams(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -2136,6 +2229,7 @@ public static native CvSeq cvSegmentImage( @Const CvArr srcarr, CvArr dstarr,
 
 @Convention("CV_CDECL") public static class CvCallback extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    CvCallback(Pointer p) { super(p); }
     protected CvCallback() { allocate(); }
     private native void allocate();
@@ -2143,8 +2237,11 @@ public static native CvSeq cvSegmentImage( @Const CvArr srcarr, CvArr dstarr,
 }
 public static class CvInput extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvInput() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvInput(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvInput(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -2218,8 +2315,11 @@ public static native void cvEigenProjection( Pointer eigInput, int nEigObjs, int
 
 public static class CvImgObsInfo extends AbstractCvImgObsInfo {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvImgObsInfo() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvImgObsInfo(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvImgObsInfo(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -2239,8 +2339,11 @@ public static class CvImgObsInfo extends AbstractCvImgObsInfo {
 
 public static class CvEHMMState extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvEHMMState() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvEHMMState(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvEHMMState(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -2258,8 +2361,11 @@ public static class CvEHMMState extends Pointer {
 
 public static class CvEHMM extends AbstractCvEHMM {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvEHMM() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvEHMM(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvEHMM(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -2453,8 +2559,11 @@ public static native void cvCalcImageHomography( float[] line, @Cast("CvPoint3D3
 
 public static class CvGraphWeightedVtx extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvGraphWeightedVtx() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvGraphWeightedVtx(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvGraphWeightedVtx(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -2469,8 +2578,11 @@ public static class CvGraphWeightedVtx extends Pointer {
 
 public static class CvGraphWeightedEdge extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvGraphWeightedEdge() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvGraphWeightedEdge(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvGraphWeightedEdge(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -2515,8 +2627,11 @@ public static native CvSeq cvFindDominantPoints( CvSeq contour, CvMemStorage sto
 
 public static class CvCliqueFinder extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvCliqueFinder() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvCliqueFinder(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvCliqueFinder(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -2710,8 +2825,11 @@ public static native void cvFindStereoCorrespondence(
 
 public static class CvStereoLineCoeff extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvStereoLineCoeff() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvStereoLineCoeff(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvStereoLineCoeff(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -2738,8 +2856,11 @@ public static class CvStereoLineCoeff extends Pointer {
 
 public static class CvCamera extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvCamera() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvCamera(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvCamera(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -2763,8 +2884,11 @@ public static class CvCamera extends Pointer {
 
 public static class CvStereoCamera extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvStereoCamera() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvStereoCamera(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvStereoCamera(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -2799,8 +2923,11 @@ public static class CvStereoCamera extends Pointer {
 
 public static class CvContourOrientation extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvContourOrientation() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvContourOrientation(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvContourOrientation(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -3262,8 +3389,11 @@ public static native void cvDeInterlace( @Const CvArr frame, CvArr fieldEven, Cv
 /* Contour tree header */
 public static class CvContourTree extends CvSeq {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvContourTree() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvContourTree(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvContourTree(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -3386,7 +3516,9 @@ public static final int CV_GLCM_GLCM =                                1;
 public static final int CV_GLCM_DESC =                                2;
 
 @Opaque public static class CvGLCM extends AbstractCvGLCM {
+    /** Empty constructor. */
     public CvGLCM() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvGLCM(Pointer p) { super(p); }
 }
 
@@ -3433,7 +3565,9 @@ public static native IplImage cvCreateGLCMImage( CvGLCM GLCM, int step );
 
 
 @Opaque public static class CvFaceTracker extends AbstractCvFaceTracker {
+    /** Empty constructor. */
     public CvFaceTracker() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvFaceTracker(Pointer p) { super(p); }
 }
 
@@ -3461,8 +3595,11 @@ public static native void cvReleaseFaceTracker(@ByPtrPtr CvFaceTracker ppFaceTra
 
 public static class CvFaceData extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvFaceData() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvFaceData(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvFaceData(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -3485,8 +3622,11 @@ public static class CvFaceData extends Pointer {
 
 public static class Cv3dTracker2dTrackedObject extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public Cv3dTracker2dTrackedObject() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public Cv3dTracker2dTrackedObject(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Cv3dTracker2dTrackedObject(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -3504,8 +3644,11 @@ public static native @ByVal Cv3dTracker2dTrackedObject cv3dTracker2dTrackedObjec
 
 public static class Cv3dTrackerTrackedObject extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public Cv3dTrackerTrackedObject() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public Cv3dTrackerTrackedObject(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Cv3dTrackerTrackedObject(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -3523,8 +3666,11 @@ public static native @ByVal Cv3dTrackerTrackedObject cv3dTrackerTrackedObject(in
 
 public static class Cv3dTrackerCameraInfo extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public Cv3dTrackerCameraInfo() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public Cv3dTrackerCameraInfo(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Cv3dTrackerCameraInfo(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -3541,8 +3687,11 @@ public static class Cv3dTrackerCameraInfo extends Pointer {
 
 public static class Cv3dTrackerCameraIntrinsics extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public Cv3dTrackerCameraIntrinsics() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public Cv3dTrackerCameraIntrinsics(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Cv3dTrackerCameraIntrinsics(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -3613,8 +3762,11 @@ public static final int
 
 public static class CvVoronoiSite2D extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvVoronoiSite2D() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvVoronoiSite2D(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvVoronoiSite2D(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -3637,8 +3789,11 @@ public static class CvVoronoiSite2D extends Pointer {
 
 public static class CvVoronoiEdge2D extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvVoronoiEdge2D() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvVoronoiEdge2D(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvVoronoiEdge2D(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -3661,8 +3816,11 @@ public static class CvVoronoiEdge2D extends Pointer {
 
 public static class CvVoronoiNode2D extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvVoronoiNode2D() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvVoronoiNode2D(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvVoronoiNode2D(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -3682,8 +3840,11 @@ public static class CvVoronoiNode2D extends Pointer {
 
 public static class CvVoronoiDiagram2D extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvVoronoiDiagram2D() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvVoronoiDiagram2D(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvVoronoiDiagram2D(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -3756,8 +3917,11 @@ public static native void cvReleaseVoronoiStorage(CvVoronoiDiagram2D VoronoiDiag
 
 public static class CvLCMEdge extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvLCMEdge() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvLCMEdge(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvLCMEdge(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -3779,8 +3943,11 @@ public static class CvLCMEdge extends Pointer {
 
 public static class CvLCMNode extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvLCMNode() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvLCMNode(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvLCMNode(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -3820,8 +3987,11 @@ public static native void cvInitPerspectiveTransform( @ByVal CvSize size, @Cast(
 
 public static class CvMatrix3 extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvMatrix3() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvMatrix3(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvMatrix3(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -4010,8 +4180,11 @@ public static native void cvDeleteMoire( IplImage img );
 
 public static class CvConDensation extends AbstractCvConDensation {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvConDensation() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvConDensation(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvConDensation(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -4071,7 +4244,9 @@ public static final int
 
 @NoOffset public static class CvCalibFilter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvCalibFilter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvCalibFilter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvCalibFilter position(int position) {
@@ -4205,7 +4380,9 @@ public static final int
 
 @NoOffset public static class CvImage extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvImage(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvImage(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvImage position(int position) {
@@ -4308,7 +4485,9 @@ public static final int
 
 @NoOffset public static class CvMatrix extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvMatrix(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvMatrix(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvMatrix position(int position) {
@@ -4426,7 +4605,9 @@ public static final int
 
 @NoOffset public static class CvCamShiftTracker extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvCamShiftTracker(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvCamShiftTracker(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvCamShiftTracker position(int position) {
@@ -4494,6 +4675,7 @@ public static final int
 \****************************************************************************************/
 @NoOffset public static class CvEMParams extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvEMParams(Pointer p) { super(p); }
 
     public CvEMParams() { allocate(); }
@@ -4531,7 +4713,9 @@ public static final int
 
 @NoOffset public static class CvEM extends CvStatModel {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvEM(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvEM(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvEM position(int position) {
@@ -4610,7 +4794,9 @@ public static final int
  */
 @Namespace("cv") @NoOffset public static class PatchGenerator extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PatchGenerator(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public PatchGenerator(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public PatchGenerator position(int position) {
@@ -4660,7 +4846,9 @@ public static final int
 
 @Namespace("cv") @NoOffset public static class LDetector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LDetector(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public LDetector(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public LDetector position(int position) {
@@ -4704,7 +4892,9 @@ public static final int
 
 @Namespace("cv") @NoOffset public static class FernClassifier extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FernClassifier(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public FernClassifier(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public FernClassifier position(int position) {
@@ -4785,7 +4975,9 @@ public static final int
 
     @NoOffset public static class Feature extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Feature(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public Feature(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public Feature position(int position) {
@@ -4822,7 +5014,9 @@ public static final int
 
 @Namespace("cv") @NoOffset public static class BaseKeypoint extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseKeypoint(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public BaseKeypoint(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public BaseKeypoint position(int position) {
@@ -4842,7 +5036,9 @@ public static final int
 
 @Namespace("cv") @NoOffset public static class RandomizedTree extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RandomizedTree(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public RandomizedTree(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public RandomizedTree position(int position) {
@@ -4924,7 +5120,9 @@ public static final int
 
 @Namespace("cv") @NoOffset public static class RTreeNode extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RTreeNode(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public RTreeNode(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public RTreeNode position(int position) {
@@ -4947,7 +5145,9 @@ public static final int
 
 @Namespace("cv") @NoOffset public static class RTreeClassifier extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RTreeClassifier(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public RTreeClassifier(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public RTreeClassifier position(int position) {
@@ -5039,8 +5239,11 @@ public static final int
 // on angle (theta - phi).
 @Namespace("cv") public static class CvAffinePose extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvAffinePose() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvAffinePose(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvAffinePose(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -5056,7 +5259,9 @@ public static final int
 
 @Namespace("cv") @NoOffset public static class OneWayDescriptor extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OneWayDescriptor(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public OneWayDescriptor(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public OneWayDescriptor position(int position) {
@@ -5206,7 +5411,9 @@ public static final int
 // and finding the nearest closest descriptor to an input feature
 @Namespace("cv") @NoOffset public static class OneWayDescriptorBase extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public OneWayDescriptorBase() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OneWayDescriptorBase(Pointer p) { super(p); }
 
 
@@ -5407,7 +5614,9 @@ public static final int
 
 @Namespace("cv") @NoOffset public static class OneWayDescriptorObject extends OneWayDescriptorBase {
     static { Loader.load(); }
+    /** Empty constructor. */
     public OneWayDescriptorObject() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OneWayDescriptorObject(Pointer p) { super(p); }
 
     // creates an instance of OneWayDescriptorObject from a set of training files
@@ -5494,7 +5703,9 @@ public static final int
 
 @Namespace("cv") @NoOffset public static class OneWayDescriptorMatcher extends GenericDescriptorMatcher {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OneWayDescriptorMatcher(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public OneWayDescriptorMatcher(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public OneWayDescriptorMatcher position(int position) {
@@ -5503,7 +5714,9 @@ public static final int
 
     @NoOffset public static class Params extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Params(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public Params(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public Params position(int position) {
@@ -5585,7 +5798,9 @@ public static final int
 
 @Namespace("cv") @NoOffset public static class FernDescriptorMatcher extends GenericDescriptorMatcher {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FernDescriptorMatcher(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public FernDescriptorMatcher(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public FernDescriptorMatcher position(int position) {
@@ -5594,7 +5809,9 @@ public static final int
 
     @NoOffset public static class Params extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Params(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public Params(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public Params position(int position) {
@@ -5681,7 +5898,9 @@ public static final int
 
 @Namespace("cv") @NoOffset public static class PlanarObjectDetector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PlanarObjectDetector(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public PlanarObjectDetector(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public PlanarObjectDetector position(int position) {
@@ -5754,8 +5973,11 @@ public static final int
 
 public static class lsh_hash extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public lsh_hash() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public lsh_hash(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public lsh_hash(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -5769,7 +5991,9 @@ public static class lsh_hash extends Pointer {
 
 public static class CvLSHOperations extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public CvLSHOperations() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvLSHOperations(Pointer p) { super(p); }
 
 
@@ -5977,8 +6201,11 @@ public static final int CV_STEREO_GC_OCCLUDED = CV_STEREO_GC_OCCLUDED();
 
 public static class CvStereoGCState extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvStereoGCState() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvStereoGCState(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvStereoGCState(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -6075,6 +6302,7 @@ public static final int CV_BG_MODEL_FGD_SIMPLE =	2;
 
 @Convention("CV_CDECL") public static class CvReleaseBGStatModel extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    CvReleaseBGStatModel(Pointer p) { super(p); }
     protected CvReleaseBGStatModel() { allocate(); }
     private native void allocate();
@@ -6082,6 +6310,7 @@ public static final int CV_BG_MODEL_FGD_SIMPLE =	2;
 }
 @Convention("CV_CDECL") public static class CvUpdateBGStatModel extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    CvUpdateBGStatModel(Pointer p) { super(p); }
     protected CvUpdateBGStatModel() { allocate(); }
     private native void allocate();
@@ -6102,8 +6331,11 @@ public static final int CV_BG_MODEL_FGD_SIMPLE =	2;
 
 public static class CvBGStatModel extends AbstractCvBGStatModel {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvBGStatModel() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvBGStatModel(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBGStatModel(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -6193,8 +6425,11 @@ public static final double CV_BGFG_FGD_BG_UPDATE_TRESH = 0.5f;
  */
 public static class CvFGDStatModelParams extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvFGDStatModelParams() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvFGDStatModelParams(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvFGDStatModelParams(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -6227,8 +6462,11 @@ public static class CvFGDStatModelParams extends Pointer {
 
 public static class CvBGPixelCStatTable extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvBGPixelCStatTable() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvBGPixelCStatTable(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBGPixelCStatTable(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -6244,8 +6482,11 @@ public static class CvBGPixelCStatTable extends Pointer {
 
 public static class CvBGPixelCCStatTable extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvBGPixelCCStatTable() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvBGPixelCCStatTable(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBGPixelCCStatTable(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -6261,8 +6502,11 @@ public static class CvBGPixelCCStatTable extends Pointer {
 
 public static class CvBGPixelStat extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvBGPixelStat() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvBGPixelStat(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBGPixelStat(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -6281,8 +6525,11 @@ public static class CvBGPixelStat extends Pointer {
 
 public static class CvFGDStatModel extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvFGDStatModel() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvFGDStatModel(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvFGDStatModel(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -6339,8 +6586,11 @@ public static final int CV_BGFG_MOG_NCOLORS =                  3;
 
 public static class CvGaussBGStatModelParams extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvGaussBGStatModelParams() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvGaussBGStatModelParams(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvGaussBGStatModelParams(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -6359,8 +6609,11 @@ public static class CvGaussBGStatModelParams extends Pointer {
 
 public static class CvGaussBGValues extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvGaussBGValues() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvGaussBGValues(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvGaussBGValues(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -6378,8 +6631,11 @@ public static class CvGaussBGValues extends Pointer {
 
 public static class CvGaussBGPoint extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvGaussBGPoint() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvGaussBGPoint(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvGaussBGPoint(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -6393,8 +6649,11 @@ public static class CvGaussBGPoint extends Pointer {
 
 public static class CvGaussBGModel extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvGaussBGModel() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvGaussBGModel(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvGaussBGModel(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -6427,8 +6686,11 @@ public static native CvBGStatModel cvCreateGaussianBGModel( IplImage first_frame
 
 public static class CvBGCodeBookElem extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvBGCodeBookElem() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvBGCodeBookElem(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBGCodeBookElem(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -6451,8 +6713,11 @@ public static class CvBGCodeBookElem extends Pointer {
 
 public static class CvBGCodeBookModel extends AbstractCvBGCodeBookModel {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvBGCodeBookModel() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvBGCodeBookModel(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBGCodeBookModel(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);

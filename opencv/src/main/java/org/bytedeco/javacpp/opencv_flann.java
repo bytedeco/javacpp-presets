@@ -235,7 +235,9 @@ public static final int
 
 @Namespace("cv::flann") @NoOffset public static class IndexParams extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IndexParams(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public IndexParams(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public IndexParams position(int position) {
@@ -288,6 +290,7 @@ public static final int
 
 @Namespace("cv::flann") public static class KDTreeIndexParams extends IndexParams {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KDTreeIndexParams(Pointer p) { super(p); }
 
     public KDTreeIndexParams(int trees/*=4*/) { allocate(trees); }
@@ -298,7 +301,9 @@ public static final int
 
 @Namespace("cv::flann") public static class LinearIndexParams extends IndexParams {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LinearIndexParams(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public LinearIndexParams(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public LinearIndexParams position(int position) {
@@ -311,7 +316,9 @@ public static final int
 
 @Namespace("cv::flann") public static class CompositeIndexParams extends IndexParams {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CompositeIndexParams(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CompositeIndexParams(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CompositeIndexParams position(int position) {
@@ -328,7 +335,9 @@ public static final int
 
 @Namespace("cv::flann") public static class AutotunedIndexParams extends IndexParams {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AutotunedIndexParams(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AutotunedIndexParams(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public AutotunedIndexParams position(int position) {
@@ -345,7 +354,9 @@ public static final int
 
 @Namespace("cv::flann") public static class HierarchicalClusteringIndexParams extends IndexParams {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HierarchicalClusteringIndexParams(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public HierarchicalClusteringIndexParams(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public HierarchicalClusteringIndexParams position(int position) {
@@ -362,7 +373,9 @@ public static final int
 
 @Namespace("cv::flann") public static class KMeansIndexParams extends IndexParams {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KMeansIndexParams(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public KMeansIndexParams(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public KMeansIndexParams position(int position) {
@@ -379,7 +392,9 @@ public static final int
 
 @Namespace("cv::flann") public static class LshIndexParams extends IndexParams {
     static { Loader.load(); }
+    /** Empty constructor. */
     public LshIndexParams() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LshIndexParams(Pointer p) { super(p); }
 
     public LshIndexParams(int table_number, int key_size, int multi_probe_level) { allocate(table_number, key_size, multi_probe_level); }
@@ -388,7 +403,9 @@ public static final int
 
 @Namespace("cv::flann") public static class SavedIndexParams extends IndexParams {
     static { Loader.load(); }
+    /** Empty constructor. */
     public SavedIndexParams() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SavedIndexParams(Pointer p) { super(p); }
 
     public SavedIndexParams(@StdString BytePointer filename) { allocate(filename); }
@@ -399,7 +416,9 @@ public static final int
 
 @Namespace("cv::flann") public static class SearchParams extends IndexParams {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SearchParams(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public SearchParams(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public SearchParams position(int position) {
@@ -414,7 +433,9 @@ public static final int
 
 @Namespace("cv::flann") @NoOffset public static class Index extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Index(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public Index(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Index position(int position) {

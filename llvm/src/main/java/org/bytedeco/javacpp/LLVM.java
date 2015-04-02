@@ -44,7 +44,9 @@ public class LLVM extends org.bytedeco.javacpp.presets.LLVM {
  * @see llvm::MemoryBuffer
  */
 @Name("LLVMOpaqueMemoryBuffer") @Opaque public static class LLVMMemoryBufferRef extends Pointer {
+    /** Empty constructor. */
     public LLVMMemoryBufferRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMMemoryBufferRef(Pointer p) { super(p); }
 }
 
@@ -161,7 +163,9 @@ public static native void LLVMParseCommandLineOptions(int argc, @Cast("const cha
  * The top-level container for all LLVM global data. See the LLVMContext class.
  */
 @Name("LLVMOpaqueContext") @Opaque public static class LLVMContextRef extends Pointer {
+    /** Empty constructor. */
     public LLVMContextRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMContextRef(Pointer p) { super(p); }
 }
 
@@ -172,7 +176,9 @@ public static native void LLVMParseCommandLineOptions(int argc, @Cast("const cha
  * @see llvm::Module
  */
 @Name("LLVMOpaqueModule") @Opaque public static class LLVMModuleRef extends Pointer {
+    /** Empty constructor. */
     public LLVMModuleRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMModuleRef(Pointer p) { super(p); }
 }
 
@@ -182,7 +188,9 @@ public static native void LLVMParseCommandLineOptions(int argc, @Cast("const cha
  * @see llvm::Type
  */
 @Name("LLVMOpaqueType") @Opaque public static class LLVMTypeRef extends Pointer {
+    /** Empty constructor. */
     public LLVMTypeRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMTypeRef(Pointer p) { super(p); }
 }
 
@@ -192,7 +200,9 @@ public static native void LLVMParseCommandLineOptions(int argc, @Cast("const cha
  * This models llvm::Value.
  */
 @Name("LLVMOpaqueValue") @Opaque public static class LLVMValueRef extends Pointer {
+    /** Empty constructor. */
     public LLVMValueRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMValueRef(Pointer p) { super(p); }
 }
 
@@ -202,7 +212,9 @@ public static native void LLVMParseCommandLineOptions(int argc, @Cast("const cha
  * This models llvm::BasicBlock.
  */
 @Name("LLVMOpaqueBasicBlock") @Opaque public static class LLVMBasicBlockRef extends Pointer {
+    /** Empty constructor. */
     public LLVMBasicBlockRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMBasicBlockRef(Pointer p) { super(p); }
 }
 
@@ -212,7 +224,9 @@ public static native void LLVMParseCommandLineOptions(int argc, @Cast("const cha
  * This models llvm::IRBuilder.
  */
 @Name("LLVMOpaqueBuilder") @Opaque public static class LLVMBuilderRef extends Pointer {
+    /** Empty constructor. */
     public LLVMBuilderRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMBuilderRef(Pointer p) { super(p); }
 }
 
@@ -222,19 +236,25 @@ public static native void LLVMParseCommandLineOptions(int argc, @Cast("const cha
  * different type to keep binary compatibility.
  */
 @Name("LLVMOpaqueModuleProvider") @Opaque public static class LLVMModuleProviderRef extends Pointer {
+    /** Empty constructor. */
     public LLVMModuleProviderRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMModuleProviderRef(Pointer p) { super(p); }
 }
 
 /** @see llvm::PassManagerBase */
 @Name("LLVMOpaquePassManager") @Opaque public static class LLVMPassManagerRef extends Pointer {
+    /** Empty constructor. */
     public LLVMPassManagerRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMPassManagerRef(Pointer p) { super(p); }
 }
 
 /** @see llvm::PassRegistry */
 @Name("LLVMOpaquePassRegistry") @Opaque public static class LLVMPassRegistryRef extends Pointer {
+    /** Empty constructor. */
     public LLVMPassRegistryRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMPassRegistryRef(Pointer p) { super(p); }
 }
 
@@ -243,7 +263,9 @@ public static native void LLVMParseCommandLineOptions(int argc, @Cast("const cha
  *
  * @see llvm::Use */
 @Name("LLVMOpaqueUse") @Opaque public static class LLVMUseRef extends Pointer {
+    /** Empty constructor. */
     public LLVMUseRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMUseRef(Pointer p) { super(p); }
 }
 
@@ -252,7 +274,9 @@ public static native void LLVMParseCommandLineOptions(int argc, @Cast("const cha
  * @see llvm::DiagnosticInfo
  */
 @Name("LLVMOpaqueDiagnosticInfo") @Opaque public static class LLVMDiagnosticInfoRef extends Pointer {
+    /** Empty constructor. */
     public LLVMDiagnosticInfoRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMDiagnosticInfoRef(Pointer p) { super(p); }
 }
 
@@ -646,6 +670,7 @@ public static native void LLVMDisposeMessage(@Cast("char*") byte[] Message);
 
 public static class LLVMFatalErrorHandler extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    LLVMFatalErrorHandler(Pointer p) { super(p); }
     protected LLVMFatalErrorHandler() { allocate(); }
     private native void allocate();
@@ -688,6 +713,7 @@ public static native void LLVMEnablePrettyStackTrace();
 
 public static class LLVMDiagnosticHandler extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    LLVMDiagnosticHandler(Pointer p) { super(p); }
     protected LLVMDiagnosticHandler() { allocate(); }
     private native void allocate();
@@ -695,6 +721,7 @@ public static class LLVMDiagnosticHandler extends FunctionPointer {
 }
 public static class LLVMYieldCallback extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    LLVMYieldCallback(Pointer p) { super(p); }
     protected LLVMYieldCallback() { allocate(); }
     private native void allocate();
@@ -3982,7 +4009,9 @@ public static native LLVMMemoryBufferRef LLVMWriteBitcodeToMemoryBuffer(LLVMModu
  * An opaque reference to a disassembler context.
  */
 @Namespace @Name("void") @Opaque public static class LLVMDisasmContextRef extends Pointer {
+    /** Empty constructor. */
     public LLVMDisasmContextRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMDisasmContextRef(Pointer p) { super(p); }
 }
 
@@ -4005,6 +4034,7 @@ public static native LLVMMemoryBufferRef LLVMWriteBitcodeToMemoryBuffer(LLVMModu
  */
 public static class LLVMOpInfoCallback extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    LLVMOpInfoCallback(Pointer p) { super(p); }
     protected LLVMOpInfoCallback() { allocate(); }
     private native void allocate();
@@ -4035,8 +4065,11 @@ public static class LLVMOpInfoCallback extends FunctionPointer {
  */
 public static class LLVMOpInfoSymbol1 extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public LLVMOpInfoSymbol1() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public LLVMOpInfoSymbol1(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMOpInfoSymbol1(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -4051,8 +4084,11 @@ public static class LLVMOpInfoSymbol1 extends Pointer {
 
 public static class LLVMOpInfo1 extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public LLVMOpInfo1() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public LLVMOpInfo1(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMOpInfo1(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -4101,6 +4137,7 @@ public static final int LLVMDisassembler_VariantKind_ARM64_TLVOFF =     6; /* @t
  */
 public static class LLVMSymbolLookupCallback extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    LLVMSymbolLookupCallback(Pointer p) { super(p); }
     protected LLVMSymbolLookupCallback() { allocate(); }
     private native void allocate();
@@ -4454,7 +4491,9 @@ public static native @Cast("LLVMBool") int LLVMLinkModules(LLVMModuleRef Dest, L
 
   /** This provides a dummy type for pointers to the LTO object. */
   @Namespace @Name("void") @Opaque public static class llvm_lto_t extends Pointer {
+      /** Empty constructor. */
       public llvm_lto_t() { }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public llvm_lto_t(Pointer p) { super(p); }
   }
 
@@ -4580,13 +4619,17 @@ public static final int
 
 /** opaque reference to a loaded object module */
 @Name("LLVMOpaqueLTOModule") @Opaque public static class lto_module_t extends Pointer {
+    /** Empty constructor. */
     public lto_module_t() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public lto_module_t(Pointer p) { super(p); }
 }
 
 /** opaque reference to a code generator */
 @Name("LLVMOpaqueLTOCodeGenerator") @Opaque public static class lto_code_gen_t extends Pointer {
+    /** Empty constructor. */
     public lto_code_gen_t() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public lto_code_gen_t(Pointer p) { super(p); }
 }
 
@@ -4830,6 +4873,7 @@ public static final int
  */
 public static class lto_diagnostic_handler_t extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    lto_diagnostic_handler_t(Pointer p) { super(p); }
     protected lto_diagnostic_handler_t() { allocate(); }
     private native void allocate();
@@ -5048,19 +5092,27 @@ public static native void lto_initialize_disassembler();
 
 // Opaque type wrappers
 @Name("LLVMOpaqueObjectFile") @Opaque public static class LLVMObjectFileRef extends Pointer {
+    /** Empty constructor. */
     public LLVMObjectFileRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMObjectFileRef(Pointer p) { super(p); }
 }
 @Name("LLVMOpaqueSectionIterator") @Opaque public static class LLVMSectionIteratorRef extends Pointer {
+    /** Empty constructor. */
     public LLVMSectionIteratorRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMSectionIteratorRef(Pointer p) { super(p); }
 }
 @Name("LLVMOpaqueSymbolIterator") @Opaque public static class LLVMSymbolIteratorRef extends Pointer {
+    /** Empty constructor. */
     public LLVMSymbolIteratorRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMSymbolIteratorRef(Pointer p) { super(p); }
 }
 @Name("LLVMOpaqueRelocationIterator") @Opaque public static class LLVMRelocationIteratorRef extends Pointer {
+    /** Empty constructor. */
     public LLVMRelocationIteratorRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMRelocationIteratorRef(Pointer p) { super(p); }
 }
 
@@ -5168,11 +5220,15 @@ public static native @Cast("const char*") BytePointer LLVMGetRelocationValueStri
 public static final int LLVMBigEndian = 0, LLVMLittleEndian = 1;
 
 @Name("LLVMOpaqueTargetData") @Opaque public static class LLVMTargetDataRef extends Pointer {
+    /** Empty constructor. */
     public LLVMTargetDataRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMTargetDataRef(Pointer p) { super(p); }
 }
 @Name("LLVMOpaqueTargetLibraryInfotData") @Opaque public static class LLVMTargetLibraryInfoRef extends Pointer {
+    /** Empty constructor. */
     public LLVMTargetLibraryInfoRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMTargetLibraryInfoRef(Pointer p) { super(p); }
 }
 
@@ -5397,11 +5453,15 @@ public static native void LLVMDisposeTargetData(LLVMTargetDataRef TD);
 // #ifdef __cplusplus
 // #endif
 @Name("LLVMOpaqueTargetMachine") @Opaque public static class LLVMTargetMachineRef extends Pointer {
+    /** Empty constructor. */
     public LLVMTargetMachineRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMTargetMachineRef(Pointer p) { super(p); }
 }
 @Name("LLVMTarget") @Opaque public static class LLVMTargetRef extends Pointer {
+    /** Empty constructor. */
     public LLVMTargetRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMTargetRef(Pointer p) { super(p); }
 }
 
@@ -5598,22 +5658,31 @@ public static native void LLVMLinkInMCJIT();
 public static native void LLVMLinkInInterpreter();
 
 @Name("LLVMOpaqueGenericValue") @Opaque public static class LLVMGenericValueRef extends Pointer {
+    /** Empty constructor. */
     public LLVMGenericValueRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMGenericValueRef(Pointer p) { super(p); }
 }
 @Name("LLVMOpaqueExecutionEngine") @Opaque public static class LLVMExecutionEngineRef extends Pointer {
+    /** Empty constructor. */
     public LLVMExecutionEngineRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMExecutionEngineRef(Pointer p) { super(p); }
 }
 @Name("LLVMOpaqueMCJITMemoryManager") @Opaque public static class LLVMMCJITMemoryManagerRef extends Pointer {
+    /** Empty constructor. */
     public LLVMMCJITMemoryManagerRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMMCJITMemoryManagerRef(Pointer p) { super(p); }
 }
 
 public static class LLVMMCJITCompilerOptions extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public LLVMMCJITCompilerOptions() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public LLVMMCJITCompilerOptions(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMMCJITCompilerOptions(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -5946,6 +6015,7 @@ public static native @Cast("uint64_t") long LLVMGetFunctionAddress(LLVMExecution
 
 public static class LLVMMemoryManagerAllocateCodeSectionCallback extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    LLVMMemoryManagerAllocateCodeSectionCallback(Pointer p) { super(p); }
     protected LLVMMemoryManagerAllocateCodeSectionCallback() { allocate(); }
     private native void allocate();
@@ -5955,6 +6025,7 @@ public static class LLVMMemoryManagerAllocateCodeSectionCallback extends Functio
 }
 public static class LLVMMemoryManagerAllocateDataSectionCallback extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    LLVMMemoryManagerAllocateDataSectionCallback(Pointer p) { super(p); }
     protected LLVMMemoryManagerAllocateDataSectionCallback() { allocate(); }
     private native void allocate();
@@ -5964,6 +6035,7 @@ public static class LLVMMemoryManagerAllocateDataSectionCallback extends Functio
 }
 public static class LLVMMemoryManagerFinalizeMemoryCallback extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    LLVMMemoryManagerFinalizeMemoryCallback(Pointer p) { super(p); }
     protected LLVMMemoryManagerFinalizeMemoryCallback() { allocate(); }
     private native void allocate();
@@ -5972,6 +6044,7 @@ public static class LLVMMemoryManagerFinalizeMemoryCallback extends FunctionPoin
 }
 public static class LLVMMemoryManagerDestroyCallback extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    LLVMMemoryManagerDestroyCallback(Pointer p) { super(p); }
     protected LLVMMemoryManagerDestroyCallback() { allocate(); }
     private native void allocate();
@@ -6112,7 +6185,9 @@ public static native void LLVMAddStripSymbolsPass(LLVMPassManagerRef PM);
 // #include "llvm-c/Core.h"
 
 @Name("LLVMOpaquePassManagerBuilder") @Opaque public static class LLVMPassManagerBuilderRef extends Pointer {
+    /** Empty constructor. */
     public LLVMPassManagerBuilderRef() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMPassManagerBuilderRef(Pointer p) { super(p); }
 }
 

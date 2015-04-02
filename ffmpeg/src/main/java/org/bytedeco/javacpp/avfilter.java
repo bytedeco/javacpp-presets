@@ -81,7 +81,9 @@ public static native @Cast("const char*") BytePointer avfilter_configuration();
  */
 public static native @Cast("const char*") BytePointer avfilter_license();
 @Opaque public static class AVFilterFormats extends Pointer {
+    /** Empty constructor. */
     public AVFilterFormats() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilterFormats(Pointer p) { super(p); }
 }
 
@@ -93,8 +95,11 @@ public static native @Cast("const char*") BytePointer avfilter_license();
  */
 public static class AVFilterBuffer extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVFilterBuffer() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVFilterBuffer(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilterBuffer(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -136,6 +141,7 @@ public static class AVFilterBuffer extends Pointer {
      */
     public static class Free_AVFilterBuffer extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Free_AVFilterBuffer(Pointer p) { super(p); }
         protected Free_AVFilterBuffer() { allocate(); }
         private native void allocate();
@@ -176,8 +182,11 @@ public static final int AVFILTER_ALIGN = 16; //not part of ABI
  */
 public static class AVFilterBufferRefAudioProps extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVFilterBufferRefAudioProps() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVFilterBufferRefAudioProps(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilterBufferRefAudioProps(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -202,8 +211,11 @@ public static class AVFilterBufferRefAudioProps extends Pointer {
  */
 public static class AVFilterBufferRefVideoProps extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVFilterBufferRefVideoProps() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVFilterBufferRefVideoProps(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilterBufferRefVideoProps(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -243,8 +255,11 @@ public static class AVFilterBufferRefVideoProps extends Pointer {
  */
 public static class AVFilterBufferRef extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVFilterBufferRef() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVFilterBufferRef(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilterBufferRef(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -360,8 +375,11 @@ public static native @Deprecated int avfilter_ref_get_channels(AVFilterBufferRef
  */
 public static class AVFilterPad extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVFilterPad() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVFilterPad(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilterPad(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -413,6 +431,7 @@ public static class AVFilterPad extends Pointer {
      */
     public static class Start_frame_AVFilterLink_AVFilterBufferRef extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Start_frame_AVFilterLink_AVFilterBufferRef(Pointer p) { super(p); }
         protected Start_frame_AVFilterLink_AVFilterBufferRef() { allocate(); }
         private native void allocate();
@@ -428,6 +447,7 @@ public static class AVFilterPad extends Pointer {
      */
     public static class Get_video_buffer_AVFilterLink_int_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Get_video_buffer_AVFilterLink_int_int(Pointer p) { super(p); }
         protected Get_video_buffer_AVFilterLink_int_int() { allocate(); }
         private native void allocate();
@@ -443,6 +463,7 @@ public static class AVFilterPad extends Pointer {
      */
     public static class Get_audio_buffer_AVFilterLink_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Get_audio_buffer_AVFilterLink_int(Pointer p) { super(p); }
         protected Get_audio_buffer_AVFilterLink_int() { allocate(); }
         private native void allocate();
@@ -455,6 +476,7 @@ public static class AVFilterPad extends Pointer {
      */
     public static class End_frame_AVFilterLink extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    End_frame_AVFilterLink(Pointer p) { super(p); }
         protected End_frame_AVFilterLink() { allocate(); }
         private native void allocate();
@@ -467,6 +489,7 @@ public static class AVFilterPad extends Pointer {
      */
     public static class Draw_slice_AVFilterLink_int_int_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Draw_slice_AVFilterLink_int_int_int(Pointer p) { super(p); }
         protected Draw_slice_AVFilterLink_int_int_int() { allocate(); }
         private native void allocate();
@@ -486,6 +509,7 @@ public static class AVFilterPad extends Pointer {
      */
     public static class Filter_frame_AVFilterLink_AVFrame extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Filter_frame_AVFilterLink_AVFrame(Pointer p) { super(p); }
         protected Filter_frame_AVFilterLink_AVFrame() { allocate(); }
         private native void allocate();
@@ -504,6 +528,7 @@ public static class AVFilterPad extends Pointer {
      */
     public static class Poll_frame_AVFilterLink extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Poll_frame_AVFilterLink(Pointer p) { super(p); }
         protected Poll_frame_AVFilterLink() { allocate(); }
         private native void allocate();
@@ -522,6 +547,7 @@ public static class AVFilterPad extends Pointer {
      */
     public static class Request_frame_AVFilterLink extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Request_frame_AVFilterLink(Pointer p) { super(p); }
         protected Request_frame_AVFilterLink() { allocate(); }
         private native void allocate();
@@ -548,6 +574,7 @@ public static class AVFilterPad extends Pointer {
      */
     public static class Config_props_AVFilterLink extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Config_props_AVFilterLink(Pointer p) { super(p); }
         protected Config_props_AVFilterLink() { allocate(); }
         private native void allocate();
@@ -647,8 +674,11 @@ public static final int AVFILTER_FLAG_SUPPORT_TIMELINE = (AVFILTER_FLAG_SUPPORT_
  */
 public static class AVFilter extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVFilter() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVFilter(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilter(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -731,6 +761,7 @@ public static class AVFilter extends Pointer {
      */
     public static class Init_AVFilterContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Init_AVFilterContext(Pointer p) { super(p); }
         protected Init_AVFilterContext() { allocate(); }
         private native void allocate();
@@ -751,6 +782,7 @@ public static class AVFilter extends Pointer {
      */
     public static class Init_dict_AVFilterContext_PointerPointer extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Init_dict_AVFilterContext_PointerPointer(Pointer p) { super(p); }
         protected Init_dict_AVFilterContext_PointerPointer() { allocate(); }
         private native void allocate();
@@ -770,6 +802,7 @@ public static class AVFilter extends Pointer {
      */
     public static class Uninit_AVFilterContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Uninit_AVFilterContext(Pointer p) { super(p); }
         protected Uninit_AVFilterContext() { allocate(); }
         private native void allocate();
@@ -801,6 +834,7 @@ public static class AVFilter extends Pointer {
      */
     public static class Query_formats_AVFilterContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Query_formats_AVFilterContext(Pointer p) { super(p); }
         protected Query_formats_AVFilterContext() { allocate(); }
         private native void allocate();
@@ -831,6 +865,7 @@ public static class AVFilter extends Pointer {
      */
     public static class Process_command_AVFilterContext_BytePointer_BytePointer_BytePointer_int_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Process_command_AVFilterContext_BytePointer_BytePointer_BytePointer_int_int(Pointer p) { super(p); }
         protected Process_command_AVFilterContext_BytePointer_BytePointer_BytePointer_int_int() { allocate(); }
         private native void allocate();
@@ -845,6 +880,7 @@ public static class AVFilter extends Pointer {
      */
     public static class Init_opaque_AVFilterContext_Pointer extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Init_opaque_AVFilterContext_Pointer(Pointer p) { super(p); }
         protected Init_opaque_AVFilterContext_Pointer() { allocate(); }
         private native void allocate();
@@ -859,15 +895,20 @@ public static class AVFilter extends Pointer {
 public static final int AVFILTER_THREAD_SLICE = (1 << 0);
 
 @Opaque public static class AVFilterInternal extends Pointer {
+    /** Empty constructor. */
     public AVFilterInternal() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilterInternal(Pointer p) { super(p); }
 }
 
 /** An instance of a filter */
 public static class AVFilterContext extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVFilterContext() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVFilterContext(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilterContext(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -958,8 +999,11 @@ public static class AVFilterContext extends Pointer {
  */
 public static class AVFilterLink extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVFilterLink() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVFilterLink(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilterLink(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1469,7 +1513,9 @@ public static native @Deprecated int avfilter_copy_buf_props(AVFrame dst, @Const
 public static native @Const AVClass avfilter_get_class();
 
 @Opaque public static class AVFilterGraphInternal extends Pointer {
+    /** Empty constructor. */
     public AVFilterGraphInternal() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilterGraphInternal(Pointer p) { super(p); }
 }
 
@@ -1487,6 +1533,7 @@ public static native @Const AVClass avfilter_get_class();
  */
 public static class avfilter_action_func extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    avfilter_action_func(Pointer p) { super(p); }
     protected avfilter_action_func() { allocate(); }
     private native void allocate();
@@ -1507,6 +1554,7 @@ public static class avfilter_action_func extends FunctionPointer {
  */
 public static class avfilter_execute_func extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    avfilter_execute_func(Pointer p) { super(p); }
     protected avfilter_execute_func() { allocate(); }
     private native void allocate();
@@ -1516,8 +1564,11 @@ public static class avfilter_execute_func extends FunctionPointer {
 
 public static class AVFilterGraph extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVFilterGraph() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVFilterGraph(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilterGraph(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1723,8 +1774,11 @@ public static native void avfilter_graph_free(@ByPtrPtr AVFilterGraph graph);
  */
 public static class AVFilterInOut extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVFilterInOut() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVFilterInOut(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilterInOut(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -2051,8 +2105,11 @@ public static final int AV_BUFFERSINK_FLAG_NO_REQUEST = 2;
  */
 public static class AVBufferSinkParams extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVBufferSinkParams() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVBufferSinkParams(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVBufferSinkParams(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -2076,8 +2133,11 @@ public static native AVBufferSinkParams av_buffersink_params_alloc();
  */
 public static class AVABufferSinkParams extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVABufferSinkParams() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVABufferSinkParams(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVABufferSinkParams(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);

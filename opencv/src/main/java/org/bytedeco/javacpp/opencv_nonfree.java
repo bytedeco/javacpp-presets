@@ -137,7 +137,9 @@ public class opencv_nonfree extends org.bytedeco.javacpp.presets.opencv_nonfree 
 */
 @Namespace("cv") @NoOffset public static class SIFT extends Feature2D {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SIFT(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public SIFT(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public SIFT position(int position) {
@@ -187,7 +189,9 @@ public class opencv_nonfree extends org.bytedeco.javacpp.presets.opencv_nonfree 
  */
 @Namespace("cv") @NoOffset public static class SURF extends Feature2D {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SURF(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public SURF(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public SURF position(int position) {

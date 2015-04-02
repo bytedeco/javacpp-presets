@@ -25,6 +25,7 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
 @Name("std::map<int,std::string>") public static class IntStringMap extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IntStringMap(Pointer p) { super(p); }
     public IntStringMap()       { allocate();  }
     private native void allocate();
@@ -38,6 +39,7 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
 @Name("std::vector<std::pair<cv::Rect_<int>,int> >") public static class RectIntPairVector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RectIntPairVector(Pointer p) { super(p); }
     public RectIntPairVector()       { allocate();  }
     public RectIntPairVector(long n) { allocate(n); }
@@ -54,6 +56,7 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
 @Name("std::valarray<float>") public static class FloatValArray extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatValArray(Pointer p) { super(p); }
     public FloatValArray(float ... array) { this(array.length); put(array); }
     public FloatValArray()       { allocate();  }
@@ -137,7 +140,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
 @NoOffset public static class CvAdaptiveSkinDetector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvAdaptiveSkinDetector(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvAdaptiveSkinDetector(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvAdaptiveSkinDetector position(int position) {
@@ -167,7 +172,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
 @NoOffset public static class CvFuzzyPoint extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public CvFuzzyPoint() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvFuzzyPoint(Pointer p) { super(p); }
 
     public native double x(); public native CvFuzzyPoint x(double x);
@@ -180,7 +187,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
 @NoOffset public static class CvFuzzyCurve extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvFuzzyCurve(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvFuzzyCurve(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvFuzzyCurve position(int position) {
@@ -201,7 +210,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
 @NoOffset public static class CvFuzzyFunction extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvFuzzyFunction(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvFuzzyFunction(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvFuzzyFunction position(int position) {
@@ -221,7 +232,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
 @NoOffset public static class CvFuzzyRule extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvFuzzyRule(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvFuzzyRule(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvFuzzyRule position(int position) {
@@ -237,7 +250,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
 @NoOffset public static class CvFuzzyController extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvFuzzyController(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvFuzzyController(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvFuzzyController position(int position) {
@@ -252,7 +267,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
 @NoOffset public static class CvFuzzyMeanShiftTracker extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvFuzzyMeanShiftTracker(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvFuzzyMeanShiftTracker(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvFuzzyMeanShiftTracker position(int position) {
@@ -288,7 +305,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
     @Namespace("cv") @NoOffset public static class Octree extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Octree(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public Octree(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public Octree position(int position) {
@@ -297,7 +316,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
     
         @NoOffset public static class Node extends Pointer {
             static { Loader.load(); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public Node(Pointer p) { super(p); }
+            /** Native array allocator. Access with {@link Pointer#position(int)}. */
             public Node(int size) { allocateArray(size); }
             private native void allocateArray(int size);
             @Override public Node position(int position) {
@@ -337,7 +358,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
     @Namespace("cv") @NoOffset public static class Mesh3D extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Mesh3D(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public Mesh3D(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public Mesh3D position(int position) {
@@ -346,8 +369,11 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
     
         public static class EmptyMeshException extends Pointer {
             static { Loader.load(); }
+            /** Default native constructor. */
             public EmptyMeshException() { allocate(); }
+            /** Native array allocator. Access with {@link Pointer#position(int)}. */
             public EmptyMeshException(int size) { allocateArray(size); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public EmptyMeshException(Pointer p) { super(p); }
             private native void allocate();
             private native void allocateArray(int size);
@@ -389,7 +415,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
     @Namespace("cv") @NoOffset public static class SpinImageModel extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public SpinImageModel(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public SpinImageModel(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public SpinImageModel position(int position) {
@@ -448,7 +476,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
     @Namespace("cv") @NoOffset public static class TickMeter extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public TickMeter(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public TickMeter(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public TickMeter position(int position) {
@@ -473,7 +503,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
     @Namespace("cv") @NoOffset public static class SelfSimDescriptor extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public SelfSimDescriptor(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public SelfSimDescriptor(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public SelfSimDescriptor position(int position) {
@@ -526,6 +558,7 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
     public static class BundleAdjustCallback extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    BundleAdjustCallback(Pointer p) { super(p); }
         protected BundleAdjustCallback() { allocate(); }
         private native void allocate();
@@ -534,7 +567,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
     @Namespace("cv") @NoOffset public static class LevMarqSparse extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public LevMarqSparse(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public LevMarqSparse(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public LevMarqSparse position(int position) {
@@ -545,6 +580,7 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
         private native void allocate();
         @Convention("CV_CDECL") public static class Fjac_int_int_Mat_Mat_Mat_Mat_Pointer extends FunctionPointer {
             static { Loader.load(); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public    Fjac_int_int_Mat_Mat_Mat_Mat_Pointer(Pointer p) { super(p); }
             protected Fjac_int_int_Mat_Mat_Mat_Mat_Pointer() { allocate(); }
             private native void allocate();
@@ -553,6 +589,7 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
         }
         @Convention("CV_CDECL") public static class Func_int_int_Mat_Mat_Mat_Pointer extends FunctionPointer {
             static { Loader.load(); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public    Func_int_int_Mat_Mat_Mat_Pointer(Pointer p) { super(p); }
             protected Func_int_int_Mat_Mat_Mat_Pointer() { allocate(); }
             private native void allocate();
@@ -719,7 +756,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
     @Namespace("cv") @NoOffset public static class StereoVar extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public StereoVar(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public StereoVar(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public StereoVar position(int position) {
@@ -765,8 +804,11 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
     @Namespace("cv") public static class Directory extends Pointer {
         static { Loader.load(); }
+        /** Default native constructor. */
         public Directory() { allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public Directory(int size) { allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Directory(Pointer p) { super(p); }
         private native void allocate();
         private native void allocateArray(int size);
@@ -845,7 +887,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
     */
     @Namespace("cv") @NoOffset public static class LogPolar_Interp extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public LogPolar_Interp(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public LogPolar_Interp(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public LogPolar_Interp position(int position) {
@@ -905,7 +949,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
     */
     @Namespace("cv") @NoOffset public static class LogPolar_Overlapping extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public LogPolar_Overlapping(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public LogPolar_Overlapping(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public LogPolar_Overlapping position(int position) {
@@ -964,7 +1010,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
     */
     @Namespace("cv") @NoOffset public static class LogPolar_Adjacent extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public LogPolar_Adjacent(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public LogPolar_Adjacent(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public LogPolar_Adjacent position(int position) {
@@ -1015,6 +1063,7 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
     @Namespace("cv") @NoOffset public static class LDA extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public LDA(Pointer p) { super(p); }
     
         // Initializes a LDA with num_components (default 0) and specifies how
@@ -1092,7 +1141,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
     @Namespace("cv") public static class FaceRecognizer extends Algorithm {
         static { Loader.load(); }
+        /** Empty constructor. */
         public FaceRecognizer() { }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public FaceRecognizer(Pointer p) { super(p); }
     
         /** virtual destructor */
@@ -1186,12 +1237,16 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
 @NoOffset public static class DetectionBasedTracker extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DetectionBasedTracker() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetectionBasedTracker(Pointer p) { super(p); }
 
         @NoOffset public static class Parameters extends Pointer {
             static { Loader.load(); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public Parameters(Pointer p) { super(p); }
+            /** Native array allocator. Access with {@link Pointer#position(int)}. */
             public Parameters(int size) { allocateArray(size); }
             private native void allocateArray(int size);
             @Override public Parameters position(int position) {
@@ -1290,7 +1345,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 // To add Kalman filter
 @Namespace("cv") @NoOffset public static class CvMotionModel extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvMotionModel(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvMotionModel(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvMotionModel position(int position) {
@@ -1309,7 +1366,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 // Mean Shift Tracker parameters for specifying use of HSV channel and CamShift parameters.
 @Namespace("cv") @NoOffset public static class CvMeanShiftTrackerParams extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvMeanShiftTrackerParams(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvMeanShiftTrackerParams(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvMeanShiftTrackerParams position(int position) {
@@ -1335,7 +1394,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 // Feature tracking parameters
 @Namespace("cv") @NoOffset public static class CvFeatureTrackerParams extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvFeatureTrackerParams(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvFeatureTrackerParams(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvFeatureTrackerParams position(int position) {
@@ -1356,7 +1417,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 // Hybrid Tracking parameters for specifying weights of individual trackers and motion model.
 @Namespace("cv") @NoOffset public static class CvHybridTrackerParams extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvHybridTrackerParams(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvHybridTrackerParams(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvHybridTrackerParams position(int position) {
@@ -1385,7 +1448,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 // Performs Camshift using parameters from MeanShiftTrackerParams
 @Namespace("cv") @NoOffset public static class CvMeanShiftTracker extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public CvMeanShiftTracker() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvMeanShiftTracker(Pointer p) { super(p); }
 
     public native @ByRef CvMeanShiftTrackerParams params(); public native CvMeanShiftTracker params(CvMeanShiftTrackerParams params);
@@ -1406,7 +1471,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 // Performs SIFT/SURF feature tracking using parameters from FeatureTrackerParams
 @Namespace("cv") @NoOffset public static class CvFeatureTracker extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public CvFeatureTracker() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvFeatureTracker(Pointer p) { super(p); }
 
     public native @ByRef Mat disp_matches(); public native CvFeatureTracker disp_matches(Mat disp_matches);
@@ -1428,7 +1495,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 // Performs Hybrid Tracking and combines individual trackers using EM or filters
 @Namespace("cv") @NoOffset public static class CvHybridTracker extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvHybridTracker(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvHybridTracker(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvHybridTracker position(int position) {
@@ -1541,7 +1610,9 @@ public static final int
     RETINA_COLOR_BAYER = 2;
 
 @Namespace("cv") @Opaque public static class RetinaFilter extends Pointer {
+    /** Empty constructor. */
     public RetinaFilter() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RetinaFilter(Pointer p) { super(p); }
 }
 
@@ -1570,15 +1641,20 @@ public static final int
  */
 @Namespace("cv") @NoOffset public static class Retina extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public Retina() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Retina(Pointer p) { super(p); }
 
 
     // parameters structure for better clarity, check explenations on the comments of methods : setupOPLandIPLParvoChannel and setupIPLMagnoChannel
     public static class RetinaParameters extends Pointer {
         static { Loader.load(); }
+        /** Default native constructor. */
         public RetinaParameters() { allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public RetinaParameters(int size) { allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public RetinaParameters(Pointer p) { super(p); }
         private native void allocate();
         private native void allocateArray(int size);
@@ -1588,7 +1664,9 @@ public static final int
     
         @NoOffset public static class OPLandIplParvoParameters extends Pointer {
             static { Loader.load(); }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public OPLandIplParvoParameters(Pointer p) { super(p); }
+            /** Native array allocator. Access with {@link Pointer#position(int)}. */
             public OPLandIplParvoParameters(int size) { allocateArray(size); }
             private native void allocateArray(int size);
             @Override public OPLandIplParvoParameters position(int position) {
@@ -1609,7 +1687,9 @@ public static final int
            }
            @NoOffset public static class IplMagnoParameters extends Pointer {
                static { Loader.load(); }
+               /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
                public IplMagnoParameters(Pointer p) { super(p); }
+               /** Native array allocator. Access with {@link Pointer#position(int)}. */
                public IplMagnoParameters(int size) { allocateArray(size); }
                private native void allocateArray(int size);
                @Override public IplMagnoParameters position(int position) {
@@ -1887,7 +1967,9 @@ public static final int
 */
 @Namespace("cv::of2") @NoOffset public static class IMatch extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IMatch(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public IMatch(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public IMatch position(int position) {
@@ -1915,7 +1997,9 @@ public static final int
 */
 @Namespace("cv::of2") @NoOffset public static class FabMap extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FabMap() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FabMap(Pointer p) { super(p); }
 
 
@@ -1981,7 +2065,9 @@ public static final int
 */
 @Namespace("cv::of2") public static class FabMap1 extends FabMap {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FabMap1() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FabMap1(Pointer p) { super(p); }
 
     public FabMap1(@Const @ByRef Mat clTree, double PzGe, double PzGNe, int flags,
@@ -1998,7 +2084,9 @@ public static final int
 */
 @Namespace("cv::of2") @NoOffset public static class FabMapLUT extends FabMap {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FabMapLUT() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FabMapLUT(Pointer p) { super(p); }
 
     public FabMapLUT(@Const @ByRef Mat clTree, double PzGe, double PzGNe,
@@ -2017,7 +2105,9 @@ public static final int
 */
 @Namespace("cv::of2") @NoOffset public static class FabMapFBO extends FabMap {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FabMapFBO() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FabMapFBO(Pointer p) { super(p); }
 
     public FabMapFBO(@Const @ByRef Mat clTree, double PzGe, double PzGNe, int flags,
@@ -2034,7 +2124,9 @@ public static final int
 */
 @Namespace("cv::of2") @NoOffset public static class FabMap2 extends FabMap {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FabMap2() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FabMap2(Pointer p) { super(p); }
 
 
@@ -2057,7 +2149,9 @@ public static final int
 */
 @Namespace("cv::of2") @NoOffset public static class ChowLiuTree extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ChowLiuTree(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ChowLiuTree(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public ChowLiuTree position(int position) {
@@ -2084,7 +2178,9 @@ public static final int
 */
 @Namespace("cv::of2") @NoOffset public static class BOWMSCTrainer extends BOWTrainer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BOWMSCTrainer(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public BOWMSCTrainer(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public BOWMSCTrainer position(int position) {

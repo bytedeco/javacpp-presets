@@ -63,7 +63,9 @@ public class opencv_superres extends org.bytedeco.javacpp.presets.opencv_superre
 
         @Namespace("cv::superres") public static class FrameSource extends Pointer {
             static { Loader.load(); }
+            /** Empty constructor. */
             public FrameSource() { }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public FrameSource(Pointer p) { super(p); }
         
 
@@ -83,7 +85,9 @@ public class opencv_superres extends org.bytedeco.javacpp.presets.opencv_superre
 
         @Namespace("cv::superres") @NoOffset public static class SuperResolution extends Algorithm {
             static { Loader.load(); }
+            /** Empty constructor. */
             public SuperResolution() { }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public SuperResolution(Pointer p) { super(p); }
             public FrameSource asFrameSource() { return asFrameSource(this); }
             @Namespace public static native @Name("static_cast<cv::superres::FrameSource*>") FrameSource asFrameSource(SuperResolution pointer);
@@ -157,7 +161,9 @@ public class opencv_superres extends org.bytedeco.javacpp.presets.opencv_superre
 // #include "opencv2/core/core.hpp"
         @Namespace("cv::superres") public static class DenseOpticalFlowExt extends Algorithm {
             static { Loader.load(); }
+            /** Empty constructor. */
             public DenseOpticalFlowExt() { }
+            /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public DenseOpticalFlowExt(Pointer p) { super(p); }
         
             public native void calc(@ByVal Mat frame0, @ByVal Mat frame1, @ByVal Mat flow1, @ByVal Mat flow2/*=noArray()*/);

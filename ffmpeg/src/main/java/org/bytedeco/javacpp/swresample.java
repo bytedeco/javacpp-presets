@@ -209,7 +209,9 @@ public static final int
  * structure.
  */
 @Opaque public static class SwrContext extends Pointer {
+    /** Empty constructor. */
     public SwrContext() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SwrContext(Pointer p) { super(p); }
 }
 

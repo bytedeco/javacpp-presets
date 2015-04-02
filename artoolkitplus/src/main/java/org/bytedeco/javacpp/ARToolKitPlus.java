@@ -32,7 +32,9 @@ public static final int MAX_PATTERNS = 256;
 
 @Namespace("ARToolKitPlus") public static class SingleTracker extends TrackerSingleMarker {
     static { Loader.load(); }
+    /** Empty constructor. */
     public SingleTracker() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SingleTracker(Pointer p) { super(p); }
 
     public SingleTracker(int width, int height) { allocate(width, height); }
@@ -41,7 +43,9 @@ public static final int MAX_PATTERNS = 256;
 
 @Namespace("ARToolKitPlus") public static class MultiTracker extends TrackerMultiMarker {
     static { Loader.load(); }
+    /** Empty constructor. */
     public MultiTracker() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MultiTracker(Pointer p) { super(p); }
 
     public MultiTracker(int width, int height) { allocate(width, height); }
@@ -121,7 +125,9 @@ public static final int
 
 @Namespace("ARToolKitPlus") @NoOffset public static class CornerPoint extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CornerPoint(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CornerPoint(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CornerPoint position(int position) {
@@ -314,8 +320,11 @@ public static final int P_MAX =       500;
 
 @Namespace("ARToolKitPlus") public static class ARMarkerInfo extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public ARMarkerInfo() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ARMarkerInfo(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ARMarkerInfo(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -337,8 +346,11 @@ public static final int P_MAX =       500;
 
 @Namespace("ARToolKitPlus") public static class ARMarkerInfo2 extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public ARMarkerInfo2() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ARMarkerInfo2(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ARMarkerInfo2(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -360,8 +372,11 @@ public static final int P_MAX =       500;
 
 @Namespace("ARToolKitPlus") public static class arPrevInfo extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public arPrevInfo() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public arPrevInfo(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public arPrevInfo(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -410,8 +425,11 @@ public static final int P_MAX =       500;
 
 @Namespace("ARToolKitPlus") public static class ARMultiEachMarkerInfoT extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public ARMultiEachMarkerInfoT() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ARMultiEachMarkerInfoT(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ARMultiEachMarkerInfoT(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -436,8 +454,11 @@ public static final int P_MAX =       500;
 
 @Namespace("ARToolKitPlus") public static class ARMultiMarkerInfoT extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public ARMultiMarkerInfoT() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ARMultiMarkerInfoT(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ARMultiMarkerInfoT(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -502,8 +523,11 @@ public static final int P_MAX =       500;
 
 @Namespace("ARToolKitPlus") public static class ARMat extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public ARMat() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ARMat(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ARMat(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -568,8 +592,11 @@ public static final int P_MAX =       500;
 
 @Namespace("ARToolKitPlus") public static class ARVec extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public ARVec() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ARVec(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ARVec(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -627,7 +654,9 @@ public static final int P_MAX =       500;
  */
 @Namespace("ARToolKitPlus") @NoOffset public static class Camera extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Camera(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public Camera(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Camera position(int position) {
@@ -728,7 +757,9 @@ public static final int BCH_MAX_SQ =   8;  // SQRT(MAX_LUT) -- (?)
 
 @Namespace("ARToolKitPlus") @NoOffset public static class BCH extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BCH(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public BCH(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public BCH position(int position) {
@@ -792,8 +823,11 @@ public static final int BCH_MAX_SQ =   8;  // SQRT(MAX_LUT) -- (?)
 
 @Namespace("ARToolKitPlus") public static class MarkerPoint extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public MarkerPoint() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public MarkerPoint(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MarkerPoint(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -933,7 +967,9 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
  */
 @Namespace("ARToolKitPlus") @NoOffset public static class Tracker extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public Tracker() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Tracker(Pointer p) { super(p); }
 
     public Tracker(int imWidth, int imHeight, int maxImagePatterns/*=8*/, int pattWidth/*=6*/, int pattHeight/*=6*/, int pattSamples/*=6*/,
@@ -1233,7 +1269,9 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
  */
 @Namespace("ARToolKitPlus") @NoOffset public static class TrackerMultiMarker extends Tracker {
     static { Loader.load(); }
+    /** Empty constructor. */
     public TrackerMultiMarker() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TrackerMultiMarker(Pointer p) { super(p); }
 
     /**
@@ -1365,7 +1403,9 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
  */
 @Namespace("ARToolKitPlus") @NoOffset public static class TrackerSingleMarker extends Tracker {
     static { Loader.load(); }
+    /** Empty constructor. */
     public TrackerSingleMarker() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TrackerSingleMarker(Pointer p) { super(p); }
 
     /**

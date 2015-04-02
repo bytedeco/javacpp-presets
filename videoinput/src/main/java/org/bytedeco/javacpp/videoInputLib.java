@@ -11,6 +11,7 @@ public class videoInputLib extends org.bytedeco.javacpp.presets.videoInputLib {
 
 @Name("std::vector<std::string>") public static class StringVector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringVector(Pointer p) { super(p); }
     public StringVector(BytePointer ... array) { this(array.length); put(array); }
     public StringVector()       { allocate();  }
@@ -210,43 +211,63 @@ public static final int VI_MEDIASUBTYPE_MJPG =    18;
 
 //allows us to directShow classes here with the includes in the cpp
 @Opaque public static class ICaptureGraphBuilder2 extends Pointer {
+    /** Empty constructor. */
     public ICaptureGraphBuilder2() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ICaptureGraphBuilder2(Pointer p) { super(p); }
 }
 @Opaque public static class IGraphBuilder extends Pointer {
+    /** Empty constructor. */
     public IGraphBuilder() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IGraphBuilder(Pointer p) { super(p); }
 }
 @Opaque public static class IBaseFilter extends Pointer {
+    /** Empty constructor. */
     public IBaseFilter() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IBaseFilter(Pointer p) { super(p); }
 }
 @Opaque public static class IAMCrossbar extends Pointer {
+    /** Empty constructor. */
     public IAMCrossbar() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IAMCrossbar(Pointer p) { super(p); }
 }
 @Opaque public static class IMediaControl extends Pointer {
+    /** Empty constructor. */
     public IMediaControl() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IMediaControl(Pointer p) { super(p); }
 }
 @Opaque public static class ISampleGrabber extends Pointer {
+    /** Empty constructor. */
     public ISampleGrabber() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ISampleGrabber(Pointer p) { super(p); }
 }
 @Opaque public static class IMediaEventEx extends Pointer {
+    /** Empty constructor. */
     public IMediaEventEx() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IMediaEventEx(Pointer p) { super(p); }
 }
 @Opaque public static class IAMStreamConfig extends Pointer {
+    /** Empty constructor. */
     public IAMStreamConfig() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IAMStreamConfig(Pointer p) { super(p); }
 }
 @Opaque public static class _AMMediaType extends Pointer {
+    /** Empty constructor. */
     public _AMMediaType() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _AMMediaType(Pointer p) { super(p); }
 }
 @Opaque public static class SampleGrabberCallback extends Pointer {
+    /** Empty constructor. */
     public SampleGrabberCallback() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SampleGrabberCallback(Pointer p) { super(p); }
 }
 
@@ -259,7 +280,9 @@ public static native int comInitCount(); public static native void comInitCount(
 
 @NoOffset public static class videoDevice extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public videoDevice(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public videoDevice(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public videoDevice position(int position) {
@@ -329,7 +352,9 @@ public static native int comInitCount(); public static native void comInitCount(
 
 @NoOffset public static class videoInput extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public videoInput(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public videoInput(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public videoInput position(int position) {

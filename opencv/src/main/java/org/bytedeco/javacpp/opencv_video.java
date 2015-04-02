@@ -279,8 +279,11 @@ standard Kalman filter (in G. Welch' and G. Bishop's notation):
 */
 public static class CvKalman extends AbstractCvKalman {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvKalman() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvKalman(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvKalman(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -392,7 +395,9 @@ public static native @Const CvMat cvKalmanUpdateByMeasurement(CvKalman arg1, CvM
 */
 @Namespace("cv") @NoOffset public static class KalmanFilter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KalmanFilter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public KalmanFilter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public KalmanFilter position(int position) {
@@ -508,7 +513,9 @@ public static final int
 
 @Namespace("cv") public static class DenseOpticalFlow extends Algorithm {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DenseOpticalFlow() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DenseOpticalFlow(Pointer p) { super(p); }
 
     public native void calc(@ByVal Mat I0, @ByVal Mat I1, @ByVal Mat flow);
@@ -587,8 +594,11 @@ public static final int
 */
 @Namespace("cv") public static class BackgroundSubtractor extends Algorithm {
     static { Loader.load(); }
+    /** Default native constructor. */
     public BackgroundSubtractor() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public BackgroundSubtractor(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BackgroundSubtractor(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -619,7 +629,9 @@ public static final int
 */
 @Namespace("cv") @NoOffset public static class BackgroundSubtractorMOG extends BackgroundSubtractor {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BackgroundSubtractorMOG(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public BackgroundSubtractorMOG(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public BackgroundSubtractorMOG position(int position) {
@@ -655,7 +667,9 @@ public static final int
 */
 @Namespace("cv") @NoOffset public static class BackgroundSubtractorMOG2 extends BackgroundSubtractor {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BackgroundSubtractorMOG2(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public BackgroundSubtractorMOG2(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public BackgroundSubtractorMOG2 position(int position) {
@@ -693,7 +707,9 @@ public static final int
  */
 @Namespace("cv") @NoOffset public static class BackgroundSubtractorGMG extends BackgroundSubtractor {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BackgroundSubtractorGMG(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public BackgroundSubtractorGMG(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public BackgroundSubtractorGMG position(int position) {

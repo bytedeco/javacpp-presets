@@ -13,6 +13,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 
 @Name("std::map<std::string,int>") public static class StringIntMap extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringIntMap(Pointer p) { super(p); }
     public StringIntMap()       { allocate();  }
     private native void allocate();
@@ -26,6 +27,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 
 @Name("std::vector<boost::shared_ptr<caffe::Blob<float> > >") public static class FloatBlobSharedVector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBlobSharedVector(Pointer p) { super(p); }
     public FloatBlobSharedVector(FloatBlob ... array) { this(array.length); put(array); }
     public FloatBlobSharedVector()       { allocate();  }
@@ -51,6 +53,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 
 @Name("std::vector<boost::shared_ptr<caffe::Blob<double> > >") public static class DoubleBlobSharedVector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBlobSharedVector(Pointer p) { super(p); }
     public DoubleBlobSharedVector(DoubleBlob ... array) { this(array.length); put(array); }
     public DoubleBlobSharedVector()       { allocate();  }
@@ -76,6 +79,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 
 @Name("std::vector<boost::shared_ptr<caffe::Layer<float> > >") public static class FloatLayerSharedVector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatLayerSharedVector(Pointer p) { super(p); }
     public FloatLayerSharedVector(FloatLayer ... array) { this(array.length); put(array); }
     public FloatLayerSharedVector()       { allocate();  }
@@ -101,6 +105,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 
 @Name("std::vector<boost::shared_ptr<caffe::Layer<double> > >") public static class DoubleLayerSharedVector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleLayerSharedVector(Pointer p) { super(p); }
     public DoubleLayerSharedVector(DoubleLayer ... array) { this(array.length); put(array); }
     public DoubleLayerSharedVector()       { allocate();  }
@@ -126,6 +131,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 
 @Name("std::vector<boost::shared_ptr<caffe::Net<float> > >") public static class FloatNetSharedVector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatNetSharedVector(Pointer p) { super(p); }
     public FloatNetSharedVector(FloatNet ... array) { this(array.length); put(array); }
     public FloatNetSharedVector()       { allocate();  }
@@ -151,6 +157,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 
 @Name("std::vector<boost::shared_ptr<caffe::Net<double> > >") public static class DoubleNetSharedVector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleNetSharedVector(Pointer p) { super(p); }
     public DoubleNetSharedVector(DoubleNet ... array) { this(array.length); put(array); }
     public DoubleNetSharedVector()       { allocate();  }
@@ -176,6 +183,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 
 @Name("std::vector<caffe::Blob<float>*>") public static class FloatBlobVector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBlobVector(Pointer p) { super(p); }
     public FloatBlobVector(FloatBlob ... array) { this(array.length); put(array); }
     public FloatBlobVector()       { allocate();  }
@@ -201,6 +209,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 
 @Name("std::vector<caffe::Blob<double>*>") public static class DoubleBlobVector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBlobVector(Pointer p) { super(p); }
     public DoubleBlobVector(DoubleBlob ... array) { this(array.length); put(array); }
     public DoubleBlobVector()       { allocate();  }
@@ -226,6 +235,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 
 @Name("std::vector<std::vector<caffe::Blob<float>*> >") public static class FloatBlobVectorVector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBlobVectorVector(Pointer p) { super(p); }
     public FloatBlobVectorVector(FloatBlobVector ... array) { this(array.length); put(array); }
     public FloatBlobVectorVector()       { allocate();  }
@@ -251,6 +261,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 
 @Name("std::vector<std::vector<caffe::Blob<double>*> >") public static class DoubleBlobVectorVector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBlobVectorVector(Pointer p) { super(p); }
     public DoubleBlobVectorVector(DoubleBlobVector ... array) { this(array.length); put(array); }
     public DoubleBlobVectorVector()       { allocate();  }
@@ -276,6 +287,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 
 @Name("std::vector<bool>") public static class BoolVector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BoolVector(Pointer p) { super(p); }
     public BoolVector(boolean ... array) { this(array.length); put(array); }
     public BoolVector()       { allocate();  }
@@ -301,6 +313,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 
 @Name("std::vector<std::vector<bool> >") public static class BoolVectorVector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BoolVectorVector(Pointer p) { super(p); }
     public BoolVectorVector(BoolVector ... array) { this(array.length); put(array); }
     public BoolVectorVector()       { allocate();  }
@@ -533,7 +546,9 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 // caffe is going to use for cublas, curand, etc.
 @Namespace("caffe") @NoOffset public static class Caffe extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public Caffe() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Caffe(Pointer p) { super(p); }
 
   public static native @ByRef Caffe Get();
@@ -544,6 +559,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
   // implementation from one another (for cross-platform compatibility).
   @NoOffset public static class RNG extends Pointer {
       static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public RNG(Pointer p) { super(p); }
   
     public RNG() { allocate(); }
@@ -1087,7 +1103,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class BlobShape extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BlobShape(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public BlobShape(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public BlobShape position(int position) {
@@ -1149,7 +1167,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class BlobProto extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BlobProto(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public BlobProto(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public BlobProto position(int position) {
@@ -1256,7 +1276,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class BlobProtoVector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BlobProtoVector(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public BlobProtoVector(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public BlobProtoVector position(int position) {
@@ -1318,7 +1340,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class Datum extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Datum(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public Datum(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Datum position(int position) {
@@ -1427,7 +1451,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class FillerParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FillerParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public FillerParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public FillerParameter position(int position) {
@@ -1536,7 +1562,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class NetParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NetParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public NetParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public NetParameter position(int position) {
@@ -1674,7 +1702,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class SolverParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SolverParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public SolverParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public SolverParameter position(int position) {
@@ -2063,7 +2093,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class SolverState extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SolverState(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public SolverState(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public SolverState position(int position) {
@@ -2152,7 +2184,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class NetState extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NetState(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public NetState(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public NetState position(int position) {
@@ -2236,7 +2270,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class NetStateRule extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NetStateRule(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public NetStateRule(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public NetStateRule position(int position) {
@@ -2343,7 +2379,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class ParamSpec extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ParamSpec(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ParamSpec(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public ParamSpec position(int position) {
@@ -2451,7 +2489,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class LayerParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LayerParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public LayerParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public LayerParameter position(int position) {
@@ -2898,7 +2938,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class TransformationParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TransformationParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public TransformationParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public TransformationParameter position(int position) {
@@ -2994,7 +3036,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class LossParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LossParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public LossParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public LossParameter position(int position) {
@@ -3062,7 +3106,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class AccuracyParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AccuracyParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AccuracyParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public AccuracyParameter position(int position) {
@@ -3137,7 +3183,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class ArgMaxParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ArgMaxParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ArgMaxParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public ArgMaxParameter position(int position) {
@@ -3205,7 +3253,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class ConcatParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConcatParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ConcatParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public ConcatParameter position(int position) {
@@ -3273,7 +3323,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class ContrastiveLossParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ContrastiveLossParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ContrastiveLossParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public ContrastiveLossParameter position(int position) {
@@ -3334,7 +3386,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class ConvolutionParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConvolutionParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ConvolutionParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public ConvolutionParameter position(int position) {
@@ -3518,7 +3572,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class DataParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DataParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public DataParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public DataParameter position(int position) {
@@ -3667,7 +3723,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class DropoutParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DropoutParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public DropoutParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public DropoutParameter position(int position) {
@@ -3728,7 +3786,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class DummyDataParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DummyDataParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public DummyDataParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public DummyDataParameter position(int position) {
@@ -3830,7 +3890,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class EltwiseParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EltwiseParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public EltwiseParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public EltwiseParameter position(int position) {
@@ -3927,7 +3989,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class ExpParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ExpParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ExpParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public ExpParameter position(int position) {
@@ -4002,7 +4066,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class HDF5DataParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HDF5DataParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public HDF5DataParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public HDF5DataParameter position(int position) {
@@ -4083,7 +4149,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class HDF5OutputParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HDF5OutputParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public HDF5OutputParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public HDF5OutputParameter position(int position) {
@@ -4150,7 +4218,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class HingeLossParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HingeLossParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public HingeLossParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public HingeLossParameter position(int position) {
@@ -4231,7 +4301,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class ImageDataParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ImageDataParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ImageDataParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public ImageDataParameter position(int position) {
@@ -4387,7 +4459,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class InfogainLossParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public InfogainLossParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public InfogainLossParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public InfogainLossParameter position(int position) {
@@ -4454,7 +4528,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class InnerProductParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public InnerProductParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public InnerProductParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public InnerProductParameter position(int position) {
@@ -4547,7 +4623,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class LRNParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LRNParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public LRNParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public LRNParameter position(int position) {
@@ -4656,7 +4734,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class MemoryDataParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MemoryDataParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public MemoryDataParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public MemoryDataParameter position(int position) {
@@ -4738,7 +4818,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class MVNParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MVNParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public MVNParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public MVNParameter position(int position) {
@@ -4806,7 +4888,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class PoolingParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PoolingParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public PoolingParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public PoolingParameter position(int position) {
@@ -4986,7 +5070,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class PowerParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PowerParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public PowerParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public PowerParameter position(int position) {
@@ -5061,7 +5147,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class PythonParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PythonParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public PythonParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public PythonParameter position(int position) {
@@ -5141,7 +5229,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class ReLUParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ReLUParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ReLUParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public ReLUParameter position(int position) {
@@ -5230,7 +5320,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class SigmoidParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SigmoidParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public SigmoidParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public SigmoidParameter position(int position) {
@@ -5312,7 +5404,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class SliceParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SliceParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public SliceParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public SliceParameter position(int position) {
@@ -5388,7 +5482,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class SoftmaxParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SoftmaxParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public SoftmaxParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public SoftmaxParameter position(int position) {
@@ -5477,7 +5573,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class TanHParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TanHParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public TanHParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public TanHParameter position(int position) {
@@ -5559,7 +5657,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class ThresholdParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ThresholdParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ThresholdParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public ThresholdParameter position(int position) {
@@ -5620,7 +5720,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class WindowDataParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public WindowDataParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public WindowDataParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public WindowDataParameter position(int position) {
@@ -5789,7 +5891,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class V1LayerParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public V1LayerParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public V1LayerParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public V1LayerParameter position(int position) {
@@ -6324,7 +6428,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class V0LayerParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public V0LayerParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public V0LayerParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public V0LayerParameter position(int position) {
@@ -6704,7 +6810,9 @@ public static final int
 
 @Namespace("caffe") @NoOffset public static class PReLUParameter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PReLUParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public PReLUParameter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public PReLUParameter position(int position) {
@@ -10690,7 +10798,9 @@ public static final int
  */
 @Namespace("caffe") @NoOffset public static class SyncedMemory extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SyncedMemory(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public SyncedMemory(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public SyncedMemory position(int position) {
@@ -10742,7 +10852,9 @@ public static final int
  */
 @Name("caffe::Blob<float>") @NoOffset public static class FloatBlob extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBlob(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public FloatBlob(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public FloatBlob position(int position) {
@@ -10932,7 +11044,9 @@ public static final int
 }
 @Name("caffe::Blob<double>") @NoOffset public static class DoubleBlob extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBlob(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public DoubleBlob(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public DoubleBlob position(int position) {
@@ -11143,7 +11257,9 @@ public static final int
  */
 @Name("caffe::DataTransformer<float>") @NoOffset public static class FloatDataTransformer extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatDataTransformer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatDataTransformer(Pointer p) { super(p); }
 
   public FloatDataTransformer(@Const @ByRef TransformationParameter param, @Cast("caffe::Phase") int phase) { allocate(param, phase); }
@@ -11217,7 +11333,9 @@ public static final int
 }
 @Name("caffe::DataTransformer<double>") @NoOffset public static class DoubleDataTransformer extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleDataTransformer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleDataTransformer(Pointer p) { super(p); }
 
   public DoubleDataTransformer(@Const @ByRef TransformationParameter param, @Cast("caffe::Phase") int phase) { allocate(param, phase); }
@@ -11316,14 +11434,18 @@ public static final int
 /** @brief Fills a Blob with constant or randomly-generated data. */
 @Name("caffe::Filler<float>") @NoOffset public static class FloatFiller extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatFiller() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatFiller(Pointer p) { super(p); }
 
   public native void Fill(FloatBlob blob);
 }
 @Name("caffe::Filler<double>") @NoOffset public static class DoubleFiller extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleFiller() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleFiller(Pointer p) { super(p); }
 
   public native void Fill(DoubleBlob blob);
@@ -11333,7 +11455,9 @@ public static final int
 /** @brief Fills a Blob with constant values @f$ x = 0 @f$. */
 @Name("caffe::ConstantFiller<float>") public static class FloatConstantFiller extends FloatFiller {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatConstantFiller() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatConstantFiller(Pointer p) { super(p); }
 
   public FloatConstantFiller(@Const @ByRef FillerParameter param) { allocate(param); }
@@ -11342,7 +11466,9 @@ public static final int
 }
 @Name("caffe::ConstantFiller<double>") public static class DoubleConstantFiller extends DoubleFiller {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleConstantFiller() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleConstantFiller(Pointer p) { super(p); }
 
   public DoubleConstantFiller(@Const @ByRef FillerParameter param) { allocate(param); }
@@ -11353,7 +11479,9 @@ public static final int
 /** @brief Fills a Blob with uniformly distributed values @f$ x\sim U(a, b) @f$. */
 @Name("caffe::UniformFiller<float>") public static class FloatUniformFiller extends FloatFiller {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatUniformFiller() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatUniformFiller(Pointer p) { super(p); }
 
   public FloatUniformFiller(@Const @ByRef FillerParameter param) { allocate(param); }
@@ -11362,7 +11490,9 @@ public static final int
 }
 @Name("caffe::UniformFiller<double>") public static class DoubleUniformFiller extends DoubleFiller {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleUniformFiller() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleUniformFiller(Pointer p) { super(p); }
 
   public DoubleUniformFiller(@Const @ByRef FillerParameter param) { allocate(param); }
@@ -11373,7 +11503,9 @@ public static final int
 /** @brief Fills a Blob with Gaussian-distributed values @f$ x = a @f$. */
 @Name("caffe::GaussianFiller<float>") @NoOffset public static class FloatGaussianFiller extends FloatFiller {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatGaussianFiller() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatGaussianFiller(Pointer p) { super(p); }
 
   public FloatGaussianFiller(@Const @ByRef FillerParameter param) { allocate(param); }
@@ -11382,7 +11514,9 @@ public static final int
 }
 @Name("caffe::GaussianFiller<double>") @NoOffset public static class DoubleGaussianFiller extends DoubleFiller {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleGaussianFiller() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleGaussianFiller(Pointer p) { super(p); }
 
   public DoubleGaussianFiller(@Const @ByRef FillerParameter param) { allocate(param); }
@@ -11395,7 +11529,9 @@ public static final int
  */
 @Name("caffe::PositiveUnitballFiller<float>") public static class FloatPositiveUnitballFiller extends FloatFiller {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatPositiveUnitballFiller() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatPositiveUnitballFiller(Pointer p) { super(p); }
 
   public FloatPositiveUnitballFiller(@Const @ByRef FillerParameter param) { allocate(param); }
@@ -11404,7 +11540,9 @@ public static final int
 }
 @Name("caffe::PositiveUnitballFiller<double>") public static class DoublePositiveUnitballFiller extends DoubleFiller {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoublePositiveUnitballFiller() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoublePositiveUnitballFiller(Pointer p) { super(p); }
 
   public DoublePositiveUnitballFiller(@Const @ByRef FillerParameter param) { allocate(param); }
@@ -11429,7 +11567,9 @@ public static final int
  */
 @Name("caffe::XavierFiller<float>") public static class FloatXavierFiller extends FloatFiller {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatXavierFiller() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatXavierFiller(Pointer p) { super(p); }
 
   public FloatXavierFiller(@Const @ByRef FillerParameter param) { allocate(param); }
@@ -11438,7 +11578,9 @@ public static final int
 }
 @Name("caffe::XavierFiller<double>") public static class DoubleXavierFiller extends DoubleFiller {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleXavierFiller() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleXavierFiller(Pointer p) { super(p); }
 
   public DoubleXavierFiller(@Const @ByRef FillerParameter param) { allocate(param); }
@@ -11473,7 +11615,9 @@ public static final int
  to avoid a boost/NVCC issues (#1009, #1010) on OSX.
  */
 @Namespace("boost") @Opaque public static class thread extends Pointer {
+    /** Empty constructor. */
     public thread() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public thread(Pointer p) { super(p); }
 } 
 
@@ -11484,7 +11628,9 @@ public static final int
  */
 @Namespace("caffe") @NoOffset public static class InternalThread extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public InternalThread(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public InternalThread(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public InternalThread position(int position) {
@@ -11537,7 +11683,9 @@ public static final int
  */
 @Name("caffe::BaseDataLayer<float>") @NoOffset public static class FloatBaseDataLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatBaseDataLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBaseDataLayer(Pointer p) { super(p); }
 
   // LayerSetUp: implements common data layer setup functionality, and calls
@@ -11558,7 +11706,9 @@ public static final int
 }
 @Name("caffe::BaseDataLayer<double>") @NoOffset public static class DoubleBaseDataLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleBaseDataLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBaseDataLayer(Pointer p) { super(p); }
 
   // LayerSetUp: implements common data layer setup functionality, and calls
@@ -11580,7 +11730,9 @@ public static final int
 
 @Name("caffe::BasePrefetchingDataLayer<float>") @NoOffset public static class FloatBasePrefetchingDataLayer extends FloatBaseDataLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatBasePrefetchingDataLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBasePrefetchingDataLayer(Pointer p) { super(p); }
     public InternalThread asInternalThread() { return asInternalThread(this); }
     @Namespace public static native @Name("static_cast<caffe::InternalThread*>") InternalThread asInternalThread(FloatBasePrefetchingDataLayer pointer);
@@ -11604,7 +11756,9 @@ public static final int
 
 @Name("caffe::BasePrefetchingDataLayer<double>") @NoOffset public static class DoubleBasePrefetchingDataLayer extends DoubleBaseDataLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleBasePrefetchingDataLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBasePrefetchingDataLayer(Pointer p) { super(p); }
     public InternalThread asInternalThread() { return asInternalThread(this); }
     @Namespace public static native @Name("static_cast<caffe::InternalThread*>") InternalThread asInternalThread(DoubleBasePrefetchingDataLayer pointer);
@@ -11628,7 +11782,9 @@ public static final int
 
 @Name("caffe::DataLayer<float>") @NoOffset public static class FloatDataLayer extends FloatBasePrefetchingDataLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatDataLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatDataLayer(Pointer p) { super(p); }
 
   public native void DataLayerSetUp(@Const @ByRef FloatBlobVector bottom,
@@ -11642,7 +11798,9 @@ public static final int
 
 @Name("caffe::DataLayer<double>") @NoOffset public static class DoubleDataLayer extends DoubleBasePrefetchingDataLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleDataLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleDataLayer(Pointer p) { super(p); }
 
   public native void DataLayerSetUp(@Const @ByRef DoubleBlobVector bottom,
@@ -11661,7 +11819,9 @@ public static final int
  */
 @Name("caffe::DummyDataLayer<float>") @NoOffset public static class FloatDummyDataLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatDummyDataLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatDummyDataLayer(Pointer p) { super(p); }
 
   public FloatDummyDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -11678,7 +11838,9 @@ public static final int
 }
 @Name("caffe::DummyDataLayer<double>") @NoOffset public static class DoubleDummyDataLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleDummyDataLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleDummyDataLayer(Pointer p) { super(p); }
 
   public DoubleDummyDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -11701,7 +11863,9 @@ public static final int
  */
 @Name("caffe::HDF5DataLayer<float>") @NoOffset public static class FloatHDF5DataLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatHDF5DataLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatHDF5DataLayer(Pointer p) { super(p); }
 
   public FloatHDF5DataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -11718,7 +11882,9 @@ public static final int
 }
 @Name("caffe::HDF5DataLayer<double>") @NoOffset public static class DoubleHDF5DataLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleHDF5DataLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleHDF5DataLayer(Pointer p) { super(p); }
 
   public DoubleHDF5DataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -11741,7 +11907,9 @@ public static final int
  */
 @Name("caffe::HDF5OutputLayer<float>") @NoOffset public static class FloatHDF5OutputLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatHDF5OutputLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatHDF5OutputLayer(Pointer p) { super(p); }
 
   public FloatHDF5OutputLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -11761,7 +11929,9 @@ public static final int
 }
 @Name("caffe::HDF5OutputLayer<double>") @NoOffset public static class DoubleHDF5OutputLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleHDF5OutputLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleHDF5OutputLayer(Pointer p) { super(p); }
 
   public DoubleHDF5OutputLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -11787,7 +11957,9 @@ public static final int
  */
 @Name("caffe::ImageDataLayer<float>") @NoOffset public static class FloatImageDataLayer extends FloatBasePrefetchingDataLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatImageDataLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatImageDataLayer(Pointer p) { super(p); }
 
   public native void DataLayerSetUp(@Const @ByRef FloatBlobVector bottom,
@@ -11799,7 +11971,9 @@ public static final int
 }
 @Name("caffe::ImageDataLayer<double>") @NoOffset public static class DoubleImageDataLayer extends DoubleBasePrefetchingDataLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleImageDataLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleImageDataLayer(Pointer p) { super(p); }
 
   public native void DataLayerSetUp(@Const @ByRef DoubleBlobVector bottom,
@@ -11817,7 +11991,9 @@ public static final int
  */
 @Name("caffe::MemoryDataLayer<float>") @NoOffset public static class FloatMemoryDataLayer extends FloatBaseDataLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatMemoryDataLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatMemoryDataLayer(Pointer p) { super(p); }
 
   public native void DataLayerSetUp(@Const @ByRef FloatBlobVector bottom,
@@ -11849,7 +12025,9 @@ public static final int
 }
 @Name("caffe::MemoryDataLayer<double>") @NoOffset public static class DoubleMemoryDataLayer extends DoubleBaseDataLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleMemoryDataLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleMemoryDataLayer(Pointer p) { super(p); }
 
   public native void DataLayerSetUp(@Const @ByRef DoubleBlobVector bottom,
@@ -11888,7 +12066,9 @@ public static final int
  */
 @Name("caffe::WindowDataLayer<float>") @NoOffset public static class FloatWindowDataLayer extends FloatBasePrefetchingDataLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatWindowDataLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatWindowDataLayer(Pointer p) { super(p); }
 
   public native void DataLayerSetUp(@Const @ByRef FloatBlobVector bottom,
@@ -11900,7 +12080,9 @@ public static final int
 }
 @Name("caffe::WindowDataLayer<double>") @NoOffset public static class DoubleWindowDataLayer extends DoubleBasePrefetchingDataLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleWindowDataLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleWindowDataLayer(Pointer p) { super(p); }
 
   public native void DataLayerSetUp(@Const @ByRef DoubleBlobVector bottom,
@@ -11943,7 +12125,9 @@ public static final int
  */
 @Name("caffe::Layer<float>") @NoOffset public static class FloatLayer extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatLayer(Pointer p) { super(p); }
 
   /**
@@ -12171,7 +12355,9 @@ public static final int
 }
 @Name("caffe::Layer<double>") @NoOffset public static class DoubleLayer extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleLayer(Pointer p) { super(p); }
 
   /**
@@ -12436,7 +12622,9 @@ public static final int
  */
 @Name("caffe::AccuracyLayer<float>") @NoOffset public static class FloatAccuracyLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatAccuracyLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatAccuracyLayer(Pointer p) { super(p); }
 
   /**
@@ -12460,7 +12648,9 @@ public static final int
 }
 @Name("caffe::AccuracyLayer<double>") @NoOffset public static class DoubleAccuracyLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleAccuracyLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleAccuracyLayer(Pointer p) { super(p); }
 
   /**
@@ -12493,7 +12683,9 @@ public static final int
  */
 @Name("caffe::LossLayer<float>") public static class FloatLossLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatLossLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatLossLayer(Pointer p) { super(p); }
 
   public native void LayerSetUp(
@@ -12519,7 +12711,9 @@ public static final int
 }
 @Name("caffe::LossLayer<double>") public static class DoubleLossLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleLossLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleLossLayer(Pointer p) { super(p); }
 
   public native void LayerSetUp(
@@ -12570,7 +12764,9 @@ public static final int
  */
 @Name("caffe::ContrastiveLossLayer<float>") @NoOffset public static class FloatContrastiveLossLayer extends FloatLossLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatContrastiveLossLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatContrastiveLossLayer(Pointer p) { super(p); }
 
   public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
@@ -12586,7 +12782,9 @@ public static final int
 }
 @Name("caffe::ContrastiveLossLayer<double>") @NoOffset public static class DoubleContrastiveLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleContrastiveLossLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleContrastiveLossLayer(Pointer p) { super(p); }
 
   public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
@@ -12629,7 +12827,9 @@ public static final int
  */
 @Name("caffe::EuclideanLossLayer<float>") @NoOffset public static class FloatEuclideanLossLayer extends FloatLossLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatEuclideanLossLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatEuclideanLossLayer(Pointer p) { super(p); }
 
   public native void Reshape(@Const @ByRef FloatBlobVector bottom,
@@ -12644,7 +12844,9 @@ public static final int
 }
 @Name("caffe::EuclideanLossLayer<double>") @NoOffset public static class DoubleEuclideanLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleEuclideanLossLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleEuclideanLossLayer(Pointer p) { super(p); }
 
   public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
@@ -12703,7 +12905,9 @@ public static final int
  */
 @Name("caffe::HingeLossLayer<float>") public static class FloatHingeLossLayer extends FloatLossLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatHingeLossLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatHingeLossLayer(Pointer p) { super(p); }
 
 
@@ -12711,7 +12915,9 @@ public static final int
 }
 @Name("caffe::HingeLossLayer<double>") public static class DoubleHingeLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleHingeLossLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleHingeLossLayer(Pointer p) { super(p); }
 
 
@@ -12752,7 +12958,9 @@ public static final int
  */
 @Name("caffe::InfogainLossLayer<float>") @NoOffset public static class FloatInfogainLossLayer extends FloatLossLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatInfogainLossLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatInfogainLossLayer(Pointer p) { super(p); }
 
   public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
@@ -12771,7 +12979,9 @@ public static final int
 }
 @Name("caffe::InfogainLossLayer<double>") @NoOffset public static class DoubleInfogainLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleInfogainLossLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleInfogainLossLayer(Pointer p) { super(p); }
 
   public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
@@ -12820,7 +13030,9 @@ public static final int
  */
 @Name("caffe::MultinomialLogisticLossLayer<float>") public static class FloatMultinomialLogisticLossLayer extends FloatLossLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatMultinomialLogisticLossLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatMultinomialLogisticLossLayer(Pointer p) { super(p); }
 
   public native void Reshape(@Const @ByRef FloatBlobVector bottom,
@@ -12830,7 +13042,9 @@ public static final int
 }
 @Name("caffe::MultinomialLogisticLossLayer<double>") public static class DoubleMultinomialLogisticLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleMultinomialLogisticLossLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleMultinomialLogisticLossLayer(Pointer p) { super(p); }
 
   public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
@@ -12870,7 +13084,9 @@ public static final int
  */
 @Name("caffe::SigmoidCrossEntropyLossLayer<float>") @NoOffset public static class FloatSigmoidCrossEntropyLossLayer extends FloatLossLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatSigmoidCrossEntropyLossLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSigmoidCrossEntropyLossLayer(Pointer p) { super(p); }
 
   public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
@@ -12882,7 +13098,9 @@ public static final int
 }
 @Name("caffe::SigmoidCrossEntropyLossLayer<double>") @NoOffset public static class DoubleSigmoidCrossEntropyLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleSigmoidCrossEntropyLossLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSigmoidCrossEntropyLossLayer(Pointer p) { super(p); }
 
   public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
@@ -12925,7 +13143,9 @@ public static final int
  */
 @Name("caffe::SoftmaxWithLossLayer<float>") @NoOffset public static class FloatSoftmaxWithLossLayer extends FloatLossLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatSoftmaxWithLossLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSoftmaxWithLossLayer(Pointer p) { super(p); }
 
    /**
@@ -12948,7 +13168,9 @@ public static final int
 }
 @Name("caffe::SoftmaxWithLossLayer<double>") @NoOffset public static class DoubleSoftmaxWithLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleSoftmaxWithLossLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSoftmaxWithLossLayer(Pointer p) { super(p); }
 
    /**
@@ -13001,7 +13223,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::NeuronLayer<float>") public static class FloatNeuronLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatNeuronLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatNeuronLayer(Pointer p) { super(p); }
 
   public native void Reshape(@Const @ByRef FloatBlobVector bottom,
@@ -13012,7 +13236,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::NeuronLayer<double>") public static class DoubleNeuronLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleNeuronLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleNeuronLayer(Pointer p) { super(p); }
 
   public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
@@ -13034,7 +13260,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::AbsValLayer<float>") public static class FloatAbsValLayer extends FloatNeuronLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatAbsValLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatAbsValLayer(Pointer p) { super(p); }
 
   public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
@@ -13046,7 +13274,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::AbsValLayer<double>") public static class DoubleAbsValLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleAbsValLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleAbsValLayer(Pointer p) { super(p); }
 
   public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
@@ -13076,7 +13306,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::BNLLLayer<float>") public static class FloatBNLLLayer extends FloatNeuronLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatBNLLLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBNLLLayer(Pointer p) { super(p); }
 
 
@@ -13084,7 +13316,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::BNLLLayer<double>") public static class DoubleBNLLLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleBNLLLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBNLLLayer(Pointer p) { super(p); }
 
 
@@ -13104,7 +13338,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::DropoutLayer<float>") @NoOffset public static class FloatDropoutLayer extends FloatNeuronLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatDropoutLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatDropoutLayer(Pointer p) { super(p); }
 
   /**
@@ -13122,7 +13358,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::DropoutLayer<double>") @NoOffset public static class DoubleDropoutLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleDropoutLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleDropoutLayer(Pointer p) { super(p); }
 
   /**
@@ -13146,7 +13384,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::ExpLayer<float>") @NoOffset public static class FloatExpLayer extends FloatNeuronLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatExpLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatExpLayer(Pointer p) { super(p); }
 
   /**
@@ -13164,7 +13404,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::ExpLayer<double>") @NoOffset public static class DoubleExpLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleExpLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleExpLayer(Pointer p) { super(p); }
 
   /**
@@ -13188,7 +13430,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::PowerLayer<float>") @NoOffset public static class FloatPowerLayer extends FloatNeuronLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatPowerLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatPowerLayer(Pointer p) { super(p); }
 
   /**
@@ -13205,7 +13449,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::PowerLayer<double>") @NoOffset public static class DoublePowerLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoublePowerLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoublePowerLayer(Pointer p) { super(p); }
 
   /**
@@ -13227,7 +13473,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::ReLULayer<float>") public static class FloatReLULayer extends FloatNeuronLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatReLULayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatReLULayer(Pointer p) { super(p); }
 
   /**
@@ -13241,7 +13489,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::ReLULayer<double>") public static class DoubleReLULayer extends DoubleNeuronLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleReLULayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleReLULayer(Pointer p) { super(p); }
 
   /**
@@ -13270,7 +13520,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::SigmoidLayer<float>") public static class FloatSigmoidLayer extends FloatNeuronLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatSigmoidLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSigmoidLayer(Pointer p) { super(p); }
 
 
@@ -13278,7 +13530,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::SigmoidLayer<double>") public static class DoubleSigmoidLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleSigmoidLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSigmoidLayer(Pointer p) { super(p); }
 
 
@@ -13301,7 +13555,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::TanHLayer<float>") public static class FloatTanHLayer extends FloatNeuronLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatTanHLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatTanHLayer(Pointer p) { super(p); }
 
 
@@ -13309,7 +13565,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::TanHLayer<double>") public static class DoubleTanHLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleTanHLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleTanHLayer(Pointer p) { super(p); }
 
 
@@ -13328,7 +13586,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::ThresholdLayer<float>") @NoOffset public static class FloatThresholdLayer extends FloatNeuronLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatThresholdLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatThresholdLayer(Pointer p) { super(p); }
 
   /**
@@ -13344,7 +13604,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::ThresholdLayer<double>") @NoOffset public static class DoubleThresholdLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleThresholdLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleThresholdLayer(Pointer p) { super(p); }
 
   /**
@@ -13369,7 +13631,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::PReLULayer<float>") @NoOffset public static class FloatPReLULayer extends FloatNeuronLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatPReLULayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatPReLULayer(Pointer p) { super(p); }
 
   /**
@@ -13391,7 +13655,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::PReLULayer<double>") @NoOffset public static class DoublePReLULayer extends DoubleNeuronLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoublePReLULayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoublePReLULayer(Pointer p) { super(p); }
 
   /**
@@ -13446,7 +13712,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::ArgMaxLayer<float>") @NoOffset public static class FloatArgMaxLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatArgMaxLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatArgMaxLayer(Pointer p) { super(p); }
 
   /**
@@ -13470,7 +13738,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::ArgMaxLayer<double>") @NoOffset public static class DoubleArgMaxLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleArgMaxLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleArgMaxLayer(Pointer p) { super(p); }
 
   /**
@@ -13499,7 +13769,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::ConcatLayer<float>") @NoOffset public static class FloatConcatLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatConcatLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatConcatLayer(Pointer p) { super(p); }
 
   public FloatConcatLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -13515,7 +13787,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::ConcatLayer<double>") @NoOffset public static class DoubleConcatLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleConcatLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleConcatLayer(Pointer p) { super(p); }
 
   public DoubleConcatLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -13538,7 +13812,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::EltwiseLayer<float>") @NoOffset public static class FloatEltwiseLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatEltwiseLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatEltwiseLayer(Pointer p) { super(p); }
 
   public FloatEltwiseLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -13554,7 +13830,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::EltwiseLayer<double>") @NoOffset public static class DoubleEltwiseLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleEltwiseLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleEltwiseLayer(Pointer p) { super(p); }
 
   public DoubleEltwiseLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -13581,7 +13859,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::FlattenLayer<float>") public static class FloatFlattenLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatFlattenLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatFlattenLayer(Pointer p) { super(p); }
 
   public FloatFlattenLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -13595,7 +13875,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::FlattenLayer<double>") public static class DoubleFlattenLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleFlattenLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleFlattenLayer(Pointer p) { super(p); }
 
   public DoubleFlattenLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -13616,7 +13898,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::InnerProductLayer<float>") @NoOffset public static class FloatInnerProductLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatInnerProductLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatInnerProductLayer(Pointer p) { super(p); }
 
   public FloatInnerProductLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -13632,7 +13916,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::InnerProductLayer<double>") @NoOffset public static class DoubleInnerProductLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleInnerProductLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleInnerProductLayer(Pointer p) { super(p); }
 
   public DoubleInnerProductLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -13654,7 +13940,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::MVNLayer<float>") @NoOffset public static class FloatMVNLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatMVNLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatMVNLayer(Pointer p) { super(p); }
 
   public FloatMVNLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -13668,7 +13956,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::MVNLayer<double>") @NoOffset public static class DoubleMVNLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleMVNLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleMVNLayer(Pointer p) { super(p); }
 
   public DoubleMVNLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -13687,7 +13977,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::SilenceLayer<float>") public static class FloatSilenceLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatSilenceLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSilenceLayer(Pointer p) { super(p); }
 
   public FloatSilenceLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -13701,7 +13993,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::SilenceLayer<double>") public static class DoubleSilenceLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleSilenceLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSilenceLayer(Pointer p) { super(p); }
 
   public DoubleSilenceLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -13721,7 +14015,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::SoftmaxLayer<float>") @NoOffset public static class FloatSoftmaxLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatSoftmaxLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSoftmaxLayer(Pointer p) { super(p); }
 
   public FloatSoftmaxLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -13735,7 +14031,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::SoftmaxLayer<double>") @NoOffset public static class DoubleSoftmaxLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleSoftmaxLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSoftmaxLayer(Pointer p) { super(p); }
 
   public DoubleSoftmaxLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -13763,7 +14061,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::SplitLayer<float>") @NoOffset public static class FloatSplitLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatSplitLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSplitLayer(Pointer p) { super(p); }
 
   public FloatSplitLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -13777,7 +14077,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::SplitLayer<double>") @NoOffset public static class DoubleSplitLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleSplitLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSplitLayer(Pointer p) { super(p); }
 
   public DoubleSplitLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -13798,7 +14100,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::SliceLayer<float>") @NoOffset public static class FloatSliceLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatSliceLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSliceLayer(Pointer p) { super(p); }
 
   public FloatSliceLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -13814,7 +14118,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::SliceLayer<double>") @NoOffset public static class DoubleSliceLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleSliceLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSliceLayer(Pointer p) { super(p); }
 
   public DoubleSliceLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -13858,7 +14164,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::Net<float>") @NoOffset public static class FloatNet extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatNet() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatNet(Pointer p) { super(p); }
 
   public FloatNet(@Const @ByRef NetParameter param) { allocate(param); }
@@ -14018,7 +14326,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::Net<double>") @NoOffset public static class DoubleNet extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleNet() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleNet(Pointer p) { super(p); }
 
   public DoubleNet(@Const @ByRef NetParameter param) { allocate(param); }
@@ -14201,7 +14511,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::Solver<float>") @NoOffset public static class FloatSolver extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatSolver() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSolver(Pointer p) { super(p); }
 
   public native void Init(@Const @ByRef SolverParameter param);
@@ -14224,7 +14536,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::Solver<double>") @NoOffset public static class DoubleSolver extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleSolver() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSolver(Pointer p) { super(p); }
 
   public native void Init(@Const @ByRef SolverParameter param);
@@ -14253,7 +14567,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::SGDSolver<float>") @NoOffset public static class FloatSGDSolver extends FloatSolver {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatSGDSolver() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSGDSolver(Pointer p) { super(p); }
 
   public FloatSGDSolver(@Const @ByRef SolverParameter param) { allocate(param); }
@@ -14267,7 +14583,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::SGDSolver<double>") @NoOffset public static class DoubleSGDSolver extends DoubleSolver {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleSGDSolver() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSGDSolver(Pointer p) { super(p); }
 
   public DoubleSGDSolver(@Const @ByRef SolverParameter param) { allocate(param); }
@@ -14282,7 +14600,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::NesterovSolver<float>") public static class FloatNesterovSolver extends FloatSGDSolver {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatNesterovSolver() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatNesterovSolver(Pointer p) { super(p); }
 
   public FloatNesterovSolver(@Const @ByRef SolverParameter param) { allocate(param); }
@@ -14295,7 +14615,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::NesterovSolver<double>") public static class DoubleNesterovSolver extends DoubleSGDSolver {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleNesterovSolver() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleNesterovSolver(Pointer p) { super(p); }
 
   public DoubleNesterovSolver(@Const @ByRef SolverParameter param) { allocate(param); }
@@ -14308,7 +14630,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::AdaGradSolver<float>") public static class FloatAdaGradSolver extends FloatSGDSolver {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatAdaGradSolver() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatAdaGradSolver(Pointer p) { super(p); }
 
   public FloatAdaGradSolver(@Const @ByRef SolverParameter param) { allocate(param); }
@@ -14321,7 +14645,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::AdaGradSolver<double>") public static class DoubleAdaGradSolver extends DoubleSGDSolver {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleAdaGradSolver() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleAdaGradSolver(Pointer p) { super(p); }
 
   public DoubleAdaGradSolver(@Const @ByRef SolverParameter param) { allocate(param); }
@@ -14365,7 +14691,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::BaseConvolutionLayer<float>") @NoOffset public static class FloatBaseConvolutionLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatBaseConvolutionLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBaseConvolutionLayer(Pointer p) { super(p); }
 
   public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
@@ -14379,7 +14707,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::BaseConvolutionLayer<double>") @NoOffset public static class DoubleBaseConvolutionLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleBaseConvolutionLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBaseConvolutionLayer(Pointer p) { super(p); }
 
   public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
@@ -14410,7 +14740,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::ConvolutionLayer<float>") public static class FloatConvolutionLayer extends FloatBaseConvolutionLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatConvolutionLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatConvolutionLayer(Pointer p) { super(p); }
 
   /**
@@ -14448,7 +14780,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::ConvolutionLayer<double>") public static class DoubleConvolutionLayer extends DoubleBaseConvolutionLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleConvolutionLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleConvolutionLayer(Pointer p) { super(p); }
 
   /**
@@ -14501,7 +14835,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::DeconvolutionLayer<float>") public static class FloatDeconvolutionLayer extends FloatBaseConvolutionLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatDeconvolutionLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatDeconvolutionLayer(Pointer p) { super(p); }
 
   public FloatDeconvolutionLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -14511,7 +14847,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::DeconvolutionLayer<double>") public static class DoubleDeconvolutionLayer extends DoubleBaseConvolutionLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleDeconvolutionLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleDeconvolutionLayer(Pointer p) { super(p); }
 
   public DoubleDeconvolutionLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -14546,7 +14884,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::Im2colLayer<float>") @NoOffset public static class FloatIm2colLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatIm2colLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatIm2colLayer(Pointer p) { super(p); }
 
   public FloatIm2colLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -14562,7 +14902,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::Im2colLayer<double>") @NoOffset public static class DoubleIm2colLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleIm2colLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleIm2colLayer(Pointer p) { super(p); }
 
   public DoubleIm2colLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -14586,7 +14928,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::LRNLayer<float>") @NoOffset public static class FloatLRNLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatLRNLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatLRNLayer(Pointer p) { super(p); }
 
   public FloatLRNLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -14602,7 +14946,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::LRNLayer<double>") @NoOffset public static class DoubleLRNLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoubleLRNLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleLRNLayer(Pointer p) { super(p); }
 
   public DoubleLRNLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -14625,7 +14971,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::PoolingLayer<float>") @NoOffset public static class FloatPoolingLayer extends FloatLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FloatPoolingLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatPoolingLayer(Pointer p) { super(p); }
 
   public FloatPoolingLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -14644,7 +14992,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::PoolingLayer<double>") @NoOffset public static class DoublePoolingLayer extends DoubleLayer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DoublePoolingLayer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoublePoolingLayer(Pointer p) { super(p); }
 
   public DoublePoolingLayer(@Const @ByRef LayerParameter param) { allocate(param); }
@@ -14685,7 +15035,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Namespace("caffe") @NoOffset public static class Timer extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Timer(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public Timer(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Timer position(int position) {
@@ -14707,7 +15059,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Namespace("caffe") public static class CPUTimer extends Timer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CPUTimer(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CPUTimer(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CPUTimer position(int position) {
@@ -14746,7 +15100,9 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
 
 @Namespace("caffe::db") public static class Cursor extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public Cursor() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Cursor(Pointer p) { super(p); }
 
   public native void SeekToFirst();
@@ -14758,7 +15114,9 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
 
 @Namespace("caffe::db") public static class Transaction extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public Transaction() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Transaction(Pointer p) { super(p); }
 
   public native void Put(@StdString BytePointer key, @StdString BytePointer value);
@@ -14768,7 +15126,9 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
 
 @Namespace("caffe::db") public static class DB extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DB() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DB(Pointer p) { super(p); }
 
   public native void Open(@StdString BytePointer source, @Cast("caffe::db::Mode") int mode);
@@ -14780,6 +15140,7 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
 
 @Namespace("caffe::db") @NoOffset public static class LevelDBCursor extends Cursor {
     static { Loader.load(); }
+    /** Empty constructor. */
     public LevelDBCursor() { }
 
   public LevelDBCursor(@Cast("leveldb::Iterator*") Pointer iter) { allocate(iter); }
@@ -14793,6 +15154,7 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
 
 @Namespace("caffe::db") @NoOffset public static class LevelDBTransaction extends Transaction {
     static { Loader.load(); }
+    /** Empty constructor. */
     public LevelDBTransaction() { }
 
   public LevelDBTransaction(@Cast("leveldb::DB*") Pointer db) { allocate(db); }
@@ -14804,7 +15166,9 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
 
 @Namespace("caffe::db") @NoOffset public static class LevelDB extends DB {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LevelDB(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public LevelDB(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public LevelDB position(int position) {
@@ -14824,7 +15188,9 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
 
 @Namespace("caffe::db") @NoOffset public static class LMDBCursor extends Cursor {
     static { Loader.load(); }
+    /** Empty constructor. */
     public LMDBCursor() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LMDBCursor(Pointer p) { super(p); }
 
   public LMDBCursor(@Cast("MDB_txn*") Pointer mdb_txn, @Cast("MDB_cursor*") Pointer mdb_cursor) { allocate(mdb_txn, mdb_cursor); }
@@ -14838,7 +15204,9 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
 
 @Namespace("caffe::db") @NoOffset public static class LMDBTransaction extends Transaction {
     static { Loader.load(); }
+    /** Empty constructor. */
     public LMDBTransaction() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LMDBTransaction(Pointer p) { super(p); }
 
   public LMDBTransaction(@Cast("MDB_dbi*") Pointer mdb_dbi, @Cast("MDB_txn*") Pointer mdb_txn) { allocate(mdb_dbi, mdb_txn); }
@@ -14850,7 +15218,9 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
 
 @Namespace("caffe::db") @NoOffset public static class LMDB extends DB {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LMDB(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public LMDB(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public LMDB position(int position) {

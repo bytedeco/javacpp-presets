@@ -128,8 +128,11 @@ public static native AVOutputFormat av_output_video_device_next(AVOutputFormat d
 
 public static class AVDeviceRect extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVDeviceRect() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVDeviceRect(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDeviceRect(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -479,8 +482,11 @@ public static native int avdevice_dev_to_app_control_message(AVFormatContext s,
  */
 public static class AVDeviceCapabilitiesQuery extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVDeviceCapabilitiesQuery() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVDeviceCapabilitiesQuery(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDeviceCapabilitiesQuery(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -544,8 +550,11 @@ public static native void avdevice_capabilities_free(@ByPtrPtr AVDeviceCapabilit
  */
 public static class AVDeviceInfo extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVDeviceInfo() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVDeviceInfo(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDeviceInfo(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -564,8 +573,11 @@ public static class AVDeviceInfo extends Pointer {
  */
 public static class AVDeviceInfoList extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVDeviceInfoList() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVDeviceInfoList(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDeviceInfoList(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);

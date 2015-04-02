@@ -15,6 +15,7 @@ public class opencv_objdetect extends org.bytedeco.javacpp.helper.opencv_objdete
 
 @Name("std::deque<CvDataMatrixCode>") public static class CvDataMatrixCodeDeque extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvDataMatrixCodeDeque(Pointer p) { super(p); }
     public CvDataMatrixCodeDeque(CvDataMatrixCode ... array) { this(array.length); put(array); }
     public CvDataMatrixCodeDeque()       { allocate();  }
@@ -40,6 +41,7 @@ public class opencv_objdetect extends org.bytedeco.javacpp.helper.opencv_objdete
 
 @Name("std::vector<cv::Ptr<cv::linemod::Modality> >") public static class ModalityVector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ModalityVector(Pointer p) { super(p); }
     public ModalityVector(Modality ... array) { this(array.length); put(array); }
     public ModalityVector()       { allocate();  }
@@ -132,8 +134,11 @@ public static final int CV_HAAR_FEATURE_MAX =  3;
 
 public static class CvHaarFeature extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvHaarFeature() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvHaarFeature(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvHaarFeature(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -148,8 +153,11 @@ public static class CvHaarFeature extends Pointer {
 
 public static class CvHaarClassifier extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvHaarClassifier() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvHaarClassifier(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvHaarClassifier(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -167,8 +175,11 @@ public static class CvHaarClassifier extends Pointer {
 
 public static class CvHaarStageClassifier extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvHaarStageClassifier() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvHaarStageClassifier(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvHaarStageClassifier(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -186,14 +197,19 @@ public static class CvHaarStageClassifier extends Pointer {
 }
 
 @Opaque public static class CvHidHaarClassifierCascade extends Pointer {
+    /** Empty constructor. */
     public CvHidHaarClassifierCascade() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvHidHaarClassifierCascade(Pointer p) { super(p); }
 }
 
 public static class CvHaarClassifierCascade extends AbstractCvHaarClassifierCascade {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvHaarClassifierCascade() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvHaarClassifierCascade(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvHaarClassifierCascade(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -212,8 +228,11 @@ public static class CvHaarClassifierCascade extends AbstractCvHaarClassifierCasc
 
 public static class CvAvgComp extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvAvgComp() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvAvgComp(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvAvgComp(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -287,8 +306,11 @@ public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCasc
 // (x, y) - coordinate in level l
 public static class CvLSVMFilterPosition extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvLSVMFilterPosition() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvLSVMFilterPosition(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvLSVMFilterPosition(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -317,8 +339,11 @@ public static class CvLSVMFilterPosition extends Pointer {
 // END OF FILTER DESCRIPTION
 public static class CvLSVMFilterObject extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvLSVMFilterObject() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvLSVMFilterObject(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvLSVMFilterObject(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -345,8 +370,11 @@ public static class CvLSVMFilterObject extends Pointer {
 // score_threshold      - confidence level threshold
 public static class CvLatentSvmDetector extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvLatentSvmDetector() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvLatentSvmDetector(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvLatentSvmDetector(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -369,8 +397,11 @@ public static class CvLatentSvmDetector extends Pointer {
 // score                - confidence level
 public static class CvObjectDetection extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvObjectDetection() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvObjectDetection(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvObjectDetection(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -483,7 +514,9 @@ public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
  */
 @Namespace("cv") @NoOffset public static class LatentSvmDetector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LatentSvmDetector(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public LatentSvmDetector(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public LatentSvmDetector position(int position) {
@@ -492,7 +525,9 @@ public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
 
     @NoOffset public static class ObjectDetection extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public ObjectDetection(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public ObjectDetection(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public ObjectDetection position(int position) {
@@ -537,7 +572,9 @@ public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
 // instance of the class is to be passed to cv::partition (see cxoperations.hpp)
 @Namespace("cv") @NoOffset public static class SimilarRects extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public SimilarRects() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SimilarRects(Pointer p) { super(p); }
 
     public SimilarRects(double _eps) { allocate(_eps); }
@@ -582,8 +619,11 @@ public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
 
 @Namespace("cv") public static class FeatureEvaluator extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public FeatureEvaluator() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public FeatureEvaluator(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FeatureEvaluator(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -618,7 +658,9 @@ public static final int
 
 @Namespace("cv") @NoOffset public static class CascadeClassifier extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CascadeClassifier(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CascadeClassifier(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CascadeClassifier position(int position) {
@@ -692,7 +734,9 @@ public static final int
     public native @Cast("bool") boolean setImage( @Const @ByRef Mat arg0 );
     public static class MaskGenerator extends Pointer {
         static { Loader.load(); }
+        /** Empty constructor. */
         public MaskGenerator() { }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public MaskGenerator(Pointer p) { super(p); }
     
         public native @ByVal Mat generateMask(@Const @ByRef Mat src);
@@ -710,8 +754,11 @@ public static final int
 // struct for detection region of interest (ROI)
 @Namespace("cv") public static class DetectionROI extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public DetectionROI() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public DetectionROI(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetectionROI(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -729,7 +776,9 @@ public static final int
 
 @Namespace("cv") @NoOffset public static class HOGDescriptor extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HOGDescriptor(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public HOGDescriptor(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public HOGDescriptor position(int position) {
@@ -936,8 +985,11 @@ public static final int
 
 public static class CvDataMatrixCode extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvDataMatrixCode() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvDataMatrixCode(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvDataMatrixCode(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -964,7 +1016,9 @@ public static native @ByVal CvDataMatrixCodeDeque cvFindDataMatrix(CvMat im);
  */
 @Namespace("cv::linemod") @NoOffset public static class Feature extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Feature(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public Feature(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Feature position(int position) {
@@ -991,8 +1045,11 @@ public static native @ByVal CvDataMatrixCodeDeque cvFindDataMatrix(CvMat im);
 
 @Namespace("cv::linemod") public static class Template extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public Template() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public Template(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Template(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1014,7 +1071,9 @@ public static native @ByVal CvDataMatrixCodeDeque cvFindDataMatrix(CvMat im);
  */
 @Namespace("cv::linemod") public static class QuantizedPyramid extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public QuantizedPyramid() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QuantizedPyramid(Pointer p) { super(p); }
 
   // Virtual destructor
@@ -1051,7 +1110,9 @@ public static native @ByVal CvDataMatrixCodeDeque cvFindDataMatrix(CvMat im);
  */
 @Namespace("cv::linemod") public static class Modality extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public Modality() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Modality(Pointer p) { super(p); }
 
   // Virtual destructor
@@ -1093,7 +1154,9 @@ public static native @ByVal CvDataMatrixCodeDeque cvFindDataMatrix(CvMat im);
  */
 @Namespace("cv::linemod") @NoOffset public static class ColorGradient extends Modality {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ColorGradient(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ColorGradient(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public ColorGradient position(int position) {
@@ -1132,7 +1195,9 @@ public static native @ByVal CvDataMatrixCodeDeque cvFindDataMatrix(CvMat im);
  */
 @Namespace("cv::linemod") @NoOffset public static class DepthNormal extends Modality {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DepthNormal(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public DepthNormal(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public DepthNormal position(int position) {
@@ -1181,7 +1246,9 @@ public static native @ByVal CvDataMatrixCodeDeque cvFindDataMatrix(CvMat im);
  */
 @Namespace("cv::linemod") @NoOffset public static class Match extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Match(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public Match(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Match position(int position) {
@@ -1216,7 +1283,9 @@ public static native @ByVal CvDataMatrixCodeDeque cvFindDataMatrix(CvMat im);
  */
 @Namespace("cv::linemod") @NoOffset public static class Detector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Detector(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public Detector(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Detector position(int position) {

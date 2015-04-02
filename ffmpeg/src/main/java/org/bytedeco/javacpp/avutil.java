@@ -1160,8 +1160,11 @@ public static native long av_add_stable(@ByVal AVRational ts_tb, long ts, @ByVal
  */
 public static class AVRational extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVRational() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVRational(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVRational(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1349,8 +1352,11 @@ public static final int
  */
 public static class AVClass extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVClass() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVClass(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVClass(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1370,6 +1376,7 @@ public static class AVClass extends Pointer {
      */
     public static class Item_name_Pointer extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Item_name_Pointer(Pointer p) { super(p); }
         protected Item_name_Pointer() { allocate(); }
         private native void allocate();
@@ -1412,6 +1419,7 @@ public static class AVClass extends Pointer {
      */
     public static class Child_next_Pointer_Pointer extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Child_next_Pointer_Pointer(Pointer p) { super(p); }
         protected Child_next_Pointer_Pointer() { allocate(); }
         private native void allocate();
@@ -1429,6 +1437,7 @@ public static class AVClass extends Pointer {
      */
     public static class Child_class_next_AVClass extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Child_class_next_AVClass(Pointer p) { super(p); }
         protected Child_class_next_AVClass() { allocate(); }
         private native void allocate();
@@ -1449,6 +1458,7 @@ public static class AVClass extends Pointer {
      */
     public static class Get_category_Pointer extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Get_category_Pointer(Pointer p) { super(p); }
         protected Get_category_Pointer() { allocate(); }
         private native void allocate();
@@ -1462,6 +1472,7 @@ public static class AVClass extends Pointer {
      */
     public static class Query_ranges_PointerPointer_Pointer_BytePointer_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Query_ranges_PointerPointer_Pointer_BytePointer_int(Pointer p) { super(p); }
         protected Query_ranges_PointerPointer_Pointer_BytePointer_int() { allocate(); }
         private native void allocate();
@@ -1606,6 +1617,7 @@ public static native void av_log_set_level(int level);
  */
 public static class Callback_Pointer_int_BytePointer_Pointer extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Callback_Pointer_int_BytePointer_Pointer(Pointer p) { super(p); }
     protected Callback_Pointer_int_BytePointer_Pointer() { allocate(); }
     private native void allocate();
@@ -1614,6 +1626,7 @@ public static class Callback_Pointer_int_BytePointer_Pointer extends FunctionPoi
 public static native void av_log_set_callback(Callback_Pointer_int_BytePointer_Pointer callback);
 public static class Callback_Pointer_int_String_Pointer extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Callback_Pointer_int_String_Pointer(Pointer p) { super(p); }
     protected Callback_Pointer_int_String_Pointer() { allocate(); }
     private native void allocate();
@@ -1783,7 +1796,9 @@ public static native int av_log_get_flags();
  * references (AVBufferRef).
  */
 @Opaque public static class AVBuffer extends Pointer {
+    /** Empty constructor. */
     public AVBuffer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVBuffer(Pointer p) { super(p); }
 }
 
@@ -1795,8 +1810,11 @@ public static native int av_log_get_flags();
  */
 public static class AVBufferRef extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVBufferRef() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVBufferRef(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVBufferRef(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1854,6 +1872,7 @@ public static final int AV_BUFFER_FLAG_READONLY = (1 << 0);
  */
 public static class Free_Pointer_BytePointer extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Free_Pointer_BytePointer(Pointer p) { super(p); }
     protected Free_Pointer_BytePointer() { allocate(); }
     private native void allocate();
@@ -1864,6 +1883,7 @@ public static native AVBufferRef av_buffer_create(@Cast("uint8_t*") BytePointer 
                               Pointer opaque, int flags);
 public static class Free_Pointer_ByteBuffer extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Free_Pointer_ByteBuffer(Pointer p) { super(p); }
     protected Free_Pointer_ByteBuffer() { allocate(); }
     private native void allocate();
@@ -1874,6 +1894,7 @@ public static native AVBufferRef av_buffer_create(@Cast("uint8_t*") ByteBuffer d
                               Pointer opaque, int flags);
 public static class Free_Pointer_byte__ extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Free_Pointer_byte__(Pointer p) { super(p); }
     protected Free_Pointer_byte__() { allocate(); }
     private native void allocate();
@@ -1993,7 +2014,9 @@ public static native int av_buffer_realloc(@ByPtrPtr AVBufferRef buf, int size);
  * av_buffer_pool_uninit().
  */
 @Opaque public static class AVBufferPool extends Pointer {
+    /** Empty constructor. */
     public AVBufferPool() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVBufferPool(Pointer p) { super(p); }
 }
 
@@ -2008,6 +2031,7 @@ public static native int av_buffer_realloc(@ByPtrPtr AVBufferRef buf, int size);
  */
 public static class Alloc_int extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Alloc_int(Pointer p) { super(p); }
     protected Alloc_int() { allocate(); }
     private native void allocate();
@@ -2961,8 +2985,11 @@ public static final int
 
 public static class AVFrameSideData extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVFrameSideData() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVFrameSideData(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFrameSideData(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -3007,8 +3034,11 @@ public static class AVFrameSideData extends Pointer {
  */
 public static class AVFrame extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVFrame() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVFrame(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFrame(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -4128,7 +4158,9 @@ public static native void av_get_channel_layout_string(@Cast("char*") ByteBuffer
 public static native void av_get_channel_layout_string(@Cast("char*") byte[] buf, int buf_size, int nb_channels, @Cast("uint64_t") long channel_layout);
 
 @Opaque public static class AVBPrint extends Pointer {
+    /** Empty constructor. */
     public AVBPrint() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVBPrint(Pointer p) { super(p); }
 }
 /**
@@ -4443,8 +4475,11 @@ public static final int AV_DICT_APPEND =         32;
 
 public static class AVDictionaryEntry extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVDictionaryEntry() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVDictionaryEntry(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDictionaryEntry(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -4457,7 +4492,9 @@ public static class AVDictionaryEntry extends Pointer {
 }
 
 @Opaque public static class AVDictionary extends Pointer {
+    /** Empty constructor. */
     public AVDictionary() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDictionary(Pointer p) { super(p); }
 }
 
@@ -4867,8 +4904,11 @@ public static final int
  */
 public static class AVOption extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVOption() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVOption(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVOption(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -4942,8 +4982,11 @@ public static final int AV_OPT_FLAG_FILTERING_PARAM = (1<<16);
  */
 public static class AVOptionRange extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVOptionRange() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVOptionRange(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVOptionRange(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -4977,8 +5020,11 @@ public static class AVOptionRange extends Pointer {
  */
 public static class AVOptionRanges extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVOptionRanges() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVOptionRanges(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVOptionRanges(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -5759,8 +5805,11 @@ public static native int av_opt_serialize(Pointer obj, int opt_flags, int flags,
 
 public static class AVComponentDescriptor extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVComponentDescriptor() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVComponentDescriptor(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVComponentDescriptor(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -5808,8 +5857,11 @@ public static class AVComponentDescriptor extends Pointer {
  */
 public static class AVPixFmtDescriptor extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVPixFmtDescriptor() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVPixFmtDescriptor(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVPixFmtDescriptor(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -6523,8 +6575,11 @@ public static final int
  */
 public static class AVDownmixInfo extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVDownmixInfo() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVDownmixInfo(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDownmixInfo(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -6717,8 +6772,11 @@ public static final int AV_STEREO3D_FLAG_INVERT =     (1 << 0);
  */
 public static class AVStereo3D extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVStereo3D() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVStereo3D(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVStereo3D(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);

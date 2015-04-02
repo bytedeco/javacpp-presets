@@ -68,8 +68,11 @@ public static final int AVIO_SEEKABLE_NORMAL = 0x0001;
  */
 public static class AVIOInterruptCB extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVIOInterruptCB() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVIOInterruptCB(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVIOInterruptCB(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -79,6 +82,7 @@ public static class AVIOInterruptCB extends Pointer {
 
     public static class Callback_Pointer extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Callback_Pointer(Pointer p) { super(p); }
         protected Callback_Pointer() { allocate(); }
         private native void allocate();
@@ -102,8 +106,11 @@ public static class AVIOInterruptCB extends Pointer {
  */
 public static class AVIOContext extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVIOContext() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVIOContext(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVIOContext(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -140,6 +147,7 @@ public static class AVIOContext extends Pointer {
     public native Pointer opaque(); public native AVIOContext opaque(Pointer opaque);
     public static class Read_packet_Pointer_BytePointer_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Read_packet_Pointer_BytePointer_int(Pointer p) { super(p); }
         protected Read_packet_Pointer_BytePointer_int() { allocate(); }
         private native void allocate();
@@ -148,6 +156,7 @@ public static class AVIOContext extends Pointer {
     public native Read_packet_Pointer_BytePointer_int read_packet(); public native AVIOContext read_packet(Read_packet_Pointer_BytePointer_int read_packet);
     public static class Write_packet_Pointer_BytePointer_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Write_packet_Pointer_BytePointer_int(Pointer p) { super(p); }
         protected Write_packet_Pointer_BytePointer_int() { allocate(); }
         private native void allocate();
@@ -156,6 +165,7 @@ public static class AVIOContext extends Pointer {
     public native Write_packet_Pointer_BytePointer_int write_packet(); public native AVIOContext write_packet(Write_packet_Pointer_BytePointer_int write_packet);
     public static class Seek_Pointer_long_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Seek_Pointer_long_int(Pointer p) { super(p); }
         protected Seek_Pointer_long_int() { allocate(); }
         private native void allocate();
@@ -175,6 +185,7 @@ public static class AVIOContext extends Pointer {
     public native @Cast("unsigned char*") BytePointer checksum_ptr(); public native AVIOContext checksum_ptr(BytePointer checksum_ptr);
     public static class Update_checksum_long_BytePointer_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Update_checksum_long_BytePointer_int(Pointer p) { super(p); }
         protected Update_checksum_long_BytePointer_int() { allocate(); }
         private native void allocate();
@@ -188,6 +199,7 @@ public static class AVIOContext extends Pointer {
      */
     public static class Read_pause_Pointer_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Read_pause_Pointer_int(Pointer p) { super(p); }
         protected Read_pause_Pointer_int() { allocate(); }
         private native void allocate();
@@ -201,6 +213,7 @@ public static class AVIOContext extends Pointer {
      */
     public static class Read_seek_Pointer_int_long_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Read_seek_Pointer_int_long_int(Pointer p) { super(p); }
         protected Read_seek_Pointer_int_long_int() { allocate(); }
         private native void allocate();
@@ -302,6 +315,7 @@ public static native int avio_check(String url, int flags);
  */
 public static class Read_packet_Pointer_BytePointer_int extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Read_packet_Pointer_BytePointer_int(Pointer p) { super(p); }
     protected Read_packet_Pointer_BytePointer_int() { allocate(); }
     private native void allocate();
@@ -309,6 +323,7 @@ public static class Read_packet_Pointer_BytePointer_int extends FunctionPointer 
 }
 public static class Write_packet_Pointer_BytePointer_int extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Write_packet_Pointer_BytePointer_int(Pointer p) { super(p); }
     protected Write_packet_Pointer_BytePointer_int() { allocate(); }
     private native void allocate();
@@ -316,6 +331,7 @@ public static class Write_packet_Pointer_BytePointer_int extends FunctionPointer
 }
 public static class Seek_Pointer_long_int extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Seek_Pointer_long_int(Pointer p) { super(p); }
     protected Seek_Pointer_long_int() { allocate(); }
     private native void allocate();
@@ -331,6 +347,7 @@ public static native AVIOContext avio_alloc_context(
                   Seek_Pointer_long_int seek);
 public static class Read_packet_Pointer_ByteBuffer_int extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Read_packet_Pointer_ByteBuffer_int(Pointer p) { super(p); }
     protected Read_packet_Pointer_ByteBuffer_int() { allocate(); }
     private native void allocate();
@@ -338,6 +355,7 @@ public static class Read_packet_Pointer_ByteBuffer_int extends FunctionPointer {
 }
 public static class Write_packet_Pointer_ByteBuffer_int extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Write_packet_Pointer_ByteBuffer_int(Pointer p) { super(p); }
     protected Write_packet_Pointer_ByteBuffer_int() { allocate(); }
     private native void allocate();
@@ -353,6 +371,7 @@ public static native AVIOContext avio_alloc_context(
                   Seek_Pointer_long_int seek);
 public static class Read_packet_Pointer_byte___int extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Read_packet_Pointer_byte___int(Pointer p) { super(p); }
     protected Read_packet_Pointer_byte___int() { allocate(); }
     private native void allocate();
@@ -360,6 +379,7 @@ public static class Read_packet_Pointer_byte___int extends FunctionPointer {
 }
 public static class Write_packet_Pointer_byte___int extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Write_packet_Pointer_byte___int(Pointer p) { super(p); }
     protected Write_packet_Pointer_byte___int() { allocate(); }
     private native void allocate();
@@ -711,7 +731,9 @@ public static native long avio_seek_time(AVIOContext h, int stream_index,
 
 /* Avoid a warning. The header can not be included because it breaks c++. */
 @Opaque public static class AVBPrint extends Pointer {
+    /** Empty constructor. */
     public AVBPrint() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVBPrint(Pointer p) { super(p); }
 }
 
@@ -994,11 +1016,15 @@ public static native int avio_read_to_bprint(AVIOContext h, AVBPrint pb, @Cast("
 // #include "libavformat/version.h"
 
 @Opaque public static class AVDeviceInfoList extends Pointer {
+    /** Empty constructor. */
     public AVDeviceInfoList() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDeviceInfoList(Pointer p) { super(p); }
 }
 @Opaque public static class AVDeviceCapabilitiesQuery extends Pointer {
+    /** Empty constructor. */
     public AVDeviceCapabilitiesQuery() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDeviceCapabilitiesQuery(Pointer p) { super(p); }
 }
 
@@ -1121,8 +1147,11 @@ public static native int av_append_packet(AVIOContext s, AVPacket pkt, int size)
  */
 public static class AVFrac extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVFrac() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVFrac(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFrac(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1140,7 +1169,9 @@ public static class AVFrac extends Pointer {
 /* input/output formats */
 
 @Opaque public static class AVCodecTag extends Pointer {
+    /** Empty constructor. */
     public AVCodecTag() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVCodecTag(Pointer p) { super(p); }
 }
 
@@ -1149,8 +1180,11 @@ public static class AVFrac extends Pointer {
  */
 public static class AVProbeData extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVProbeData() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVProbeData(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVProbeData(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1240,8 +1274,11 @@ public static final int AVFMT_SEEK_TO_PTS =   0x4000000;
  */
 public static class AVOutputFormat extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVOutputFormat() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVOutputFormat(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVOutputFormat(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1300,6 +1337,7 @@ public static class AVOutputFormat extends Pointer {
 
     public static class Write_header_AVFormatContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Write_header_AVFormatContext(Pointer p) { super(p); }
         protected Write_header_AVFormatContext() { allocate(); }
         private native void allocate();
@@ -1315,6 +1353,7 @@ public static class AVOutputFormat extends Pointer {
      */
     public static class Write_packet_AVFormatContext_AVPacket extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Write_packet_AVFormatContext_AVPacket(Pointer p) { super(p); }
         protected Write_packet_AVFormatContext_AVPacket() { allocate(); }
         private native void allocate();
@@ -1323,6 +1362,7 @@ public static class AVOutputFormat extends Pointer {
     public native Write_packet_AVFormatContext_AVPacket write_packet(); public native AVOutputFormat write_packet(Write_packet_AVFormatContext_AVPacket write_packet);
     public static class Write_trailer_AVFormatContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Write_trailer_AVFormatContext(Pointer p) { super(p); }
         protected Write_trailer_AVFormatContext() { allocate(); }
         private native void allocate();
@@ -1334,6 +1374,7 @@ public static class AVOutputFormat extends Pointer {
      */
     public static class Interleave_packet_AVFormatContext_AVPacket_AVPacket_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Interleave_packet_AVFormatContext_AVPacket_AVPacket_int(Pointer p) { super(p); }
         protected Interleave_packet_AVFormatContext_AVPacket_AVPacket_int() { allocate(); }
         private native void allocate();
@@ -1350,6 +1391,7 @@ public static class AVOutputFormat extends Pointer {
      */
     public static class Query_codec_int_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Query_codec_int_int(Pointer p) { super(p); }
         protected Query_codec_int_int() { allocate(); }
         private native void allocate();
@@ -1359,6 +1401,7 @@ public static class AVOutputFormat extends Pointer {
 
     public static class Get_output_timestamp_AVFormatContext_int_LongPointer_LongPointer extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Get_output_timestamp_AVFormatContext_int_LongPointer_LongPointer(Pointer p) { super(p); }
         protected Get_output_timestamp_AVFormatContext_int_LongPointer_LongPointer() { allocate(); }
         private native void allocate();
@@ -1371,6 +1414,7 @@ public static class AVOutputFormat extends Pointer {
      */
     public static class Control_message_AVFormatContext_int_Pointer_long extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Control_message_AVFormatContext_int_Pointer_long(Pointer p) { super(p); }
         protected Control_message_AVFormatContext_int_Pointer_long() { allocate(); }
         private native void allocate();
@@ -1389,6 +1433,7 @@ public static class AVOutputFormat extends Pointer {
      */
     public static class Write_uncoded_frame_AVFormatContext_int_PointerPointer_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Write_uncoded_frame_AVFormatContext_int_PointerPointer_int(Pointer p) { super(p); }
         protected Write_uncoded_frame_AVFormatContext_int_PointerPointer_int() { allocate(); }
         private native void allocate();
@@ -1402,6 +1447,7 @@ public static class AVOutputFormat extends Pointer {
      */
     public static class Get_device_list_AVFormatContext_AVDeviceInfoList extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Get_device_list_AVFormatContext_AVDeviceInfoList(Pointer p) { super(p); }
         protected Get_device_list_AVFormatContext_AVDeviceInfoList() { allocate(); }
         private native void allocate();
@@ -1414,6 +1460,7 @@ public static class AVOutputFormat extends Pointer {
      */
     public static class Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery(Pointer p) { super(p); }
         protected Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery() { allocate(); }
         private native void allocate();
@@ -1426,6 +1473,7 @@ public static class AVOutputFormat extends Pointer {
      */
     public static class Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery(Pointer p) { super(p); }
         protected Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery() { allocate(); }
         private native void allocate();
@@ -1445,8 +1493,11 @@ public static class AVOutputFormat extends Pointer {
  */
 public static class AVInputFormat extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVInputFormat() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVInputFormat(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVInputFormat(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1520,6 +1571,7 @@ public static class AVInputFormat extends Pointer {
      */
     public static class Read_probe_AVProbeData extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Read_probe_AVProbeData(Pointer p) { super(p); }
         protected Read_probe_AVProbeData() { allocate(); }
         private native void allocate();
@@ -1534,6 +1586,7 @@ public static class AVInputFormat extends Pointer {
      */
     public static class Read_header_AVFormatContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Read_header_AVFormatContext(Pointer p) { super(p); }
         protected Read_header_AVFormatContext() { allocate(); }
         private native void allocate();
@@ -1552,6 +1605,7 @@ public static class AVInputFormat extends Pointer {
      */
     public static class Read_packet_AVFormatContext_AVPacket extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Read_packet_AVFormatContext_AVPacket(Pointer p) { super(p); }
         protected Read_packet_AVFormatContext_AVPacket() { allocate(); }
         private native void allocate();
@@ -1565,6 +1619,7 @@ public static class AVInputFormat extends Pointer {
      */
     public static class Read_close_AVFormatContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Read_close_AVFormatContext(Pointer p) { super(p); }
         protected Read_close_AVFormatContext() { allocate(); }
         private native void allocate();
@@ -1582,6 +1637,7 @@ public static class AVInputFormat extends Pointer {
      */
     public static class Read_seek_AVFormatContext_int_long_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Read_seek_AVFormatContext_int_long_int(Pointer p) { super(p); }
         protected Read_seek_AVFormatContext_int_long_int() { allocate(); }
         private native void allocate();
@@ -1596,6 +1652,7 @@ public static class AVInputFormat extends Pointer {
      */
     public static class Read_timestamp_AVFormatContext_int_LongPointer_long extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Read_timestamp_AVFormatContext_int_LongPointer_long(Pointer p) { super(p); }
         protected Read_timestamp_AVFormatContext_int_LongPointer_long() { allocate(); }
         private native void allocate();
@@ -1610,6 +1667,7 @@ public static class AVInputFormat extends Pointer {
      */
     public static class Read_play_AVFormatContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Read_play_AVFormatContext(Pointer p) { super(p); }
         protected Read_play_AVFormatContext() { allocate(); }
         private native void allocate();
@@ -1623,6 +1681,7 @@ public static class AVInputFormat extends Pointer {
      */
     public static class Read_pause_AVFormatContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Read_pause_AVFormatContext(Pointer p) { super(p); }
         protected Read_pause_AVFormatContext() { allocate(); }
         private native void allocate();
@@ -1638,6 +1697,7 @@ public static class AVInputFormat extends Pointer {
      */
     public static class Read_seek2_AVFormatContext_int_long_long_long_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Read_seek2_AVFormatContext_int_long_long_long_int(Pointer p) { super(p); }
         protected Read_seek2_AVFormatContext_int_long_long_long_int() { allocate(); }
         private native void allocate();
@@ -1651,6 +1711,7 @@ public static class AVInputFormat extends Pointer {
      */
     public static class Get_device_list_AVFormatContext_AVDeviceInfoList extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Get_device_list_AVFormatContext_AVDeviceInfoList(Pointer p) { super(p); }
         protected Get_device_list_AVFormatContext_AVDeviceInfoList() { allocate(); }
         private native void allocate();
@@ -1664,6 +1725,7 @@ public static class AVInputFormat extends Pointer {
      */
     public static class Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery(Pointer p) { super(p); }
         protected Create_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery() { allocate(); }
         private native void allocate();
@@ -1677,6 +1739,7 @@ public static class AVInputFormat extends Pointer {
      */
     public static class Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery(Pointer p) { super(p); }
         protected Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery() { allocate(); }
         private native void allocate();
@@ -1708,8 +1771,11 @@ public static final int
 
 public static class AVIndexEntry extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVIndexEntry() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVIndexEntry(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVIndexEntry(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1785,8 +1851,11 @@ public static final int AV_PTS_WRAP_SUB_OFFSET =  -1;
  */
 public static class AVStream extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVStream() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVStream(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVStream(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -2157,8 +2226,11 @@ public static final int AV_PROGRAM_RUNNING = 1;
  */
 public static class AVProgram extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVProgram() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVProgram(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVProgram(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -2200,8 +2272,11 @@ public static final int AVFMTCTX_NOHEADER =      0x0001;
 
 public static class AVChapter extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVChapter() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVChapter(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVChapter(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -2225,6 +2300,7 @@ public static class AVChapter extends Pointer {
  */
 public static class av_format_control_message extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    av_format_control_message(Pointer p) { super(p); }
     protected av_format_control_message() { allocate(); }
     private native void allocate();
@@ -2247,7 +2323,9 @@ public static final int
     AVFMT_DURATION_FROM_BITRATE = 2;
 
 @Opaque public static class AVFormatInternal extends Pointer {
+    /** Empty constructor. */
     public AVFormatInternal() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFormatInternal(Pointer p) { super(p); }
 }
 
@@ -2261,8 +2339,11 @@ public static final int
  */
 public static class AVFormatContext extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVFormatContext() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVFormatContext(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFormatContext(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -2844,8 +2925,11 @@ public static native @Cast("AVDurationEstimationMethod") int av_fmt_ctx_get_dura
 
 public static class AVPacketList extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVPacketList() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVPacketList(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVPacketList(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);

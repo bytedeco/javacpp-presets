@@ -71,7 +71,9 @@ public static final int MAX_STRING_LENGTH =   512;
  * performing any calls to the library.
  */ 
 @Namespace @Name("void") @Opaque public static class fc2Context extends Pointer {
+    /** Empty constructor. */
     public fc2Context() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2Context(Pointer p) { super(p); }
 }
 
@@ -80,7 +82,9 @@ public static final int MAX_STRING_LENGTH =   512;
  * performing any calls to the library.
  */ 
 @Namespace @Name("void") @Opaque public static class fc2GuiContext extends Pointer {
+    /** Empty constructor. */
     public fc2GuiContext() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2GuiContext(Pointer p) { super(p); }
 }
 
@@ -88,7 +92,9 @@ public static final int MAX_STRING_LENGTH =   512;
  * An internal pointer used in the fc2Image structure.
  */ 
 @Namespace @Name("void") @Opaque public static class fc2ImageImpl extends Pointer {
+    /** Empty constructor. */
     public fc2ImageImpl() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2ImageImpl(Pointer p) { super(p); }
 }
 
@@ -96,7 +102,9 @@ public static final int MAX_STRING_LENGTH =   512;
  * A context referring to the AVI recorder object.
  */ 
 @Namespace @Name("void") @Opaque public static class fc2AVIContext extends Pointer {
+    /** Empty constructor. */
     public fc2AVIContext() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2AVIContext(Pointer p) { super(p); }
 }
 
@@ -104,7 +112,9 @@ public static final int MAX_STRING_LENGTH =   512;
  * A context referring to the ImageStatistics object.
  */ 
 @Namespace @Name("void") @Opaque public static class fc2ImageStatisticsContext extends Pointer {
+    /** Empty constructor. */
     public fc2ImageStatisticsContext() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2ImageStatisticsContext(Pointer p) { super(p); }
 }
 
@@ -113,8 +123,11 @@ public static final int MAX_STRING_LENGTH =   512;
  */ 
 public static class fc2PGRGuid extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2PGRGuid() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2PGRGuid(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2PGRGuid(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -609,8 +622,11 @@ public static final int
 //
 public static class fc2Image extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2Image() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2Image(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2Image(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -633,8 +649,11 @@ public static class fc2Image extends Pointer {
 
 public static class fc2SystemInfo extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2SystemInfo() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2SystemInfo(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2SystemInfo(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -665,8 +684,11 @@ public static class fc2SystemInfo extends Pointer {
 
 public static class fc2Version extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2Version() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2Version(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2Version(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -682,8 +704,11 @@ public static class fc2Version extends Pointer {
 
 public static class fc2Config extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2Config() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2Config(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2Config(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -708,8 +733,11 @@ public static class fc2Config extends Pointer {
 
 @Name("fc2TriggerDelayInfo") public static class fc2PropertyInfo extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2PropertyInfo() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2PropertyInfo(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2PropertyInfo(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -740,8 +768,11 @@ public static class fc2Config extends Pointer {
 
 @Name("fc2TriggerDelay") public static class fc2Property extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2Property() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2Property(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2Property(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -769,8 +800,11 @@ public static class fc2Config extends Pointer {
 
 public static class fc2TriggerModeInfo extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2TriggerModeInfo() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2TriggerModeInfo(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2TriggerModeInfo(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -793,8 +827,11 @@ public static class fc2TriggerModeInfo extends Pointer {
 
 public static class fc2TriggerMode extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2TriggerMode() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2TriggerMode(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2TriggerMode(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -814,8 +851,11 @@ public static class fc2TriggerMode extends Pointer {
 
 public static class fc2StrobeInfo extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2StrobeInfo() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2StrobeInfo(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2StrobeInfo(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -837,8 +877,11 @@ public static class fc2StrobeInfo extends Pointer {
 
 public static class fc2StrobeControl extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2StrobeControl() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2StrobeControl(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2StrobeControl(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -858,8 +901,11 @@ public static class fc2StrobeControl extends Pointer {
 
 public static class fc2Format7ImageSettings extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2Format7ImageSettings() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2Format7ImageSettings(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2Format7ImageSettings(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -880,8 +926,11 @@ public static class fc2Format7ImageSettings extends Pointer {
 
 public static class fc2Format7Info extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2Format7Info() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2Format7Info(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2Format7Info(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -910,8 +959,11 @@ public static class fc2Format7Info extends Pointer {
 
 public static class fc2Format7PacketInfo extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2Format7PacketInfo() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2Format7PacketInfo(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2Format7PacketInfo(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -929,8 +981,11 @@ public static class fc2Format7PacketInfo extends Pointer {
 
 public static class fc2IPAddress extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2IPAddress() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2IPAddress(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2IPAddress(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -944,8 +999,11 @@ public static class fc2IPAddress extends Pointer {
 
 public static class fc2MACAddress extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2MACAddress() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2MACAddress(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2MACAddress(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -959,8 +1017,11 @@ public static class fc2MACAddress extends Pointer {
 
 public static class fc2GigEProperty extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2GigEProperty() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2GigEProperty(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2GigEProperty(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -981,8 +1042,11 @@ public static class fc2GigEProperty extends Pointer {
 
 public static class fc2GigEStreamChannel extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2GigEStreamChannel() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2GigEStreamChannel(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2GigEStreamChannel(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1004,8 +1068,11 @@ public static class fc2GigEStreamChannel extends Pointer {
 
 public static class fc2GigEConfig extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2GigEConfig() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2GigEConfig(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2GigEConfig(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1026,8 +1093,11 @@ public static class fc2GigEConfig extends Pointer {
 
 public static class fc2GigEImageSettingsInfo extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2GigEImageSettingsInfo() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2GigEImageSettingsInfo(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2GigEImageSettingsInfo(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1050,8 +1120,11 @@ public static class fc2GigEImageSettingsInfo extends Pointer {
 
 public static class fc2GigEImageSettings extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2GigEImageSettings() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2GigEImageSettings(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2GigEImageSettings(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1071,8 +1144,11 @@ public static class fc2GigEImageSettings extends Pointer {
 
 public static class fc2TimeStamp extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2TimeStamp() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2TimeStamp(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2TimeStamp(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1092,8 +1168,11 @@ public static class fc2TimeStamp extends Pointer {
 
 public static class fc2ConfigROM extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2ConfigROM() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2ConfigROM(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2ConfigROM(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1120,8 +1199,11 @@ public static class fc2ConfigROM extends Pointer {
 
 public static class fc2CameraInfo extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2CameraInfo() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2CameraInfo(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2CameraInfo(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1185,8 +1267,11 @@ public static class fc2CameraInfo extends Pointer {
 
 public static class fc2EmbeddedImageInfoProperty extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2EmbeddedImageInfoProperty() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2EmbeddedImageInfoProperty(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2EmbeddedImageInfoProperty(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1201,8 +1286,11 @@ public static class fc2EmbeddedImageInfoProperty extends Pointer {
 
 public static class fc2EmbeddedImageInfo extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2EmbeddedImageInfo() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2EmbeddedImageInfo(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2EmbeddedImageInfo(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1225,8 +1313,11 @@ public static class fc2EmbeddedImageInfo extends Pointer {
 
 public static class fc2ImageMetadata extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2ImageMetadata() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2ImageMetadata(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2ImageMetadata(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1251,8 +1342,11 @@ public static class fc2ImageMetadata extends Pointer {
 
 public static class fc2LUTData extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2LUTData() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2LUTData(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2LUTData(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1274,8 +1368,11 @@ public static class fc2LUTData extends Pointer {
 
 public static class fc2PNGOption extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2PNGOption() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2PNGOption(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2PNGOption(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1292,8 +1389,11 @@ public static class fc2PNGOption extends Pointer {
 
  public static class fc2PPMOption extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2PPMOption() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2PPMOption(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2PPMOption(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1309,8 +1409,11 @@ public static class fc2PNGOption extends Pointer {
 
 public static class fc2PGMOption extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2PGMOption() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2PGMOption(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2PGMOption(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1337,8 +1440,11 @@ public static final int
 
 public static class fc2TIFFOption extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2TIFFOption() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2TIFFOption(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2TIFFOption(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1354,8 +1460,11 @@ public static class fc2TIFFOption extends Pointer {
 
 public static class fc2JPEGOption extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2JPEGOption() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2JPEGOption(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2JPEGOption(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1372,8 +1481,11 @@ public static class fc2JPEGOption extends Pointer {
 
 public static class fc2JPG2Option extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2JPG2Option() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2JPG2Option(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2JPG2Option(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1388,8 +1500,11 @@ public static class fc2JPG2Option extends Pointer {
 
 public static class fc2AVIOption extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2AVIOption() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2AVIOption(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2AVIOption(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1405,8 +1520,11 @@ public static class fc2AVIOption extends Pointer {
 
 public static class fc2MJPGOption extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2MJPGOption() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2MJPGOption(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2MJPGOption(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1424,8 +1542,11 @@ public static class fc2MJPGOption extends Pointer {
 
 public static class fc2H264Option extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fc2H264Option() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fc2H264Option(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2H264Option(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1448,11 +1569,14 @@ public static class fc2H264Option extends Pointer {
 //=============================================================================
 
 @Namespace @Name("void") @Opaque public static class fc2CallbackHandle extends Pointer {
+    /** Empty constructor. */
     public fc2CallbackHandle() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fc2CallbackHandle(Pointer p) { super(p); }
 }
 public static class fc2BusEventCallback extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    fc2BusEventCallback(Pointer p) { super(p); }
     protected fc2BusEventCallback() { allocate(); }
     private native void allocate();
@@ -1460,6 +1584,7 @@ public static class fc2BusEventCallback extends FunctionPointer {
 }
 public static class fc2ImageEventCallback extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    fc2ImageEventCallback(Pointer p) { super(p); }
     protected fc2ImageEventCallback() { allocate(); }
     private native void allocate();
@@ -1467,6 +1592,7 @@ public static class fc2ImageEventCallback extends FunctionPointer {
 }
 public static class fc2AsyncCommandCallback extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    fc2AsyncCommandCallback(Pointer p) { super(p); }
     protected fc2AsyncCommandCallback() { allocate(); }
     private native void allocate();

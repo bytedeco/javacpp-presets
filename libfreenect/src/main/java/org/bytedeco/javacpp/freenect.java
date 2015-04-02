@@ -79,8 +79,11 @@ public static final int
  *  is most useful if you have more than one Kinect. */
 public static class freenect_device_attributes extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public freenect_device_attributes() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public freenect_device_attributes(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_device_attributes(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -170,8 +173,11 @@ public static final int
  *  well as the total number of bytes needed to hold a single frame. */
 public static class freenect_frame_mode extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public freenect_frame_mode() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public freenect_frame_mode(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_frame_mode(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -234,8 +240,11 @@ public static final int
 /** Data from the tilt motor and accelerometer */
 public static class freenect_raw_tilt_state extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public freenect_raw_tilt_state() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public freenect_raw_tilt_state(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_raw_tilt_state(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -256,29 +265,39 @@ public static class freenect_raw_tilt_state extends Pointer {
 }
 
 @Opaque public static class _freenect_context extends Pointer {
+    /** Empty constructor. */
     public _freenect_context() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _freenect_context(Pointer p) { super(p); }
 }
 /** Holds information about the usb context. */
 @Opaque public static class freenect_context extends Pointer {
+    /** Empty constructor. */
     public freenect_context() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_context(Pointer p) { super(p); }
 }
 
 @Opaque public static class _freenect_device extends Pointer {
+    /** Empty constructor. */
     public _freenect_device() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _freenect_device(Pointer p) { super(p); }
 }
 /** Holds device information. */
 @Opaque public static class freenect_device extends Pointer {
+    /** Empty constructor. */
     public freenect_device() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_device(Pointer p) { super(p); }
 }
 
 // usb backend specific section
 /** Holds libusb-1.0 context */
 @Opaque public static class freenect_usb_context extends Pointer {
+    /** Empty constructor. */
     public freenect_usb_context() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_usb_context(Pointer p) { super(p); }
 }
 //
@@ -342,6 +361,7 @@ public static native int freenect_shutdown(freenect_context ctx);
 /** Typedef for logging callback functions */
 public static class freenect_log_cb extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    freenect_log_cb(Pointer p) { super(p); }
     protected freenect_log_cb() { allocate(); }
     private native void allocate();
@@ -505,6 +525,7 @@ public static native Pointer freenect_get_user(freenect_device dev);
 /** Typedef for depth image received event callbacks */
 public static class freenect_depth_cb extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    freenect_depth_cb(Pointer p) { super(p); }
     protected freenect_depth_cb() { allocate(); }
     private native void allocate();
@@ -513,6 +534,7 @@ public static class freenect_depth_cb extends FunctionPointer {
 /** Typedef for video image received event callbacks */
 public static class freenect_video_cb extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    freenect_video_cb(Pointer p) { super(p); }
     protected freenect_video_cb() { allocate(); }
     private native void allocate();
@@ -521,6 +543,7 @@ public static class freenect_video_cb extends FunctionPointer {
 /** Typedef for stream chunk processing callbacks */
 public static class freenect_chunk_cb extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    freenect_chunk_cb(Pointer p) { super(p); }
     protected freenect_chunk_cb() { allocate(); }
     private native void allocate();
@@ -878,8 +901,11 @@ public static native void freenect_set_fw_address_k4w(freenect_context ctx, @Cas
  *  of the Kinect. */
 public static class freenect_reg_info extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public freenect_reg_info() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public freenect_reg_info(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_reg_info(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -934,8 +960,11 @@ public static class freenect_reg_info extends Pointer {
 /** registration padding info (?) */
 public static class freenect_reg_pad_info extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public freenect_reg_pad_info() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public freenect_reg_pad_info(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_reg_pad_info(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -951,8 +980,11 @@ public static class freenect_reg_pad_info extends Pointer {
 /** internal Kinect zero plane data */
 public static class freenect_zero_plane_info extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public freenect_zero_plane_info() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public freenect_zero_plane_info(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_zero_plane_info(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -969,8 +1001,11 @@ public static class freenect_zero_plane_info extends Pointer {
 /** all data needed for depth->RGB mapping */
 public static class freenect_registration extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public freenect_registration() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public freenect_registration(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_registration(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1057,8 +1092,11 @@ public static native void freenect_map_rgb_to_depth( freenect_device dev,
 /** Structure to represent a single 16-bit signed little-endian PCM sample. */
 public static class freenect_sample_51 extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public freenect_sample_51() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public freenect_sample_51(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_sample_51(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1089,6 +1127,7 @@ public static class freenect_sample_51 extends Pointer {
  */
 public static class freenect_audio_in_cb extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    freenect_audio_in_cb(Pointer p) { super(p); }
     protected freenect_audio_in_cb() { allocate(); }
     private native void allocate();
@@ -1108,6 +1147,7 @@ public static class freenect_audio_in_cb extends FunctionPointer {
  */
 public static class freenect_audio_out_cb extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    freenect_audio_out_cb(Pointer p) { super(p); }
     protected freenect_audio_out_cb() { allocate(); }
     private native void allocate();

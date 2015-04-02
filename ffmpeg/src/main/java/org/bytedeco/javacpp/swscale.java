@@ -136,8 +136,11 @@ public static native @Const IntPointer sws_getCoefficients(int colorspace);
 // coeffs cannot be shared between vectors
 public static class SwsVector extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public SwsVector() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public SwsVector(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SwsVector(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -154,8 +157,11 @@ public static class SwsVector extends Pointer {
 // vectors can be shared
 public static class SwsFilter extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public SwsFilter() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public SwsFilter(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SwsFilter(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -170,7 +176,9 @@ public static class SwsFilter extends Pointer {
 }
 
 @Opaque public static class SwsContext extends Pointer {
+    /** Empty constructor. */
     public SwsContext() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SwsContext(Pointer p) { super(p); }
 }
 

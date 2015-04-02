@@ -17,6 +17,7 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 
 @Name("std::vector<std::vector<cv::KeyPoint> >") public static class KeyPointVectorVector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KeyPointVectorVector(Pointer p) { super(p); }
     public KeyPointVectorVector(KeyPoint[] ... array) { this(array.length); put(array); }
     public KeyPointVectorVector()       { allocate();  }
@@ -47,6 +48,7 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 
 @Name("std::vector<std::vector<cv::DMatch> >") public static class DMatchVectorVector extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DMatchVectorVector(Pointer p) { super(p); }
     public DMatchVectorVector(DMatch[] ... array) { this(array.length); put(array); }
     public DMatchVectorVector()       { allocate();  }
@@ -144,7 +146,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 */
 @Namespace("cv") @NoOffset public static class KeyPoint extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KeyPoint(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public KeyPoint(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public KeyPoint position(int position) {
@@ -224,7 +228,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
  */
 @Namespace("cv") public static class KeyPointsFilter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KeyPointsFilter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public KeyPointsFilter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public KeyPointsFilter position(int position) {
@@ -267,7 +273,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
  */
 @Namespace("cv") public static class FeatureDetector extends Algorithm {
     static { Loader.load(); }
+    /** Empty constructor. */
     public FeatureDetector() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FeatureDetector(Pointer p) { super(p); }
 
 
@@ -310,7 +318,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
  */
 @Namespace("cv") public static class DescriptorExtractor extends Algorithm {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DescriptorExtractor() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DescriptorExtractor(Pointer p) { super(p); }
 
 
@@ -347,7 +357,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
  */
 @Namespace("cv") public static class Feature2D extends FeatureDetector {
     static { Loader.load(); }
+    /** Empty constructor. */
     public Feature2D() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Feature2D(Pointer p) { super(p); }
     public DescriptorExtractor asDescriptorExtractor() { return asDescriptorExtractor(this); }
     @Namespace public static native @Name("static_cast<cv::DescriptorExtractor*>") DescriptorExtractor asDescriptorExtractor(Feature2D pointer);
@@ -381,7 +393,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 */
 @Namespace("cv") @NoOffset public static class BRISK extends Feature2D {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BRISK(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public BRISK(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public BRISK position(int position) {
@@ -455,7 +469,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 */
 @Namespace("cv") @NoOffset public static class ORB extends Feature2D {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ORB(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ORB(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public ORB position(int position) {
@@ -495,7 +511,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 */
 @Namespace("cv") @NoOffset public static class FREAK extends DescriptorExtractor {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FREAK(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public FREAK(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public FREAK position(int position) {
@@ -580,7 +598,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 */
 @Namespace("cv") @NoOffset public static class MSER extends FeatureDetector {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MSER(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public MSER(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public MSER position(int position) {
@@ -613,7 +633,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 */
 @Namespace("cv") @NoOffset public static class StarDetector extends FeatureDetector {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StarDetector(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public StarDetector(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public StarDetector position(int position) {
@@ -650,7 +672,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 
 @Namespace("cv") @NoOffset public static class FastFeatureDetector extends FeatureDetector {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FastFeatureDetector(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public FastFeatureDetector(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public FastFeatureDetector position(int position) {
@@ -672,7 +696,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 
 @Namespace("cv") @NoOffset public static class GFTTDetector extends FeatureDetector {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GFTTDetector(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public GFTTDetector(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public GFTTDetector position(int position) {
@@ -690,7 +716,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 
 @Namespace("cv") @NoOffset public static class SimpleBlobDetector extends FeatureDetector {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SimpleBlobDetector(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public SimpleBlobDetector(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public SimpleBlobDetector position(int position) {
@@ -699,7 +727,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 
   @NoOffset public static class Params extends Pointer {
       static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public Params(Pointer p) { super(p); }
+      /** Native array allocator. Access with {@link Pointer#position(int)}. */
       public Params(int size) { allocateArray(size); }
       private native void allocateArray(int size);
       @Override public Params position(int position) {
@@ -749,7 +779,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 
 @Namespace("cv") @NoOffset public static class DenseFeatureDetector extends FeatureDetector {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DenseFeatureDetector(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public DenseFeatureDetector(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public DenseFeatureDetector position(int position) {
@@ -777,7 +809,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
  */
 @Namespace("cv") @NoOffset public static class GridAdaptedFeatureDetector extends FeatureDetector {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GridAdaptedFeatureDetector(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public GridAdaptedFeatureDetector(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public GridAdaptedFeatureDetector position(int position) {
@@ -812,7 +846,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
  */
 @Namespace("cv") @NoOffset public static class PyramidAdaptedFeatureDetector extends FeatureDetector {
     static { Loader.load(); }
+    /** Empty constructor. */
     public PyramidAdaptedFeatureDetector() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PyramidAdaptedFeatureDetector(Pointer p) { super(p); }
 
     // maxLevel - The 0-based index of the last pyramid layer
@@ -830,7 +866,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
  */
 @Namespace("cv") public static class AdjusterAdapter extends FeatureDetector {
     static { Loader.load(); }
+    /** Empty constructor. */
     public AdjusterAdapter() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AdjusterAdapter(Pointer p) { super(p); }
 
     /** pure virtual interface
@@ -869,7 +907,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
  */
 @Namespace("cv") @NoOffset public static class DynamicAdaptedFeatureDetector extends FeatureDetector {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DynamicAdaptedFeatureDetector() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DynamicAdaptedFeatureDetector(Pointer p) { super(p); }
 
 
@@ -892,7 +932,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
  */
 @Namespace("cv") @NoOffset public static class FastAdjuster extends AdjusterAdapter {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FastAdjuster(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public FastAdjuster(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public FastAdjuster position(int position) {
@@ -922,7 +964,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
  */
 @Namespace("cv") @NoOffset public static class StarAdjuster extends AdjusterAdapter {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StarAdjuster(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public StarAdjuster(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public StarAdjuster position(int position) {
@@ -943,7 +987,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 
 @Namespace("cv") @NoOffset public static class SurfAdjuster extends AdjusterAdapter {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SurfAdjuster(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public SurfAdjuster(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public SurfAdjuster position(int position) {
@@ -978,7 +1024,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
  */
 @Namespace("cv") @NoOffset public static class OpponentColorDescriptorExtractor extends DescriptorExtractor {
     static { Loader.load(); }
+    /** Empty constructor. */
     public OpponentColorDescriptorExtractor() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OpponentColorDescriptorExtractor(Pointer p) { super(p); }
 
     public OpponentColorDescriptorExtractor( @Ptr DescriptorExtractor descriptorExtractor ) { allocate(descriptorExtractor); }
@@ -998,6 +1046,7 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
  */
 @Namespace("cv") @NoOffset public static class BriefDescriptorExtractor extends DescriptorExtractor {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BriefDescriptorExtractor(Pointer p) { super(p); }
 
     @MemberGetter public static native int PATCH_SIZE();
@@ -1027,8 +1076,11 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 
 @Name("cv::Accumulator<unsigned char>") public static class Accumulator extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public Accumulator() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public Accumulator(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Accumulator(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1055,8 +1107,11 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
  */
 @Namespace("cv") public static class Hamming extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public Hamming() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public Hamming(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Hamming(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1082,7 +1137,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
  */
 @Namespace("cv") @NoOffset public static class DMatch extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DMatch(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public DMatch(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public DMatch position(int position) {
@@ -1114,7 +1171,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
  */
 @Namespace("cv") @NoOffset public static class DescriptorMatcher extends Algorithm {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DescriptorMatcher() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DescriptorMatcher(Pointer p) { super(p); }
 
 
@@ -1218,7 +1277,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
  */
 @Namespace("cv") @NoOffset public static class BFMatcher extends DescriptorMatcher {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BFMatcher(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public BFMatcher(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public BFMatcher position(int position) {
@@ -1244,7 +1305,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
  */
 @Namespace("cv") @NoOffset public static class FlannBasedMatcher extends DescriptorMatcher {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlannBasedMatcher(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public FlannBasedMatcher(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public FlannBasedMatcher position(int position) {
@@ -1284,7 +1347,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 
 @Namespace("cv") @NoOffset public static class GenericDescriptorMatcher extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public GenericDescriptorMatcher() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GenericDescriptorMatcher(Pointer p) { super(p); }
 
 
@@ -1415,7 +1480,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 
 @Namespace("cv") @NoOffset public static class VectorDescriptorMatcher extends GenericDescriptorMatcher {
     static { Loader.load(); }
+    /** Empty constructor. */
     public VectorDescriptorMatcher() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VectorDescriptorMatcher(Pointer p) { super(p); }
 
     public VectorDescriptorMatcher( @Ptr DescriptorExtractor extractor, @Ptr DescriptorMatcher matcher ) { allocate(extractor, matcher); }
@@ -1443,8 +1510,11 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 \****************************************************************************************/
 @Namespace("cv") public static class DrawMatchesFlags extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public DrawMatchesFlags() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public DrawMatchesFlags(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DrawMatchesFlags(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1551,7 +1621,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
  */
 @Namespace("cv") @NoOffset public static class BOWTrainer extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public BOWTrainer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BOWTrainer(Pointer p) { super(p); }
 
 
@@ -1577,7 +1649,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
  */
 @Namespace("cv") @NoOffset public static class BOWKMeansTrainer extends BOWTrainer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public BOWKMeansTrainer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BOWKMeansTrainer(Pointer p) { super(p); }
 
     public BOWKMeansTrainer( int clusterCount, @Const @ByRef TermCriteria termcrit/*=TermCriteria()*/,
@@ -1597,7 +1671,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
  */
 @Namespace("cv") @NoOffset public static class BOWImgDescriptorExtractor extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public BOWImgDescriptorExtractor() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BOWImgDescriptorExtractor(Pointer p) { super(p); }
 
     public BOWImgDescriptorExtractor( @Ptr DescriptorExtractor dextractor,

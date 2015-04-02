@@ -111,6 +111,7 @@ public static native @Platform("linux") void cvLoadWindowParameters(@Cast("const
 public static native @Platform("linux") void cvLoadWindowParameters(String name);
 public static class Pt2Func_int_PointerPointer extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Pt2Func_int_PointerPointer(Pointer p) { super(p); }
     protected Pt2Func_int_PointerPointer() { allocate(); }
     private native void allocate();
@@ -119,6 +120,7 @@ public static class Pt2Func_int_PointerPointer extends FunctionPointer {
 public static native @Platform("linux") int cvStartLoop(Pt2Func_int_PointerPointer pt2Func, int argc, @Cast("char**") PointerPointer argv);
 public static class Pt2Func_int_BytePointer extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Pt2Func_int_BytePointer(Pointer p) { super(p); }
     protected Pt2Func_int_BytePointer() { allocate(); }
     private native void allocate();
@@ -127,6 +129,7 @@ public static class Pt2Func_int_BytePointer extends FunctionPointer {
 public static native @Platform("linux") int cvStartLoop(Pt2Func_int_BytePointer pt2Func, int argc, @Cast("char**") @ByPtrPtr BytePointer argv);
 public static class Pt2Func_int_ByteBuffer extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Pt2Func_int_ByteBuffer(Pointer p) { super(p); }
     protected Pt2Func_int_ByteBuffer() { allocate(); }
     private native void allocate();
@@ -135,6 +138,7 @@ public static class Pt2Func_int_ByteBuffer extends FunctionPointer {
 public static native @Platform("linux") int cvStartLoop(Pt2Func_int_ByteBuffer pt2Func, int argc, @Cast("char**") @ByPtrPtr ByteBuffer argv);
 public static class Pt2Func_int_byte__ extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Pt2Func_int_byte__(Pointer p) { super(p); }
     protected Pt2Func_int_byte__() { allocate(); }
     private native void allocate();
@@ -145,6 +149,7 @@ public static native @Platform("linux") void cvStopLoop( );
 
 @Convention("CV_CDECL") public static class CvButtonCallback extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    CvButtonCallback(Pointer p) { super(p); }
     protected CvButtonCallback() { allocate(); }
     private native void allocate();
@@ -228,6 +233,7 @@ public static native @Cast("const char*") BytePointer cvGetWindowName( Pointer w
 
 @Convention("CV_CDECL") public static class CvTrackbarCallback extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    CvTrackbarCallback(Pointer p) { super(p); }
     protected CvTrackbarCallback() { allocate(); }
     private native void allocate();
@@ -262,6 +268,7 @@ public static native int cvCreateTrackbar( String trackbar_name, String window_n
 
 @Convention("CV_CDECL") public static class CvTrackbarCallback2 extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    CvTrackbarCallback2(Pointer p) { super(p); }
     protected CvTrackbarCallback2() { allocate(); }
     private native void allocate();
@@ -331,6 +338,7 @@ public static final int
 
 @Convention("CV_CDECL") public static class CvMouseCallback extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    CvMouseCallback(Pointer p) { super(p); }
     protected CvMouseCallback() { allocate(); }
     private native void allocate();
@@ -441,6 +449,7 @@ public static native int cvWaitKey();
 
 @Convention("CV_CDECL") public static class CvOpenGlDrawCallback extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    CvOpenGlDrawCallback(Pointer p) { super(p); }
     protected CvOpenGlDrawCallback() { allocate(); }
     private native void allocate();
@@ -463,7 +472,9 @@ public static native void cvUpdateWindow(String window_name);
 
 /* "black box" capture structure */
 @Opaque public static class CvCapture extends Pointer {
+    /** Empty constructor. */
     public CvCapture() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvCapture(Pointer p) { super(p); }
 }
 
@@ -778,7 +789,9 @@ public static native int cvGetCaptureDomain( CvCapture capture);
 
 /* "black box" video file writer structure */
 @Opaque public static class CvVideoWriter extends Pointer {
+    /** Empty constructor. */
     public CvVideoWriter() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvVideoWriter(Pointer p) { super(p); }
 }
 
@@ -988,6 +1001,7 @@ public static final int
 
 public static class MouseCallback extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    MouseCallback(Pointer p) { super(p); }
     protected MouseCallback() { allocate(); }
     private native void allocate();
@@ -1003,6 +1017,7 @@ public static class MouseCallback extends FunctionPointer {
 
 @Convention("CV_CDECL") public static class TrackbarCallback extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    TrackbarCallback(Pointer p) { super(p); }
     protected TrackbarCallback() { allocate(); }
     private native void allocate();
@@ -1055,6 +1070,7 @@ public static class MouseCallback extends FunctionPointer {
 
 public static class OpenGlDrawCallback extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    OpenGlDrawCallback(Pointer p) { super(p); }
     protected OpenGlDrawCallback() { allocate(); }
     private native void allocate();
@@ -1114,6 +1130,7 @@ public static class OpenGlDrawCallback extends FunctionPointer {
 
 @Convention("CV_CDECL") public static class ButtonCallback extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    ButtonCallback(Pointer p) { super(p); }
     protected ButtonCallback() { allocate(); }
     private native void allocate();
@@ -1214,6 +1231,7 @@ public static final int
 
 @Namespace("cv") @NoOffset public static class VideoCapture extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VideoCapture(Pointer p) { super(p); }
 
     public VideoCapture() { allocate(); }
@@ -1243,7 +1261,9 @@ public static final int
 
 @Namespace("cv") @NoOffset public static class VideoWriter extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VideoWriter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public VideoWriter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public VideoWriter position(int position) {

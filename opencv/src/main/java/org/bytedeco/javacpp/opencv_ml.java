@@ -13,6 +13,7 @@ public class opencv_ml extends org.bytedeco.javacpp.presets.opencv_ml {
 
 @Name("std::map<std::string,int>") public static class StringIntMap extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringIntMap(Pointer p) { super(p); }
     public StringIntMap()       { allocate();  }
     private native void allocate();
@@ -99,8 +100,11 @@ public static final int CV_ROW_SAMPLE = 1;
 
 public static class CvVectors extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvVectors() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvVectors(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvVectors(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -145,7 +149,9 @@ public static final int CV_TEST_ERROR =   1;
 
 @NoOffset public static class CvStatModel extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvStatModel(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvStatModel(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvStatModel position(int position) {
@@ -182,7 +188,9 @@ public static final int CV_TEST_ERROR =   1;
 
 @NoOffset public static class CvParamGrid extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvParamGrid(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvParamGrid(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvParamGrid position(int position) {
@@ -210,7 +218,9 @@ public static final int CV_TEST_ERROR =   1;
 
 @NoOffset public static class CvNormalBayesClassifier extends CvStatModel {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvNormalBayesClassifier(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvNormalBayesClassifier(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvNormalBayesClassifier position(int position) {
@@ -261,7 +271,9 @@ public static final int CV_TEST_ERROR =   1;
 // k Nearest Neighbors
 @NoOffset public static class CvKNearest extends CvStatModel {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvKNearest(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvKNearest(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvKNearest position(int position) {
@@ -355,7 +367,9 @@ public static final int CV_TEST_ERROR =   1;
 // SVM training parameters
 @NoOffset public static class CvSVMParams extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSVMParams(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvSVMParams(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvSVMParams position(int position) {
@@ -389,7 +403,9 @@ public static final int CV_TEST_ERROR =   1;
 
 @NoOffset public static class CvSVMKernel extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSVMKernel(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvSVMKernel(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvSVMKernel position(int position) {
@@ -398,6 +414,7 @@ public static final int CV_TEST_ERROR =   1;
 
     @Namespace("CvSVMKernel") public static class Calc extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Calc(Pointer p) { super(p); }
         public native void call(CvSVMKernel o,  int vec_count, int vec_size, @Const @ByPtrPtr FloatPointer vecs,
                                            @Const FloatPointer another, FloatPointer results );
@@ -467,8 +484,11 @@ public static final int CV_TEST_ERROR =   1;
 
 public static class CvSVMKernelRow extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvSVMKernelRow() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvSVMKernelRow(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSVMKernelRow(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -484,8 +504,11 @@ public static class CvSVMKernelRow extends Pointer {
 
 public static class CvSVMSolutionInfo extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvSVMSolutionInfo() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvSVMSolutionInfo(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSVMSolutionInfo(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -502,7 +525,9 @@ public static class CvSVMSolutionInfo extends Pointer {
 
 @NoOffset public static class CvSVMSolver extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSVMSolver(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvSVMSolver(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvSVMSolver position(int position) {
@@ -511,16 +536,19 @@ public static class CvSVMSolutionInfo extends Pointer {
 
     @Namespace("CvSVMSolver") public static class SelectWorkingSet extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    SelectWorkingSet(Pointer p) { super(p); }
         public native @Cast("bool") boolean call(CvSVMSolver o,  @ByRef IntPointer i, @ByRef IntPointer j );
     }
     @Namespace("CvSVMSolver") public static class GetRow extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    GetRow(Pointer p) { super(p); }
         public native FloatPointer call(CvSVMSolver o,  int i, FloatPointer row, FloatPointer dst, @Cast("bool") boolean existed );
     }
     @Namespace("CvSVMSolver") public static class CalcRho extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    CalcRho(Pointer p) { super(p); }
         public native void call(CvSVMSolver o,  @ByRef DoublePointer rho, @ByRef DoublePointer r );
     }
@@ -708,8 +736,11 @@ public static class CvSVMSolutionInfo extends Pointer {
 
 public static class CvSVMDecisionFunc extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvSVMDecisionFunc() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvSVMDecisionFunc(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSVMDecisionFunc(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -727,7 +758,9 @@ public static class CvSVMDecisionFunc extends Pointer {
 // SVM model
 @NoOffset public static class CvSVM extends CvStatModel {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSVM(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvSVM(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvSVM position(int position) {
@@ -828,7 +861,9 @@ public static class CvSVMDecisionFunc extends Pointer {
 \****************************************************************************************/
 @Namespace("cv") @NoOffset public static class EM extends Algorithm {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EM(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public EM(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public EM position(int position) {
@@ -897,8 +932,11 @@ public static class CvSVMDecisionFunc extends Pointer {
 \****************************************************************************************/
 public static class CvPair16u32s extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvPair16u32s() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvPair16u32s(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvPair16u32s(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -916,8 +954,11 @@ public static class CvPair16u32s extends Pointer {
 
 public static class CvDTreeSplit extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvDTreeSplit() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvDTreeSplit(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvDTreeSplit(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -938,8 +979,11 @@ public static class CvDTreeSplit extends Pointer {
 
 public static class CvDTreeNode extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvDTreeNode() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvDTreeNode(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvDTreeNode(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -983,7 +1027,9 @@ public static class CvDTreeNode extends Pointer {
 
 @NoOffset public static class CvDTreeParams extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvDTreeParams(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvDTreeParams(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvDTreeParams position(int position) {
@@ -1037,7 +1083,9 @@ public static class CvDTreeNode extends Pointer {
 
 @NoOffset public static class CvDTreeTrainData extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvDTreeTrainData(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvDTreeTrainData(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvDTreeTrainData position(int position) {
@@ -1191,18 +1239,24 @@ public static class CvDTreeNode extends Pointer {
     public native RNG rng(); public native CvDTreeTrainData rng(RNG rng);
 }
     @Namespace("cv") @Opaque public static class DTreeBestSplitFinder extends Pointer {
+        /** Empty constructor. */
         public DTreeBestSplitFinder() { }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public DTreeBestSplitFinder(Pointer p) { super(p); }
     }
     @Namespace("cv") @Opaque public static class ForestTreeBestSplitFinder extends Pointer {
+        /** Empty constructor. */
         public ForestTreeBestSplitFinder() { }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public ForestTreeBestSplitFinder(Pointer p) { super(p); }
     }
 
 
 @NoOffset public static class CvDTree extends CvStatModel {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvDTree(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvDTree(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvDTree position(int position) {
@@ -1273,7 +1327,9 @@ public static class CvDTreeNode extends Pointer {
 
 @NoOffset public static class CvForestTree extends CvDTree {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvForestTree(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvForestTree(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvForestTree position(int position) {
@@ -1306,7 +1362,9 @@ public static class CvDTreeNode extends Pointer {
 
 @NoOffset public static class CvRTParams extends CvDTreeParams {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvRTParams(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvRTParams(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvRTParams position(int position) {
@@ -1355,7 +1413,9 @@ public static class CvDTreeNode extends Pointer {
 
 @NoOffset public static class CvRTrees extends CvStatModel {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvRTrees(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvRTrees(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvRTrees position(int position) {
@@ -1422,8 +1482,11 @@ public static class CvDTreeNode extends Pointer {
 \****************************************************************************************/
 @NoOffset public static class CvERTreeTrainData extends CvDTreeTrainData {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvERTreeTrainData() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvERTreeTrainData(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvERTreeTrainData(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1481,8 +1544,11 @@ public static class CvDTreeNode extends Pointer {
 
 public static class CvForestERTree extends CvForestTree {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvForestERTree() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvForestERTree(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvForestERTree(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1494,7 +1560,9 @@ public static class CvForestERTree extends CvForestTree {
 
 public static class CvERTrees extends CvRTrees {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvERTrees(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvERTrees(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvERTrees position(int position) {
@@ -1528,7 +1596,9 @@ public static class CvERTrees extends CvRTrees {
 
 @NoOffset public static class CvBoostParams extends CvDTreeParams {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBoostParams(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvBoostParams(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvBoostParams position(int position) {
@@ -1558,7 +1628,9 @@ public static class CvERTrees extends CvRTrees {
 
 @NoOffset public static class CvBoostTree extends CvDTree {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBoostTree(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvBoostTree(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvBoostTree position(int position) {
@@ -1594,7 +1666,9 @@ public static class CvERTrees extends CvRTrees {
 
 @NoOffset public static class CvBoost extends CvStatModel {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBoost(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvBoost(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvBoost position(int position) {
@@ -1723,7 +1797,9 @@ public static class CvERTrees extends CvRTrees {
 
 @NoOffset public static class CvGBTreesParams extends CvDTreeParams {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvGBTreesParams(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvGBTreesParams(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvGBTreesParams position(int position) {
@@ -1793,7 +1869,9 @@ public static class CvERTrees extends CvRTrees {
 
 @NoOffset public static class CvGBTrees extends CvStatModel {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvGBTrees(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvGBTrees(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvGBTrees position(int position) {
@@ -2152,7 +2230,9 @@ public static class CvERTrees extends CvRTrees {
 
 @NoOffset public static class CvANN_MLP_TrainParams extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvANN_MLP_TrainParams(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvANN_MLP_TrainParams(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvANN_MLP_TrainParams position(int position) {
@@ -2191,7 +2271,9 @@ public static class CvERTrees extends CvRTrees {
 
 @NoOffset public static class CvANN_MLP extends CvStatModel {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvANN_MLP(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvANN_MLP(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvANN_MLP position(int position) {
@@ -2346,6 +2428,7 @@ public static final int CV_PORTION =   1;
 
 @NoOffset public static class CvTrainTestSplit extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvTrainTestSplit(Pointer p) { super(p); }
 
     public CvTrainTestSplit() { allocate(); }
@@ -2368,7 +2451,9 @@ public static final int CV_PORTION =   1;
 
 @NoOffset public static class CvMLData extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvMLData(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvMLData(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvMLData position(int position) {

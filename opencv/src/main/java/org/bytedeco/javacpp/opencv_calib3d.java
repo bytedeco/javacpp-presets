@@ -74,7 +74,9 @@ public class opencv_calib3d extends org.bytedeco.javacpp.helper.opencv_calib3d {
 \****************************************************************************************/
 
 @Opaque public static class CvPOSITObject extends AbstractCvPOSITObject {
+    /** Empty constructor. */
     public CvPOSITObject() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvPOSITObject(Pointer p) { super(p); }
 }
 
@@ -448,8 +450,11 @@ public static final int CV_STEREO_BM_XSOBEL =               1;
 /* Block matching algorithm structure */
 public static class CvStereoBMState extends AbstractCvStereoBMState {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvStereoBMState() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvStereoBMState(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvStereoBMState(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -526,7 +531,9 @@ public static native void cvReprojectImageTo3D( @Const CvArr disparityImage,
 //////////////////////////////////////////////////////////////////////////////////////////
 @NoOffset public static class CvLevMarq extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvLevMarq(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvLevMarq(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvLevMarq position(int position) {
@@ -906,6 +913,7 @@ public static final int
 */
 @Namespace("cv") @NoOffset public static class StereoBM extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StereoBM(Pointer p) { super(p); }
 
     /** enum cv::StereoBM:: */
@@ -941,7 +949,9 @@ public static final int
  */
 @Namespace("cv") @NoOffset public static class StereoSGBM extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StereoSGBM(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public StereoSGBM(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public StereoSGBM position(int position) {

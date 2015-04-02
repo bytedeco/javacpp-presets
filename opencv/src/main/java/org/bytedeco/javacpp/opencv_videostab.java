@@ -76,7 +76,9 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 
 @Namespace("cv::videostab") public static class IFrameSource extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public IFrameSource() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IFrameSource(Pointer p) { super(p); }
 
     public native void reset();
@@ -85,8 +87,11 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 
 @Namespace("cv::videostab") public static class NullFrameSource extends IFrameSource {
     static { Loader.load(); }
+    /** Default native constructor. */
     public NullFrameSource() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public NullFrameSource(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NullFrameSource(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -100,7 +105,9 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 
 @Namespace("cv::videostab") @NoOffset public static class VideoFileSource extends IFrameSource {
     static { Loader.load(); }
+    /** Empty constructor. */
     public VideoFileSource() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VideoFileSource(Pointer p) { super(p); }
 
     public VideoFileSource(@StdString BytePointer path, @Cast("bool") boolean volatileFrame/*=false*/) { allocate(path, volatileFrame); }
@@ -176,7 +183,9 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 
 @Namespace("cv::videostab") public static class ILog extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public ILog() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ILog(Pointer p) { super(p); }
 
     public native void print(@Cast("const char*") BytePointer format);
@@ -185,8 +194,11 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 
 @Namespace("cv::videostab") public static class NullLog extends ILog {
     static { Loader.load(); }
+    /** Default native constructor. */
     public NullLog() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public NullLog(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NullLog(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -200,8 +212,11 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 
 @Namespace("cv::videostab") public static class LogToStdout extends ILog {
     static { Loader.load(); }
+    /** Default native constructor. */
     public LogToStdout() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public LogToStdout(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LogToStdout(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -274,7 +289,9 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 // See http://iwi.eldoc.ub.rug.nl/FILES/root/2004/JGraphToolsTelea/2004JGraphToolsTelea.pdf
 @Namespace("cv::videostab") @NoOffset public static class FastMarchingMethod extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FastMarchingMethod(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public FastMarchingMethod(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public FastMarchingMethod position(int position) {
@@ -351,7 +368,9 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 
 @Namespace("cv::videostab") public static class ISparseOptFlowEstimator extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public ISparseOptFlowEstimator() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ISparseOptFlowEstimator(Pointer p) { super(p); }
 
     public native void run(
@@ -361,7 +380,9 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 
 @Namespace("cv::videostab") public static class IDenseOptFlowEstimator extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public IDenseOptFlowEstimator() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IDenseOptFlowEstimator(Pointer p) { super(p); }
 
     public native void run(
@@ -371,7 +392,9 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 
 @Namespace("cv::videostab") @NoOffset public static class PyrLkOptFlowEstimatorBase extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PyrLkOptFlowEstimatorBase(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public PyrLkOptFlowEstimatorBase(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public PyrLkOptFlowEstimatorBase position(int position) {
@@ -390,8 +413,11 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 
 @Namespace("cv::videostab") public static class SparsePyrLkOptFlowEstimator extends PyrLkOptFlowEstimatorBase {
     static { Loader.load(); }
+    /** Default native constructor. */
     public SparsePyrLkOptFlowEstimator() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public SparsePyrLkOptFlowEstimator(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparsePyrLkOptFlowEstimator(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -409,7 +435,9 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 // #if defined(HAVE_OPENCV_GPU) && !defined(ANDROID)
 @Platform(not="android") @Namespace("cv::videostab") @NoOffset public static class DensePyrLkOptFlowEstimatorGpu extends PyrLkOptFlowEstimatorBase {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DensePyrLkOptFlowEstimatorGpu(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public DensePyrLkOptFlowEstimatorGpu(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public DensePyrLkOptFlowEstimatorGpu position(int position) {
@@ -506,7 +534,9 @@ public static final int
 
 @Namespace("cv::videostab") @NoOffset public static class RansacParams extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public RansacParams() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RansacParams(Pointer p) { super(p); }
 
     public native int size(); public native RansacParams size(int size); // subset size
@@ -540,7 +570,9 @@ public static final int
 
 @Namespace("cv::videostab") public static class IGlobalMotionEstimator extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public IGlobalMotionEstimator() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IGlobalMotionEstimator(Pointer p) { super(p); }
 
     public native @ByVal Mat estimate(@Const @ByRef Mat frame0, @Const @ByRef Mat frame1);
@@ -548,7 +580,9 @@ public static final int
 
 @Namespace("cv::videostab") @NoOffset public static class PyrLkRobustMotionEstimator extends IGlobalMotionEstimator {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PyrLkRobustMotionEstimator(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public PyrLkRobustMotionEstimator(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public PyrLkRobustMotionEstimator position(int position) {
@@ -641,7 +675,9 @@ public static final int
 
 @Namespace("cv::videostab") public static class IMotionStabilizer extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public IMotionStabilizer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IMotionStabilizer(Pointer p) { super(p); }
 
     public native void stabilize(@Const Mat motions, int size, Mat stabilizationMotions);
@@ -652,7 +688,9 @@ public static final int
 
 @Namespace("cv::videostab") @NoOffset public static class MotionFilterBase extends IMotionStabilizer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public MotionFilterBase() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MotionFilterBase(Pointer p) { super(p); }
 
 
@@ -667,7 +705,9 @@ public static final int
 
 @Namespace("cv::videostab") @NoOffset public static class GaussianMotionFilter extends MotionFilterBase {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GaussianMotionFilter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public GaussianMotionFilter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public GaussianMotionFilter position(int position) {
@@ -750,7 +790,9 @@ public static final int
 
 @Namespace("cv::videostab") @NoOffset public static class InpainterBase extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public InpainterBase() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public InpainterBase(Pointer p) { super(p); }
 
 
@@ -776,8 +818,11 @@ public static final int
 
 @Namespace("cv::videostab") public static class NullInpainter extends InpainterBase {
     static { Loader.load(); }
+    /** Default native constructor. */
     public NullInpainter() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public NullInpainter(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NullInpainter(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -790,8 +835,11 @@ public static final int
 
 @Namespace("cv::videostab") @NoOffset public static class InpaintingPipeline extends InpainterBase {
     static { Loader.load(); }
+    /** Default native constructor. */
     public InpaintingPipeline() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public InpaintingPipeline(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public InpaintingPipeline(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -815,7 +863,9 @@ public static final int
 
 @Namespace("cv::videostab") @NoOffset public static class ConsistentMosaicInpainter extends InpainterBase {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConsistentMosaicInpainter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ConsistentMosaicInpainter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public ConsistentMosaicInpainter position(int position) {
@@ -833,7 +883,9 @@ public static final int
 
 @Namespace("cv::videostab") @NoOffset public static class MotionInpainter extends InpainterBase {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MotionInpainter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public MotionInpainter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public MotionInpainter position(int position) {
@@ -860,8 +912,11 @@ public static final int
 
 @Namespace("cv::videostab") @NoOffset public static class ColorAverageInpainter extends InpainterBase {
     static { Loader.load(); }
+    /** Default native constructor. */
     public ColorAverageInpainter() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ColorAverageInpainter(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ColorAverageInpainter(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -874,7 +929,9 @@ public static final int
 
 @Namespace("cv::videostab") @NoOffset public static class ColorInpainter extends InpainterBase {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ColorInpainter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public ColorInpainter(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public ColorInpainter position(int position) {
@@ -957,7 +1014,9 @@ public static final int
 
 @Namespace("cv::videostab") @NoOffset public static class DeblurerBase extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public DeblurerBase() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DeblurerBase(Pointer p) { super(p); }
 
 
@@ -982,8 +1041,11 @@ public static final int
 
 @Namespace("cv::videostab") public static class NullDeblurer extends DeblurerBase {
     static { Loader.load(); }
+    /** Default native constructor. */
     public NullDeblurer() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public NullDeblurer(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NullDeblurer(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -996,7 +1058,9 @@ public static final int
 
 @Namespace("cv::videostab") @NoOffset public static class WeightingDeblurer extends DeblurerBase {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public WeightingDeblurer(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public WeightingDeblurer(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public WeightingDeblurer position(int position) {
@@ -1077,7 +1141,9 @@ public static final int
 
 @Namespace("cv::videostab") @NoOffset public static class StabilizerBase extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public StabilizerBase() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StabilizerBase(Pointer p) { super(p); }
 
 
@@ -1111,7 +1177,9 @@ public static final int
 
 @Namespace("cv::videostab") @NoOffset public static class OnePassStabilizer extends StabilizerBase {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OnePassStabilizer(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public OnePassStabilizer(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public OnePassStabilizer position(int position) {
@@ -1132,7 +1200,9 @@ public static final int
 
 @Namespace("cv::videostab") @NoOffset public static class TwoPassStabilizer extends StabilizerBase {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TwoPassStabilizer(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public TwoPassStabilizer(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public TwoPassStabilizer position(int position) {

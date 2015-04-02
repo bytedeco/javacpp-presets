@@ -726,8 +726,11 @@ public static final int
  */
 public static class AVCodecDescriptor extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVCodecDescriptor() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVCodecDescriptor(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVCodecDescriptor(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -880,8 +883,11 @@ public static final int
  */
 public static class RcOverride extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public RcOverride() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public RcOverride(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RcOverride(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1151,8 +1157,11 @@ public static final int MB_TYPE_CBP =        0x00020000;
  */
 public static class AVPanScan extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVPanScan() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVPanScan(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVPanScan(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1353,8 +1362,11 @@ public static final int
 
 public static class AVPacketSideData extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVPacketSideData() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVPacketSideData(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVPacketSideData(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1391,8 +1403,11 @@ public static class AVPacketSideData extends Pointer {
  */
 public static class AVPacket extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVPacket() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVPacket(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVPacket(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1444,6 +1459,7 @@ public static class AVPacket extends Pointer {
 // #if FF_API_DESTRUCT_PACKET
     public static class Destruct_AVPacket extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Destruct_AVPacket(Pointer p) { super(p); }
         protected Destruct_AVPacket() { allocate(); }
         private native void allocate();
@@ -1490,7 +1506,9 @@ public static final int
  */
 
 @Opaque public static class AVCodecInternal extends Pointer {
+    /** Empty constructor. */
     public AVCodecInternal() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVCodecInternal(Pointer p) { super(p); }
 }
 
@@ -1514,8 +1532,11 @@ public static final int
  */
 public static class AVCodecContext extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVCodecContext() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVCodecContext(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVCodecContext(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -1762,6 +1783,7 @@ public static final int FF_ASPECT_EXTENDED = 15;
      */
     public static class Draw_horiz_band_AVCodecContext_AVFrame_IntPointer_int_int_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Draw_horiz_band_AVCodecContext_AVFrame_IntPointer_int_int_int(Pointer p) { super(p); }
         protected Draw_horiz_band_AVCodecContext_AVFrame_IntPointer_int_int_int() { allocate(); }
         private native void allocate();
@@ -1786,6 +1808,7 @@ public static final int FF_ASPECT_EXTENDED = 15;
      */
     public static class Get_format_AVCodecContext_IntPointer extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Get_format_AVCodecContext_IntPointer(Pointer p) { super(p); }
         protected Get_format_AVCodecContext_IntPointer() { allocate(); }
         private native void allocate();
@@ -2437,6 +2460,7 @@ public static final int FF_MB_DECISION_RD =     2;
      */
     public static class Get_buffer_AVCodecContext_AVFrame extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Get_buffer_AVCodecContext_AVFrame(Pointer p) { super(p); }
         protected Get_buffer_AVCodecContext_AVFrame() { allocate(); }
         private native void allocate();
@@ -2457,6 +2481,7 @@ public static final int FF_MB_DECISION_RD =     2;
      */
     public static class Release_buffer_AVCodecContext_AVFrame extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Release_buffer_AVCodecContext_AVFrame(Pointer p) { super(p); }
         protected Release_buffer_AVCodecContext_AVFrame() { allocate(); }
         private native void allocate();
@@ -2478,6 +2503,7 @@ public static final int FF_MB_DECISION_RD =     2;
      */
     public static class Reget_buffer_AVCodecContext_AVFrame extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Reget_buffer_AVCodecContext_AVFrame(Pointer p) { super(p); }
         protected Reget_buffer_AVCodecContext_AVFrame() { allocate(); }
         private native void allocate();
@@ -2568,6 +2594,7 @@ public static final int FF_MB_DECISION_RD =     2;
      */
     public static class Get_buffer2_AVCodecContext_AVFrame_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Get_buffer2_AVCodecContext_AVFrame_int(Pointer p) { super(p); }
         protected Get_buffer2_AVCodecContext_AVFrame_int() { allocate(); }
         private native void allocate();
@@ -2786,6 +2813,7 @@ public static final int FF_CODER_TYPE_DEFLATE =   4;
     /* encoded in the RTP payload.                  */
     public static class Rtp_callback_AVCodecContext_Pointer_int_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Rtp_callback_AVCodecContext_Pointer_int_int(Pointer p) { super(p); }
         protected Rtp_callback_AVCodecContext_Pointer_int_int() { allocate(); }
         private native void allocate();
@@ -3142,6 +3170,7 @@ public static final int FF_THREAD_SLICE =   2;
      */
     public static class Func_AVCodecContext_Pointer extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Func_AVCodecContext_Pointer(Pointer p) { super(p); }
         protected Func_AVCodecContext_Pointer() { allocate(); }
         private native void allocate();
@@ -3149,6 +3178,7 @@ public static final int FF_THREAD_SLICE =   2;
     }
     public static class Execute_AVCodecContext_Func_AVCodecContext_Pointer_Pointer_IntPointer_int_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Execute_AVCodecContext_Func_AVCodecContext_Pointer_Pointer_IntPointer_int_int(Pointer p) { super(p); }
         protected Execute_AVCodecContext_Func_AVCodecContext_Pointer_Pointer_IntPointer_int_int() { allocate(); }
         private native void allocate();
@@ -3176,6 +3206,7 @@ public static final int FF_THREAD_SLICE =   2;
      */
     public static class Func_AVCodecContext_Pointer_int_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Func_AVCodecContext_Pointer_int_int(Pointer p) { super(p); }
         protected Func_AVCodecContext_Pointer_int_int() { allocate(); }
         private native void allocate();
@@ -3183,6 +3214,7 @@ public static final int FF_THREAD_SLICE =   2;
     }
     public static class Execute2_AVCodecContext_Func_AVCodecContext_Pointer_int_int_Pointer_IntPointer_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Execute2_AVCodecContext_Func_AVCodecContext_Pointer_int_int_Pointer_IntPointer_int(Pointer p) { super(p); }
         protected Execute2_AVCodecContext_Func_AVCodecContext_Pointer_int_int_Pointer_IntPointer_int() { allocate(); }
         private native void allocate();
@@ -3524,8 +3556,11 @@ public static native void av_codec_set_chroma_intra_matrix(AVCodecContext avctx,
  */
 public static class AVProfile extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVProfile() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVProfile(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVProfile(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -3539,7 +3574,9 @@ public static class AVProfile extends Pointer {
 }
 
 @Opaque public static class AVCodecDefault extends Pointer {
+    /** Empty constructor. */
     public AVCodecDefault() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVCodecDefault(Pointer p) { super(p); }
 }
 
@@ -3548,8 +3585,11 @@ public static class AVProfile extends Pointer {
  */
 public static class AVCodec extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVCodec() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVCodec(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVCodec(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -3615,6 +3655,7 @@ public static class AVCodec extends Pointer {
      */
     public static class Init_thread_copy_AVCodecContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Init_thread_copy_AVCodecContext(Pointer p) { super(p); }
         protected Init_thread_copy_AVCodecContext() { allocate(); }
         private native void allocate();
@@ -3630,6 +3671,7 @@ public static class AVCodec extends Pointer {
      */
     public static class Update_thread_context_AVCodecContext_AVCodecContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Update_thread_context_AVCodecContext_AVCodecContext(Pointer p) { super(p); }
         protected Update_thread_context_AVCodecContext_AVCodecContext() { allocate(); }
         private native void allocate();
@@ -3648,6 +3690,7 @@ public static class AVCodec extends Pointer {
      */
     public static class Init_static_data_AVCodec extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Init_static_data_AVCodec(Pointer p) { super(p); }
         protected Init_static_data_AVCodec() { allocate(); }
         private native void allocate();
@@ -3657,6 +3700,7 @@ public static class AVCodec extends Pointer {
 
     public static class Init_AVCodecContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Init_AVCodecContext(Pointer p) { super(p); }
         protected Init_AVCodecContext() { allocate(); }
         private native void allocate();
@@ -3665,6 +3709,7 @@ public static class AVCodec extends Pointer {
     public native Init_AVCodecContext init(); public native AVCodec init(Init_AVCodecContext init);
     public static class Encode_sub_AVCodecContext_BytePointer_int_AVSubtitle extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Encode_sub_AVCodecContext_BytePointer_int_AVSubtitle(Pointer p) { super(p); }
         protected Encode_sub_AVCodecContext_BytePointer_int_AVSubtitle() { allocate(); }
         private native void allocate();
@@ -3684,6 +3729,7 @@ public static class AVCodec extends Pointer {
      */
     public static class Encode2_AVCodecContext_AVPacket_AVFrame_IntPointer extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Encode2_AVCodecContext_AVPacket_AVFrame_IntPointer(Pointer p) { super(p); }
         protected Encode2_AVCodecContext_AVPacket_AVFrame_IntPointer() { allocate(); }
         private native void allocate();
@@ -3693,6 +3739,7 @@ public static class AVCodec extends Pointer {
     public native Encode2_AVCodecContext_AVPacket_AVFrame_IntPointer encode2(); public native AVCodec encode2(Encode2_AVCodecContext_AVPacket_AVFrame_IntPointer encode2);
     public static class Decode_AVCodecContext_Pointer_IntPointer_AVPacket extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Decode_AVCodecContext_Pointer_IntPointer_AVPacket(Pointer p) { super(p); }
         protected Decode_AVCodecContext_Pointer_IntPointer_AVPacket() { allocate(); }
         private native void allocate();
@@ -3701,6 +3748,7 @@ public static class AVCodec extends Pointer {
     public native Decode_AVCodecContext_Pointer_IntPointer_AVPacket decode(); public native AVCodec decode(Decode_AVCodecContext_Pointer_IntPointer_AVPacket decode);
     public static class Close_AVCodecContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Close_AVCodecContext(Pointer p) { super(p); }
         protected Close_AVCodecContext() { allocate(); }
         private native void allocate();
@@ -3713,6 +3761,7 @@ public static class AVCodec extends Pointer {
      */
     public static class Flush_AVCodecContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Flush_AVCodecContext(Pointer p) { super(p); }
         protected Flush_AVCodecContext() { allocate(); }
         private native void allocate();
@@ -3724,7 +3773,9 @@ public static class AVCodec extends Pointer {
 public static native int av_codec_get_max_lowres(@Const AVCodec codec);
 
 @Opaque public static class MpegEncContext extends Pointer {
+    /** Empty constructor. */
     public MpegEncContext() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MpegEncContext(Pointer p) { super(p); }
 }
 
@@ -3734,8 +3785,11 @@ public static native int av_codec_get_max_lowres(@Const AVCodec codec);
  */
 public static class AVHWAccel extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVHWAccel() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVHWAccel(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVHWAccel(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -3791,6 +3845,7 @@ public static class AVHWAccel extends Pointer {
      */
     public static class Alloc_frame_AVCodecContext_AVFrame extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Alloc_frame_AVCodecContext_AVFrame(Pointer p) { super(p); }
         protected Alloc_frame_AVCodecContext_AVFrame() { allocate(); }
         private native void allocate();
@@ -3814,6 +3869,7 @@ public static class AVHWAccel extends Pointer {
      */
     public static class Start_frame_AVCodecContext_BytePointer_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Start_frame_AVCodecContext_BytePointer_int(Pointer p) { super(p); }
         protected Start_frame_AVCodecContext_BytePointer_int() { allocate(); }
         private native void allocate();
@@ -3835,6 +3891,7 @@ public static class AVHWAccel extends Pointer {
      */
     public static class Decode_slice_AVCodecContext_BytePointer_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Decode_slice_AVCodecContext_BytePointer_int(Pointer p) { super(p); }
         protected Decode_slice_AVCodecContext_BytePointer_int() { allocate(); }
         private native void allocate();
@@ -3853,6 +3910,7 @@ public static class AVHWAccel extends Pointer {
      */
     public static class End_frame_AVCodecContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    End_frame_AVCodecContext(Pointer p) { super(p); }
         protected End_frame_AVCodecContext() { allocate(); }
         private native void allocate();
@@ -3880,6 +3938,7 @@ public static class AVHWAccel extends Pointer {
      */
     public static class Decode_mb_MpegEncContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Decode_mb_MpegEncContext(Pointer p) { super(p); }
         protected Decode_mb_MpegEncContext() { allocate(); }
         private native void allocate();
@@ -3896,6 +3955,7 @@ public static class AVHWAccel extends Pointer {
      */
     public static class Init_AVCodecContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Init_AVCodecContext(Pointer p) { super(p); }
         protected Init_AVCodecContext() { allocate(); }
         private native void allocate();
@@ -3911,6 +3971,7 @@ public static class AVHWAccel extends Pointer {
      */
     public static class Uninit_AVCodecContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Uninit_AVCodecContext(Pointer p) { super(p); }
         protected Uninit_AVCodecContext() { allocate(); }
         private native void allocate();
@@ -3957,8 +4018,11 @@ public static final int AV_HWACCEL_FLAG_ALLOW_HIGH_DEPTH = (1 << 1);
  */
 public static class AVPicture extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVPicture() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVPicture(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVPicture(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -4001,8 +4065,11 @@ public static final int AV_SUBTITLE_FLAG_FORCED = 0x00000001;
 
 public static class AVSubtitleRect extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVSubtitleRect() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVSubtitleRect(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVSubtitleRect(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -4043,8 +4110,11 @@ public static class AVSubtitleRect extends Pointer {
 
 public static class AVSubtitle extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVSubtitle() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVSubtitle(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVSubtitle(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -4833,8 +4903,11 @@ public static final int
 
 public static class AVCodecParserContext extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVCodecParserContext() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVCodecParserContext(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVCodecParserContext(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -5027,8 +5100,11 @@ public static final int PARSER_FLAG_USE_CODEC_TS =              0x1000;
 
 public static class AVCodecParser extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVCodecParser() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVCodecParser(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVCodecParser(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -5041,6 +5117,7 @@ public static class AVCodecParser extends Pointer {
     public native int priv_data_size(); public native AVCodecParser priv_data_size(int priv_data_size);
     public static class Parser_init_AVCodecParserContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Parser_init_AVCodecParserContext(Pointer p) { super(p); }
         protected Parser_init_AVCodecParserContext() { allocate(); }
         private native void allocate();
@@ -5051,6 +5128,7 @@ public static class AVCodecParser extends Pointer {
      * the frame start was in a previous packet. */
     public static class Parser_parse_AVCodecParserContext_AVCodecContext_PointerPointer_IntPointer_BytePointer_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Parser_parse_AVCodecParserContext_AVCodecContext_PointerPointer_IntPointer_BytePointer_int(Pointer p) { super(p); }
         protected Parser_parse_AVCodecParserContext_AVCodecContext_PointerPointer_IntPointer_BytePointer_int() { allocate(); }
         private native void allocate();
@@ -5062,6 +5140,7 @@ public static class AVCodecParser extends Pointer {
     public native Parser_parse_AVCodecParserContext_AVCodecContext_PointerPointer_IntPointer_BytePointer_int parser_parse(); public native AVCodecParser parser_parse(Parser_parse_AVCodecParserContext_AVCodecContext_PointerPointer_IntPointer_BytePointer_int parser_parse);
     public static class Parser_close_AVCodecParserContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Parser_close_AVCodecParserContext(Pointer p) { super(p); }
         protected Parser_close_AVCodecParserContext() { allocate(); }
         private native void allocate();
@@ -5070,6 +5149,7 @@ public static class AVCodecParser extends Pointer {
     public native Parser_close_AVCodecParserContext parser_close(); public native AVCodecParser parser_close(Parser_close_AVCodecParserContext parser_close);
     public static class Split_AVCodecContext_BytePointer_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Split_AVCodecContext_BytePointer_int(Pointer p) { super(p); }
         protected Split_AVCodecContext_BytePointer_int() { allocate(); }
         private native void allocate();
@@ -5353,11 +5433,15 @@ public static native int avcodec_encode_subtitle(AVCodecContext avctx, @Cast("ui
  * @{
  */
 @Opaque public static class ReSampleContext extends Pointer {
+    /** Empty constructor. */
     public ReSampleContext() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ReSampleContext(Pointer p) { super(p); }
 }
 @Opaque public static class AVResampleContext extends Pointer {
+    /** Empty constructor. */
     public AVResampleContext() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVResampleContext(Pointer p) { super(p); }
 }
 
@@ -5716,6 +5800,7 @@ public static native @Cast("const char*") BytePointer av_get_profile_name(@Const
 
 public static class Func_AVCodecContext_Pointer extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Func_AVCodecContext_Pointer(Pointer p) { super(p); }
     protected Func_AVCodecContext_Pointer() { allocate(); }
     private native void allocate();
@@ -5726,6 +5811,7 @@ public static native int avcodec_default_execute(AVCodecContext c, Func_AVCodecC
 public static native int avcodec_default_execute(AVCodecContext c, Func_AVCodecContext_Pointer func,Pointer arg, int[] ret, int count, int size);
 public static class Func_AVCodecContext_Pointer_int_int extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Func_AVCodecContext_Pointer_int_int(Pointer p) { super(p); }
     protected Func_AVCodecContext_Pointer_int_int() { allocate(); }
     private native void allocate();
@@ -5819,8 +5905,11 @@ public static native int av_get_audio_frame_duration(AVCodecContext avctx, int f
 
 public static class AVBitStreamFilterContext extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVBitStreamFilterContext() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVBitStreamFilterContext(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVBitStreamFilterContext(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -5837,8 +5926,11 @@ public static class AVBitStreamFilterContext extends Pointer {
 
 public static class AVBitStreamFilter extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public AVBitStreamFilter() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public AVBitStreamFilter(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVBitStreamFilter(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -5850,6 +5942,7 @@ public static class AVBitStreamFilter extends Pointer {
     public native int priv_data_size(); public native AVBitStreamFilter priv_data_size(int priv_data_size);
     public static class Filter_AVBitStreamFilterContext_AVCodecContext_BytePointer_PointerPointer_IntPointer_BytePointer_int_int extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Filter_AVBitStreamFilterContext_AVCodecContext_BytePointer_PointerPointer_IntPointer_BytePointer_int_int(Pointer p) { super(p); }
         protected Filter_AVBitStreamFilterContext_AVCodecContext_BytePointer_PointerPointer_IntPointer_BytePointer_int_int() { allocate(); }
         private native void allocate();
@@ -5861,6 +5954,7 @@ public static class AVBitStreamFilter extends Pointer {
     public native Filter_AVBitStreamFilterContext_AVCodecContext_BytePointer_PointerPointer_IntPointer_BytePointer_int_int filter(); public native AVBitStreamFilter filter(Filter_AVBitStreamFilterContext_AVCodecContext_BytePointer_PointerPointer_IntPointer_BytePointer_int_int filter);
     public static class Close_AVBitStreamFilterContext extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    Close_AVBitStreamFilterContext(Pointer p) { super(p); }
         protected Close_AVBitStreamFilterContext() { allocate(); }
         private native void allocate();
@@ -6083,6 +6177,7 @@ public static final int
  */
 public static class Cb_PointerPointer_int extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Cb_PointerPointer_int(Pointer p) { super(p); }
     protected Cb_PointerPointer_int() { allocate(); }
     private native void allocate();
@@ -6091,6 +6186,7 @@ public static class Cb_PointerPointer_int extends FunctionPointer {
 public static native int av_lockmgr_register(Cb_PointerPointer_int cb);
 public static class Cb_Pointer_int extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    Cb_Pointer_int(Pointer p) { super(p); }
     protected Cb_Pointer_int() { allocate(); }
     private native void allocate();
@@ -6191,8 +6287,11 @@ public static native @Const AVCodecDescriptor avcodec_descriptor_get_by_name(Str
 
 public static class FFTComplex extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public FFTComplex() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public FFTComplex(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FFTComplex(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -6205,7 +6304,9 @@ public static class FFTComplex extends Pointer {
 }
 
 @Opaque public static class FFTContext extends Pointer {
+    /** Empty constructor. */
     public FFTContext() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FFTContext(Pointer p) { super(p); }
 }
 
@@ -6251,7 +6352,9 @@ public static final int
     DFT_C2R = 3;
 
 @Opaque public static class RDFTContext extends Pointer {
+    /** Empty constructor. */
     public RDFTContext() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RDFTContext(Pointer p) { super(p); }
 }
 
@@ -6269,7 +6372,9 @@ public static native void av_rdft_end(RDFTContext s);
 /* Discrete Cosine Transform */
 
 @Opaque public static class DCTContext extends Pointer {
+    /** Empty constructor. */
     public DCTContext() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DCTContext(Pointer p) { super(p); }
 }
 

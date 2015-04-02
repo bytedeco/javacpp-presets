@@ -66,8 +66,11 @@ public class opencv_imgproc extends org.bytedeco.javacpp.helper.opencv_imgproc {
 /* Connected component structure */
 public static class CvConnectedComp extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvConnectedComp() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvConnectedComp(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvConnectedComp(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -383,8 +386,11 @@ public static final int
 /* Spatial and central moments */
 public static class CvMoments extends AbstractCvMoments {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvMoments() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvMoments(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvMoments(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -415,8 +421,11 @@ public static class CvMoments extends AbstractCvMoments {
 /* Hu invariants */
 public static class CvHuMoments extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvHuMoments() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvHuMoments(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvHuMoments(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -445,6 +454,7 @@ public static final int
 
 @Convention("CV_CDECL") public static class CvDistanceFunction extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    CvDistanceFunction(Pointer p) { super(p); }
     protected CvDistanceFunction() { allocate(); }
     private native void allocate();
@@ -475,15 +485,20 @@ Internal structure that is used for sequental retrieving contours from the image
 It supports both hierarchical and plane variants of Suzuki algorithm.
 */
 @Name("_CvContourScanner") @Opaque public static class CvContourScanner extends Pointer {
+    /** Empty constructor. */
     public CvContourScanner() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvContourScanner(Pointer p) { super(p); }
 }
 
 /* Freeman chain reader state */
 public static class CvChainPtReader extends CvSeqReader {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvChainPtReader() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvChainPtReader(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvChainPtReader(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -532,8 +547,11 @@ public static final int CV_SUBDIV2D_VIRTUAL_POINT_FLAG = (1 << 30);
 
 public static class CvQuadEdge2D extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvQuadEdge2D() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvQuadEdge2D(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvQuadEdge2D(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -550,8 +568,11 @@ public static class CvQuadEdge2D extends Pointer {
 
 public static class CvSubdiv2DPoint extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvSubdiv2DPoint() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvSubdiv2DPoint(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSubdiv2DPoint(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -575,8 +596,11 @@ public static class CvSubdiv2DPoint extends Pointer {
 
 public static class CvSubdiv2D extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvSubdiv2D() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvSubdiv2D(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSubdiv2D(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -654,8 +678,11 @@ public static final int
 /* Convexity defect */
 public static class CvConvexityDefect extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public CvConvexityDefect() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public CvConvexityDefect(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvConvexityDefect(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -746,15 +773,21 @@ public static final int
 
 /* Fast search data structures  */
 @Opaque public static class CvFeatureTree extends Pointer {
+    /** Empty constructor. */
     public CvFeatureTree() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvFeatureTree(Pointer p) { super(p); }
 }
 @Opaque public static class CvLSH extends Pointer {
+    /** Empty constructor. */
     public CvLSH() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvLSH(Pointer p) { super(p); }
 }
 @Opaque public static class CvLSHOperations extends Pointer {
+    /** Empty constructor. */
     public CvLSHOperations() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvLSHOperations(Pointer p) { super(p); }
 }
 
@@ -1797,7 +1830,9 @@ public static final int BORDER_REPLICATE= IPL_BORDER_REPLICATE, BORDER_CONSTANT=
 */
 @Namespace("cv") @NoOffset public static class BaseRowFilter extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public BaseRowFilter() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseRowFilter(Pointer p) { super(p); }
 
     /** the default constructor */
@@ -1829,7 +1864,9 @@ public static final int BORDER_REPLICATE= IPL_BORDER_REPLICATE, BORDER_CONSTANT=
  */
 @Namespace("cv") @NoOffset public static class BaseColumnFilter extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public BaseColumnFilter() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseColumnFilter(Pointer p) { super(p); }
 
     /** the default constructor */
@@ -1862,7 +1899,9 @@ public static final int BORDER_REPLICATE= IPL_BORDER_REPLICATE, BORDER_CONSTANT=
 */
 @Namespace("cv") @NoOffset public static class BaseFilter extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
     public BaseFilter() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseFilter(Pointer p) { super(p); }
 
     /** the default constructor */
@@ -1957,7 +1996,9 @@ public static final int BORDER_REPLICATE= IPL_BORDER_REPLICATE, BORDER_CONSTANT=
 */
 @Namespace("cv") @NoOffset public static class FilterEngine extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FilterEngine(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public FilterEngine(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public FilterEngine position(int position) {
@@ -2354,7 +2395,9 @@ public static final int
  *  Guil, N., González-Linares, J.M. and Zapata, E.L. (1999). Bidimensional shape detection using an invariant approach. Pattern Recognition 32 (6): 1025-1038. */
 @Namespace("cv") @NoOffset public static class GeneralizedHough extends Algorithm {
     static { Loader.load(); }
+    /** Empty constructor. */
     public GeneralizedHough() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GeneralizedHough(Pointer p) { super(p); }
 
     public static native @Ptr GeneralizedHough create(int method);
@@ -2791,7 +2834,9 @@ CV_EXPORTS_W void calcBackProjectPatch( InputArrayOfArrays images, const vector<
 
 @Namespace("cv") public static class CLAHE extends Algorithm {
     static { Loader.load(); }
+    /** Empty constructor. */
     public CLAHE() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CLAHE(Pointer p) { super(p); }
 
     public native void apply(@ByVal Mat src, @ByVal Mat dst);
@@ -3143,7 +3188,9 @@ public static final int
 /** raster image moments */
 @Namespace("cv") @NoOffset public static class Moments extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Moments(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public Moments(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Moments position(int position) {
@@ -3307,7 +3354,9 @@ public static final int
 
 @Namespace("cv") @NoOffset public static class Subdiv2D extends Pointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Subdiv2D(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public Subdiv2D(int size) { allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Subdiv2D position(int position) {

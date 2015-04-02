@@ -703,8 +703,11 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** The current version of the library. */
     @Namespace("FlyCapture2") public static class FC2Version extends Pointer {
         static { Loader.load(); }
+        /** Default native constructor. */
         public FC2Version() { allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public FC2Version(int size) { allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public FC2Version(Pointer p) { super(p); }
         private native void allocate();
         private native void allocateArray(int size);
@@ -725,7 +728,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** A GUID to the camera.  It is used to uniquely identify a camera. */
     @Namespace("FlyCapture2") @NoOffset public static class PGRGuid extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public PGRGuid(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public PGRGuid(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public PGRGuid position(int position) {
@@ -757,6 +762,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** IPv4 address. */
     @Namespace("FlyCapture2") @NoOffset public static class IPAddress extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public IPAddress(Pointer p) { super(p); }
     
         public native @Cast("unsigned char") byte octets(int i); public native IPAddress octets(int i, byte octets);
@@ -778,7 +784,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** MAC address. */
     @Namespace("FlyCapture2") @NoOffset public static class MACAddress extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public MACAddress(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public MACAddress(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public MACAddress position(int position) {
@@ -804,8 +812,11 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** A GigE property. */
     @Namespace("FlyCapture2") public static class GigEProperty extends Pointer {
         static { Loader.load(); }
+        /** Default native constructor. */
         public GigEProperty() { allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public GigEProperty(int size) { allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public GigEProperty(Pointer p) { super(p); }
         private native void allocate();
         private native void allocateArray(int size);
@@ -833,7 +844,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Information about a single GigE stream channel. */
     @Namespace("FlyCapture2") @NoOffset public static class GigEStreamChannel extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public GigEStreamChannel(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public GigEStreamChannel(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public GigEStreamChannel position(int position) {
@@ -868,7 +881,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      */
     @Namespace("FlyCapture2") @NoOffset public static class GigEConfig extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public GigEConfig(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public GigEConfig(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public GigEConfig position(int position) {
@@ -897,7 +912,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Format 7 information for a single mode. */
     @Namespace("FlyCapture2") @NoOffset public static class GigEImageSettingsInfo extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public GigEImageSettingsInfo(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public GigEImageSettingsInfo(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public GigEImageSettingsInfo position(int position) {
@@ -931,7 +948,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Image settings for a GigE camera. */
     @Namespace("FlyCapture2") @NoOffset public static class GigEImageSettings extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public GigEImageSettings(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public GigEImageSettings(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public GigEImageSettings position(int position) {
@@ -969,7 +988,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Format 7 image settings. */
     @Namespace("FlyCapture2") @NoOffset public static class Format7ImageSettings extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Format7ImageSettings(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public Format7ImageSettings(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public Format7ImageSettings position(int position) {
@@ -999,7 +1020,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Format 7 information for a single mode. */
     @Namespace("FlyCapture2") @NoOffset public static class Format7Info extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Format7Info(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public Format7Info(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public Format7Info position(int position) {
@@ -1045,7 +1068,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Format 7 packet information. */
     @Namespace("FlyCapture2") @NoOffset public static class Format7PacketInfo extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Format7PacketInfo(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public Format7PacketInfo(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public Format7PacketInfo position(int position) {
@@ -1074,7 +1099,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      */
     @Namespace("FlyCapture2") @NoOffset public static class FC2Config extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public FC2Config(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public FC2Config(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public FC2Config position(int position) {
@@ -1171,6 +1198,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      */
     @Namespace("FlyCapture2") @NoOffset public static class PropertyInfo extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public PropertyInfo(Pointer p) { super(p); }
     
         /** Property info type. */
@@ -1228,6 +1256,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      */
     @Namespace("FlyCapture2") @NoOffset public static class Property extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Property(Pointer p) { super(p); }
     
         /** Property info type. */
@@ -1267,7 +1296,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Information about a camera trigger property. */
     @Namespace("FlyCapture2") @NoOffset public static class TriggerModeInfo extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public TriggerModeInfo(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public TriggerModeInfo(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public TriggerModeInfo position(int position) {
@@ -1301,7 +1332,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** A camera trigger. */
     @Namespace("FlyCapture2") @NoOffset public static class TriggerMode extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public TriggerMode(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public TriggerMode(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public TriggerMode position(int position) {
@@ -1329,7 +1362,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** A camera strobe property. */
     @Namespace("FlyCapture2") @NoOffset public static class StrobeInfo extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public StrobeInfo(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public StrobeInfo(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public StrobeInfo position(int position) {
@@ -1361,7 +1396,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** A camera strobe. */
     @Namespace("FlyCapture2") @NoOffset public static class StrobeControl extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public StrobeControl(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public StrobeControl(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public StrobeControl position(int position) {
@@ -1389,7 +1426,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Timestamp information. */
     @Namespace("FlyCapture2") @NoOffset public static class TimeStamp extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public TimeStamp(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public TimeStamp(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public TimeStamp position(int position) {
@@ -1417,7 +1456,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Camera configuration ROM. */
     @Namespace("FlyCapture2") @NoOffset public static class ConfigROM extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public ConfigROM(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public ConfigROM(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public ConfigROM position(int position) {
@@ -1458,7 +1499,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Camera information. */
     @Namespace("FlyCapture2") @NoOffset public static class CameraInfo extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public CameraInfo(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public CameraInfo(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public CameraInfo position(int position) {
@@ -1558,7 +1601,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Properties of a single embedded image info property. */
     @Namespace("FlyCapture2") @NoOffset public static class EmbeddedImageInfoProperty extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public EmbeddedImageInfoProperty(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public EmbeddedImageInfoProperty(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public EmbeddedImageInfoProperty position(int position) {
@@ -1577,8 +1622,11 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Properties of the possible embedded image information. */
     @Namespace("FlyCapture2") public static class EmbeddedImageInfo extends Pointer {
         static { Loader.load(); }
+        /** Default native constructor. */
         public EmbeddedImageInfo() { allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public EmbeddedImageInfo(int size) { allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public EmbeddedImageInfo(Pointer p) { super(p); }
         private native void allocate();
         private native void allocateArray(int size);
@@ -1601,7 +1649,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Metadata related to an image. */
     @Namespace("FlyCapture2") @NoOffset public static class ImageMetadata extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public ImageMetadata(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public ImageMetadata(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public ImageMetadata position(int position) {
@@ -1640,7 +1690,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Information about the camera's look up table. */
     @Namespace("FlyCapture2") @NoOffset public static class LUTData extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public LUTData(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public LUTData(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public LUTData position(int position) {
@@ -1672,7 +1724,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Camera diagnostic information. */
     @Namespace("FlyCapture2") @NoOffset public static class CameraStats extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public CameraStats(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public CameraStats(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public CameraStats position(int position) {
@@ -1752,7 +1806,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Options for saving PNG images. */
     @Namespace("FlyCapture2") @NoOffset public static class PNGOption extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public PNGOption(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public PNGOption(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public PNGOption position(int position) {
@@ -1774,7 +1830,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Options for saving PPM images. */
     @Namespace("FlyCapture2") @NoOffset public static class PPMOption extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public PPMOption(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public PPMOption(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public PPMOption position(int position) {
@@ -1794,7 +1852,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Options for saving PGM images. */
     @Namespace("FlyCapture2") @NoOffset public static class PGMOption extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public PGMOption(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public PGMOption(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public PGMOption position(int position) {
@@ -1814,7 +1874,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Options for saving TIFF images. */
     @Namespace("FlyCapture2") @NoOffset public static class TIFFOption extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public TIFFOption(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public TIFFOption(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public TIFFOption position(int position) {
@@ -1862,7 +1924,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Options for saving JPEG image. */
     @Namespace("FlyCapture2") @NoOffset public static class JPEGOption extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public JPEGOption(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public JPEGOption(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public JPEGOption position(int position) {
@@ -1890,7 +1954,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Options for saving JPEG2000 image. */
     @Namespace("FlyCapture2") @NoOffset public static class JPG2Option extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public JPG2Option(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public JPG2Option(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public JPG2Option position(int position) {
@@ -1910,7 +1976,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 	/** Options for saving Bitmap image. */
 	@Namespace("FlyCapture2") @NoOffset public static class BMPOption extends Pointer {
 	    static { Loader.load(); }
+	    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
 	    public BMPOption(Pointer p) { super(p); }
+	    /** Native array allocator. Access with {@link Pointer#position(int)}. */
 	    public BMPOption(int size) { allocateArray(size); }
 	    private native void allocateArray(int size);
 	    @Override public BMPOption position(int position) {
@@ -1929,7 +1997,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 	/** Options for saving MJPG files. */
 	@Namespace("FlyCapture2") @NoOffset public static class MJPGOption extends Pointer {
 	    static { Loader.load(); }
+	    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
 	    public MJPGOption(Pointer p) { super(p); }
+	    /** Native array allocator. Access with {@link Pointer#position(int)}. */
 	    public MJPGOption(int size) { allocateArray(size); }
 	    private native void allocateArray(int size);
 	    @Override public MJPGOption position(int position) {
@@ -1952,7 +2022,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 	/** Options for saving H264 files. */
 	@Namespace("FlyCapture2") @NoOffset public static class H264Option extends Pointer {
 	    static { Loader.load(); }
+	    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
 	    public H264Option(Pointer p) { super(p); }
+	    /** Native array allocator. Access with {@link Pointer#position(int)}. */
 	    public H264Option(int size) { allocateArray(size); }
 	    private native void allocateArray(int size);
 	    @Override public H264Option position(int position) {
@@ -1982,7 +2054,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /** Options for saving AVI files. */
     @Namespace("FlyCapture2") @NoOffset public static class AVIOption extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public AVIOption(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public AVIOption(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public AVIOption position(int position) {
@@ -2041,7 +2115,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 // #include "FlyCapture2Defs.h"
 // #include <stdio.h>
     @Namespace("FlyCapture2") @Opaque public static class ErrorImpl extends Pointer {
+        /** Empty constructor. */
         public ErrorImpl() { }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public ErrorImpl(Pointer p) { super(p); }
     }
   
@@ -2052,7 +2128,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      */
     @Namespace("FlyCapture2") @NoOffset public static class Error extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Error(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public Error(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public Error position(int position) {
@@ -2201,6 +2279,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      */
     public static class BusEventCallback extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    BusEventCallback(Pointer p) { super(p); }
         protected BusEventCallback() { allocate(); }
         private native void allocate();
@@ -2212,7 +2291,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      * when unregistering the callback.
      */
     @Namespace @Name("void") @Opaque public static class CallbackHandle extends Pointer {
+        /** Empty constructor. */
         public CallbackHandle() { }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public CallbackHandle(Pointer p) { super(p); }
     }    
     
@@ -2226,7 +2307,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      */ 
     @Namespace("FlyCapture2") @NoOffset public static class BusManager extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public BusManager(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public BusManager(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public BusManager position(int position) {
@@ -2632,6 +2715,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      */
     public static class ImageEventCallback extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    ImageEventCallback(Pointer p) { super(p); }
         protected ImageEventCallback() { allocate(); }
         private native void allocate();
@@ -2646,7 +2730,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      */
     @Namespace("FlyCapture2") @NoOffset public static class CameraBase extends Pointer {
         static { Loader.load(); }
+        /** Empty constructor. */
         public CameraBase() { }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public CameraBase(Pointer p) { super(p); }
     
 
@@ -3591,7 +3677,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      */
     @Namespace("FlyCapture2") public static class Camera extends CameraBase {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Camera(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public Camera(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public Camera position(int position) {
@@ -4021,7 +4109,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      */
     @Namespace("FlyCapture2") public static class GigECamera extends CameraBase {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public GigECamera(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public GigECamera(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public GigECamera position(int position) {
@@ -4610,7 +4700,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      */ 
     @Namespace("FlyCapture2") @NoOffset public static class Image extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Image(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public Image(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public Image position(int position) {
@@ -5395,8 +5487,11 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 	/** Description of the system. */ 
     @Namespace("FlyCapture2") public static class SystemInfo extends Pointer {
         static { Loader.load(); }
+        /** Default native constructor. */
         public SystemInfo() { allocate(); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public SystemInfo(int size) { allocateArray(size); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public SystemInfo(Pointer p) { super(p); }
         private native void allocate();
         private native void allocateArray(int size);
@@ -5454,6 +5549,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      */
     public static class AsyncCommandCallback extends FunctionPointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public    AsyncCommandCallback(Pointer p) { super(p); }
         protected AsyncCommandCallback() { allocate(); }
         private native void allocate();
@@ -5467,7 +5563,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      */ 
     @Namespace("FlyCapture2") public static class Utilities extends Pointer {
         static { Loader.load(); }
+        /** Empty constructor. */
         public Utilities() { }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Utilities(Pointer p) { super(p); }
     
 		
@@ -5616,7 +5714,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      */
     @Namespace("FlyCapture2") @NoOffset public static class AVIRecorder extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public AVIRecorder(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public AVIRecorder(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public AVIRecorder position(int position) {
@@ -5754,7 +5854,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      */ 
     @Namespace("FlyCapture2") @NoOffset public static class TopologyNode extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public TopologyNode(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public TopologyNode(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public TopologyNode position(int position) {
@@ -5957,7 +6059,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      */
     @Namespace("FlyCapture2") @NoOffset public static class ImageStatistics extends Pointer {
         static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public ImageStatistics(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
         public ImageStatistics(int size) { allocateArray(size); }
         private native void allocateArray(int size);
         @Override public ImageStatistics position(int position) {

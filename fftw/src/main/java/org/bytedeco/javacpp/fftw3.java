@@ -104,8 +104,11 @@ public static final int
 
 public static class fftw_iodim_do_not_use_me extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fftw_iodim_do_not_use_me() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fftw_iodim_do_not_use_me(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftw_iodim_do_not_use_me(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -121,8 +124,11 @@ public static class fftw_iodim_do_not_use_me extends Pointer {
 // #include <stddef.h> /* for ptrdiff_t */
 public static class fftw_iodim64_do_not_use_me extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
     public fftw_iodim64_do_not_use_me() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
     public fftw_iodim64_do_not_use_me(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftw_iodim64_do_not_use_me(Pointer p) { super(p); }
     private native void allocate();
     private native void allocateArray(int size);
@@ -137,6 +143,7 @@ public static class fftw_iodim64_do_not_use_me extends Pointer {
 
 public static class fftw_write_char_func_do_not_use_me extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    fftw_write_char_func_do_not_use_me(Pointer p) { super(p); }
     protected fftw_write_char_func_do_not_use_me() { allocate(); }
     private native void allocate();
@@ -144,6 +151,7 @@ public static class fftw_write_char_func_do_not_use_me extends FunctionPointer {
 }
 public static class fftw_read_char_func_do_not_use_me extends FunctionPointer {
     static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    fftw_read_char_func_do_not_use_me(Pointer p) { super(p); }
     protected fftw_read_char_func_do_not_use_me() { allocate(); }
     private native void allocate();
@@ -395,16 +403,22 @@ public static class fftw_read_char_func_do_not_use_me extends FunctionPointer {
 /* end of FFTW_DEFINE_API macro */
 
 @Name("fftw_plan_s") @Opaque public static class fftw_plan extends Pointer {
+    /** Empty constructor. */
     public fftw_plan() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftw_plan(Pointer p) { super(p); }
 }
 
 @Opaque public static class fftw_iodim extends Pointer {
+    /** Empty constructor. */
     public fftw_iodim() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftw_iodim(Pointer p) { super(p); }
 }
 @Opaque public static class fftw_iodim64 extends Pointer {
+    /** Empty constructor. */
     public fftw_iodim64() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftw_iodim64(Pointer p) { super(p); }
 }
 
@@ -827,16 +841,22 @@ public static native int fftw_alignment_of( double[] p);
 @MemberGetter public static native @Platform(not="windows") @Cast("const char*") BytePointer fftw_codelet_optim();
 
 @Name("fftwf_plan_s") @Opaque public static class fftwf_plan extends Pointer {
+    /** Empty constructor. */
     public fftwf_plan() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftwf_plan(Pointer p) { super(p); }
 }
 
 @Opaque public static class fftwf_iodim extends Pointer {
+    /** Empty constructor. */
     public fftwf_iodim() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftwf_iodim(Pointer p) { super(p); }
 }
 @Opaque public static class fftwf_iodim64 extends Pointer {
+    /** Empty constructor. */
     public fftwf_iodim64() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftwf_iodim64(Pointer p) { super(p); }
 }
 
