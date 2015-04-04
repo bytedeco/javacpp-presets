@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * FlyCapture 2.7.3.13  http://www.ptgrey.com/flycapture-sdk
+ * FlyCapture 2.7.3.19  http://www.ptgrey.com/flycapture-sdk
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -25,7 +25,7 @@ Here is a simple example of FlyCapture ported to Java from this C++ source file:
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/FlyCapture2Test.java` source files below, simply execute on the command line:
 ```bash
- $ mvn package exec:java -Dplatform.dependencies -Dexec.mainClass=FlyCapture2Test
+ $ mvn package exec:java -Dexec.mainClass=FlyCapture2Test
 ```
 
 ### The `pom.xml` build file
@@ -34,12 +34,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.flycapture</groupId>
     <artifactId>flycapture2test</artifactId>
-    <version>0.10</version>
+    <version>0.11</version>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>flycapture</artifactId>
-            <version>2.7.3.13-0.10</version>
+            <version>2.7.3.19-0.11</version>
         </dependency>
     </dependencies>
 </project>

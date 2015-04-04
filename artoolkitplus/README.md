@@ -26,7 +26,7 @@ Here is a simple example of ARToolKitPlus ported to Java from this C++ source fi
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/MultiMain.java` source files below, simply execute on the command line:
 ```bash
- $ mvn package exec:java -Dplatform.dependencies -Dexec.mainClass=MultiMain
+ $ mvn package exec:java -Dexec.mainClass=MultiMain
 ```
 
 ### The `pom.xml` build file
@@ -35,12 +35,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.artoolkitplus</groupId>
     <artifactId>multimain</artifactId>
-    <version>0.10</version>
+    <version>0.11</version>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>artoolkitplus</artifactId>
-            <version>2.3.1-0.10</version>
+            <version>2.3.1-0.11</version>
         </dependency>
     </dependencies>
 </project>

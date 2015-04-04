@@ -31,7 +31,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit=opencv_core.class, target="org.bytedeco.javacpp.caffe", value={
-    @Platform(define="SHARED_PTR_NAMESPACE boost", include={"caffe/caffe.hpp", "caffe/util/device_alternate.hpp",
+    @Platform(value="linux", define="SHARED_PTR_NAMESPACE boost", include={"caffe/caffe.hpp", "caffe/util/device_alternate.hpp",
         "caffe/common.hpp", "caffe/proto/caffe.pb.h", "caffe/util/math_functions.hpp", "caffe/syncedmem.hpp", "caffe/blob.hpp",
         "caffe/data_transformer.hpp", "caffe/filler.hpp", "caffe/internal_thread.hpp", "caffe/data_layers.hpp", // "caffe/layer_factory.hpp",
         "caffe/layer.hpp", "caffe/loss_layers.hpp", "caffe/neuron_layers.hpp", "caffe/common_layers.hpp", "caffe/net.hpp", "caffe/solver.hpp",

@@ -25,7 +25,7 @@ Here is a simple example of videoInput ported to Java from the "Example Usage" i
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/ExampleUsage.java` source files below, simply execute on the command line:
 ```bash
- $ mvn package exec:java -Dplatform.dependencies -Dexec.mainClass=ExampleUsage
+ $ mvn package exec:java -Dexec.mainClass=ExampleUsage
 ```
 
 ### The `pom.xml` build file
@@ -34,12 +34,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.videoinput</groupId>
     <artifactId>exampleusage</artifactId>
-    <version>0.10</version>
+    <version>0.11</version>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>videoinput</artifactId>
-            <version>0.200-0.10</version>
+            <version>0.200-0.11</version>
         </dependency>
     </dependencies>
 </project>

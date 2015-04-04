@@ -1,4 +1,5 @@
 
+### April 4, 2014 version 0.11
  * Remove unneeded `@Opaque` types from `gsl` and replace them with their definitions whose names end with "_struct"
  * Segregate methods using `java.awt` classes into the new `Java2DFrameConverter` class of JavaCV ([issue #12](https://github.com/bytedeco/javacpp-presets/issues/12))
  * Emphasize the need to install separately the parent `pom.xml` file ([issue #42](https://github.com/bytedeco/javacpp-presets/issues/42))

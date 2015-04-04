@@ -26,7 +26,7 @@ Here is a simple example of Tesseract ported to Java from this C++ source file a
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/BasicExample.java` source files below, simply execute on the command line:
 ```bash
- $ mvn package exec:java -Dplatform.dependencies -Dexec.mainClass=BasicExample -Dexec.args="path/to/image/file"
+ $ mvn package exec:java -Dexec.mainClass=BasicExample -Dexec.args="path/to/image/file"
 ```
 
 ### The `pom.xml` build file
@@ -35,12 +35,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.tesseract</groupId>
     <artifactId>BasicExample</artifactId>
-    <version>0.10</version>
+    <version>0.11</version>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>tesseract</artifactId>
-            <version>3.03-rc1-0.10</version>
+            <version>3.03-rc1-0.11</version>
         </dependency>
     </dependencies>
 </project>

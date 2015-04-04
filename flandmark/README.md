@@ -26,7 +26,7 @@ Here is a simple example of flandmark ported to Java from this C++ source file a
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/SimpleExample.java` source files below, simply execute on the command line:
 ```bash
- $ mvn package exec:java -Dplatform.dependencies -Dexec.mainClass=SimpleExample -Dexec.args="<path_to_input_image> <face_bbox - 4int> [<path_to_output_image>]"
+ $ mvn package exec:java -Dexec.mainClass=SimpleExample -Dexec.args="<path_to_input_image> <face_bbox - 4int> [<path_to_output_image>]"
 ```
 
 ### The `pom.xml` build file
@@ -35,12 +35,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.flandmark</groupId>
     <artifactId>simpleexample</artifactId>
-    <version>0.10</version>
+    <version>0.11</version>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>flandmark</artifactId>
-            <version>1.07-0.10</version>
+            <version>1.07-0.11</version>
         </dependency>
     </dependencies>
 </project>

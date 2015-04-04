@@ -12,10 +12,10 @@ Downloads
 ---------
 To install manually the JAR files, obtain the following archives and follow the instructions in the [Manual Installation](#manual-installation) section below.
 
- * JavaCPP Presets 0.10 binary archive  [javacpp-presets-0.10-bin.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets/0.10/javacpp-presets-0.10-bin.zip) (204 MB)
- * JavaCPP Presets 0.10 source archive  [javacpp-presets-0.10-src.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets/0.10/javacpp-presets-0.10-src.zip) (1233 KB)
+ * JavaCPP Presets 0.11 binary archive  [javacpp-presets-0.11-bin.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets/0.11/javacpp-presets-0.11-bin.zip) (216 MB)
+ * JavaCPP Presets 0.11 source archive  [javacpp-presets-0.11-src.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets/0.11/javacpp-presets-0.11-src.zip) (1298 KB)
 
-The binary archive contains builds for Linux, Mac OS X, Windows, and Android. The JAR files for specific child modules or platforms can also be obtained individually from the [Maven Central Repository](http://search.maven.org/#search|ga|1|bytedeco).
+The binary archive contains builds for Android, Linux, Mac OS X, and Windows. The JAR files for specific child modules or platforms can also be obtained individually from the [Maven Central Repository](http://search.maven.org/#search|ga|1|bytedeco).
 
 
 We can also have everything downloaded and installed automatically with:
@@ -25,24 +25,24 @@ We can also have everything downloaded and installed automatically with:
   <dependency>
     <groupId>org.bytedeco.javacpp-presets</groupId>
     <artifactId>${moduleName}</artifactId>
-    <version>${moduleVersion}-0.10</version>
+    <version>${moduleVersion}-0.11</version>
   </dependency>
 ```
 
  * Gradle (inside the `build.gradle` file)
 ```groovy
   dependencies {
-    compile group: 'org.bytedeco.javacpp-presets', name: moduleName, version: moduleVersion + '-0.10'
+    compile group: 'org.bytedeco.javacpp-presets', name: moduleName, version: moduleVersion + '-0.11'
   }
 ```
 
  * SBT (inside the `build.sbt` file)
 ```scala
   classpathTypes += "maven-plugin"
-  libraryDependencies += "org.bytedeco.javacpp-presets" % moduleName % moduleVersion + "-0.10"
+  libraryDependencies += "org.bytedeco.javacpp-presets" % moduleName % moduleVersion + "-0.11"
 ```
 
-where the `moduleName` and `moduleVersion` variables correspond to the desired module. Additionally, we need to either set the `platform.dependency` system property (via the `-D` command line option) to something like `android-arm`, or set the `platform.dependencies` one to `true` to get all the binaries for Linux, Mac OS X, and Windows. On build systems where this does not work, we need to add the platform-specific artifacts manually.
+where the `moduleName` and `moduleVersion` variables correspond to the desired module. Additionally, we need to either set the `platform.dependency` system property (via the `-D` command line option) to something like `android-arm`, or set the `platform.dependencies` one to `true` to get all the binaries for Android, Linux, Mac OS X, and Windows. **On build systems where this does not work, we need to add the platform-specific artifacts manually.**
 
 
 Required Software
@@ -62,7 +62,7 @@ Further, in the case of Android, the JavaCPP Presets also rely on:
 
 Manual Installation
 -------------------
-Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, etc.), in addition to `javacpp.jar`, somewhere in your CLASSPATH. The JAR files available as pre-built artifacts are meant to be used with [JavaCPP](https://github.com/bytedeco/javacpp). They were built on Fedora 20, so they may not work on all distributions of Linux, especially older ones. The binaries for Android were compiled for ARMv7 processors featuring an FPU, so they will not work on ancient devices such as the HTC Magic or some others with an ARMv6 CPU. Here are some more specific instructions for common cases:
+Simply put all the desired JAR files (`opencv*.jar`, `ffmpeg*.jar`, etc.), in addition to `javacpp.jar`, somewhere in your class path. The JAR files available as pre-built artifacts are meant to be used with [JavaCPP](https://github.com/bytedeco/javacpp). They were built on Fedora 21, so they may not work on all distributions of Linux, especially older ones. The binaries for Android were compiled for ARMv7 processors featuring an FPU, so they will not work on ancient devices such as the HTC Magic or some others with an ARMv6 CPU. Here are some more specific instructions for common cases:
 
 NetBeans (Java SE 6 or newer):
 
@@ -92,23 +92,24 @@ Build Instructions
 If the binary files available above are not enough for your needs, you might need to rebuild them from the source code. To this end, the project files on the Java side were created for:
 
  * Maven 2 or 3  http://maven.apache.org/download.html
- * JavaCPP 0.10  https://github.com/bytedeco/javacpp
+ * JavaCPP 0.11  https://github.com/bytedeco/javacpp
 
-Each child module in turn relies on its corresponding native libraries being already installed in the `cppbuild` subdirectory created by a prior execution of the included [CPPBuild Scripts](#cppbuild-scripts), explained below. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified in the `.java` configuration files directly. The following versions are supported:
+Each child module in turn relies on its corresponding native libraries being already installed in the `cppbuild` subdirectory created by a prior execution of the included [CPPBuild Scripts](#cppbuild-scripts), explained below. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 2.4.10  http://opencv.org/downloads.html
- * FFmpeg 2.5.x  http://ffmpeg.org/download.html
+ * OpenCV 2.4.11  http://opencv.org/downloads.html
+ * FFmpeg 2.6.x  http://ffmpeg.org/download.html
  * FlyCapture 2.7.x  http://www.ptgrey.com/flycapture-sdk
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
- * libfreenect 0.5.1  https://github.com/OpenKinect/libfreenect
+ * libfreenect 0.5.2  https://github.com/OpenKinect/libfreenect
  * videoInput 0.200  https://github.com/ofTheo/videoInput/
  * ARToolKitPlus 2.3.1  https://launchpad.net/artoolkitplus
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * FFTW 3.3.4  http://www.fftw.org/download.html
  * GSL 1.16  http://www.gnu.org/software/gsl/#downloading
- * LLVM 3.5.0  http://llvm.org/releases/download.html
+ * LLVM 3.6.0  http://llvm.org/releases/download.html
  * Leptonica 1.71  http://www.leptonica.org/download.html
  * Tesseract 3.03-rc1  https://code.google.com/p/tesseract-ocr/
+ * Caffe  https://github.com/BVLC/caffe
 
 Once everything installed and configured, simply execute
 ```bash

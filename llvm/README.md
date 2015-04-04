@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * LLVM 3.5.0  http://llvm.org/
+ * LLVM 3.6.0  http://llvm.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -26,7 +26,7 @@ Here is a simple example of LLVM ported to Java from this C source file:
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/Fac.java` source files below, simply execute on the command line:
 ```bash
- $ mvn package exec:java -Dplatform.dependencies -Dexec.mainClass=Fac
+ $ mvn package exec:java -Dexec.mainClass=Fac
 ```
 
 ### The `pom.xml` build file
@@ -35,12 +35,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.llvm</groupId>
     <artifactId>fac</artifactId>
-    <version>0.10</version>
+    <version>0.11</version>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>llvm</artifactId>
-            <version>3.5.0-0.10</version>
+            <version>3.6.0-0.11</version>
         </dependency>
     </dependencies>
 </project>
