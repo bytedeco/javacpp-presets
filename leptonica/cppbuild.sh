@@ -74,6 +74,7 @@ case $PLATFORM in
         make install-strip
         ;;
     macosx-*)
+        patch -Np1 < ../../../leptonica-$LEPTONICA_VERSION-macosx.patch
         ./configure --prefix=$INSTALL_PATH --disable-programs
         make -j4
         make install-strip
