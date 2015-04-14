@@ -38,6 +38,7 @@ case $PLATFORM in
         make install
         ;;
     macosx-*)
+        patch -Np1 < ../../../libfreenect-$LIBFREENECT_VERSION-macosx.patch
         $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=..
         make -j4
         make install

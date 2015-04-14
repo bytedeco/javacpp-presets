@@ -1,5 +1,5 @@
 
- * Patch Leptonica and Tesseract with missing `@rpath` needed by Mac OS X ([issue #46](https://github.com/bytedeco/javacpp-presets/issues/46))
+ * Patch libdc1394, libdcfreenect, FFTW, GSL, Leptonica and Tesseract with missing `@rpath` needed by Mac OS X ([issue #46](https://github.com/bytedeco/javacpp-presets/issues/46))
 
 ### April 4, 2014 version 0.11
  * Remove unneeded `@Opaque` types from `gsl` and replace them with their definitions whose names end with "_struct"

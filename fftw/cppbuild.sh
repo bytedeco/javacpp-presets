@@ -62,6 +62,7 @@ case $PLATFORM in
         make install-strip
         ;;
     macosx-*)
+        patch -Np1 < ../../../fftw-$FFTW_VERSION-macosx.patch
         ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --enable-sse2
         make -j4
         make install-strip

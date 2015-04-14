@@ -50,6 +50,7 @@ case $PLATFORM in
         make install-strip
         ;;
     macosx-*)
+        patch -Np1 < ../../../gsl-$GSL_VERSION-macosx.patch
         ./configure --prefix=$INSTALL_PATH
         make -j4
         make install-strip
