@@ -25,6 +25,32 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     public native StringIntMap put(@StdString BytePointer i, int value);
 }
 
+@Name("std::vector<std::string>") public static class StringVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringVector(Pointer p) { super(p); }
+    public StringVector(BytePointer ... array) { this(array.length); put(array); }
+    public StringVector()       { allocate();  }
+    public StringVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef StringVector put(@ByRef StringVector x);
+
+    public native long size();
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native @StdString BytePointer get(@Cast("size_t") long i);
+    public native StringVector put(@Cast("size_t") long i, BytePointer value);
+
+    public StringVector put(BytePointer ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
 @Name("std::vector<boost::shared_ptr<caffe::Blob<float> > >") public static class FloatBlobSharedVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -1421,9 +1447,9 @@ public static final int
   public native void set_data(@StdString BytePointer value);
   public native void set_data(@StdString String value);
   public native void set_data(@Const Pointer value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_data();
-  public native @Cast("std::string*") Pointer release_data();
-  public native void set_allocated_data(@Cast("std::string*") Pointer data);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_data();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_data();
+  public native void set_allocated_data(@StdString @Cast({"char*", "std::string*"}) BytePointer data);
 
   // optional int32 label = 5;
   public native @Cast("bool") boolean has_label();
@@ -1512,9 +1538,9 @@ public static final int
   public native void set_type(@StdString String value);
   public native void set_type(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_type(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_type();
-  public native @Cast("std::string*") Pointer release_type();
-  public native void set_allocated_type(@Cast("std::string*") Pointer type);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_type();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_type();
+  public native void set_allocated_type(@StdString @Cast({"char*", "std::string*"}) BytePointer type);
 
   // optional float value = 2 [default = 0];
   public native @Cast("bool") boolean has_value();
@@ -1623,21 +1649,21 @@ public static final int
   public native void set_name(@StdString String value);
   public native void set_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_name(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_name();
-  public native @Cast("std::string*") Pointer release_name();
-  public native void set_allocated_name(@Cast("std::string*") Pointer name);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
+  public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
 
   // repeated string input = 3;
   public native int input_size();
   public native void clear_input();
   @MemberGetter public static native int kInputFieldNumber();
   public native @StdString BytePointer input(int index);
-  public native @Cast("std::string*") Pointer mutable_input(int index);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_input(int index);
   public native void set_input(int index, @StdString BytePointer value);
   public native void set_input(int index, @StdString String value);
   public native void set_input(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_input(int index, String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer add_input();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_input();
   public native void add_input(@StdString BytePointer value);
   public native void add_input(@StdString String value);
   public native void add_input(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
@@ -1804,9 +1830,9 @@ public static final int
   public native void set_net(@StdString String value);
   public native void set_net(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_net(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_net();
-  public native @Cast("std::string*") Pointer release_net();
-  public native void set_allocated_net(@Cast("std::string*") Pointer net);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_net();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_net();
+  public native void set_allocated_net(@StdString @Cast({"char*", "std::string*"}) BytePointer net);
 
   // optional .caffe.NetParameter net_param = 25;
   public native @Cast("bool") boolean has_net_param();
@@ -1826,21 +1852,21 @@ public static final int
   public native void set_train_net(@StdString String value);
   public native void set_train_net(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_train_net(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_train_net();
-  public native @Cast("std::string*") Pointer release_train_net();
-  public native void set_allocated_train_net(@Cast("std::string*") Pointer train_net);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_train_net();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_train_net();
+  public native void set_allocated_train_net(@StdString @Cast({"char*", "std::string*"}) BytePointer train_net);
 
   // repeated string test_net = 2;
   public native int test_net_size();
   public native void clear_test_net();
   @MemberGetter public static native int kTestNetFieldNumber();
   public native @StdString BytePointer test_net(int index);
-  public native @Cast("std::string*") Pointer mutable_test_net(int index);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_test_net(int index);
   public native void set_test_net(int index, @StdString BytePointer value);
   public native void set_test_net(int index, @StdString String value);
   public native void set_test_net(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_test_net(int index, String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer add_test_net();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_test_net();
   public native void add_test_net(@StdString BytePointer value);
   public native void add_test_net(@StdString String value);
   public native void add_test_net(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
@@ -1946,9 +1972,9 @@ public static final int
   public native void set_lr_policy(@StdString String value);
   public native void set_lr_policy(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_lr_policy(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_lr_policy();
-  public native @Cast("std::string*") Pointer release_lr_policy();
-  public native void set_allocated_lr_policy(@Cast("std::string*") Pointer lr_policy);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_lr_policy();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_lr_policy();
+  public native void set_allocated_lr_policy(@StdString @Cast({"char*", "std::string*"}) BytePointer lr_policy);
 
   // optional float gamma = 9;
   public native @Cast("bool") boolean has_gamma();
@@ -1987,9 +2013,9 @@ public static final int
   public native void set_regularization_type(@StdString String value);
   public native void set_regularization_type(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_regularization_type(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_regularization_type();
-  public native @Cast("std::string*") Pointer release_regularization_type();
-  public native void set_allocated_regularization_type(@Cast("std::string*") Pointer regularization_type);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_regularization_type();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_regularization_type();
+  public native void set_allocated_regularization_type(@StdString @Cast({"char*", "std::string*"}) BytePointer regularization_type);
 
   // optional int32 stepsize = 13;
   public native @Cast("bool") boolean has_stepsize();
@@ -2029,9 +2055,9 @@ public static final int
   public native void set_snapshot_prefix(@StdString String value);
   public native void set_snapshot_prefix(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_snapshot_prefix(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_snapshot_prefix();
-  public native @Cast("std::string*") Pointer release_snapshot_prefix();
-  public native void set_allocated_snapshot_prefix(@Cast("std::string*") Pointer snapshot_prefix);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_snapshot_prefix();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_snapshot_prefix();
+  public native void set_allocated_snapshot_prefix(@StdString @Cast({"char*", "std::string*"}) BytePointer snapshot_prefix);
 
   // optional bool snapshot_diff = 16 [default = false];
   public native @Cast("bool") boolean has_snapshot_diff();
@@ -2161,9 +2187,9 @@ public static final int
   public native void set_learned_net(@StdString String value);
   public native void set_learned_net(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_learned_net(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_learned_net();
-  public native @Cast("std::string*") Pointer release_learned_net();
-  public native void set_allocated_learned_net(@Cast("std::string*") Pointer learned_net);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_learned_net();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_learned_net();
+  public native void set_allocated_learned_net(@StdString @Cast({"char*", "std::string*"}) BytePointer learned_net);
 
   // repeated .caffe.BlobProto history = 3;
   public native int history_size();
@@ -2255,12 +2281,12 @@ public static final int
   public native void clear_stage();
   @MemberGetter public static native int kStageFieldNumber();
   public native @StdString BytePointer stage(int index);
-  public native @Cast("std::string*") Pointer mutable_stage(int index);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_stage(int index);
   public native void set_stage(int index, @StdString BytePointer value);
   public native void set_stage(int index, @StdString String value);
   public native void set_stage(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_stage(int index, String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer add_stage();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_stage();
   public native void add_stage(@StdString BytePointer value);
   public native void add_stage(@StdString String value);
   public native void add_stage(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
@@ -2348,12 +2374,12 @@ public static final int
   public native void clear_stage();
   @MemberGetter public static native int kStageFieldNumber();
   public native @StdString BytePointer stage(int index);
-  public native @Cast("std::string*") Pointer mutable_stage(int index);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_stage(int index);
   public native void set_stage(int index, @StdString BytePointer value);
   public native void set_stage(int index, @StdString String value);
   public native void set_stage(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_stage(int index, String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer add_stage();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_stage();
   public native void add_stage(@StdString BytePointer value);
   public native void add_stage(@StdString String value);
   public native void add_stage(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
@@ -2364,12 +2390,12 @@ public static final int
   public native void clear_not_stage();
   @MemberGetter public static native int kNotStageFieldNumber();
   public native @StdString BytePointer not_stage(int index);
-  public native @Cast("std::string*") Pointer mutable_not_stage(int index);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_not_stage(int index);
   public native void set_not_stage(int index, @StdString BytePointer value);
   public native void set_not_stage(int index, @StdString String value);
   public native void set_not_stage(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_not_stage(int index, String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer add_not_stage();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_not_stage();
   public native void add_not_stage(@StdString BytePointer value);
   public native void add_not_stage(@StdString String value);
   public native void add_not_stage(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
@@ -2460,9 +2486,9 @@ public static final int
   public native void set_name(@StdString String value);
   public native void set_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_name(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_name();
-  public native @Cast("std::string*") Pointer release_name();
-  public native void set_allocated_name(@Cast("std::string*") Pointer name);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
+  public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
 
   // optional .caffe.ParamSpec.DimCheckMode share_mode = 2;
   public native @Cast("bool") boolean has_share_mode();
@@ -2550,9 +2576,9 @@ public static final int
   public native void set_name(@StdString String value);
   public native void set_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_name(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_name();
-  public native @Cast("std::string*") Pointer release_name();
-  public native void set_allocated_name(@Cast("std::string*") Pointer name);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
+  public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
 
   // optional string type = 2;
   public native @Cast("bool") boolean has_type();
@@ -2563,21 +2589,21 @@ public static final int
   public native void set_type(@StdString String value);
   public native void set_type(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_type(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_type();
-  public native @Cast("std::string*") Pointer release_type();
-  public native void set_allocated_type(@Cast("std::string*") Pointer type);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_type();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_type();
+  public native void set_allocated_type(@StdString @Cast({"char*", "std::string*"}) BytePointer type);
 
   // repeated string bottom = 3;
   public native int bottom_size();
   public native void clear_bottom();
   @MemberGetter public static native int kBottomFieldNumber();
   public native @StdString BytePointer bottom(int index);
-  public native @Cast("std::string*") Pointer mutable_bottom(int index);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_bottom(int index);
   public native void set_bottom(int index, @StdString BytePointer value);
   public native void set_bottom(int index, @StdString String value);
   public native void set_bottom(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_bottom(int index, String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer add_bottom();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_bottom();
   public native void add_bottom(@StdString BytePointer value);
   public native void add_bottom(@StdString String value);
   public native void add_bottom(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
@@ -2588,12 +2614,12 @@ public static final int
   public native void clear_top();
   @MemberGetter public static native int kTopFieldNumber();
   public native @StdString BytePointer top(int index);
-  public native @Cast("std::string*") Pointer mutable_top(int index);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_top(int index);
   public native void set_top(int index, @StdString BytePointer value);
   public native void set_top(int index, @StdString String value);
   public native void set_top(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_top(int index, String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer add_top();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_top();
   public native void add_top(@StdString BytePointer value);
   public native void add_top(@StdString String value);
   public native void add_top(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
@@ -3020,9 +3046,9 @@ public static final int
   public native void set_mean_file(@StdString String value);
   public native void set_mean_file(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_mean_file(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_mean_file();
-  public native @Cast("std::string*") Pointer release_mean_file();
-  public native void set_allocated_mean_file(@Cast("std::string*") Pointer mean_file);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_mean_file();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_mean_file();
+  public native void set_allocated_mean_file(@StdString @Cast({"char*", "std::string*"}) BytePointer mean_file);
 
   // repeated float mean_value = 5;
   public native int mean_value_size();
@@ -3653,9 +3679,9 @@ public static final int
   public native void set_source(@StdString String value);
   public native void set_source(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_source(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_source();
-  public native @Cast("std::string*") Pointer release_source();
-  public native void set_allocated_source(@Cast("std::string*") Pointer source);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_source();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_source();
+  public native void set_allocated_source(@StdString @Cast({"char*", "std::string*"}) BytePointer source);
 
   // optional uint32 batch_size = 4;
   public native @Cast("bool") boolean has_batch_size();
@@ -3694,9 +3720,9 @@ public static final int
   public native void set_mean_file(@StdString String value);
   public native void set_mean_file(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_mean_file(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_mean_file();
-  public native @Cast("std::string*") Pointer release_mean_file();
-  public native void set_allocated_mean_file(@Cast("std::string*") Pointer mean_file);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_mean_file();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_mean_file();
+  public native void set_allocated_mean_file(@StdString @Cast({"char*", "std::string*"}) BytePointer mean_file);
 
   // optional uint32 crop_size = 5 [default = 0];
   public native @Cast("bool") boolean has_crop_size();
@@ -4127,9 +4153,9 @@ public static final int
   public native void set_source(@StdString String value);
   public native void set_source(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_source(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_source();
-  public native @Cast("std::string*") Pointer release_source();
-  public native void set_allocated_source(@Cast("std::string*") Pointer source);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_source();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_source();
+  public native void set_allocated_source(@StdString @Cast({"char*", "std::string*"}) BytePointer source);
 
   // optional uint32 batch_size = 2;
   public native @Cast("bool") boolean has_batch_size();
@@ -4210,9 +4236,9 @@ public static final int
   public native void set_file_name(@StdString String value);
   public native void set_file_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_file_name(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_file_name();
-  public native @Cast("std::string*") Pointer release_file_name();
-  public native void set_allocated_file_name(@Cast("std::string*") Pointer file_name);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_file_name();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_file_name();
+  public native void set_allocated_file_name(@StdString @Cast({"char*", "std::string*"}) BytePointer file_name);
 }
 // -------------------------------------------------------------------
 
@@ -4362,9 +4388,9 @@ public static final int
   public native void set_source(@StdString String value);
   public native void set_source(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_source(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_source();
-  public native @Cast("std::string*") Pointer release_source();
-  public native void set_allocated_source(@Cast("std::string*") Pointer source);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_source();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_source();
+  public native void set_allocated_source(@StdString @Cast({"char*", "std::string*"}) BytePointer source);
 
   // optional uint32 batch_size = 4;
   public native @Cast("bool") boolean has_batch_size();
@@ -4424,9 +4450,9 @@ public static final int
   public native void set_mean_file(@StdString String value);
   public native void set_mean_file(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_mean_file(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_mean_file();
-  public native @Cast("std::string*") Pointer release_mean_file();
-  public native void set_allocated_mean_file(@Cast("std::string*") Pointer mean_file);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_mean_file();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_mean_file();
+  public native void set_allocated_mean_file(@StdString @Cast({"char*", "std::string*"}) BytePointer mean_file);
 
   // optional uint32 crop_size = 5 [default = 0];
   public native @Cast("bool") boolean has_crop_size();
@@ -4451,9 +4477,9 @@ public static final int
   public native void set_root_folder(@StdString String value);
   public native void set_root_folder(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_root_folder(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_root_folder();
-  public native @Cast("std::string*") Pointer release_root_folder();
-  public native void set_allocated_root_folder(@Cast("std::string*") Pointer root_folder);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_root_folder();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_root_folder();
+  public native void set_allocated_root_folder(@StdString @Cast({"char*", "std::string*"}) BytePointer root_folder);
 }
 // -------------------------------------------------------------------
 
@@ -4520,9 +4546,9 @@ public static final int
   public native void set_source(@StdString String value);
   public native void set_source(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_source(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_source();
-  public native @Cast("std::string*") Pointer release_source();
-  public native void set_allocated_source(@Cast("std::string*") Pointer source);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_source();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_source();
+  public native void set_allocated_source(@StdString @Cast({"char*", "std::string*"}) BytePointer source);
 }
 // -------------------------------------------------------------------
 
@@ -5208,9 +5234,9 @@ public static final int
   public native void set_module(@StdString String value);
   public native void set_module(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_module(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_module();
-  public native @Cast("std::string*") Pointer release_module();
-  public native void set_allocated_module(@Cast("std::string*") Pointer module);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_module();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_module();
+  public native void set_allocated_module(@StdString @Cast({"char*", "std::string*"}) BytePointer module);
 
   // optional string layer = 2;
   public native @Cast("bool") boolean has_layer();
@@ -5221,9 +5247,9 @@ public static final int
   public native void set_layer(@StdString String value);
   public native void set_layer(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_layer(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_layer();
-  public native @Cast("std::string*") Pointer release_layer();
-  public native void set_allocated_layer(@Cast("std::string*") Pointer layer);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_layer();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_layer();
+  public native void set_allocated_layer(@StdString @Cast({"char*", "std::string*"}) BytePointer layer);
 }
 // -------------------------------------------------------------------
 
@@ -5781,9 +5807,9 @@ public static final int
   public native void set_source(@StdString String value);
   public native void set_source(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_source(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_source();
-  public native @Cast("std::string*") Pointer release_source();
-  public native void set_allocated_source(@Cast("std::string*") Pointer source);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_source();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_source();
+  public native void set_allocated_source(@StdString @Cast({"char*", "std::string*"}) BytePointer source);
 
   // optional float scale = 2 [default = 1];
   public native @Cast("bool") boolean has_scale();
@@ -5801,9 +5827,9 @@ public static final int
   public native void set_mean_file(@StdString String value);
   public native void set_mean_file(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_mean_file(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_mean_file();
-  public native @Cast("std::string*") Pointer release_mean_file();
-  public native void set_allocated_mean_file(@Cast("std::string*") Pointer mean_file);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_mean_file();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_mean_file();
+  public native void set_allocated_mean_file(@StdString @Cast({"char*", "std::string*"}) BytePointer mean_file);
 
   // optional uint32 batch_size = 4;
   public native @Cast("bool") boolean has_batch_size();
@@ -5863,9 +5889,9 @@ public static final int
   public native void set_crop_mode(@StdString String value);
   public native void set_crop_mode(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_crop_mode(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_crop_mode();
-  public native @Cast("std::string*") Pointer release_crop_mode();
-  public native void set_allocated_crop_mode(@Cast("std::string*") Pointer crop_mode);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_crop_mode();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_crop_mode();
+  public native void set_allocated_crop_mode(@StdString @Cast({"char*", "std::string*"}) BytePointer crop_mode);
 
   // optional bool cache_images = 12 [default = false];
   public native @Cast("bool") boolean has_cache_images();
@@ -5883,9 +5909,9 @@ public static final int
   public native void set_root_folder(@StdString String value);
   public native void set_root_folder(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_root_folder(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_root_folder();
-  public native @Cast("std::string*") Pointer release_root_folder();
-  public native void set_allocated_root_folder(@Cast("std::string*") Pointer root_folder);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_root_folder();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_root_folder();
+  public native void set_allocated_root_folder(@StdString @Cast({"char*", "std::string*"}) BytePointer root_folder);
 }
 // -------------------------------------------------------------------
 
@@ -6026,12 +6052,12 @@ public static final int
   public native void clear_bottom();
   @MemberGetter public static native int kBottomFieldNumber();
   public native @StdString BytePointer bottom(int index);
-  public native @Cast("std::string*") Pointer mutable_bottom(int index);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_bottom(int index);
   public native void set_bottom(int index, @StdString BytePointer value);
   public native void set_bottom(int index, @StdString String value);
   public native void set_bottom(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_bottom(int index, String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer add_bottom();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_bottom();
   public native void add_bottom(@StdString BytePointer value);
   public native void add_bottom(@StdString String value);
   public native void add_bottom(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
@@ -6042,12 +6068,12 @@ public static final int
   public native void clear_top();
   @MemberGetter public static native int kTopFieldNumber();
   public native @StdString BytePointer top(int index);
-  public native @Cast("std::string*") Pointer mutable_top(int index);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_top(int index);
   public native void set_top(int index, @StdString BytePointer value);
   public native void set_top(int index, @StdString String value);
   public native void set_top(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_top(int index, String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer add_top();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_top();
   public native void add_top(@StdString BytePointer value);
   public native void add_top(@StdString String value);
   public native void add_top(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
@@ -6062,9 +6088,9 @@ public static final int
   public native void set_name(@StdString String value);
   public native void set_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_name(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_name();
-  public native @Cast("std::string*") Pointer release_name();
-  public native void set_allocated_name(@Cast("std::string*") Pointer name);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
+  public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
 
   // repeated .caffe.NetStateRule include = 32;
   public native int include_size();
@@ -6102,12 +6128,12 @@ public static final int
   public native void clear_param();
   @MemberGetter public static native int kParamFieldNumber();
   public native @StdString BytePointer param(int index);
-  public native @Cast("std::string*") Pointer mutable_param(int index);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_param(int index);
   public native void set_param(int index, @StdString BytePointer value);
   public native void set_param(int index, @StdString String value);
   public native void set_param(int index, @Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_param(int index, String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer add_param();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer add_param();
   public native void add_param(@StdString BytePointer value);
   public native void add_param(@StdString String value);
   public native void add_param(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
@@ -6510,9 +6536,9 @@ public static final int
   public native void set_name(@StdString String value);
   public native void set_name(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_name(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_name();
-  public native @Cast("std::string*") Pointer release_name();
-  public native void set_allocated_name(@Cast("std::string*") Pointer name);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_name();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_name();
+  public native void set_allocated_name(@StdString @Cast({"char*", "std::string*"}) BytePointer name);
 
   // optional string type = 2;
   public native @Cast("bool") boolean has_type();
@@ -6523,9 +6549,9 @@ public static final int
   public native void set_type(@StdString String value);
   public native void set_type(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_type(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_type();
-  public native @Cast("std::string*") Pointer release_type();
-  public native void set_allocated_type(@Cast("std::string*") Pointer type);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_type();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_type();
+  public native void set_allocated_type(@StdString @Cast({"char*", "std::string*"}) BytePointer type);
 
   // optional uint32 num_output = 3;
   public native @Cast("bool") boolean has_num_output();
@@ -6638,9 +6664,9 @@ public static final int
   public native void set_source(@StdString String value);
   public native void set_source(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_source(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_source();
-  public native @Cast("std::string*") Pointer release_source();
-  public native void set_allocated_source(@Cast("std::string*") Pointer source);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_source();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_source();
+  public native void set_allocated_source(@StdString @Cast({"char*", "std::string*"}) BytePointer source);
 
   // optional float scale = 17 [default = 1];
   public native @Cast("bool") boolean has_scale();
@@ -6658,9 +6684,9 @@ public static final int
   public native void set_meanfile(@StdString String value);
   public native void set_meanfile(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_meanfile(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_meanfile();
-  public native @Cast("std::string*") Pointer release_meanfile();
-  public native void set_allocated_meanfile(@Cast("std::string*") Pointer meanfile);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_meanfile();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_meanfile();
+  public native void set_allocated_meanfile(@StdString @Cast({"char*", "std::string*"}) BytePointer meanfile);
 
   // optional uint32 batchsize = 19;
   public native @Cast("bool") boolean has_batchsize();
@@ -6751,9 +6777,9 @@ public static final int
   public native void set_det_crop_mode(@StdString String value);
   public native void set_det_crop_mode(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
   public native void set_det_crop_mode(String value, @Cast("size_t") long size);
-  public native @Cast("std::string*") Pointer mutable_det_crop_mode();
-  public native @Cast("std::string*") Pointer release_det_crop_mode();
-  public native void set_allocated_det_crop_mode(@Cast("std::string*") Pointer det_crop_mode);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_det_crop_mode();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_det_crop_mode();
+  public native void set_allocated_det_crop_mode(@StdString @Cast({"char*", "std::string*"}) BytePointer det_crop_mode);
 
   // optional int32 new_num = 60 [default = 0];
   public native @Cast("bool") boolean has_new_num();
@@ -11691,17 +11717,17 @@ public static final int
   // LayerSetUp: implements common data layer setup functionality, and calls
   // DataLayerSetUp to do special data layer setup for individual layer types.
   // This method may not be overridden except by the BasePrefetchingDataLayer.
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
-  public native void DataLayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void DataLayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
   // Data layers have no bottoms, so reshaping is trivial.
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+  @Virtual public native void Backward_cpu(@Const @ByRef FloatBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
-  public native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+  @Virtual public native void Backward_gpu(@Const @ByRef FloatBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::BaseDataLayer<double>") @NoOffset public static class DoubleBaseDataLayer extends DoubleLayer {
@@ -11714,17 +11740,17 @@ public static final int
   // LayerSetUp: implements common data layer setup functionality, and calls
   // DataLayerSetUp to do special data layer setup for individual layer types.
   // This method may not be overridden except by the BasePrefetchingDataLayer.
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
-  public native void DataLayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void DataLayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
   // Data layers have no bottoms, so reshaping is trivial.
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+  @Virtual public native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
-  public native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+  @Virtual public native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
@@ -11737,6 +11763,8 @@ public static final int
     public InternalThread asInternalThread() { return asInternalThread(this); }
     @Namespace public static native @Name("static_cast<caffe::InternalThread*>") InternalThread asInternalThread(FloatBasePrefetchingDataLayer pointer);
 
+  public FloatBasePrefetchingDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   // LayerSetUp: implements common data layer setup functionality, and calls
   // DataLayerSetUp to do special data layer setup for individual layer types.
   // This method may not be overridden.
@@ -11763,6 +11791,8 @@ public static final int
     public InternalThread asInternalThread() { return asInternalThread(this); }
     @Namespace public static native @Name("static_cast<caffe::InternalThread*>") InternalThread asInternalThread(DoubleBasePrefetchingDataLayer pointer);
 
+  public DoubleBasePrefetchingDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   // LayerSetUp: implements common data layer setup functionality, and calls
   // DataLayerSetUp to do special data layer setup for individual layer types.
   // This method may not be overridden.
@@ -11787,6 +11817,8 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatDataLayer(Pointer p) { super(p); }
 
+  public FloatDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void DataLayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
@@ -11803,6 +11835,8 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleDataLayer(Pointer p) { super(p); }
 
+  public DoubleDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void DataLayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
@@ -11962,6 +11996,8 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatImageDataLayer(Pointer p) { super(p); }
 
+  public FloatImageDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void DataLayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
@@ -11976,6 +12012,8 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleImageDataLayer(Pointer p) { super(p); }
 
+  public DoubleImageDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void DataLayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
@@ -11996,6 +12034,8 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatMemoryDataLayer(Pointer p) { super(p); }
 
+  public FloatMemoryDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void DataLayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
@@ -12030,6 +12070,8 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleMemoryDataLayer(Pointer p) { super(p); }
 
+  public DoubleMemoryDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void DataLayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
@@ -12071,6 +12113,8 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatWindowDataLayer(Pointer p) { super(p); }
 
+  public FloatWindowDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void DataLayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
@@ -12085,6 +12129,8 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleWindowDataLayer(Pointer p) { super(p); }
 
+  public DoubleWindowDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void DataLayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
@@ -12688,12 +12734,12 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatLossLayer(Pointer p) { super(p); }
 
-  public native void LayerSetUp(
+  @Virtual public native void LayerSetUp(
         @Const @ByRef FloatBlobVector bottom, @Const @ByRef FloatBlobVector top);
-  public native void Reshape(
+  @Virtual public native void Reshape(
         @Const @ByRef FloatBlobVector bottom, @Const @ByRef FloatBlobVector top);
 
-  public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumBottomBlobs();
 
   /**
    * @brief For convenience and backwards compatibility, instruct the Net to
@@ -12701,13 +12747,13 @@ public static final int
    *        they output their singleton loss, (even if the user didn't specify
    *        one in the prototxt, etc.).
    */
-  public native @Cast("bool") boolean AutoTopBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("bool") boolean AutoTopBlobs();
+  @Virtual public native int ExactNumTopBlobs();
   /**
    * We usually cannot backpropagate to the labels; ignore force_backward for
    * these inputs.
    */
-  public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
 }
 @Name("caffe::LossLayer<double>") public static class DoubleLossLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -12716,12 +12762,12 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleLossLayer(Pointer p) { super(p); }
 
-  public native void LayerSetUp(
+  @Virtual public native void LayerSetUp(
         @Const @ByRef DoubleBlobVector bottom, @Const @ByRef DoubleBlobVector top);
-  public native void Reshape(
+  @Virtual public native void Reshape(
         @Const @ByRef DoubleBlobVector bottom, @Const @ByRef DoubleBlobVector top);
 
-  public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumBottomBlobs();
 
   /**
    * @brief For convenience and backwards compatibility, instruct the Net to
@@ -12729,13 +12775,13 @@ public static final int
    *        they output their singleton loss, (even if the user didn't specify
    *        one in the prototxt, etc.).
    */
-  public native @Cast("bool") boolean AutoTopBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("bool") boolean AutoTopBlobs();
+  @Virtual public native int ExactNumTopBlobs();
   /**
    * We usually cannot backpropagate to the labels; ignore force_backward for
    * these inputs.
    */
-  public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
 }
 
 /**
@@ -12769,6 +12815,8 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatContrastiveLossLayer(Pointer p) { super(p); }
 
+  public FloatContrastiveLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
@@ -12787,6 +12835,8 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleContrastiveLossLayer(Pointer p) { super(p); }
 
+  public DoubleContrastiveLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
@@ -12832,6 +12882,8 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatEuclideanLossLayer(Pointer p) { super(p); }
 
+  public FloatEuclideanLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
@@ -12849,6 +12901,8 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleEuclideanLossLayer(Pointer p) { super(p); }
 
+  public DoubleEuclideanLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
@@ -12910,6 +12964,8 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatHingeLossLayer(Pointer p) { super(p); }
 
+  public FloatHingeLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
 
   public native @Cast("const char*") BytePointer type();
 }
@@ -12920,6 +12976,8 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleHingeLossLayer(Pointer p) { super(p); }
 
+  public DoubleHingeLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
 
   public native @Cast("const char*") BytePointer type();
 }
@@ -12963,6 +13021,8 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatInfogainLossLayer(Pointer p) { super(p); }
 
+  public FloatInfogainLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
   public native void Reshape(@Const @ByRef FloatBlobVector bottom,
@@ -12984,6 +13044,8 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleInfogainLossLayer(Pointer p) { super(p); }
 
+  public DoubleInfogainLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
   public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
@@ -13035,6 +13097,8 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatMultinomialLogisticLossLayer(Pointer p) { super(p); }
 
+  public FloatMultinomialLogisticLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
@@ -13047,6 +13111,8 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleMultinomialLogisticLossLayer(Pointer p) { super(p); }
 
+  public DoubleMultinomialLogisticLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
@@ -13089,6 +13155,8 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSigmoidCrossEntropyLossLayer(Pointer p) { super(p); }
 
+  public FloatSigmoidCrossEntropyLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
   public native void Reshape(@Const @ByRef FloatBlobVector bottom,
@@ -13103,6 +13171,8 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSigmoidCrossEntropyLossLayer(Pointer p) { super(p); }
 
+  public DoubleSigmoidCrossEntropyLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
   public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
@@ -13156,6 +13226,8 @@ public static final int
     *    If true, the loss is normalized by the number of (nonignored) labels
     *    present; otherwise the loss is simply summed over spatial locations.
     */
+  public FloatSoftmaxWithLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
   public native void Reshape(@Const @ByRef FloatBlobVector bottom,
@@ -13181,6 +13253,8 @@ public static final int
     *    If true, the loss is normalized by the number of (nonignored) labels
     *    present; otherwise the loss is simply summed over spatial locations.
     */
+  public DoubleSoftmaxWithLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
   public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
@@ -13228,11 +13302,11 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatNeuronLayer(Pointer p) { super(p); }
 
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
 }
 @Name("caffe::NeuronLayer<double>") public static class DoubleNeuronLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -13241,11 +13315,11 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleNeuronLayer(Pointer p) { super(p); }
 
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
 }
 
 /**
@@ -13265,6 +13339,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatAbsValLayer(Pointer p) { super(p); }
 
+  public FloatAbsValLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
@@ -13279,6 +13355,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleAbsValLayer(Pointer p) { super(p); }
 
+  public DoubleAbsValLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
@@ -13311,6 +13389,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBNLLLayer(Pointer p) { super(p); }
 
+  public FloatBNLLLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
 
   public native @Cast("const char*") BytePointer type();
 }
@@ -13321,6 +13401,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBNLLLayer(Pointer p) { super(p); }
 
+  public DoubleBNLLLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
 
   public native @Cast("const char*") BytePointer type();
 }
@@ -13349,6 +13431,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    *   - dropout_ratio (\b optional, default 0.5).
    *     Sets the probability @f$ p @f$ that any given unit is dropped.
    */
+  public FloatDropoutLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
   public native void Reshape(@Const @ByRef FloatBlobVector bottom,
@@ -13369,6 +13453,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    *   - dropout_ratio (\b optional, default 0.5).
    *     Sets the probability @f$ p @f$ that any given unit is dropped.
    */
+  public DoubleDropoutLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
   public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
@@ -13397,6 +13483,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    *   - base (\b optional, default -1 for a value of @f$ e \approx 2.718 @f$)
    *         the base @f$ \gamma @f$
    */
+  public FloatExpLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
@@ -13417,6 +13505,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    *   - base (\b optional, default -1 for a value of @f$ e \approx 2.718 @f$)
    *         the base @f$ \gamma @f$
    */
+  public DoubleExpLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
@@ -13442,6 +13532,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    *   - shift (\b optional, default 0) the shift @f$ \beta @f$
    *   - power (\b optional, default 1) the power @f$ \gamma @f$
    */
+  public FloatPowerLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
@@ -13461,6 +13553,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    *   - shift (\b optional, default 0) the shift @f$ \beta @f$
    *   - power (\b optional, default 1) the power @f$ \gamma @f$
    */
+  public DoublePowerLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
@@ -13484,6 +13578,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    *   - negative_slope (\b optional, default 0).
    *     the value @f$ \nu @f$ by which negative values are multiplied.
    */
+  public FloatReLULayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
 
   public native @Cast("const char*") BytePointer type();
 }
@@ -13500,6 +13596,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    *   - negative_slope (\b optional, default 0).
    *     the value @f$ \nu @f$ by which negative values are multiplied.
    */
+  public DoubleReLULayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
 
   public native @Cast("const char*") BytePointer type();
 }
@@ -13525,6 +13623,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSigmoidLayer(Pointer p) { super(p); }
 
+  public FloatSigmoidLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
 
   public native @Cast("const char*") BytePointer type();
 }
@@ -13535,6 +13635,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSigmoidLayer(Pointer p) { super(p); }
 
+  public DoubleSigmoidLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
 
   public native @Cast("const char*") BytePointer type();
 }
@@ -13560,6 +13662,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatTanHLayer(Pointer p) { super(p); }
 
+  public FloatTanHLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
 
   public native @Cast("const char*") BytePointer type();
 }
@@ -13570,6 +13674,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleTanHLayer(Pointer p) { super(p); }
 
+  public DoubleTanHLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
 
   public native @Cast("const char*") BytePointer type();
 }
@@ -13597,6 +13703,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    *   - threshold (\b optional, default 0).
    *     the threshold value @f$ t @f$ to which the input values are compared.
    */
+  public FloatThresholdLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
@@ -13615,6 +13723,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    *   - threshold (\b optional, default 0).
    *     the threshold value @f$ t @f$ to which the input values are compared.
    */
+  public DoubleThresholdLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
@@ -13644,6 +13754,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    *   - channel_shared (\b optional, default false).
    *     negative slopes are shared across channels.
    */
+  public FloatPReLULayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
 
   public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
@@ -13668,6 +13780,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    *   - channel_shared (\b optional, default false).
    *     negative slopes are shared across channels.
    */
+  public DoublePReLULayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
 
   public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
@@ -15264,9 +15378,9 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
 
 public static final int HDF5_NUM_DIMS = 4;
 
-@Namespace("caffe") public static native void MakeTempFilename(@Cast("std::string*") Pointer temp_filename);
+@Namespace("caffe") public static native void MakeTempFilename(@StdString @Cast({"char*", "std::string*"}) BytePointer temp_filename);
 
-@Namespace("caffe") public static native void MakeTempDir(@Cast("std::string*") Pointer temp_dirname);
+@Namespace("caffe") public static native void MakeTempDir(@StdString @Cast({"char*", "std::string*"}) BytePointer temp_dirname);
 
 @Namespace("caffe") public static native @Cast("bool") boolean ReadProtoFromTextFile(@Cast("const char*") BytePointer filename, @Cast("google::protobuf::Message*") Pointer proto);
 @Namespace("caffe") public static native @Cast("bool") boolean ReadProtoFromTextFile(String filename, @Cast("google::protobuf::Message*") Pointer proto);

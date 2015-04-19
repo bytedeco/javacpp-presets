@@ -44,7 +44,8 @@ public class caffe implements InfoMapper {
                .put(new Info("GFLAGS_GFLAGS_H_").define())
                .put(new Info("cublasHandle_t", "curandGenerator_t").cast().valueTypes("Pointer"))
                .put(new Info("CBLAS_TRANSPOSE", "cublasStatus_t", "curandStatus_t", "hid_t").cast().valueTypes("int"))
-               .put(new Info("std::string").valueTypes("@StdString BytePointer", "@StdString String").pointerTypes("@Cast(\"std::string*\") Pointer"))
+               .put(new Info("std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
+               .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
 
                .put(new Info("google::protobuf::int8", "google::protobuf::uint8").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
                .put(new Info("google::protobuf::int16", "google::protobuf::uint16").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
