@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Samuel Audet
+ * Copyright (C) 2014,2015 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -173,4 +173,28 @@ public class opencv_imgproc extends org.bytedeco.javacpp.presets.opencv_imgproc 
         org.bytedeco.javacpp.opencv_imgproc.cvCalcArrBackProjectPatch(image, dst, range, hist, method, factor);
     }
 
+    public static void cvFillPoly(CvArr img, CvPoint[] pts, int[] npts,
+            int contours, CvScalar color, int line_type/*=8*/, int shift/*=0*/) {
+        org.bytedeco.javacpp.opencv_imgproc.cvFillPoly(img, new PointerPointer(pts),
+                new IntPointer(npts), contours, color, line_type, shift);
+    }
+
+    public static void cvPolyLine(CvArr img, CvPoint[] pts,
+            int[] npts, int contours, int is_closed, CvScalar color,
+            int thickness/*=1*/, int line_type/*=8*/, int shift/*=0*/) {
+        org.bytedeco.javacpp.opencv_imgproc.cvPolyLine(img, new PointerPointer(pts),
+                new IntPointer(npts), contours, is_closed, color, thickness, line_type, shift);
+    }
+
+    public static void cvDrawPolyLine(CvArr img, CvPoint[] pts,
+            int[] npts, int contours, int is_closed, CvScalar color,
+            int thickness/*=1*/, int line_type/*=8*/, int shift/*=0*/) {
+        cvPolyLine(img, pts, npts, contours, is_closed, color, thickness, line_type, shift);
+    }
+
+    public static void cvDrawContours(CvArr img, CvSeq contour, CvScalar external_color,
+            CvScalar hole_color, int max_level, int thickness/*=1*/, int line_type/*=8*/) {
+        org.bytedeco.javacpp.opencv_imgproc.cvDrawContours(img, contour, external_color,
+                hole_color, max_level, thickness, line_type, CvPoint.ZERO);
+    }
 }

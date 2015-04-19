@@ -7461,9 +7461,9 @@ public static final int
 @Namespace("cv") public static native @ByRef RNG theRNG();
 
 /** returns the next unifomly-distributed random number of the specified type */
-@Namespace("cv") public static native @Name("randu<int>") int intRand();
-@Namespace("cv") public static native @Name("randu<float>") float floatRand();
-@Namespace("cv") public static native @Name("randu<double>") double doubleRand();
+@Namespace("cv") public static native @Name("randu<int>") int randInt();
+@Namespace("cv") public static native @Name("randu<float>") float randFloat();
+@Namespace("cv") public static native @Name("randu<double>") double randDouble();
 
 /** fills array with uniformly-distributed random numbers from the range [low, high) */
 @Namespace("cv") public static native void randu(@ByVal Mat dst, @ByVal Mat low, @ByVal Mat high);
@@ -9482,39 +9482,41 @@ public static class ConvertScaleData extends FunctionPointer {
 
 /////////////// saturate_cast (used in image & signal processing) ///////////////////
 
+@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte saturateCastUchar(@Cast("uchar") byte v);
 
-@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(@Cast("schar") byte v);
-@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(@Cast("schar") byte v);
-@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(@Cast("schar") byte v);
-@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(@Cast("schar") byte v);
-@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(@Cast("schar") byte v);
-@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(@Cast("schar") byte v);
+@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte saturateCastSchar(@Cast("uchar") byte v);
 
-@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(short v);
-@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(short v);
-@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(short v);
-@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(short v);
-@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(short v);
-@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(short v);
+@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short saturateCastUshort(@Cast("uchar") byte v);
 
-@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(int v);
-@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(int v);
-@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(int v);
-@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(int v);
-@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(int v);
-@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(int v);
-@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(float v);
-@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(float v);
-@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(float v);
-@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(float v);
-@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(float v);
-@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(float v);
-@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(double v);
-@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(double v);
-@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(double v);
-@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(double v);
-@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(double v);
-@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(double v);
+@Namespace("cv") public static native @Name("saturate_cast<short>") short saturateCastShort(@Cast("uchar") byte v);
+
+@Namespace("cv") public static native @Name("saturate_cast<int>") int saturateCastInt(@Cast("uchar") byte v);
+
+@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int saturateCastUnsigned(@Cast("uchar") byte v);
+@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte saturateCastUchar(@Cast("ushort") short v);
+@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte saturateCastSchar(@Cast("ushort") short v);
+@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short saturateCastUshort(@Cast("ushort") short v);
+@Namespace("cv") public static native @Name("saturate_cast<short>") short saturateCastShort(@Cast("ushort") short v);
+@Namespace("cv") public static native @Name("saturate_cast<int>") int saturateCastInt(@Cast("ushort") short v);
+@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int saturateCastUnsigned(@Cast("ushort") short v);
+@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte saturateCastUchar(@Cast("unsigned") int v);
+@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte saturateCastSchar(@Cast("unsigned") int v);
+@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short saturateCastUshort(@Cast("unsigned") int v);
+@Namespace("cv") public static native @Name("saturate_cast<short>") short saturateCastShort(@Cast("unsigned") int v);
+@Namespace("cv") public static native @Name("saturate_cast<int>") int saturateCastInt(@Cast("unsigned") int v);
+@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int saturateCastUnsigned(@Cast("unsigned") int v);
+@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte saturateCastUchar(float v);
+@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte saturateCastSchar(float v);
+@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short saturateCastUshort(float v);
+@Namespace("cv") public static native @Name("saturate_cast<short>") short saturateCastShort(float v);
+@Namespace("cv") public static native @Name("saturate_cast<int>") int saturateCastInt(float v);
+@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int saturateCastUnsigned(float v);
+@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte saturateCastUchar(double v);
+@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte saturateCastSchar(double v);
+@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short saturateCastUshort(double v);
+@Namespace("cv") public static native @Name("saturate_cast<short>") short saturateCastShort(double v);
+@Namespace("cv") public static native @Name("saturate_cast<int>") int saturateCastInt(double v);
+@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int saturateCastUnsigned(double v);
 
 // we intentionally do not clip negative numbers, to make -1 become 0xffffffff etc.
 

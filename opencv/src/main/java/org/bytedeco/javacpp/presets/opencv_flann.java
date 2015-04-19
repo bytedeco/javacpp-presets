@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Samuel Audet
+ * Copyright (C) 2014,2015 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -30,10 +30,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit=opencv_core.class, value={
-    @Platform(include={"<opencv2/flann/defines.h>", "<opencv2/flann/miniflann.hpp>"}, link="opencv_flann@.2.4"),
-    @Platform(value="windows", link="opencv_flann2411") },
-        target="org.bytedeco.javacpp.opencv_flann")
+@Properties(inherit = opencv_core.class, value = {
+    @Platform(include = {"<opencv2/flann/defines.h>", "<opencv2/flann/miniflann.hpp>"}, link = "opencv_flann@.3.0"),
+    @Platform(value = "windows", link = "opencv_flann300")},
+        target = "org.bytedeco.javacpp.opencv_flann")
 public class opencv_flann implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("FLANN_EXPORT", "FLANN_DEPRECATED").cppTypes());

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Samuel Audet
+ * Copyright (C) 2014,2015 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -30,15 +30,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit=opencv_core.class, value={
-    @Platform(include={"<opencv2/superres/superres.hpp>", "<opencv2/superres/optical_flow.hpp>"},
-        link="opencv_superres@.2.4", preload={"opencv_gpu@.2.4", "opencv_ocl@.2.4"}),
-    @Platform(value="windows", link="opencv_superres2411", preload={"opencv_gpu2411", "opencv_ocl2411"}) },
-        target="org.bytedeco.javacpp.opencv_superres")
+@Properties(inherit = {opencv_video.class, opencv_videoio.class}, value = {
+    @Platform(include = {"<opencv2/superres.hpp>", "<opencv2/superres/optical_flow.hpp>"},
+              link = "opencv_superres@.3.0", preload = "opencv_cuda@.3.0"),
+    @Platform(value = "windows", link = "opencv_superres300", preload = "opencv_cuda300")},
+        target = "org.bytedeco.javacpp.opencv_superres")
 public class opencv_superres implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("cv::superres::createOptFlow_Farneback_OCL",
-                             "cv::superres::createOptFlow_DualTVL1_OCL",
-                             "cv::superres::createOptFlow_PyrLK_OCL").skip());
     }
 }

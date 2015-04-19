@@ -1,0 +1,12 @@
+diff -ruN opencv-3.0.0-beta/cmake/OpenCVModule.cmake opencv-3.0.0-beta-macosx/cmake/OpenCVModule.cmake
+--- opencv-3.0.0-beta/cmake/OpenCVModule.cmake	2014-11-08 01:22:46.000000000 +0900
++++ opencv-3.0.0-beta-macosx/cmake/OpenCVModule.cmake	2015-04-19 08:43:33.677145285 +0900
+@@ -667,7 +667,7 @@
+     ARCHIVE_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+     LIBRARY_OUTPUT_DIRECTORY ${LIBRARY_OUTPUT_PATH}
+     RUNTIME_OUTPUT_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
+-    INSTALL_NAME_DIR lib
++    INSTALL_NAME_DIR @rpath
+   )
+ 
+   # For dynamic link numbering convenions

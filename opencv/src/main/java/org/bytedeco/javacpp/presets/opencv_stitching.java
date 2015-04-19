@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Samuel Audet
+ * Copyright (C) 2014,2015 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -30,18 +30,18 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit={opencv_calib3d.class, opencv_features2d.class, opencv_objdetect.class, opencv_nonfree.class,
-        opencv_photo.class, opencv_ml.class, opencv_legacy.class, opencv_video.class}, value={
-    @Platform(include={"<opencv2/stitching/detail/warpers.hpp>", "<opencv2/stitching/detail/matchers.hpp>", "<opencv2/stitching/detail/util.hpp>",
+@Properties(inherit = {opencv_calib3d.class, opencv_features2d.class, opencv_objdetect.class, opencv_ml.class, opencv_video.class}, value = {
+    @Platform(include = {
+        "<opencv2/stitching/detail/warpers.hpp>", "<opencv2/stitching/detail/matchers.hpp>", "<opencv2/stitching/detail/util.hpp>",
         "<opencv2/stitching/detail/camera.hpp>", "<opencv2/stitching/detail/motion_estimators.hpp>", "<opencv2/stitching/detail/exposure_compensate.hpp>",
         "<opencv2/stitching/detail/seam_finders.hpp>", "<opencv2/stitching/detail/blenders.hpp>", "<opencv2/stitching/detail/autocalib.hpp>",
-        "<opencv2/stitching/warpers.hpp>", "<opencv2/stitching/stitcher.hpp>"}, link="opencv_stitching@.2.4", preload={"opencv_gpu@.2.4", "opencv_ocl@.2.4"}),
-    @Platform(value="windows", link="opencv_stitching2411", preload={"opencv_gpu2411", "opencv_ocl2411"}) },
-        target="org.bytedeco.javacpp.opencv_stitching")
+        "<opencv2/stitching/detail/timelapsers.hpp>", "<opencv2/stitching/warpers.hpp>", "<opencv2/stitching.hpp>"},
+              link = "opencv_stitching@.3.0", preload = "opencv_cuda@.3.0"),
+    @Platform(value = "windows", link = "opencv_stitching300", preload = "opencv_cuda300")},
+        target = "org.bytedeco.javacpp.opencv_stitching")
 public class opencv_stitching implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info().javaText("import org.bytedeco.javacpp.annotation.Index;"))
-               .put(new Info("std::vector<std::pair<cv::Mat,unsigned char> >").pointerTypes("MatBytePairVector").define())
                .put(new Info("cv::detail::PlaneWarper").pointerTypes("DetailPlaneWarper").base("RotationWarper"))
                .put(new Info("cv::detail::SphericalWarper").pointerTypes("DetailSphericalWarper").base("RotationWarper"))
                .put(new Info("cv::detail::CylindricalWarper").pointerTypes("DetailCylindricalWarper").base("RotationWarper"))
@@ -53,15 +53,15 @@ public class opencv_stitching implements InfoMapper {
                .put(new Info("cv::detail::PaniniPortraitWarper").pointerTypes("DetailPaniniPortraitWarper").base("RotationWarper"))
                .put(new Info("cv::detail::MercatorWarper").pointerTypes("DetailMercatorWarper").base("RotationWarper"))
                .put(new Info("cv::detail::TransverseMercatorWarper").pointerTypes("DetailTransverseMercatorWarper").base("RotationWarper"))
-               .put(new Info("cv::detail::PlaneWarperGpu").annotations("@Platform(not=\"android\")").pointerTypes("DetailPlaneWarperGpu").base("RotationWarper"))
-               .put(new Info("cv::detail::SphericalWarperGpu").annotations("@Platform(not=\"android\")").pointerTypes("DetailSphericalWarperGpu").base("RotationWarper"))
-               .put(new Info("cv::detail::CylindricalWarperGpu").annotations("@Platform(not=\"android\")").pointerTypes("DetailCylindricalWarperGpu").base("RotationWarper"))
+               .put(new Info("cv::detail::PlaneWarperGpu").pointerTypes("DetailPlaneWarperGpu").base("RotationWarper"))
+               .put(new Info("cv::detail::SphericalWarperGpu").pointerTypes("DetailSphericalWarperGpu").base("RotationWarper"))
+               .put(new Info("cv::detail::CylindricalWarperGpu").pointerTypes("DetailCylindricalWarperGpu").base("RotationWarper"))
                .put(new Info("cv::detail::SphericalPortraitWarper", "cv::detail::CylindricalPortraitWarper", "cv::detail::PlanePortraitWarper").base("RotationWarper"))
-               .put(new Info("cv::PlaneWarperGpu").annotations("@Platform(not=\"android\")").pointerTypes("PlaneWarperGpu"))
-               .put(new Info("cv::CylindricalWarperGpu").annotations("@Platform(not=\"android\")").pointerTypes("CylindricalWarperGpu"))
-               .put(new Info("cv::SphericalWarperGpu").annotations("@Platform(not=\"android\")").pointerTypes("SphericalWarperGpu"))
-               .put(new Info("cv::detail::SurfFeaturesFinderGpu").annotations("@Platform(not=\"android\")").pointerTypes("SurfFeaturesFinderGpu"))
-               .put(new Info("cv::detail::GraphCutSeamFinderGpu").annotations("@Platform(not=\"android\")").pointerTypes("GraphCutSeamFinderGpu"))
+               .put(new Info("cv::PlaneWarperGpu").pointerTypes("PlaneWarperGpu"))
+               .put(new Info("cv::CylindricalWarperGpu").pointerTypes("CylindricalWarperGpu"))
+               .put(new Info("cv::SphericalWarperGpu").pointerTypes("SphericalWarperGpu"))
+               .put(new Info("cv::detail::SurfFeaturesFinderGpu").pointerTypes("SurfFeaturesFinderGpu"))
+               .put(new Info("cv::detail::GraphCutSeamFinderGpu").pointerTypes("GraphCutSeamFinderGpu"))
                .putFirst(new Info("cv::InputArray").skip()./*cast().*/pointerTypes("MatVector"));
     }
 }

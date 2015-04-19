@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013,2014 Samuel Audet
+ * Copyright (C) 2013,2014,2015 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -29,10 +29,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit=opencv_imgproc.class, value={
-    @Platform(include={"<opencv2/photo/photo_c.h>", "<opencv2/photo/photo.hpp>"}, link="opencv_photo@.2.4"),
-    @Platform(value="windows", link="opencv_photo2411") },
-        target="org.bytedeco.javacpp.opencv_photo")
+@Properties(inherit = opencv_imgproc.class, value = {
+    @Platform(include = {"<opencv2/photo/photo_c.h>", "<opencv2/photo.hpp>", "<opencv2/photo/cuda.hpp>"},
+              link = "opencv_photo@.3.0", preload = "opencv_cuda@.3.0"),
+    @Platform(value = "windows", link = "opencv_photo300", preload = "opencv_cuda300")},
+        target = "org.bytedeco.javacpp.opencv_photo")
 public class opencv_photo implements InfoMapper {
     public void map(InfoMap infoMap) {
     }

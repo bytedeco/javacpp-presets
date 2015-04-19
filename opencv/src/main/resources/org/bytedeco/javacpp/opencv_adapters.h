@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011,2012,2014 Samuel Audet
+ * Copyright (C) 2011,2012,2014,2015 Samuel Audet
  *
  * This file is part of JavaCV.
  *
@@ -37,8 +37,7 @@ static inline void SetLibraryPath(const char *path) {
 
 template<class T> class PtrAdapter {
 public:
-    PtrAdapter(const T* ptr, int size)  : ptr((T*)ptr), size(size), cvPtr(cvPtr2) {
-            cvPtr2.obj = (T*)ptr; cvPtr2.refcount = 0; }
+    PtrAdapter(const T* ptr, int size)  : ptr((T*)ptr), size(size), cvPtr2((T*)ptr), cvPtr(cvPtr2) { }
     PtrAdapter(const cv::Ptr<T>& cvPtr) : ptr(0), size(0), cvPtr2(cvPtr), cvPtr(cvPtr2) { }
     PtrAdapter(      cv::Ptr<T>& cvPtr) : ptr(0), size(0), cvPtr(cvPtr) { }
     void assign(T* ptr, int size) {
@@ -48,12 +47,15 @@ public:
     }
     static void deallocate(void* ptr) { cv::Ptr<T> deallocator((T*)ptr); }
     operator T*() {
-        // take ownership
-        ptr = cvPtr.obj;
-        cvPtr.obj = 0;
+        // take ownership, if unique
+        ptr = cvPtr.get();
+        if (&cvPtr == &cvPtr2) {
+            // XXX: this probably causes a small memory leak
+            memset(&cvPtr, 0, sizeof(cv::Ptr<T>));
+        }
         return ptr;
     }
-    operator const T*()    { return (const T*)cvPtr; }
+    operator const T*()    { return cvPtr.get(); }
     operator cv::Ptr<T>&() { return cvPtr; }
     operator cv::Ptr<T>*() { return ptr ? &cvPtr : 0; }
     T* ptr;
@@ -62,3 +64,39 @@ public:
     cv::Ptr<T>& cvPtr;
 };
 
+class StrAdapter {
+public:
+    StrAdapter(const          char* ptr, size_t size) : ptr((char*)ptr), size(size),
+        str2(ptr ? (char*)ptr : ""), str(str2) { }
+    StrAdapter(const signed   char* ptr, size_t size) : ptr((char*)ptr), size(size),
+        str2(ptr ? (char*)ptr : ""), str(str2) { }
+    StrAdapter(const unsigned char* ptr, size_t size) : ptr((char*)ptr), size(size),
+        str2(ptr ? (char*)ptr : ""), str(str2) { }
+    StrAdapter(const cv::String& str) : ptr(0), size(0), str2(str), str(str2) { }
+    StrAdapter(      cv::String& str) : ptr(0), size(0), str(str) { }
+    void assign(char* ptr, size_t size) {
+        this->ptr = ptr;
+        this->size = size;
+        str = ptr ? ptr : "";
+    }
+    static void deallocate(void* ptr) { free(ptr); }
+    operator char*() {
+        const char* c_str = str.c_str();
+        if (ptr == NULL || strcmp(c_str, ptr) != 0) {
+            ptr = strdup(c_str);
+        }
+        size = strlen(c_str) + 1;
+        return ptr;
+    }
+    operator       signed   char*() { return (signed   char*)(operator char*)(); }
+    operator       unsigned char*() { return (unsigned char*)(operator char*)(); }
+    operator const          char*() { return                 str.c_str(); }
+    operator const signed   char*() { return (signed   char*)str.c_str(); }
+    operator const unsigned char*() { return (unsigned char*)str.c_str(); }
+    operator         cv::String&() { return str; }
+    operator         cv::String*() { return ptr ? &str : 0; }
+    char* ptr;
+    size_t size;
+    cv::String str2;
+    cv::String& str;
+};

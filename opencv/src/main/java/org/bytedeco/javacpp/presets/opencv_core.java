@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013,2014 Samuel Audet
+ * Copyright (C) 2013,2014,2015 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -37,21 +37,26 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(value={
-    @Platform(include={"<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/core.hpp>",
-                       "<opencv2/core/operations.hpp>", "<opencv2/core/mat.hpp>", "opencv_adapters.h"}, link="opencv_core@.2.4", preload="tbb"),
-    @Platform(value="windows", define="_WIN32_WINNT 0x0502", link="opencv_core2411", preload={"msvcr100", "msvcp100"}),
-    @Platform(value="windows-x86", preloadpath={"C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/redist/x86/Microsoft.VC100.CRT/"}),
-    @Platform(value="windows-x86_64", preloadpath={"C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/redist/x64/Microsoft.VC100.CRT/"}) },
-        target="org.bytedeco.javacpp.opencv_core", helper="org.bytedeco.javacpp.helper.opencv_core")
+@Properties(value = {
+    @Platform(include = {
+        "<opencv2/core/cvdef.h>", "<opencv2/core/version.hpp>", "<opencv2/core/base.hpp>", "<opencv2/core/cvstd.hpp>",
+        "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/utility.hpp>", "<opencv2/core/types.hpp>",
+        "<opencv2/core.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
+        "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "opencv_adapters.h"}, link = "opencv_core@.3.0", preload = "tbb"),
+    @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link = "opencv_core300", preload = {"msvcr100", "msvcp100"}),
+    @Platform(value = "windows-x86", preloadpath = "C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/redist/x86/Microsoft.VC100.CRT/"),
+    @Platform(value = "windows-x86_64", preloadpath = "C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/redist/x64/Microsoft.VC100.CRT/")},
+        target = "org.bytedeco.javacpp.opencv_core", helper = "org.bytedeco.javacpp.helper.opencv_core")
 public class opencv_core implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("opencv_adapters.h").skip())
-               .put(new Info("__cplusplus").define())
-               .put(new Info("defined __ICL", "defined __ICC", "defined __ECL", "defined __ECC",
-                             "defined __INTEL_COMPILER", "defined WIN32 || defined _WIN32").define(false))
-               .put(new Info("CV_ENABLE_UNROLLED", "CV_CDECL", "CV_STDCALL", "CV_EXTERN_C", "CV_Func").cppTypes())
-               .put(new Info("CV_DEFAULT", "CV_INLINE", "CV_EXPORTS").cppTypes().annotations())
+               .put(new Info("__cplusplus", "CV_StaticAssert").define())
+               .put(new Info("defined __ICL", "defined __ICC", "defined __ECL", "defined __ECC", "defined __INTEL_COMPILER",
+                             "defined WIN32 || defined _WIN32", "defined(__clang__)", "defined(__GNUC__)", "defined(_MSC_VER)",
+                             "OPENCV_NOSTL_TRANSITIONAL", "CV_COLLECT_IMPL_DATA").define(false))
+               .put(new Info("CV_ENABLE_UNROLLED", "CV_CDECL", "CV_STDCALL", "CV_IMPL", "CV_EXTERN_C", "CV_Func").cppTypes())
+               .put(new Info("CV_DEFAULT", "CV_INLINE", "CV_EXPORTS", "CV_NEON", "CPU_HAS_NEON_FEATURE",
+                             "CV_NORETURN", "CV_SUPPRESS_DEPRECATED_START", "CV_SUPPRESS_DEPRECATED_END").cppTypes().annotations())
                .put(new Info("CVAPI").cppText("#define CVAPI(rettype) rettype"))
                .put(new Info("CV_EXPORTS_W", "CV_EXPORTS_W_SIMPLE", "CV_EXPORTS_AS", "CV_EXPORTS_W_MAP",
                              "CV_IN_OUT", "CV_OUT", "CV_PROP", "CV_PROP_RW", "CV_WRAP", "CV_WRAP_AS").cppTypes().annotations().cppText(""))
@@ -119,12 +124,16 @@ public class opencv_core implements InfoMapper {
 
                .put(new Info("std::vector<std::vector<char> >", "std::vector<std::vector<unsigned char> >").cast().pointerTypes("ByteVectorVector").define())
                .put(new Info("std::vector<std::vector<int> >").pointerTypes("IntVectorVector").define())
-               .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
+               .put(new Info("std::vector<cv::String>").pointerTypes("StringVector").define())
                .put(new Info("std::vector<std::vector<cv::Point_<int> > >").pointerTypes("PointVectorVector").define())
                .put(new Info("std::vector<std::vector<cv::Point_<float> > >").pointerTypes("Point2fVectorVector").define())
                .put(new Info("std::vector<std::vector<cv::Point_<double> > >").pointerTypes("Point2dVectorVector").define())
                .put(new Info("std::vector<std::vector<cv::Rect_<int> > >").pointerTypes("RectVectorVector").define())
                .put(new Info("std::vector<cv::Mat>").pointerTypes("MatVector").define())
+               .put(new Info("std::pair<int,int>").pointerTypes("IntIntPair").define())
+               .put(new Info("std::vector<std::pair<int,int> >").pointerTypes("IntIntPairVector").define())
+               .put(new Info("std::vector<std::pair<cv::Mat,unsigned char> >").pointerTypes("MatBytePairVector").define())
+               .put(new Info("std::vector<std::pair<cv::UMat,unsigned char> >").pointerTypes("UMatBytePairVector").define())
                .put(new Info("cv::randu<int>").javaNames("intRand"))
                .put(new Info("cv::randu<float>").javaNames("floatRand"))
                .put(new Info("cv::randu<double>").javaNames("doubleRand"))
@@ -138,6 +147,7 @@ public class opencv_core implements InfoMapper {
                              "cv::MatConstIterator(cv::Mat*, int*)", "cv::SparseMatIterator(cv::SparseMat*, int*)",
                              "cv::SparseMatIterator_", "cv::SparseMatConstIterator_", "cv::SparseMatConstIterator::operator--",
                              "cv::AlgorithmInfoData", "cv::AlgorithmInfo::addParam", "cv::CommandLineParser").skip())
+               .put(new Info("cv::AutoBuffer<double>").cast().pointerTypes("Pointer"))
 
                .put(new Info("cv::Mat").base("AbstractMat"))
                .put(new Info("cv::noArray()").javaText("public static Mat noArray() { return null; }"))
@@ -161,8 +171,11 @@ public class opencv_core implements InfoMapper {
                .put(new Info("cv::Mat::zeros(int, int*, int)", "cv::Mat::ones(int, int*, int)").skip())
                .put(new Info("cv::Mat::size").javaText("public native @ByVal Size size();\n@MemberGetter public native int size(int i);"))
                .put(new Info("cv::Mat::step").javaText("@MemberGetter public native long step();\n@MemberGetter public native int step(int i);"))
+               .put(new Info("cv::UMat::zeros(int, int*, int)", "cv::UMat::ones(int, int*, int)").skip())
+               .put(new Info("cv::UMat::size").javaText("public native @ByVal Size size();\n@MemberGetter public native int size(int i);"))
+               .put(new Info("cv::UMat::step").javaText("@MemberGetter public native long step();\n@MemberGetter public native int step(int i);"))
 
-               .put(new Info("cv::InputArray", "cv::OutputArray", "cv::InputOutputArray").skip()./*cast().*/pointerTypes("Mat"))
+               .put(new Info("cv::InputArray", "cv::OutputArray", "cv::InputOutputArray", "cv::_InputOutputArray").skip()./*cast().*/pointerTypes("Mat"))
                .put(new Info("cv::InputArrayOfArrays", "cv::OutputArrayOfArrays", "cv::InputOutputArrayOfArrays").skip()./*cast().*/pointerTypes("MatVector"))
 
                .put(new Info("cv::Point_<int>").pointerTypes("Point").base("IntPointer"))
@@ -178,7 +191,7 @@ public class opencv_core implements InfoMapper {
                .put(new Info("cv::Rect_<float>").pointerTypes("Rectf").base("FloatPointer"))
                .put(new Info("cv::Rect_<double>").pointerTypes("Rectd").base("DoublePointer"))
                .put(new Info("cv::RotatedRect").pointerTypes("RotatedRect").base("FloatPointer"))
-               .put(new Info("cv::Scalar_<double>").pointerTypes("Scalar").base("DoublePointer"))
+               .put(new Info("cv::Scalar_<double>").pointerTypes("Scalar").base("AbstractScalar"))
 
                .put(new Info("cv::Vec2i").pointerTypes("Point"))
                .put(new Info("cv::Vec2d").pointerTypes("Point2d"))
@@ -203,7 +216,15 @@ public class opencv_core implements InfoMapper {
                      + "private native void allocate(@Const @ByRef Mat m, @Const Formatter fmt,\n"
                      + "              @Cast({\"\", \"std::vector<int>&\"}) @StdVector IntPointer params);"))
 
-               .put(new Info("cv::Ptr").annotations("@Ptr"));
+               .put(new Info("cv::MinProblemSolver", "cv::DownhillSolver", "cv::ConjGradSolver").purify())
+               .put(new Info("cv::MinProblemSolver::Function").virtualize())
+
+               .put(new Info("HAVE_OPENCV_CUDA", "HAVE_OPENCV_CUDAIMGPROC", "HAVE_OPENCV_CUDAOPTFLOW", "HAVE_OPENCV_CUDAWARPING",
+                             "defined(HAVE_OPENCV_CUDA) && defined(HAVE_OPENCV_CUDAWARPING)", "HAVE_OPENCV_XFEATURES2D",
+                             "defined(HAVE_OPENCV_CUDAIMGPROC) && defined(HAVE_OPENCV_CUDA) && defined(HAVE_OPENCV_CUDAOPTFLOW)").define(false))
+
+               .put(new Info("cv::Ptr").skip().annotations("@Ptr"))
+               .put(new Info("cv::String").skip().annotations("@Str").valueTypes("BytePointer", "String"));
     }
 
     @Documented @Retention(RetentionPolicy.RUNTIME)
@@ -212,4 +233,8 @@ public class opencv_core implements InfoMapper {
         /** @return template type */
         String value() default "";
     }
+
+    @Documented @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.METHOD, ElementType.PARAMETER})
+    @Cast({"cv::String&"}) @Adapter("StrAdapter") public @interface Str { }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013,2014 Samuel Audet
+ * Copyright (C) 2013,2014,2015 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -30,10 +30,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit=opencv_core.class, value={
-    @Platform(include={"<opencv2/imgproc/types_c.h>", "<opencv2/imgproc/imgproc_c.h>", "<opencv2/imgproc/imgproc.hpp>"}, link="opencv_imgproc@.2.4"),
-    @Platform(value="windows", link="opencv_imgproc2411") },
-        target="org.bytedeco.javacpp.opencv_imgproc", helper="org.bytedeco.javacpp.helper.opencv_imgproc")
+@Properties(inherit = opencv_core.class, value = {
+    @Platform(include = {"<opencv2/imgproc/types_c.h>", "<opencv2/imgproc/imgproc_c.h>", "<opencv2/imgproc.hpp>"}, link = "opencv_imgproc@.3.0"),
+    @Platform(value = "windows", link = "opencv_imgproc300")},
+        target = "org.bytedeco.javacpp.opencv_imgproc", helper = "org.bytedeco.javacpp.helper.opencv_imgproc")
 public class opencv_imgproc implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CvMoments").base("AbstractCvMoments"))

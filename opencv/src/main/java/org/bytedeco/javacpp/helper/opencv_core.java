@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Samuel Audet
+ * Copyright (C) 2014,2015 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -1797,25 +1797,6 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         return org.bytedeco.javacpp.opencv_core.cvNorm(arr1, arr2, CV_L2, null);
     }
 
-    public static void cvFillPoly(CvArr img, CvPoint[] pts, int[] npts,
-            int contours, CvScalar color, int line_type/*=8*/, int shift/*=0*/) {
-        org.bytedeco.javacpp.opencv_core.cvFillPoly(img, new PointerPointer(pts),
-                new IntPointer(npts), contours, color, line_type, shift);
-    }
-
-    public static void cvPolyLine(CvArr img, CvPoint[] pts,
-            int[] npts, int contours, int is_closed, CvScalar color,
-            int thickness/*=1*/, int line_type/*=8*/, int shift/*=0*/) {
-        org.bytedeco.javacpp.opencv_core.cvPolyLine(img, new PointerPointer(pts),
-                new IntPointer(npts), contours, is_closed, color, thickness, line_type, shift);
-    }
-
-    public static void cvDrawPolyLine(CvArr img, CvPoint[] pts,
-            int[] npts, int contours, int is_closed, CvScalar color,
-            int thickness/*=1*/, int line_type/*=8*/, int shift/*=0*/) {
-        cvPolyLine(img, pts, npts, contours, is_closed, color, thickness, line_type, shift);
-    }
-
     public static abstract class AbstractCvFont extends Pointer {
         public AbstractCvFont() { }
         public AbstractCvFont(Pointer p) { super(p); }
@@ -1830,13 +1811,6 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
 //            cvInitFont(this, font_face, scale, scale, 0, thickness, CV_AA);
 //        }
     }
-
-    public static void cvDrawContours(CvArr img, CvSeq contour, CvScalar external_color,
-            CvScalar hole_color, int max_level, int thickness/*=1*/, int line_type/*=8*/) {
-        org.bytedeco.javacpp.opencv_core.cvDrawContours(img, contour, external_color,
-                hole_color, max_level, thickness, line_type, CvPoint.ZERO);
-    }
-
 
     public static abstract class AbstractMat extends AbstractArray {
         public AbstractMat() { }
@@ -1879,4 +1853,66 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         public static final Mat EMPTY = null;
     }
 
+    public static abstract class AbstractScalar extends DoublePointer {
+        static { Loader.load(); }
+        public AbstractScalar() { }
+        public AbstractScalar(Pointer p) { super(p); }
+
+        public void scale(double s) {
+            for (int i = 0; i < 4; i++) {
+                put(i, get(i) * s);
+            }
+        }
+
+        public double red()      { return get(2); }
+        public double green()    { return get(1); }
+        public double blue()     { return get(0); }
+        public Scalar red  (double r) { put(2, r); return (Scalar)this; }
+        public Scalar green(double g) { put(1, g); return (Scalar)this; }
+        public Scalar blue (double b) { put(0, b); return (Scalar)this; }
+
+        public double magnitude() {
+            return Math.sqrt(get(0)*get(0) + get(1)*get(1) + get(2)*get(2) + get(3)*get(3));
+        }
+
+        @Override public String toString() {
+            if (isNull()) {
+                return super.toString();
+            } else {
+                if (capacity() == 0) {
+                    return "(" + (float)get(0) + ", " + (float)get(1) + ", " +
+                            (float)get(2) + ", " + (float)get(3) + ")";
+                }
+                String s = "";
+                int p = position();
+                for (int i = 0; i < capacity(); i++) {
+                    position(i);
+                    s += (i == 0 ? "(" : " (") + (float)get(0) + ", " + (float)get(1) + ", " +
+                            (float)get(2) + ", " + (float)get(3) + ")";
+                }
+                position(p);
+                return s;
+            }
+        }
+
+        public static final Scalar
+                ZERO    = new Scalar(0.0, 0.0, 0.0, 0.0),
+                ONE     = new Scalar(1.0, 1.0, 1.0, 1.0),
+                ONEHALF = new Scalar(0.5, 0.5, 0.5, 0.5),
+                ALPHA1  = new Scalar(0.0, 0.0, 0.0, 1.0),
+                ALPHA255= new Scalar(0.0, 0.0, 0.0, 255.0),
+
+                WHITE   = RGB(255, 255, 255),
+                GRAY    = RGB(128, 128, 128),
+                BLACK   = RGB(  0,   0,   0),
+                RED     = RGB(255,   0,   0),
+                GREEN   = RGB(  0, 255,   0),
+                BLUE    = RGB(  0,   0, 255),
+                CYAN    = RGB(  0, 255, 255),
+                MAGENTA = RGB(255,   0, 255),
+                YELLOW  = RGB(255, 255,   0);
+    }
+    public static Scalar RGB(double r, double g, double b) {
+        return new Scalar(b, g, r, 0);
+    }
 }

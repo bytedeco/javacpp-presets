@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013,2014 Samuel Audet
+ * Copyright (C) 2013,2014,2015 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -30,16 +30,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit=opencv_highgui.class, value={
-    @Platform(include="<opencv2/objdetect/objdetect.hpp>", link="opencv_objdetect@.2.4"),
-    @Platform(value="windows", link="opencv_objdetect2411") },
-        target="org.bytedeco.javacpp.opencv_objdetect", helper="org.bytedeco.javacpp.helper.opencv_objdetect")
+@Properties(inherit = {opencv_highgui.class, opencv_ml.class}, value = {
+    @Platform(include = {"<opencv2/objdetect/objdetect_c.h>", "<opencv2/objdetect.hpp>",
+                         "<opencv2/objdetect/detection_based_tracker.hpp>"}, link = "opencv_objdetect@.3.0"),
+    @Platform(value = "windows", link = "opencv_objdetect300")},
+        target = "org.bytedeco.javacpp.opencv_objdetect", helper = "org.bytedeco.javacpp.helper.opencv_objdetect")
 public class opencv_objdetect implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("std::deque<CvDataMatrixCode>").pointerTypes("CvDataMatrixCodeDeque").define())
-               .put(new Info("std::vector<cv::Ptr<cv::linemod::Modality> >").pointerTypes("ModalityVector").define())
-               .put(new Info("cv::Ptr<cv::linemod::Modality>").annotations("@Ptr").valueTypes("Modality"))
-               .put(new Info("CvHaarClassifierCascade").base("AbstractCvHaarClassifierCascade"))
-               .put(new Info("cv::linemod::colormap").skip());
+        infoMap.put(new Info("CvHaarClassifierCascade").base("AbstractCvHaarClassifierCascade"));
     }
 }

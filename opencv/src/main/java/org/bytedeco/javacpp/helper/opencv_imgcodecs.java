@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Samuel Audet
+ * Copyright (C) 2015 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -25,13 +25,13 @@ import org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_core.cvCreateImage;
 import static org.bytedeco.javacpp.opencv_core.cvGetSize;
 import static org.bytedeco.javacpp.opencv_core.cvReleaseImage;
-import static org.bytedeco.javacpp.opencv_highgui.CV_LOAD_IMAGE_COLOR;
-import static org.bytedeco.javacpp.opencv_highgui.cvLoadImage;
+import static org.bytedeco.javacpp.opencv_imgcodecs.CV_LOAD_IMAGE_COLOR;
+import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
 import static org.bytedeco.javacpp.opencv_imgproc.CV_BGR2BGRA;
 import static org.bytedeco.javacpp.opencv_imgproc.CV_BGR2RGBA;
 import static org.bytedeco.javacpp.opencv_imgproc.cvCvtColor;
 
-public class opencv_highgui extends org.bytedeco.javacpp.presets.opencv_highgui {
+public class opencv_imgcodecs extends org.bytedeco.javacpp.presets.opencv_imgcodecs {
 
     public static IplImage cvLoadImageBGRA(String filename) {
         IplImage imageBGR = cvLoadImage(filename, CV_LOAD_IMAGE_COLOR);

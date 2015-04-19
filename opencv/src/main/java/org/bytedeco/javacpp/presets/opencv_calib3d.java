@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013,2014 Samuel Audet
+ * Copyright (C) 2013,2014,2015 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -30,10 +30,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit={opencv_highgui.class, opencv_features2d.class}, value={
-    @Platform(include="<opencv2/calib3d/calib3d.hpp>", link="opencv_calib3d@.2.4"),
-    @Platform(value="windows", link="opencv_calib3d2411") },
-        target="org.bytedeco.javacpp.opencv_calib3d", helper="org.bytedeco.javacpp.helper.opencv_calib3d")
+@Properties(inherit = {opencv_highgui.class, opencv_features2d.class}, value = {
+    @Platform(include = {"<opencv2/calib3d/calib3d_c.h>", "<opencv2/calib3d.hpp>"}, link = "opencv_calib3d@.3.0"),
+    @Platform(value = "windows", link = "opencv_calib3d300")},
+        target = "org.bytedeco.javacpp.opencv_calib3d", helper = "org.bytedeco.javacpp.helper.opencv_calib3d")
 public class opencv_calib3d implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CvPOSITObject").base("AbstractCvPOSITObject"))

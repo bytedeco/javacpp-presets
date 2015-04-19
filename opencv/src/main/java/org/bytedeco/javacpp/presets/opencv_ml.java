@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Samuel Audet
+ * Copyright (C) 2014,2015 Samuel Audet
  *
  * This file is part of JavaCPP.
  *
@@ -30,10 +30,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit=opencv_core.class, value={
-    @Platform(include={"<opencv2/ml/ml.hpp>"}, link="opencv_ml@.2.4"),
-    @Platform(value="windows", link="opencv_ml2411") },
-        target="org.bytedeco.javacpp.opencv_ml")
+@Properties(inherit = opencv_core.class, value = {
+    @Platform(include = "<opencv2/ml.hpp>", link = "opencv_ml@.3.0"),
+    @Platform(value = "windows", link = "opencv_ml300")},
+        target = "org.bytedeco.javacpp.opencv_ml")
 public class opencv_ml implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("std::map<std::string,int>").pointerTypes("StringIntMap").define())
