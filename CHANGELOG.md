@@ -1,4 +1,5 @@
 
+ * Make `flycapture/cppbuild.sh` fail if FlyCapture is not found installed on the system ([issue #46](https://github.com/bytedeco/javacpp-presets/issues/46))
  * Patch libdc1394, libdcfreenect, FFTW, GSL, Leptonica and Tesseract with missing `@rpath` needed by Mac OS X ([issue #46](https://github.com/bytedeco/javacpp-presets/issues/46))
 
 ### April 4, 2014 version 0.11
