@@ -37,7 +37,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef Mat first(@Cast("size_t") long i); public native MatBytePairVector first(@Cast("size_t") long i, Mat first);
-    @Index public native @ByRef byte second(@Cast("size_t") long i);  public native MatBytePairVector second(@Cast("size_t") long i, byte second);
+    @Index public native byte second(@Cast("size_t") long i);  public native MatBytePairVector second(@Cast("size_t") long i, byte second);
 }
 
 // Parsed from <opencv2/stitching/detail/warpers.hpp>

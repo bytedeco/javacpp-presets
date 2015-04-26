@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit=opencv_core.class, target="org.bytedeco.javacpp.caffe", value={
     @Platform(value="linux", define="SHARED_PTR_NAMESPACE boost", include={"caffe/caffe.hpp", "caffe/util/device_alternate.hpp",
         "caffe/common.hpp", "caffe/proto/caffe.pb.h", "caffe/util/math_functions.hpp", "caffe/syncedmem.hpp", "caffe/blob.hpp",
-        "caffe/data_transformer.hpp", "caffe/filler.hpp", "caffe/internal_thread.hpp", "caffe/data_layers.hpp", // "caffe/layer_factory.hpp",
+        "caffe/data_transformer.hpp", "caffe/filler.hpp", "caffe/internal_thread.hpp", "caffe/data_layers.hpp", "caffe/layer_factory.hpp",
         "caffe/layer.hpp", "caffe/loss_layers.hpp", "caffe/neuron_layers.hpp", "caffe/common_layers.hpp", "caffe/net.hpp", "caffe/solver.hpp",
         "caffe/vision_layers.hpp", "caffe/util/benchmark.hpp", "caffe/util/db.hpp", "caffe/util/io.hpp", "caffe/util/rng.hpp", // "caffe/util/cudnn.hpp",
         "caffe/util/im2col.hpp", "caffe/util/insert_splits.hpp", "caffe/util/mkl_alternate.hpp", "caffe/util/upgrade_proto.hpp"},
@@ -79,12 +79,15 @@ public class caffe implements InfoMapper {
                 "AdaGradSolver", "BaseConvolutionLayer", "ConvolutionLayer", "DeconvolutionLayer", "Im2colLayer", "LRNLayer", "PoolingLayer",
                 /* "CuDNNReLULayer", "CuDNNSigmoidLayer", "CuDNNTanHLayer", "CuDNNSoftmaxLayer", "CuDNNConvolutionLayer", "CuDNNPoolingLayer" */ };
         for (String t : classTemplates) {
-            boolean virtualize = t.equals("BaseDataLayer") || t.equals("NeuronLayer") || t.equals("LossLayer");
-            infoMap.put(new Info("caffe::" + t + "<float>").pointerTypes("Float" + t).virtualize(virtualize))
-                   .put(new Info("caffe::" + t + "<double>").pointerTypes("Double" + t).virtualize(virtualize));
+            boolean purify = t.equals("BaseDataLayer") || t.equals("LossLayer") || t.equals("NeuronLayer");
+            boolean virtualize = t.endsWith("Layer");
+            infoMap.put(new Info("caffe::" + t + "<float>").pointerTypes("Float" + t).purify(purify).virtualize(virtualize))
+                   .put(new Info("caffe::" + t + "<double>").pointerTypes("Double" + t).purify(purify).virtualize(virtualize));
         }
+        infoMap.put(new Info("caffe::BasePrefetchingDataLayer<float>::InternalThreadEntry()",
+                             "caffe::BasePrefetchingDataLayer<double>::InternalThreadEntry()").skip())
 
-        infoMap.put(new Info("caffe::GetFiller<float>").javaNames("GetFloatFiller"))
+               .put(new Info("caffe::GetFiller<float>").javaNames("GetFloatFiller"))
                .put(new Info("caffe::GetFiller<double>").javaNames("GetDoubleFiller"))
                .put(new Info("caffe::GetSolver<float>").javaNames("GetFloatSolver"))
                .put(new Info("caffe::GetSolver<double>").javaNames("GetDoubleSolver"))
@@ -94,8 +97,8 @@ public class caffe implements InfoMapper {
                .put(new Info("std::vector<boost::shared_ptr<caffe::Blob<float> > >").pointerTypes("FloatBlobSharedVector").define())
                .put(new Info("std::vector<boost::shared_ptr<caffe::Blob<double> > >").pointerTypes("DoubleBlobSharedVector").define())
 
-               .put(new Info("boost::shared_ptr<caffe::Layer<float> >").annotations("@SharedPtr").pointerTypes("FloatLayer"))
-               .put(new Info("boost::shared_ptr<caffe::Layer<double> >").annotations("@SharedPtr").pointerTypes("DoubleLayer"))
+               .put(new Info("boost::shared_ptr<caffe::Layer<float> >").annotations("@Cast({\"\", \"boost::shared_ptr<caffe::Layer<float> >\"}) @SharedPtr").pointerTypes("FloatLayer"))
+               .put(new Info("boost::shared_ptr<caffe::Layer<double> >").annotations("@Cast({\"\", \"boost::shared_ptr<caffe::Layer<double> >\"}) @SharedPtr").pointerTypes("DoubleLayer"))
                .put(new Info("std::vector<boost::shared_ptr<caffe::Layer<float> > >").pointerTypes("FloatLayerSharedVector").define())
                .put(new Info("std::vector<boost::shared_ptr<caffe::Layer<double> > >").pointerTypes("DoubleLayerSharedVector").define())
 
@@ -108,6 +111,11 @@ public class caffe implements InfoMapper {
                .put(new Info("std::vector<caffe::Blob<double>*>").pointerTypes("DoubleBlobVector").define())
                .put(new Info("std::vector<std::vector<caffe::Blob<float>*> >").pointerTypes("FloatBlobVectorVector").define())
                .put(new Info("std::vector<std::vector<caffe::Blob<double>*> >").pointerTypes("DoubleBlobVectorVector").define())
+
+               .put(new Info("caffe::LayerRegistry<float>::Creator").valueTypes("FloatLayerRegistry.Creator"))
+               .put(new Info("caffe::LayerRegistry<double>::Creator").valueTypes("DoubleLayerRegistry.Creator"))
+               .put(new Info("std::map<std::string,caffe::LayerRegistry<float>::Creator>").pointerTypes("FloatRegistry").define())
+               .put(new Info("std::map<std::string,caffe::LayerRegistry<double>::Creator>").pointerTypes("DoubleRegistry").define())
 
                .put(new Info("std::vector<bool>").pointerTypes("BoolVector").define())
                .put(new Info("std::vector<std::vector<bool> >").pointerTypes("BoolVectorVector").define())

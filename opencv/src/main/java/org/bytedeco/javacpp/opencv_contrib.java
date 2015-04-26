@@ -51,7 +51,7 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
     public native void resize(@Cast("size_t") long n);
 
     @Index public native @ByRef Rect first(@Cast("size_t") long i); public native RectIntPairVector first(@Cast("size_t") long i, Rect first);
-    @Index public native @ByRef int second(@Cast("size_t") long i);  public native RectIntPairVector second(@Cast("size_t") long i, int second);
+    @Index public native int second(@Cast("size_t") long i);  public native RectIntPairVector second(@Cast("size_t") long i, int second);
 }
 
 @Name("std::valarray<float>") public static class FloatValArray extends Pointer {
@@ -68,7 +68,7 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
     public native long size();
     public native void resize(@Cast("size_t") long n);
 
-    @Index public native @ByRef float get(@Cast("size_t") long i);
+    @Index public native float get(@Cast("size_t") long i);
     public native FloatValArray put(@Cast("size_t") long i, float value);
 
     public FloatValArray put(float ... array) {

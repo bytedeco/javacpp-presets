@@ -711,150 +711,255 @@ public static class TessClosure extends Pointer {
 
 @Name("TessCallback1<char>") public static abstract class CharClearCallback extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public CharClearCallback() { }
+    /** Default native constructor. */
+    public CharClearCallback() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public CharClearCallback(int size) { allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CharClearCallback(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public CharClearCallback position(int position) {
+        return (CharClearCallback)super.position(position);
+    }
 
   @Virtual public abstract void Run(@Cast("char") byte arg0);
 }
 
 @Name("TessCallback1<STRING>") public static abstract class StringClearCallback extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public StringClearCallback() { }
+    /** Default native constructor. */
+    public StringClearCallback() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public StringClearCallback(int size) { allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringClearCallback(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public StringClearCallback position(int position) {
+        return (StringClearCallback)super.position(position);
+    }
 
   @Virtual public abstract void Run(@ByVal STRING arg0);
 }
 
 @Name("TessCallback1<int>") public static abstract class IntClearCallback extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public IntClearCallback() { }
+    /** Default native constructor. */
+    public IntClearCallback() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public IntClearCallback(int size) { allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IntClearCallback(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public IntClearCallback position(int position) {
+        return (IntClearCallback)super.position(position);
+    }
 
   @Virtual public abstract void Run(int arg0);
 }
 
 @Name("TessResultCallback1<bool,int>") public static abstract class DeleteCallback extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DeleteCallback() { }
+    /** Default native constructor. */
+    public DeleteCallback() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public DeleteCallback(int size) { allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DeleteCallback(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public DeleteCallback position(int position) {
+        return (DeleteCallback)super.position(position);
+    }
 
   @Virtual public abstract @Cast("bool") boolean Run(int arg0);
 }
 
 @Name("TessResultCallback2<bool,char const&,char const&>") public static abstract class CharCompareCallback extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public CharCompareCallback() { }
+    /** Default native constructor. */
+    public CharCompareCallback() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public CharCompareCallback(int size) { allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CharCompareCallback(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public CharCompareCallback position(int position) {
+        return (CharCompareCallback)super.position(position);
+    }
 
   @Virtual public abstract @Cast("bool") boolean Run(@Cast("char const*") @ByRef BytePointer arg0,@Cast("char const*") @ByRef BytePointer arg1);
 }
 
 @Name("TessResultCallback2<bool,FILE*,char const&>") public static abstract class CharWriteCallback extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public CharWriteCallback() { }
+    /** Default native constructor. */
+    public CharWriteCallback() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public CharWriteCallback(int size) { allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CharWriteCallback(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public CharWriteCallback position(int position) {
+        return (CharWriteCallback)super.position(position);
+    }
 
   @Virtual public abstract @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Cast("char const*") @ByRef BytePointer arg1);
 }
 
 @Name("TessResultCallback2<bool,STRING const&,STRING const&>") public static abstract class StringCompareCallback extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public StringCompareCallback() { }
+    /** Default native constructor. */
+    public StringCompareCallback() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public StringCompareCallback(int size) { allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringCompareCallback(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public StringCompareCallback position(int position) {
+        return (StringCompareCallback)super.position(position);
+    }
 
-  @Virtual public abstract @Cast("bool") boolean Run(@ByRef STRING arg0,@ByRef STRING arg1);
+  @Virtual public abstract @Cast("bool") boolean Run(@Const({false, true}) @ByRef STRING arg0,@Const({false, true}) @ByRef STRING arg1);
 }
 
 @Name("TessResultCallback2<bool,FILE*,STRING const&>") public static abstract class StringWriteCallback extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public StringWriteCallback() { }
+    /** Default native constructor. */
+    public StringWriteCallback() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public StringWriteCallback(int size) { allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringWriteCallback(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public StringWriteCallback position(int position) {
+        return (StringWriteCallback)super.position(position);
+    }
 
-  @Virtual public abstract @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@ByRef STRING arg1);
+  @Virtual public abstract @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Const({false, true}) @ByRef STRING arg1);
 }
 
 @Name("TessResultCallback2<bool,int const&,int const&>") public static abstract class IntCompareCallback extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public IntCompareCallback() { }
+    /** Default native constructor. */
+    public IntCompareCallback() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public IntCompareCallback(int size) { allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IntCompareCallback(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public IntCompareCallback position(int position) {
+        return (IntCompareCallback)super.position(position);
+    }
 
-  @Virtual public abstract @Cast("bool") boolean Run(@ByRef IntPointer arg0,@ByRef IntPointer arg1);
+  @Virtual public abstract @Cast("bool") boolean Run(@Const({false, true}) @ByRef IntPointer arg0,@Const({false, true}) @ByRef IntPointer arg1);
 }
 
 @Name("TessResultCallback2<bool,FILE*,int const&>") public static abstract class IntWriteCallback extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public IntWriteCallback() { }
+    /** Default native constructor. */
+    public IntWriteCallback() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public IntWriteCallback(int size) { allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IntWriteCallback(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public IntWriteCallback position(int position) {
+        return (IntWriteCallback)super.position(position);
+    }
 
-  @Virtual public abstract @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@ByRef IntPointer arg1);
+  @Virtual public abstract @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Const({false, true}) @ByRef IntPointer arg1);
 }
 
 @Name("TessCallback3<const UNICHARSET&,int,PAGE_RES*>") public static abstract class TruthCallback3 extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public TruthCallback3() { }
+    /** Default native constructor. */
+    public TruthCallback3() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public TruthCallback3(int size) { allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TruthCallback3(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public TruthCallback3 position(int position) {
+        return (TruthCallback3)super.position(position);
+    }
 
   @Virtual public abstract void Run(@Const @ByRef UNICHARSET arg0,int arg1,PAGE_RES arg2);
 }
 
 @Name("TessResultCallback3<bool,FILE*,char*,bool>") public static abstract class CharReadCallback extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public CharReadCallback() { }
+    /** Default native constructor. */
+    public CharReadCallback() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public CharReadCallback(int size) { allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CharReadCallback(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public CharReadCallback position(int position) {
+        return (CharReadCallback)super.position(position);
+    }
 
   @Virtual public abstract @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Cast("char*") BytePointer arg1,@Cast("bool") boolean arg2);
 }
 
 @Name("TessResultCallback3<bool,FILE*,STRING*,bool>") public static abstract class StringReadCallback extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public StringReadCallback() { }
+    /** Default native constructor. */
+    public StringReadCallback() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public StringReadCallback(int size) { allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringReadCallback(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public StringReadCallback position(int position) {
+        return (StringReadCallback)super.position(position);
+    }
 
   @Virtual public abstract @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,STRING arg1,@Cast("bool") boolean arg2);
 }
 
 @Name("TessResultCallback3<bool,FILE*,int*,bool>") public static abstract class IntReadCallback extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public IntReadCallback() { }
+    /** Default native constructor. */
+    public IntReadCallback() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public IntReadCallback(int size) { allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IntReadCallback(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public IntReadCallback position(int position) {
+        return (IntReadCallback)super.position(position);
+    }
 
   @Virtual public abstract @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,IntPointer arg1,@Cast("bool") boolean arg2);
 }
 
 @Name("TessCallback4<const UNICHARSET&,int,tesseract::PageIterator*,Pix*>") public static abstract class TruthCallback4 extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public TruthCallback4() { }
+    /** Default native constructor. */
+    public TruthCallback4() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public TruthCallback4(int size) { allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TruthCallback4(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public TruthCallback4 position(int position) {
+        return (TruthCallback4)super.position(position);
+    }
 
   @Virtual public abstract void Run(@Const @ByRef UNICHARSET arg0,int arg1,PageIterator arg2,PIX arg3);
 }

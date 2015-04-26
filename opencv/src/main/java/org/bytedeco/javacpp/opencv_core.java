@@ -25,7 +25,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     public native @Index long size(@Cast("size_t") long i);
     public native @Index void resize(@Cast("size_t") long i, @Cast("size_t") long n);
 
-    @Index public native @ByRef byte get(@Cast("size_t") long i, @Cast("size_t") long j);
+    @Index public native byte get(@Cast("size_t") long i, @Cast("size_t") long j);
     public native ByteVectorVector put(@Cast("size_t") long i, @Cast("size_t") long j, byte value);
 
     public ByteVectorVector put(byte[] ... array) {
@@ -56,7 +56,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     public native @Index long size(@Cast("size_t") long i);
     public native @Index void resize(@Cast("size_t") long i, @Cast("size_t") long n);
 
-    @Index public native @ByRef int get(@Cast("size_t") long i, @Cast("size_t") long j);
+    @Index public native int get(@Cast("size_t") long i, @Cast("size_t") long j);
     public native IntVectorVector put(@Cast("size_t") long i, @Cast("size_t") long j, int value);
 
     public IntVectorVector put(int[] ... array) {

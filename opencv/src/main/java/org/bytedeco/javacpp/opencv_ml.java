@@ -21,7 +21,7 @@ public class opencv_ml extends org.bytedeco.javacpp.presets.opencv_ml {
 
     public native long size();
 
-    @Index public native @ByRef int get(@StdString BytePointer i);
+    @Index public native int get(@StdString BytePointer i);
     public native StringIntMap put(@StdString BytePointer i, int value);
 }
 

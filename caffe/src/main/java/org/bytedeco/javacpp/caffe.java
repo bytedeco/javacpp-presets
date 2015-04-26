@@ -11,6 +11,34 @@ import static org.bytedeco.javacpp.opencv_core.*;
 public class caffe extends org.bytedeco.javacpp.presets.caffe {
     static { Loader.load(); }
 
+@Name("std::map<std::string,caffe::LayerRegistry<float>::Creator>") public static class FloatRegistry extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FloatRegistry(Pointer p) { super(p); }
+    public FloatRegistry()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef FloatRegistry put(@ByRef FloatRegistry x);
+
+    public native long size();
+
+    @Index public native FloatLayerRegistry.Creator get(@StdString BytePointer i);
+    public native FloatRegistry put(@StdString BytePointer i, FloatLayerRegistry.Creator value);
+}
+
+@Name("std::map<std::string,caffe::LayerRegistry<double>::Creator>") public static class DoubleRegistry extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DoubleRegistry(Pointer p) { super(p); }
+    public DoubleRegistry()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef DoubleRegistry put(@ByRef DoubleRegistry x);
+
+    public native long size();
+
+    @Index public native DoubleLayerRegistry.Creator get(@StdString BytePointer i);
+    public native DoubleRegistry put(@StdString BytePointer i, DoubleLayerRegistry.Creator value);
+}
+
 @Name("std::map<std::string,int>") public static class StringIntMap extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -21,7 +49,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 
     public native long size();
 
-    @Index public native @ByRef int get(@StdString BytePointer i);
+    @Index public native int get(@StdString BytePointer i);
     public native StringIntMap put(@StdString BytePointer i, int value);
 }
 
@@ -117,7 +145,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     public native long size();
     public native void resize(@Cast("size_t") long n);
 
-    @Index public native @SharedPtr FloatLayer get(@Cast("size_t") long i);
+    @Index public native @Cast({"", "boost::shared_ptr<caffe::Layer<float> >"}) @SharedPtr FloatLayer get(@Cast("size_t") long i);
     public native FloatLayerSharedVector put(@Cast("size_t") long i, FloatLayer value);
 
     public FloatLayerSharedVector put(FloatLayer ... array) {
@@ -143,7 +171,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     public native long size();
     public native void resize(@Cast("size_t") long n);
 
-    @Index public native @SharedPtr DoubleLayer get(@Cast("size_t") long i);
+    @Index public native @Cast({"", "boost::shared_ptr<caffe::Layer<double> >"}) @SharedPtr DoubleLayer get(@Cast("size_t") long i);
     public native DoubleLayerSharedVector put(@Cast("size_t") long i, DoubleLayer value);
 
     public DoubleLayerSharedVector put(DoubleLayer ... array) {
@@ -325,7 +353,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     public native long size();
     public native void resize(@Cast("size_t") long n);
 
-    @Index public native @ByRef boolean get(@Cast("size_t") long i);
+    @Index public native boolean get(@Cast("size_t") long i);
     public native BoolVector put(@Cast("size_t") long i, boolean value);
 
     public BoolVector put(boolean ... array) {
@@ -11707,13 +11735,15 @@ public static final int
  *
  * TODO(dox): thorough documentation for Forward and proto params.
  */
-@Name("caffe::BaseDataLayer<float>") @NoOffset public static class FloatBaseDataLayer extends FloatLayer {
+@Name("caffe::BaseDataLayer<float>") @NoOffset public static abstract class FloatBaseDataLayer extends FloatLayer {
     static { Loader.load(); }
     /** Empty constructor. */
     public FloatBaseDataLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBaseDataLayer(Pointer p) { super(p); }
 
+  public FloatBaseDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   // LayerSetUp: implements common data layer setup functionality, and calls
   // DataLayerSetUp to do special data layer setup for individual layer types.
   // This method may not be overridden except by the BasePrefetchingDataLayer.
@@ -11730,13 +11760,15 @@ public static final int
   @Virtual public native void Backward_gpu(@Const @ByRef FloatBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
-@Name("caffe::BaseDataLayer<double>") @NoOffset public static class DoubleBaseDataLayer extends DoubleLayer {
+@Name("caffe::BaseDataLayer<double>") @NoOffset public static abstract class DoubleBaseDataLayer extends DoubleLayer {
     static { Loader.load(); }
     /** Empty constructor. */
     public DoubleBaseDataLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBaseDataLayer(Pointer p) { super(p); }
 
+  public DoubleBaseDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   // LayerSetUp: implements common data layer setup functionality, and calls
   // DataLayerSetUp to do special data layer setup for individual layer types.
   // This method may not be overridden except by the BasePrefetchingDataLayer.
@@ -11771,15 +11803,15 @@ public static final int
   public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
-  public native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native void CreatePrefetchThread();
-  public native void JoinPrefetchThread();
+  @Virtual public native void CreatePrefetchThread();
+  @Virtual public native void JoinPrefetchThread();
   // The thread's function
-  public native void InternalThreadEntry();
+  
 }
 
 @Name("caffe::BasePrefetchingDataLayer<double>") @NoOffset public static class DoubleBasePrefetchingDataLayer extends DoubleBaseDataLayer {
@@ -11799,15 +11831,15 @@ public static final int
   public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
-  public native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native void CreatePrefetchThread();
-  public native void JoinPrefetchThread();
+  @Virtual public native void CreatePrefetchThread();
+  @Virtual public native void JoinPrefetchThread();
   // The thread's function
-  public native void InternalThreadEntry();
+  
 }
 
 @Name("caffe::DataLayer<float>") @NoOffset public static class FloatDataLayer extends FloatBasePrefetchingDataLayer {
@@ -11819,13 +11851,14 @@ public static final int
 
   public FloatDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void DataLayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void DataLayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int MinTopBlobs();
-  public native int MaxTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int MinTopBlobs();
+  @Virtual public native int MaxTopBlobs();
+  @Virtual protected native void InternalThreadEntry();
 }
 
 @Name("caffe::DataLayer<double>") @NoOffset public static class DoubleDataLayer extends DoubleBasePrefetchingDataLayer {
@@ -11837,13 +11870,14 @@ public static final int
 
   public DoubleDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void DataLayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void DataLayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int MinTopBlobs();
-  public native int MaxTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int MinTopBlobs();
+  @Virtual public native int MaxTopBlobs();
+  @Virtual protected native void InternalThreadEntry();
 }
 
 /**
@@ -11860,15 +11894,21 @@ public static final int
 
   public FloatDummyDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
   // Data layers have no bottoms, so reshaping is trivial.
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int MinTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int MinTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::DummyDataLayer<double>") @NoOffset public static class DoubleDummyDataLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -11879,15 +11919,21 @@ public static final int
 
   public DoubleDummyDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
   // Data layers have no bottoms, so reshaping is trivial.
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int MinTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int MinTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -11904,15 +11950,24 @@ public static final int
 
   public FloatHDF5DataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
   // Data layers have no bottoms, so reshaping is trivial.
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int MinTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int MinTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void LoadHDF5FileData(@Cast("const char*") BytePointer filename);
 }
 @Name("caffe::HDF5DataLayer<double>") @NoOffset public static class DoubleHDF5DataLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -11923,15 +11978,24 @@ public static final int
 
   public DoubleHDF5DataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
   // Data layers have no bottoms, so reshaping is trivial.
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int MinTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int MinTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void LoadHDF5FileData(@Cast("const char*") BytePointer filename);
 }
 
 /**
@@ -11948,18 +12012,27 @@ public static final int
 
   public FloatHDF5OutputLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
   // Data layers have no bottoms, so reshaping is trivial.
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
   // TODO: no limit on the number of blobs
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
 
   public native @StdString BytePointer file_name();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void SaveBlobs();
 }
 @Name("caffe::HDF5OutputLayer<double>") @NoOffset public static class DoubleHDF5OutputLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -11970,18 +12043,27 @@ public static final int
 
   public DoubleHDF5OutputLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
   // Data layers have no bottoms, so reshaping is trivial.
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
   // TODO: no limit on the number of blobs
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
 
   public native @StdString BytePointer file_name();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void SaveBlobs();
 }
 
 /**
@@ -11998,12 +12080,14 @@ public static final int
 
   public FloatImageDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void DataLayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void DataLayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void ShuffleImages();
+  @Virtual protected native void InternalThreadEntry();
 }
 @Name("caffe::ImageDataLayer<double>") @NoOffset public static class DoubleImageDataLayer extends DoubleBasePrefetchingDataLayer {
     static { Loader.load(); }
@@ -12014,12 +12098,14 @@ public static final int
 
   public DoubleImageDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void DataLayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void DataLayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void ShuffleImages();
+  @Virtual protected native void InternalThreadEntry();
 }
 
 /**
@@ -12036,20 +12122,16 @@ public static final int
 
   public FloatMemoryDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void DataLayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void DataLayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
 
-  public native void AddDatumVector(@StdVector Datum datum_vector);
-  public native void AddMatVector(@Const @ByRef MatVector mat_vector,
-        @StdVector IntPointer labels);
-  public native void AddMatVector(@Const @ByRef MatVector mat_vector,
-        @StdVector IntBuffer labels);
-  public native void AddMatVector(@Const @ByRef MatVector mat_vector,
-        @StdVector int[] labels);
+  @Virtual public native void AddDatumVector(@Cast({"caffe::Datum*", "std::vector<caffe::Datum>&"}) @StdVector Datum datum_vector);
+  @Virtual public native void AddMatVector(@Const @ByRef MatVector mat_vector,
+        @Cast({"int*", "std::vector<int>&"}) @StdVector IntPointer labels);
 
   // Reset should accept const pointers, but can't, because the memory
   //  will be given to Blob, which is mutable
@@ -12062,6 +12144,8 @@ public static final int
   public native int channels();
   public native int height();
   public native int width();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
 }
 @Name("caffe::MemoryDataLayer<double>") @NoOffset public static class DoubleMemoryDataLayer extends DoubleBaseDataLayer {
     static { Loader.load(); }
@@ -12072,20 +12156,16 @@ public static final int
 
   public DoubleMemoryDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void DataLayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void DataLayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
 
-  public native void AddDatumVector(@StdVector Datum datum_vector);
-  public native void AddMatVector(@Const @ByRef MatVector mat_vector,
-        @StdVector IntPointer labels);
-  public native void AddMatVector(@Const @ByRef MatVector mat_vector,
-        @StdVector IntBuffer labels);
-  public native void AddMatVector(@Const @ByRef MatVector mat_vector,
-        @StdVector int[] labels);
+  @Virtual public native void AddDatumVector(@Cast({"caffe::Datum*", "std::vector<caffe::Datum>&"}) @StdVector Datum datum_vector);
+  @Virtual public native void AddMatVector(@Const @ByRef MatVector mat_vector,
+        @Cast({"int*", "std::vector<int>&"}) @StdVector IntPointer labels);
 
   // Reset should accept const pointers, but can't, because the memory
   //  will be given to Blob, which is mutable
@@ -12098,6 +12178,8 @@ public static final int
   public native int channels();
   public native int height();
   public native int width();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
 }
 
 /**
@@ -12115,12 +12197,14 @@ public static final int
 
   public FloatWindowDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void DataLayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void DataLayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native @Cast("unsigned int") int PrefetchRand();
+  @Virtual protected native void InternalThreadEntry();
 }
 @Name("caffe::WindowDataLayer<double>") @NoOffset public static class DoubleWindowDataLayer extends DoubleBasePrefetchingDataLayer {
     static { Loader.load(); }
@@ -12131,17 +12215,190 @@ public static final int
 
   public DoubleWindowDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void DataLayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void DataLayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native @Cast("unsigned int") int PrefetchRand();
+  @Virtual protected native void InternalThreadEntry();
 }
 
   // namespace caffe
 
 // #endif  // CAFFE_DATA_LAYERS_HPP_
+
+
+// Parsed from caffe/layer_factory.hpp
+
+/**
+ * @brief A layer factory that allows one to register layers.
+ * During runtime, registered layers could be called by passing a LayerParameter
+ * protobuffer to the CreateLayer function:
+ *
+ *     LayerRegistry<Dtype>::CreateLayer(param);
+ *
+ * There are two ways to register a layer. Assuming that we have a layer like:
+ *
+ *   template <typename Dtype>
+ *   class MyAwesomeLayer : public Layer<Dtype> {
+ *     // your implementations
+ *   };
+ *
+ * and its type is its C++ class name, but without the "Layer" at the end
+ * ("MyAwesomeLayer" -> "MyAwesome").
+ *
+ * If the layer is going to be created simply by its constructor, in your c++
+ * file, add the following line:
+ *
+ *    REGISTER_LAYER_CLASS(MyAwesome);
+ *
+ * Or, if the layer is going to be created by another creator function, in the
+ * format of:
+ *
+ *    template <typename Dtype>
+ *    Layer<Dtype*> GetMyAwesomeLayer(const LayerParameter& param) {
+ *      // your implementation
+ *    }
+ *
+ * (for example, when your layer has multiple backends, see GetConvolutionLayer
+ * for a use case), then you can register the creator function instead, like
+ *
+ * REGISTER_LAYER_CREATOR(MyAwesome, GetMyAwesomeLayer)
+ *
+ * Note that each layer type should only be registered once.
+ */
+
+// #ifndef CAFFE_LAYER_FACTORY_H_
+// #define CAFFE_LAYER_FACTORY_H_
+
+// #include <map>
+// #include <string>
+
+// #include "caffe/common.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+@Name("caffe::LayerRegistry<float>") public static class FloatLayerRegistry extends Pointer {
+    static { Loader.load(); }
+    /** Empty constructor. */
+    public FloatLayerRegistry() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FloatLayerRegistry(Pointer p) { super(p); }
+
+  public static class Creator extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Creator(Pointer p) { super(p); }
+      protected Creator() { allocate(); }
+      private native void allocate();
+      public native @Cast({"", "boost::shared_ptr<caffe::Layer<float> >"}) @SharedPtr @ByVal FloatLayer call(@Const @ByRef LayerParameter arg0);
+  }
+
+  public static native @Cast("caffe::LayerRegistry<float>::CreatorRegistry*") @ByRef FloatRegistry Registry();
+
+  // Adds a creator.
+  public static native void AddCreator(@StdString BytePointer type, Creator creator);
+  public static native void AddCreator(@StdString String type, Creator creator);
+
+  // Get a layer using a LayerParameter.
+  public static native @Cast({"", "boost::shared_ptr<caffe::Layer<float> >"}) @SharedPtr @ByVal FloatLayer CreateLayer(@Const @ByRef LayerParameter param);
+}
+
+@Name("caffe::LayerRegistry<double>") public static class DoubleLayerRegistry extends Pointer {
+    static { Loader.load(); }
+    /** Empty constructor. */
+    public DoubleLayerRegistry() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DoubleLayerRegistry(Pointer p) { super(p); }
+
+  public static class Creator extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Creator(Pointer p) { super(p); }
+      protected Creator() { allocate(); }
+      private native void allocate();
+      public native @Cast({"", "boost::shared_ptr<caffe::Layer<double> >"}) @SharedPtr @ByVal DoubleLayer call(@Const @ByRef LayerParameter arg0);
+  }
+
+  public static native @Cast("caffe::LayerRegistry<double>::CreatorRegistry*") @ByRef DoubleRegistry Registry();
+
+  // Adds a creator.
+  public static native void AddCreator(@StdString BytePointer type, Creator creator);
+  public static native void AddCreator(@StdString String type, Creator creator);
+
+  // Get a layer using a LayerParameter.
+  public static native @Cast({"", "boost::shared_ptr<caffe::Layer<double> >"}) @SharedPtr @ByVal DoubleLayer CreateLayer(@Const @ByRef LayerParameter param);
+}
+
+
+@Name("caffe::LayerRegisterer<float>") public static class FloatLayerRegisterer extends Pointer {
+    static { Loader.load(); }
+    /** Empty constructor. */
+    public FloatLayerRegisterer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FloatLayerRegisterer(Pointer p) { super(p); }
+
+  public static class Creator_LayerParameter extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Creator_LayerParameter(Pointer p) { super(p); }
+      protected Creator_LayerParameter() { allocate(); }
+      private native void allocate();
+      public native @Cast({"", "boost::shared_ptr<caffe::Layer<float> >"}) @SharedPtr @ByVal FloatLayer call(@Const @ByRef LayerParameter arg0);
+  }
+  public FloatLayerRegisterer(@StdString BytePointer type,
+                    Creator_LayerParameter creator) { allocate(type, creator); }
+  private native void allocate(@StdString BytePointer type,
+                    Creator_LayerParameter creator);
+  public FloatLayerRegisterer(@StdString String type,
+                    Creator_LayerParameter creator) { allocate(type, creator); }
+  private native void allocate(@StdString String type,
+                    Creator_LayerParameter creator);
+}
+
+
+@Name("caffe::LayerRegisterer<double>") public static class DoubleLayerRegisterer extends Pointer {
+    static { Loader.load(); }
+    /** Empty constructor. */
+    public DoubleLayerRegisterer() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DoubleLayerRegisterer(Pointer p) { super(p); }
+
+  public static class Creator_LayerParameter extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Creator_LayerParameter(Pointer p) { super(p); }
+      protected Creator_LayerParameter() { allocate(); }
+      private native void allocate();
+      public native @Cast({"", "boost::shared_ptr<caffe::Layer<double> >"}) @SharedPtr @ByVal DoubleLayer call(@Const @ByRef LayerParameter arg0);
+  }
+  public DoubleLayerRegisterer(@StdString BytePointer type,
+                    Creator_LayerParameter creator) { allocate(type, creator); }
+  private native void allocate(@StdString BytePointer type,
+                    Creator_LayerParameter creator);
+  public DoubleLayerRegisterer(@StdString String type,
+                    Creator_LayerParameter creator) { allocate(type, creator); }
+  private native void allocate(@StdString String type,
+                    Creator_LayerParameter creator);
+}
+
+
+// #define REGISTER_LAYER_CREATOR(type, creator)
+//   static LayerRegisterer<float> g_creator_f_##type(#type, creator<float>);
+//   static LayerRegisterer<double> g_creator_d_##type(#type, creator<double>)    
+
+// #define REGISTER_LAYER_CLASS(type)
+//   template <typename Dtype>
+//   shared_ptr<Layer<Dtype> > Creator_##type##Layer(const LayerParameter& param)
+//   {
+//     return shared_ptr<Layer<Dtype> >(new type##Layer<Dtype>(param));
+//   }
+//   REGISTER_LAYER_CREATOR(type, Creator_##type##Layer)
+
+  // namespace caffe
+
+// #endif  // CAFFE_LAYER_FACTORY_H_
 
 
 // Parsed from caffe/layer.hpp
@@ -12169,7 +12426,7 @@ public static final int
  * gradients with respect to their input Blob%s, given the error gradients with
  * their output Blob%s.
  */
-@Name("caffe::Layer<float>") @NoOffset public static class FloatLayer extends Pointer {
+@Name("caffe::Layer<float>") @NoOffset public static abstract class FloatLayer extends Pointer {
     static { Loader.load(); }
     /** Empty constructor. */
     public FloatLayer() { }
@@ -12214,7 +12471,7 @@ public static final int
    * <code>Reshape</code>, which will be called before the forward pass to
    * adjust the top blob sizes.
    */
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
   /**
@@ -12229,7 +12486,7 @@ public static final int
    * and making any other necessary adjustments so that the layer can
    * accomodate the bottom blobs.
    */
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public abstract void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
   /**
@@ -12290,8 +12547,7 @@ public static final int
   /**
    * @brief Writes the layer parameter to a protocol buffer
    */
-  public native void ToProto(LayerParameter param, @Cast("bool") boolean write_diff/*=false*/);
-  public native void ToProto(LayerParameter param);
+  @Virtual public native void ToProto(LayerParameter param, @Cast("bool") boolean write_diff/*=false*/);
 
   /**
    * @brief Returns the scalar loss associated with a top blob at a given index.
@@ -12306,7 +12562,7 @@ public static final int
   /**
    * @brief Returns the layer type.
    */
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
 
   /**
    * @brief Returns the exact number of bottom blobs required by the layer,
@@ -12315,7 +12571,7 @@ public static final int
    * This method should be overridden to return a non-negative value if your
    * layer expects some exact number of bottom blobs.
    */
-  public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumBottomBlobs();
   /**
    * @brief Returns the minimum number of bottom blobs required by the layer,
    *        or -1 if no minimum number is required.
@@ -12323,7 +12579,7 @@ public static final int
    * This method should be overridden to return a non-negative value if your
    * layer expects some minimum number of bottom blobs.
    */
-  public native int MinBottomBlobs();
+  @Virtual public native int MinBottomBlobs();
   /**
    * @brief Returns the maximum number of bottom blobs required by the layer,
    *        or -1 if no maximum number is required.
@@ -12331,7 +12587,7 @@ public static final int
    * This method should be overridden to return a non-negative value if your
    * layer expects some maximum number of bottom blobs.
    */
-  public native int MaxBottomBlobs();
+  @Virtual public native int MaxBottomBlobs();
   /**
    * @brief Returns the exact number of top blobs required by the layer,
    *        or -1 if no exact number is required.
@@ -12339,7 +12595,7 @@ public static final int
    * This method should be overridden to return a non-negative value if your
    * layer expects some exact number of top blobs.
    */
-  public native int ExactNumTopBlobs();
+  @Virtual public native int ExactNumTopBlobs();
   /**
    * @brief Returns the minimum number of top blobs required by the layer,
    *        or -1 if no minimum number is required.
@@ -12347,7 +12603,7 @@ public static final int
    * This method should be overridden to return a non-negative value if your
    * layer expects some minimum number of top blobs.
    */
-  public native int MinTopBlobs();
+  @Virtual public native int MinTopBlobs();
   /**
    * @brief Returns the maximum number of top blobs required by the layer,
    *        or -1 if no maximum number is required.
@@ -12355,7 +12611,7 @@ public static final int
    * This method should be overridden to return a non-negative value if your
    * layer expects some maximum number of top blobs.
    */
-  public native int MaxTopBlobs();
+  @Virtual public native int MaxTopBlobs();
   /**
    * @brief Returns true if the layer requires an equal number of bottom and
    *        top blobs.
@@ -12363,7 +12619,7 @@ public static final int
    * This method should be overridden to return true if your layer expects an
    * equal number of bottom and top blobs.
    */
-  public native @Cast("bool") boolean EqualNumBottomTopBlobs();
+  @Virtual public native @Cast("bool") boolean EqualNumBottomTopBlobs();
 
   /**
    * @brief Return whether "anonymous" top blobs are created automatically
@@ -12373,7 +12629,7 @@ public static final int
    * blobs to fulfill the requirement specified by ExactNumTopBlobs() or
    * MinTopBlobs().
    */
-  public native @Cast("bool") boolean AutoTopBlobs();
+  @Virtual public native @Cast("bool") boolean AutoTopBlobs();
 
   /**
    * @brief Return whether to allow force_backward for a given bottom blob
@@ -12383,7 +12639,7 @@ public static final int
    * setting and backpropagate to blob i only if it needs gradient information
    * (as is done when force_backward == false).
    */
-  public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
 
   /**
    * @brief Specifies whether the layer should compute gradients w.r.t. a
@@ -12398,8 +12654,20 @@ public static final int
    *        parameter at a particular index given by param_id.
    */
   public native void set_param_propagate_down(int param_id, @Cast("const bool") boolean value);
+  @Virtual protected abstract void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected abstract void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down,
+        @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down,
+        @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void CheckBlobCounts(@Const @ByRef FloatBlobVector bottom,
+                                 @Const @ByRef FloatBlobVector top);
 }
-@Name("caffe::Layer<double>") @NoOffset public static class DoubleLayer extends Pointer {
+@Name("caffe::Layer<double>") @NoOffset public static abstract class DoubleLayer extends Pointer {
     static { Loader.load(); }
     /** Empty constructor. */
     public DoubleLayer() { }
@@ -12444,7 +12712,7 @@ public static final int
    * <code>Reshape</code>, which will be called before the forward pass to
    * adjust the top blob sizes.
    */
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
   /**
@@ -12459,7 +12727,7 @@ public static final int
    * and making any other necessary adjustments so that the layer can
    * accomodate the bottom blobs.
    */
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public abstract void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
   /**
@@ -12520,8 +12788,7 @@ public static final int
   /**
    * @brief Writes the layer parameter to a protocol buffer
    */
-  public native void ToProto(LayerParameter param, @Cast("bool") boolean write_diff/*=false*/);
-  public native void ToProto(LayerParameter param);
+  @Virtual public native void ToProto(LayerParameter param, @Cast("bool") boolean write_diff/*=false*/);
 
   /**
    * @brief Returns the scalar loss associated with a top blob at a given index.
@@ -12536,7 +12803,7 @@ public static final int
   /**
    * @brief Returns the layer type.
    */
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
 
   /**
    * @brief Returns the exact number of bottom blobs required by the layer,
@@ -12545,7 +12812,7 @@ public static final int
    * This method should be overridden to return a non-negative value if your
    * layer expects some exact number of bottom blobs.
    */
-  public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumBottomBlobs();
   /**
    * @brief Returns the minimum number of bottom blobs required by the layer,
    *        or -1 if no minimum number is required.
@@ -12553,7 +12820,7 @@ public static final int
    * This method should be overridden to return a non-negative value if your
    * layer expects some minimum number of bottom blobs.
    */
-  public native int MinBottomBlobs();
+  @Virtual public native int MinBottomBlobs();
   /**
    * @brief Returns the maximum number of bottom blobs required by the layer,
    *        or -1 if no maximum number is required.
@@ -12561,7 +12828,7 @@ public static final int
    * This method should be overridden to return a non-negative value if your
    * layer expects some maximum number of bottom blobs.
    */
-  public native int MaxBottomBlobs();
+  @Virtual public native int MaxBottomBlobs();
   /**
    * @brief Returns the exact number of top blobs required by the layer,
    *        or -1 if no exact number is required.
@@ -12569,7 +12836,7 @@ public static final int
    * This method should be overridden to return a non-negative value if your
    * layer expects some exact number of top blobs.
    */
-  public native int ExactNumTopBlobs();
+  @Virtual public native int ExactNumTopBlobs();
   /**
    * @brief Returns the minimum number of top blobs required by the layer,
    *        or -1 if no minimum number is required.
@@ -12577,7 +12844,7 @@ public static final int
    * This method should be overridden to return a non-negative value if your
    * layer expects some minimum number of top blobs.
    */
-  public native int MinTopBlobs();
+  @Virtual public native int MinTopBlobs();
   /**
    * @brief Returns the maximum number of top blobs required by the layer,
    *        or -1 if no maximum number is required.
@@ -12585,7 +12852,7 @@ public static final int
    * This method should be overridden to return a non-negative value if your
    * layer expects some maximum number of top blobs.
    */
-  public native int MaxTopBlobs();
+  @Virtual public native int MaxTopBlobs();
   /**
    * @brief Returns true if the layer requires an equal number of bottom and
    *        top blobs.
@@ -12593,7 +12860,7 @@ public static final int
    * This method should be overridden to return true if your layer expects an
    * equal number of bottom and top blobs.
    */
-  public native @Cast("bool") boolean EqualNumBottomTopBlobs();
+  @Virtual public native @Cast("bool") boolean EqualNumBottomTopBlobs();
 
   /**
    * @brief Return whether "anonymous" top blobs are created automatically
@@ -12603,7 +12870,7 @@ public static final int
    * blobs to fulfill the requirement specified by ExactNumTopBlobs() or
    * MinTopBlobs().
    */
-  public native @Cast("bool") boolean AutoTopBlobs();
+  @Virtual public native @Cast("bool") boolean AutoTopBlobs();
 
   /**
    * @brief Return whether to allow force_backward for a given bottom blob
@@ -12613,7 +12880,7 @@ public static final int
    * setting and backpropagate to blob i only if it needs gradient information
    * (as is done when force_backward == false).
    */
-  public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
 
   /**
    * @brief Specifies whether the layer should compute gradients w.r.t. a
@@ -12628,6 +12895,18 @@ public static final int
    *        parameter at a particular index given by param_id.
    */
   public native void set_param_propagate_down(int param_id, @Cast("const bool") boolean value);
+  @Virtual protected abstract void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected abstract void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down,
+        @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down,
+        @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void CheckBlobCounts(@Const @ByRef DoubleBlobVector bottom,
+                                 @Const @ByRef DoubleBlobVector top);
 }  // class Layer
 
 // Forward and backward wrappers. You should implement the cpu and
@@ -12683,14 +12962,18 @@ public static final int
    */
   public FloatAccuracyLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::AccuracyLayer<double>") @NoOffset public static class DoubleAccuracyLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -12709,14 +12992,18 @@ public static final int
    */
   public DoubleAccuracyLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -12727,13 +13014,15 @@ public static final int
  * LossLayers are typically only capable of backpropagating to their first input
  * -- the predictions.
  */
-@Name("caffe::LossLayer<float>") public static class FloatLossLayer extends FloatLayer {
+@Name("caffe::LossLayer<float>") public static abstract class FloatLossLayer extends FloatLayer {
     static { Loader.load(); }
     /** Empty constructor. */
     public FloatLossLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatLossLayer(Pointer p) { super(p); }
 
+  public FloatLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   @Virtual public native void LayerSetUp(
         @Const @ByRef FloatBlobVector bottom, @Const @ByRef FloatBlobVector top);
   @Virtual public native void Reshape(
@@ -12755,13 +13044,15 @@ public static final int
    */
   @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
 }
-@Name("caffe::LossLayer<double>") public static class DoubleLossLayer extends DoubleLayer {
+@Name("caffe::LossLayer<double>") public static abstract class DoubleLossLayer extends DoubleLayer {
     static { Loader.load(); }
     /** Empty constructor. */
     public DoubleLossLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleLossLayer(Pointer p) { super(p); }
 
+  public DoubleLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   @Virtual public native void LayerSetUp(
         @Const @ByRef DoubleBlobVector bottom, @Const @ByRef DoubleBlobVector top);
   @Virtual public native void Reshape(
@@ -12817,16 +13108,24 @@ public static final int
 
   public FloatContrastiveLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native int ExactNumBottomBlobs();
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
   /**
    * Unlike most loss layers, in the ContrastiveLossLayer we can backpropagate
    * to the first two inputs.
    */
-  public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::ContrastiveLossLayer<double>") @NoOffset public static class DoubleContrastiveLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
@@ -12837,16 +13136,24 @@ public static final int
 
   public DoubleContrastiveLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native int ExactNumBottomBlobs();
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
   /**
    * Unlike most loss layers, in the ContrastiveLossLayer we can backpropagate
    * to the first two inputs.
    */
-  public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -12884,15 +13191,23 @@ public static final int
 
   public FloatEuclideanLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
   /**
    * Unlike most loss layers, in the EuclideanLossLayer we can backpropagate
    * to both inputs -- override to return true and always allow force_backward.
    */
-  public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::EuclideanLossLayer<double>") @NoOffset public static class DoubleEuclideanLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
@@ -12903,15 +13218,23 @@ public static final int
 
   public DoubleEuclideanLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
   /**
    * Unlike most loss layers, in the EuclideanLossLayer we can backpropagate
    * to both inputs -- override to return true and always allow force_backward.
    */
-  public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -12967,7 +13290,11 @@ public static final int
   public FloatHingeLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::HingeLossLayer<double>") public static class DoubleHingeLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
@@ -12979,7 +13306,11 @@ public static final int
   public DoubleHingeLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -13023,19 +13354,23 @@ public static final int
 
   public FloatInfogainLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
   // InfogainLossLayer takes 2-3 bottom Blobs; if there are 3 the third should
   // be the infogain matrix.  (Otherwise the infogain matrix is loaded from a
   // file specified by LayerParameter.)
-  public native int ExactNumBottomBlobs();
-  public native int MinBottomBlobs();
-  public native int MaxBottomBlobs();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int MinBottomBlobs();
+  @Virtual public native int MaxBottomBlobs();
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::InfogainLossLayer<double>") @NoOffset public static class DoubleInfogainLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
@@ -13046,19 +13381,23 @@ public static final int
 
   public DoubleInfogainLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
   // InfogainLossLayer takes 2-3 bottom Blobs; if there are 3 the third should
   // be the infogain matrix.  (Otherwise the infogain matrix is loaded from a
   // file specified by LayerParameter.)
-  public native int ExactNumBottomBlobs();
-  public native int MinBottomBlobs();
-  public native int MaxBottomBlobs();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int MinBottomBlobs();
+  @Virtual public native int MaxBottomBlobs();
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -13099,10 +13438,14 @@ public static final int
 
   public FloatMultinomialLogisticLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::MultinomialLogisticLossLayer<double>") public static class DoubleMultinomialLogisticLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
@@ -13113,10 +13456,14 @@ public static final int
 
   public DoubleMultinomialLogisticLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -13157,12 +13504,20 @@ public static final int
 
   public FloatSigmoidCrossEntropyLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::SigmoidCrossEntropyLossLayer<double>") @NoOffset public static class DoubleSigmoidCrossEntropyLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
@@ -13173,12 +13528,20 @@ public static final int
 
   public DoubleSigmoidCrossEntropyLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 // Forward declare SoftmaxLayer for use in SoftmaxWithLossLayer.
@@ -13228,15 +13591,23 @@ public static final int
     */
   public FloatSoftmaxWithLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumTopBlobs();
-  public native int MinTopBlobs();
-  public native int MaxTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual public native int MinTopBlobs();
+  @Virtual public native int MaxTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::SoftmaxWithLossLayer<double>") @NoOffset public static class DoubleSoftmaxWithLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
@@ -13255,15 +13626,23 @@ public static final int
     */
   public DoubleSoftmaxWithLossLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumTopBlobs();
-  public native int MinTopBlobs();
-  public native int MaxTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual public native int MinTopBlobs();
+  @Virtual public native int MaxTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
   // namespace caffe
@@ -13295,26 +13674,30 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  *        each element of the output depends only on the corresponding input
  *        element.
  */
-@Name("caffe::NeuronLayer<float>") public static class FloatNeuronLayer extends FloatLayer {
+@Name("caffe::NeuronLayer<float>") public static abstract class FloatNeuronLayer extends FloatLayer {
     static { Loader.load(); }
     /** Empty constructor. */
     public FloatNeuronLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatNeuronLayer(Pointer p) { super(p); }
 
+  public FloatNeuronLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
   @Virtual public native int ExactNumBottomBlobs();
   @Virtual public native int ExactNumTopBlobs();
 }
-@Name("caffe::NeuronLayer<double>") public static class DoubleNeuronLayer extends DoubleLayer {
+@Name("caffe::NeuronLayer<double>") public static abstract class DoubleNeuronLayer extends DoubleLayer {
     static { Loader.load(); }
     /** Empty constructor. */
     public DoubleNeuronLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleNeuronLayer(Pointer p) { super(p); }
 
+  public DoubleNeuronLayer(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
   @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
@@ -13341,12 +13724,20 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public FloatAbsValLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::AbsValLayer<double>") public static class DoubleAbsValLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
@@ -13357,12 +13748,20 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public DoubleAbsValLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -13392,7 +13791,15 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public FloatBNLLLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::BNLLLayer<double>") public static class DoubleBNLLLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
@@ -13404,7 +13811,15 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public DoubleBNLLLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -13433,12 +13848,20 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    */
   public FloatDropoutLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::DropoutLayer<double>") @NoOffset public static class DoubleDropoutLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
@@ -13455,12 +13878,20 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    */
   public DoubleDropoutLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -13485,10 +13916,18 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    */
   public FloatExpLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::ExpLayer<double>") @NoOffset public static class DoubleExpLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
@@ -13507,10 +13946,18 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    */
   public DoubleExpLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -13534,10 +13981,18 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    */
   public FloatPowerLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::PowerLayer<double>") @NoOffset public static class DoublePowerLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
@@ -13555,10 +14010,18 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    */
   public DoublePowerLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -13581,7 +14044,15 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public FloatReLULayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::ReLULayer<double>") public static class DoubleReLULayer extends DoubleNeuronLayer {
     static { Loader.load(); }
@@ -13599,7 +14070,15 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public DoubleReLULayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 // #ifdef USE_CUDNN
@@ -13626,7 +14105,15 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public FloatSigmoidLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::SigmoidLayer<double>") public static class DoubleSigmoidLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
@@ -13638,7 +14125,15 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public DoubleSigmoidLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 // #ifdef USE_CUDNN
@@ -13665,7 +14160,15 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public FloatTanHLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::TanHLayer<double>") public static class DoubleTanHLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
@@ -13677,7 +14180,15 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public DoubleTanHLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 // #ifdef USE_CUDNN
@@ -13705,10 +14216,16 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    */
   public FloatThresholdLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::ThresholdLayer<double>") @NoOffset public static class DoubleThresholdLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
@@ -13725,10 +14242,16 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    */
   public DoubleThresholdLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -13757,13 +14280,21 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public FloatPReLULayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
 
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::PReLULayer<double>") @NoOffset public static class DoublePReLULayer extends DoubleNeuronLayer {
     static { Loader.load(); }
@@ -13783,13 +14314,21 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public DoublePReLULayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
 
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
   // namespace caffe
@@ -13841,14 +14380,18 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    */
   public FloatArgMaxLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::ArgMaxLayer<double>") @NoOffset public static class DoubleArgMaxLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -13867,14 +14410,18 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    */
   public DoubleArgMaxLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -13890,14 +14437,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public FloatConcatLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int MinBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int MinBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::ConcatLayer<double>") @NoOffset public static class DoubleConcatLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -13908,14 +14463,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public DoubleConcatLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int MinBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int MinBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -13933,14 +14496,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public FloatEltwiseLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int MinBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int MinBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::EltwiseLayer<double>") @NoOffset public static class DoubleEltwiseLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -13951,14 +14522,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public DoubleEltwiseLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int MinBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int MinBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -13980,12 +14559,16 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public FloatFlattenLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::FlattenLayer<double>") public static class DoubleFlattenLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -13996,12 +14579,16 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public DoubleFlattenLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -14019,14 +14606,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public FloatInnerProductLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::InnerProductLayer<double>") @NoOffset public static class DoubleInnerProductLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -14037,14 +14632,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public DoubleInnerProductLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -14061,12 +14664,20 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public FloatMVNLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+       @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::MVNLayer<double>") @NoOffset public static class DoubleMVNLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -14077,12 +14688,20 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public DoubleMVNLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+       @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -14098,12 +14717,20 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public FloatSilenceLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int MinBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int MinBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::SilenceLayer<double>") public static class DoubleSilenceLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -14114,12 +14741,20 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public DoubleSilenceLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int MinBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int MinBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -14136,12 +14771,20 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public FloatSoftmaxLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+       @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::SoftmaxLayer<double>") @NoOffset public static class DoubleSoftmaxLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -14152,12 +14795,20 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public DoubleSoftmaxLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+       @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 // #ifdef USE_CUDNN
@@ -14182,12 +14833,20 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public FloatSplitLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int MinTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int MinTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::SplitLayer<double>") @NoOffset public static class DoubleSplitLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -14198,12 +14857,20 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public DoubleSplitLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int MinTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int MinTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 /**
@@ -14221,14 +14888,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public FloatSliceLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int MinTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int MinTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::SliceLayer<double>") @NoOffset public static class DoubleSliceLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -14239,14 +14914,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public DoubleSliceLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int MinTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int MinTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
   // namespace caffe
@@ -14420,8 +15103,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public native @Const @SharedPtr @ByVal FloatBlob blob_by_name(@StdString String blob_name);
   public native @Cast("bool") boolean has_layer(@StdString BytePointer layer_name);
   public native @Cast("bool") boolean has_layer(@StdString String layer_name);
-  public native @Const @SharedPtr @ByVal FloatLayer layer_by_name(@StdString BytePointer layer_name);
-  public native @Const @SharedPtr @ByVal FloatLayer layer_by_name(@StdString String layer_name);
+  public native @Const @Cast({"", "boost::shared_ptr<caffe::Layer<float> >"}) @SharedPtr @ByVal FloatLayer layer_by_name(@StdString BytePointer layer_name);
+  public native @Const @Cast({"", "boost::shared_ptr<caffe::Layer<float> >"}) @SharedPtr @ByVal FloatLayer layer_by_name(@StdString String layer_name);
 
   public native void set_debug_info(@Cast("const bool") boolean value);
 
@@ -14582,8 +15265,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public native @Const @SharedPtr @ByVal DoubleBlob blob_by_name(@StdString String blob_name);
   public native @Cast("bool") boolean has_layer(@StdString BytePointer layer_name);
   public native @Cast("bool") boolean has_layer(@StdString String layer_name);
-  public native @Const @SharedPtr @ByVal DoubleLayer layer_by_name(@StdString BytePointer layer_name);
-  public native @Const @SharedPtr @ByVal DoubleLayer layer_by_name(@StdString String layer_name);
+  public native @Const @Cast({"", "boost::shared_ptr<caffe::Layer<double> >"}) @SharedPtr @ByVal DoubleLayer layer_by_name(@StdString BytePointer layer_name);
+  public native @Const @Cast({"", "boost::shared_ptr<caffe::Layer<double> >"}) @SharedPtr @ByVal DoubleLayer layer_by_name(@StdString String layer_name);
 
   public native void set_debug_info(@Cast("const bool") boolean value);
 
@@ -14803,37 +15486,41 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  * @brief Abstract base class that factors out the BLAS code common to
  *        ConvolutionLayer and DeconvolutionLayer.
  */
-@Name("caffe::BaseConvolutionLayer<float>") @NoOffset public static class FloatBaseConvolutionLayer extends FloatLayer {
+@Name("caffe::BaseConvolutionLayer<float>") @NoOffset public static abstract class FloatBaseConvolutionLayer extends FloatLayer {
     static { Loader.load(); }
     /** Empty constructor. */
     public FloatBaseConvolutionLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBaseConvolutionLayer(Pointer p) { super(p); }
 
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native int MinBottomBlobs();
-  public native int MinTopBlobs();
-  public native @Cast("bool") boolean EqualNumBottomTopBlobs();
+  @Virtual public native int MinBottomBlobs();
+  @Virtual public native int MinTopBlobs();
+  @Virtual public native @Cast("bool") boolean EqualNumBottomTopBlobs();
+  @Virtual protected abstract @Cast("bool") boolean reverse_dimensions();
+  @Virtual protected abstract void compute_output_shape();
 }
-@Name("caffe::BaseConvolutionLayer<double>") @NoOffset public static class DoubleBaseConvolutionLayer extends DoubleLayer {
+@Name("caffe::BaseConvolutionLayer<double>") @NoOffset public static abstract class DoubleBaseConvolutionLayer extends DoubleLayer {
     static { Loader.load(); }
     /** Empty constructor. */
     public DoubleBaseConvolutionLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBaseConvolutionLayer(Pointer p) { super(p); }
 
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native int MinBottomBlobs();
-  public native int MinTopBlobs();
-  public native @Cast("bool") boolean EqualNumBottomTopBlobs();
+  @Virtual public native int MinBottomBlobs();
+  @Virtual public native int MinTopBlobs();
+  @Virtual public native @Cast("bool") boolean EqualNumBottomTopBlobs();
+  @Virtual protected abstract @Cast("bool") boolean reverse_dimensions();
+  @Virtual protected abstract void compute_output_shape();
 }
 
 /**
@@ -14890,7 +15577,17 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public FloatConvolutionLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native @Cast("bool") boolean reverse_dimensions();
+  @Virtual protected native void compute_output_shape();
 }
 @Name("caffe::ConvolutionLayer<double>") public static class DoubleConvolutionLayer extends DoubleBaseConvolutionLayer {
     static { Loader.load(); }
@@ -14930,7 +15627,17 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public DoubleConvolutionLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native @Cast("bool") boolean reverse_dimensions();
+  @Virtual protected native void compute_output_shape();
 }
 
 /**
@@ -14957,7 +15664,17 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public FloatDeconvolutionLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native @Cast("bool") boolean reverse_dimensions();
+  @Virtual protected native void compute_output_shape();
 }
 @Name("caffe::DeconvolutionLayer<double>") public static class DoubleDeconvolutionLayer extends DoubleBaseConvolutionLayer {
     static { Loader.load(); }
@@ -14969,7 +15686,17 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public DoubleDeconvolutionLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
 
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native @Cast("bool") boolean reverse_dimensions();
+  @Virtual protected native void compute_output_shape();
 }
 
 // #ifdef USE_CUDNN
@@ -15005,14 +15732,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public FloatIm2colLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::Im2colLayer<double>") @NoOffset public static class DoubleIm2colLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -15023,14 +15758,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public DoubleIm2colLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 // Forward declare PoolingLayer and SplitLayer for use in LRNLayer.
@@ -15049,14 +15792,35 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public FloatLRNLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+
+  @Virtual protected native void CrossChannelForward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void CrossChannelForward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void WithinChannelForward(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void CrossChannelBackward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void CrossChannelBackward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void WithinChannelBackward(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::LRNLayer<double>") @NoOffset public static class DoubleLRNLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -15067,14 +15831,35 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public DoubleLRNLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int ExactNumTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int ExactNumTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+
+  @Virtual protected native void CrossChannelForward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void CrossChannelForward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void WithinChannelForward(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void CrossChannelBackward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void CrossChannelBackward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void WithinChannelBackward(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 
@@ -15092,17 +15877,25 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public FloatPoolingLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
-  public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int MinTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int MinTopBlobs();
   // MAX POOL layers can output an extra top blob for the mask;
   // others can only output the pooled inputs.
-  public native int MaxTopBlobs();
+  @Virtual public native int MaxTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
+        @Const @ByRef FloatBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
 @Name("caffe::PoolingLayer<double>") @NoOffset public static class DoublePoolingLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -15113,17 +15906,25 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   public DoublePoolingLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
-  public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
-  public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  public native @Cast("const char*") BytePointer type();
-  public native int ExactNumBottomBlobs();
-  public native int MinTopBlobs();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual public native int ExactNumBottomBlobs();
+  @Virtual public native int MinTopBlobs();
   // MAX POOL layers can output an extra top blob for the mask;
   // others can only output the pooled inputs.
-  public native int MaxTopBlobs();
+  @Virtual public native int MaxTopBlobs();
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
+        @Const @ByRef DoubleBlobVector top);
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
+        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
 // #ifdef USE_CUDNN
