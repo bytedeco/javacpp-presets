@@ -64,8 +64,10 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
 // #include "opencv2/shape/shape_transformer.hpp"
 // #include "opencv2/shape/hist_cost.hpp"
 // #include "opencv2/shape/shape_distance.hpp"
-@Namespace("cv") public static native @Cast("bool") boolean initModule_shape();
 
+/**
+  @defgroup shape Shape Distance and Matching
+ */
 
 // #endif
 
@@ -124,7 +126,21 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
 *                                   EMDL1 Function                                      *
 \****************************************************************************************/
 
+/** @addtogroup shape
+/** @{
+
+/** @brief Computes the "minimal work" distance between two weighted point configurations base on the papers
+"EMD-L1: An efficient and Robust Algorithm for comparing histogram-based descriptors", by Haibin
+Ling and Kazunori Okuda; and "The Earth Mover's Distance is the Mallows Distance: Some Insights from
+Statistics", by Elizaveta Levina and Peter Bickel.
+
+@param signature1 First signature, a single column floating-point matrix. Each row is the value of
+the histogram in each bin.
+@param signature2 Second signature of the same format and size as signature1.
+ */
 @Namespace("cv") public static native float EMDL1(@ByVal Mat signature1, @ByVal Mat signature2);
+
+/** @} */
 
 //namespace cv
 
@@ -182,10 +198,10 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
 // #include "opencv2/core.hpp"
 // #include "opencv2/imgproc.hpp"
 
-/**
- * The base class for ShapeTransformer.
- * This is just to define the common interface for
- * shape transformation techniques.
+/** @addtogroup shape
+ *  @{
+
+/** @brief Abstract base class for shape transformation algorithms.
  */
 @Namespace("cv") public static class ShapeTransformer extends Algorithm {
     static { Loader.load(); }
@@ -194,13 +210,31 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ShapeTransformer(Pointer p) { super(p); }
 
-    /* Estimate, Apply Transformation and return Transforming cost*/
+    /** @brief Estimate the transformation parameters of the current transformer algorithm, based on point matches.
+
+    @param transformingShape Contour defining first shape.
+    @param targetShape Contour defining second shape (Target).
+    @param matches Standard vector of Matches between points.
+     */
     public native void estimateTransformation(@ByVal Mat transformingShape, @ByVal Mat targetShape,
                                                      @StdVector DMatch matches);
 
+    /** @brief Apply a transformation, given a pre-estimated transformation parameters.
+
+    @param input Contour (set of points) to apply the transformation.
+    @param output Output contour.
+     */
     public native float applyTransformation(@ByVal Mat input, @ByVal Mat output/*=noArray()*/);
     public native float applyTransformation(@ByVal Mat input);
 
+    /** @brief Apply a transformation, given a pre-estimated transformation parameters, to an Image.
+
+    @param transformingImage Input image.
+    @param output Output image.
+    @param flags Image interpolation method.
+    @param borderMode border style.
+    @param borderValue border value.
+     */
     public native void warpImage(@ByVal Mat transformingImage, @ByVal Mat output,
                                        int flags/*=INTER_LINEAR*/, int borderMode/*=BORDER_CONSTANT*/,
                                        @Const @ByRef Scalar borderValue/*=Scalar()*/);
@@ -209,13 +243,12 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
 
 /***********************************************************************************/
 /***********************************************************************************/
-/**
- * Thin Plate Spline Transformation
- * Implementation of the TPS transformation
- * according to "Principal Warps: Thin-Plate Splines and the
- * Decomposition of Deformations" by Juan Manuel Perez for the GSOC 2013
- */
 
+/** @brief Definition of the transformation
+
+ocupied in the paper "Principal Warps: Thin-Plate Splines and Decomposition of Deformations", by
+F.L. Bookstein (PAMI 1989). :
+ */
 @Namespace("cv") public static class ThinPlateSplineShapeTransformer extends ShapeTransformer {
     static { Loader.load(); }
     /** Empty constructor. */
@@ -223,20 +256,24 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ThinPlateSplineShapeTransformer(Pointer p) { super(p); }
 
+    /** @brief Set the regularization parameter for relaxing the exact interpolation requirements of the TPS
+    algorithm.
+
+    @param beta value of the regularization parameter.
+     */
     public native void setRegularizationParameter(double beta);
     public native double getRegularizationParameter();
 }
 
-/* Complete constructor */
+/** Complete constructor */
 @Namespace("cv") public static native @Ptr ThinPlateSplineShapeTransformer createThinPlateSplineShapeTransformer(double regularizationParameter/*=0*/);
 @Namespace("cv") public static native @Ptr ThinPlateSplineShapeTransformer createThinPlateSplineShapeTransformer();
 
 /***********************************************************************************/
 /***********************************************************************************/
-/**
- * Affine Transformation as a derivated from ShapeTransformer
- */
 
+/** @brief Wrapper class for the OpenCV Affine Transformation algorithm. :
+ */
 @Namespace("cv") public static class AffineTransformer extends ShapeTransformer {
     static { Loader.load(); }
     /** Empty constructor. */
@@ -248,8 +285,10 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
     public native @Cast("bool") boolean getFullAffine();
 }
 
-/* Complete constructor */
+/** Complete constructor */
 @Namespace("cv") public static native @Ptr AffineTransformer createAffineTransformer(@Cast("bool") boolean fullAffine);
+
+/** @} */
 
  // cv
 // #endif
@@ -305,8 +344,10 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
 
 // #include "opencv2/imgproc.hpp"
 
-/**
- * The base class for HistogramCostExtractor.
+/** @addtogroup shape
+ *  @{
+
+/** @brief Abstract base class for histogram cost algorithms.
  */
 @Namespace("cv") public static class HistogramCostExtractor extends Algorithm {
     static { Loader.load(); }
@@ -324,7 +365,8 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
     public native float getDefaultCost();
 }
 
-/**  */
+/** @brief A norm based cost extraction. :
+ */
 @Namespace("cv") public static class NormHistogramCostExtractor extends HistogramCostExtractor {
     static { Loader.load(); }
     /** Empty constructor. */
@@ -339,7 +381,8 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
 @Namespace("cv") public static native @Ptr HistogramCostExtractor createNormHistogramCostExtractor(int flag/*=DIST_L2*/, int nDummies/*=25*/, float defaultCost/*=0.2f*/);
 @Namespace("cv") public static native @Ptr HistogramCostExtractor createNormHistogramCostExtractor();
 
-/**  */
+/** @brief An EMD based cost extraction. :
+ */
 @Namespace("cv") public static class EMDHistogramCostExtractor extends HistogramCostExtractor {
     static { Loader.load(); }
     /** Empty constructor. */
@@ -354,7 +397,8 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
 @Namespace("cv") public static native @Ptr HistogramCostExtractor createEMDHistogramCostExtractor(int flag/*=DIST_L2*/, int nDummies/*=25*/, float defaultCost/*=0.2f*/);
 @Namespace("cv") public static native @Ptr HistogramCostExtractor createEMDHistogramCostExtractor();
 
-/**  */
+/** @brief An Chi based cost extraction. :
+ */
 @Namespace("cv") public static class ChiHistogramCostExtractor extends HistogramCostExtractor {
     static { Loader.load(); }
     /** Empty constructor. */
@@ -366,7 +410,8 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
 @Namespace("cv") public static native @Ptr HistogramCostExtractor createChiHistogramCostExtractor(int nDummies/*=25*/, float defaultCost/*=0.2f*/);
 @Namespace("cv") public static native @Ptr HistogramCostExtractor createChiHistogramCostExtractor();
 
-/**  */
+/** @brief An EMD-L1 based cost extraction. :
+ */
 @Namespace("cv") public static class EMDL1HistogramCostExtractor extends HistogramCostExtractor {
     static { Loader.load(); }
     /** Empty constructor. */
@@ -377,6 +422,8 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
 
 @Namespace("cv") public static native @Ptr HistogramCostExtractor createEMDL1HistogramCostExtractor(int nDummies/*=25*/, float defaultCost/*=0.2f*/);
 @Namespace("cv") public static native @Ptr HistogramCostExtractor createEMDL1HistogramCostExtractor();
+
+/** @} */
 
  // cv
 // #endif
@@ -433,10 +480,10 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
 // #include "opencv2/shape/hist_cost.hpp"
 // #include "opencv2/shape/shape_transformer.hpp"
 
-/**
- * The base class for ShapeDistanceExtractor.
- * This is just to define the common interface for
- * shape comparisson techniques.
+/** @addtogroup shape
+ *  @{
+
+/** @brief Abstract base class for shape distance algorithms.
  */
 @Namespace("cv") public static class ShapeDistanceExtractor extends Algorithm {
     static { Loader.load(); }
@@ -445,18 +492,23 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ShapeDistanceExtractor(Pointer p) { super(p); }
 
+    /** @brief Compute the shape distance between two shapes defined by its contours.
+
+    @param contour1 Contour defining first shape.
+    @param contour2 Contour defining second shape.
+     */
     public native float computeDistance(@ByVal Mat contour1, @ByVal Mat contour2);
 }
 
 /***********************************************************************************/
 /***********************************************************************************/
 /***********************************************************************************/
-/**
- * Shape Context implementation.
- * The SCD class implements SCD algorithm proposed by Belongie et al.in
- * "Shape Matching and Object Recognition Using Shape Contexts".
- * Implemented by Juan M. Perez for the GSOC 2013.
- */
+/** @brief Implementation of the Shape Context descriptor and matching algorithm
+
+proposed by Belongie et al. in "Shape Matching and Object Recognition Using Shape Contexts" (PAMI
+2002). This implementation is packaged in a generic scheme, in order to allow you the
+implementation of the common variations of the original pipeline.
+*/
 @Namespace("cv") public static class ShapeContextDistanceExtractor extends ShapeDistanceExtractor {
     static { Loader.load(); }
     /** Empty constructor. */
@@ -464,42 +516,103 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ShapeContextDistanceExtractor(Pointer p) { super(p); }
 
+    /** @brief Establish the number of angular bins for the Shape Context Descriptor used in the shape matching
+    pipeline.
+
+    @param nAngularBins The number of angular bins in the shape context descriptor.
+     */
     public native void setAngularBins(int nAngularBins);
     public native int getAngularBins();
 
+    /** @brief Establish the number of radial bins for the Shape Context Descriptor used in the shape matching
+    pipeline.
+
+    @param nRadialBins The number of radial bins in the shape context descriptor.
+     */
     public native void setRadialBins(int nRadialBins);
     public native int getRadialBins();
 
+    /** @brief Set the inner radius of the shape context descriptor.
+
+    @param innerRadius The value of the inner radius.
+     */
     public native void setInnerRadius(float innerRadius);
     public native float getInnerRadius();
 
+    /** @brief Set the outer radius of the shape context descriptor.
+
+    @param outerRadius The value of the outer radius.
+     */
     public native void setOuterRadius(float outerRadius);
     public native float getOuterRadius();
 
     public native void setRotationInvariant(@Cast("bool") boolean rotationInvariant);
     public native @Cast("bool") boolean getRotationInvariant();
 
+    /** @brief Set the weight of the shape context distance in the final value of the shape distance. The shape
+    context distance between two shapes is defined as the symmetric sum of shape context matching costs
+    over best matching points. The final value of the shape distance is a user-defined linear
+    combination of the shape context distance, an image appearance distance, and a bending energy.
+
+    @param shapeContextWeight The weight of the shape context distance in the final distance value.
+     */
     public native void setShapeContextWeight(float shapeContextWeight);
     public native float getShapeContextWeight();
 
+    /** @brief Set the weight of the Image Appearance cost in the final value of the shape distance. The image
+    appearance cost is defined as the sum of squared brightness differences in Gaussian windows around
+    corresponding image points. The final value of the shape distance is a user-defined linear
+    combination of the shape context distance, an image appearance distance, and a bending energy. If
+    this value is set to a number different from 0, is mandatory to set the images that correspond to
+    each shape.
+
+    @param imageAppearanceWeight The weight of the appearance cost in the final distance value.
+     */
     public native void setImageAppearanceWeight(float imageAppearanceWeight);
     public native float getImageAppearanceWeight();
 
+    /** @brief Set the weight of the Bending Energy in the final value of the shape distance. The bending energy
+    definition depends on what transformation is being used to align the shapes. The final value of the
+    shape distance is a user-defined linear combination of the shape context distance, an image
+    appearance distance, and a bending energy.
+
+    @param bendingEnergyWeight The weight of the Bending Energy in the final distance value.
+     */
     public native void setBendingEnergyWeight(float bendingEnergyWeight);
     public native float getBendingEnergyWeight();
 
+    /** @brief Set the images that correspond to each shape. This images are used in the calculation of the Image
+    Appearance cost.
+
+    @param image1 Image corresponding to the shape defined by contours1.
+    @param image2 Image corresponding to the shape defined by contours2.
+     */
     public native void setImages(@ByVal Mat image1, @ByVal Mat image2);
     public native void getImages(@ByVal Mat image1, @ByVal Mat image2);
 
     public native void setIterations(int iterations);
     public native int getIterations();
 
+    /** @brief Set the algorithm used for building the shape context descriptor cost matrix.
+
+    @param comparer Smart pointer to a HistogramCostExtractor, an algorithm that defines the cost
+    matrix between descriptors.
+     */
     public native void setCostExtractor(@Ptr HistogramCostExtractor comparer);
     public native @Ptr HistogramCostExtractor getCostExtractor();
 
+    /** @brief Set the value of the standard deviation for the Gaussian window for the image appearance cost.
+
+    @param sigma Standard Deviation.
+     */
     public native void setStdDev(float sigma);
     public native float getStdDev();
 
+    /** @brief Set the algorithm used for aligning the shapes.
+
+    @param transformer Smart pointer to a ShapeTransformer, an algorithm that defines the aligning
+    transformation.
+     */
     public native void setTransformAlgorithm(@Ptr ShapeTransformer transformer);
     public native @Ptr ShapeTransformer getTransformAlgorithm();
 }
@@ -514,8 +627,10 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
 /***********************************************************************************/
 /***********************************************************************************/
 /***********************************************************************************/
-/**
- * Hausdorff distace implementation based on
+/** @brief A simple Hausdorff distance measure between shapes defined by contours
+
+according to the paper "Comparing Images using the Hausdorff distance." by D.P. Huttenlocher, G.A.
+Klanderman, and W.J. Rucklidge. (PAMI 1993). :
  */
 @Namespace("cv") public static class HausdorffDistanceExtractor extends ShapeDistanceExtractor {
     static { Loader.load(); }
@@ -524,9 +639,20 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HausdorffDistanceExtractor(Pointer p) { super(p); }
 
+    /** @brief Set the norm used to compute the Hausdorff value between two shapes. It can be L1 or L2 norm.
+
+    @param distanceFlag Flag indicating which norm is used to compute the Hausdorff distance
+    (NORM_L1, NORM_L2).
+     */
     public native void setDistanceFlag(int distanceFlag);
     public native int getDistanceFlag();
 
+    /** @brief This method sets the rank proportion (or fractional value) that establish the Kth ranked value of
+    the partial Hausdorff distance. Experimentally had been shown that 0.6 is a good value to compare
+    shapes.
+
+    @param rankProportion fractional value (between 0 and 1).
+     */
     public native void setRankProportion(float rankProportion);
     public native float getRankProportion();
 }
@@ -534,6 +660,8 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
 /* Constructor */
 @Namespace("cv") public static native @Ptr HausdorffDistanceExtractor createHausdorffDistanceExtractor(int distanceFlag/*=cv::NORM_L2*/, float rankProp/*=0.6f*/);
 @Namespace("cv") public static native @Ptr HausdorffDistanceExtractor createHausdorffDistanceExtractor();
+
+/** @} */
 
  // cv
 // #endif

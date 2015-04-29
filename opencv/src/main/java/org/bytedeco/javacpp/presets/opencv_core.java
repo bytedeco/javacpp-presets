@@ -38,9 +38,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(value = {
-    @Platform(include = {
+    @Platform(include = {"<opencv2/hal/defs.h>",
         "<opencv2/core/cvdef.h>", "<opencv2/core/version.hpp>", "<opencv2/core/base.hpp>", "<opencv2/core/cvstd.hpp>",
-        "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/utility.hpp>", "<opencv2/core/types.hpp>",
+        "<opencv2/core/utility.hpp>", "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>",
         "<opencv2/core.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
         "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "opencv_adapters.h"}, link = "opencv_core@.3.0", preload = "tbb"),
     @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link = "opencv_core300", preload = {"msvcr100", "msvcp100"}),
@@ -220,8 +220,9 @@ public class opencv_core implements InfoMapper {
                .put(new Info("cv::MinProblemSolver::Function").virtualize())
 
                .put(new Info("HAVE_OPENCV_CUDA", "HAVE_OPENCV_CUDAIMGPROC", "HAVE_OPENCV_CUDAOPTFLOW", "HAVE_OPENCV_CUDAWARPING",
-                             "defined(HAVE_OPENCV_CUDA) && defined(HAVE_OPENCV_CUDAWARPING)", "HAVE_OPENCV_XFEATURES2D",
-                             "defined(HAVE_OPENCV_CUDAIMGPROC) && defined(HAVE_OPENCV_CUDA) && defined(HAVE_OPENCV_CUDAOPTFLOW)").define(false))
+                             "HAVE_OPENCV_CUDALEGACY", "HAVE_OPENCV_XFEATURES2D", "defined(HAVE_OPENCV_CUDAWARPING)",
+                             "defined(HAVE_OPENCV_CUDAIMGPROC) && defined(HAVE_OPENCV_CUDAOPTFLOW)",
+                             "defined(HAVE_OPENCV_CUDA) && defined(HAVE_OPENCV_CUDAWARPING)").define(false))
 
                .put(new Info("cv::Ptr").skip().annotations("@Ptr"))
                .put(new Info("cv::String").skip().annotations("@Str").valueTypes("BytePointer", "String"));

@@ -64,6 +64,10 @@ public class opencv_videoio extends org.bytedeco.javacpp.presets.opencv_videoio 
 // #ifdef __cplusplus
 // #endif /* __cplusplus */
 
+/**
+  @addtogroup videoio_c
+  @{
+*/
 
 /****************************************************************************************\
 *                         Working with Video Files and Cameras                           *
@@ -179,7 +183,7 @@ public static final int
     CV_CAP_PROP_CONVERT_RGB   = 16,
     CV_CAP_PROP_WHITE_BALANCE_BLUE_U = 17,
     CV_CAP_PROP_RECTIFICATION = 18,
-    CV_CAP_PROP_MONOCROME     = 19,
+    CV_CAP_PROP_MONOCHROME    = 19,
     CV_CAP_PROP_SHARPNESS     = 20,
     CV_CAP_PROP_AUTO_EXPOSURE = 21, // exposure control done by camera,
                                    // user can adjust refernce level
@@ -245,6 +249,7 @@ public static final int
     CV_CAP_PROP_PVAPI_DECIMATIONVERTICAL    = 303, // Vertical sub-sampling of the image
     CV_CAP_PROP_PVAPI_BINNINGX              = 304, // Horizontal binning factor
     CV_CAP_PROP_PVAPI_BINNINGY              = 305, // Vertical binning factor
+    CV_CAP_PROP_PVAPI_PIXELFORMAT           = 306, // Pixel format
 
     // Properties of cameras available through XIMEA SDK interface
     CV_CAP_PROP_XI_DOWNSAMPLING  = 400,      // Change image resolution by binning or skipping.
@@ -310,6 +315,15 @@ public static final int
     CV_CAP_INTELPERC_IMAGE_GENERATOR =  1 << 28,
     CV_CAP_INTELPERC_GENERATORS_MASK =  CV_CAP_INTELPERC_DEPTH_GENERATOR + CV_CAP_INTELPERC_IMAGE_GENERATOR;
 
+// Generic camera output modes.
+// Currently, these are supported through the libv4l interface only.
+/** enum  */
+public static final int
+    CV_CAP_MODE_BGR  = 0, // BGR24 (default)
+    CV_CAP_MODE_RGB  = 1, // RGB24
+    CV_CAP_MODE_GRAY = 2, // Y8
+    CV_CAP_MODE_YUYV = 3;  // YUYV
+
 /** enum  */
 public static final int
     // Data given from depth generator.
@@ -338,6 +352,7 @@ public static final int
     CV_CAP_ANDROID_COLOR_FRAME_BGR = 0, //BGR
     CV_CAP_ANDROID_COLOR_FRAME =  CV_CAP_ANDROID_COLOR_FRAME_BGR,
     CV_CAP_ANDROID_GREY_FRAME  = 1,  //Y
+    CV_CAP_ANDROID_GRAY_FRAME  =  CV_CAP_ANDROID_GREY_FRAME,
     CV_CAP_ANDROID_COLOR_FRAME_RGB = 2,
     CV_CAP_ANDROID_COLOR_FRAME_BGRA = 3,
     CV_CAP_ANDROID_COLOR_FRAME_RGBA = 4;
@@ -444,6 +459,7 @@ public static native CvVideoWriter cvCreateAVIWriter(@Cast("const char*") BytePo
 public static native CvVideoWriter cvCreateAVIWriter(String arg1, int arg2, double arg3, @ByVal CvSize arg4, int arg5);
 public static native int cvWriteToAVI(CvVideoWriter arg1, IplImage arg2);
 
+/** @} videoio_c */
 
 // #ifdef __cplusplus
 // #endif
@@ -500,8 +516,18 @@ public static native int cvWriteToAVI(CvVideoWriter arg1, IplImage arg2);
 
 // #include "opencv2/core.hpp"
 
+/**
+  @defgroup videoio Media I/O
+  @{
+    @defgroup videoio_c C API
+    @defgroup videoio_ios iOS glue
+  @}
+*/
 
 ////////////////////////////////// video io /////////////////////////////////
+
+/** @addtogroup videoio
+ *  @{ */
 
 // Camera API
 /** enum cv:: */
@@ -526,7 +552,8 @@ public static final int CAP_ANY          = 0,     // autodetect
        CAP_GIGANETIX    = 1300,  // Smartek Giganetix GigEVisionSDK
        CAP_MSMF         = 1400,  // Microsoft Media Foundation (via videoInput)
        CAP_INTELPERC    = 1500,   // Intel Perceptual Computing SDK
-       CAP_OPENNI2      = 1600;   // OpenNI2 (for Kinect)
+       CAP_OPENNI2      = 1600,   // OpenNI2 (for Kinect)
+       CAP_OPENNI2_ASUS = 1610;   // OpenNI2 (for Asus Xtion and Occipital Structure sensors)
 
 // generic properties (based on DC1394 properties)
 /** enum cv:: */
@@ -549,7 +576,7 @@ public static final int CAP_PROP_POS_MSEC       = 0,
        CAP_PROP_CONVERT_RGB   = 16,
        CAP_PROP_WHITE_BALANCE_BLUE_U = 17,
        CAP_PROP_RECTIFICATION = 18,
-       CAP_PROP_MONOCROME     = 19,
+       CAP_PROP_MONOCHROME    = 19,
        CAP_PROP_SHARPNESS     = 20,
        CAP_PROP_AUTO_EXPOSURE = 21, // DC1394: exposure control done by camera, user can adjust refernce level using this feature
        CAP_PROP_GAMMA         = 22,
@@ -567,6 +594,15 @@ public static final int CAP_PROP_POS_MSEC       = 0,
        CAP_PROP_ROLL          = 35,
        CAP_PROP_IRIS          = 36,
        CAP_PROP_SETTINGS      = 37;
+
+
+// Generic camera output modes.
+// Currently, these are supported through the libv4l interface only.
+/** enum cv:: */
+public static final int CAP_MODE_BGR  = 0, // BGR24 (default)
+       CAP_MODE_RGB  = 1, // RGB24
+       CAP_MODE_GRAY = 2, // Y8
+       CAP_MODE_YUYV = 3;  // YUYV
 
 
 // DC1394 only
@@ -646,7 +682,8 @@ public static final int CAP_PROP_PVAPI_MULTICASTIP           = 300, // ip for an
        CAP_PROP_PVAPI_DECIMATIONHORIZONTAL  = 302, // Horizontal sub-sampling of the image
        CAP_PROP_PVAPI_DECIMATIONVERTICAL    = 303, // Vertical sub-sampling of the image
        CAP_PROP_PVAPI_BINNINGX              = 304, // Horizontal binning factor
-       CAP_PROP_PVAPI_BINNINGY              = 305;  // Vertical binning factor
+       CAP_PROP_PVAPI_BINNINGY              = 305, // Vertical binning factor
+       CAP_PROP_PVAPI_PIXELFORMAT           = 306;  // Pixel format
 
 // PVAPI: FrameStartTriggerMode
 /** enum cv:: */
@@ -662,6 +699,17 @@ public static final int CAP_PVAPI_DECIMATION_OFF       = 1,    // Off
        CAP_PVAPI_DECIMATION_2OUTOF4   = 2,    // 2 out of 4 decimation
        CAP_PVAPI_DECIMATION_2OUTOF8   = 4,    // 2 out of 8 decimation
        CAP_PVAPI_DECIMATION_2OUTOF16  = 8;     // 2 out of 16 decimation
+
+// PVAPI: PixelFormat
+/** enum cv:: */
+public static final int CAP_PVAPI_PIXELFORMAT_MONO8    = 1,    // Mono8
+       CAP_PVAPI_PIXELFORMAT_MONO16   = 2,    // Mono16
+       CAP_PVAPI_PIXELFORMAT_BAYER8   = 3,    // Bayer8
+       CAP_PVAPI_PIXELFORMAT_BAYER16  = 4,    // Bayer16
+       CAP_PVAPI_PIXELFORMAT_RGB24    = 5,    // Rgb24
+       CAP_PVAPI_PIXELFORMAT_BGR24    = 6,    // Bgr24
+       CAP_PVAPI_PIXELFORMAT_RGBA32   = 7,    // Rgba32
+       CAP_PVAPI_PIXELFORMAT_BGRA32   = 8;    // Bgra32
 
 // Properties of cameras available through XIMEA SDK interface
 /** enum cv:: */
@@ -708,6 +756,7 @@ public static final int CAP_PROP_ANDROID_AUTOGRAB               = 1024,
 public static final int CAP_ANDROID_COLOR_FRAME_BGR  = 0, //BGR
        CAP_ANDROID_COLOR_FRAME      =  CAP_ANDROID_COLOR_FRAME_BGR,
        CAP_ANDROID_GREY_FRAME       = 1,  //Y
+       CAP_ANDROID_GRAY_FRAME       =  CAP_ANDROID_GREY_FRAME,
        CAP_ANDROID_COLOR_FRAME_RGB  = 2,
        CAP_ANDROID_COLOR_FRAME_BGRA = 3,
        CAP_ANDROID_COLOR_FRAME_RGBA = 4;
@@ -792,6 +841,9 @@ public static final int CAP_INTELPERC_DEPTH_MAP              = 0, // Each pixel 
        CAP_INTELPERC_IR_MAP                 = 2, // Each pixel is a 16-bit integer. The value indicates the intensity of the reflected laser beam.
        CAP_INTELPERC_IMAGE                  = 3;
 
+/** enum cv:: */
+public static final int VIDEOWRITER_PROP_QUALITY = 1,    // Quality (0..100%) of the videostream encoded
+       VIDEOWRITER_PROP_FRAMEBYTES = 2; // (Read-only): Size of just encoded video frame
 
 @Namespace("cv") @Opaque public static class IVideoCapture extends Pointer {
     /** Empty constructor. */
@@ -799,36 +851,228 @@ public static final int CAP_INTELPERC_DEPTH_MAP              = 0, // Each pixel 
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IVideoCapture(Pointer p) { super(p); }
 }
+
+/** @brief Class for video capturing from video files, image sequences or cameras. The class provides C++ API
+for capturing video from cameras or for reading video files and image sequences. Here is how the
+class can be used: :
+@code
+    #include "opencv2/opencv.hpp"
+
+    using namespace cv;
+
+    int main(int, char**)
+    {
+        VideoCapture cap(0); // open the default camera
+        if(!cap.isOpened())  // check if we succeeded
+            return -1;
+
+        Mat edges;
+        namedWindow("edges",1);
+        for(;;)
+        {
+            Mat frame;
+            cap >> frame; // get a new frame from camera
+            cvtColor(frame, edges, COLOR_BGR2GRAY);
+            GaussianBlur(edges, edges, Size(7,7), 1.5, 1.5);
+            Canny(edges, edges, 0, 30, 3);
+            imshow("edges", edges);
+            if(waitKey(30) >= 0) break;
+        }
+        // the camera will be deinitialized automatically in VideoCapture destructor
+        return 0;
+    }
+@endcode
+@note In C API the black-box structure CvCapture is used instead of VideoCapture.
+
+@note
+-   A basic sample on using the VideoCapture interface can be found at
+    opencv_source_code/samples/cpp/starter_video.cpp
+-   Another basic video processing sample can be found at
+    opencv_source_code/samples/cpp/video_dmtx.cpp
+-   (Python) A basic sample on using the VideoCapture interface can be found at
+    opencv_source_code/samples/python2/video.py
+-   (Python) Another basic video processing sample can be found at
+    opencv_source_code/samples/python2/video_dmtx.py
+-   (Python) A multi threaded video processing sample can be found at
+    opencv_source_code/samples/python2/video_threaded.py
+ */
 @Namespace("cv") @NoOffset public static class VideoCapture extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VideoCapture(Pointer p) { super(p); }
 
+    /** @brief
+    @note In C API, when you finished working with video, release CvCapture structure with
+    cvReleaseCapture(), or use Ptr\<CvCapture\> that calls cvReleaseCapture() automatically in the
+    destructor.
+     */
     public VideoCapture() { allocate(); }
     private native void allocate();
+
+    /** @overload
+    @param filename name of the opened video file (eg. video.avi) or image sequence (eg.
+    img_%02d.jpg, which will read samples like img_00.jpg, img_01.jpg, img_02.jpg, ...)
+    */
     public VideoCapture(@Str BytePointer filename) { allocate(filename); }
     private native void allocate(@Str BytePointer filename);
     public VideoCapture(@Str String filename) { allocate(filename); }
     private native void allocate(@Str String filename);
+
+    /** @overload
+    @param device id of the opened video capturing device (i.e. a camera index). If there is a single
+    camera connected, just pass 0.
+    */
     public VideoCapture(int device) { allocate(device); }
     private native void allocate(int device);
+
+    /** @brief Open video file or a capturing device for video capturing
+
+    @param filename name of the opened video file (eg. video.avi) or image sequence (eg.
+    img_%02d.jpg, which will read samples like img_00.jpg, img_01.jpg, img_02.jpg, ...)
+
+    The methods first call VideoCapture::release to close the already opened file or camera.
+     */
     public native @Cast("bool") boolean open(@Str BytePointer filename);
     public native @Cast("bool") boolean open(@Str String filename);
+
+    /** @overload
+    @param device id of the opened video capturing device (i.e. a camera index).
+    */
     public native @Cast("bool") boolean open(int device);
+
+    /** @brief Returns true if video capturing has been initialized already.
+
+    If the previous call to VideoCapture constructor or VideoCapture::open succeeded, the method returns
+    true.
+     */
     public native @Cast("bool") boolean isOpened();
+
+    /** @brief Closes video file or capturing device.
+
+    The methods are automatically called by subsequent VideoCapture::open and by VideoCapture
+    destructor.
+
+    The C function also deallocates memory and clears \*capture pointer.
+     */
     public native void release();
 
+    /** @brief Grabs the next frame from video file or capturing device.
+
+    The methods/functions grab the next frame from video file or camera and return true (non-zero) in
+    the case of success.
+
+    The primary use of the function is in multi-camera environments, especially when the cameras do not
+    have hardware synchronization. That is, you call VideoCapture::grab() for each camera and after that
+    call the slower method VideoCapture::retrieve() to decode and get frame from each camera. This way
+    the overhead on demosaicing or motion jpeg decompression etc. is eliminated and the retrieved frames
+    from different cameras will be closer in time.
+
+    Also, when a connected camera is multi-head (for example, a stereo camera or a Kinect device), the
+    correct way of retrieving data from it is to call VideoCapture::grab first and then call
+    VideoCapture::retrieve one or more times with different values of the channel parameter. See
+    <https://github.com/Itseez/opencv/tree/master/samples/cpp/openni_capture.cpp>
+     */
     public native @Cast("bool") boolean grab();
+
+    /** @brief Decodes and returns the grabbed video frame.
+
+    The methods/functions decode and return the just grabbed frame. If no frames has been grabbed
+    (camera has been disconnected, or there are no more frames in video file), the methods return false
+    and the functions return NULL pointer.
+
+    @note OpenCV 1.x functions cvRetrieveFrame and cv.RetrieveFrame return image stored inside the video
+    capturing structure. It is not allowed to modify or release the image! You can copy the frame using
+    :ocvcvCloneImage and then do whatever you want with the copy.
+     */
     public native @Cast("bool") boolean retrieve(@ByVal Mat image, int flag/*=0*/);
     public native @Cast("bool") boolean retrieve(@ByVal Mat image);
     public native @ByRef @Name("operator>>") VideoCapture shiftRight(@ByRef Mat image);
     public native @ByRef @Name("operator>>") VideoCapture shiftRight(@ByRef UMat image);
+
+    /** @brief Grabs, decodes and returns the next video frame.
+
+    The methods/functions combine VideoCapture::grab and VideoCapture::retrieve in one call. This is the
+    most convenient method for reading video files or capturing data from decode and return the just
+    grabbed frame. If no frames has been grabbed (camera has been disconnected, or there are no more
+    frames in video file), the methods return false and the functions return NULL pointer.
+
+    @note OpenCV 1.x functions cvRetrieveFrame and cv.RetrieveFrame return image stored inside the video
+    capturing structure. It is not allowed to modify or release the image! You can copy the frame using
+    :ocvcvCloneImage and then do whatever you want with the copy.
+     */
     public native @Cast("bool") boolean read(@ByVal Mat image);
 
+    /** @brief Sets a property in the VideoCapture.
+
+    @param propId Property identifier. It can be one of the following:
+     -   **CAP_PROP_POS_MSEC** Current position of the video file in milliseconds.
+     -   **CAP_PROP_POS_FRAMES** 0-based index of the frame to be decoded/captured next.
+     -   **CAP_PROP_POS_AVI_RATIO** Relative position of the video file: 0 - start of the
+         film, 1 - end of the film.
+     -   **CAP_PROP_FRAME_WIDTH** Width of the frames in the video stream.
+     -   **CAP_PROP_FRAME_HEIGHT** Height of the frames in the video stream.
+     -   **CAP_PROP_FPS** Frame rate.
+     -   **CAP_PROP_FOURCC** 4-character code of codec.
+     -   **CAP_PROP_FRAME_COUNT** Number of frames in the video file.
+     -   **CAP_PROP_FORMAT** Format of the Mat objects returned by retrieve() .
+     -   **CAP_PROP_MODE** Backend-specific value indicating the current capture mode.
+     -   **CAP_PROP_BRIGHTNESS** Brightness of the image (only for cameras).
+     -   **CAP_PROP_CONTRAST** Contrast of the image (only for cameras).
+     -   **CAP_PROP_SATURATION** Saturation of the image (only for cameras).
+     -   **CAP_PROP_HUE** Hue of the image (only for cameras).
+     -   **CAP_PROP_GAIN** Gain of the image (only for cameras).
+     -   **CAP_PROP_EXPOSURE** Exposure (only for cameras).
+     -   **CAP_PROP_CONVERT_RGB** Boolean flags indicating whether images should be converted
+         to RGB.
+     -   **CAP_PROP_WHITE_BALANCE** Currently unsupported
+     -   **CAP_PROP_RECTIFICATION** Rectification flag for stereo cameras (note: only supported
+         by DC1394 v 2.x backend currently)
+    @param value Value of the property.
+     */
     public native @Cast("bool") boolean set(int propId, double value);
+
+    /** @brief Returns the specified VideoCapture property
+
+    @param propId Property identifier. It can be one of the following:
+     -   **CAP_PROP_POS_MSEC** Current position of the video file in milliseconds or video
+         capture timestamp.
+     -   **CAP_PROP_POS_FRAMES** 0-based index of the frame to be decoded/captured next.
+     -   **CAP_PROP_POS_AVI_RATIO** Relative position of the video file: 0 - start of the
+         film, 1 - end of the film.
+     -   **CAP_PROP_FRAME_WIDTH** Width of the frames in the video stream.
+     -   **CAP_PROP_FRAME_HEIGHT** Height of the frames in the video stream.
+     -   **CAP_PROP_FPS** Frame rate.
+     -   **CAP_PROP_FOURCC** 4-character code of codec.
+     -   **CAP_PROP_FRAME_COUNT** Number of frames in the video file.
+     -   **CAP_PROP_FORMAT** Format of the Mat objects returned by retrieve() .
+     -   **CAP_PROP_MODE** Backend-specific value indicating the current capture mode.
+     -   **CAP_PROP_BRIGHTNESS** Brightness of the image (only for cameras).
+     -   **CAP_PROP_CONTRAST** Contrast of the image (only for cameras).
+     -   **CAP_PROP_SATURATION** Saturation of the image (only for cameras).
+     -   **CAP_PROP_HUE** Hue of the image (only for cameras).
+     -   **CAP_PROP_GAIN** Gain of the image (only for cameras).
+     -   **CAP_PROP_EXPOSURE** Exposure (only for cameras).
+     -   **CAP_PROP_CONVERT_RGB** Boolean flags indicating whether images should be converted
+         to RGB.
+     -   **CAP_PROP_WHITE_BALANCE** Currently not supported
+     -   **CAP_PROP_RECTIFICATION** Rectification flag for stereo cameras (note: only supported
+         by DC1394 v 2.x backend currently)
+
+    @note When querying a property that is not supported by the backend used by the VideoCapture
+    class, value 0 is returned.
+     */
     public native double get(int propId);
 }
 
+@Namespace("cv") @Opaque public static class IVideoWriter extends Pointer {
+    /** Empty constructor. */
+    public IVideoWriter() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public IVideoWriter(Pointer p) { super(p); }
+}
+
+/** @brief Video writer class.
+ */
 @Namespace("cv") @NoOffset public static class VideoWriter extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -840,8 +1084,25 @@ public static final int CAP_INTELPERC_DEPTH_MAP              = 0, // Each pixel 
         return (VideoWriter)super.position(position);
     }
 
+    /** @brief VideoWriter constructors
+
+    The constructors/functions initialize video writers. On Linux FFMPEG is used to write videos; on
+    Windows FFMPEG or VFW is used; on MacOSX QTKit is used.
+     */
     public VideoWriter() { allocate(); }
     private native void allocate();
+
+    /** @overload
+    @param filename Name of the output video file.
+    @param fourcc 4-character code of codec used to compress the frames. For example,
+    VideoWriter::fourcc('P','I','M','1') is a MPEG-1 codec, VideoWriter::fourcc('M','J','P','G') is a
+    motion-jpeg codec etc. List of codes can be obtained at [Video Codecs by
+    FOURCC](http://www.fourcc.org/codecs.php) page.
+    @param fps Framerate of the created video stream.
+    @param frameSize Size of the video frames.
+    @param isColor If it is not zero, the encoder will expect and encode color frames, otherwise it
+    will work with grayscale frames (the flag is currently supported on Windows only).
+    */
     public VideoWriter(@Str BytePointer filename, int fourcc, double fps,
                     @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/) { allocate(filename, fourcc, fps, frameSize, isColor); }
     private native void allocate(@Str BytePointer filename, int fourcc, double fps,
@@ -858,6 +1119,13 @@ public static final int CAP_INTELPERC_DEPTH_MAP              = 0, // Each pixel 
                     @ByVal Size frameSize) { allocate(filename, fourcc, fps, frameSize); }
     private native void allocate(@Str String filename, int fourcc, double fps,
                     @ByVal Size frameSize);
+
+    /** @brief Initializes or reinitializes video writer.
+
+    The method opens video writer. Parameters are the same as in the constructor
+    VideoWriter::VideoWriter.
+
+     */
     public native @Cast("bool") boolean open(@Str BytePointer filename, int fourcc, double fps,
                           @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/);
     public native @Cast("bool") boolean open(@Str BytePointer filename, int fourcc, double fps,
@@ -866,16 +1134,53 @@ public static final int CAP_INTELPERC_DEPTH_MAP              = 0, // Each pixel 
                           @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/);
     public native @Cast("bool") boolean open(@Str String filename, int fourcc, double fps,
                           @ByVal Size frameSize);
+
+    /** @brief Returns true if video writer has been successfully initialized.
+    */
     public native @Cast("bool") boolean isOpened();
     public native void release();
     public native @ByRef @Name("operator<<") VideoWriter shiftLeft(@Const @ByRef Mat image);
+
+    /** @brief Writes the next video frame
+
+    @param image The written frame
+
+    The functions/methods write the specified image to video file. It must have the same size as has
+    been specified when opening the video writer.
+     */
     public native void write(@Const @ByRef Mat image);
 
+    /** @brief Sets a property in the VideoWriter.
+
+     @param propId Property identifier. It can be one of the following:
+     -   **VIDEOWRITER_PROP_QUALITY** Quality (0..100%) of the videostream encoded. Can be adjusted dynamically in some codecs.
+     @param value Value of the property.
+     */
+    public native @Cast("bool") boolean set(int propId, double value);
+
+    /** @brief Returns the specified VideoWriter property
+
+     @param propId Property identifier. It can be one of the following:
+     -   **VIDEOWRITER_PROP_QUALITY** Current quality of the encoded videostream.
+     -   **VIDEOWRITER_PROP_FRAMEBYTES** (Read-only) Size of just encoded video frame; note that the encoding order may be different from representation order.
+
+     @note When querying a property that is not supported by the backend used by the VideoWriter
+     class, value 0 is returned.
+     */
+    public native double get(int propId);
+
+    /** @brief Concatenates 4 chars to a fourcc code
+
+    This static method constructs the fourcc code of the codec to be used in the constructor
+    VideoWriter::VideoWriter or VideoWriter::open.
+     */
     public static native int fourcc(@Cast("char") byte c1, @Cast("char") byte c2, @Cast("char") byte c3, @Cast("char") byte c4);
 }
 
 
 
+
+/** @} videoio */
 
  // cv
 

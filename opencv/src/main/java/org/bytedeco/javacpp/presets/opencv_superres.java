@@ -37,5 +37,6 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         target = "org.bytedeco.javacpp.opencv_superres")
 public class opencv_superres implements InfoMapper {
     public void map(InfoMap infoMap) {
+        infoMap.put(new Info("cv::superres::DualTVL1OpticalFlow").pointerTypes("SuperResDualTVL1OpticalFlow"));
     }
 }
