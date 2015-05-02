@@ -94,7 +94,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "gsl/gsl_statistics_ushort.h", "gsl/gsl_statistics_short.h", "gsl/gsl_statistics_uchar.h", "gsl/gsl_statistics_char.h"}, 
                                link={"gslcblas@.0", "gsl@.0"}),
     @Platform(value="android", link={"gslcblas",    "gsl"}),
-    @Platform(value="windows", link={"libgslcblas-0", "libgsl-0"}) })
+    @Platform(value="windows", preload={"libgslcblas-0", "libgsl-0"}) })
 public class gsl implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("__cplusplus").define())

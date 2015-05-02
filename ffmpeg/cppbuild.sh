@@ -12,13 +12,11 @@ if [[ $PLATFORM == windows* ]]; then
     [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
     download http://ffmpeg.zeranoe.com/builds/win$BITS/dev/ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z
     download http://ffmpeg.zeranoe.com/builds/win$BITS/shared/ffmpeg-$FFMPEG_VERSION-win$BITS-shared.7z ffmpeg-$FFMPEG_VERSION-win$BITS-shared.7z
-    download http://msinttypes.googlecode.com/files/msinttypes-r26.zip msinttypes-r26.zip
 
     mkdir -p $PLATFORM
     cd $PLATFORM
     7za x -y ../ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z
     7za x -y ../ffmpeg-$FFMPEG_VERSION-win$BITS-shared.7z
-    patch -Np1 -d ffmpeg-$FFMPEG_VERSION-win$BITS-dev/ < ../../ffmpeg-$FFMPEG_VERSION-windows.patch
 else
     LAME=lame-3.99.5
     SPEEX=speex-1.2rc1
@@ -212,28 +210,16 @@ case $PLATFORM in
         make install
         ;;
     windows-x86)
-        # http://ffmpeg.org/platform.html#Linking-to-FFmpeg-with-Microsoft-Visual-C_002b_002b
-        LIBS=(avcodec-56 avdevice-56 avfilter-5 avformat-56 avutil-54 postproc-53 swresample-1 swscale-3)
-        for LIB in ${LIBS[@]}; do
-            lib /def:ffmpeg-$FFMPEG_VERSION-win32-dev/lib/$LIB.def /out:ffmpeg-$FFMPEG_VERSION-win32-dev/lib/$LIB.lib /machine:x86
-        done
         cp -r ffmpeg-$FFMPEG_VERSION-win32-dev/include .
         cp -r ffmpeg-$FFMPEG_VERSION-win32-dev/lib .
         cp -r ffmpeg-$FFMPEG_VERSION-win32-shared/bin .
         cd include
-        unzip -o ../../msinttypes-r26.zip
         ;;
     windows-x86_64)
-        # http://ffmpeg.org/platform.html#Linking-to-FFmpeg-with-Microsoft-Visual-C_002b_002b
-        LIBS=(avcodec-56 avdevice-56 avfilter-5 avformat-56 avutil-54 postproc-53 swresample-1 swscale-3)
-        for LIB in ${LIBS[@]}; do
-            lib /def:ffmpeg-$FFMPEG_VERSION-win64-dev/lib/$LIB.def /out:ffmpeg-$FFMPEG_VERSION-win64-dev/lib/$LIB.lib /machine:x64
-        done
         cp -r ffmpeg-$FFMPEG_VERSION-win64-dev/include .
         cp -r ffmpeg-$FFMPEG_VERSION-win64-dev/lib .
         cp -r ffmpeg-$FFMPEG_VERSION-win64-shared/bin .
         cd include
-        unzip -o ../../msinttypes-r26.zip
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

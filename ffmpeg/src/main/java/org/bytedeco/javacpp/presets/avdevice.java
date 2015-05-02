@@ -32,7 +32,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit=avfilter.class, target="org.bytedeco.javacpp.avdevice", value={
     @Platform(cinclude="<libavdevice/avdevice.h>", link="avdevice@.56"),
-    @Platform(value="windows", link="avdevice-56") })
+    @Platform(value="windows", preload="avdevice-56") })
 public class avdevice implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("av_device_capabilities").skip());

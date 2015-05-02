@@ -14,7 +14,7 @@ if [[ $PLATFORM == windows* ]]; then
 
     mkdir -p $PLATFORM
     cd $PLATFORM
-    mkdir -p include lib bin
+    mkdir -p include lib
     unzip -o ../fftw-$FFTW_VERSION-dll$BITS.zip -d fftw-$FFTW_VERSION-dll$BITS
     cd fftw-$FFTW_VERSION-dll$BITS
 else
@@ -71,24 +71,12 @@ case $PLATFORM in
         make install-strip
         ;;
     windows-x86)
-        # http://www.fftw.org/install/windows.html
-        LIBS=(libfftw3-3 libfftw3f-3 libfftw3l-3)
-        for LIB in ${LIBS[@]}; do
-            lib /def:$LIB.def /out:$LIB.lib /machine:x86
-        done
         cp *.h ../include
-        cp *.lib ../lib
-        cp *.dll ../bin
+        cp *.dll ../lib
         ;;
     windows-x86_64)
-        # http://www.fftw.org/install/windows.html
-        LIBS=(libfftw3-3 libfftw3f-3 libfftw3l-3)
-        for LIB in ${LIBS[@]}; do
-            lib /def:$LIB.def /out:$LIB.lib /machine:x64
-        done
         cp *.h ../include
-        cp *.lib ../lib
-        cp *.dll ../bin
+        cp *.dll ../lib
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

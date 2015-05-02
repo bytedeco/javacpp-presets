@@ -14,7 +14,7 @@ if [[ $PLATFORM == windows* ]]; then
 
     mkdir -p $PLATFORM
     cd $PLATFORM
-    mkdir -p include lib bin
+    rm -Rf include lib bin
     /C/Program\ Files/7-Zip/7z x -y ../mingw$BITS-gsl-$GSL_VERSION.rpm -o..
     /C/Program\ Files/7-Zip/7z x -y ../mingw$BITS-gsl-$GSL_VERSION.cpio
 else
@@ -56,34 +56,10 @@ case $PLATFORM in
         make install-strip
         ;;
     windows-x86)
-        cd usr/i686-w64-mingw32/sys-root/mingw
-        echo LIBRARY libgsl-0.dll > libgsl-0.def
-        echo EXPORTS >> libgsl-0.def
-        dumpbin //exports bin/libgsl-0.dll | tail -n +20 | head -n -13 | cut -c27- >> libgsl-0.def
-        lib /def:libgsl-0.def /out:libgsl-0.lib /machine:x86
-        echo LIBRARY libgslcblas-0.dll > libgslcblas-0.def
-        echo EXPORTS >> libgslcblas-0.def
-        dumpbin //exports bin/libgslcblas-0.dll | tail -n +20 | head -n -13 | cut -c27- >> libgslcblas-0.def
-        lib /def:libgslcblas-0.def /out:libgslcblas-0.lib /machine:x86
-        cp -r include/* ../../../../include
-        cp *.lib ../../../../lib
-        cp -r bin/* ../../../../bin
-        cd ../../../..
+        mv usr/i686-w64-mingw32/sys-root/mingw/* .
         ;;
     windows-x86_64)
-        cd usr/x86_64-w64-mingw32/sys-root/mingw
-        echo LIBRARY libgsl-0.dll > libgsl-0.def
-        echo EXPORTS >> libgsl-0.def
-        dumpbin //exports bin/libgsl-0.dll | tail -n +20 | head -n -15 | cut -c27- >> libgsl-0.def
-        lib /def:libgsl-0.def /out:libgsl-0.lib /machine:x64
-        echo LIBRARY libgslcblas-0.dll > libgslcblas-0.def
-        echo EXPORTS >> libgslcblas-0.def
-        dumpbin //exports bin/libgslcblas-0.dll | tail -n +20 | head -n -15 | cut -c27- >> libgslcblas-0.def
-        lib /def:libgslcblas-0.def /out:libgslcblas-0.lib /machine:x64
-        cp -r include/* ../../../../include
-        cp *.lib ../../../../lib
-        cp -r bin/* ../../../../bin
-        cd ../../../..
+        mv usr/x86_64-w64-mingw32/sys-root/mingw/* .
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
