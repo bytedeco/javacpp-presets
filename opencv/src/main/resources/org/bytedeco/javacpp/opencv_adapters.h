@@ -50,8 +50,8 @@ public:
         // take ownership, if unique
         ptr = cvPtr.get();
         if (&cvPtr == &cvPtr2) {
-            // XXX: this probably causes a small memory leak
-            memset(&cvPtr, 0, sizeof(cv::Ptr<T>));
+            // hack to set cvPtr.owner->owned = NULL
+            *(T**)&cvPtr = NULL;
         }
         return ptr;
     }

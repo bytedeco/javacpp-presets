@@ -1,4 +1,5 @@
 
+ * Adopt a better hack for `cv::Ptr` in `opencv_adapters.h`
  * Upgrade presets for OpenCV 3.0.0-rc1
  * Map `cv::saturate_cast<>()` in a more meaningful way ([issue #53](https://github.com/bytedeco/javacpp-presets/issues/53)) and name these functions more consistently
  * In addition to Leptonica and Tesseract, use only the officially supported GCC compiler for FFmpeg, FFTW, and GSL under Windows as well, to prevent compatibility issues ([issue bytedeco/javacv#137](https://github.com/bytedeco/javacv/issues/137))
