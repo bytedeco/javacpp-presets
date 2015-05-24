@@ -224,7 +224,7 @@ the histogram in each bin.
     @param input Contour (set of points) to apply the transformation.
     @param output Output contour.
      */
-    public native float applyTransformation(@ByVal Mat input, @ByVal Mat output/*=noArray()*/);
+    public native float applyTransformation(@ByVal Mat input, @ByVal(nullValue = "cv::noArray()") Mat output/*=cv::noArray()*/);
     public native float applyTransformation(@ByVal Mat input);
 
     /** @brief Apply a transformation, given a pre-estimated transformation parameters, to an Image.
@@ -236,8 +236,8 @@ the histogram in each bin.
     @param borderValue border value.
      */
     public native void warpImage(@ByVal Mat transformingImage, @ByVal Mat output,
-                                       int flags/*=INTER_LINEAR*/, int borderMode/*=BORDER_CONSTANT*/,
-                                       @Const @ByRef Scalar borderValue/*=Scalar()*/);
+                                       int flags/*=cv::INTER_LINEAR*/, int borderMode/*=cv::BORDER_CONSTANT*/,
+                                       @Const @ByRef(nullValue = "cv::Scalar()") Scalar borderValue/*=cv::Scalar()*/);
     public native void warpImage(@ByVal Mat transformingImage, @ByVal Mat output);
 }
 
@@ -378,7 +378,7 @@ F.L. Bookstein (PAMI 1989). :
     public native int getNormFlag();
 }
 
-@Namespace("cv") public static native @Ptr HistogramCostExtractor createNormHistogramCostExtractor(int flag/*=DIST_L2*/, int nDummies/*=25*/, float defaultCost/*=0.2f*/);
+@Namespace("cv") public static native @Ptr HistogramCostExtractor createNormHistogramCostExtractor(int flag/*=cv::DIST_L2*/, int nDummies/*=25*/, float defaultCost/*=0.2f*/);
 @Namespace("cv") public static native @Ptr HistogramCostExtractor createNormHistogramCostExtractor();
 
 /** @brief An EMD based cost extraction. :
@@ -394,7 +394,7 @@ F.L. Bookstein (PAMI 1989). :
     public native int getNormFlag();
 }
 
-@Namespace("cv") public static native @Ptr HistogramCostExtractor createEMDHistogramCostExtractor(int flag/*=DIST_L2*/, int nDummies/*=25*/, float defaultCost/*=0.2f*/);
+@Namespace("cv") public static native @Ptr HistogramCostExtractor createEMDHistogramCostExtractor(int flag/*=cv::DIST_L2*/, int nDummies/*=25*/, float defaultCost/*=0.2f*/);
 @Namespace("cv") public static native @Ptr HistogramCostExtractor createEMDHistogramCostExtractor();
 
 /** @brief An Chi based cost extraction. :

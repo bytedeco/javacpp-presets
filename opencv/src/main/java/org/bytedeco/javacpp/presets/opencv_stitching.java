@@ -61,7 +61,6 @@ public class opencv_stitching implements InfoMapper {
                .put(new Info("cv::CylindricalWarperGpu").pointerTypes("CylindricalWarperGpu"))
                .put(new Info("cv::SphericalWarperGpu").pointerTypes("SphericalWarperGpu"))
                .put(new Info("cv::detail::SurfFeaturesFinderGpu").pointerTypes("SurfFeaturesFinderGpu"))
-               .put(new Info("cv::detail::GraphCutSeamFinderGpu").pointerTypes("GraphCutSeamFinderGpu"))
-               .putFirst(new Info("cv::InputArray").skip()./*cast().*/pointerTypes("MatVector"));
+               .put(new Info("cv::detail::GraphCutSeamFinderGpu").pointerTypes("GraphCutSeamFinderGpu"));
     }
 }

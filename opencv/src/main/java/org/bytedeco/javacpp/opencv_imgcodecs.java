@@ -325,9 +325,9 @@ returns an empty matrix ( Mat::data==NULL ). Currently, the following file forma
 
 @note In the case of color images, the decoded images will have the channels stored in B G R order.
  */
-@Namespace("cv") public static native @ByVal Mat imread( @Str BytePointer filename, int flags/*=IMREAD_COLOR*/ );
+@Namespace("cv") public static native @ByVal Mat imread( @Str BytePointer filename, int flags/*=cv::IMREAD_COLOR*/ );
 @Namespace("cv") public static native @ByVal Mat imread( @Str BytePointer filename );
-@Namespace("cv") public static native @ByVal Mat imread( @Str String filename, int flags/*=IMREAD_COLOR*/ );
+@Namespace("cv") public static native @ByVal Mat imread( @Str String filename, int flags/*=cv::IMREAD_COLOR*/ );
 @Namespace("cv") public static native @ByVal Mat imread( @Str String filename );
 
 /** @brief Loads a multi-page image from a file. (see imread for details.)
@@ -338,9 +338,9 @@ returns an empty matrix ( Mat::data==NULL ). Currently, the following file forma
 @param mats A vector of Mat objects holding each page, if more than one.
 
 */
-@Namespace("cv") public static native @Cast("bool") boolean imreadmulti(@Str BytePointer filename, @ByRef MatVector mats, int flags/*=IMREAD_ANYCOLOR*/);
+@Namespace("cv") public static native @Cast("bool") boolean imreadmulti(@Str BytePointer filename, @ByRef MatVector mats, int flags/*=cv::IMREAD_ANYCOLOR*/);
 @Namespace("cv") public static native @Cast("bool") boolean imreadmulti(@Str BytePointer filename, @ByRef MatVector mats);
-@Namespace("cv") public static native @Cast("bool") boolean imreadmulti(@Str String filename, @ByRef MatVector mats, int flags/*=IMREAD_ANYCOLOR*/);
+@Namespace("cv") public static native @Cast("bool") boolean imreadmulti(@Str String filename, @ByRef MatVector mats, int flags/*=cv::IMREAD_ANYCOLOR*/);
 @Namespace("cv") public static native @Cast("bool") boolean imreadmulti(@Str String filename, @ByRef MatVector mats);
 
 /** @brief Saves an image to a specified file.

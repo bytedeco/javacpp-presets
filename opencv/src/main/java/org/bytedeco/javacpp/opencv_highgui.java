@@ -8,8 +8,10 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_imgproc.*;
+import static org.bytedeco.javacpp.opencv_imgcodecs.*;
+import static org.bytedeco.javacpp.opencv_videoio.*;
 
-public class opencv_highgui extends org.bytedeco.javacpp.helper.opencv_highgui {
+public class opencv_highgui extends org.bytedeco.javacpp.presets.opencv_highgui {
     static { Loader.load(); }
 
 // Parsed from <opencv2/highgui/highgui_c.h>
@@ -59,9 +61,16 @@ public class opencv_highgui extends org.bytedeco.javacpp.helper.opencv_highgui {
 // #define __OPENCV_HIGHGUI_H__
 
 // #include "opencv2/core/core_c.h"
+// #include "opencv2/imgproc/imgproc_c.h"
+// #include "opencv2/imgcodecs/imgcodecs_c.h"
+// #include "opencv2/videoio/videoio_c.h"
 
 // #ifdef __cplusplus
 // #endif /* __cplusplus */
+
+/** @addtogroup highgui_c
+  @{
+  */
 
 /****************************************************************************************\
 *                                  Basic GUI functions                                   *
@@ -82,7 +91,7 @@ public static final int  CV_STYLE_NORMAL         = 0,//QFont::StyleNormal,
         CV_STYLE_OBLIQUE        = 2; //QFont::StyleOblique
 /* ---------*/
 
-//for color cvScalar(blue_component, green_component, red\_component[, alpha_component])
+//for color cvScalar(blue_component, green_component, red_component[, alpha_component])
 //and alpha= 0 <-> 0xFF (not transparent <-> transparent)
 public static native @ByVal @Platform("linux") CvFont cvFontQt(@Cast("const char*") BytePointer nameFont, int pointSize/*=-1*/, @ByVal(nullValue = "cvScalarAll(0)") CvScalar color/*=cvScalarAll(0)*/, int weight/*=CV_FONT_NORMAL*/,  int style/*=CV_STYLE_NORMAL*/, int spacing/*=0*/);
 public static native @ByVal @Platform("linux") CvFont cvFontQt(@Cast("const char*") BytePointer nameFont);
@@ -325,7 +334,9 @@ public static final int
     CV_EVENT_MBUTTONUP      = 6,
     CV_EVENT_LBUTTONDBLCLK  = 7,
     CV_EVENT_RBUTTONDBLCLK  = 8,
-    CV_EVENT_MBUTTONDBLCLK  = 9;
+    CV_EVENT_MBUTTONDBLCLK  = 9,
+    CV_EVENT_MOUSEWHEEL     = 10,
+    CV_EVENT_MOUSEHWHEEL    = 11;
 
 /** enum  */
 public static final int
@@ -335,6 +346,9 @@ public static final int
     CV_EVENT_FLAG_CTRLKEY   = 8,
     CV_EVENT_FLAG_SHIFTKEY  = 16,
     CV_EVENT_FLAG_ALTKEY    = 32;
+
+
+// #define CV_GET_WHEEL_DELTA(flags) ((short)((flags >> 16) & 0xffff)) // upper 16 bits
 
 @Convention("CV_CDECL") public static class CvMouseCallback extends FunctionPointer {
     static { Loader.load(); }
@@ -352,94 +366,6 @@ public static native void cvSetMouseCallback( @Cast("const char*") BytePointer w
 public static native void cvSetMouseCallback( String window_name, CvMouseCallback on_mouse,
                                 Pointer param/*=NULL*/);
 public static native void cvSetMouseCallback( String window_name, CvMouseCallback on_mouse);
-
-/** enum  */
-public static final int
-/* 8bit, color or not */
-    CV_LOAD_IMAGE_UNCHANGED  = -1,
-/* 8bit, gray */
-    CV_LOAD_IMAGE_GRAYSCALE  = 0,
-/* ?, color */
-    CV_LOAD_IMAGE_COLOR      = 1,
-/* any depth, ? */
-    CV_LOAD_IMAGE_ANYDEPTH   = 2,
-/* ?, any color */
-    CV_LOAD_IMAGE_ANYCOLOR   = 4;
-
-/* load image from file
-  iscolor can be a combination of above flags where CV_LOAD_IMAGE_UNCHANGED
-  overrides the other flags
-  using CV_LOAD_IMAGE_ANYCOLOR alone is equivalent to CV_LOAD_IMAGE_UNCHANGED
-  unless CV_LOAD_IMAGE_ANYDEPTH is specified images are converted to 8bit
-*/
-public static native IplImage cvLoadImage( @Cast("const char*") BytePointer filename, int iscolor/*=CV_LOAD_IMAGE_COLOR*/);
-public static native IplImage cvLoadImage( @Cast("const char*") BytePointer filename);
-public static native IplImage cvLoadImage( String filename, int iscolor/*=CV_LOAD_IMAGE_COLOR*/);
-public static native IplImage cvLoadImage( String filename);
-public static native CvMat cvLoadImageM( @Cast("const char*") BytePointer filename, int iscolor/*=CV_LOAD_IMAGE_COLOR*/);
-public static native CvMat cvLoadImageM( @Cast("const char*") BytePointer filename);
-public static native CvMat cvLoadImageM( String filename, int iscolor/*=CV_LOAD_IMAGE_COLOR*/);
-public static native CvMat cvLoadImageM( String filename);
-
-/** enum  */
-public static final int
-    CV_IMWRITE_JPEG_QUALITY = 1,
-    CV_IMWRITE_PNG_COMPRESSION = 16,
-    CV_IMWRITE_PNG_STRATEGY = 17,
-    CV_IMWRITE_PNG_BILEVEL = 18,
-    CV_IMWRITE_PNG_STRATEGY_DEFAULT = 0,
-    CV_IMWRITE_PNG_STRATEGY_FILTERED = 1,
-    CV_IMWRITE_PNG_STRATEGY_HUFFMAN_ONLY = 2,
-    CV_IMWRITE_PNG_STRATEGY_RLE = 3,
-    CV_IMWRITE_PNG_STRATEGY_FIXED = 4,
-    CV_IMWRITE_PXM_BINARY = 32;
-
-/* save image to file */
-public static native int cvSaveImage( @Cast("const char*") BytePointer filename, @Const CvArr image,
-                        @Const IntPointer params/*=0*/ );
-public static native int cvSaveImage( @Cast("const char*") BytePointer filename, @Const CvArr image );
-public static native int cvSaveImage( String filename, @Const CvArr image,
-                        @Const IntBuffer params/*=0*/ );
-public static native int cvSaveImage( String filename, @Const CvArr image );
-public static native int cvSaveImage( @Cast("const char*") BytePointer filename, @Const CvArr image,
-                        @Const int[] params/*=0*/ );
-public static native int cvSaveImage( String filename, @Const CvArr image,
-                        @Const IntPointer params/*=0*/ );
-public static native int cvSaveImage( @Cast("const char*") BytePointer filename, @Const CvArr image,
-                        @Const IntBuffer params/*=0*/ );
-public static native int cvSaveImage( String filename, @Const CvArr image,
-                        @Const int[] params/*=0*/ );
-
-/* decode image stored in the buffer */
-public static native IplImage cvDecodeImage( @Const CvMat buf, int iscolor/*=CV_LOAD_IMAGE_COLOR*/);
-public static native IplImage cvDecodeImage( @Const CvMat buf);
-public static native CvMat cvDecodeImageM( @Const CvMat buf, int iscolor/*=CV_LOAD_IMAGE_COLOR*/);
-public static native CvMat cvDecodeImageM( @Const CvMat buf);
-
-/* encode image and store the result as a byte vector (single-row 8uC1 matrix) */
-public static native CvMat cvEncodeImage( @Cast("const char*") BytePointer ext, @Const CvArr image,
-                             @Const IntPointer params/*=0*/ );
-public static native CvMat cvEncodeImage( @Cast("const char*") BytePointer ext, @Const CvArr image );
-public static native CvMat cvEncodeImage( String ext, @Const CvArr image,
-                             @Const IntBuffer params/*=0*/ );
-public static native CvMat cvEncodeImage( String ext, @Const CvArr image );
-public static native CvMat cvEncodeImage( @Cast("const char*") BytePointer ext, @Const CvArr image,
-                             @Const int[] params/*=0*/ );
-public static native CvMat cvEncodeImage( String ext, @Const CvArr image,
-                             @Const IntPointer params/*=0*/ );
-public static native CvMat cvEncodeImage( @Cast("const char*") BytePointer ext, @Const CvArr image,
-                             @Const IntBuffer params/*=0*/ );
-public static native CvMat cvEncodeImage( String ext, @Const CvArr image,
-                             @Const int[] params/*=0*/ );
-
-/** enum  */
-public static final int
-    CV_CVTIMG_FLIP      = 1,
-    CV_CVTIMG_SWAP_RB   = 2;
-
-/* utility function: convert one image to another with optional vertical flip */
-public static native void cvConvertImage( @Const CvArr src, CvArr dst, int flags/*=0*/);
-public static native void cvConvertImage( @Const CvArr src, CvArr dst);
 
 /* wait for key event infinitely (delay<=0) or for "delay" milliseconds */
 public static native int cvWaitKey(int delay/*=0*/);
@@ -467,376 +393,10 @@ public static native void cvUpdateWindow(String window_name);
 
 
 /****************************************************************************************\
-*                         Working with Video Files and Cameras                           *
-\****************************************************************************************/
 
-/* "black box" capture structure */
-@Opaque public static class CvCapture extends Pointer {
-    /** Empty constructor. */
-    public CvCapture() { }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvCapture(Pointer p) { super(p); }
-}
-
-/* start capturing frames from video file */
-public static native CvCapture cvCreateFileCapture( @Cast("const char*") BytePointer filename );
-public static native CvCapture cvCreateFileCapture( String filename );
-
-/** enum  */
-public static final int
-    CV_CAP_ANY      = 0,     // autodetect
-
-    CV_CAP_MIL      = 100,   // MIL proprietary drivers
-
-    CV_CAP_VFW      = 200,   // platform native
-    CV_CAP_V4L      = 200,
-    CV_CAP_V4L2     = 200,
-
-    CV_CAP_FIREWARE = 300,   // IEEE 1394 drivers
-    CV_CAP_FIREWIRE = 300,
-    CV_CAP_IEEE1394 = 300,
-    CV_CAP_DC1394   = 300,
-    CV_CAP_CMU1394  = 300,
-
-    CV_CAP_STEREO   = 400,   // TYZX proprietary drivers
-    CV_CAP_TYZX     = 400,
-    CV_TYZX_LEFT    = 400,
-    CV_TYZX_RIGHT   = 401,
-    CV_TYZX_COLOR   = 402,
-    CV_TYZX_Z       = 403,
-
-    CV_CAP_QT       = 500,   // QuickTime
-
-    CV_CAP_UNICAP   = 600,   // Unicap drivers
-
-    CV_CAP_DSHOW    = 700,   // DirectShow (via videoInput)
-    CV_CAP_MSMF     = 1400,  // Microsoft Media Foundation (via videoInput)
-
-    CV_CAP_PVAPI    = 800,   // PvAPI, Prosilica GigE SDK
-
-    CV_CAP_OPENNI   = 900,   // OpenNI (for Kinect)
-    CV_CAP_OPENNI_ASUS = 910,   // OpenNI (for Asus Xtion)
-
-    CV_CAP_ANDROID  = 1000,  // Android
-    CV_CAP_ANDROID_BACK = CV_CAP_ANDROID+99, // Android back camera
-    CV_CAP_ANDROID_FRONT = CV_CAP_ANDROID+98, // Android front camera
-
-    CV_CAP_XIAPI    = 1100,   // XIMEA Camera API
-
-    CV_CAP_AVFOUNDATION = 1200,  // AVFoundation framework for iOS (OS X Lion will have the same API)
-
-    CV_CAP_GIGANETIX = 1300,  // Smartek Giganetix GigEVisionSDK
-
-    CV_CAP_INTELPERC = 1500; // Intel Perceptual Computing SDK
-
-/* start capturing frames from camera: index = camera_index + domain_offset (CV_CAP_*) */
-public static native CvCapture cvCreateCameraCapture( int index );
-
-/* grab a frame, return 1 on success, 0 on fail.
-  this function is thought to be fast               */
-public static native int cvGrabFrame( CvCapture capture );
-
-/* get the frame grabbed with cvGrabFrame(..)
-  This function may apply some frame processing like
-  frame decompression, flipping etc.
-  !!!DO NOT RELEASE or MODIFY the retrieved frame!!! */
-public static native IplImage cvRetrieveFrame( CvCapture capture, int streamIdx/*=0*/ );
-public static native IplImage cvRetrieveFrame( CvCapture capture );
-
-/* Just a combination of cvGrabFrame and cvRetrieveFrame
-   !!!DO NOT RELEASE or MODIFY the retrieved frame!!!      */
-public static native IplImage cvQueryFrame( CvCapture capture );
-
-/* stop capturing/reading and free resources */
-public static native void cvReleaseCapture( @Cast("CvCapture**") PointerPointer capture );
-public static native void cvReleaseCapture( @ByPtrPtr CvCapture capture );
-
-/** enum  */
-public static final int
-    // modes of the controlling registers (can be: auto, manual, auto single push, absolute Latter allowed with any other mode)
-    // every feature can have only one mode turned on at a time
-    CV_CAP_PROP_DC1394_OFF         = -4,  //turn the feature off (not controlled manually nor automatically)
-    CV_CAP_PROP_DC1394_MODE_MANUAL = -3, //set automatically when a value of the feature is set by the user
-    CV_CAP_PROP_DC1394_MODE_AUTO = -2,
-    CV_CAP_PROP_DC1394_MODE_ONE_PUSH_AUTO = -1,
-    CV_CAP_PROP_POS_MSEC       = 0,
-    CV_CAP_PROP_POS_FRAMES     = 1,
-    CV_CAP_PROP_POS_AVI_RATIO  = 2,
-    CV_CAP_PROP_FRAME_WIDTH    = 3,
-    CV_CAP_PROP_FRAME_HEIGHT   = 4,
-    CV_CAP_PROP_FPS            = 5,
-    CV_CAP_PROP_FOURCC         = 6,
-    CV_CAP_PROP_FRAME_COUNT    = 7,
-    CV_CAP_PROP_FORMAT         = 8,
-    CV_CAP_PROP_MODE           = 9,
-    CV_CAP_PROP_BRIGHTNESS    = 10,
-    CV_CAP_PROP_CONTRAST      = 11,
-    CV_CAP_PROP_SATURATION    = 12,
-    CV_CAP_PROP_HUE           = 13,
-    CV_CAP_PROP_GAIN          = 14,
-    CV_CAP_PROP_EXPOSURE      = 15,
-    CV_CAP_PROP_CONVERT_RGB   = 16,
-    CV_CAP_PROP_WHITE_BALANCE_U = 17,
-    CV_CAP_PROP_RECTIFICATION = 18,
-    CV_CAP_PROP_MONOCROME     = 19,
-    CV_CAP_PROP_SHARPNESS     = 20,
-    CV_CAP_PROP_AUTO_EXPOSURE = 21, // exposure control done by camera,
-                                   // user can adjust refernce level
-                                   // using this feature
-    CV_CAP_PROP_GAMMA         = 22,
-    CV_CAP_PROP_TEMPERATURE   = 23,
-    CV_CAP_PROP_TRIGGER       = 24,
-    CV_CAP_PROP_TRIGGER_DELAY = 25,
-    CV_CAP_PROP_WHITE_BALANCE_V = 26,
-    CV_CAP_PROP_ZOOM          = 27,
-    CV_CAP_PROP_FOCUS         = 28,
-    CV_CAP_PROP_GUID          = 29,
-    CV_CAP_PROP_ISO_SPEED     = 30,
-    CV_CAP_PROP_MAX_DC1394    = 31,
-    CV_CAP_PROP_BACKLIGHT     = 32,
-    CV_CAP_PROP_PAN           = 33,
-    CV_CAP_PROP_TILT          = 34,
-    CV_CAP_PROP_ROLL          = 35,
-    CV_CAP_PROP_IRIS          = 36,
-    CV_CAP_PROP_SETTINGS      = 37,
-    CV_CAP_PROP_BUFFERSIZE    = 38,
-
-    CV_CAP_PROP_AUTOGRAB      = 1024, // property for highgui class CvCapture_Android only
-    CV_CAP_PROP_SUPPORTED_PREVIEW_SIZES_STRING= 1025, // readonly, tricky property, returns cpnst char* indeed
-    CV_CAP_PROP_PREVIEW_FORMAT= 1026, // readonly, tricky property, returns cpnst char* indeed
-
-    // OpenNI map generators
-    CV_CAP_OPENNI_DEPTH_GENERATOR =  1 << 31,
-    CV_CAP_OPENNI_IMAGE_GENERATOR =  1 << 30,
-    CV_CAP_OPENNI_GENERATORS_MASK =  CV_CAP_OPENNI_DEPTH_GENERATOR + CV_CAP_OPENNI_IMAGE_GENERATOR,
-
-    // Properties of cameras available through OpenNI interfaces
-    CV_CAP_PROP_OPENNI_OUTPUT_MODE     = 100,
-    CV_CAP_PROP_OPENNI_FRAME_MAX_DEPTH = 101, // in mm
-    CV_CAP_PROP_OPENNI_BASELINE        = 102, // in mm
-    CV_CAP_PROP_OPENNI_FOCAL_LENGTH    = 103, // in pixels
-    CV_CAP_PROP_OPENNI_REGISTRATION    = 104, // flag
-    CV_CAP_PROP_OPENNI_REGISTRATION_ON =  CV_CAP_PROP_OPENNI_REGISTRATION, // flag that synchronizes the remapping depth map to image map
-                                                                          // by changing depth generator's view point (if the flag is "on") or
-                                                                          // sets this view point to its normal one (if the flag is "off").
-    CV_CAP_PROP_OPENNI_APPROX_FRAME_SYNC = 105,
-    CV_CAP_PROP_OPENNI_MAX_BUFFER_SIZE   = 106,
-    CV_CAP_PROP_OPENNI_CIRCLE_BUFFER     = 107,
-    CV_CAP_PROP_OPENNI_MAX_TIME_DURATION = 108,
-
-    CV_CAP_PROP_OPENNI_GENERATOR_PRESENT = 109,
-
-    CV_CAP_OPENNI_IMAGE_GENERATOR_PRESENT         =  CV_CAP_OPENNI_IMAGE_GENERATOR + CV_CAP_PROP_OPENNI_GENERATOR_PRESENT,
-    CV_CAP_OPENNI_IMAGE_GENERATOR_OUTPUT_MODE     =  CV_CAP_OPENNI_IMAGE_GENERATOR + CV_CAP_PROP_OPENNI_OUTPUT_MODE,
-    CV_CAP_OPENNI_DEPTH_GENERATOR_BASELINE        =  CV_CAP_OPENNI_DEPTH_GENERATOR + CV_CAP_PROP_OPENNI_BASELINE,
-    CV_CAP_OPENNI_DEPTH_GENERATOR_FOCAL_LENGTH    =  CV_CAP_OPENNI_DEPTH_GENERATOR + CV_CAP_PROP_OPENNI_FOCAL_LENGTH,
-    CV_CAP_OPENNI_DEPTH_GENERATOR_REGISTRATION    =  CV_CAP_OPENNI_DEPTH_GENERATOR + CV_CAP_PROP_OPENNI_REGISTRATION,
-    CV_CAP_OPENNI_DEPTH_GENERATOR_REGISTRATION_ON =  CV_CAP_OPENNI_DEPTH_GENERATOR_REGISTRATION,
-
-    // Properties of cameras available through GStreamer interface
-    CV_CAP_GSTREAMER_QUEUE_LENGTH   = 200, // default is 1
-    CV_CAP_PROP_PVAPI_MULTICASTIP   = 300, // ip for anable multicast master mode. 0 for disable multicast
-
-    // Properties of cameras available through XIMEA SDK interface
-    CV_CAP_PROP_XI_DOWNSAMPLING  = 400,      // Change image resolution by binning or skipping.
-    CV_CAP_PROP_XI_DATA_FORMAT   = 401,       // Output data format.
-    CV_CAP_PROP_XI_OFFSET_X      = 402,      // Horizontal offset from the origin to the area of interest (in pixels).
-    CV_CAP_PROP_XI_OFFSET_Y      = 403,      // Vertical offset from the origin to the area of interest (in pixels).
-    CV_CAP_PROP_XI_TRG_SOURCE    = 404,      // Defines source of trigger.
-    CV_CAP_PROP_XI_TRG_SOFTWARE  = 405,      // Generates an internal trigger. PRM_TRG_SOURCE must be set to TRG_SOFTWARE.
-    CV_CAP_PROP_XI_GPI_SELECTOR  = 406,      // Selects general purpose input
-    CV_CAP_PROP_XI_GPI_MODE      = 407,      // Set general purpose input mode
-    CV_CAP_PROP_XI_GPI_LEVEL     = 408,      // Get general purpose level
-    CV_CAP_PROP_XI_GPO_SELECTOR  = 409,      // Selects general purpose output
-    CV_CAP_PROP_XI_GPO_MODE      = 410,      // Set general purpose output mode
-    CV_CAP_PROP_XI_LED_SELECTOR  = 411,      // Selects camera signalling LED
-    CV_CAP_PROP_XI_LED_MODE      = 412,      // Define camera signalling LED functionality
-    CV_CAP_PROP_XI_MANUAL_WB     = 413,      // Calculates White Balance(must be called during acquisition)
-    CV_CAP_PROP_XI_AUTO_WB       = 414,      // Automatic white balance
-    CV_CAP_PROP_XI_AEAG          = 415,      // Automatic exposure/gain
-    CV_CAP_PROP_XI_EXP_PRIORITY  = 416,      // Exposure priority (0.5 - exposure 50%, gain 50%).
-    CV_CAP_PROP_XI_AE_MAX_LIMIT  = 417,      // Maximum limit of exposure in AEAG procedure
-    CV_CAP_PROP_XI_AG_MAX_LIMIT  = 418,      // Maximum limit of gain in AEAG procedure
-    CV_CAP_PROP_XI_AEAG_LEVEL    = 419,       // Average intensity of output signal AEAG should achieve(in %)
-    CV_CAP_PROP_XI_TIMEOUT       = 420,       // Image capture timeout in milliseconds
-
-    // Properties for Android cameras
-    CV_CAP_PROP_ANDROID_FLASH_MODE = 8001,
-    CV_CAP_PROP_ANDROID_FOCUS_MODE = 8002,
-    CV_CAP_PROP_ANDROID_WHITE_BALANCE = 8003,
-    CV_CAP_PROP_ANDROID_ANTIBANDING = 8004,
-    CV_CAP_PROP_ANDROID_FOCAL_LENGTH = 8005,
-    CV_CAP_PROP_ANDROID_FOCUS_DISTANCE_NEAR = 8006,
-    CV_CAP_PROP_ANDROID_FOCUS_DISTANCE_OPTIMAL = 8007,
-    CV_CAP_PROP_ANDROID_FOCUS_DISTANCE_FAR = 8008,
-    CV_CAP_PROP_ANDROID_EXPOSE_LOCK = 8009,
-    CV_CAP_PROP_ANDROID_WHITEBALANCE_LOCK = 8010,
-
-    // Properties of cameras available through AVFOUNDATION interface
-    CV_CAP_PROP_IOS_DEVICE_FOCUS = 9001,
-    CV_CAP_PROP_IOS_DEVICE_EXPOSURE = 9002,
-    CV_CAP_PROP_IOS_DEVICE_FLASH = 9003,
-    CV_CAP_PROP_IOS_DEVICE_WHITEBALANCE = 9004,
-    CV_CAP_PROP_IOS_DEVICE_TORCH = 9005,
-
-    // Properties of cameras available through Smartek Giganetix Ethernet Vision interface
-    /* --- Vladimir Litvinenko (litvinenko.vladimir@gmail.com) --- */
-    CV_CAP_PROP_GIGA_FRAME_OFFSET_X = 10001,
-    CV_CAP_PROP_GIGA_FRAME_OFFSET_Y = 10002,
-    CV_CAP_PROP_GIGA_FRAME_WIDTH_MAX = 10003,
-    CV_CAP_PROP_GIGA_FRAME_HEIGH_MAX = 10004,
-    CV_CAP_PROP_GIGA_FRAME_SENS_WIDTH = 10005,
-    CV_CAP_PROP_GIGA_FRAME_SENS_HEIGH = 10006,
-
-    CV_CAP_PROP_INTELPERC_PROFILE_COUNT               = 11001,
-    CV_CAP_PROP_INTELPERC_PROFILE_IDX                 = 11002,
-    CV_CAP_PROP_INTELPERC_DEPTH_LOW_CONFIDENCE_VALUE  = 11003,
-    CV_CAP_PROP_INTELPERC_DEPTH_SATURATION_VALUE      = 11004,
-    CV_CAP_PROP_INTELPERC_DEPTH_CONFIDENCE_THRESHOLD  = 11005,
-    CV_CAP_PROP_INTELPERC_DEPTH_FOCAL_LENGTH_HORZ     = 11006,
-    CV_CAP_PROP_INTELPERC_DEPTH_FOCAL_LENGTH_VERT     = 11007,
-
-    // Intel PerC streams
-    CV_CAP_INTELPERC_DEPTH_GENERATOR =  1 << 29,
-    CV_CAP_INTELPERC_IMAGE_GENERATOR =  1 << 28,
-    CV_CAP_INTELPERC_GENERATORS_MASK =  CV_CAP_INTELPERC_DEPTH_GENERATOR + CV_CAP_INTELPERC_IMAGE_GENERATOR;
-
-/** enum  */
-public static final int
-    // Data given from depth generator.
-    CV_CAP_OPENNI_DEPTH_MAP                 = 0, // Depth values in mm (CV_16UC1)
-    CV_CAP_OPENNI_POINT_CLOUD_MAP           = 1, // XYZ in meters (CV_32FC3)
-    CV_CAP_OPENNI_DISPARITY_MAP             = 2, // Disparity in pixels (CV_8UC1)
-    CV_CAP_OPENNI_DISPARITY_MAP_32F         = 3, // Disparity in pixels (CV_32FC1)
-    CV_CAP_OPENNI_VALID_DEPTH_MASK          = 4, // CV_8UC1
-
-    // Data given from RGB image generator.
-    CV_CAP_OPENNI_BGR_IMAGE                 = 5,
-    CV_CAP_OPENNI_GRAY_IMAGE                = 6;
-
-// Supported output modes of OpenNI image generator
-/** enum  */
-public static final int
-    CV_CAP_OPENNI_VGA_30HZ     = 0,
-    CV_CAP_OPENNI_SXGA_15HZ    = 1,
-    CV_CAP_OPENNI_SXGA_30HZ    = 2,
-    CV_CAP_OPENNI_QVGA_30HZ    = 3,
-    CV_CAP_OPENNI_QVGA_60HZ    = 4;
-
-//supported by Android camera output formats
-/** enum  */
-public static final int
-    CV_CAP_ANDROID_COLOR_FRAME_BGR = 0, //BGR
-    CV_CAP_ANDROID_COLOR_FRAME =  CV_CAP_ANDROID_COLOR_FRAME_BGR,
-    CV_CAP_ANDROID_GREY_FRAME  = 1,  //Y
-    CV_CAP_ANDROID_COLOR_FRAME_RGB = 2,
-    CV_CAP_ANDROID_COLOR_FRAME_BGRA = 3,
-    CV_CAP_ANDROID_COLOR_FRAME_RGBA = 4;
-
-// supported Android camera flash modes
-/** enum  */
-public static final int
-    CV_CAP_ANDROID_FLASH_MODE_AUTO = 0,
-    CV_CAP_ANDROID_FLASH_MODE_OFF = 1,
-    CV_CAP_ANDROID_FLASH_MODE_ON = 2,
-    CV_CAP_ANDROID_FLASH_MODE_RED_EYE = 3,
-    CV_CAP_ANDROID_FLASH_MODE_TORCH = 4;
-
-// supported Android camera focus modes
-/** enum  */
-public static final int
-    CV_CAP_ANDROID_FOCUS_MODE_AUTO = 0,
-    CV_CAP_ANDROID_FOCUS_MODE_CONTINUOUS_PICTURE = 1,
-    CV_CAP_ANDROID_FOCUS_MODE_CONTINUOUS_VIDEO = 2,
-    CV_CAP_ANDROID_FOCUS_MODE_EDOF = 3,
-    CV_CAP_ANDROID_FOCUS_MODE_FIXED = 4,
-    CV_CAP_ANDROID_FOCUS_MODE_INFINITY = 5,
-    CV_CAP_ANDROID_FOCUS_MODE_MACRO = 6;
-
-// supported Android camera white balance modes
-/** enum  */
-public static final int
-    CV_CAP_ANDROID_WHITE_BALANCE_AUTO = 0,
-    CV_CAP_ANDROID_WHITE_BALANCE_CLOUDY_DAYLIGHT = 1,
-    CV_CAP_ANDROID_WHITE_BALANCE_DAYLIGHT = 2,
-    CV_CAP_ANDROID_WHITE_BALANCE_FLUORESCENT = 3,
-    CV_CAP_ANDROID_WHITE_BALANCE_INCANDESCENT = 4,
-    CV_CAP_ANDROID_WHITE_BALANCE_SHADE = 5,
-    CV_CAP_ANDROID_WHITE_BALANCE_TWILIGHT = 6,
-    CV_CAP_ANDROID_WHITE_BALANCE_WARM_FLUORESCENT = 7;
-
-// supported Android camera antibanding modes
-/** enum  */
-public static final int
-    CV_CAP_ANDROID_ANTIBANDING_50HZ = 0,
-    CV_CAP_ANDROID_ANTIBANDING_60HZ = 1,
-    CV_CAP_ANDROID_ANTIBANDING_AUTO = 2,
-    CV_CAP_ANDROID_ANTIBANDING_OFF = 3;
-
-/** enum  */
-public static final int
-    CV_CAP_INTELPERC_DEPTH_MAP              = 0, // Each pixel is a 16-bit integer. The value indicates the distance from an object to the camera's XY plane or the Cartesian depth.
-    CV_CAP_INTELPERC_UVDEPTH_MAP            = 1, // Each pixel contains two 32-bit floating point values in the range of 0-1, representing the mapping of depth coordinates to the color coordinates.
-    CV_CAP_INTELPERC_IR_MAP                 = 2, // Each pixel is a 16-bit integer. The value indicates the intensity of the reflected laser beam.
-    CV_CAP_INTELPERC_IMAGE                  = 3;
-
-/* retrieve or set capture properties */
-public static native double cvGetCaptureProperty( CvCapture capture, int property_id );
-public static native int cvSetCaptureProperty( CvCapture capture, int property_id, double value );
-
-// Return the type of the capturer (eg, CV_CAP_V4W, CV_CAP_UNICAP), which is unknown if created with CV_CAP_ANY
-public static native int cvGetCaptureDomain( CvCapture capture);
-
-/* "black box" video file writer structure */
-@Opaque public static class CvVideoWriter extends Pointer {
-    /** Empty constructor. */
-    public CvVideoWriter() { }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvVideoWriter(Pointer p) { super(p); }
-}
-
-// #define CV_FOURCC_MACRO(c1, c2, c3, c4) (((c1) & 255) + (((c2) & 255) << 8) + (((c3) & 255) << 16) + (((c4) & 255) << 24))
-
-public static native int CV_FOURCC(@Cast("char") byte c1, @Cast("char") byte c2, @Cast("char") byte c3, @Cast("char") byte c4);
-
-public static final int CV_FOURCC_PROMPT = -1;  /* Open Codec Selection Dialog (Windows only) */
-public static native @MemberGetter int CV_FOURCC_DEFAULT();
-public static final int CV_FOURCC_DEFAULT = CV_FOURCC_DEFAULT(); /* Use default codec for specified filename (Linux only) */
-
-/* initialize video file writer */
-public static native CvVideoWriter cvCreateVideoWriter( @Cast("const char*") BytePointer filename, int fourcc,
-                                           double fps, @ByVal CvSize frame_size,
-                                           int is_color/*=1*/);
-public static native CvVideoWriter cvCreateVideoWriter( @Cast("const char*") BytePointer filename, int fourcc,
-                                           double fps, @ByVal CvSize frame_size);
-public static native CvVideoWriter cvCreateVideoWriter( String filename, int fourcc,
-                                           double fps, @ByVal CvSize frame_size,
-                                           int is_color/*=1*/);
-public static native CvVideoWriter cvCreateVideoWriter( String filename, int fourcc,
-                                           double fps, @ByVal CvSize frame_size);
-
-//CVAPI(CvVideoWriter*) cvCreateImageSequenceWriter( const char* filename,
-//                                                   int is_color CV_DEFAULT(1));
-
-/* write frame to video file */
-public static native int cvWriteFrame( CvVideoWriter writer, @Const IplImage image );
-
-/* close video file writer */
-public static native void cvReleaseVideoWriter( @Cast("CvVideoWriter**") PointerPointer writer );
-public static native void cvReleaseVideoWriter( @ByPtrPtr CvVideoWriter writer );
-
-/****************************************************************************************\
 *                              Obsolete functions/synonyms                               *
 \****************************************************************************************/
 
-public static native CvCapture cvCaptureFromFile(@Cast("const char*") BytePointer arg1);
-public static native CvCapture cvCaptureFromFile(String arg1);
-public static native CvCapture cvCaptureFromCAM(int arg1);
-public static native CvCapture cvCaptureFromAVI(@Cast("const char*") BytePointer arg1);
-public static native CvCapture cvCaptureFromAVI(String arg1);
-public static native CvVideoWriter cvCreateAVIWriter(@Cast("const char*") BytePointer arg1, int arg2, double arg3, @ByVal CvSize arg4, int arg5);
-public static native CvVideoWriter cvCreateAVIWriter(String arg1, int arg2, double arg3, @ByVal CvSize arg4, int arg5);
-public static native int cvWriteToAVI(CvVideoWriter arg1, IplImage arg2);
 public static native void cvAddSearchPath(@Cast("const char*") BytePointer path);
 public static native void cvAddSearchPath(String path);
 public static native int cvvInitSystem(int arg1, @Cast("char**") PointerPointer arg2);
@@ -857,21 +417,12 @@ public static native int cvvCreateTrackbar(@Cast("const char*") BytePointer arg1
 public static native int cvvCreateTrackbar(String arg1, String arg2, IntPointer arg3, int arg4, CvTrackbarCallback arg5);
 public static native int cvvCreateTrackbar(@Cast("const char*") BytePointer arg1, @Cast("const char*") BytePointer arg2, IntBuffer arg3, int arg4, CvTrackbarCallback arg5);
 public static native int cvvCreateTrackbar(String arg1, String arg2, int[] arg3, int arg4, CvTrackbarCallback arg5);
-public static native IplImage cvvLoadImage(@Cast("const char*") BytePointer name);
-public static native IplImage cvvLoadImage(String name);
-public static native int cvvSaveImage(@Cast("const char*") BytePointer arg1, CvArr arg2, IntPointer arg3);
-public static native int cvvSaveImage(String arg1, CvArr arg2, IntBuffer arg3);
-public static native int cvvSaveImage(@Cast("const char*") BytePointer arg1, CvArr arg2, int[] arg3);
-public static native int cvvSaveImage(String arg1, CvArr arg2, IntPointer arg3);
-public static native int cvvSaveImage(@Cast("const char*") BytePointer arg1, CvArr arg2, IntBuffer arg3);
-public static native int cvvSaveImage(String arg1, CvArr arg2, int[] arg3);
 public static native void cvvAddSearchPath(@Cast("const char*") BytePointer arg1);
 public static native void cvvAddSearchPath(String arg1);
 public static native int cvvWaitKey(@Cast("const char*") BytePointer name);
 public static native int cvvWaitKey(String name);
 public static native int cvvWaitKeyEx(@Cast("const char*") BytePointer name, int delay);
 public static native int cvvWaitKeyEx(String name, int delay);
-public static native void cvvConvertImage(CvArr arg1, CvArr arg2, int arg3);
 public static final int HG_AUTOSIZE = CV_WINDOW_AUTOSIZE;
 // #define set_preprocess_func cvSetPreprocessFuncWin32
 // #define set_postprocess_func cvSetPostprocessFuncWin32
@@ -880,13 +431,15 @@ public static final int HG_AUTOSIZE = CV_WINDOW_AUTOSIZE;
 
 // #endif
 
+/** @} highgui_c */
+
 // #ifdef __cplusplus
 // #endif
 
 // #endif
 
 
-// Parsed from <opencv2/highgui/highgui.hpp>
+// Parsed from <opencv2/highgui.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -933,71 +486,153 @@ public static final int HG_AUTOSIZE = CV_WINDOW_AUTOSIZE;
 // #ifndef __OPENCV_HIGHGUI_HPP__
 // #define __OPENCV_HIGHGUI_HPP__
 
-// #include "opencv2/core/core.hpp"
-// #include "opencv2/highgui/highgui_c.h"
+// #include "opencv2/core.hpp"
+// #include "opencv2/imgcodecs.hpp"
+// #include "opencv2/videoio.hpp"
 
-// #ifdef __cplusplus
+/**
+@defgroup highgui High-level GUI
+
+While OpenCV was designed for use in full-scale applications and can be used within functionally
+rich UI frameworks (such as Qt\*, WinForms\*, or Cocoa\*) or without any UI at all, sometimes there
+it is required to try functionality quickly and visualize the results. This is what the HighGUI
+module has been designed for.
+
+It provides easy interface to:
+
+-   Create and manipulate windows that can display images and "remember" their content (no need to
+    handle repaint events from OS).
+-   Add trackbars to the windows, handle simple mouse events as well as keyboard commands.
+
+@{
+    @defgroup highgui_opengl OpenGL support
+    @defgroup highgui_qt Qt New Functions
+
+    ![image](pics/qtgui.png)
+
+    This figure explains new functionality implemented with Qt\* GUI. The new GUI provides a statusbar,
+    a toolbar, and a control panel. The control panel can have trackbars and buttonbars attached to it.
+    If you cannot see the control panel, press Ctrl+P or right-click any Qt window and select **Display
+    properties window**.
+
+    -   To attach a trackbar, the window name parameter must be NULL.
+
+    -   To attach a buttonbar, a button must be created. If the last bar attached to the control panel
+        is a buttonbar, the new button is added to the right of the last button. If the last bar
+        attached to the control panel is a trackbar, or the control panel is empty, a new buttonbar is
+        created. Then, a new button is attached to it.
+
+    See below the example used to generate the figure: :
+    @code
+        int main(int argc, char *argv[])
+            int value = 50;
+            int value2 = 0;
+
+            cvNamedWindow("main1",CV_WINDOW_NORMAL);
+            cvNamedWindow("main2",CV_WINDOW_AUTOSIZE | CV_GUI_NORMAL);
+
+            cvCreateTrackbar( "track1", "main1", &value, 255,  NULL);//OK tested
+            char* nameb1 = "button1";
+            char* nameb2 = "button2";
+            cvCreateButton(nameb1,callbackButton,nameb1,CV_CHECKBOX,1);
+
+            cvCreateButton(nameb2,callbackButton,nameb2,CV_CHECKBOX,0);
+            cvCreateTrackbar( "track2", NULL, &value2, 255, NULL);
+            cvCreateButton("button5",callbackButton1,NULL,CV_RADIOBOX,0);
+            cvCreateButton("button6",callbackButton2,NULL,CV_RADIOBOX,1);
+
+            cvSetMouseCallback( "main2",on_mouse,NULL );
+
+            IplImage* img1 = cvLoadImage("files/flower.jpg");
+            IplImage* img2 = cvCreateImage(cvGetSize(img1),8,3);
+            CvCapture* video = cvCaptureFromFile("files/hockey.avi");
+            IplImage* img3 = cvCreateImage(cvGetSize(cvQueryFrame(video)),8,3);
+
+            while(cvWaitKey(33) != 27)
+            {
+                cvAddS(img1,cvScalarAll(value),img2);
+                cvAddS(cvQueryFrame(video),cvScalarAll(value2),img3);
+                cvShowImage("main1",img2);
+                cvShowImage("main2",img3);
+            }
+
+            cvDestroyAllWindows();
+            cvReleaseImage(&img1);
+            cvReleaseImage(&img2);
+            cvReleaseImage(&img3);
+            cvReleaseCapture(&video);
+            return 0;
+        }
+    @endcode
+
+    @defgroup highgui_c C API
+@}
+*/
+
+///////////////////////// graphical user interface //////////////////////////
+
+/** @addtogroup highgui
+ *  @{ */
+
+// Flags for namedWindow
+/** enum cv:: */
+public static final int WINDOW_NORMAL     =  0x00000000, // the user can resize the window (no constraint) / also use to switch a fullscreen window to a normal size
+       WINDOW_AUTOSIZE   =  0x00000001, // the user cannot resize the window, the size is constrainted by the image displayed
+       WINDOW_OPENGL     =  0x00001000, // window with opengl support
+
+       WINDOW_FULLSCREEN = 1,          // change the window to fullscreen
+       WINDOW_FREERATIO  =  0x00000100, // the image expends as much as it can (no ratio constraint)
+       WINDOW_KEEPRATIO  =  0x00000000;  // the ratio of the image is respected
+
+// Flags for set / getWindowProperty
+/** enum cv:: */
+public static final int WND_PROP_FULLSCREEN   = 0, // fullscreen property    (can be WINDOW_NORMAL or WINDOW_FULLSCREEN)
+       WND_PROP_AUTOSIZE     = 1, // autosize property      (can be WINDOW_NORMAL or WINDOW_AUTOSIZE)
+       WND_PROP_ASPECT_RATIO = 2, // window's aspect ration (can be set to WINDOW_FREERATIO or WINDOW_KEEPRATIO);
+       WND_PROP_OPENGL       = 3;  // opengl support
 
 /** enum cv:: */
-public static final int
-    // Flags for namedWindow
-    WINDOW_NORMAL   =  CV_WINDOW_NORMAL,   // the user can resize the window (no constraint) / also use to switch a fullscreen window to a normal size
-    WINDOW_AUTOSIZE =  CV_WINDOW_AUTOSIZE, // the user cannot resize the window, the size is constrainted by the image displayed
-    WINDOW_OPENGL   =  CV_WINDOW_OPENGL,   // window with opengl support
-
-    // Flags for set / getWindowProperty
-    WND_PROP_FULLSCREEN   =  CV_WND_PROP_FULLSCREEN,  // fullscreen property
-    WND_PROP_AUTOSIZE     =  CV_WND_PROP_AUTOSIZE,    // autosize property
-    WND_PROP_ASPECT_RATIO =  CV_WND_PROP_ASPECTRATIO, // window's aspect ration
-    WND_PROP_OPENGL       =  CV_WND_PROP_OPENGL;       // opengl support
-
-@Namespace("cv") public static native void namedWindow(@StdString BytePointer winname, int flags/*=cv::WINDOW_AUTOSIZE*/);
-@Namespace("cv") public static native void namedWindow(@StdString BytePointer winname);
-@Namespace("cv") public static native void namedWindow(@StdString String winname, int flags/*=cv::WINDOW_AUTOSIZE*/);
-@Namespace("cv") public static native void namedWindow(@StdString String winname);
-@Namespace("cv") public static native void destroyWindow(@StdString BytePointer winname);
-@Namespace("cv") public static native void destroyWindow(@StdString String winname);
-@Namespace("cv") public static native void destroyAllWindows();
-
-@Namespace("cv") public static native int startWindowThread();
-
-@Namespace("cv") public static native int waitKey(int delay/*=0*/);
-@Namespace("cv") public static native int waitKey();
-
-@Namespace("cv") public static native void imshow(@StdString BytePointer winname, @ByVal Mat mat);
-@Namespace("cv") public static native void imshow(@StdString String winname, @ByVal Mat mat);
-
-@Namespace("cv") public static native void resizeWindow(@StdString BytePointer winname, int width, int height);
-@Namespace("cv") public static native void resizeWindow(@StdString String winname, int width, int height);
-@Namespace("cv") public static native void moveWindow(@StdString BytePointer winname, int x, int y);
-@Namespace("cv") public static native void moveWindow(@StdString String winname, int x, int y);
-
-@Namespace("cv") public static native void setWindowProperty(@StdString BytePointer winname, int prop_id, double prop_value);
-@Namespace("cv") public static native void setWindowProperty(@StdString String winname, int prop_id, double prop_value);//YV
-@Namespace("cv") public static native double getWindowProperty(@StdString BytePointer winname, int prop_id);
-@Namespace("cv") public static native double getWindowProperty(@StdString String winname, int prop_id);//YV
+public static final int EVENT_MOUSEMOVE      = 0,
+       EVENT_LBUTTONDOWN    = 1,
+       EVENT_RBUTTONDOWN    = 2,
+       EVENT_MBUTTONDOWN    = 3,
+       EVENT_LBUTTONUP      = 4,
+       EVENT_RBUTTONUP      = 5,
+       EVENT_MBUTTONUP      = 6,
+       EVENT_LBUTTONDBLCLK  = 7,
+       EVENT_RBUTTONDBLCLK  = 8,
+       EVENT_MBUTTONDBLCLK  = 9,
+       EVENT_MOUSEWHEEL     = 10,
+       EVENT_MOUSEHWHEEL    = 11;
 
 /** enum cv:: */
-public static final int
-    EVENT_MOUSEMOVE      = 0,
-    EVENT_LBUTTONDOWN    = 1,
-    EVENT_RBUTTONDOWN    = 2,
-    EVENT_MBUTTONDOWN    = 3,
-    EVENT_LBUTTONUP      = 4,
-    EVENT_RBUTTONUP      = 5,
-    EVENT_MBUTTONUP      = 6,
-    EVENT_LBUTTONDBLCLK  = 7,
-    EVENT_RBUTTONDBLCLK  = 8,
-    EVENT_MBUTTONDBLCLK  = 9;
+public static final int EVENT_FLAG_LBUTTON   = 1,
+       EVENT_FLAG_RBUTTON   = 2,
+       EVENT_FLAG_MBUTTON   = 4,
+       EVENT_FLAG_CTRLKEY   = 8,
+       EVENT_FLAG_SHIFTKEY  = 16,
+       EVENT_FLAG_ALTKEY    = 32;
 
+// Qt font
 /** enum cv:: */
-public static final int
-    EVENT_FLAG_LBUTTON   = 1,
-    EVENT_FLAG_RBUTTON   = 2,
-    EVENT_FLAG_MBUTTON   = 4,
-    EVENT_FLAG_CTRLKEY   = 8,
-    EVENT_FLAG_SHIFTKEY  = 16,
-    EVENT_FLAG_ALTKEY    = 32;
+public static final int  QT_FONT_LIGHT           = 25, //QFont::Light,
+        QT_FONT_NORMAL          = 50, //QFont::Normal,
+        QT_FONT_DEMIBOLD        = 63, //QFont::DemiBold,
+        QT_FONT_BOLD            = 75, //QFont::Bold,
+        QT_FONT_BLACK           = 87;  //QFont::Black
+
+// Qt font style
+/** enum cv:: */
+public static final int  QT_STYLE_NORMAL         = 0, //QFont::StyleNormal,
+        QT_STYLE_ITALIC         = 1, //QFont::StyleItalic,
+        QT_STYLE_OBLIQUE        = 2;  //QFont::StyleOblique
+
+// Qt "button" type
+/** enum cv:: */
+public static final int QT_PUSH_BUTTON = 0,
+       QT_CHECKBOX    = 1,
+       QT_RADIOBOX    = 2;
+
 
 public static class MouseCallback extends FunctionPointer {
     static { Loader.load(); }
@@ -1007,15 +642,7 @@ public static class MouseCallback extends FunctionPointer {
     private native void allocate();
     public native void call(int event, int x, int y, int flags, Pointer userdata);
 }
-
-/** assigns callback for mouse events */
-@Namespace("cv") public static native void setMouseCallback(@StdString BytePointer winname, MouseCallback onMouse, Pointer userdata/*=0*/);
-@Namespace("cv") public static native void setMouseCallback(@StdString BytePointer winname, MouseCallback onMouse);
-@Namespace("cv") public static native void setMouseCallback(@StdString String winname, MouseCallback onMouse, Pointer userdata/*=0*/);
-@Namespace("cv") public static native void setMouseCallback(@StdString String winname, MouseCallback onMouse);
-
-
-@Convention("CV_CDECL") public static class TrackbarCallback extends FunctionPointer {
+public static class TrackbarCallback extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    TrackbarCallback(Pointer p) { super(p); }
@@ -1023,51 +650,6 @@ public static class MouseCallback extends FunctionPointer {
     private native void allocate();
     public native void call(int pos, Pointer userdata);
 }
-
-@Namespace("cv") public static native int createTrackbar(@StdString BytePointer trackbarname, @StdString BytePointer winname,
-                              IntPointer value, int count,
-                              TrackbarCallback onChange/*=0*/,
-                              Pointer userdata/*=0*/);
-@Namespace("cv") public static native int createTrackbar(@StdString BytePointer trackbarname, @StdString BytePointer winname,
-                              IntPointer value, int count);
-@Namespace("cv") public static native int createTrackbar(@StdString String trackbarname, @StdString String winname,
-                              IntBuffer value, int count,
-                              TrackbarCallback onChange/*=0*/,
-                              Pointer userdata/*=0*/);
-@Namespace("cv") public static native int createTrackbar(@StdString String trackbarname, @StdString String winname,
-                              IntBuffer value, int count);
-@Namespace("cv") public static native int createTrackbar(@StdString BytePointer trackbarname, @StdString BytePointer winname,
-                              int[] value, int count,
-                              TrackbarCallback onChange/*=0*/,
-                              Pointer userdata/*=0*/);
-@Namespace("cv") public static native int createTrackbar(@StdString BytePointer trackbarname, @StdString BytePointer winname,
-                              int[] value, int count);
-@Namespace("cv") public static native int createTrackbar(@StdString String trackbarname, @StdString String winname,
-                              IntPointer value, int count,
-                              TrackbarCallback onChange/*=0*/,
-                              Pointer userdata/*=0*/);
-@Namespace("cv") public static native int createTrackbar(@StdString String trackbarname, @StdString String winname,
-                              IntPointer value, int count);
-@Namespace("cv") public static native int createTrackbar(@StdString BytePointer trackbarname, @StdString BytePointer winname,
-                              IntBuffer value, int count,
-                              TrackbarCallback onChange/*=0*/,
-                              Pointer userdata/*=0*/);
-@Namespace("cv") public static native int createTrackbar(@StdString BytePointer trackbarname, @StdString BytePointer winname,
-                              IntBuffer value, int count);
-@Namespace("cv") public static native int createTrackbar(@StdString String trackbarname, @StdString String winname,
-                              int[] value, int count,
-                              TrackbarCallback onChange/*=0*/,
-                              Pointer userdata/*=0*/);
-@Namespace("cv") public static native int createTrackbar(@StdString String trackbarname, @StdString String winname,
-                              int[] value, int count);
-
-@Namespace("cv") public static native int getTrackbarPos(@StdString BytePointer trackbarname, @StdString BytePointer winname);
-@Namespace("cv") public static native int getTrackbarPos(@StdString String trackbarname, @StdString String winname);
-@Namespace("cv") public static native void setTrackbarPos(@StdString BytePointer trackbarname, @StdString BytePointer winname, int pos);
-@Namespace("cv") public static native void setTrackbarPos(@StdString String trackbarname, @StdString String winname, int pos);
-
-// OpenGL support
-
 public static class OpenGlDrawCallback extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -1076,59 +658,7 @@ public static class OpenGlDrawCallback extends FunctionPointer {
     private native void allocate();
     public native void call(Pointer userdata);
 }
-@Namespace("cv") public static native void setOpenGlDrawCallback(@StdString BytePointer winname, OpenGlDrawCallback onOpenGlDraw, Pointer userdata/*=0*/);
-@Namespace("cv") public static native void setOpenGlDrawCallback(@StdString BytePointer winname, OpenGlDrawCallback onOpenGlDraw);
-@Namespace("cv") public static native void setOpenGlDrawCallback(@StdString String winname, OpenGlDrawCallback onOpenGlDraw, Pointer userdata/*=0*/);
-@Namespace("cv") public static native void setOpenGlDrawCallback(@StdString String winname, OpenGlDrawCallback onOpenGlDraw);
-
-@Namespace("cv") public static native void setOpenGlContext(@StdString BytePointer winname);
-@Namespace("cv") public static native void setOpenGlContext(@StdString String winname);
-
-@Namespace("cv") public static native void updateWindow(@StdString BytePointer winname);
-@Namespace("cv") public static native void updateWindow(@StdString String winname);
-
-// < Deperecated
-@Namespace("cv") public static native void pointCloudShow(@StdString BytePointer winname, @Const @ByRef GlCamera camera, @Const @ByRef GlArrays arr);
-@Namespace("cv") public static native void pointCloudShow(@StdString String winname, @Const @ByRef GlCamera camera, @Const @ByRef GlArrays arr);
-@Namespace("cv") public static native void pointCloudShow(@StdString BytePointer winname, @Const @ByRef GlCamera camera, @ByVal Mat points, @ByVal(nullValue = "cv::noArray()") Mat colors/*=cv::noArray()*/);
-@Namespace("cv") public static native void pointCloudShow(@StdString BytePointer winname, @Const @ByRef GlCamera camera, @ByVal Mat points);
-@Namespace("cv") public static native void pointCloudShow(@StdString String winname, @Const @ByRef GlCamera camera, @ByVal Mat points, @ByVal(nullValue = "cv::noArray()") Mat colors/*=cv::noArray()*/);
-@Namespace("cv") public static native void pointCloudShow(@StdString String winname, @Const @ByRef GlCamera camera, @ByVal Mat points);
-// >
-
-//Only for Qt
-
-@Namespace("cv") public static native @ByVal CvFont fontQt(@StdString BytePointer nameFont, int pointSize/*=-1*/,
-                         @ByVal(nullValue = "cv::Scalar::all(0)") Scalar color/*=cv::Scalar::all(0)*/, int weight/*=CV_FONT_NORMAL*/,
-                         int style/*=CV_STYLE_NORMAL*/, int spacing/*=0*/);
-@Namespace("cv") public static native @ByVal CvFont fontQt(@StdString BytePointer nameFont);
-@Namespace("cv") public static native @ByVal CvFont fontQt(@StdString String nameFont, int pointSize/*=-1*/,
-                         @ByVal(nullValue = "cv::Scalar::all(0)") Scalar color/*=cv::Scalar::all(0)*/, int weight/*=CV_FONT_NORMAL*/,
-                         int style/*=CV_STYLE_NORMAL*/, int spacing/*=0*/);
-@Namespace("cv") public static native @ByVal CvFont fontQt(@StdString String nameFont);
-@Namespace("cv") public static native void addText( @Const @ByRef Mat img, @StdString BytePointer text, @ByVal Point org, @ByVal CvFont font);
-@Namespace("cv") public static native void addText( @Const @ByRef Mat img, @StdString String text, @ByVal Point org, @ByVal CvFont font);
-
-@Namespace("cv") public static native void displayOverlay(@StdString BytePointer winname, @StdString BytePointer text, int delayms/*=0*/);
-@Namespace("cv") public static native void displayOverlay(@StdString BytePointer winname, @StdString BytePointer text);
-@Namespace("cv") public static native void displayOverlay(@StdString String winname, @StdString String text, int delayms/*=0*/);
-@Namespace("cv") public static native void displayOverlay(@StdString String winname, @StdString String text);
-@Namespace("cv") public static native void displayStatusBar(@StdString BytePointer winname, @StdString BytePointer text, int delayms/*=0*/);
-@Namespace("cv") public static native void displayStatusBar(@StdString BytePointer winname, @StdString BytePointer text);
-@Namespace("cv") public static native void displayStatusBar(@StdString String winname, @StdString String text, int delayms/*=0*/);
-@Namespace("cv") public static native void displayStatusBar(@StdString String winname, @StdString String text);
-
-@Namespace("cv") public static native void saveWindowParameters(@StdString BytePointer windowName);
-@Namespace("cv") public static native void saveWindowParameters(@StdString String windowName);
-@Namespace("cv") public static native void loadWindowParameters(@StdString BytePointer windowName);
-@Namespace("cv") public static native void loadWindowParameters(@StdString String windowName);
-@Namespace("cv") public static native int startLoop(Pt2Func_int_PointerPointer pt2Func, int argc, @Cast("char**") PointerPointer argv);
-@Namespace("cv") public static native int startLoop(Pt2Func_int_BytePointer pt2Func, int argc, @Cast("char**") @ByPtrPtr BytePointer argv);
-@Namespace("cv") public static native int startLoop(Pt2Func_int_ByteBuffer pt2Func, int argc, @Cast("char**") @ByPtrPtr ByteBuffer argv);
-@Namespace("cv") public static native int startLoop(Pt2Func_int_byte__ pt2Func, int argc, @Cast("char**") @ByPtrPtr byte[] argv);
-@Namespace("cv") public static native void stopLoop();
-
-@Convention("CV_CDECL") public static class ButtonCallback extends FunctionPointer {
+public static class ButtonCallback extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public    ButtonCallback(Pointer p) { super(p); }
@@ -1136,176 +666,598 @@ public static class OpenGlDrawCallback extends FunctionPointer {
     private native void allocate();
     public native void call(int state, Pointer userdata);
 }
-@Namespace("cv") public static native int createButton( @StdString BytePointer bar_name, ButtonCallback on_change,
-                             Pointer userdata/*=NULL*/, int type/*=CV_PUSH_BUTTON*/,
-                             @Cast("bool") boolean initial_button_state/*=0*/);
-@Namespace("cv") public static native int createButton( @StdString BytePointer bar_name, ButtonCallback on_change);
-@Namespace("cv") public static native int createButton( @StdString String bar_name, ButtonCallback on_change,
-                             Pointer userdata/*=NULL*/, int type/*=CV_PUSH_BUTTON*/,
-                             @Cast("bool") boolean initial_button_state/*=0*/);
-@Namespace("cv") public static native int createButton( @StdString String bar_name, ButtonCallback on_change);
 
-//-------------------------
+/** @brief Creates a window.
 
-/** enum cv:: */
-public static final int
-    // 8bit, color or not
-    IMREAD_UNCHANGED  = -1,
-    // 8bit, gray
-    IMREAD_GRAYSCALE  = 0,
-    // ?, color
-    IMREAD_COLOR      = 1,
-    // any depth, ?
-    IMREAD_ANYDEPTH   = 2,
-    // ?, any color
-    IMREAD_ANYCOLOR   = 4;
+@param winname Name of the window in the window caption that may be used as a window identifier.
+@param flags Flags of the window. The supported flags are:
+> -   **WINDOW_NORMAL** If this is set, the user can resize the window (no constraint).
+> -   **WINDOW_AUTOSIZE** If this is set, the window size is automatically adjusted to fit the
+>     displayed image (see imshow ), and you cannot change the window size manually.
+> -   **WINDOW_OPENGL** If this is set, the window will be created with OpenGL support.
 
-/** enum cv:: */
-public static final int
-    IMWRITE_JPEG_QUALITY = 1,
-    IMWRITE_PNG_COMPRESSION = 16,
-    IMWRITE_PNG_STRATEGY = 17,
-    IMWRITE_PNG_BILEVEL = 18,
-    IMWRITE_PNG_STRATEGY_DEFAULT = 0,
-    IMWRITE_PNG_STRATEGY_FILTERED = 1,
-    IMWRITE_PNG_STRATEGY_HUFFMAN_ONLY = 2,
-    IMWRITE_PNG_STRATEGY_RLE = 3,
-    IMWRITE_PNG_STRATEGY_FIXED = 4,
-    IMWRITE_PXM_BINARY = 32;
+The function namedWindow creates a window that can be used as a placeholder for images and
+trackbars. Created windows are referred to by their names.
 
-@Namespace("cv") public static native @ByVal Mat imread( @StdString BytePointer filename, int flags/*=1*/ );
-@Namespace("cv") public static native @ByVal Mat imread( @StdString BytePointer filename );
-@Namespace("cv") public static native @ByVal Mat imread( @StdString String filename, int flags/*=1*/ );
-@Namespace("cv") public static native @ByVal Mat imread( @StdString String filename );
-@Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString BytePointer filename, @ByVal Mat img,
-              @StdVector IntPointer params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString BytePointer filename, @ByVal Mat img);
-@Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString String filename, @ByVal Mat img,
-              @StdVector IntBuffer params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString String filename, @ByVal Mat img);
-@Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString BytePointer filename, @ByVal Mat img,
-              @StdVector int[] params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString String filename, @ByVal Mat img,
-              @StdVector IntPointer params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString BytePointer filename, @ByVal Mat img,
-              @StdVector IntBuffer params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString String filename, @ByVal Mat img,
-              @StdVector int[] params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @ByVal Mat imdecode( @ByVal Mat buf, int flags );
-@Namespace("cv") public static native @ByVal Mat imdecode( @ByVal Mat buf, int flags, Mat dst );
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString BytePointer ext, @ByVal Mat img,
-                            @Cast("uchar*") @StdVector BytePointer buf,
-                            @StdVector IntPointer params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString BytePointer ext, @ByVal Mat img,
-                            @Cast("uchar*") @StdVector BytePointer buf);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString String ext, @ByVal Mat img,
-                            @Cast("uchar*") @StdVector ByteBuffer buf,
-                            @StdVector IntBuffer params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString String ext, @ByVal Mat img,
-                            @Cast("uchar*") @StdVector ByteBuffer buf);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString BytePointer ext, @ByVal Mat img,
-                            @Cast("uchar*") @StdVector byte[] buf,
-                            @StdVector int[] params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString BytePointer ext, @ByVal Mat img,
-                            @Cast("uchar*") @StdVector byte[] buf);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString String ext, @ByVal Mat img,
-                            @Cast("uchar*") @StdVector BytePointer buf,
-                            @StdVector IntPointer params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString String ext, @ByVal Mat img,
-                            @Cast("uchar*") @StdVector BytePointer buf);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString BytePointer ext, @ByVal Mat img,
-                            @Cast("uchar*") @StdVector ByteBuffer buf,
-                            @StdVector IntBuffer params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString BytePointer ext, @ByVal Mat img,
-                            @Cast("uchar*") @StdVector ByteBuffer buf);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString String ext, @ByVal Mat img,
-                            @Cast("uchar*") @StdVector byte[] buf,
-                            @StdVector int[] params/*=std::vector<int>()*/);
-@Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString String ext, @ByVal Mat img,
-                            @Cast("uchar*") @StdVector byte[] buf);
+If a window with the same name already exists, the function does nothing.
 
-// #ifndef CV_NO_VIDEO_CAPTURE_CPP_API
+You can call destroyWindow or destroyAllWindows to close the window and de-allocate any associated
+memory usage. For a simple program, you do not really have to call these functions because all the
+resources and windows of the application are closed automatically by the operating system upon exit.
 
+@note
 
+Qt backend supports additional flags:
+ -   **CV_WINDOW_NORMAL or CV_WINDOW_AUTOSIZE:** CV_WINDOW_NORMAL enables you to resize the
+     window, whereas CV_WINDOW_AUTOSIZE adjusts automatically the window size to fit the
+     displayed image (see imshow ), and you cannot change the window size manually.
+ -   **CV_WINDOW_FREERATIO or CV_WINDOW_KEEPRATIO:** CV_WINDOW_FREERATIO adjusts the image
+     with no respect to its ratio, whereas CV_WINDOW_KEEPRATIO keeps the image ratio.
+ -   **CV_GUI_NORMAL or CV_GUI_EXPANDED:** CV_GUI_NORMAL is the old way to draw the window
+     without statusbar and toolbar, whereas CV_GUI_EXPANDED is a new enhanced GUI.
+By default, flags == CV_WINDOW_AUTOSIZE | CV_WINDOW_KEEPRATIO | CV_GUI_EXPANDED
+ */
+@Namespace("cv") public static native void namedWindow(@Str BytePointer winname, int flags/*=cv::WINDOW_AUTOSIZE*/);
+@Namespace("cv") public static native void namedWindow(@Str BytePointer winname);
+@Namespace("cv") public static native void namedWindow(@Str String winname, int flags/*=cv::WINDOW_AUTOSIZE*/);
+@Namespace("cv") public static native void namedWindow(@Str String winname);
 
+/** @brief Destroys a window.
 
-@Namespace("cv") @NoOffset public static class VideoCapture extends Pointer {
+@param winname Name of the window to be destroyed.
+
+The function destroyWindow destroys the window with the given name.
+ */
+@Namespace("cv") public static native void destroyWindow(@Str BytePointer winname);
+@Namespace("cv") public static native void destroyWindow(@Str String winname);
+
+/** @brief Destroys all of the HighGUI windows.
+
+The function destroyAllWindows destroys all of the opened HighGUI windows.
+ */
+@Namespace("cv") public static native void destroyAllWindows();
+
+@Namespace("cv") public static native int startWindowThread();
+
+/** @brief Waits for a pressed key.
+
+@param delay Delay in milliseconds. 0 is the special value that means "forever".
+
+The function waitKey waits for a key event infinitely (when \f$\texttt{delay}\leq 0\f$ ) or for delay
+milliseconds, when it is positive. Since the OS has a minimum time between switching threads, the
+function will not wait exactly delay ms, it will wait at least delay ms, depending on what else is
+running on your computer at that time. It returns the code of the pressed key or -1 if no key was
+pressed before the specified time had elapsed.
+
+@note
+
+This function is the only method in HighGUI that can fetch and handle events, so it needs to be
+called periodically for normal event processing unless HighGUI is used within an environment that
+takes care of event processing.
+
+@note
+
+The function only works if there is at least one HighGUI window created and the window is active.
+If there are several HighGUI windows, any of them can be active.
+ */
+@Namespace("cv") public static native int waitKey(int delay/*=0*/);
+@Namespace("cv") public static native int waitKey();
+
+/** @brief Displays an image in the specified window.
+
+@param winname Name of the window.
+@param mat Image to be shown.
+
+The function imshow displays an image in the specified window. If the window was created with the
+CV_WINDOW_AUTOSIZE flag, the image is shown with its original size, however it is still limited by the screen resolution.
+Otherwise, the image is scaled to fit the window. The function may scale the image, depending on its depth:
+
+-   If the image is 8-bit unsigned, it is displayed as is.
+-   If the image is 16-bit unsigned or 32-bit integer, the pixels are divided by 256. That is, the
+    value range [0,255\*256] is mapped to [0,255].
+-   If the image is 32-bit floating-point, the pixel values are multiplied by 255. That is, the
+    value range [0,1] is mapped to [0,255].
+
+If window was created with OpenGL support, imshow also support ogl::Buffer , ogl::Texture2D and
+cuda::GpuMat as input.
+
+If the window was not created before this function, it is assumed creating a window with CV_WINDOW_AUTOSIZE.
+
+If you need to show an image that is bigger than the screen resolution, you will need to call namedWindow("", WINDOW_NORMAL) before the imshow.
+
+@note This function should be followed by waitKey function which displays the image for specified
+milliseconds. Otherwise, it won't display the image. For example, waitKey(0) will display the window
+infinitely until any keypress (it is suitable for image display). waitKey(25) will display a frame
+for 25 ms, after which display will be automatically closed. (If you put it in a loop to read
+videos, it will display the video frame-by-frame)
+
+@note
+
+[Windows Backend Only] Pressing Ctrl+C will copy the image to the clipboard.
+
+ */
+@Namespace("cv") public static native void imshow(@Str BytePointer winname, @ByVal Mat mat);
+@Namespace("cv") public static native void imshow(@Str String winname, @ByVal Mat mat);
+
+/** @brief Resizes window to the specified size
+
+@param winname Window name
+@param width The new window width
+@param height The new window height
+
+@note
+
+-   The specified window size is for the image area. Toolbars are not counted.
+-   Only windows created without CV_WINDOW_AUTOSIZE flag can be resized.
+ */
+@Namespace("cv") public static native void resizeWindow(@Str BytePointer winname, int width, int height);
+@Namespace("cv") public static native void resizeWindow(@Str String winname, int width, int height);
+
+/** @brief Moves window to the specified position
+
+@param winname Window name
+@param x The new x-coordinate of the window
+@param y The new y-coordinate of the window
+ */
+@Namespace("cv") public static native void moveWindow(@Str BytePointer winname, int x, int y);
+@Namespace("cv") public static native void moveWindow(@Str String winname, int x, int y);
+
+/** @brief Changes parameters of a window dynamically.
+
+@param winname Name of the window.
+@param prop_id Window property to edit. The following operation flags are available:
+ -   **CV_WND_PROP_FULLSCREEN** Change if the window is fullscreen ( CV_WINDOW_NORMAL or
+     CV_WINDOW_FULLSCREEN ).
+ -   **CV_WND_PROP_AUTOSIZE** Change if the window is resizable (CV_WINDOW_NORMAL or
+     CV_WINDOW_AUTOSIZE ).
+ -   **CV_WND_PROP_ASPECTRATIO** Change if the aspect ratio of the image is preserved (
+     CV_WINDOW_FREERATIO or CV_WINDOW_KEEPRATIO ).
+@param prop_value New value of the window property. The following operation flags are available:
+ -   **CV_WINDOW_NORMAL** Change the window to normal size or make the window resizable.
+ -   **CV_WINDOW_AUTOSIZE** Constrain the size by the displayed image. The window is not
+     resizable.
+ -   **CV_WINDOW_FULLSCREEN** Change the window to fullscreen.
+ -   **CV_WINDOW_FREERATIO** Make the window resizable without any ratio constraints.
+ -   **CV_WINDOW_KEEPRATIO** Make the window resizable, but preserve the proportions of the
+     displayed image.
+
+The function setWindowProperty enables changing properties of a window.
+ */
+@Namespace("cv") public static native void setWindowProperty(@Str BytePointer winname, int prop_id, double prop_value);
+@Namespace("cv") public static native void setWindowProperty(@Str String winname, int prop_id, double prop_value);
+
+/** @brief Updates window title
+*/
+@Namespace("cv") public static native void setWindowTitle(@Str BytePointer winname, @Str BytePointer title);
+@Namespace("cv") public static native void setWindowTitle(@Str String winname, @Str String title);
+
+/** @brief Provides parameters of a window.
+
+@param winname Name of the window.
+@param prop_id Window property to retrieve. The following operation flags are available:
+ -   **CV_WND_PROP_FULLSCREEN** Change if the window is fullscreen ( CV_WINDOW_NORMAL or
+     CV_WINDOW_FULLSCREEN ).
+ -   **CV_WND_PROP_AUTOSIZE** Change if the window is resizable (CV_WINDOW_NORMAL or
+     CV_WINDOW_AUTOSIZE ).
+ -   **CV_WND_PROP_ASPECTRATIO** Change if the aspect ratio of the image is preserved
+     (CV_WINDOW_FREERATIO or CV_WINDOW_KEEPRATIO ).
+
+See setWindowProperty to know the meaning of the returned values.
+
+The function getWindowProperty returns properties of a window.
+ */
+@Namespace("cv") public static native double getWindowProperty(@Str BytePointer winname, int prop_id);
+@Namespace("cv") public static native double getWindowProperty(@Str String winname, int prop_id);
+
+/** @brief Sets mouse handler for the specified window
+
+@param winname Window name
+@param onMouse Mouse callback. See OpenCV samples, such as
+<https://github.com/Itseez/opencv/tree/master/samples/cpp/ffilldemo.cpp>, on how to specify and
+use the callback.
+@param userdata The optional parameter passed to the callback.
+ */
+@Namespace("cv") public static native void setMouseCallback(@Str BytePointer winname, MouseCallback onMouse, Pointer userdata/*=0*/);
+@Namespace("cv") public static native void setMouseCallback(@Str BytePointer winname, MouseCallback onMouse);
+@Namespace("cv") public static native void setMouseCallback(@Str String winname, MouseCallback onMouse, Pointer userdata/*=0*/);
+@Namespace("cv") public static native void setMouseCallback(@Str String winname, MouseCallback onMouse);
+
+/** @brief Gets the mouse-wheel motion delta, when handling mouse-wheel events EVENT_MOUSEWHEEL and
+EVENT_MOUSEHWHEEL.
+
+@param flags The mouse callback flags parameter.
+
+For regular mice with a scroll-wheel, delta will be a multiple of 120. The value 120 corresponds to
+a one notch rotation of the wheel or the threshold for action to be taken and one such action should
+occur for each delta. Some high-precision mice with higher-resolution freely-rotating wheels may
+generate smaller values.
+
+For EVENT_MOUSEWHEEL positive and negative values mean forward and backward scrolling,
+respectively. For EVENT_MOUSEHWHEEL, where available, positive and negative values mean right and
+left scrolling, respectively.
+
+With the C API, the macro CV_GET_WHEEL_DELTA(flags) can be used alternatively.
+
+@note
+
+Mouse-wheel events are currently supported only on Windows.
+ */
+@Namespace("cv") public static native int getMouseWheelDelta(int flags);
+
+/** @brief Creates a trackbar and attaches it to the specified window.
+
+@param trackbarname Name of the created trackbar.
+@param winname Name of the window that will be used as a parent of the created trackbar.
+@param value Optional pointer to an integer variable whose value reflects the position of the
+slider. Upon creation, the slider position is defined by this variable.
+@param count Maximal position of the slider. The minimal position is always 0.
+@param onChange Pointer to the function to be called every time the slider changes position. This
+function should be prototyped as void Foo(int,void\*); , where the first parameter is the trackbar
+position and the second parameter is the user data (see the next parameter). If the callback is
+the NULL pointer, no callbacks are called, but only value is updated.
+@param userdata User data that is passed as is to the callback. It can be used to handle trackbar
+events without using global variables.
+
+The function createTrackbar creates a trackbar (a slider or range control) with the specified name
+and range, assigns a variable value to be a position synchronized with the trackbar and specifies
+the callback function onChange to be called on the trackbar position change. The created trackbar is
+displayed in the specified window winname.
+
+@note
+
+**[Qt Backend Only]** winname can be empty (or NULL) if the trackbar should be attached to the
+control panel.
+
+Clicking the label of each trackbar enables editing the trackbar values manually.
+
+@note
+
+-   An example of using the trackbar functionality can be found at
+    opencv_source_code/samples/cpp/connected_components.cpp
+ */
+@Namespace("cv") public static native int createTrackbar(@Str BytePointer trackbarname, @Str BytePointer winname,
+                              IntPointer value, int count,
+                              TrackbarCallback onChange/*=0*/,
+                              Pointer userdata/*=0*/);
+@Namespace("cv") public static native int createTrackbar(@Str BytePointer trackbarname, @Str BytePointer winname,
+                              IntPointer value, int count);
+@Namespace("cv") public static native int createTrackbar(@Str String trackbarname, @Str String winname,
+                              IntBuffer value, int count,
+                              TrackbarCallback onChange/*=0*/,
+                              Pointer userdata/*=0*/);
+@Namespace("cv") public static native int createTrackbar(@Str String trackbarname, @Str String winname,
+                              IntBuffer value, int count);
+@Namespace("cv") public static native int createTrackbar(@Str BytePointer trackbarname, @Str BytePointer winname,
+                              int[] value, int count,
+                              TrackbarCallback onChange/*=0*/,
+                              Pointer userdata/*=0*/);
+@Namespace("cv") public static native int createTrackbar(@Str BytePointer trackbarname, @Str BytePointer winname,
+                              int[] value, int count);
+@Namespace("cv") public static native int createTrackbar(@Str String trackbarname, @Str String winname,
+                              IntPointer value, int count,
+                              TrackbarCallback onChange/*=0*/,
+                              Pointer userdata/*=0*/);
+@Namespace("cv") public static native int createTrackbar(@Str String trackbarname, @Str String winname,
+                              IntPointer value, int count);
+@Namespace("cv") public static native int createTrackbar(@Str BytePointer trackbarname, @Str BytePointer winname,
+                              IntBuffer value, int count,
+                              TrackbarCallback onChange/*=0*/,
+                              Pointer userdata/*=0*/);
+@Namespace("cv") public static native int createTrackbar(@Str BytePointer trackbarname, @Str BytePointer winname,
+                              IntBuffer value, int count);
+@Namespace("cv") public static native int createTrackbar(@Str String trackbarname, @Str String winname,
+                              int[] value, int count,
+                              TrackbarCallback onChange/*=0*/,
+                              Pointer userdata/*=0*/);
+@Namespace("cv") public static native int createTrackbar(@Str String trackbarname, @Str String winname,
+                              int[] value, int count);
+
+/** @brief Returns the trackbar position.
+
+@param trackbarname Name of the trackbar.
+@param winname Name of the window that is the parent of the trackbar.
+
+The function returns the current position of the specified trackbar.
+
+@note
+
+**[Qt Backend Only]** winname can be empty (or NULL) if the trackbar is attached to the control
+panel.
+
+ */
+@Namespace("cv") public static native int getTrackbarPos(@Str BytePointer trackbarname, @Str BytePointer winname);
+@Namespace("cv") public static native int getTrackbarPos(@Str String trackbarname, @Str String winname);
+
+/** @brief Sets the trackbar position.
+
+@param trackbarname Name of the trackbar.
+@param winname Name of the window that is the parent of trackbar.
+@param pos New position.
+
+The function sets the position of the specified trackbar in the specified window.
+
+@note
+
+**[Qt Backend Only]** winname can be empty (or NULL) if the trackbar is attached to the control
+panel.
+ */
+@Namespace("cv") public static native void setTrackbarPos(@Str BytePointer trackbarname, @Str BytePointer winname, int pos);
+@Namespace("cv") public static native void setTrackbarPos(@Str String trackbarname, @Str String winname, int pos);
+
+/** @brief Sets the trackbar maximum position.
+
+@param trackbarname Name of the trackbar.
+@param winname Name of the window that is the parent of trackbar.
+@param maxval New maximum position.
+
+The function sets the maximum position of the specified trackbar in the specified window.
+
+@note
+
+**[Qt Backend Only]** winname can be empty (or NULL) if the trackbar is attached to the control
+panel.
+ */
+@Namespace("cv") public static native void setTrackbarMax(@Str BytePointer trackbarname, @Str BytePointer winname, int maxval);
+@Namespace("cv") public static native void setTrackbarMax(@Str String trackbarname, @Str String winname, int maxval);
+
+/** @addtogroup highgui_opengl OpenGL support
+ *  @{ */
+
+@Namespace("cv") public static native void imshow(@Str BytePointer winname, @Const @ByRef Texture2D tex);
+@Namespace("cv") public static native void imshow(@Str String winname, @Const @ByRef Texture2D tex);
+
+/** @brief Sets a callback function to be called to draw on top of displayed image.
+
+@param winname Name of the window.
+@param onOpenGlDraw Pointer to the function to be called every frame. This function should be
+prototyped as void Foo(void\*) .
+@param userdata Pointer passed to the callback function. *(Optional)*
+
+The function setOpenGlDrawCallback can be used to draw 3D data on the window. See the example of
+callback function below: :
+@code
+    void on_opengl(void* param)
+    {
+        glLoadIdentity();
+
+        glTranslated(0.0, 0.0, -1.0);
+
+        glRotatef( 55, 1, 0, 0 );
+        glRotatef( 45, 0, 1, 0 );
+        glRotatef( 0, 0, 0, 1 );
+
+        static const int coords[6][4][3] = {
+            { { +1, -1, -1 }, { -1, -1, -1 }, { -1, +1, -1 }, { +1, +1, -1 } },
+            { { +1, +1, -1 }, { -1, +1, -1 }, { -1, +1, +1 }, { +1, +1, +1 } },
+            { { +1, -1, +1 }, { +1, -1, -1 }, { +1, +1, -1 }, { +1, +1, +1 } },
+            { { -1, -1, -1 }, { -1, -1, +1 }, { -1, +1, +1 }, { -1, +1, -1 } },
+            { { +1, -1, +1 }, { -1, -1, +1 }, { -1, -1, -1 }, { +1, -1, -1 } },
+            { { -1, -1, +1 }, { +1, -1, +1 }, { +1, +1, +1 }, { -1, +1, +1 } }
+        };
+
+        for (int i = 0; i < 6; ++i) {
+                    glColor3ub( i*20, 100+i*10, i*42 );
+                    glBegin(GL_QUADS);
+                    for (int j = 0; j < 4; ++j) {
+                            glVertex3d(0.2 * coords[i][j][0], 0.2 * coords[i][j][1], 0.2 * coords[i][j][2]);
+                    }
+                    glEnd();
+        }
+    }
+@endcode
+ */
+@Namespace("cv") public static native void setOpenGlDrawCallback(@Str BytePointer winname, OpenGlDrawCallback onOpenGlDraw, Pointer userdata/*=0*/);
+@Namespace("cv") public static native void setOpenGlDrawCallback(@Str BytePointer winname, OpenGlDrawCallback onOpenGlDraw);
+@Namespace("cv") public static native void setOpenGlDrawCallback(@Str String winname, OpenGlDrawCallback onOpenGlDraw, Pointer userdata/*=0*/);
+@Namespace("cv") public static native void setOpenGlDrawCallback(@Str String winname, OpenGlDrawCallback onOpenGlDraw);
+
+/** @brief Sets the specified window as current OpenGL context.
+
+@param winname Window name
+ */
+@Namespace("cv") public static native void setOpenGlContext(@Str BytePointer winname);
+@Namespace("cv") public static native void setOpenGlContext(@Str String winname);
+
+/** @brief Force window to redraw its context and call draw callback ( setOpenGlDrawCallback ).
+
+@param winname Window name
+ */
+@Namespace("cv") public static native void updateWindow(@Str BytePointer winname);
+@Namespace("cv") public static native void updateWindow(@Str String winname);
+
+/** @} highgui_opengl
+
+ *  @addtogroup highgui_qt
+ *  @{ */
+// Only for Qt
+
+@Namespace("cv") public static class QtFont extends Pointer {
     static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public VideoCapture(Pointer p) { super(p); }
-
-    public VideoCapture() { allocate(); }
-    private native void allocate();
-    public VideoCapture(@StdString BytePointer filename) { allocate(filename); }
-    private native void allocate(@StdString BytePointer filename);
-    public VideoCapture(@StdString String filename) { allocate(filename); }
-    private native void allocate(@StdString String filename);
-    public VideoCapture(int device) { allocate(device); }
-    private native void allocate(int device);
-    public native @Cast("bool") boolean open(@StdString BytePointer filename);
-    public native @Cast("bool") boolean open(@StdString String filename);
-    public native @Cast("bool") boolean open(int device);
-    public native @Cast("bool") boolean isOpened();
-    public native void release();
-
-    public native @Cast("bool") boolean grab();
-    public native @Cast("bool") boolean retrieve(@ByRef Mat image, int channel/*=0*/);
-    public native @Cast("bool") boolean retrieve(@ByRef Mat image);
-    public native @ByRef @Name("operator>>") VideoCapture shiftRight(@ByRef Mat image);
-    public native @Cast("bool") boolean read(@ByRef Mat image);
-
-    public native @Cast("bool") boolean set(int propId, double value);
-    public native double get(int propId);
-}
-
-
-@Namespace("cv") @NoOffset public static class VideoWriter extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public VideoWriter(Pointer p) { super(p); }
+    /** Default native constructor. */
+    public QtFont() { allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public VideoWriter(int size) { allocateArray(size); }
+    public QtFont(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public QtFont(Pointer p) { super(p); }
+    private native void allocate();
     private native void allocateArray(int size);
-    @Override public VideoWriter position(int position) {
-        return (VideoWriter)super.position(position);
+    @Override public QtFont position(int position) {
+        return (QtFont)super.position(position);
     }
 
-    public VideoWriter() { allocate(); }
-    private native void allocate();
-    public VideoWriter(@StdString BytePointer filename, int fourcc, double fps,
-                    @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/) { allocate(filename, fourcc, fps, frameSize, isColor); }
-    private native void allocate(@StdString BytePointer filename, int fourcc, double fps,
-                    @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/);
-    public VideoWriter(@StdString BytePointer filename, int fourcc, double fps,
-                    @ByVal Size frameSize) { allocate(filename, fourcc, fps, frameSize); }
-    private native void allocate(@StdString BytePointer filename, int fourcc, double fps,
-                    @ByVal Size frameSize);
-    public VideoWriter(@StdString String filename, int fourcc, double fps,
-                    @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/) { allocate(filename, fourcc, fps, frameSize, isColor); }
-    private native void allocate(@StdString String filename, int fourcc, double fps,
-                    @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/);
-    public VideoWriter(@StdString String filename, int fourcc, double fps,
-                    @ByVal Size frameSize) { allocate(filename, fourcc, fps, frameSize); }
-    private native void allocate(@StdString String filename, int fourcc, double fps,
-                    @ByVal Size frameSize);
-    public native @Cast("bool") boolean open(@StdString BytePointer filename, int fourcc, double fps,
-                          @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/);
-    public native @Cast("bool") boolean open(@StdString BytePointer filename, int fourcc, double fps,
-                          @ByVal Size frameSize);
-    public native @Cast("bool") boolean open(@StdString String filename, int fourcc, double fps,
-                          @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/);
-    public native @Cast("bool") boolean open(@StdString String filename, int fourcc, double fps,
-                          @ByVal Size frameSize);
-    public native @Cast("bool") boolean isOpened();
-    public native void release();
-    public native @ByRef @Name("operator<<") VideoWriter shiftLeft(@Const @ByRef Mat image);
-    public native void write(@Const @ByRef Mat image);
+    @MemberGetter public native @Cast("const char*") BytePointer nameFont();  // Qt: nameFont
+    public native @ByRef Scalar color(); public native QtFont color(Scalar color);     // Qt: ColorFont -> cvScalar(blue_component, green_component, red_component[, alpha_component])
+    public native int font_face(); public native QtFont font_face(int font_face); // Qt: bool italic
+    @MemberGetter public native @Const IntPointer ascii();     // font data and metrics
+    @MemberGetter public native @Const IntPointer greek();
+    @MemberGetter public native @Const IntPointer cyrillic();
+    public native float hscale(); public native QtFont hscale(float hscale);
+    public native float vscale(); public native QtFont vscale(float vscale);
+    public native float shear(); public native QtFont shear(float shear);     // slope coefficient: 0 - normal, >0 - italic
+    public native int thickness(); public native QtFont thickness(int thickness); // Qt: weight
+    public native float dx(); public native QtFont dx(float dx);        // horizontal interval between letters
+    public native int line_type(); public native QtFont line_type(int line_type); // Qt: PointSize
 }
 
-// #endif
+/** @brief Creates the font to draw a text on an image.
 
+@param nameFont Name of the font. The name should match the name of a system font (such as
+*Times*). If the font is not found, a default one is used.
+@param pointSize Size of the font. If not specified, equal zero or negative, the point size of the
+font is set to a system-dependent default value. Generally, this is 12 points.
+@param color Color of the font in BGRA where A = 255 is fully transparent. Use the macro CV _ RGB
+for simplicity.
+@param weight Font weight. The following operation flags are available:
+ -   **CV_FONT_LIGHT** Weight of 25
+ -   **CV_FONT_NORMAL** Weight of 50
+ -   **CV_FONT_DEMIBOLD** Weight of 63
+ -   **CV_FONT_BOLD** Weight of 75
+ -   **CV_FONT_BLACK** Weight of 87
 
+ You can also specify a positive integer for better control.
+@param style Font style. The following operation flags are available:
+ -   **CV_STYLE_NORMAL** Normal font
+ -   **CV_STYLE_ITALIC** Italic font
+ -   **CV_STYLE_OBLIQUE** Oblique font
+@param spacing Spacing between characters. It can be negative or positive.
 
+The function fontQt creates a CvFont object. This CvFont is not compatible with putText .
+
+A basic usage of this function is the following: :
+@code
+    CvFont font = fontQt(''Times'');
+    addText( img1, ``Hello World !'', Point(50,50), font);
+@endcode
+ */
+@Namespace("cv") public static native @ByVal QtFont fontQt(@Str BytePointer nameFont, int pointSize/*=-1*/,
+                         @ByVal(nullValue = "cv::Scalar::all(0)") Scalar color/*=cv::Scalar::all(0)*/, int weight/*=cv::QT_FONT_NORMAL*/,
+                         int style/*=cv::QT_STYLE_NORMAL*/, int spacing/*=0*/);
+@Namespace("cv") public static native @ByVal QtFont fontQt(@Str BytePointer nameFont);
+@Namespace("cv") public static native @ByVal QtFont fontQt(@Str String nameFont, int pointSize/*=-1*/,
+                         @ByVal(nullValue = "cv::Scalar::all(0)") Scalar color/*=cv::Scalar::all(0)*/, int weight/*=cv::QT_FONT_NORMAL*/,
+                         int style/*=cv::QT_STYLE_NORMAL*/, int spacing/*=0*/);
+@Namespace("cv") public static native @ByVal QtFont fontQt(@Str String nameFont);
+
+/** @brief Creates the font to draw a text on an image.
+
+@param img 8-bit 3-channel image where the text should be drawn.
+@param text Text to write on an image.
+@param org Point(x,y) where the text should start on an image.
+@param font Font to use to draw a text.
+
+The function addText draws *text* on an image *img* using a specific font *font* (see example fontQt
+)
+ */
+@Namespace("cv") public static native void addText( @Const @ByRef Mat img, @Str BytePointer text, @ByVal Point org, @Const @ByRef QtFont font);
+@Namespace("cv") public static native void addText( @Const @ByRef Mat img, @Str String text, @ByVal Point org, @Const @ByRef QtFont font);
+
+/** @brief Displays a text on a window image as an overlay for a specified duration.
+
+@param winname Name of the window.
+@param text Overlay text to write on a window image.
+@param delayms The period (in milliseconds), during which the overlay text is displayed. If this
+function is called before the previous overlay text timed out, the timer is restarted and the text
+is updated. If this value is zero, the text never disappears.
+
+The function displayOverlay displays useful information/tips on top of the window for a certain
+amount of time *delayms*. The function does not modify the image, displayed in the window, that is,
+after the specified delay the original content of the window is restored.
+ */
+@Namespace("cv") public static native void displayOverlay(@Str BytePointer winname, @Str BytePointer text, int delayms/*=0*/);
+@Namespace("cv") public static native void displayOverlay(@Str BytePointer winname, @Str BytePointer text);
+@Namespace("cv") public static native void displayOverlay(@Str String winname, @Str String text, int delayms/*=0*/);
+@Namespace("cv") public static native void displayOverlay(@Str String winname, @Str String text);
+
+/** @brief Displays a text on the window statusbar during the specified period of time.
+
+@param winname Name of the window.
+@param text Text to write on the window statusbar.
+@param delayms Duration (in milliseconds) to display the text. If this function is called before
+the previous text timed out, the timer is restarted and the text is updated. If this value is
+zero, the text never disappears.
+
+The function displayOverlay displays useful information/tips on top of the window for a certain
+amount of time *delayms* . This information is displayed on the window statusbar (the window must be
+created with the CV_GUI_EXPANDED flags).
+ */
+@Namespace("cv") public static native void displayStatusBar(@Str BytePointer winname, @Str BytePointer text, int delayms/*=0*/);
+@Namespace("cv") public static native void displayStatusBar(@Str BytePointer winname, @Str BytePointer text);
+@Namespace("cv") public static native void displayStatusBar(@Str String winname, @Str String text, int delayms/*=0*/);
+@Namespace("cv") public static native void displayStatusBar(@Str String winname, @Str String text);
+
+/** @brief Saves parameters of the specified window.
+
+@param windowName Name of the window.
+
+The function saveWindowParameters saves size, location, flags, trackbars value, zoom and panning
+location of the window window_name .
+ */
+@Namespace("cv") public static native void saveWindowParameters(@Str BytePointer windowName);
+@Namespace("cv") public static native void saveWindowParameters(@Str String windowName);
+
+/** @brief Loads parameters of the specified window.
+
+@param windowName Name of the window.
+
+The function loadWindowParameters loads size, location, flags, trackbars value, zoom and panning
+location of the window window_name .
+ */
+@Namespace("cv") public static native void loadWindowParameters(@Str BytePointer windowName);
+@Namespace("cv") public static native void loadWindowParameters(@Str String windowName);
+
+@Namespace("cv") public static native int startLoop(Pt2Func_int_PointerPointer pt2Func, int argc, @Cast("char**") PointerPointer argv);
+@Namespace("cv") public static native int startLoop(Pt2Func_int_BytePointer pt2Func, int argc, @Cast("char**") @ByPtrPtr BytePointer argv);
+@Namespace("cv") public static native int startLoop(Pt2Func_int_ByteBuffer pt2Func, int argc, @Cast("char**") @ByPtrPtr ByteBuffer argv);
+@Namespace("cv") public static native int startLoop(Pt2Func_int_byte__ pt2Func, int argc, @Cast("char**") @ByPtrPtr byte[] argv);
+
+@Namespace("cv") public static native void stopLoop();
+
+/** @brief Attaches a button to the control panel.
+
+@param  bar_name
+   Name of the button.
+@param on_change Pointer to the function to be called every time the button changes its state.
+This function should be prototyped as void Foo(int state,\*void); . *state* is the current state
+of the button. It could be -1 for a push button, 0 or 1 for a check/radio box button.
+@param userdata Pointer passed to the callback function.
+@param type Optional type of the button.
+ -   **CV_PUSH_BUTTON** Push button
+ -   **CV_CHECKBOX** Checkbox button
+ -   **CV_RADIOBOX** Radiobox button. The radiobox on the same buttonbar (same line) are
+     exclusive, that is only one can be selected at a time.
+@param initial_button_state Default state of the button. Use for checkbox and radiobox. Its
+value could be 0 or 1. *(Optional)*
+
+The function createButton attaches a button to the control panel. Each button is added to a
+buttonbar to the right of the last button. A new buttonbar is created if nothing was attached to the
+control panel before, or if the last element attached to the control panel was a trackbar.
+
+See below various examples of the createButton function call: :
+@code
+    createButton(NULL,callbackButton);//create a push button "button 0", that will call callbackButton.
+    createButton("button2",callbackButton,NULL,CV_CHECKBOX,0);
+    createButton("button3",callbackButton,&value);
+    createButton("button5",callbackButton1,NULL,CV_RADIOBOX);
+    createButton("button6",callbackButton2,NULL,CV_PUSH_BUTTON,1);
+@endcode
+*/
+@Namespace("cv") public static native int createButton( @Str BytePointer bar_name, ButtonCallback on_change,
+                             Pointer userdata/*=0*/, int type/*=cv::QT_PUSH_BUTTON*/,
+                             @Cast("bool") boolean initial_button_state/*=false*/);
+@Namespace("cv") public static native int createButton( @Str BytePointer bar_name, ButtonCallback on_change);
+@Namespace("cv") public static native int createButton( @Str String bar_name, ButtonCallback on_change,
+                             Pointer userdata/*=0*/, int type/*=cv::QT_PUSH_BUTTON*/,
+                             @Cast("bool") boolean initial_button_state/*=false*/);
+@Namespace("cv") public static native int createButton( @Str String bar_name, ButtonCallback on_change);
+
+/** @} highgui_qt
+
+ *  @} highgui */
+
+ // cv
+
+// #ifndef DISABLE_OPENCV_24_COMPATIBILITY
+// #include "opencv2/highgui/highgui_c.h"
 // #endif
 
 // #endif

@@ -69,7 +69,6 @@ public class opencv_flann extends org.bytedeco.javacpp.presets.opencv_flann {
 // #ifdef __GNUC__
 // #define FLANN_DEPRECATED __attribute__ ((deprecated))
 // #elif defined(_MSC_VER)
-// #define FLANN_DEPRECATED __declspec(deprecated)
 // #else
 // #pragma message("WARNING: You need to implement FLANN_DEPRECATED for this compiler")
 // #define FLANN_DEPRECATED
@@ -117,6 +116,7 @@ public static final int
     FLANN_CENTERS_RANDOM = 0,
     FLANN_CENTERS_GONZALES = 1,
     FLANN_CENTERS_KMEANSPP = 2,
+    FLANN_CENTERS_GROUPWISE = 3,
 
     // deprecated constants, should use the FLANN_CENTERS_* ones instead
     CENTERS_RANDOM = 0,
@@ -228,9 +228,7 @@ public static final int
 // #ifndef _OPENCV_MINIFLANN_HPP_
 // #define _OPENCV_MINIFLANN_HPP_
 
-// #ifdef __cplusplus
-
-// #include "opencv2/core/core.hpp"
+// #include "opencv2/core.hpp"
 // #include "opencv2/flann/defines.h"
 
 @Namespace("cv::flann") @NoOffset public static class IndexParams extends Pointer {
@@ -247,29 +245,29 @@ public static final int
     public IndexParams() { allocate(); }
     private native void allocate();
 
-    public native @StdString BytePointer getString(@StdString BytePointer key, @StdString BytePointer defaultVal/*=std::string()*/);
-    public native @StdString BytePointer getString(@StdString BytePointer key);
-    public native @StdString String getString(@StdString String key, @StdString String defaultVal/*=std::string()*/);
-    public native @StdString String getString(@StdString String key);
-    public native int getInt(@StdString BytePointer key, int defaultVal/*=-1*/);
-    public native int getInt(@StdString BytePointer key);
-    public native int getInt(@StdString String key, int defaultVal/*=-1*/);
-    public native int getInt(@StdString String key);
-    public native double getDouble(@StdString BytePointer key, double defaultVal/*=-1*/);
-    public native double getDouble(@StdString BytePointer key);
-    public native double getDouble(@StdString String key, double defaultVal/*=-1*/);
-    public native double getDouble(@StdString String key);
+    public native @Str BytePointer getString(@Str BytePointer key, @Str BytePointer defaultVal/*=cv::String()*/);
+    public native @Str BytePointer getString(@Str BytePointer key);
+    public native @Str String getString(@Str String key, @Str String defaultVal/*=cv::String()*/);
+    public native @Str String getString(@Str String key);
+    public native int getInt(@Str BytePointer key, int defaultVal/*=-1*/);
+    public native int getInt(@Str BytePointer key);
+    public native int getInt(@Str String key, int defaultVal/*=-1*/);
+    public native int getInt(@Str String key);
+    public native double getDouble(@Str BytePointer key, double defaultVal/*=-1*/);
+    public native double getDouble(@Str BytePointer key);
+    public native double getDouble(@Str String key, double defaultVal/*=-1*/);
+    public native double getDouble(@Str String key);
 
-    public native void setString(@StdString BytePointer key, @StdString BytePointer value);
-    public native void setString(@StdString String key, @StdString String value);
-    public native void setInt(@StdString BytePointer key, int value);
-    public native void setInt(@StdString String key, int value);
-    public native void setDouble(@StdString BytePointer key, double value);
-    public native void setDouble(@StdString String key, double value);
-    public native void setFloat(@StdString BytePointer key, float value);
-    public native void setFloat(@StdString String key, float value);
-    public native void setBool(@StdString BytePointer key, @Cast("bool") boolean value);
-    public native void setBool(@StdString String key, @Cast("bool") boolean value);
+    public native void setString(@Str BytePointer key, @Str BytePointer value);
+    public native void setString(@Str String key, @Str String value);
+    public native void setInt(@Str BytePointer key, int value);
+    public native void setInt(@Str String key, int value);
+    public native void setDouble(@Str BytePointer key, double value);
+    public native void setDouble(@Str String key, double value);
+    public native void setFloat(@Str BytePointer key, float value);
+    public native void setFloat(@Str String key, float value);
+    public native void setBool(@Str BytePointer key, @Cast("bool") boolean value);
+    public native void setBool(@Str String key, @Cast("bool") boolean value);
     public native void setAlgorithm(int value);
 
     public native void getAll(@ByRef StringVector names,
@@ -326,9 +324,9 @@ public static final int
     }
 
     public CompositeIndexParams(int trees/*=4*/, int branching/*=32*/, int iterations/*=11*/,
-                             @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2f*/ ) { allocate(trees, branching, iterations, centers_init, cb_index); }
+                             @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2*/ ) { allocate(trees, branching, iterations, centers_init, cb_index); }
     private native void allocate(int trees/*=4*/, int branching/*=32*/, int iterations/*=11*/,
-                             @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2f*/ );
+                             @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2*/ );
     public CompositeIndexParams( ) { allocate(); }
     private native void allocate( );
 }
@@ -344,10 +342,10 @@ public static final int
         return (AutotunedIndexParams)super.position(position);
     }
 
-    public AutotunedIndexParams(float target_precision/*=0.8f*/, float build_weight/*=0.01f*/,
-                             float memory_weight/*=0*/, float sample_fraction/*=0.1f*/) { allocate(target_precision, build_weight, memory_weight, sample_fraction); }
-    private native void allocate(float target_precision/*=0.8f*/, float build_weight/*=0.01f*/,
-                             float memory_weight/*=0*/, float sample_fraction/*=0.1f*/);
+    public AutotunedIndexParams(float target_precision/*=0.8*/, float build_weight/*=0.01*/,
+                             float memory_weight/*=0*/, float sample_fraction/*=0.1*/) { allocate(target_precision, build_weight, memory_weight, sample_fraction); }
+    private native void allocate(float target_precision/*=0.8*/, float build_weight/*=0.01*/,
+                             float memory_weight/*=0*/, float sample_fraction/*=0.1*/);
     public AutotunedIndexParams() { allocate(); }
     private native void allocate();
 }
@@ -383,9 +381,9 @@ public static final int
     }
 
     public KMeansIndexParams(int branching/*=32*/, int iterations/*=11*/,
-                          @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2f*/ ) { allocate(branching, iterations, centers_init, cb_index); }
+                          @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2*/ ) { allocate(branching, iterations, centers_init, cb_index); }
     private native void allocate(int branching/*=32*/, int iterations/*=11*/,
-                          @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2f*/ );
+                          @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2*/ );
     public KMeansIndexParams( ) { allocate(); }
     private native void allocate( );
 }
@@ -408,10 +406,10 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SavedIndexParams(Pointer p) { super(p); }
 
-    public SavedIndexParams(@StdString BytePointer filename) { allocate(filename); }
-    private native void allocate(@StdString BytePointer filename);
-    public SavedIndexParams(@StdString String filename) { allocate(filename); }
-    private native void allocate(@StdString String filename);
+    public SavedIndexParams(@Str BytePointer filename) { allocate(filename); }
+    private native void allocate(@Str BytePointer filename);
+    public SavedIndexParams(@Str String filename) { allocate(filename); }
+    private native void allocate(@Str String filename);
 }
 
 @Namespace("cv::flann") public static class SearchParams extends IndexParams {
@@ -462,18 +460,16 @@ public static final int
     public native int radiusSearch(@ByVal Mat query, @ByVal Mat indices,
                                  @ByVal Mat dists, double radius, int maxResults);
 
-    public native void save(@StdString BytePointer filename);
-    public native void save(@StdString String filename);
-    public native @Cast("bool") boolean load(@ByVal Mat features, @StdString BytePointer filename);
-    public native @Cast("bool") boolean load(@ByVal Mat features, @StdString String filename);
+    public native void save(@Str BytePointer filename);
+    public native void save(@Str String filename);
+    public native @Cast("bool") boolean load(@ByVal Mat features, @Str BytePointer filename);
+    public native @Cast("bool") boolean load(@ByVal Mat features, @Str String filename);
     public native void release();
     public native @Cast("cvflann::flann_distance_t") int getDistance();
     public native @Cast("cvflann::flann_algorithm_t") int getAlgorithm();
 }
 
   // namespace cv::flann
-
-// #endif // __cplusplus
 
 // #endif
 

@@ -25,7 +25,7 @@ public class opencv_ml extends org.bytedeco.javacpp.presets.opencv_ml {
     public native StringIntMap put(@StdString BytePointer i, int value);
 }
 
-// Parsed from <opencv2/ml/ml.hpp>
+// Parsed from <opencv2/ml.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -36,9 +36,12 @@ public class opencv_ml extends org.bytedeco.javacpp.presets.opencv_ml {
 //  copy or use the software.
 //
 //
-//                        Intel License Agreement
+//                           License Agreement
+//                For Open Source Computer Vision Library
 //
 // Copyright (C) 2000, Intel Corporation, all rights reserved.
+// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
+// Copyright (C) 2014, Itseez Inc, all rights reserved.
 // Third party copyrights are property of their respective owners.
 //
 // Redistribution and use in source and binary forms, with or without modification,
@@ -51,7 +54,7 @@ public class opencv_ml extends org.bytedeco.javacpp.presets.opencv_ml {
 //     this list of conditions and the following disclaimer in the documentation
 //     and/or other materials provided with the distribution.
 //
-//   * The name of Intel Corporation may not be used to endorse or promote products
+//   * The name of the copyright holders may not be used to endorse or promote products
 //     derived from this software without specific prior written permission.
 //
 // This software is provided by the copyright holders and contributors "as is" and
@@ -70,2159 +73,1297 @@ public class opencv_ml extends org.bytedeco.javacpp.presets.opencv_ml {
 // #ifndef __OPENCV_ML_HPP__
 // #define __OPENCV_ML_HPP__
 
-// #include "opencv2/core/core.hpp"
-// #include <limits.h>
+// #ifdef __cplusplus
+// #  include "opencv2/core.hpp"
+// #endif
 
 // #ifdef __cplusplus
 
+// #include <float.h>
 // #include <map>
-// #include <string>
 // #include <iostream>
 
-// Apple defines a check() macro somewhere in the debug headers
-// that interferes with a method definiton in this header
-// #undef check
+/**
+  @defgroup ml Machine Learning
 
-/****************************************************************************************\
-*                               Main struct definitions                                  *
-\****************************************************************************************/
+  The Machine Learning Library (MLL) is a set of classes and functions for statistical
+  classification, regression, and clustering of data.
 
-/* log(2*PI) */
-public static final double CV_LOG2PI = (1.8378770664093454835606594728112);
+  Most of the classification and regression algorithms are implemented as C++ classes. As the
+  algorithms have different sets of features (like an ability to handle missing measurements or
+  categorical input variables), there is a little common ground between the classes. This common
+  ground is defined by the class cv::ml::StatModel that all the other ML classes are derived from.
 
-/* columns of <trainData> matrix are training samples */
-public static final int CV_COL_SAMPLE = 0;
+  See detailed overview here: @ref ml_intro.
+ */
 
-/* rows of <trainData> matrix are training samples */
-public static final int CV_ROW_SAMPLE = 1;
+/** @addtogroup ml
+ *  @{
 
-// #define CV_IS_ROW_SAMPLE(flags) ((flags) & CV_ROW_SAMPLE)
+/** @brief Variable types */
+/** enum cv::ml::VariableTypes */
+public static final int
+    /** same as VAR_ORDERED */
+    VAR_NUMERICAL    = 0,
+    /** ordered variables */
+    VAR_ORDERED      = 0,
+    /** categorical variables */
+    VAR_CATEGORICAL  = 1;
 
-public static class CvVectors extends Pointer {
+/** @brief %Error types */
+/** enum cv::ml::ErrorTypes */
+public static final int
+    TEST_ERROR = 0,
+    TRAIN_ERROR = 1;
+
+/** @brief Sample types */
+/** enum cv::ml::SampleTypes */
+public static final int
+    /** each training sample is a row of samples */
+    ROW_SAMPLE = 0,
+    /** each training sample occupies a column of samples */
+    COL_SAMPLE = 1;
+
+/** @brief The structure represents the logarithmic grid range of statmodel parameters.
+
+It is used for optimizing statmodel accuracy by varying model parameters, the accuracy estimate
+being computed by cross-validation.
+ */
+@Namespace("cv::ml") @NoOffset public static class ParamGrid extends Pointer {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public CvVectors() { allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvVectors(int size) { allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvVectors(Pointer p) { super(p); }
-    private native void allocate();
+    public ParamGrid(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public ParamGrid(int size) { allocateArray(size); }
     private native void allocateArray(int size);
-    @Override public CvVectors position(int position) {
-        return (CvVectors)super.position(position);
+    @Override public ParamGrid position(int position) {
+        return (ParamGrid)super.position(position);
     }
 
-    public native int type(); public native CvVectors type(int type);
-    public native int dims(); public native CvVectors dims(int dims);
-    public native int count(); public native CvVectors count(int count);
-    public native CvVectors next(); public native CvVectors next(CvVectors next);
-        @Name("data.ptr") public native @Cast("uchar*") BytePointer data_ptr(int i); public native CvVectors data_ptr(int i, BytePointer data_ptr);
-        @Name("data.ptr") @MemberGetter public native @Cast("uchar**") PointerPointer data_ptr();
-        @Name("data.fl") public native FloatPointer data_fl(int i); public native CvVectors data_fl(int i, FloatPointer data_fl);
-        @Name("data.fl") @MemberGetter public native @Cast("float**") PointerPointer data_fl();
-        @Name("data.db") public native DoublePointer data_db(int i); public native CvVectors data_db(int i, DoublePointer data_db);
-        @Name("data.db") @MemberGetter public native @Cast("double**") PointerPointer data_db();
+    /** @brief Default constructor */
+    public ParamGrid() { allocate(); }
+    private native void allocate();
+    /** @brief Constructor with parameters */
+    public ParamGrid(double _minVal, double _maxVal, double _logStep) { allocate(_minVal, _maxVal, _logStep); }
+    private native void allocate(double _minVal, double _maxVal, double _logStep);
+
+    /** Minimum value of the statmodel parameter. Default value is 0. */
+    public native double minVal(); public native ParamGrid minVal(double minVal);
+    /** Maximum value of the statmodel parameter. Default value is 0. */
+    public native double maxVal(); public native ParamGrid maxVal(double maxVal);
+    /** @brief Logarithmic step for iterating the statmodel parameter.
+
+    The grid determines the following iteration sequence of the statmodel parameter values:
+    \f[(minVal, minVal*step, minVal*{step}^2, \dots,  minVal*{logStep}^n),\f]
+    where \f$n\f$ is the maximal index satisfying
+    \f[\texttt{minVal} * \texttt{logStep} ^n <  \texttt{maxVal}\f]
+    The grid is logarithmic, so logStep must always be greater then 1. Default value is 1.
+    */
+    public native double logStep(); public native ParamGrid logStep(double logStep);
 }
 
-// #if 0
-// #endif
+/** @brief Class encapsulating training data.
 
-/* Variable type */
-public static final int CV_VAR_NUMERICAL =    0;
-public static final int CV_VAR_ORDERED =      0;
-public static final int CV_VAR_CATEGORICAL =  1;
+Please note that the class only specifies the interface of training data, but not implementation.
+All the statistical model classes in _ml_ module accepts Ptr\<TrainData\> as parameter. In other
+words, you can create your own class derived from TrainData and pass smart pointer to the instance
+of this class into StatModel::train.
 
-public static final String CV_TYPE_NAME_ML_SVM =         "opencv-ml-svm";
-public static final String CV_TYPE_NAME_ML_KNN =         "opencv-ml-knn";
-public static final String CV_TYPE_NAME_ML_NBAYES =      "opencv-ml-bayesian";
-public static final String CV_TYPE_NAME_ML_EM =          "opencv-ml-em";
-public static final String CV_TYPE_NAME_ML_BOOSTING =    "opencv-ml-boost-tree";
-public static final String CV_TYPE_NAME_ML_TREE =        "opencv-ml-tree";
-public static final String CV_TYPE_NAME_ML_ANN_MLP =     "opencv-ml-ann-mlp";
-public static final String CV_TYPE_NAME_ML_CNN =         "opencv-ml-cnn";
-public static final String CV_TYPE_NAME_ML_RTREES =      "opencv-ml-random-trees";
-public static final String CV_TYPE_NAME_ML_ERTREES =     "opencv-ml-extremely-randomized-trees";
-public static final String CV_TYPE_NAME_ML_GBT =         "opencv-ml-gradient-boosting-trees";
-
-public static final int CV_TRAIN_ERROR =  0;
-public static final int CV_TEST_ERROR =   1;
-
-@NoOffset public static class CvStatModel extends Pointer {
+@sa @ref ml_intro_data
+ */
+@Namespace("cv::ml") public static class TrainData extends Pointer {
     static { Loader.load(); }
+    /** Empty constructor. */
+    public TrainData() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvStatModel(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvStatModel(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvStatModel position(int position) {
-        return (CvStatModel)super.position(position);
-    }
+    public TrainData(Pointer p) { super(p); }
 
-    public CvStatModel() { allocate(); }
-    private native void allocate();
+    public static native float missingValue();
 
-    public native void clear();
+    public native int getLayout();
+    public native int getNTrainSamples();
+    public native int getNTestSamples();
+    public native int getNSamples();
+    public native int getNVars();
+    public native int getNAllVars();
 
-    public native void save( @Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer name/*=0*/ );
-    public native void save( @Cast("const char*") BytePointer filename );
-    public native void save( String filename, String name/*=0*/ );
-    public native void save( String filename );
-    public native void load( @Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer name/*=0*/ );
-    public native void load( @Cast("const char*") BytePointer filename );
-    public native void load( String filename, String name/*=0*/ );
-    public native void load( String filename );
+    public native void getSample(@ByVal Mat varIdx, int sidx, FloatPointer buf);
+    public native void getSample(@ByVal Mat varIdx, int sidx, FloatBuffer buf);
+    public native void getSample(@ByVal Mat varIdx, int sidx, float[] buf);
+    public native @ByVal Mat getSamples();
+    public native @ByVal Mat getMissing();
 
-    public native void write( CvFileStorage storage, @Cast("const char*") BytePointer name );
-    public native void write( CvFileStorage storage, String name );
-    public native void read( CvFileStorage storage, CvFileNode node );
+    /** @brief Returns matrix of train samples
+
+    @param layout The requested layout. If it's different from the initial one, the matrix is
+        transposed. See ml::SampleTypes.
+    @param compressSamples if true, the function returns only the training samples (specified by
+        sampleIdx)
+    @param compressVars if true, the function returns the shorter training samples, containing only
+        the active variables.
+
+    In current implementation the function tries to avoid physical data copying and returns the
+    matrix stored inside TrainData (unless the transposition or compression is needed).
+     */
+    public native @ByVal Mat getTrainSamples(int layout/*=cv::ml::ROW_SAMPLE*/,
+                                    @Cast("bool") boolean compressSamples/*=true*/,
+                                    @Cast("bool") boolean compressVars/*=true*/);
+    public native @ByVal Mat getTrainSamples();
+
+    /** @brief Returns the vector of responses
+
+    The function returns ordered or the original categorical responses. Usually it's used in
+    regression algorithms.
+     */
+    public native @ByVal Mat getTrainResponses();
+
+    /** @brief Returns the vector of normalized categorical responses
+
+    The function returns vector of responses. Each response is integer from `0` to `<number of
+    classes>-1`. The actual label value can be retrieved then from the class label vector, see
+    TrainData::getClassLabels.
+     */
+    public native @ByVal Mat getTrainNormCatResponses();
+    public native @ByVal Mat getTestResponses();
+    public native @ByVal Mat getTestNormCatResponses();
+    public native @ByVal Mat getResponses();
+    public native @ByVal Mat getNormCatResponses();
+    public native @ByVal Mat getSampleWeights();
+    public native @ByVal Mat getTrainSampleWeights();
+    public native @ByVal Mat getTestSampleWeights();
+    public native @ByVal Mat getVarIdx();
+    public native @ByVal Mat getVarType();
+    public native int getResponseType();
+    public native @ByVal Mat getTrainSampleIdx();
+    public native @ByVal Mat getTestSampleIdx();
+    public native void getValues(int vi, @ByVal Mat sidx, FloatPointer values);
+    public native void getValues(int vi, @ByVal Mat sidx, FloatBuffer values);
+    public native void getValues(int vi, @ByVal Mat sidx, float[] values);
+    public native void getNormCatValues(int vi, @ByVal Mat sidx, IntPointer values);
+    public native void getNormCatValues(int vi, @ByVal Mat sidx, IntBuffer values);
+    public native void getNormCatValues(int vi, @ByVal Mat sidx, int[] values);
+    public native @ByVal Mat getDefaultSubstValues();
+
+    public native int getCatCount(int vi);
+
+    /** @brief Returns the vector of class labels
+
+    The function returns vector of unique labels occurred in the responses.
+     */
+    public native @ByVal Mat getClassLabels();
+
+    public native @ByVal Mat getCatOfs();
+    public native @ByVal Mat getCatMap();
+
+    /** @brief Splits the training data into the training and test parts
+    @sa TrainData::setTrainTestSplitRatio
+     */
+    public native void setTrainTestSplit(int count, @Cast("bool") boolean shuffle/*=true*/);
+    public native void setTrainTestSplit(int count);
+
+    /** @brief Splits the training data into the training and test parts
+
+    The function selects a subset of specified relative size and then returns it as the training
+    set. If the function is not called, all the data is used for training. Please, note that for
+    each of TrainData::getTrain\* there is corresponding TrainData::getTest\*, so that the test
+    subset can be retrieved and processed as well.
+    @sa TrainData::setTrainTestSplit
+     */
+    public native void setTrainTestSplitRatio(double ratio, @Cast("bool") boolean shuffle/*=true*/);
+    public native void setTrainTestSplitRatio(double ratio);
+    public native void shuffleTrainTest();
+
+    public static native @ByVal Mat getSubVector(@Const @ByRef Mat vec, @Const @ByRef Mat idx);
+
+    /** @brief Reads the dataset from a .csv file and returns the ready-to-use training data.
+
+    @param filename The input file name
+    @param headerLineCount The number of lines in the beginning to skip; besides the header, the
+        function also skips empty lines and lines staring with `#`
+    @param responseStartIdx Index of the first output variable. If -1, the function considers the
+        last variable as the response
+    @param responseEndIdx Index of the last output variable + 1. If -1, then there is single
+        response variable at responseStartIdx.
+    @param varTypeSpec The optional text string that specifies the variables' types. It has the
+        format `ord[n1-n2,n3,n4-n5,...]cat[n6,n7-n8,...]`. That is, variables from `n1 to n2`
+        (inclusive range), `n3`, `n4 to n5` ... are considered ordered and `n6`, `n7 to n8` ... are
+        considered as categorical. The range `[n1..n2] + [n3] + [n4..n5] + ... + [n6] + [n7..n8]`
+        should cover all the variables. If varTypeSpec is not specified, then algorithm uses the
+        following rules:
+        - all input variables are considered ordered by default. If some column contains has non-
+          numerical values, e.g. 'apple', 'pear', 'apple', 'apple', 'mango', the corresponding
+          variable is considered categorical.
+        - if there are several output variables, they are all considered as ordered. Error is
+          reported when non-numerical values are used.
+        - if there is a single output variable, then if its values are non-numerical or are all
+          integers, then it's considered categorical. Otherwise, it's considered ordered.
+    @param delimiter The character used to separate values in each line.
+    @param missch The character used to specify missing measurements. It should not be a digit.
+        Although it's a non-numerical value, it surely does not affect the decision of whether the
+        variable ordered or categorical.
+     */
+    public static native @Ptr TrainData loadFromCSV(@Str BytePointer filename,
+                                          int headerLineCount,
+                                          int responseStartIdx/*=-1*/,
+                                          int responseEndIdx/*=-1*/,
+                                          @Str BytePointer varTypeSpec/*=cv::String()*/,
+                                          @Cast("char") byte delimiter/*=','*/,
+                                          @Cast("char") byte missch/*='?'*/);
+    public static native @Ptr TrainData loadFromCSV(@Str BytePointer filename,
+                                          int headerLineCount);
+    public static native @Ptr TrainData loadFromCSV(@Str String filename,
+                                          int headerLineCount,
+                                          int responseStartIdx/*=-1*/,
+                                          int responseEndIdx/*=-1*/,
+                                          @Str String varTypeSpec/*=cv::String()*/,
+                                          @Cast("char") byte delimiter/*=','*/,
+                                          @Cast("char") byte missch/*='?'*/);
+    public static native @Ptr TrainData loadFromCSV(@Str String filename,
+                                          int headerLineCount);
+
+    /** @brief Creates training data from in-memory arrays.
+
+    @param samples matrix of samples. It should have CV_32F type.
+    @param layout see ml::SampleTypes.
+    @param responses matrix of responses. If the responses are scalar, they should be stored as a
+        single row or as a single column. The matrix should have type CV_32F or CV_32S (in the
+        former case the responses are considered as ordered by default; in the latter case - as
+        categorical)
+    @param varIdx vector specifying which variables to use for training. It can be an integer vector
+        (CV_32S) containing 0-based variable indices or byte vector (CV_8U) containing a mask of
+        active variables.
+    @param sampleIdx vector specifying which samples to use for training. It can be an integer
+        vector (CV_32S) containing 0-based sample indices or byte vector (CV_8U) containing a mask
+        of training samples.
+    @param sampleWeights optional vector with weights for each sample. It should have CV_32F type.
+    @param varType optional vector of type CV_8U and size `<number_of_variables_in_samples> +
+        <number_of_variables_in_responses>`, containing types of each input and output variable. See
+        ml::VariableTypes.
+     */
+    public static native @Ptr TrainData create(@ByVal Mat samples, int layout, @ByVal Mat responses,
+                                     @ByVal(nullValue = "cv::noArray()") Mat varIdx/*=cv::noArray()*/, @ByVal(nullValue = "cv::noArray()") Mat sampleIdx/*=cv::noArray()*/,
+                                     @ByVal(nullValue = "cv::noArray()") Mat sampleWeights/*=cv::noArray()*/, @ByVal(nullValue = "cv::noArray()") Mat varType/*=cv::noArray()*/);
+    public static native @Ptr TrainData create(@ByVal Mat samples, int layout, @ByVal Mat responses);
+}
+
+/** @brief Base class for statistical models in OpenCV ML.
+ */
+@Namespace("cv::ml") public static class StatModel extends Algorithm {
+    static { Loader.load(); }
+    /** Empty constructor. */
+    public StatModel() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StatModel(Pointer p) { super(p); }
+
+    /** Predict options */
+    /** enum cv::ml::StatModel::Flags */
+    public static final int
+        UPDATE_MODEL = 1,
+        /** makes the method return the raw results (the sum), not the class label */
+        RAW_OUTPUT= 1,
+        COMPRESSED_INPUT= 2,
+        PREPROCESSED_INPUT= 4;
+
+    /** @brief Returns the number of variables in training samples */
+    public native int getVarCount();
+
+    public native @Cast("bool") boolean empty();
+
+    /** @brief Returns true if the model is trained */
+    public native @Cast("bool") boolean isTrained();
+    /** @brief Returns true if the model is classifier */
+    public native @Cast("bool") boolean isClassifier();
+
+    /** @brief Trains the statistical model
+
+    @param trainData training data that can be loaded from file using TrainData::loadFromCSV or
+        created with TrainData::create.
+    @param flags optional flags, depending on the model. Some of the models can be updated with the
+        new training samples, not completely overwritten (such as NormalBayesClassifier or ANN_MLP).
+     */
+    public native @Cast("bool") boolean train( @Ptr TrainData trainData, int flags/*=0*/ );
+    public native @Cast("bool") boolean train( @Ptr TrainData trainData );
+
+    /** @brief Trains the statistical model
+
+    @param samples training samples
+    @param layout See ml::SampleTypes.
+    @param responses vector of responses associated with the training samples.
+    */
+    public native @Cast("bool") boolean train( @ByVal Mat samples, int layout, @ByVal Mat responses );
+
+    /** @brief Computes error on the training or test dataset
+
+    @param data the training data
+    @param test if true, the error is computed over the test subset of the data, otherwise it's
+        computed over the training subset of the data. Please note that if you loaded a completely
+        different dataset to evaluate already trained classifier, you will probably want not to set
+        the test subset at all with TrainData::setTrainTestSplitRatio and specify test=false, so
+        that the error is computed for the whole new set. Yes, this sounds a bit confusing.
+    @param resp the optional output responses.
+
+    The method uses StatModel::predict to compute the error. For regression models the error is
+    computed as RMS, for classifiers - as a percent of missclassified samples (0%-100%).
+     */
+    public native float calcError( @Ptr TrainData data, @Cast("bool") boolean test, @ByVal Mat resp );
+
+    /** @brief Predicts response(s) for the provided sample(s)
+
+    @param samples The input samples, floating-point matrix
+    @param results The optional output matrix of results.
+    @param flags The optional flags, model-dependent. See cv::ml::StatModel::Flags.
+     */
+    public native float predict( @ByVal Mat samples, @ByVal(nullValue = "cv::noArray()") Mat results/*=cv::noArray()*/, int flags/*=0*/ );
+    public native float predict( @ByVal Mat samples );
+
+    /** @brief Create and train model with default parameters
+
+    The class must implement static `create()` method with no parameters or with all default parameter values
+    */
 }
 
 /****************************************************************************************\
 *                                 Normal Bayes Classifier                                *
 \****************************************************************************************/
 
-/* The structure, representing the grid range of statmodel parameters.
-   It is used for optimizing statmodel accuracy by varying model parameters,
-   the accuracy estimate being computed by cross-validation.
-   The grid is logarithmic, so <step> must be greater then 1. */
+/** @brief Bayes classifier for normally distributed data.
 
-@NoOffset public static class CvParamGrid extends Pointer {
+@sa @ref ml_intro_bayes
+ */
+@Namespace("cv::ml") public static class NormalBayesClassifier extends StatModel {
     static { Loader.load(); }
+    /** Empty constructor. */
+    public NormalBayesClassifier() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvParamGrid(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvParamGrid(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvParamGrid position(int position) {
-        return (CvParamGrid)super.position(position);
-    }
+    public NormalBayesClassifier(Pointer p) { super(p); }
 
-    // SVM params type
-    /** enum CvParamGrid:: */
-    public static final int SVM_C= 0, SVM_GAMMA= 1, SVM_P= 2, SVM_NU= 3, SVM_COEF= 4, SVM_DEGREE= 5;
+    /** @brief Predicts the response for sample(s).
 
-    public CvParamGrid() { allocate(); }
-    private native void allocate();
+    The method estimates the most probable classes for input vectors. Input vectors (one or more)
+    are stored as rows of the matrix inputs. In case of multiple input vectors, there should be one
+    output vector outputs. The predicted class for a single input vector is returned by the method.
+    The vector outputProbs contains the output probabilities corresponding to each element of
+    result.
+     */
+    public native float predictProb( @ByVal Mat inputs, @ByVal Mat outputs,
+                                   @ByVal Mat outputProbs, int flags/*=0*/ );
+    public native float predictProb( @ByVal Mat inputs, @ByVal Mat outputs,
+                                   @ByVal Mat outputProbs );
 
-    public CvParamGrid( double min_val, double max_val, double log_step ) { allocate(min_val, max_val, log_step); }
-    private native void allocate( double min_val, double max_val, double log_step );
-    //CvParamGrid( int param_id );
-    public native @Cast("bool") boolean check();
-
-    public native double min_val(); public native CvParamGrid min_val(double min_val);
-    public native double max_val(); public native CvParamGrid max_val(double max_val);
-    public native double step(); public native CvParamGrid step(double step);
+    /** Creates empty model
+    Use StatModel::train to train the model after creation. */
+    public static native @Ptr NormalBayesClassifier create();
 }
-
-
-
-@NoOffset public static class CvNormalBayesClassifier extends CvStatModel {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvNormalBayesClassifier(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvNormalBayesClassifier(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvNormalBayesClassifier position(int position) {
-        return (CvNormalBayesClassifier)super.position(position);
-    }
-
-    public CvNormalBayesClassifier() { allocate(); }
-    private native void allocate();
-
-    public CvNormalBayesClassifier( @Const CvMat trainData, @Const CvMat responses,
-            @Const CvMat varIdx/*=0*/, @Const CvMat sampleIdx/*=0*/ ) { allocate(trainData, responses, varIdx, sampleIdx); }
-    private native void allocate( @Const CvMat trainData, @Const CvMat responses,
-            @Const CvMat varIdx/*=0*/, @Const CvMat sampleIdx/*=0*/ );
-    public CvNormalBayesClassifier( @Const CvMat trainData, @Const CvMat responses ) { allocate(trainData, responses); }
-    private native void allocate( @Const CvMat trainData, @Const CvMat responses );
-
-    public native @Cast("bool") boolean train( @Const CvMat trainData, @Const CvMat responses,
-            @Const CvMat varIdx/*=0*/, @Const CvMat sampleIdx/*=0*/, @Cast("bool") boolean update/*=false*/ );
-    public native @Cast("bool") boolean train( @Const CvMat trainData, @Const CvMat responses );
-
-    public native float predict( @Const CvMat samples, CvMat results/*=0*/ );
-    public native float predict( @Const CvMat samples );
-    public native void clear();
-
-    public CvNormalBayesClassifier( @Const @ByRef Mat trainData, @Const @ByRef Mat responses,
-                                @Const @ByRef(nullValue = "cv::Mat()") Mat varIdx/*=cv::Mat()*/, @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/ ) { allocate(trainData, responses, varIdx, sampleIdx); }
-    private native void allocate( @Const @ByRef Mat trainData, @Const @ByRef Mat responses,
-                                @Const @ByRef(nullValue = "cv::Mat()") Mat varIdx/*=cv::Mat()*/, @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/ );
-    public CvNormalBayesClassifier( @Const @ByRef Mat trainData, @Const @ByRef Mat responses ) { allocate(trainData, responses); }
-    private native void allocate( @Const @ByRef Mat trainData, @Const @ByRef Mat responses );
-    public native @Cast("bool") boolean train( @Const @ByRef Mat trainData, @Const @ByRef Mat responses,
-                           @Const @ByRef(nullValue = "cv::Mat()") Mat varIdx/*=cv::Mat()*/, @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/,
-                           @Cast("bool") boolean update/*=false*/ );
-    public native @Cast("bool") boolean train( @Const @ByRef Mat trainData, @Const @ByRef Mat responses );
-    public native float predict( @Const @ByRef Mat samples, Mat results/*=0*/ );
-    public native float predict( @Const @ByRef Mat samples );
-
-    public native void write( CvFileStorage storage, @Cast("const char*") BytePointer name );
-    public native void write( CvFileStorage storage, String name );
-    public native void read( CvFileStorage storage, CvFileNode node );
-}
-
 
 /****************************************************************************************\
 *                          K-Nearest Neighbour Classifier                                *
 \****************************************************************************************/
 
-// k Nearest Neighbors
-@NoOffset public static class CvKNearest extends CvStatModel {
+/** @brief The class implements K-Nearest Neighbors model
+
+@sa @ref ml_intro_knn
+ */
+@Namespace("cv::ml") public static class KNearest extends StatModel {
     static { Loader.load(); }
+    /** Empty constructor. */
+    public KNearest() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvKNearest(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvKNearest(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvKNearest position(int position) {
-        return (CvKNearest)super.position(position);
-    }
+    public KNearest(Pointer p) { super(p); }
 
 
-    public CvKNearest() { allocate(); }
-    private native void allocate();
+    /** Default number of neighbors to use in predict method. */
+    /** @see setDefaultK */
+    public native int getDefaultK();
+    /** @copybrief getDefaultK @see getDefaultK */
+    public native void setDefaultK(int val);
 
-    public CvKNearest( @Const CvMat trainData, @Const CvMat responses,
-                    @Const CvMat sampleIdx/*=0*/, @Cast("bool") boolean isRegression/*=false*/, int max_k/*=32*/ ) { allocate(trainData, responses, sampleIdx, isRegression, max_k); }
-    private native void allocate( @Const CvMat trainData, @Const CvMat responses,
-                    @Const CvMat sampleIdx/*=0*/, @Cast("bool") boolean isRegression/*=false*/, int max_k/*=32*/ );
-    public CvKNearest( @Const CvMat trainData, @Const CvMat responses ) { allocate(trainData, responses); }
-    private native void allocate( @Const CvMat trainData, @Const CvMat responses );
+    /** Whether classification or regression model should be trained. */
+    /** @see setIsClassifier */
+    public native @Cast("bool") boolean getIsClassifier();
+    /** @copybrief getIsClassifier @see getIsClassifier */
+    public native void setIsClassifier(@Cast("bool") boolean val);
 
-    public native @Cast("bool") boolean train( @Const CvMat trainData, @Const CvMat responses,
-                            @Const CvMat sampleIdx/*=0*/, @Cast("bool") boolean is_regression/*=false*/,
-                            int maxK/*=32*/, @Cast("bool") boolean updateBase/*=false*/ );
-    public native @Cast("bool") boolean train( @Const CvMat trainData, @Const CvMat responses );
+    /** Parameter for KDTree implementation. */
+    /** @see setEmax */
+    public native int getEmax();
+    /** @copybrief getEmax @see getEmax */
+    public native void setEmax(int val);
 
-    public native float find_nearest( @Const CvMat samples, int k, CvMat results/*=0*/,
-            @Cast("const float**") PointerPointer neighbors/*=0*/, CvMat neighborResponses/*=0*/, CvMat dist/*=0*/ );
-    public native float find_nearest( @Const CvMat samples, int k );
-    public native float find_nearest( @Const CvMat samples, int k, CvMat results/*=0*/,
-            @Const @ByPtrPtr FloatPointer neighbors/*=0*/, CvMat neighborResponses/*=0*/, CvMat dist/*=0*/ );
-    public native float find_nearest( @Const CvMat samples, int k, CvMat results/*=0*/,
-            @Const @ByPtrPtr FloatBuffer neighbors/*=0*/, CvMat neighborResponses/*=0*/, CvMat dist/*=0*/ );
-    public native float find_nearest( @Const CvMat samples, int k, CvMat results/*=0*/,
-            @Const @ByPtrPtr float[] neighbors/*=0*/, CvMat neighborResponses/*=0*/, CvMat dist/*=0*/ );
+    /** %Algorithm type, one of KNearest::Types. */
+    /** @see setAlgorithmType */
+    public native int getAlgorithmType();
+    /** @copybrief getAlgorithmType @see getAlgorithmType */
+    public native void setAlgorithmType(int val);
 
-    public CvKNearest( @Const @ByRef Mat trainData, @Const @ByRef Mat responses,
-                   @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/, @Cast("bool") boolean isRegression/*=false*/, int max_k/*=32*/ ) { allocate(trainData, responses, sampleIdx, isRegression, max_k); }
-    private native void allocate( @Const @ByRef Mat trainData, @Const @ByRef Mat responses,
-                   @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/, @Cast("bool") boolean isRegression/*=false*/, int max_k/*=32*/ );
-    public CvKNearest( @Const @ByRef Mat trainData, @Const @ByRef Mat responses ) { allocate(trainData, responses); }
-    private native void allocate( @Const @ByRef Mat trainData, @Const @ByRef Mat responses );
+    /** @brief Finds the neighbors and predicts responses for input vectors.
 
-    public native @Cast("bool") boolean train( @Const @ByRef Mat trainData, @Const @ByRef Mat responses,
-                           @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/, @Cast("bool") boolean isRegression/*=false*/,
-                           int maxK/*=32*/, @Cast("bool") boolean updateBase/*=false*/ );
-    public native @Cast("bool") boolean train( @Const @ByRef Mat trainData, @Const @ByRef Mat responses );
+    @param samples Input samples stored by rows. It is a single-precision floating-point matrix of
+        `<number_of_samples> * k` size.
+    @param k Number of used nearest neighbors. Should be greater than 1.
+    @param results Vector with results of prediction (regression or classification) for each input
+        sample. It is a single-precision floating-point vector with `<number_of_samples>` elements.
+    @param neighborResponses Optional output values for corresponding neighbors. It is a single-
+        precision floating-point matrix of `<number_of_samples> * k` size.
+    @param dist Optional output distances from the input vectors to the corresponding neighbors. It
+        is a single-precision floating-point matrix of `<number_of_samples> * k` size.
 
-    public native float find_nearest( @Const @ByRef Mat samples, int k, Mat results/*=0*/,
-                                    @Cast("const float**") PointerPointer neighbors/*=0*/, Mat neighborResponses/*=0*/,
-                                    Mat dist/*=0*/ );
-    public native float find_nearest( @Const @ByRef Mat samples, int k );
-    public native float find_nearest( @Const @ByRef Mat samples, int k, Mat results/*=0*/,
-                                    @Const @ByPtrPtr FloatPointer neighbors/*=0*/, Mat neighborResponses/*=0*/,
-                                    Mat dist/*=0*/ );
-    public native float find_nearest( @Const @ByRef Mat samples, int k, Mat results/*=0*/,
-                                    @Const @ByPtrPtr FloatBuffer neighbors/*=0*/, Mat neighborResponses/*=0*/,
-                                    Mat dist/*=0*/ );
-    public native float find_nearest( @Const @ByRef Mat samples, int k, Mat results/*=0*/,
-                                    @Const @ByPtrPtr float[] neighbors/*=0*/, Mat neighborResponses/*=0*/,
-                                    Mat dist/*=0*/ );
-    public native float find_nearest( @Const @ByRef Mat samples, int k, @ByRef Mat results,
-                                            @ByRef Mat neighborResponses, @ByRef Mat dists);
+    For each input vector (a row of the matrix samples), the method finds the k nearest neighbors.
+    In case of regression, the predicted result is a mean value of the particular vector's neighbor
+    responses. In case of classification, the class is determined by voting.
 
-    public native void clear();
-    public native int get_max_k();
-    public native int get_var_count();
-    public native int get_sample_count();
-    public native @Cast("bool") boolean is_regression();
+    For each input vector, the neighbors are sorted by their distances to the vector.
 
-    public native float write_results( int k, int k1, int start, int end,
-            @Const FloatPointer neighbor_responses, @Const FloatPointer dist, CvMat _results,
-            CvMat _neighbor_responses, CvMat _dist, Cv32suf sort_buf );
-    public native float write_results( int k, int k1, int start, int end,
-            @Const FloatBuffer neighbor_responses, @Const FloatBuffer dist, CvMat _results,
-            CvMat _neighbor_responses, CvMat _dist, Cv32suf sort_buf );
-    public native float write_results( int k, int k1, int start, int end,
-            @Const float[] neighbor_responses, @Const float[] dist, CvMat _results,
-            CvMat _neighbor_responses, CvMat _dist, Cv32suf sort_buf );
+    In case of C++ interface you can use output pointers to empty matrices and the function will
+    allocate memory itself.
 
-    public native void find_neighbors_direct( @Const CvMat _samples, int k, int start, int end,
-            FloatPointer neighbor_responses, @Cast("const float**") PointerPointer neighbors, FloatPointer dist );
-    public native void find_neighbors_direct( @Const CvMat _samples, int k, int start, int end,
-            FloatPointer neighbor_responses, @Const @ByPtrPtr FloatPointer neighbors, FloatPointer dist );
-    public native void find_neighbors_direct( @Const CvMat _samples, int k, int start, int end,
-            FloatBuffer neighbor_responses, @Const @ByPtrPtr FloatBuffer neighbors, FloatBuffer dist );
-    public native void find_neighbors_direct( @Const CvMat _samples, int k, int start, int end,
-            float[] neighbor_responses, @Const @ByPtrPtr float[] neighbors, float[] dist );
+    If only a single input vector is passed, all output matrices are optional and the predicted
+    value is returned by the method.
+
+    The function is parallelized with the TBB library.
+     */
+    public native float findNearest( @ByVal Mat samples, int k,
+                                   @ByVal Mat results,
+                                   @ByVal(nullValue = "cv::noArray()") Mat neighborResponses/*=cv::noArray()*/,
+                                   @ByVal(nullValue = "cv::noArray()") Mat dist/*=cv::noArray()*/ );
+    public native float findNearest( @ByVal Mat samples, int k,
+                                   @ByVal Mat results );
+
+    /** @brief Implementations of KNearest algorithm
+       */
+    /** enum cv::ml::KNearest::Types */
+    public static final int
+        BRUTE_FORCE= 1,
+        KDTREE= 2;
+
+    /** @brief Creates the empty model
+
+    The static method creates empty %KNearest classifier. It should be then trained using StatModel::train method.
+     */
+    public static native @Ptr KNearest create();
 }
 
 /****************************************************************************************\
 *                                   Support Vector Machines                              *
 \****************************************************************************************/
 
-// SVM training parameters
-@NoOffset public static class CvSVMParams extends Pointer {
+/** @brief Support Vector Machines.
+
+@sa @ref ml_intro_svm
+ */
+@Namespace("cv::ml") public static class SVM extends StatModel {
     static { Loader.load(); }
+    /** Empty constructor. */
+    public SVM() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvSVMParams(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvSVMParams(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvSVMParams position(int position) {
-        return (CvSVMParams)super.position(position);
-    }
-
-    public CvSVMParams() { allocate(); }
-    private native void allocate();
-    public CvSVMParams( int svm_type, int kernel_type,
-                     double degree, double gamma, double coef0,
-                     double Cvalue, double nu, double p,
-                     CvMat class_weights, @ByVal CvTermCriteria term_crit ) { allocate(svm_type, kernel_type, degree, gamma, coef0, Cvalue, nu, p, class_weights, term_crit); }
-    private native void allocate( int svm_type, int kernel_type,
-                     double degree, double gamma, double coef0,
-                     double Cvalue, double nu, double p,
-                     CvMat class_weights, @ByVal CvTermCriteria term_crit );
-
-    public native int svm_type(); public native CvSVMParams svm_type(int svm_type);
-    public native int kernel_type(); public native CvSVMParams kernel_type(int kernel_type);
-    public native double degree(); public native CvSVMParams degree(double degree); // for poly
-    public native double gamma(); public native CvSVMParams gamma(double gamma);  // for poly/rbf/sigmoid
-    public native double coef0(); public native CvSVMParams coef0(double coef0);  // for poly/sigmoid
-
-    public native double C(); public native CvSVMParams C(double C);  // for CV_SVM_C_SVC, CV_SVM_EPS_SVR and CV_SVM_NU_SVR
-    public native double nu(); public native CvSVMParams nu(double nu); // for CV_SVM_NU_SVC, CV_SVM_ONE_CLASS, and CV_SVM_NU_SVR
-    public native double p(); public native CvSVMParams p(double p); // for CV_SVM_EPS_SVR
-    public native CvMat class_weights(); public native CvSVMParams class_weights(CvMat class_weights); // for CV_SVM_C_SVC
-    public native @ByRef CvTermCriteria term_crit(); public native CvSVMParams term_crit(CvTermCriteria term_crit); // termination criteria
-}
+    public SVM(Pointer p) { super(p); }
 
 
-@NoOffset public static class CvSVMKernel extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvSVMKernel(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvSVMKernel(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvSVMKernel position(int position) {
-        return (CvSVMKernel)super.position(position);
-    }
-
-    @Namespace("CvSVMKernel") public static class Calc extends FunctionPointer {
+    public static class Kernel extends Algorithm {
         static { Loader.load(); }
+        /** Empty constructor. */
+        public Kernel() { }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Calc(Pointer p) { super(p); }
-        public native void call(CvSVMKernel o,  int vec_count, int vec_size, @Const @ByPtrPtr FloatPointer vecs,
-                                           @Const FloatPointer another, FloatPointer results );
-    }
-    public CvSVMKernel() { allocate(); }
-    private native void allocate();
-    public CvSVMKernel( @Const CvSVMParams params, Calc _calc_func ) { allocate(params, _calc_func); }
-    private native void allocate( @Const CvSVMParams params, Calc _calc_func );
-    public native @Cast("bool") boolean create( @Const CvSVMParams params, Calc _calc_func );
-
-    public native void clear();
-    public native void calc( int vcount, int n, @Cast("const float**") PointerPointer vecs, @Const FloatPointer another, FloatPointer results );
-    public native void calc( int vcount, int n, @Const @ByPtrPtr FloatPointer vecs, @Const FloatPointer another, FloatPointer results );
-    public native void calc( int vcount, int n, @Const @ByPtrPtr FloatBuffer vecs, @Const FloatBuffer another, FloatBuffer results );
-    public native void calc( int vcount, int n, @Const @ByPtrPtr float[] vecs, @Const float[] another, float[] results );
-
-    @MemberGetter public native @Const CvSVMParams params();
-    public native Calc calc_func(); public native CvSVMKernel calc_func(Calc calc_func);
-
-    public native void calc_non_rbf_base( int vec_count, int vec_size, @Cast("const float**") PointerPointer vecs,
-                                        @Const FloatPointer another, FloatPointer results,
-                                        double alpha, double beta );
-    public native void calc_non_rbf_base( int vec_count, int vec_size, @Const @ByPtrPtr FloatPointer vecs,
-                                        @Const FloatPointer another, FloatPointer results,
-                                        double alpha, double beta );
-    public native void calc_non_rbf_base( int vec_count, int vec_size, @Const @ByPtrPtr FloatBuffer vecs,
-                                        @Const FloatBuffer another, FloatBuffer results,
-                                        double alpha, double beta );
-    public native void calc_non_rbf_base( int vec_count, int vec_size, @Const @ByPtrPtr float[] vecs,
-                                        @Const float[] another, float[] results,
-                                        double alpha, double beta );
-
-    public native void calc_linear( int vec_count, int vec_size, @Cast("const float**") PointerPointer vecs,
-                                  @Const FloatPointer another, FloatPointer results );
-    public native void calc_linear( int vec_count, int vec_size, @Const @ByPtrPtr FloatPointer vecs,
-                                  @Const FloatPointer another, FloatPointer results );
-    public native void calc_linear( int vec_count, int vec_size, @Const @ByPtrPtr FloatBuffer vecs,
-                                  @Const FloatBuffer another, FloatBuffer results );
-    public native void calc_linear( int vec_count, int vec_size, @Const @ByPtrPtr float[] vecs,
-                                  @Const float[] another, float[] results );
-    public native void calc_rbf( int vec_count, int vec_size, @Cast("const float**") PointerPointer vecs,
-                               @Const FloatPointer another, FloatPointer results );
-    public native void calc_rbf( int vec_count, int vec_size, @Const @ByPtrPtr FloatPointer vecs,
-                               @Const FloatPointer another, FloatPointer results );
-    public native void calc_rbf( int vec_count, int vec_size, @Const @ByPtrPtr FloatBuffer vecs,
-                               @Const FloatBuffer another, FloatBuffer results );
-    public native void calc_rbf( int vec_count, int vec_size, @Const @ByPtrPtr float[] vecs,
-                               @Const float[] another, float[] results );
-    public native void calc_poly( int vec_count, int vec_size, @Cast("const float**") PointerPointer vecs,
-                                @Const FloatPointer another, FloatPointer results );
-    public native void calc_poly( int vec_count, int vec_size, @Const @ByPtrPtr FloatPointer vecs,
-                                @Const FloatPointer another, FloatPointer results );
-    public native void calc_poly( int vec_count, int vec_size, @Const @ByPtrPtr FloatBuffer vecs,
-                                @Const FloatBuffer another, FloatBuffer results );
-    public native void calc_poly( int vec_count, int vec_size, @Const @ByPtrPtr float[] vecs,
-                                @Const float[] another, float[] results );
-    public native void calc_sigmoid( int vec_count, int vec_size, @Cast("const float**") PointerPointer vecs,
-                                   @Const FloatPointer another, FloatPointer results );
-    public native void calc_sigmoid( int vec_count, int vec_size, @Const @ByPtrPtr FloatPointer vecs,
-                                   @Const FloatPointer another, FloatPointer results );
-    public native void calc_sigmoid( int vec_count, int vec_size, @Const @ByPtrPtr FloatBuffer vecs,
-                                   @Const FloatBuffer another, FloatBuffer results );
-    public native void calc_sigmoid( int vec_count, int vec_size, @Const @ByPtrPtr float[] vecs,
-                                   @Const float[] another, float[] results );
-}
-
-
-public static class CvSVMKernelRow extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvSVMKernelRow() { allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvSVMKernelRow(int size) { allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvSVMKernelRow(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CvSVMKernelRow position(int position) {
-        return (CvSVMKernelRow)super.position(position);
+        public Kernel(Pointer p) { super(p); }
+    
+        public native int getType();
+        public native void calc( int vcount, int n, @Const FloatPointer vecs, @Const FloatPointer another, FloatPointer results );
+        public native void calc( int vcount, int n, @Const FloatBuffer vecs, @Const FloatBuffer another, FloatBuffer results );
+        public native void calc( int vcount, int n, @Const float[] vecs, @Const float[] another, float[] results );
     }
 
-    public native CvSVMKernelRow prev(); public native CvSVMKernelRow prev(CvSVMKernelRow prev);
-    public native CvSVMKernelRow next(); public native CvSVMKernelRow next(CvSVMKernelRow next);
-    public native FloatPointer data(); public native CvSVMKernelRow data(FloatPointer data);
-}
+    /** Type of a %SVM formulation.
+    See SVM::Types. Default value is SVM::C_SVC. */
+    /** @see setType */
+    public native int getType();
+    /** @copybrief getType @see getType */
+    public native void setType(int val);
 
+    /** Parameter \f$\gamma\f$ of a kernel function.
+    For SVM::POLY, SVM::RBF, SVM::SIGMOID or SVM::CHI2. Default value is 1. */
+    /** @see setGamma */
+    public native double getGamma();
+    /** @copybrief getGamma @see getGamma */
+    public native void setGamma(double val);
 
-public static class CvSVMSolutionInfo extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvSVMSolutionInfo() { allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvSVMSolutionInfo(int size) { allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvSVMSolutionInfo(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CvSVMSolutionInfo position(int position) {
-        return (CvSVMSolutionInfo)super.position(position);
-    }
+    /** Parameter _coef0_ of a kernel function.
+    For SVM::POLY or SVM::SIGMOID. Default value is 0.*/
+    /** @see setCoef0 */
+    public native double getCoef0();
+    /** @copybrief getCoef0 @see getCoef0 */
+    public native void setCoef0(double val);
 
-    public native double obj(); public native CvSVMSolutionInfo obj(double obj);
-    public native double rho(); public native CvSVMSolutionInfo rho(double rho);
-    public native double upper_bound_p(); public native CvSVMSolutionInfo upper_bound_p(double upper_bound_p);
-    public native double upper_bound_n(); public native CvSVMSolutionInfo upper_bound_n(double upper_bound_n);
-    public native double r(); public native CvSVMSolutionInfo r(double r);   // for Solver_NU
-}
+    /** Parameter _degree_ of a kernel function.
+    For SVM::POLY. Default value is 0. */
+    /** @see setDegree */
+    public native double getDegree();
+    /** @copybrief getDegree @see getDegree */
+    public native void setDegree(double val);
 
-@NoOffset public static class CvSVMSolver extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvSVMSolver(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvSVMSolver(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvSVMSolver position(int position) {
-        return (CvSVMSolver)super.position(position);
-    }
+    /** Parameter _C_ of a %SVM optimization problem.
+    For SVM::C_SVC, SVM::EPS_SVR or SVM::NU_SVR. Default value is 0. */
+    /** @see setC */
+    public native double getC();
+    /** @copybrief getC @see getC */
+    public native void setC(double val);
 
-    @Namespace("CvSVMSolver") public static class SelectWorkingSet extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    SelectWorkingSet(Pointer p) { super(p); }
-        public native @Cast("bool") boolean call(CvSVMSolver o,  @ByRef IntPointer i, @ByRef IntPointer j );
-    }
-    @Namespace("CvSVMSolver") public static class GetRow extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    GetRow(Pointer p) { super(p); }
-        public native FloatPointer call(CvSVMSolver o,  int i, FloatPointer row, FloatPointer dst, @Cast("bool") boolean existed );
-    }
-    @Namespace("CvSVMSolver") public static class CalcRho extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    CalcRho(Pointer p) { super(p); }
-        public native void call(CvSVMSolver o,  @ByRef DoublePointer rho, @ByRef DoublePointer r );
-    }
+    /** Parameter \f$\nu\f$ of a %SVM optimization problem.
+    For SVM::NU_SVC, SVM::ONE_CLASS or SVM::NU_SVR. Default value is 0. */
+    /** @see setNu */
+    public native double getNu();
+    /** @copybrief getNu @see getNu */
+    public native void setNu(double val);
 
-    public CvSVMSolver() { allocate(); }
-    private native void allocate();
+    /** Parameter \f$\epsilon\f$ of a %SVM optimization problem.
+    For SVM::EPS_SVR. Default value is 0. */
+    /** @see setP */
+    public native double getP();
+    /** @copybrief getP @see getP */
+    public native void setP(double val);
 
-    public CvSVMSolver( int count, int var_count, @Cast("const float**") PointerPointer samples, @Cast("schar*") BytePointer y,
-                     int alpha_count, DoublePointer alpha, double Cp, double Cn,
-                     CvMemStorage storage, CvSVMKernel kernel, GetRow get_row,
-                     SelectWorkingSet select_working_set, CalcRho calc_rho ) { allocate(count, var_count, samples, y, alpha_count, alpha, Cp, Cn, storage, kernel, get_row, select_working_set, calc_rho); }
-    private native void allocate( int count, int var_count, @Cast("const float**") PointerPointer samples, @Cast("schar*") BytePointer y,
-                     int alpha_count, DoublePointer alpha, double Cp, double Cn,
-                     CvMemStorage storage, CvSVMKernel kernel, GetRow get_row,
-                     SelectWorkingSet select_working_set, CalcRho calc_rho );
-    public CvSVMSolver( int count, int var_count, @Const @ByPtrPtr FloatPointer samples, @Cast("schar*") BytePointer y,
-                     int alpha_count, DoublePointer alpha, double Cp, double Cn,
-                     CvMemStorage storage, CvSVMKernel kernel, GetRow get_row,
-                     SelectWorkingSet select_working_set, CalcRho calc_rho ) { allocate(count, var_count, samples, y, alpha_count, alpha, Cp, Cn, storage, kernel, get_row, select_working_set, calc_rho); }
-    private native void allocate( int count, int var_count, @Const @ByPtrPtr FloatPointer samples, @Cast("schar*") BytePointer y,
-                     int alpha_count, DoublePointer alpha, double Cp, double Cn,
-                     CvMemStorage storage, CvSVMKernel kernel, GetRow get_row,
-                     SelectWorkingSet select_working_set, CalcRho calc_rho );
-    public CvSVMSolver( int count, int var_count, @Const @ByPtrPtr FloatBuffer samples, @Cast("schar*") ByteBuffer y,
-                     int alpha_count, DoubleBuffer alpha, double Cp, double Cn,
-                     CvMemStorage storage, CvSVMKernel kernel, GetRow get_row,
-                     SelectWorkingSet select_working_set, CalcRho calc_rho ) { allocate(count, var_count, samples, y, alpha_count, alpha, Cp, Cn, storage, kernel, get_row, select_working_set, calc_rho); }
-    private native void allocate( int count, int var_count, @Const @ByPtrPtr FloatBuffer samples, @Cast("schar*") ByteBuffer y,
-                     int alpha_count, DoubleBuffer alpha, double Cp, double Cn,
-                     CvMemStorage storage, CvSVMKernel kernel, GetRow get_row,
-                     SelectWorkingSet select_working_set, CalcRho calc_rho );
-    public CvSVMSolver( int count, int var_count, @Const @ByPtrPtr float[] samples, @Cast("schar*") byte[] y,
-                     int alpha_count, double[] alpha, double Cp, double Cn,
-                     CvMemStorage storage, CvSVMKernel kernel, GetRow get_row,
-                     SelectWorkingSet select_working_set, CalcRho calc_rho ) { allocate(count, var_count, samples, y, alpha_count, alpha, Cp, Cn, storage, kernel, get_row, select_working_set, calc_rho); }
-    private native void allocate( int count, int var_count, @Const @ByPtrPtr float[] samples, @Cast("schar*") byte[] y,
-                     int alpha_count, double[] alpha, double Cp, double Cn,
-                     CvMemStorage storage, CvSVMKernel kernel, GetRow get_row,
-                     SelectWorkingSet select_working_set, CalcRho calc_rho );
-    public native @Cast("bool") boolean create( int count, int var_count, @Cast("const float**") PointerPointer samples, @Cast("schar*") BytePointer y,
-                     int alpha_count, DoublePointer alpha, double Cp, double Cn,
-                     CvMemStorage storage, CvSVMKernel kernel, GetRow get_row,
-                     SelectWorkingSet select_working_set, CalcRho calc_rho );
-    public native @Cast("bool") boolean create( int count, int var_count, @Const @ByPtrPtr FloatPointer samples, @Cast("schar*") BytePointer y,
-                     int alpha_count, DoublePointer alpha, double Cp, double Cn,
-                     CvMemStorage storage, CvSVMKernel kernel, GetRow get_row,
-                     SelectWorkingSet select_working_set, CalcRho calc_rho );
-    public native @Cast("bool") boolean create( int count, int var_count, @Const @ByPtrPtr FloatBuffer samples, @Cast("schar*") ByteBuffer y,
-                     int alpha_count, DoubleBuffer alpha, double Cp, double Cn,
-                     CvMemStorage storage, CvSVMKernel kernel, GetRow get_row,
-                     SelectWorkingSet select_working_set, CalcRho calc_rho );
-    public native @Cast("bool") boolean create( int count, int var_count, @Const @ByPtrPtr float[] samples, @Cast("schar*") byte[] y,
-                     int alpha_count, double[] alpha, double Cp, double Cn,
-                     CvMemStorage storage, CvSVMKernel kernel, GetRow get_row,
-                     SelectWorkingSet select_working_set, CalcRho calc_rho );
+    /** Optional weights in the SVM::C_SVC problem, assigned to particular classes.
+    They are multiplied by _C_ so the parameter _C_ of class _i_ becomes `classWeights(i) * C`. Thus
+    these weights affect the misclassification penalty for different classes. The larger weight,
+    the larger penalty on misclassification of data from the corresponding class. Default value is
+    empty Mat. */
+    /** @see setClassWeights */
+    public native @ByVal Mat getClassWeights();
+    /** @copybrief getClassWeights @see getClassWeights */
+    public native void setClassWeights(@Const @ByRef Mat val);
 
-    public native void clear();
-    public native @Cast("bool") boolean solve_generic( @ByRef CvSVMSolutionInfo si );
+    /** Termination criteria of the iterative %SVM training procedure which solves a partial
+    case of constrained quadratic optimization problem.
+    You can specify tolerance and/or the maximum number of iterations. Default value is
+    `TermCriteria( TermCriteria::MAX_ITER + TermCriteria::EPS, 1000, FLT_EPSILON )`; */
+    /** @see setTermCriteria */
+    public native @ByVal TermCriteria getTermCriteria();
+    /** @copybrief getTermCriteria @see getTermCriteria */
+    public native void setTermCriteria(@Const @ByRef TermCriteria val);
 
-    public native @Cast("bool") boolean solve_c_svc( int count, int var_count, @Cast("const float**") PointerPointer samples, @Cast("schar*") BytePointer y,
-                                  double Cp, double Cn, CvMemStorage storage,
-                                  CvSVMKernel kernel, DoublePointer alpha, @ByRef CvSVMSolutionInfo si );
-    public native @Cast("bool") boolean solve_c_svc( int count, int var_count, @Const @ByPtrPtr FloatPointer samples, @Cast("schar*") BytePointer y,
-                                  double Cp, double Cn, CvMemStorage storage,
-                                  CvSVMKernel kernel, DoublePointer alpha, @ByRef CvSVMSolutionInfo si );
-    public native @Cast("bool") boolean solve_c_svc( int count, int var_count, @Const @ByPtrPtr FloatBuffer samples, @Cast("schar*") ByteBuffer y,
-                                  double Cp, double Cn, CvMemStorage storage,
-                                  CvSVMKernel kernel, DoubleBuffer alpha, @ByRef CvSVMSolutionInfo si );
-    public native @Cast("bool") boolean solve_c_svc( int count, int var_count, @Const @ByPtrPtr float[] samples, @Cast("schar*") byte[] y,
-                                  double Cp, double Cn, CvMemStorage storage,
-                                  CvSVMKernel kernel, double[] alpha, @ByRef CvSVMSolutionInfo si );
-    public native @Cast("bool") boolean solve_nu_svc( int count, int var_count, @Cast("const float**") PointerPointer samples, @Cast("schar*") BytePointer y,
-                                   CvMemStorage storage, CvSVMKernel kernel,
-                                   DoublePointer alpha, @ByRef CvSVMSolutionInfo si );
-    public native @Cast("bool") boolean solve_nu_svc( int count, int var_count, @Const @ByPtrPtr FloatPointer samples, @Cast("schar*") BytePointer y,
-                                   CvMemStorage storage, CvSVMKernel kernel,
-                                   DoublePointer alpha, @ByRef CvSVMSolutionInfo si );
-    public native @Cast("bool") boolean solve_nu_svc( int count, int var_count, @Const @ByPtrPtr FloatBuffer samples, @Cast("schar*") ByteBuffer y,
-                                   CvMemStorage storage, CvSVMKernel kernel,
-                                   DoubleBuffer alpha, @ByRef CvSVMSolutionInfo si );
-    public native @Cast("bool") boolean solve_nu_svc( int count, int var_count, @Const @ByPtrPtr float[] samples, @Cast("schar*") byte[] y,
-                                   CvMemStorage storage, CvSVMKernel kernel,
-                                   double[] alpha, @ByRef CvSVMSolutionInfo si );
-    public native @Cast("bool") boolean solve_one_class( int count, int var_count, @Cast("const float**") PointerPointer samples,
-                                      CvMemStorage storage, CvSVMKernel kernel,
-                                      DoublePointer alpha, @ByRef CvSVMSolutionInfo si );
-    public native @Cast("bool") boolean solve_one_class( int count, int var_count, @Const @ByPtrPtr FloatPointer samples,
-                                      CvMemStorage storage, CvSVMKernel kernel,
-                                      DoublePointer alpha, @ByRef CvSVMSolutionInfo si );
-    public native @Cast("bool") boolean solve_one_class( int count, int var_count, @Const @ByPtrPtr FloatBuffer samples,
-                                      CvMemStorage storage, CvSVMKernel kernel,
-                                      DoubleBuffer alpha, @ByRef CvSVMSolutionInfo si );
-    public native @Cast("bool") boolean solve_one_class( int count, int var_count, @Const @ByPtrPtr float[] samples,
-                                      CvMemStorage storage, CvSVMKernel kernel,
-                                      double[] alpha, @ByRef CvSVMSolutionInfo si );
+    /** Type of a %SVM kernel.
+    See SVM::KernelTypes. Default value is SVM::RBF. */
+    public native int getKernelType();
 
-    public native @Cast("bool") boolean solve_eps_svr( int count, int var_count, @Cast("const float**") PointerPointer samples, @Const FloatPointer y,
-                                    CvMemStorage storage, CvSVMKernel kernel,
-                                    DoublePointer alpha, @ByRef CvSVMSolutionInfo si );
-    public native @Cast("bool") boolean solve_eps_svr( int count, int var_count, @Const @ByPtrPtr FloatPointer samples, @Const FloatPointer y,
-                                    CvMemStorage storage, CvSVMKernel kernel,
-                                    DoublePointer alpha, @ByRef CvSVMSolutionInfo si );
-    public native @Cast("bool") boolean solve_eps_svr( int count, int var_count, @Const @ByPtrPtr FloatBuffer samples, @Const FloatBuffer y,
-                                    CvMemStorage storage, CvSVMKernel kernel,
-                                    DoubleBuffer alpha, @ByRef CvSVMSolutionInfo si );
-    public native @Cast("bool") boolean solve_eps_svr( int count, int var_count, @Const @ByPtrPtr float[] samples, @Const float[] y,
-                                    CvMemStorage storage, CvSVMKernel kernel,
-                                    double[] alpha, @ByRef CvSVMSolutionInfo si );
+    /** Initialize with one of predefined kernels.
+    See SVM::KernelTypes. */
+    public native void setKernel(int kernelType);
 
-    public native @Cast("bool") boolean solve_nu_svr( int count, int var_count, @Cast("const float**") PointerPointer samples, @Const FloatPointer y,
-                                   CvMemStorage storage, CvSVMKernel kernel,
-                                   DoublePointer alpha, @ByRef CvSVMSolutionInfo si );
-    public native @Cast("bool") boolean solve_nu_svr( int count, int var_count, @Const @ByPtrPtr FloatPointer samples, @Const FloatPointer y,
-                                   CvMemStorage storage, CvSVMKernel kernel,
-                                   DoublePointer alpha, @ByRef CvSVMSolutionInfo si );
-    public native @Cast("bool") boolean solve_nu_svr( int count, int var_count, @Const @ByPtrPtr FloatBuffer samples, @Const FloatBuffer y,
-                                   CvMemStorage storage, CvSVMKernel kernel,
-                                   DoubleBuffer alpha, @ByRef CvSVMSolutionInfo si );
-    public native @Cast("bool") boolean solve_nu_svr( int count, int var_count, @Const @ByPtrPtr float[] samples, @Const float[] y,
-                                   CvMemStorage storage, CvSVMKernel kernel,
-                                   double[] alpha, @ByRef CvSVMSolutionInfo si );
+    /** Initialize with custom kernel.
+    See SVM::Kernel class for implementation details */
+    public native void setCustomKernel(@Ptr Kernel _kernel);
 
-    public native FloatPointer get_row_base( int i, @Cast("bool*") BoolPointer _existed );
-    public native FloatPointer get_row( int i, FloatPointer dst );
-    public native FloatBuffer get_row( int i, FloatBuffer dst );
-    public native float[] get_row( int i, float[] dst );
+    /** %SVM type */
+    /** enum cv::ml::SVM::Types */
+    public static final int
+        /** C-Support Vector Classification. n-class classification (n \f$\geq\f$ 2), allows
+        imperfect separation of classes with penalty multiplier C for outliers. */
+        C_SVC= 100,
+        /** \f$\nu\f$-Support Vector Classification. n-class classification with possible
+        imperfect separation. Parameter \f$\nu\f$ (in the range 0..1, the larger the value, the smoother
+        the decision boundary) is used instead of C. */
+        NU_SVC= 101,
+        /** Distribution Estimation (One-class %SVM). All the training data are from
+        the same class, %SVM builds a boundary that separates the class from the rest of the feature
+        space. */
+        ONE_CLASS= 102,
+        /** \f$\epsilon\f$-Support Vector Regression. The distance between feature vectors
+        from the training set and the fitting hyper-plane must be less than p. For outliers the
+        penalty multiplier C is used. */
+        EPS_SVR= 103,
+        /** \f$\nu\f$-Support Vector Regression. \f$\nu\f$ is used instead of p.
+        See @cite LibSVM for details. */
+        NU_SVR= 104;
 
-    public native int sample_count(); public native CvSVMSolver sample_count(int sample_count);
-    public native int var_count(); public native CvSVMSolver var_count(int var_count);
-    public native int cache_size(); public native CvSVMSolver cache_size(int cache_size);
-    public native int cache_line_size(); public native CvSVMSolver cache_line_size(int cache_line_size);
-    @MemberGetter public native @Const FloatPointer samples(int i);
-    @MemberGetter public native @Cast("const float**") PointerPointer samples();
-    @MemberGetter public native @Const CvSVMParams params();
-    public native CvMemStorage storage(); public native CvSVMSolver storage(CvMemStorage storage);
-    public native @ByRef CvSVMKernelRow lru_list(); public native CvSVMSolver lru_list(CvSVMKernelRow lru_list);
-    public native CvSVMKernelRow rows(); public native CvSVMSolver rows(CvSVMKernelRow rows);
+    /** @brief %SVM kernel type
 
-    public native int alpha_count(); public native CvSVMSolver alpha_count(int alpha_count);
+    A comparison of different kernels on the following 2D test case with four classes. Four
+    SVM::C_SVC SVMs have been trained (one against rest) with auto_train. Evaluation on three
+    different kernels (SVM::CHI2, SVM::INTER, SVM::RBF). The color depicts the class with max score.
+    Bright means max-score \> 0, dark means max-score \< 0.
+    ![image](pics/SVM_Comparison.png)
+    */
+    /** enum cv::ml::SVM::KernelTypes */
+    public static final int
+        /** Returned by SVM::getKernelType in case when custom kernel has been set */
+        CUSTOM= -1,
+        /** Linear kernel. No mapping is done, linear discrimination (or regression) is
+        done in the original feature space. It is the fastest option. \f$K(x_i, x_j) = x_i^T x_j\f$. */
+        LINEAR= 0,
+        /** Polynomial kernel:
+        \f$K(x_i, x_j) = (\gamma x_i^T x_j + coef0)^{degree}, \gamma > 0\f$. */
+        POLY= 1,
+        /** Radial basis function (RBF), a good choice in most cases.
+        \f$K(x_i, x_j) = e^{-\gamma ||x_i - x_j||^2}, \gamma > 0\f$. */
+        RBF= 2,
+        /** Sigmoid kernel: \f$K(x_i, x_j) = \tanh(\gamma x_i^T x_j + coef0)\f$. */
+        SIGMOID= 3,
+        /** Exponential Chi2 kernel, similar to the RBF kernel:
+        \f$K(x_i, x_j) = e^{-\gamma \chi^2(x_i,x_j)}, \chi^2(x_i,x_j) = (x_i-x_j)^2/(x_i+x_j), \gamma > 0\f$. */
+        CHI2= 4,
+        /** Histogram intersection kernel. A fast kernel. \f$K(x_i, x_j) = min(x_i,x_j)\f$. */
+        INTER= 5;
 
-    public native DoublePointer G(); public native CvSVMSolver G(DoublePointer G);
-    public native DoublePointer alpha(); public native CvSVMSolver alpha(DoublePointer alpha);
+    /** %SVM params type */
+    /** enum cv::ml::SVM::ParamTypes */
+    public static final int
+        C= 0,
+        GAMMA= 1,
+        P= 2,
+        NU= 3,
+        COEF= 4,
+        DEGREE= 5;
 
-    // -1 - lower bound, 0 - free, 1 - upper bound
-    public native @Cast("schar*") BytePointer alpha_status(); public native CvSVMSolver alpha_status(BytePointer alpha_status);
+    /** @brief Trains an %SVM with optimal parameters.
 
-    public native @Cast("schar*") BytePointer y(); public native CvSVMSolver y(BytePointer y);
-    public native DoublePointer b(); public native CvSVMSolver b(DoublePointer b);
-    public native FloatPointer buf(int i); public native CvSVMSolver buf(int i, FloatPointer buf);
-    @MemberGetter public native @Cast("float**") PointerPointer buf();
-    public native double eps(); public native CvSVMSolver eps(double eps);
-    public native int max_iter(); public native CvSVMSolver max_iter(int max_iter);
-    public native double C(int i); public native CvSVMSolver C(int i, double C);
-    @MemberGetter public native DoublePointer C();  // C[0] == Cn, C[1] == Cp
-    public native CvSVMKernel kernel(); public native CvSVMSolver kernel(CvSVMKernel kernel);
+    @param data the training data that can be constructed using TrainData::create or
+        TrainData::loadFromCSV.
+    @param kFold Cross-validation parameter. The training set is divided into kFold subsets. One
+        subset is used to test the model, the others form the train set. So, the %SVM algorithm is
+        executed kFold times.
+    @param Cgrid grid for C
+    @param gammaGrid grid for gamma
+    @param pGrid grid for p
+    @param nuGrid grid for nu
+    @param coeffGrid grid for coeff
+    @param degreeGrid grid for degree
+    @param balanced If true and the problem is 2-class classification then the method creates more
+        balanced cross-validation subsets that is proportions between classes in subsets are close
+        to such proportion in the whole train dataset.
 
-    public native SelectWorkingSet select_working_set_func(); public native CvSVMSolver select_working_set_func(SelectWorkingSet select_working_set_func);
-    public native CalcRho calc_rho_func(); public native CvSVMSolver calc_rho_func(CalcRho calc_rho_func);
-    public native GetRow get_row_func(); public native CvSVMSolver get_row_func(GetRow get_row_func);
+    The method trains the %SVM model automatically by choosing the optimal parameters C, gamma, p,
+    nu, coef0, degree. Parameters are considered optimal when the cross-validation
+    estimate of the test set error is minimal.
 
-    public native @Cast("bool") boolean select_working_set( @ByRef IntPointer i, @ByRef IntPointer j );
-    public native @Cast("bool") boolean select_working_set( @ByRef IntBuffer i, @ByRef IntBuffer j );
-    public native @Cast("bool") boolean select_working_set( @ByRef int[] i, @ByRef int[] j );
-    public native @Cast("bool") boolean select_working_set_nu_svm( @ByRef IntPointer i, @ByRef IntPointer j );
-    public native @Cast("bool") boolean select_working_set_nu_svm( @ByRef IntBuffer i, @ByRef IntBuffer j );
-    public native @Cast("bool") boolean select_working_set_nu_svm( @ByRef int[] i, @ByRef int[] j );
-    public native void calc_rho( @ByRef DoublePointer rho, @ByRef DoublePointer r );
-    public native void calc_rho( @ByRef DoubleBuffer rho, @ByRef DoubleBuffer r );
-    public native void calc_rho( @ByRef double[] rho, @ByRef double[] r );
-    public native void calc_rho_nu_svm( @ByRef DoublePointer rho, @ByRef DoublePointer r );
-    public native void calc_rho_nu_svm( @ByRef DoubleBuffer rho, @ByRef DoubleBuffer r );
-    public native void calc_rho_nu_svm( @ByRef double[] rho, @ByRef double[] r );
+    If there is no need to optimize a parameter, the corresponding grid step should be set to any
+    value less than or equal to 1. For example, to avoid optimization in gamma, set `gammaGrid.step
+    = 0`, `gammaGrid.minVal`, `gamma_grid.maxVal` as arbitrary numbers. In this case, the value
+    `Gamma` is taken for gamma.
 
-    public native FloatPointer get_row_svc( int i, FloatPointer row, FloatPointer dst, @Cast("bool") boolean existed );
-    public native FloatBuffer get_row_svc( int i, FloatBuffer row, FloatBuffer dst, @Cast("bool") boolean existed );
-    public native float[] get_row_svc( int i, float[] row, float[] dst, @Cast("bool") boolean existed );
-    public native FloatPointer get_row_one_class( int i, FloatPointer row, FloatPointer dst, @Cast("bool") boolean existed );
-    public native FloatBuffer get_row_one_class( int i, FloatBuffer row, FloatBuffer dst, @Cast("bool") boolean existed );
-    public native float[] get_row_one_class( int i, float[] row, float[] dst, @Cast("bool") boolean existed );
-    public native FloatPointer get_row_svr( int i, FloatPointer row, FloatPointer dst, @Cast("bool") boolean existed );
-    public native FloatBuffer get_row_svr( int i, FloatBuffer row, FloatBuffer dst, @Cast("bool") boolean existed );
-    public native float[] get_row_svr( int i, float[] row, float[] dst, @Cast("bool") boolean existed );
-}
+    And, finally, if the optimization in a parameter is required but the corresponding grid is
+    unknown, you may call the function SVM::getDefaultGrid. To generate a grid, for example, for
+    gamma, call `SVM::getDefaultGrid(SVM::GAMMA)`.
 
+    This function works for the classification (SVM::C_SVC or SVM::NU_SVC) as well as for the
+    regression (SVM::EPS_SVR or SVM::NU_SVR). If it is SVM::ONE_CLASS, no optimization is made and
+    the usual %SVM with parameters specified in params is executed.
+     */
+    public native @Cast("bool") boolean trainAuto( @Ptr TrainData data, int kFold/*=10*/,
+                        @ByVal(nullValue = "cv::ml::SVM::getDefaultGrid(cv::ml::SVM::C)") ParamGrid Cgrid/*=cv::ml::SVM::getDefaultGrid(cv::ml::SVM::C)*/,
+                        @ByVal(nullValue = "cv::ml::SVM::getDefaultGrid(cv::ml::SVM::GAMMA)") ParamGrid gammaGrid/*=cv::ml::SVM::getDefaultGrid(cv::ml::SVM::GAMMA)*/,
+                        @ByVal(nullValue = "cv::ml::SVM::getDefaultGrid(cv::ml::SVM::P)") ParamGrid pGrid/*=cv::ml::SVM::getDefaultGrid(cv::ml::SVM::P)*/,
+                        @ByVal(nullValue = "cv::ml::SVM::getDefaultGrid(cv::ml::SVM::NU)") ParamGrid nuGrid/*=cv::ml::SVM::getDefaultGrid(cv::ml::SVM::NU)*/,
+                        @ByVal(nullValue = "cv::ml::SVM::getDefaultGrid(cv::ml::SVM::COEF)") ParamGrid coeffGrid/*=cv::ml::SVM::getDefaultGrid(cv::ml::SVM::COEF)*/,
+                        @ByVal(nullValue = "cv::ml::SVM::getDefaultGrid(cv::ml::SVM::DEGREE)") ParamGrid degreeGrid/*=cv::ml::SVM::getDefaultGrid(cv::ml::SVM::DEGREE)*/,
+                        @Cast("bool") boolean balanced/*=false*/);
+    public native @Cast("bool") boolean trainAuto( @Ptr TrainData data);
 
-public static class CvSVMDecisionFunc extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvSVMDecisionFunc() { allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvSVMDecisionFunc(int size) { allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvSVMDecisionFunc(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CvSVMDecisionFunc position(int position) {
-        return (CvSVMDecisionFunc)super.position(position);
-    }
+    /** @brief Retrieves all the support vectors
 
-    public native double rho(); public native CvSVMDecisionFunc rho(double rho);
-    public native int sv_count(); public native CvSVMDecisionFunc sv_count(int sv_count);
-    public native DoublePointer alpha(); public native CvSVMDecisionFunc alpha(DoublePointer alpha);
-    public native IntPointer sv_index(); public native CvSVMDecisionFunc sv_index(IntPointer sv_index);
-}
+    The method returns all the support vector as floating-point matrix, where support vectors are
+    stored as matrix rows.
+     */
+    public native @ByVal Mat getSupportVectors();
 
+    /** @brief Retrieves the decision function
 
-// SVM model
-@NoOffset public static class CvSVM extends CvStatModel {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvSVM(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvSVM(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvSVM position(int position) {
-        return (CvSVM)super.position(position);
-    }
+    @param i the index of the decision function. If the problem solved is regression, 1-class or
+        2-class classification, then there will be just one decision function and the index should
+        always be 0. Otherwise, in the case of N-class classification, there will be \f$N(N-1)/2\f$
+        decision functions.
+    @param alpha the optional output vector for weights, corresponding to different support vectors.
+        In the case of linear %SVM all the alpha's will be 1's.
+    @param svidx the optional output vector of indices of support vectors within the matrix of
+        support vectors (which can be retrieved by SVM::getSupportVectors). In the case of linear
+        %SVM each decision function consists of a single "compressed" support vector.
 
-    // SVM type
-    /** enum CvSVM:: */
-    public static final int C_SVC= 100, NU_SVC= 101, ONE_CLASS= 102, EPS_SVR= 103, NU_SVR= 104;
+    The method returns rho parameter of the decision function, a scalar subtracted from the weighted
+    sum of kernel responses.
+     */
+    public native double getDecisionFunction(int i, @ByVal Mat alpha, @ByVal Mat svidx);
 
-    // SVM kernel type
-    /** enum CvSVM:: */
-    public static final int LINEAR= 0, POLY= 1, RBF= 2, SIGMOID= 3;
+    /** @brief Generates a grid for %SVM parameters.
 
-    // SVM params type
-    /** enum CvSVM:: */
-    public static final int C= 0, GAMMA= 1, P= 2, NU= 3, COEF= 4, DEGREE= 5;
+    @param param_id %SVM parameters IDs that must be one of the SVM::ParamTypes. The grid is
+    generated for the parameter with this ID.
 
-    public CvSVM() { allocate(); }
-    private native void allocate();
+    The function generates a grid for the specified parameter of the %SVM algorithm. The grid may be
+    passed to the function SVM::trainAuto.
+     */
+    public static native @ByVal ParamGrid getDefaultGrid( int param_id );
 
-    public CvSVM( @Const CvMat trainData, @Const CvMat responses,
-               @Const CvMat varIdx/*=0*/, @Const CvMat sampleIdx/*=0*/,
-               @ByVal(nullValue = "CvSVMParams()") CvSVMParams params/*=CvSVMParams()*/ ) { allocate(trainData, responses, varIdx, sampleIdx, params); }
-    private native void allocate( @Const CvMat trainData, @Const CvMat responses,
-               @Const CvMat varIdx/*=0*/, @Const CvMat sampleIdx/*=0*/,
-               @ByVal(nullValue = "CvSVMParams()") CvSVMParams params/*=CvSVMParams()*/ );
-    public CvSVM( @Const CvMat trainData, @Const CvMat responses ) { allocate(trainData, responses); }
-    private native void allocate( @Const CvMat trainData, @Const CvMat responses );
-
-    public native @Cast("bool") boolean train( @Const CvMat trainData, @Const CvMat responses,
-                            @Const CvMat varIdx/*=0*/, @Const CvMat sampleIdx/*=0*/,
-                            @ByVal(nullValue = "CvSVMParams()") CvSVMParams params/*=CvSVMParams()*/ );
-    public native @Cast("bool") boolean train( @Const CvMat trainData, @Const CvMat responses );
-
-    public native @Cast("bool") boolean train_auto( @Const CvMat trainData, @Const CvMat responses,
-            @Const CvMat varIdx, @Const CvMat sampleIdx, @ByVal CvSVMParams params,
-            int kfold/*=10*/,
-            @ByVal(nullValue = "CvSVM::get_default_grid(CvSVM::C)") CvParamGrid Cgrid/*=CvSVM::get_default_grid(CvSVM::C)*/,
-            @ByVal(nullValue = "CvSVM::get_default_grid(CvSVM::GAMMA)") CvParamGrid gammaGrid/*=CvSVM::get_default_grid(CvSVM::GAMMA)*/,
-            @ByVal(nullValue = "CvSVM::get_default_grid(CvSVM::P)") CvParamGrid pGrid/*=CvSVM::get_default_grid(CvSVM::P)*/,
-            @ByVal(nullValue = "CvSVM::get_default_grid(CvSVM::NU)") CvParamGrid nuGrid/*=CvSVM::get_default_grid(CvSVM::NU)*/,
-            @ByVal(nullValue = "CvSVM::get_default_grid(CvSVM::COEF)") CvParamGrid coeffGrid/*=CvSVM::get_default_grid(CvSVM::COEF)*/,
-            @ByVal(nullValue = "CvSVM::get_default_grid(CvSVM::DEGREE)") CvParamGrid degreeGrid/*=CvSVM::get_default_grid(CvSVM::DEGREE)*/,
-            @Cast("bool") boolean balanced/*=false*/ );
-    public native @Cast("bool") boolean train_auto( @Const CvMat trainData, @Const CvMat responses,
-            @Const CvMat varIdx, @Const CvMat sampleIdx, @ByVal CvSVMParams params );
-
-    public native float predict( @Const CvMat sample, @Cast("bool") boolean returnDFVal/*=false*/ );
-    public native float predict( @Const CvMat sample );
-    public native float predict( @Const CvMat samples, CvMat results );
-
-    public CvSVM( @Const @ByRef Mat trainData, @Const @ByRef Mat responses,
-              @Const @ByRef(nullValue = "cv::Mat()") Mat varIdx/*=cv::Mat()*/, @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/,
-              @ByVal(nullValue = "CvSVMParams()") CvSVMParams params/*=CvSVMParams()*/ ) { allocate(trainData, responses, varIdx, sampleIdx, params); }
-    private native void allocate( @Const @ByRef Mat trainData, @Const @ByRef Mat responses,
-              @Const @ByRef(nullValue = "cv::Mat()") Mat varIdx/*=cv::Mat()*/, @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/,
-              @ByVal(nullValue = "CvSVMParams()") CvSVMParams params/*=CvSVMParams()*/ );
-    public CvSVM( @Const @ByRef Mat trainData, @Const @ByRef Mat responses ) { allocate(trainData, responses); }
-    private native void allocate( @Const @ByRef Mat trainData, @Const @ByRef Mat responses );
-
-    public native @Cast("bool") boolean train( @Const @ByRef Mat trainData, @Const @ByRef Mat responses,
-                           @Const @ByRef(nullValue = "cv::Mat()") Mat varIdx/*=cv::Mat()*/, @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/,
-                           @ByVal(nullValue = "CvSVMParams()") CvSVMParams params/*=CvSVMParams()*/ );
-    public native @Cast("bool") boolean train( @Const @ByRef Mat trainData, @Const @ByRef Mat responses );
-
-    public native @Cast("bool") boolean train_auto( @Const @ByRef Mat trainData, @Const @ByRef Mat responses,
-                                @Const @ByRef Mat varIdx, @Const @ByRef Mat sampleIdx, @ByVal CvSVMParams params,
-                                int k_fold/*=10*/,
-                                @ByVal(nullValue = "CvSVM::get_default_grid(CvSVM::C)") CvParamGrid Cgrid/*=CvSVM::get_default_grid(CvSVM::C)*/,
-                                @ByVal(nullValue = "CvSVM::get_default_grid(CvSVM::GAMMA)") CvParamGrid gammaGrid/*=CvSVM::get_default_grid(CvSVM::GAMMA)*/,
-                                @ByVal(nullValue = "CvSVM::get_default_grid(CvSVM::P)") CvParamGrid pGrid/*=CvSVM::get_default_grid(CvSVM::P)*/,
-                                @ByVal(nullValue = "CvSVM::get_default_grid(CvSVM::NU)") CvParamGrid nuGrid/*=CvSVM::get_default_grid(CvSVM::NU)*/,
-                                @ByVal(nullValue = "CvSVM::get_default_grid(CvSVM::COEF)") CvParamGrid coeffGrid/*=CvSVM::get_default_grid(CvSVM::COEF)*/,
-                                @ByVal(nullValue = "CvSVM::get_default_grid(CvSVM::DEGREE)") CvParamGrid degreeGrid/*=CvSVM::get_default_grid(CvSVM::DEGREE)*/,
-                                @Cast("bool") boolean balanced/*=false*/);
-    public native @Cast("bool") boolean train_auto( @Const @ByRef Mat trainData, @Const @ByRef Mat responses,
-                                @Const @ByRef Mat varIdx, @Const @ByRef Mat sampleIdx, @ByVal CvSVMParams params);
-    public native float predict( @Const @ByRef Mat sample, @Cast("bool") boolean returnDFVal/*=false*/ );
-    public native float predict( @Const @ByRef Mat sample );
-    public native @Name("predict") void predict_all( @ByVal Mat samples, @ByVal Mat results );
-
-    public native int get_support_vector_count();
-    public native @Const FloatPointer get_support_vector(int i);
-    public native @ByVal CvSVMParams get_params();
-    public native void clear();
-
-    public static native @ByVal CvParamGrid get_default_grid( int param_id );
-
-    public native void write( CvFileStorage storage, @Cast("const char*") BytePointer name );
-    public native void write( CvFileStorage storage, String name );
-    public native void read( CvFileStorage storage, CvFileNode node );
-    public native int get_var_count();
+    /** Creates empty model.
+    Use StatModel::train to train the model. Since %SVM has several parameters, you may want to
+    find the best parameters for your problem, it can be done with SVM::trainAuto. */
+    public static native @Ptr SVM create();
 }
 
 /****************************************************************************************\
 *                              Expectation - Maximization                                *
 \****************************************************************************************/
-@Namespace("cv") @NoOffset public static class EM extends Algorithm {
+
+/** @brief The class implements the Expectation Maximization algorithm.
+
+@sa @ref ml_intro_em
+ */
+@Namespace("cv::ml") public static class EM extends StatModel {
     static { Loader.load(); }
+    /** Empty constructor. */
+    public EM() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EM(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public EM(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public EM position(int position) {
-        return (EM)super.position(position);
-    }
 
-    // Type of covariation matrices
-    /** enum cv::EM:: */
-    public static final int COV_MAT_SPHERICAL= 0, COV_MAT_DIAGONAL= 1, COV_MAT_GENERIC= 2, COV_MAT_DEFAULT= COV_MAT_DIAGONAL;
+    /** Type of covariation matrices */
+    /** enum cv::ml::EM::Types */
+    public static final int
+        /** A scaled identity matrix \f$\mu_k * I\f$. There is the only
+        parameter \f$\mu_k\f$ to be estimated for each matrix. The option may be used in special cases,
+        when the constraint is relevant, or as a first step in the optimization (for example in case
+        when the data is preprocessed with PCA). The results of such preliminary estimation may be
+        passed again to the optimization procedure, this time with
+        covMatType=EM::COV_MAT_DIAGONAL. */
+        COV_MAT_SPHERICAL= 0,
+        /** A diagonal matrix with positive diagonal elements. The number of
+        free parameters is d for each matrix. This is most commonly used option yielding good
+        estimation results. */
+        COV_MAT_DIAGONAL= 1,
+        /** A symmetric positively defined matrix. The number of free
+        parameters in each matrix is about \f$d^2/2\f$. It is not recommended to use this option, unless
+        there is pretty accurate initial estimation of the parameters and/or a huge number of
+        training samples. */
+        COV_MAT_GENERIC= 2,
+        COV_MAT_DEFAULT= COV_MAT_DIAGONAL;
 
-    // Default parameters
-    /** enum cv::EM:: */
+    /** Default parameters */
+    /** enum cv::ml::EM:: */
     public static final int DEFAULT_NCLUSTERS= 5, DEFAULT_MAX_ITERS= 100;
 
-    // The initial step
-    /** enum cv::EM:: */
+    /** The initial step */
+    /** enum cv::ml::EM:: */
     public static final int START_E_STEP= 1, START_M_STEP= 2, START_AUTO_STEP= 0;
 
-    public EM(int nclusters/*=cv::EM::DEFAULT_NCLUSTERS*/, int covMatType/*=cv::EM::COV_MAT_DIAGONAL*/,
-           @Const @ByRef(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS,"
-                                                      + "cv::EM::DEFAULT_MAX_ITERS, FLT_EPSILON)") TermCriteria termCrit/*=cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS,
-                                                     cv::EM::DEFAULT_MAX_ITERS, FLT_EPSILON)*/) { allocate(nclusters, covMatType, termCrit); }
-    private native void allocate(int nclusters/*=cv::EM::DEFAULT_NCLUSTERS*/, int covMatType/*=cv::EM::COV_MAT_DIAGONAL*/,
-           @Const @ByRef(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS,"
-                                                      + "cv::EM::DEFAULT_MAX_ITERS, FLT_EPSILON)") TermCriteria termCrit/*=cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS,
-                                                     cv::EM::DEFAULT_MAX_ITERS, FLT_EPSILON)*/);
-    public EM() { allocate(); }
-    private native void allocate();
-    public native void clear();
+    /** The number of mixture components in the Gaussian mixture model.
+    Default value of the parameter is EM::DEFAULT_NCLUSTERS=5. Some of %EM implementation could
+    determine the optimal number of mixtures within a specified value range, but that is not the
+    case in ML yet. */
+    /** @see setClustersNumber */
+    public native int getClustersNumber();
+    /** @copybrief getClustersNumber @see getClustersNumber */
+    public native void setClustersNumber(int val);
 
-    public native @Cast("bool") boolean train(@ByVal Mat samples,
-                           @ByVal(nullValue = "cv::noArray()") Mat logLikelihoods/*=cv::noArray()*/,
-                           @ByVal(nullValue = "cv::noArray()") Mat labels/*=cv::noArray()*/,
-                           @ByVal(nullValue = "cv::noArray()") Mat probs/*=cv::noArray()*/);
-    public native @Cast("bool") boolean train(@ByVal Mat samples);
+    /** Constraint on covariance matrices which defines type of matrices.
+    See EM::Types. */
+    /** @see setCovarianceMatrixType */
+    public native int getCovarianceMatrixType();
+    /** @copybrief getCovarianceMatrixType @see getCovarianceMatrixType */
+    public native void setCovarianceMatrixType(int val);
 
-    public native @Cast("bool") boolean trainE(@ByVal Mat samples,
-                            @ByVal Mat means0,
+    /** The termination criteria of the %EM algorithm.
+    The %EM algorithm can be terminated by the number of iterations termCrit.maxCount (number of
+    M-steps) or when relative change of likelihood logarithm is less than termCrit.epsilon. Default
+    maximum number of iterations is EM::DEFAULT_MAX_ITERS=100. */
+    /** @see setTermCriteria */
+    public native @ByVal TermCriteria getTermCriteria();
+    /** @copybrief getTermCriteria @see getTermCriteria */
+    public native void setTermCriteria(@Const @ByRef TermCriteria val);
+
+    /** @brief Returns weights of the mixtures
+
+    Returns vector with the number of elements equal to the number of mixtures.
+     */
+    public native @ByVal Mat getWeights();
+    /** @brief Returns the cluster centers (means of the Gaussian mixture)
+
+    Returns matrix with the number of rows equal to the number of mixtures and number of columns
+    equal to the space dimensionality.
+     */
+    public native @ByVal Mat getMeans();
+    /** @brief Returns covariation matrices
+
+    Returns vector of covariation matrices. Number of matrices is the number of gaussian mixtures,
+    each matrix is a square floating-point matrix NxN, where N is the space dimensionality.
+     */
+    public native void getCovs(@ByRef MatVector covs);
+
+    /** @brief Returns a likelihood logarithm value and an index of the most probable mixture component
+    for the given sample.
+
+    @param sample A sample for classification. It should be a one-channel matrix of
+        \f$1 \times dims\f$ or \f$dims \times 1\f$ size.
+    @param probs Optional output matrix that contains posterior probabilities of each component
+        given the sample. It has \f$1 \times nclusters\f$ size and CV_64FC1 type.
+
+    The method returns a two-element double vector. Zero element is a likelihood logarithm value for
+    the sample. First element is an index of the most probable mixture component for the given
+    sample.
+     */
+    public native @ByVal Point2d predict2(@ByVal Mat sample, @ByVal Mat probs);
+
+    /** @brief Estimate the Gaussian mixture parameters from a samples set.
+
+    This variation starts with Expectation step. Initial values of the model parameters will be
+    estimated by the k-means algorithm.
+
+    Unlike many of the ML models, %EM is an unsupervised learning algorithm and it does not take
+    responses (class labels or function values) as input. Instead, it computes the *Maximum
+    Likelihood Estimate* of the Gaussian mixture parameters from an input sample set, stores all the
+    parameters inside the structure: \f$p_{i,k}\f$ in probs, \f$a_k\f$ in means , \f$S_k\f$ in
+    covs[k], \f$\pi_k\f$ in weights , and optionally computes the output "class label" for each
+    sample: \f$\texttt{labels}_i=\texttt{arg max}_k(p_{i,k}), i=1..N\f$ (indices of the most
+    probable mixture component for each sample).
+
+    The trained model can be used further for prediction, just like any other classifier. The
+    trained model is similar to the NormalBayesClassifier.
+
+    @param samples Samples from which the Gaussian mixture model will be estimated. It should be a
+        one-channel matrix, each row of which is a sample. If the matrix does not have CV_64F type
+        it will be converted to the inner matrix of such type for the further computing.
+    @param logLikelihoods The optional output matrix that contains a likelihood logarithm value for
+        each sample. It has \f$nsamples \times 1\f$ size and CV_64FC1 type.
+    @param labels The optional output "class label" for each sample:
+        \f$\texttt{labels}_i=\texttt{arg max}_k(p_{i,k}), i=1..N\f$ (indices of the most probable
+        mixture component for each sample). It has \f$nsamples \times 1\f$ size and CV_32SC1 type.
+    @param probs The optional output matrix that contains posterior probabilities of each Gaussian
+        mixture component given the each sample. It has \f$nsamples \times nclusters\f$ size and
+        CV_64FC1 type.
+     */
+    public native @Cast("bool") boolean trainEM(@ByVal Mat samples,
+                             @ByVal(nullValue = "cv::noArray()") Mat logLikelihoods/*=cv::noArray()*/,
+                             @ByVal(nullValue = "cv::noArray()") Mat labels/*=cv::noArray()*/,
+                             @ByVal(nullValue = "cv::noArray()") Mat probs/*=cv::noArray()*/);
+    public native @Cast("bool") boolean trainEM(@ByVal Mat samples);
+
+    /** @brief Estimate the Gaussian mixture parameters from a samples set.
+
+    This variation starts with Expectation step. You need to provide initial means \f$a_k\f$ of
+    mixture components. Optionally you can pass initial weights \f$\pi_k\f$ and covariance matrices
+    \f$S_k\f$ of mixture components.
+
+    @param samples Samples from which the Gaussian mixture model will be estimated. It should be a
+        one-channel matrix, each row of which is a sample. If the matrix does not have CV_64F type
+        it will be converted to the inner matrix of such type for the further computing.
+    @param means0 Initial means \f$a_k\f$ of mixture components. It is a one-channel matrix of
+        \f$nclusters \times dims\f$ size. If the matrix does not have CV_64F type it will be
+        converted to the inner matrix of such type for the further computing.
+    @param covs0 The vector of initial covariance matrices \f$S_k\f$ of mixture components. Each of
+        covariance matrices is a one-channel matrix of \f$dims \times dims\f$ size. If the matrices
+        do not have CV_64F type they will be converted to the inner matrices of such type for the
+        further computing.
+    @param weights0 Initial weights \f$\pi_k\f$ of mixture components. It should be a one-channel
+        floating-point matrix with \f$1 \times nclusters\f$ or \f$nclusters \times 1\f$ size.
+    @param logLikelihoods The optional output matrix that contains a likelihood logarithm value for
+        each sample. It has \f$nsamples \times 1\f$ size and CV_64FC1 type.
+    @param labels The optional output "class label" for each sample:
+        \f$\texttt{labels}_i=\texttt{arg max}_k(p_{i,k}), i=1..N\f$ (indices of the most probable
+        mixture component for each sample). It has \f$nsamples \times 1\f$ size and CV_32SC1 type.
+    @param probs The optional output matrix that contains posterior probabilities of each Gaussian
+        mixture component given the each sample. It has \f$nsamples \times nclusters\f$ size and
+        CV_64FC1 type.
+    */
+    public native @Cast("bool") boolean trainE(@ByVal Mat samples, @ByVal Mat means0,
                             @ByVal(nullValue = "cv::noArray()") Mat covs0/*=cv::noArray()*/,
                             @ByVal(nullValue = "cv::noArray()") Mat weights0/*=cv::noArray()*/,
                             @ByVal(nullValue = "cv::noArray()") Mat logLikelihoods/*=cv::noArray()*/,
                             @ByVal(nullValue = "cv::noArray()") Mat labels/*=cv::noArray()*/,
                             @ByVal(nullValue = "cv::noArray()") Mat probs/*=cv::noArray()*/);
-    public native @Cast("bool") boolean trainE(@ByVal Mat samples,
-                            @ByVal Mat means0);
+    public native @Cast("bool") boolean trainE(@ByVal Mat samples, @ByVal Mat means0);
 
-    public native @Cast("bool") boolean trainM(@ByVal Mat samples,
-                            @ByVal Mat probs0,
+    /** @brief Estimate the Gaussian mixture parameters from a samples set.
+
+    This variation starts with Maximization step. You need to provide initial probabilities
+    \f$p_{i,k}\f$ to use this option.
+
+    @param samples Samples from which the Gaussian mixture model will be estimated. It should be a
+        one-channel matrix, each row of which is a sample. If the matrix does not have CV_64F type
+        it will be converted to the inner matrix of such type for the further computing.
+    @param probs0
+    @param logLikelihoods The optional output matrix that contains a likelihood logarithm value for
+        each sample. It has \f$nsamples \times 1\f$ size and CV_64FC1 type.
+    @param labels The optional output "class label" for each sample:
+        \f$\texttt{labels}_i=\texttt{arg max}_k(p_{i,k}), i=1..N\f$ (indices of the most probable
+        mixture component for each sample). It has \f$nsamples \times 1\f$ size and CV_32SC1 type.
+    @param probs The optional output matrix that contains posterior probabilities of each Gaussian
+        mixture component given the each sample. It has \f$nsamples \times nclusters\f$ size and
+        CV_64FC1 type.
+    */
+    public native @Cast("bool") boolean trainM(@ByVal Mat samples, @ByVal Mat probs0,
                             @ByVal(nullValue = "cv::noArray()") Mat logLikelihoods/*=cv::noArray()*/,
                             @ByVal(nullValue = "cv::noArray()") Mat labels/*=cv::noArray()*/,
                             @ByVal(nullValue = "cv::noArray()") Mat probs/*=cv::noArray()*/);
-    public native @Cast("bool") boolean trainM(@ByVal Mat samples,
-                            @ByVal Mat probs0);
+    public native @Cast("bool") boolean trainM(@ByVal Mat samples, @ByVal Mat probs0);
 
-    public native @ByVal Point2d predict(@ByVal Mat sample,
-                    @ByVal(nullValue = "cv::noArray()") Mat probs/*=cv::noArray()*/);
-    public native @ByVal Point2d predict(@ByVal Mat sample);
-
-    public native @Cast("bool") boolean isTrained();
-
-    public native AlgorithmInfo info();
-    public native void read(@Const @ByRef FileNode fn);
+    /** Creates empty %EM model.
+    The model should be trained then using StatModel::train(traindata, flags) method. Alternatively, you
+    can use one of the EM::train\* methods or load it from file using Algorithm::load\<EM\>(filename).
+     */
+    public static native @Ptr EM create();
 }
- // namespace cv
 
 /****************************************************************************************\
 *                                      Decision Tree                                     *
 \****************************************************************************************/
-public static class CvPair16u32s extends Pointer {
+
+/** @brief The class represents a single decision tree or a collection of decision trees.
+
+The current public interface of the class allows user to train only a single decision tree, however
+the class is capable of storing multiple decision trees and using them for prediction (by summing
+responses or using a voting schemes), and the derived from DTrees classes (such as RTrees and Boost)
+use this capability to implement decision tree ensembles.
+
+@sa @ref ml_intro_trees
+*/
+@Namespace("cv::ml") public static class DTrees extends StatModel {
     static { Loader.load(); }
-    /** Default native constructor. */
-    public CvPair16u32s() { allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvPair16u32s(int size) { allocateArray(size); }
+    /** Empty constructor. */
+    public DTrees() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvPair16u32s(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CvPair16u32s position(int position) {
-        return (CvPair16u32s)super.position(position);
-    }
+    public DTrees(Pointer p) { super(p); }
 
-    public native @Cast("unsigned short*") ShortPointer u(); public native CvPair16u32s u(ShortPointer u);
-    public native IntPointer i(); public native CvPair16u32s i(IntPointer i);
-}
+    /** Predict options */
+    /** enum cv::ml::DTrees::Flags */
+    public static final int PREDICT_AUTO= 0, PREDICT_SUM= (1<<8), PREDICT_MAX_VOTE= (2<<8), PREDICT_MASK= (3<<8);
 
+    /** Cluster possible values of a categorical variable into K\<=maxCategories clusters to
+    find a suboptimal split.
+    If a discrete variable, on which the training procedure tries to make a split, takes more than
+    maxCategories values, the precise best subset estimation may take a very long time because the
+    algorithm is exponential. Instead, many decision trees engines (including our implementation)
+    try to find sub-optimal split in this case by clustering all the samples into maxCategories
+    clusters that is some categories are merged together. The clustering is applied only in n \>
+    2-class classification problems for categorical variables with N \> max_categories possible
+    values. In case of regression and 2-class classification the optimal split can be found
+    efficiently without employing clustering, thus the parameter is not used in these cases.
+    Default value is 10.*/
+    /** @see setMaxCategories */
+    public native int getMaxCategories();
+    /** @copybrief getMaxCategories @see getMaxCategories */
+    public native void setMaxCategories(int val);
 
-// #define CV_DTREE_CAT_DIR(idx,subset)
-//     (2*((subset[(idx)>>5]&(1 << ((idx) & 31)))==0)-1)
+    /** The maximum possible depth of the tree.
+    That is the training algorithms attempts to split a node while its depth is less than maxDepth.
+    The root node has zero depth. The actual depth may be smaller if the other termination criteria
+    are met (see the outline of the training procedure @ref ml_intro_trees "here"), and/or if the
+    tree is pruned. Default value is INT_MAX.*/
+    /** @see setMaxDepth */
+    public native int getMaxDepth();
+    /** @copybrief getMaxDepth @see getMaxDepth */
+    public native void setMaxDepth(int val);
 
-public static class CvDTreeSplit extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvDTreeSplit() { allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvDTreeSplit(int size) { allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvDTreeSplit(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CvDTreeSplit position(int position) {
-        return (CvDTreeSplit)super.position(position);
-    }
+    /** If the number of samples in a node is less than this parameter then the node will not be split.
 
-    public native int var_idx(); public native CvDTreeSplit var_idx(int var_idx);
-    public native int condensed_idx(); public native CvDTreeSplit condensed_idx(int condensed_idx);
-    public native int inversed(); public native CvDTreeSplit inversed(int inversed);
-    public native float quality(); public native CvDTreeSplit quality(float quality);
-    public native CvDTreeSplit next(); public native CvDTreeSplit next(CvDTreeSplit next);
-        public native int subset(int i); public native CvDTreeSplit subset(int i, int subset);
-        @MemberGetter public native IntPointer subset();
-            @Name("ord.c") public native float ord_c(); public native CvDTreeSplit ord_c(float ord_c);
-            @Name("ord.split_point") public native int ord_split_point(); public native CvDTreeSplit ord_split_point(int ord_split_point);
-}
+    Default value is 10.*/
+    /** @see setMinSampleCount */
+    public native int getMinSampleCount();
+    /** @copybrief getMinSampleCount @see getMinSampleCount */
+    public native void setMinSampleCount(int val);
 
-public static class CvDTreeNode extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvDTreeNode() { allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvDTreeNode(int size) { allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvDTreeNode(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CvDTreeNode position(int position) {
-        return (CvDTreeNode)super.position(position);
-    }
+    /** If CVFolds \> 1 then algorithms prunes the built decision tree using K-fold
+    cross-validation procedure where K is equal to CVFolds.
+    Default value is 10.*/
+    /** @see setCVFolds */
+    public native int getCVFolds();
+    /** @copybrief getCVFolds @see getCVFolds */
+    public native void setCVFolds(int val);
 
-    public native int class_idx(); public native CvDTreeNode class_idx(int class_idx);
-    public native int Tn(); public native CvDTreeNode Tn(int Tn);
-    public native double value(); public native CvDTreeNode value(double value);
+    /** If true then surrogate splits will be built.
+    These splits allow to work with missing data and compute variable importance correctly.
+    Default value is false.
+    @note currently it's not implemented.*/
+    /** @see setUseSurrogates */
+    public native @Cast("bool") boolean getUseSurrogates();
+    /** @copybrief getUseSurrogates @see getUseSurrogates */
+    public native void setUseSurrogates(@Cast("bool") boolean val);
 
-    public native CvDTreeNode parent(); public native CvDTreeNode parent(CvDTreeNode parent);
-    public native CvDTreeNode left(); public native CvDTreeNode left(CvDTreeNode left);
-    public native CvDTreeNode right(); public native CvDTreeNode right(CvDTreeNode right);
+    /** If true then a pruning will be harsher.
+    This will make a tree more compact and more resistant to the training data noise but a bit less
+    accurate. Default value is true.*/
+    /** @see setUse1SERule */
+    public native @Cast("bool") boolean getUse1SERule();
+    /** @copybrief getUse1SERule @see getUse1SERule */
+    public native void setUse1SERule(@Cast("bool") boolean val);
 
-    public native CvDTreeSplit split(); public native CvDTreeNode split(CvDTreeSplit split);
+    /** If true then pruned branches are physically removed from the tree.
+    Otherwise they are retained and it is possible to get results from the original unpruned (or
+    pruned less aggressively) tree. Default value is true.*/
+    /** @see setTruncatePrunedTree */
+    public native @Cast("bool") boolean getTruncatePrunedTree();
+    /** @copybrief getTruncatePrunedTree @see getTruncatePrunedTree */
+    public native void setTruncatePrunedTree(@Cast("bool") boolean val);
 
-    public native int sample_count(); public native CvDTreeNode sample_count(int sample_count);
-    public native int depth(); public native CvDTreeNode depth(int depth);
-    public native IntPointer num_valid(); public native CvDTreeNode num_valid(IntPointer num_valid);
-    public native int offset(); public native CvDTreeNode offset(int offset);
-    public native int buf_idx(); public native CvDTreeNode buf_idx(int buf_idx);
-    public native double maxlr(); public native CvDTreeNode maxlr(double maxlr);
+    /** Termination criteria for regression trees.
+    If all absolute differences between an estimated value in a node and values of train samples
+    in this node are less than this parameter then the node will not be split further. Default
+    value is 0.01f*/
+    /** @see setRegressionAccuracy */
+    public native float getRegressionAccuracy();
+    /** @copybrief getRegressionAccuracy @see getRegressionAccuracy */
+    public native void setRegressionAccuracy(float val);
 
-    // global pruning data
-    public native int complexity(); public native CvDTreeNode complexity(int complexity);
-    public native double alpha(); public native CvDTreeNode alpha(double alpha);
-    public native double node_risk(); public native CvDTreeNode node_risk(double node_risk);
-    public native double tree_risk(); public native CvDTreeNode tree_risk(double tree_risk);
-    public native double tree_error(); public native CvDTreeNode tree_error(double tree_error);
+    /** @brief The array of a priori class probabilities, sorted by the class label value.
 
-    // cross-validation pruning data
-    public native IntPointer cv_Tn(); public native CvDTreeNode cv_Tn(IntPointer cv_Tn);
-    public native DoublePointer cv_node_risk(); public native CvDTreeNode cv_node_risk(DoublePointer cv_node_risk);
-    public native DoublePointer cv_node_error(); public native CvDTreeNode cv_node_error(DoublePointer cv_node_error);
+    The parameter can be used to tune the decision tree preferences toward a certain class. For
+    example, if you want to detect some rare anomaly occurrence, the training base will likely
+    contain much more normal cases than anomalies, so a very good classification performance
+    will be achieved just by considering every case as normal. To avoid this, the priors can be
+    specified, where the anomaly probability is artificially increased (up to 0.5 or even
+    greater), so the weight of the misclassified anomalies becomes much bigger, and the tree is
+    adjusted properly.
 
-    public native int get_num_valid(int vi);
-    public native void set_num_valid(int vi, int n);
-}
+    You can also think about this parameter as weights of prediction categories which determine
+    relative weights that you give to misclassification. That is, if the weight of the first
+    category is 1 and the weight of the second category is 10, then each mistake in predicting
+    the second category is equivalent to making 10 mistakes in predicting the first category.
+    Default value is empty Mat.*/
+    /** @see setPriors */
+    public native @ByVal Mat getPriors();
+    /** @copybrief getPriors @see getPriors */
+    public native void setPriors(@Const @ByRef Mat val);
 
-
-@NoOffset public static class CvDTreeParams extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvDTreeParams(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvDTreeParams(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvDTreeParams position(int position) {
-        return (CvDTreeParams)super.position(position);
-    }
-
-    public native int max_categories(); public native CvDTreeParams max_categories(int max_categories);
-    public native int max_depth(); public native CvDTreeParams max_depth(int max_depth);
-    public native int min_sample_count(); public native CvDTreeParams min_sample_count(int min_sample_count);
-    public native int cv_folds(); public native CvDTreeParams cv_folds(int cv_folds);
-    public native @Cast("bool") boolean use_surrogates(); public native CvDTreeParams use_surrogates(boolean use_surrogates);
-    public native @Cast("bool") boolean use_1se_rule(); public native CvDTreeParams use_1se_rule(boolean use_1se_rule);
-    public native @Cast("bool") boolean truncate_pruned_tree(); public native CvDTreeParams truncate_pruned_tree(boolean truncate_pruned_tree);
-    public native float regression_accuracy(); public native CvDTreeParams regression_accuracy(float regression_accuracy);
-    @MemberGetter public native @Const FloatPointer priors();
-
-    public CvDTreeParams() { allocate(); }
-    private native void allocate();
-    public CvDTreeParams( int max_depth, int min_sample_count,
-                       float regression_accuracy, @Cast("bool") boolean use_surrogates,
-                       int max_categories, int cv_folds,
-                       @Cast("bool") boolean use_1se_rule, @Cast("bool") boolean truncate_pruned_tree,
-                       @Const FloatPointer priors ) { allocate(max_depth, min_sample_count, regression_accuracy, use_surrogates, max_categories, cv_folds, use_1se_rule, truncate_pruned_tree, priors); }
-    private native void allocate( int max_depth, int min_sample_count,
-                       float regression_accuracy, @Cast("bool") boolean use_surrogates,
-                       int max_categories, int cv_folds,
-                       @Cast("bool") boolean use_1se_rule, @Cast("bool") boolean truncate_pruned_tree,
-                       @Const FloatPointer priors );
-    public CvDTreeParams( int max_depth, int min_sample_count,
-                       float regression_accuracy, @Cast("bool") boolean use_surrogates,
-                       int max_categories, int cv_folds,
-                       @Cast("bool") boolean use_1se_rule, @Cast("bool") boolean truncate_pruned_tree,
-                       @Const FloatBuffer priors ) { allocate(max_depth, min_sample_count, regression_accuracy, use_surrogates, max_categories, cv_folds, use_1se_rule, truncate_pruned_tree, priors); }
-    private native void allocate( int max_depth, int min_sample_count,
-                       float regression_accuracy, @Cast("bool") boolean use_surrogates,
-                       int max_categories, int cv_folds,
-                       @Cast("bool") boolean use_1se_rule, @Cast("bool") boolean truncate_pruned_tree,
-                       @Const FloatBuffer priors );
-    public CvDTreeParams( int max_depth, int min_sample_count,
-                       float regression_accuracy, @Cast("bool") boolean use_surrogates,
-                       int max_categories, int cv_folds,
-                       @Cast("bool") boolean use_1se_rule, @Cast("bool") boolean truncate_pruned_tree,
-                       @Const float[] priors ) { allocate(max_depth, min_sample_count, regression_accuracy, use_surrogates, max_categories, cv_folds, use_1se_rule, truncate_pruned_tree, priors); }
-    private native void allocate( int max_depth, int min_sample_count,
-                       float regression_accuracy, @Cast("bool") boolean use_surrogates,
-                       int max_categories, int cv_folds,
-                       @Cast("bool") boolean use_1se_rule, @Cast("bool") boolean truncate_pruned_tree,
-                       @Const float[] priors );
-}
-
-
-@NoOffset public static class CvDTreeTrainData extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvDTreeTrainData(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvDTreeTrainData(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvDTreeTrainData position(int position) {
-        return (CvDTreeTrainData)super.position(position);
-    }
-
-    public CvDTreeTrainData() { allocate(); }
-    private native void allocate();
-    public CvDTreeTrainData( @Const CvMat trainData, int tflag,
-                          @Const CvMat responses, @Const CvMat varIdx/*=0*/,
-                          @Const CvMat sampleIdx/*=0*/, @Const CvMat varType/*=0*/,
-                          @Const CvMat missingDataMask/*=0*/,
-                          @Const @ByRef(nullValue = "CvDTreeParams()") CvDTreeParams params/*=CvDTreeParams()*/,
-                          @Cast("bool") boolean _shared/*=false*/, @Cast("bool") boolean _add_labels/*=false*/ ) { allocate(trainData, tflag, responses, varIdx, sampleIdx, varType, missingDataMask, params, _shared, _add_labels); }
-    private native void allocate( @Const CvMat trainData, int tflag,
-                          @Const CvMat responses, @Const CvMat varIdx/*=0*/,
-                          @Const CvMat sampleIdx/*=0*/, @Const CvMat varType/*=0*/,
-                          @Const CvMat missingDataMask/*=0*/,
-                          @Const @ByRef(nullValue = "CvDTreeParams()") CvDTreeParams params/*=CvDTreeParams()*/,
-                          @Cast("bool") boolean _shared/*=false*/, @Cast("bool") boolean _add_labels/*=false*/ );
-    public CvDTreeTrainData( @Const CvMat trainData, int tflag,
-                          @Const CvMat responses ) { allocate(trainData, tflag, responses); }
-    private native void allocate( @Const CvMat trainData, int tflag,
-                          @Const CvMat responses );
-
-    public native void set_data( @Const CvMat trainData, int tflag,
-                              @Const CvMat responses, @Const CvMat varIdx/*=0*/,
-                              @Const CvMat sampleIdx/*=0*/, @Const CvMat varType/*=0*/,
-                              @Const CvMat missingDataMask/*=0*/,
-                              @Const @ByRef(nullValue = "CvDTreeParams()") CvDTreeParams params/*=CvDTreeParams()*/,
-                              @Cast("bool") boolean _shared/*=false*/, @Cast("bool") boolean _add_labels/*=false*/,
-                              @Cast("bool") boolean _update_data/*=false*/ );
-    public native void set_data( @Const CvMat trainData, int tflag,
-                              @Const CvMat responses );
-    public native void do_responses_copy();
-
-    public native void get_vectors( @Const CvMat _subsample_idx,
-             FloatPointer values, @Cast("uchar*") BytePointer missing, FloatPointer responses, @Cast("bool") boolean get_class_idx/*=false*/ );
-    public native void get_vectors( @Const CvMat _subsample_idx,
-             FloatPointer values, @Cast("uchar*") BytePointer missing, FloatPointer responses );
-    public native void get_vectors( @Const CvMat _subsample_idx,
-             FloatBuffer values, @Cast("uchar*") ByteBuffer missing, FloatBuffer responses, @Cast("bool") boolean get_class_idx/*=false*/ );
-    public native void get_vectors( @Const CvMat _subsample_idx,
-             FloatBuffer values, @Cast("uchar*") ByteBuffer missing, FloatBuffer responses );
-    public native void get_vectors( @Const CvMat _subsample_idx,
-             float[] values, @Cast("uchar*") byte[] missing, float[] responses, @Cast("bool") boolean get_class_idx/*=false*/ );
-    public native void get_vectors( @Const CvMat _subsample_idx,
-             float[] values, @Cast("uchar*") byte[] missing, float[] responses );
-
-    public native CvDTreeNode subsample_data( @Const CvMat _subsample_idx );
-
-    public native void write_params( CvFileStorage fs );
-    public native void read_params( CvFileStorage fs, CvFileNode node );
-
-    // release all the data
-    public native void clear();
-
-    public native int get_num_classes();
-    public native int get_var_type(int vi);
-    public native int get_work_var_count();
-
-    public native @Const FloatPointer get_ord_responses( CvDTreeNode n, FloatPointer values_buf, IntPointer sample_indices_buf );
-    public native @Const FloatBuffer get_ord_responses( CvDTreeNode n, FloatBuffer values_buf, IntBuffer sample_indices_buf );
-    public native @Const float[] get_ord_responses( CvDTreeNode n, float[] values_buf, int[] sample_indices_buf );
-    public native @Const IntPointer get_class_labels( CvDTreeNode n, IntPointer labels_buf );
-    public native @Const IntBuffer get_class_labels( CvDTreeNode n, IntBuffer labels_buf );
-    public native @Const int[] get_class_labels( CvDTreeNode n, int[] labels_buf );
-    public native @Const IntPointer get_cv_labels( CvDTreeNode n, IntPointer labels_buf );
-    public native @Const IntBuffer get_cv_labels( CvDTreeNode n, IntBuffer labels_buf );
-    public native @Const int[] get_cv_labels( CvDTreeNode n, int[] labels_buf );
-    public native @Const IntPointer get_sample_indices( CvDTreeNode n, IntPointer indices_buf );
-    public native @Const IntBuffer get_sample_indices( CvDTreeNode n, IntBuffer indices_buf );
-    public native @Const int[] get_sample_indices( CvDTreeNode n, int[] indices_buf );
-    public native @Const IntPointer get_cat_var_data( CvDTreeNode n, int vi, IntPointer cat_values_buf );
-    public native @Const IntBuffer get_cat_var_data( CvDTreeNode n, int vi, IntBuffer cat_values_buf );
-    public native @Const int[] get_cat_var_data( CvDTreeNode n, int vi, int[] cat_values_buf );
-    public native void get_ord_var_data( CvDTreeNode n, int vi, FloatPointer ord_values_buf, IntPointer sorted_indices_buf,
-                                       @Cast("const float**") PointerPointer ord_values, @Cast("const int**") PointerPointer sorted_indices, IntPointer sample_indices_buf );
-    public native void get_ord_var_data( CvDTreeNode n, int vi, FloatPointer ord_values_buf, IntPointer sorted_indices_buf,
-                                       @Const @ByPtrPtr FloatPointer ord_values, @Const @ByPtrPtr IntPointer sorted_indices, IntPointer sample_indices_buf );
-    public native void get_ord_var_data( CvDTreeNode n, int vi, FloatBuffer ord_values_buf, IntBuffer sorted_indices_buf,
-                                       @Const @ByPtrPtr FloatBuffer ord_values, @Const @ByPtrPtr IntBuffer sorted_indices, IntBuffer sample_indices_buf );
-    public native void get_ord_var_data( CvDTreeNode n, int vi, float[] ord_values_buf, int[] sorted_indices_buf,
-                                       @Const @ByPtrPtr float[] ord_values, @Const @ByPtrPtr int[] sorted_indices, int[] sample_indices_buf );
-    public native int get_child_buf_idx( CvDTreeNode n );
-
-    ////////////////////////////////////
-
-    public native @Cast("bool") boolean set_params( @Const @ByRef CvDTreeParams params );
-    public native CvDTreeNode new_node( CvDTreeNode parent, int count,
-                                       int storage_idx, int offset );
-
-    public native CvDTreeSplit new_split_ord( int vi, float cmp_val,
-                    int split_point, int inversed, float quality );
-    public native CvDTreeSplit new_split_cat( int vi, float quality );
-    public native void free_node_data( CvDTreeNode node );
-    public native void free_train_data();
-    public native void free_node( CvDTreeNode node );
-
-    public native int sample_count(); public native CvDTreeTrainData sample_count(int sample_count);
-    public native int var_all(); public native CvDTreeTrainData var_all(int var_all);
-    public native int var_count(); public native CvDTreeTrainData var_count(int var_count);
-    public native int max_c_count(); public native CvDTreeTrainData max_c_count(int max_c_count);
-    public native int ord_var_count(); public native CvDTreeTrainData ord_var_count(int ord_var_count);
-    public native int cat_var_count(); public native CvDTreeTrainData cat_var_count(int cat_var_count);
-    public native int work_var_count(); public native CvDTreeTrainData work_var_count(int work_var_count);
-    public native @Cast("bool") boolean have_labels(); public native CvDTreeTrainData have_labels(boolean have_labels);
-    public native @Cast("bool") boolean have_priors(); public native CvDTreeTrainData have_priors(boolean have_priors);
-    public native @Cast("bool") boolean is_classifier(); public native CvDTreeTrainData is_classifier(boolean is_classifier);
-    public native int tflag(); public native CvDTreeTrainData tflag(int tflag);
-
-    @MemberGetter public native @Const CvMat train_data();
-    @MemberGetter public native @Const CvMat responses();
-    public native CvMat responses_copy(); public native CvDTreeTrainData responses_copy(CvMat responses_copy); // used in Boosting
-
-    public native int buf_count(); public native CvDTreeTrainData buf_count(int buf_count);
-    public native int buf_size(); public native CvDTreeTrainData buf_size(int buf_size); // buf_size is obsolete, please do not use it, use expression ((int64)buf->rows * (int64)buf->cols / buf_count) instead
-    public native @Cast("bool") boolean shared(); public native CvDTreeTrainData shared(boolean shared);
-    public native int is_buf_16u(); public native CvDTreeTrainData is_buf_16u(int is_buf_16u);
-
-    public native CvMat cat_count(); public native CvDTreeTrainData cat_count(CvMat cat_count);
-    public native CvMat cat_ofs(); public native CvDTreeTrainData cat_ofs(CvMat cat_ofs);
-    public native CvMat cat_map(); public native CvDTreeTrainData cat_map(CvMat cat_map);
-
-    public native CvMat counts(); public native CvDTreeTrainData counts(CvMat counts);
-    public native CvMat buf(); public native CvDTreeTrainData buf(CvMat buf);
-    public native @Cast("size_t") long get_length_subbuf();
-
-    public native CvMat direction(); public native CvDTreeTrainData direction(CvMat direction);
-    public native CvMat split_buf(); public native CvDTreeTrainData split_buf(CvMat split_buf);
-
-    public native CvMat var_idx(); public native CvDTreeTrainData var_idx(CvMat var_idx);
-    public native CvMat var_type(); public native CvDTreeTrainData var_type(CvMat var_type); // i-th element =
-                     //   k<0  - ordered
-                     //   k>=0 - categorical, see k-th element of cat_* arrays
-    public native CvMat priors(); public native CvDTreeTrainData priors(CvMat priors);
-    public native CvMat priors_mult(); public native CvDTreeTrainData priors_mult(CvMat priors_mult);
-
-    public native @ByRef CvDTreeParams params(); public native CvDTreeTrainData params(CvDTreeParams params);
-
-    public native CvMemStorage tree_storage(); public native CvDTreeTrainData tree_storage(CvMemStorage tree_storage);
-    public native CvMemStorage temp_storage(); public native CvDTreeTrainData temp_storage(CvMemStorage temp_storage);
-
-    public native CvDTreeNode data_root(); public native CvDTreeTrainData data_root(CvDTreeNode data_root);
-
-    public native CvSet node_heap(); public native CvDTreeTrainData node_heap(CvSet node_heap);
-    public native CvSet split_heap(); public native CvDTreeTrainData split_heap(CvSet split_heap);
-    public native CvSet cv_heap(); public native CvDTreeTrainData cv_heap(CvSet cv_heap);
-    public native CvSet nv_heap(); public native CvDTreeTrainData nv_heap(CvSet nv_heap);
-
-    public native RNG rng(); public native CvDTreeTrainData rng(RNG rng);
-}
-    @Namespace("cv") @Opaque public static class DTreeBestSplitFinder extends Pointer {
-        /** Empty constructor. */
-        public DTreeBestSplitFinder() { }
+    /** @brief The class represents a decision tree node.
+     */
+    @NoOffset public static class Node extends Pointer {
+        static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public DTreeBestSplitFinder(Pointer p) { super(p); }
+        public Node(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
+        public Node(int size) { allocateArray(size); }
+        private native void allocateArray(int size);
+        @Override public Node position(int position) {
+            return (Node)super.position(position);
+        }
+    
+        public Node() { allocate(); }
+        private native void allocate();
+        /** Value at the node: a class label in case of classification or estimated
+         *  function value in case of regression. */
+        public native double value(); public native Node value(double value);
+        /** Class index normalized to 0..class_count-1 range and assigned to the
+         *  node. It is used internally in classification trees and tree ensembles. */
+        public native int classIdx(); public native Node classIdx(int classIdx);
+        /** Index of the parent node */
+        public native int parent(); public native Node parent(int parent);
+        /** Index of the left child node */
+        public native int left(); public native Node left(int left);
+        /** Index of right child node */
+        public native int right(); public native Node right(int right);
+        /** Default direction where to go (-1: left or +1: right). It helps in the
+         *  case of missing values. */
+        public native int defaultDir(); public native Node defaultDir(int defaultDir);
+        /** Index of the first split */
+        public native int split(); public native Node split(int split);
     }
-    @Namespace("cv") @Opaque public static class ForestTreeBestSplitFinder extends Pointer {
-        /** Empty constructor. */
-        public ForestTreeBestSplitFinder() { }
+
+    /** @brief The class represents split in a decision tree.
+     */
+    @NoOffset public static class Split extends Pointer {
+        static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public ForestTreeBestSplitFinder(Pointer p) { super(p); }
+        public Split(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(int)}. */
+        public Split(int size) { allocateArray(size); }
+        private native void allocateArray(int size);
+        @Override public Split position(int position) {
+            return (Split)super.position(position);
+        }
+    
+        public Split() { allocate(); }
+        private native void allocate();
+        /** Index of variable on which the split is created. */
+        public native int varIdx(); public native Split varIdx(int varIdx);
+        /** If true, then the inverse split rule is used (i.e. left and right
+         *  branches are exchanged in the rule expressions below). */
+        public native @Cast("bool") boolean inversed(); public native Split inversed(boolean inversed);
+        /** The split quality, a positive number. It is used to choose the best split. */
+        public native float quality(); public native Split quality(float quality);
+        /** Index of the next split in the list of splits for the node */
+        public native int next(); public native Split next(int next);
+        /** The threshold value in case of split on an ordered variable.
+                              The rule is:
+                              @code{.none}
+                              if var_value < c
+                                then next_node <- left
+                                else next_node <- right
+                              @endcode */
+        public native float c(); public native Split c(float c);
+        /** Offset of the bitset used by the split on a categorical variable.
+                                    The rule is:
+                                    @code{.none}
+                                    if bitset[var_value] == 1
+                                        then next_node <- left
+                                        else next_node <- right
+                                    @endcode */
+        public native int subsetOfs(); public native Split subsetOfs(int subsetOfs);
     }
 
+    /** @brief Returns indices of root nodes
+    */
+    public native @StdVector IntPointer getRoots();
+    /** @brief Returns all the nodes
 
-@NoOffset public static class CvDTree extends CvStatModel {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvDTree(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvDTree(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvDTree position(int position) {
-        return (CvDTree)super.position(position);
-    }
+    all the node indices are indices in the returned vector
+     */
+    public native @StdVector Node getNodes();
+    /** @brief Returns all the splits
 
-    public CvDTree() { allocate(); }
-    private native void allocate();
+    all the split indices are indices in the returned vector
+     */
+    public native @StdVector Split getSplits();
+    /** @brief Returns all the bitsets for categorical splits
 
-    public native @Cast("bool") boolean train( @Const CvMat trainData, int tflag,
-                            @Const CvMat responses, @Const CvMat varIdx/*=0*/,
-                            @Const CvMat sampleIdx/*=0*/, @Const CvMat varType/*=0*/,
-                            @Const CvMat missingDataMask/*=0*/,
-                            @ByVal(nullValue = "CvDTreeParams()") CvDTreeParams params/*=CvDTreeParams()*/ );
-    public native @Cast("bool") boolean train( @Const CvMat trainData, int tflag,
-                            @Const CvMat responses );
+    Split::subsetOfs is an offset in the returned vector
+     */
+    public native @StdVector IntPointer getSubsets();
 
-    public native @Cast("bool") boolean train( CvMLData trainData, @ByVal(nullValue = "CvDTreeParams()") CvDTreeParams params/*=CvDTreeParams()*/ );
-    public native @Cast("bool") boolean train( CvMLData trainData );
+    /** @brief Creates the empty model
 
-    // type in {CV_TRAIN_ERROR, CV_TEST_ERROR}
-    public native float calc_error( CvMLData trainData, int type, @StdVector FloatPointer resp/*=0*/ );
-    public native float calc_error( CvMLData trainData, int type );
-    public native float calc_error( CvMLData trainData, int type, @StdVector FloatBuffer resp/*=0*/ );
-    public native float calc_error( CvMLData trainData, int type, @StdVector float[] resp/*=0*/ );
-
-    public native @Cast("bool") boolean train( CvDTreeTrainData trainData, @Const CvMat subsampleIdx );
-
-    public native CvDTreeNode predict( @Const CvMat sample, @Const CvMat missingDataMask/*=0*/,
-                                      @Cast("bool") boolean preprocessedInput/*=false*/ );
-    public native CvDTreeNode predict( @Const CvMat sample );
-
-    public native @Cast("bool") boolean train( @Const @ByRef Mat trainData, int tflag,
-                           @Const @ByRef Mat responses, @Const @ByRef(nullValue = "cv::Mat()") Mat varIdx/*=cv::Mat()*/,
-                           @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/, @Const @ByRef(nullValue = "cv::Mat()") Mat varType/*=cv::Mat()*/,
-                           @Const @ByRef(nullValue = "cv::Mat()") Mat missingDataMask/*=cv::Mat()*/,
-                           @ByVal(nullValue = "CvDTreeParams()") CvDTreeParams params/*=CvDTreeParams()*/ );
-    public native @Cast("bool") boolean train( @Const @ByRef Mat trainData, int tflag,
-                           @Const @ByRef Mat responses );
-
-    public native CvDTreeNode predict( @Const @ByRef Mat sample, @Const @ByRef(nullValue = "cv::Mat()") Mat missingDataMask/*=cv::Mat()*/,
-                                      @Cast("bool") boolean preprocessedInput/*=false*/ );
-    public native CvDTreeNode predict( @Const @ByRef Mat sample );
-    public native @ByVal Mat getVarImportance();
-
-    public native @Const CvMat get_var_importance();
-    public native void clear();
-
-    public native void read( CvFileStorage fs, CvFileNode node );
-    public native void write( CvFileStorage fs, @Cast("const char*") BytePointer name );
-    public native void write( CvFileStorage fs, String name );
-
-    // special read & write methods for trees in the tree ensembles
-    public native void read( CvFileStorage fs, CvFileNode node,
-                           CvDTreeTrainData data );
-    public native void write( CvFileStorage fs );
-
-    public native @Const CvDTreeNode get_root();
-    public native int get_pruned_tree_idx();
-    public native CvDTreeTrainData get_data();
-    public native int pruned_tree_idx(); public native CvDTree pruned_tree_idx(int pruned_tree_idx);
+    The static method creates empty decision tree with the specified parameters. It should be then
+    trained using train method (see StatModel::train). Alternatively, you can load the model from
+    file using Algorithm::load\<DTrees\>(filename).
+     */
+    public static native @Ptr DTrees create();
 }
-
 
 /****************************************************************************************\
 *                                   Random Trees Classifier                              *
 \****************************************************************************************/
 
-@NoOffset public static class CvForestTree extends CvDTree {
+/** @brief The class implements the random forest predictor.
+
+@sa @ref ml_intro_rtrees
+ */
+@Namespace("cv::ml") public static class RTrees extends DTrees {
     static { Loader.load(); }
+    /** Empty constructor. */
+    public RTrees() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvForestTree(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvForestTree(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvForestTree position(int position) {
-        return (CvForestTree)super.position(position);
-    }
-
-    public CvForestTree() { allocate(); }
-    private native void allocate();
-
-    public native @Cast("bool") boolean train( CvDTreeTrainData trainData, @Const CvMat _subsample_idx, CvRTrees forest );
-
-    public native int get_var_count();
-    public native void read( CvFileStorage fs, CvFileNode node, CvRTrees forest, CvDTreeTrainData _data );
-
-    /* dummy methods to avoid warnings: BEGIN */
-    public native @Cast("bool") boolean train( @Const CvMat trainData, int tflag,
-                            @Const CvMat responses, @Const CvMat varIdx/*=0*/,
-                            @Const CvMat sampleIdx/*=0*/, @Const CvMat varType/*=0*/,
-                            @Const CvMat missingDataMask/*=0*/,
-                            @ByVal(nullValue = "CvDTreeParams()") CvDTreeParams params/*=CvDTreeParams()*/ );
-    public native @Cast("bool") boolean train( @Const CvMat trainData, int tflag,
-                            @Const CvMat responses );
-
-    public native @Cast("bool") boolean train( CvDTreeTrainData trainData, @Const CvMat _subsample_idx );
-    public native void read( CvFileStorage fs, CvFileNode node );
-    public native void read( CvFileStorage fs, CvFileNode node,
-                           CvDTreeTrainData data );
-}
+    public RTrees(Pointer p) { super(p); }
 
 
-@NoOffset public static class CvRTParams extends CvDTreeParams {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvRTParams(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvRTParams(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvRTParams position(int position) {
-        return (CvRTParams)super.position(position);
-    }
+    /** If true then variable importance will be calculated and then it can be retrieved by RTrees::getVarImportance.
+    Default value is false.*/
+    /** @see setCalculateVarImportance */
+    public native @Cast("bool") boolean getCalculateVarImportance();
+    /** @copybrief getCalculateVarImportance @see getCalculateVarImportance */
+    public native void setCalculateVarImportance(@Cast("bool") boolean val);
 
-    //Parameters for the forest
-    public native @Cast("bool") boolean calc_var_importance(); public native CvRTParams calc_var_importance(boolean calc_var_importance); // true <=> RF processes variable importance
-    public native int nactive_vars(); public native CvRTParams nactive_vars(int nactive_vars);
-    public native @ByRef CvTermCriteria term_crit(); public native CvRTParams term_crit(CvTermCriteria term_crit);
+    /** The size of the randomly selected subset of features at each tree node and that are used
+    to find the best split(s).
+    If you set it to 0 then the size will be set to the square root of the total number of
+    features. Default value is 0.*/
+    /** @see setActiveVarCount */
+    public native int getActiveVarCount();
+    /** @copybrief getActiveVarCount @see getActiveVarCount */
+    public native void setActiveVarCount(int val);
 
-    public CvRTParams() { allocate(); }
-    private native void allocate();
-    public CvRTParams( int max_depth, int min_sample_count,
-                    float regression_accuracy, @Cast("bool") boolean use_surrogates,
-                    int max_categories, @Const FloatPointer priors, @Cast("bool") boolean calc_var_importance,
-                    int nactive_vars, int max_num_of_trees_in_the_forest,
-                    float forest_accuracy, int termcrit_type ) { allocate(max_depth, min_sample_count, regression_accuracy, use_surrogates, max_categories, priors, calc_var_importance, nactive_vars, max_num_of_trees_in_the_forest, forest_accuracy, termcrit_type); }
-    private native void allocate( int max_depth, int min_sample_count,
-                    float regression_accuracy, @Cast("bool") boolean use_surrogates,
-                    int max_categories, @Const FloatPointer priors, @Cast("bool") boolean calc_var_importance,
-                    int nactive_vars, int max_num_of_trees_in_the_forest,
-                    float forest_accuracy, int termcrit_type );
-    public CvRTParams( int max_depth, int min_sample_count,
-                    float regression_accuracy, @Cast("bool") boolean use_surrogates,
-                    int max_categories, @Const FloatBuffer priors, @Cast("bool") boolean calc_var_importance,
-                    int nactive_vars, int max_num_of_trees_in_the_forest,
-                    float forest_accuracy, int termcrit_type ) { allocate(max_depth, min_sample_count, regression_accuracy, use_surrogates, max_categories, priors, calc_var_importance, nactive_vars, max_num_of_trees_in_the_forest, forest_accuracy, termcrit_type); }
-    private native void allocate( int max_depth, int min_sample_count,
-                    float regression_accuracy, @Cast("bool") boolean use_surrogates,
-                    int max_categories, @Const FloatBuffer priors, @Cast("bool") boolean calc_var_importance,
-                    int nactive_vars, int max_num_of_trees_in_the_forest,
-                    float forest_accuracy, int termcrit_type );
-    public CvRTParams( int max_depth, int min_sample_count,
-                    float regression_accuracy, @Cast("bool") boolean use_surrogates,
-                    int max_categories, @Const float[] priors, @Cast("bool") boolean calc_var_importance,
-                    int nactive_vars, int max_num_of_trees_in_the_forest,
-                    float forest_accuracy, int termcrit_type ) { allocate(max_depth, min_sample_count, regression_accuracy, use_surrogates, max_categories, priors, calc_var_importance, nactive_vars, max_num_of_trees_in_the_forest, forest_accuracy, termcrit_type); }
-    private native void allocate( int max_depth, int min_sample_count,
-                    float regression_accuracy, @Cast("bool") boolean use_surrogates,
-                    int max_categories, @Const float[] priors, @Cast("bool") boolean calc_var_importance,
-                    int nactive_vars, int max_num_of_trees_in_the_forest,
-                    float forest_accuracy, int termcrit_type );
-}
+    /** The termination criteria that specifies when the training algorithm stops.
+    Either when the specified number of trees is trained and added to the ensemble or when
+    sufficient accuracy (measured as OOB error) is achieved. Typically the more trees you have the
+    better the accuracy. However, the improvement in accuracy generally diminishes and asymptotes
+    pass a certain number of trees. Also to keep in mind, the number of tree increases the
+    prediction time linearly. Default value is TermCriteria(TermCriteria::MAX_ITERS +
+    TermCriteria::EPS, 50, 0.1)*/
+    /** @see setTermCriteria */
+    public native @ByVal TermCriteria getTermCriteria();
+    /** @copybrief getTermCriteria @see getTermCriteria */
+    public native void setTermCriteria(@Const @ByRef TermCriteria val);
 
-
-@NoOffset public static class CvRTrees extends CvStatModel {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvRTrees(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvRTrees(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvRTrees position(int position) {
-        return (CvRTrees)super.position(position);
-    }
-
-    public CvRTrees() { allocate(); }
-    private native void allocate();
-    public native @Cast("bool") boolean train( @Const CvMat trainData, int tflag,
-                            @Const CvMat responses, @Const CvMat varIdx/*=0*/,
-                            @Const CvMat sampleIdx/*=0*/, @Const CvMat varType/*=0*/,
-                            @Const CvMat missingDataMask/*=0*/,
-                            @ByVal(nullValue = "CvRTParams()") CvRTParams params/*=CvRTParams()*/ );
-    public native @Cast("bool") boolean train( @Const CvMat trainData, int tflag,
-                            @Const CvMat responses );
-
-    public native @Cast("bool") boolean train( CvMLData data, @ByVal(nullValue = "CvRTParams()") CvRTParams params/*=CvRTParams()*/ );
-    public native @Cast("bool") boolean train( CvMLData data );
-    public native float predict( @Const CvMat sample, @Const CvMat missing/*=0*/ );
-    public native float predict( @Const CvMat sample );
-    public native float predict_prob( @Const CvMat sample, @Const CvMat missing/*=0*/ );
-    public native float predict_prob( @Const CvMat sample );
-
-    public native @Cast("bool") boolean train( @Const @ByRef Mat trainData, int tflag,
-                           @Const @ByRef Mat responses, @Const @ByRef(nullValue = "cv::Mat()") Mat varIdx/*=cv::Mat()*/,
-                           @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/, @Const @ByRef(nullValue = "cv::Mat()") Mat varType/*=cv::Mat()*/,
-                           @Const @ByRef(nullValue = "cv::Mat()") Mat missingDataMask/*=cv::Mat()*/,
-                           @ByVal(nullValue = "CvRTParams()") CvRTParams params/*=CvRTParams()*/ );
-    public native @Cast("bool") boolean train( @Const @ByRef Mat trainData, int tflag,
-                           @Const @ByRef Mat responses );
-    public native float predict( @Const @ByRef Mat sample, @Const @ByRef(nullValue = "cv::Mat()") Mat missing/*=cv::Mat()*/ );
-    public native float predict( @Const @ByRef Mat sample );
-    public native float predict_prob( @Const @ByRef Mat sample, @Const @ByRef(nullValue = "cv::Mat()") Mat missing/*=cv::Mat()*/ );
-    public native float predict_prob( @Const @ByRef Mat sample );
+    /** Returns the variable importance array.
+    The method returns the variable importance vector, computed at the training stage when
+    CalculateVarImportance is set to true. If this flag was set to false, the empty matrix is
+    returned.
+     */
     public native @ByVal Mat getVarImportance();
 
-    public native void clear();
-
-    public native @Const CvMat get_var_importance();
-    public native float get_proximity( @Const CvMat sample1, @Const CvMat sample2,
-            @Const CvMat missing1/*=0*/, @Const CvMat missing2/*=0*/ );
-    public native float get_proximity( @Const CvMat sample1, @Const CvMat sample2 );
-
-    public native float calc_error( CvMLData data, int type, @StdVector FloatPointer resp/*=0*/ );
-    public native float calc_error( CvMLData data, int type );
-    public native float calc_error( CvMLData data, int type, @StdVector FloatBuffer resp/*=0*/ );
-    public native float calc_error( CvMLData data, int type, @StdVector float[] resp/*=0*/ ); // type in {CV_TRAIN_ERROR, CV_TEST_ERROR}
-
-    public native float get_train_error();
-
-    public native void read( CvFileStorage fs, CvFileNode node );
-    public native void write( CvFileStorage fs, @Cast("const char*") BytePointer name );
-    public native void write( CvFileStorage fs, String name );
-
-    public native CvMat get_active_var_mask();
-    public native @Cast("CvRNG*") LongPointer get_rng();
-
-    public native int get_tree_count();
-    public native CvForestTree get_tree(int i);
+    /** Creates the empty model.
+    Use StatModel::train to train the model, StatModel::train to create and train the model,
+    Algorithm::load to load the pre-trained model.
+     */
+    public static native @Ptr RTrees create();
 }
-
-/****************************************************************************************\
-*                           Extremely randomized trees Classifier                        *
-\****************************************************************************************/
-@NoOffset public static class CvERTreeTrainData extends CvDTreeTrainData {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvERTreeTrainData() { allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvERTreeTrainData(int size) { allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvERTreeTrainData(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CvERTreeTrainData position(int position) {
-        return (CvERTreeTrainData)super.position(position);
-    }
-
-    public native void set_data( @Const CvMat trainData, int tflag,
-                              @Const CvMat responses, @Const CvMat varIdx/*=0*/,
-                              @Const CvMat sampleIdx/*=0*/, @Const CvMat varType/*=0*/,
-                              @Const CvMat missingDataMask/*=0*/,
-                              @Const @ByRef(nullValue = "CvDTreeParams()") CvDTreeParams params/*=CvDTreeParams()*/,
-                              @Cast("bool") boolean _shared/*=false*/, @Cast("bool") boolean _add_labels/*=false*/,
-                              @Cast("bool") boolean _update_data/*=false*/ );
-    public native void set_data( @Const CvMat trainData, int tflag,
-                              @Const CvMat responses );
-    public native void get_ord_var_data( CvDTreeNode n, int vi, FloatPointer ord_values_buf, IntPointer missing_buf,
-                                       @Cast("const float**") PointerPointer ord_values, @Cast("const int**") PointerPointer missing, IntPointer sample_buf/*=0*/ );
-    public native void get_ord_var_data( CvDTreeNode n, int vi, FloatPointer ord_values_buf, IntPointer missing_buf,
-                                       @Const @ByPtrPtr FloatPointer ord_values, @Const @ByPtrPtr IntPointer missing );
-    public native void get_ord_var_data( CvDTreeNode n, int vi, FloatPointer ord_values_buf, IntPointer missing_buf,
-                                       @Const @ByPtrPtr FloatPointer ord_values, @Const @ByPtrPtr IntPointer missing, IntPointer sample_buf/*=0*/ );
-    public native void get_ord_var_data( CvDTreeNode n, int vi, FloatBuffer ord_values_buf, IntBuffer missing_buf,
-                                       @Const @ByPtrPtr FloatBuffer ord_values, @Const @ByPtrPtr IntBuffer missing, IntBuffer sample_buf/*=0*/ );
-    public native void get_ord_var_data( CvDTreeNode n, int vi, FloatBuffer ord_values_buf, IntBuffer missing_buf,
-                                       @Const @ByPtrPtr FloatBuffer ord_values, @Const @ByPtrPtr IntBuffer missing );
-    public native void get_ord_var_data( CvDTreeNode n, int vi, float[] ord_values_buf, int[] missing_buf,
-                                       @Const @ByPtrPtr float[] ord_values, @Const @ByPtrPtr int[] missing, int[] sample_buf/*=0*/ );
-    public native void get_ord_var_data( CvDTreeNode n, int vi, float[] ord_values_buf, int[] missing_buf,
-                                       @Const @ByPtrPtr float[] ord_values, @Const @ByPtrPtr int[] missing );
-    public native @Const IntPointer get_sample_indices( CvDTreeNode n, IntPointer indices_buf );
-    public native @Const IntBuffer get_sample_indices( CvDTreeNode n, IntBuffer indices_buf );
-    public native @Const int[] get_sample_indices( CvDTreeNode n, int[] indices_buf );
-    public native @Const IntPointer get_cv_labels( CvDTreeNode n, IntPointer labels_buf );
-    public native @Const IntBuffer get_cv_labels( CvDTreeNode n, IntBuffer labels_buf );
-    public native @Const int[] get_cv_labels( CvDTreeNode n, int[] labels_buf );
-    public native @Const IntPointer get_cat_var_data( CvDTreeNode n, int vi, IntPointer cat_values_buf );
-    public native @Const IntBuffer get_cat_var_data( CvDTreeNode n, int vi, IntBuffer cat_values_buf );
-    public native @Const int[] get_cat_var_data( CvDTreeNode n, int vi, int[] cat_values_buf );
-    public native void get_vectors( @Const CvMat _subsample_idx, FloatPointer values, @Cast("uchar*") BytePointer missing,
-                                  FloatPointer responses, @Cast("bool") boolean get_class_idx/*=false*/ );
-    public native void get_vectors( @Const CvMat _subsample_idx, FloatPointer values, @Cast("uchar*") BytePointer missing,
-                                  FloatPointer responses );
-    public native void get_vectors( @Const CvMat _subsample_idx, FloatBuffer values, @Cast("uchar*") ByteBuffer missing,
-                                  FloatBuffer responses, @Cast("bool") boolean get_class_idx/*=false*/ );
-    public native void get_vectors( @Const CvMat _subsample_idx, FloatBuffer values, @Cast("uchar*") ByteBuffer missing,
-                                  FloatBuffer responses );
-    public native void get_vectors( @Const CvMat _subsample_idx, float[] values, @Cast("uchar*") byte[] missing,
-                                  float[] responses, @Cast("bool") boolean get_class_idx/*=false*/ );
-    public native void get_vectors( @Const CvMat _subsample_idx, float[] values, @Cast("uchar*") byte[] missing,
-                                  float[] responses );
-    public native CvDTreeNode subsample_data( @Const CvMat _subsample_idx );
-    @MemberGetter public native @Const CvMat missing_mask();
-}
-
-public static class CvForestERTree extends CvForestTree {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public CvForestERTree() { allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvForestERTree(int size) { allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvForestERTree(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CvForestERTree position(int position) {
-        return (CvForestERTree)super.position(position);
-    }
-
-}
-
-public static class CvERTrees extends CvRTrees {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvERTrees(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvERTrees(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvERTrees position(int position) {
-        return (CvERTrees)super.position(position);
-    }
-
-    public CvERTrees() { allocate(); }
-    private native void allocate();
-    public native @Cast("bool") boolean train( @Const CvMat trainData, int tflag,
-                            @Const CvMat responses, @Const CvMat varIdx/*=0*/,
-                            @Const CvMat sampleIdx/*=0*/, @Const CvMat varType/*=0*/,
-                            @Const CvMat missingDataMask/*=0*/,
-                            @ByVal(nullValue = "CvRTParams()") CvRTParams params/*=CvRTParams()*/);
-    public native @Cast("bool") boolean train( @Const CvMat trainData, int tflag,
-                            @Const CvMat responses);
-    public native @Cast("bool") boolean train( @Const @ByRef Mat trainData, int tflag,
-                           @Const @ByRef Mat responses, @Const @ByRef(nullValue = "cv::Mat()") Mat varIdx/*=cv::Mat()*/,
-                           @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/, @Const @ByRef(nullValue = "cv::Mat()") Mat varType/*=cv::Mat()*/,
-                           @Const @ByRef(nullValue = "cv::Mat()") Mat missingDataMask/*=cv::Mat()*/,
-                           @ByVal(nullValue = "CvRTParams()") CvRTParams params/*=CvRTParams()*/);
-    public native @Cast("bool") boolean train( @Const @ByRef Mat trainData, int tflag,
-                           @Const @ByRef Mat responses);
-    public native @Cast("bool") boolean train( CvMLData data, @ByVal(nullValue = "CvRTParams()") CvRTParams params/*=CvRTParams()*/ );
-    public native @Cast("bool") boolean train( CvMLData data );
-}
-
 
 /****************************************************************************************\
 *                                   Boosted tree classifier                              *
 \****************************************************************************************/
 
-@NoOffset public static class CvBoostParams extends CvDTreeParams {
+/** @brief Boosted tree classifier derived from DTrees
+
+@sa @ref ml_intro_boost
+ */
+@Namespace("cv::ml") public static class Boost extends DTrees {
     static { Loader.load(); }
+    /** Empty constructor. */
+    public Boost() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvBoostParams(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvBoostParams(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvBoostParams position(int position) {
-        return (CvBoostParams)super.position(position);
-    }
+    public Boost(Pointer p) { super(p); }
 
-    public native int boost_type(); public native CvBoostParams boost_type(int boost_type);
-    public native int weak_count(); public native CvBoostParams weak_count(int weak_count);
-    public native int split_criteria(); public native CvBoostParams split_criteria(int split_criteria);
-    public native double weight_trim_rate(); public native CvBoostParams weight_trim_rate(double weight_trim_rate);
+    /** Type of the boosting algorithm.
+    See Boost::Types. Default value is Boost::REAL. */
+    /** @see setBoostType */
+    public native int getBoostType();
+    /** @copybrief getBoostType @see getBoostType */
+    public native void setBoostType(int val);
 
-    public CvBoostParams() { allocate(); }
-    private native void allocate();
-    public CvBoostParams( int boost_type, int weak_count, double weight_trim_rate,
-                       int max_depth, @Cast("bool") boolean use_surrogates, @Const FloatPointer priors ) { allocate(boost_type, weak_count, weight_trim_rate, max_depth, use_surrogates, priors); }
-    private native void allocate( int boost_type, int weak_count, double weight_trim_rate,
-                       int max_depth, @Cast("bool") boolean use_surrogates, @Const FloatPointer priors );
-    public CvBoostParams( int boost_type, int weak_count, double weight_trim_rate,
-                       int max_depth, @Cast("bool") boolean use_surrogates, @Const FloatBuffer priors ) { allocate(boost_type, weak_count, weight_trim_rate, max_depth, use_surrogates, priors); }
-    private native void allocate( int boost_type, int weak_count, double weight_trim_rate,
-                       int max_depth, @Cast("bool") boolean use_surrogates, @Const FloatBuffer priors );
-    public CvBoostParams( int boost_type, int weak_count, double weight_trim_rate,
-                       int max_depth, @Cast("bool") boolean use_surrogates, @Const float[] priors ) { allocate(boost_type, weak_count, weight_trim_rate, max_depth, use_surrogates, priors); }
-    private native void allocate( int boost_type, int weak_count, double weight_trim_rate,
-                       int max_depth, @Cast("bool") boolean use_surrogates, @Const float[] priors );
+    /** The number of weak classifiers.
+    Default value is 100. */
+    /** @see setWeakCount */
+    public native int getWeakCount();
+    /** @copybrief getWeakCount @see getWeakCount */
+    public native void setWeakCount(int val);
+
+    /** A threshold between 0 and 1 used to save computational time.
+    Samples with summary weight \f$\leq 1 - weight_trim_rate\f$ do not participate in the *next*
+    iteration of training. Set this parameter to 0 to turn off this functionality. Default value is 0.95.*/
+    /** @see setWeightTrimRate */
+    public native double getWeightTrimRate();
+    /** @copybrief getWeightTrimRate @see getWeightTrimRate */
+    public native void setWeightTrimRate(double val);
+
+    /** Boosting type.
+    Gentle AdaBoost and Real AdaBoost are often the preferable choices. */
+    /** enum cv::ml::Boost::Types */
+    public static final int
+        /** Discrete AdaBoost. */
+        DISCRETE= 0,
+        /** Real AdaBoost. It is a technique that utilizes confidence-rated predictions
+ *  and works well with categorical data. */
+        REAL= 1,
+        /** LogitBoost. It can produce good regression fits. */
+        LOGIT= 2,
+        /** Gentle AdaBoost. It puts less weight on outlier data points and for that
+ * reason is often good with regression data. */
+        GENTLE= 3;
+
+    /** Creates the empty model.
+    Use StatModel::train to train the model, Algorithm::load\<Boost\>(filename) to load the pre-trained model. */
+    public static native @Ptr Boost create();
 }
-
-@NoOffset public static class CvBoostTree extends CvDTree {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvBoostTree(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvBoostTree(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvBoostTree position(int position) {
-        return (CvBoostTree)super.position(position);
-    }
-
-    public CvBoostTree() { allocate(); }
-    private native void allocate();
-
-    public native @Cast("bool") boolean train( CvDTreeTrainData trainData,
-                            @Const CvMat subsample_idx, CvBoost ensemble );
-
-    public native void scale( double s );
-    public native void read( CvFileStorage fs, CvFileNode node,
-                           CvBoost ensemble, CvDTreeTrainData _data );
-    public native void clear();
-
-    /* dummy methods to avoid warnings: BEGIN */
-    public native @Cast("bool") boolean train( @Const CvMat trainData, int tflag,
-                            @Const CvMat responses, @Const CvMat varIdx/*=0*/,
-                            @Const CvMat sampleIdx/*=0*/, @Const CvMat varType/*=0*/,
-                            @Const CvMat missingDataMask/*=0*/,
-                            @ByVal(nullValue = "CvDTreeParams()") CvDTreeParams params/*=CvDTreeParams()*/ );
-    public native @Cast("bool") boolean train( @Const CvMat trainData, int tflag,
-                            @Const CvMat responses );
-    public native @Cast("bool") boolean train( CvDTreeTrainData trainData, @Const CvMat _subsample_idx );
-
-    public native void read( CvFileStorage fs, CvFileNode node );
-    public native void read( CvFileStorage fs, CvFileNode node,
-                           CvDTreeTrainData data );
-}
-
-
-@NoOffset public static class CvBoost extends CvStatModel {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvBoost(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvBoost(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvBoost position(int position) {
-        return (CvBoost)super.position(position);
-    }
-
-    // Boosting type
-    /** enum CvBoost:: */
-    public static final int DISCRETE= 0, REAL= 1, LOGIT= 2, GENTLE= 3;
-
-    // Splitting criteria
-    /** enum CvBoost:: */
-    public static final int DEFAULT= 0, GINI= 1, MISCLASS= 3, SQERR= 4;
-
-    public CvBoost() { allocate(); }
-    private native void allocate();
-
-    public CvBoost( @Const CvMat trainData, int tflag,
-                 @Const CvMat responses, @Const CvMat varIdx/*=0*/,
-                 @Const CvMat sampleIdx/*=0*/, @Const CvMat varType/*=0*/,
-                 @Const CvMat missingDataMask/*=0*/,
-                 @ByVal(nullValue = "CvBoostParams()") CvBoostParams params/*=CvBoostParams()*/ ) { allocate(trainData, tflag, responses, varIdx, sampleIdx, varType, missingDataMask, params); }
-    private native void allocate( @Const CvMat trainData, int tflag,
-                 @Const CvMat responses, @Const CvMat varIdx/*=0*/,
-                 @Const CvMat sampleIdx/*=0*/, @Const CvMat varType/*=0*/,
-                 @Const CvMat missingDataMask/*=0*/,
-                 @ByVal(nullValue = "CvBoostParams()") CvBoostParams params/*=CvBoostParams()*/ );
-    public CvBoost( @Const CvMat trainData, int tflag,
-                 @Const CvMat responses ) { allocate(trainData, tflag, responses); }
-    private native void allocate( @Const CvMat trainData, int tflag,
-                 @Const CvMat responses );
-
-    public native @Cast("bool") boolean train( @Const CvMat trainData, int tflag,
-                 @Const CvMat responses, @Const CvMat varIdx/*=0*/,
-                 @Const CvMat sampleIdx/*=0*/, @Const CvMat varType/*=0*/,
-                 @Const CvMat missingDataMask/*=0*/,
-                 @ByVal(nullValue = "CvBoostParams()") CvBoostParams params/*=CvBoostParams()*/,
-                 @Cast("bool") boolean update/*=false*/ );
-    public native @Cast("bool") boolean train( @Const CvMat trainData, int tflag,
-                 @Const CvMat responses );
-
-    public native @Cast("bool") boolean train( CvMLData data,
-                 @ByVal(nullValue = "CvBoostParams()") CvBoostParams params/*=CvBoostParams()*/,
-                 @Cast("bool") boolean update/*=false*/ );
-    public native @Cast("bool") boolean train( CvMLData data );
-
-    public native float predict( @Const CvMat sample, @Const CvMat missing/*=0*/,
-                               CvMat weak_responses/*=0*/, @ByVal(nullValue = "CV_WHOLE_SEQ") CvSlice slice/*=CV_WHOLE_SEQ*/,
-                               @Cast("bool") boolean raw_mode/*=false*/, @Cast("bool") boolean return_sum/*=false*/ );
-    public native float predict( @Const CvMat sample );
-
-    public CvBoost( @Const @ByRef Mat trainData, int tflag,
-                @Const @ByRef Mat responses, @Const @ByRef(nullValue = "cv::Mat()") Mat varIdx/*=cv::Mat()*/,
-                @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/, @Const @ByRef(nullValue = "cv::Mat()") Mat varType/*=cv::Mat()*/,
-                @Const @ByRef(nullValue = "cv::Mat()") Mat missingDataMask/*=cv::Mat()*/,
-                @ByVal(nullValue = "CvBoostParams()") CvBoostParams params/*=CvBoostParams()*/ ) { allocate(trainData, tflag, responses, varIdx, sampleIdx, varType, missingDataMask, params); }
-    private native void allocate( @Const @ByRef Mat trainData, int tflag,
-                @Const @ByRef Mat responses, @Const @ByRef(nullValue = "cv::Mat()") Mat varIdx/*=cv::Mat()*/,
-                @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/, @Const @ByRef(nullValue = "cv::Mat()") Mat varType/*=cv::Mat()*/,
-                @Const @ByRef(nullValue = "cv::Mat()") Mat missingDataMask/*=cv::Mat()*/,
-                @ByVal(nullValue = "CvBoostParams()") CvBoostParams params/*=CvBoostParams()*/ );
-    public CvBoost( @Const @ByRef Mat trainData, int tflag,
-                @Const @ByRef Mat responses ) { allocate(trainData, tflag, responses); }
-    private native void allocate( @Const @ByRef Mat trainData, int tflag,
-                @Const @ByRef Mat responses );
-
-    public native @Cast("bool") boolean train( @Const @ByRef Mat trainData, int tflag,
-                           @Const @ByRef Mat responses, @Const @ByRef(nullValue = "cv::Mat()") Mat varIdx/*=cv::Mat()*/,
-                           @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/, @Const @ByRef(nullValue = "cv::Mat()") Mat varType/*=cv::Mat()*/,
-                           @Const @ByRef(nullValue = "cv::Mat()") Mat missingDataMask/*=cv::Mat()*/,
-                           @ByVal(nullValue = "CvBoostParams()") CvBoostParams params/*=CvBoostParams()*/,
-                           @Cast("bool") boolean update/*=false*/ );
-    public native @Cast("bool") boolean train( @Const @ByRef Mat trainData, int tflag,
-                           @Const @ByRef Mat responses );
-
-    public native float predict( @Const @ByRef Mat sample, @Const @ByRef(nullValue = "cv::Mat()") Mat missing/*=cv::Mat()*/,
-                                       @Const @ByRef(nullValue = "cv::Range::all()") Range slice/*=cv::Range::all()*/, @Cast("bool") boolean rawMode/*=false*/,
-                                       @Cast("bool") boolean returnSum/*=false*/ );
-    public native float predict( @Const @ByRef Mat sample );
-
-    public native float calc_error( CvMLData _data, int type, @StdVector FloatPointer resp/*=0*/ );
-    public native float calc_error( CvMLData _data, int type );
-    public native float calc_error( CvMLData _data, int type, @StdVector FloatBuffer resp/*=0*/ );
-    public native float calc_error( CvMLData _data, int type, @StdVector float[] resp/*=0*/ ); // type in {CV_TRAIN_ERROR, CV_TEST_ERROR}
-
-    public native void prune( @ByVal CvSlice slice );
-
-    public native void clear();
-
-    public native void write( CvFileStorage storage, @Cast("const char*") BytePointer name );
-    public native void write( CvFileStorage storage, String name );
-    public native void read( CvFileStorage storage, CvFileNode node );
-    public native @Const CvMat get_active_vars(@Cast("bool") boolean absolute_idx/*=true*/);
-    public native @Const CvMat get_active_vars();
-
-    public native CvSeq get_weak_predictors();
-
-    public native CvMat get_weights();
-    public native CvMat get_subtree_weights();
-    public native CvMat get_weak_response();
-    public native @Const @ByRef CvBoostParams get_params();
-    public native @Const CvDTreeTrainData get_data();
-}
-
 
 /****************************************************************************************\
 *                                   Gradient Boosted Trees                               *
 \****************************************************************************************/
 
-// DataType: STRUCT CvGBTreesParams
-// Parameters of GBT (Gradient Boosted trees model), including single
-// tree settings and ensemble parameters.
-//
-// weak_count          - count of trees in the ensemble
-// loss_function_type  - loss function used for ensemble training
-// subsample_portion   - portion of whole training set used for
-//                       every single tree training.
-//                       subsample_portion value is in (0.0, 1.0].
-//                       subsample_portion == 1.0 when whole dataset is
-//                       used on each step. Count of sample used on each
-//                       step is computed as
-//                       int(total_samples_count * subsample_portion).
-// shrinkage           - regularization parameter.
-//                       Each tree prediction is multiplied on shrinkage value.
+/*class CV_EXPORTS_W GBTrees : public DTrees
+{
+public:
+    struct CV_EXPORTS_W_MAP Params : public DTrees::Params
+    {
+        CV_PROP_RW int weakCount;
+        CV_PROP_RW int lossFunctionType;
+        CV_PROP_RW float subsamplePortion;
+        CV_PROP_RW float shrinkage;
 
+        Params();
+        Params( int lossFunctionType, int weakCount, float shrinkage,
+                float subsamplePortion, int maxDepth, bool useSurrogates );
+    };
 
-@NoOffset public static class CvGBTreesParams extends CvDTreeParams {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvGBTreesParams(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvGBTreesParams(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvGBTreesParams position(int position) {
-        return (CvGBTreesParams)super.position(position);
-    }
+    enum {SQUARED_LOSS=0, ABSOLUTE_LOSS, HUBER_LOSS=3, DEVIANCE_LOSS};
 
-    public native int weak_count(); public native CvGBTreesParams weak_count(int weak_count);
-    public native int loss_function_type(); public native CvGBTreesParams loss_function_type(int loss_function_type);
-    public native float subsample_portion(); public native CvGBTreesParams subsample_portion(float subsample_portion);
-    public native float shrinkage(); public native CvGBTreesParams shrinkage(float shrinkage);
+    virtual void setK(int k) = 0;
 
-    public CvGBTreesParams() { allocate(); }
-    private native void allocate();
-    public CvGBTreesParams( int loss_function_type, int weak_count, float shrinkage,
-            float subsample_portion, int max_depth, @Cast("bool") boolean use_surrogates ) { allocate(loss_function_type, weak_count, shrinkage, subsample_portion, max_depth, use_surrogates); }
-    private native void allocate( int loss_function_type, int weak_count, float shrinkage,
-            float subsample_portion, int max_depth, @Cast("bool") boolean use_surrogates );
-}
+    virtual float predictSerial( InputArray samples,
+                                 OutputArray weakResponses, int flags) const = 0;
 
-// DataType: CLASS CvGBTrees
-// Gradient Boosting Trees (GBT) algorithm implementation.
-//
-// data             - training dataset
-// params           - parameters of the CvGBTrees
-// weak             - array[0..(class_count-1)] of CvSeq
-//                    for storing tree ensembles
-// orig_response    - original responses of the training set samples
-// sum_response     - predicitons of the current model on the training dataset.
-//                    this matrix is updated on every iteration.
-// sum_response_tmp - predicitons of the model on the training set on the next
-//                    step. On every iteration values of sum_responses_tmp are
-//                    computed via sum_responses values. When the current
-//                    step is complete sum_response values become equal to
-//                    sum_responses_tmp.
-// sampleIdx       - indices of samples used for training the ensemble.
-//                    CvGBTrees training procedure takes a set of samples
-//                    (train_data) and a set of responses (responses).
-//                    Only pairs (train_data[i], responses[i]), where i is
-//                    in sample_idx are used for training the ensemble.
-// subsample_train  - indices of samples used for training a single decision
-//                    tree on the current step. This indices are countered
-//                    relatively to the sample_idx, so that pairs
-//                    (train_data[sample_idx[i]], responses[sample_idx[i]])
-//                    are used for training a decision tree.
-//                    Training set is randomly splited
-//                    in two parts (subsample_train and subsample_test)
-//                    on every iteration accordingly to the portion parameter.
-// subsample_test   - relative indices of samples from the training set,
-//                    which are not used for training a tree on the current
-//                    step.
-// missing          - mask of the missing values in the training set. This
-//                    matrix has the same size as train_data. 1 - missing
-//                    value, 0 - not a missing value.
-// class_labels     - output class labels map.
-// rng              - random number generator. Used for spliting the
-//                    training set.
-// class_count      - count of output classes.
-//                    class_count == 1 in the case of regression,
-//                    and > 1 in the case of classification.
-// delta            - Huber loss function parameter.
-// base_value       - start point of the gradient descent procedure.
-//                    model prediction is
-//                    f(x) = f_0 + sum_{i=1..weak_count-1}(f_i(x)), where
-//                    f_0 is the base value.
-
-
-
-@NoOffset public static class CvGBTrees extends CvStatModel {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvGBTrees(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvGBTrees(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvGBTrees position(int position) {
-        return (CvGBTrees)super.position(position);
-    }
-
-
-    /*
-    // DataType: ENUM
-    // Loss functions implemented in CvGBTrees.
-    //
-    // SQUARED_LOSS
-    // problem: regression
-    // loss = (x - x')^2
-    //
-    // ABSOLUTE_LOSS
-    // problem: regression
-    // loss = abs(x - x')
-    //
-    // HUBER_LOSS
-    // problem: regression
-    // loss = delta*( abs(x - x') - delta/2), if abs(x - x') > delta
-    //           1/2*(x - x')^2, if abs(x - x') <= delta,
-    //           where delta is the alpha-quantile of pseudo responses from
-    //           the training set.
-    //
-    // DEVIANCE_LOSS
-    // problem: classification
-    //
-    */
-    /** enum CvGBTrees:: */
-    public static final int SQUARED_LOSS= 0, ABSOLUTE_LOSS = 1, HUBER_LOSS= 3, DEVIANCE_LOSS = 4;
-
-
-    /*
-    // Default constructor. Creates a model only (without training).
-    // Should be followed by one form of the train(...) function.
-    //
-    // API
-    // CvGBTrees();
-
-    // INPUT
-    // OUTPUT
-    // RESULT
-    */
-    public CvGBTrees() { allocate(); }
-    private native void allocate();
-
-
-    /*
-    // Full form constructor. Creates a gradient boosting model and does the
-    // train.
-    //
-    // API
-    // CvGBTrees( const CvMat* trainData, int tflag,
-             const CvMat* responses, const CvMat* varIdx=0,
-             const CvMat* sampleIdx=0, const CvMat* varType=0,
-             const CvMat* missingDataMask=0,
-             CvGBTreesParams params=CvGBTreesParams() );
-
-    // INPUT
-    // trainData    - a set of input feature vectors.
-    //                  size of matrix is
-    //                  <count of samples> x <variables count>
-    //                  or <variables count> x <count of samples>
-    //                  depending on the tflag parameter.
-    //                  matrix values are float.
-    // tflag         - a flag showing how do samples stored in the
-    //                  trainData matrix row by row (tflag=CV_ROW_SAMPLE)
-    //                  or column by column (tflag=CV_COL_SAMPLE).
-    // responses     - a vector of responses corresponding to the samples
-    //                  in trainData.
-    // varIdx       - indices of used variables. zero value means that all
-    //                  variables are active.
-    // sampleIdx    - indices of used samples. zero value means that all
-    //                  samples from trainData are in the training set.
-    // varType      - vector of <variables count> length. gives every
-    //                  variable type CV_VAR_CATEGORICAL or CV_VAR_ORDERED.
-    //                  varType = 0 means all variables are numerical.
-    // missingDataMask  - a mask of misiing values in trainData.
-    //                  missingDataMask = 0 means that there are no missing
-    //                  values.
-    // params         - parameters of GTB algorithm.
-    // OUTPUT
-    // RESULT
-    */
-    public CvGBTrees( @Const CvMat trainData, int tflag,
-                 @Const CvMat responses, @Const CvMat varIdx/*=0*/,
-                 @Const CvMat sampleIdx/*=0*/, @Const CvMat varType/*=0*/,
-                 @Const CvMat missingDataMask/*=0*/,
-                 @ByVal(nullValue = "CvGBTreesParams()") CvGBTreesParams params/*=CvGBTreesParams()*/ ) { allocate(trainData, tflag, responses, varIdx, sampleIdx, varType, missingDataMask, params); }
-    private native void allocate( @Const CvMat trainData, int tflag,
-                 @Const CvMat responses, @Const CvMat varIdx/*=0*/,
-                 @Const CvMat sampleIdx/*=0*/, @Const CvMat varType/*=0*/,
-                 @Const CvMat missingDataMask/*=0*/,
-                 @ByVal(nullValue = "CvGBTreesParams()") CvGBTreesParams params/*=CvGBTreesParams()*/ );
-    public CvGBTrees( @Const CvMat trainData, int tflag,
-                 @Const CvMat responses ) { allocate(trainData, tflag, responses); }
-    private native void allocate( @Const CvMat trainData, int tflag,
-                 @Const CvMat responses );
-
-
-    /*
-    // Destructor.
-    */
-
-
-    /*
-    // Gradient tree boosting model training
-    //
-    // API
-    // virtual bool train( const CvMat* trainData, int tflag,
-             const CvMat* responses, const CvMat* varIdx=0,
-             const CvMat* sampleIdx=0, const CvMat* varType=0,
-             const CvMat* missingDataMask=0,
-             CvGBTreesParams params=CvGBTreesParams(),
-             bool update=false );
-
-    // INPUT
-    // trainData    - a set of input feature vectors.
-    //                  size of matrix is
-    //                  <count of samples> x <variables count>
-    //                  or <variables count> x <count of samples>
-    //                  depending on the tflag parameter.
-    //                  matrix values are float.
-    // tflag         - a flag showing how do samples stored in the
-    //                  trainData matrix row by row (tflag=CV_ROW_SAMPLE)
-    //                  or column by column (tflag=CV_COL_SAMPLE).
-    // responses     - a vector of responses corresponding to the samples
-    //                  in trainData.
-    // varIdx       - indices of used variables. zero value means that all
-    //                  variables are active.
-    // sampleIdx    - indices of used samples. zero value means that all
-    //                  samples from trainData are in the training set.
-    // varType      - vector of <variables count> length. gives every
-    //                  variable type CV_VAR_CATEGORICAL or CV_VAR_ORDERED.
-    //                  varType = 0 means all variables are numerical.
-    // missingDataMask  - a mask of misiing values in trainData.
-    //                  missingDataMask = 0 means that there are no missing
-    //                  values.
-    // params         - parameters of GTB algorithm.
-    // update         - is not supported now. (!)
-    // OUTPUT
-    // RESULT
-    // Error state.
-    */
-    public native @Cast("bool") boolean train( @Const CvMat trainData, int tflag,
-                 @Const CvMat responses, @Const CvMat varIdx/*=0*/,
-                 @Const CvMat sampleIdx/*=0*/, @Const CvMat varType/*=0*/,
-                 @Const CvMat missingDataMask/*=0*/,
-                 @ByVal(nullValue = "CvGBTreesParams()") CvGBTreesParams params/*=CvGBTreesParams()*/,
-                 @Cast("bool") boolean update/*=false*/ );
-    public native @Cast("bool") boolean train( @Const CvMat trainData, int tflag,
-                 @Const CvMat responses );
-
-
-    /*
-    // Gradient tree boosting model training
-    //
-    // API
-    // virtual bool train( CvMLData* data,
-             CvGBTreesParams params=CvGBTreesParams(),
-             bool update=false ) {return false;};
-
-    // INPUT
-    // data          - training set.
-    // params        - parameters of GTB algorithm.
-    // update        - is not supported now. (!)
-    // OUTPUT
-    // RESULT
-    // Error state.
-    */
-    public native @Cast("bool") boolean train( CvMLData data,
-                 @ByVal(nullValue = "CvGBTreesParams()") CvGBTreesParams params/*=CvGBTreesParams()*/,
-                 @Cast("bool") boolean update/*=false*/ );
-    public native @Cast("bool") boolean train( CvMLData data );
-
-
-    /*
-    // Response value prediction
-    //
-    // API
-    // virtual float predict_serial( const CvMat* sample, const CvMat* missing=0,
-             CvMat* weak_responses=0, CvSlice slice = CV_WHOLE_SEQ,
-             int k=-1 ) const;
-
-    // INPUT
-    // sample         - input sample of the same type as in the training set.
-    // missing        - missing values mask. missing=0 if there are no
-    //                   missing values in sample vector.
-    // weak_responses  - predictions of all of the trees.
-    //                   not implemented (!)
-    // slice           - part of the ensemble used for prediction.
-    //                   slice = CV_WHOLE_SEQ when all trees are used.
-    // k               - number of ensemble used.
-    //                   k is in {-1,0,1,..,<count of output classes-1>}.
-    //                   in the case of classification problem
-    //                   <count of output classes-1> ensembles are built.
-    //                   If k = -1 ordinary prediction is the result,
-    //                   otherwise function gives the prediction of the
-    //                   k-th ensemble only.
-    // OUTPUT
-    // RESULT
-    // Predicted value.
-    */
-    public native float predict_serial( @Const CvMat sample, @Const CvMat missing/*=0*/,
-                CvMat weakResponses/*=0*/, @ByVal(nullValue = "CV_WHOLE_SEQ") CvSlice slice/*=CV_WHOLE_SEQ*/,
-                int k/*=-1*/ );
-    public native float predict_serial( @Const CvMat sample );
-
-    /*
-    // Response value prediction.
-    // Parallel version (in the case of TBB existence)
-    //
-    // API
-    // virtual float predict( const CvMat* sample, const CvMat* missing=0,
-             CvMat* weak_responses=0, CvSlice slice = CV_WHOLE_SEQ,
-             int k=-1 ) const;
-
-    // INPUT
-    // sample         - input sample of the same type as in the training set.
-    // missing        - missing values mask. missing=0 if there are no
-    //                   missing values in sample vector.
-    // weak_responses  - predictions of all of the trees.
-    //                   not implemented (!)
-    // slice           - part of the ensemble used for prediction.
-    //                   slice = CV_WHOLE_SEQ when all trees are used.
-    // k               - number of ensemble used.
-    //                   k is in {-1,0,1,..,<count of output classes-1>}.
-    //                   in the case of classification problem
-    //                   <count of output classes-1> ensembles are built.
-    //                   If k = -1 ordinary prediction is the result,
-    //                   otherwise function gives the prediction of the
-    //                   k-th ensemble only.
-    // OUTPUT
-    // RESULT
-    // Predicted value.
-    */
-    public native float predict( @Const CvMat sample, @Const CvMat missing/*=0*/,
-                CvMat weakResponses/*=0*/, @ByVal(nullValue = "CV_WHOLE_SEQ") CvSlice slice/*=CV_WHOLE_SEQ*/,
-                int k/*=-1*/ );
-    public native float predict( @Const CvMat sample );
-
-    /*
-    // Deletes all the data.
-    //
-    // API
-    // virtual void clear();
-
-    // INPUT
-    // OUTPUT
-    // delete data, weak, orig_response, sum_response,
-    //        weak_eval, subsample_train, subsample_test,
-    //        sample_idx, missing, lass_labels
-    // delta = 0.0
-    // RESULT
-    */
-    public native void clear();
-
-    /*
-    // Compute error on the train/test set.
-    //
-    // API
-    // virtual float calc_error( CvMLData* _data, int type,
-    //        std::vector<float> *resp = 0 );
-    //
-    // INPUT
-    // data  - dataset
-    // type  - defines which error is to compute: train (CV_TRAIN_ERROR) or
-    //         test (CV_TEST_ERROR).
-    // OUTPUT
-    // resp  - vector of predicitons
-    // RESULT
-    // Error value.
-    */
-    public native float calc_error( CvMLData _data, int type,
-                @StdVector FloatPointer resp/*=0*/ );
-    public native float calc_error( CvMLData _data, int type );
-    public native float calc_error( CvMLData _data, int type,
-                @StdVector FloatBuffer resp/*=0*/ );
-    public native float calc_error( CvMLData _data, int type,
-                @StdVector float[] resp/*=0*/ );
-
-    /*
-    //
-    // Write parameters of the gtb model and data. Write learned model.
-    //
-    // API
-    // virtual void write( CvFileStorage* fs, const char* name ) const;
-    //
-    // INPUT
-    // fs     - file storage to read parameters from.
-    // name   - model name.
-    // OUTPUT
-    // RESULT
-    */
-    public native void write( CvFileStorage fs, @Cast("const char*") BytePointer name );
-    public native void write( CvFileStorage fs, String name );
-
-
-    /*
-    //
-    // Read parameters of the gtb model and data. Read learned model.
-    //
-    // API
-    // virtual void read( CvFileStorage* fs, CvFileNode* node );
-    //
-    // INPUT
-    // fs     - file storage to read parameters from.
-    // node   - file node.
-    // OUTPUT
-    // RESULT
-    */
-    public native void read( CvFileStorage fs, CvFileNode node );
-
-
-    // new-style C++ interface
-    public CvGBTrees( @Const @ByRef Mat trainData, int tflag,
-                  @Const @ByRef Mat responses, @Const @ByRef(nullValue = "cv::Mat()") Mat varIdx/*=cv::Mat()*/,
-                  @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/, @Const @ByRef(nullValue = "cv::Mat()") Mat varType/*=cv::Mat()*/,
-                  @Const @ByRef(nullValue = "cv::Mat()") Mat missingDataMask/*=cv::Mat()*/,
-                  @ByVal(nullValue = "CvGBTreesParams()") CvGBTreesParams params/*=CvGBTreesParams()*/ ) { allocate(trainData, tflag, responses, varIdx, sampleIdx, varType, missingDataMask, params); }
-    private native void allocate( @Const @ByRef Mat trainData, int tflag,
-                  @Const @ByRef Mat responses, @Const @ByRef(nullValue = "cv::Mat()") Mat varIdx/*=cv::Mat()*/,
-                  @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/, @Const @ByRef(nullValue = "cv::Mat()") Mat varType/*=cv::Mat()*/,
-                  @Const @ByRef(nullValue = "cv::Mat()") Mat missingDataMask/*=cv::Mat()*/,
-                  @ByVal(nullValue = "CvGBTreesParams()") CvGBTreesParams params/*=CvGBTreesParams()*/ );
-    public CvGBTrees( @Const @ByRef Mat trainData, int tflag,
-                  @Const @ByRef Mat responses ) { allocate(trainData, tflag, responses); }
-    private native void allocate( @Const @ByRef Mat trainData, int tflag,
-                  @Const @ByRef Mat responses );
-
-    public native @Cast("bool") boolean train( @Const @ByRef Mat trainData, int tflag,
-                           @Const @ByRef Mat responses, @Const @ByRef(nullValue = "cv::Mat()") Mat varIdx/*=cv::Mat()*/,
-                           @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/, @Const @ByRef(nullValue = "cv::Mat()") Mat varType/*=cv::Mat()*/,
-                           @Const @ByRef(nullValue = "cv::Mat()") Mat missingDataMask/*=cv::Mat()*/,
-                           @ByVal(nullValue = "CvGBTreesParams()") CvGBTreesParams params/*=CvGBTreesParams()*/,
-                           @Cast("bool") boolean update/*=false*/ );
-    public native @Cast("bool") boolean train( @Const @ByRef Mat trainData, int tflag,
-                           @Const @ByRef Mat responses );
-
-    public native float predict( @Const @ByRef Mat sample, @Const @ByRef(nullValue = "cv::Mat()") Mat missing/*=cv::Mat()*/,
-                               @Const @ByRef(nullValue = "cv::Range::all()") Range slice/*=cv::Range::all()*/,
-                               int k/*=-1*/ );
-    public native float predict( @Const @ByRef Mat sample );
-
-}
-
-
+    static Ptr<GBTrees> create(const Params& p);
+};*/
 
 /****************************************************************************************\
 *                              Artificial Neural Networks (ANN)                          *
@@ -2230,288 +1371,284 @@ public static class CvERTrees extends CvRTrees {
 
 /////////////////////////////////// Multi-Layer Perceptrons //////////////////////////////
 
-@NoOffset public static class CvANN_MLP_TrainParams extends Pointer {
+/** @brief Artificial Neural Networks - Multi-Layer Perceptrons.
+
+Unlike many other models in ML that are constructed and trained at once, in the MLP model these
+steps are separated. First, a network with the specified topology is created using the non-default
+constructor or the method ANN_MLP::create. All the weights are set to zeros. Then, the network is
+trained using a set of input and output vectors. The training procedure can be repeated more than
+once, that is, the weights can be adjusted based on the new training data.
+
+Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
+
+@sa @ref ml_intro_ann
+ */
+@Namespace("cv::ml") public static class ANN_MLP extends StatModel {
     static { Loader.load(); }
+    /** Empty constructor. */
+    public ANN_MLP() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvANN_MLP_TrainParams(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvANN_MLP_TrainParams(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvANN_MLP_TrainParams position(int position) {
-        return (CvANN_MLP_TrainParams)super.position(position);
-    }
+    public ANN_MLP(Pointer p) { super(p); }
 
-    public CvANN_MLP_TrainParams() { allocate(); }
-    private native void allocate();
-    public CvANN_MLP_TrainParams( @ByVal CvTermCriteria term_crit, int train_method,
-                               double param1, double param2/*=0*/ ) { allocate(term_crit, train_method, param1, param2); }
-    private native void allocate( @ByVal CvTermCriteria term_crit, int train_method,
-                               double param1, double param2/*=0*/ );
-    public CvANN_MLP_TrainParams( @ByVal CvTermCriteria term_crit, int train_method,
-                               double param1 ) { allocate(term_crit, train_method, param1); }
-    private native void allocate( @ByVal CvTermCriteria term_crit, int train_method,
-                               double param1 );
+    /** Available training methods */
+    /** enum cv::ml::ANN_MLP::TrainingMethods */
+    public static final int
+        /** The back-propagation algorithm. */
+        BACKPROP= 0,
+        /** The RPROP algorithm. See @cite RPROP93 for details. */
+        RPROP= 1;
 
-    /** enum CvANN_MLP_TrainParams:: */
-    public static final int BACKPROP= 0, RPROP= 1;
+    /** Sets training method and common parameters.
+    @param method Default value is ANN_MLP::RPROP. See ANN_MLP::TrainingMethods.
+    @param param1 passed to setRpropDW0 for ANN_MLP::RPROP and to setBackpropWeightScale for ANN_MLP::BACKPROP
+    @param param2 passed to setRpropDWMin for ANN_MLP::RPROP and to setBackpropMomentumScale for ANN_MLP::BACKPROP.
+    */
+    public native void setTrainMethod(int method, double param1/*=0*/, double param2/*=0*/);
+    public native void setTrainMethod(int method);
 
-    public native @ByRef CvTermCriteria term_crit(); public native CvANN_MLP_TrainParams term_crit(CvTermCriteria term_crit);
-    public native int train_method(); public native CvANN_MLP_TrainParams train_method(int train_method);
+    /** Returns current training method */
+    public native int getTrainMethod();
 
-    // backpropagation parameters
-    public native double bp_dw_scale(); public native CvANN_MLP_TrainParams bp_dw_scale(double bp_dw_scale);
-    public native double bp_moment_scale(); public native CvANN_MLP_TrainParams bp_moment_scale(double bp_moment_scale);
+    /** Initialize the activation function for each neuron.
+    Currently the default and the only fully supported activation function is ANN_MLP::SIGMOID_SYM.
+    @param type The type of activation function. See ANN_MLP::ActivationFunctions.
+    @param param1 The first parameter of the activation function, \f$\alpha\f$. Default value is 0.
+    @param param2 The second parameter of the activation function, \f$\beta\f$. Default value is 0.
+    */
+    public native void setActivationFunction(int type, double param1/*=0*/, double param2/*=0*/);
+    public native void setActivationFunction(int type);
 
-    // rprop parameters
-    public native double rp_dw0(); public native CvANN_MLP_TrainParams rp_dw0(double rp_dw0);
-    public native double rp_dw_plus(); public native CvANN_MLP_TrainParams rp_dw_plus(double rp_dw_plus);
-    public native double rp_dw_minus(); public native CvANN_MLP_TrainParams rp_dw_minus(double rp_dw_minus);
-    public native double rp_dw_min(); public native CvANN_MLP_TrainParams rp_dw_min(double rp_dw_min);
-    public native double rp_dw_max(); public native CvANN_MLP_TrainParams rp_dw_max(double rp_dw_max);
+    /**  Integer vector specifying the number of neurons in each layer including the input and output layers.
+    The very first element specifies the number of elements in the input layer.
+    The last element - number of elements in the output layer. Default value is empty Mat.
+    @sa getLayerSizes */
+    public native void setLayerSizes(@ByVal Mat _layer_sizes);
+
+    /**  Integer vector specifying the number of neurons in each layer including the input and output layers.
+    The very first element specifies the number of elements in the input layer.
+    The last element - number of elements in the output layer.
+    @sa setLayerSizes */
+    public native @ByVal Mat getLayerSizes();
+
+    /** Termination criteria of the training algorithm.
+    You can specify the maximum number of iterations (maxCount) and/or how much the error could
+    change between the iterations to make the algorithm continue (epsilon). Default value is
+    TermCriteria(TermCriteria::MAX_ITER + TermCriteria::EPS, 1000, 0.01).*/
+    /** @see setTermCriteria */
+    public native @ByVal TermCriteria getTermCriteria();
+    /** @copybrief getTermCriteria @see getTermCriteria */
+    public native void setTermCriteria(@ByVal TermCriteria val);
+
+    /** BPROP: Strength of the weight gradient term.
+    The recommended value is about 0.1. Default value is 0.1.*/
+    /** @see setBackpropWeightScale */
+    public native double getBackpropWeightScale();
+    /** @copybrief getBackpropWeightScale @see getBackpropWeightScale */
+    public native void setBackpropWeightScale(double val);
+
+    /** BPROP: Strength of the momentum term (the difference between weights on the 2 previous iterations).
+    This parameter provides some inertia to smooth the random fluctuations of the weights. It can
+    vary from 0 (the feature is disabled) to 1 and beyond. The value 0.1 or so is good enough.
+    Default value is 0.1.*/
+    /** @see setBackpropMomentumScale */
+    public native double getBackpropMomentumScale();
+    /** @copybrief getBackpropMomentumScale @see getBackpropMomentumScale */
+    public native void setBackpropMomentumScale(double val);
+
+    /** RPROP: Initial value \f$\Delta_0\f$ of update-values \f$\Delta_{ij}\f$.
+    Default value is 0.1.*/
+    /** @see setRpropDW0 */
+    public native double getRpropDW0();
+    /** @copybrief getRpropDW0 @see getRpropDW0 */
+    public native void setRpropDW0(double val);
+
+    /** RPROP: Increase factor \f$\eta^+\f$.
+    It must be \>1. Default value is 1.2.*/
+    /** @see setRpropDWPlus */
+    public native double getRpropDWPlus();
+    /** @copybrief getRpropDWPlus @see getRpropDWPlus */
+    public native void setRpropDWPlus(double val);
+
+    /** RPROP: Decrease factor \f$\eta^-\f$.
+    It must be \<1. Default value is 0.5.*/
+    /** @see setRpropDWMinus */
+    public native double getRpropDWMinus();
+    /** @copybrief getRpropDWMinus @see getRpropDWMinus */
+    public native void setRpropDWMinus(double val);
+
+    /** RPROP: Update-values lower limit \f$\Delta_{min}\f$.
+    It must be positive. Default value is FLT_EPSILON.*/
+    /** @see setRpropDWMin */
+    public native double getRpropDWMin();
+    /** @copybrief getRpropDWMin @see getRpropDWMin */
+    public native void setRpropDWMin(double val);
+
+    /** RPROP: Update-values upper limit \f$\Delta_{max}\f$.
+    It must be \>1. Default value is 50.*/
+    /** @see setRpropDWMax */
+    public native double getRpropDWMax();
+    /** @copybrief getRpropDWMax @see getRpropDWMax */
+    public native void setRpropDWMax(double val);
+
+    /** possible activation functions */
+    /** enum cv::ml::ANN_MLP::ActivationFunctions */
+    public static final int
+        /** Identity function: \f$f(x)=x\f$ */
+        IDENTITY = 0,
+        /** Symmetrical sigmoid: \f$f(x)=\beta*(1-e^{-\alpha x})/(1+e^{-\alpha x}\f$
+        @note
+        If you are using the default sigmoid activation function with the default parameter values
+        fparam1=0 and fparam2=0 then the function used is y = 1.7159\*tanh(2/3 \* x), so the output
+        will range from [-1.7159, 1.7159], instead of [0,1].*/
+        SIGMOID_SYM = 1,
+        /** Gaussian function: \f$f(x)=\beta e^{-\alpha x*x}\f$ */
+        GAUSSIAN = 2;
+
+    /** Train options */
+    /** enum cv::ml::ANN_MLP::TrainFlags */
+    public static final int
+        /** Update the network weights, rather than compute them from scratch. In the latter case
+        the weights are initialized using the Nguyen-Widrow algorithm. */
+        UPDATE_WEIGHTS = 1,
+        /** Do not normalize the input vectors. If this flag is not set, the training algorithm
+        normalizes each input feature independently, shifting its mean value to 0 and making the
+        standard deviation equal to 1. If the network is assumed to be updated frequently, the new
+        training data could be much different from original one. In this case, you should take care
+        of proper normalization. */
+        NO_INPUT_SCALE = 2,
+        /** Do not normalize the output vectors. If the flag is not set, the training algorithm
+        normalizes each output feature independently, by transforming it to the certain range
+        depending on the used activation function. */
+        NO_OUTPUT_SCALE = 4;
+
+    public native @ByVal Mat getWeights(int layerIdx);
+
+    /** @brief Creates empty model
+
+    Use StatModel::train to train the model, Algorithm::load\<ANN_MLP\>(filename) to load the pre-trained model.
+    Note that the train method has optional flags: ANN_MLP::TrainFlags.
+     */
+    public static native @Ptr ANN_MLP create();
 }
 
+/****************************************************************************************\
+*                           Logistic Regression                                          *
+\****************************************************************************************/
 
-@NoOffset public static class CvANN_MLP extends CvStatModel {
+/** @brief Implements Logistic Regression classifier.
+
+@sa @ref ml_intro_lr
+ */
+@Namespace("cv::ml") public static class LogisticRegression extends StatModel {
     static { Loader.load(); }
+    /** Empty constructor. */
+    public LogisticRegression() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvANN_MLP(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvANN_MLP(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvANN_MLP position(int position) {
-        return (CvANN_MLP)super.position(position);
-    }
+    public LogisticRegression(Pointer p) { super(p); }
 
-    public CvANN_MLP() { allocate(); }
-    private native void allocate();
-    public CvANN_MLP( @Const CvMat layerSizes,
-                   int activateFunc/*=CvANN_MLP::SIGMOID_SYM*/,
-                   double fparam1/*=0*/, double fparam2/*=0*/ ) { allocate(layerSizes, activateFunc, fparam1, fparam2); }
-    private native void allocate( @Const CvMat layerSizes,
-                   int activateFunc/*=CvANN_MLP::SIGMOID_SYM*/,
-                   double fparam1/*=0*/, double fparam2/*=0*/ );
-    public CvANN_MLP( @Const CvMat layerSizes ) { allocate(layerSizes); }
-    private native void allocate( @Const CvMat layerSizes );
 
-    public native void create( @Const CvMat layerSizes,
-                             int activateFunc/*=CvANN_MLP::SIGMOID_SYM*/,
-                             double fparam1/*=0*/, double fparam2/*=0*/ );
-    public native void create( @Const CvMat layerSizes );
+    /** Learning rate. */
+    /** @see setLearningRate */
+    public native double getLearningRate();
+    /** @copybrief getLearningRate @see getLearningRate */
+    public native void setLearningRate(double val);
 
-    public native int train( @Const CvMat inputs, @Const CvMat outputs,
-                           @Const CvMat sampleWeights, @Const CvMat sampleIdx/*=0*/,
-                           @ByVal(nullValue = "CvANN_MLP_TrainParams()") CvANN_MLP_TrainParams params/*=CvANN_MLP_TrainParams()*/,
-                           int flags/*=0*/ );
-    public native int train( @Const CvMat inputs, @Const CvMat outputs,
-                           @Const CvMat sampleWeights );
-    public native float predict( @Const CvMat inputs, CvMat outputs );
+    /** Number of iterations. */
+    /** @see setIterations */
+    public native int getIterations();
+    /** @copybrief getIterations @see getIterations */
+    public native void setIterations(int val);
 
-    public CvANN_MLP( @Const @ByRef Mat layerSizes,
-                  int activateFunc/*=CvANN_MLP::SIGMOID_SYM*/,
-                  double fparam1/*=0*/, double fparam2/*=0*/ ) { allocate(layerSizes, activateFunc, fparam1, fparam2); }
-    private native void allocate( @Const @ByRef Mat layerSizes,
-                  int activateFunc/*=CvANN_MLP::SIGMOID_SYM*/,
-                  double fparam1/*=0*/, double fparam2/*=0*/ );
-    public CvANN_MLP( @Const @ByRef Mat layerSizes ) { allocate(layerSizes); }
-    private native void allocate( @Const @ByRef Mat layerSizes );
+    /** Kind of regularization to be applied. See LogisticRegression::RegKinds. */
+    /** @see setRegularization */
+    public native int getRegularization();
+    /** @copybrief getRegularization @see getRegularization */
+    public native void setRegularization(int val);
 
-    public native void create( @Const @ByRef Mat layerSizes,
-                            int activateFunc/*=CvANN_MLP::SIGMOID_SYM*/,
-                            double fparam1/*=0*/, double fparam2/*=0*/ );
-    public native void create( @Const @ByRef Mat layerSizes );
+    /** Kind of training method used. See LogisticRegression::Methods. */
+    /** @see setTrainMethod */
+    public native int getTrainMethod();
+    /** @copybrief getTrainMethod @see getTrainMethod */
+    public native void setTrainMethod(int val);
 
-    public native int train( @Const @ByRef Mat inputs, @Const @ByRef Mat outputs,
-                          @Const @ByRef Mat sampleWeights, @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/,
-                          @ByVal(nullValue = "CvANN_MLP_TrainParams()") CvANN_MLP_TrainParams params/*=CvANN_MLP_TrainParams()*/,
-                          int flags/*=0*/ );
-    public native int train( @Const @ByRef Mat inputs, @Const @ByRef Mat outputs,
-                          @Const @ByRef Mat sampleWeights );
+    /** Specifies the number of training samples taken in each step of Mini-Batch Gradient
+    Descent. Will only be used if using LogisticRegression::MINI_BATCH training algorithm. It
+    has to take values less than the total number of training samples. */
+    /** @see setMiniBatchSize */
+    public native int getMiniBatchSize();
+    /** @copybrief getMiniBatchSize @see getMiniBatchSize */
+    public native void setMiniBatchSize(int val);
 
-    public native float predict( @Const @ByRef Mat inputs, @ByRef Mat outputs );
+    /** Termination criteria of the algorithm. */
+    /** @see setTermCriteria */
+    public native @ByVal TermCriteria getTermCriteria();
+    /** @copybrief getTermCriteria @see getTermCriteria */
+    public native void setTermCriteria(@ByVal TermCriteria val);
 
-    public native void clear();
+    /** Regularization kinds */
+    /** enum cv::ml::LogisticRegression::RegKinds */
+    public static final int
+        /** Regularization disabled */
+        REG_DISABLE = -1,
+        /** %L1 norm */
+        REG_L1 = 0,
+        /** %L2 norm */
+        REG_L2 = 1;
 
-    // possible activation functions
-    /** enum CvANN_MLP:: */
-    public static final int IDENTITY = 0, SIGMOID_SYM = 1, GAUSSIAN = 2;
+    /** Training methods */
+    /** enum cv::ml::LogisticRegression::Methods */
+    public static final int
+        BATCH = 0,
+        /** Set MiniBatchSize to a positive integer when using this method. */
+        MINI_BATCH = 1;
 
-    // available training flags
-    /** enum CvANN_MLP:: */
-    public static final int UPDATE_WEIGHTS = 1, NO_INPUT_SCALE = 2, NO_OUTPUT_SCALE = 4;
+    /** @brief Predicts responses for input samples and returns a float type.
 
-    public native void read( CvFileStorage fs, CvFileNode node );
-    public native void write( CvFileStorage storage, @Cast("const char*") BytePointer name );
-    public native void write( CvFileStorage storage, String name );
+    @param samples The input data for the prediction algorithm. Matrix [m x n], where each row
+        contains variables (features) of one object being classified. Should have data type CV_32F.
+    @param results Predicted labels as a column matrix of type CV_32S.
+    @param flags Not used.
+     */
+    public native float predict( @ByVal Mat samples, @ByVal(nullValue = "cv::noArray()") Mat results/*=cv::noArray()*/, int flags/*=0*/ );
+    public native float predict( @ByVal Mat samples );
 
-    public native int get_layer_count();
-    public native @Const CvMat get_layer_sizes();
-    public native DoublePointer get_weights(int layer);
+    /** @brief This function returns the trained paramters arranged across rows.
 
-    public native void calc_activ_func_deriv( CvMat xf, CvMat deriv, @Const DoublePointer bias );
-    public native void calc_activ_func_deriv( CvMat xf, CvMat deriv, @Const DoubleBuffer bias );
-    public native void calc_activ_func_deriv( CvMat xf, CvMat deriv, @Const double[] bias );
+    For a two class classifcation problem, it returns a row matrix. It returns learnt paramters of
+    the Logistic Regression as a matrix of type CV_32F.
+     */
+    public native @ByVal Mat get_learnt_thetas();
+
+    /** @brief Creates empty model.
+
+    Creates Logistic Regression model with parameters given.
+     */
+    public static native @Ptr LogisticRegression create();
 }
 
 /****************************************************************************************\
 *                           Auxilary functions declarations                              *
 \****************************************************************************************/
 
-/* Generates <sample> from multivariate normal distribution, where <mean> - is an
-   average row vector, <cov> - symmetric covariation matrix */
-public static native void cvRandMVNormal( CvMat mean, CvMat cov, CvMat sample,
-                           @Cast("CvRNG*") LongPointer rng/*=0*/ );
-public static native void cvRandMVNormal( CvMat mean, CvMat cov, CvMat sample );
-public static native void cvRandMVNormal( CvMat mean, CvMat cov, CvMat sample,
-                           @Cast("CvRNG*") LongBuffer rng/*=0*/ );
-public static native void cvRandMVNormal( CvMat mean, CvMat cov, CvMat sample,
-                           @Cast("CvRNG*") long[] rng/*=0*/ );
+/** @brief Generates _sample_ from multivariate normal distribution
 
-/* Generates sample from gaussian mixture distribution */
-public static native void cvRandGaussMixture( @Cast("CvMat**") PointerPointer means,
-                               @Cast("CvMat**") PointerPointer covs,
-                               FloatPointer weights,
-                               int clsnum,
-                               CvMat sample,
-                               CvMat sampClasses/*=0*/ );
-public static native void cvRandGaussMixture( @ByPtrPtr CvMat means,
-                               @ByPtrPtr CvMat covs,
-                               FloatPointer weights,
-                               int clsnum,
-                               CvMat sample );
-public static native void cvRandGaussMixture( @ByPtrPtr CvMat means,
-                               @ByPtrPtr CvMat covs,
-                               FloatPointer weights,
-                               int clsnum,
-                               CvMat sample,
-                               CvMat sampClasses/*=0*/ );
-public static native void cvRandGaussMixture( @ByPtrPtr CvMat means,
-                               @ByPtrPtr CvMat covs,
-                               FloatBuffer weights,
-                               int clsnum,
-                               CvMat sample,
-                               CvMat sampClasses/*=0*/ );
-public static native void cvRandGaussMixture( @ByPtrPtr CvMat means,
-                               @ByPtrPtr CvMat covs,
-                               FloatBuffer weights,
-                               int clsnum,
-                               CvMat sample );
-public static native void cvRandGaussMixture( @ByPtrPtr CvMat means,
-                               @ByPtrPtr CvMat covs,
-                               float[] weights,
-                               int clsnum,
-                               CvMat sample,
-                               CvMat sampClasses/*=0*/ );
-public static native void cvRandGaussMixture( @ByPtrPtr CvMat means,
-                               @ByPtrPtr CvMat covs,
-                               float[] weights,
-                               int clsnum,
-                               CvMat sample );
+@param mean an average row vector
+@param cov symmetric covariation matrix
+@param nsamples returned samples count
+@param samples returned samples array
+*/
+@Namespace("cv::ml") public static native void randMVNormal( @ByVal Mat mean, @ByVal Mat cov, int nsamples, @ByVal Mat samples);
 
-public static final int CV_TS_CONCENTRIC_SPHERES = 0;
+/** @brief Generates sample from gaussian mixture distribution */
+@Namespace("cv::ml") public static native void randGaussMixture( @ByVal Mat means, @ByVal Mat covs, @ByVal Mat weights,
+                                  int nsamples, @ByVal Mat samples, @ByVal Mat sampClasses );
 
-/* creates test set */
-public static native void cvCreateTestSet( int type, @Cast("CvMat**") PointerPointer samples,
-                 int num_samples,
-                 int num_features,
-                 @Cast("CvMat**") PointerPointer responses,
-                 int num_classes );
-public static native void cvCreateTestSet( int type, @ByPtrPtr CvMat samples,
-                 int num_samples,
-                 int num_features,
-                 @ByPtrPtr CvMat responses,
-                 int num_classes );
+/** @brief Creates test set */
+@Namespace("cv::ml") public static native void createConcentricSpheresTestSet( int nsamples, int nfeatures, int nclasses,
+                                                @ByVal Mat samples, @ByVal Mat responses);
 
-/****************************************************************************************\
-*                                      Data                                             *
-\****************************************************************************************/
+/** @} ml */
 
-public static final int CV_COUNT =     0;
-public static final int CV_PORTION =   1;
-
-@NoOffset public static class CvTrainTestSplit extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvTrainTestSplit(Pointer p) { super(p); }
-
-    public CvTrainTestSplit() { allocate(); }
-    private native void allocate();
-    public CvTrainTestSplit( int train_sample_count, @Cast("bool") boolean mix/*=true*/) { allocate(train_sample_count, mix); }
-    private native void allocate( int train_sample_count, @Cast("bool") boolean mix/*=true*/);
-    public CvTrainTestSplit( int train_sample_count) { allocate(train_sample_count); }
-    private native void allocate( int train_sample_count);
-    public CvTrainTestSplit( float train_sample_portion, @Cast("bool") boolean mix/*=true*/) { allocate(train_sample_portion, mix); }
-    private native void allocate( float train_sample_portion, @Cast("bool") boolean mix/*=true*/);
-    public CvTrainTestSplit( float train_sample_portion) { allocate(train_sample_portion); }
-    private native void allocate( float train_sample_portion);
-
-        @Name("train_sample_part.count") public native int train_sample_part_count(); public native CvTrainTestSplit train_sample_part_count(int train_sample_part_count);
-        @Name("train_sample_part.portion") public native float train_sample_part_portion(); public native CvTrainTestSplit train_sample_part_portion(float train_sample_part_portion);
-    public native int train_sample_part_mode(); public native CvTrainTestSplit train_sample_part_mode(int train_sample_part_mode);
-
-    public native @Cast("bool") boolean mix(); public native CvTrainTestSplit mix(boolean mix);
-}
-
-@NoOffset public static class CvMLData extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public CvMLData(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvMLData(int size) { allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvMLData position(int position) {
-        return (CvMLData)super.position(position);
-    }
-
-    public CvMLData() { allocate(); }
-    private native void allocate();
-
-    // returns:
-    // 0 - OK
-    // -1 - file can not be opened or is not correct
-    public native int read_csv( @Cast("const char*") BytePointer filename );
-    public native int read_csv( String filename );
-
-    public native @Const CvMat get_values();
-    public native @Const CvMat get_responses();
-    public native @Const CvMat get_missing();
-
-    public native void set_response_idx( int idx ); // old response become predictors, new response_idx = idx
-                                      // if idx < 0 there will be no response
-    public native int get_response_idx();
-
-    public native void set_train_test_split( @Const CvTrainTestSplit spl );
-    public native @Const CvMat get_train_sample_idx();
-    public native @Const CvMat get_test_sample_idx();
-    public native void mix_train_and_test_idx();
-
-    public native @Const CvMat get_var_idx();
-    public native void chahge_var_idx( int vi, @Cast("bool") boolean state ); // misspelled (saved for back compitability),
-                                               // use change_var_idx
-    public native void change_var_idx( int vi, @Cast("bool") boolean state ); // state == true to set vi-variable as predictor
-
-    public native @Const CvMat get_var_types();
-    public native int get_var_type( int var_idx );
-    // following 2 methods enable to change vars type
-    // use these methods to assign CV_VAR_CATEGORICAL type for categorical variable
-    // with numerical labels; in the other cases var types are correctly determined automatically
-    public native void set_var_types( @Cast("const char*") BytePointer str );
-    public native void set_var_types( String str );  // str examples:
-                                            // "ord[0-17],cat[18]", "ord[0,2,4,10-12], cat[1,3,5-9,13,14]",
-                                            // "cat", "ord" (all vars are categorical/ordered)
-    public native void change_var_type( int var_idx, int type); // type in { CV_VAR_ORDERED, CV_VAR_CATEGORICAL }
-
-    public native void set_delimiter( @Cast("char") byte ch );
-    public native @Cast("char") byte get_delimiter();
-
-    public native void set_miss_ch( @Cast("char") byte ch );
-    public native @Cast("char") byte get_miss_ch();
-
-    public native @Const @ByRef StringIntMap get_class_labels_map();
-}
-
-
-
-@Namespace("cv") public static native @Cast("bool") boolean initModule_ml();
 
 
 
