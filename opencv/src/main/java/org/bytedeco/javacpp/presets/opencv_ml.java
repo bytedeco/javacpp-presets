@@ -36,6 +36,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         target="org.bytedeco.javacpp.opencv_ml")
 public class opencv_ml implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("std::map<std::string,int>").pointerTypes("StringIntMap").define());
+        infoMap.put(new Info("std::map<std::string,int>").pointerTypes("StringIntMap").define())
+               .put(new Info("CvSVM::get_default_grid"));
     }
 }

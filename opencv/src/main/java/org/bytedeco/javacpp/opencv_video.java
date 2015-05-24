@@ -417,7 +417,7 @@ public static native @Const CvMat cvKalmanUpdateByMeasurement(CvKalman arg1, CvM
     public native void init(int dynamParams, int measureParams);
 
     /** computes predicted state */
-    public native @Const @ByRef Mat predict(@Const @ByRef Mat control/*=Mat()*/);
+    public native @Const @ByRef Mat predict(@Const @ByRef(nullValue = "cv::Mat()") Mat control/*=cv::Mat()*/);
     public native @Const @ByRef Mat predict();
     /** updates the predicted state from the measurement */
     public native @Const @ByRef Mat correct(@Const @ByRef Mat measurement);
@@ -460,7 +460,7 @@ public static final int
 /** constructs a pyramid which can be used as input for calcOpticalFlowPyrLK */
 @Namespace("cv") public static native int buildOpticalFlowPyramid(@ByVal Mat img, @ByVal MatVector pyramid,
                                          @ByVal Size winSize, int maxLevel, @Cast("bool") boolean withDerivatives/*=true*/,
-                                         int pyrBorder/*=BORDER_REFLECT_101*/, int derivBorder/*=BORDER_CONSTANT*/,
+                                         int pyrBorder/*=cv::BORDER_REFLECT_101*/, int derivBorder/*=cv::BORDER_CONSTANT*/,
                                          @Cast("bool") boolean tryReuseInputImage/*=true*/);
 @Namespace("cv") public static native int buildOpticalFlowPyramid(@ByVal Mat img, @ByVal MatVector pyramid,
                                          @ByVal Size winSize, int maxLevel);
@@ -469,8 +469,8 @@ public static final int
 @Namespace("cv") public static native void calcOpticalFlowPyrLK( @ByVal Mat prevImg, @ByVal Mat nextImg,
                            @ByVal Mat prevPts, @ByVal Mat nextPts,
                            @ByVal Mat status, @ByVal Mat err,
-                           @ByVal Size winSize/*=Size(21,21)*/, int maxLevel/*=3*/,
-                           @ByVal TermCriteria criteria/*=TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 30, 0.01)*/,
+                           @ByVal(nullValue = "cv::Size(21,21)") Size winSize/*=cv::Size(21,21)*/, int maxLevel/*=3*/,
+                           @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 0.01)") TermCriteria criteria/*=cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 0.01)*/,
                            int flags/*=0*/, double minEigThreshold/*=1e-4*/);
 @Namespace("cv") public static native void calcOpticalFlowPyrLK( @ByVal Mat prevImg, @ByVal Mat nextImg,
                            @ByVal Mat prevPts, @ByVal Mat nextPts,

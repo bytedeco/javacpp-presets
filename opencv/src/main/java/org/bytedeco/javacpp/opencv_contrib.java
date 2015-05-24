@@ -157,8 +157,8 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
         MORPHING_METHOD_ERODE_ERODE = 2,
         MORPHING_METHOD_ERODE_DILATE = 3;
 
-    public CvAdaptiveSkinDetector(int samplingDivider/*=1*/, int morphingMethod/*=MORPHING_METHOD_NONE*/) { allocate(samplingDivider, morphingMethod); }
-    private native void allocate(int samplingDivider/*=1*/, int morphingMethod/*=MORPHING_METHOD_NONE*/);
+    public CvAdaptiveSkinDetector(int samplingDivider/*=1*/, int morphingMethod/*=CvAdaptiveSkinDetector::MORPHING_METHOD_NONE*/) { allocate(samplingDivider, morphingMethod); }
+    private native void allocate(int samplingDivider/*=1*/, int morphingMethod/*=CvAdaptiveSkinDetector::MORPHING_METHOD_NONE*/);
     public CvAdaptiveSkinDetector() { allocate(); }
     private native void allocate();
 
@@ -299,7 +299,7 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
     public CvFuzzyMeanShiftTracker() { allocate(); }
     private native void allocate();
 
-    public native void track(IplImage maskImage, IplImage depthMap, int resizeMethod, @Cast("bool") boolean resetSearch, int minKernelMass/*=MinKernelMass*/);
+    public native void track(IplImage maskImage, IplImage depthMap, int resizeMethod, @Cast("bool") boolean resetSearch, int minKernelMass/*=CvFuzzyMeanShiftTracker::MinKernelMass*/);
     public native void track(IplImage maskImage, IplImage depthMap, int resizeMethod, @Cast("bool") boolean resetSearch);
 }
 
@@ -400,9 +400,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
         public native void computeNormals(@StdVector int[] subset, float normalRadius, int minNeighbors/*=20*/);
         public native void computeNormals(@StdVector int[] subset, float normalRadius);
 
-        public native void writeAsVrml(@StdString BytePointer file, @StdVector Scalar colors/*=vector<Scalar>()*/);
+        public native void writeAsVrml(@StdString BytePointer file, @StdVector Scalar colors/*=std::vector<cv::Scalar>()*/);
         public native void writeAsVrml(@StdString BytePointer file);
-        public native void writeAsVrml(@StdString String file, @StdVector Scalar colors/*=vector<Scalar>()*/);
+        public native void writeAsVrml(@StdString String file, @StdVector Scalar colors/*=std::vector<cv::Scalar>()*/);
         public native void writeAsVrml(@StdString String file);
 
         public native @StdVector Point3f vtx(); public native Mesh3D vtx(Point3f vtx);
@@ -531,14 +531,14 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
         public native @Cast("size_t") long getDescriptorSize();
         public native @ByVal Size getGridSize( @ByVal Size imgsize, @ByVal Size winStride );
 
-        public native void compute(@Const @ByRef Mat img, @StdVector FloatPointer descriptors, @ByVal Size winStride/*=Size()*/,
-                                     @StdVector Point locations/*=vector<Point>()*/);
+        public native void compute(@Const @ByRef Mat img, @StdVector FloatPointer descriptors, @ByVal(nullValue = "cv::Size()") Size winStride/*=cv::Size()*/,
+                                     @StdVector Point locations/*=std::vector<cv::Point>()*/);
         public native void compute(@Const @ByRef Mat img, @StdVector FloatPointer descriptors);
-        public native void compute(@Const @ByRef Mat img, @StdVector FloatBuffer descriptors, @ByVal Size winStride/*=Size()*/,
-                                     @StdVector Point locations/*=vector<Point>()*/);
+        public native void compute(@Const @ByRef Mat img, @StdVector FloatBuffer descriptors, @ByVal(nullValue = "cv::Size()") Size winStride/*=cv::Size()*/,
+                                     @StdVector Point locations/*=std::vector<cv::Point>()*/);
         public native void compute(@Const @ByRef Mat img, @StdVector FloatBuffer descriptors);
-        public native void compute(@Const @ByRef Mat img, @StdVector float[] descriptors, @ByVal Size winStride/*=Size()*/,
-                                     @StdVector Point locations/*=vector<Point>()*/);
+        public native void compute(@Const @ByRef Mat img, @StdVector float[] descriptors, @ByVal(nullValue = "cv::Size()") Size winStride/*=cv::Size()*/,
+                                     @StdVector Point locations/*=std::vector<cv::Point>()*/);
         public native void compute(@Const @ByRef Mat img, @StdVector float[] descriptors);
         public native void computeLogPolarMapping(@ByRef Mat mappingMask);
         public native void SSD(@Const @ByRef Mat img, @ByVal Point pt, @ByRef Mat ssd);
@@ -649,7 +649,7 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
                                          @ByRef MatVector R,
                                          @ByRef MatVector T,
                                          @ByRef MatVector distCoeffs,
-                                         @Const @ByRef TermCriteria criteria/*=TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 30, DBL_EPSILON)*/,
+                                         @Const @ByRef(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria/*=cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, DBL_EPSILON)*/,
                                          BundleAdjustCallback cb/*=0*/, Pointer user_data/*=0*/);
         public static native void bundleAdjust(@StdVector Point3d points,
                                          @Const @ByRef Point2dVectorVector imagePoints,
@@ -856,7 +856,7 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
                                       @Const @ByRef Mat cameraMatrix, float minDepth/*=0.f*/, float maxDepth/*=4.f*/, float maxDepthDiff/*=0.07f*/,
                                       @StdVector IntPointer iterCounts/*=std::vector<int>()*/,
                                       @StdVector FloatPointer minGradientMagnitudes/*=std::vector<float>()*/,
-                                      int transformType/*=RIGID_BODY_MOTION*/ );
+                                      int transformType/*=cv::RIGID_BODY_MOTION*/ );
     @Namespace("cv") public static native @Cast("bool") boolean RGBDOdometry( @ByRef Mat Rt, @Const @ByRef Mat initRt,
                                       @Const @ByRef Mat image0, @Const @ByRef Mat depth0, @Const @ByRef Mat mask0,
                                       @Const @ByRef Mat image1, @Const @ByRef Mat depth1, @Const @ByRef Mat mask1,
@@ -867,14 +867,14 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
                                       @Const @ByRef Mat cameraMatrix, float minDepth/*=0.f*/, float maxDepth/*=4.f*/, float maxDepthDiff/*=0.07f*/,
                                       @StdVector IntBuffer iterCounts/*=std::vector<int>()*/,
                                       @StdVector FloatBuffer minGradientMagnitudes/*=std::vector<float>()*/,
-                                      int transformType/*=RIGID_BODY_MOTION*/ );
+                                      int transformType/*=cv::RIGID_BODY_MOTION*/ );
     @Namespace("cv") public static native @Cast("bool") boolean RGBDOdometry( @ByRef Mat Rt, @Const @ByRef Mat initRt,
                                       @Const @ByRef Mat image0, @Const @ByRef Mat depth0, @Const @ByRef Mat mask0,
                                       @Const @ByRef Mat image1, @Const @ByRef Mat depth1, @Const @ByRef Mat mask1,
                                       @Const @ByRef Mat cameraMatrix, float minDepth/*=0.f*/, float maxDepth/*=4.f*/, float maxDepthDiff/*=0.07f*/,
                                       @StdVector int[] iterCounts/*=std::vector<int>()*/,
                                       @StdVector float[] minGradientMagnitudes/*=std::vector<float>()*/,
-                                      int transformType/*=RIGID_BODY_MOTION*/ );
+                                      int transformType/*=cv::RIGID_BODY_MOTION*/ );
 
     /**
     *Bilinear interpolation technique.
@@ -916,9 +916,9 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
         *          \a 0 means that the parameter \a S is provided by the user.
         */
         public LogPolar_Interp(int w, int h, @ByVal @Cast("cv::Point2i*") Point center, int R/*=70*/, double ro0/*=3.0*/,
-                                int interp/*=INTER_LINEAR*/, int full/*=1*/, int S/*=117*/, int sp/*=1*/) { allocate(w, h, center, R, ro0, interp, full, S, sp); }
+                                int interp/*=cv::INTER_LINEAR*/, int full/*=1*/, int S/*=117*/, int sp/*=1*/) { allocate(w, h, center, R, ro0, interp, full, S, sp); }
         private native void allocate(int w, int h, @ByVal @Cast("cv::Point2i*") Point center, int R/*=70*/, double ro0/*=3.0*/,
-                                int interp/*=INTER_LINEAR*/, int full/*=1*/, int S/*=117*/, int sp/*=1*/);
+                                int interp/*=cv::INTER_LINEAR*/, int full/*=1*/, int S/*=117*/, int sp/*=1*/);
         public LogPolar_Interp(int w, int h, @ByVal @Cast("cv::Point2i*") Point center) { allocate(w, h, center); }
         private native void allocate(int w, int h, @ByVal @Cast("cv::Point2i*") Point center);
         /**
@@ -1377,10 +1377,10 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
 
     /** enum cv::CvMeanShiftTrackerParams:: */
     public static final int  H = 0, HS = 1, HSV = 2;
-    public CvMeanShiftTrackerParams(int tracking_type/*=CvMeanShiftTrackerParams::HS*/,
-                @ByVal CvTermCriteria term_crit/*=CvTermCriteria()*/) { allocate(tracking_type, term_crit); }
-    private native void allocate(int tracking_type/*=CvMeanShiftTrackerParams::HS*/,
-                @ByVal CvTermCriteria term_crit/*=CvTermCriteria()*/);
+    public CvMeanShiftTrackerParams(int tracking_type/*=cv::CvMeanShiftTrackerParams::HS*/,
+                @ByVal(nullValue = "CvTermCriteria()") CvTermCriteria term_crit/*=CvTermCriteria()*/) { allocate(tracking_type, term_crit); }
+    private native void allocate(int tracking_type/*=cv::CvMeanShiftTrackerParams::HS*/,
+                @ByVal(nullValue = "CvTermCriteria()") CvTermCriteria term_crit/*=CvTermCriteria()*/);
     public CvMeanShiftTrackerParams() { allocate(); }
     private native void allocate();
 
@@ -1427,13 +1427,13 @@ public class opencv_contrib extends org.bytedeco.javacpp.presets.opencv_contrib 
     }
 
     public CvHybridTrackerParams(float ft_tracker_weight/*=0.5*/, float ms_tracker_weight/*=0.5*/,
-                @ByVal CvFeatureTrackerParams ft_params/*=CvFeatureTrackerParams()*/,
-                @ByVal CvMeanShiftTrackerParams ms_params/*=CvMeanShiftTrackerParams()*/,
-                @ByVal CvMotionModel model/*=CvMotionModel()*/) { allocate(ft_tracker_weight, ms_tracker_weight, ft_params, ms_params, model); }
+                @ByVal(nullValue = "cv::CvFeatureTrackerParams()") CvFeatureTrackerParams ft_params/*=cv::CvFeatureTrackerParams()*/,
+                @ByVal(nullValue = "cv::CvMeanShiftTrackerParams()") CvMeanShiftTrackerParams ms_params/*=cv::CvMeanShiftTrackerParams()*/,
+                @ByVal(nullValue = "cv::CvMotionModel()") CvMotionModel model/*=cv::CvMotionModel()*/) { allocate(ft_tracker_weight, ms_tracker_weight, ft_params, ms_params, model); }
     private native void allocate(float ft_tracker_weight/*=0.5*/, float ms_tracker_weight/*=0.5*/,
-                @ByVal CvFeatureTrackerParams ft_params/*=CvFeatureTrackerParams()*/,
-                @ByVal CvMeanShiftTrackerParams ms_params/*=CvMeanShiftTrackerParams()*/,
-                @ByVal CvMotionModel model/*=CvMotionModel()*/);
+                @ByVal(nullValue = "cv::CvFeatureTrackerParams()") CvFeatureTrackerParams ft_params/*=cv::CvFeatureTrackerParams()*/,
+                @ByVal(nullValue = "cv::CvMeanShiftTrackerParams()") CvMeanShiftTrackerParams ms_params/*=cv::CvMeanShiftTrackerParams()*/,
+                @ByVal(nullValue = "cv::CvMotionModel()") CvMotionModel model/*=cv::CvMotionModel()*/);
     public CvHybridTrackerParams() { allocate(); }
     private native void allocate();
 
@@ -1727,8 +1727,8 @@ public static final int
      * @param reductionFactor: only usefull if param useRetinaLogSampling=true, specifies the reduction factor of the output frame (as the center (fovea) is high resolution and corners can be underscaled, then a reduction of the output is allowed without precision leak
      * @param samplingStrenght: only usefull if param useRetinaLogSampling=true, specifies the strenght of the log scale that is applied
      */
-    public Retina(@ByVal Size inputSize, @Cast("const bool") boolean colorMode, @Cast("cv::RETINA_COLORSAMPLINGMETHOD") int colorSamplingMethod/*=RETINA_COLOR_BAYER*/, @Cast("const bool") boolean useRetinaLogSampling/*=false*/, double reductionFactor/*=1.0*/, double samplingStrenght/*=10.0*/) { allocate(inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrenght); }
-    private native void allocate(@ByVal Size inputSize, @Cast("const bool") boolean colorMode, @Cast("cv::RETINA_COLORSAMPLINGMETHOD") int colorSamplingMethod/*=RETINA_COLOR_BAYER*/, @Cast("const bool") boolean useRetinaLogSampling/*=false*/, double reductionFactor/*=1.0*/, double samplingStrenght/*=10.0*/);
+    public Retina(@ByVal Size inputSize, @Cast("const bool") boolean colorMode, @Cast("cv::RETINA_COLORSAMPLINGMETHOD") int colorSamplingMethod/*=cv::RETINA_COLOR_BAYER*/, @Cast("const bool") boolean useRetinaLogSampling/*=false*/, double reductionFactor/*=1.0*/, double samplingStrenght/*=10.0*/) { allocate(inputSize, colorMode, colorSamplingMethod, useRetinaLogSampling, reductionFactor, samplingStrenght); }
+    private native void allocate(@ByVal Size inputSize, @Cast("const bool") boolean colorMode, @Cast("cv::RETINA_COLORSAMPLINGMETHOD") int colorSamplingMethod/*=cv::RETINA_COLOR_BAYER*/, @Cast("const bool") boolean useRetinaLogSampling/*=false*/, double reductionFactor/*=1.0*/, double samplingStrenght/*=10.0*/);
     public Retina(@ByVal Size inputSize, @Cast("const bool") boolean colorMode) { allocate(inputSize, colorMode); }
     private native void allocate(@ByVal Size inputSize, @Cast("const bool") boolean colorMode);
 
@@ -2034,25 +2034,25 @@ public static final int
     //Main FabMap image comparison
     public native void compare(@Const @ByRef Mat queryImgDescriptor,
                 @StdVector IMatch matches, @Cast("bool") boolean addQuery/*=false*/,
-                @Const @ByRef Mat mask/*=Mat()*/);
+                @Const @ByRef(nullValue = "cv::Mat()") Mat mask/*=cv::Mat()*/);
     public native void compare(@Const @ByRef Mat queryImgDescriptor,
                 @StdVector IMatch matches);
     public native void compare(@Const @ByRef Mat queryImgDescriptor,
                 @Const @ByRef Mat testImgDescriptors, @StdVector IMatch matches,
-                @Const @ByRef Mat mask/*=Mat()*/);
+                @Const @ByRef(nullValue = "cv::Mat()") Mat mask/*=cv::Mat()*/);
     public native void compare(@Const @ByRef Mat queryImgDescriptor,
                 @Const @ByRef Mat testImgDescriptors, @StdVector IMatch matches);
     public native void compare(@Const @ByRef Mat queryImgDescriptor,
                 @Const @ByRef MatVector testImgDescriptors,
-                @StdVector IMatch matches, @Const @ByRef Mat mask/*=Mat()*/);
+                @StdVector IMatch matches, @Const @ByRef(nullValue = "cv::Mat()") Mat mask/*=cv::Mat()*/);
     public native void compare(@Const @ByRef Mat queryImgDescriptor,
                 @Const @ByRef MatVector testImgDescriptors,
                 @StdVector IMatch matches);
-    public native void compare(@Const @ByRef MatVector queryImgDescriptors, @StdVector IMatch matches, @Cast("bool") boolean addQuery/*=false*/, @Const @ByRef Mat mask/*=Mat()*/);
+    public native void compare(@Const @ByRef MatVector queryImgDescriptors, @StdVector IMatch matches, @Cast("bool") boolean addQuery/*=false*/, @Const @ByRef(nullValue = "cv::Mat()") Mat mask/*=cv::Mat()*/);
     public native void compare(@Const @ByRef MatVector queryImgDescriptors, @StdVector IMatch matches);
     public native void compare(@Const @ByRef MatVector queryImgDescriptors,
                 @Const @ByRef MatVector testImgDescriptors,
-                @StdVector IMatch matches, @Const @ByRef Mat mask/*=Mat()*/);
+                @StdVector IMatch matches, @Const @ByRef(nullValue = "cv::Mat()") Mat mask/*=cv::Mat()*/);
     public native void compare(@Const @ByRef MatVector queryImgDescriptors,
                 @Const @ByRef MatVector testImgDescriptors,
                 @StdVector IMatch matches);

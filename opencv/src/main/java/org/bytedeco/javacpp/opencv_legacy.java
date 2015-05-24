@@ -2154,7 +2154,7 @@ public static native @ByVal CvStarDetectorParams cvStarDetectorParams(
 public static native @ByVal CvStarDetectorParams cvStarDetectorParams();
 
 public static native CvSeq cvGetStarKeypoints( @Const CvArr img, CvMemStorage storage,
-                                 @ByVal CvStarDetectorParams params/*=cvStarDetectorParams()*/);
+                                 @ByVal(nullValue = "cvStarDetectorParams()") CvStarDetectorParams params/*=cvStarDetectorParams()*/);
 public static native CvSeq cvGetStarKeypoints( @Const CvArr img, CvMemStorage storage);
 
 // #ifdef __cplusplus
@@ -4682,21 +4682,21 @@ public static final int
     private native void allocate();
     public CvEMParams( int nclusters, int cov_mat_type/*=cv::EM::COV_MAT_DIAGONAL*/,
                     int start_step/*=cv::EM::START_AUTO_STEP*/,
-                    @ByVal CvTermCriteria term_crit/*=cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 100, FLT_EPSILON)*/,
+                    @ByVal(nullValue = "cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 100, FLT_EPSILON)") CvTermCriteria term_crit/*=cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 100, FLT_EPSILON)*/,
                     @Const CvMat probs/*=0*/, @Const CvMat weights/*=0*/, @Const CvMat means/*=0*/, @Cast("const CvMat**") PointerPointer covs/*=0*/ ) { allocate(nclusters, cov_mat_type, start_step, term_crit, probs, weights, means, covs); }
     private native void allocate( int nclusters, int cov_mat_type/*=cv::EM::COV_MAT_DIAGONAL*/,
                     int start_step/*=cv::EM::START_AUTO_STEP*/,
-                    @ByVal CvTermCriteria term_crit/*=cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 100, FLT_EPSILON)*/,
+                    @ByVal(nullValue = "cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 100, FLT_EPSILON)") CvTermCriteria term_crit/*=cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 100, FLT_EPSILON)*/,
                     @Const CvMat probs/*=0*/, @Const CvMat weights/*=0*/, @Const CvMat means/*=0*/, @Cast("const CvMat**") PointerPointer covs/*=0*/ );
     public CvEMParams( int nclusters ) { allocate(nclusters); }
     private native void allocate( int nclusters );
     public CvEMParams( int nclusters, int cov_mat_type/*=cv::EM::COV_MAT_DIAGONAL*/,
                     int start_step/*=cv::EM::START_AUTO_STEP*/,
-                    @ByVal CvTermCriteria term_crit/*=cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 100, FLT_EPSILON)*/,
+                    @ByVal(nullValue = "cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 100, FLT_EPSILON)") CvTermCriteria term_crit/*=cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 100, FLT_EPSILON)*/,
                     @Const CvMat probs/*=0*/, @Const CvMat weights/*=0*/, @Const CvMat means/*=0*/, @Const @ByPtrPtr CvMat covs/*=0*/ ) { allocate(nclusters, cov_mat_type, start_step, term_crit, probs, weights, means, covs); }
     private native void allocate( int nclusters, int cov_mat_type/*=cv::EM::COV_MAT_DIAGONAL*/,
                     int start_step/*=cv::EM::START_AUTO_STEP*/,
-                    @ByVal CvTermCriteria term_crit/*=cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 100, FLT_EPSILON)*/,
+                    @ByVal(nullValue = "cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 100, FLT_EPSILON)") CvTermCriteria term_crit/*=cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 100, FLT_EPSILON)*/,
                     @Const CvMat probs/*=0*/, @Const CvMat weights/*=0*/, @Const CvMat means/*=0*/, @Const @ByPtrPtr CvMat covs/*=0*/ );
 
     public native int nclusters(); public native CvEMParams nclusters(int nclusters);
@@ -4737,28 +4737,28 @@ public static final int
     public CvEM() { allocate(); }
     private native void allocate();
     public CvEM( @Const CvMat samples, @Const CvMat sampleIdx/*=0*/,
-              @ByVal CvEMParams params/*=CvEMParams()*/, CvMat labels/*=0*/ ) { allocate(samples, sampleIdx, params, labels); }
+              @ByVal(nullValue = "CvEMParams()") CvEMParams params/*=CvEMParams()*/, CvMat labels/*=0*/ ) { allocate(samples, sampleIdx, params, labels); }
     private native void allocate( @Const CvMat samples, @Const CvMat sampleIdx/*=0*/,
-              @ByVal CvEMParams params/*=CvEMParams()*/, CvMat labels/*=0*/ );
+              @ByVal(nullValue = "CvEMParams()") CvEMParams params/*=CvEMParams()*/, CvMat labels/*=0*/ );
     public CvEM( @Const CvMat samples ) { allocate(samples); }
     private native void allocate( @Const CvMat samples );
 
     public native @Cast("bool") boolean train( @Const CvMat samples, @Const CvMat sampleIdx/*=0*/,
-                            @ByVal CvEMParams params/*=CvEMParams()*/, CvMat labels/*=0*/ );
+                            @ByVal(nullValue = "CvEMParams()") CvEMParams params/*=CvEMParams()*/, CvMat labels/*=0*/ );
     public native @Cast("bool") boolean train( @Const CvMat samples );
 
     public native float predict( @Const CvMat sample, CvMat probs );
 
-    public CvEM( @Const @ByRef Mat samples, @Const @ByRef Mat sampleIdx/*=cv::Mat()*/,
-                      @ByVal CvEMParams params/*=CvEMParams()*/ ) { allocate(samples, sampleIdx, params); }
-    private native void allocate( @Const @ByRef Mat samples, @Const @ByRef Mat sampleIdx/*=cv::Mat()*/,
-                      @ByVal CvEMParams params/*=CvEMParams()*/ );
+    public CvEM( @Const @ByRef Mat samples, @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/,
+                      @ByVal(nullValue = "CvEMParams()") CvEMParams params/*=CvEMParams()*/ ) { allocate(samples, sampleIdx, params); }
+    private native void allocate( @Const @ByRef Mat samples, @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/,
+                      @ByVal(nullValue = "CvEMParams()") CvEMParams params/*=CvEMParams()*/ );
     public CvEM( @Const @ByRef Mat samples ) { allocate(samples); }
     private native void allocate( @Const @ByRef Mat samples );
 
     public native @Cast("bool") boolean train( @Const @ByRef Mat samples,
-                                    @Const @ByRef Mat sampleIdx/*=cv::Mat()*/,
-                                    @ByVal CvEMParams params/*=CvEMParams()*/,
+                                    @Const @ByRef(nullValue = "cv::Mat()") Mat sampleIdx/*=cv::Mat()*/,
+                                    @ByVal(nullValue = "CvEMParams()") CvEMParams params/*=CvEMParams()*/,
                                     Mat labels/*=0*/ );
     public native @Cast("bool") boolean train( @Const @ByRef Mat samples );
 
@@ -4876,9 +4876,9 @@ public static final int
     public native void setVerbose(@Cast("bool") boolean verbose);
 
     public native void read(@Const @ByRef FileNode node);
-    public native void write(@ByRef FileStorage fs, @StdString BytePointer name/*=String()*/);
+    public native void write(@ByRef FileStorage fs, @StdString BytePointer name/*=cv::String()*/);
     public native void write(@ByRef FileStorage fs);
-    public native void write(@ByRef FileStorage fs, @StdString String name/*=String()*/);
+    public native void write(@ByRef FileStorage fs, @StdString String name/*=cv::String()*/);
 
     public native int radius(); public native LDetector radius(int radius);
     public native int threshold(); public native LDetector threshold(int threshold);
@@ -4907,32 +4907,32 @@ public static final int
     private native void allocate(@Const @ByRef FileNode node);
     public FernClassifier(@Const @ByRef Point2fVectorVector points,
                        @Const @ByRef MatVector refimgs,
-                       @Const @ByRef IntVectorVector labels/*=vector<vector<int> >()*/,
+                       @Const @ByRef(nullValue = "std::vector<std::vector<int> >()") IntVectorVector labels/*=std::vector<std::vector<int> >()*/,
                        int _nclasses/*=0*/, int _patchSize/*=PATCH_SIZE*/,
                        int _signatureSize/*=DEFAULT_SIGNATURE_SIZE*/,
                        int _nstructs/*=DEFAULT_STRUCTS*/,
                        int _structSize/*=DEFAULT_STRUCT_SIZE*/,
                        int _nviews/*=DEFAULT_VIEWS*/,
                        int _compressionMethod/*=COMPRESSION_NONE*/,
-                       @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/) { allocate(points, refimgs, labels, _nclasses, _patchSize, _signatureSize, _nstructs, _structSize, _nviews, _compressionMethod, patchGenerator); }
+                       @Const @ByRef(nullValue = "cv::PatchGenerator()") PatchGenerator patchGenerator/*=cv::PatchGenerator()*/) { allocate(points, refimgs, labels, _nclasses, _patchSize, _signatureSize, _nstructs, _structSize, _nviews, _compressionMethod, patchGenerator); }
     private native void allocate(@Const @ByRef Point2fVectorVector points,
                        @Const @ByRef MatVector refimgs,
-                       @Const @ByRef IntVectorVector labels/*=vector<vector<int> >()*/,
+                       @Const @ByRef(nullValue = "std::vector<std::vector<int> >()") IntVectorVector labels/*=std::vector<std::vector<int> >()*/,
                        int _nclasses/*=0*/, int _patchSize/*=PATCH_SIZE*/,
                        int _signatureSize/*=DEFAULT_SIGNATURE_SIZE*/,
                        int _nstructs/*=DEFAULT_STRUCTS*/,
                        int _structSize/*=DEFAULT_STRUCT_SIZE*/,
                        int _nviews/*=DEFAULT_VIEWS*/,
                        int _compressionMethod/*=COMPRESSION_NONE*/,
-                       @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/);
+                       @Const @ByRef(nullValue = "cv::PatchGenerator()") PatchGenerator patchGenerator/*=cv::PatchGenerator()*/);
     public FernClassifier(@Const @ByRef Point2fVectorVector points,
                        @Const @ByRef MatVector refimgs) { allocate(points, refimgs); }
     private native void allocate(@Const @ByRef Point2fVectorVector points,
                        @Const @ByRef MatVector refimgs);
     public native void read(@Const @ByRef FileNode n);
-    public native void write(@ByRef FileStorage fs, @StdString BytePointer name/*=String()*/);
+    public native void write(@ByRef FileStorage fs, @StdString BytePointer name/*=cv::String()*/);
     public native void write(@ByRef FileStorage fs);
-    public native void write(@ByRef FileStorage fs, @StdString String name/*=String()*/);
+    public native void write(@ByRef FileStorage fs, @StdString String name/*=cv::String()*/);
     public native void trainFromSingleView(@Const @ByRef Mat image,
                                          @StdVector KeyPoint keypoints,
                                          int _patchSize/*=PATCH_SIZE*/,
@@ -4941,19 +4941,19 @@ public static final int
                                          int _structSize/*=DEFAULT_STRUCT_SIZE*/,
                                          int _nviews/*=DEFAULT_VIEWS*/,
                                          int _compressionMethod/*=COMPRESSION_NONE*/,
-                                         @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/);
+                                         @Const @ByRef(nullValue = "cv::PatchGenerator()") PatchGenerator patchGenerator/*=cv::PatchGenerator()*/);
     public native void trainFromSingleView(@Const @ByRef Mat image,
                                          @StdVector KeyPoint keypoints);
     public native void train(@Const @ByRef Point2fVectorVector points,
                            @Const @ByRef MatVector refimgs,
-                           @Const @ByRef IntVectorVector labels/*=vector<vector<int> >()*/,
+                           @Const @ByRef(nullValue = "std::vector<std::vector<int> >()") IntVectorVector labels/*=std::vector<std::vector<int> >()*/,
                            int _nclasses/*=0*/, int _patchSize/*=PATCH_SIZE*/,
                            int _signatureSize/*=DEFAULT_SIGNATURE_SIZE*/,
                            int _nstructs/*=DEFAULT_STRUCTS*/,
                            int _structSize/*=DEFAULT_STRUCT_SIZE*/,
                            int _nviews/*=DEFAULT_VIEWS*/,
                            int _compressionMethod/*=COMPRESSION_NONE*/,
-                           @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/);
+                           @Const @ByRef(nullValue = "cv::PatchGenerator()") PatchGenerator patchGenerator/*=cv::PatchGenerator()*/);
     public native void train(@Const @ByRef Point2fVectorVector points,
                            @Const @ByRef MatVector refimgs);
     public native @Name("operator()") int apply(@Const @ByRef Mat img, @ByVal Point2f kpt, @StdVector FloatPointer signature);
@@ -5161,21 +5161,21 @@ public static final int
     private native void allocate();
     public native void train(@StdVector BaseKeypoint base_set,
                    @ByRef RNG rng,
-                   int num_trees/*=RTreeClassifier::DEFAULT_TREES*/,
-                   int depth/*=RandomizedTree::DEFAULT_DEPTH*/,
-                   int views/*=RandomizedTree::DEFAULT_VIEWS*/,
-                   @Cast("size_t") long reduced_num_dim/*=RandomizedTree::DEFAULT_REDUCED_NUM_DIM*/,
-                   int num_quant_bits/*=DEFAULT_NUM_QUANT_BITS*/);
+                   int num_trees/*=cv::RTreeClassifier::DEFAULT_TREES*/,
+                   int depth/*=cv::RandomizedTree::DEFAULT_DEPTH*/,
+                   int views/*=cv::RandomizedTree::DEFAULT_VIEWS*/,
+                   @Cast("size_t") long reduced_num_dim/*=cv::RandomizedTree::DEFAULT_REDUCED_NUM_DIM*/,
+                   int num_quant_bits/*=cv::RTreeClassifier::DEFAULT_NUM_QUANT_BITS*/);
     public native void train(@StdVector BaseKeypoint base_set,
                    @ByRef RNG rng);
     public native void train(@StdVector BaseKeypoint base_set,
                    @ByRef RNG rng,
                    @ByRef PatchGenerator make_patch,
-                   int num_trees/*=RTreeClassifier::DEFAULT_TREES*/,
-                   int depth/*=RandomizedTree::DEFAULT_DEPTH*/,
-                   int views/*=RandomizedTree::DEFAULT_VIEWS*/,
-                   @Cast("size_t") long reduced_num_dim/*=RandomizedTree::DEFAULT_REDUCED_NUM_DIM*/,
-                   int num_quant_bits/*=DEFAULT_NUM_QUANT_BITS*/);
+                   int num_trees/*=cv::RTreeClassifier::DEFAULT_TREES*/,
+                   int depth/*=cv::RandomizedTree::DEFAULT_DEPTH*/,
+                   int views/*=cv::RandomizedTree::DEFAULT_VIEWS*/,
+                   @Cast("size_t") long reduced_num_dim/*=cv::RandomizedTree::DEFAULT_REDUCED_NUM_DIM*/,
+                   int num_quant_bits/*=cv::RTreeClassifier::DEFAULT_NUM_QUANT_BITS*/);
     public native void train(@StdVector BaseKeypoint base_set,
                    @ByRef RNG rng,
                    @ByRef PatchGenerator make_patch);
@@ -5440,18 +5440,18 @@ public static final int
                              String pca_hr_config/*=0*/, String pca_desc_config/*=0*/, int pyr_levels/*=1*/,
                              int pca_dim_high/*=100*/, int pca_dim_low/*=100*/);
 
-    public OneWayDescriptorBase(@ByVal CvSize patch_size, int pose_count, @StdString BytePointer pca_filename, @StdString BytePointer train_path/*=string()*/, @StdString BytePointer images_list/*=string()*/,
+    public OneWayDescriptorBase(@ByVal CvSize patch_size, int pose_count, @StdString BytePointer pca_filename, @StdString BytePointer train_path/*=std::string()*/, @StdString BytePointer images_list/*=std::string()*/,
                              float _scale_min/*=0.7f*/, float _scale_max/*=1.5f*/, float _scale_step/*=1.2f*/, int pyr_levels/*=1*/,
                              int pca_dim_high/*=100*/, int pca_dim_low/*=100*/) { allocate(patch_size, pose_count, pca_filename, train_path, images_list, _scale_min, _scale_max, _scale_step, pyr_levels, pca_dim_high, pca_dim_low); }
-    private native void allocate(@ByVal CvSize patch_size, int pose_count, @StdString BytePointer pca_filename, @StdString BytePointer train_path/*=string()*/, @StdString BytePointer images_list/*=string()*/,
+    private native void allocate(@ByVal CvSize patch_size, int pose_count, @StdString BytePointer pca_filename, @StdString BytePointer train_path/*=std::string()*/, @StdString BytePointer images_list/*=std::string()*/,
                              float _scale_min/*=0.7f*/, float _scale_max/*=1.5f*/, float _scale_step/*=1.2f*/, int pyr_levels/*=1*/,
                              int pca_dim_high/*=100*/, int pca_dim_low/*=100*/);
     public OneWayDescriptorBase(@ByVal CvSize patch_size, int pose_count, @StdString BytePointer pca_filename) { allocate(patch_size, pose_count, pca_filename); }
     private native void allocate(@ByVal CvSize patch_size, int pose_count, @StdString BytePointer pca_filename);
-    public OneWayDescriptorBase(@ByVal CvSize patch_size, int pose_count, @StdString String pca_filename, @StdString String train_path/*=string()*/, @StdString String images_list/*=string()*/,
+    public OneWayDescriptorBase(@ByVal CvSize patch_size, int pose_count, @StdString String pca_filename, @StdString String train_path/*=std::string()*/, @StdString String images_list/*=std::string()*/,
                              float _scale_min/*=0.7f*/, float _scale_max/*=1.5f*/, float _scale_step/*=1.2f*/, int pyr_levels/*=1*/,
                              int pca_dim_high/*=100*/, int pca_dim_low/*=100*/) { allocate(patch_size, pose_count, pca_filename, train_path, images_list, _scale_min, _scale_max, _scale_step, pyr_levels, pca_dim_high, pca_dim_low); }
-    private native void allocate(@ByVal CvSize patch_size, int pose_count, @StdString String pca_filename, @StdString String train_path/*=string()*/, @StdString String images_list/*=string()*/,
+    private native void allocate(@ByVal CvSize patch_size, int pose_count, @StdString String pca_filename, @StdString String train_path/*=std::string()*/, @StdString String images_list/*=std::string()*/,
                              float _scale_min/*=0.7f*/, float _scale_max/*=1.5f*/, float _scale_step/*=1.2f*/, int pyr_levels/*=1*/,
                              int pca_dim_high/*=100*/, int pca_dim_low/*=100*/);
     public OneWayDescriptorBase(@ByVal CvSize patch_size, int pose_count, @StdString String pca_filename) { allocate(patch_size, pose_count, pca_filename); }
@@ -5641,18 +5641,18 @@ public static final int
     private native void allocate(@ByVal CvSize patch_size, int pose_count, String train_path, String pca_config);
 
     public OneWayDescriptorObject(@ByVal CvSize patch_size, int pose_count, @StdString BytePointer pca_filename,
-                               @StdString BytePointer train_path/*=string ()*/, @StdString BytePointer images_list/*=string ()*/,
+                               @StdString BytePointer train_path/*=std::string ()*/, @StdString BytePointer images_list/*=std::string ()*/,
                                float _scale_min/*=0.7f*/, float _scale_max/*=1.5f*/, float _scale_step/*=1.2f*/, int pyr_levels/*=1*/) { allocate(patch_size, pose_count, pca_filename, train_path, images_list, _scale_min, _scale_max, _scale_step, pyr_levels); }
     private native void allocate(@ByVal CvSize patch_size, int pose_count, @StdString BytePointer pca_filename,
-                               @StdString BytePointer train_path/*=string ()*/, @StdString BytePointer images_list/*=string ()*/,
+                               @StdString BytePointer train_path/*=std::string ()*/, @StdString BytePointer images_list/*=std::string ()*/,
                                float _scale_min/*=0.7f*/, float _scale_max/*=1.5f*/, float _scale_step/*=1.2f*/, int pyr_levels/*=1*/);
     public OneWayDescriptorObject(@ByVal CvSize patch_size, int pose_count, @StdString BytePointer pca_filename) { allocate(patch_size, pose_count, pca_filename); }
     private native void allocate(@ByVal CvSize patch_size, int pose_count, @StdString BytePointer pca_filename);
     public OneWayDescriptorObject(@ByVal CvSize patch_size, int pose_count, @StdString String pca_filename,
-                               @StdString String train_path/*=string ()*/, @StdString String images_list/*=string ()*/,
+                               @StdString String train_path/*=std::string ()*/, @StdString String images_list/*=std::string ()*/,
                                float _scale_min/*=0.7f*/, float _scale_max/*=1.5f*/, float _scale_step/*=1.2f*/, int pyr_levels/*=1*/) { allocate(patch_size, pose_count, pca_filename, train_path, images_list, _scale_min, _scale_max, _scale_step, pyr_levels); }
     private native void allocate(@ByVal CvSize patch_size, int pose_count, @StdString String pca_filename,
-                               @StdString String train_path/*=string ()*/, @StdString String images_list/*=string ()*/,
+                               @StdString String train_path/*=std::string ()*/, @StdString String images_list/*=std::string ()*/,
                                float _scale_min/*=0.7f*/, float _scale_max/*=1.5f*/, float _scale_step/*=1.2f*/, int pyr_levels/*=1*/);
     public OneWayDescriptorObject(@ByVal CvSize patch_size, int pose_count, @StdString String pca_filename) { allocate(patch_size, pose_count, pca_filename); }
     private native void allocate(@ByVal CvSize patch_size, int pose_count, @StdString String pca_filename);
@@ -5730,32 +5730,32 @@ public static final int
         public static native float GET_MAX_SCALE();
         public static native float GET_STEP_SCALE();
 
-        public Params( int poseCount/*=POSE_COUNT*/,
-                       @ByVal Size patchSize/*=Size(PATCH_WIDTH, PATCH_HEIGHT)*/,
-                       @StdString BytePointer pcaFilename/*=string()*/,
-                       @StdString BytePointer trainPath/*=string()*/, @StdString BytePointer trainImagesList/*=string()*/,
-                       float minScale/*=GET_MIN_SCALE()*/, float maxScale/*=GET_MAX_SCALE()*/,
-                       float stepScale/*=GET_STEP_SCALE()*/ ) { allocate(poseCount, patchSize, pcaFilename, trainPath, trainImagesList, minScale, maxScale, stepScale); }
-        private native void allocate( int poseCount/*=POSE_COUNT*/,
-                       @ByVal Size patchSize/*=Size(PATCH_WIDTH, PATCH_HEIGHT)*/,
-                       @StdString BytePointer pcaFilename/*=string()*/,
-                       @StdString BytePointer trainPath/*=string()*/, @StdString BytePointer trainImagesList/*=string()*/,
-                       float minScale/*=GET_MIN_SCALE()*/, float maxScale/*=GET_MAX_SCALE()*/,
-                       float stepScale/*=GET_STEP_SCALE()*/ );
+        public Params( int poseCount/*=cv::OneWayDescriptorMatcher::Params::POSE_COUNT*/,
+                       @ByVal(nullValue = "cv::Size(cv::OneWayDescriptorMatcher::Params::PATCH_WIDTH, cv::OneWayDescriptorMatcher::Params::PATCH_HEIGHT)") Size patchSize/*=cv::Size(cv::OneWayDescriptorMatcher::Params::PATCH_WIDTH, cv::OneWayDescriptorMatcher::Params::PATCH_HEIGHT)*/,
+                       @StdString BytePointer pcaFilename/*=std::string()*/,
+                       @StdString BytePointer trainPath/*=std::string()*/, @StdString BytePointer trainImagesList/*=std::string()*/,
+                       float minScale/*=cv::OneWayDescriptorMatcher::Params::GET_MIN_SCALE()*/, float maxScale/*=cv::OneWayDescriptorMatcher::Params::GET_MAX_SCALE()*/,
+                       float stepScale/*=cv::OneWayDescriptorMatcher::Params::GET_STEP_SCALE()*/ ) { allocate(poseCount, patchSize, pcaFilename, trainPath, trainImagesList, minScale, maxScale, stepScale); }
+        private native void allocate( int poseCount/*=cv::OneWayDescriptorMatcher::Params::POSE_COUNT*/,
+                       @ByVal(nullValue = "cv::Size(cv::OneWayDescriptorMatcher::Params::PATCH_WIDTH, cv::OneWayDescriptorMatcher::Params::PATCH_HEIGHT)") Size patchSize/*=cv::Size(cv::OneWayDescriptorMatcher::Params::PATCH_WIDTH, cv::OneWayDescriptorMatcher::Params::PATCH_HEIGHT)*/,
+                       @StdString BytePointer pcaFilename/*=std::string()*/,
+                       @StdString BytePointer trainPath/*=std::string()*/, @StdString BytePointer trainImagesList/*=std::string()*/,
+                       float minScale/*=cv::OneWayDescriptorMatcher::Params::GET_MIN_SCALE()*/, float maxScale/*=cv::OneWayDescriptorMatcher::Params::GET_MAX_SCALE()*/,
+                       float stepScale/*=cv::OneWayDescriptorMatcher::Params::GET_STEP_SCALE()*/ );
         public Params( ) { allocate(); }
         private native void allocate( );
-        public Params( int poseCount/*=POSE_COUNT*/,
-                       @ByVal Size patchSize/*=Size(PATCH_WIDTH, PATCH_HEIGHT)*/,
-                       @StdString String pcaFilename/*=string()*/,
-                       @StdString String trainPath/*=string()*/, @StdString String trainImagesList/*=string()*/,
-                       float minScale/*=GET_MIN_SCALE()*/, float maxScale/*=GET_MAX_SCALE()*/,
-                       float stepScale/*=GET_STEP_SCALE()*/ ) { allocate(poseCount, patchSize, pcaFilename, trainPath, trainImagesList, minScale, maxScale, stepScale); }
-        private native void allocate( int poseCount/*=POSE_COUNT*/,
-                       @ByVal Size patchSize/*=Size(PATCH_WIDTH, PATCH_HEIGHT)*/,
-                       @StdString String pcaFilename/*=string()*/,
-                       @StdString String trainPath/*=string()*/, @StdString String trainImagesList/*=string()*/,
-                       float minScale/*=GET_MIN_SCALE()*/, float maxScale/*=GET_MAX_SCALE()*/,
-                       float stepScale/*=GET_STEP_SCALE()*/ );
+        public Params( int poseCount/*=cv::OneWayDescriptorMatcher::Params::POSE_COUNT*/,
+                       @ByVal(nullValue = "cv::Size(cv::OneWayDescriptorMatcher::Params::PATCH_WIDTH, cv::OneWayDescriptorMatcher::Params::PATCH_HEIGHT)") Size patchSize/*=cv::Size(cv::OneWayDescriptorMatcher::Params::PATCH_WIDTH, cv::OneWayDescriptorMatcher::Params::PATCH_HEIGHT)*/,
+                       @StdString String pcaFilename/*=std::string()*/,
+                       @StdString String trainPath/*=std::string()*/, @StdString String trainImagesList/*=std::string()*/,
+                       float minScale/*=cv::OneWayDescriptorMatcher::Params::GET_MIN_SCALE()*/, float maxScale/*=cv::OneWayDescriptorMatcher::Params::GET_MAX_SCALE()*/,
+                       float stepScale/*=cv::OneWayDescriptorMatcher::Params::GET_STEP_SCALE()*/ ) { allocate(poseCount, patchSize, pcaFilename, trainPath, trainImagesList, minScale, maxScale, stepScale); }
+        private native void allocate( int poseCount/*=cv::OneWayDescriptorMatcher::Params::POSE_COUNT*/,
+                       @ByVal(nullValue = "cv::Size(cv::OneWayDescriptorMatcher::Params::PATCH_WIDTH, cv::OneWayDescriptorMatcher::Params::PATCH_HEIGHT)") Size patchSize/*=cv::Size(cv::OneWayDescriptorMatcher::Params::PATCH_WIDTH, cv::OneWayDescriptorMatcher::Params::PATCH_HEIGHT)*/,
+                       @StdString String pcaFilename/*=std::string()*/,
+                       @StdString String trainPath/*=std::string()*/, @StdString String trainImagesList/*=std::string()*/,
+                       float minScale/*=cv::OneWayDescriptorMatcher::Params::GET_MIN_SCALE()*/, float maxScale/*=cv::OneWayDescriptorMatcher::Params::GET_MAX_SCALE()*/,
+                       float stepScale/*=cv::OneWayDescriptorMatcher::Params::GET_STEP_SCALE()*/ );
 
         public native int poseCount(); public native Params poseCount(int poseCount);
         public native @ByRef Size patchSize(); public native Params patchSize(Size patchSize);
@@ -5768,12 +5768,12 @@ public static final int
         public native float stepScale(); public native Params stepScale(float stepScale);
     }
 
-    public OneWayDescriptorMatcher( @Const @ByRef Params params/*=Params()*/ ) { allocate(params); }
-    private native void allocate( @Const @ByRef Params params/*=Params()*/ );
+    public OneWayDescriptorMatcher( @Const @ByRef(nullValue = "cv::OneWayDescriptorMatcher::Params()") Params params/*=cv::OneWayDescriptorMatcher::Params()*/ ) { allocate(params); }
+    private native void allocate( @Const @ByRef(nullValue = "cv::OneWayDescriptorMatcher::Params()") Params params/*=cv::OneWayDescriptorMatcher::Params()*/ );
     public OneWayDescriptorMatcher( ) { allocate(); }
     private native void allocate( );
 
-    public native void initialize( @Const @ByRef Params params, @Ptr OneWayDescriptorBase base/*=Ptr<OneWayDescriptorBase>()*/ );
+    public native void initialize( @Const @ByRef Params params, @Ptr OneWayDescriptorBase base/*=cv::Ptr<cv::OneWayDescriptorBase>()*/ );
     public native void initialize( @Const @ByRef Params params );
 
     // Clears keypoints storing in collection and OneWayDescriptorBase
@@ -5819,21 +5819,21 @@ public static final int
         }
     
         public Params( int nclasses/*=0*/,
-                       int patchSize/*=FernClassifier::PATCH_SIZE*/,
-                       int signatureSize/*=FernClassifier::DEFAULT_SIGNATURE_SIZE*/,
-                       int nstructs/*=FernClassifier::DEFAULT_STRUCTS*/,
-                       int structSize/*=FernClassifier::DEFAULT_STRUCT_SIZE*/,
-                       int nviews/*=FernClassifier::DEFAULT_VIEWS*/,
-                       int compressionMethod/*=FernClassifier::COMPRESSION_NONE*/,
-                       @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/ ) { allocate(nclasses, patchSize, signatureSize, nstructs, structSize, nviews, compressionMethod, patchGenerator); }
+                       int patchSize/*=cv::FernClassifier::PATCH_SIZE*/,
+                       int signatureSize/*=cv::FernClassifier::DEFAULT_SIGNATURE_SIZE*/,
+                       int nstructs/*=cv::FernClassifier::DEFAULT_STRUCTS*/,
+                       int structSize/*=cv::FernClassifier::DEFAULT_STRUCT_SIZE*/,
+                       int nviews/*=cv::FernClassifier::DEFAULT_VIEWS*/,
+                       int compressionMethod/*=cv::FernClassifier::COMPRESSION_NONE*/,
+                       @Const @ByRef(nullValue = "cv::PatchGenerator()") PatchGenerator patchGenerator/*=cv::PatchGenerator()*/ ) { allocate(nclasses, patchSize, signatureSize, nstructs, structSize, nviews, compressionMethod, patchGenerator); }
         private native void allocate( int nclasses/*=0*/,
-                       int patchSize/*=FernClassifier::PATCH_SIZE*/,
-                       int signatureSize/*=FernClassifier::DEFAULT_SIGNATURE_SIZE*/,
-                       int nstructs/*=FernClassifier::DEFAULT_STRUCTS*/,
-                       int structSize/*=FernClassifier::DEFAULT_STRUCT_SIZE*/,
-                       int nviews/*=FernClassifier::DEFAULT_VIEWS*/,
-                       int compressionMethod/*=FernClassifier::COMPRESSION_NONE*/,
-                       @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/ );
+                       int patchSize/*=cv::FernClassifier::PATCH_SIZE*/,
+                       int signatureSize/*=cv::FernClassifier::DEFAULT_SIGNATURE_SIZE*/,
+                       int nstructs/*=cv::FernClassifier::DEFAULT_STRUCTS*/,
+                       int structSize/*=cv::FernClassifier::DEFAULT_STRUCT_SIZE*/,
+                       int nviews/*=cv::FernClassifier::DEFAULT_VIEWS*/,
+                       int compressionMethod/*=cv::FernClassifier::COMPRESSION_NONE*/,
+                       @Const @ByRef(nullValue = "cv::PatchGenerator()") PatchGenerator patchGenerator/*=cv::PatchGenerator()*/ );
         public Params( ) { allocate(); }
         private native void allocate( );
 
@@ -5854,8 +5854,8 @@ public static final int
         public native @StdString BytePointer filename(); public native Params filename(BytePointer filename);
     }
 
-    public FernDescriptorMatcher( @Const @ByRef Params params/*=Params()*/ ) { allocate(params); }
-    private native void allocate( @Const @ByRef Params params/*=Params()*/ );
+    public FernDescriptorMatcher( @Const @ByRef(nullValue = "cv::FernDescriptorMatcher::Params()") Params params/*=cv::FernDescriptorMatcher::Params()*/ ) { allocate(params); }
+    private native void allocate( @Const @ByRef(nullValue = "cv::FernDescriptorMatcher::Params()") Params params/*=cv::FernDescriptorMatcher::Params()*/ );
     public FernDescriptorMatcher( ) { allocate(); }
     private native void allocate( );
 
@@ -5912,36 +5912,36 @@ public static final int
     public PlanarObjectDetector(@Const @ByRef FileNode node) { allocate(node); }
     private native void allocate(@Const @ByRef FileNode node);
     public PlanarObjectDetector(@Const @ByRef MatVector pyr, int _npoints/*=300*/,
-                             int _patchSize/*=FernClassifier::PATCH_SIZE*/,
-                             int _nstructs/*=FernClassifier::DEFAULT_STRUCTS*/,
-                             int _structSize/*=FernClassifier::DEFAULT_STRUCT_SIZE*/,
-                             int _nviews/*=FernClassifier::DEFAULT_VIEWS*/,
-                             @Const @ByRef LDetector detector/*=LDetector()*/,
-                             @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/) { allocate(pyr, _npoints, _patchSize, _nstructs, _structSize, _nviews, detector, patchGenerator); }
+                             int _patchSize/*=cv::FernClassifier::PATCH_SIZE*/,
+                             int _nstructs/*=cv::FernClassifier::DEFAULT_STRUCTS*/,
+                             int _structSize/*=cv::FernClassifier::DEFAULT_STRUCT_SIZE*/,
+                             int _nviews/*=cv::FernClassifier::DEFAULT_VIEWS*/,
+                             @Const @ByRef(nullValue = "cv::LDetector()") LDetector detector/*=cv::LDetector()*/,
+                             @Const @ByRef(nullValue = "cv::PatchGenerator()") PatchGenerator patchGenerator/*=cv::PatchGenerator()*/) { allocate(pyr, _npoints, _patchSize, _nstructs, _structSize, _nviews, detector, patchGenerator); }
     private native void allocate(@Const @ByRef MatVector pyr, int _npoints/*=300*/,
-                             int _patchSize/*=FernClassifier::PATCH_SIZE*/,
-                             int _nstructs/*=FernClassifier::DEFAULT_STRUCTS*/,
-                             int _structSize/*=FernClassifier::DEFAULT_STRUCT_SIZE*/,
-                             int _nviews/*=FernClassifier::DEFAULT_VIEWS*/,
-                             @Const @ByRef LDetector detector/*=LDetector()*/,
-                             @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/);
+                             int _patchSize/*=cv::FernClassifier::PATCH_SIZE*/,
+                             int _nstructs/*=cv::FernClassifier::DEFAULT_STRUCTS*/,
+                             int _structSize/*=cv::FernClassifier::DEFAULT_STRUCT_SIZE*/,
+                             int _nviews/*=cv::FernClassifier::DEFAULT_VIEWS*/,
+                             @Const @ByRef(nullValue = "cv::LDetector()") LDetector detector/*=cv::LDetector()*/,
+                             @Const @ByRef(nullValue = "cv::PatchGenerator()") PatchGenerator patchGenerator/*=cv::PatchGenerator()*/);
     public PlanarObjectDetector(@Const @ByRef MatVector pyr) { allocate(pyr); }
     private native void allocate(@Const @ByRef MatVector pyr);
     public native void train(@Const @ByRef MatVector pyr, int _npoints/*=300*/,
-                           int _patchSize/*=FernClassifier::PATCH_SIZE*/,
-                           int _nstructs/*=FernClassifier::DEFAULT_STRUCTS*/,
-                           int _structSize/*=FernClassifier::DEFAULT_STRUCT_SIZE*/,
-                           int _nviews/*=FernClassifier::DEFAULT_VIEWS*/,
-                           @Const @ByRef LDetector detector/*=LDetector()*/,
-                           @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/);
+                           int _patchSize/*=cv::FernClassifier::PATCH_SIZE*/,
+                           int _nstructs/*=cv::FernClassifier::DEFAULT_STRUCTS*/,
+                           int _structSize/*=cv::FernClassifier::DEFAULT_STRUCT_SIZE*/,
+                           int _nviews/*=cv::FernClassifier::DEFAULT_VIEWS*/,
+                           @Const @ByRef(nullValue = "cv::LDetector()") LDetector detector/*=cv::LDetector()*/,
+                           @Const @ByRef(nullValue = "cv::PatchGenerator()") PatchGenerator patchGenerator/*=cv::PatchGenerator()*/);
     public native void train(@Const @ByRef MatVector pyr);
     public native void train(@Const @ByRef MatVector pyr, @StdVector KeyPoint keypoints,
-                           int _patchSize/*=FernClassifier::PATCH_SIZE*/,
-                           int _nstructs/*=FernClassifier::DEFAULT_STRUCTS*/,
-                           int _structSize/*=FernClassifier::DEFAULT_STRUCT_SIZE*/,
-                           int _nviews/*=FernClassifier::DEFAULT_VIEWS*/,
-                           @Const @ByRef LDetector detector/*=LDetector()*/,
-                           @Const @ByRef PatchGenerator patchGenerator/*=PatchGenerator()*/);
+                           int _patchSize/*=cv::FernClassifier::PATCH_SIZE*/,
+                           int _nstructs/*=cv::FernClassifier::DEFAULT_STRUCTS*/,
+                           int _structSize/*=cv::FernClassifier::DEFAULT_STRUCT_SIZE*/,
+                           int _nviews/*=cv::FernClassifier::DEFAULT_VIEWS*/,
+                           @Const @ByRef(nullValue = "cv::LDetector()") LDetector detector/*=cv::LDetector()*/,
+                           @Const @ByRef(nullValue = "cv::PatchGenerator()") PatchGenerator patchGenerator/*=cv::PatchGenerator()*/);
     public native void train(@Const @ByRef MatVector pyr, @StdVector KeyPoint keypoints);
     
     public native @StdVector KeyPoint getModelPoints();
@@ -5950,9 +5950,9 @@ public static final int
     public native void setVerbose(@Cast("bool") boolean verbose);
 
     public native void read(@Const @ByRef FileNode node);
-    public native void write(@ByRef FileStorage fs, @StdString BytePointer name/*=String()*/);
+    public native void write(@ByRef FileStorage fs, @StdString BytePointer name/*=cv::String()*/);
     public native void write(@ByRef FileStorage fs);
-    public native void write(@ByRef FileStorage fs, @StdString String name/*=String()*/);
+    public native void write(@ByRef FileStorage fs, @StdString String name/*=cv::String()*/);
     public native @Cast("bool") @Name("operator()") boolean apply(@Const @ByRef Mat image, @ByRef Mat H, @StdVector Point2f corners);
     public native @Cast("bool") @Name("operator()") boolean apply(@Const @ByRef MatVector pyr, @StdVector KeyPoint keypoints,
                         @ByRef Mat H, @StdVector Point2f corners,
@@ -6744,33 +6744,33 @@ public static native void cvReleaseBGCodeBookModel( @Cast("CvBGCodeBookModel**")
 public static native void cvReleaseBGCodeBookModel( @ByPtrPtr CvBGCodeBookModel model );
 
 public static native void cvBGCodeBookUpdate( CvBGCodeBookModel model, @Const CvArr image,
-                               @ByVal CvRect roi/*=cvRect(0,0,0,0)*/,
+                               @ByVal(nullValue = "cvRect(0,0,0,0)") CvRect roi/*=cvRect(0,0,0,0)*/,
                                @Const CvArr mask/*=0*/ );
 public static native void cvBGCodeBookUpdate( CvBGCodeBookModel model, @Const CvArr image );
 
 public static native int cvBGCodeBookDiff( @Const CvBGCodeBookModel model, @Const CvArr image,
-                            CvArr fgmask, @ByVal CvRect roi/*=cvRect(0,0,0,0)*/ );
+                            CvArr fgmask, @ByVal(nullValue = "cvRect(0,0,0,0)") CvRect roi/*=cvRect(0,0,0,0)*/ );
 public static native int cvBGCodeBookDiff( @Const CvBGCodeBookModel model, @Const CvArr image,
                             CvArr fgmask );
 
 public static native void cvBGCodeBookClearStale( CvBGCodeBookModel model, int staleThresh,
-                                   @ByVal CvRect roi/*=cvRect(0,0,0,0)*/,
+                                   @ByVal(nullValue = "cvRect(0,0,0,0)") CvRect roi/*=cvRect(0,0,0,0)*/,
                                    @Const CvArr mask/*=0*/ );
 public static native void cvBGCodeBookClearStale( CvBGCodeBookModel model, int staleThresh );
 
 public static native CvSeq cvSegmentFGMask( CvArr fgmask, int poly1Hull0/*=1*/,
                               float perimScale/*=4.f*/,
                               CvMemStorage storage/*=0*/,
-                              @ByVal CvPoint offset/*=cvPoint(0,0)*/);
+                              @ByVal(nullValue = "cvPoint(0,0)") CvPoint offset/*=cvPoint(0,0)*/);
 public static native CvSeq cvSegmentFGMask( CvArr fgmask);
 public static native CvSeq cvSegmentFGMask( CvArr fgmask, int poly1Hull0/*=1*/,
                               float perimScale/*=4.f*/,
                               CvMemStorage storage/*=0*/,
-                              @ByVal @Cast("CvPoint*") IntBuffer offset/*=cvPoint(0,0)*/);
+                              @ByVal(nullValue = "cvPoint(0,0)") @Cast("CvPoint*") IntBuffer offset/*=cvPoint(0,0)*/);
 public static native CvSeq cvSegmentFGMask( CvArr fgmask, int poly1Hull0/*=1*/,
                               float perimScale/*=4.f*/,
                               CvMemStorage storage/*=0*/,
-                              @ByVal @Cast("CvPoint*") int[] offset/*=cvPoint(0,0)*/);
+                              @ByVal(nullValue = "cvPoint(0,0)") @Cast("CvPoint*") int[] offset/*=cvPoint(0,0)*/);
 
 // #ifdef __cplusplus
 // #endif

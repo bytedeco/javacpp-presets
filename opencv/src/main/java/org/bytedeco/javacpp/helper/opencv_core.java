@@ -1876,7 +1876,7 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         @Override public BytePointer arrayData() { return data(); }
         @Override public int arrayStep() { return step(0); }
 
-        public static final Mat EMPTY = new Mat();
+        public static final Mat EMPTY = null;
     }
 
 }

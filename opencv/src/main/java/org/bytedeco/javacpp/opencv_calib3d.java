@@ -160,7 +160,7 @@ public static native void cvGetOptimalNewCameraMatrix( @Const CvMat camera_matri
                                          @Const CvMat dist_coeffs,
                                          @ByVal CvSize image_size, double alpha,
                                          CvMat new_camera_matrix,
-                                         @ByVal CvSize new_imag_size/*=cvSize(0,0)*/,
+                                         @ByVal(nullValue = "cvSize(0,0)") CvSize new_imag_size/*=cvSize(0,0)*/,
                                          CvRect valid_pixel_ROI/*=0*/,
                                          int center_principal_point/*=0*/);
 public static native void cvGetOptimalNewCameraMatrix( @Const CvMat camera_matrix,
@@ -349,7 +349,8 @@ public static native double cvCalibrateCamera2( @Const CvMat object_points,
                                 CvMat rotation_vectors/*=NULL*/,
                                 CvMat translation_vectors/*=NULL*/,
                                 int flags/*=0*/,
-                                @ByVal CvTermCriteria term_crit/*=cvTermCriteria(
+                                @ByVal(nullValue = "cvTermCriteria("
+                                     + "CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,30,DBL_EPSILON)") CvTermCriteria term_crit/*=cvTermCriteria(
                                     CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,30,DBL_EPSILON)*/ );
 public static native double cvCalibrateCamera2( @Const CvMat object_points,
                                 @Const CvMat image_points,
@@ -402,7 +403,8 @@ public static native double cvStereoCalibrate( @Const CvMat object_points, @Cons
                                CvMat camera_matrix2, CvMat dist_coeffs2,
                                @ByVal CvSize image_size, CvMat R, CvMat T,
                                CvMat E/*=0*/, CvMat F/*=0*/,
-                               @ByVal CvTermCriteria term_crit/*=cvTermCriteria(
+                               @ByVal(nullValue = "cvTermCriteria("
+                                    + "CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,30,1e-6)") CvTermCriteria term_crit/*=cvTermCriteria(
                                    CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,30,1e-6)*/,
                                int flags/*=CV_CALIB_FIX_INTRINSIC*/);
 public static native double cvStereoCalibrate( @Const CvMat object_points, @Const CvMat image_points1,
@@ -422,7 +424,7 @@ public static native void cvStereoRectify( @Const CvMat camera_matrix1, @Const C
                              CvMat Q/*=0*/,
                              int flags/*=CV_CALIB_ZERO_DISPARITY*/,
                              double alpha/*=-1*/,
-                             @ByVal CvSize new_image_size/*=cvSize(0,0)*/,
+                             @ByVal(nullValue = "cvSize(0,0)") CvSize new_image_size/*=cvSize(0,0)*/,
                              CvRect valid_pix_ROI1/*=0*/,
                              CvRect valid_pix_ROI2/*=0*/);
 public static native void cvStereoRectify( @Const CvMat camera_matrix1, @Const CvMat camera_matrix2,
@@ -542,13 +544,13 @@ public static native void cvReprojectImageTo3D( @Const CvArr disparityImage,
 
     public CvLevMarq() { allocate(); }
     private native void allocate();
-    public CvLevMarq( int nparams, int nerrs, @ByVal CvTermCriteria criteria/*=cvTermCriteria(CV_TERMCRIT_EPS+CV_TERMCRIT_ITER,30,DBL_EPSILON)*/,
+    public CvLevMarq( int nparams, int nerrs, @ByVal(nullValue = "cvTermCriteria(CV_TERMCRIT_EPS+CV_TERMCRIT_ITER,30,DBL_EPSILON)") CvTermCriteria criteria/*=cvTermCriteria(CV_TERMCRIT_EPS+CV_TERMCRIT_ITER,30,DBL_EPSILON)*/,
                   @Cast("bool") boolean completeSymmFlag/*=false*/ ) { allocate(nparams, nerrs, criteria, completeSymmFlag); }
-    private native void allocate( int nparams, int nerrs, @ByVal CvTermCriteria criteria/*=cvTermCriteria(CV_TERMCRIT_EPS+CV_TERMCRIT_ITER,30,DBL_EPSILON)*/,
+    private native void allocate( int nparams, int nerrs, @ByVal(nullValue = "cvTermCriteria(CV_TERMCRIT_EPS+CV_TERMCRIT_ITER,30,DBL_EPSILON)") CvTermCriteria criteria/*=cvTermCriteria(CV_TERMCRIT_EPS+CV_TERMCRIT_ITER,30,DBL_EPSILON)*/,
                   @Cast("bool") boolean completeSymmFlag/*=false*/ );
     public CvLevMarq( int nparams, int nerrs ) { allocate(nparams, nerrs); }
     private native void allocate( int nparams, int nerrs );
-    public native void init( int nparams, int nerrs, @ByVal CvTermCriteria criteria/*=cvTermCriteria(CV_TERMCRIT_EPS+CV_TERMCRIT_ITER,30,DBL_EPSILON)*/,
+    public native void init( int nparams, int nerrs, @ByVal(nullValue = "cvTermCriteria(CV_TERMCRIT_EPS+CV_TERMCRIT_ITER,30,DBL_EPSILON)") CvTermCriteria criteria/*=cvTermCriteria(CV_TERMCRIT_EPS+CV_TERMCRIT_ITER,30,DBL_EPSILON)*/,
                   @Cast("bool") boolean completeSymmFlag/*=false*/ );
     public native void init( int nparams, int nerrs );
     public native @Cast("bool") boolean update( @Const @ByPtrRef CvMat param, @ByPtrRef CvMat J, @ByPtrRef CvMat err );
@@ -580,7 +582,7 @@ public static native void cvReprojectImageTo3D( @Const CvArr disparityImage,
     public native @Cast("bool") boolean completeSymmFlag(); public native CvLevMarq completeSymmFlag(boolean completeSymmFlag);
 }
 /** converts rotation vector to rotation matrix or vice versa using Rodrigues transformation */
-@Namespace("cv") public static native void Rodrigues(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat jacobian/*=noArray()*/);
+@Namespace("cv") public static native void Rodrigues(@ByVal Mat src, @ByVal Mat dst, @ByVal(nullValue = "cv::noArray()") Mat jacobian/*=cv::noArray()*/);
 @Namespace("cv") public static native void Rodrigues(@ByVal Mat src, @ByVal Mat dst);
 
 /** type of the robust estimation algorithm */
@@ -594,7 +596,7 @@ public static final int
 /** computes the best-fit perspective transformation mapping srcPoints to dstPoints. */
 @Namespace("cv") public static native @ByVal Mat findHomography( @ByVal Mat srcPoints, @ByVal Mat dstPoints,
                                  int method/*=0*/, double ransacReprojThreshold/*=3*/,
-                                 @ByVal Mat mask/*=noArray()*/);
+                                 @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native @ByVal Mat findHomography( @ByVal Mat srcPoints, @ByVal Mat dstPoints);
 
 /** variant of findHomography for backward compatibility */
@@ -605,18 +607,18 @@ public static final int
 
 /** Computes RQ decomposition of 3x3 matrix */
 @Namespace("cv") public static native @ByVal Point3d RQDecomp3x3( @ByVal Mat src, @ByVal Mat mtxR, @ByVal Mat mtxQ,
-                                @ByVal Mat Qx/*=noArray()*/,
-                                @ByVal Mat Qy/*=noArray()*/,
-                                @ByVal Mat Qz/*=noArray()*/);
+                                @ByVal(nullValue = "cv::noArray()") Mat Qx/*=cv::noArray()*/,
+                                @ByVal(nullValue = "cv::noArray()") Mat Qy/*=cv::noArray()*/,
+                                @ByVal(nullValue = "cv::noArray()") Mat Qz/*=cv::noArray()*/);
 @Namespace("cv") public static native @ByVal Point3d RQDecomp3x3( @ByVal Mat src, @ByVal Mat mtxR, @ByVal Mat mtxQ);
 
 /** Decomposes the projection matrix into camera matrix and the rotation martix and the translation vector */
 @Namespace("cv") public static native void decomposeProjectionMatrix( @ByVal Mat projMatrix, @ByVal Mat cameraMatrix,
                                              @ByVal Mat rotMatrix, @ByVal Mat transVect,
-                                             @ByVal Mat rotMatrixX/*=noArray()*/,
-                                             @ByVal Mat rotMatrixY/*=noArray()*/,
-                                             @ByVal Mat rotMatrixZ/*=noArray()*/,
-                                             @ByVal Mat eulerAngles/*=noArray()*/ );
+                                             @ByVal(nullValue = "cv::noArray()") Mat rotMatrixX/*=cv::noArray()*/,
+                                             @ByVal(nullValue = "cv::noArray()") Mat rotMatrixY/*=cv::noArray()*/,
+                                             @ByVal(nullValue = "cv::noArray()") Mat rotMatrixZ/*=cv::noArray()*/,
+                                             @ByVal(nullValue = "cv::noArray()") Mat eulerAngles/*=cv::noArray()*/ );
 @Namespace("cv") public static native void decomposeProjectionMatrix( @ByVal Mat projMatrix, @ByVal Mat cameraMatrix,
                                              @ByVal Mat rotMatrix, @ByVal Mat transVect );
 
@@ -629,10 +631,10 @@ public static final int
 @Namespace("cv") public static native void composeRT( @ByVal Mat rvec1, @ByVal Mat tvec1,
                              @ByVal Mat rvec2, @ByVal Mat tvec2,
                              @ByVal Mat rvec3, @ByVal Mat tvec3,
-                             @ByVal Mat dr3dr1/*=noArray()*/, @ByVal Mat dr3dt1/*=noArray()*/,
-                             @ByVal Mat dr3dr2/*=noArray()*/, @ByVal Mat dr3dt2/*=noArray()*/,
-                             @ByVal Mat dt3dr1/*=noArray()*/, @ByVal Mat dt3dt1/*=noArray()*/,
-                             @ByVal Mat dt3dr2/*=noArray()*/, @ByVal Mat dt3dt2/*=noArray()*/ );
+                             @ByVal(nullValue = "cv::noArray()") Mat dr3dr1/*=cv::noArray()*/, @ByVal(nullValue = "cv::noArray()") Mat dr3dt1/*=cv::noArray()*/,
+                             @ByVal(nullValue = "cv::noArray()") Mat dr3dr2/*=cv::noArray()*/, @ByVal(nullValue = "cv::noArray()") Mat dr3dt2/*=cv::noArray()*/,
+                             @ByVal(nullValue = "cv::noArray()") Mat dt3dr1/*=cv::noArray()*/, @ByVal(nullValue = "cv::noArray()") Mat dt3dt1/*=cv::noArray()*/,
+                             @ByVal(nullValue = "cv::noArray()") Mat dt3dr2/*=cv::noArray()*/, @ByVal(nullValue = "cv::noArray()") Mat dt3dt2/*=cv::noArray()*/ );
 @Namespace("cv") public static native void composeRT( @ByVal Mat rvec1, @ByVal Mat tvec1,
                              @ByVal Mat rvec2, @ByVal Mat tvec2,
                              @ByVal Mat rvec3, @ByVal Mat tvec3 );
@@ -642,7 +644,7 @@ public static final int
                                  @ByVal Mat rvec, @ByVal Mat tvec,
                                  @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                                  @ByVal Mat imagePoints,
-                                 @ByVal Mat jacobian/*=noArray()*/,
+                                 @ByVal(nullValue = "cv::noArray()") Mat jacobian/*=cv::noArray()*/,
                                  double aspectRatio/*=0*/ );
 @Namespace("cv") public static native void projectPoints( @ByVal Mat objectPoints,
                                  @ByVal Mat rvec, @ByVal Mat tvec,
@@ -658,7 +660,7 @@ public static final int
 @Namespace("cv") public static native @Cast("bool") boolean solvePnP( @ByVal Mat objectPoints, @ByVal Mat imagePoints,
                             @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                             @ByVal Mat rvec, @ByVal Mat tvec,
-                            @Cast("bool") boolean useExtrinsicGuess/*=false*/, int flags/*=ITERATIVE*/);
+                            @Cast("bool") boolean useExtrinsicGuess/*=false*/, int flags/*=cv::ITERATIVE*/);
 @Namespace("cv") public static native @Cast("bool") boolean solvePnP( @ByVal Mat objectPoints, @ByVal Mat imagePoints,
                             @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                             @ByVal Mat rvec, @ByVal Mat tvec);
@@ -674,8 +676,8 @@ public static final int
                                   int iterationsCount/*=100*/,
                                   float reprojectionError/*=8.0*/,
                                   int minInliersCount/*=100*/,
-                                  @ByVal Mat inliers/*=noArray()*/,
-                                  int flags/*=ITERATIVE*/);
+                                  @ByVal(nullValue = "cv::noArray()") Mat inliers/*=cv::noArray()*/,
+                                  int flags/*=cv::ITERATIVE*/);
 @Namespace("cv") public static native void solvePnPRansac( @ByVal Mat objectPoints,
                                   @ByVal Mat imagePoints,
                                   @ByVal Mat cameraMatrix,
@@ -698,7 +700,7 @@ public static final int CALIB_CB_ADAPTIVE_THRESH = 1, CALIB_CB_NORMALIZE_IMAGE =
 /** finds checkerboard pattern of the specified size in the image */
 @Namespace("cv") public static native @Cast("bool") boolean findChessboardCorners( @ByVal Mat image, @ByVal Size patternSize,
                                          @ByVal Mat corners,
-                                         int flags/*=CALIB_CB_ADAPTIVE_THRESH+CALIB_CB_NORMALIZE_IMAGE*/ );
+                                         int flags/*=cv::CALIB_CB_ADAPTIVE_THRESH+CALIB_CB_NORMALIZE_IMAGE*/ );
 @Namespace("cv") public static native @Cast("bool") boolean findChessboardCorners( @ByVal Mat image, @ByVal Size patternSize,
                                          @ByVal Mat corners );
 
@@ -715,14 +717,14 @@ public static final int CALIB_CB_SYMMETRIC_GRID = 1, CALIB_CB_ASYMMETRIC_GRID = 
 
 /** finds circles' grid pattern of the specified size in the image */
 @Namespace("cv") public static native @Cast("bool") boolean findCirclesGrid( @ByVal Mat image, @ByVal Size patternSize,
-                                 @ByVal Mat centers, int flags/*=CALIB_CB_SYMMETRIC_GRID*/,
-                                 @Ptr FeatureDetector blobDetector/*=new SimpleBlobDetector()*/);
+                                 @ByVal Mat centers, int flags/*=cv::CALIB_CB_SYMMETRIC_GRID*/,
+                                 @Ptr FeatureDetector blobDetector/*=new cv::SimpleBlobDetector()*/);
 @Namespace("cv") public static native @Cast("bool") boolean findCirclesGrid( @ByVal Mat image, @ByVal Size patternSize,
                                  @ByVal Mat centers);
 
 /** the deprecated function. Use findCirclesGrid() instead of it. */
 @Namespace("cv") public static native @Cast("bool") boolean findCirclesGridDefault( @ByVal Mat image, @ByVal Size patternSize,
-                                          @ByVal Mat centers, int flags/*=CALIB_CB_SYMMETRIC_GRID*/ );
+                                          @ByVal Mat centers, int flags/*=cv::CALIB_CB_SYMMETRIC_GRID*/ );
 @Namespace("cv") public static native @Cast("bool") boolean findCirclesGridDefault( @ByVal Mat image, @ByVal Size patternSize,
                                           @ByVal Mat centers );
 /** enum cv:: */
@@ -752,8 +754,9 @@ public static final int
                                      @ByVal Mat cameraMatrix,
                                      @ByVal Mat distCoeffs,
                                      @ByVal MatVector rvecs, @ByVal MatVector tvecs,
-                                     int flags/*=0*/, @ByVal TermCriteria criteria/*=TermCriteria(
-                                         TermCriteria::COUNT+TermCriteria::EPS, 30, DBL_EPSILON)*/ );
+                                     int flags/*=0*/, @ByVal(nullValue = "cv::TermCriteria("
+                                          + "cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, DBL_EPSILON)") TermCriteria criteria/*=cv::TermCriteria(
+                                         cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, DBL_EPSILON)*/ );
 @Namespace("cv") public static native double calibrateCamera( @ByVal MatVector objectPoints,
                                      @ByVal MatVector imagePoints,
                                      @ByVal Size imageSize,
@@ -800,8 +803,8 @@ public static final int
                                      @ByVal Mat distCoeffs2,
                                      @ByVal Size imageSize, @ByVal Mat R,
                                      @ByVal Mat T, @ByVal Mat E, @ByVal Mat F,
-                                     @ByVal TermCriteria criteria/*=TermCriteria(TermCriteria::COUNT+TermCriteria::EPS, 30, 1e-6)*/,
-                                     int flags/*=CALIB_FIX_INTRINSIC*/ );
+                                     @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)") TermCriteria criteria/*=cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 30, 1e-6)*/,
+                                     int flags/*=cv::CALIB_FIX_INTRINSIC*/ );
 @Namespace("cv") public static native double stereoCalibrate( @ByVal MatVector objectPoints,
                                      @ByVal MatVector imagePoints1,
                                      @ByVal MatVector imagePoints2,
@@ -819,8 +822,8 @@ public static final int
                                @ByVal Size imageSize, @ByVal Mat R, @ByVal Mat T,
                                @ByVal Mat R1, @ByVal Mat R2,
                                @ByVal Mat P1, @ByVal Mat P2,
-                               @ByVal Mat Q, int flags/*=CALIB_ZERO_DISPARITY*/,
-                               double alpha/*=-1*/, @ByVal Size newImageSize/*=Size()*/,
+                               @ByVal Mat Q, int flags/*=cv::CALIB_ZERO_DISPARITY*/,
+                               double alpha/*=-1*/, @ByVal(nullValue = "cv::Size()") Size newImageSize/*=cv::Size()*/,
                                Rect validPixROI1/*=0*/, Rect validPixROI2/*=0*/ );
 @Namespace("cv") public static native void stereoRectify( @ByVal Mat cameraMatrix1, @ByVal Mat distCoeffs1,
                                @ByVal Mat cameraMatrix2, @ByVal Mat distCoeffs2,
@@ -852,7 +855,7 @@ public static final int
 
 /** returns the optimal new camera matrix */
 @Namespace("cv") public static native @ByVal Mat getOptimalNewCameraMatrix( @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
-                                            @ByVal Size imageSize, double alpha, @ByVal Size newImgSize/*=Size()*/,
+                                            @ByVal Size imageSize, double alpha, @ByVal(nullValue = "cv::Size()") Size newImgSize/*=cv::Size()*/,
                                             Rect validPixROI/*=0*/, @Cast("bool") boolean centerPrincipalPoint/*=false*/);
 @Namespace("cv") public static native @ByVal Mat getOptimalNewCameraMatrix( @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                                             @ByVal Size imageSize, double alpha);
@@ -880,14 +883,14 @@ public static final int
 
 /** finds fundamental matrix from a set of corresponding 2D points */
 @Namespace("cv") public static native @ByVal Mat findFundamentalMat( @ByVal Mat points1, @ByVal Mat points2,
-                                     int method/*=FM_RANSAC*/,
+                                     int method/*=cv::FM_RANSAC*/,
                                      double param1/*=3.*/, double param2/*=0.99*/,
-                                     @ByVal Mat mask/*=noArray()*/);
+                                     @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native @ByVal Mat findFundamentalMat( @ByVal Mat points1, @ByVal Mat points2);
 
 /** variant of findFundamentalMat for backward compatibility */
 @Namespace("cv") public static native @ByVal Mat findFundamentalMat( @ByVal Mat points1, @ByVal Mat points2,
-                                   @ByVal Mat mask, int method/*=FM_RANSAC*/,
+                                   @ByVal Mat mask, int method/*=cv::FM_RANSAC*/,
                                    double param1/*=3.*/, double param2/*=0.99*/);
 @Namespace("cv") public static native @ByVal Mat findFundamentalMat( @ByVal Mat points1, @ByVal Mat points2,
                                    @ByVal Mat mask);
@@ -999,7 +1002,7 @@ public static final int
 
 /** filters off speckles (small regions of incorrectly computed disparity) */
 @Namespace("cv") public static native void filterSpeckles( @ByVal Mat img, double newVal, int maxSpeckleSize, double maxDiff,
-                                  @ByVal Mat buf/*=noArray()*/ );
+                                  @ByVal(nullValue = "cv::noArray()") Mat buf/*=cv::noArray()*/ );
 @Namespace("cv") public static native void filterSpeckles( @ByVal Mat img, double newVal, int maxSpeckleSize, double maxDiff );
 
 /** computes valid disparity ROI from the valid ROIs of the rectified images (that are returned by cv::stereoRectify()) */
@@ -1041,13 +1044,13 @@ public static final int
 
     /** projects 3D points using fisheye model */
     @Namespace("cv::fisheye") public static native void projectPoints(@ByVal Mat objectPoints, @ByVal Mat imagePoints, @Const @ByRef Mat affine,
-            @ByVal Mat K, @ByVal Mat D, double alpha/*=0*/, @ByVal Mat jacobian/*=noArray()*/);
+            @ByVal Mat K, @ByVal Mat D, double alpha/*=0*/, @ByVal(nullValue = "cv::noArray()") Mat jacobian/*=cv::noArray()*/);
     @Namespace("cv::fisheye") public static native void projectPoints(@ByVal Mat objectPoints, @ByVal Mat imagePoints, @Const @ByRef Mat affine,
             @ByVal Mat K, @ByVal Mat D);
 
     /** projects points using fisheye model */
     @Namespace("cv::fisheye") public static native void projectPoints(@ByVal Mat objectPoints, @ByVal Mat imagePoints, @ByVal Mat rvec, @ByVal Mat tvec,
-            @ByVal Mat K, @ByVal Mat D, double alpha/*=0*/, @ByVal Mat jacobian/*=noArray()*/);
+            @ByVal Mat K, @ByVal Mat D, double alpha/*=0*/, @ByVal(nullValue = "cv::noArray()") Mat jacobian/*=cv::noArray()*/);
 
     /** distorts 2D points using fisheye model */
     @Namespace("cv::fisheye") public static native void distortPoints(@ByVal Mat undistorted, @ByVal Mat distorted, @ByVal Mat K, @ByVal Mat D, double alpha/*=0*/);
@@ -1055,7 +1058,7 @@ public static final int
 
     /** undistorts 2D points using fisheye model */
     @Namespace("cv::fisheye") public static native void undistortPoints(@ByVal Mat distorted, @ByVal Mat undistorted,
-            @ByVal Mat K, @ByVal Mat D, @ByVal Mat R/*=noArray()*/, @ByVal Mat P/*=noArray()*/);
+            @ByVal Mat K, @ByVal Mat D, @ByVal(nullValue = "cv::noArray()") Mat R/*=cv::noArray()*/, @ByVal(nullValue = "cv::noArray()") Mat P/*=cv::noArray()*/);
     @Namespace("cv::fisheye") public static native void undistortPoints(@ByVal Mat distorted, @ByVal Mat undistorted,
             @ByVal Mat K, @ByVal Mat D);
 
@@ -1066,26 +1069,26 @@ public static final int
 
     /** undistorts image, optionally changes resolution and camera matrix. If Knew zero identity matrix is used */
     @Namespace("cv::fisheye") public static native void undistortImage(@ByVal Mat distorted, @ByVal Mat undistorted,
-            @ByVal Mat K, @ByVal Mat D, @ByVal Mat Knew/*=cv::noArray()*/, @Const @ByRef Size new_size/*=Size()*/);
+            @ByVal Mat K, @ByVal Mat D, @ByVal(nullValue = "cv::noArray()") Mat Knew/*=cv::noArray()*/, @Const @ByRef(nullValue = "cv::Size()") Size new_size/*=cv::Size()*/);
     @Namespace("cv::fisheye") public static native void undistortImage(@ByVal Mat distorted, @ByVal Mat undistorted,
             @ByVal Mat K, @ByVal Mat D);
 
     /** estimates new camera matrix for undistortion or rectification */
     @Namespace("cv::fisheye") public static native void estimateNewCameraMatrixForUndistortRectify(@ByVal Mat K, @ByVal Mat D, @Const @ByRef Size image_size, @ByVal Mat R,
-            @ByVal Mat P, double balance/*=0.0*/, @Const @ByRef Size new_size/*=Size()*/, double fov_scale/*=1.0*/);
+            @ByVal Mat P, double balance/*=0.0*/, @Const @ByRef(nullValue = "cv::Size()") Size new_size/*=cv::Size()*/, double fov_scale/*=1.0*/);
     @Namespace("cv::fisheye") public static native void estimateNewCameraMatrixForUndistortRectify(@ByVal Mat K, @ByVal Mat D, @Const @ByRef Size image_size, @ByVal Mat R,
             @ByVal Mat P);
 
     /** performs camera calibaration */
     @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
             @ByVal Mat K, @ByVal Mat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs, int flags/*=0*/,
-                @ByVal TermCriteria criteria/*=TermCriteria(TermCriteria::COUNT + TermCriteria::EPS, 100, DBL_EPSILON)*/);
+                @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria/*=cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)*/);
     @Namespace("cv::fisheye") public static native double calibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints, @Const @ByRef Size image_size,
             @ByVal Mat K, @ByVal Mat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs);
 
     /** stereo rectification estimation */
     @Namespace("cv::fisheye") public static native void stereoRectify(@ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @Const @ByRef Size imageSize, @ByVal Mat R, @ByVal Mat tvec,
-            @ByVal Mat R1, @ByVal Mat R2, @ByVal Mat P1, @ByVal Mat P2, @ByVal Mat Q, int flags, @Const @ByRef Size newImageSize/*=Size()*/,
+            @ByVal Mat R1, @ByVal Mat R2, @ByVal Mat P1, @ByVal Mat P2, @ByVal Mat Q, int flags, @Const @ByRef(nullValue = "cv::Size()") Size newImageSize/*=cv::Size()*/,
             double balance/*=0.0*/, double fov_scale/*=1.0*/);
     @Namespace("cv::fisheye") public static native void stereoRectify(@ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @Const @ByRef Size imageSize, @ByVal Mat R, @ByVal Mat tvec,
             @ByVal Mat R1, @ByVal Mat R2, @ByVal Mat P1, @ByVal Mat P2, @ByVal Mat Q, int flags);
@@ -1093,8 +1096,8 @@ public static final int
     /** performs stereo calibaration */
     @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
                                       @ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @ByVal Size imageSize,
-                                      @ByVal Mat R, @ByVal Mat T, int flags/*=CALIB_FIX_INTRINSIC*/,
-                                      @ByVal TermCriteria criteria/*=TermCriteria(TermCriteria::COUNT + TermCriteria::EPS, 100, DBL_EPSILON)*/);
+                                      @ByVal Mat R, @ByVal Mat T, int flags/*=cv::fisheye::CALIB_FIX_INTRINSIC*/,
+                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)") TermCriteria criteria/*=cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 100, DBL_EPSILON)*/);
     @Namespace("cv::fisheye") public static native double stereoCalibrate(@ByVal MatVector objectPoints, @ByVal MatVector imagePoints1, @ByVal MatVector imagePoints2,
                                       @ByVal Mat K1, @ByVal Mat D1, @ByVal Mat K2, @ByVal Mat D2, @ByVal Size imageSize,
                                       @ByVal Mat R, @ByVal Mat T);

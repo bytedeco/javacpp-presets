@@ -166,7 +166,7 @@ public class opencv_superres extends org.bytedeco.javacpp.presets.opencv_superre
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public DenseOpticalFlowExt(Pointer p) { super(p); }
         
-            public native void calc(@ByVal Mat frame0, @ByVal Mat frame1, @ByVal Mat flow1, @ByVal Mat flow2/*=noArray()*/);
+            public native void calc(@ByVal Mat frame0, @ByVal Mat frame1, @ByVal Mat flow1, @ByVal(nullValue = "cv::noArray()") Mat flow2/*=cv::noArray()*/);
             public native void calc(@ByVal Mat frame0, @ByVal Mat frame1, @ByVal Mat flow1);
             public native void collectGarbage();
         }

@@ -3397,7 +3397,7 @@ public static native void cvEigenVV( CvArr mat, CvArr evects, CvArr evals);
 //                                int lowindex, int highindex );
 
 /* Makes an identity matrix (mat_ij = i == j) */
-public static native void cvSetIdentity( CvArr mat, @ByVal CvScalar value/*=cvRealScalar(1)*/ );
+public static native void cvSetIdentity( CvArr mat, @ByVal(nullValue = "cvRealScalar(1)") CvScalar value/*=cvRealScalar(1)*/ );
 public static native void cvSetIdentity( CvArr mat );
 
 /* Fills matrix with given range of numbers */
@@ -3709,7 +3709,7 @@ public static native void cvSetSeqReaderPos( CvSeqReader reader, int index);
 
 /* Copies sequence content to a continuous piece of memory */
 public static native Pointer cvCvtSeqToArray( @Const CvSeq seq, Pointer elements,
-                               @ByVal CvSlice slice/*=CV_WHOLE_SEQ*/ );
+                               @ByVal(nullValue = "CV_WHOLE_SEQ") CvSlice slice/*=CV_WHOLE_SEQ*/ );
 public static native Pointer cvCvtSeqToArray( @Const CvSeq seq, Pointer elements );
 
 /* Creates sequence header for array.
@@ -4278,7 +4278,7 @@ public static native void cvDrawContours( CvArr img, CvSeq contour,
                              @ByVal CvScalar external_color, @ByVal CvScalar hole_color,
                              int max_level, int thickness/*=1*/,
                              int line_type/*=8*/,
-                             @ByVal CvPoint offset/*=cvPoint(0,0)*/);
+                             @ByVal(nullValue = "cvPoint(0,0)") CvPoint offset/*=cvPoint(0,0)*/);
 public static native void cvDrawContours( CvArr img, CvSeq contour,
                              @ByVal CvScalar external_color, @ByVal CvScalar hole_color,
                              int max_level);
@@ -4286,12 +4286,12 @@ public static native void cvDrawContours( CvArr img, CvSeq contour,
                              @ByVal CvScalar external_color, @ByVal CvScalar hole_color,
                              int max_level, int thickness/*=1*/,
                              int line_type/*=8*/,
-                             @ByVal @Cast("CvPoint*") IntBuffer offset/*=cvPoint(0,0)*/);
+                             @ByVal(nullValue = "cvPoint(0,0)") @Cast("CvPoint*") IntBuffer offset/*=cvPoint(0,0)*/);
 public static native void cvDrawContours( CvArr img, CvSeq contour,
                              @ByVal CvScalar external_color, @ByVal CvScalar hole_color,
                              int max_level, int thickness/*=1*/,
                              int line_type/*=8*/,
-                             @ByVal @Cast("CvPoint*") int[] offset/*=cvPoint(0,0)*/);
+                             @ByVal(nullValue = "cvPoint(0,0)") @Cast("CvPoint*") int[] offset/*=cvPoint(0,0)*/);
 
 /* Does look-up transformation. Elements of the source array
    (that should be 8uC1 or 8sC1) are used as indexes in lutarr 256-element table */
@@ -4492,12 +4492,12 @@ public static native String cvAttrValue( @Const CvAttrList attr, String attr_nam
 /* starts writing compound structure (map or sequence) */
 public static native void cvStartWriteStruct( CvFileStorage fs, @Cast("const char*") BytePointer name,
                                 int struct_flags, @Cast("const char*") BytePointer type_name/*=NULL*/,
-                                @ByVal CvAttrList attributes/*=cvAttrList()*/);
+                                @ByVal(nullValue = "cvAttrList()") CvAttrList attributes/*=cvAttrList()*/);
 public static native void cvStartWriteStruct( CvFileStorage fs, @Cast("const char*") BytePointer name,
                                 int struct_flags);
 public static native void cvStartWriteStruct( CvFileStorage fs, String name,
                                 int struct_flags, String type_name/*=NULL*/,
-                                @ByVal CvAttrList attributes/*=cvAttrList()*/);
+                                @ByVal(nullValue = "cvAttrList()") CvAttrList attributes/*=cvAttrList()*/);
 public static native void cvStartWriteStruct( CvFileStorage fs, String name,
                                 int struct_flags);
 
@@ -4531,10 +4531,10 @@ public static native void cvWriteComment( CvFileStorage fs, String comment,
 /* writes instance of a standard type (matrix, image, sequence, graph etc.)
    or user-defined type */
 public static native void cvWrite( CvFileStorage fs, @Cast("const char*") BytePointer name, @Const Pointer ptr,
-                         @ByVal CvAttrList attributes/*=cvAttrList()*/);
+                         @ByVal(nullValue = "cvAttrList()") CvAttrList attributes/*=cvAttrList()*/);
 public static native void cvWrite( CvFileStorage fs, @Cast("const char*") BytePointer name, @Const Pointer ptr);
 public static native void cvWrite( CvFileStorage fs, String name, @Const Pointer ptr,
-                         @ByVal CvAttrList attributes/*=cvAttrList()*/);
+                         @ByVal(nullValue = "cvAttrList()") CvAttrList attributes/*=cvAttrList()*/);
 public static native void cvWrite( CvFileStorage fs, String name, @Const Pointer ptr);
 
 /* starts the next stream */
@@ -4684,12 +4684,12 @@ public static native Pointer cvClone( @Const Pointer struct_ptr );
 public static native void cvSave( @Cast("const char*") BytePointer filename, @Const Pointer struct_ptr,
                     @Cast("const char*") BytePointer name/*=NULL*/,
                     @Cast("const char*") BytePointer comment/*=NULL*/,
-                    @ByVal CvAttrList attributes/*=cvAttrList()*/);
+                    @ByVal(nullValue = "cvAttrList()") CvAttrList attributes/*=cvAttrList()*/);
 public static native void cvSave( @Cast("const char*") BytePointer filename, @Const Pointer struct_ptr);
 public static native void cvSave( String filename, @Const Pointer struct_ptr,
                     String name/*=NULL*/,
                     String comment/*=NULL*/,
-                    @ByVal CvAttrList attributes/*=cvAttrList()*/);
+                    @ByVal(nullValue = "cvAttrList()") CvAttrList attributes/*=cvAttrList()*/);
 public static native void cvSave( String filename, @Const Pointer struct_ptr);
 public static native Pointer cvLoad( @Cast("const char*") BytePointer filename,
                      CvMemStorage memstorage/*=NULL*/,
@@ -6184,7 +6184,7 @@ public static final int
  Proxy datatype for passing Mat's and vector<>'s as input parameters
  */
 
-
+public static Mat noArray() { return null; }
 
 /////////////////////////////////////// Mat ///////////////////////////////////////////
 
@@ -6503,8 +6503,8 @@ public static final int MAGIC_MASK= 0xFFFF0000, TYPE_MASK= 0x00000FFF, DEPTH_MAS
     private native void allocate(int ndims, @Const int[] sizes, int type, Pointer data);
 
     /** creates a matrix header for a part of the bigger matrix */
-    public Mat(@Const @ByRef Mat m, @Const @ByRef Range rowRange, @Const @ByRef Range colRange/*=Range::all()*/) { allocate(m, rowRange, colRange); }
-    private native void allocate(@Const @ByRef Mat m, @Const @ByRef Range rowRange, @Const @ByRef Range colRange/*=Range::all()*/);
+    public Mat(@Const @ByRef Mat m, @Const @ByRef Range rowRange, @Const @ByRef(nullValue = "cv::Range::all()") Range colRange/*=cv::Range::all()*/) { allocate(m, rowRange, colRange); }
+    private native void allocate(@Const @ByRef Mat m, @Const @ByRef Range rowRange, @Const @ByRef(nullValue = "cv::Range::all()") Range colRange/*=cv::Range::all()*/);
     public Mat(@Const @ByRef Mat m, @Const @ByRef Range rowRange) { allocate(m, rowRange); }
     private native void allocate(@Const @ByRef Mat m, @Const @ByRef Range rowRange);
     public Mat(@Const @ByRef Mat m, @Const @ByRef Rect roi) { allocate(m, roi); }
@@ -6576,7 +6576,7 @@ public static final int MAGIC_MASK= 0xFFFF0000, TYPE_MASK= 0x00000FFF, DEPTH_MAS
     /** sets every matrix element to s */
     public native @ByRef @Name("operator=") Mat put(@Const @ByRef Scalar s);
     /** sets some of the matrix elements to s, according to the mask */
-    public native @ByRef Mat setTo(@ByVal Mat value, @ByVal Mat mask/*=noArray()*/);
+    public native @ByRef Mat setTo(@ByVal Mat value, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
     public native @ByRef Mat setTo(@ByVal Mat value);
     /** creates alternative matrix header for the same data, with different */
     // number of channels and/or different number of rows. see cvReshape.
@@ -6589,7 +6589,7 @@ public static final int MAGIC_MASK= 0xFFFF0000, TYPE_MASK= 0x00000FFF, DEPTH_MAS
     /** matrix transposition by means of matrix expressions */
     public native @ByVal MatExpr t();
     /** matrix inversion by means of matrix expressions */
-    public native @ByVal MatExpr inv(int method/*=DECOMP_LU*/);
+    public native @ByVal MatExpr inv(int method/*=cv::DECOMP_LU*/);
     public native @ByVal MatExpr inv();
     /** per-element matrix multiplication by means of matrix expressions */
     public native @ByVal MatExpr mul(@ByVal Mat m, double scale/*=1*/);
@@ -6902,11 +6902,11 @@ public static class BinaryFunc extends FunctionPointer {
 
 /** adds one matrix to another (dst = src1 + src2) */
 @Namespace("cv") public static native void add(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst,
-                      @ByVal Mat mask/*=noArray()*/, int dtype/*=-1*/);
+                      @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/, int dtype/*=-1*/);
 @Namespace("cv") public static native void add(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst);
 /** subtracts one matrix from another (dst = src1 - src2) */
 @Namespace("cv") public static native void subtract(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst,
-                           @ByVal Mat mask/*=noArray()*/, int dtype/*=-1*/);
+                           @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/, int dtype/*=-1*/);
 @Namespace("cv") public static native void subtract(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst);
 
 /** computes element-wise weighted product of the two arrays (dst = scale*src1*src2) */
@@ -6952,55 +6952,55 @@ public static class BinaryFunc extends FunctionPointer {
 @Namespace("cv") public static native void findNonZero( @ByVal Mat src, @ByVal Mat idx );
 
 /** computes mean value of selected array elements */
-@Namespace("cv") public static native @ByVal Scalar mean(@ByVal Mat src, @ByVal Mat mask/*=noArray()*/);
+@Namespace("cv") public static native @ByVal Scalar mean(@ByVal Mat src, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native @ByVal Scalar mean(@ByVal Mat src);
 /** computes mean value and standard deviation of all or selected array elements */
 @Namespace("cv") public static native void meanStdDev(@ByVal Mat src, @ByVal Mat mean, @ByVal Mat stddev,
-                             @ByVal Mat mask/*=noArray()*/);
+                             @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native void meanStdDev(@ByVal Mat src, @ByVal Mat mean, @ByVal Mat stddev);
 /** computes norm of the selected array part */
-@Namespace("cv") public static native double norm(@ByVal Mat src1, int normType/*=NORM_L2*/, @ByVal Mat mask/*=noArray()*/);
+@Namespace("cv") public static native double norm(@ByVal Mat src1, int normType/*=cv::NORM_L2*/, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native double norm(@ByVal Mat src1);
 /** computes norm of selected part of the difference between two arrays */
 @Namespace("cv") public static native double norm(@ByVal Mat src1, @ByVal Mat src2,
-                         int normType/*=NORM_L2*/, @ByVal Mat mask/*=noArray()*/);
+                         int normType/*=cv::NORM_L2*/, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native double norm(@ByVal Mat src1, @ByVal Mat src2);
 
 /** naive nearest neighbor finder */
 @Namespace("cv") public static native void batchDistance(@ByVal Mat src1, @ByVal Mat src2,
                                 @ByVal Mat dist, int dtype, @ByVal Mat nidx,
-                                int normType/*=NORM_L2*/, int K/*=0*/,
-                                @ByVal Mat mask/*=noArray()*/, int update/*=0*/,
+                                int normType/*=cv::NORM_L2*/, int K/*=0*/,
+                                @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/, int update/*=0*/,
                                 @Cast("bool") boolean crosscheck/*=false*/);
 @Namespace("cv") public static native void batchDistance(@ByVal Mat src1, @ByVal Mat src2,
                                 @ByVal Mat dist, int dtype, @ByVal Mat nidx);
 
 /** scales and shifts array elements so that either the specified norm (alpha) or the minimum (alpha) and maximum (beta) array values get the specified values */
 @Namespace("cv") public static native void normalize( @ByVal Mat src, @ByVal Mat dst, double alpha/*=1*/, double beta/*=0*/,
-                             int norm_type/*=NORM_L2*/, int dtype/*=-1*/, @ByVal Mat mask/*=noArray()*/);
+                             int norm_type/*=cv::NORM_L2*/, int dtype/*=-1*/, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native void normalize( @ByVal Mat src, @ByVal Mat dst);
 
 /** finds global minimum and maximum array elements and returns their values and their locations */
 @Namespace("cv") public static native void minMaxLoc(@ByVal Mat src, DoublePointer minVal,
                            DoublePointer maxVal/*=0*/, Point minLoc/*=0*/,
-                           Point maxLoc/*=0*/, @ByVal Mat mask/*=noArray()*/);
+                           Point maxLoc/*=0*/, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native void minMaxLoc(@ByVal Mat src, DoublePointer minVal);
 @Namespace("cv") public static native void minMaxLoc(@ByVal Mat src, DoubleBuffer minVal,
                            DoubleBuffer maxVal/*=0*/, Point minLoc/*=0*/,
-                           Point maxLoc/*=0*/, @ByVal Mat mask/*=noArray()*/);
+                           Point maxLoc/*=0*/, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native void minMaxLoc(@ByVal Mat src, DoubleBuffer minVal);
 @Namespace("cv") public static native void minMaxLoc(@ByVal Mat src, double[] minVal,
                            double[] maxVal/*=0*/, Point minLoc/*=0*/,
-                           Point maxLoc/*=0*/, @ByVal Mat mask/*=noArray()*/);
+                           Point maxLoc/*=0*/, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native void minMaxLoc(@ByVal Mat src, double[] minVal);
 @Namespace("cv") public static native void minMaxIdx(@ByVal Mat src, DoublePointer minVal, DoublePointer maxVal,
-                          IntPointer minIdx/*=0*/, IntPointer maxIdx/*=0*/, @ByVal Mat mask/*=noArray()*/);
+                          IntPointer minIdx/*=0*/, IntPointer maxIdx/*=0*/, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native void minMaxIdx(@ByVal Mat src, DoublePointer minVal, DoublePointer maxVal);
 @Namespace("cv") public static native void minMaxIdx(@ByVal Mat src, DoubleBuffer minVal, DoubleBuffer maxVal,
-                          IntBuffer minIdx/*=0*/, IntBuffer maxIdx/*=0*/, @ByVal Mat mask/*=noArray()*/);
+                          IntBuffer minIdx/*=0*/, IntBuffer maxIdx/*=0*/, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native void minMaxIdx(@ByVal Mat src, DoubleBuffer minVal, DoubleBuffer maxVal);
 @Namespace("cv") public static native void minMaxIdx(@ByVal Mat src, double[] minVal, double[] maxVal,
-                          int[] minIdx/*=0*/, int[] maxIdx/*=0*/, @ByVal Mat mask/*=noArray()*/);
+                          int[] minIdx/*=0*/, int[] maxIdx/*=0*/, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native void minMaxIdx(@ByVal Mat src, double[] minVal, double[] maxVal);
 
 /** transforms 2D matrix to 1D row or column vector by taking sum, minimum, maximum or mean value over all the rows */
@@ -7062,22 +7062,22 @@ public static class BinaryFunc extends FunctionPointer {
 
 /** computes bitwise conjunction of the two arrays (dst = src1 & src2) */
 @Namespace("cv") public static native void bitwise_and(@ByVal Mat src1, @ByVal Mat src2,
-                              @ByVal Mat dst, @ByVal Mat mask/*=noArray()*/);
+                              @ByVal Mat dst, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native void bitwise_and(@ByVal Mat src1, @ByVal Mat src2,
                               @ByVal Mat dst);
 /** computes bitwise disjunction of the two arrays (dst = src1 | src2) */
 @Namespace("cv") public static native void bitwise_or(@ByVal Mat src1, @ByVal Mat src2,
-                             @ByVal Mat dst, @ByVal Mat mask/*=noArray()*/);
+                             @ByVal Mat dst, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native void bitwise_or(@ByVal Mat src1, @ByVal Mat src2,
                              @ByVal Mat dst);
 /** computes bitwise exclusive-or of the two arrays (dst = src1 ^ src2) */
 @Namespace("cv") public static native void bitwise_xor(@ByVal Mat src1, @ByVal Mat src2,
-                              @ByVal Mat dst, @ByVal Mat mask/*=noArray()*/);
+                              @ByVal Mat dst, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native void bitwise_xor(@ByVal Mat src1, @ByVal Mat src2,
                               @ByVal Mat dst);
 /** inverts each bit of array (dst = ~src) */
 @Namespace("cv") public static native void bitwise_not(@ByVal Mat src, @ByVal Mat dst,
-                              @ByVal Mat mask/*=noArray()*/);
+                              @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native void bitwise_not(@ByVal Mat src, @ByVal Mat dst);
 /** computes element-wise absolute difference of two arrays (dst = abs(src1 - src2)) */
 @Namespace("cv") public static native void absdiff(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst);
@@ -7156,7 +7156,7 @@ public static class BinaryFunc extends FunctionPointer {
                        @ByVal Mat src3, double beta, @ByVal Mat dst);
 /** multiplies matrix by its transposition from the left or from the right */
 @Namespace("cv") public static native void mulTransposed( @ByVal Mat src, @ByVal Mat dst, @Cast("bool") boolean aTa,
-                                 @ByVal Mat delta/*=noArray()*/,
+                                 @ByVal(nullValue = "cv::noArray()") Mat delta/*=cv::noArray()*/,
                                  double scale/*=1*/, int dtype/*=-1*/ );
 @Namespace("cv") public static native void mulTransposed( @ByVal Mat src, @ByVal Mat dst, @Cast("bool") boolean aTa );
 /** transposes the matrix */
@@ -7170,18 +7170,18 @@ public static class BinaryFunc extends FunctionPointer {
 @Namespace("cv") public static native void completeSymm(@ByVal Mat mtx, @Cast("bool") boolean lowerToUpper/*=false*/);
 @Namespace("cv") public static native void completeSymm(@ByVal Mat mtx);
 /** initializes scaled identity matrix */
-@Namespace("cv") public static native void setIdentity(@ByVal Mat mtx, @Const @ByRef Scalar s/*=Scalar(1)*/);
+@Namespace("cv") public static native void setIdentity(@ByVal Mat mtx, @Const @ByRef(nullValue = "cv::Scalar(1)") Scalar s/*=cv::Scalar(1)*/);
 @Namespace("cv") public static native void setIdentity(@ByVal Mat mtx);
 /** computes determinant of a square matrix */
 @Namespace("cv") public static native double determinant(@ByVal Mat mtx);
 /** computes trace of a matrix */
 @Namespace("cv") public static native @ByVal Scalar trace(@ByVal Mat mtx);
 /** computes inverse or pseudo-inverse matrix */
-@Namespace("cv") public static native double invert(@ByVal Mat src, @ByVal Mat dst, int flags/*=DECOMP_LU*/);
+@Namespace("cv") public static native double invert(@ByVal Mat src, @ByVal Mat dst, int flags/*=cv::DECOMP_LU*/);
 @Namespace("cv") public static native double invert(@ByVal Mat src, @ByVal Mat dst);
 /** solves linear system or a least-square problem */
 @Namespace("cv") public static native @Cast("bool") boolean solve(@ByVal Mat src1, @ByVal Mat src2,
-                        @ByVal Mat dst, int flags/*=DECOMP_LU*/);
+                        @ByVal Mat dst, int flags/*=cv::DECOMP_LU*/);
 @Namespace("cv") public static native @Cast("bool") boolean solve(@ByVal Mat src1, @ByVal Mat src2,
                         @ByVal Mat dst);
 
@@ -7452,7 +7452,7 @@ public static final int
 /** clusters the input data using k-Means algorithm */
 @Namespace("cv") public static native double kmeans( @ByVal Mat data, int K, @ByVal Mat bestLabels,
                             @ByVal TermCriteria criteria, int attempts,
-                            int flags, @ByVal Mat centers/*=noArray()*/ );
+                            int flags, @ByVal(nullValue = "cv::noArray()") Mat centers/*=cv::noArray()*/ );
 @Namespace("cv") public static native double kmeans( @ByVal Mat data, int K, @ByVal Mat bestLabels,
                             @ByVal TermCriteria criteria, int attempts,
                             int flags );
@@ -7537,32 +7537,32 @@ public static final int
 @Namespace("cv") public static native void fillPoly(@ByRef Mat img, @Cast("const cv::Point**") PointerPointer pts,
                          @Const IntPointer npts, int ncontours,
                          @Const @ByRef Scalar color, int lineType/*=8*/, int shift/*=0*/,
-                         @ByVal Point offset/*=Point()*/ );
+                         @ByVal(nullValue = "cv::Point()") Point offset/*=cv::Point()*/ );
 @Namespace("cv") public static native void fillPoly(@ByRef Mat img, @Const @ByPtrPtr Point pts,
                          @Const IntPointer npts, int ncontours,
                          @Const @ByRef Scalar color );
 @Namespace("cv") public static native void fillPoly(@ByRef Mat img, @Const @ByPtrPtr Point pts,
                          @Const IntPointer npts, int ncontours,
                          @Const @ByRef Scalar color, int lineType/*=8*/, int shift/*=0*/,
-                         @ByVal Point offset/*=Point()*/ );
+                         @ByVal(nullValue = "cv::Point()") Point offset/*=cv::Point()*/ );
 @Namespace("cv") public static native void fillPoly(@ByRef Mat img, @Const @ByPtrPtr Point pts,
                          @Const IntBuffer npts, int ncontours,
                          @Const @ByRef Scalar color, int lineType/*=8*/, int shift/*=0*/,
-                         @ByVal Point offset/*=Point()*/ );
+                         @ByVal(nullValue = "cv::Point()") Point offset/*=cv::Point()*/ );
 @Namespace("cv") public static native void fillPoly(@ByRef Mat img, @Const @ByPtrPtr Point pts,
                          @Const IntBuffer npts, int ncontours,
                          @Const @ByRef Scalar color );
 @Namespace("cv") public static native void fillPoly(@ByRef Mat img, @Const @ByPtrPtr Point pts,
                          @Const int[] npts, int ncontours,
                          @Const @ByRef Scalar color, int lineType/*=8*/, int shift/*=0*/,
-                         @ByVal Point offset/*=Point()*/ );
+                         @ByVal(nullValue = "cv::Point()") Point offset/*=cv::Point()*/ );
 @Namespace("cv") public static native void fillPoly(@ByRef Mat img, @Const @ByPtrPtr Point pts,
                          @Const int[] npts, int ncontours,
                          @Const @ByRef Scalar color );
 
 @Namespace("cv") public static native void fillPoly(@ByVal Mat img, @ByVal MatVector pts,
                            @Const @ByRef Scalar color, int lineType/*=8*/, int shift/*=0*/,
-                           @ByVal Point offset/*=Point()*/ );
+                           @ByVal(nullValue = "cv::Point()") Point offset/*=cv::Point()*/ );
 @Namespace("cv") public static native void fillPoly(@ByVal Mat img, @ByVal MatVector pts,
                            @Const @ByRef Scalar color );
 
@@ -8626,23 +8626,23 @@ public static class ConvertScaleData extends FunctionPointer {
     /** finds the K nearest neighbors of "vec" while looking at Emax (at most) leaves */
     public native int findNearest(@ByVal Mat vec, int K, int Emax,
                                 @ByVal Mat neighborsIdx,
-                                @ByVal Mat neighbors/*=noArray()*/,
-                                @ByVal Mat dist/*=noArray()*/,
-                                @ByVal Mat labels/*=noArray()*/);
+                                @ByVal(nullValue = "cv::noArray()") Mat neighbors/*=cv::noArray()*/,
+                                @ByVal(nullValue = "cv::noArray()") Mat dist/*=cv::noArray()*/,
+                                @ByVal(nullValue = "cv::noArray()") Mat labels/*=cv::noArray()*/);
     public native int findNearest(@ByVal Mat vec, int K, int Emax,
                                 @ByVal Mat neighborsIdx);
     /** finds all the points from the initial set that belong to the specified box */
     public native void findOrthoRange(@ByVal Mat minBounds,
                                     @ByVal Mat maxBounds,
                                     @ByVal Mat neighborsIdx,
-                                    @ByVal Mat neighbors/*=noArray()*/,
-                                    @ByVal Mat labels/*=noArray()*/);
+                                    @ByVal(nullValue = "cv::noArray()") Mat neighbors/*=cv::noArray()*/,
+                                    @ByVal(nullValue = "cv::noArray()") Mat labels/*=cv::noArray()*/);
     public native void findOrthoRange(@ByVal Mat minBounds,
                                     @ByVal Mat maxBounds,
                                     @ByVal Mat neighborsIdx);
     /** returns vectors with the specified indices */
     public native void getPoints(@ByVal Mat idx, @ByVal Mat pts,
-                               @ByVal Mat labels/*=noArray()*/);
+                               @ByVal(nullValue = "cv::noArray()") Mat labels/*=cv::noArray()*/);
     public native void getPoints(@ByVal Mat idx, @ByVal Mat pts);
     /** return a vector with the specified index */
     public native @Const FloatPointer getPoint(int ptidx, IntPointer label/*=0*/);
@@ -8795,12 +8795,12 @@ public static class ConvertScaleData extends FunctionPointer {
     public FileStorage() { allocate(); }
     private native void allocate();
     /** the full constructor that opens file storage for reading or writing */
-    public FileStorage(@StdString BytePointer source, int flags, @StdString BytePointer encoding/*=string()*/) { allocate(source, flags, encoding); }
-    private native void allocate(@StdString BytePointer source, int flags, @StdString BytePointer encoding/*=string()*/);
+    public FileStorage(@StdString BytePointer source, int flags, @StdString BytePointer encoding/*=std::string()*/) { allocate(source, flags, encoding); }
+    private native void allocate(@StdString BytePointer source, int flags, @StdString BytePointer encoding/*=std::string()*/);
     public FileStorage(@StdString BytePointer source, int flags) { allocate(source, flags); }
     private native void allocate(@StdString BytePointer source, int flags);
-    public FileStorage(@StdString String source, int flags, @StdString String encoding/*=string()*/) { allocate(source, flags, encoding); }
-    private native void allocate(@StdString String source, int flags, @StdString String encoding/*=string()*/);
+    public FileStorage(@StdString String source, int flags, @StdString String encoding/*=std::string()*/) { allocate(source, flags, encoding); }
+    private native void allocate(@StdString String source, int flags, @StdString String encoding/*=std::string()*/);
     public FileStorage(@StdString String source, int flags) { allocate(source, flags); }
     private native void allocate(@StdString String source, int flags);
     /** the constructor that takes pointer to the C FileStorage structure */
@@ -8809,9 +8809,9 @@ public static class ConvertScaleData extends FunctionPointer {
     /** the destructor. calls release() */
 
     /** opens file storage for reading or writing. The previous storage is closed with release() */
-    public native @Cast("bool") boolean open(@StdString BytePointer filename, int flags, @StdString BytePointer encoding/*=string()*/);
+    public native @Cast("bool") boolean open(@StdString BytePointer filename, int flags, @StdString BytePointer encoding/*=std::string()*/);
     public native @Cast("bool") boolean open(@StdString BytePointer filename, int flags);
-    public native @Cast("bool") boolean open(@StdString String filename, int flags, @StdString String encoding/*=string()*/);
+    public native @Cast("bool") boolean open(@StdString String filename, int flags, @StdString String encoding/*=std::string()*/);
     public native @Cast("bool") boolean open(@StdString String filename, int flags);
     /** returns true if the object is associated with currently opened file. */
     public native @Cast("bool") boolean isOpened();
@@ -9188,14 +9188,14 @@ public static class ConvertScaleData extends FunctionPointer {
     public native void addParam_(@ByRef Algorithm algo, @Cast("const char*") BytePointer name, int argType,
                        Pointer value, @Cast("bool") boolean readOnly,
                        Algorithm.Getter getter, Algorithm.Setter setter,
-                       @StdString BytePointer help/*=string()*/);
+                       @StdString BytePointer help/*=std::string()*/);
     public native void addParam_(@ByRef Algorithm algo, @Cast("const char*") BytePointer name, int argType,
                        Pointer value, @Cast("bool") boolean readOnly,
                        Algorithm.Getter getter, Algorithm.Setter setter);
     public native void addParam_(@ByRef Algorithm algo, String name, int argType,
                        Pointer value, @Cast("bool") boolean readOnly,
                        Algorithm.Getter getter, Algorithm.Setter setter,
-                       @StdString String help/*=string()*/);
+                       @StdString String help/*=std::string()*/);
     public native void addParam_(@ByRef Algorithm algo, String name, int argType,
                        Pointer value, @Cast("bool") boolean readOnly,
                        Algorithm.Getter getter, Algorithm.Setter setter);
@@ -9209,7 +9209,6 @@ public static class ConvertScaleData extends FunctionPointer {
     public native void read(Algorithm algo, @Const @ByRef FileNode fn);
     public native @StdString BytePointer name();
 
-    
     
     
     
@@ -9245,21 +9244,21 @@ public static class ConvertScaleData extends FunctionPointer {
     public Param(int _type, @Cast("bool") boolean _readonly, int _offset,
               Algorithm.Getter _getter/*=0*/,
               Algorithm.Setter _setter/*=0*/,
-              @StdString BytePointer _help/*=string()*/) { allocate(_type, _readonly, _offset, _getter, _setter, _help); }
+              @StdString BytePointer _help/*=std::string()*/) { allocate(_type, _readonly, _offset, _getter, _setter, _help); }
     private native void allocate(int _type, @Cast("bool") boolean _readonly, int _offset,
               Algorithm.Getter _getter/*=0*/,
               Algorithm.Setter _setter/*=0*/,
-              @StdString BytePointer _help/*=string()*/);
+              @StdString BytePointer _help/*=std::string()*/);
     public Param(int _type, @Cast("bool") boolean _readonly, int _offset) { allocate(_type, _readonly, _offset); }
     private native void allocate(int _type, @Cast("bool") boolean _readonly, int _offset);
     public Param(int _type, @Cast("bool") boolean _readonly, int _offset,
               Algorithm.Getter _getter/*=0*/,
               Algorithm.Setter _setter/*=0*/,
-              @StdString String _help/*=string()*/) { allocate(_type, _readonly, _offset, _getter, _setter, _help); }
+              @StdString String _help/*=std::string()*/) { allocate(_type, _readonly, _offset, _getter, _setter, _help); }
     private native void allocate(int _type, @Cast("bool") boolean _readonly, int _offset,
               Algorithm.Getter _getter/*=0*/,
               Algorithm.Setter _setter/*=0*/,
-              @StdString String _help/*=string()*/);
+              @StdString String _help/*=std::string()*/);
     public native int type(); public native Param type(int type);
     public native int offset(); public native Param offset(int offset);
     public native @Cast("bool") boolean readonly(); public native Param readonly(boolean readonly);
@@ -10043,17 +10042,17 @@ public static class ConvertScaleData extends FunctionPointer {
     public WriteStructContext(Pointer p) { super(p); }
 
     public WriteStructContext(@ByRef FileStorage _fs, @StdString BytePointer name,
-            int flags, @StdString BytePointer typeName/*=string()*/) { allocate(_fs, name, flags, typeName); }
+            int flags, @StdString BytePointer typeName/*=std::string()*/) { allocate(_fs, name, flags, typeName); }
     private native void allocate(@ByRef FileStorage _fs, @StdString BytePointer name,
-            int flags, @StdString BytePointer typeName/*=string()*/);
+            int flags, @StdString BytePointer typeName/*=std::string()*/);
     public WriteStructContext(@ByRef FileStorage _fs, @StdString BytePointer name,
             int flags) { allocate(_fs, name, flags); }
     private native void allocate(@ByRef FileStorage _fs, @StdString BytePointer name,
             int flags);
     public WriteStructContext(@ByRef FileStorage _fs, @StdString String name,
-            int flags, @StdString String typeName/*=string()*/) { allocate(_fs, name, flags, typeName); }
+            int flags, @StdString String typeName/*=std::string()*/) { allocate(_fs, name, flags, typeName); }
     private native void allocate(@ByRef FileStorage _fs, @StdString String name,
-            int flags, @StdString String typeName/*=string()*/);
+            int flags, @StdString String typeName/*=std::string()*/);
     public WriteStructContext(@ByRef FileStorage _fs, @StdString String name,
             int flags) { allocate(_fs, name, flags); }
     private native void allocate(@ByRef FileStorage _fs, @StdString String name,
@@ -10121,9 +10120,9 @@ public static class ConvertScaleData extends FunctionPointer {
 
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef Range value, @Const @ByRef Range default_value);
 
-@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef Mat mat, @Const @ByRef Mat default_mat/*=Mat()*/ );
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef Mat mat, @Const @ByRef(nullValue = "cv::Mat()") Mat default_mat/*=cv::Mat()*/ );
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef Mat mat );
-@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef SparseMat mat, @Const @ByRef SparseMat default_mat/*=SparseMat()*/ );
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef SparseMat mat, @Const @ByRef(nullValue = "cv::SparseMat()") SparseMat default_mat/*=cv::SparseMat()*/ );
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef SparseMat mat );
 
 
@@ -10352,19 +10351,19 @@ public static class ConvertScaleData extends FunctionPointer {
 }
 
 @Namespace("cv") public static native @ByVal Formatted format(@Const @ByRef Mat mtx, @Cast("const char*") BytePointer fmt,
-                               @StdVector IntPointer params/*=vector<int>()*/);
+                               @StdVector IntPointer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @ByVal Formatted format(@Const @ByRef Mat mtx, @Cast("const char*") BytePointer fmt);
 @Namespace("cv") public static native @ByVal Formatted format(@Const @ByRef Mat mtx, String fmt,
-                               @StdVector IntBuffer params/*=vector<int>()*/);
+                               @StdVector IntBuffer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @ByVal Formatted format(@Const @ByRef Mat mtx, String fmt);
 @Namespace("cv") public static native @ByVal Formatted format(@Const @ByRef Mat mtx, @Cast("const char*") BytePointer fmt,
-                               @StdVector int[] params/*=vector<int>()*/);
+                               @StdVector int[] params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @ByVal Formatted format(@Const @ByRef Mat mtx, String fmt,
-                               @StdVector IntPointer params/*=vector<int>()*/);
+                               @StdVector IntPointer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @ByVal Formatted format(@Const @ByRef Mat mtx, @Cast("const char*") BytePointer fmt,
-                               @StdVector IntBuffer params/*=vector<int>()*/);
+                               @StdVector IntBuffer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @ByVal Formatted format(@Const @ByRef Mat mtx, String fmt,
-                               @StdVector int[] params/*=vector<int>()*/);
+                               @StdVector int[] params/*=std::vector<int>()*/);
 
 /** \brief prints Mat to the output stream in Matlab notation
  * use like
@@ -10879,10 +10878,10 @@ public static class ConvertScaleData extends FunctionPointer {
 
     public MatExpr() { allocate(); }
     private native void allocate();
-    public MatExpr(@Const MatOp _op, int _flags, @Const @ByRef Mat _a/*=Mat()*/, @Const @ByRef Mat _b/*=Mat()*/,
-                @Const @ByRef Mat _c/*=Mat()*/, double _alpha/*=1*/, double _beta/*=1*/, @Const @ByRef Scalar _s/*=Scalar()*/) { allocate(_op, _flags, _a, _b, _c, _alpha, _beta, _s); }
-    private native void allocate(@Const MatOp _op, int _flags, @Const @ByRef Mat _a/*=Mat()*/, @Const @ByRef Mat _b/*=Mat()*/,
-                @Const @ByRef Mat _c/*=Mat()*/, double _alpha/*=1*/, double _beta/*=1*/, @Const @ByRef Scalar _s/*=Scalar()*/);
+    public MatExpr(@Const MatOp _op, int _flags, @Const @ByRef(nullValue = "cv::Mat()") Mat _a/*=cv::Mat()*/, @Const @ByRef(nullValue = "cv::Mat()") Mat _b/*=cv::Mat()*/,
+                @Const @ByRef(nullValue = "cv::Mat()") Mat _c/*=cv::Mat()*/, double _alpha/*=1*/, double _beta/*=1*/, @Const @ByRef(nullValue = "cv::Scalar()") Scalar _s/*=cv::Scalar()*/) { allocate(_op, _flags, _a, _b, _c, _alpha, _beta, _s); }
+    private native void allocate(@Const MatOp _op, int _flags, @Const @ByRef(nullValue = "cv::Mat()") Mat _a/*=cv::Mat()*/, @Const @ByRef(nullValue = "cv::Mat()") Mat _b/*=cv::Mat()*/,
+                @Const @ByRef(nullValue = "cv::Mat()") Mat _c/*=cv::Mat()*/, double _alpha/*=1*/, double _beta/*=1*/, @Const @ByRef(nullValue = "cv::Scalar()") Scalar _s/*=cv::Scalar()*/);
     public MatExpr(@Const MatOp _op, int _flags) { allocate(_op, _flags); }
     private native void allocate(@Const MatOp _op, int _flags);
     public MatExpr(@Const @ByRef Mat m) { allocate(m); }
@@ -10900,7 +10899,7 @@ public static class ConvertScaleData extends FunctionPointer {
     public native double dot(@Const @ByRef Mat m);
 
     public native @ByVal MatExpr t();
-    public native @ByVal MatExpr inv(int method/*=DECOMP_LU*/);
+    public native @ByVal MatExpr inv(int method/*=cv::DECOMP_LU*/);
     public native @ByVal MatExpr inv();
     public native @ByVal MatExpr mul(@Const @ByRef MatExpr e, double scale/*=1*/);
     public native @ByVal MatExpr mul(@Const @ByRef MatExpr e);

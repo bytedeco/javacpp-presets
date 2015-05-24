@@ -130,9 +130,9 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
         return (ProjectorBase)super.position(position);
     }
 
-    public native void setCameraParams(@Const @ByRef Mat K/*=Mat::eye(3, 3, CV_32F)*/,
-                             @Const @ByRef Mat R/*=Mat::eye(3, 3, CV_32F)*/,
-                             @Const @ByRef Mat T/*=Mat::zeros(3, 1, CV_32F)*/);
+    public native void setCameraParams(@Const @ByRef(nullValue = "cv::Mat::eye(3, 3, CV_32F)") Mat K/*=cv::Mat::eye(3, 3, CV_32F)*/,
+                             @Const @ByRef(nullValue = "cv::Mat::eye(3, 3, CV_32F)") Mat R/*=cv::Mat::eye(3, 3, CV_32F)*/,
+                             @Const @ByRef(nullValue = "cv::Mat::zeros(3, 1, CV_32F)") Mat T/*=cv::Mat::zeros(3, 1, CV_32F)*/);
     public native void setCameraParams();
 
     public native float scale(); public native ProjectorBase scale(float scale);
@@ -890,8 +890,8 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
         return (OrbFeaturesFinder)super.position(position);
     }
 
-    public OrbFeaturesFinder(@ByVal Size _grid_size/*=Size(3,1)*/, int nfeatures/*=1500*/, float scaleFactor/*=1.3f*/, int nlevels/*=5*/) { allocate(_grid_size, nfeatures, scaleFactor, nlevels); }
-    private native void allocate(@ByVal Size _grid_size/*=Size(3,1)*/, int nfeatures/*=1500*/, float scaleFactor/*=1.3f*/, int nlevels/*=5*/);
+    public OrbFeaturesFinder(@ByVal(nullValue = "cv::Size(3,1)") Size _grid_size/*=cv::Size(3,1)*/, int nfeatures/*=1500*/, float scaleFactor/*=1.3f*/, int nlevels/*=5*/) { allocate(_grid_size, nfeatures, scaleFactor, nlevels); }
+    private native void allocate(@ByVal(nullValue = "cv::Size(3,1)") Size _grid_size/*=cv::Size(3,1)*/, int nfeatures/*=1500*/, float scaleFactor/*=1.3f*/, int nlevels/*=5*/);
     public OrbFeaturesFinder() { allocate(); }
     private native void allocate();
 }
@@ -960,7 +960,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
                          @ByRef MatchesInfo matches_info);
 
     public native @Name("operator()") void apply(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches,
-                         @Const @ByRef Mat mask/*=cv::Mat()*/);
+                         @Const @ByRef(nullValue = "cv::Mat()") Mat mask/*=cv::Mat()*/);
     public native @Name("operator()") void apply(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches);
 
     public native @Cast("bool") boolean isThreadSafe();
@@ -1676,8 +1676,8 @@ public static final int
     /** enum cv::detail::DpSeamFinder::CostFunction */
     public static final int COLOR = 0, COLOR_GRAD = 1;
 
-    public DpSeamFinder(@Cast("cv::detail::DpSeamFinder::CostFunction") int costFunc/*=COLOR*/) { allocate(costFunc); }
-    private native void allocate(@Cast("cv::detail::DpSeamFinder::CostFunction") int costFunc/*=COLOR*/);
+    public DpSeamFinder(@Cast("cv::detail::DpSeamFinder::CostFunction") int costFunc/*=cv::detail::DpSeamFinder::COLOR*/) { allocate(costFunc); }
+    private native void allocate(@Cast("cv::detail::DpSeamFinder::CostFunction") int costFunc/*=cv::detail::DpSeamFinder::COLOR*/);
     public DpSeamFinder() { allocate(); }
     private native void allocate();
 

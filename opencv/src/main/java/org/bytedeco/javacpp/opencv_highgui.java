@@ -84,9 +84,9 @@ public static final int  CV_STYLE_NORMAL         = 0,//QFont::StyleNormal,
 
 //for color cvScalar(blue_component, green_component, red\_component[, alpha_component])
 //and alpha= 0 <-> 0xFF (not transparent <-> transparent)
-public static native @ByVal @Platform("linux") CvFont cvFontQt(@Cast("const char*") BytePointer nameFont, int pointSize/*=-1*/, @ByVal CvScalar color/*=cvScalarAll(0)*/, int weight/*=CV_FONT_NORMAL*/,  int style/*=CV_STYLE_NORMAL*/, int spacing/*=0*/);
+public static native @ByVal @Platform("linux") CvFont cvFontQt(@Cast("const char*") BytePointer nameFont, int pointSize/*=-1*/, @ByVal(nullValue = "cvScalarAll(0)") CvScalar color/*=cvScalarAll(0)*/, int weight/*=CV_FONT_NORMAL*/,  int style/*=CV_STYLE_NORMAL*/, int spacing/*=0*/);
 public static native @ByVal @Platform("linux") CvFont cvFontQt(@Cast("const char*") BytePointer nameFont);
-public static native @ByVal @Platform("linux") CvFont cvFontQt(String nameFont, int pointSize/*=-1*/, @ByVal CvScalar color/*=cvScalarAll(0)*/, int weight/*=CV_FONT_NORMAL*/,  int style/*=CV_STYLE_NORMAL*/, int spacing/*=0*/);
+public static native @ByVal @Platform("linux") CvFont cvFontQt(String nameFont, int pointSize/*=-1*/, @ByVal(nullValue = "cvScalarAll(0)") CvScalar color/*=cvScalarAll(0)*/, int weight/*=CV_FONT_NORMAL*/,  int style/*=CV_STYLE_NORMAL*/, int spacing/*=0*/);
 public static native @ByVal @Platform("linux") CvFont cvFontQt(String nameFont);
 
 public static native @Platform("linux") void cvAddText(@Const CvArr img, @Cast("const char*") BytePointer text, @ByVal CvPoint org, CvFont arg2);
@@ -951,9 +951,9 @@ public static final int
     WND_PROP_ASPECT_RATIO =  CV_WND_PROP_ASPECTRATIO, // window's aspect ration
     WND_PROP_OPENGL       =  CV_WND_PROP_OPENGL;       // opengl support
 
-@Namespace("cv") public static native void namedWindow(@StdString BytePointer winname, int flags/*=WINDOW_AUTOSIZE*/);
+@Namespace("cv") public static native void namedWindow(@StdString BytePointer winname, int flags/*=cv::WINDOW_AUTOSIZE*/);
 @Namespace("cv") public static native void namedWindow(@StdString BytePointer winname);
-@Namespace("cv") public static native void namedWindow(@StdString String winname, int flags/*=WINDOW_AUTOSIZE*/);
+@Namespace("cv") public static native void namedWindow(@StdString String winname, int flags/*=cv::WINDOW_AUTOSIZE*/);
 @Namespace("cv") public static native void namedWindow(@StdString String winname);
 @Namespace("cv") public static native void destroyWindow(@StdString BytePointer winname);
 @Namespace("cv") public static native void destroyWindow(@StdString String winname);
@@ -1090,20 +1090,20 @@ public static class OpenGlDrawCallback extends FunctionPointer {
 // < Deperecated
 @Namespace("cv") public static native void pointCloudShow(@StdString BytePointer winname, @Const @ByRef GlCamera camera, @Const @ByRef GlArrays arr);
 @Namespace("cv") public static native void pointCloudShow(@StdString String winname, @Const @ByRef GlCamera camera, @Const @ByRef GlArrays arr);
-@Namespace("cv") public static native void pointCloudShow(@StdString BytePointer winname, @Const @ByRef GlCamera camera, @ByVal Mat points, @ByVal Mat colors/*=noArray()*/);
+@Namespace("cv") public static native void pointCloudShow(@StdString BytePointer winname, @Const @ByRef GlCamera camera, @ByVal Mat points, @ByVal(nullValue = "cv::noArray()") Mat colors/*=cv::noArray()*/);
 @Namespace("cv") public static native void pointCloudShow(@StdString BytePointer winname, @Const @ByRef GlCamera camera, @ByVal Mat points);
-@Namespace("cv") public static native void pointCloudShow(@StdString String winname, @Const @ByRef GlCamera camera, @ByVal Mat points, @ByVal Mat colors/*=noArray()*/);
+@Namespace("cv") public static native void pointCloudShow(@StdString String winname, @Const @ByRef GlCamera camera, @ByVal Mat points, @ByVal(nullValue = "cv::noArray()") Mat colors/*=cv::noArray()*/);
 @Namespace("cv") public static native void pointCloudShow(@StdString String winname, @Const @ByRef GlCamera camera, @ByVal Mat points);
 // >
 
 //Only for Qt
 
 @Namespace("cv") public static native @ByVal CvFont fontQt(@StdString BytePointer nameFont, int pointSize/*=-1*/,
-                         @ByVal Scalar color/*=Scalar::all(0)*/, int weight/*=CV_FONT_NORMAL*/,
+                         @ByVal(nullValue = "cv::Scalar::all(0)") Scalar color/*=cv::Scalar::all(0)*/, int weight/*=CV_FONT_NORMAL*/,
                          int style/*=CV_STYLE_NORMAL*/, int spacing/*=0*/);
 @Namespace("cv") public static native @ByVal CvFont fontQt(@StdString BytePointer nameFont);
 @Namespace("cv") public static native @ByVal CvFont fontQt(@StdString String nameFont, int pointSize/*=-1*/,
-                         @ByVal Scalar color/*=Scalar::all(0)*/, int weight/*=CV_FONT_NORMAL*/,
+                         @ByVal(nullValue = "cv::Scalar::all(0)") Scalar color/*=cv::Scalar::all(0)*/, int weight/*=CV_FONT_NORMAL*/,
                          int style/*=CV_STYLE_NORMAL*/, int spacing/*=0*/);
 @Namespace("cv") public static native @ByVal CvFont fontQt(@StdString String nameFont);
 @Namespace("cv") public static native void addText( @Const @ByRef Mat img, @StdString BytePointer text, @ByVal Point org, @ByVal CvFont font);
@@ -1178,49 +1178,49 @@ public static final int
 @Namespace("cv") public static native @ByVal Mat imread( @StdString String filename, int flags/*=1*/ );
 @Namespace("cv") public static native @ByVal Mat imread( @StdString String filename );
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString BytePointer filename, @ByVal Mat img,
-              @StdVector IntPointer params/*=vector<int>()*/);
+              @StdVector IntPointer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString BytePointer filename, @ByVal Mat img);
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString String filename, @ByVal Mat img,
-              @StdVector IntBuffer params/*=vector<int>()*/);
+              @StdVector IntBuffer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString String filename, @ByVal Mat img);
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString BytePointer filename, @ByVal Mat img,
-              @StdVector int[] params/*=vector<int>()*/);
+              @StdVector int[] params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString String filename, @ByVal Mat img,
-              @StdVector IntPointer params/*=vector<int>()*/);
+              @StdVector IntPointer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString BytePointer filename, @ByVal Mat img,
-              @StdVector IntBuffer params/*=vector<int>()*/);
+              @StdVector IntBuffer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @StdString String filename, @ByVal Mat img,
-              @StdVector int[] params/*=vector<int>()*/);
+              @StdVector int[] params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @ByVal Mat imdecode( @ByVal Mat buf, int flags );
 @Namespace("cv") public static native @ByVal Mat imdecode( @ByVal Mat buf, int flags, Mat dst );
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString BytePointer ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector BytePointer buf,
-                            @StdVector IntPointer params/*=vector<int>()*/);
+                            @StdVector IntPointer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString BytePointer ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector BytePointer buf);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString String ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector ByteBuffer buf,
-                            @StdVector IntBuffer params/*=vector<int>()*/);
+                            @StdVector IntBuffer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString String ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector ByteBuffer buf);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString BytePointer ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector byte[] buf,
-                            @StdVector int[] params/*=vector<int>()*/);
+                            @StdVector int[] params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString BytePointer ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector byte[] buf);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString String ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector BytePointer buf,
-                            @StdVector IntPointer params/*=vector<int>()*/);
+                            @StdVector IntPointer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString String ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector BytePointer buf);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString BytePointer ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector ByteBuffer buf,
-                            @StdVector IntBuffer params/*=vector<int>()*/);
+                            @StdVector IntBuffer params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString BytePointer ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector ByteBuffer buf);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString String ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector byte[] buf,
-                            @StdVector int[] params/*=vector<int>()*/);
+                            @StdVector int[] params/*=std::vector<int>()*/);
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @StdString String ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector byte[] buf);
 

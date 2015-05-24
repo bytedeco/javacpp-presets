@@ -178,15 +178,15 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
     /** converts vector of keypoints to vector of points */
     public static native void convert(@StdVector KeyPoint keypoints,
                             @StdVector Point2f points2f,
-                            @StdVector IntPointer keypointIndexes/*=vector<int>()*/);
+                            @StdVector IntPointer keypointIndexes/*=std::vector<int>()*/);
     public static native void convert(@StdVector KeyPoint keypoints,
                             @StdVector Point2f points2f);
     public static native void convert(@StdVector KeyPoint keypoints,
                             @StdVector Point2f points2f,
-                            @StdVector IntBuffer keypointIndexes/*=vector<int>()*/);
+                            @StdVector IntBuffer keypointIndexes/*=std::vector<int>()*/);
     public static native void convert(@StdVector KeyPoint keypoints,
                             @StdVector Point2f points2f,
-                            @StdVector int[] keypointIndexes/*=vector<int>()*/);
+                            @StdVector int[] keypointIndexes/*=std::vector<int>()*/);
     /** converts vector of points to the vector of keypoints, where each keypoint is assigned the same size and the same orientation */
     public static native void convert(@StdVector Point2f points2f,
                             @StdVector KeyPoint keypoints,
@@ -286,7 +286,7 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
      * mask         Mask specifying where to look for keypoints (optional). Must be a char
      *              matrix with non-zero values in the region of interest.
      */
-    public native void detect( @Const @ByRef Mat image, @StdVector KeyPoint keypoints, @Const @ByRef Mat mask/*=Mat()*/ );
+    public native void detect( @Const @ByRef Mat image, @StdVector KeyPoint keypoints, @Const @ByRef(nullValue = "cv::Mat()") Mat mask/*=cv::Mat()*/ );
     public native void detect( @Const @ByRef Mat image, @StdVector KeyPoint keypoints );
 
     /*
@@ -295,7 +295,7 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
      * keypoints    Collection of keypoints detected in an input images. keypoints[i] is a set of keypoints detected in an images[i].
      * masks        Masks for image set. masks[i] is a mask for images[i].
      */
-    public native void detect( @Const @ByRef MatVector images, @ByRef KeyPointVectorVector keypoints, @Const @ByRef MatVector masks/*=vector<Mat>()*/ );
+    public native void detect( @Const @ByRef MatVector images, @ByRef KeyPointVectorVector keypoints, @Const @ByRef(nullValue = "std::vector<cv::Mat>()") MatVector masks/*=std::vector<cv::Mat>()*/ );
     public native void detect( @Const @ByRef MatVector images, @ByRef KeyPointVectorVector keypoints );
 
     // Return true if detector object is empty
@@ -483,9 +483,9 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
     public static final int kBytes = 32, HARRIS_SCORE= 0, FAST_SCORE= 1;
 
     public ORB(int nfeatures/*=500*/, float scaleFactor/*=1.2f*/, int nlevels/*=8*/, int edgeThreshold/*=31*/,
-            int firstLevel/*=0*/, int WTA_K/*=2*/, int scoreType/*=ORB::HARRIS_SCORE*/, int patchSize/*=31*/ ) { allocate(nfeatures, scaleFactor, nlevels, edgeThreshold, firstLevel, WTA_K, scoreType, patchSize); }
+            int firstLevel/*=0*/, int WTA_K/*=2*/, int scoreType/*=cv::ORB::HARRIS_SCORE*/, int patchSize/*=31*/ ) { allocate(nfeatures, scaleFactor, nlevels, edgeThreshold, firstLevel, WTA_K, scoreType, patchSize); }
     private native void allocate(int nfeatures/*=500*/, float scaleFactor/*=1.2f*/, int nlevels/*=8*/, int edgeThreshold/*=31*/,
-            int firstLevel/*=0*/, int WTA_K/*=2*/, int scoreType/*=ORB::HARRIS_SCORE*/, int patchSize/*=31*/ );
+            int firstLevel/*=0*/, int WTA_K/*=2*/, int scoreType/*=cv::ORB::HARRIS_SCORE*/, int patchSize/*=31*/ );
     public ORB( ) { allocate(); }
     private native void allocate( );
 
@@ -531,34 +531,34 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
                @Cast("bool") boolean scaleNormalized/*=true*/,
                float patternScale/*=22.0f*/,
                int nOctaves/*=4*/,
-               @StdVector IntPointer selectedPairs/*=vector<int>()*/) { allocate(orientationNormalized, scaleNormalized, patternScale, nOctaves, selectedPairs); }
+               @StdVector IntPointer selectedPairs/*=std::vector<int>()*/) { allocate(orientationNormalized, scaleNormalized, patternScale, nOctaves, selectedPairs); }
     private native void allocate( @Cast("bool") boolean orientationNormalized/*=true*/,
                @Cast("bool") boolean scaleNormalized/*=true*/,
                float patternScale/*=22.0f*/,
                int nOctaves/*=4*/,
-               @StdVector IntPointer selectedPairs/*=vector<int>()*/);
+               @StdVector IntPointer selectedPairs/*=std::vector<int>()*/);
     public FREAK() { allocate(); }
     private native void allocate();
     public FREAK( @Cast("bool") boolean orientationNormalized/*=true*/,
                @Cast("bool") boolean scaleNormalized/*=true*/,
                float patternScale/*=22.0f*/,
                int nOctaves/*=4*/,
-               @StdVector IntBuffer selectedPairs/*=vector<int>()*/) { allocate(orientationNormalized, scaleNormalized, patternScale, nOctaves, selectedPairs); }
+               @StdVector IntBuffer selectedPairs/*=std::vector<int>()*/) { allocate(orientationNormalized, scaleNormalized, patternScale, nOctaves, selectedPairs); }
     private native void allocate( @Cast("bool") boolean orientationNormalized/*=true*/,
                @Cast("bool") boolean scaleNormalized/*=true*/,
                float patternScale/*=22.0f*/,
                int nOctaves/*=4*/,
-               @StdVector IntBuffer selectedPairs/*=vector<int>()*/);
+               @StdVector IntBuffer selectedPairs/*=std::vector<int>()*/);
     public FREAK( @Cast("bool") boolean orientationNormalized/*=true*/,
                @Cast("bool") boolean scaleNormalized/*=true*/,
                float patternScale/*=22.0f*/,
                int nOctaves/*=4*/,
-               @StdVector int[] selectedPairs/*=vector<int>()*/) { allocate(orientationNormalized, scaleNormalized, patternScale, nOctaves, selectedPairs); }
+               @StdVector int[] selectedPairs/*=std::vector<int>()*/) { allocate(orientationNormalized, scaleNormalized, patternScale, nOctaves, selectedPairs); }
     private native void allocate( @Cast("bool") boolean orientationNormalized/*=true*/,
                @Cast("bool") boolean scaleNormalized/*=true*/,
                float patternScale/*=22.0f*/,
                int nOctaves/*=4*/,
-               @StdVector int[] selectedPairs/*=vector<int>()*/);
+               @StdVector int[] selectedPairs/*=std::vector<int>()*/);
     
     
 
@@ -621,7 +621,7 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 
     /** the operator that extracts the MSERs from the image or the specific part of it */
     public native @Name("operator()") void detect( @Const @ByRef Mat image, @ByRef PointVectorVector msers,
-                                            @Const @ByRef Mat mask/*=Mat()*/ );
+                                            @Const @ByRef(nullValue = "cv::Mat()") Mat mask/*=cv::Mat()*/ );
     public native @Name("operator()") void detect( @Const @ByRef Mat image, @ByRef PointVectorVector msers );
     public native AlgorithmInfo info();
 }
@@ -767,8 +767,8 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
       public native void write( @ByRef FileStorage fs );
   }
 
-  public SimpleBlobDetector(@Const @ByRef Params parameters/*=SimpleBlobDetector::Params()*/) { allocate(parameters); }
-  private native void allocate(@Const @ByRef Params parameters/*=SimpleBlobDetector::Params()*/);
+  public SimpleBlobDetector(@Const @ByRef(nullValue = "cv::SimpleBlobDetector::Params()") Params parameters/*=cv::SimpleBlobDetector::Params()*/) { allocate(parameters); }
+  private native void allocate(@Const @ByRef(nullValue = "cv::SimpleBlobDetector::Params()") Params parameters/*=cv::SimpleBlobDetector::Params()*/);
   public SimpleBlobDetector() { allocate(); }
   private native void allocate();
 
@@ -1218,7 +1218,7 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
      */
     // Find one best match for each query descriptor (if mask is empty).
     public native void match( @Const @ByRef Mat queryDescriptors, @Const @ByRef Mat trainDescriptors,
-                    @StdVector DMatch matches, @Const @ByRef Mat mask/*=Mat()*/ );
+                    @StdVector DMatch matches, @Const @ByRef(nullValue = "cv::Mat()") Mat mask/*=cv::Mat()*/ );
     public native void match( @Const @ByRef Mat queryDescriptors, @Const @ByRef Mat trainDescriptors,
                     @StdVector DMatch matches );
     // Find k best matches for each query descriptor (in increasing order of distances).
@@ -1227,14 +1227,14 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
     // matches vector will not contain matches for fully masked out query descriptors.
     public native void knnMatch( @Const @ByRef Mat queryDescriptors, @Const @ByRef Mat trainDescriptors,
                        @ByRef DMatchVectorVector matches, int k,
-                       @Const @ByRef Mat mask/*=Mat()*/, @Cast("bool") boolean compactResult/*=false*/ );
+                       @Const @ByRef(nullValue = "cv::Mat()") Mat mask/*=cv::Mat()*/, @Cast("bool") boolean compactResult/*=false*/ );
     public native void knnMatch( @Const @ByRef Mat queryDescriptors, @Const @ByRef Mat trainDescriptors,
                        @ByRef DMatchVectorVector matches, int k );
     // Find best matches for each query descriptor which have distance less than
     // maxDistance (in increasing order of distances).
     public native void radiusMatch( @Const @ByRef Mat queryDescriptors, @Const @ByRef Mat trainDescriptors,
                           @ByRef DMatchVectorVector matches, float maxDistance,
-                          @Const @ByRef Mat mask/*=Mat()*/, @Cast("bool") boolean compactResult/*=false*/ );
+                          @Const @ByRef(nullValue = "cv::Mat()") Mat mask/*=cv::Mat()*/, @Cast("bool") boolean compactResult/*=false*/ );
     public native void radiusMatch( @Const @ByRef Mat queryDescriptors, @Const @ByRef Mat trainDescriptors,
                           @ByRef DMatchVectorVector matches, float maxDistance );
     /*
@@ -1242,13 +1242,13 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
      * See description of similar methods for matching image pair above.
      */
     public native void match( @Const @ByRef Mat queryDescriptors, @StdVector DMatch matches,
-                    @Const @ByRef MatVector masks/*=vector<Mat>()*/ );
+                    @Const @ByRef(nullValue = "std::vector<cv::Mat>()") MatVector masks/*=std::vector<cv::Mat>()*/ );
     public native void match( @Const @ByRef Mat queryDescriptors, @StdVector DMatch matches );
     public native void knnMatch( @Const @ByRef Mat queryDescriptors, @ByRef DMatchVectorVector matches, int k,
-               @Const @ByRef MatVector masks/*=vector<Mat>()*/, @Cast("bool") boolean compactResult/*=false*/ );
+               @Const @ByRef(nullValue = "std::vector<cv::Mat>()") MatVector masks/*=std::vector<cv::Mat>()*/, @Cast("bool") boolean compactResult/*=false*/ );
     public native void knnMatch( @Const @ByRef Mat queryDescriptors, @ByRef DMatchVectorVector matches, int k );
     public native void radiusMatch( @Const @ByRef Mat queryDescriptors, @ByRef DMatchVectorVector matches, float maxDistance,
-                       @Const @ByRef MatVector masks/*=vector<Mat>()*/, @Cast("bool") boolean compactResult/*=false*/ );
+                       @Const @ByRef(nullValue = "std::vector<cv::Mat>()") MatVector masks/*=std::vector<cv::Mat>()*/, @Cast("bool") boolean compactResult/*=false*/ );
     public native void radiusMatch( @Const @ByRef Mat queryDescriptors, @ByRef DMatchVectorVector matches, float maxDistance );
 
     // Reads matcher object from a file node
@@ -1286,8 +1286,8 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
         return (BFMatcher)super.position(position);
     }
 
-    public BFMatcher( int normType/*=NORM_L2*/, @Cast("bool") boolean crossCheck/*=false*/ ) { allocate(normType, crossCheck); }
-    private native void allocate( int normType/*=NORM_L2*/, @Cast("bool") boolean crossCheck/*=false*/ );
+    public BFMatcher( int normType/*=cv::NORM_L2*/, @Cast("bool") boolean crossCheck/*=false*/ ) { allocate(normType, crossCheck); }
+    private native void allocate( int normType/*=cv::NORM_L2*/, @Cast("bool") boolean crossCheck/*=false*/ );
     public BFMatcher( ) { allocate(); }
     private native void allocate( );
 
@@ -1405,7 +1405,7 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
     // Find one best match for each query descriptor (if mask is empty).
     public native void match( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
                     @Const @ByRef Mat trainImage, @StdVector KeyPoint trainKeypoints,
-                    @StdVector DMatch matches, @Const @ByRef Mat mask/*=Mat()*/ );
+                    @StdVector DMatch matches, @Const @ByRef(nullValue = "cv::Mat()") Mat mask/*=cv::Mat()*/ );
     public native void match( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
                     @Const @ByRef Mat trainImage, @StdVector KeyPoint trainKeypoints,
                     @StdVector DMatch matches );
@@ -1416,7 +1416,7 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
     public native void knnMatch( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
                        @Const @ByRef Mat trainImage, @StdVector KeyPoint trainKeypoints,
                        @ByRef DMatchVectorVector matches, int k,
-                       @Const @ByRef Mat mask/*=Mat()*/, @Cast("bool") boolean compactResult/*=false*/ );
+                       @Const @ByRef(nullValue = "cv::Mat()") Mat mask/*=cv::Mat()*/, @Cast("bool") boolean compactResult/*=false*/ );
     public native void knnMatch( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
                        @Const @ByRef Mat trainImage, @StdVector KeyPoint trainKeypoints,
                        @ByRef DMatchVectorVector matches, int k );
@@ -1424,7 +1424,7 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
     public native void radiusMatch( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
                           @Const @ByRef Mat trainImage, @StdVector KeyPoint trainKeypoints,
                           @ByRef DMatchVectorVector matches, float maxDistance,
-                          @Const @ByRef Mat mask/*=Mat()*/, @Cast("bool") boolean compactResult/*=false*/ );
+                          @Const @ByRef(nullValue = "cv::Mat()") Mat mask/*=cv::Mat()*/, @Cast("bool") boolean compactResult/*=false*/ );
     public native void radiusMatch( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
                           @Const @ByRef Mat trainImage, @StdVector KeyPoint trainKeypoints,
                           @ByRef DMatchVectorVector matches, float maxDistance );
@@ -1433,17 +1433,17 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
      * See description of similar methods for matching image pair above.
      */
     public native void match( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
-                    @StdVector DMatch matches, @Const @ByRef MatVector masks/*=vector<Mat>()*/ );
+                    @StdVector DMatch matches, @Const @ByRef(nullValue = "std::vector<cv::Mat>()") MatVector masks/*=std::vector<cv::Mat>()*/ );
     public native void match( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
                     @StdVector DMatch matches );
     public native void knnMatch( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
                        @ByRef DMatchVectorVector matches, int k,
-                       @Const @ByRef MatVector masks/*=vector<Mat>()*/, @Cast("bool") boolean compactResult/*=false*/ );
+                       @Const @ByRef(nullValue = "std::vector<cv::Mat>()") MatVector masks/*=std::vector<cv::Mat>()*/, @Cast("bool") boolean compactResult/*=false*/ );
     public native void knnMatch( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
                        @ByRef DMatchVectorVector matches, int k );
     public native void radiusMatch( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
                           @ByRef DMatchVectorVector matches, float maxDistance,
-                          @Const @ByRef MatVector masks/*=vector<Mat>()*/, @Cast("bool") boolean compactResult/*=false*/ );
+                          @Const @ByRef(nullValue = "std::vector<cv::Mat>()") MatVector masks/*=std::vector<cv::Mat>()*/, @Cast("bool") boolean compactResult/*=false*/ );
     public native void radiusMatch( @Const @ByRef Mat queryImage, @StdVector KeyPoint queryKeypoints,
                           @ByRef DMatchVectorVector matches, float maxDistance );
 
@@ -1462,10 +1462,10 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
     public native @Ptr GenericDescriptorMatcher clone( );
 
     public static native @Ptr GenericDescriptorMatcher create( @StdString BytePointer genericDescritptorMatcherType,
-                                                     @StdString BytePointer paramsFilename/*=string()*/ );
+                                                     @StdString BytePointer paramsFilename/*=std::string()*/ );
     public static native @Ptr GenericDescriptorMatcher create( @StdString BytePointer genericDescritptorMatcherType );
     public static native @Ptr GenericDescriptorMatcher create( @StdString String genericDescritptorMatcherType,
-                                                     @StdString String paramsFilename/*=string()*/ );
+                                                     @StdString String paramsFilename/*=std::string()*/ );
     public static native @Ptr GenericDescriptorMatcher create( @StdString String genericDescritptorMatcherType );
 }
 
@@ -1537,34 +1537,34 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 
 // Draw keypoints.
 @Namespace("cv") public static native void drawKeypoints( @Const @ByRef Mat image, @StdVector KeyPoint keypoints, @ByRef Mat outImage,
-                               @Const @ByRef Scalar color/*=Scalar::all(-1)*/, int flags/*=DrawMatchesFlags::DEFAULT*/ );
+                               @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar color/*=cv::Scalar::all(-1)*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native void drawKeypoints( @Const @ByRef Mat image, @StdVector KeyPoint keypoints, @ByRef Mat outImage );
 
 // Draws matches of keypints from two images on output image.
 @Namespace("cv") public static native void drawMatches( @Const @ByRef Mat img1, @StdVector KeyPoint keypoints1,
                              @Const @ByRef Mat img2, @StdVector KeyPoint keypoints2,
                              @StdVector DMatch matches1to2, @ByRef Mat outImg,
-                             @Const @ByRef Scalar matchColor/*=Scalar::all(-1)*/, @Const @ByRef Scalar singlePointColor/*=Scalar::all(-1)*/,
-                             @Cast("char*") @StdVector BytePointer matchesMask/*=vector<char>()*/, int flags/*=DrawMatchesFlags::DEFAULT*/ );
+                             @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor/*=cv::Scalar::all(-1)*/, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor/*=cv::Scalar::all(-1)*/,
+                             @Cast("char*") @StdVector BytePointer matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native void drawMatches( @Const @ByRef Mat img1, @StdVector KeyPoint keypoints1,
                              @Const @ByRef Mat img2, @StdVector KeyPoint keypoints2,
                              @StdVector DMatch matches1to2, @ByRef Mat outImg );
 @Namespace("cv") public static native void drawMatches( @Const @ByRef Mat img1, @StdVector KeyPoint keypoints1,
                              @Const @ByRef Mat img2, @StdVector KeyPoint keypoints2,
                              @StdVector DMatch matches1to2, @ByRef Mat outImg,
-                             @Const @ByRef Scalar matchColor/*=Scalar::all(-1)*/, @Const @ByRef Scalar singlePointColor/*=Scalar::all(-1)*/,
-                             @Cast("char*") @StdVector ByteBuffer matchesMask/*=vector<char>()*/, int flags/*=DrawMatchesFlags::DEFAULT*/ );
+                             @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor/*=cv::Scalar::all(-1)*/, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor/*=cv::Scalar::all(-1)*/,
+                             @Cast("char*") @StdVector ByteBuffer matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native void drawMatches( @Const @ByRef Mat img1, @StdVector KeyPoint keypoints1,
                              @Const @ByRef Mat img2, @StdVector KeyPoint keypoints2,
                              @StdVector DMatch matches1to2, @ByRef Mat outImg,
-                             @Const @ByRef Scalar matchColor/*=Scalar::all(-1)*/, @Const @ByRef Scalar singlePointColor/*=Scalar::all(-1)*/,
-                             @Cast("char*") @StdVector byte[] matchesMask/*=vector<char>()*/, int flags/*=DrawMatchesFlags::DEFAULT*/ );
+                             @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor/*=cv::Scalar::all(-1)*/, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor/*=cv::Scalar::all(-1)*/,
+                             @Cast("char*") @StdVector byte[] matchesMask/*=std::vector<char>()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 
 @Namespace("cv") public static native void drawMatches( @Const @ByRef Mat img1, @StdVector KeyPoint keypoints1,
                              @Const @ByRef Mat img2, @StdVector KeyPoint keypoints2,
                              @Const @ByRef DMatchVectorVector matches1to2, @ByRef Mat outImg,
-                             @Const @ByRef Scalar matchColor/*=Scalar::all(-1)*/, @Const @ByRef Scalar singlePointColor/*=Scalar::all(-1)*/,
-                             @Cast("const std::vector<std::vector<char> >*") @ByRef ByteVectorVector matchesMask/*=vector<vector<char> >()*/, int flags/*=DrawMatchesFlags::DEFAULT*/ );
+                             @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar matchColor/*=cv::Scalar::all(-1)*/, @Const @ByRef(nullValue = "cv::Scalar::all(-1)") Scalar singlePointColor/*=cv::Scalar::all(-1)*/,
+                             @Cast("const std::vector<std::vector<char> >*") @ByRef(nullValue = "std::vector<std::vector<char> >()") ByteVectorVector matchesMask/*=std::vector<std::vector<char> >()*/, int flags/*=cv::DrawMatchesFlags::DEFAULT*/ );
 @Namespace("cv") public static native void drawMatches( @Const @ByRef Mat img1, @StdVector KeyPoint keypoints1,
                              @Const @ByRef Mat img2, @StdVector KeyPoint keypoints2,
                              @Const @ByRef DMatchVectorVector matches1to2, @ByRef Mat outImg );
@@ -1576,21 +1576,21 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
 @Namespace("cv") public static native void evaluateFeatureDetector( @Const @ByRef Mat img1, @Const @ByRef Mat img2, @Const @ByRef Mat H1to2,
                                          @StdVector KeyPoint keypoints1, @StdVector KeyPoint keypoints2,
                                          @ByRef FloatPointer repeatability, @ByRef IntPointer correspCount,
-                                         @Ptr FeatureDetector fdetector/*=Ptr<FeatureDetector>()*/ );
+                                         @Ptr FeatureDetector fdetector/*=cv::Ptr<cv::FeatureDetector>()*/ );
 @Namespace("cv") public static native void evaluateFeatureDetector( @Const @ByRef Mat img1, @Const @ByRef Mat img2, @Const @ByRef Mat H1to2,
                                          @StdVector KeyPoint keypoints1, @StdVector KeyPoint keypoints2,
                                          @ByRef FloatPointer repeatability, @ByRef IntPointer correspCount );
 @Namespace("cv") public static native void evaluateFeatureDetector( @Const @ByRef Mat img1, @Const @ByRef Mat img2, @Const @ByRef Mat H1to2,
                                          @StdVector KeyPoint keypoints1, @StdVector KeyPoint keypoints2,
                                          @ByRef FloatBuffer repeatability, @ByRef IntBuffer correspCount,
-                                         @Ptr FeatureDetector fdetector/*=Ptr<FeatureDetector>()*/ );
+                                         @Ptr FeatureDetector fdetector/*=cv::Ptr<cv::FeatureDetector>()*/ );
 @Namespace("cv") public static native void evaluateFeatureDetector( @Const @ByRef Mat img1, @Const @ByRef Mat img2, @Const @ByRef Mat H1to2,
                                          @StdVector KeyPoint keypoints1, @StdVector KeyPoint keypoints2,
                                          @ByRef FloatBuffer repeatability, @ByRef IntBuffer correspCount );
 @Namespace("cv") public static native void evaluateFeatureDetector( @Const @ByRef Mat img1, @Const @ByRef Mat img2, @Const @ByRef Mat H1to2,
                                          @StdVector KeyPoint keypoints1, @StdVector KeyPoint keypoints2,
                                          @ByRef float[] repeatability, @ByRef int[] correspCount,
-                                         @Ptr FeatureDetector fdetector/*=Ptr<FeatureDetector>()*/ );
+                                         @Ptr FeatureDetector fdetector/*=cv::Ptr<cv::FeatureDetector>()*/ );
 @Namespace("cv") public static native void evaluateFeatureDetector( @Const @ByRef Mat img1, @Const @ByRef Mat img2, @Const @ByRef Mat H1to2,
                                          @StdVector KeyPoint keypoints1, @StdVector KeyPoint keypoints2,
                                          @ByRef float[] repeatability, @ByRef int[] correspCount );
@@ -1606,7 +1606,7 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
                                                   @StdVector KeyPoint keypoints1, @StdVector KeyPoint keypoints2,
                                                   DMatchVectorVector matches1to2, @Cast("std::vector<std::vector<unsigned char> >*") ByteVectorVector correctMatches1to2Mask,
                                                   @StdVector Point2f recallPrecisionCurve,
-                                                  @Ptr GenericDescriptorMatcher dmatch/*=Ptr<GenericDescriptorMatcher>()*/ );
+                                                  @Ptr GenericDescriptorMatcher dmatch/*=cv::Ptr<cv::GenericDescriptorMatcher>()*/ );
 @Namespace("cv") public static native void evaluateGenericDescriptorMatcher( @Const @ByRef Mat img1, @Const @ByRef Mat img2, @Const @ByRef Mat H1to2,
                                                   @StdVector KeyPoint keypoints1, @StdVector KeyPoint keypoints2,
                                                   DMatchVectorVector matches1to2, @Cast("std::vector<std::vector<unsigned char> >*") ByteVectorVector correctMatches1to2Mask,
@@ -1654,10 +1654,10 @@ public class opencv_features2d extends org.bytedeco.javacpp.presets.opencv_featu
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BOWKMeansTrainer(Pointer p) { super(p); }
 
-    public BOWKMeansTrainer( int clusterCount, @Const @ByRef TermCriteria termcrit/*=TermCriteria()*/,
-                          int attempts/*=3*/, int flags/*=KMEANS_PP_CENTERS*/ ) { allocate(clusterCount, termcrit, attempts, flags); }
-    private native void allocate( int clusterCount, @Const @ByRef TermCriteria termcrit/*=TermCriteria()*/,
-                          int attempts/*=3*/, int flags/*=KMEANS_PP_CENTERS*/ );
+    public BOWKMeansTrainer( int clusterCount, @Const @ByRef(nullValue = "cv::TermCriteria()") TermCriteria termcrit/*=cv::TermCriteria()*/,
+                          int attempts/*=3*/, int flags/*=cv::KMEANS_PP_CENTERS*/ ) { allocate(clusterCount, termcrit, attempts, flags); }
+    private native void allocate( int clusterCount, @Const @ByRef(nullValue = "cv::TermCriteria()") TermCriteria termcrit/*=cv::TermCriteria()*/,
+                          int attempts/*=3*/, int flags/*=cv::KMEANS_PP_CENTERS*/ );
     public BOWKMeansTrainer( int clusterCount ) { allocate(clusterCount); }
     private native void allocate( int clusterCount );
 

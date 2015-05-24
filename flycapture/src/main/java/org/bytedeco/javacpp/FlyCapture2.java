@@ -4795,7 +4795,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned char*") BytePointer pData, 
                     @Cast("unsigned int") int dataSize,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=NONE*/ ) { allocate(rows, cols, stride, pData, dataSize, format, bayerFormat); }
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { allocate(rows, cols, stride, pData, dataSize, format, bayerFormat); }
         private native void allocate( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4803,7 +4803,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned char*") BytePointer pData, 
                     @Cast("unsigned int") int dataSize,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=NONE*/ );
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ );
         public Image( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4825,7 +4825,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned char*") ByteBuffer pData, 
                     @Cast("unsigned int") int dataSize,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=NONE*/ ) { allocate(rows, cols, stride, pData, dataSize, format, bayerFormat); }
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { allocate(rows, cols, stride, pData, dataSize, format, bayerFormat); }
         private native void allocate( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4833,7 +4833,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned char*") ByteBuffer pData, 
                     @Cast("unsigned int") int dataSize,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=NONE*/ );
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ );
         public Image( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4855,7 +4855,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned char*") byte[] pData, 
                     @Cast("unsigned int") int dataSize,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=NONE*/ ) { allocate(rows, cols, stride, pData, dataSize, format, bayerFormat); }
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { allocate(rows, cols, stride, pData, dataSize, format, bayerFormat); }
         private native void allocate( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4863,7 +4863,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned char*") byte[] pData, 
                     @Cast("unsigned int") int dataSize,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=NONE*/ );
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ );
         public Image( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4902,7 +4902,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned int") int dataSize,
                     @Cast("unsigned int") int receivedDataSize,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=NONE*/ ) { allocate(rows, cols, stride, pData, dataSize, receivedDataSize, format, bayerFormat); }
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { allocate(rows, cols, stride, pData, dataSize, receivedDataSize, format, bayerFormat); }
         private native void allocate( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4911,7 +4911,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned int") int dataSize,
                     @Cast("unsigned int") int receivedDataSize,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=NONE*/ );
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ );
         public Image( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4920,7 +4920,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned int") int dataSize,
                     @Cast("unsigned int") int receivedDataSize,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=NONE*/ ) { allocate(rows, cols, stride, pData, dataSize, receivedDataSize, format, bayerFormat); }
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { allocate(rows, cols, stride, pData, dataSize, receivedDataSize, format, bayerFormat); }
         private native void allocate( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4929,7 +4929,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned int") int dataSize,
                     @Cast("unsigned int") int receivedDataSize,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=NONE*/ );
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ );
         public Image( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4938,7 +4938,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned int") int dataSize,
                     @Cast("unsigned int") int receivedDataSize,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=NONE*/ ) { allocate(rows, cols, stride, pData, dataSize, receivedDataSize, format, bayerFormat); }
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { allocate(rows, cols, stride, pData, dataSize, receivedDataSize, format, bayerFormat); }
         private native void allocate( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4947,7 +4947,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned int") int dataSize,
                     @Cast("unsigned int") int receivedDataSize,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=NONE*/ );
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ );
 
         /**
          * Construct an Image object with the specified arguments.
@@ -4989,12 +4989,12 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=NONE*/ ) { allocate(rows, cols, format, bayerFormat); }
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { allocate(rows, cols, format, bayerFormat); }
         private native void allocate( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=NONE*/ );
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ );
         public Image( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -5278,12 +5278,12 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
          */ 
         public native @ByVal Error Save( 
                     @Cast("const char*") BytePointer pFilename, 
-                    @Cast("FlyCapture2::ImageFileFormat") int format/*=FROM_FILE_EXT*/ );
+                    @Cast("FlyCapture2::ImageFileFormat") int format/*=FlyCapture2::FROM_FILE_EXT*/ );
         public native @ByVal Error Save( 
                     @Cast("const char*") BytePointer pFilename );
         public native @ByVal Error Save( 
                     String pFilename, 
-                    @Cast("FlyCapture2::ImageFileFormat") int format/*=FROM_FILE_EXT*/ );
+                    @Cast("FlyCapture2::ImageFileFormat") int format/*=FlyCapture2::FROM_FILE_EXT*/ );
         public native @ByVal Error Save( 
                     String pFilename );
             

@@ -522,15 +522,15 @@ public static final int
 
 @Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionLeastSquares(
         @StdVector Point2f points0, @StdVector Point2f points1,
-        int model/*=AFFINE*/, FloatPointer rmse/*=0*/);
+        int model/*=cv::videostab::AFFINE*/, FloatPointer rmse/*=0*/);
 @Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionLeastSquares(
         @StdVector Point2f points0, @StdVector Point2f points1);
 @Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionLeastSquares(
         @StdVector Point2f points0, @StdVector Point2f points1,
-        int model/*=AFFINE*/, FloatBuffer rmse/*=0*/);
+        int model/*=cv::videostab::AFFINE*/, FloatBuffer rmse/*=0*/);
 @Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionLeastSquares(
         @StdVector Point2f points0, @StdVector Point2f points1,
-        int model/*=AFFINE*/, float[] rmse/*=0*/);
+        int model/*=cv::videostab::AFFINE*/, float[] rmse/*=0*/);
 
 @Namespace("cv::videostab") @NoOffset public static class RansacParams extends Pointer {
     static { Loader.load(); }
@@ -555,17 +555,17 @@ public static final int
 
 @Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionRobust(
         @StdVector Point2f points0, @StdVector Point2f points1,
-        int model/*=AFFINE*/, @Const @ByRef RansacParams params/*=RansacParams::affine2dMotionStd()*/,
+        int model/*=cv::videostab::AFFINE*/, @Const @ByRef(nullValue = "cv::videostab::RansacParams::affine2dMotionStd()") RansacParams params/*=cv::videostab::RansacParams::affine2dMotionStd()*/,
         FloatPointer rmse/*=0*/, IntPointer ninliers/*=0*/);
 @Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionRobust(
         @StdVector Point2f points0, @StdVector Point2f points1);
 @Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionRobust(
         @StdVector Point2f points0, @StdVector Point2f points1,
-        int model/*=AFFINE*/, @Const @ByRef RansacParams params/*=RansacParams::affine2dMotionStd()*/,
+        int model/*=cv::videostab::AFFINE*/, @Const @ByRef(nullValue = "cv::videostab::RansacParams::affine2dMotionStd()") RansacParams params/*=cv::videostab::RansacParams::affine2dMotionStd()*/,
         FloatBuffer rmse/*=0*/, IntBuffer ninliers/*=0*/);
 @Namespace("cv::videostab") public static native @ByVal Mat estimateGlobalMotionRobust(
         @StdVector Point2f points0, @StdVector Point2f points1,
-        int model/*=AFFINE*/, @Const @ByRef RansacParams params/*=RansacParams::affine2dMotionStd()*/,
+        int model/*=cv::videostab::AFFINE*/, @Const @ByRef(nullValue = "cv::videostab::RansacParams::affine2dMotionStd()") RansacParams params/*=cv::videostab::RansacParams::affine2dMotionStd()*/,
         float[] rmse/*=0*/, int[] ninliers/*=0*/);
 
 @Namespace("cv::videostab") public static class IGlobalMotionEstimator extends Pointer {
@@ -938,8 +938,8 @@ public static final int
         return (ColorInpainter)super.position(position);
     }
 
-    public ColorInpainter(int method/*=INPAINT_TELEA*/, double _radius/*=2.*/) { allocate(method, _radius); }
-    private native void allocate(int method/*=INPAINT_TELEA*/, double _radius/*=2.*/);
+    public ColorInpainter(int method/*=cv::INPAINT_TELEA*/, double _radius/*=2.*/) { allocate(method, _radius); }
+    private native void allocate(int method/*=cv::INPAINT_TELEA*/, double _radius/*=2.*/);
     public ColorInpainter() { allocate(); }
     private native void allocate();
 

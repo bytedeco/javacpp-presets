@@ -452,13 +452,13 @@ public static final int
     public native void build(@ByVal Mat features, @Const @ByRef IndexParams params, @Cast("cvflann::flann_distance_t") int distType/*=cvflann::FLANN_DIST_L2*/);
     public native void build(@ByVal Mat features, @Const @ByRef IndexParams params);
     public native void knnSearch(@ByVal Mat query, @ByVal Mat indices,
-                       @ByVal Mat dists, int knn, @Const @ByRef SearchParams params/*=SearchParams()*/);
+                       @ByVal Mat dists, int knn, @Const @ByRef(nullValue = "cv::flann::SearchParams()") SearchParams params/*=cv::flann::SearchParams()*/);
     public native void knnSearch(@ByVal Mat query, @ByVal Mat indices,
                        @ByVal Mat dists, int knn);
 
     public native int radiusSearch(@ByVal Mat query, @ByVal Mat indices,
                                  @ByVal Mat dists, double radius, int maxResults,
-                                 @Const @ByRef SearchParams params/*=SearchParams()*/);
+                                 @Const @ByRef(nullValue = "cv::flann::SearchParams()") SearchParams params/*=cv::flann::SearchParams()*/);
     public native int radiusSearch(@ByVal Mat query, @ByVal Mat indices,
                                  @ByVal Mat dists, double radius, int maxResults);
 

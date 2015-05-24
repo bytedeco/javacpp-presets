@@ -879,15 +879,15 @@ public static native void cvRunningAvg( @Const CvArr image, CvArr acc, double al
 /* Copies source 2D array inside of the larger destination array and
    makes a border of the specified type (IPL_BORDER_*) around the copied area. */
 public static native void cvCopyMakeBorder( @Const CvArr src, CvArr dst, @ByVal CvPoint offset,
-                              int bordertype, @ByVal CvScalar value/*=cvScalarAll(0)*/);
+                              int bordertype, @ByVal(nullValue = "cvScalarAll(0)") CvScalar value/*=cvScalarAll(0)*/);
 public static native void cvCopyMakeBorder( @Const CvArr src, CvArr dst, @ByVal CvPoint offset,
                               int bordertype);
 public static native void cvCopyMakeBorder( @Const CvArr src, CvArr dst, @ByVal @Cast("CvPoint*") IntBuffer offset,
-                              int bordertype, @ByVal CvScalar value/*=cvScalarAll(0)*/);
+                              int bordertype, @ByVal(nullValue = "cvScalarAll(0)") CvScalar value/*=cvScalarAll(0)*/);
 public static native void cvCopyMakeBorder( @Const CvArr src, CvArr dst, @ByVal @Cast("CvPoint*") IntBuffer offset,
                               int bordertype);
 public static native void cvCopyMakeBorder( @Const CvArr src, CvArr dst, @ByVal @Cast("CvPoint*") int[] offset,
-                              int bordertype, @ByVal CvScalar value/*=cvScalarAll(0)*/);
+                              int bordertype, @ByVal(nullValue = "cvScalarAll(0)") CvScalar value/*=cvScalarAll(0)*/);
 public static native void cvCopyMakeBorder( @Const CvArr src, CvArr dst, @ByVal @Cast("CvPoint*") int[] offset,
                               int bordertype);
 
@@ -902,12 +902,12 @@ public static native void cvSmooth( @Const CvArr src, CvArr dst);
 
 /* Convolves the image with the kernel */
 public static native void cvFilter2D( @Const CvArr src, CvArr dst, @Const CvMat kernel,
-                        @ByVal CvPoint anchor/*=cvPoint(-1,-1)*/);
+                        @ByVal(nullValue = "cvPoint(-1,-1)") CvPoint anchor/*=cvPoint(-1,-1)*/);
 public static native void cvFilter2D( @Const CvArr src, CvArr dst, @Const CvMat kernel);
 public static native void cvFilter2D( @Const CvArr src, CvArr dst, @Const CvMat kernel,
-                        @ByVal @Cast("CvPoint*") IntBuffer anchor/*=cvPoint(-1,-1)*/);
+                        @ByVal(nullValue = "cvPoint(-1,-1)") @Cast("CvPoint*") IntBuffer anchor/*=cvPoint(-1,-1)*/);
 public static native void cvFilter2D( @Const CvArr src, CvArr dst, @Const CvMat kernel,
-                        @ByVal @Cast("CvPoint*") int[] anchor/*=cvPoint(-1,-1)*/);
+                        @ByVal(nullValue = "cvPoint(-1,-1)") @Cast("CvPoint*") int[] anchor/*=cvPoint(-1,-1)*/);
 
 /* Finds integral image: SUM(X,Y) = sum(x<X,y<Y)I(x,y) */
 public static native void cvIntegral( @Const CvArr image, CvArr sum,
@@ -948,7 +948,7 @@ public static native void cvReleasePyramid( @Cast("CvMat***") PointerPointer pyr
 /* Filters image using meanshift algorithm */
 public static native void cvPyrMeanShiftFiltering( @Const CvArr src, CvArr dst,
     double sp, double sr, int max_level/*=1*/,
-    @ByVal CvTermCriteria termcrit/*=cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,5,1)*/);
+    @ByVal(nullValue = "cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,5,1)") CvTermCriteria termcrit/*=cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,5,1)*/);
 public static native void cvPyrMeanShiftFiltering( @Const CvArr src, CvArr dst,
     double sp, double sr);
 
@@ -981,7 +981,7 @@ public static native void cvResize( @Const CvArr src, CvArr dst);
 /* Warps image with affine transform */
 public static native void cvWarpAffine( @Const CvArr src, CvArr dst, @Const CvMat map_matrix,
                            int flags/*=CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS*/,
-                           @ByVal CvScalar fillval/*=cvScalarAll(0)*/ );
+                           @ByVal(nullValue = "cvScalarAll(0)") CvScalar fillval/*=cvScalarAll(0)*/ );
 public static native void cvWarpAffine( @Const CvArr src, CvArr dst, @Const CvMat map_matrix );
 
 /* Computes affine transform matrix for mapping src[i] to dst[i] (i=0,1,2) */
@@ -1006,7 +1006,7 @@ public static native CvMat cv2DRotationMatrix( @ByVal @Cast("CvPoint2D32f*") flo
 /* Warps image with perspective (projective) transform */
 public static native void cvWarpPerspective( @Const CvArr src, CvArr dst, @Const CvMat map_matrix,
                                 int flags/*=CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS*/,
-                                @ByVal CvScalar fillval/*=cvScalarAll(0)*/ );
+                                @ByVal(nullValue = "cvScalarAll(0)") CvScalar fillval/*=cvScalarAll(0)*/ );
 public static native void cvWarpPerspective( @Const CvArr src, CvArr dst, @Const CvMat map_matrix );
 
 /* Computes perspective transform matrix for mapping src[i] to dst[i] (i=0,1,2,3) */
@@ -1024,7 +1024,7 @@ public static native CvMat cvGetPerspectiveTransform( @Cast("const CvPoint2D32f*
 public static native void cvRemap( @Const CvArr src, CvArr dst,
                       @Const CvArr mapx, @Const CvArr mapy,
                       int flags/*=CV_INTER_LINEAR+CV_WARP_FILL_OUTLIERS*/,
-                      @ByVal CvScalar fillval/*=cvScalarAll(0)*/ );
+                      @ByVal(nullValue = "cvScalarAll(0)") CvScalar fillval/*=cvScalarAll(0)*/ );
 public static native void cvRemap( @Const CvArr src, CvArr dst,
                       @Const CvArr mapx, @Const CvArr mapy );
 
@@ -1226,23 +1226,23 @@ public static native int cvFindContours( CvArr image, CvMemStorage storage, @Cas
                             int header_size/*=sizeof(CvContour)*/,
                             int mode/*=CV_RETR_LIST*/,
                             int method/*=CV_CHAIN_APPROX_SIMPLE*/,
-                            @ByVal CvPoint offset/*=cvPoint(0,0)*/);
+                            @ByVal(nullValue = "cvPoint(0,0)") CvPoint offset/*=cvPoint(0,0)*/);
 public static native int cvFindContours( CvArr image, CvMemStorage storage, @ByPtrPtr CvSeq first_contour);
 public static native int cvFindContours( CvArr image, CvMemStorage storage, @ByPtrPtr CvSeq first_contour,
                             int header_size/*=sizeof(CvContour)*/,
                             int mode/*=CV_RETR_LIST*/,
                             int method/*=CV_CHAIN_APPROX_SIMPLE*/,
-                            @ByVal CvPoint offset/*=cvPoint(0,0)*/);
+                            @ByVal(nullValue = "cvPoint(0,0)") CvPoint offset/*=cvPoint(0,0)*/);
 public static native int cvFindContours( CvArr image, CvMemStorage storage, @ByPtrPtr CvSeq first_contour,
                             int header_size/*=sizeof(CvContour)*/,
                             int mode/*=CV_RETR_LIST*/,
                             int method/*=CV_CHAIN_APPROX_SIMPLE*/,
-                            @ByVal @Cast("CvPoint*") IntBuffer offset/*=cvPoint(0,0)*/);
+                            @ByVal(nullValue = "cvPoint(0,0)") @Cast("CvPoint*") IntBuffer offset/*=cvPoint(0,0)*/);
 public static native int cvFindContours( CvArr image, CvMemStorage storage, @ByPtrPtr CvSeq first_contour,
                             int header_size/*=sizeof(CvContour)*/,
                             int mode/*=CV_RETR_LIST*/,
                             int method/*=CV_CHAIN_APPROX_SIMPLE*/,
-                            @ByVal @Cast("CvPoint*") int[] offset/*=cvPoint(0,0)*/);
+                            @ByVal(nullValue = "cvPoint(0,0)") @Cast("CvPoint*") int[] offset/*=cvPoint(0,0)*/);
 
 /* Initializes contour retrieving process.
    Calls cvStartFindContours.
@@ -1253,18 +1253,18 @@ public static native CvContourScanner cvStartFindContours( CvArr image, CvMemSto
                             int header_size/*=sizeof(CvContour)*/,
                             int mode/*=CV_RETR_LIST*/,
                             int method/*=CV_CHAIN_APPROX_SIMPLE*/,
-                            @ByVal CvPoint offset/*=cvPoint(0,0)*/);
+                            @ByVal(nullValue = "cvPoint(0,0)") CvPoint offset/*=cvPoint(0,0)*/);
 public static native CvContourScanner cvStartFindContours( CvArr image, CvMemStorage storage);
 public static native CvContourScanner cvStartFindContours( CvArr image, CvMemStorage storage,
                             int header_size/*=sizeof(CvContour)*/,
                             int mode/*=CV_RETR_LIST*/,
                             int method/*=CV_CHAIN_APPROX_SIMPLE*/,
-                            @ByVal @Cast("CvPoint*") IntBuffer offset/*=cvPoint(0,0)*/);
+                            @ByVal(nullValue = "cvPoint(0,0)") @Cast("CvPoint*") IntBuffer offset/*=cvPoint(0,0)*/);
 public static native CvContourScanner cvStartFindContours( CvArr image, CvMemStorage storage,
                             int header_size/*=sizeof(CvContour)*/,
                             int mode/*=CV_RETR_LIST*/,
                             int method/*=CV_CHAIN_APPROX_SIMPLE*/,
-                            @ByVal @Cast("CvPoint*") int[] offset/*=cvPoint(0,0)*/);
+                            @ByVal(nullValue = "cvPoint(0,0)") @Cast("CvPoint*") int[] offset/*=cvPoint(0,0)*/);
 
 /* Retrieves next contour */
 public static native CvSeq cvFindNextContour( CvContourScanner scanner );
@@ -1311,7 +1311,7 @@ public static native CvSeq cvApproxPoly( @Const Pointer src_seq,
 
 /* Calculates perimeter of a contour or length of a part of contour */
 public static native double cvArcLength( @Const Pointer curve,
-                            @ByVal CvSlice slice/*=CV_WHOLE_SEQ*/,
+                            @ByVal(nullValue = "CV_WHOLE_SEQ") CvSlice slice/*=CV_WHOLE_SEQ*/,
                             int is_closed/*=-1*/);
 public static native double cvArcLength( @Const Pointer curve);
 
@@ -1325,7 +1325,7 @@ public static native @ByVal CvRect cvBoundingRect( CvArr points );
 
 /* Calculates area of a contour or contour segment */
 public static native double cvContourArea( @Const CvArr contour,
-                              @ByVal CvSlice slice/*=CV_WHOLE_SEQ*/,
+                              @ByVal(nullValue = "CV_WHOLE_SEQ") CvSlice slice/*=CV_WHOLE_SEQ*/,
                               int oriented/*=0*/);
 public static native double cvContourArea( @Const CvArr contour);
 
@@ -1598,24 +1598,24 @@ public static native void cvAdaptiveThreshold( @Const CvArr src, CvArr dst, doub
 
 /* Fills the connected component until the color difference gets large enough */
 public static native void cvFloodFill( CvArr image, @ByVal CvPoint seed_point,
-                          @ByVal CvScalar new_val, @ByVal CvScalar lo_diff/*=cvScalarAll(0)*/,
-                          @ByVal CvScalar up_diff/*=cvScalarAll(0)*/,
+                          @ByVal CvScalar new_val, @ByVal(nullValue = "cvScalarAll(0)") CvScalar lo_diff/*=cvScalarAll(0)*/,
+                          @ByVal(nullValue = "cvScalarAll(0)") CvScalar up_diff/*=cvScalarAll(0)*/,
                           CvConnectedComp comp/*=NULL*/,
                           int flags/*=4*/,
                           CvArr mask/*=NULL*/);
 public static native void cvFloodFill( CvArr image, @ByVal CvPoint seed_point,
                           @ByVal CvScalar new_val);
 public static native void cvFloodFill( CvArr image, @ByVal @Cast("CvPoint*") IntBuffer seed_point,
-                          @ByVal CvScalar new_val, @ByVal CvScalar lo_diff/*=cvScalarAll(0)*/,
-                          @ByVal CvScalar up_diff/*=cvScalarAll(0)*/,
+                          @ByVal CvScalar new_val, @ByVal(nullValue = "cvScalarAll(0)") CvScalar lo_diff/*=cvScalarAll(0)*/,
+                          @ByVal(nullValue = "cvScalarAll(0)") CvScalar up_diff/*=cvScalarAll(0)*/,
                           CvConnectedComp comp/*=NULL*/,
                           int flags/*=4*/,
                           CvArr mask/*=NULL*/);
 public static native void cvFloodFill( CvArr image, @ByVal @Cast("CvPoint*") IntBuffer seed_point,
                           @ByVal CvScalar new_val);
 public static native void cvFloodFill( CvArr image, @ByVal @Cast("CvPoint*") int[] seed_point,
-                          @ByVal CvScalar new_val, @ByVal CvScalar lo_diff/*=cvScalarAll(0)*/,
-                          @ByVal CvScalar up_diff/*=cvScalarAll(0)*/,
+                          @ByVal CvScalar new_val, @ByVal(nullValue = "cvScalarAll(0)") CvScalar lo_diff/*=cvScalarAll(0)*/,
+                          @ByVal(nullValue = "cvScalarAll(0)") CvScalar up_diff/*=cvScalarAll(0)*/,
                           CvConnectedComp comp/*=NULL*/,
                           int flags/*=4*/,
                           CvArr mask/*=NULL*/);
@@ -2013,16 +2013,16 @@ public static final int BORDER_REPLICATE= IPL_BORDER_REPLICATE, BORDER_CONSTANT=
                      @Ptr BaseRowFilter _rowFilter,
                      @Ptr BaseColumnFilter _columnFilter,
                      int srcType, int dstType, int bufType,
-                     int _rowBorderType/*=BORDER_REPLICATE*/,
+                     int _rowBorderType/*=cv::BORDER_REPLICATE*/,
                      int _columnBorderType/*=-1*/,
-                     @Const @ByRef Scalar _borderValue/*=Scalar()*/) { allocate(_filter2D, _rowFilter, _columnFilter, srcType, dstType, bufType, _rowBorderType, _columnBorderType, _borderValue); }
+                     @Const @ByRef(nullValue = "cv::Scalar()") Scalar _borderValue/*=cv::Scalar()*/) { allocate(_filter2D, _rowFilter, _columnFilter, srcType, dstType, bufType, _rowBorderType, _columnBorderType, _borderValue); }
     private native void allocate(@Ptr BaseFilter _filter2D,
                      @Ptr BaseRowFilter _rowFilter,
                      @Ptr BaseColumnFilter _columnFilter,
                      int srcType, int dstType, int bufType,
-                     int _rowBorderType/*=BORDER_REPLICATE*/,
+                     int _rowBorderType/*=cv::BORDER_REPLICATE*/,
                      int _columnBorderType/*=-1*/,
-                     @Const @ByRef Scalar _borderValue/*=Scalar()*/);
+                     @Const @ByRef(nullValue = "cv::Scalar()") Scalar _borderValue/*=cv::Scalar()*/);
     public FilterEngine(@Ptr BaseFilter _filter2D,
                      @Ptr BaseRowFilter _rowFilter,
                      @Ptr BaseColumnFilter _columnFilter,
@@ -2037,8 +2037,8 @@ public static final int BORDER_REPLICATE= IPL_BORDER_REPLICATE, BORDER_CONSTANT=
                   @Ptr BaseRowFilter _rowFilter,
                   @Ptr BaseColumnFilter _columnFilter,
                   int srcType, int dstType, int bufType,
-                  int _rowBorderType/*=BORDER_REPLICATE*/, int _columnBorderType/*=-1*/,
-                  @Const @ByRef Scalar _borderValue/*=Scalar()*/);
+                  int _rowBorderType/*=cv::BORDER_REPLICATE*/, int _columnBorderType/*=-1*/,
+                  @Const @ByRef(nullValue = "cv::Scalar()") Scalar _borderValue/*=cv::Scalar()*/);
     public native void init(@Ptr BaseFilter _filter2D,
                   @Ptr BaseRowFilter _rowFilter,
                   @Ptr BaseColumnFilter _columnFilter,
@@ -2047,7 +2047,7 @@ public static final int BORDER_REPLICATE= IPL_BORDER_REPLICATE, BORDER_CONSTANT=
     public native int start(@ByVal Size wholeSize, @ByVal Rect roi, int maxBufRows/*=-1*/);
     public native int start(@ByVal Size wholeSize, @ByVal Rect roi);
     /** starts filtering of the specified ROI of the specified image. */
-    public native int start(@Const @ByRef Mat src, @Const @ByRef Rect srcRoi/*=Rect(0,0,-1,-1)*/,
+    public native int start(@Const @ByRef Mat src, @Const @ByRef(nullValue = "cv::Rect(0,0,-1,-1)") Rect srcRoi/*=cv::Rect(0,0,-1,-1)*/,
                           @Cast("bool") boolean isolated/*=false*/, int maxBufRows/*=-1*/);
     public native int start(@Const @ByRef Mat src);
     /** processes the next srcCount rows of the image. */
@@ -2059,8 +2059,8 @@ public static final int BORDER_REPLICATE= IPL_BORDER_REPLICATE, BORDER_CONSTANT=
                             @Cast("uchar*") byte[] dst, int dstStep);
     /** applies filter to the specified ROI of the image. if srcRoi=(0,0,-1,-1), the whole image is filtered. */
     public native void apply( @Const @ByRef Mat src, @ByRef Mat dst,
-                            @Const @ByRef Rect srcRoi/*=Rect(0,0,-1,-1)*/,
-                            @ByVal Point dstOfs/*=Point(0,0)*/,
+                            @Const @ByRef(nullValue = "cv::Rect(0,0,-1,-1)") Rect srcRoi/*=cv::Rect(0,0,-1,-1)*/,
+                            @ByVal(nullValue = "cv::Point(0,0)") Point dstOfs/*=cv::Point(0,0)*/,
                             @Cast("bool") boolean isolated/*=false*/);
     public native void apply( @Const @ByRef Mat src, @ByRef Mat dst);
     /** returns true if the filter is separable */
@@ -2125,7 +2125,7 @@ public static final int KERNEL_GENERAL= 0, KERNEL_SYMMETRICAL= 1, KERNEL_ASYMMET
 /** returns 2D filter with the specified kernel */
 @Namespace("cv") public static native @Ptr BaseFilter getLinearFilter(int srcType, int dstType,
                                            @ByVal Mat kernel,
-                                           @ByVal Point anchor/*=Point(-1,-1)*/,
+                                           @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor/*=cv::Point(-1,-1)*/,
                                            double delta/*=0*/, int bits/*=0*/);
 @Namespace("cv") public static native @Ptr BaseFilter getLinearFilter(int srcType, int dstType,
                                            @ByVal Mat kernel);
@@ -2133,18 +2133,18 @@ public static final int KERNEL_GENERAL= 0, KERNEL_SYMMETRICAL= 1, KERNEL_ASYMMET
 /** returns the separable linear filter engine */
 @Namespace("cv") public static native @Ptr FilterEngine createSeparableLinearFilter(int srcType, int dstType,
                           @ByVal Mat rowKernel, @ByVal Mat columnKernel,
-                          @ByVal Point anchor/*=Point(-1,-1)*/, double delta/*=0*/,
-                          int rowBorderType/*=BORDER_DEFAULT*/,
+                          @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor/*=cv::Point(-1,-1)*/, double delta/*=0*/,
+                          int rowBorderType/*=cv::BORDER_DEFAULT*/,
                           int columnBorderType/*=-1*/,
-                          @Const @ByRef Scalar borderValue/*=Scalar()*/);
+                          @Const @ByRef(nullValue = "cv::Scalar()") Scalar borderValue/*=cv::Scalar()*/);
 @Namespace("cv") public static native @Ptr FilterEngine createSeparableLinearFilter(int srcType, int dstType,
                           @ByVal Mat rowKernel, @ByVal Mat columnKernel);
 
 /** returns the non-separable linear filter engine */
 @Namespace("cv") public static native @Ptr FilterEngine createLinearFilter(int srcType, int dstType,
-                 @ByVal Mat kernel, @ByVal Point _anchor/*=Point(-1,-1)*/,
-                 double delta/*=0*/, int rowBorderType/*=BORDER_DEFAULT*/,
-                 int columnBorderType/*=-1*/, @Const @ByRef Scalar borderValue/*=Scalar()*/);
+                 @ByVal Mat kernel, @ByVal(nullValue = "cv::Point(-1,-1)") Point _anchor/*=cv::Point(-1,-1)*/,
+                 double delta/*=0*/, int rowBorderType/*=cv::BORDER_DEFAULT*/,
+                 int columnBorderType/*=-1*/, @Const @ByRef(nullValue = "cv::Scalar()") Scalar borderValue/*=cv::Scalar()*/);
 @Namespace("cv") public static native @Ptr FilterEngine createLinearFilter(int srcType, int dstType,
                  @ByVal Mat kernel);
 
@@ -2155,7 +2155,7 @@ public static final int KERNEL_GENERAL= 0, KERNEL_SYMMETRICAL= 1, KERNEL_ASYMMET
 /** returns the Gaussian filter engine */
 @Namespace("cv") public static native @Ptr FilterEngine createGaussianFilter( int type, @ByVal Size ksize,
                                     double sigma1, double sigma2/*=0*/,
-                                    int borderType/*=BORDER_DEFAULT*/);
+                                    int borderType/*=cv::BORDER_DEFAULT*/);
 @Namespace("cv") public static native @Ptr FilterEngine createGaussianFilter( int type, @ByVal Size ksize,
                                     double sigma1);
 /** initializes kernels of the generalized Sobel operator */
@@ -2167,7 +2167,7 @@ public static final int KERNEL_GENERAL= 0, KERNEL_SYMMETRICAL= 1, KERNEL_ASYMMET
 /** returns filter engine for the generalized Sobel operator */
 @Namespace("cv") public static native @Ptr FilterEngine createDerivFilter( int srcType, int dstType,
                                         int dx, int dy, int ksize,
-                                        int borderType/*=BORDER_DEFAULT*/ );
+                                        int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native @Ptr FilterEngine createDerivFilter( int srcType, int dstType,
                                         int dx, int dy, int ksize );
 /** returns horizontal 1D box filter */
@@ -2183,9 +2183,9 @@ public static final int KERNEL_GENERAL= 0, KERNEL_SYMMETRICAL= 1, KERNEL_ASYMMET
                                                      int ksize);
 /** returns box filter engine */
 @Namespace("cv") public static native @Ptr FilterEngine createBoxFilter( int srcType, int dstType, @ByVal Size ksize,
-                                              @ByVal Point anchor/*=Point(-1,-1)*/,
+                                              @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor/*=cv::Point(-1,-1)*/,
                                               @Cast("bool") boolean normalize/*=true*/,
-                                              int borderType/*=BORDER_DEFAULT*/);
+                                              int borderType/*=cv::BORDER_DEFAULT*/);
 @Namespace("cv") public static native @Ptr FilterEngine createBoxFilter( int srcType, int dstType, @ByVal Size ksize);
 
 /** returns the Gabor kernel with the specified parameters */
@@ -2209,7 +2209,7 @@ public static final int MORPH_ERODE= CV_MOP_ERODE, MORPH_DILATE= CV_MOP_DILATE,
 @Namespace("cv") public static native @Ptr BaseColumnFilter getMorphologyColumnFilter(int op, int type, int ksize);
 /** returns 2D morphological filter */
 @Namespace("cv") public static native @Ptr BaseFilter getMorphologyFilter(int op, int type, @ByVal Mat kernel,
-                                               @ByVal Point anchor/*=Point(-1,-1)*/);
+                                               @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor/*=cv::Point(-1,-1)*/);
 @Namespace("cv") public static native @Ptr BaseFilter getMorphologyFilter(int op, int type, @ByVal Mat kernel);
 
 /** returns "magic" border value for erosion and dilation. It is automatically transformed to Scalar::all(-DBL_MAX) for dilation. */
@@ -2217,16 +2217,16 @@ public static final int MORPH_ERODE= CV_MOP_ERODE, MORPH_DILATE= CV_MOP_DILATE,
 
 /** returns morphological filter engine. Only MORPH_ERODE and MORPH_DILATE are supported. */
 @Namespace("cv") public static native @Ptr FilterEngine createMorphologyFilter(int op, int type, @ByVal Mat kernel,
-                    @ByVal Point anchor/*=Point(-1,-1)*/, int rowBorderType/*=BORDER_CONSTANT*/,
+                    @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor/*=cv::Point(-1,-1)*/, int rowBorderType/*=cv::BORDER_CONSTANT*/,
                     int columnBorderType/*=-1*/,
-                    @Const @ByRef Scalar borderValue/*=morphologyDefaultBorderValue()*/);
+                    @Const @ByRef(nullValue = "cv::morphologyDefaultBorderValue()") Scalar borderValue/*=cv::morphologyDefaultBorderValue()*/);
 @Namespace("cv") public static native @Ptr FilterEngine createMorphologyFilter(int op, int type, @ByVal Mat kernel);
 
 /** shape of the structuring element */
 /** enum cv:: */
 public static final int MORPH_RECT= 0, MORPH_CROSS= 1, MORPH_ELLIPSE= 2;
 /** returns structuring element of the specified shape and size */
-@Namespace("cv") public static native @ByVal Mat getStructuringElement(int shape, @ByVal Size ksize, @ByVal Point anchor/*=Point(-1,-1)*/);
+@Namespace("cv") public static native @ByVal Mat getStructuringElement(int shape, @ByVal Size ksize, @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor/*=cv::Point(-1,-1)*/);
 @Namespace("cv") public static native @ByVal Mat getStructuringElement(int shape, @ByVal Size ksize);
 
 
@@ -2234,7 +2234,7 @@ public static final int MORPH_RECT= 0, MORPH_CROSS= 1, MORPH_ELLIPSE= 2;
 /** copies 2D array to a larger destination array with extrapolation of the outer part of src using the specified border mode */
 @Namespace("cv") public static native void copyMakeBorder( @ByVal Mat src, @ByVal Mat dst,
                                 int top, int bottom, int left, int right,
-                                int borderType, @Const @ByRef Scalar value/*=Scalar()*/ );
+                                int borderType, @Const @ByRef(nullValue = "cv::Scalar()") Scalar value/*=cv::Scalar()*/ );
 @Namespace("cv") public static native void copyMakeBorder( @ByVal Mat src, @ByVal Mat dst,
                                 int top, int bottom, int left, int right,
                                 int borderType );
@@ -2245,48 +2245,48 @@ public static final int MORPH_RECT= 0, MORPH_CROSS= 1, MORPH_ELLIPSE= 2;
 @Namespace("cv") public static native void GaussianBlur( @ByVal Mat src,
                                                @ByVal Mat dst, @ByVal Size ksize,
                                                double sigmaX, double sigmaY/*=0*/,
-                                               int borderType/*=BORDER_DEFAULT*/ );
+                                               int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void GaussianBlur( @ByVal Mat src,
                                                @ByVal Mat dst, @ByVal Size ksize,
                                                double sigmaX );
 /** smooths the image using bilateral filter */
 @Namespace("cv") public static native void bilateralFilter( @ByVal Mat src, @ByVal Mat dst, int d,
                                    double sigmaColor, double sigmaSpace,
-                                   int borderType/*=BORDER_DEFAULT*/ );
+                                   int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void bilateralFilter( @ByVal Mat src, @ByVal Mat dst, int d,
                                    double sigmaColor, double sigmaSpace );
 /** smooths the image using adaptive bilateral filter */
 @Namespace("cv") public static native void adaptiveBilateralFilter( @ByVal Mat src, @ByVal Mat dst, @ByVal Size ksize,
-                                           double sigmaSpace, double maxSigmaColor/*=20.0*/, @ByVal Point anchor/*=Point(-1, -1)*/,
-                                           int borderType/*=BORDER_DEFAULT*/ );
+                                           double sigmaSpace, double maxSigmaColor/*=20.0*/, @ByVal(nullValue = "cv::Point(-1, -1)") Point anchor/*=cv::Point(-1, -1)*/,
+                                           int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void adaptiveBilateralFilter( @ByVal Mat src, @ByVal Mat dst, @ByVal Size ksize,
                                            double sigmaSpace );
 /** smooths the image using the box filter. Each pixel is processed in O(1) time */
 @Namespace("cv") public static native void boxFilter( @ByVal Mat src, @ByVal Mat dst, int ddepth,
-                             @ByVal Size ksize, @ByVal Point anchor/*=Point(-1,-1)*/,
+                             @ByVal Size ksize, @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor/*=cv::Point(-1,-1)*/,
                              @Cast("bool") boolean normalize/*=true*/,
-                             int borderType/*=BORDER_DEFAULT*/ );
+                             int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void boxFilter( @ByVal Mat src, @ByVal Mat dst, int ddepth,
                              @ByVal Size ksize );
 /** a synonym for normalized box filter */
 @Namespace("cv") public static native void blur( @ByVal Mat src, @ByVal Mat dst,
-                        @ByVal Size ksize, @ByVal Point anchor/*=Point(-1,-1)*/,
-                        int borderType/*=BORDER_DEFAULT*/ );
+                        @ByVal Size ksize, @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor/*=cv::Point(-1,-1)*/,
+                        int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void blur( @ByVal Mat src, @ByVal Mat dst,
                         @ByVal Size ksize );
 
 /** applies non-separable 2D linear filter to the image */
 @Namespace("cv") public static native void filter2D( @ByVal Mat src, @ByVal Mat dst, int ddepth,
-                            @ByVal Mat kernel, @ByVal Point anchor/*=Point(-1,-1)*/,
-                            double delta/*=0*/, int borderType/*=BORDER_DEFAULT*/ );
+                            @ByVal Mat kernel, @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor/*=cv::Point(-1,-1)*/,
+                            double delta/*=0*/, int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void filter2D( @ByVal Mat src, @ByVal Mat dst, int ddepth,
                             @ByVal Mat kernel );
 
 /** applies separable 2D linear filter to the image */
 @Namespace("cv") public static native void sepFilter2D( @ByVal Mat src, @ByVal Mat dst, int ddepth,
                                @ByVal Mat kernelX, @ByVal Mat kernelY,
-                               @ByVal Point anchor/*=Point(-1,-1)*/,
-                               double delta/*=0*/, int borderType/*=BORDER_DEFAULT*/ );
+                               @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor/*=cv::Point(-1,-1)*/,
+                               double delta/*=0*/, int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void sepFilter2D( @ByVal Mat src, @ByVal Mat dst, int ddepth,
                                @ByVal Mat kernelX, @ByVal Mat kernelY );
 
@@ -2294,21 +2294,21 @@ public static final int MORPH_RECT= 0, MORPH_CROSS= 1, MORPH_ELLIPSE= 2;
 @Namespace("cv") public static native void Sobel( @ByVal Mat src, @ByVal Mat dst, int ddepth,
                          int dx, int dy, int ksize/*=3*/,
                          double scale/*=1*/, double delta/*=0*/,
-                         int borderType/*=BORDER_DEFAULT*/ );
+                         int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void Sobel( @ByVal Mat src, @ByVal Mat dst, int ddepth,
                          int dx, int dy );
 
 /** applies the vertical or horizontal Scharr operator to the image */
 @Namespace("cv") public static native void Scharr( @ByVal Mat src, @ByVal Mat dst, int ddepth,
                           int dx, int dy, double scale/*=1*/, double delta/*=0*/,
-                          int borderType/*=BORDER_DEFAULT*/ );
+                          int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void Scharr( @ByVal Mat src, @ByVal Mat dst, int ddepth,
                           int dx, int dy );
 
 /** applies Laplacian operator to the image */
 @Namespace("cv") public static native void Laplacian( @ByVal Mat src, @ByVal Mat dst, int ddepth,
                              int ksize/*=1*/, double scale/*=1*/, double delta/*=0*/,
-                             int borderType/*=BORDER_DEFAULT*/ );
+                             int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void Laplacian( @ByVal Mat src, @ByVal Mat dst, int ddepth );
 
 /** applies Canny edge detector and produces the edge map. */
@@ -2321,14 +2321,14 @@ public static final int MORPH_RECT= 0, MORPH_CROSS= 1, MORPH_ELLIPSE= 2;
 /** computes minimum eigen value of 2x2 derivative covariation matrix at each pixel - the cornerness criteria */
 @Namespace("cv") public static native void cornerMinEigenVal( @ByVal Mat src, @ByVal Mat dst,
                                    int blockSize, int ksize/*=3*/,
-                                   int borderType/*=BORDER_DEFAULT*/ );
+                                   int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void cornerMinEigenVal( @ByVal Mat src, @ByVal Mat dst,
                                    int blockSize );
 
 /** computes Harris cornerness criteria at each image pixel */
 @Namespace("cv") public static native void cornerHarris( @ByVal Mat src, @ByVal Mat dst, int blockSize,
                                 int ksize, double k,
-                                int borderType/*=BORDER_DEFAULT*/ );
+                                int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void cornerHarris( @ByVal Mat src, @ByVal Mat dst, int blockSize,
                                 int ksize, double k );
 
@@ -2340,13 +2340,13 @@ public static final int MORPH_RECT= 0, MORPH_CROSS= 1, MORPH_ELLIPSE= 2;
 /** computes both eigenvalues and the eigenvectors of 2x2 derivative covariation matrix  at each pixel. The output is stored as 6-channel matrix. */
 @Namespace("cv") public static native void cornerEigenValsAndVecs( @ByVal Mat src, @ByVal Mat dst,
                                           int blockSize, int ksize,
-                                          int borderType/*=BORDER_DEFAULT*/ );
+                                          int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void cornerEigenValsAndVecs( @ByVal Mat src, @ByVal Mat dst,
                                           int blockSize, int ksize );
 
 /** computes another complex cornerness criteria at each pixel */
 @Namespace("cv") public static native void preCornerDetect( @ByVal Mat src, @ByVal Mat dst, int ksize,
-                                   int borderType/*=BORDER_DEFAULT*/ );
+                                   int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void preCornerDetect( @ByVal Mat src, @ByVal Mat dst, int ksize );
 
 /** adjusts the corner locations with sub-pixel accuracy to maximize the certain cornerness criteria */
@@ -2357,7 +2357,7 @@ public static final int MORPH_RECT= 0, MORPH_CROSS= 1, MORPH_ELLIPSE= 2;
 /** finds the strong enough corners where the cornerMinEigenVal() or cornerHarris() report the local maxima */
 @Namespace("cv") public static native void goodFeaturesToTrack( @ByVal Mat image, @ByVal Mat corners,
                                      int maxCorners, double qualityLevel, double minDistance,
-                                     @ByVal Mat mask/*=noArray()*/, int blockSize/*=3*/,
+                                     @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/, int blockSize/*=3*/,
                                      @Cast("bool") boolean useHarrisDetector/*=false*/, double k/*=0.04*/ );
 @Namespace("cv") public static native void goodFeaturesToTrack( @ByVal Mat image, @ByVal Mat corners,
                                      int maxCorners, double qualityLevel, double minDistance );
@@ -2403,15 +2403,15 @@ public static final int
     public static native @Ptr GeneralizedHough create(int method);
 
     /** set template to search */
-    public native void setTemplate(@ByVal Mat templ, int cannyThreshold/*=100*/, @ByVal Point templCenter/*=Point(-1, -1)*/);
+    public native void setTemplate(@ByVal Mat templ, int cannyThreshold/*=100*/, @ByVal(nullValue = "cv::Point(-1, -1)") Point templCenter/*=cv::Point(-1, -1)*/);
     public native void setTemplate(@ByVal Mat templ);
-    public native void setTemplate(@ByVal Mat edges, @ByVal Mat dx, @ByVal Mat dy, @ByVal Point templCenter/*=Point(-1, -1)*/);
+    public native void setTemplate(@ByVal Mat edges, @ByVal Mat dx, @ByVal Mat dy, @ByVal(nullValue = "cv::Point(-1, -1)") Point templCenter/*=cv::Point(-1, -1)*/);
     public native void setTemplate(@ByVal Mat edges, @ByVal Mat dx, @ByVal Mat dy);
 
     /** find template on image */
-    public native void detect(@ByVal Mat image, @ByVal Mat positions, @ByVal Mat votes/*=cv::noArray()*/, int cannyThreshold/*=100*/);
+    public native void detect(@ByVal Mat image, @ByVal Mat positions, @ByVal(nullValue = "cv::noArray()") Mat votes/*=cv::noArray()*/, int cannyThreshold/*=100*/);
     public native void detect(@ByVal Mat image, @ByVal Mat positions);
-    public native void detect(@ByVal Mat edges, @ByVal Mat dx, @ByVal Mat dy, @ByVal Mat positions, @ByVal Mat votes/*=cv::noArray()*/);
+    public native void detect(@ByVal Mat edges, @ByVal Mat dx, @ByVal Mat dy, @ByVal Mat positions, @ByVal(nullValue = "cv::noArray()") Mat votes/*=cv::noArray()*/);
     public native void detect(@ByVal Mat edges, @ByVal Mat dx, @ByVal Mat dy, @ByVal Mat positions);
 
     public native void release();
@@ -2419,24 +2419,24 @@ public static final int
 
 /** erodes the image (applies the local minimum operator) */
 @Namespace("cv") public static native void erode( @ByVal Mat src, @ByVal Mat dst, @ByVal Mat kernel,
-                         @ByVal Point anchor/*=Point(-1,-1)*/, int iterations/*=1*/,
-                         int borderType/*=BORDER_CONSTANT*/,
-                         @Const @ByRef Scalar borderValue/*=morphologyDefaultBorderValue()*/ );
+                         @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor/*=cv::Point(-1,-1)*/, int iterations/*=1*/,
+                         int borderType/*=cv::BORDER_CONSTANT*/,
+                         @Const @ByRef(nullValue = "cv::morphologyDefaultBorderValue()") Scalar borderValue/*=cv::morphologyDefaultBorderValue()*/ );
 @Namespace("cv") public static native void erode( @ByVal Mat src, @ByVal Mat dst, @ByVal Mat kernel );
 
 /** dilates the image (applies the local maximum operator) */
 @Namespace("cv") public static native void dilate( @ByVal Mat src, @ByVal Mat dst, @ByVal Mat kernel,
-                          @ByVal Point anchor/*=Point(-1,-1)*/, int iterations/*=1*/,
-                          int borderType/*=BORDER_CONSTANT*/,
-                          @Const @ByRef Scalar borderValue/*=morphologyDefaultBorderValue()*/ );
+                          @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor/*=cv::Point(-1,-1)*/, int iterations/*=1*/,
+                          int borderType/*=cv::BORDER_CONSTANT*/,
+                          @Const @ByRef(nullValue = "cv::morphologyDefaultBorderValue()") Scalar borderValue/*=cv::morphologyDefaultBorderValue()*/ );
 @Namespace("cv") public static native void dilate( @ByVal Mat src, @ByVal Mat dst, @ByVal Mat kernel );
 
 /** applies an advanced morphological operation to the image */
 @Namespace("cv") public static native void morphologyEx( @ByVal Mat src, @ByVal Mat dst,
                                 int op, @ByVal Mat kernel,
-                                @ByVal Point anchor/*=Point(-1,-1)*/, int iterations/*=1*/,
-                                int borderType/*=BORDER_CONSTANT*/,
-                                @Const @ByRef Scalar borderValue/*=morphologyDefaultBorderValue()*/ );
+                                @ByVal(nullValue = "cv::Point(-1,-1)") Point anchor/*=cv::Point(-1,-1)*/, int iterations/*=1*/,
+                                int borderType/*=cv::BORDER_CONSTANT*/,
+                                @Const @ByRef(nullValue = "cv::morphologyDefaultBorderValue()") Scalar borderValue/*=cv::morphologyDefaultBorderValue()*/ );
 @Namespace("cv") public static native void morphologyEx( @ByVal Mat src, @ByVal Mat dst,
                                 int op, @ByVal Mat kernel );
 
@@ -2459,25 +2459,25 @@ public static final int
 /** resizes the image */
 @Namespace("cv") public static native void resize( @ByVal Mat src, @ByVal Mat dst,
                           @ByVal Size dsize, double fx/*=0*/, double fy/*=0*/,
-                          int interpolation/*=INTER_LINEAR*/ );
+                          int interpolation/*=cv::INTER_LINEAR*/ );
 @Namespace("cv") public static native void resize( @ByVal Mat src, @ByVal Mat dst,
                           @ByVal Size dsize );
 
 /** warps the image using affine transformation */
 @Namespace("cv") public static native void warpAffine( @ByVal Mat src, @ByVal Mat dst,
                               @ByVal Mat M, @ByVal Size dsize,
-                              int flags/*=INTER_LINEAR*/,
-                              int borderMode/*=BORDER_CONSTANT*/,
-                              @Const @ByRef Scalar borderValue/*=Scalar()*/);
+                              int flags/*=cv::INTER_LINEAR*/,
+                              int borderMode/*=cv::BORDER_CONSTANT*/,
+                              @Const @ByRef(nullValue = "cv::Scalar()") Scalar borderValue/*=cv::Scalar()*/);
 @Namespace("cv") public static native void warpAffine( @ByVal Mat src, @ByVal Mat dst,
                               @ByVal Mat M, @ByVal Size dsize);
 
 /** warps the image using perspective transformation */
 @Namespace("cv") public static native void warpPerspective( @ByVal Mat src, @ByVal Mat dst,
                                    @ByVal Mat M, @ByVal Size dsize,
-                                   int flags/*=INTER_LINEAR*/,
-                                   int borderMode/*=BORDER_CONSTANT*/,
-                                   @Const @ByRef Scalar borderValue/*=Scalar()*/);
+                                   int flags/*=cv::INTER_LINEAR*/,
+                                   int borderMode/*=cv::BORDER_CONSTANT*/,
+                                   @Const @ByRef(nullValue = "cv::Scalar()") Scalar borderValue/*=cv::Scalar()*/);
 @Namespace("cv") public static native void warpPerspective( @ByVal Mat src, @ByVal Mat dst,
                                    @ByVal Mat M, @ByVal Size dsize);
 
@@ -2490,8 +2490,8 @@ public static final int
 /** warps the image using the precomputed maps. The maps are stored in either floating-point or integer fixed-point format */
 @Namespace("cv") public static native void remap( @ByVal Mat src, @ByVal Mat dst,
                          @ByVal Mat map1, @ByVal Mat map2,
-                         int interpolation, int borderMode/*=BORDER_CONSTANT*/,
-                         @Const @ByRef Scalar borderValue/*=Scalar()*/);
+                         int interpolation, int borderMode/*=cv::BORDER_CONSTANT*/,
+                         @Const @ByRef(nullValue = "cv::Scalar()") Scalar borderValue/*=cv::Scalar()*/);
 @Namespace("cv") public static native void remap( @ByVal Mat src, @ByVal Mat dst,
                          @ByVal Mat map1, @ByVal Mat map2,
                          int interpolation);
@@ -2540,20 +2540,20 @@ public static final int
 
 /** adds image to the accumulator (dst += src). Unlike cv::add, dst and src can have different types. */
 @Namespace("cv") public static native void accumulate( @ByVal Mat src, @ByVal Mat dst,
-                              @ByVal Mat mask/*=noArray()*/ );
+                              @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/ );
 @Namespace("cv") public static native void accumulate( @ByVal Mat src, @ByVal Mat dst );
 /** adds squared src image to the accumulator (dst += src*src). */
 @Namespace("cv") public static native void accumulateSquare( @ByVal Mat src, @ByVal Mat dst,
-                                    @ByVal Mat mask/*=noArray()*/ );
+                                    @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/ );
 @Namespace("cv") public static native void accumulateSquare( @ByVal Mat src, @ByVal Mat dst );
 /** adds product of the 2 images to the accumulator (dst += src1*src2). */
 @Namespace("cv") public static native void accumulateProduct( @ByVal Mat src1, @ByVal Mat src2,
-                                     @ByVal Mat dst, @ByVal Mat mask/*=noArray()*/ );
+                                     @ByVal Mat dst, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/ );
 @Namespace("cv") public static native void accumulateProduct( @ByVal Mat src1, @ByVal Mat src2,
                                      @ByVal Mat dst );
 /** updates the running average (dst = dst*(1-alpha) + src*alpha) */
 @Namespace("cv") public static native void accumulateWeighted( @ByVal Mat src, @ByVal Mat dst,
-                                      double alpha, @ByVal Mat mask/*=noArray()*/ );
+                                      double alpha, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/ );
 @Namespace("cv") public static native void accumulateWeighted( @ByVal Mat src, @ByVal Mat dst,
                                       double alpha );
 
@@ -2561,7 +2561,7 @@ public static final int
 @Namespace("cv") public static native double PSNR(@ByVal Mat src1, @ByVal Mat src2);
 
 @Namespace("cv") public static native @ByVal Point2d phaseCorrelate(@ByVal Mat src1, @ByVal Mat src2,
-                                  @ByVal Mat window/*=noArray()*/);
+                                  @ByVal(nullValue = "cv::noArray()") Mat window/*=cv::noArray()*/);
 @Namespace("cv") public static native @ByVal Point2d phaseCorrelate(@ByVal Mat src1, @ByVal Mat src2);
 @Namespace("cv") public static native @ByVal Point2d phaseCorrelateRes(@ByVal Mat src1, @ByVal Mat src2,
                                     @ByVal Mat window, DoublePointer response/*=0*/);
@@ -2595,16 +2595,16 @@ public static final int ADAPTIVE_THRESH_MEAN_C= 0, ADAPTIVE_THRESH_GAUSSIAN_C= 1
 
 /** smooths and downsamples the image */
 @Namespace("cv") public static native void pyrDown( @ByVal Mat src, @ByVal Mat dst,
-                           @Const @ByRef Size dstsize/*=Size()*/, int borderType/*=BORDER_DEFAULT*/ );
+                           @Const @ByRef(nullValue = "cv::Size()") Size dstsize/*=cv::Size()*/, int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void pyrDown( @ByVal Mat src, @ByVal Mat dst );
 /** upsamples and smoothes the image */
 @Namespace("cv") public static native void pyrUp( @ByVal Mat src, @ByVal Mat dst,
-                         @Const @ByRef Size dstsize/*=Size()*/, int borderType/*=BORDER_DEFAULT*/ );
+                         @Const @ByRef(nullValue = "cv::Size()") Size dstsize/*=cv::Size()*/, int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void pyrUp( @ByVal Mat src, @ByVal Mat dst );
 
 /** builds the gaussian pyramid using pyrDown() as a basic operation */
 @Namespace("cv") public static native void buildPyramid( @ByVal Mat src, @ByVal MatVector dst,
-                              int maxlevel, int borderType/*=BORDER_DEFAULT*/ );
+                              int maxlevel, int borderType/*=cv::BORDER_DEFAULT*/ );
 @Namespace("cv") public static native void buildPyramid( @ByVal Mat src, @ByVal MatVector dst,
                               int maxlevel );
 
@@ -2612,7 +2612,7 @@ public static final int ADAPTIVE_THRESH_MEAN_C= 0, ADAPTIVE_THRESH_GAUSSIAN_C= 1
 @Namespace("cv") public static native void undistort( @ByVal Mat src, @ByVal Mat dst,
                              @ByVal Mat cameraMatrix,
                              @ByVal Mat distCoeffs,
-                             @ByVal Mat newCameraMatrix/*=noArray()*/ );
+                             @ByVal(nullValue = "cv::noArray()") Mat newCameraMatrix/*=cv::noArray()*/ );
 @Namespace("cv") public static native void undistort( @ByVal Mat src, @ByVal Mat dst,
                              @ByVal Mat cameraMatrix,
                              @ByVal Mat distCoeffs );
@@ -2631,20 +2631,20 @@ public static final int
 @Namespace("cv") public static native float initWideAngleProjMap( @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                                          @ByVal Size imageSize, int destImageWidth,
                                          int m1type, @ByVal Mat map1, @ByVal Mat map2,
-                                         int projType/*=PROJ_SPHERICAL_EQRECT*/, double alpha/*=0*/);
+                                         int projType/*=cv::PROJ_SPHERICAL_EQRECT*/, double alpha/*=0*/);
 @Namespace("cv") public static native float initWideAngleProjMap( @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
                                          @ByVal Size imageSize, int destImageWidth,
                                          int m1type, @ByVal Mat map1, @ByVal Mat map2);
 
 /** returns the default new camera matrix (by default it is the same as cameraMatrix unless centerPricipalPoint=true) */
-@Namespace("cv") public static native @ByVal Mat getDefaultNewCameraMatrix( @ByVal Mat cameraMatrix, @ByVal Size imgsize/*=Size()*/,
+@Namespace("cv") public static native @ByVal Mat getDefaultNewCameraMatrix( @ByVal Mat cameraMatrix, @ByVal(nullValue = "cv::Size()") Size imgsize/*=cv::Size()*/,
                                             @Cast("bool") boolean centerPrincipalPoint/*=false*/ );
 @Namespace("cv") public static native @ByVal Mat getDefaultNewCameraMatrix( @ByVal Mat cameraMatrix );
 
 /** returns points' coordinates after lens distortion correction */
 @Namespace("cv") public static native void undistortPoints( @ByVal Mat src, @ByVal Mat dst,
                                    @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs,
-                                   @ByVal Mat R/*=noArray()*/, @ByVal Mat P/*=noArray()*/);
+                                   @ByVal(nullValue = "cv::noArray()") Mat R/*=cv::noArray()*/, @ByVal(nullValue = "cv::noArray()") Mat P/*=cv::noArray()*/);
 @Namespace("cv") public static native void undistortPoints( @ByVal Mat src, @ByVal Mat dst,
                                    @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs);
 
@@ -2849,20 +2849,20 @@ CV_EXPORTS_W void calcBackProjectPatch( InputArrayOfArrays images, const vector<
 
     public native void collectGarbage();
 }
-@Namespace("cv") public static native @Ptr CLAHE createCLAHE(double clipLimit/*=40.0*/, @ByVal Size tileGridSize/*=Size(8, 8)*/);
+@Namespace("cv") public static native @Ptr CLAHE createCLAHE(double clipLimit/*=40.0*/, @ByVal(nullValue = "cv::Size(8, 8)") Size tileGridSize/*=cv::Size(8, 8)*/);
 @Namespace("cv") public static native @Ptr CLAHE createCLAHE();
 
 @Namespace("cv") public static native float EMD( @ByVal Mat signature1, @ByVal Mat signature2,
-                      int distType, @ByVal Mat cost/*=noArray()*/,
-                      FloatPointer lowerBound/*=0*/, @ByVal Mat flow/*=noArray()*/ );
+                      int distType, @ByVal(nullValue = "cv::noArray()") Mat cost/*=cv::noArray()*/,
+                      FloatPointer lowerBound/*=0*/, @ByVal(nullValue = "cv::noArray()") Mat flow/*=cv::noArray()*/ );
 @Namespace("cv") public static native float EMD( @ByVal Mat signature1, @ByVal Mat signature2,
                       int distType );
 @Namespace("cv") public static native float EMD( @ByVal Mat signature1, @ByVal Mat signature2,
-                      int distType, @ByVal Mat cost/*=noArray()*/,
-                      FloatBuffer lowerBound/*=0*/, @ByVal Mat flow/*=noArray()*/ );
+                      int distType, @ByVal(nullValue = "cv::noArray()") Mat cost/*=cv::noArray()*/,
+                      FloatBuffer lowerBound/*=0*/, @ByVal(nullValue = "cv::noArray()") Mat flow/*=cv::noArray()*/ );
 @Namespace("cv") public static native float EMD( @ByVal Mat signature1, @ByVal Mat signature2,
-                      int distType, @ByVal Mat cost/*=noArray()*/,
-                      float[] lowerBound/*=0*/, @ByVal Mat flow/*=noArray()*/ );
+                      int distType, @ByVal(nullValue = "cv::noArray()") Mat cost/*=cv::noArray()*/,
+                      float[] lowerBound/*=0*/, @ByVal(nullValue = "cv::noArray()") Mat flow/*=cv::noArray()*/ );
 
 /** segments the image using watershed algorithm */
 @Namespace("cv") public static native void watershed( @ByVal Mat image, @ByVal Mat markers );
@@ -2870,8 +2870,9 @@ CV_EXPORTS_W void calcBackProjectPatch( InputArrayOfArrays images, const vector<
 /** filters image using meanshift algorithm */
 @Namespace("cv") public static native void pyrMeanShiftFiltering( @ByVal Mat src, @ByVal Mat dst,
                                          double sp, double sr, int maxLevel/*=1*/,
-                                         @ByVal TermCriteria termcrit/*=TermCriteria(
-                                            TermCriteria::MAX_ITER+TermCriteria::EPS,5,1)*/ );
+                                         @ByVal(nullValue = "cv::TermCriteria("
+                                             + "cv::TermCriteria::MAX_ITER+cv::TermCriteria::EPS,5,1)") TermCriteria termcrit/*=cv::TermCriteria(
+                                            cv::TermCriteria::MAX_ITER+cv::TermCriteria::EPS,5,1)*/ );
 @Namespace("cv") public static native void pyrMeanShiftFiltering( @ByVal Mat src, @ByVal Mat dst,
                                          double sp, double sr );
 
@@ -2897,7 +2898,7 @@ public static final int
 /** segments the image using GrabCut algorithm */
 @Namespace("cv") public static native void grabCut( @ByVal Mat img, @ByVal Mat mask, @ByVal Rect rect,
                            @ByVal Mat bgdModel, @ByVal Mat fgdModel,
-                           int iterCount, int mode/*=GC_EVAL*/ );
+                           int iterCount, int mode/*=cv::GC_EVAL*/ );
 @Namespace("cv") public static native void grabCut( @ByVal Mat img, @ByVal Mat mask, @ByVal Rect rect,
                            @ByVal Mat bgdModel, @ByVal Mat fgdModel,
                            int iterCount );
@@ -2910,7 +2911,7 @@ public static final int
 /** builds the discrete Voronoi diagram */
 @Namespace("cv") public static native @Name("distanceTransform") void distanceTransformWithLabels( @ByVal Mat src, @ByVal Mat dst,
                                      @ByVal Mat labels, int distanceType, int maskSize,
-                                     int labelType/*=DIST_LABEL_CCOMP*/ );
+                                     int labelType/*=cv::DIST_LABEL_CCOMP*/ );
 @Namespace("cv") public static native @Name("distanceTransform") void distanceTransformWithLabels( @ByVal Mat src, @ByVal Mat dst,
                                      @ByVal Mat labels, int distanceType, int maskSize );
 
@@ -2924,7 +2925,7 @@ public static final int FLOODFILL_FIXED_RANGE =  1 << 16, FLOODFILL_MASK_ONLY = 
 /** fills the semi-uniform image region starting from the specified seed point */
 @Namespace("cv") public static native int floodFill( @ByVal Mat image,
                           @ByVal Point seedPoint, @ByVal Scalar newVal, Rect rect/*=0*/,
-                          @ByVal Scalar loDiff/*=Scalar()*/, @ByVal Scalar upDiff/*=Scalar()*/,
+                          @ByVal(nullValue = "cv::Scalar()") Scalar loDiff/*=cv::Scalar()*/, @ByVal(nullValue = "cv::Scalar()") Scalar upDiff/*=cv::Scalar()*/,
                           int flags/*=4*/ );
 @Namespace("cv") public static native int floodFill( @ByVal Mat image,
                           @ByVal Point seedPoint, @ByVal Scalar newVal );
@@ -2932,7 +2933,7 @@ public static final int FLOODFILL_FIXED_RANGE =  1 << 16, FLOODFILL_MASK_ONLY = 
 /** fills the semi-uniform image region and/or the mask starting from the specified seed point */
 @Namespace("cv") public static native int floodFill( @ByVal Mat image, @ByVal Mat mask,
                             @ByVal Point seedPoint, @ByVal Scalar newVal, Rect rect/*=0*/,
-                            @ByVal Scalar loDiff/*=Scalar()*/, @ByVal Scalar upDiff/*=Scalar()*/,
+                            @ByVal(nullValue = "cv::Scalar()") Scalar loDiff/*=cv::Scalar()*/, @ByVal(nullValue = "cv::Scalar()") Scalar upDiff/*=cv::Scalar()*/,
                             int flags/*=4*/ );
 @Namespace("cv") public static native int floodFill( @ByVal Mat image, @ByVal Mat mask,
                             @ByVal Point seedPoint, @ByVal Scalar newVal );
@@ -3282,14 +3283,14 @@ public static final int
 /** retrieves contours and the hierarchical information from black-n-white image. */
 @Namespace("cv") public static native void findContours( @ByVal Mat image, @ByVal MatVector contours,
                               @ByVal Mat hierarchy, int mode,
-                              int method, @ByVal Point offset/*=Point()*/);
+                              int method, @ByVal(nullValue = "cv::Point()") Point offset/*=cv::Point()*/);
 @Namespace("cv") public static native void findContours( @ByVal Mat image, @ByVal MatVector contours,
                               @ByVal Mat hierarchy, int mode,
                               int method);
 
 /** retrieves contours from black-n-white image. */
 @Namespace("cv") public static native void findContours( @ByVal Mat image, @ByVal MatVector contours,
-                              int mode, int method, @ByVal Point offset/*=Point()*/);
+                              int mode, int method, @ByVal(nullValue = "cv::Point()") Point offset/*=cv::Point()*/);
 @Namespace("cv") public static native void findContours( @ByVal Mat image, @ByVal MatVector contours,
                               int mode, int method);
 
@@ -3297,8 +3298,8 @@ public static final int
 @Namespace("cv") public static native void drawContours( @ByVal Mat image, @ByVal MatVector contours,
                               int contourIdx, @Const @ByRef Scalar color,
                               int thickness/*=1*/, int lineType/*=8*/,
-                              @ByVal Mat hierarchy/*=noArray()*/,
-                              int maxLevel/*=INT_MAX*/, @ByVal Point offset/*=Point()*/ );
+                              @ByVal(nullValue = "cv::noArray()") Mat hierarchy/*=cv::noArray()*/,
+                              int maxLevel/*=INT_MAX*/, @ByVal(nullValue = "cv::Point()") Point offset/*=cv::Point()*/ );
 @Namespace("cv") public static native void drawContours( @ByVal Mat image, @ByVal MatVector contours,
                               int contourIdx, @Const @ByRef Scalar color );
 

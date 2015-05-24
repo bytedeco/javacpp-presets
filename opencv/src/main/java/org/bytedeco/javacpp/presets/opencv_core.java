@@ -131,7 +131,7 @@ public class opencv_core implements InfoMapper {
 
                .put(new Info("CvModule::first", "CvModule::last", "CvType::first", "CvType::last",
                              "cv::fromUtf16", "cv::toUtf16", "cv::Exception", "cv::Allocator", "cv::DataDepth", "cv::DataType", "cv::ParamType",
-                             "cv::_InputArray", "cv::_OutputArray", "cv::noArray", "cv::Mat_", "cv::SparseMat_",
+                             "cv::_InputArray", "cv::_OutputArray", "cv::Mat_", "cv::SparseMat_",
                              "cv::Matx_AddOp", "cv::Matx_SubOp", "cv::Matx_ScaleOp", "cv::Matx_MulOp", "cv::Matx_MatMulOp", "cv::Matx_TOp",
                              "cv::Matx", "cv::Vec", "cv::MatIterator_", "cv::MatConstIterator_", "cv::Mat::MSize", "cv::Mat::MStep",
                              "cv::MatCommaInitializer_", "cv::MatxCommaInitializer", "cv::VecCommaInitializer",
@@ -140,6 +140,7 @@ public class opencv_core implements InfoMapper {
                              "cv::AlgorithmInfoData", "cv::AlgorithmInfo::addParam", "cv::CommandLineParser").skip())
 
                .put(new Info("cv::Mat").base("AbstractMat"))
+               .put(new Info("cv::noArray()").javaText("public static Mat noArray() { return null; }"))
                .put(new Info("cv::Mat(int, int, int, void*, size_t)").javaText(
                        "public Mat(int rows, int cols, int type, Pointer data, @Cast(\"size_t\") long step/*=AUTO_STEP*/) { allocate(rows, cols, type, data, step); this.data = data; }\n"
                      + "private native void allocate(int rows, int cols, int type, Pointer data, @Cast(\"size_t\") long step/*=AUTO_STEP*/);\n"
