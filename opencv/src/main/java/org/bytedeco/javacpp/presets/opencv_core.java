@@ -125,9 +125,9 @@ public class opencv_core implements InfoMapper {
                .put(new Info("std::vector<std::vector<cv::Point_<double> > >").pointerTypes("Point2dVectorVector").define())
                .put(new Info("std::vector<std::vector<cv::Rect_<int> > >").pointerTypes("RectVectorVector").define())
                .put(new Info("std::vector<cv::Mat>").pointerTypes("MatVector").define())
-               .put(new Info("cv::randu<int>").javaNames("randInt"))
-               .put(new Info("cv::randu<float>").javaNames("randFloat"))
-               .put(new Info("cv::randu<double>").javaNames("randDouble"))
+               .put(new Info("cv::randu<int>").javaNames("intRand"))
+               .put(new Info("cv::randu<float>").javaNames("floatRand"))
+               .put(new Info("cv::randu<double>").javaNames("doubleRand"))
 
                .put(new Info("CvModule::first", "CvModule::last", "CvType::first", "CvType::last",
                              "cv::fromUtf16", "cv::toUtf16", "cv::Exception", "cv::Allocator", "cv::DataDepth", "cv::DataType", "cv::ParamType",
@@ -187,12 +187,13 @@ public class opencv_core implements InfoMapper {
                .put(new Info("defined __INTEL_COMPILER && !(defined WIN32 || defined _WIN32)", "defined __GNUC__",
                              "defined WIN32 || defined _WIN32 || defined WINCE").define(false))
 
-               .put(new Info("cv::saturate_cast<uchar>").javaNames("saturateCastUchar"))
-               .put(new Info("cv::saturate_cast<schar>").javaNames("saturateCastSchar"))
-               .put(new Info("cv::saturate_cast<ushort>").javaNames("saturateCastUshort"))
-               .put(new Info("cv::saturate_cast<short>").javaNames("saturateCastShort"))
-               .put(new Info("cv::saturate_cast<int>").javaNames("saturateCastInt"))
-               .put(new Info("cv::saturate_cast<unsigned>").javaNames("saturateCastUnsigned"))
+               .put(new Info("cv::saturate_cast(uchar)", "cv::saturate_cast(ushort)", "cv::saturate_cast(unsigned)").skip())
+               .put(new Info("cv::saturate_cast<uchar>").javaNames("ucharSaturateCast"))
+               .put(new Info("cv::saturate_cast<schar>").javaNames("scharSaturateCast"))
+               .put(new Info("cv::saturate_cast<ushort>").javaNames("ushortSaturateCast"))
+               .put(new Info("cv::saturate_cast<short>").javaNames("shortSaturateCast"))
+               .put(new Info("cv::saturate_cast<int>").javaNames("intSaturate"))
+               .put(new Info("cv::saturate_cast<unsigned>").javaNames("unsignedSaturateCast"))
 
                .put(new Info("cv::normL2Sqr", "cv::normL1", "cv::seqPopMulti").skip())
 
