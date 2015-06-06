@@ -280,7 +280,7 @@ denoising time. Recommended value 21 pixels
 removes noise but also removes image details, smaller h value preserves details but also preserves
 some noise
 @param hColor The same as h but for color components. For most images value equals 10
-will be enought to remove colored noise and do not distort colors
+will be enough to remove colored noise and do not distort colors
 
 The function converts image to CIELAB colorspace and then separately denoise L and AB components
 with given h parameters using fastNlMeansDenoising function.
@@ -1175,7 +1175,7 @@ FastNonLocalMeansDenoising::labMethod.
 @param h_luminance Parameter regulating filter strength. Big h value perfectly removes noise but
 also removes image details, smaller h value preserves details but also preserves some noise
 @param photo_render float The same as h but for color components. For most images value equals 10 will be
-enought to remove colored noise and do not distort colors
+enough to remove colored noise and do not distort colors
 @param search_window Size in pixels of the window that is used to compute weighted average for
 given pixel. Should be odd. Affect performance linearly: greater search_window - greater
 denoising time. Recommended value 21 pixels

@@ -217,7 +217,7 @@ the histogram in each bin.
     @param matches Standard vector of Matches between points.
      */
     public native void estimateTransformation(@ByVal Mat transformingShape, @ByVal Mat targetShape,
-                                                     @StdVector DMatch matches);
+                                                     @ByRef DMatchVector matches);
 
     /** @brief Apply a transformation, given a pre-estimated transformation parameters.
 

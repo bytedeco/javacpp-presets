@@ -11,20 +11,6 @@ import static org.bytedeco.javacpp.opencv_core.*;
 public class opencv_ml extends org.bytedeco.javacpp.presets.opencv_ml {
     static { Loader.load(); }
 
-@Name("std::map<std::string,int>") public static class StringIntMap extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public StringIntMap(Pointer p) { super(p); }
-    public StringIntMap()       { allocate();  }
-    private native void allocate();
-    public native @Name("operator=") @ByRef StringIntMap put(@ByRef StringIntMap x);
-
-    public native long size();
-
-    @Index public native int get(@StdString BytePointer i);
-    public native StringIntMap put(@StdString BytePointer i, int value);
-}
-
 // Parsed from <opencv2/ml.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
@@ -1640,8 +1626,7 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
 @Namespace("cv::ml") public static native void randMVNormal( @ByVal Mat mean, @ByVal Mat cov, int nsamples, @ByVal Mat samples);
 
 /** @brief Generates sample from gaussian mixture distribution */
-@Namespace("cv::ml") public static native void randGaussMixture( @ByVal Mat means, @ByVal Mat covs, @ByVal Mat weights,
-                                  int nsamples, @ByVal Mat samples, @ByVal Mat sampClasses );
+
 
 /** @brief Creates test set */
 @Namespace("cv::ml") public static native void createConcentricSpheresTestSet( int nsamples, int nfeatures, int nclasses,

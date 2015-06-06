@@ -189,30 +189,7 @@ public static native void cvCalcOpticalFlowPyrLK( @Const CvArr prev, @Const CvAr
 
 /* Modification of a previous sparse optical flow algorithm to calculate
    affine flow */
-public static native void cvCalcAffineFlowPyrLK( @Const CvArr prev, @Const CvArr curr,
-                                    CvArr prev_pyr, CvArr curr_pyr,
-                                    @Const CvPoint2D32f prev_features,
-                                    CvPoint2D32f curr_features,
-                                    FloatPointer matrices, int count,
-                                    @ByVal CvSize win_size, int level,
-                                    @Cast("char*") BytePointer status, FloatPointer track_error,
-                                    @ByVal CvTermCriteria criteria, int flags );
-public static native void cvCalcAffineFlowPyrLK( @Const CvArr prev, @Const CvArr curr,
-                                    CvArr prev_pyr, CvArr curr_pyr,
-                                    @Cast("const CvPoint2D32f*") FloatBuffer prev_features,
-                                    @Cast("CvPoint2D32f*") FloatBuffer curr_features,
-                                    FloatBuffer matrices, int count,
-                                    @ByVal CvSize win_size, int level,
-                                    @Cast("char*") ByteBuffer status, FloatBuffer track_error,
-                                    @ByVal CvTermCriteria criteria, int flags );
-public static native void cvCalcAffineFlowPyrLK( @Const CvArr prev, @Const CvArr curr,
-                                    CvArr prev_pyr, CvArr curr_pyr,
-                                    @Cast("const CvPoint2D32f*") float[] prev_features,
-                                    @Cast("CvPoint2D32f*") float[] curr_features,
-                                    float[] matrices, int count,
-                                    @ByVal CvSize win_size, int level,
-                                    @Cast("char*") byte[] status, float[] track_error,
-                                    @ByVal CvTermCriteria criteria, int flags );
+
 
 /* Estimate rigid transformation between 2 images or 2 point sets */
 public static native int cvEstimateRigidTransform( @Const CvArr A, @Const CvArr B,
@@ -237,29 +214,20 @@ public static native void cvCalcOpticalFlowFarneback( @Const CvArr prev, @Const 
 \****************************************************************************************/
 
 /* Updates motion history image given motion silhouette */
-public static native void cvUpdateMotionHistory( @Const CvArr silhouette, CvArr mhi,
-                                      double timestamp, double duration );
+
 
 /* Calculates gradient of the motion history image and fills
    a mask indicating where the gradient is valid */
-public static native void cvCalcMotionGradient( @Const CvArr mhi, CvArr mask, CvArr orientation,
-                                     double delta1, double delta2,
-                                     int aperture_size/*=3*/);
-public static native void cvCalcMotionGradient( @Const CvArr mhi, CvArr mask, CvArr orientation,
-                                     double delta1, double delta2);
+
 
 /* Calculates average motion direction within a selected motion region
    (region can be selected by setting ROIs and/or by composing a valid gradient mask
    with the region mask) */
-public static native double cvCalcGlobalOrientation( @Const CvArr orientation, @Const CvArr mask,
-                                        @Const CvArr mhi, double timestamp,
-                                        double duration );
+
 
 /* Splits a motion history image into a few parts corresponding to separate independent motions
    (e.g. left hand, right hand) */
-public static native CvSeq cvSegmentMotion( @Const CvArr mhi, CvArr seg_mask,
-                                CvMemStorage storage,
-                                double timestamp, double seg_thresh );
+
 
 /****************************************************************************************\
 *                                       Tracking                                         *
@@ -653,6 +621,7 @@ order to provide an image similar to templateImage, same type as temlateImage.
 criteria.epsilon defines the threshold of the increment in the correlation coefficient between two
 iterations (a negative criteria.epsilon makes criteria.maxcount the only termination criterion).
 Default values are shown in the declaration above.
+@param inputMask An optional mask to indicate valid values of inputImage.
 
 The function estimates the optimum transformation (warpMatrix) with respect to ECC criterion
 (@cite EP08), that is
@@ -684,7 +653,8 @@ estimateRigidTransform, findHomography
  */
 @Namespace("cv") public static native double findTransformECC( @ByVal Mat templateImage, @ByVal Mat inputImage,
                                       @ByVal Mat warpMatrix, int motionType/*=cv::MOTION_AFFINE*/,
-                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 50, 0.001)") TermCriteria criteria/*=cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 50, 0.001)*/);
+                                      @ByVal(nullValue = "cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 50, 0.001)") TermCriteria criteria/*=cv::TermCriteria(cv::TermCriteria::COUNT+cv::TermCriteria::EPS, 50, 0.001)*/,
+                                      @ByVal(nullValue = "cv::noArray()") Mat inputMask/*=cv::noArray()*/);
 @Namespace("cv") public static native double findTransformECC( @ByVal Mat templateImage, @ByVal Mat inputImage,
                                       @ByVal Mat warpMatrix);
 
@@ -730,7 +700,7 @@ an extended Kalman filter functionality. See the OpenCV sample kalman.cpp.
 
     /** @brief Re-initializes Kalman filter. The previous content is destroyed.
 
-    @param dynamParams Dimensionalityensionality of the state.
+    @param dynamParams Dimensionality of the state.
     @param measureParams Dimensionality of the measurement.
     @param controlParams Dimensionality of the control vector.
     @param type Type of the created matrices that should be CV_32F or CV_64F.

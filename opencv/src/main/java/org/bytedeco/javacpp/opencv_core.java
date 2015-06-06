@@ -97,11 +97,193 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     }
 }
 
+@Name("std::vector<cv::Point_<int> >") public static class PointVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PointVector(Pointer p) { super(p); }
+    public PointVector(Point ... array) { this(array.length); put(array); }
+    public PointVector()       { allocate();  }
+    public PointVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef PointVector put(@ByRef PointVector x);
+
+    public native long size();
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native @ByRef Point get(@Cast("size_t") long i);
+    public native PointVector put(@Cast("size_t") long i, Point value);
+
+    public PointVector put(Point ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<cv::Point_<float> >") public static class Point2fVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Point2fVector(Pointer p) { super(p); }
+    public Point2fVector(Point2f ... array) { this(array.length); put(array); }
+    public Point2fVector()       { allocate();  }
+    public Point2fVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef Point2fVector put(@ByRef Point2fVector x);
+
+    public native long size();
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native @ByRef Point2f get(@Cast("size_t") long i);
+    public native Point2fVector put(@Cast("size_t") long i, Point2f value);
+
+    public Point2fVector put(Point2f ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<cv::Point_<double> >") public static class Point2dVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Point2dVector(Pointer p) { super(p); }
+    public Point2dVector(Point2d ... array) { this(array.length); put(array); }
+    public Point2dVector()       { allocate();  }
+    public Point2dVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef Point2dVector put(@ByRef Point2dVector x);
+
+    public native long size();
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native @ByRef Point2d get(@Cast("size_t") long i);
+    public native Point2dVector put(@Cast("size_t") long i, Point2d value);
+
+    public Point2dVector put(Point2d ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<cv::Size_<int> >") public static class SizeVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SizeVector(Pointer p) { super(p); }
+    public SizeVector(Size ... array) { this(array.length); put(array); }
+    public SizeVector()       { allocate();  }
+    public SizeVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef SizeVector put(@ByRef SizeVector x);
+
+    public native long size();
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native @ByRef Size get(@Cast("size_t") long i);
+    public native SizeVector put(@Cast("size_t") long i, Size value);
+
+    public SizeVector put(Size ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<cv::Rect_<int> >") public static class RectVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public RectVector(Pointer p) { super(p); }
+    public RectVector(Rect ... array) { this(array.length); put(array); }
+    public RectVector()       { allocate();  }
+    public RectVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef RectVector put(@ByRef RectVector x);
+
+    public native long size();
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native @ByRef Rect get(@Cast("size_t") long i);
+    public native RectVector put(@Cast("size_t") long i, Rect value);
+
+    public RectVector put(Rect ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<cv::KeyPoint>") public static class KeyPointVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public KeyPointVector(Pointer p) { super(p); }
+    public KeyPointVector(KeyPoint ... array) { this(array.length); put(array); }
+    public KeyPointVector()       { allocate();  }
+    public KeyPointVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef KeyPointVector put(@ByRef KeyPointVector x);
+
+    public native long size();
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native @ByRef KeyPoint get(@Cast("size_t") long i);
+    public native KeyPointVector put(@Cast("size_t") long i, KeyPoint value);
+
+    public KeyPointVector put(KeyPoint ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<cv::DMatch>") public static class DMatchVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DMatchVector(Pointer p) { super(p); }
+    public DMatchVector(DMatch ... array) { this(array.length); put(array); }
+    public DMatchVector()       { allocate();  }
+    public DMatchVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef DMatchVector put(@ByRef DMatchVector x);
+
+    public native long size();
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native @ByRef DMatch get(@Cast("size_t") long i);
+    public native DMatchVector put(@Cast("size_t") long i, DMatch value);
+
+    public DMatchVector put(DMatch ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
 @Name("std::vector<std::vector<cv::Point_<int> > >") public static class PointVectorVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PointVectorVector(Pointer p) { super(p); }
-    public PointVectorVector(Point[] ... array) { this(array.length); put(array); }
+    public PointVectorVector(PointVector ... array) { this(array.length); put(array); }
     public PointVectorVector()       { allocate();  }
     public PointVectorVector(long n) { allocate(n); }
     private native void allocate();
@@ -110,19 +292,14 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
     public native long size();
     public native void resize(@Cast("size_t") long n);
-    public native @Index long size(@Cast("size_t") long i);
-    public native @Index void resize(@Cast("size_t") long i, @Cast("size_t") long n);
 
-    @Index public native @ByRef Point get(@Cast("size_t") long i, @Cast("size_t") long j);
-    public native PointVectorVector put(@Cast("size_t") long i, @Cast("size_t") long j, Point value);
+    @Index public native @ByRef PointVector get(@Cast("size_t") long i);
+    public native PointVectorVector put(@Cast("size_t") long i, PointVector value);
 
-    public PointVectorVector put(Point[] ... array) {
+    public PointVectorVector put(PointVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
-            if (size(i) != array[i].length) { resize(i, array[i].length); }
-            for (int j = 0; j < array[i].length; j++) {
-                put(i, j, array[i][j]);
-            }
+            put(i, array[i]);
         }
         return this;
     }
@@ -132,7 +309,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Point2fVectorVector(Pointer p) { super(p); }
-    public Point2fVectorVector(Point2f[] ... array) { this(array.length); put(array); }
+    public Point2fVectorVector(Point2fVector ... array) { this(array.length); put(array); }
     public Point2fVectorVector()       { allocate();  }
     public Point2fVectorVector(long n) { allocate(n); }
     private native void allocate();
@@ -141,19 +318,14 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
     public native long size();
     public native void resize(@Cast("size_t") long n);
-    public native @Index long size(@Cast("size_t") long i);
-    public native @Index void resize(@Cast("size_t") long i, @Cast("size_t") long n);
 
-    @Index public native @ByRef Point2f get(@Cast("size_t") long i, @Cast("size_t") long j);
-    public native Point2fVectorVector put(@Cast("size_t") long i, @Cast("size_t") long j, Point2f value);
+    @Index public native @ByRef Point2fVector get(@Cast("size_t") long i);
+    public native Point2fVectorVector put(@Cast("size_t") long i, Point2fVector value);
 
-    public Point2fVectorVector put(Point2f[] ... array) {
+    public Point2fVectorVector put(Point2fVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
-            if (size(i) != array[i].length) { resize(i, array[i].length); }
-            for (int j = 0; j < array[i].length; j++) {
-                put(i, j, array[i][j]);
-            }
+            put(i, array[i]);
         }
         return this;
     }
@@ -163,7 +335,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Point2dVectorVector(Pointer p) { super(p); }
-    public Point2dVectorVector(Point2d[] ... array) { this(array.length); put(array); }
+    public Point2dVectorVector(Point2dVector ... array) { this(array.length); put(array); }
     public Point2dVectorVector()       { allocate();  }
     public Point2dVectorVector(long n) { allocate(n); }
     private native void allocate();
@@ -172,19 +344,14 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
     public native long size();
     public native void resize(@Cast("size_t") long n);
-    public native @Index long size(@Cast("size_t") long i);
-    public native @Index void resize(@Cast("size_t") long i, @Cast("size_t") long n);
 
-    @Index public native @ByRef Point2d get(@Cast("size_t") long i, @Cast("size_t") long j);
-    public native Point2dVectorVector put(@Cast("size_t") long i, @Cast("size_t") long j, Point2d value);
+    @Index public native @ByRef Point2dVector get(@Cast("size_t") long i);
+    public native Point2dVectorVector put(@Cast("size_t") long i, Point2dVector value);
 
-    public Point2dVectorVector put(Point2d[] ... array) {
+    public Point2dVectorVector put(Point2dVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
-            if (size(i) != array[i].length) { resize(i, array[i].length); }
-            for (int j = 0; j < array[i].length; j++) {
-                put(i, j, array[i][j]);
-            }
+            put(i, array[i]);
         }
         return this;
     }
@@ -194,7 +361,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RectVectorVector(Pointer p) { super(p); }
-    public RectVectorVector(Rect[] ... array) { this(array.length); put(array); }
+    public RectVectorVector(RectVector ... array) { this(array.length); put(array); }
     public RectVectorVector()       { allocate();  }
     public RectVectorVector(long n) { allocate(n); }
     private native void allocate();
@@ -203,19 +370,66 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
     public native long size();
     public native void resize(@Cast("size_t") long n);
-    public native @Index long size(@Cast("size_t") long i);
-    public native @Index void resize(@Cast("size_t") long i, @Cast("size_t") long n);
 
-    @Index public native @ByRef Rect get(@Cast("size_t") long i, @Cast("size_t") long j);
-    public native RectVectorVector put(@Cast("size_t") long i, @Cast("size_t") long j, Rect value);
+    @Index public native @ByRef RectVector get(@Cast("size_t") long i);
+    public native RectVectorVector put(@Cast("size_t") long i, RectVector value);
 
-    public RectVectorVector put(Rect[] ... array) {
+    public RectVectorVector put(RectVector ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
-            if (size(i) != array[i].length) { resize(i, array[i].length); }
-            for (int j = 0; j < array[i].length; j++) {
-                put(i, j, array[i][j]);
-            }
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<std::vector<cv::KeyPoint> >") public static class KeyPointVectorVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public KeyPointVectorVector(Pointer p) { super(p); }
+    public KeyPointVectorVector(KeyPointVector ... array) { this(array.length); put(array); }
+    public KeyPointVectorVector()       { allocate();  }
+    public KeyPointVectorVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef KeyPointVectorVector put(@ByRef KeyPointVectorVector x);
+
+    public native long size();
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native @ByRef KeyPointVector get(@Cast("size_t") long i);
+    public native KeyPointVectorVector put(@Cast("size_t") long i, KeyPointVector value);
+
+    public KeyPointVectorVector put(KeyPointVector ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<std::vector<cv::DMatch> >") public static class DMatchVectorVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DMatchVectorVector(Pointer p) { super(p); }
+    public DMatchVectorVector(DMatchVector ... array) { this(array.length); put(array); }
+    public DMatchVectorVector()       { allocate();  }
+    public DMatchVectorVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef DMatchVectorVector put(@ByRef DMatchVectorVector x);
+
+    public native long size();
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native @ByRef DMatchVector get(@Cast("size_t") long i);
+    public native DMatchVectorVector put(@Cast("size_t") long i, DMatchVector value);
+
+    public DMatchVectorVector put(DMatchVector ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
         }
         return this;
     }
@@ -239,6 +453,32 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     public native MatVector put(@Cast("size_t") long i, Mat value);
 
     public MatVector put(Mat ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<cv::UMat>") public static class UMatVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public UMatVector(Pointer p) { super(p); }
+    public UMatVector(UMat ... array) { this(array.length); put(array); }
+    public UMatVector()       { allocate();  }
+    public UMatVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef UMatVector put(@ByRef UMatVector x);
+
+    public native long size();
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native @ByRef UMat get(@Cast("size_t") long i);
+    public native UMatVector put(@Cast("size_t") long i, UMat value);
+
+    public UMatVector put(UMat ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
             put(i, array[i]);
@@ -1097,7 +1337,7 @@ public static final int CV_SUBMAT_FLAG =          (1 << CV_SUBMAT_FLAG_SHIFT);
 public static final int CV_VERSION_MAJOR =    3;
 public static final int CV_VERSION_MINOR =    0;
 public static final int CV_VERSION_REVISION = 0;
-public static final String CV_VERSION_STATUS =   "-rc1";
+public static final String CV_VERSION_STATUS =   "";
 
 // #define CVAUX_STR_EXP(__A)  #__A
 // #define CVAUX_STR(__A)      CVAUX_STR_EXP(__A)
@@ -1614,6 +1854,23 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
  */
 @Namespace("cv") public static native float fastAtan2(float y, float x);
 
+/** proxy for hal::LU */
+@Namespace("cv") public static native int LU(FloatPointer A, @Cast("size_t") long astep, int m, FloatPointer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv") public static native int LU(FloatBuffer A, @Cast("size_t") long astep, int m, FloatBuffer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv") public static native int LU(float[] A, @Cast("size_t") long astep, int m, float[] b, @Cast("size_t") long bstep, int n);
+/** proxy for hal::LU */
+@Namespace("cv") public static native int LU(DoublePointer A, @Cast("size_t") long astep, int m, DoublePointer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv") public static native int LU(DoubleBuffer A, @Cast("size_t") long astep, int m, DoubleBuffer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv") public static native int LU(double[] A, @Cast("size_t") long astep, int m, double[] b, @Cast("size_t") long bstep, int n);
+/** proxy for hal::Cholesky */
+@Namespace("cv") public static native @Cast("bool") boolean Cholesky(FloatPointer A, @Cast("size_t") long astep, int m, FloatPointer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv") public static native @Cast("bool") boolean Cholesky(FloatBuffer A, @Cast("size_t") long astep, int m, FloatBuffer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv") public static native @Cast("bool") boolean Cholesky(float[] A, @Cast("size_t") long astep, int m, float[] b, @Cast("size_t") long bstep, int n);
+/** proxy for hal::Cholesky */
+@Namespace("cv") public static native @Cast("bool") boolean Cholesky(DoublePointer A, @Cast("size_t") long astep, int m, DoublePointer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv") public static native @Cast("bool") boolean Cholesky(DoubleBuffer A, @Cast("size_t") long astep, int m, DoubleBuffer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv") public static native @Cast("bool") boolean Cholesky(double[] A, @Cast("size_t") long astep, int m, double[] b, @Cast("size_t") long bstep, int n);
+
 ////////////////// forward declarations for important OpenCV types //////////////////
 
 /** @cond IGNORED */
@@ -1636,12 +1893,6 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
         public Arrays(Pointer p) { super(p); }
     }
 
-    @Namespace("cv::cuda") @Opaque public static class GpuMat extends Pointer {
-        /** Empty constructor. */
-        public GpuMat() { }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public GpuMat(Pointer p) { super(p); }
-    }
     @Namespace("cv::cuda") @Opaque public static class HostMem extends Pointer {
         /** Empty constructor. */
         public HostMem() { }
@@ -2479,7 +2730,7 @@ The function returns true if the optimized code is enabled. Otherwise, it return
     public native Pointer getData();
 }
 
-/** @brief designed for command line arguments parsing
+/** @brief Designed for command line parsing
 
 The sample below demonstrates how to use CommandLineParser:
 @code
@@ -2509,8 +2760,19 @@ The sample below demonstrates how to use CommandLineParser:
         return 0;
     }
 @endcode
-Syntax:
-@code
+
+### Keys syntax
+
+The keys parameter is a string containing several blocks, each one is enclosed in curley braces and
+describes one argument. Each argument contains three parts separated by the `|` symbol:
+
+-# argument names is a space-separated list of option synonyms (to mark argument as positional, prefix it with the `@` symbol)
+-# default value will be used if the argument was not provided (can be empty)
+-# help message (can be empty)
+
+For example:
+
+@code{.cpp}
     const String keys =
         "{help h usage ? |      | print this message   }"
         "{@image1        |      | image1 for compare   }"
@@ -2521,12 +2783,19 @@ Syntax:
         "{N count        |100   | count of objects     }"
         "{ts timestamp   |      | use time stamp       }"
         ;
+}
 @endcode
-Use:
-@code
-    # ./app -N=200 1.png 2.jpg 19 -ts
 
-    # ./app -fps=aaa
+### Usage
+
+For the described keys:
+
+@code{.sh}
+    # Good call (3 positional parameters: image1, image2 and repeat; N is 200, ts is true)
+    $ ./app -N=200 1.png 2.jpg 19 -ts
+
+    # Bad call
+    $ ./app -fps=aaa
     ERRORS:
     Exception: can not convert: [aaa] to [double]
 @endcode
@@ -9165,16 +9434,16 @@ can then be matched using cv::KDTree or another method.
     @param keypointIndexes Array of indexes of keypoints to be converted to points. (Acts like a mask to
     convert only specified keypoints)
     */
-    public static native void convert(@StdVector KeyPoint keypoints,
-                                    @StdVector Point2f points2f,
+    public static native void convert(@Const @ByRef KeyPointVector keypoints,
+                                    @ByRef Point2fVector points2f,
                                     @StdVector IntPointer keypointIndexes/*=std::vector<int>()*/);
-    public static native void convert(@StdVector KeyPoint keypoints,
-                                    @StdVector Point2f points2f);
-    public static native void convert(@StdVector KeyPoint keypoints,
-                                    @StdVector Point2f points2f,
+    public static native void convert(@Const @ByRef KeyPointVector keypoints,
+                                    @ByRef Point2fVector points2f);
+    public static native void convert(@Const @ByRef KeyPointVector keypoints,
+                                    @ByRef Point2fVector points2f,
                                     @StdVector IntBuffer keypointIndexes/*=std::vector<int>()*/);
-    public static native void convert(@StdVector KeyPoint keypoints,
-                                    @StdVector Point2f points2f,
+    public static native void convert(@Const @ByRef KeyPointVector keypoints,
+                                    @ByRef Point2fVector points2f,
                                     @StdVector int[] keypointIndexes/*=std::vector<int>()*/);
     /** @overload
     @param points2f Array of (x,y) coordinates of each keypoint
@@ -9184,11 +9453,11 @@ can then be matched using cv::KDTree or another method.
     @param octave pyramid octave in which the keypoint has been detected
     @param class_id object id
     */
-    public static native void convert(@StdVector Point2f points2f,
-                                    @StdVector KeyPoint keypoints,
+    public static native void convert(@Const @ByRef Point2fVector points2f,
+                                    @ByRef KeyPointVector keypoints,
                                     float size/*=1*/, float response/*=1*/, int octave/*=0*/, int class_id/*=-1*/);
-    public static native void convert(@StdVector Point2f points2f,
-                                    @StdVector KeyPoint keypoints);
+    public static native void convert(@Const @ByRef Point2fVector points2f,
+                                    @ByRef KeyPointVector keypoints);
 
     /**
     This method computes overlap for pair of keypoints. Overlap is the ratio between area of keypoint
@@ -10960,7 +11229,8 @@ equivalent matrix expressions:
 @endcode
 @param src1 first input array or a scalar; when it is an array, it must have a single channel.
 @param src2 second input array or a scalar; when it is an array, it must have a single channel.
-@param dst output array that has the same size and type as the input arrays.
+@param dst output array of type ref CV_8U that has the same size and the same number of channels as
+    the input arrays.
 @param cmpop a flag, that specifies correspondence between the arrays (cv::CmpTypes)
 @sa checkRange, min, max, threshold
 */
@@ -13786,8 +14056,6 @@ including std::sort().
     */
 
     /** download data from GpuMat */
-    public Mat(@Const @ByRef GpuMat m) { allocate(m); }
-    private native void allocate(@Const @ByRef GpuMat m);
 
     /** destructor - calls release() */
 
@@ -16818,8 +17086,10 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef Mat value );
 @Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef SparseMat value );
 @Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef SparseMat value );
-@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @StdVector KeyPoint value);
-@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @StdVector KeyPoint value);
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef KeyPointVector value);
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef KeyPointVector value);
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef DMatchVector value);
+@Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, @Const @ByRef DMatchVector value);
 
 @Namespace("cv") public static native void writeScalar( @ByRef FileStorage fs, int value );
 @Namespace("cv") public static native void writeScalar( @ByRef FileStorage fs, float value );
@@ -16847,7 +17117,8 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef Mat mat );
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef SparseMat mat, @Const @ByRef(nullValue = "cv::SparseMat()") SparseMat default_mat/*=cv::SparseMat()*/ );
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef SparseMat mat );
-@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @StdVector KeyPoint keypoints);
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef KeyPointVector keypoints);
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef DMatchVector matches);
 
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef Range value, @Const @ByRef Range default_value);
 
@@ -17078,8 +17349,10 @@ without any constraints.
             return (Function)super.position(position);
         }
     
-       @Virtual public abstract double calc(@Const DoublePointer x);
-       @Virtual public native void getGradient(@Const DoublePointer arg0,DoublePointer arg1);
+        @Virtual public abstract int getDims();
+        @Virtual public native double getGradientEps();
+        @Virtual public abstract double calc(@Const DoublePointer x);
+        @Virtual public native void getGradient(@Const DoublePointer x,DoublePointer grad);
     }
 
     /** @brief Getter for the optimized function.
@@ -17301,7 +17574,7 @@ column vector and \f$x\f$ is an arbitrary `n`-by-`1` column vector, which satisf
 
 Simplex algorithm is one of many algorithms that are designed to handle this sort of problems
 efficiently. Although it is not optimal in theoretical sense (there exist algorithms that can solve
-any problem written as above in polynomial type, while simplex method degenerates to exponential
+any problem written as above in polynomial time, while simplex method degenerates to exponential
 time for some special cases), it is well-studied, easy to implement and is shown to work well for
 real-life purposes.
 

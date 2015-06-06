@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * OpenCV 2.4.11  http://opencv.org/
+ * OpenCV 3.0.0  http://opencv.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -21,7 +21,7 @@ Sample Usage
 ------------
 Here is a simple example of OpenCV ported to Java from this C++ source file:
 
- * https://github.com/Itseez/opencv/blob/2.4/samples/cpp/stitching.cpp
+ * https://github.com/Itseez/opencv/blob/3.0.0/samples/cpp/stitching.cpp
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/Stitching.java` source files below, simply execute on the command line:
 ```bash
@@ -39,7 +39,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>opencv</artifactId>
-            <version>2.4.11-0.11</version>
+            <version>3.0.0-0.11</version>
         </dependency>
     </dependencies>
 </project>

@@ -522,7 +522,7 @@ public static final int
     CV_LINK_RUNS= 5;
 
 /*
-Internal structure that is used for sequental retrieving contours from the image.
+Internal structure that is used for sequential retrieving contours from the image.
 It supports both hierarchical and plane variants of Suzuki algorithm.
 */
 @Name("_CvContourScanner") @Opaque public static class CvContourScanner extends Pointer {
@@ -3448,6 +3448,7 @@ public static final int
     public native void initDelaunay(@ByVal Rect rect);
 
     public native int insert(@ByVal Point2f pt);
+    public native void insert(@Const @ByRef Point2fVector ptvec);
     public native int locate(@ByVal Point2f pt, @ByRef IntPointer edge, @ByRef IntPointer vertex);
     public native int locate(@ByVal Point2f pt, @ByRef IntBuffer edge, @ByRef IntBuffer vertex);
     public native int locate(@ByVal Point2f pt, @ByRef int[] edge, @ByRef int[] vertex);
@@ -3457,11 +3458,11 @@ public static final int
     public native void getEdgeList(@Cast("cv::Vec4f*") @StdVector FloatPointer edgeList);
     public native void getTriangleList(@Cast("cv::Vec6f*") @StdVector FloatPointer triangleList);
     public native void getVoronoiFacetList(@StdVector IntPointer idx, @ByRef Point2fVectorVector facetList,
-                                         @StdVector Point2f facetCenters);
+                                         @ByRef Point2fVector facetCenters);
     public native void getVoronoiFacetList(@StdVector IntBuffer idx, @ByRef Point2fVectorVector facetList,
-                                         @StdVector Point2f facetCenters);
+                                         @ByRef Point2fVector facetCenters);
     public native void getVoronoiFacetList(@StdVector int[] idx, @ByRef Point2fVectorVector facetList,
-                                         @StdVector Point2f facetCenters);
+                                         @ByRef Point2fVector facetCenters);
 
     public native @ByVal Point2f getVertex(int vertex, IntPointer firstEdge/*=0*/);
     public native @ByVal Point2f getVertex(int vertex);
@@ -6275,7 +6276,7 @@ false, which means that the absolute value is returned.
 
 The function calculates and returns the minimum-area bounding rectangle (possibly rotated) for a
 specified point set. See the OpenCV sample minarea.cpp . Developer should keep in mind that the
-returned rotatedRect can contain negative indices when data is close the the containing Mat element
+returned rotatedRect can contain negative indices when data is close to the containing Mat element
 boundary.
 
 @param points Input vector of 2D points, stored in std::vector\<\> or Mat
@@ -6542,7 +6543,9 @@ public static final int
     /** ![pink](pics/colormaps/colorscale_pink.jpg) */
     COLORMAP_PINK = 10,
     /** ![hot](pics/colormaps/colorscale_hot.jpg) */
-    COLORMAP_HOT = 11;
+    COLORMAP_HOT = 11,
+    /** ![hot](pics/colormaps/colorscale_parula.jpg) */
+    COLORMAP_PARULA = 12;
 
 /** @brief Applies a GNU Octave/MATLAB equivalent colormap on a given image.
 
@@ -6910,7 +6913,7 @@ accuracy.
  */
 @Namespace("cv") public static native void ellipse2Poly( @ByVal Point center, @ByVal Size axes, int angle,
                                 int arcStart, int arcEnd, int delta,
-                                @StdVector Point pts );
+                                @ByRef PointVector pts );
 
 /** @brief Draws a text string.
 

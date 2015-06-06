@@ -2,7 +2,6 @@
 
 package org.bytedeco.javacpp;
 
-import org.bytedeco.javacpp.annotation.Index;
 import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
@@ -635,7 +634,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 }
 
 
-@Name("cv::detail::PlaneWarperGpu") @NoOffset public static class DetailPlaneWarperGpu extends RotationWarper {
+@Name("cv::detail::PlaneWarperGpu") public static class DetailPlaneWarperGpu extends RotationWarper {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetailPlaneWarperGpu(Pointer p) { super(p); }
@@ -660,20 +659,10 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
     public native @ByVal Point warp(@ByVal Mat src, @ByVal Mat K, @ByVal Mat R, @ByVal Mat T, int interp_mode, int border_mode,
                    @ByVal Mat dst);
-
-    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByRef GpuMat xmap, @ByRef GpuMat ymap);
-
-    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByVal Mat T, @ByRef GpuMat xmap, @ByRef GpuMat ymap);
-
-    public native @ByVal Point warp(@Const @ByRef GpuMat src, @ByVal Mat K, @ByVal Mat R, int interp_mode, int border_mode,
-                   @ByRef GpuMat dst);
-
-    public native @ByVal Point warp(@Const @ByRef GpuMat src, @ByVal Mat K, @ByVal Mat R, @ByVal Mat T, int interp_mode, int border_mode,
-                   @ByRef GpuMat dst);
 }
 
 
-@Name("cv::detail::SphericalWarperGpu") @NoOffset public static class DetailSphericalWarperGpu extends RotationWarper {
+@Name("cv::detail::SphericalWarperGpu") public static class DetailSphericalWarperGpu extends RotationWarper {
     static { Loader.load(); }
     /** Empty constructor. */
     public DetailSphericalWarperGpu() { }
@@ -687,15 +676,10 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
     public native @ByVal Point warp(@ByVal Mat src, @ByVal Mat K, @ByVal Mat R, int interp_mode, int border_mode,
                    @ByVal Mat dst);
-
-    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByRef GpuMat xmap, @ByRef GpuMat ymap);
-
-    public native @ByVal Point warp(@Const @ByRef GpuMat src, @ByVal Mat K, @ByVal Mat R, int interp_mode, int border_mode,
-                   @ByRef GpuMat dst);
 }
 
 
-@Name("cv::detail::CylindricalWarperGpu") @NoOffset public static class DetailCylindricalWarperGpu extends RotationWarper {
+@Name("cv::detail::CylindricalWarperGpu") public static class DetailCylindricalWarperGpu extends RotationWarper {
     static { Loader.load(); }
     /** Empty constructor. */
     public DetailCylindricalWarperGpu() { }
@@ -709,11 +693,6 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
     public native @ByVal Point warp(@ByVal Mat src, @ByVal Mat K, @ByVal Mat R, int interp_mode, int border_mode,
                    @ByVal Mat dst);
-
-    public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByRef GpuMat xmap, @ByRef GpuMat ymap);
-
-    public native @ByVal Point warp(@Const @ByRef GpuMat src, @ByVal Mat K, @ByVal Mat R, int interp_mode, int border_mode,
-                   @ByRef GpuMat dst);
 }
 
 
@@ -906,7 +885,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
     public native int img_idx(); public native ImageFeatures img_idx(int img_idx);
     public native @ByRef Size img_size(); public native ImageFeatures img_size(Size img_size);
-    public native @StdVector KeyPoint keypoints(); public native ImageFeatures keypoints(KeyPoint keypoints);
+    public native @ByRef KeyPointVector keypoints(); public native ImageFeatures keypoints(KeyPointVector keypoints);
     public native @ByRef UMat descriptors(); public native ImageFeatures descriptors(UMat descriptors);
 }
 
@@ -928,7 +907,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
     @sa detail::ImageFeatures, Rect_
     */
-    public native @Name("operator()") void apply(@ByVal Mat image, @ByRef ImageFeatures features, @StdVector Rect rois);
+    public native @Name("operator()") void apply(@ByVal Mat image, @ByRef ImageFeatures features, @Const @ByRef RectVector rois);
     /** @brief Frees unused memory allocated before if there is any. */
     public native void collectGarbage();
 }
@@ -1005,7 +984,7 @@ It's assumed that there is a homography between those images.
     /** Images indices (optional) */
     public native int src_img_idx(); public native MatchesInfo src_img_idx(int src_img_idx);
     public native int dst_img_idx(); public native MatchesInfo dst_img_idx(int dst_img_idx);
-    public native @StdVector DMatch matches(); public native MatchesInfo matches(DMatch matches);
+    public native @ByRef DMatchVector matches(); public native MatchesInfo matches(DMatchVector matches);
     /** Geometrically consistent matches mask */
     public native @Cast("uchar*") @StdVector BytePointer inliers_mask(); public native MatchesInfo inliers_mask(BytePointer inliers_mask);
     /** Number of geometrically consistent matches */
@@ -1283,10 +1262,10 @@ public static final int ENABLE_LOG = 0;
 // Auxiliary functions
 
 @Namespace("cv::detail") public static native @Cast("bool") boolean overlapRoi(@ByVal Point tl1, @ByVal Point tl2, @ByVal Size sz1, @ByVal Size sz2, @ByRef Rect roi);
-@Namespace("cv::detail") public static native @ByVal Rect resultRoi(@StdVector Point corners, @StdVector UMat images);
-@Namespace("cv::detail") public static native @ByVal Rect resultRoi(@StdVector Point corners, @StdVector Size sizes);
-@Namespace("cv::detail") public static native @ByVal Rect resultRoiIntersection(@StdVector Point corners, @StdVector Size sizes);
-@Namespace("cv::detail") public static native @ByVal Point resultTl(@StdVector Point corners);
+@Namespace("cv::detail") public static native @ByVal Rect resultRoi(@Const @ByRef PointVector corners, @Const @ByRef UMatVector images);
+@Namespace("cv::detail") public static native @ByVal Rect resultRoi(@Const @ByRef PointVector corners, @Const @ByRef SizeVector sizes);
+@Namespace("cv::detail") public static native @ByVal Rect resultRoiIntersection(@Const @ByRef PointVector corners, @Const @ByRef SizeVector sizes);
+@Namespace("cv::detail") public static native @ByVal Point resultTl(@Const @ByRef PointVector corners);
 
 // Returns random 'count' element subset of the {0,1,...,size-1} set
 @Namespace("cv::detail") public static native void selectRandomSubset(int count, int size, @StdVector IntPointer subset);
@@ -1675,10 +1654,10 @@ public static final int
     @param masks Image masks to update (second value in pair specifies the value which should be used
     to detect where image is)
      */
-    public native void feed(@StdVector Point corners, @StdVector UMat images,
-                  @StdVector UMat masks);
+    public native void feed(@Const @ByRef PointVector corners, @Const @ByRef UMatVector images,
+                  @Const @ByRef UMatVector masks);
     /** @overload */
-    public native void feed(@StdVector Point corners, @StdVector UMat images,
+    public native void feed(@Const @ByRef PointVector corners, @Const @ByRef UMatVector images,
                           @Const @ByRef UMatBytePairVector masks);
     /** @brief Compensate exposure in the specified image.
 
@@ -1706,7 +1685,7 @@ public static final int
         return (NoExposureCompensator)super.position(position);
     }
 
-    public native void feed(@StdVector Point arg0, @StdVector UMat arg1,
+    public native void feed(@Const @ByRef PointVector arg0, @Const @ByRef UMatVector arg1,
                   @Const @ByRef UMatBytePairVector arg2);
     public native void apply(int arg0, @ByVal Point arg1, @ByVal Mat arg2, @ByVal Mat arg3);
 }
@@ -1728,7 +1707,7 @@ intensities, see @cite BL07 and @cite WJ10 for details.
         return (GainCompensator)super.position(position);
     }
 
-    public native void feed(@StdVector Point corners, @StdVector UMat images,
+    public native void feed(@Const @ByRef PointVector corners, @Const @ByRef UMatVector images,
                   @Const @ByRef UMatBytePairVector masks);
     public native void apply(int index, @ByVal Point corner, @ByVal Mat image, @ByVal Mat mask);
     public native @StdVector DoublePointer gains();
@@ -1752,7 +1731,7 @@ intensities, see @cite UES01 for details.
     private native void allocate(int bl_width/*=32*/, int bl_height/*=32*/);
     public BlocksGainCompensator() { allocate(); }
     private native void allocate();
-    public native void feed(@StdVector Point corners, @StdVector UMat images,
+    public native void feed(@Const @ByRef PointVector corners, @Const @ByRef UMatVector images,
                   @Const @ByRef UMatBytePairVector masks);
     public native void apply(int index, @ByVal Point corner, @ByVal Mat image, @ByVal Mat mask);
 }
@@ -1834,8 +1813,8 @@ intensities, see @cite UES01 for details.
     @param corners Source image top-left corners
     @param masks Source image masks to update
      */
-    public native void find(@StdVector UMat src, @StdVector Point corners,
-                          @StdVector UMat masks);
+    public native void find(@Const @ByRef UMatVector src, @Const @ByRef PointVector corners,
+                          @ByRef UMatVector masks);
 }
 
 /** @brief Stub seam estimator which does nothing.
@@ -1854,7 +1833,7 @@ intensities, see @cite UES01 for details.
         return (NoSeamFinder)super.position(position);
     }
 
-    public native void find(@StdVector UMat arg0, @StdVector Point arg1, @StdVector UMat arg2);
+    public native void find(@Const @ByRef UMatVector arg0, @Const @ByRef PointVector arg1, @ByRef UMatVector arg2);
 }
 
 /** @brief Base class for all pairwise seam estimators.
@@ -1866,8 +1845,8 @@ intensities, see @cite UES01 for details.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PairwiseSeamFinder(Pointer p) { super(p); }
 
-    public native void find(@StdVector UMat src, @StdVector Point corners,
-                          @StdVector UMat masks);
+    public native void find(@Const @ByRef UMatVector src, @Const @ByRef PointVector corners,
+                          @ByRef UMatVector masks);
 }
 
 /** @brief Voronoi diagram-based seam estimator.
@@ -1886,10 +1865,10 @@ intensities, see @cite UES01 for details.
         return (VoronoiSeamFinder)super.position(position);
     }
 
-    public native void find(@StdVector UMat src, @StdVector Point corners,
-                          @StdVector UMat masks);
-    public native void find(@StdVector Size size, @StdVector Point corners,
-                          @StdVector UMat masks);
+    public native void find(@Const @ByRef UMatVector src, @Const @ByRef PointVector corners,
+                          @ByRef UMatVector masks);
+    public native void find(@Const @ByRef SizeVector size, @Const @ByRef PointVector corners,
+                          @ByRef UMatVector masks);
 }
 
 
@@ -1909,8 +1888,8 @@ intensities, see @cite UES01 for details.
     public native @Cast("cv::detail::DpSeamFinder::CostFunction") int costFunction();
     public native void setCostFunction(@Cast("cv::detail::DpSeamFinder::CostFunction") int val);
 
-    public native void find(@StdVector UMat src, @StdVector Point corners,
-                          @StdVector UMat masks);
+    public native void find(@Const @ByRef UMatVector src, @Const @ByRef PointVector corners,
+                          @ByRef UMatVector masks);
 }
 
 /** @brief Base class for all minimum graph-cut-based seam estimators.
@@ -1955,8 +1934,8 @@ intensities, see @cite UES01 for details.
     public GraphCutSeamFinder() { allocate(); }
     private native void allocate();
 
-    public native void find(@StdVector UMat src, @StdVector Point corners,
-                  @StdVector UMat masks);
+    public native void find(@Const @ByRef UMatVector src, @Const @ByRef PointVector corners,
+                  @ByRef UMatVector masks);
 }
 
 
@@ -2052,7 +2031,7 @@ Simple blender which puts one image over another
     @param corners Source images top-left corners
     @param sizes Source image sizes
      */
-    public native void prepare(@StdVector Point corners, @StdVector Size sizes);
+    public native void prepare(@Const @ByRef PointVector corners, @Const @ByRef SizeVector sizes);
     /** @overload */
     public native void prepare(@ByVal Rect dst_roi);
     /** @brief Processes the image.
@@ -2097,8 +2076,8 @@ Simple blender which puts one image over another
 
     /** Creates weight maps for fixed set of source images by their masks and top-left corners.
      *  Final image can be obtained by simple weighting of the source images. */
-    public native @ByVal Rect createWeightMaps(@StdVector UMat masks, @StdVector Point corners,
-                              @StdVector UMat weight_maps);
+    public native @ByVal Rect createWeightMaps(@Const @ByRef UMatVector masks, @Const @ByRef PointVector corners,
+                              @ByRef UMatVector weight_maps);
 }
 
 
@@ -2137,12 +2116,12 @@ Simple blender which puts one image over another
 
 @Namespace("cv::detail") public static native void createWeightMap(@ByVal Mat mask, float sharpness, @ByVal Mat weight);
 
-@Namespace("cv::detail") public static native void createLaplacePyr(@ByVal Mat img, int num_levels, @StdVector UMat pyr);
-@Namespace("cv::detail") public static native void createLaplacePyrGpu(@ByVal Mat img, int num_levels, @StdVector UMat pyr);
+@Namespace("cv::detail") public static native void createLaplacePyr(@ByVal Mat img, int num_levels, @ByRef UMatVector pyr);
+@Namespace("cv::detail") public static native void createLaplacePyrGpu(@ByVal Mat img, int num_levels, @ByRef UMatVector pyr);
 
 // Restores source image
-@Namespace("cv::detail") public static native void restoreImageFromLaplacePyr(@StdVector UMat pyr);
-@Namespace("cv::detail") public static native void restoreImageFromLaplacePyrGpu(@StdVector UMat pyr);
+@Namespace("cv::detail") public static native void restoreImageFromLaplacePyr(@ByRef UMatVector pyr);
+@Namespace("cv::detail") public static native void restoreImageFromLaplacePyrGpu(@ByRef UMatVector pyr);
 
 /** @} */
 
@@ -2322,7 +2301,7 @@ by Heung-Yeung Shum and Richard Szeliski.
 
     public static native @Ptr Timelapser createDefault(int type);
 
-    public native void initialize(@StdVector Point corners, @StdVector Size sizes);
+    public native void initialize(@Const @ByRef PointVector corners, @Const @ByRef SizeVector sizes);
     public native void process(@ByVal Mat img, @ByVal Mat mask, @ByVal Point tl);
     public native @Const @ByRef UMat getDst();
 }
@@ -2342,7 +2321,7 @@ by Heung-Yeung Shum and Richard Szeliski.
         return (TimelapserCrop)super.position(position);
     }
 
-    public native void initialize(@StdVector Point corners, @StdVector Size sizes);
+    public native void initialize(@Const @ByRef PointVector corners, @Const @ByRef SizeVector sizes);
 }
 
 /** @} */

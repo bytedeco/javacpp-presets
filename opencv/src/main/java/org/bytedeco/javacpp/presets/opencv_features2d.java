@@ -32,13 +32,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = {opencv_highgui.class, opencv_flann.class, opencv_ml.class}, value = {
     @Platform(include = "<opencv2/features2d.hpp>", link = "opencv_features2d@.3.0"),
-    @Platform(value = "windows", link = "opencv_features2d300")},
+    @Platform(value = "windows", link = "opencv_world300")},
         target = "org.bytedeco.javacpp.opencv_features2d")
 public class opencv_features2d implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info().javaText("import org.bytedeco.javacpp.annotation.Index;"))
-               .put(new Info("std::vector<std::vector<cv::KeyPoint> >").pointerTypes("KeyPointVectorVector").define())
-               .put(new Info("std::vector<std::vector<cv::DMatch> >").pointerTypes("DMatchVectorVector").define())
-               .put(new Info("cv::FREAK(cv::FREAK&)", "cv::FREAK::operator=").skip());
     }
 }

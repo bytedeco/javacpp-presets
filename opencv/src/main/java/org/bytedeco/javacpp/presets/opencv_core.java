@@ -42,10 +42,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "<opencv2/core/cvdef.h>", "<opencv2/core/version.hpp>", "<opencv2/core/base.hpp>", "<opencv2/core/cvstd.hpp>",
         "<opencv2/core/utility.hpp>", "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>",
         "<opencv2/core.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
-        "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "opencv_adapters.h"}, link = "opencv_core@.3.0", preload = "tbb"),
-    @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link = "opencv_core300", preload = {"msvcr100", "msvcp100"}),
-    @Platform(value = "windows-x86", preloadpath = "C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/redist/x86/Microsoft.VC100.CRT/"),
-    @Platform(value = "windows-x86_64", preloadpath = "C:/Program Files (x86)/Microsoft Visual Studio 10.0/VC/redist/x64/Microsoft.VC100.CRT/")},
+        "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.3.0", "opencv_imgproc@.3.0"}),
+    @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link = "opencv_world300", preload = {"msvcr120", "msvcp120"}),
+    @Platform(value = "windows-x86", preloadpath = "C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/redist/x86/Microsoft.VC120.CRT/"),
+    @Platform(value = "windows-x86_64", preloadpath = "C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/redist/x64/Microsoft.VC120.CRT/")},
         target = "org.bytedeco.javacpp.opencv_core", helper = "org.bytedeco.javacpp.helper.opencv_core")
 public class opencv_core implements InfoMapper {
     public void map(InfoMap infoMap) {
@@ -54,7 +54,7 @@ public class opencv_core implements InfoMapper {
                .put(new Info("defined __ICL", "defined __ICC", "defined __ECL", "defined __ECC", "defined __INTEL_COMPILER",
                              "defined WIN32 || defined _WIN32", "defined(__clang__)", "defined(__GNUC__)", "defined(_MSC_VER)",
                              "OPENCV_NOSTL_TRANSITIONAL", "CV_COLLECT_IMPL_DATA").define(false))
-               .put(new Info("CV_ENABLE_UNROLLED", "CV_CDECL", "CV_STDCALL", "CV_IMPL", "CV_EXTERN_C", "CV_Func").cppTypes())
+               .put(new Info("CV_ENABLE_UNROLLED", "CV_CDECL", "CV_STDCALL", "CV_IMPL", "CV_EXTERN_C", "CV_Func").cppTypes().cppText(""))
                .put(new Info("CV_DEFAULT", "CV_INLINE", "CV_EXPORTS", "CV_NEON", "CPU_HAS_NEON_FEATURE",
                              "CV_NORETURN", "CV_SUPPRESS_DEPRECATED_START", "CV_SUPPRESS_DEPRECATED_END").cppTypes().annotations())
                .put(new Info("CVAPI").cppText("#define CVAPI(rettype) rettype"))
@@ -125,11 +125,21 @@ public class opencv_core implements InfoMapper {
                .put(new Info("std::vector<std::vector<char> >", "std::vector<std::vector<unsigned char> >").cast().pointerTypes("ByteVectorVector").define())
                .put(new Info("std::vector<std::vector<int> >").pointerTypes("IntVectorVector").define())
                .put(new Info("std::vector<cv::String>").pointerTypes("StringVector").define())
+               .put(new Info("std::vector<cv::Point_<int> >").pointerTypes("PointVector").define())
+               .put(new Info("std::vector<cv::Point_<float> >").pointerTypes("Point2fVector").define())
+               .put(new Info("std::vector<cv::Point_<double> >").pointerTypes("Point2dVector").define())
+               .put(new Info("std::vector<cv::Size_<int> >").pointerTypes("SizeVector").define())
+               .put(new Info("std::vector<cv::Rect_<int> >").pointerTypes("RectVector").define())
+               .put(new Info("std::vector<cv::KeyPoint>").pointerTypes("KeyPointVector").define())
+               .put(new Info("std::vector<cv::DMatch>").pointerTypes("DMatchVector").define())
                .put(new Info("std::vector<std::vector<cv::Point_<int> > >").pointerTypes("PointVectorVector").define())
                .put(new Info("std::vector<std::vector<cv::Point_<float> > >").pointerTypes("Point2fVectorVector").define())
                .put(new Info("std::vector<std::vector<cv::Point_<double> > >").pointerTypes("Point2dVectorVector").define())
                .put(new Info("std::vector<std::vector<cv::Rect_<int> > >").pointerTypes("RectVectorVector").define())
+               .put(new Info("std::vector<std::vector<cv::KeyPoint> >").pointerTypes("KeyPointVectorVector").define())
+               .put(new Info("std::vector<std::vector<cv::DMatch> >").pointerTypes("DMatchVectorVector").define())
                .put(new Info("std::vector<cv::Mat>").pointerTypes("MatVector").define())
+               .put(new Info("std::vector<cv::UMat>").pointerTypes("UMatVector").define())
                .put(new Info("std::pair<int,int>").pointerTypes("IntIntPair").define())
                .put(new Info("std::vector<std::pair<int,int> >").pointerTypes("IntIntPairVector").define())
                .put(new Info("std::vector<std::pair<cv::Mat,unsigned char> >").pointerTypes("MatBytePairVector").define())
@@ -140,7 +150,7 @@ public class opencv_core implements InfoMapper {
 
                .put(new Info("CvModule::first", "CvModule::last", "CvType::first", "CvType::last",
                              "cv::fromUtf16", "cv::toUtf16", "cv::Exception", "cv::Allocator", "cv::DataDepth", "cv::DataType", "cv::ParamType",
-                             "cv::_InputArray", "cv::_OutputArray", "cv::Mat_", "cv::SparseMat_",
+                             "cv::_InputArray", "cv::_OutputArray", "cv::Mat_", "cv::SparseMat_", "cv::cuda::GpuMat",
                              "cv::Matx_AddOp", "cv::Matx_SubOp", "cv::Matx_ScaleOp", "cv::Matx_MulOp", "cv::Matx_MatMulOp", "cv::Matx_TOp",
                              "cv::Matx", "cv::Vec", "cv::MatIterator_", "cv::MatConstIterator_", "cv::Mat::MSize", "cv::Mat::MStep",
                              "cv::MatCommaInitializer_", "cv::MatxCommaInitializer", "cv::VecCommaInitializer",

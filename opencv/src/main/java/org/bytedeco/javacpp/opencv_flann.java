@@ -324,9 +324,9 @@ public static final int
     }
 
     public CompositeIndexParams(int trees/*=4*/, int branching/*=32*/, int iterations/*=11*/,
-                             @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2*/ ) { allocate(trees, branching, iterations, centers_init, cb_index); }
+                             @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2f*/ ) { allocate(trees, branching, iterations, centers_init, cb_index); }
     private native void allocate(int trees/*=4*/, int branching/*=32*/, int iterations/*=11*/,
-                             @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2*/ );
+                             @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2f*/ );
     public CompositeIndexParams( ) { allocate(); }
     private native void allocate( );
 }
@@ -342,10 +342,10 @@ public static final int
         return (AutotunedIndexParams)super.position(position);
     }
 
-    public AutotunedIndexParams(float target_precision/*=0.8*/, float build_weight/*=0.01*/,
-                             float memory_weight/*=0*/, float sample_fraction/*=0.1*/) { allocate(target_precision, build_weight, memory_weight, sample_fraction); }
-    private native void allocate(float target_precision/*=0.8*/, float build_weight/*=0.01*/,
-                             float memory_weight/*=0*/, float sample_fraction/*=0.1*/);
+    public AutotunedIndexParams(float target_precision/*=0.8f*/, float build_weight/*=0.01f*/,
+                             float memory_weight/*=0*/, float sample_fraction/*=0.1f*/) { allocate(target_precision, build_weight, memory_weight, sample_fraction); }
+    private native void allocate(float target_precision/*=0.8f*/, float build_weight/*=0.01f*/,
+                             float memory_weight/*=0*/, float sample_fraction/*=0.1f*/);
     public AutotunedIndexParams() { allocate(); }
     private native void allocate();
 }
@@ -381,9 +381,9 @@ public static final int
     }
 
     public KMeansIndexParams(int branching/*=32*/, int iterations/*=11*/,
-                          @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2*/ ) { allocate(branching, iterations, centers_init, cb_index); }
+                          @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2f*/ ) { allocate(branching, iterations, centers_init, cb_index); }
     private native void allocate(int branching/*=32*/, int iterations/*=11*/,
-                          @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2*/ );
+                          @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2f*/ );
     public KMeansIndexParams( ) { allocate(); }
     private native void allocate( );
 }

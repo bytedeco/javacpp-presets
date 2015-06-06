@@ -120,9 +120,9 @@ public static final int
     CV_CAP_OPENNI   = 900,   // OpenNI (for Kinect)
     CV_CAP_OPENNI_ASUS = 910,   // OpenNI (for Asus Xtion)
 
-    CV_CAP_ANDROID  = 1000,  // Android
-    CV_CAP_ANDROID_BACK = CV_CAP_ANDROID+99, // Android back camera
-    CV_CAP_ANDROID_FRONT = CV_CAP_ANDROID+98, // Android front camera
+    CV_CAP_ANDROID  = 1000,  // Android - not used
+    CV_CAP_ANDROID_BACK = CV_CAP_ANDROID+99, // Android back camera - not used
+    CV_CAP_ANDROID_FRONT = CV_CAP_ANDROID+98, // Android front camera - not used
 
     CV_CAP_XIAPI    = 1100,   // XIMEA Camera API
 
@@ -132,7 +132,9 @@ public static final int
 
     CV_CAP_INTELPERC = 1500, // Intel Perceptual Computing
 
-    CV_CAP_OPENNI2 = 1600;   // OpenNI2 (for Kinect)
+    CV_CAP_OPENNI2 = 1600,   // OpenNI2 (for Kinect)
+
+    CV_CAP_GPHOTO2 = 1700;
 
 /* start capturing frames from camera: index = camera_index + domain_offset (CV_CAP_*) */
 public static native CvCapture cvCreateCameraCapture( int index );
@@ -204,6 +206,7 @@ public static final int
     CV_CAP_PROP_ROLL          = 35,
     CV_CAP_PROP_IRIS          = 36,
     CV_CAP_PROP_SETTINGS      = 37,
+    CV_CAP_PROP_BUFFERSIZE    = 38,
 
     CV_CAP_PROP_AUTOGRAB      = 1024, // property for videoio class CvCapture_Android only
     CV_CAP_PROP_SUPPORTED_PREVIEW_SIZES_STRING= 1025, // readonly, tricky property, returns cpnst char* indeed
@@ -346,63 +349,28 @@ public static final int
     CV_CAP_OPENNI_QVGA_30HZ    = 3,
     CV_CAP_OPENNI_QVGA_60HZ    = 4;
 
-//supported by Android camera output formats
-/** enum  */
-public static final int
-    CV_CAP_ANDROID_COLOR_FRAME_BGR = 0, //BGR
-    CV_CAP_ANDROID_COLOR_FRAME =  CV_CAP_ANDROID_COLOR_FRAME_BGR,
-    CV_CAP_ANDROID_GREY_FRAME  = 1,  //Y
-    CV_CAP_ANDROID_GRAY_FRAME  =  CV_CAP_ANDROID_GREY_FRAME,
-    CV_CAP_ANDROID_COLOR_FRAME_RGB = 2,
-    CV_CAP_ANDROID_COLOR_FRAME_BGRA = 3,
-    CV_CAP_ANDROID_COLOR_FRAME_RGBA = 4;
-
-// supported Android camera flash modes
-/** enum  */
-public static final int
-    CV_CAP_ANDROID_FLASH_MODE_AUTO = 0,
-    CV_CAP_ANDROID_FLASH_MODE_OFF = 1,
-    CV_CAP_ANDROID_FLASH_MODE_ON = 2,
-    CV_CAP_ANDROID_FLASH_MODE_RED_EYE = 3,
-    CV_CAP_ANDROID_FLASH_MODE_TORCH = 4;
-
-// supported Android camera focus modes
-/** enum  */
-public static final int
-    CV_CAP_ANDROID_FOCUS_MODE_AUTO = 0,
-    CV_CAP_ANDROID_FOCUS_MODE_CONTINUOUS_PICTURE = 1,
-    CV_CAP_ANDROID_FOCUS_MODE_CONTINUOUS_VIDEO = 2,
-    CV_CAP_ANDROID_FOCUS_MODE_EDOF = 3,
-    CV_CAP_ANDROID_FOCUS_MODE_FIXED = 4,
-    CV_CAP_ANDROID_FOCUS_MODE_INFINITY = 5,
-    CV_CAP_ANDROID_FOCUS_MODE_MACRO = 6;
-
-// supported Android camera white balance modes
-/** enum  */
-public static final int
-    CV_CAP_ANDROID_WHITE_BALANCE_AUTO = 0,
-    CV_CAP_ANDROID_WHITE_BALANCE_CLOUDY_DAYLIGHT = 1,
-    CV_CAP_ANDROID_WHITE_BALANCE_DAYLIGHT = 2,
-    CV_CAP_ANDROID_WHITE_BALANCE_FLUORESCENT = 3,
-    CV_CAP_ANDROID_WHITE_BALANCE_INCANDESCENT = 4,
-    CV_CAP_ANDROID_WHITE_BALANCE_SHADE = 5,
-    CV_CAP_ANDROID_WHITE_BALANCE_TWILIGHT = 6,
-    CV_CAP_ANDROID_WHITE_BALANCE_WARM_FLUORESCENT = 7;
-
-// supported Android camera antibanding modes
-/** enum  */
-public static final int
-    CV_CAP_ANDROID_ANTIBANDING_50HZ = 0,
-    CV_CAP_ANDROID_ANTIBANDING_60HZ = 1,
-    CV_CAP_ANDROID_ANTIBANDING_AUTO = 2,
-    CV_CAP_ANDROID_ANTIBANDING_OFF = 3;
-
 /** enum  */
 public static final int
     CV_CAP_INTELPERC_DEPTH_MAP              = 0, // Each pixel is a 16-bit integer. The value indicates the distance from an object to the camera's XY plane or the Cartesian depth.
     CV_CAP_INTELPERC_UVDEPTH_MAP            = 1, // Each pixel contains two 32-bit floating point values in the range of 0-1, representing the mapping of depth coordinates to the color coordinates.
     CV_CAP_INTELPERC_IR_MAP                 = 2, // Each pixel is a 16-bit integer. The value indicates the intensity of the reflected laser beam.
     CV_CAP_INTELPERC_IMAGE                  = 3;
+
+// gPhoto2 properties, if propertyId is less than 0 then work on widget with that __additive inversed__ camera setting ID
+// Get IDs by using CAP_PROP_GPHOTO2_WIDGET_ENUMERATE.
+// @see CvCaptureCAM_GPHOTO2 for more info
+/** enum  */
+public static final int
+    CV_CAP_PROP_GPHOTO2_PREVIEW           = 17001, // Capture only preview from liveview mode.
+    CV_CAP_PROP_GPHOTO2_WIDGET_ENUMERATE  = 17002, // Readonly, returns (const char *).
+    CV_CAP_PROP_GPHOTO2_RELOAD_CONFIG     = 17003, // Trigger, only by set. Reload camera settings.
+    CV_CAP_PROP_GPHOTO2_RELOAD_ON_CHANGE  = 17004, // Reload all settings on set.
+    CV_CAP_PROP_GPHOTO2_COLLECT_MSGS      = 17005, // Collect messages with details.
+    CV_CAP_PROP_GPHOTO2_FLUSH_MSGS        = 17006, // Readonly, returns (const char *).
+    CV_CAP_PROP_SPEED                     = 17007, // Exposure speed. Can be readonly, depends on camera program.
+    CV_CAP_PROP_APERTURE                  = 17008, // Aperture. Can be readonly, depends on camera program.
+    CV_CAP_PROP_EXPOSUREPROGRAM           = 17009, // Camera exposure program.
+    CV_CAP_PROP_VIEWFINDER                = 17010;  // Enter liveview mode.
 
 /* retrieve or set capture properties */
 public static native double cvGetCaptureProperty( CvCapture capture, int property_id );
@@ -521,6 +489,7 @@ public static native int cvWriteToAVI(CvVideoWriter arg1, IplImage arg2);
   @{
     @defgroup videoio_c C API
     @defgroup videoio_ios iOS glue
+    @defgroup videoio_winrt WinRT glue
   @}
 */
 
@@ -546,14 +515,16 @@ public static final int CAP_ANY          = 0,     // autodetect
        CAP_PVAPI        = 800,   // PvAPI, Prosilica GigE SDK
        CAP_OPENNI       = 900,   // OpenNI (for Kinect)
        CAP_OPENNI_ASUS  = 910,   // OpenNI (for Asus Xtion)
-       CAP_ANDROID      = 1000,  // Android
+       CAP_ANDROID      = 1000,  // Android - not used
        CAP_XIAPI        = 1100,  // XIMEA Camera API
        CAP_AVFOUNDATION = 1200,  // AVFoundation framework for iOS (OS X Lion will have the same API)
        CAP_GIGANETIX    = 1300,  // Smartek Giganetix GigEVisionSDK
        CAP_MSMF         = 1400,  // Microsoft Media Foundation (via videoInput)
-       CAP_INTELPERC    = 1500,   // Intel Perceptual Computing SDK
-       CAP_OPENNI2      = 1600,   // OpenNI2 (for Kinect)
-       CAP_OPENNI2_ASUS = 1610;   // OpenNI2 (for Asus Xtion and Occipital Structure sensors)
+       CAP_WINRT        = 1410,  // Microsoft Windows Runtime using Media Foundation
+       CAP_INTELPERC    = 1500,  // Intel Perceptual Computing SDK
+       CAP_OPENNI2      = 1600,  // OpenNI2 (for Kinect)
+       CAP_OPENNI2_ASUS = 1610,  // OpenNI2 (for Asus Xtion and Occipital Structure sensors)
+       CAP_GPHOTO2      = 1700;   // gPhoto2 connection
 
 // generic properties (based on DC1394 properties)
 /** enum cv:: */
@@ -735,72 +706,6 @@ public static final int CAP_PROP_XI_DOWNSAMPLING  = 400, // Change image resolut
        CAP_PROP_XI_AEAG_LEVEL    = 419, // Average intensity of output signal AEAG should achieve(in %)
        CAP_PROP_XI_TIMEOUT       = 420;  // Image capture timeout in milliseconds
 
-
-// Properties for Android cameras
-/** enum cv:: */
-public static final int CAP_PROP_ANDROID_AUTOGRAB               = 1024,
-       CAP_PROP_ANDROID_PREVIEW_SIZES_STRING   = 1025, // readonly, tricky property, returns const char* indeed
-       CAP_PROP_ANDROID_PREVIEW_FORMAT         = 1026, // readonly, tricky property, returns const char* indeed
-       CAP_PROP_ANDROID_FLASH_MODE             = 8001,
-       CAP_PROP_ANDROID_FOCUS_MODE             = 8002,
-       CAP_PROP_ANDROID_WHITE_BALANCE          = 8003,
-       CAP_PROP_ANDROID_ANTIBANDING            = 8004,
-       CAP_PROP_ANDROID_FOCAL_LENGTH           = 8005,
-       CAP_PROP_ANDROID_FOCUS_DISTANCE_NEAR    = 8006,
-       CAP_PROP_ANDROID_FOCUS_DISTANCE_OPTIMAL = 8007,
-       CAP_PROP_ANDROID_FOCUS_DISTANCE_FAR     = 8008;
-
-
-// Android camera output formats
-/** enum cv:: */
-public static final int CAP_ANDROID_COLOR_FRAME_BGR  = 0, //BGR
-       CAP_ANDROID_COLOR_FRAME      =  CAP_ANDROID_COLOR_FRAME_BGR,
-       CAP_ANDROID_GREY_FRAME       = 1,  //Y
-       CAP_ANDROID_GRAY_FRAME       =  CAP_ANDROID_GREY_FRAME,
-       CAP_ANDROID_COLOR_FRAME_RGB  = 2,
-       CAP_ANDROID_COLOR_FRAME_BGRA = 3,
-       CAP_ANDROID_COLOR_FRAME_RGBA = 4;
-
-
-// Android camera flash modes
-/** enum cv:: */
-public static final int CAP_ANDROID_FLASH_MODE_AUTO     = 0,
-       CAP_ANDROID_FLASH_MODE_OFF      = 1,
-       CAP_ANDROID_FLASH_MODE_ON       = 2,
-       CAP_ANDROID_FLASH_MODE_RED_EYE  = 3,
-       CAP_ANDROID_FLASH_MODE_TORCH    = 4;
-
-
-// Android camera focus modes
-/** enum cv:: */
-public static final int CAP_ANDROID_FOCUS_MODE_AUTO             = 0,
-       CAP_ANDROID_FOCUS_MODE_CONTINUOUS_VIDEO = 1,
-       CAP_ANDROID_FOCUS_MODE_EDOF             = 2,
-       CAP_ANDROID_FOCUS_MODE_FIXED            = 3,
-       CAP_ANDROID_FOCUS_MODE_INFINITY         = 4,
-       CAP_ANDROID_FOCUS_MODE_MACRO            = 5;
-
-
-// Android camera white balance modes
-/** enum cv:: */
-public static final int CAP_ANDROID_WHITE_BALANCE_AUTO             = 0,
-       CAP_ANDROID_WHITE_BALANCE_CLOUDY_DAYLIGHT  = 1,
-       CAP_ANDROID_WHITE_BALANCE_DAYLIGHT         = 2,
-       CAP_ANDROID_WHITE_BALANCE_FLUORESCENT      = 3,
-       CAP_ANDROID_WHITE_BALANCE_INCANDESCENT     = 4,
-       CAP_ANDROID_WHITE_BALANCE_SHADE            = 5,
-       CAP_ANDROID_WHITE_BALANCE_TWILIGHT         = 6,
-       CAP_ANDROID_WHITE_BALANCE_WARM_FLUORESCENT = 7;
-
-
-// Android camera antibanding modes
-/** enum cv:: */
-public static final int CAP_ANDROID_ANTIBANDING_50HZ = 0,
-       CAP_ANDROID_ANTIBANDING_60HZ = 1,
-       CAP_ANDROID_ANTIBANDING_AUTO = 2,
-       CAP_ANDROID_ANTIBANDING_OFF  = 3;
-
-
 // Properties of cameras available through AVFOUNDATION interface
 /** enum cv:: */
 public static final int CAP_PROP_IOS_DEVICE_FOCUS        = 9001,
@@ -844,6 +749,23 @@ public static final int CAP_INTELPERC_DEPTH_MAP              = 0, // Each pixel 
 /** enum cv:: */
 public static final int VIDEOWRITER_PROP_QUALITY = 1,    // Quality (0..100%) of the videostream encoded
        VIDEOWRITER_PROP_FRAMEBYTES = 2; // (Read-only): Size of just encoded video frame
+
+// gPhoto2 properties, if propertyId is less than 0 then work on widget with that __additive inversed__ camera setting ID
+// Get IDs by using CAP_PROP_GPHOTO2_WIDGET_ENUMERATE.
+// @see CvCaptureCAM_GPHOTO2 for more info
+/** enum cv:: */
+public static final int CAP_PROP_GPHOTO2_PREVIEW           = 17001, // Capture only preview from liveview mode.
+       CAP_PROP_GPHOTO2_WIDGET_ENUMERATE  = 17002, // Readonly, returns (const char *).
+       CAP_PROP_GPHOTO2_RELOAD_CONFIG     = 17003, // Trigger, only by set. Reload camera settings.
+       CAP_PROP_GPHOTO2_RELOAD_ON_CHANGE  = 17004, // Reload all settings on set.
+       CAP_PROP_GPHOTO2_COLLECT_MSGS      = 17005, // Collect messages with details.
+       CAP_PROP_GPHOTO2_FLUSH_MSGS        = 17006, // Readonly, returns (const char *).
+       CAP_PROP_SPEED                     = 17007, // Exposure speed. Can be readonly, depends on camera program.
+       CAP_PROP_APERTURE                  = 17008, // Aperture. Can be readonly, depends on camera program.
+       CAP_PROP_EXPOSUREPROGRAM           = 17009, // Camera exposure program.
+       CAP_PROP_VIEWFINDER                = 17010;  // Enter liveview mode.
+
+//enum {
 
 @Namespace("cv") @Opaque public static class IVideoCapture extends Pointer {
     /** Empty constructor. */
@@ -1124,7 +1046,6 @@ class can be used: :
 
     The method opens video writer. Parameters are the same as in the constructor
     VideoWriter::VideoWriter.
-
      */
     public native @Cast("bool") boolean open(@Str BytePointer filename, int fourcc, double fps,
                           @ByVal Size frameSize, @Cast("bool") boolean isColor/*=true*/);
@@ -1138,6 +1059,12 @@ class can be used: :
     /** @brief Returns true if video writer has been successfully initialized.
     */
     public native @Cast("bool") boolean isOpened();
+
+    /** @brief Closes the video writer.
+
+    The methods are automatically called by subsequent VideoWriter::open and by the VideoWriter
+    destructor.
+     */
     public native void release();
     public native @ByRef @Name("operator<<") VideoWriter shiftLeft(@Const @ByRef Mat image);
 

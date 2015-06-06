@@ -37,12 +37,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "<opencv2/stitching/detail/seam_finders.hpp>", "<opencv2/stitching/detail/blenders.hpp>", "<opencv2/stitching/detail/autocalib.hpp>",
         "<opencv2/stitching/detail/timelapsers.hpp>", "<opencv2/stitching/warpers.hpp>", "<opencv2/stitching.hpp>"},
               link = "opencv_stitching@.3.0", preload = "opencv_cuda@.3.0"),
-    @Platform(value = "windows", link = "opencv_stitching300", preload = "opencv_cuda300")},
+    @Platform(value = "windows", link = "opencv_world300", preload = "opencv_cuda300")},
         target = "org.bytedeco.javacpp.opencv_stitching")
 public class opencv_stitching implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info().javaText("import org.bytedeco.javacpp.annotation.Index;"))
-               .put(new Info("cv::detail::PlaneWarper").pointerTypes("DetailPlaneWarper").base("RotationWarper"))
+        infoMap.put(new Info("cv::detail::PlaneWarper").pointerTypes("DetailPlaneWarper").base("RotationWarper"))
                .put(new Info("cv::detail::SphericalWarper").pointerTypes("DetailSphericalWarper").base("RotationWarper"))
                .put(new Info("cv::detail::CylindricalWarper").pointerTypes("DetailCylindricalWarper").base("RotationWarper"))
                .put(new Info("cv::detail::FisheyeWarper").pointerTypes("DetailFisheyeWarper").base("RotationWarper"))

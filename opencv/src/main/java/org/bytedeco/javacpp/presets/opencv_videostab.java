@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "<opencv2/videostab/global_motion.hpp>", "<opencv2/videostab/motion_stabilizing.hpp>", "<opencv2/videostab/inpainting.hpp>",
         "<opencv2/videostab/deblurring.hpp>", "<opencv2/videostab/wobble_suppression.hpp>", "<opencv2/videostab/stabilizer.hpp>",
         "<opencv2/videostab/ring_buffer.hpp>", "<opencv2/videostab.hpp>"}, link = "opencv_videostab@.3.0", preload = "opencv_cuda@.3.0"),
-    @Platform(value = "windows", link = "opencv_videostab300", preload = "opencv_cuda300")},
+    @Platform(value = "windows", link = "opencv_world300", preload = "opencv_cuda300")},
         target = "org.bytedeco.javacpp.opencv_videostab")
 public class opencv_videostab implements InfoMapper {
     public void map(InfoMap infoMap) {
