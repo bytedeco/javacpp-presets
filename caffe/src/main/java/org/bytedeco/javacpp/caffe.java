@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 0.11
+// Targeted by JavaCPP version 1.0-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -538,7 +538,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 // #include "caffe/util/device_alternate.hpp"
 
 // gflags 2.1 issue: namespace google was changed to gflags without warning.
-// Luckily we will be able to use GFLAGS_GFAGS_H_ to detect if it is version
+// Luckily we will be able to use GFLAGS_GFLAGS_H_ to detect if it is version
 // 2.1. If yes, we will add a temporary solution to redirect the namespace.
 // TODO(Yangqing): Once gflags solves the problem in a more elegant way, let's
 // remove the following hack.
@@ -691,6 +691,30 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 @Namespace("caffe") public static native void protobuf_AssignDesc_caffe_2eproto();
 @Namespace("caffe") public static native void protobuf_ShutdownFile_caffe_2eproto();
 
+/** enum caffe::FillerParameter_VarianceNorm */
+public static final int
+  FillerParameter_VarianceNorm_FAN_IN = 0,
+  FillerParameter_VarianceNorm_FAN_OUT = 1,
+  FillerParameter_VarianceNorm_AVERAGE = 2;
+@Namespace("caffe") public static native @Cast("bool") boolean FillerParameter_VarianceNorm_IsValid(int value);
+@Namespace("caffe") @MemberGetter public static native @Cast("const caffe::FillerParameter_VarianceNorm") int FillerParameter_VarianceNorm_VarianceNorm_MIN();
+@Namespace("caffe") @MemberGetter public static native @Cast("const caffe::FillerParameter_VarianceNorm") int FillerParameter_VarianceNorm_VarianceNorm_MAX();
+@Namespace("caffe") @MemberGetter public static native int FillerParameter_VarianceNorm_VarianceNorm_ARRAYSIZE();
+
+@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer FillerParameter_VarianceNorm_descriptor();
+@Namespace("caffe") public static native @StdString BytePointer FillerParameter_VarianceNorm_Name(@Cast("caffe::FillerParameter_VarianceNorm") int value);
+@Namespace("caffe") public static native @Cast("bool") boolean FillerParameter_VarianceNorm_Parse(
+    @StdString BytePointer name, @Cast("caffe::FillerParameter_VarianceNorm*") IntPointer value);
+@Namespace("caffe") public static native @Cast("bool") boolean FillerParameter_VarianceNorm_Parse(
+    @StdString String name, @Cast("caffe::FillerParameter_VarianceNorm*") IntBuffer value);
+@Namespace("caffe") public static native @Cast("bool") boolean FillerParameter_VarianceNorm_Parse(
+    @StdString BytePointer name, @Cast("caffe::FillerParameter_VarianceNorm*") int[] value);
+@Namespace("caffe") public static native @Cast("bool") boolean FillerParameter_VarianceNorm_Parse(
+    @StdString String name, @Cast("caffe::FillerParameter_VarianceNorm*") IntPointer value);
+@Namespace("caffe") public static native @Cast("bool") boolean FillerParameter_VarianceNorm_Parse(
+    @StdString BytePointer name, @Cast("caffe::FillerParameter_VarianceNorm*") IntBuffer value);
+@Namespace("caffe") public static native @Cast("bool") boolean FillerParameter_VarianceNorm_Parse(
+    @StdString String name, @Cast("caffe::FillerParameter_VarianceNorm*") int[] value);
 /** enum caffe::SolverParameter_SolverMode */
 public static final int
   SolverParameter_SolverMode_CPU = 0,
@@ -926,6 +950,31 @@ public static final int
     @StdString BytePointer name, @Cast("caffe::PoolingParameter_Engine*") IntBuffer value);
 @Namespace("caffe") public static native @Cast("bool") boolean PoolingParameter_Engine_Parse(
     @StdString String name, @Cast("caffe::PoolingParameter_Engine*") int[] value);
+/** enum caffe::ReductionParameter_ReductionOp */
+public static final int
+  ReductionParameter_ReductionOp_SUM = 1,
+  ReductionParameter_ReductionOp_ASUM = 2,
+  ReductionParameter_ReductionOp_SUMSQ = 3,
+  ReductionParameter_ReductionOp_MEAN = 4;
+@Namespace("caffe") public static native @Cast("bool") boolean ReductionParameter_ReductionOp_IsValid(int value);
+@Namespace("caffe") @MemberGetter public static native @Cast("const caffe::ReductionParameter_ReductionOp") int ReductionParameter_ReductionOp_ReductionOp_MIN();
+@Namespace("caffe") @MemberGetter public static native @Cast("const caffe::ReductionParameter_ReductionOp") int ReductionParameter_ReductionOp_ReductionOp_MAX();
+@Namespace("caffe") @MemberGetter public static native int ReductionParameter_ReductionOp_ReductionOp_ARRAYSIZE();
+
+@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer ReductionParameter_ReductionOp_descriptor();
+@Namespace("caffe") public static native @StdString BytePointer ReductionParameter_ReductionOp_Name(@Cast("caffe::ReductionParameter_ReductionOp") int value);
+@Namespace("caffe") public static native @Cast("bool") boolean ReductionParameter_ReductionOp_Parse(
+    @StdString BytePointer name, @Cast("caffe::ReductionParameter_ReductionOp*") IntPointer value);
+@Namespace("caffe") public static native @Cast("bool") boolean ReductionParameter_ReductionOp_Parse(
+    @StdString String name, @Cast("caffe::ReductionParameter_ReductionOp*") IntBuffer value);
+@Namespace("caffe") public static native @Cast("bool") boolean ReductionParameter_ReductionOp_Parse(
+    @StdString BytePointer name, @Cast("caffe::ReductionParameter_ReductionOp*") int[] value);
+@Namespace("caffe") public static native @Cast("bool") boolean ReductionParameter_ReductionOp_Parse(
+    @StdString String name, @Cast("caffe::ReductionParameter_ReductionOp*") IntPointer value);
+@Namespace("caffe") public static native @Cast("bool") boolean ReductionParameter_ReductionOp_Parse(
+    @StdString BytePointer name, @Cast("caffe::ReductionParameter_ReductionOp*") IntBuffer value);
+@Namespace("caffe") public static native @Cast("bool") boolean ReductionParameter_ReductionOp_Parse(
+    @StdString String name, @Cast("caffe::ReductionParameter_ReductionOp*") int[] value);
 /** enum caffe::ReLUParameter_Engine */
 public static final int
   ReLUParameter_Engine_DEFAULT = 0,
@@ -1022,6 +1071,54 @@ public static final int
     @StdString BytePointer name, @Cast("caffe::TanHParameter_Engine*") IntBuffer value);
 @Namespace("caffe") public static native @Cast("bool") boolean TanHParameter_Engine_Parse(
     @StdString String name, @Cast("caffe::TanHParameter_Engine*") int[] value);
+/** enum caffe::SPPParameter_PoolMethod */
+public static final int
+  SPPParameter_PoolMethod_MAX = 0,
+  SPPParameter_PoolMethod_AVE = 1,
+  SPPParameter_PoolMethod_STOCHASTIC = 2;
+@Namespace("caffe") public static native @Cast("bool") boolean SPPParameter_PoolMethod_IsValid(int value);
+@Namespace("caffe") @MemberGetter public static native @Cast("const caffe::SPPParameter_PoolMethod") int SPPParameter_PoolMethod_PoolMethod_MIN();
+@Namespace("caffe") @MemberGetter public static native @Cast("const caffe::SPPParameter_PoolMethod") int SPPParameter_PoolMethod_PoolMethod_MAX();
+@Namespace("caffe") @MemberGetter public static native int SPPParameter_PoolMethod_PoolMethod_ARRAYSIZE();
+
+@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer SPPParameter_PoolMethod_descriptor();
+@Namespace("caffe") public static native @StdString BytePointer SPPParameter_PoolMethod_Name(@Cast("caffe::SPPParameter_PoolMethod") int value);
+@Namespace("caffe") public static native @Cast("bool") boolean SPPParameter_PoolMethod_Parse(
+    @StdString BytePointer name, @Cast("caffe::SPPParameter_PoolMethod*") IntPointer value);
+@Namespace("caffe") public static native @Cast("bool") boolean SPPParameter_PoolMethod_Parse(
+    @StdString String name, @Cast("caffe::SPPParameter_PoolMethod*") IntBuffer value);
+@Namespace("caffe") public static native @Cast("bool") boolean SPPParameter_PoolMethod_Parse(
+    @StdString BytePointer name, @Cast("caffe::SPPParameter_PoolMethod*") int[] value);
+@Namespace("caffe") public static native @Cast("bool") boolean SPPParameter_PoolMethod_Parse(
+    @StdString String name, @Cast("caffe::SPPParameter_PoolMethod*") IntPointer value);
+@Namespace("caffe") public static native @Cast("bool") boolean SPPParameter_PoolMethod_Parse(
+    @StdString BytePointer name, @Cast("caffe::SPPParameter_PoolMethod*") IntBuffer value);
+@Namespace("caffe") public static native @Cast("bool") boolean SPPParameter_PoolMethod_Parse(
+    @StdString String name, @Cast("caffe::SPPParameter_PoolMethod*") int[] value);
+/** enum caffe::SPPParameter_Engine */
+public static final int
+  SPPParameter_Engine_DEFAULT = 0,
+  SPPParameter_Engine_CAFFE = 1,
+  SPPParameter_Engine_CUDNN = 2;
+@Namespace("caffe") public static native @Cast("bool") boolean SPPParameter_Engine_IsValid(int value);
+@Namespace("caffe") @MemberGetter public static native @Cast("const caffe::SPPParameter_Engine") int SPPParameter_Engine_Engine_MIN();
+@Namespace("caffe") @MemberGetter public static native @Cast("const caffe::SPPParameter_Engine") int SPPParameter_Engine_Engine_MAX();
+@Namespace("caffe") @MemberGetter public static native int SPPParameter_Engine_Engine_ARRAYSIZE();
+
+@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer SPPParameter_Engine_descriptor();
+@Namespace("caffe") public static native @StdString BytePointer SPPParameter_Engine_Name(@Cast("caffe::SPPParameter_Engine") int value);
+@Namespace("caffe") public static native @Cast("bool") boolean SPPParameter_Engine_Parse(
+    @StdString BytePointer name, @Cast("caffe::SPPParameter_Engine*") IntPointer value);
+@Namespace("caffe") public static native @Cast("bool") boolean SPPParameter_Engine_Parse(
+    @StdString String name, @Cast("caffe::SPPParameter_Engine*") IntBuffer value);
+@Namespace("caffe") public static native @Cast("bool") boolean SPPParameter_Engine_Parse(
+    @StdString BytePointer name, @Cast("caffe::SPPParameter_Engine*") int[] value);
+@Namespace("caffe") public static native @Cast("bool") boolean SPPParameter_Engine_Parse(
+    @StdString String name, @Cast("caffe::SPPParameter_Engine*") IntPointer value);
+@Namespace("caffe") public static native @Cast("bool") boolean SPPParameter_Engine_Parse(
+    @StdString BytePointer name, @Cast("caffe::SPPParameter_Engine*") IntBuffer value);
+@Namespace("caffe") public static native @Cast("bool") boolean SPPParameter_Engine_Parse(
+    @StdString String name, @Cast("caffe::SPPParameter_Engine*") int[] value);
 /** enum caffe::V1LayerParameter_LayerType */
 public static final int
   V1LayerParameter_LayerType_NONE = 0,
@@ -1554,6 +1651,27 @@ public static final int
   public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
 
   // nested types ----------------------------------------------------
+  @MemberGetter public static native @Cast("const caffe::FillerParameter::VarianceNorm") int FAN_IN();
+  @MemberGetter public static native @Cast("const caffe::FillerParameter::VarianceNorm") int FAN_OUT();
+  @MemberGetter public static native @Cast("const caffe::FillerParameter::VarianceNorm") int AVERAGE();
+  public static native @Cast("bool") boolean VarianceNorm_IsValid(int value);
+  @MemberGetter public static native @Cast("const caffe::FillerParameter::VarianceNorm") int VarianceNorm_MIN();
+  @MemberGetter public static native @Cast("const caffe::FillerParameter::VarianceNorm") int VarianceNorm_MAX();
+  @MemberGetter public static native int VarianceNorm_ARRAYSIZE();
+  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer VarianceNorm_descriptor();
+  public static native @StdString BytePointer VarianceNorm_Name(@Cast("caffe::FillerParameter::VarianceNorm") int value);
+  public static native @Cast("bool") boolean VarianceNorm_Parse(@StdString BytePointer name,
+        @Cast("caffe::FillerParameter::VarianceNorm*") IntPointer value);
+  public static native @Cast("bool") boolean VarianceNorm_Parse(@StdString String name,
+        @Cast("caffe::FillerParameter::VarianceNorm*") IntBuffer value);
+  public static native @Cast("bool") boolean VarianceNorm_Parse(@StdString BytePointer name,
+        @Cast("caffe::FillerParameter::VarianceNorm*") int[] value);
+  public static native @Cast("bool") boolean VarianceNorm_Parse(@StdString String name,
+        @Cast("caffe::FillerParameter::VarianceNorm*") IntPointer value);
+  public static native @Cast("bool") boolean VarianceNorm_Parse(@StdString BytePointer name,
+        @Cast("caffe::FillerParameter::VarianceNorm*") IntBuffer value);
+  public static native @Cast("bool") boolean VarianceNorm_Parse(@StdString String name,
+        @Cast("caffe::FillerParameter::VarianceNorm*") int[] value);
 
   // accessors -------------------------------------------------------
 
@@ -1611,6 +1729,13 @@ public static final int
   @MemberGetter public static native int kSparseFieldNumber();
   public native @Cast("google::protobuf::int32") int sparse();
   public native void set_sparse(@Cast("google::protobuf::int32") int value);
+
+  // optional .caffe.FillerParameter.VarianceNorm variance_norm = 8 [default = FAN_IN];
+  public native @Cast("bool") boolean has_variance_norm();
+  public native void clear_variance_norm();
+  @MemberGetter public static native int kVarianceNormFieldNumber();
+  public native @Cast("caffe::FillerParameter_VarianceNorm") int variance_norm();
+  public native void set_variance_norm(@Cast("caffe::FillerParameter_VarianceNorm") int value);
 }
 // -------------------------------------------------------------------
 
@@ -1990,6 +2115,13 @@ public static final int
   @MemberGetter public static native int kMaxIterFieldNumber();
   public native @Cast("google::protobuf::int32") int max_iter();
   public native void set_max_iter(@Cast("google::protobuf::int32") int value);
+
+  // optional int32 iter_size = 36 [default = 1];
+  public native @Cast("bool") boolean has_iter_size();
+  public native void clear_iter_size();
+  @MemberGetter public static native int kIterSizeFieldNumber();
+  public native @Cast("google::protobuf::int32") int iter_size();
+  public native void set_iter_size(@Cast("google::protobuf::int32") int value);
 
   // optional string lr_policy = 8;
   public native @Cast("bool") boolean has_lr_policy();
@@ -2684,6 +2816,14 @@ public static final int
   public native BlobProto mutable_blobs(int index);
   public native BlobProto add_blobs();
 
+  // repeated bool propagate_down = 11;
+  public native int propagate_down_size();
+  public native void clear_propagate_down();
+  @MemberGetter public static native int kPropagateDownFieldNumber();
+  public native @Cast("bool") boolean propagate_down(int index);
+  public native void set_propagate_down(int index, @Cast("bool") boolean value);
+  public native void add_propagate_down(@Cast("bool") boolean value);
+
   // repeated .caffe.NetStateRule include = 8;
   public native int include_size();
   public native void clear_include();
@@ -2808,6 +2948,15 @@ public static final int
   public native ExpParameter release_exp_param();
   public native void set_allocated_exp_param(ExpParameter exp_param);
 
+  // optional .caffe.FlattenParameter flatten_param = 135;
+  public native @Cast("bool") boolean has_flatten_param();
+  public native void clear_flatten_param();
+  @MemberGetter public static native int kFlattenParamFieldNumber();
+  public native @Const @ByRef FlattenParameter flatten_param();
+  public native FlattenParameter mutable_flatten_param();
+  public native FlattenParameter release_flatten_param();
+  public native void set_allocated_flatten_param(FlattenParameter flatten_param);
+
   // optional .caffe.HDF5DataParameter hdf5_data_param = 112;
   public native @Cast("bool") boolean has_hdf5_data_param();
   public native void clear_hdf5_data_param();
@@ -2861,6 +3010,15 @@ public static final int
   public native InnerProductParameter mutable_inner_product_param();
   public native InnerProductParameter release_inner_product_param();
   public native void set_allocated_inner_product_param(InnerProductParameter inner_product_param);
+
+  // optional .caffe.LogParameter log_param = 134;
+  public native @Cast("bool") boolean has_log_param();
+  public native void clear_log_param();
+  @MemberGetter public static native int kLogParamFieldNumber();
+  public native @Const @ByRef LogParameter log_param();
+  public native LogParameter mutable_log_param();
+  public native LogParameter release_log_param();
+  public native void set_allocated_log_param(LogParameter log_param);
 
   // optional .caffe.LRNParameter lrn_param = 118;
   public native @Cast("bool") boolean has_lrn_param();
@@ -2925,6 +3083,15 @@ public static final int
   public native PythonParameter release_python_param();
   public native void set_allocated_python_param(PythonParameter python_param);
 
+  // optional .caffe.ReductionParameter reduction_param = 136;
+  public native @Cast("bool") boolean has_reduction_param();
+  public native void clear_reduction_param();
+  @MemberGetter public static native int kReductionParamFieldNumber();
+  public native @Const @ByRef ReductionParameter reduction_param();
+  public native ReductionParameter mutable_reduction_param();
+  public native ReductionParameter release_reduction_param();
+  public native void set_allocated_reduction_param(ReductionParameter reduction_param);
+
   // optional .caffe.ReLUParameter relu_param = 123;
   public native @Cast("bool") boolean has_relu_param();
   public native void clear_relu_param();
@@ -2933,6 +3100,15 @@ public static final int
   public native ReLUParameter mutable_relu_param();
   public native ReLUParameter release_relu_param();
   public native void set_allocated_relu_param(ReLUParameter relu_param);
+
+  // optional .caffe.ReshapeParameter reshape_param = 133;
+  public native @Cast("bool") boolean has_reshape_param();
+  public native void clear_reshape_param();
+  @MemberGetter public static native int kReshapeParamFieldNumber();
+  public native @Const @ByRef ReshapeParameter reshape_param();
+  public native ReshapeParameter mutable_reshape_param();
+  public native ReshapeParameter release_reshape_param();
+  public native void set_allocated_reshape_param(ReshapeParameter reshape_param);
 
   // optional .caffe.SigmoidParameter sigmoid_param = 124;
   public native @Cast("bool") boolean has_sigmoid_param();
@@ -2951,6 +3127,15 @@ public static final int
   public native SoftmaxParameter mutable_softmax_param();
   public native SoftmaxParameter release_softmax_param();
   public native void set_allocated_softmax_param(SoftmaxParameter softmax_param);
+
+  // optional .caffe.SPPParameter spp_param = 132;
+  public native @Cast("bool") boolean has_spp_param();
+  public native void clear_spp_param();
+  @MemberGetter public static native int kSppParamFieldNumber();
+  public native @Const @ByRef SPPParameter spp_param();
+  public native SPPParameter mutable_spp_param();
+  public native SPPParameter release_spp_param();
+  public native void set_allocated_spp_param(SPPParameter spp_param);
 
   // optional .caffe.SliceParameter slice_param = 126;
   public native @Cast("bool") boolean has_slice_param();
@@ -3085,6 +3270,20 @@ public static final int
   public native float mean_value(int index);
   public native void set_mean_value(int index, float value);
   public native void add_mean_value(float value);
+
+  // optional bool force_color = 6 [default = false];
+  public native @Cast("bool") boolean has_force_color();
+  public native void clear_force_color();
+  @MemberGetter public static native int kForceColorFieldNumber();
+  public native @Cast("bool") boolean force_color();
+  public native void set_force_color(@Cast("bool") boolean value);
+
+  // optional bool force_gray = 7 [default = false];
+  public native @Cast("bool") boolean has_force_gray();
+  public native void clear_force_gray();
+  @MemberGetter public static native int kForceGrayFieldNumber();
+  public native @Cast("bool") boolean force_gray();
+  public native void set_force_gray(@Cast("bool") boolean value);
 }
 // -------------------------------------------------------------------
 
@@ -3435,6 +3634,13 @@ public static final int
   @MemberGetter public static native int kMarginFieldNumber();
   public native float margin();
   public native void set_margin(float value);
+
+  // optional bool legacy_version = 2 [default = false];
+  public native @Cast("bool") boolean has_legacy_version();
+  public native void clear_legacy_version();
+  @MemberGetter public static native int kLegacyVersionFieldNumber();
+  public native @Cast("bool") boolean legacy_version();
+  public native void set_legacy_version(@Cast("bool") boolean value);
 }
 // -------------------------------------------------------------------
 
@@ -4118,6 +4324,76 @@ public static final int
 }
 // -------------------------------------------------------------------
 
+@Namespace("caffe") @NoOffset public static class FlattenParameter extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FlattenParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public FlattenParameter(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public FlattenParameter position(int position) {
+        return (FlattenParameter)super.position(position);
+    }
+
+  public FlattenParameter() { allocate(); }
+  private native void allocate();
+
+  public FlattenParameter(@Const @ByRef FlattenParameter from) { allocate(from); }
+  private native void allocate(@Const @ByRef FlattenParameter from);
+
+  public native @ByRef @Name("operator=") FlattenParameter put(@Const @ByRef FlattenParameter from);
+
+  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+
+  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef FlattenParameter default_instance();
+
+  public native void Swap(FlattenParameter other);
+
+  // implements Message ----------------------------------------------
+
+  public native FlattenParameter New();
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef FlattenParameter from);
+  public native void MergeFrom(@Const @ByRef FlattenParameter from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native int ByteSize();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+  public native void SerializeWithCachedSizes(
+        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+  public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
+  public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 axis = 1 [default = 1];
+  public native @Cast("bool") boolean has_axis();
+  public native void clear_axis();
+  @MemberGetter public static native int kAxisFieldNumber();
+  public native @Cast("google::protobuf::int32") int axis();
+  public native void set_axis(@Cast("google::protobuf::int32") int value);
+
+  // optional int32 end_axis = 2 [default = -1];
+  public native @Cast("bool") boolean has_end_axis();
+  public native void clear_end_axis();
+  @MemberGetter public static native int kEndAxisFieldNumber();
+  public native @Cast("google::protobuf::int32") int end_axis();
+  public native void set_end_axis(@Cast("google::protobuf::int32") int value);
+}
+// -------------------------------------------------------------------
+
 @Namespace("caffe") @NoOffset public static class HDF5DataParameter extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -4675,6 +4951,83 @@ public static final int
 }
 // -------------------------------------------------------------------
 
+@Namespace("caffe") @NoOffset public static class LogParameter extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LogParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public LogParameter(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public LogParameter position(int position) {
+        return (LogParameter)super.position(position);
+    }
+
+  public LogParameter() { allocate(); }
+  private native void allocate();
+
+  public LogParameter(@Const @ByRef LogParameter from) { allocate(from); }
+  private native void allocate(@Const @ByRef LogParameter from);
+
+  public native @ByRef @Name("operator=") LogParameter put(@Const @ByRef LogParameter from);
+
+  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+
+  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef LogParameter default_instance();
+
+  public native void Swap(LogParameter other);
+
+  // implements Message ----------------------------------------------
+
+  public native LogParameter New();
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef LogParameter from);
+  public native void MergeFrom(@Const @ByRef LogParameter from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native int ByteSize();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+  public native void SerializeWithCachedSizes(
+        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+  public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
+  public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional float base = 1 [default = -1];
+  public native @Cast("bool") boolean has_base();
+  public native void clear_base();
+  @MemberGetter public static native int kBaseFieldNumber();
+  public native float base();
+  public native void set_base(float value);
+
+  // optional float scale = 2 [default = 1];
+  public native @Cast("bool") boolean has_scale();
+  public native void clear_scale();
+  @MemberGetter public static native int kScaleFieldNumber();
+  public native float scale();
+  public native void set_scale(float value);
+
+  // optional float shift = 3 [default = 0];
+  public native @Cast("bool") boolean has_shift();
+  public native void clear_shift();
+  @MemberGetter public static native int kShiftFieldNumber();
+  public native float shift();
+  public native void set_shift(float value);
+}
+// -------------------------------------------------------------------
+
 @Namespace("caffe") @NoOffset public static class LRNParameter extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -4937,6 +5290,13 @@ public static final int
   @MemberGetter public static native int kAcrossChannelsFieldNumber();
   public native @Cast("bool") boolean across_channels();
   public native void set_across_channels(@Cast("bool") boolean value);
+
+  // optional float eps = 3 [default = 1e-09];
+  public native @Cast("bool") boolean has_eps();
+  public native void clear_eps();
+  @MemberGetter public static native int kEpsFieldNumber();
+  public native float eps();
+  public native void set_eps(float value);
 }
 // -------------------------------------------------------------------
 
@@ -5281,6 +5641,105 @@ public static final int
 }
 // -------------------------------------------------------------------
 
+@Namespace("caffe") @NoOffset public static class ReductionParameter extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ReductionParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public ReductionParameter(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public ReductionParameter position(int position) {
+        return (ReductionParameter)super.position(position);
+    }
+
+  public ReductionParameter() { allocate(); }
+  private native void allocate();
+
+  public ReductionParameter(@Const @ByRef ReductionParameter from) { allocate(from); }
+  private native void allocate(@Const @ByRef ReductionParameter from);
+
+  public native @ByRef @Name("operator=") ReductionParameter put(@Const @ByRef ReductionParameter from);
+
+  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+
+  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef ReductionParameter default_instance();
+
+  public native void Swap(ReductionParameter other);
+
+  // implements Message ----------------------------------------------
+
+  public native ReductionParameter New();
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef ReductionParameter from);
+  public native void MergeFrom(@Const @ByRef ReductionParameter from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native int ByteSize();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+  public native void SerializeWithCachedSizes(
+        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+  public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
+  public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+  @MemberGetter public static native @Cast("const caffe::ReductionParameter::ReductionOp") int SUM();
+  @MemberGetter public static native @Cast("const caffe::ReductionParameter::ReductionOp") int ASUM();
+  @MemberGetter public static native @Cast("const caffe::ReductionParameter::ReductionOp") int SUMSQ();
+  @MemberGetter public static native @Cast("const caffe::ReductionParameter::ReductionOp") int MEAN();
+  public static native @Cast("bool") boolean ReductionOp_IsValid(int value);
+  @MemberGetter public static native @Cast("const caffe::ReductionParameter::ReductionOp") int ReductionOp_MIN();
+  @MemberGetter public static native @Cast("const caffe::ReductionParameter::ReductionOp") int ReductionOp_MAX();
+  @MemberGetter public static native int ReductionOp_ARRAYSIZE();
+  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer ReductionOp_descriptor();
+  public static native @StdString BytePointer ReductionOp_Name(@Cast("caffe::ReductionParameter::ReductionOp") int value);
+  public static native @Cast("bool") boolean ReductionOp_Parse(@StdString BytePointer name,
+        @Cast("caffe::ReductionParameter::ReductionOp*") IntPointer value);
+  public static native @Cast("bool") boolean ReductionOp_Parse(@StdString String name,
+        @Cast("caffe::ReductionParameter::ReductionOp*") IntBuffer value);
+  public static native @Cast("bool") boolean ReductionOp_Parse(@StdString BytePointer name,
+        @Cast("caffe::ReductionParameter::ReductionOp*") int[] value);
+  public static native @Cast("bool") boolean ReductionOp_Parse(@StdString String name,
+        @Cast("caffe::ReductionParameter::ReductionOp*") IntPointer value);
+  public static native @Cast("bool") boolean ReductionOp_Parse(@StdString BytePointer name,
+        @Cast("caffe::ReductionParameter::ReductionOp*") IntBuffer value);
+  public static native @Cast("bool") boolean ReductionOp_Parse(@StdString String name,
+        @Cast("caffe::ReductionParameter::ReductionOp*") int[] value);
+
+  // accessors -------------------------------------------------------
+
+  // optional .caffe.ReductionParameter.ReductionOp operation = 1 [default = SUM];
+  public native @Cast("bool") boolean has_operation();
+  public native void clear_operation();
+  @MemberGetter public static native int kOperationFieldNumber();
+  public native @Cast("caffe::ReductionParameter_ReductionOp") int operation();
+  public native void set_operation(@Cast("caffe::ReductionParameter_ReductionOp") int value);
+
+  // optional int32 axis = 2 [default = 0];
+  public native @Cast("bool") boolean has_axis();
+  public native void clear_axis();
+  @MemberGetter public static native int kAxisFieldNumber();
+  public native @Cast("google::protobuf::int32") int axis();
+  public native void set_axis(@Cast("google::protobuf::int32") int value);
+
+  // optional float coeff = 3 [default = 1];
+  public native @Cast("bool") boolean has_coeff();
+  public native void clear_coeff();
+  @MemberGetter public static native int kCoeffFieldNumber();
+  public native float coeff();
+  public native void set_coeff(float value);
+}
+// -------------------------------------------------------------------
+
 @Namespace("caffe") @NoOffset public static class ReLUParameter extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -5369,6 +5828,85 @@ public static final int
   @MemberGetter public static native int kEngineFieldNumber();
   public native @Cast("caffe::ReLUParameter_Engine") int engine();
   public native void set_engine(@Cast("caffe::ReLUParameter_Engine") int value);
+}
+// -------------------------------------------------------------------
+
+@Namespace("caffe") @NoOffset public static class ReshapeParameter extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ReshapeParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public ReshapeParameter(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public ReshapeParameter position(int position) {
+        return (ReshapeParameter)super.position(position);
+    }
+
+  public ReshapeParameter() { allocate(); }
+  private native void allocate();
+
+  public ReshapeParameter(@Const @ByRef ReshapeParameter from) { allocate(from); }
+  private native void allocate(@Const @ByRef ReshapeParameter from);
+
+  public native @ByRef @Name("operator=") ReshapeParameter put(@Const @ByRef ReshapeParameter from);
+
+  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+
+  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef ReshapeParameter default_instance();
+
+  public native void Swap(ReshapeParameter other);
+
+  // implements Message ----------------------------------------------
+
+  public native ReshapeParameter New();
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef ReshapeParameter from);
+  public native void MergeFrom(@Const @ByRef ReshapeParameter from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native int ByteSize();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+  public native void SerializeWithCachedSizes(
+        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+  public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
+  public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional .caffe.BlobShape shape = 1;
+  public native @Cast("bool") boolean has_shape();
+  public native void clear_shape();
+  @MemberGetter public static native int kShapeFieldNumber();
+  public native @Const @ByRef BlobShape shape();
+  public native BlobShape mutable_shape();
+  public native BlobShape release_shape();
+  public native void set_allocated_shape(BlobShape shape);
+
+  // optional int32 axis = 2 [default = 0];
+  public native @Cast("bool") boolean has_axis();
+  public native void clear_axis();
+  @MemberGetter public static native int kAxisFieldNumber();
+  public native @Cast("google::protobuf::int32") int axis();
+  public native void set_axis(@Cast("google::protobuf::int32") int value);
+
+  // optional int32 num_axes = 3 [default = -1];
+  public native @Cast("bool") boolean has_num_axes();
+  public native void clear_num_axes();
+  @MemberGetter public static native int kNumAxesFieldNumber();
+  public native @Cast("google::protobuf::int32") int num_axes();
+  public native void set_num_axes(@Cast("google::protobuf::int32") int value);
 }
 // -------------------------------------------------------------------
 
@@ -5940,6 +6478,125 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_root_folder();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_root_folder();
   public native void set_allocated_root_folder(@StdString @Cast({"char*", "std::string*"}) BytePointer root_folder);
+}
+// -------------------------------------------------------------------
+
+@Namespace("caffe") @NoOffset public static class SPPParameter extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SPPParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public SPPParameter(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public SPPParameter position(int position) {
+        return (SPPParameter)super.position(position);
+    }
+
+  public SPPParameter() { allocate(); }
+  private native void allocate();
+
+  public SPPParameter(@Const @ByRef SPPParameter from) { allocate(from); }
+  private native void allocate(@Const @ByRef SPPParameter from);
+
+  public native @ByRef @Name("operator=") SPPParameter put(@Const @ByRef SPPParameter from);
+
+  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+
+  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef SPPParameter default_instance();
+
+  public native void Swap(SPPParameter other);
+
+  // implements Message ----------------------------------------------
+
+  public native SPPParameter New();
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef SPPParameter from);
+  public native void MergeFrom(@Const @ByRef SPPParameter from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native int ByteSize();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+  public native void SerializeWithCachedSizes(
+        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+  public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
+  public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+  @MemberGetter public static native @Cast("const caffe::SPPParameter::PoolMethod") int MAX();
+  @MemberGetter public static native @Cast("const caffe::SPPParameter::PoolMethod") int AVE();
+  @MemberGetter public static native @Cast("const caffe::SPPParameter::PoolMethod") int STOCHASTIC();
+  public static native @Cast("bool") boolean PoolMethod_IsValid(int value);
+  @MemberGetter public static native @Cast("const caffe::SPPParameter::PoolMethod") int PoolMethod_MIN();
+  @MemberGetter public static native @Cast("const caffe::SPPParameter::PoolMethod") int PoolMethod_MAX();
+  @MemberGetter public static native int PoolMethod_ARRAYSIZE();
+  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer PoolMethod_descriptor();
+  public static native @StdString BytePointer PoolMethod_Name(@Cast("caffe::SPPParameter::PoolMethod") int value);
+  public static native @Cast("bool") boolean PoolMethod_Parse(@StdString BytePointer name,
+        @Cast("caffe::SPPParameter::PoolMethod*") IntPointer value);
+  public static native @Cast("bool") boolean PoolMethod_Parse(@StdString String name,
+        @Cast("caffe::SPPParameter::PoolMethod*") IntBuffer value);
+  public static native @Cast("bool") boolean PoolMethod_Parse(@StdString BytePointer name,
+        @Cast("caffe::SPPParameter::PoolMethod*") int[] value);
+  public static native @Cast("bool") boolean PoolMethod_Parse(@StdString String name,
+        @Cast("caffe::SPPParameter::PoolMethod*") IntPointer value);
+  public static native @Cast("bool") boolean PoolMethod_Parse(@StdString BytePointer name,
+        @Cast("caffe::SPPParameter::PoolMethod*") IntBuffer value);
+  public static native @Cast("bool") boolean PoolMethod_Parse(@StdString String name,
+        @Cast("caffe::SPPParameter::PoolMethod*") int[] value);
+  @MemberGetter public static native @Cast("const caffe::SPPParameter::Engine") int DEFAULT();
+  @MemberGetter public static native @Cast("const caffe::SPPParameter::Engine") int CAFFE();
+  @MemberGetter public static native @Cast("const caffe::SPPParameter::Engine") int CUDNN();
+  public static native @Cast("bool") boolean Engine_IsValid(int value);
+  @MemberGetter public static native @Cast("const caffe::SPPParameter::Engine") int Engine_MIN();
+  @MemberGetter public static native @Cast("const caffe::SPPParameter::Engine") int Engine_MAX();
+  @MemberGetter public static native int Engine_ARRAYSIZE();
+  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer Engine_descriptor();
+  public static native @StdString BytePointer Engine_Name(@Cast("caffe::SPPParameter::Engine") int value);
+  public static native @Cast("bool") boolean Engine_Parse(@StdString BytePointer name,
+        @Cast("caffe::SPPParameter::Engine*") IntPointer value);
+  public static native @Cast("bool") boolean Engine_Parse(@StdString String name,
+        @Cast("caffe::SPPParameter::Engine*") IntBuffer value);
+  public static native @Cast("bool") boolean Engine_Parse(@StdString BytePointer name,
+        @Cast("caffe::SPPParameter::Engine*") int[] value);
+  public static native @Cast("bool") boolean Engine_Parse(@StdString String name,
+        @Cast("caffe::SPPParameter::Engine*") IntPointer value);
+  public static native @Cast("bool") boolean Engine_Parse(@StdString BytePointer name,
+        @Cast("caffe::SPPParameter::Engine*") IntBuffer value);
+  public static native @Cast("bool") boolean Engine_Parse(@StdString String name,
+        @Cast("caffe::SPPParameter::Engine*") int[] value);
+
+  // accessors -------------------------------------------------------
+
+  // optional uint32 pyramid_height = 1;
+  public native @Cast("bool") boolean has_pyramid_height();
+  public native void clear_pyramid_height();
+  @MemberGetter public static native int kPyramidHeightFieldNumber();
+  public native @Cast("google::protobuf::uint32") int pyramid_height();
+  public native void set_pyramid_height(@Cast("google::protobuf::uint32") int value);
+
+  // optional .caffe.SPPParameter.PoolMethod pool = 2 [default = MAX];
+  public native @Cast("bool") boolean has_pool();
+  public native void clear_pool();
+  @MemberGetter public static native int kPoolFieldNumber();
+  public native @Cast("caffe::SPPParameter_PoolMethod") int pool();
+  public native void set_pool(@Cast("caffe::SPPParameter_PoolMethod") int value);
+
+  // optional .caffe.SPPParameter.Engine engine = 6 [default = DEFAULT];
+  public native @Cast("bool") boolean has_engine();
+  public native void clear_engine();
+  @MemberGetter public static native int kEngineFieldNumber();
+  public native @Cast("caffe::SPPParameter_Engine") int engine();
+  public native void set_engine(@Cast("caffe::SPPParameter_Engine") int value);
 }
 // -------------------------------------------------------------------
 
@@ -7156,6 +7813,14 @@ public static final int
 
 
 
+// optional .caffe.FillerParameter.VarianceNorm variance_norm = 8 [default = FAN_IN];
+
+
+
+
+
+
+
 // -------------------------------------------------------------------
 
 // NetParameter
@@ -7401,6 +8066,14 @@ public static final int
 
 
 // optional int32 max_iter = 7;
+
+
+
+
+
+
+
+// optional int32 iter_size = 36 [default = 1];
 
 
 
@@ -7847,6 +8520,15 @@ public static final int
 
 
 
+// repeated bool propagate_down = 11;
+
+
+
+
+
+
+
+
 // repeated .caffe.NetStateRule include = 8;
 
 
@@ -7985,6 +8667,16 @@ public static final int
 
 
 
+// optional .caffe.FlattenParameter flatten_param = 135;
+
+
+
+
+
+
+
+
+
 // optional .caffe.HDF5DataParameter hdf5_data_param = 112;
 
 
@@ -8036,6 +8728,16 @@ public static final int
 
 
 // optional .caffe.InnerProductParameter inner_product_param = 117;
+
+
+
+
+
+
+
+
+
+// optional .caffe.LogParameter log_param = 134;
 
 
 
@@ -8115,7 +8817,27 @@ public static final int
 
 
 
+// optional .caffe.ReductionParameter reduction_param = 136;
+
+
+
+
+
+
+
+
+
 // optional .caffe.ReLUParameter relu_param = 123;
+
+
+
+
+
+
+
+
+
+// optional .caffe.ReshapeParameter reshape_param = 133;
 
 
 
@@ -8136,6 +8858,16 @@ public static final int
 
 
 // optional .caffe.SoftmaxParameter softmax_param = 125;
+
+
+
+
+
+
+
+
+
+// optional .caffe.SPPParameter spp_param = 132;
 
 
 
@@ -8228,6 +8960,22 @@ public static final int
 
 // repeated float mean_value = 5;
 
+
+
+
+
+
+
+
+// optional bool force_color = 6 [default = false];
+
+
+
+
+
+
+
+// optional bool force_gray = 7 [default = false];
 
 
 
@@ -8328,6 +9076,14 @@ public static final int
 // ContrastiveLossParameter
 
 // optional float margin = 1 [default = 1];
+
+
+
+
+
+
+
+// optional bool legacy_version = 2 [default = false];
 
 
 
@@ -8678,6 +9434,26 @@ public static final int
 
 // -------------------------------------------------------------------
 
+// FlattenParameter
+
+// optional int32 axis = 1 [default = 1];
+
+
+
+
+
+
+
+// optional int32 end_axis = 2 [default = -1];
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
 // HDF5DataParameter
 
 // optional string source = 1;
@@ -8920,6 +9696,34 @@ public static final int
 
 // -------------------------------------------------------------------
 
+// LogParameter
+
+// optional float base = 1 [default = -1];
+
+
+
+
+
+
+
+// optional float scale = 2 [default = 1];
+
+
+
+
+
+
+
+// optional float shift = 3 [default = 0];
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
 // LRNParameter
 
 // optional uint32 local_size = 1 [default = 5];
@@ -9011,6 +9815,14 @@ public static final int
 
 
 // optional bool across_channels = 2 [default = false];
+
+
+
+
+
+
+
+// optional float eps = 3 [default = 1e-09];
 
 
 
@@ -9178,6 +9990,34 @@ public static final int
 
 // -------------------------------------------------------------------
 
+// ReductionParameter
+
+// optional .caffe.ReductionParameter.ReductionOp operation = 1 [default = SUM];
+
+
+
+
+
+
+
+// optional int32 axis = 2 [default = 0];
+
+
+
+
+
+
+
+// optional float coeff = 3 [default = 1];
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
 // ReLUParameter
 
 // optional float negative_slope = 1 [default = 0];
@@ -9189,6 +10029,36 @@ public static final int
 
 
 // optional .caffe.ReLUParameter.Engine engine = 2 [default = DEFAULT];
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// ReshapeParameter
+
+// optional .caffe.BlobShape shape = 1;
+
+
+
+
+
+
+
+
+
+// optional int32 axis = 2 [default = 0];
+
+
+
+
+
+
+
+// optional int32 num_axes = 3 [default = -1];
 
 
 
@@ -9402,6 +10272,34 @@ public static final int
 
 
 
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// SPPParameter
+
+// optional uint32 pyramid_height = 1;
+
+
+
+
+
+
+
+// optional .caffe.SPPParameter.PoolMethod pool = 2 [default = MAX];
+
+
+
+
+
+
+
+// optional .caffe.SPPParameter.Engine engine = 6 [default = DEFAULT];
 
 
 
@@ -10222,6 +11120,10 @@ public static final int
   // namespace caffe
 
 // #ifndef SWIG
+
+
+
+
 
 
 
@@ -11360,6 +12262,7 @@ public static final int
    */
   public native void Transform(@Const @ByRef MatVector mat_vector,
                   FloatBlob transformed_blob);
+
   /**
    * @brief Applies the transformation defined in the data layer's
    * transform_param block to a cv::Mat
@@ -11384,6 +12287,40 @@ public static final int
    *    input blob. It can be part of top blob's data.
    */
   public native void Transform(FloatBlob input_blob, FloatBlob transformed_blob);
+
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *
+   * @param datum
+   *    Datum containing the data to be transformed.
+   */
+  public native @StdVector IntPointer InferBlobShape(@Const @ByRef Datum datum);
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *    It uses the first element to infer the shape of the blob.
+   *
+   * @param datum_vector
+   *    A vector of Datum containing the data to be transformed.
+   */
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *    It uses the first element to infer the shape of the blob.
+   *
+   * @param mat_vector
+   *    A vector of Mat containing the data to be transformed.
+   */
+  public native @StdVector IntPointer InferBlobShape(@Const @ByRef MatVector mat_vector);
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *
+   * @param cv_img
+   *    cv::Mat containing the data to be transformed.
+   */
+  public native @StdVector IntPointer InferBlobShape(@Const @ByRef Mat cv_img);
 }
 @Name("caffe::DataTransformer<double>") @NoOffset public static class DoubleDataTransformer extends Pointer {
     static { Loader.load(); }
@@ -11436,6 +12373,7 @@ public static final int
    */
   public native void Transform(@Const @ByRef MatVector mat_vector,
                   DoubleBlob transformed_blob);
+
   /**
    * @brief Applies the transformation defined in the data layer's
    * transform_param block to a cv::Mat
@@ -11460,6 +12398,40 @@ public static final int
    *    input blob. It can be part of top blob's data.
    */
   public native void Transform(DoubleBlob input_blob, DoubleBlob transformed_blob);
+
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *
+   * @param datum
+   *    Datum containing the data to be transformed.
+   */
+  public native @StdVector IntPointer InferBlobShape(@Const @ByRef Datum datum);
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *    It uses the first element to infer the shape of the blob.
+   *
+   * @param datum_vector
+   *    A vector of Datum containing the data to be transformed.
+   */
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *    It uses the first element to infer the shape of the blob.
+   *
+   * @param mat_vector
+   *    A vector of Mat containing the data to be transformed.
+   */
+  public native @StdVector IntPointer InferBlobShape(@Const @ByRef MatVector mat_vector);
+  /**
+   * @brief Infers the shape of transformed_blob will have when
+   *    the transformation is applied to the data.
+   *
+   * @param cv_img
+   *    cv::Mat containing the data to be transformed.
+   */
+  public native @StdVector IntPointer InferBlobShape(@Const @ByRef Mat cv_img);
 }
 
   // namespace caffe
@@ -11605,17 +12577,18 @@ public static final int
 }
 
 /**
- * @brief Fills a Blob with values @f$ x \sim U(-a, +a) @f$ where @f$ a @f$
- *        is set inversely proportional to the number of incoming nodes.
+ * @brief Fills a Blob with values @f$ x \sim U(-a, +a) @f$ where @f$ a @f$ is
+ *        set inversely proportional to number of incoming nodes, outgoing
+ *        nodes, or their average.
  *
  * A Filler based on the paper [Bengio and Glorot 2010]: Understanding
- * the difficulty of training deep feedforward neuralnetworks, but does not
- * use the fan_out value.
+ * the difficulty of training deep feedforward neuralnetworks.
  *
- * It fills the incoming matrix by randomly sampling uniform data from
- * [-scale, scale] where scale = sqrt(3 / fan_in) where fan_in is the number
- * of input nodes. You should make sure the input blob has shape (num, a, b, c)
- * where a * b * c = fan_in.
+ * It fills the incoming matrix by randomly sampling uniform data from [-scale,
+ * scale] where scale = sqrt(3 / n) where n is the fan_in, fan_out, or their
+ * average, depending on the variance_norm option. You should make sure the
+ * input blob has shape (num, a, b, c) where a * b * c = fan_in and num * b * c
+ * = fan_out. Note that this is currently not the case for inner product layers.
  *
  * TODO(dox): make notation in above comment consistent with rest & use LaTeX.
  */
@@ -11642,6 +12615,23 @@ public static final int
   public native void Fill(DoubleBlob blob);
 }
 
+/**
+ * @brief Fills a Blob with values @f$ x \sim N(0, \sigma^2) @f$ where
+ *        @f$ \sigma^2 @f$ is set inversely proportional to number of incoming
+ *        nodes, outgoing nodes, or their average.
+ *
+ * A Filler based on the paper [He, Zhang, Ren and Sun 2015]: Specifically
+ * accounts for ReLU nonlinearities.
+ *
+ * Aside: for another perspective on the scaling factor, see the derivation of
+ * [Saxe, McClelland, and Ganguli 2013 (v3)].
+ *
+ * It fills the incoming matrix by randomly sampling Gaussian data with std =
+ * sqrt(2 / n) where n is the fan_in, fan_out, or their average, depending on
+ * the variance_norm option. You should make sure the input blob has shape (num,
+ * a, b, c) where a * b * c = fan_in and num * b * c = fan_out. Note that this
+ * is currently not the case for inner product layers.
+ */
 
 /**
  * @brief Get a specific filler from the specification given in FillerParameter.
@@ -11726,7 +12716,6 @@ public static final int
 // #include "caffe/filler.hpp"
 // #include "caffe/internal_thread.hpp"
 // #include "caffe/layer.hpp"
-// #include "caffe/net.hpp"
 // #include "caffe/proto/caffe.pb.h"
 // #include "caffe/util/db.hpp"
 
@@ -13512,8 +14501,6 @@ public static final int
   @Virtual public native @Cast("const char*") BytePointer type();
   @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
-  @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
-        @Const @ByRef FloatBlobVector top);
   @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
   @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
@@ -13535,8 +14522,6 @@ public static final int
 
   @Virtual public native @Cast("const char*") BytePointer type();
   @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
-        @Const @ByRef DoubleBlobVector top);
-  @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
   @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
@@ -13662,7 +14647,6 @@ public static final int
 // #include "caffe/blob.hpp"
 // #include "caffe/common.hpp"
 // #include "caffe/layer.hpp"
-// #include "caffe/net.hpp"
 // #include "caffe/proto/caffe.pb.h"
 
 public static final String HDF5_DATA_DATASET_NAME = "data";
@@ -13959,6 +14943,12 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
+
+/**
+ * @brief Computes @f$ y = log_{\gamma}(\alpha x + \beta) @f$,
+ *        as specified by the scale @f$ \alpha @f$, shift @f$ \beta @f$,
+ *        and base @f$ \gamma @f$.
+ */
 
 /**
  * @brief Computes @f$ y = (\alpha x + \beta) ^ \gamma @f$,
@@ -14541,6 +15531,13 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 
 /**
+ * @brief Takes two+ Blobs, interprets last Blob as a selector and
+ *  filter remaining Blobs accordingly with selector data (0 means that
+ * the corresponding item has to be filtered, non-zero means that corresponding
+ * item needs to stay).
+ */
+
+/**
  * @brief Reshapes the input Blob into flat vectors.
  *
  * Note: because this layer does not change the input values -- merely the
@@ -14703,6 +15700,21 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
+
+/*
+ * @brief Reshapes the input Blob into an arbitrary-sized output Blob.
+ *
+ * Note: similarly to FlattenLayer, this layer does not change the input values
+ * (see FlattenLayer, Blob::ShareData and Blob::ShareDiff).
+ */
+
+/**
+ * @brief Compute "reductions" -- operations that return a scalar output Blob
+ *        for an input Blob of arbitrary size, such as the sum, absolute sum,
+ *        and sum of squares.
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
 
 /**
  * @brief Ignores bottom blobs while producing no top blobs. (This is useful
@@ -15083,6 +16095,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public native @Const @ByRef FloatBlobVectorVector top_vecs();
   public native @Const @ByRef BoolVectorVector bottom_need_backward();
   public native @StdVector FloatPointer blob_loss_weights();
+  public native @Const @ByRef BoolVector layer_need_backward();
   /** @brief returns the parameters */
   public native @Const @ByRef FloatBlobSharedVector params();
   /** @brief returns the parameter learning rate multipliers */
@@ -15245,6 +16258,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public native @Const @ByRef DoubleBlobVectorVector top_vecs();
   public native @Const @ByRef BoolVectorVector bottom_need_backward();
   public native @StdVector DoublePointer blob_loss_weights();
+  public native @Const @ByRef BoolVector layer_need_backward();
   /** @brief returns the parameters */
   public native @Const @ByRef DoubleBlobSharedVector params();
   /** @brief returns the parameter learning rate multipliers */
@@ -15303,7 +16317,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 /**
  * @brief An interface for classes that perform optimization on Net%s.
  *
- * Requires implementation of ComputeUpdateValue to compute a parameter update
+ * Requires implementation of ApplyUpdate to compute a parameter update
  * given the current state of the Net parameters.
  */
 @Name("caffe::Solver<float>") @NoOffset public static class FloatSolver extends Pointer {
@@ -15934,6 +16948,13 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 */
 // #endif
 
+/**
+ * @brief Does spatial pyramid pooling on the input image
+ *        by taking the max, average, etc. within regions
+ *        so that the result vector of different sized
+ *        images are of the same size.
+ */
+
   // namespace caffe
 
 // #endif  // CAFFE_VISION_LAYERS_HPP_
@@ -16533,6 +17554,18 @@ public static final int HDF5_NUM_DIMS = 4;
   public static native void vdExp(
         int n, @Const DoubleBuffer a, DoubleBuffer y);
   public static native void vdExp(
+        int n, @Const double[] a, double[] y);
+  public static native void vsLn(
+      int n, @Const FloatPointer a, FloatPointer y);
+  public static native void vsLn(
+      int n, @Const FloatBuffer a, FloatBuffer y);
+  public static native void vsLn(
+      int n, @Const float[] a, float[] y);
+  public static native void vdLn(
+        int n, @Const DoublePointer a, DoublePointer y);
+  public static native void vdLn(
+        int n, @Const DoubleBuffer a, DoubleBuffer y);
+  public static native void vdLn(
         int n, @Const double[] a, double[] y);
   public static native void vsAbs(
       int n, @Const FloatPointer a, FloatPointer y);

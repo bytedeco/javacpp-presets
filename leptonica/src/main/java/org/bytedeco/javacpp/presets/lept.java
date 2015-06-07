@@ -34,7 +34,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(include={"leptonica/alltypes.h", "leptonica/environ.h", "leptonica/array.h", "leptonica/bbuffer.h", "leptonica/heap.h", "leptonica/list.h",
         "leptonica/ptra.h", "leptonica/queue.h", "leptonica/stack.h", "leptonica/arrayaccess.h", "leptonica/bmf.h", "leptonica/ccbord.h",
         "leptonica/dewarp.h", "leptonica/gplot.h", "leptonica/imageio.h", "leptonica/jbclass.h", "leptonica/morph.h", "leptonica/pix.h",
-        "leptonica/recog.h", "leptonica/regutils.h", "leptonica/sudoku.h", "leptonica/watershed.h", "leptonica/allheaders.h"}, link="lept@.4",
+        "leptonica/recog.h", "leptonica/regutils.h", "leptonica/stringcode.h", "leptonica/sudoku.h", "leptonica/watershed.h", "leptonica/allheaders.h"}, link="lept@.4",
         preload={"gif@.4", "jpeg@.62", "png16@.16", "tiff@.5", "webp@.5"}),
     @Platform(value="linux-x86", preloadpath={"/usr/lib32/", "/usr/lib/"}),
     @Platform(value="linux-x86_64", preloadpath={"/usr/lib64/", "/usr/lib/"}),
@@ -45,7 +45,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value="windows-x86_64", preloadpath="C:/Program Files/mingw-w64/x86_64-4.9.1-posix-seh-rt_v3-rev3/mingw64/bin/") })
 public class lept implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("LEPT_DLL", "L_END_LIST").cppTypes().annotations())
+        infoMap.put(new Info("LEPT_DLL", "LIBJP2K_HEADER", "L_END_LIST").cppTypes().annotations())
+               .put(new Info("L_WallTimer").pointerTypes("L_WALLTIMER"))
                .put(new Info("Numa").pointerTypes("NUMA"))
                .put(new Info("Numaa").pointerTypes("NUMAA"))
                .put(new Info("Numa2d").pointerTypes("NUMA2D"))
@@ -97,6 +98,7 @@ public class lept implements InfoMapper {
                .put(new Info("L_Rcha").pointerTypes("L_RCHA"))
                .put(new Info("L_Rdid").pointerTypes("L_RDID"))
                .put(new Info("L_RegParams").pointerTypes("L_REGPARAMS"))
+               .put(new Info("L_StrCode").pointerTypes("L_STRCODE"))
                .put(new Info("L_Sudoku").pointerTypes("L_SUDOKU"))
                .put(new Info("L_WShed").pointerTypes("L_WSHED"));
     }

@@ -10,7 +10,7 @@ fi
 if [[ $PLATFORM == windows* ]]; then
     GSL_VERSION=1.16-2
     [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
-    download http://mirrors.kernel.org/fedora/releases/21/Everything/x86_64/os/Packages/m/mingw$BITS-gsl-$GSL_VERSION.fc21.noarch.rpm mingw$BITS-gsl-$GSL_VERSION.rpm
+    download http://mirrors.kernel.org/fedora/releases/22/Everything/x86_64/os/Packages/m/mingw$BITS-gsl-$GSL_VERSION.fc21.noarch.rpm mingw$BITS-gsl-$GSL_VERSION.rpm
 
     mkdir -p $PLATFORM
     cd $PLATFORM

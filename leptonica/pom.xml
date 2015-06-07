@@ -6,12 +6,12 @@
   <parent>
     <groupId>org.bytedeco</groupId>
     <artifactId>javacpp-presets</artifactId>
-    <version>0.11</version>
+    <version>1.0-SNAPSHOT</version>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>leptonica</artifactId>
-  <version>1.71-${project.parent.version}</version>
+  <version>1.72-${project.parent.version}</version>
   <packaging>jar</packaging>
   <name>JavaCPP Presets for Leptonica</name>
 

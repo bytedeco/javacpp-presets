@@ -8,15 +8,15 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 if [[ $PLATFORM == windows* ]]; then
-    LEPTONICA_VERSION=1.71-1
+    LEPTONICA_VERSION=1.72-1
     [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
-    download http://mirrors.kernel.org/fedora/releases/21/Everything/x86_64/os/Packages/m/mingw$BITS-leptonica-$LEPTONICA_VERSION.fc21.noarch.rpm mingw$BITS-leptonica-$LEPTONICA_VERSION.fc21.noarch.rpm
-    download http://mirrors.kernel.org/fedora/releases/21/Everything/x86_64/os/Packages/m/mingw$BITS-giflib-5.0.5-2.fc21.noarch.rpm mingw$BITS-giflib-5.0.5-2.fc21.noarch.rpm
-    download http://mirrors.kernel.org/fedora/releases/21/Everything/x86_64/os/Packages/m/mingw$BITS-libjpeg-turbo-1.3.1-3.fc21.noarch.rpm mingw$BITS-libjpeg-turbo-1.3.1-3.fc21.noarch.rpm
-    download http://mirrors.kernel.org/fedora/releases/21/Everything/x86_64/os/Packages/m/mingw$BITS-libpng-1.6.10-2.fc21.noarch.rpm mingw$BITS-libpng-1.6.10-2.fc21.noarch.rpm
-    download http://mirrors.kernel.org/fedora/releases/21/Everything/x86_64/os/Packages/m/mingw$BITS-libtiff-4.0.3-5.fc21.noarch.rpm mingw$BITS-libtiff-4.0.3-5.fc21.noarch.rpm
-    download http://mirrors.kernel.org/fedora/releases/21/Everything/x86_64/os/Packages/m/mingw$BITS-libwebp-0.4.2-1.fc21.noarch.rpm mingw$BITS-libwebp-0.4.2-1.fc21.noarch.rpm
-    download http://mirrors.kernel.org/fedora/releases/21/Everything/x86_64/os/Packages/m/mingw$BITS-zlib-1.2.8-3.fc21.noarch.rpm mingw$BITS-zlib-1.2.8-3.fc21.noarch.rpm
+    download http://mirrors.kernel.org/fedora/releases/22/Everything/x86_64/os/Packages/m/mingw$BITS-leptonica-$LEPTONICA_VERSION.fc22.noarch.rpm mingw$BITS-leptonica-$LEPTONICA_VERSION.fc22.noarch.rpm
+    download http://mirrors.kernel.org/fedora/releases/22/Everything/x86_64/os/Packages/m/mingw$BITS-giflib-5.0.5-2.fc21.noarch.rpm mingw$BITS-giflib-5.0.5-2.fc21.noarch.rpm
+    download http://mirrors.kernel.org/fedora/releases/22/Everything/x86_64/os/Packages/m/mingw$BITS-libjpeg-turbo-1.3.1-4.fc22.noarch.rpm mingw$BITS-libjpeg-turbo-1.3.1-4.fc22.noarch.rpm
+    download http://mirrors.kernel.org/fedora/releases/22/Everything/x86_64/os/Packages/m/mingw$BITS-libpng-1.6.10-2.fc21.noarch.rpm mingw$BITS-libpng-1.6.10-2.fc21.noarch.rpm
+    download http://mirrors.kernel.org/fedora/releases/22/Everything/x86_64/os/Packages/m/mingw$BITS-libtiff-4.0.3-6.fc22.noarch.rpm mingw$BITS-libtiff-4.0.3-6.fc22.noarch.rpm
+    download http://mirrors.kernel.org/fedora/releases/22/Everything/x86_64/os/Packages/m/mingw$BITS-libwebp-0.4.2-1.fc22.noarch.rpm mingw$BITS-libwebp-0.4.2-1.fc22.noarch.rpm
+    download http://mirrors.kernel.org/fedora/releases/22/Everything/x86_64/os/Packages/m/mingw$BITS-zlib-1.2.8-3.fc21.noarch.rpm mingw$BITS-zlib-1.2.8-3.fc21.noarch.rpm
 
     function extract {
         /C/Program\ Files/7-Zip/7z x -y $1
@@ -40,7 +40,7 @@ if [[ $PLATFORM == windows* ]]; then
     extract ../mingw$BITS-libwebp-*.cpio
     extract ../mingw$BITS-zlib-*.cpio
 else
-    LEPTONICA_VERSION=1.71
+    LEPTONICA_VERSION=1.72
     download http://www.leptonica.org/source/leptonica-$LEPTONICA_VERSION.tar.gz leptonica-$LEPTONICA_VERSION.tar.gz
 
     mkdir -p $PLATFORM
