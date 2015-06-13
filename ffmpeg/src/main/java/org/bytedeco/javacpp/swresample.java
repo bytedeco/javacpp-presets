@@ -325,9 +325,10 @@ public static native void swr_close(SwrContext s);
  * in and in_count can be set to 0 to flush the last few samples out at the
  * end.
  *
- * If more input is provided than output space then the input will be buffered.
- * You can avoid this buffering by providing more output space than input.
- * Conversion will run directly without copying whenever possible.
+ * If more input is provided than output space, then the input will be buffered.
+ * You can avoid this buffering by using swr_get_out_samples() to retrieve an
+ * upper bound on the required number of output samples for the given number of
+ * input samples. Conversion will run directly without copying whenever possible.
  *
  * @param s         allocated Swr context, with parameters set
  * @param out       output buffers, only the first one need be set in case of packed audio
@@ -475,6 +476,24 @@ public static native int swr_inject_silence(SwrContext s, int count);
  * @returns     the delay in 1 / @c base units.
  */
 public static native long swr_get_delay(SwrContext s, long base);
+
+/**
+ * Find an upper bound on the number of samples that the next swr_convert
+ * call will output, if called with in_samples of input samples. This
+ * depends on the internal state, and anything changing the internal state
+ * (like further swr_convert() calls) will may change the number of samples
+ * swr_get_out_samples() returns for the same number of input samples.
+ *
+ * @param in_samples    number of input samples.
+ * @note any call to swr_inject_silence(), swr_convert(), swr_next_pts()
+ *       or swr_set_compensation() invalidates this limit
+ * @note it is recommended to pass the correct available buffer size
+ *       to all functions like swr_convert() even if swr_get_out_samples()
+ *       indicates that less would be used.
+ * @returns an upper bound on the number of samples that the next swr_convert
+ *          will output or a negative value to indicate an error
+ */
+public static native int swr_get_out_samples(SwrContext s, int in_samples);
 
 /**
  * @}

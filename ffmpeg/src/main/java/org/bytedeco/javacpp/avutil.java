@@ -1278,6 +1278,13 @@ public static native int av_nearer_q(@ByVal AVRational q, @ByVal AVRational q1, 
 public static native int av_find_nearest_q_idx(@ByVal AVRational q, @Const AVRational q_list);
 
 /**
+ * Converts a AVRational to a IEEE 32bit float.
+ *
+ * The float is returned in a uint32_t and its value is platform indepenant.
+ */
+public static native @Cast("uint32_t") int av_q2intfloat(@ByVal AVRational q);
+
+/**
  * @}
  */
 
@@ -1312,6 +1319,7 @@ public static native int av_find_nearest_q_idx(@ByVal AVRational q, @Const AVRat
 // #include <stdarg.h>
 // #include "avutil.h"
 // #include "attributes.h"
+// #include "version.h"
 
 /** enum AVClassCategory */
 public static final int
@@ -1538,6 +1546,11 @@ public static final int AV_LOG_DEBUG =    48;
 public static final int AV_LOG_MAX_OFFSET = (AV_LOG_DEBUG - AV_LOG_QUIET);
 
 /**
+ * Extremely verbose debugging, useful for libav* development.
+ */
+public static final int AV_LOG_TRACE =    56;
+
+/**
  * @}
  */
 
@@ -1559,7 +1572,7 @@ public static final int AV_LOG_MAX_OFFSET = (AV_LOG_DEBUG - AV_LOG_QUIET);
  * @see av_log_set_callback
  *
  * @param avcl A pointer to an arbitrary struct of which the first field is a
- *        pointer to an AVClass struct.
+ *        pointer to an AVClass struct or NULL if general log.
  * @param level The importance level of the message expressed using a @ref
  *        lavu_log_constants "Logging Constant".
  * @param fmt The format string (printf-compatible) that specifies how
@@ -1682,8 +1695,10 @@ public static native void av_log_format_line(Pointer ptr, int level, @Cast("cons
 public static native void av_log_format_line(Pointer ptr, int level, String fmt, @ByVal @Cast("va_list*") Pointer vl,
                         @Cast("char*") byte[] line, int line_size, int[] print_prefix);
 
+// #if FF_API_DLOG
 /**
  * av_dlog macros
+ * @deprecated unused
  * Useful to print debug messages that shouldn't get compiled in normally.
  */
 
@@ -1692,6 +1707,7 @@ public static native void av_log_format_line(Pointer ptr, int level, String fmt,
 // #else
 // #    define av_dlog(pctx, ...) do { if (0) av_log(pctx, AV_LOG_DEBUG, __VA_ARGS__); } while (0)
 // #endif
+// #endif /* FF_API_DLOG */
 
 /**
  * Skip repeated messages, this requires the user app to use av_log() instead of
@@ -2127,11 +2143,6 @@ public static final int AVPALETTE_COUNT = 256;
  * For all the 8bit per pixel formats, an RGB32 palette is in data[1] like
  * for pal8. This palette is filled in automatically by the function
  * allocating the picture.
- *
- * @note
- * Make sure that all newly added big-endian formats have (pix_fmt & 1) == 1
- * and that all newly added little-endian formats have (pix_fmt & 1) == 0.
- * This allows simpler detection of big vs little-endian.
  */
 /** enum AVPixelFormat */
 public static final int
@@ -2158,13 +2169,13 @@ public static final int
     AV_PIX_FMT_MONOWHITE = 9,
     /**        Y        ,  1bpp, 0 is black, 1 is white, in each byte pixels are ordered from the msb to the lsb */
     AV_PIX_FMT_MONOBLACK = 10,
-    /** 8 bit with PIX_FMT_RGB32 palette */
+    /** 8 bit with AV_PIX_FMT_RGB32 palette */
     AV_PIX_FMT_PAL8 = 11,
-    /** planar YUV 4:2:0, 12bpp, full scale (JPEG), deprecated in favor of PIX_FMT_YUV420P and setting color_range */
+    /** planar YUV 4:2:0, 12bpp, full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV420P and setting color_range */
     AV_PIX_FMT_YUVJ420P = 12,
-    /** planar YUV 4:2:2, 16bpp, full scale (JPEG), deprecated in favor of PIX_FMT_YUV422P and setting color_range */
+    /** planar YUV 4:2:2, 16bpp, full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV422P and setting color_range */
     AV_PIX_FMT_YUVJ422P = 13,
-    /** planar YUV 4:4:4, 24bpp, full scale (JPEG), deprecated in favor of PIX_FMT_YUV444P and setting color_range */
+    /** planar YUV 4:4:4, 24bpp, full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV444P and setting color_range */
     AV_PIX_FMT_YUVJ444P = 14,
 // #if FF_API_XVMC
     /** XVideo Motion Acceleration via common packet passing */
@@ -2209,7 +2220,7 @@ public static final int
     AV_PIX_FMT_GRAY16LE = 32,
     /** planar YUV 4:4:0 (1 Cr & Cb sample per 1x2 Y samples) */
     AV_PIX_FMT_YUV440P = 33,
-    /** planar YUV 4:4:0 full scale (JPEG), deprecated in favor of PIX_FMT_YUV440P and setting color_range */
+    /** planar YUV 4:4:0 full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV440P and setting color_range */
     AV_PIX_FMT_YUVJ440P = 34,
     /** planar YUV 4:2:0, 20bpp, (1 Cr & Cb sample per 2x2 Y & A samples) */
     AV_PIX_FMT_YUVA420P = 35,
@@ -2447,6 +2458,14 @@ public static final int
      *  mfxFrameSurface1 structure.
      */
     AV_PIX_FMT_QSV =  AV_PIX_FMT_YA8 + 60,
+    /**
+     * HW acceleration though MMAL, data[3] contains a pointer to the
+     * MMAL_BUFFER_HEADER_T structure.
+     */
+    AV_PIX_FMT_MMAL =  AV_PIX_FMT_YA8 + 61,
+
+    /** HW decoding through Direct3D11, Picture.data[3] contains a ID3D11VideoDecoderOutputView pointer */
+    AV_PIX_FMT_D3D11VA_VLD =  AV_PIX_FMT_YA8 + 62,
 
 // #ifndef AV_PIX_FMT_ABI_GIT_MASTER
     /** packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian */
@@ -2509,7 +2528,7 @@ public static final int
     AV_PIX_FMT_GBRAP16BE = 0x123+4 + 23,
     /** planar GBRA 4:4:4:4 64bpp, little-endian */
     AV_PIX_FMT_GBRAP16LE = 0x123+4 + 24,
-    /** planar YUV 4:1:1, 12bpp, (1 Cr & Cb sample per 4x1 Y samples) full scale (JPEG), deprecated in favor of PIX_FMT_YUV411P and setting color_range */
+    /** planar YUV 4:1:1, 12bpp, (1 Cr & Cb sample per 4x1 Y samples) full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV411P and setting color_range */
     AV_PIX_FMT_YUVJ411P = 0x123+4 + 25,
 
     /** bayer, BGBG..(odd line), GRGR..(even line), 8-bit samples */
@@ -2538,9 +2557,17 @@ public static final int
     AV_PIX_FMT_BAYER_GRBG16BE = 0x123+4 + 37,
 // #if !FF_API_XVMC
 // #endif /* !FF_API_XVMC */
+    /** planar YUV 4:4:0,20bpp, (1 Cr & Cb sample per 1x2 Y samples), little-endian */
+    AV_PIX_FMT_YUV440P10LE = 0x123+4 + 38,
+    /** planar YUV 4:4:0,20bpp, (1 Cr & Cb sample per 1x2 Y samples), big-endian */
+    AV_PIX_FMT_YUV440P10BE = 0x123+4 + 39,
+    /** planar YUV 4:4:0,24bpp, (1 Cr & Cb sample per 1x2 Y samples), little-endian */
+    AV_PIX_FMT_YUV440P12LE = 0x123+4 + 40,
+    /** planar YUV 4:4:0,24bpp, (1 Cr & Cb sample per 1x2 Y samples), big-endian */
+    AV_PIX_FMT_YUV440P12BE = 0x123+4 + 41,
 
     /** number of pixel formats, DO NOT USE THIS if you want to link with shared libav* because the number of formats might differ between versions */
-    AV_PIX_FMT_NB = 0x123+4 + 38;
+    AV_PIX_FMT_NB = 0x123+4 + 42;
 
 // #if FF_API_PIX_FMT
 // #include "old_pix_fmts.h"
@@ -2607,12 +2634,16 @@ public static native @MemberGetter int AV_PIX_FMT_YUV420P10();
 public static final int AV_PIX_FMT_YUV420P10 = AV_PIX_FMT_YUV420P10();
 public static native @MemberGetter int AV_PIX_FMT_YUV422P10();
 public static final int AV_PIX_FMT_YUV422P10 = AV_PIX_FMT_YUV422P10();
+public static native @MemberGetter int AV_PIX_FMT_YUV440P10();
+public static final int AV_PIX_FMT_YUV440P10 = AV_PIX_FMT_YUV440P10();
 public static native @MemberGetter int AV_PIX_FMT_YUV444P10();
 public static final int AV_PIX_FMT_YUV444P10 = AV_PIX_FMT_YUV444P10();
 public static native @MemberGetter int AV_PIX_FMT_YUV420P12();
 public static final int AV_PIX_FMT_YUV420P12 = AV_PIX_FMT_YUV420P12();
 public static native @MemberGetter int AV_PIX_FMT_YUV422P12();
 public static final int AV_PIX_FMT_YUV422P12 = AV_PIX_FMT_YUV422P12();
+public static native @MemberGetter int AV_PIX_FMT_YUV440P12();
+public static final int AV_PIX_FMT_YUV440P12 = AV_PIX_FMT_YUV440P12();
 public static native @MemberGetter int AV_PIX_FMT_YUV444P12();
 public static final int AV_PIX_FMT_YUV444P12 = AV_PIX_FMT_YUV444P12();
 public static native @MemberGetter int AV_PIX_FMT_YUV420P14();
@@ -2833,18 +2864,26 @@ public static final int
 /**
  * Location of chroma samples.
  *
- *  X   X      3 4 X      X are luma samples,
- *             1 2        1-6 are possible chroma positions
- *  X   X      5 6 X      0 is undefined/unknown position
+ * Illustration showing the location of the first (top left) chroma sample of the
+ * image, the left shows only luma, the right
+ * shows the location of the chroma sample, the 2 could be imagined to overlay
+ * each other but are drawn seperately due to limitations of ASCII
+ *
+ *                1st 2nd       1st 2nd horizontal luma sample positions
+ *                 v   v         v   v
+ *                 ______        ______
+ *1st luma line > |X   X ...    |3 4 X ...     X are luma samples,
+ *                |             |1 2           1-6 are possible chroma positions
+ *2nd luma line > |X   X ...    |5 6 X ...     0 is undefined/unknown position
  */
 /** enum AVChromaLocation */
 public static final int
     AVCHROMA_LOC_UNSPECIFIED = 0,
-    /** mpeg2/4, h264 default */
+    /** mpeg2/4 4:2:0, h264 default for 4:2:0 */
     AVCHROMA_LOC_LEFT        = 1,
-    /** mpeg1, jpeg, h263 */
+    /** mpeg1 4:2:0, jpeg 4:2:0, h263 4:2:0 */
     AVCHROMA_LOC_CENTER      = 2,
-    /** DV */
+    /** ITU-R 601, SMPTE 274M 296M S314M(DV 4:1:1), mpeg2 4:2:2 */
     AVCHROMA_LOC_TOPLEFT     = 3,
     AVCHROMA_LOC_TOP         = 4,
     AVCHROMA_LOC_BOTTOMLEFT  = 5,
@@ -2983,6 +3022,13 @@ public static final int
     AV_AFD_16_9_SP_14_9 = 14,
     AV_AFD_SP_4_3       = 15;
 
+
+/**
+ * Structure to hold side data for an AVFrame.
+ *
+ * sizeof(AVFrameSideData) is not a part of the public ABI, so new fields may be added
+ * to the end with a minor bump.
+ */
 public static class AVFrameSideData extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
@@ -3001,6 +3047,7 @@ public static class AVFrameSideData extends Pointer {
     public native @Cast("uint8_t*") BytePointer data(); public native AVFrameSideData data(BytePointer data);
     public native int size(); public native AVFrameSideData size(int size);
     public native AVDictionary metadata(); public native AVFrameSideData metadata(AVDictionary metadata);
+    public native AVBufferRef buf(); public native AVFrameSideData buf(AVBufferRef buf);
 }
 
 /**
@@ -3543,7 +3590,7 @@ public static native AVFrame av_frame_clone(@Const AVFrame src);
 public static native void av_frame_unref(AVFrame frame);
 
 /**
- * Move everythnig contained in src to dst and reset src.
+ * Move everything contained in src to dst and reset src.
  */
 public static native void av_frame_move_ref(AVFrame dst, AVFrame src);
 
@@ -4298,6 +4345,8 @@ public static final int AV_CPU_FLAG_SSE4 =         0x0100;
 public static final int AV_CPU_FLAG_SSE42 =        0x0200;
 /** AVX functions: requires OS support even if YMM registers aren't used */
 public static final int AV_CPU_FLAG_AVX =          0x4000;
+/** AVX supported, but slow when using YMM registers (e.g. Bulldozer) */
+public static final int AV_CPU_FLAG_AVXSLOW =   0x8000000;
 /** Bulldozer XOP functions */
 public static final int AV_CPU_FLAG_XOP =          0x0400;
 /** Bulldozer FMA4 functions */
@@ -4319,6 +4368,10 @@ public static final int AV_CPU_FLAG_BMI2 =        0x40000;
 
 /** standard */
 public static final int AV_CPU_FLAG_ALTIVEC =      0x0001;
+/** ISA 2.06 */
+public static final int AV_CPU_FLAG_VSX =          0x0002;
+/** ISA 2.07 */
+public static final int AV_CPU_FLAG_POWER8 =       0x0004;
 
 public static final int AV_CPU_FLAG_ARMV5TE =      (1 << 0);
 public static final int AV_CPU_FLAG_ARMV6 =        (1 << 1);

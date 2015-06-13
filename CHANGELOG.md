@@ -1,5 +1,6 @@
 
- * Upgrade presets for OpenCV 3.0.0, FFmpeg 2.6.3, x265 1.7, Leptonica 1.72, LLVM 3.6.1, and the latest of Caffe
+ * Add libvpx in the `cppbuild.sh` script for FFmpeg to support the WebM format ([issue #33](https://github.com/bytedeco/javacpp-presets/issues/33))
+ * Upgrade presets for OpenCV 3.0.0, FFmpeg 2.7, OpenSSL 1.0.2c, x265 1.7, Leptonica 1.72, LLVM 3.6.1, and the latest of Caffe
  * Define commonly used OpenCV `std::vector` types (`PointVector`, `Point2fVector`, `Point2dVector`, `SizeVector`, `RectVector`, `KeyPointVector`, `DMatchVector`) for ease of use and performance reasons
  * Map `cv::saturate_cast<>()` in a more meaningful way ([issue #53](https://github.com/bytedeco/javacpp-presets/issues/53)) and name these functions more consistently
  * In addition to Leptonica and Tesseract, use only the officially supported GCC compiler for FFmpeg, FFTW, and GSL under Windows as well, to prevent compatibility issues ([issue bytedeco/javacv#137](https://github.com/bytedeco/javacv/issues/137))

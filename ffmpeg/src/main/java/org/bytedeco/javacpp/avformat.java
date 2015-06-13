@@ -51,7 +51,6 @@ public class avformat extends org.bytedeco.javacpp.presets.avformat {
 
 // #include "libavformat/version.h"
 
-
 /** Seeking works like for a local file */
 public static final int AVIO_SEEKABLE_NORMAL = 0x0001;
 
@@ -90,6 +89,86 @@ public static class AVIOInterruptCB extends Pointer {
     }
     public native Callback_Pointer callback(); public native AVIOInterruptCB callback(Callback_Pointer callback);
     public native Pointer opaque(); public native AVIOInterruptCB opaque(Pointer opaque);
+}
+
+/**
+ * Directory entry types.
+ */
+/** enum AVIODirEntryType */
+public static final int
+    AVIO_ENTRY_UNKNOWN = 0,
+    AVIO_ENTRY_BLOCK_DEVICE = 1,
+    AVIO_ENTRY_CHARACTER_DEVICE = 2,
+    AVIO_ENTRY_DIRECTORY = 3,
+    AVIO_ENTRY_NAMED_PIPE = 4,
+    AVIO_ENTRY_SYMBOLIC_LINK = 5,
+    AVIO_ENTRY_SOCKET = 6,
+    AVIO_ENTRY_FILE = 7,
+    AVIO_ENTRY_SERVER = 8,
+    AVIO_ENTRY_SHARE = 9,
+    AVIO_ENTRY_WORKGROUP = 10;
+
+/**
+ * Describes single entry of the directory.
+ *
+ * Only name and type fields are guaranteed be set.
+ * Rest of fields are protocol or/and platform dependent and might be unknown.
+ */
+public static class AVIODirEntry extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public AVIODirEntry() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public AVIODirEntry(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AVIODirEntry(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public AVIODirEntry position(int position) {
+        return (AVIODirEntry)super.position(position);
+    }
+
+    /** Filename */
+    public native @Cast("char*") BytePointer name(); public native AVIODirEntry name(BytePointer name);
+    /** Type of the entry */
+    public native int type(); public native AVIODirEntry type(int type);
+    /** Set to 1 when name is encoded with UTF-8, 0 otherwise.
+                                                   Name can be encoded with UTF-8 eventhough 0 is set. */
+    public native int utf8(); public native AVIODirEntry utf8(int utf8);
+    /** File size in bytes, -1 if unknown. */
+    public native long size(); public native AVIODirEntry size(long size);
+    /** Time of last modification in microseconds since unix
+                                                   epoch, -1 if unknown. */
+    public native long modification_timestamp(); public native AVIODirEntry modification_timestamp(long modification_timestamp);
+    /** Time of last access in microseconds since unix epoch,
+                                                   -1 if unknown. */
+    public native long access_timestamp(); public native AVIODirEntry access_timestamp(long access_timestamp);
+    /** Time of last status change in microseconds since unix
+                                                   epoch, -1 if unknown. */
+    public native long status_change_timestamp(); public native AVIODirEntry status_change_timestamp(long status_change_timestamp);
+    /** User ID of owner, -1 if unknown. */
+    public native long user_id(); public native AVIODirEntry user_id(long user_id);
+    /** Group ID of owner, -1 if unknown. */
+    public native long group_id(); public native AVIODirEntry group_id(long group_id);
+    /** Unix file mode, -1 if unknown. */
+    public native long filemode(); public native AVIODirEntry filemode(long filemode);
+}
+
+public static class AVIODirContext extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public AVIODirContext() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public AVIODirContext(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AVIODirContext(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public AVIODirContext position(int position) {
+        return (AVIODirContext)super.position(position);
+    }
+
+    public native @Cast("URLContext*") Pointer url_context(); public native AVIODirContext url_context(Pointer url_context);
 }
 
 /**
@@ -293,6 +372,54 @@ public static native int avio_check(@Cast("const char*") BytePointer url, int fl
 public static native int avio_check(String url, int flags);
 
 /**
+ * Open directory for reading.
+ *
+ * @param s       directory read context. Pointer to a NULL pointer must be passed.
+ * @param url     directory to be listed.
+ * @param options A dictionary filled with protocol-private options. On return
+ *                this parameter will be destroyed and replaced with a dictionary
+ *                containing options that were not found. May be NULL.
+ * @return >=0 on success or negative on error.
+ */
+public static native int avio_open_dir(@Cast("AVIODirContext**") PointerPointer s, @Cast("const char*") BytePointer url, @Cast("AVDictionary**") PointerPointer options);
+public static native int avio_open_dir(@ByPtrPtr AVIODirContext s, @Cast("const char*") BytePointer url, @ByPtrPtr AVDictionary options);
+public static native int avio_open_dir(@ByPtrPtr AVIODirContext s, String url, @ByPtrPtr AVDictionary options);
+
+/**
+ * Get next directory entry.
+ *
+ * Returned entry must be freed with avio_free_directory_entry(). In particular
+ * it may outlive AVIODirContext.
+ *
+ * @param s         directory read context.
+ * @param[out] next next entry or NULL when no more entries.
+ * @return >=0 on success or negative on error. End of list is not considered an
+ *             error.
+ */
+public static native int avio_read_dir(AVIODirContext s, @Cast("AVIODirEntry**") PointerPointer next);
+public static native int avio_read_dir(AVIODirContext s, @ByPtrPtr AVIODirEntry next);
+
+/**
+ * Close directory.
+ *
+ * @note Entries created using avio_read_dir() are not deleted and must be
+ * freeded with avio_free_directory_entry().
+ *
+ * @param s         directory read context.
+ * @return >=0 on success or negative on error.
+ */
+public static native int avio_close_dir(@Cast("AVIODirContext**") PointerPointer s);
+public static native int avio_close_dir(@ByPtrPtr AVIODirContext s);
+
+/**
+ * Free entry allocated by avio_read_dir().
+ *
+ * @param entry entry to be freed.
+ */
+public static native void avio_free_directory_entry(@Cast("AVIODirEntry**") PointerPointer entry);
+public static native void avio_free_directory_entry(@ByPtrPtr AVIODirEntry entry);
+
+/**
  * Allocate and initialize an AVIOContext for buffered I/O. It must be later
  * freed with av_free().
  *
@@ -416,6 +543,9 @@ public static native int avio_put_str(AVIOContext s, String str);
 
 /**
  * Convert an UTF-8 string to UTF-16LE and write it.
+ * @param s the AVIOContext
+ * @param str NULL-terminated UTF-8 string
+ *
  * @return number of bytes written.
  */
 public static native int avio_put_str16le(AVIOContext s, @Cast("const char*") BytePointer str);
@@ -423,6 +553,9 @@ public static native int avio_put_str16le(AVIOContext s, String str);
 
 /**
  * Convert an UTF-8 string to UTF-16BE and write it.
+ * @param s the AVIOContext
+ * @param str NULL-terminated UTF-8 string
+ *
  * @return number of bytes written.
  */
 public static native int avio_put_str16be(AVIOContext s, @Cast("const char*") BytePointer str);
@@ -985,6 +1118,53 @@ public static native int avio_read_to_bprint(AVIOContext h, AVBPrint pb, @Cast("
  *
  * @defgroup lavf_io I/O Read/Write
  * @{
+ * @section lavf_io_dirlist Directory listing
+ * The directory listing API allows to list files on remote servers.
+ *
+ * Some of possible use cases:
+ * - an "open file" dialog to choose files from a remote location,
+ * - a recursive media finder providing a player with an ability to play all
+ * files from a given directory.
+ *
+ * @subsection lavf_io_dirlist_open Opening a directory
+ * At first, a directory needs to be opened by calling avio_open_dir()
+ * supplied with a URL and, optionally, ::AVDictionary containing
+ * protocol-specific parameters. The function returns zero or positive
+ * integer and allocates AVIODirContext on success.
+ *
+ * @code
+ * AVIODirContext *ctx = NULL;
+ * if (avio_open_dir(&ctx, "smb://example.com/some_dir", NULL) < 0) {
+ *     fprintf(stderr, "Cannot open directory.\n");
+ *     abort();
+ * }
+ * @endcode
+ *
+ * This code tries to open a sample directory using smb protocol without
+ * any additional parameters.
+ *
+ * @subsection lavf_io_dirlist_read Reading entries
+ * Each directory's entry (i.e. file, another directory, anything else
+ * within ::AVIODirEntryType) is represented by AVIODirEntry.
+ * Reading consecutive entries from an opened AVIODirContext is done by
+ * repeatedly calling avio_read_dir() on it. Each call returns zero or
+ * positive integer if successful. Reading can be stopped right after the
+ * NULL entry has been read -- it means there are no entries left to be
+ * read. The following code reads all entries from a directory associated
+ * with ctx and prints their names to standard output.
+ * @code
+ * AVIODirEntry *entry = NULL;
+ * for (;;) {
+ *     if (avio_read_dir(ctx, &entry) < 0) {
+ *         fprintf(stderr, "Cannot list directory.\n");
+ *         abort();
+ *     }
+ *     if (!entry)
+ *         break;
+ *     printf("%s\n", entry->name);
+ *     avio_free_directory_entry(&entry);
+ * }
+ * @endcode
  * @}
  *
  * @defgroup lavf_codec Demuxers
@@ -2118,6 +2298,15 @@ public static final int MAX_REORDER_DELAY = 16;
     public native int skip_samples(); public native AVStream skip_samples(int skip_samples);
 
     /**
+     * If not 0, the number of samples that should be skipped from the start of
+     * the stream (the samples are removed from packets with pts==0, which also
+     * assumes negative timestamps do not happen).
+     * Intended for use with formats such as mp3 with ad-hoc gapless audio
+     * support.
+     */
+    public native long start_skip_samples(); public native AVStream start_skip_samples(long start_skip_samples);
+
+    /**
      * If not 0, the first audio sample that should be discarded from the stream.
      * This is broken by design (needs global sample count), but can't be
      * avoided for broken by design formats such as mp3 with ad-hoc gapless
@@ -2308,6 +2497,15 @@ public static class av_format_control_message extends FunctionPointer {
                                          Pointer data, @Cast("size_t") long data_size);
 }
 
+public static class AVOpenCallback extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    AVOpenCallback(Pointer p) { super(p); }
+    protected AVOpenCallback() { allocate(); }
+    private native void allocate();
+    public native int call(AVFormatContext s, @ByPtrPtr AVIOContext pb, @Cast("const char*") BytePointer url, int flags,
+                              @Const AVIOInterruptCB int_cb, @ByPtrPtr AVDictionary options);
+}
 
 /**
  * The duration of a video can be estimated through various ways, and this enum can be used
@@ -2499,6 +2697,8 @@ public static final int AVFMT_FLAG_SORT_DTS =    0x10000;
 public static final int AVFMT_FLAG_PRIV_OPT =    0x20000;
 /** Don't merge side data but keep it separate. */
 public static final int AVFMT_FLAG_KEEP_SIDE_DATA = 0x40000;
+/** Enable fast, but inaccurate seeks for some formats */
+public static final int AVFMT_FLAG_FAST_SEEK =   0x80000;
 
     /**
      * @deprecated deprecated in favor of probesize2
@@ -2892,6 +3092,31 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
      * Demuxing: Set by user.
      */
     public native @Cast("AVCodecID") int data_codec_id(); public native AVFormatContext data_codec_id(int data_codec_id);
+
+    /**
+     * Called to open further IO contexts when needed for demuxing.
+     *
+     * This can be set by the user application to perform security checks on
+     * the URLs before opening them.
+     * The function should behave like avio_open2(), AVFormatContext is provided
+     * as contextual information and to reach AVFormatContext.opaque.
+     *
+     * If NULL then some simple checks are used together with avio_open2().
+     *
+     * Must not be accessed directly from outside avformat.
+     * @See av_format_set_open_cb()
+     *
+     * Demuxing: Set by user.
+     */
+    public static class Open_cb_AVFormatContext_PointerPointer_BytePointer_int_AVIOInterruptCB_PointerPointer extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Open_cb_AVFormatContext_PointerPointer_BytePointer_int_AVIOInterruptCB_PointerPointer(Pointer p) { super(p); }
+        protected Open_cb_AVFormatContext_PointerPointer_BytePointer_int_AVIOInterruptCB_PointerPointer() { allocate(); }
+        private native void allocate();
+        public native int call(AVFormatContext s, @Cast("AVIOContext**") PointerPointer p, @Cast("const char*") BytePointer url, int flags, @Const AVIOInterruptCB int_cb, @Cast("AVDictionary**") PointerPointer options);
+    }
+    public native Open_cb_AVFormatContext_PointerPointer_BytePointer_int_AVIOInterruptCB_PointerPointer open_cb(); public native AVFormatContext open_cb(Open_cb_AVFormatContext_PointerPointer_BytePointer_int_AVIOInterruptCB_PointerPointer open_cb);
 }
 
 public static native int av_format_get_probe_score(@Const AVFormatContext s);
@@ -2909,6 +3134,8 @@ public static native Pointer av_format_get_opaque(@Const AVFormatContext s);
 public static native void av_format_set_opaque(AVFormatContext s, Pointer opaque);
 public static native av_format_control_message av_format_get_control_message_cb(@Const AVFormatContext s);
 public static native void av_format_set_control_message_cb(AVFormatContext s, av_format_control_message callback);
+public static native AVOpenCallback av_format_get_open_cb(@Const AVFormatContext s);
+public static native void av_format_set_open_cb(AVFormatContext s, AVOpenCallback callback);
 
 /**
  * This function will cause global side data to be injected in the next packet

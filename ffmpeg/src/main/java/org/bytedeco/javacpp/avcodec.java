@@ -308,7 +308,9 @@ public static final int
     AV_CODEC_ID_SGIRLE_DEPRECATED = 183,
     AV_CODEC_ID_MVC1_DEPRECATED = 184,
     AV_CODEC_ID_MVC2_DEPRECATED = 185,
-    AV_CODEC_ID_HQX = 186;
+    AV_CODEC_ID_HQX = 186,
+    AV_CODEC_ID_TDSC = 187,
+    AV_CODEC_ID_HQ_HQA = 188;
 public static native @MemberGetter int AV_CODEC_ID_BRENDER_PIX();
 public static final int
 
@@ -2151,7 +2153,7 @@ public static final int FF_MB_DECISION_RD =     2;
     /**
      * precision of the intra DC coefficient - 8
      * - encoding: Set by user.
-     * - decoding: unused
+     * - decoding: Set by libavcodec
      */
     public native int intra_dc_precision(); public native AVCodecContext intra_dc_precision(int intra_dc_precision);
 
@@ -3261,6 +3263,7 @@ public static final int FF_PROFILE_DTS_ES =      30;
 public static final int FF_PROFILE_DTS_96_24 =   40;
 public static final int FF_PROFILE_DTS_HD_HRA =  50;
 public static final int FF_PROFILE_DTS_HD_MA =   60;
+public static final int FF_PROFILE_DTS_EXPRESS = 70;
 
 public static final int FF_PROFILE_MPEG2_422 =    0;
 public static final int FF_PROFILE_MPEG2_HIGH =   1;
@@ -3319,6 +3322,11 @@ public static final int FF_PROFILE_HEVC_MAIN =                        1;
 public static final int FF_PROFILE_HEVC_MAIN_10 =                     2;
 public static final int FF_PROFILE_HEVC_MAIN_STILL_PICTURE =          3;
 public static final int FF_PROFILE_HEVC_REXT =                        4;
+
+public static final int FF_PROFILE_VP9_0 =                            0;
+public static final int FF_PROFILE_VP9_1 =                            1;
+public static final int FF_PROFILE_VP9_2 =                            2;
+public static final int FF_PROFILE_VP9_3 =                            3;
 
     /**
      * level
@@ -3768,6 +3776,11 @@ public static class AVCodec extends Pointer {
         public native void call(AVCodecContext arg0);
     }
     public native Flush_AVCodecContext flush(); public native AVCodec flush(Flush_AVCodecContext flush);
+    /**
+     * Internal codec capabilities.
+     * See FF_CODEC_CAP_* in internal.h
+     */
+    public native int caps_internal(); public native AVCodec caps_internal(int caps_internal);
 }
 
 public static native int av_codec_get_max_lowres(@Const AVCodec codec);
@@ -4475,6 +4488,8 @@ public static native @Cast("uint8_t*") byte[] av_packet_get_side_data(AVPacket p
 public static native int av_packet_merge_side_data(AVPacket pkt);
 
 public static native int av_packet_split_side_data(AVPacket pkt);
+
+public static native @Cast("const char*") BytePointer av_packet_side_data_name(@Cast("AVPacketSideDataType") int type);
 
 /**
  * Pack a dictionary for use in side_data.

@@ -1659,6 +1659,8 @@ public static class AVFilterGraph extends Pointer {
 
 /**
  * Allocate a filter graph.
+ *
+ * @return the allocated filter graph on success or NULL.
  */
 public static native AVFilterGraph avfilter_graph_alloc();
 
