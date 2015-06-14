@@ -164,6 +164,3 @@ To contribute, please fork and create pull requests, or post your suggestions [a
 Project lead: Samuel Audet [samuel.audet `at` gmail.com](mailto:samuel.audet at gmail.com)  
 Developer site: https://github.com/bytedeco/javacpp-presets  
 Discussion group: http://groups.google.com/group/javacpp-project
-
-Licensed under the GNU General Public License version 2 (GPLv2) **with Classpath exception**.  
-Please refer to LICENSE.txt or http://www.gnu.org/software/classpath/license.html for details.
