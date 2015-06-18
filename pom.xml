@@ -51,6 +51,7 @@
     <module>leptonica</module>
     <module>tesseract</module>
     <module>caffe</module>
+    <module>cuda</module>
   </modules>
 
   <scm>

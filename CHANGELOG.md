@@ -1,4 +1,5 @@
 
+ * Add presets for CUDA 6.5 (including cuBLAS and cuDNN)
  * Offer the Apache License, Version 2.0, as a new choice of license, in addition to the GPLv2 with Classpath exception
  * Add libvpx in the `cppbuild.sh` script for FFmpeg to support the WebM format ([issue #33](https://github.com/bytedeco/javacpp-presets/issues/33))
  * Upgrade presets for OpenCV 3.0.0, FFmpeg 2.7, OpenSSL 1.0.2c, x265 1.7, Leptonica 1.72, LLVM 3.6.1, and the latest of Caffe
