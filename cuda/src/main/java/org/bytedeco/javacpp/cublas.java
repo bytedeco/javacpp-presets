@@ -151,8 +151,8 @@ public static native @Cast("cublasStatus_t") int cublasDestroy_v2(cublasContext 
 public static native @Cast("cublasStatus_t") int cublasGetVersion_v2(cublasContext handle, IntPointer version);
 public static native @Cast("cublasStatus_t") int cublasGetVersion_v2(cublasContext handle, IntBuffer version);
 public static native @Cast("cublasStatus_t") int cublasGetVersion_v2(cublasContext handle, int[] version);
-public static native @Cast("cublasStatus_t") int cublasSetStream_v2(cublasContext handle, cudaStream streamId); 
-public static native @Cast("cublasStatus_t") int cublasGetStream_v2(cublasContext handle, @ByPtrPtr cudaStream streamId); 
+public static native @Cast("cublasStatus_t") int cublasSetStream_v2(cublasContext handle, CUstream_st streamId); 
+public static native @Cast("cublasStatus_t") int cublasGetStream_v2(cublasContext handle, @ByPtrPtr CUstream_st streamId); 
 
 public static native @Cast("cublasStatus_t") int cublasGetPointerMode_v2(cublasContext handle, @Cast("cublasPointerMode_t*") IntPointer mode);
 public static native @Cast("cublasStatus_t") int cublasGetPointerMode_v2(cublasContext handle, @Cast("cublasPointerMode_t*") IntBuffer mode);
@@ -284,7 +284,7 @@ public static native @Cast("cublasStatus_t") int cublasGetMatrix(int rows, int c
 public static native @Cast("cublasStatus_t") int cublasSetVectorAsync(int n, int elemSize, 
                                                   @Const Pointer hostPtr, int incx, 
                                                   Pointer devicePtr, int incy,
-                                                  cudaStream stream);
+                                                  CUstream_st stream);
 /* 
  * cublasStatus 
  * cublasGetVectorAsync( int n, int elemSize, const void *x, int incx, 
@@ -304,7 +304,7 @@ public static native @Cast("cublasStatus_t") int cublasSetVectorAsync(int n, int
 public static native @Cast("cublasStatus_t") int cublasGetVectorAsync(int n, int elemSize,
                                                   @Const Pointer devicePtr, int incx,
                                                   Pointer hostPtr, int incy,
-                                                  cudaStream stream);
+                                                  CUstream_st stream);
 
 /*
  * cublasStatus_t 
@@ -325,7 +325,7 @@ public static native @Cast("cublasStatus_t") int cublasGetVectorAsync(int n, int
  */
 public static native @Cast("cublasStatus_t") int cublasSetMatrixAsync(int rows, int cols, int elemSize,
                                                   @Const Pointer A, int lda, Pointer B,
-                                                  int ldb, cudaStream stream);
+                                                  int ldb, CUstream_st stream);
 
 /*
  * cublasStatus_t 
@@ -345,7 +345,7 @@ public static native @Cast("cublasStatus_t") int cublasSetMatrixAsync(int rows, 
  */
 public static native @Cast("cublasStatus_t") int cublasGetMatrixAsync(int rows, int cols, int elemSize,
                                                   @Const Pointer A, int lda, Pointer B,
-                                                  int ldb, cudaStream stream);
+                                                  int ldb, CUstream_st stream);
 
 
 public static native void cublasXerbla(@Cast("const char*") BytePointer srName, int info);
@@ -5192,7 +5192,7 @@ public static native @Cast("cublasStatus_t") int cublasAlloc(int n, int elemSize
 public static native @Cast("cublasStatus_t") int cublasFree(Pointer devicePtr);
 
 
-public static native @Cast("cublasStatus_t") int cublasSetKernelStream(cudaStream stream);
+public static native @Cast("cublasStatus_t") int cublasSetKernelStream(CUstream_st stream);
 
 
 

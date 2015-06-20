@@ -116,8 +116,8 @@ public static native @Cast("const char*") BytePointer cudnnGetErrorString(@Cast(
 
 public static native @Cast("cudnnStatus_t") int cudnnCreate(@ByPtrPtr cudnnContext handle);
 public static native @Cast("cudnnStatus_t") int cudnnDestroy(cudnnContext handle);
-public static native @Cast("cudnnStatus_t") int cudnnSetStream(cudnnContext handle, cudaStream streamId);
-public static native @Cast("cudnnStatus_t") int cudnnGetStream(cudnnContext handle, @ByPtrPtr cudaStream streamId);
+public static native @Cast("cudnnStatus_t") int cudnnSetStream(cudnnContext handle, CUstream_st streamId);
+public static native @Cast("cudnnStatus_t") int cudnnGetStream(cudnnContext handle, @ByPtrPtr CUstream_st streamId);
 
 
 /* Data structures to represent Image/Filter and the Neural Network Layer */

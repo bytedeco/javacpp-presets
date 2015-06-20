@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(value = {
-    @Platform(include = {"<host_defines.h>", "<device_types.h>", "<driver_types.h>", "<surface_types.h>", "<texture_types.h>",
+    @Platform(include = {"<cuda.h>", "<host_defines.h>", "<device_types.h>", "<driver_types.h>", "<surface_types.h>", "<texture_types.h>",
                          "<vector_types.h>", "<builtin_types.h>", "<cuda_runtime_api.h>", "<driver_functions.h>", "<vector_functions.h>",
                        /*"<cuda_device_runtime_api.h>", <cuda_runtime.h>"*/ "<cuComplex.h>"}, includepath = "/usr/local/cuda/include/",
               link = {"cudart@.6.5", "cuda@.6.5"}, linkpath = "/usr/local/cuda/lib/"),
@@ -47,21 +47,40 @@ public class cuda implements InfoMapper {
         infoMap.put(new Info("__volatile__", "__no_return__", "__noinline__", "__forceinline__", "__thread__", "__restrict__",
                              "__inline__", "__specialization_static", "__host__", "__device__", "__global__", "__shared__",
                              "__constant__", "__managed__", "NV_CLANG_ATOMIC_NOEXCEPT", "cudaDevicePropDontCare",
-                             "CUDART_DEVICE", "CUDART_CB", "__VECTOR_FUNCTIONS_DECL__").cppTypes().annotations().cppText(""))
+                             "CUDA_CB", "CUDAAPI", "CUDART_DEVICE", "CUDART_CB", "__VECTOR_FUNCTIONS_DECL__").cppTypes().annotations().cppText(""))
                .put(new Info("defined(__CUDABE__) || !defined(__CUDACC__)").define())
-               .put(new Info("!defined(__CUDACC__) && !defined(__CUDABE__) &&"
+               .put(new Info("defined(CUDA_FORCE_API_VERSION)",
+                             "defined(__CUDA_API_VERSION_INTERNAL) || __CUDA_API_VERSION >= 3020",
+                             "defined(__CUDA_API_VERSION_INTERNAL) || __CUDA_API_VERSION >= 4000",
+                             "defined(__CUDA_API_VERSION_INTERNAL) || __CUDA_API_VERSION >= 4010",
+                             "defined(__CUDA_API_VERSION_INTERNAL) || __CUDA_API_VERSION >= 6050",
+                             "defined(__CUDA_API_VERSION) && __CUDA_API_VERSION >= 3020 && __CUDA_API_VERSION < 4010",
+                             "defined(__CUDA_API_VERSION_INTERNAL)", "defined(__CUDA_API_PER_THREAD_DEFAULT_STREAM)",
+                             "defined(__CUDA_API_VERSION_INTERNAL) || __CUDA_API_VERSION < 3020",
+                             "defined(__CUDA_API_VERSION_INTERNAL) || (__CUDA_API_VERSION >= 3020 && __CUDA_API_VERSION < 4010)",
+                             "!defined(__CUDACC__) && !defined(__CUDABE__) &&"
                        + "    defined(_WIN32) && !defined(_WIN64)",
                              "!defined(__CUDACC__) && !defined(__CUDABE__) && defined(__arm__) &&"
                        + "    defined(__ARM_PCS_VFP) && __GNUC__ == 4 && __GNUC_MINOR__ == 6",
                              "!defined(__CUDACC__) && !defined(__CUDACC_RTC__) && !defined(__CUDABE__) &&"
                        + "    defined(_WIN32) && !defined(_WIN64)", "defined(__CUDART_API_PER_THREAD_DEFAULT_STREAM)").define(false))
-               .put(new Info("cudaStreamLegacy", "cudaStreamPerThread").translate(false).cppTypes("cudaStream*"))
+               .put(new Info("CUcontext").valueTypes("CUctx_st").pointerTypes("@ByPtrPtr CUctx_st"))
+               .put(new Info("CUmodule").valueTypes("CUmod_st").pointerTypes("@ByPtrPtr CUmod_st"))
+               .put(new Info("CUfunction").valueTypes("CUfunc_st").pointerTypes("@ByPtrPtr CUfunc_st"))
+               .put(new Info("CUarray").valueTypes("CUarray_st").pointerTypes("@ByPtrPtr CUarray_st"))
+               .put(new Info("CUmipmappedArray").valueTypes("CUmipmappedArray_st").pointerTypes("@ByPtrPtr CUmipmappedArray_st"))
+               .put(new Info("CUtexref").valueTypes("CUtexref_st").pointerTypes("@ByPtrPtr CUtexref_st"))
+               .put(new Info("CUsurfref").valueTypes("CUsurfref_st").pointerTypes("@ByPtrPtr CUsurfref_st"))
+               .put(new Info("CUevent").valueTypes("CUevent_st").pointerTypes("@ByPtrPtr CUevent_st"))
+               .put(new Info("CUstream").valueTypes("CUstream_st").pointerTypes("@ByPtrPtr CUstream_st"))
+               .put(new Info("CUgraphicsResource").valueTypes("CUgraphicsResource_st").pointerTypes("@ByPtrPtr CUgraphicsResource_st"))
+               .put(new Info("CUlinkState").valueTypes("CUlinkState_st").pointerTypes("@ByPtrPtr CUlinkState_st"))
+               .put(new Info("CU_LAUNCH_PARAM_END", "CU_LAUNCH_PARAM_BUFFER_POINTER", "CU_LAUNCH_PARAM_BUFFER_SIZE").translate(false).cppTypes("void*"))
+               .put(new Info("CU_STREAM_LEGACY", "CU_STREAM_PER_THREAD", "cudaStreamLegacy", "cudaStreamPerThread").translate(false).cppTypes("CUstream_st*"))
                .put(new Info("cudaArray_t", "cudaArray_const_t").valueTypes("cudaArray").pointerTypes("@ByPtrPtr cudaArray"))
                .put(new Info("cudaMipmappedArray_t", "cudaMipmappedArray_const_t").valueTypes("cudaMipmappedArray").pointerTypes("@ByPtrPtr cudaMipmappedArray"))
                .put(new Info("cudaGraphicsResource_t").valueTypes("cudaGraphicsResource").pointerTypes("@ByPtrPtr cudaGraphicsResource"))
-               .put(new Info("CUstream_st").pointerTypes("cudaStream"))
-               .put(new Info("CUevent_st").pointerTypes("cudaEvent"))
-               .put(new Info("cudaStream_t").valueTypes("cudaStream").pointerTypes("@ByPtrPtr cudaStream"))
-               .put(new Info("cudaEvent_t").valueTypes("cudaEvent").pointerTypes("@ByPtrPtr cudaEvent"));
+               .put(new Info("cudaStream_t").valueTypes("CUstream_st").pointerTypes("@ByPtrPtr CUstream_st"))
+               .put(new Info("cudaEvent_t").valueTypes("CUevent_st").pointerTypes("@ByPtrPtr CUevent_st"));
     }
 }

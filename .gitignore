@@ -13,6 +13,7 @@
 /leptonica/target/
 /tesseract/target/
 /caffe/target/
+/cuda/target/
 /opencv/cppbuild/
 /ffmpeg/cppbuild/
 /flycapture/cppbuild/
@@ -27,4 +28,5 @@
 /leptonica/cppbuild/
 /tesseract/cppbuild/
 /caffe/cppbuild/
+/cuda/cppbuild/
 
