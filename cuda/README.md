@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * CUDA 6.5  https://developer.nvidia.com/cuda-zone
+ * CUDA 7.0  https://developer.nvidia.com/cuda-zone
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -39,7 +39,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda</artifactId>
-            <version>6.5-1.0-SNAPSHOT</version>
+            <version>7.0-1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

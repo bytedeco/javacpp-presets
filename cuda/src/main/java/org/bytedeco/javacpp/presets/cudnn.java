@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cuda.class, value = {
-    @Platform(include = "<cudnn.h>", link = "cudnn@.6.5")},
+    @Platform(include = "<cudnn.h>", link = "cudnn@.7.0")},
         target = "org.bytedeco.javacpp.cudnn")
 public class cudnn implements InfoMapper {
     public void map(InfoMap infoMap) {

@@ -70,8 +70,17 @@ public class cuda extends org.bytedeco.javacpp.presets.cuda {
  */
 // #if defined(CUDA_FORCE_API_VERSION)
 // #else
-    public static final int __CUDA_API_VERSION = 6050;
+    public static final int __CUDA_API_VERSION = 7000;
 // #endif /* CUDA_FORCE_API_VERSION */
+
+// #if defined(__CUDA_API_VERSION_INTERNAL) || defined(CUDA_API_PER_THREAD_DEFAULT_STREAM)
+//     #define __CUDA_API_PER_THREAD_DEFAULT_STREAM
+//     #define __CUDA_API_PTDS(api) api ## _ptds
+//     #define __CUDA_API_PTSZ(api) api ## _ptsz
+// #else
+//     #define __CUDA_API_PTDS(api) api
+//     #define __CUDA_API_PTSZ(api) api
+// #endif
 
 // #if defined(__CUDA_API_VERSION_INTERNAL) || __CUDA_API_VERSION >= 3020
 // #endif /* __CUDA_API_VERSION_INTERNAL || __CUDA_API_VERSION >= 3020 */
@@ -88,6 +97,9 @@ public class cuda extends org.bytedeco.javacpp.presets.cuda {
 // #if defined(__CUDA_API_VERSION) && __CUDA_API_VERSION >= 3020 && __CUDA_API_VERSION < 4010
 // #endif /* __CUDA_API_VERSION && __CUDA_API_VERSION >= 3020 && __CUDA_API_VERSION < 4010 */
 // #endif /* __CUDA_API_VERSION_INTERNAL */
+
+// #if defined(__CUDA_API_PER_THREAD_DEFAULT_STREAM)
+// #endif
 
 /**
  * \file cuda.h
@@ -110,17 +122,18 @@ public class cuda extends org.bytedeco.javacpp.presets.cuda {
 /**
  * CUDA API version number
  */
-public static final int CUDA_VERSION = 6050;
+public static final int CUDA_VERSION = 7000;
 
 // #ifdef __cplusplus
 // #endif
 
 /**
  * CUDA device pointer
+ * CUdeviceptr is defined as an unsigned integer type whose size matches the size of a pointer on the target platform.
  */ 
 // #if __CUDA_API_VERSION >= 3020
 
-// #if defined(__x86_64) || defined(AMD64) || defined(_M_AMD64) || defined(__aarch64__)
+// #if defined(_WIN64) || defined(__LP64__)
 // #else
 // #endif
 
@@ -197,8 +210,8 @@ public static final int CUDA_VERSION = 6050;
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUgraphicsResource_st(Pointer p) { super(p); }
 }
-/** CUDA texture object */
-/** CUDA surface object */
+/** An opaque value that represents a CUDA texture object */
+/** An opaque value that represents a CUDA surface object */
 
 public static class CUuuid extends Pointer {
     static { Loader.load(); }
@@ -325,6 +338,28 @@ public static final int
     CU_STREAM_NON_BLOCKING =  0x1;
 
 /**
+ * Legacy stream handle
+ *
+ * Stream handle that can be passed as a CUstream to use an implicit stream
+ * with legacy synchronization behavior.
+ *
+ * See details of the \link_sync_behavior
+ */
+public static native @MemberGetter CUstream_st CU_STREAM_LEGACY();
+public static final CUstream_st CU_STREAM_LEGACY = CU_STREAM_LEGACY();
+
+/**
+ * Per-thread stream handle
+ *
+ * Stream handle that can be passed as a CUstream to use an implicit stream
+ * with per-thread synchronization behavior.
+ *
+ * See details of the \link_sync_behavior
+ */
+public static native @MemberGetter CUstream_st CU_STREAM_PER_THREAD();
+public static final CUstream_st CU_STREAM_PER_THREAD = CU_STREAM_PER_THREAD();
+
+/**
  * Event creation flags
  */
 /** enum CUevent_flags */
@@ -337,6 +372,16 @@ public static final int
     CU_EVENT_DISABLE_TIMING =  0x2,
     /** Event is suitable for interprocess use. CU_EVENT_DISABLE_TIMING must be set */
     CU_EVENT_INTERPROCESS   =  0x4;
+
+/**
+ * Occupancy calculator flag
+ */
+/** enum CUoccupancy_flags */
+public static final int
+    /** Default behavior */
+    CU_OCCUPANCY_DEFAULT                  =  0x0,
+    /** Assume global caching is enabled and cannot be automatically turned off */
+    CU_OCCUPANCY_DISABLE_CACHING_OVERRIDE =  0x1;
 
 /**
  * Array formats
@@ -911,7 +956,9 @@ public static final int
     /** Compute device class 3.7 */
     CU_TARGET_COMPUTE_37 = 37,
     /** Compute device class 5.0 */
-    CU_TARGET_COMPUTE_50 = 50;
+    CU_TARGET_COMPUTE_50 = 50,
+    /** Compute device class 5.2 */
+    CU_TARGET_COMPUTE_52 = 52;
 
 /**
  * Cubin matching fallback strategies
@@ -2661,6 +2708,240 @@ public static native @Cast("CUresult") int cuDeviceComputeCapability(int[] major
 /** @} */ /* END CUDA_DEVICE_DEPRECATED */
 
 /**
+ * \defgroup CUDA_PRIMARY_CTX Primary Context Management
+ *
+ * ___MANBRIEF___ primary context management functions of the low-level CUDA driver
+ * API (___CURRENT_FILE___) ___ENDMANBRIEF___
+ *
+ * This section describes the primary context management functions of the low-level
+ * CUDA driver application programming interface.
+ *
+ * The primary context unique per device and it's shared with CUDA runtime API.
+ * Those functions allows seemless integration with other libraries using CUDA.
+ *
+ * @{
+ */
+
+// #if __CUDA_API_VERSION >= 7000
+
+/**
+ * \brief Retain the primary context on the GPU
+ *
+ * Retains the primary context on the device, creating it if necessary,
+ * increasing its usage count. The caller must call
+ * ::cuDevicePrimaryCtxRelease() when done using the context.
+ * Unlike ::cuCtxCreate() the newly created context is not pushed onto the stack.
+ *
+ * Context creation will fail with ::CUDA_ERROR_UNKNOWN if the compute mode of
+ * the device is ::CU_COMPUTEMODE_PROHIBITED. Similarly, context creation will
+ * also fail with ::CUDA_ERROR_UNKNOWN if the compute mode for the device is
+ * set to ::CU_COMPUTEMODE_EXCLUSIVE and there is already an active, non-primary,
+ * context on the device. The function ::cuDeviceGetAttribute() can be used with
+ * ::CU_DEVICE_ATTRIBUTE_COMPUTE_MODE to determine the compute mode of the
+ * device. The <i>nvidia-smi</i> tool can be used to set the compute mode for
+ * devices. Documentation for <i>nvidia-smi</i> can be obtained by passing a
+ * -h option to it.
+ *
+ * Please note that the primary context always supports pinned allocations. Other
+ * flags can be specified by ::cuDevicePrimaryCtxSetFlags().
+ *
+ * \param pctx  - Returned context handle of the new context
+ * \param dev   - Device for which primary context is requested
+ *
+ * \return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_CONTEXT,
+ * ::CUDA_ERROR_INVALID_DEVICE,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_OUT_OF_MEMORY,
+ * ::CUDA_ERROR_UNKNOWN
+ * \notefnerr
+ *
+ * \sa ::cuDevicePrimaryCtxRelease,
+ * ::cuDevicePrimaryCtxSetFlags,
+ * ::cuCtxCreate,
+ * ::cuCtxGetApiVersion,
+ * ::cuCtxGetCacheConfig,
+ * ::cuCtxGetDevice,
+ * ::cuCtxGetFlags,
+ * ::cuCtxGetLimit,
+ * ::cuCtxPopCurrent,
+ * ::cuCtxPushCurrent,
+ * ::cuCtxSetCacheConfig,
+ * ::cuCtxSetLimit,
+ * ::cuCtxSynchronize
+ */
+public static native @Cast("CUresult") int cuDevicePrimaryCtxRetain(@ByPtrPtr CUctx_st pctx, @Cast("CUdevice") int dev);
+
+/**
+ * \brief Release the primary context on the GPU
+ *
+ * Releases the primary context interop on the device by decreasing the usage
+ * count by 1. If the usage drops to 0 the primary context of device \p dev
+ * will be destroyed regardless of how many threads it is current to.
+ *
+ * Please note that unlike ::cuCtxDestroy() this method does not pop the context
+ * from stack in any circumstances.
+ *
+ * \param dev - Device which primary context is released
+ *
+ * \return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_DEVICE
+ * \notefnerr
+ *
+ * \sa ::cuDevicePrimaryCtxRetain,
+ * ::cuCtxDestroy,
+ * ::cuCtxGetApiVersion,
+ * ::cuCtxGetCacheConfig,
+ * ::cuCtxGetDevice,
+ * ::cuCtxGetFlags,
+ * ::cuCtxGetLimit,
+ * ::cuCtxPopCurrent,
+ * ::cuCtxPushCurrent,
+ * ::cuCtxSetCacheConfig,
+ * ::cuCtxSetLimit,
+ * ::cuCtxSynchronize
+ */
+public static native @Cast("CUresult") int cuDevicePrimaryCtxRelease(@Cast("CUdevice") int dev);
+
+/**
+ * \brief Set flags for the primary context
+ *
+ * Sets the flags for the primary context on the device overwriting perviously
+ * set ones. If the primary context is already created
+ * ::CUDA_ERROR_PRIMARY_CONTEXT_ACTIVE is returned.
+ *
+ * The three LSBs of the \p flags parameter can be used to control how the OS
+ * thread, which owns the CUDA context at the time of an API call, interacts
+ * with the OS scheduler when waiting for results from the GPU. Only one of
+ * the scheduling flags can be set when creating a context.
+ *
+ * - ::CU_CTX_SCHED_SPIN: Instruct CUDA to actively spin when waiting for
+ * results from the GPU. This can decrease latency when waiting for the GPU,
+ * but may lower the performance of CPU threads if they are performing work in
+ * parallel with the CUDA thread.
+ *
+ * - ::CU_CTX_SCHED_YIELD: Instruct CUDA to yield its thread when waiting for
+ * results from the GPU. This can increase latency when waiting for the GPU,
+ * but can increase the performance of CPU threads performing work in parallel
+ * with the GPU.
+ *
+ * - ::CU_CTX_SCHED_BLOCKING_SYNC: Instruct CUDA to block the CPU thread on a
+ * synchronization primitive when waiting for the GPU to finish work.
+ *
+ * - ::CU_CTX_BLOCKING_SYNC: Instruct CUDA to block the CPU thread on a
+ * synchronization primitive when waiting for the GPU to finish work. <br>
+ * <b>Deprecated:</b> This flag was deprecated as of CUDA 4.0 and was
+ * replaced with ::CU_CTX_SCHED_BLOCKING_SYNC.
+ *
+ * - ::CU_CTX_SCHED_AUTO: The default value if the \p flags parameter is zero,
+ * uses a heuristic based on the number of active CUDA contexts in the
+ * process \e C and the number of logical processors in the system \e P. If
+ * \e C > \e P, then CUDA will yield to other OS threads when waiting for
+ * the GPU (::CU_CTX_SCHED_YIELD), otherwise CUDA will not yield while
+ * waiting for results and actively spin on the processor (::CU_CTX_SCHED_SPIN).
+ * However, on low power devices like Tegra, it always defaults to
+ * ::CU_CTX_SCHED_BLOCKING_SYNC.
+ *
+ * - ::CU_CTX_LMEM_RESIZE_TO_MAX: Instruct CUDA to not reduce local memory
+ * after resizing local memory for a kernel. This can prevent thrashing by
+ * local memory allocations when launching many kernels with high local
+ * memory usage at the cost of potentially increased memory usage.
+ *
+ * \param dev   - Device for which the primary context flags are set
+ * \param flags - New flags for the device
+ *
+ * \return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_DEVICE,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_PRIMARY_CONTEXT_ACTIVE
+ * \notefnerr
+ *
+ * \sa ::cuDevicePrimaryCtxRetain,
+ * ::cuDevicePrimaryCtxGetState,
+ * ::cuCtxCreate,
+ * ::cuCtxGetFlags
+ */
+public static native @Cast("CUresult") int cuDevicePrimaryCtxSetFlags(@Cast("CUdevice") int dev, @Cast("unsigned int") int flags);
+
+/**
+ * \brief Get the state of the primary context
+ *
+ * Returns in \p *flags the flags for the primary context of \p dev, and in
+ * \p *active whether it is active.  See ::cuDevicePrimaryCtxSetFlags for flag
+ * values.
+ *
+ * \param dev    - Device to get primary context flags for
+ * \param flags  - Pointer to store flags
+ * \param active - Pointer to store context state; 0 = inactive, 1 = active
+ *
+ * \return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_DEVICE,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * \notefnerr
+ *
+ * \sa ::cuDevicePrimaryCtxSetFlags,
+ * ::cuCtxGetFlags
+ */
+public static native @Cast("CUresult") int cuDevicePrimaryCtxGetState(@Cast("CUdevice") int dev, @Cast("unsigned int*") IntPointer flags, IntPointer active);
+public static native @Cast("CUresult") int cuDevicePrimaryCtxGetState(@Cast("CUdevice") int dev, @Cast("unsigned int*") IntBuffer flags, IntBuffer active);
+public static native @Cast("CUresult") int cuDevicePrimaryCtxGetState(@Cast("CUdevice") int dev, @Cast("unsigned int*") int[] flags, int[] active);
+
+/**
+ * \brief Destroy all allocations and reset all state on the primary context
+ *
+ * Explicitly destroys and cleans up all resources associated with the current
+ * device in the current process.
+ *
+ * Note that it is responsibility of the calling function to ensure that no
+ * other module in the process is using the device any more. For that reason
+ * it is recommended to use ::cuDevicePrimaryCtxRelease() in most cases.
+ * However it is safe for other modules to call ::cuDevicePrimaryCtxRelease()
+ * even after resetting the device.
+ *
+ * \param dev - Device for which primary context is destroyed
+ *
+ * \return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_DEVICE,
+ * ::CUDA_ERROR_PRIMARY_CONTEXT_ACTIVE
+ * \notefnerr
+ *
+ * \sa ::cuDevicePrimaryCtxRetain,
+ * ::cuDevicePrimaryCtxRelease,
+ * ::cuCtxGetApiVersion,
+ * ::cuCtxGetCacheConfig,
+ * ::cuCtxGetDevice,
+ * ::cuCtxGetFlags,
+ * ::cuCtxGetLimit,
+ * ::cuCtxPopCurrent,
+ * ::cuCtxPushCurrent,
+ * ::cuCtxSetCacheConfig,
+ * ::cuCtxSetLimit,
+ * ::cuCtxSynchronize
+ *
+ */
+public static native @Cast("CUresult") int cuDevicePrimaryCtxReset(@Cast("CUdevice") int dev);
+
+// #endif /* __CUDA_API_VERSION >= 7000 */
+
+/** @} */ /* END CUDA_PRIMARY_CTX */
+
+
+/**
  * \defgroup CUDA_CTX Context Management
  *
  * ___MANBRIEF___ context management functions of the low-level CUDA driver
@@ -2688,13 +2969,6 @@ public static native @Cast("CUresult") int cuDeviceComputeCapability(int[] major
  * with the OS scheduler when waiting for results from the GPU. Only one of
  * the scheduling flags can be set when creating a context.
  *
- * - ::CU_CTX_SCHED_AUTO: The default value if the \p flags parameter is zero,
- * uses a heuristic based on the number of active CUDA contexts in the
- * process \e C and the number of logical processors in the system \e P. If
- * \e C > \e P, then CUDA will yield to other OS threads when waiting for
- * the GPU, otherwise CUDA will not yield while waiting for results and
- * actively spin on the processor.
- *
  * - ::CU_CTX_SCHED_SPIN: Instruct CUDA to actively spin when waiting for
  * results from the GPU. This can decrease latency when waiting for the GPU,
  * but may lower the performance of CPU threads if they are performing work in
@@ -2712,6 +2986,15 @@ public static native @Cast("CUresult") int cuDeviceComputeCapability(int[] major
  * synchronization primitive when waiting for the GPU to finish work. <br>
  * <b>Deprecated:</b> This flag was deprecated as of CUDA 4.0 and was
  * replaced with ::CU_CTX_SCHED_BLOCKING_SYNC. 
+ *
+ * - ::CU_CTX_SCHED_AUTO: The default value if the \p flags parameter is zero,
+ * uses a heuristic based on the number of active CUDA contexts in the
+ * process \e C and the number of logical processors in the system \e P. If
+ * \e C > \e P, then CUDA will yield to other OS threads when waiting for 
+ * the GPU (::CU_CTX_SCHED_YIELD), otherwise CUDA will not yield while 
+ * waiting for results and actively spin on the processor (::CU_CTX_SCHED_SPIN). 
+ * However, on low power devices like Tegra, it always defaults to 
+ * ::CU_CTX_SCHED_BLOCKING_SYNC.
  *
  * - ::CU_CTX_MAP_HOST: Instruct CUDA to support mapped pinned allocations.
  * This flag must be set in order to allocate pinned host memory that is
@@ -2751,6 +3034,7 @@ public static native @Cast("CUresult") int cuDeviceComputeCapability(int[] major
  * ::cuCtxGetApiVersion,
  * ::cuCtxGetCacheConfig,
  * ::cuCtxGetDevice,
+ * ::cuCtxGetFlags,
  * ::cuCtxGetLimit,
  * ::cuCtxPopCurrent,
  * ::cuCtxPushCurrent,
@@ -2790,6 +3074,7 @@ public static native @Cast("CUresult") int cuCtxCreate(@ByPtrPtr CUctx_st pctx, 
  * ::cuCtxGetApiVersion,
  * ::cuCtxGetCacheConfig,
  * ::cuCtxGetDevice,
+ * ::cuCtxGetFlags,
  * ::cuCtxGetLimit,
  * ::cuCtxPopCurrent,
  * ::cuCtxPushCurrent,
@@ -2826,6 +3111,7 @@ public static native @Cast("CUresult") int cuCtxDestroy(CUctx_st ctx);
  * ::cuCtxGetApiVersion,
  * ::cuCtxGetCacheConfig,
  * ::cuCtxGetDevice,
+ * ::cuCtxGetFlags,
  * ::cuCtxGetLimit,
  * ::cuCtxPopCurrent,
  * ::cuCtxSetCacheConfig,
@@ -2859,6 +3145,7 @@ public static native @Cast("CUresult") int cuCtxPushCurrent(CUctx_st ctx);
  * ::cuCtxGetApiVersion,
  * ::cuCtxGetCacheConfig,
  * ::cuCtxGetDevice,
+ * ::cuCtxGetFlags,
  * ::cuCtxGetLimit,
  * ::cuCtxPushCurrent,
  * ::cuCtxSetCacheConfig,
@@ -2932,6 +3219,7 @@ public static native @Cast("CUresult") int cuCtxGetCurrent(@ByPtrPtr CUctx_st pc
  * ::cuCtxDestroy,
  * ::cuCtxGetApiVersion,
  * ::cuCtxGetCacheConfig,
+ * ::cuCtxGetFlags,
  * ::cuCtxGetLimit,
  * ::cuCtxPopCurrent,
  * ::cuCtxPushCurrent,
@@ -2942,6 +3230,37 @@ public static native @Cast("CUresult") int cuCtxGetCurrent(@ByPtrPtr CUctx_st pc
 public static native @Cast("CUresult") int cuCtxGetDevice(@Cast("CUdevice*") IntPointer device);
 public static native @Cast("CUresult") int cuCtxGetDevice(@Cast("CUdevice*") IntBuffer device);
 public static native @Cast("CUresult") int cuCtxGetDevice(@Cast("CUdevice*") int[] device);
+
+// #if __CUDA_API_VERSION >= 7000
+/**
+ * \brief Returns the flags for the current context
+ *
+ * Returns in \p *flags the flags of the current context. See ::cuCtxCreate
+ * for flag values.
+ *
+ * \param flags - Pointer to store flags of current context
+ *
+ * \return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_CONTEXT,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * \notefnerr
+ *
+ * \sa ::cuCtxCreate,
+ * ::cuCtxGetApiVersion,
+ * ::cuCtxGetCacheConfig,
+ * ::cuCtxGetCurrent,
+ * ::cuCtxGetDevice
+ * ::cuCtxGetLimit,
+ * ::cuCtxGetSharedMemConfig,
+ * ::cuCtxGetStreamPriorityRange
+ */
+public static native @Cast("CUresult") int cuCtxGetFlags(@Cast("unsigned int*") IntPointer flags);
+public static native @Cast("CUresult") int cuCtxGetFlags(@Cast("unsigned int*") IntBuffer flags);
+public static native @Cast("CUresult") int cuCtxGetFlags(@Cast("unsigned int*") int[] flags);
+// #endif /* __CUDA_API_VERSION >= 7000 */
 
 /**
  * \brief Block for a context's tasks to complete
@@ -2963,6 +3282,7 @@ public static native @Cast("CUresult") int cuCtxGetDevice(@Cast("CUdevice*") int
  * ::cuCtxGetApiVersion,
  * ::cuCtxGetCacheConfig,
  * ::cuCtxGetDevice,
+ * ::cuCtxGetFlags,
  * ::cuCtxGetLimit,
  * ::cuCtxPopCurrent,
  * ::cuCtxPushCurrent,
@@ -3057,6 +3377,7 @@ public static native @Cast("CUresult") int cuCtxSynchronize();
  * ::cuCtxGetApiVersion,
  * ::cuCtxGetCacheConfig,
  * ::cuCtxGetDevice,
+ * ::cuCtxGetFlags,
  * ::cuCtxGetLimit,
  * ::cuCtxPopCurrent,
  * ::cuCtxPushCurrent,
@@ -3095,6 +3416,7 @@ public static native @Cast("CUresult") int cuCtxSetLimit(@Cast("CUlimit") int li
  * ::cuCtxGetApiVersion,
  * ::cuCtxGetCacheConfig,
  * ::cuCtxGetDevice,
+ * ::cuCtxGetFlags,
  * ::cuCtxPopCurrent,
  * ::cuCtxPushCurrent,
  * ::cuCtxSetCacheConfig,
@@ -3135,6 +3457,7 @@ public static native @Cast("CUresult") int cuCtxGetLimit(@Cast("size_t*") SizeTP
  * ::cuCtxDestroy,
  * ::cuCtxGetApiVersion,
  * ::cuCtxGetDevice,
+ * ::cuCtxGetFlags,
  * ::cuCtxGetLimit,
  * ::cuCtxPopCurrent,
  * ::cuCtxPushCurrent,
@@ -3187,6 +3510,7 @@ public static native @Cast("CUresult") int cuCtxGetCacheConfig(@Cast("CUfunc_cac
  * ::cuCtxGetApiVersion,
  * ::cuCtxGetCacheConfig,
  * ::cuCtxGetDevice,
+ * ::cuCtxGetFlags,
  * ::cuCtxGetLimit,
  * ::cuCtxPopCurrent,
  * ::cuCtxPushCurrent,
@@ -3227,6 +3551,7 @@ public static native @Cast("CUresult") int cuCtxSetCacheConfig(@Cast("CUfunc_cac
  * ::cuCtxGetApiVersion,
  * ::cuCtxGetCacheConfig,
  * ::cuCtxGetDevice,
+ * ::cuCtxGetFlags,
  * ::cuCtxGetLimit,
  * ::cuCtxPopCurrent,
  * ::cuCtxPushCurrent,
@@ -3280,6 +3605,7 @@ public static native @Cast("CUresult") int cuCtxGetSharedMemConfig(@Cast("CUshar
  * ::cuCtxGetApiVersion,
  * ::cuCtxGetCacheConfig,
  * ::cuCtxGetDevice,
+ * ::cuCtxGetFlags,
  * ::cuCtxGetLimit,
  * ::cuCtxPopCurrent,
  * ::cuCtxPushCurrent,
@@ -3318,6 +3644,7 @@ public static native @Cast("CUresult") int cuCtxSetSharedMemConfig(@Cast("CUshar
  * \sa ::cuCtxCreate,
  * ::cuCtxDestroy,
  * ::cuCtxGetDevice,
+ * ::cuCtxGetFlags,
  * ::cuCtxGetLimit,
  * ::cuCtxPopCurrent,
  * ::cuCtxPushCurrent,
@@ -3362,6 +3689,7 @@ public static native @Cast("CUresult") int cuCtxGetApiVersion(CUctx_st ctx, @Cas
  * \sa ::cuStreamCreateWithPriority,
  * ::cuStreamGetPriority,
  * ::cuCtxGetDevice,
+ * ::cuCtxGetFlags,
  * ::cuCtxSetLimit,
  * ::cuCtxSynchronize
  */
@@ -3414,6 +3742,7 @@ public static native @Cast("CUresult") int cuCtxGetStreamPriorityRange(int[] lea
  * ::cuCtxGetApiVersion,
  * ::cuCtxGetCacheConfig,
  * ::cuCtxGetDevice,
+ * ::cuCtxGetFlags,
  * ::cuCtxGetLimit,
  * ::cuCtxPopCurrent,
  * ::cuCtxPushCurrent,
@@ -3449,6 +3778,7 @@ public static native @Cast("CUresult") int cuCtxAttach(@ByPtrPtr CUctx_st pctx, 
  * ::cuCtxGetApiVersion,
  * ::cuCtxGetCacheConfig,
  * ::cuCtxGetDevice,
+ * ::cuCtxGetFlags,
  * ::cuCtxGetLimit,
  * ::cuCtxPopCurrent,
  * ::cuCtxPushCurrent,
@@ -5345,7 +5675,7 @@ public static native @Cast("CUresult") int cuMemcpyAtoA(CUarray_st dstArray, @Ca
  * ::CUDA_ERROR_INVALID_CONTEXT,
  * ::CUDA_ERROR_INVALID_VALUE
  * \notefnerr
- * \nore_sync
+ * \note_sync
  *
  * \sa ::cuArray3DCreate, ::cuArray3DGetDescriptor, ::cuArrayCreate,
  * ::cuArrayDestroy, ::cuArrayGetDescriptor, ::cuMemAlloc, ::cuMemAllocHost,
@@ -7628,6 +7958,7 @@ public static native @Cast("CUresult") int cuPointerGetAttribute(Pointer data, @
  * \notefnerr
  *
  * \sa ::cuPointerGetAttribute,
+ * ::cuPointerGetAttributes,
  * ::cuMemAlloc,
  * ::cuMemFree,
  * ::cuMemAllocHost,
@@ -7638,6 +7969,51 @@ public static native @Cast("CUresult") int cuPointerGetAttribute(Pointer data, @
  */
 public static native @Cast("CUresult") int cuPointerSetAttribute(@Const Pointer value, @Cast("CUpointer_attribute") int attribute, @Cast("CUdeviceptr") long ptr);
 // #endif /* __CUDA_API_VERSION >= 6000 */
+
+// #if __CUDA_API_VERSION >= 7000
+/**
+ * \brief Returns information about a pointer.
+ *
+ * The supported attributes are (refer to ::cuPointerGetAttribute for attribute descriptions and restrictions):
+ *
+ * - ::CU_POINTER_ATTRIBUTE_CONTEXT
+ * - ::CU_POINTER_ATTRIBUTE_MEMORY_TYPE
+ * - ::CU_POINTER_ATTRIBUTE_DEVICE_POINTER
+ * - ::CU_POINTER_ATTRIBUTE_HOST_POINTER
+ * - ::CU_POINTER_ATTRIBUTE_SYNC_MEMOPS
+ * - ::CU_POINTER_ATTRIBUTE_BUFFER_ID
+ * - ::CU_POINTER_ATTRIBUTE_IS_MANAGED
+ *
+ * \param numAttributes - Number of attributes to query
+ * \param attributes    - An array of attributes to query
+ *                      (numAttributes and the number of attributes in this array should match)
+ * \param data          - A two-dimensional array containing pointers to memory
+ *                      locations where the result of each attribute query will be written to.
+ * \param ptr           - Pointer to query
+ *
+ * Unlike ::cuPointerGetAttribute, this function will not return an error when the \p ptr
+ * encountered is not a valid CUDA pointer. Instead, the attributes are assigned default NULL values
+ * and CUDA_SUCCESS is returned.
+ *
+ * If \p ptr was not allocated by, mapped by, or registered with a ::CUcontext which uses UVA
+ * (Unified Virtual Addressing), ::CUDA_ERROR_INVALID_CONTEXT is returned.
+ *
+ * \return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_INVALID_CONTEXT,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_INVALID_DEVICE
+ * \notefnerr
+ *
+ * \sa ::cuPointerGetAttribute,
+ * ::cuPointerSetAttribute
+ */
+public static native @Cast("CUresult") int cuPointerGetAttributes(@Cast("unsigned int") int numAttributes, @Cast("CUpointer_attribute*") IntPointer attributes, @Cast("void**") PointerPointer data, @Cast("CUdeviceptr") long ptr);
+public static native @Cast("CUresult") int cuPointerGetAttributes(@Cast("unsigned int") int numAttributes, @Cast("CUpointer_attribute*") IntPointer attributes, @Cast("void**") @ByPtrPtr Pointer data, @Cast("CUdeviceptr") long ptr);
+public static native @Cast("CUresult") int cuPointerGetAttributes(@Cast("unsigned int") int numAttributes, @Cast("CUpointer_attribute*") IntBuffer attributes, @Cast("void**") @ByPtrPtr Pointer data, @Cast("CUdeviceptr") long ptr);
+public static native @Cast("CUresult") int cuPointerGetAttributes(@Cast("unsigned int") int numAttributes, @Cast("CUpointer_attribute*") int[] attributes, @Cast("void**") @ByPtrPtr Pointer data, @Cast("CUdeviceptr") long ptr);
+// #endif /* __CUDA_API_VERSION >= 7000 */
 
 /** @} */ /* END CUDA_UNIFIED */
 
@@ -8991,7 +9367,7 @@ public static native @Cast("CUresult") int cuParamSetTexRef(CUfunc_st hfunc, int
  * streaming multiprocessor.
  *
  * \param numBlocks       - Returned occupancy
- * \param func            - Kernel for which occupancy is calulated
+ * \param func            - Kernel for which occupancy is calculated
  * \param blockSize       - Block size the kernel is intended to be launched with
  * \param dynamicSMemSize - Per-block dynamic shared memory usage intended, in bytes
  *
@@ -9009,6 +9385,48 @@ public static native @Cast("CUresult") int cuOccupancyMaxActiveBlocksPerMultipro
 public static native @Cast("CUresult") int cuOccupancyMaxActiveBlocksPerMultiprocessor(IntBuffer numBlocks, CUfunc_st func, int blockSize, @Cast("size_t") long dynamicSMemSize);
 public static native @Cast("CUresult") int cuOccupancyMaxActiveBlocksPerMultiprocessor(int[] numBlocks, CUfunc_st func, int blockSize, @Cast("size_t") long dynamicSMemSize);
 
+/**
+ * \brief Returns occupancy of a function
+ *
+ * Returns in \p *numBlocks the number of the maximum active blocks per
+ * streaming multiprocessor.
+ *
+ * The \p Flags parameter controls how special cases are handled. The
+ * valid flags are:
+ *
+ * - ::CU_OCCUPANCY_DEFAULT, which maintains the default behavior as
+ *   ::cuOccupancyMaxActiveBlocksPerMultiprocessor;
+ *
+ * - ::CU_OCCUPANCY_DISABLE_CACHING_OVERRIDE, which suppresses the
+ *   default behavior on platform where global caching affects
+ *   occupancy. On such platforms, if caching is enabled, but
+ *   per-block SM resource usage would result in zero occupancy, the
+ *   occupancy calculator will calculate the occupancy as if caching
+ *   is disabled. Setting ::CU_OCCUPANCY_DISABLE_CACHING_OVERRIDE makes
+ *   the occupancy calculator to return 0 in such cases. More information
+ *   can be found about this feature in the "Unified L1/Texture Cache"
+ *   section of the Maxwell tuning guide.
+ *
+ * \param numBlocks       - Returned occupancy
+ * \param func            - Kernel for which occupancy is calculated
+ * \param blockSize       - Block size the kernel is intended to be launched with
+ * \param dynamicSMemSize - Per-block dynamic shared memory usage intended, in bytes
+ * \param flags           - Requested behavior for the occupancy calculator
+ *
+ * \return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_CONTEXT,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_UNKNOWN
+ * \notefnerr
+ *
+ */
+public static native @Cast("CUresult") int cuOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(IntPointer numBlocks, CUfunc_st func, int blockSize, @Cast("size_t") long dynamicSMemSize, @Cast("unsigned int") int flags);
+public static native @Cast("CUresult") int cuOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(IntBuffer numBlocks, CUfunc_st func, int blockSize, @Cast("size_t") long dynamicSMemSize, @Cast("unsigned int") int flags);
+public static native @Cast("CUresult") int cuOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(int[] numBlocks, CUfunc_st func, int blockSize, @Cast("size_t") long dynamicSMemSize, @Cast("unsigned int") int flags);
+    
 /**
  * \brief Suggest a launch configuration with reasonable occupancy
  *
@@ -9042,7 +9460,7 @@ public static native @Cast("CUresult") int cuOccupancyMaxActiveBlocksPerMultipro
  *
  * \param minGridSize - Returned minimum grid size needed to achieve the maximum occupancy
  * \param blockSize   - Returned maximum block size that can achieve the maximum occupancy
- * \param func        - Kernel for which launch configuration is calulated
+ * \param func        - Kernel for which launch configuration is calculated
  * \param blockSizeToDynamicSMemSize - A function that calculates how much per-block dynamic shared memory \p func uses based on the block size
  * \param dynamicSMemSize - Dynamic shared memory usage intended, in bytes
  * \param blockSizeLimit  - The maximum block size \p func is designed to handle
@@ -9060,6 +9478,52 @@ public static native @Cast("CUresult") int cuOccupancyMaxActiveBlocksPerMultipro
 public static native @Cast("CUresult") int cuOccupancyMaxPotentialBlockSize(IntPointer minGridSize, IntPointer blockSize, CUfunc_st func, CUoccupancyB2DSize blockSizeToDynamicSMemSize, @Cast("size_t") long dynamicSMemSize, int blockSizeLimit);
 public static native @Cast("CUresult") int cuOccupancyMaxPotentialBlockSize(IntBuffer minGridSize, IntBuffer blockSize, CUfunc_st func, CUoccupancyB2DSize blockSizeToDynamicSMemSize, @Cast("size_t") long dynamicSMemSize, int blockSizeLimit);
 public static native @Cast("CUresult") int cuOccupancyMaxPotentialBlockSize(int[] minGridSize, int[] blockSize, CUfunc_st func, CUoccupancyB2DSize blockSizeToDynamicSMemSize, @Cast("size_t") long dynamicSMemSize, int blockSizeLimit);
+
+/**
+ * \brief Suggest a launch configuration with reasonable occupancy
+ *
+ * An extended version of ::cuOccupancyMaxPotentialBlockSize. In
+ * addition to arguments passed to ::cuOccupancyMaxPotentialBlockSize,
+ * ::cuOccupancyMaxPotentialBlockSizeWithFlags also takes a \p Flags
+ * parameter.
+ *
+ * The \p Flags parameter controls how special cases are handled. The
+ * valid flags are:
+ *
+ * - ::CU_OCCUPANCY_DEFAULT, which maintains the default behavior as
+ *   ::cuOccupancyMaxPotentialBlockSize;
+ *
+ * - ::CU_OCCUPANCY_DISABLE_CACHING_OVERRIDE, which suppresses the
+ *   default behavior on platform where global caching affects
+ *   occupancy. On such platforms, the launch configurations that
+ *   produces maximal occupancy might not support global
+ *   caching. Setting ::CU_OCCUPANCY_DISABLE_CACHING_OVERRIDE
+ *   guarantees that the the produced launch configuration is global
+ *   caching compatible at a potential cost of occupancy. More information
+ *   can be found about this feature in the "Unified L1/Texture Cache"
+ *   section of the Maxwell tuning guide.
+ *
+ * \param minGridSize - Returned minimum grid size needed to achieve the maximum occupancy
+ * \param blockSize   - Returned maximum block size that can achieve the maximum occupancy
+ * \param func        - Kernel for which launch configuration is calculated
+ * \param blockSizeToDynamicSMemSize - A function that calculates how much per-block dynamic shared memory \p func uses based on the block size
+ * \param dynamicSMemSize - Dynamic shared memory usage intended, in bytes
+ * \param blockSizeLimit  - The maximum block size \p func is designed to handle
+ * \param flags       - Options
+ *
+ * \return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_CONTEXT,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_UNKNOWN
+ * \notefnerr
+ *
+ */
+public static native @Cast("CUresult") int cuOccupancyMaxPotentialBlockSizeWithFlags(IntPointer minGridSize, IntPointer blockSize, CUfunc_st func, CUoccupancyB2DSize blockSizeToDynamicSMemSize, @Cast("size_t") long dynamicSMemSize, int blockSizeLimit, @Cast("unsigned int") int flags);
+public static native @Cast("CUresult") int cuOccupancyMaxPotentialBlockSizeWithFlags(IntBuffer minGridSize, IntBuffer blockSize, CUfunc_st func, CUoccupancyB2DSize blockSizeToDynamicSMemSize, @Cast("size_t") long dynamicSMemSize, int blockSizeLimit, @Cast("unsigned int") int flags);
+public static native @Cast("CUresult") int cuOccupancyMaxPotentialBlockSizeWithFlags(int[] minGridSize, int[] blockSize, CUfunc_st func, CUoccupancyB2DSize blockSizeToDynamicSMemSize, @Cast("size_t") long dynamicSMemSize, int blockSizeLimit, @Cast("unsigned int") int flags);
 
 /** @} */ /* END CUDA_OCCUPANCY */
 // #endif /* __CUDA_API_VERSION >= 6050 */
@@ -9914,6 +10378,8 @@ public static native @Cast("CUresult") int cuSurfRefGetArray(@ByPtrPtr CUarray_s
  * the type of resource is a CUDA array or a CUDA mipmapped array.
  *
  * Texture objects are only supported on devices of compute capability 3.0 or higher.
+ * Additionally, a texture object is an opaque value, and, as such, should only be
+ * accessed through CUDA API calls.
  *
  * The ::CUDA_RESOURCE_DESC structure is defined as:
  * \code
@@ -10209,6 +10675,8 @@ public static native @Cast("CUresult") int cuTexObjectGetResourceViewDesc(CUDA_R
  * must be set to a valid CUDA array handle. ::CUDA_RESOURCE_DESC::flags must be set to zero.
  *
  * Surface objects are only supported on devices of compute capability 3.0 or higher.
+ * Additionally, a surface object is an opaque value, and, as such, should only be
+ * accessed through CUDA API calls.
  *
  * \param pSurfObject - Surface object to create
  * \param pResDesc    - Resource descriptor
@@ -10683,6 +11151,9 @@ public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**"
 // #if defined(__CUDA_API_VERSION_INTERNAL)
 // #endif /* __CUDA_API_VERSION_INTERNAL */
 
+// #if defined(__CUDA_API_VERSION_INTERNAL)
+// #endif
+
 // #ifdef __cplusplus
 // #endif
 
@@ -10695,7 +11166,7 @@ public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**"
 // Parsed from <host_defines.h>
 
 /*
- * Copyright 1993-2012 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2014 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -10746,7 +11217,12 @@ public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**"
 // #if !defined(__HOST_DEFINES_H__)
 // #define __HOST_DEFINES_H__
 
-// #if defined(__GNUC__) || defined(__CUDA_LIBDEVICE__)
+/* CUDA JIT mode (__CUDACC_RTC__) also uses GNU style attributes */
+// #if defined(__GNUC__) || defined(__CUDA_LIBDEVICE__) || defined(__CUDACC_RTC__)
+
+// #if defined(__CUDACC_RTC__)
+// #define __volatile__ volatile
+// #endif /* __CUDACC_RTC__ */
 
 // #define __no_return__
 //         __attribute__((noreturn))
@@ -10815,7 +11291,7 @@ public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**"
 // #define CUDARTAPI
 //         __stdcall
 
-// #else /* __GNUC__ || __CUDA_LIBDEVICE__ */
+// #else /* __GNUC__ || __CUDA_LIBDEVICE__ || __CUDACC_RTC__ */
 
 // #define __inline__
 
@@ -10831,7 +11307,7 @@ public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**"
 
 // #endif /* !CUDARTAPI */
 
-// #endif /* !__GNUC__ */
+// #endif /* __GNUC__ || __CUDA_LIBDEVICE__ || __CUDACC_RTC__ */
 
 // #if !defined(__GNUC__) || __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 3 && !defined(__clang__) )
 
@@ -10888,6 +11364,25 @@ public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**"
 // #define __cudart_builtin__
 // #else /* __CUDABE__  || !__CUDACC__ */
 // #endif /* __CUDABE__ || !__CUDACC__ */
+
+// #if defined(__CUDACC__) && defined(__clang__)
+
+// #if !defined(__has_feature)
+// #error --- !!! The Clang version does not support __has_feature !!! ---
+// #endif /* !__has_feature */
+
+// #if __has_feature(cxx_atomic)
+// #if (__has_feature(cxx_noexcept))
+// #define NV_CLANG_ATOMIC_NOEXCEPT noexcept
+// #define NV_CLANG_ATOMIC_NOEXCEPT_(x) noexcept(x)
+// #else /* !__has_feature(cxx_noexcept) */
+// #define NV_CLANG_ATOMIC_NOEXCEPT throw()
+// #define NV_CLANG_ATOMIC_NOEXCEPT_(x)
+// #endif /* __has_feature(cxx_noexcept) */
+// #define _Atomic(X) __nv_clang_atomic_t<X>
+// #endif /* __has_feature(cxx_atomic) */
+
+// #endif /* __CUDACC__ && __clang__ */
 
 
 // #endif /* !__HOST_DEFINES_H__ */
@@ -10968,7 +11463,7 @@ public static final int
 // Parsed from <driver_types.h>
 
 /*
- * Copyright 1993-2012 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2014 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -11034,88 +11529,114 @@ public static final int
 *                                                                              *
 *******************************************************************************/
 
-// #if !defined(__CUDA_INTERNAL_COMPILATION__)
+// #if !defined(__CUDA_INTERNAL_COMPILATION__) && !defined(__CUDACC_RTC__)
 
 // #include <limits.h>
 // #include <stddef.h>
 
 /** Default page-locked allocation flag */
-public static final int cudaHostAllocDefault =           0x00;
+public static final int cudaHostAllocDefault =                0x00;
 /** Pinned memory accessible by all CUDA contexts */
-public static final int cudaHostAllocPortable =          0x01;
+public static final int cudaHostAllocPortable =               0x01;
 /** Map allocation into device space */
-public static final int cudaHostAllocMapped =            0x02;
+public static final int cudaHostAllocMapped =                 0x02;
 /** Write-combined memory */
-public static final int cudaHostAllocWriteCombined =     0x04;
+public static final int cudaHostAllocWriteCombined =          0x04;
 
 /** Default host memory registration flag */
-public static final int cudaHostRegisterDefault =        0x00;
+public static final int cudaHostRegisterDefault =             0x00;
 /** Pinned memory accessible by all CUDA contexts */
-public static final int cudaHostRegisterPortable =       0x01;
+public static final int cudaHostRegisterPortable =            0x01;
 /** Map registered memory into device space */
-public static final int cudaHostRegisterMapped =         0x02;
+public static final int cudaHostRegisterMapped =              0x02;
 
 /** Default peer addressing enable flag */
-public static final int cudaPeerAccessDefault =          0x00;
+public static final int cudaPeerAccessDefault =               0x00;
 
 /** Default stream flag */
-public static final int cudaStreamDefault =              0x00;
+public static final int cudaStreamDefault =                   0x00;
 /** Stream does not synchronize with stream 0 (the NULL stream) */
-public static final int cudaStreamNonBlocking =          0x01;
+public static final int cudaStreamNonBlocking =               0x01;
 
+ /**
+ * Legacy stream handle
+ *
+ * Stream handle that can be passed as a cudaStream_t to use an implicit stream
+ * with legacy synchronization behavior.
+ *
+ * See details of the \link_sync_behavior
+ */
+public static native @MemberGetter CUstream_st cudaStreamLegacy();
+public static final CUstream_st cudaStreamLegacy = cudaStreamLegacy();
+
+/**
+ * Per-thread stream handle
+ *
+ * Stream handle that can be passed as a cudaStream_t to use an implicit stream
+ * with per-thread synchronization behavior.
+ *
+ * See details of the \link_sync_behavior
+ */
+public static native @MemberGetter CUstream_st cudaStreamPerThread();
+public static final CUstream_st cudaStreamPerThread = cudaStreamPerThread();
 
 /** Default event flag */
-public static final int cudaEventDefault =               0x00;
+public static final int cudaEventDefault =                    0x00;
 /** Event uses blocking synchronization */
-public static final int cudaEventBlockingSync =          0x01;
+public static final int cudaEventBlockingSync =               0x01;
 /** Event will not record timing data */
-public static final int cudaEventDisableTiming =         0x02;
+public static final int cudaEventDisableTiming =              0x02;
 /** Event is suitable for interprocess use. cudaEventDisableTiming must be set */
-public static final int cudaEventInterprocess =          0x04;
+public static final int cudaEventInterprocess =               0x04;
 
 /** Device flag - Automatic scheduling */
-public static final int cudaDeviceScheduleAuto =         0x00;
+public static final int cudaDeviceScheduleAuto =              0x00;
 /** Device flag - Spin default scheduling */
-public static final int cudaDeviceScheduleSpin =         0x01;
+public static final int cudaDeviceScheduleSpin =              0x01;
 /** Device flag - Yield default scheduling */
-public static final int cudaDeviceScheduleYield =        0x02;
+public static final int cudaDeviceScheduleYield =             0x02;
 /** Device flag - Use blocking synchronization */
-public static final int cudaDeviceScheduleBlockingSync = 0x04;
+public static final int cudaDeviceScheduleBlockingSync =      0x04;
 /** Device flag - Use blocking synchronization 
-                                               *  \deprecated This flag was deprecated as of CUDA 4.0 and
-                                               *  replaced with ::cudaDeviceScheduleBlockingSync. */
-public static final int cudaDeviceBlockingSync =         0x04;
+                                                    *  \deprecated This flag was deprecated as of CUDA 4.0 and
+                                                    *  replaced with ::cudaDeviceScheduleBlockingSync. */
+public static final int cudaDeviceBlockingSync =              0x04;
 /** Device schedule flags mask */
-public static final int cudaDeviceScheduleMask =         0x07;
+public static final int cudaDeviceScheduleMask =              0x07;
 /** Device flag - Support mapped pinned allocations */
-public static final int cudaDeviceMapHost =              0x08;
+public static final int cudaDeviceMapHost =                   0x08;
 /** Device flag - Keep local memory allocation after launch */
-public static final int cudaDeviceLmemResizeToMax =      0x10;
+public static final int cudaDeviceLmemResizeToMax =           0x10;
 /** Device flags mask */
-public static final int cudaDeviceMask =                 0x1f;
+public static final int cudaDeviceMask =                      0x1f;
 
 /** Default CUDA array allocation flag */
-public static final int cudaArrayDefault =               0x00;
+public static final int cudaArrayDefault =                    0x00;
 /** Must be set in cudaMalloc3DArray to create a layered CUDA array */
-public static final int cudaArrayLayered =               0x01;
+public static final int cudaArrayLayered =                    0x01;
 /** Must be set in cudaMallocArray or cudaMalloc3DArray in order to bind surfaces to the CUDA array */
-public static final int cudaArraySurfaceLoadStore =      0x02;
+public static final int cudaArraySurfaceLoadStore =           0x02;
 /** Must be set in cudaMalloc3DArray to create a cubemap CUDA array */
-public static final int cudaArrayCubemap =               0x04;
+public static final int cudaArrayCubemap =                    0x04;
 /** Must be set in cudaMallocArray or cudaMalloc3DArray in order to perform texture gather operations on the CUDA array */
-public static final int cudaArrayTextureGather =         0x08;
+public static final int cudaArrayTextureGather =              0x08;
 
 /** Automatically enable peer access between remote devices as needed */
-public static final int cudaIpcMemLazyEnablePeerAccess = 0x01;
+public static final int cudaIpcMemLazyEnablePeerAccess =      0x01;
 
 /** Memory can be accessed by any stream on any device*/
-public static final int cudaMemAttachGlobal =            0x01;
+public static final int cudaMemAttachGlobal =                 0x01;
 /** Memory cannot be accessed by any stream on any device */
-public static final int cudaMemAttachHost =              0x02;
+public static final int cudaMemAttachHost =                   0x02;
 /** Memory can only be accessed by a single stream on the associated device */
-public static final int cudaMemAttachSingle =            0x04;
+public static final int cudaMemAttachSingle =                 0x04;
 
-// #endif /* !__CUDA_INTERNAL_COMPILATION__ */
+/** Default behavior */
+public static final int cudaOccupancyDefault =                0x00;
+/** Assume global caching is enabled and cannot be automatically turned off */
+public static final int cudaOccupancyDisableCachingOverride = 0x01;
+
+// #endif /* !__CUDA_INTERNAL_COMPILATION__ && !__CUDACC_RTC__ */
 
 /*******************************************************************************
 *                                                                              *
@@ -11136,7 +11657,7 @@ public static final int
     cudaSuccess                           = 0,
   
     /**
-     * The device function being invoked (usually via ::cudaLaunch()) was not
+     * The device function being invoked (usually via ::cudaLaunchKernel()) was not
      * previously configured via the ::cudaConfigureCall() function.
      */
     cudaErrorMissingConfiguration         = 1,
@@ -12993,7 +13514,7 @@ public static class surfaceReference extends Pointer {
 }
 
 /**
- * CUDA Surface object
+ * An opaque value that represents a CUDA Surface object
  */
 
 /** @} */
@@ -13241,7 +13762,7 @@ public static class cudaTextureDesc extends Pointer {
 }
 
 /**
- * CUDA texture object
+ * An opaque value that represents a CUDA texture object
  */
 
 /** @} */
@@ -13253,7 +13774,7 @@ public static class cudaTextureDesc extends Pointer {
 // Parsed from <vector_types.h>
 
 /*
- * Copyright 1993-2012 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2014 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -13310,9 +13831,11 @@ public static class cudaTextureDesc extends Pointer {
 *                                                                              *
 *******************************************************************************/
 
-// #if !defined(__CUDA_LIBDEVICE__)
+// #if !defined(__CUDA_LIBDEVICE__) && !defined(__CUDACC_RTC__)
+// #define EXCLUDE_FROM_RTC
 // #include "builtin_types.h"
-// #endif /* !__CUDA_LIBDEVICE__ */
+// #undef EXCLUDE_FROM_RTC
+// #endif /* !__CUDA_LIBDEVICE__ && !__CUDACC_RTC__ */
 // #include "host_defines.h"
 
 /*******************************************************************************
@@ -13321,10 +13844,10 @@ public static class cudaTextureDesc extends Pointer {
 *                                                                              *
 *******************************************************************************/
 
-// #if !defined(__CUDACC__) && !defined(__CUDABE__) &&
+// #if !defined(__CUDACC__) && !defined(__CUDACC_RTC__) && !defined(__CUDABE__) &&
 //     defined(_WIN32) && !defined(_WIN64)
 
-// #else /* !__CUDACC__ && !__CUDABE__ && _WIN32 && !_WIN64 */
+// #else /* !__CUDACC__ && !__CUDACC_RTC__ && !__CUDABE__ && _WIN32 && !_WIN64 */
 
 // #define __cuda_builtin_vector_align8(tag, members)
 // struct __device_builtin__ __align__(8) tag
@@ -13332,7 +13855,7 @@ public static class cudaTextureDesc extends Pointer {
 //     members
 // }
 
-// #endif /* !__CUDACC__ && !__CUDABE__ && _WIN32 && !_WIN64 */
+// #endif /* !__CUDACC__ && !__CUDACC_RTC__ && !__CUDABE__ && _WIN32 && !_WIN64 */
 
 public static class char1 extends Pointer {
     static { Loader.load(); }
@@ -13799,7 +14322,7 @@ public static class ulong1 extends Pointer {
     public native @Cast("unsigned long") long x(); public native ulong1 x(long x);
 }
 
-// #if defined (_WIN32)
+// #if defined(__CUDACC_RTC__) || defined(_WIN32)
 public static class long2 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
@@ -13830,9 +14353,9 @@ public static class ulong2 extends Pointer {
     }
  public native @Cast("unsigned long int") long x(); public native ulong2 x(long x); public native @Cast("unsigned long int") long y(); public native ulong2 y(long y);
 }
-// #else /* _WIN32 */
+// #else /* __CUDACC_RTC__ || _WIN32 */
 
-// #endif /* _WIN32 */
+// #endif /* __CUDACC_RTC__ || _WIN32 */
 
 public static class long3 extends Pointer {
     static { Loader.load(); }
@@ -14265,7 +14788,7 @@ public static class double4 extends Pointer {
 // Parsed from <builtin_types.h>
 
 /*
- * Copyright 1993-2012 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2014 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -14320,7 +14843,11 @@ public static class double4 extends Pointer {
 *******************************************************************************/
 
 // #include "device_types.h"
+// #if !defined(__CUDACC_RTC__)
+// #define EXCLUDE_FROM_RTC
 // #include "driver_types.h"
+// #undef EXCLUDE_FROM_RTC
+// #endif /* !__CUDACC_RTC__ */
 // #include "surface_types.h"
 // #include "texture_types.h"
 // #include "vector_types.h"
@@ -14467,11 +14994,23 @@ public static class double4 extends Pointer {
  */
 
 /** CUDA Runtime API Version */
-public static final int CUDART_VERSION =  6050;
+public static final int CUDART_VERSION =  7000;
 
 // #include "host_defines.h"
 // #include "builtin_types.h"
 // #include "cuda_device_runtime_api.h"
+
+// #if defined(CUDA_API_PER_THREAD_DEFAULT_STREAM) || defined(__CUDA_API_VERSION_INTERNAL)
+//     #define __CUDART_API_PER_THREAD_DEFAULT_STREAM
+//     #define __CUDART_API_PTDS(api) api ## _ptds
+//     #define __CUDART_API_PTSZ(api) api ## _ptsz
+// #else
+//     #define __CUDART_API_PTDS(api) api
+//     #define __CUDART_API_PTSZ(api) api
+// #endif
+
+// #if defined(__CUDART_API_PER_THREAD_DEFAULT_STREAM)
+// #endif
 
 /** \cond impl_private */
 // #if !defined(__dv)
@@ -14565,29 +15104,19 @@ public static native @Cast("cudaError_t") int cudaDeviceSynchronize();
  * Setting each ::cudaLimit has its own specific restrictions, so each is
  * discussed here.
  *
- * - ::cudaLimitStackSize controls the stack size in bytes of each GPU
- *   thread. This limit is only applicable to devices of compute capability
- *   2.0 and higher.  Attempting to set this limit on devices of compute
- *   capability less than 2.0 will result in the error
- *   ::cudaErrorUnsupportedLimit being returned.
+ * - ::cudaLimitStackSize controls the stack size in bytes of each GPU thread.
  *
  * - ::cudaLimitPrintfFifoSize controls the size in bytes of the shared FIFO
  *   used by the ::printf() and ::fprintf() device system calls. Setting
- *   ::cudaLimitPrintfFifoSize must be performed before launching any kernel
- *   that uses the ::printf() or ::fprintf() device system calls, otherwise
- *   ::cudaErrorInvalidValue will be returned. This limit is only applicable
- *   to devices of compute capability 2.0 and higher.  Attempting to set this
- *   limit on devices of compute capability less than 2.0 will result in the
- *   error ::cudaErrorUnsupportedLimit being returned.
+ *   ::cudaLimitPrintfFifoSize must not be performed after launching any kernel
+ *   that uses the ::printf() or ::fprintf() device system calls - in such case
+ *   ::cudaErrorInvalidValue will be returned.
  *
  * - ::cudaLimitMallocHeapSize controls the size in bytes of the heap used by
  *   the ::malloc() and ::free() device system calls. Setting
- *   ::cudaLimitMallocHeapSize must be performed before launching any kernel
- *   that uses the ::malloc() or ::free() device system calls, otherwise
- *   ::cudaErrorInvalidValue will be returned. This limit is only applicable
- *   to devices of compute capability 2.0 and higher. Attempting to set this
- *   limit on devices of compute capability less than 2.0 will result in the
- *   error ::cudaErrorUnsupportedLimit being returned.
+ *   ::cudaLimitMallocHeapSize must not be performed after launching any kernel
+ *   that uses the ::malloc() or ::free() device system calls - in such case
+ *   ::cudaErrorInvalidValue will be returned.
  *
  * - ::cudaLimitDevRuntimeSyncDepth controls the maximum nesting depth of a
  *   grid at which a thread can safely call ::cudaDeviceSynchronize(). Setting
@@ -15189,30 +15718,18 @@ public static native @Cast("cudaError_t") int cudaThreadSynchronize();
  * discussed here.
  *
  * - ::cudaLimitStackSize controls the stack size of each GPU thread.
- *   This limit is only applicable to devices of compute capability
- *   2.0 and higher.  Attempting to set this limit on devices of
- *   compute capability less than 2.0 will result in the error
- *   ::cudaErrorUnsupportedLimit being returned.
  *
  * - ::cudaLimitPrintfFifoSize controls the size of the shared FIFO
  *   used by the ::printf() and ::fprintf() device system calls.
  *   Setting ::cudaLimitPrintfFifoSize must be performed before
  *   launching any kernel that uses the ::printf() or ::fprintf() device
  *   system calls, otherwise ::cudaErrorInvalidValue will be returned.
- *   This limit is only applicable to devices of compute capability
- *   2.0 and higher.  Attempting to set this limit on devices of
- *   compute capability less than 2.0 will result in the error
- *   ::cudaErrorUnsupportedLimit being returned.
  *
  * - ::cudaLimitMallocHeapSize controls the size of the heap used
  *   by the ::malloc() and ::free() device system calls.  Setting
  *   ::cudaLimitMallocHeapSize must be performed before launching
  *   any kernel that uses the ::malloc() or ::free() device system calls,
  *   otherwise ::cudaErrorInvalidValue will be returned.
- *   This limit is only applicable to devices of compute capability
- *   2.0 and higher.  Attempting to set this limit on devices of
- *   compute capability less than 2.0 will result in the error
- *   ::cudaErrorUnsupportedLimit being returned.
  *
  * \param limit - Limit to set
  * \param value - Size in bytes of limit
@@ -15439,13 +15956,13 @@ public static native @Cast("cudaError_t") int cudaPeekAtLastError();
 /**
  * \brief Returns the string representation of an error code enum name
  *
- * Returns a string containing the name of an error code in the enum, or NULL
- * if the error code is not valid.
+ * Returns a string containing the name of an error code in the enum.  If the error
+ * code is not recognized, "unrecognized error code" is returned.
  *
  * \param error - Error code to convert to string
  *
  * \return
- * \p char* pointer to a NULL-terminated string, or NULL if the error code is not valid.
+ * \p char* pointer to a NULL-terminated string
  *
  * \sa ::cudaGetErrorString, ::cudaGetLastError, ::cudaPeekAtLastError, ::cudaError
  */
@@ -15454,13 +15971,13 @@ public static native @Cast("const char*") BytePointer cudaGetErrorName(@Cast("cu
 /**
  * \brief Returns the description string for an error code
  *
- * Returns the description string for an error code, or NULL if the error
- * code is not valid.
+ * Returns the description string for an error code.  If the error
+ * code is not recognized, "unrecognized error code" is returned.
  *
  * \param error - Error code to convert to string
  *
  * \return
- * \p char* pointer to a NULL-terminated string, or NULL if the error code is not valid.
+ * \p char* pointer to a NULL-terminated string
  *
  * \sa ::cudaGetErrorName, ::cudaGetLastError, ::cudaPeekAtLastError, ::cudaError
  */
@@ -15477,13 +15994,13 @@ public static native @Cast("const char*") BytePointer cudaGetErrorString(@Cast("
  * \brief Returns the number of compute-capable devices
  *
  * Returns in \p *count the number of devices with compute capability greater
- * or equal to 1.0 that are available for execution.  If there is no such
+ * or equal to 2.0 that are available for execution.  If there is no such
  * device then ::cudaGetDeviceCount() will return ::cudaErrorNoDevice.
  * If no driver can be loaded to determine if any such devices exist then
  * ::cudaGetDeviceCount() will return ::cudaErrorInsufficientDriver.
  *
  * \param count - Returns the number of devices with compute capability
- * greater or equal to 1.0
+ * greater or equal to 2.0
  *
  * \return
  * ::cudaSuccess,
@@ -15714,8 +16231,8 @@ public static native @Cast("cudaError_t") int cudaGetDeviceCount(int[] count);
  * - \ref ::cudaDeviceProp::regsPerMultiprocessor "regsPerMultiprocessor" is the maximum number
  *   of 32-bit registers available to a multiprocessor; this number is shared
  *   by all thread blocks simultaneously resident on a multiprocessor;
- * - \ref ::cudaDeviceProp::managedMemSupported "managedMemSupported"
- *   is 1 if the device supports allocating managed memory, or 0 if it is not supported.
+ * - \ref ::cudaDeviceProp::managedMemory "managedMemory"
+ *   is 1 if the device supports allocating managed memory on this system, or 0 if it is not supported.
  * - \ref ::cudaDeviceProp::isMultiGpuBoard "isMultiGpuBoard"
  *   is 1 if the device is on a multi-GPU board (e.g. Gemini cards), and 0 if not;
  * - \ref ::cudaDeviceProp::multiGpuBoardGroupID "multiGpuBoardGroupID" is a unique identifier
@@ -15930,7 +16447,7 @@ public static native @Cast("cudaError_t") int cudaChooseDevice(int[] device, @Co
  * or ::cudaHostRegister() will have its lifetime associated  with
  * \p device.  Any streams or events created from this host thread will 
  * be associated with \p device.  Any kernels launched from this host
- * thread using the <<<>>> operator or ::cudaLaunch() will be executed 
+ * thread using the <<<>>> operator or ::cudaLaunchKernel() will be executed
  * on \p device.
  *
  * This call may be made from any host thread, to any device, and at 
@@ -16005,7 +16522,7 @@ public static native @Cast("cudaError_t") int cudaSetValidDevices(int[] device_a
  * \brief Sets flags to be used for device executions
  *
  * Records \p flags as the flags to use when initializing the current 
- * device.  If no device has been made current to the calling thread
+ * device.  If no device has been made current to the calling thread,
  * then \p flags will be applied to the initialization of any device
  * initialized by the calling host thread, unless that device has had
  * its initialization flags set explicitly by this or any host thread.
@@ -16040,9 +16557,11 @@ public static native @Cast("cudaError_t") int cudaSetValidDevices(int[] device_a
  * synchronization primitive when waiting for the device to finish work. <br>
  * \ref deprecated "Deprecated:" This flag was deprecated as of CUDA 4.0 and
  * replaced with ::cudaDeviceScheduleBlockingSync.
- * - ::cudaDeviceMapHost: This flag must be set in order to allocate pinned
- * host memory that is accessible to the device. If this flag is not set,
- * ::cudaHostGetDevicePointer() will always return a failure code.
+ * - ::cudaDeviceMapHost: This flag enables allocating pinned
+ * host memory that is accessible to the device. It is implicit for the
+ * runtime but may be absent if a context is created using the driver API.
+ * If this flag is not set, ::cudaHostGetDevicePointer() will always return
+ * a failure code.
  * - ::cudaDeviceLmemResizeToMax: Instruct CUDA to not reduce local memory
  * after resizing local memory for a kernel. This can prevent thrashing by
  * local memory allocations when launching many kernels with high local
@@ -16055,12 +16574,54 @@ public static native @Cast("cudaError_t") int cudaSetValidDevices(int[] device_a
  * ::cudaErrorInvalidDevice,
  * ::cudaErrorSetOnActiveProcess
  *
- * \sa ::cudaGetDeviceCount, ::cudaGetDevice, ::cudaGetDeviceProperties,
+ * \sa ::cudaGetDeviceFlags, ::cudaGetDeviceCount, ::cudaGetDevice, ::cudaGetDeviceProperties,
  * ::cudaSetDevice, ::cudaSetValidDevices,
  * ::cudaChooseDevice
  */
 public static native @Cast("cudaError_t") int cudaSetDeviceFlags( @Cast("unsigned int") int flags );
 
+/**
+ * \brief Gets the flags for the current device
+ *
+ * Returns in \p flags the flags for the current device.  If there is a
+ * current device for the calling thread, and the device has been initialized
+ * or flags have been set on that device specifically, the flags for the
+ * device are returned.  If there is no current device, but flags have been
+ * set for the thread with ::cudaSetDeviceFlags, the thread flags are returned.
+ * Finally, if there is no current device and no thread flags, the flags for
+ * the first device are returned, which may be the default flags.  Compare
+ * to the behavior of ::cudaSetDeviceFlags.
+ *
+ * Typically, the flags returned should match the behavior that will be seen
+ * if the calling thread uses a device after this call, without any change to
+ * the flags or current device inbetween by this or another thread.  Note that
+ * if the device is not initialized, it is possible for another thread to
+ * change the flags for the current device before it is initialized.
+ * Additionally, when using exclusive mode, if this thread has not requested a
+ * specific device, it may use a device other than the first device, contrary
+ * to the assumption made by this function.
+ *
+ * If a context has been created via the driver API and is current to the
+ * calling thread, the flags for that context are always returned.
+ *
+ * Flags returned by this function may specifically include ::cudaDeviceMapHost
+ * even though it is not accepted by ::cudaSetDeviceFlags because it is
+ * implicit in runtime API flags.  The reason for this is that the current
+ * context may have been created via the driver API in which case the flag is
+ * not implicit and may be unset.
+ *
+ * \param flags - Pointer to store the device flags
+ *
+ * \return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidDevice
+ *
+ * \sa ::cudaGetDevice, ::cudaGetDeviceProperties,
+ * ::cudaSetDevice, ::cudaSetDeviceFlags
+ */
+public static native @Cast("cudaError_t") int cudaGetDeviceFlags( @Cast("unsigned int*") IntPointer flags );
+public static native @Cast("cudaError_t") int cudaGetDeviceFlags( @Cast("unsigned int*") IntBuffer flags );
+public static native @Cast("cudaError_t") int cudaGetDeviceFlags( @Cast("unsigned int*") int[] flags );
 /** @} */ /* END CUDART_DEVICE */
 
 /**
@@ -16311,11 +16872,6 @@ public static native @Cast("cudaError_t") int cudaStreamWaitEvent(CUstream_st st
  * synchronization that may depend on outstanding device work or other callbacks
  * that are not mandated to run earlier.  Callbacks without a mandated order
  * (in independent streams) execute in undefined order and may be serialized.
- *
- * This API requires compute capability 1.1 or greater.  See
- * ::cudaDeviceGetAttribute or ::cudaGetDeviceProperties to query compute
- * capability.  Calling this API with an earlier compute version will
- * return ::cudaErrorNotSupported.
  *
  * For the purposes of Unified Memory, callback execution makes a number of
  * guarantees:
@@ -16714,63 +17270,47 @@ public static native @Cast("cudaError_t") int cudaEventElapsedTime(float[] ms, C
  * @{
  */
 
+// #if CUDART_VERSION >= 7000
 /**
- * \brief Configure a device-launch
+ * \brief Launches a device function
  *
- * Specifies the grid and block dimensions for the device call to be executed
- * similar to the execution configuration syntax. ::cudaConfigureCall() is
- * stack based. Each call pushes data on top of an execution stack. This data
- * contains the dimension for the grid and thread blocks, together with any
- * arguments for the call.
+ * The function invokes kernel \p func on \p gridDim (\p gridDim.x × \p gridDim.y
+ * × \p gridDim.z) grid of blocks. Each block contains \p blockDim (\p blockDim.x ×
+ * \p blockDim.y × \p blockDim.z) threads.
  *
- * \param gridDim   - Grid dimensions
- * \param blockDim  - Block dimensions
- * \param sharedMem - Shared memory
- * \param stream    - Stream identifier
+ * If the kernel has N parameters the \p args should point to array of N pointers.
+ * Each pointer, from <tt>args[0]</tt> to <tt>args[N - 1]</tt>, point to the region
+ * of memory from which the actual parameter will be copied.
+ *
+ * \p sharedMem sets the amount of dynamic shared memory that will be available to
+ * each thread block.
+ *
+ * \p stream specifies a stream the invocation is associated to.
+ *
+ * \param func        - Device function symbol
+ * \param gridDim     - Grid dimentions
+ * \param blockDim    - Block dimentions
+ * \param args        - Arguments
+ * \param sharedMem   - Shared memory
+ * \param stream      - Stream identifier
  *
  * \return
  * ::cudaSuccess,
- * ::cudaErrorInvalidConfiguration
+ * ::cudaErrorInvalidDeviceFunction,
+ * ::cudaErrorInvalidConfiguration,
+ * ::cudaErrorLaunchFailure,
+ * ::cudaErrorLaunchTimeout,
+ * ::cudaErrorLaunchOutOfResources,
+ * ::cudaErrorSharedObjectInitFailed
  * \note_null_stream
  * \notefnerr
  *
- * \sa
- * \ref ::cudaFuncSetCacheConfig(const void*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C API)",
- * \ref ::cudaFuncGetAttributes(struct cudaFuncAttributes*, const void*) "cudaFuncGetAttributes (C API)",
- * \ref ::cudaLaunch(const void*) "cudaLaunch (C API)",
- * ::cudaSetDoubleForDevice,
- * ::cudaSetDoubleForHost,
- * \ref ::cudaSetupArgument(const void*, size_t, size_t) "cudaSetupArgument (C API)",
+ * \ref ::cudaLaunchKernel(const T *func, dim3 gridDim, dim3 blockDim, void **args, size_t sharedMem, cudaStream_t stream) "cudaLaunchKernel (C++ API)"
  */
-public static native @Cast("cudaError_t") int cudaConfigureCall(@ByVal dim3 gridDim, @ByVal dim3 blockDim, @Cast("size_t") long sharedMem/*=0*/, CUstream_st stream/*=0*/);
-public static native @Cast("cudaError_t") int cudaConfigureCall(@ByVal dim3 gridDim, @ByVal dim3 blockDim);
+public static native @Cast("cudaError_t") int cudaLaunchKernel(@Const Pointer func, @ByVal dim3 gridDim, @ByVal dim3 blockDim, @Cast("void**") PointerPointer args, @Cast("size_t") long sharedMem, CUstream_st stream);
+public static native @Cast("cudaError_t") int cudaLaunchKernel(@Const Pointer func, @ByVal dim3 gridDim, @ByVal dim3 blockDim, @Cast("void**") @ByPtrPtr Pointer args, @Cast("size_t") long sharedMem, CUstream_st stream);
 
-/**
- * \brief Configure a device launch
- *
- * Pushes \p size bytes of the argument pointed to by \p arg at \p offset
- * bytes from the start of the parameter passing area, which starts at
- * offset 0. The arguments are stored in the top of the execution stack.
- * \ref ::cudaSetupArgument(const void*, size_t, size_t) "cudaSetupArgument()"
- * must be preceded by a call to ::cudaConfigureCall().
- *
- * \param arg    - Argument to push for a kernel launch
- * \param size   - Size of argument
- * \param offset - Offset in argument stack to push new arg
- *
- * \return
- * ::cudaSuccess
- * \notefnerr
- *
- * \sa ::cudaConfigureCall,
- * \ref ::cudaFuncSetCacheConfig(const void*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C API)",
- * \ref ::cudaFuncGetAttributes(struct cudaFuncAttributes*, const void*) "cudaFuncGetAttributes (C API)",
- * \ref ::cudaLaunch(const void*) "cudaLaunch (C API)",
- * ::cudaSetDoubleForDevice,
- * ::cudaSetDoubleForHost,
- * \ref ::cudaSetupArgument(T, size_t) "cudaSetupArgument (C++ API)",
- */
-public static native @Cast("cudaError_t") int cudaSetupArgument(@Const Pointer arg, @Cast("size_t") long size, @Cast("size_t") long offset);
+// #endif /* CUDART_VERSION >= 7000 */
 
 /**
  * \brief Sets the preferred cache configuration for a device function
@@ -16810,7 +17350,7 @@ public static native @Cast("cudaError_t") int cudaSetupArgument(@Const Pointer a
  * \sa ::cudaConfigureCall,
  * \ref ::cudaFuncSetCacheConfig(T*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C++ API)",
  * \ref ::cudaFuncGetAttributes(struct cudaFuncAttributes*, const void*) "cudaFuncGetAttributes (C API)",
- * \ref ::cudaLaunch(const void*) "cudaLaunch (C API)",
+ * \ref ::cudaLaunchKernel(const void *func, dim3 gridDim, dim3 blockDim, void **args, size_t sharedMem, cudaStream_t stream) "cudaLaunchKernel (C API)",
  * ::cudaSetDoubleForDevice,
  * ::cudaSetDoubleForHost,
  * \ref ::cudaSetupArgument(const void*, size_t, size_t) "cudaSetupArgument (C API)",
@@ -16871,41 +17411,6 @@ public static native @Cast("cudaError_t") int cudaFuncSetCacheConfig(@Const Poin
 public static native @Cast("cudaError_t") int cudaFuncSetSharedMemConfig(@Const Pointer func, @Cast("cudaSharedMemConfig") int config);
 
 /**
- * \brief Launches a device function
- *
- * Launches the function \p func on the device. The parameter \p func must
- * be a device function symbol. The parameter specified by \p func must be
- * declared as a \p __global__ function.
- * \ref ::cudaLaunch(const void*) "cudaLaunch()" must be preceded by a call to
- * ::cudaConfigureCall() since it pops the data that was pushed by
- * ::cudaConfigureCall() from the execution stack.
- *
- * \param func - Device function symbol
- *
- * \return
- * ::cudaSuccess,
- * ::cudaErrorInvalidDeviceFunction,
- * ::cudaErrorInvalidConfiguration,
- * ::cudaErrorLaunchFailure,
- * ::cudaErrorLaunchTimeout,
- * ::cudaErrorLaunchOutOfResources,
- * ::cudaErrorSharedObjectInitFailed
- * \notefnerr
- * \note_string_api_deprecation_50
- *
- * \sa ::cudaConfigureCall,
- * \ref ::cudaFuncSetCacheConfig(const void*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C API)",
- * \ref ::cudaFuncGetAttributes(struct cudaFuncAttributes*, const void*) "cudaFuncGetAttributes (C API)",
- * \ref ::cudaLaunch(T*) "cudaLaunch (C++ API)",
- * ::cudaSetDoubleForDevice,
- * ::cudaSetDoubleForHost,
- * \ref ::cudaSetupArgument(const void*, size_t, size_t) "cudaSetupArgument (C API)",
- * ::cudaThreadGetCacheConfig,
- * ::cudaThreadSetCacheConfig
- */
-public static native @Cast("cudaError_t") int cudaLaunch(@Const Pointer func);
-
-/**
  * \brief Find out attributes for a given function
  *
  * This function obtains the attributes of a function specified via \p func.
@@ -16931,7 +17436,7 @@ public static native @Cast("cudaError_t") int cudaLaunch(@Const Pointer func);
  * \sa ::cudaConfigureCall,
  * \ref ::cudaFuncSetCacheConfig(const void*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C API)",
  * \ref ::cudaFuncGetAttributes(struct cudaFuncAttributes*, T*) "cudaFuncGetAttributes (C++ API)",
- * \ref ::cudaLaunch(const void*) "cudaLaunch (C API)",
+ * \ref ::cudaLaunchKernel(const void *func, dim3 gridDim, dim3 blockDim, void **args, size_t sharedMem, cudaStream_t stream) "cudaLaunchKernel (C API)",
  * ::cudaSetDoubleForDevice,
  * ::cudaSetDoubleForHost,
  * \ref ::cudaSetupArgument(const void*, size_t, size_t) "cudaSetupArgument (C API)"
@@ -16951,10 +17456,9 @@ public static native @Cast("cudaError_t") int cudaFuncGetAttributes(cudaFuncAttr
  * ::cudaSuccess
  * \notefnerr
  *
- * \sa ::cudaConfigureCall,
+ * \ref ::cudaLaunch(const void*) "cudaLaunch (C API)",
  * \ref ::cudaFuncSetCacheConfig(const void*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C API)",
  * \ref ::cudaFuncGetAttributes(struct cudaFuncAttributes*, const void*) "cudaFuncGetAttributes (C API)",
- * \ref ::cudaLaunch(const void*) "cudaLaunch (C API)",
  * ::cudaSetDoubleForHost,
  * \ref ::cudaSetupArgument(const void*, size_t, size_t) "cudaSetupArgument (C API)"
  */
@@ -16975,10 +17479,9 @@ public static native @Cast("cudaError_t") int cudaSetDoubleForDevice(double[] d)
  * ::cudaSuccess
  * \notefnerr
  *
- * \sa ::cudaConfigureCall,
+ * \ref ::cudaLaunch(const void*) "cudaLaunch (C API)",
  * \ref ::cudaFuncSetCacheConfig(const void*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C API)",
  * \ref ::cudaFuncGetAttributes(struct cudaFuncAttributes*, const void*) "cudaFuncGetAttributes (C API)",
- * \ref ::cudaLaunch(const void*) "cudaLaunch (C API)",
  * ::cudaSetDoubleForDevice,
  * \ref ::cudaSetupArgument(const void*, size_t, size_t) "cudaSetupArgument (C API)"
  */
@@ -16999,15 +17502,16 @@ public static native @Cast("cudaError_t") int cudaSetDoubleForHost(double[] d);
  * This section describes the occupancy calculation functions of the CUDA runtime
  * application programming interface.
  *
- * Besides the occupancy calculator function
- * (\ref ::cudaOccupancyMaxActiveBlocksPerMultiprocessor), there are also C++ only
- * occupancy-based launch configuration functions documented in
+ * Besides the occupancy calculator functions
+ * (\ref ::cudaOccupancyMaxActiveBlocksPerMultiprocessor and \ref ::cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags),
+ * there are also C++ only occupancy-based launch configuration functions documented in
  * \ref CUDART_HIGHLEVEL "C++ API Routines" module.
  *
  * See
- * \ref ::cudaOccupancyMaxPotentialBlockSize(int*, int*, T, size_t, int) "cudaOccupancyMaxPotentialBlockSize (C++ API)"
- * and
- * \ref ::cudaOccupancyMaxPotentialBlockSizeVariableSMem(int*, int*, T, UnaryFunction, int) "cudaOccupancyMaxPotentialBlockSizeVariableSMem (C++ API)"
+ * \ref ::cudaOccupancyMaxPotentialBlockSize(int*, int*, T, size_t, int) "cudaOccupancyMaxPotentialBlockSize (C++ API)",
+ * \ref ::cudaOccupancyMaxPotentialBlockSizeWithFlags(int*, int*, T, size_t, int, unsigned int) "cudaOccupancyMaxPotentialBlockSize (C++ API)",
+ * \ref ::cudaOccupancyMaxPotentialBlockSizeVariableSMem(int*, int*, T, UnaryFunction, int) "cudaOccupancyMaxPotentialBlockSizeVariableSMem (C++ API)",
+ * \ref ::cudaOccupancyMaxPotentialBlockSizeVariableSMemWithFlags(int*, int*, T, UnaryFunction, int, unsigned int) "cudaOccupancyMaxPotentialBlockSizeVariableSMem (C++ API)",
  *
  * @{
  */
@@ -17019,9 +17523,9 @@ public static native @Cast("cudaError_t") int cudaSetDoubleForHost(double[] d);
  * streaming multiprocessor for the device function.
  *
  * \param numBlocks       - Returned occupancy
- * \param func            - Kernel function for which occupancy is calulated
+ * \param func            - Kernel function for which occupancy is calculated
  * \param blockSize       - Block size the kernel is intended to be launched with
- * \param dynamicSMemSize  - Per-block dynamic shared memory usage intended, in bytes
+ * \param dynamicSMemSize - Per-block dynamic shared memory usage intended, in bytes
  *
  * \return
  * ::cudaSuccess,
@@ -17033,16 +17537,183 @@ public static native @Cast("cudaError_t") int cudaSetDoubleForHost(double[] d);
  * ::cudaErrorUnknown,
  * \notefnerr
  *
- * \sa ::cudaOccupancyMaxPotentialBlockSize,
+ * \sa ::cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags,
  * \ref ::cudaOccupancyMaxPotentialBlockSize(int*, int*, T, size_t, int) "cudaOccupancyMaxPotentialBlockSize (C++ API)",
+ * \ref ::cudaOccupancyMaxPotentialBlockSizeWithFlags(int*, int*, T, size_t, int, unsigned int) "cudaOccupancyMaxPotentialBlockSizeWithFlags (C++ API)",
  * \ref ::cudaOccupancyMaxPotentialBlockSizeVariableSMem(int*, int*, T, UnaryFunction, int) "cudaOccupancyMaxPotentialBlockSizeVariableSMem (C++ API)"
+ * \ref ::cudaOccupancyMaxPotentialBlockSizeVariableSMemWithFlags(int*, int*, T, UnaryFunction, int, unsigned int) "cudaOccupancyMaxPotentialBlockSizeVariableSMemWithFlags (C++ API)"
  */
 public static native @Cast("cudaError_t") int cudaOccupancyMaxActiveBlocksPerMultiprocessor(IntPointer numBlocks, @Const Pointer func, int blockSize, @Cast("size_t") long dynamicSMemSize);
 public static native @Cast("cudaError_t") int cudaOccupancyMaxActiveBlocksPerMultiprocessor(IntBuffer numBlocks, @Const Pointer func, int blockSize, @Cast("size_t") long dynamicSMemSize);
 public static native @Cast("cudaError_t") int cudaOccupancyMaxActiveBlocksPerMultiprocessor(int[] numBlocks, @Const Pointer func, int blockSize, @Cast("size_t") long dynamicSMemSize);
 
+// #if CUDART_VERSION >= 7000
+/**
+ * \brief Returns occupancy for a device function with the specified flags
+ *
+ * Returns in \p *numBlocks the maximum number of active blocks per
+ * streaming multiprocessor for the device function.
+ *
+ * The \p flags parameter controls how special cases are handled. Valid flags include:
+ *
+ * - ::cudaOccupancyDefault: keeps the default behavior as
+ *   ::cudaOccupancyMaxActiveBlocksPerMultiprocessor
+ *
+ * - ::cudaOccupancyDisableCachingOverride: This flag suppresses the default behavior
+ *   on platform where global caching affects occupancy. On such platforms, if caching
+ *   is enabled, but per-block SM resource usage would result in zero occupancy, the
+ *   occupancy calculator will calculate the occupancy as if caching is disabled.
+ *   Setting this flag makes the occupancy calculator to return 0 in such cases.
+ *   More information can be found about this feature in the "Unified L1/Texture Cache"
+ *   section of the Maxwell tuning guide.
+ *
+ * \param numBlocks       - Returned occupancy
+ * \param func            - Kernel function for which occupancy is calculated
+ * \param blockSize       - Block size the kernel is intended to be launched with
+ * \param dynamicSMemSize - Per-block dynamic shared memory usage intended, in bytes
+ * \param flags           - Requested behavior for the occupancy calculator
+ *
+ * \return
+ * ::cudaSuccess,
+ * ::cudaErrorCudartUnloading,
+ * ::cudaErrorInitializationError,
+ * ::cudaErrorInvalidDevice,
+ * ::cudaErrorInvalidDeviceFunction,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorUnknown,
+ * \notefnerr
+ *
+ * \sa ::cudaOccupancyMaxActiveBlocksPerMultiprocessor,
+ * \ref ::cudaOccupancyMaxPotentialBlockSize(int*, int*, T, size_t, int) "cudaOccupancyMaxPotentialBlockSize (C++ API)",
+ * \ref ::cudaOccupancyMaxPotentialBlockSizeWithFlags(int*, int*, T, size_t, int, unsigned int) "cudaOccupancyMaxPotentialBlockSizeWithFlags (C++ API)",
+ * \ref ::cudaOccupancyMaxPotentialBlockSizeVariableSMem(int*, int*, T, UnaryFunction, int) "cudaOccupancyMaxPotentialBlockSizeVariableSMem (C++ API)"
+ * \ref ::cudaOccupancyMaxPotentialBlockSizeVariableSMemWithFlags(int*, int*, T, UnaryFunction, int, unsigned int) "cudaOccupancyMaxPotentialBlockSizeVariableSMemWithFlags (C++ API)"
+ */
+public static native @Cast("cudaError_t") int cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(IntPointer numBlocks, @Const Pointer func, int blockSize, @Cast("size_t") long dynamicSMemSize, @Cast("unsigned int") int flags);
+public static native @Cast("cudaError_t") int cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(IntBuffer numBlocks, @Const Pointer func, int blockSize, @Cast("size_t") long dynamicSMemSize, @Cast("unsigned int") int flags);
+public static native @Cast("cudaError_t") int cudaOccupancyMaxActiveBlocksPerMultiprocessorWithFlags(int[] numBlocks, @Const Pointer func, int blockSize, @Cast("size_t") long dynamicSMemSize, @Cast("unsigned int") int flags);
+
 /** @} */ /* END CUDA_OCCUPANCY */
+// #endif /* CUDART_VERSION >= 7000 */
 // #endif /* CUDART_VERSION >= 6050 */
+
+/**
+ * \defgroup CUDART_EXECUTION_DEPRECATED Execution Control [DEPRECATED]
+ *
+ * ___MANBRIEF___ deprecated execution control functions of the CUDA runtime API
+ * (___CURRENT_FILE___) ___ENDMANBRIEF___
+ *
+ * This section describes the deprecated execution control functions of the CUDA runtime
+ * application programming interface.
+ *
+ * Some functions have overloaded C++ API template versions documented separately in the
+ * \ref CUDART_HIGHLEVEL "C++ API Routines" module.
+ *
+ * @{
+ */
+
+/**
+ * \brief Configure a device-launch
+ *
+ * \deprecated This function is deprecated as of CUDA 7.0
+ *
+ * Specifies the grid and block dimensions for the device call to be executed
+ * similar to the execution configuration syntax. ::cudaConfigureCall() is
+ * stack based. Each call pushes data on top of an execution stack. This data
+ * contains the dimension for the grid and thread blocks, together with any
+ * arguments for the call.
+ *
+ * \param gridDim   - Grid dimensions
+ * \param blockDim  - Block dimensions
+ * \param sharedMem - Shared memory
+ * \param stream    - Stream identifier
+ *
+ * \return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidConfiguration
+ * \note_null_stream
+ * \notefnerr
+ *
+ * \ref ::cudaLaunchKernel(const void *func, dim3 gridDim, dim3 blockDim, void **args, size_t sharedMem, cudaStream_t stream) "cudaLaunchKernel (C API)",
+ * \ref ::cudaFuncSetCacheConfig(const void*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C API)",
+ * \ref ::cudaFuncGetAttributes(struct cudaFuncAttributes*, const void*) "cudaFuncGetAttributes (C API)",
+ * \ref ::cudaLaunch(const void*) "cudaLaunch (C API)",
+ * ::cudaSetDoubleForDevice,
+ * ::cudaSetDoubleForHost,
+ * \ref ::cudaSetupArgument(const void*, size_t, size_t) "cudaSetupArgument (C API)",
+ */
+public static native @Cast("cudaError_t") int cudaConfigureCall(@ByVal dim3 gridDim, @ByVal dim3 blockDim, @Cast("size_t") long sharedMem/*=0*/, CUstream_st stream/*=0*/);
+public static native @Cast("cudaError_t") int cudaConfigureCall(@ByVal dim3 gridDim, @ByVal dim3 blockDim);
+
+/**
+ * \brief Configure a device launch
+ *
+ * \deprecated This function is deprecated as of CUDA 7.0
+ *
+ * Pushes \p size bytes of the argument pointed to by \p arg at \p offset
+ * bytes from the start of the parameter passing area, which starts at
+ * offset 0. The arguments are stored in the top of the execution stack.
+ * \ref ::cudaSetupArgument(const void*, size_t, size_t) "cudaSetupArgument()"
+ * must be preceded by a call to ::cudaConfigureCall().
+ *
+ * \param arg    - Argument to push for a kernel launch
+ * \param size   - Size of argument
+ * \param offset - Offset in argument stack to push new arg
+ *
+ * \return
+ * ::cudaSuccess
+ * \notefnerr
+ *
+ * \ref ::cudaLaunchKernel(const void *func, dim3 gridDim, dim3 blockDim, void **args, size_t sharedMem, cudaStream_t stream) "cudaLaunchKernel (C API)",
+ * \ref ::cudaFuncSetCacheConfig(const void*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C API)",
+ * \ref ::cudaFuncGetAttributes(struct cudaFuncAttributes*, const void*) "cudaFuncGetAttributes (C API)",
+ * \ref ::cudaLaunch(const void*) "cudaLaunch (C API)",
+ * ::cudaSetDoubleForDevice,
+ * ::cudaSetDoubleForHost,
+ * \ref ::cudaSetupArgument(T, size_t) "cudaSetupArgument (C++ API)",
+ */
+public static native @Cast("cudaError_t") int cudaSetupArgument(@Const Pointer arg, @Cast("size_t") long size, @Cast("size_t") long offset);
+
+/**
+ * \brief Launches a device function
+ *
+ * \deprecated This function is deprecated as of CUDA 7.0
+ *
+ * Launches the function \p func on the device. The parameter \p func must
+ * be a device function symbol. The parameter specified by \p func must be
+ * declared as a \p __global__ function.
+ * \ref ::cudaLaunch(const void*) "cudaLaunch()" must be preceded by a call to
+ * ::cudaConfigureCall() since it pops the data that was pushed by
+ * ::cudaConfigureCall() from the execution stack.
+ *
+ * \param func - Device function symbol
+ *
+ * \return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidDeviceFunction,
+ * ::cudaErrorInvalidConfiguration,
+ * ::cudaErrorLaunchFailure,
+ * ::cudaErrorLaunchTimeout,
+ * ::cudaErrorLaunchOutOfResources,
+ * ::cudaErrorSharedObjectInitFailed
+ * \notefnerr
+ * \note_string_api_deprecation_50
+ *
+ * \ref ::cudaLaunchKernel(const void *func, dim3 gridDim, dim3 blockDim, void **args, size_t sharedMem, cudaStream_t stream) "cudaLaunchKernel (C API)",
+ * \ref ::cudaFuncSetCacheConfig(const void*, enum cudaFuncCache) "cudaFuncSetCacheConfig (C API)",
+ * \ref ::cudaFuncGetAttributes(struct cudaFuncAttributes*, const void*) "cudaFuncGetAttributes (C API)",
+ * \ref ::cudaLaunch(T*) "cudaLaunch (C++ API)",
+ * ::cudaSetDoubleForDevice,
+ * ::cudaSetDoubleForHost,
+ * \ref ::cudaSetupArgument(const void*, size_t, size_t) "cudaSetupArgument (C API)",
+ * ::cudaThreadGetCacheConfig,
+ * ::cudaThreadSetCacheConfig
+ */
+public static native @Cast("cudaError_t") int cudaLaunch(@Const Pointer func);
+
+
+/** @} */ /* END CUDART_EXECUTION_DEPRECATED */
+
 
 /**
  * \defgroup CUDART_MEMORY Memory Management
@@ -17138,6 +17809,9 @@ public static native @Cast("cudaError_t") int cudaMallocManaged(@Cast("void**") 
  * \p *devPtr a pointer to the allocated memory. The allocated memory is
  * suitably aligned for any kind of variable. The memory is not cleared.
  * ::cudaMalloc() returns ::cudaErrorMemoryAllocation in case of failure.
+ *
+ * The device version of ::cudaFree cannot be used with a \p *devPtr
+ * allocated using the host API, and vice versa.
  *
  * \param devPtr - Pointer to allocated device memory
  * \param size   - Requested allocation size in bytes
@@ -17275,6 +17949,9 @@ public static native @Cast("cudaError_t") int cudaMallocArray(@ByPtrPtr cudaArra
  * Otherwise, or if ::cudaFree(\p devPtr) has already been called before,
  * an error is returned. If \p devPtr is 0, no operation is performed.
  * ::cudaFree() returns ::cudaErrorInvalidDevicePointer in case of failure.
+ *
+ * The device version of ::cudaFree cannot be used with a \p *devPtr
+ * allocated using the host API, and vice versa.
  *
  * \param devPtr - Device pointer to memory to free
  *
@@ -17432,14 +18109,17 @@ public static native @Cast("cudaError_t") int cudaHostAlloc(@Cast("void**") @ByP
  * The \p flags parameter enables different options to be specified that
  * affect the allocation, as follows.
  *
+ * - ::cudaHostRegisterDefault: On a system with unified virtual addressing,
+ *   the memory will be both mapped and portable.  On a system with no unified
+ *   virtual addressing, the memory will be neither mapped nor portable.
+ *
  * - ::cudaHostRegisterPortable: The memory returned by this call will be
  *   considered as pinned memory by all CUDA contexts, not just the one that
  *   performed the allocation.
  *
  * - ::cudaHostRegisterMapped: Maps the allocation into the CUDA address
  *   space. The device pointer to the memory may be obtained by calling
- *   ::cudaHostGetDevicePointer(). This feature is available only on GPUs
- *   with compute capability greater than or equal to 1.1.
+ *   ::cudaHostGetDevicePointer().
  *
  * All of these flags are orthogonal to one another: a developer may page-lock
  * memory that is portable or mapped with no restrictions.
@@ -17461,7 +18141,8 @@ public static native @Cast("cudaError_t") int cudaHostAlloc(@Cast("void**") @ByP
  * \return
  * ::cudaSuccess,
  * ::cudaErrorInvalidValue,
- * ::cudaErrorMemoryAllocation
+ * ::cudaErrorMemoryAllocation,
+ * ::cudaErrorHostMemoryAlreadyRegistered
  * \notefnerr
  *
  * \sa ::cudaHostUnregister, ::cudaHostGetFlags, ::cudaHostGetDevicePointer
@@ -18060,6 +18741,9 @@ cudaMemcpy3DParms myParms = {0};
  * \p kind is ::cudaMemcpyHostToDevice or ::cudaMemcpyDeviceToHost and \p stream
  * is non-zero, the copy may overlap with operations in other streams.
  *
+ * The device version of this function only handles device to device copies and
+ * cannot be given local or shared pointers.
+ *
  * \param p      - 3D memory copy parameters
  * \param stream - Stream identifier
  *
@@ -18580,6 +19264,9 @@ public static native @Cast("cudaError_t") int cudaMemcpyFromSymbol(Pointer dst, 
  * is ::cudaMemcpyHostToDevice or ::cudaMemcpyDeviceToHost and the \p stream is
  * non-zero, the copy may overlap with operations in other streams.
  *
+ * The device version of this function only handles device to device copies and
+ * cannot be given local or shared pointers.
+ *
  * \param dst    - Destination memory address
  * \param src    - Source memory address
  * \param count  - Size in bytes to copy
@@ -18747,6 +19434,9 @@ public static native @Cast("cudaError_t") int cudaMemcpyFromArrayAsync(Pointer d
  * \p kind is ::cudaMemcpyHostToDevice or ::cudaMemcpyDeviceToHost and
  * \p stream is non-zero, the copy may overlap with operations in other
  * streams.
+ *
+ * The device version of this function only handles device to device copies and
+ * cannot be given local or shared pointers.
  *
  * \param dst    - Destination memory address
  * \param dpitch - Pitch of destination memory
@@ -19079,6 +19769,9 @@ public static native @Cast("cudaError_t") int cudaMemset3D(@ByVal cudaPitchedPtr
  * be associated to a stream by passing a non-zero \p stream argument.
  * If \p stream is non-zero, the operation may overlap with operations in other streams.
  *
+ * The device version of this function only handles device to device copies and
+ * cannot be given local or shared pointers.
+ *
  * \param devPtr - Pointer to device memory
  * \param value  - Value to set for each byte of specified memory
  * \param count  - Size in bytes to set
@@ -19111,6 +19804,9 @@ public static native @Cast("cudaError_t") int cudaMemsetAsync(Pointer devPtr, in
  * the call may return before the memset is complete. The operation can optionally
  * be associated to a stream by passing a non-zero \p stream argument.
  * If \p stream is non-zero, the operation may overlap with operations in other streams.
+ *
+ * The device version of this function only handles device to device copies and
+ * cannot be given local or shared pointers.
  *
  * \param devPtr - Pointer to 2D device memory
  * \param pitch  - Pitch in bytes of 2D device memory
@@ -19159,6 +19855,9 @@ public static native @Cast("cudaError_t") int cudaMemset2DAsync(Pointer devPtr, 
  * the call may return before the memset is complete. The operation can optionally
  * be associated to a stream by passing a non-zero \p stream argument.
  * If \p stream is non-zero, the operation may overlap with operations in other streams.
+ *
+ * The device version of this function only handles device to device copies and
+ * cannot be given local or shared pointers.
  *
  * \param pitchedDevPtr - Pointer to pitched device memory
  * \param value         - Value to set for each byte of specified memory
@@ -19254,8 +19953,7 @@ public static native @Cast("cudaError_t") int cudaGetSymbolSize(@Cast("size_t*")
  * queried by calling ::cudaGetDeviceProperties() with the device 
  * property ::cudaDeviceProp::unifiedAddressing.
  *
- * Unified addressing is automatically enabled in 64-bit processes 
- * on devices with compute capability greater than or equal to 2.0.
+ * Unified addressing is automatically enabled in 64-bit processes .
  *
  * Unified addressing is not yet supported on Windows Vista or
  * Windows 7 for devices that do not use the TCC driver model.
@@ -19373,7 +20071,7 @@ public static native @Cast("cudaError_t") int cudaGetSymbolSize(@Cast("size_t*")
  *
  * \return
  * ::cudaSuccess,
- * ::cudaErrorInvalidDevice
+ * ::cudaErrorInvalidDevice,
  * ::cudaErrorInvalidValue
  *
  * \sa ::cudaGetDeviceCount, ::cudaGetDevice, ::cudaSetDevice,
@@ -20114,6 +20812,8 @@ public static native @Cast("cudaError_t") int cudaGetSurfaceReference(@Const @By
  * the type of resource is a CUDA array or a CUDA mipmapped array.
  *
  * Texture objects are only supported on devices of compute capability 3.0 or higher.
+ * Additionally, a texture object is an opaque value, and, as such, should only be
+ * accessed through CUDA API calls.
  *
  * The ::cudaResourceDesc structure is defined as:
  * \code
@@ -20160,7 +20860,7 @@ public static native @Cast("cudaError_t") int cudaGetSurfaceReference(@Const @By
  *
  * \par
  * If ::cudaResourceDesc::resType is set to ::cudaResourceTypeMipmappedArray, ::cudaResourceDesc::res::mipmap::mipmap
- * must be set to a valid CUDA mipmapped array handle.
+ * must be set to a valid CUDA mipmapped array handle and ::cudaTextureDesc::normalizedCoords must be set to true.
  *
  * \par
  * If ::cudaResourceDesc::resType is set to ::cudaResourceTypeLinear, ::cudaResourceDesc::res::linear::devPtr
@@ -20393,6 +21093,8 @@ public static native @Cast("cudaError_t") int cudaGetTextureObjectResourceViewDe
  * must be set to a valid CUDA array handle.
  *
  * Surface objects are only supported on devices of compute capability 3.0 or higher.
+ * Additionally, a surface object is an opaque value, and, as such, should only be
+ * accessed through CUDA API calls.
  *
  * \param pSurfObject - Surface object to create
  * \param pResDesc    - Resource descriptor
@@ -20625,6 +21327,10 @@ public static native @Cast("cudaError_t") int cudaGetExportTable(@Cast("const vo
  * @}
  */
 
+// #if defined(__CUDA_API_VERSION_INTERNAL)
+// #elif defined(__CUDART_API_PER_THREAD_DEFAULT_STREAM)
+// #endif
+
 // #if defined(__cplusplus)
 
 // #endif /* __cplusplus */
@@ -20758,7 +21464,7 @@ public static native @ByVal cudaExtent make_cudaExtent(@Cast("size_t") long w, @
 // Parsed from <vector_functions.h>
 
 /*
- * Copyright 1993-2012 NVIDIA Corporation.  All rights reserved.
+ * Copyright 1993-2014 NVIDIA Corporation.  All rights reserved.
  *
  * NOTICE TO LICENSEE:
  *
@@ -20818,6 +21524,12 @@ public static native @ByVal cudaExtent make_cudaExtent(@Cast("size_t") long w, @
 // #include "builtin_types.h"
 // #include "host_defines.h"
 // #include "vector_types.h"
+
+// #if defined(__CUDACC_RTC__)
+// #define __VECTOR_FUNCTIONS_DECL__ __host__ __device__
+// #else /* !__CUDACC_RTC__ */
+// #define __VECTOR_FUNCTIONS_DECL__ static __inline__ __host__ __device__
+// #endif /* __CUDACC_RTC__ */
 
 /*******************************************************************************
 *                                                                              *
@@ -20921,6 +21633,12 @@ public static native @ByVal double3 make_double3(double x, double y, double z);
 
 public static native @ByVal double4 make_double4(double x, double y, double z, double w);
 
+// #undef __VECTOR_FUNCTIONS_DECL__
+
+// #if !defined(__CUDACC_RTC__)
+// #include "vector_functions.hpp"
+// #endif /* !__CUDACC_RTC__ */
+
 // #endif /* !__VECTOR_FUNCTIONS_H__ */
 
 
@@ -20978,10 +21696,16 @@ public static native @ByVal double4 make_double4(double x, double y, double z, d
 // #if !defined(CU_COMPLEX_H_)
 // #define CU_COMPLEX_H_
 
+// When tyring to include C header file in C++ Code extern "C" is required
+// But the Standard QNX headers already have ifdef extern in them when compiling C++ Code
+// extern "C" cannot be nested
+// Hence keep the header out of extern "C" block
+
+// #include <math.h>       /* import fabsf, sqrt */
+
 // #if defined(__cplusplus)
 // #endif /* __cplusplus */
 
-// #include <math.h>       /* import fabsf, sqrt */
 // #include "vector_types.h"
 
 public static native float cuCrealf(@ByVal @Cast("cuFloatComplex*") float2 x);

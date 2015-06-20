@@ -910,10 +910,11 @@ public static native @Cast("curandStatus_t") int curandGenerateLogNormalDouble(c
  * - CURAND_STATUS_ALLOCATION_FAILED if memory could not be allocated \n
  * - CURAND_STATUS_DOUBLE_PRECISION_REQUIRED if the GPU does not support double precision \n
  * - CURAND_STATUS_INITIALIZATION_FAILED if there was a problem setting up the GPU \n
+ * - CURAND_STATUS_NOT_INITIALIZED if the distribution pointer was null \n
  * - CURAND_STATUS_PREEXISTING_FAILURE if there was an existing error from
  *    a previous kernel launch \n
  * - CURAND_STATUS_OUT_OF_RANGE if lambda is non-positive or greater than 400,000 \n
- * - CURAND_STATUS_SUCCESS if the histogram were generated successfully \n
+ * - CURAND_STATUS_SUCCESS if the histogram was generated successfully \n
  */
 
 public static native @Cast("curandStatus_t") int curandCreatePoissonDistribution(double lambda, @ByPtrPtr curandDiscreteDistribution_st discrete_distribution);

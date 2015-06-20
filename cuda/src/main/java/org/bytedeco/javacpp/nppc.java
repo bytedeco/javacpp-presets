@@ -144,9 +144,9 @@ public class nppc extends org.bytedeco.javacpp.presets.nppc {
 // #ifdef __cplusplus
 // #endif
 
-public static final int NPP_VERSION_MAJOR = 6;
-public static final int NPP_VERSION_MINOR = 5;
-public static final int NPP_VERSION_BUILD = 14;
+public static final int NPP_VERSION_MAJOR = 7;
+public static final int NPP_VERSION_MINOR = 0;
+public static final int NPP_VERSION_BUILD = 28;
 
 // #ifdef __cplusplus /* extern "C" */
 // #endif
@@ -247,13 +247,13 @@ public static final int NPP_VERSION_BUILD = 14;
  */
 /** enum NppiInterpolationMode */
 public static final int
-    NPPI_INTER_UNDEFINED    = 0,
+    NPPI_INTER_UNDEFINED         = 0,
     /**  Nearest neighbor filtering. */
-    NPPI_INTER_NN           = 1,
+    NPPI_INTER_NN                = 1,
     /**  Linear interpolation. */
-    NPPI_INTER_LINEAR       = 2,
+    NPPI_INTER_LINEAR            = 2,
     /**  Cubic interpolation. */
-    NPPI_INTER_CUBIC        = 4,
+    NPPI_INTER_CUBIC             = 4,
     /**  Two-parameter cubic filter (B=1, C=0) */
     NPPI_INTER_CUBIC2P_BSPLINE = 5,
     /**  Two-parameter cubic filter (B=0, C=1/2) */
@@ -261,11 +261,13 @@ public static final int
     /**  Two-parameter cubic filter (B=1/2, C=3/10) */
     NPPI_INTER_CUBIC2P_B05C03 = 7,
     /**  Super sampling. */
-    NPPI_INTER_SUPER        = 8,
+    NPPI_INTER_SUPER             = 8,
     /**  Lanczos filtering. */
-    NPPI_INTER_LANCZOS      = 16,
+    NPPI_INTER_LANCZOS           = 16,
+    /**  Generic Lanczos filtering with order 3. */
+    NPPI_INTER_LANCZOS3_ADVANCED = 17,
     /**  Smooth edge filtering. */
-    NPPI_SMOOTH_EDGE        =  (1 << 31); 
+    NPPI_SMOOTH_EDGE             =  (1 << 31); 
 
 /**
  * Fixed filter-kernel sizes.
@@ -330,6 +332,8 @@ public static final int
     /** Number of levels for LUT is less than 2 */
     NPP_LUT_NUMBER_OF_LEVELS_ERROR          = -106,
 
+    /** Processed data is corrupted */
+    NPP_CORRUPTED_DATA_ERROR                = -61,
     /** Wrong order of the destination channels */
     NPP_CHANNEL_ORDER_ERROR                 = -60,
     /** All values of the mask are zero */
