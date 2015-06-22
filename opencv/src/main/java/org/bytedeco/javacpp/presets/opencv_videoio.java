@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value = "android", preload = {
         "native_camera_r2.2.0", "native_camera_r2.3.3", "native_camera_r3.0.1", "native_camera_r4.0.0", "native_camera_r4.0.3",
         "native_camera_r4.1.1", "native_camera_r4.2.0", "native_camera_r4.3.0", "native_camera_r4.4.0"}),
-    @Platform(value = "windows", link = "opencv_world300", preload = {"opencv_ffmpeg300", "opencv_ffmpeg300_64"})},
+    @Platform(value = "windows", link = "opencv_videoio300", preload = {"opencv_ffmpeg300", "opencv_ffmpeg300_64"})},
         target = "org.bytedeco.javacpp.opencv_videoio")
 public class opencv_videoio implements InfoMapper {
     public void map(InfoMap infoMap) {

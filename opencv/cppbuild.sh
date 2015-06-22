@@ -7,26 +7,15 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-if [[ $PLATFORM == windows* ]]; then
-    OPENCV_VERSION=3.0.0
-    [[ $PLATFORM == *64 ]] && BITS=x64 || BITS=x86
-    download http://downloads.sourceforge.net/project/opencvlibrary/opencv-win/$OPENCV_VERSION/opencv-$OPENCV_VERSION.exe opencv-$OPENCV_VERSION.exe
+OPENCV_VERSION=3.0.0
+download https://github.com/Itseez/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
+# download https://github.com/Itseez/opencv_contrib/archive/$OPENCV_VERSION.tar.gz opencv_contrib-$OPENCV_VERSION.tar.gz
 
-    mkdir -p $PLATFORM
-    cd $PLATFORM
-    7za x -y ../opencv-$OPENCV_VERSION.exe opencv/build/OpenCV* opencv/build/include opencv/build/$BITS/vc12/lib opencv/build/$BITS/vc12/bin
-    cd opencv
-else
-    OPENCV_VERSION=3.0.0
-    download https://github.com/Itseez/opencv/archive/$OPENCV_VERSION.tar.gz opencv-$OPENCV_VERSION.tar.gz
-#    download https://github.com/Itseez/opencv_contrib/archive/$OPENCV_VERSION.tar.gz opencv_contrib-$OPENCV_VERSION.tar.gz
-
-    mkdir -p $PLATFORM
-    cd $PLATFORM
-    tar -xzvf ../opencv-$OPENCV_VERSION.tar.gz
-#    tar -xzvf ../opencv_contrib-$OPENCV_VERSION.tar.gz
-    cd opencv-$OPENCV_VERSION
-fi
+mkdir -p $PLATFORM
+cd $PLATFORM
+tar -xzvf ../opencv-$OPENCV_VERSION.tar.gz
+# tar -xzvf ../opencv_contrib-$OPENCV_VERSION.tar.gz
+cd opencv-$OPENCV_VERSION
 
 case $PLATFORM in
     android-arm)
@@ -62,14 +51,24 @@ case $PLATFORM in
         make install/strip
         ;;
     windows-x86)
-        cp -r build/include ..
-        cp -r build/x86/vc12/lib ..
-        cp -r build/x86/vc12/bin ..
+        patch -Np1 < ../../../opencv-$OPENCV_VERSION-windows-issue56a.patch
+        BUILD_X="-DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_JASPER=ON -DBUILD_JPEG=ON -DBUILD_WEBP=ON -DBUILD_OPENEXR=ON -DBUILD_PNG=ON -DBUILD_TIFF=ON -DBUILD_ZLIB=ON -DBUILD_opencv_java=OFF -DBUILD_opencv_python2=OFF"
+        WITH_X="-DWITH_1394=OFF -DWITH_FFMPEG=OFF -DWITH_GSTREAMER=OFF -DWITH_OPENMP=ON -DWITH_CUDA=OFF -DWITH_OPENCL=OFF -DWITH_IPP=OFF"
+        CMAKE="c:/Program Files (x86)/CMake/bin/cmake.exe"
+        "$CMAKE" -G "Visual Studio 12 2013" -DCMAKE_INSTALL_PREFIX=.. $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X # -DOPENCV_EXTRA_MODULES_PATH=../opencv_contrib-$OPENCV_VERSION/modules
+        MSBuild.exe INSTALL.vcxproj /p:Configuration=Release
+        cp -r ../x86/vc12/lib ..
+        cp -r ../x86/vc12/bin ..
         ;;
     windows-x86_64)
-        cp -r build/include ..
-        cp -r build/x64/vc12/lib ..
-        cp -r build/x64/vc12/bin ..
+        patch -Np1 < ../../../opencv-$OPENCV_VERSION-windows-issue56a.patch
+        BUILD_X="-DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_JASPER=ON -DBUILD_JPEG=ON -DBUILD_WEBP=ON -DBUILD_OPENEXR=ON -DBUILD_PNG=ON -DBUILD_TIFF=ON -DBUILD_ZLIB=ON -DBUILD_opencv_java=OFF -DBUILD_opencv_python2=OFF"
+        WITH_X="-DWITH_1394=OFF -DWITH_FFMPEG=OFF -DWITH_GSTREAMER=OFF -DWITH_OPENMP=ON -DWITH_CUDA=OFF -DWITH_OPENCL=OFF -DWITH_IPP=OFF"
+        CMAKE="c:/Program Files (x86)/CMake/bin/cmake.exe"
+        "$CMAKE" -G "Visual Studio 12 2013 Win64" -DCMAKE_INSTALL_PREFIX=.. $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X # -DOPENCV_EXTRA_MODULES_PATH=../opencv_contrib-$OPENCV_VERSION/modules
+        MSBuild.exe INSTALL.vcxproj /p:Configuration=Release
+        cp -r ../x64/vc12/lib ..
+        cp -r ../x64/vc12/bin ..
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
