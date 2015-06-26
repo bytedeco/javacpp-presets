@@ -814,37 +814,9 @@ public static native @Cast("cudnnStatus_t") int cudnnGetPoolingNdDescriptor(  cu
                                                         int[] strideA
                                                      );
 
-public static native @Cast("cudnnStatus_t") int cudnnGetPoolingNdForwardOutputDim( cudnnPoolingStruct poolingDesc,
-                                                             cudnnTensorStruct inputTensorDesc,
-                                                             int nbDims,
-                                                             IntPointer outputTensorDimA);
-public static native @Cast("cudnnStatus_t") int cudnnGetPoolingNdForwardOutputDim( cudnnPoolingStruct poolingDesc,
-                                                             cudnnTensorStruct inputTensorDesc,
-                                                             int nbDims,
-                                                             IntBuffer outputTensorDimA);
-public static native @Cast("cudnnStatus_t") int cudnnGetPoolingNdForwardOutputDim( cudnnPoolingStruct poolingDesc,
-                                                             cudnnTensorStruct inputTensorDesc,
-                                                             int nbDims,
-                                                             int[] outputTensorDimA);
 
-public static native @Cast("cudnnStatus_t") int cudnnGetPooling2dForwardOutputDim( cudnnPoolingStruct poolingDesc,
-                                                             cudnnTensorStruct inputTensorDesc,
-                                                             IntPointer outN,
-                                                             IntPointer outC,
-                                                             IntPointer outH,
-                                                             IntPointer outW);
-public static native @Cast("cudnnStatus_t") int cudnnGetPooling2dForwardOutputDim( cudnnPoolingStruct poolingDesc,
-                                                             cudnnTensorStruct inputTensorDesc,
-                                                             IntBuffer outN,
-                                                             IntBuffer outC,
-                                                             IntBuffer outH,
-                                                             IntBuffer outW);
-public static native @Cast("cudnnStatus_t") int cudnnGetPooling2dForwardOutputDim( cudnnPoolingStruct poolingDesc,
-                                                             cudnnTensorStruct inputTensorDesc,
-                                                             int[] outN,
-                                                             int[] outC,
-                                                             int[] outH,
-                                                             int[] outW);
+
+
 
 
 /* Destroy an instance of pooling descriptor */

@@ -42,5 +42,6 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         target = "org.bytedeco.javacpp.nppi")
 public class nppi implements InfoMapper {
     public void map(InfoMap infoMap) {
+        infoMap.put(new Info("nppiHLSToBGR_8u_AC4R", "nppiNormRelInfGetBufferHostSize_32s_C1R", "nppiSub_32s_C4IRSfs", "nppiSub_32s_C4RSfs").skip());
     }
 }

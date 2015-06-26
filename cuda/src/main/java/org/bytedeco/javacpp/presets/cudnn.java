@@ -39,6 +39,7 @@ public class cudnn implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CUDNNWINAPI").cppTypes().annotations().cppText(""))
                .put(new Info("cudnnHandle_t").valueTypes("cudnnContext").pointerTypes("@ByPtrPtr cudnnContext"))
+               .put(new Info("cudnnGetPoolingNdForwardOutputDim", "cudnnGetPooling2dForwardOutputDim").skip())
                .put(new Info("cudnnTensorDescriptor_t").valueTypes("cudnnTensorStruct").pointerTypes("@ByPtrPtr cudnnTensorStruct"))
                .put(new Info("cudnnFilterDescriptor_t").valueTypes("cudnnFilterStruct").pointerTypes("@ByPtrPtr cudnnFilterStruct"))
                .put(new Info("cudnnConvolutionDescriptor_t").valueTypes("cudnnConvolutionStruct").pointerTypes("@ByPtrPtr cudnnConvolutionStruct"))
