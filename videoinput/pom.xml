@@ -42,7 +42,7 @@
         <configuration>
           <environmentVariables>
             <!-- Hack required for Windows SDK v7.1 -->
-            <CL>&quot;/I${env.SDKDIR}/Include/&quot;</CL>
+            <CL>&quot;/I${env.SDKDIR}/Include/&quot; &quot;/IC:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Include&quot;</CL>
           </environmentVariables>
         </configuration>
       </plugin>

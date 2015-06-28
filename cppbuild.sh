@@ -13,9 +13,6 @@ case $KERNEL in
     mingw*)
         OS=windows
         KERNEL=windows
-        if [[ $TARGET_CPU == "x64" ]]; then
-            ARCH=x86_64
-        fi
         ;;
     *)
         OS=$KERNEL

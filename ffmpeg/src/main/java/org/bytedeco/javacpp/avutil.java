@@ -6868,4 +6868,12 @@ public static native AVStereo3D av_stereo3d_create_side_data(AVFrame frame);
 // #endif /* AVUTIL_STEREO3D_H */
 
 
+// Parsed from <libavutil/ffversion.h>
+
+// #ifndef AVUTIL_FFVERSION_H
+// #define AVUTIL_FFVERSION_H
+public static final String FFMPEG_VERSION = "2.7";
+// #endif /* AVUTIL_FFVERSION_H */
+
+
 }

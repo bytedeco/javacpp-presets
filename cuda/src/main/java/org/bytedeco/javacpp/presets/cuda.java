@@ -38,9 +38,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                        /*"<cuda_device_runtime_api.h>", <cuda_runtime.h>"*/ "<cuComplex.h>"}, includepath = "/usr/local/cuda/include/",
               link = {"cudart@.7.0", "cuda@.7.0"}, linkpath = "/usr/local/cuda/lib/"),
     @Platform(value = "linux-x86_64", linkpath = "/usr/local/cuda/lib64/"),
-    @Platform(value = "windows", includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.0/Include/",
-                                 linkpath    = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.0/Lib/",
-                                 preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.0/Bin/") },
+    @Platform(value = "windows",     includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.0/include/",
+                                     preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.0/bin/"),
+    @Platform(value = "windows-x86",    linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.0/lib/Win32/"),
+    @Platform(value = "windows-x86_64", linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.0/lib/x64/") },
         target = "org.bytedeco.javacpp.cuda")
 public class cuda implements InfoMapper {
     public void map(InfoMap infoMap) {

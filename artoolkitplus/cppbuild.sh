@@ -14,7 +14,7 @@ mkdir -p $PLATFORM
 cd $PLATFORM
 tar -xjvf ../ARToolKitPlus-$ARTOOLKITPLUS_VERSION.tar.bz2 --exclude="*/id-markers/*"
 cd ARToolKitPlus-$ARTOOLKITPLUS_VERSION
-patch -Np1 < ../../../ARToolKitPlus-$ARTOOLKITPLUS_VERSION.patch
+patch --binary -Np1 < ../../../ARToolKitPlus-$ARTOOLKITPLUS_VERSION.patch
 
 case $PLATFORM in
     android-arm)
@@ -43,12 +43,12 @@ case $PLATFORM in
         make install
         ;;
     windows-x86)
-        $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
+        "$CMAKE" -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
         nmake
         nmake install
         ;;
     windows-x86_64)
-        $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
+        "$CMAKE" -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
         nmake
         nmake install
         ;;

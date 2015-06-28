@@ -949,6 +949,7 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
 // #include <ARToolKitPlus/extra/BCH.h>
 // #include <ARToolKitPlus/extra/Hull.h>
 
+// #include <algorithm>
 // #include <vector>
 
 /**

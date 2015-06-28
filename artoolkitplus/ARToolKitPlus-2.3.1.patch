@@ -1,6 +1,6 @@
 diff -ruN ARToolKitPlus-2.3.1/android-arm.cmake ARToolKitPlus-2.3.1-patch/android-arm.cmake
 --- ARToolKitPlus-2.3.1/android-arm.cmake	1970-01-01 09:00:00.000000000 +0900
-+++ ARToolKitPlus-2.3.1-patch/android-arm.cmake	2014-11-08 22:39:16.482271782 +0900
++++ ARToolKitPlus-2.3.1-patch/android-arm.cmake	2015-06-28 14:36:05.670742300 +0900
 @@ -0,0 +1,26 @@
 +# CMake toolchain to build ARToolKitPlus 2.3.1 for Android 2.2. Sample usage:
 +#
@@ -30,7 +30,7 @@ diff -ruN ARToolKitPlus-2.3.1/android-arm.cmake ARToolKitPlus-2.3.1-patch/androi
 +include_directories("$ENV{ANDROID_CPP}/include/" "$ENV{ANDROID_CPP}/libs/armeabi-v7a/include/" "$ENV{ANDROID_ROOT}/usr/include/")
 diff -ruN ARToolKitPlus-2.3.1/android-x86.cmake ARToolKitPlus-2.3.1-patch/android-x86.cmake
 --- ARToolKitPlus-2.3.1/android-x86.cmake	1970-01-01 09:00:00.000000000 +0900
-+++ ARToolKitPlus-2.3.1-patch/android-x86.cmake	2014-11-08 22:39:20.021341230 +0900
++++ ARToolKitPlus-2.3.1-patch/android-x86.cmake	2015-06-28 14:36:05.670742300 +0900
 @@ -0,0 +1,23 @@
 +# CMake toolchain to build ARToolKitPlus 2.3.1 for Android 2.2. Sample usage:
 +#
@@ -57,7 +57,7 @@ diff -ruN ARToolKitPlus-2.3.1/android-x86.cmake ARToolKitPlus-2.3.1-patch/androi
 +include_directories("$ENV{ANDROID_CPP}/include/" "$ENV{ANDROID_CPP}/libs/x86/include/" "$ENV{ANDROID_ROOT}/usr/include/")
 diff -ruN ARToolKitPlus-2.3.1/CMakeLists.txt ARToolKitPlus-2.3.1-patch/CMakeLists.txt
 --- ARToolKitPlus-2.3.1/CMakeLists.txt	2014-10-06 04:46:01.000000000 +0900
-+++ ARToolKitPlus-2.3.1-patch/CMakeLists.txt	2014-11-08 22:37:34.997280327 +0900
++++ ARToolKitPlus-2.3.1-patch/CMakeLists.txt	2015-06-28 14:36:05.686366700 +0900
 @@ -8,8 +8,10 @@
  option(ARTK_USE_BOOST "Compile with boost (OpenCV calibration file support)" FALSE)
  
@@ -91,3 +91,55 @@ diff -ruN ARToolKitPlus-2.3.1/CMakeLists.txt ARToolKitPlus-2.3.1-patch/CMakeList
  RUNTIME DESTINATION bin)
  
  install(DIRECTORY include/ DESTINATION include)
+diff -ruN ARToolKitPlus-2.3.1/include/ARToolKitPlus/Tracker.h ARToolKitPlus-2.3.1-patch/include/ARToolKitPlus/Tracker.h
+--- ARToolKitPlus-2.3.1/include/ARToolKitPlus/Tracker.h	2014-10-06 04:46:01.000000000 +0900
++++ ARToolKitPlus-2.3.1-patch/include/ARToolKitPlus/Tracker.h	2015-06-28 14:37:00.189513600 +0900
+@@ -30,6 +30,7 @@
+ #include <ARToolKitPlus/extra/BCH.h>
+ #include <ARToolKitPlus/extra/Hull.h>
+ 
++#include <algorithm>
+ #include <vector>
+ 
+ 
+diff -ruN ARToolKitPlus-2.3.1/src/Camera.cpp ARToolKitPlus-2.3.1-patch/src/Camera.cpp
+--- ARToolKitPlus-2.3.1/src/Camera.cpp	2014-10-06 04:46:01.000000000 +0900
++++ ARToolKitPlus-2.3.1-patch/src/Camera.cpp	2015-06-28 14:36:38.000803100 +0900
+@@ -19,6 +19,7 @@
+  *  Pavel Rojtberg
+  */
+ 
++#include <algorithm>
+ #include <cstdlib>
+ #include <cstring>
+ #include <fstream>
+diff -ruN ARToolKitPlus-2.3.1/src/core/rppMultiGetTransMat.cpp ARToolKitPlus-2.3.1-patch/src/core/rppMultiGetTransMat.cpp
+--- ARToolKitPlus-2.3.1/src/core/rppMultiGetTransMat.cpp	2014-10-06 04:46:01.000000000 +0900
++++ ARToolKitPlus-2.3.1-patch/src/core/rppMultiGetTransMat.cpp	2015-06-28 14:37:57.833858200 +0900
+@@ -43,7 +43,7 @@
+             std::map<int, int>::iterator iter = marker_id_freq.find(m_patt_id);
+ 
+             if (iter == marker_id_freq.end()) {
+-                marker_id_freq.insert(std::make_pair<int, int>(int(m_patt_id), 1));
++                marker_id_freq.insert(std::make_pair(int(m_patt_id), 1));
+             } else {
+                 ((*iter).second)++;
+             }
+@@ -52,7 +52,7 @@
+ 
+     std::deque<std::pair<int, int> > config_patt_id;
+     for (int j = 0; j < config->marker_num; j++)
+-        config_patt_id.push_back(std::make_pair<int, int>(int(j), int(config->marker[j].patt_id)));
++        config_patt_id.push_back(std::make_pair(int(j), int(config->marker[j].patt_id)));
+ 
+     std::map<int, int> m2c_idx;
+     for (int m = 0; m < marker_num; m++) {
+@@ -67,7 +67,7 @@
+                 do {
+                     const int patt_id = (*c_iter).second;
+                     if (marker_info[m].id == patt_id) {
+-                        m2c_idx.insert(std::make_pair<int, int>(int(m), int((*c_iter).first)));
++                        m2c_idx.insert(std::make_pair(int(m), int((*c_iter).first)));
+                         config_patt_id.erase(c_iter);
+                         c_iter = config_patt_id.end();
+                         continue;
