@@ -45,7 +45,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "<opencv2/core/utility.hpp>", "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>",
         "<opencv2/core.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
         "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.3.0", "opencv_imgproc@.3.0"}),
-    @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link = "opencv_world300", preload = {"msvcr120", "msvcp120"}),
+    @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link =  {"opencv_core300", "opencv_imgproc300"}, preload = {"msvcr120", "msvcp120"}),
     @Platform(value = "windows-x86", preloadpath = "C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/redist/x86/Microsoft.VC120.CRT/"),
     @Platform(value = "windows-x86_64", preloadpath = "C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/redist/x64/Microsoft.VC120.CRT/")},
         target = "org.bytedeco.javacpp.opencv_core", helper = "org.bytedeco.javacpp.helper.opencv_core")
