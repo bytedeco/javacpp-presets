@@ -7,30 +7,14 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-if [[ $PLATFORM == windows* ]]; then
-    TESSERACT_VERSION=3.03-0.1.rc1
-    [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
-    download http://mirrors.kernel.org/fedora/releases/22/Everything/x86_64/os/Packages/m/mingw$BITS-tesseract-$TESSERACT_VERSION.fc22.noarch.rpm mingw$BITS-tesseract-$TESSERACT_VERSION.fc22.noarch.rpm
+TESSERACT_VERSION=3.03
+download "https://drive.google.com/uc?export=download&id=0B7l10Bj_LprhSGN2bTYwemVRREU" tesseract-$TESSERACT_VERSION.tar.gz
 
-    function extract {
-        /C/Program\ Files/7-Zip/7z x -y $1
-    }
-    extract mingw$BITS-tesseract-$TESSERACT_VERSION.fc22.noarch.rpm
-
-    mkdir -p $PLATFORM
-    cd $PLATFORM
-    rm -Rf include lib bin
-    extract ../mingw$BITS-tesseract-$TESSERACT_VERSION.fc22.noarch.cpio
-else
-    TESSERACT_VERSION=3.03
-    download "https://drive.google.com/uc?export=download&id=0B7l10Bj_LprhSGN2bTYwemVRREU" tesseract-$TESSERACT_VERSION.tar.gz
-
-    mkdir -p $PLATFORM
-    cd $PLATFORM
-    INSTALL_PATH=`pwd`
-    tar -xzvf ../tesseract-$TESSERACT_VERSION.tar.gz
-    cd tesseract-$TESSERACT_VERSION
-fi
+mkdir -p $PLATFORM
+cd $PLATFORM
+INSTALL_PATH=`pwd`
+tar -xzvf ../tesseract-$TESSERACT_VERSION.tar.gz
+cd tesseract-$TESSERACT_VERSION
 
 case $PLATFORM in
     android-arm)
@@ -66,10 +50,16 @@ case $PLATFORM in
         make install-strip
         ;;
     windows-x86)
-        mv usr/i686-w64-mingw32/sys-root/mingw/* .
+	cp vs2010/port/* ccutil/
+        ./configure --prefix=$INSTALL_PATH CC="gcc -m32" CXX="g++ -m32 -fpermissive" LIBLEPT_HEADERSDIR="$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" CPPFLAGS="-I$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" LDFLAGS="-L$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/lib/"
+        make -j4
+        make install-strip
         ;;
     windows-x86_64)
-        mv usr/x86_64-w64-mingw32/sys-root/mingw/* .
+        cp vs2010/port/* ccutil/
+        ./configure --prefix=$INSTALL_PATH CC="gcc -m64" CXX="g++ -m64 -fpermissive" LIBLEPT_HEADERSDIR="$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" CPPFLAGS="-I$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" LDFLAGS="-L$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/lib/"
+        make -j4
+        make install-strip
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

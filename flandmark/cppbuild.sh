@@ -51,13 +51,13 @@ case $PLATFORM in
         cp libflandmark/*.a ../lib
         ;;
     windows-x86)
-        "$CMAKE" -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/opencv/build/
+        "$CMAKE" -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH
         nmake flandmark_static
         cp libflandmark/*.h ../include
         cp libflandmark/*.lib ../lib
         ;;
     windows-x86_64)
-        "$CMAKE" -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH/opencv/build/
+        "$CMAKE" -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=Release -DOpenCV_DIR=$OPENCV_PATH
         nmake flandmark_static
         cp libflandmark/*.h ../include
         cp libflandmark/*.lib ../lib

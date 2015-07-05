@@ -14,7 +14,7 @@ mkdir -p $PLATFORM
 cd $PLATFORM
 tar -xjvf ../ARToolKitPlus-$ARTOOLKITPLUS_VERSION.tar.bz2 --exclude="*/id-markers/*"
 cd ARToolKitPlus-$ARTOOLKITPLUS_VERSION
-patch --binary -Np1 < ../../../ARToolKitPlus-$ARTOOLKITPLUS_VERSION.patch
+patch --binary -Np1 < ../../../ARToolKitPlus-$ARTOOLKITPLUS_VERSION.patch || true
 
 case $PLATFORM in
     android-arm)

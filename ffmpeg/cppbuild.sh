@@ -121,7 +121,7 @@ case $PLATFORM in
         make -j4 x265-static
         make install
         cd ../libvpx-$VPX_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --sdk-path=$ANDROID_NDK --target=x86-android-gcc
+        CROSS="$ANDROID_BIN-" ASFLAGS="-D__ANDROID__" CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -mtune=atom -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" LDFLAGS="--sysroot=$ANDROID_ROOT -nostdlib -lgcc -ldl -lz -lm -lc" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=x86-android-gcc
         make -j4
         make install
         cd ../ffmpeg-$FFMPEG_VERSION

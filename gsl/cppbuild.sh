@@ -7,26 +7,14 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-if [[ $PLATFORM == windows* ]]; then
-    GSL_VERSION=1.16-2
-    [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
-    download http://mirrors.kernel.org/fedora/releases/22/Everything/x86_64/os/Packages/m/mingw$BITS-gsl-$GSL_VERSION.fc21.noarch.rpm mingw$BITS-gsl-$GSL_VERSION.rpm
+GSL_VERSION=1.16
+download ftp://ftp.gnu.org/gnu/gsl/gsl-$GSL_VERSION.tar.gz gsl-$GSL_VERSION.tar.gz
 
-    mkdir -p $PLATFORM
-    cd $PLATFORM
-    rm -Rf include lib bin
-    /C/Program\ Files/7-Zip/7z x -y ../mingw$BITS-gsl-$GSL_VERSION.rpm -o..
-    /C/Program\ Files/7-Zip/7z x -y ../mingw$BITS-gsl-$GSL_VERSION.cpio
-else
-    GSL_VERSION=1.16
-    download ftp://ftp.gnu.org/gnu/gsl/gsl-$GSL_VERSION.tar.gz gsl-$GSL_VERSION.tar.gz
-
-    mkdir -p $PLATFORM
-    cd $PLATFORM
-    INSTALL_PATH=`pwd`
-    tar -xzvf ../gsl-$GSL_VERSION.tar.gz
-    cd gsl-$GSL_VERSION
-fi
+mkdir -p $PLATFORM
+cd $PLATFORM
+INSTALL_PATH=`pwd`
+tar -xzvf ../gsl-$GSL_VERSION.tar.gz
+cd gsl-$GSL_VERSION
 
 case $PLATFORM in
     android-arm)
@@ -56,10 +44,14 @@ case $PLATFORM in
         make install-strip
         ;;
     windows-x86)
-        mv usr/i686-w64-mingw32/sys-root/mingw/* .
+        ./configure --prefix=$INSTALL_PATH CC="gcc -m32"
+        make -j4
+        make install-strip
         ;;
     windows-x86_64)
-        mv usr/x86_64-w64-mingw32/sys-root/mingw/* .
+        ./configure --prefix=$INSTALL_PATH CC="gcc -m64"
+        make -j4
+        make install-strip
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

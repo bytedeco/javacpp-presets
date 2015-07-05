@@ -10,9 +10,15 @@ case $KERNEL in
     darwin)
         OS=macosx
         ;;
-    mingw*)
+    mingw32*)
         OS=windows
         KERNEL=windows
+        ARCH=x86
+        ;;
+    mingw64*)
+        OS=windows
+        KERNEL=windows
+        ARCH=x86_64
         ;;
     *)
         OS=$KERNEL

@@ -7,83 +7,256 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-if [[ $PLATFORM == windows* ]]; then
-    LEPTONICA_VERSION=1.72-1
-    [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
-    download http://mirrors.kernel.org/fedora/releases/22/Everything/x86_64/os/Packages/m/mingw$BITS-leptonica-$LEPTONICA_VERSION.fc22.noarch.rpm mingw$BITS-leptonica-$LEPTONICA_VERSION.fc22.noarch.rpm
-    download http://mirrors.kernel.org/fedora/releases/22/Everything/x86_64/os/Packages/m/mingw$BITS-giflib-5.0.5-2.fc21.noarch.rpm mingw$BITS-giflib-5.0.5-2.fc21.noarch.rpm
-    download http://mirrors.kernel.org/fedora/releases/22/Everything/x86_64/os/Packages/m/mingw$BITS-libjpeg-turbo-1.3.1-4.fc22.noarch.rpm mingw$BITS-libjpeg-turbo-1.3.1-4.fc22.noarch.rpm
-    download http://mirrors.kernel.org/fedora/releases/22/Everything/x86_64/os/Packages/m/mingw$BITS-libpng-1.6.10-2.fc21.noarch.rpm mingw$BITS-libpng-1.6.10-2.fc21.noarch.rpm
-    download http://mirrors.kernel.org/fedora/releases/22/Everything/x86_64/os/Packages/m/mingw$BITS-libtiff-4.0.3-6.fc22.noarch.rpm mingw$BITS-libtiff-4.0.3-6.fc22.noarch.rpm
-    download http://mirrors.kernel.org/fedora/releases/22/Everything/x86_64/os/Packages/m/mingw$BITS-libwebp-0.4.2-1.fc22.noarch.rpm mingw$BITS-libwebp-0.4.2-1.fc22.noarch.rpm
-    download http://mirrors.kernel.org/fedora/releases/22/Everything/x86_64/os/Packages/m/mingw$BITS-zlib-1.2.8-3.fc21.noarch.rpm mingw$BITS-zlib-1.2.8-3.fc21.noarch.rpm
+ZLIB=zlib-1.2.8
+GIFLIB=giflib-5.1.1
+LIBJPEG=libjpeg-turbo-1.4.1
+LIBPNG=libpng-1.6.17
+LIBTIFF=tiff-4.0.4
+LIBWEBP=libwebp-0.4.3
+LEPTONICA_VERSION=1.72
+download http://zlib.net/$ZLIB.tar.gz $ZLIB.tar.gz
+download http://downloads.sourceforge.net/project/giflib/$GIFLIB.tar.gz $GIFLIB.tar.gz
+download http://downloads.sourceforge.net/project/libjpeg-turbo/1.4.1/$LIBJPEG.tar.gz $LIBJPEG.tar.gz
+download http://downloads.sourceforge.net/project/libpng/libpng16/1.6.17/$LIBPNG.tar.gz $LIBPNG.tar.gz
+download http://download.osgeo.org/libtiff/$LIBTIFF.tar.gz $LIBTIFF.tar.gz
+download http://downloads.webmproject.org/releases/webp/$LIBWEBP.tar.gz $LIBWEBP.tar.gz
+download http://www.leptonica.org/source/leptonica-$LEPTONICA_VERSION.tar.gz leptonica-$LEPTONICA_VERSION.tar.gz
 
-    function extract {
-        /C/Program\ Files/7-Zip/7z x -y $1
-    }
-    extract mingw$BITS-leptonica-*.rpm
-    extract mingw$BITS-giflib-*.rpm
-    extract mingw$BITS-libjpeg-turbo-*.rpm
-    extract mingw$BITS-libpng-*.rpm
-    extract mingw$BITS-libtiff-*.rpm
-    extract mingw$BITS-libwebp-*.rpm
-    extract mingw$BITS-zlib-*.rpm
-
-    mkdir -p $PLATFORM
-    cd $PLATFORM
-    rm -Rf include lib bin
-    extract ../mingw$BITS-leptonica-*.cpio
-    extract ../mingw$BITS-giflib-*.cpio
-    extract ../mingw$BITS-libjpeg-turbo-*.cpio
-    extract ../mingw$BITS-libpng-*.cpio
-    extract ../mingw$BITS-libtiff-*.cpio
-    extract ../mingw$BITS-libwebp-*.cpio
-    extract ../mingw$BITS-zlib-*.cpio
-else
-    LEPTONICA_VERSION=1.72
-    download http://www.leptonica.org/source/leptonica-$LEPTONICA_VERSION.tar.gz leptonica-$LEPTONICA_VERSION.tar.gz
-
-    mkdir -p $PLATFORM
-    cd $PLATFORM
-    INSTALL_PATH=`pwd`
-    tar -xzvf ../leptonica-$LEPTONICA_VERSION.tar.gz
-    cd leptonica-$LEPTONICA_VERSION
-fi
+mkdir -p $PLATFORM
+cd $PLATFORM
+INSTALL_PATH=`pwd`
+tar -xzvf ../$ZLIB.tar.gz
+tar -xzvf ../$GIFLIB.tar.gz
+tar -xzvf ../$LIBJPEG.tar.gz
+tar -xzvf ../$LIBPNG.tar.gz
+tar -xzvf ../$LIBTIFF.tar.gz
+tar -xzvf ../$LIBWEBP.tar.gz
+tar -xzvf ../leptonica-$LEPTONICA_VERSION.tar.gz
 
 case $PLATFORM in
     android-arm)
+        export CC="$ANDROID_BIN-gcc -DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -D__native_client__ -pthread -I$INSTALL_PATH/include/ -I$ANDROID_NDK/sources/android/cpufeatures/ --sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
+        export LDFLAGS="-L$INSTALL_PATH/lib/ -nostdlib -Wl,--fix-cortex-a8"
+        export LIBS="-lgcc -ldl -lz -lm -lc"
+        export STRIP="$ANDROID_BIN-strip"
+        cd $ZLIB
+        ./configure --prefix=$INSTALL_PATH --static
+        make -j4
+        make install
+        cd ../$GIFLIB
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux --with-sysroot="$ANDROID_ROOT"
+        make -j4
+        make install
+        cd ../$LIBJPEG
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux --with-sysroot="$ANDROID_ROOT"
+        make -j4
+        make install
+        cd ../$LIBPNG
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux --with-sysroot="$ANDROID_ROOT"
+        make -j4
+        make install
+        cd ../$LIBTIFF
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux --with-sysroot="$ANDROID_ROOT" --disable-lzma --without-x
+        make -j4
+        make install
+        cd ../$LIBWEBP
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-androideabi --with-sysroot="$ANDROID_ROOT"
+        cd src
+        make -j4
+        make install
+        cd ../../leptonica-$LEPTONICA_VERSION
         patch -Np1 < ../../../leptonica-$LEPTONICA_VERSION-android.patch
-        ./configure --prefix=$INSTALL_PATH --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT" CC="$ANDROID_BIN-gcc" STRIP="$ANDROID_BIN-strip" CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" LDFLAGS="-nostdlib -Wl,--fix-cortex-a8" LIBS="-lgcc -ldl -lz -lm -lc" --disable-programs
+        ./configure --prefix=$INSTALL_PATH --host=arm-linux-androideabi --disable-programs
         make -j4
         make install-strip
         ;;
      android-x86)
+        export CC="$ANDROID_BIN-gcc -DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -pthread -I$INSTALL_PATH/include/ -I$ANDROID_NDK/sources/android/cpufeatures/ --sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
+        export LDFLAGS="-L$INSTALL_PATH/lib/ -nostdlib"
+        export LIBS="-lgcc -ldl -lz -lm -lc"
+        export STRIP="$ANDROID_BIN-strip"
+        cd $ZLIB
+        ./configure --prefix=$INSTALL_PATH --static
+        make -j4
+        make install
+        cd ../$GIFLIB
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --with-sysroot="$ANDROID_ROOT"
+        make -j4
+        make install
+        cd ../$LIBJPEG
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --with-sysroot="$ANDROID_ROOT"
+        make -j4
+        make install
+        cd ../$LIBPNG
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --with-sysroot="$ANDROID_ROOT"
+        make -j4
+        make install
+        cd ../$LIBTIFF
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --with-sysroot="$ANDROID_ROOT" --disable-lzma --without-x
+        make -j4
+        make install
+        cd ../$LIBWEBP
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux-android --with-sysroot="$ANDROID_ROOT"
+        cd src
+        make -j4
+        make install
+        cd ../../leptonica-$LEPTONICA_VERSION
         patch -Np1 < ../../../leptonica-$LEPTONICA_VERSION-android.patch
-        ./configure --prefix=$INSTALL_PATH --host="i686-linux-android" --with-sysroot="$ANDROID_ROOT" CC="$ANDROID_BIN-gcc" STRIP="$ANDROID_BIN-strip" CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" LDFLAGS="-nostdlib" LIBS="-lgcc -ldl -lz -lm -lc" --disable-programs
+        ./configure --prefix=$INSTALL_PATH --host=i686-linux-android --disable-programs
         make -j4
         make install-strip
         ;;
     linux-x86)
-        ./configure --prefix=$INSTALL_PATH CC="gcc -m32" --disable-programs
+        export CC="gcc -m32 -fPIC"
+        cd $ZLIB
+        ./configure --prefix=$INSTALL_PATH --static
+        make -j4
+        make install
+        cd ../$GIFLIB
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
+        make -j4
+        make install
+        cd ../$LIBJPEG
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
+        make -j4
+        make install
+        cd ../$LIBPNG
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
+        make -j4
+        make install
+        cd ../$LIBTIFF
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --disable-lzma
+        make -j4
+        make install
+        cd ../$LIBWEBP
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
+        make -j4
+        make install
+        cd ../leptonica-$LEPTONICA_VERSION
+        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-programs
         make -j4
         make install-strip
         ;;
     linux-x86_64)
-        ./configure --prefix=$INSTALL_PATH CC="gcc -m64" --disable-programs
+        export CC="gcc -m64 -fPIC"
+        cd $ZLIB
+        ./configure --prefix=$INSTALL_PATH --static
+        make -j4
+        make install
+        cd ../$GIFLIB
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
+        make -j4
+        make install
+        cd ../$LIBJPEG
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
+        make -j4
+        make install
+        cd ../$LIBPNG
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
+        make -j4
+        make install
+        cd ../$LIBTIFF
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux --disable-lzma
+        make -j4
+        make install
+        cd ../$LIBWEBP
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
+        make -j4
+        make install
+        cd ../leptonica-$LEPTONICA_VERSION
+        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-programs
         make -j4
         make install-strip
         ;;
     macosx-*)
+        cd $ZLIB
+        ./configure --prefix=$INSTALL_PATH --static
+        make -j4
+        make install
+        cd ../$GIFLIB
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
+        make -j4
+        make install
+        cd ../$LIBJPEG
+        [[ $ARCH == x86_64 ]] && BUILD=--build=x86_64-darwin || BUILD=
+        NASM=yasm ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic $BUILD
+        make -j4
+        make install
+        cd ../$LIBPNG
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
+        make -j4
+        make install
+        cd ../$LIBTIFF
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --disable-lzma
+        make -j4
+        make install
+        cd ../$LIBWEBP
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
+        make -j4
+        make install
+        cd ../leptonica-$LEPTONICA_VERSION
         patch -Np1 < ../../../leptonica-$LEPTONICA_VERSION-macosx.patch
-        ./configure --prefix=$INSTALL_PATH --disable-programs
+        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-programs
         make -j4
         make install-strip
         ;;
     windows-x86)
-        mv usr/i686-w64-mingw32/sys-root/mingw/* .
+        export CC="gcc -m32"
+        cd $ZLIB
+        make -j4 install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
+        cd ../$GIFLIB
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32
+        make -j4
+        make install
+        cd ../$LIBJPEG
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32
+        make -j4
+        make install
+        cd ../$LIBPNG
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32
+        make -j4
+        make install
+        cd ../$LIBTIFF
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 --disable-lzma
+        make -j4
+        make install
+        cd ../$LIBWEBP
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32
+        make -j4
+        make install
+        cd ../leptonica-$LEPTONICA_VERSION
+        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/ -Wl,$INSTALL_PATH/lib/*.a" --disable-programs
+        make -j4
+        make install-strip
         ;;
     windows-x86_64)
-        mv usr/x86_64-w64-mingw32/sys-root/mingw/* .
+        export CC="gcc -m64"
+        cd $ZLIB
+        make -j4 install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
+        cd ../$GIFLIB
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32
+        make -j4
+        make install
+        cd ../$LIBJPEG
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32
+        make -j4
+        make install
+        cd ../$LIBPNG
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32
+        make -j4
+        make install
+        cd ../$LIBTIFF
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 --disable-lzma
+        make -j4
+        make install
+        cd ../$LIBWEBP
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32
+        make -j4
+        make install
+        cd ../leptonica-$LEPTONICA_VERSION
+        ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/ -Wl,$INSTALL_PATH/lib/*.a" --disable-programs
+        make -j4
+        make install-strip
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
