@@ -196,7 +196,7 @@ public class caffe {
     // Device Query: show diagnostic information for a GPU device.
     RegisterBrewFunction("device_query", new BrewFunction() {
         public int command() {
-            int gpu = flags.getValue("gpu");
+            Integer gpu = flags.getValue("gpu");
             if (gpu < 0) {
                 throw new RuntimeException("Need a device ID to query.");
             }
@@ -210,7 +210,7 @@ public class caffe {
     // Train / Finetune a model.
     RegisterBrewFunction("train", new BrewFunction() {
         public int command() {
-            int gpu = flags.getValue("gpu");
+            Integer gpu = flags.getValue("gpu");
             String solverFlag = flags.getValue("solver");
             String snapshot = flags.getValue("snapshot");
             String weights = flags.getValue("weights");
@@ -262,10 +262,10 @@ public class caffe {
     // Test: score a model.
     RegisterBrewFunction("test", new BrewFunction() {
         public int command() {
-            int gpu = flags.getValue("gpu");
+            Integer gpu = flags.getValue("gpu");
             String model = flags.getValue("model");
             String weights = flags.getValue("weights");
-            int iterations = flags.getValue("iterations");
+            Integer iterations = flags.getValue("iterations");
             if (model.length() == 0) {
                 throw new RuntimeException("Need a model definition to score.");
             }
@@ -334,9 +334,9 @@ public class caffe {
     // Time: benchmark the execution time of a model.
     RegisterBrewFunction("time", new BrewFunction() {
         public int command() {
-            int gpu = flags.getValue("gpu");
+            Integer gpu = flags.getValue("gpu");
             String model = flags.getValue("model");
-            int iterations = flags.getValue("iterations");
+            Integer iterations = flags.getValue("iterations");
             if (model.length() == 0) {
                 throw new RuntimeException("Need a model definition to time.");
             }

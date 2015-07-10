@@ -11120,32 +11120,6 @@ public static final int
   // namespace caffe
 
 // #ifndef SWIG
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // namespace google
-  // namespace protobuf
 // #endif  // SWIG
 
 // @@protoc_insertion_point(global_scope)
@@ -12631,6 +12605,40 @@ public static final int
  * the variance_norm option. You should make sure the input blob has shape (num,
  * a, b, c) where a * b * c = fan_in and num * b * c = fan_out. Note that this
  * is currently not the case for inner product layers.
+ */
+
+/**
+@brief Fills a Blob with coefficients for bilinear interpolation.
+
+A common use case is with the DeconvolutionLayer acting as upsampling.
+You can upsample a feature map with shape of (B, C, H, W) by any integer factor
+using the following proto.
+\code
+layer {
+  name: "upsample", type: "Deconvolution"
+  bottom: "{{bottom_name}}" top: "{{top_name}}"
+  convolution_param {
+    kernel_size: {{2 * factor - factor % 2}} stride: {{factor}}
+    num_output: {{C}} group: {{C}}
+    pad: {{ceil((factor - 1) / 2.)}}
+    weight_filler: { type: "bilinear" } bias_term: false
+  }
+  param { lr_mult: 0 decay_mult: 0 }
+}
+\endcode
+Please use this by replacing `{{}}` with your values. By specifying
+`num_output: {{C}} group: {{C}}`, it behaves as
+channel-wise convolution. The filter shape of this deconvolution layer will be
+(C, 1, K, K) where K is `kernel_size`, and this filler will set a (K, K)
+interpolation kernel for every channel of the filter identically. The resulting
+shape of the top feature map will be (B, C, factor * H, factor * W).
+Note that the learning rate and the
+weight decay are set to 0 in order to keep coefficient values of bilinear
+interpolation unchanged during training. If you apply this to an image, this
+operation is equivalent to the following call in Python with Scikit.Image.
+\code{.py}
+out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
+\endcode
  */
 
 /**
@@ -17024,10 +17032,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 // #include <string>
 
-// #include "leveldb/db.h"
-// #include "leveldb/write_batch.h"
-// #include "lmdb.h"
-
 // #include "caffe/common.hpp"
 // #include "caffe/proto/caffe.pb.h"
 
@@ -17074,6 +17078,28 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
   public native Transaction NewTransaction();
 }
 
+@Namespace("caffe::db") public static native DB GetDB(@Cast("caffe::DataParameter::DB") int backend);
+@Namespace("caffe::db") public static native DB GetDB(@StdString BytePointer backend);
+@Namespace("caffe::db") public static native DB GetDB(@StdString String backend);
+
+  // namespace db
+  // namespace caffe
+
+// #endif  // CAFFE_UTIL_DB_HPP
+
+
+// Parsed from caffe/util/db_leveldb.hpp
+
+// #ifndef CAFFE_UTIL_DB_LEVELDB_HPP
+// #define CAFFE_UTIL_DB_LEVELDB_HPP
+
+// #include <string>
+
+// #include "leveldb/db.h"
+// #include "leveldb/write_batch.h"
+
+// #include "caffe/util/db.hpp"
+
 @Namespace("caffe::db") @NoOffset public static class LevelDBCursor extends Cursor {
     static { Loader.load(); }
     /** Empty constructor. */
@@ -17119,6 +17145,24 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
   public native LevelDBCursor NewCursor();
   public native LevelDBTransaction NewTransaction();
 }
+
+
+  // namespace db
+  // namespace caffe
+
+// #endif  // CAFFE_UTIL_DB_LEVELDB_HPP
+
+
+// Parsed from caffe/util/db_lmdb.hpp
+
+// #ifndef CAFFE_UTIL_DB_LMDB_HPP
+// #define CAFFE_UTIL_DB_LMDB_HPP
+
+// #include <string>
+
+// #include "lmdb.h"
+
+// #include "caffe/util/db.hpp"
 
 @Namespace("caffe::db") public static native void MDB_CHECK(int mdb_status);
 
@@ -17172,14 +17216,10 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
   public native LMDBTransaction NewTransaction();
 }
 
-@Namespace("caffe::db") public static native DB GetDB(@Cast("caffe::DataParameter::DB") int backend);
-@Namespace("caffe::db") public static native DB GetDB(@StdString BytePointer backend);
-@Namespace("caffe::db") public static native DB GetDB(@StdString String backend);
-
   // namespace db
   // namespace caffe
 
-// #endif  // CAFFE_UTIL_DB_HPP
+// #endif  // CAFFE_UTIL_DB_LMDB_HPP
 
 
 // Parsed from caffe/util/io.hpp
