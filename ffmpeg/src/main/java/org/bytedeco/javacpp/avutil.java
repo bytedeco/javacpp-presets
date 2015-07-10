@@ -1677,7 +1677,7 @@ public static native @Cast("AVClassCategory") int av_default_get_category(Pointe
 
 /**
  * Format a line of log the same way as the default callback.
- * @param line          buffer to receive the formated line
+ * @param line          buffer to receive the formatted line
  * @param line_size     size of the buffer
  * @param print_prefix  used to store whether the prefix must be printed;
  *                      must point to a persistent integer initially set to 1
@@ -2867,7 +2867,7 @@ public static final int
  * Illustration showing the location of the first (top left) chroma sample of the
  * image, the left shows only luma, the right
  * shows the location of the chroma sample, the 2 could be imagined to overlay
- * each other but are drawn seperately due to limitations of ASCII
+ * each other but are drawn separately due to limitations of ASCII
  *
  *                1st 2nd       1st 2nd horizontal luma sample positions
  *                 v   v         v   v
@@ -4898,7 +4898,7 @@ public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**
  * In some cases it may be more convenient to put all options into an
  * AVDictionary and call av_opt_set_dict() on it. A specific case of this
  * are the format/codec open functions in lavf/lavc which take a dictionary
- * filled with option as a parameter. This allows to set some options
+ * filled with option as a parameter. This makes it possible to set some options
  * that cannot be set otherwise, since e.g. the input file format is not known
  * before the file is actually opened.
  */
@@ -6872,7 +6872,7 @@ public static native AVStereo3D av_stereo3d_create_side_data(AVFrame frame);
 
 // #ifndef AVUTIL_FFVERSION_H
 // #define AVUTIL_FFVERSION_H
-public static final String FFMPEG_VERSION = "2.7";
+public static final String FFMPEG_VERSION = "2.7.1";
 // #endif /* AVUTIL_FFVERSION_H */
 
 

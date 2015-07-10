@@ -133,7 +133,7 @@ public static class AVIODirEntry extends Pointer {
     /** Type of the entry */
     public native int type(); public native AVIODirEntry type(int type);
     /** Set to 1 when name is encoded with UTF-8, 0 otherwise.
-                                                   Name can be encoded with UTF-8 eventhough 0 is set. */
+                                                   Name can be encoded with UTF-8 even though 0 is set. */
     public native int utf8(); public native AVIODirEntry utf8(int utf8);
     /** File size in bytes, -1 if unknown. */
     public native long size(); public native AVIODirEntry size(long size);
@@ -952,7 +952,7 @@ public static native int avio_read_to_bprint(AVIOContext h, AVBPrint pb, @Cast("
  * with an AVFMT_NOFILE format).
  *
  * @section lavf_options Passing options to (de)muxers
- * Lavf allows to configure muxers and demuxers using the @ref avoptions
+ * It is possible to configure lavf muxers and demuxers using the @ref avoptions
  * mechanism. Generic (format-independent) libavformat options are provided by
  * AVFormatContext, they can be examined from a user program by calling
  * av_opt_next() / av_opt_find() on an allocated AVFormatContext (or its AVClass
@@ -1119,7 +1119,7 @@ public static native int avio_read_to_bprint(AVIOContext h, AVBPrint pb, @Cast("
  * @defgroup lavf_io I/O Read/Write
  * @{
  * @section lavf_io_dirlist Directory listing
- * The directory listing API allows to list files on remote servers.
+ * The directory listing API makes it possible to list files on remote servers.
  *
  * Some of possible use cases:
  * - an "open file" dialog to choose files from a remote location,
@@ -3731,7 +3731,7 @@ public static native int av_write_uncoded_frame(AVFormatContext s, int stream_in
 /**
  * Write a uncoded frame to an output media file.
  *
- * If the muxer supports it, this function allows to write an AVFrame
+ * If the muxer supports it, this function makes it possible to write an AVFrame
  * structure directly, without encoding it into a packet.
  * It is mostly useful for devices and similar special muxers that use raw
  * video or PCM data and will not serialize it into a byte stream.
