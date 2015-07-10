@@ -33,7 +33,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = nppc.class, value = {
-    @Platform(include = {"<npps.h>", "<npps_support_functions.h>", "<npps_initialization.h>",
+    @Platform(value = {"linux-x86_64", "linux-ppc64", "macosx-x86_64", "windows-x86_64"},
+              include = {"<npps.h>", "<npps_support_functions.h>", "<npps_initialization.h>",
             "<npps_conversion_functions.h>", "<npps_arithmetic_and_logical_operations.h>",
             "<npps_statistics_functions.h>", "<npps_filtering_functions.h>"}, link = "npps@.7.0")},
         target = "org.bytedeco.javacpp.npps")
