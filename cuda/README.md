@@ -16,6 +16,7 @@ Java API documentation is available here:
 
  * http://bytedeco.org/javacpp-presets/cuda/apidocs/
 
+&lowast; We can also [use Thrust with JavaCPP](https://github.com/bytedeco/javacpp/wiki/Interface-Thrust-and-CUDA).
 
 Sample Usage
 ------------
@@ -34,12 +35,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.cuda</groupId>
     <artifactId>mnistcudnn</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>cuda</artifactId>
-            <version>7.0-1.0-SNAPSHOT</version>
+            <version>7.0-1.0</version>
         </dependency>
     </dependencies>
 </project>

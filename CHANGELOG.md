@@ -1,4 +1,5 @@
 
+### July 11, 2015 version 1.0
  * Build OpenCV, GSL, Leptonica, and Tesseract from source code on all platforms for better consistency in functionality across platforms
  * Add presets for CUDA 7.0 (including cuBLAS, cuDNN, cuFFT, cuRAND, cuSOLVER, cuSPARSE, and NPP)
  * Offer the Apache License, Version 2.0, as a new choice of license, in addition to the GPLv2 with Classpath exception
@@ -10,7 +11,7 @@
  * Make `flycapture/cppbuild.sh` fail if FlyCapture is not found installed on the system ([issue #46](https://github.com/bytedeco/javacpp-presets/issues/46))
  * Patch libdc1394, libdcfreenect, FFTW, GSL, Leptonica and Tesseract with missing `@rpath` needed by Mac OS X ([issue #46](https://github.com/bytedeco/javacpp-presets/issues/46))
 
-### April 4, 2014 version 0.11
+### April 4, 2015 version 0.11
  * Remove unneeded `@Opaque` types from `gsl` and replace them with their definitions whose names end with "_struct"
  * Segregate methods using `java.awt` classes into the new `Java2DFrameConverter` class of JavaCV ([issue #12](https://github.com/bytedeco/javacpp-presets/issues/12))
  * Emphasize the need to install separately the parent `pom.xml` file ([issue #42](https://github.com/bytedeco/javacpp-presets/issues/42))

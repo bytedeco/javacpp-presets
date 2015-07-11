@@ -12,8 +12,8 @@ Downloads
 ---------
 To install manually the JAR files, obtain the following archives and follow the instructions in the [Manual Installation](#manual-installation) section below.
 
- * JavaCPP Presets 0.11 binary archive  [javacpp-presets-0.11-bin.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets/0.11/javacpp-presets-0.11-bin.zip) (216 MB)
- * JavaCPP Presets 0.11 source archive  [javacpp-presets-0.11-src.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets/0.11/javacpp-presets-0.11-src.zip) (1298 KB)
+ * JavaCPP Presets 1.0 binary archive  [javacpp-presets-1.0-bin.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets/1.0/javacpp-presets-1.0-bin.zip) (232 MB)
+ * JavaCPP Presets 1.0 source archive  [javacpp-presets-1.0-src.zip](http://search.maven.org/remotecontent?filepath=org/bytedeco/javacpp-presets/1.0/javacpp-presets-1.0-src.zip) (1.9 MB)
 
 The binary archive contains builds for Android, Linux, Mac OS X, and Windows. The JAR files for specific child modules or platforms can also be obtained individually from the [Maven Central Repository](http://search.maven.org/#search|ga|1|bytedeco).
 
@@ -25,21 +25,21 @@ We can also have everything downloaded and installed automatically with:
   <dependency>
     <groupId>org.bytedeco.javacpp-presets</groupId>
     <artifactId>${moduleName}</artifactId>
-    <version>${moduleVersion}-0.11</version>
+    <version>${moduleVersion}-1.0</version>
   </dependency>
 ```
 
  * Gradle (inside the `build.gradle` file)
 ```groovy
   dependencies {
-    compile group: 'org.bytedeco.javacpp-presets', name: moduleName, version: moduleVersion + '-0.11'
+    compile group: 'org.bytedeco.javacpp-presets', name: moduleName, version: moduleVersion + '-1.0'
   }
 ```
 
  * sbt (inside the `build.sbt` file)
 ```scala
   classpathTypes += "maven-plugin"
-  libraryDependencies += "org.bytedeco.javacpp-presets" % moduleName % moduleVersion + "-0.11"
+  libraryDependencies += "org.bytedeco.javacpp-presets" % moduleName % moduleVersion + "-1.0"
 ```
 
 where the `moduleName` and `moduleVersion` variables correspond to the desired module. Additionally, we need to either set the `platform.dependency` system property (via the `-D` command line option) to something like `android-arm`, or set the `platform.dependencies` one to `true` to get all the binaries for Android, Linux, Mac OS X, and Windows. **On build systems where this does not work, we need to add the platform-specific artifacts manually.**
@@ -92,12 +92,12 @@ Build Instructions
 If the binary files available above are not enough for your needs, you might need to rebuild them from the source code. To this end, the project files on the Java side were created for:
 
  * Maven 2 or 3  http://maven.apache.org/download.html
- * JavaCPP 0.11  https://github.com/bytedeco/javacpp
+ * JavaCPP 1.0  https://github.com/bytedeco/javacpp
 
 Each child module in turn relies on its corresponding native libraries being already installed in the `cppbuild` subdirectory created by a prior execution of the included [CPPBuild Scripts](#cppbuild-scripts), explained below. To use native libraries already installed somewhere else on the system, other installation directories than `cppbuild` can also be specified either in the `pom.xml` files or in the `.java` configuration files. The following versions are supported:
 
- * OpenCV 2.4.11  http://opencv.org/downloads.html
- * FFmpeg 2.6.x  http://ffmpeg.org/download.html
+ * OpenCV 3.0.0  http://opencv.org/downloads.html
+ * FFmpeg 2.7.x  http://ffmpeg.org/download.html
  * FlyCapture 2.7.x  http://www.ptgrey.com/flycapture-sdk
  * libdc1394 2.1.x or 2.2.x  http://sourceforge.net/projects/libdc1394/files/
  * libfreenect 0.5.2  https://github.com/OpenKinect/libfreenect
@@ -106,10 +106,11 @@ Each child module in turn relies on its corresponding native libraries being alr
  * flandmark 1.07  http://cmp.felk.cvut.cz/~uricamic/flandmark/#download
  * FFTW 3.3.4  http://www.fftw.org/download.html
  * GSL 1.16  http://www.gnu.org/software/gsl/#downloading
- * LLVM 3.6.0  http://llvm.org/releases/download.html
- * Leptonica 1.71  http://www.leptonica.org/download.html
+ * LLVM 3.6.1  http://llvm.org/releases/download.html
+ * Leptonica 1.72  http://www.leptonica.org/download.html
  * Tesseract 3.03-rc1  https://code.google.com/p/tesseract-ocr/
  * Caffe  https://github.com/BVLC/caffe
+ * CUDA 7.0  https://developer.nvidia.com/cuda-downloads
 
 Once everything installed and configured, simply execute
 ```bash
@@ -122,7 +123,7 @@ CPPBuild Scripts
 ----------------
 Before running the Maven build, however, we recommend to install the native libraries on the native C/C++ side with the `cppbuild.sh` scripts. In this case, additional software is required:
 
- * A recent version of Linux, Mac OS X, or Windows with MSYS and the Windows SDK
+ * A recent version of Linux, Mac OS X, or Windows with MSYS and Visual Studio
  * Android NDK r7 or newer  http://developer.android.com/sdk/ndk/  (required only for Android builds)
 
 With the above in working order, simply execute

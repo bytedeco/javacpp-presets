@@ -34,12 +34,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.flycapture</groupId>
     <artifactId>flycapture2test</artifactId>
-    <version>0.11</version>
+    <version>1.0</version>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>flycapture</artifactId>
-            <version>2.7.3.19-0.11</version>
+            <version>2.7.3.19-1.0</version>
         </dependency>
     </dependencies>
 </project>

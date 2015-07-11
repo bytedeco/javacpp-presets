@@ -24,8 +24,7 @@ case $PLATFORM in
         CC="gcc -m64" CXX="g++ -m64" BLAS=open DISTRIBUTE_DIR=.. make -j4 -e distribute
         ;;
     macosx-*)
-        CC="gcc -undefined dynamic_lookup" CXX="g++ -undefined dynamic_lookup" DISTRIBUTE_DIR=.. make --ignore-errors -j4 -e distribute
-        mv ../lib/libcaffe.so ../lib/libcaffe.dylib
+        LDFLAGS="-undefined dynamic_lookup" DISTRIBUTE_DIR=.. make --ignore-errors -j4 -e distribute
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"

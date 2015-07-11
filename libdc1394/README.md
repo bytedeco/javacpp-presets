@@ -34,12 +34,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.libdc1394</groupId>
     <artifactId>grabcolorimage</artifactId>
-    <version>0.11</version>
+    <version>1.0</version>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>libdc1394</artifactId>
-            <version>2.2.3-0.11</version>
+            <version>2.2.3-1.0</version>
         </dependency>
     </dependencies>
 </project>

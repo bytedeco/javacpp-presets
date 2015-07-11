@@ -34,12 +34,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.caffe</groupId>
     <artifactId>caffe</artifactId>
-    <version>0.11</version>
+    <version>1.0</version>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>caffe</artifactId>
-            <version>master-0.11</version>
+            <version>master-1.0</version>
         </dependency>
     </dependencies>
 </project>
