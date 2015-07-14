@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>gsl</artifactId>
-  <version>1.16-${project.parent.version}</version>
+  <version>1.16-1.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>JavaCPP Presets for GSL</name>
 

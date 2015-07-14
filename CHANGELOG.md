@@ -1,4 +1,6 @@
 
+ * Resolve missing dependency for GSL on `windows-x86` by linking statically whatever it needs from `libgcc_s_dw2-1.dll`
+
 ### July 11, 2015 version 1.0
  * Build OpenCV, GSL, Leptonica, and Tesseract from source code on all platforms for better consistency in functionality across platforms
  * Add presets for CUDA 7.0 (including cuBLAS, cuDNN, cuFFT, cuRAND, cuSOLVER, cuSPARSE, and NPP)

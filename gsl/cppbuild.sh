@@ -44,12 +44,12 @@ case $PLATFORM in
         make install-strip
         ;;
     windows-x86)
-        ./configure --prefix=$INSTALL_PATH CC="gcc -m32"
+        ./configure --prefix=$INSTALL_PATH CC="gcc -m32 -static-libgcc"
         make -j4
         make install-strip
         ;;
     windows-x86_64)
-        ./configure --prefix=$INSTALL_PATH CC="gcc -m64"
+        ./configure --prefix=$INSTALL_PATH CC="gcc -m64 -static-libgcc"
         make -j4
         make install-strip
         ;;
