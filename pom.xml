@@ -434,7 +434,7 @@
       <properties>
         <platform>android-arm</platform>
         <platform.root>${user.home}/Android/android-ndk/</platform.root>
-        <platform.compiler>toolchains/arm-linux-androideabi-4.6/prebuilt/${os.name}-${os.arch}/bin/arm-linux-androideabi-g++</platform.compiler>
+        <platform.compiler>toolchains/arm-linux-androideabi-4.9/prebuilt/${os.name}-${os.arch}/bin/arm-linux-androideabi-g++</platform.compiler>
       </properties>
     </profile>
     <profile>
@@ -448,7 +448,7 @@
       <properties>
         <platform>android-x86</platform>
         <platform.root>${user.home}/Android/android-ndk/</platform.root>
-        <platform.compiler>toolchains/x86-4.6/prebuilt/${os.name}-${os.arch}/bin/i686-linux-android-g++</platform.compiler>
+        <platform.compiler>toolchains/x86-4.9/prebuilt/${os.name}-${os.arch}/bin/i686-linux-android-g++</platform.compiler>
       </properties>
     </profile>
 

@@ -68,14 +68,14 @@ if [[ -z ${ANDROID_NDK:-} ]]; then
     ANDROID_NDK=~/Android/android-ndk/
 fi
 export ANDROID_NDK
-export ANDROID_CPP="$ANDROID_NDK/sources/cxx-stl/gnu-libstdc++/4.6/"
+export ANDROID_CPP="$ANDROID_NDK/sources/cxx-stl/gnu-libstdc++/4.9/"
 case $PLATFORM in
     android-x86)
-        export ANDROID_BIN="$ANDROID_NDK/toolchains/x86-4.6/prebuilt/$KERNEL-$ARCH/bin/i686-linux-android"
+        export ANDROID_BIN="$ANDROID_NDK/toolchains/x86-4.9/prebuilt/$KERNEL-$ARCH/bin/i686-linux-android"
         export ANDROID_ROOT="$ANDROID_NDK/platforms/android-9/arch-x86/"
         ;;
     *)
-        export ANDROID_BIN="$ANDROID_NDK/toolchains/arm-linux-androideabi-4.6/prebuilt/$KERNEL-$ARCH/bin/arm-linux-androideabi"
+        export ANDROID_BIN="$ANDROID_NDK/toolchains/arm-linux-androideabi-4.9/prebuilt/$KERNEL-$ARCH/bin/arm-linux-androideabi"
         export ANDROID_ROOT="$ANDROID_NDK/platforms/android-9/arch-arm/"
         ;;
 esac

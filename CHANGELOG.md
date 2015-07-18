@@ -1,4 +1,5 @@
 
+ * Switch to GCC 4.9 by default on Android, probably dropping support for Android 2.2, because GCC 4.6 has issues with OpenMP ([issue bytedeco/javacv#179](https://github.com/bytedeco/javacv/issues/179))
  * Resolve missing dependency for GSL on `windows-x86` by linking statically whatever it needs from `libgcc_s_dw2-1.dll`
 
 ### July 11, 2015 version 1.0
