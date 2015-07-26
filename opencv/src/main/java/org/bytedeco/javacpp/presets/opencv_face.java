@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Samuel Audet
+ * Copyright (C) 2015 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -28,15 +28,14 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 /**
- *   Wrapper for OpenCV module xfeatures2d, part of OpenCV_Contrib.
  *
- * @author Jarek Sacha
+ * @author Samuel Audet
  */
-@Properties(inherit = opencv_features2d.class, value = {
-    @Platform(include = {"<opencv2/xfeatures2d.hpp>", "<opencv2/xfeatures2d/nonfree.hpp>"}, link = "opencv_xfeatures2d@.3.0"),
-    @Platform(value = "windows", link = "opencv_xfeatures2d300")},
-        target = "org.bytedeco.javacpp.opencv_xfeatures2d")
-public class opencv_xfeatures2d implements InfoMapper {
+@Properties(inherit = opencv_imgproc.class, value = {
+    @Platform(include = {"<opencv2/face.hpp>", "<opencv2/face/facerec.hpp>"}, link = "opencv_face@.3.0"),
+    @Platform(value = "windows", link = "opencv_face300")},
+        target = "org.bytedeco.javacpp.opencv_face")
+public class opencv_face implements InfoMapper {
     public void map(InfoMap infoMap) {
     }
 }
