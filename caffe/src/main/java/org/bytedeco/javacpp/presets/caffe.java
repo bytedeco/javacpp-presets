@@ -122,6 +122,17 @@ public class caffe implements InfoMapper {
 
                .put(new Info("std::vector<bool>").pointerTypes("BoolVector").define())
                .put(new Info("std::vector<std::vector<bool> >").pointerTypes("BoolVectorVector").define())
-               .put(new Info("std::map<std::string,int>").pointerTypes("StringIntMap").define());
+               .put(new Info("std::map<std::string,int>").pointerTypes("StringIntMap").define())
+
+               .put(new Info("caffe::Net<float>::layer_by_name").javaText(
+                       "public FloatLayer layer_by_name(BytePointer layer_name) { return layer_by_name(FloatLayer.class, layer_name); }\n"
+                     + "public FloatLayer layer_by_name(String layer_name) { return layer_by_name(FloatLayer.class, layer_name); };\n"
+                     + "public native @Const @Cast({\"\", \"boost::shared_ptr<caffe::Layer<float> >\"}) @SharedPtr @ByVal <L extends FloatLayer> L layer_by_name(Class<L> cls, @StdString BytePointer layer_name);\n"
+                     + "public native @Const @Cast({\"\", \"boost::shared_ptr<caffe::Layer<float> >\"}) @SharedPtr @ByVal <L extends FloatLayer> L layer_by_name(Class<L> cls, @StdString String layer_name);\n"))
+               .put(new Info("caffe::Net<double>::layer_by_name").javaText(
+                       "public DoubleLayer layer_by_name(BytePointer layer_name) { return layer_by_name(DoubleLayer.class, layer_name); }\n"
+                     + "public DoubleLayer layer_by_name(String layer_name) { return layer_by_name(DoubleLayer.class, layer_name); };\n"
+                     + "public native @Const @Cast({\"\", \"boost::shared_ptr<caffe::Layer<double> >\"}) @SharedPtr @ByVal <L extends DoubleLayer> L layer_by_name(Class<L> cls, @StdString BytePointer layer_name);\n"
+                     + "public native @Const @Cast({\"\", \"boost::shared_ptr<caffe::Layer<double> >\"}) @SharedPtr @ByVal <L extends DoubleLayer> L layer_by_name(Class<L> cls, @StdString String layer_name);\n"));
     }
 }

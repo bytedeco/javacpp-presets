@@ -1,4 +1,5 @@
 
+ * Let users choose the runtime type of `layer_by_name()` from `FloatNet` or `DoubleNet` in `caffe` ([issue bytedeco/javacpp#25](https://github.com/bytedeco/javacpp/issues/25))
  * Add presets for the `face` and `xfeatures2d` modules of OpenCV 3.0 ([issue #54](https://github.com/bytedeco/javacpp-presets/issues/54))
  * Switch to GCC 4.9 by default on Android, probably dropping support for Android 2.2, because GCC 4.6 has issues with OpenMP ([issue bytedeco/javacv#179](https://github.com/bytedeco/javacv/issues/179))
  * Resolve missing dependency for GSL on `windows-x86` by linking statically whatever it needs from `libgcc_s_dw2-1.dll`

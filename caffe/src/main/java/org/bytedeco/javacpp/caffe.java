@@ -16124,8 +16124,10 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public native @Const @SharedPtr @ByVal FloatBlob blob_by_name(@StdString String blob_name);
   public native @Cast("bool") boolean has_layer(@StdString BytePointer layer_name);
   public native @Cast("bool") boolean has_layer(@StdString String layer_name);
-  public native @Const @Cast({"", "boost::shared_ptr<caffe::Layer<float> >"}) @SharedPtr @ByVal FloatLayer layer_by_name(@StdString BytePointer layer_name);
-  public native @Const @Cast({"", "boost::shared_ptr<caffe::Layer<float> >"}) @SharedPtr @ByVal FloatLayer layer_by_name(@StdString String layer_name);
+  public FloatLayer layer_by_name(BytePointer layer_name) { return layer_by_name(FloatLayer.class, layer_name); }
+  public FloatLayer layer_by_name(String layer_name) { return layer_by_name(FloatLayer.class, layer_name); };
+  public native @Const @Cast({"", "boost::shared_ptr<caffe::Layer<float> >"}) @SharedPtr @ByVal <L extends FloatLayer> L layer_by_name(Class<L> cls, @StdString BytePointer layer_name);
+  public native @Const @Cast({"", "boost::shared_ptr<caffe::Layer<float> >"}) @SharedPtr @ByVal <L extends FloatLayer> L layer_by_name(Class<L> cls, @StdString String layer_name);
 
   public native void set_debug_info(@Cast("const bool") boolean value);
 
@@ -16287,8 +16289,10 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public native @Const @SharedPtr @ByVal DoubleBlob blob_by_name(@StdString String blob_name);
   public native @Cast("bool") boolean has_layer(@StdString BytePointer layer_name);
   public native @Cast("bool") boolean has_layer(@StdString String layer_name);
-  public native @Const @Cast({"", "boost::shared_ptr<caffe::Layer<double> >"}) @SharedPtr @ByVal DoubleLayer layer_by_name(@StdString BytePointer layer_name);
-  public native @Const @Cast({"", "boost::shared_ptr<caffe::Layer<double> >"}) @SharedPtr @ByVal DoubleLayer layer_by_name(@StdString String layer_name);
+  public DoubleLayer layer_by_name(BytePointer layer_name) { return layer_by_name(DoubleLayer.class, layer_name); }
+  public DoubleLayer layer_by_name(String layer_name) { return layer_by_name(DoubleLayer.class, layer_name); };
+  public native @Const @Cast({"", "boost::shared_ptr<caffe::Layer<double> >"}) @SharedPtr @ByVal <L extends DoubleLayer> L layer_by_name(Class<L> cls, @StdString BytePointer layer_name);
+  public native @Const @Cast({"", "boost::shared_ptr<caffe::Layer<double> >"}) @SharedPtr @ByVal <L extends DoubleLayer> L layer_by_name(Class<L> cls, @StdString String layer_name);
 
   public native void set_debug_info(@Cast("const bool") boolean value);
 
