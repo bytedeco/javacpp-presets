@@ -17335,7 +17335,7 @@ without any constraints.
 
     /** @brief Represents function being optimized
      */
-    @Const public static abstract class Function extends Pointer {
+    @Const public static class Function extends Pointer {
         static { Loader.load(); }
         /** Default native constructor. */
         public Function() { allocate(); }
@@ -17349,9 +17349,9 @@ without any constraints.
             return (Function)super.position(position);
         }
     
-        @Virtual public abstract int getDims();
+        @Virtual public native int getDims();
         @Virtual public native double getGradientEps();
-        @Virtual public abstract double calc(@Const DoublePointer x);
+        @Virtual public native double calc(@Const DoublePointer x);
         @Virtual public native void getGradient(@Const DoublePointer x,DoublePointer grad);
     }
 

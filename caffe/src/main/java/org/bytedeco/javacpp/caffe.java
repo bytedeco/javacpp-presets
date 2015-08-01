@@ -12732,7 +12732,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
  *
  * TODO(dox): thorough documentation for Forward and proto params.
  */
-@Name("caffe::BaseDataLayer<float>") @NoOffset public static abstract class FloatBaseDataLayer extends FloatLayer {
+@Name("caffe::BaseDataLayer<float>") @NoOffset public static class FloatBaseDataLayer extends FloatLayer {
     static { Loader.load(); }
     /** Empty constructor. */
     public FloatBaseDataLayer() { }
@@ -12757,7 +12757,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
   @Virtual public native void Backward_gpu(@Const @ByRef FloatBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
 }
-@Name("caffe::BaseDataLayer<double>") @NoOffset public static abstract class DoubleBaseDataLayer extends DoubleLayer {
+@Name("caffe::BaseDataLayer<double>") @NoOffset public static class DoubleBaseDataLayer extends DoubleLayer {
     static { Loader.load(); }
     /** Empty constructor. */
     public DoubleBaseDataLayer() { }
@@ -13423,7 +13423,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
  * gradients with respect to their input Blob%s, given the error gradients with
  * their output Blob%s.
  */
-@Name("caffe::Layer<float>") @NoOffset public static abstract class FloatLayer extends Pointer {
+@Name("caffe::Layer<float>") @NoOffset public static class FloatLayer extends Pointer {
     static { Loader.load(); }
     /** Empty constructor. */
     public FloatLayer() { }
@@ -13483,7 +13483,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
    * and making any other necessary adjustments so that the layer can
    * accomodate the bottom blobs.
    */
-  @Virtual public abstract void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
   /**
@@ -13651,11 +13651,11 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
    *        parameter at a particular index given by param_id.
    */
   public native void set_param_propagate_down(int param_id, @Cast("const bool") boolean value);
-  @Virtual protected abstract void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
   @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
-  @Virtual protected abstract void Backward_cpu(@Const @ByRef FloatBlobVector top,
+  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
         @Const @ByRef BoolVector propagate_down,
         @Const @ByRef FloatBlobVector bottom);
   @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
@@ -13664,7 +13664,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
   @Virtual protected native void CheckBlobCounts(@Const @ByRef FloatBlobVector bottom,
                                  @Const @ByRef FloatBlobVector top);
 }
-@Name("caffe::Layer<double>") @NoOffset public static abstract class DoubleLayer extends Pointer {
+@Name("caffe::Layer<double>") @NoOffset public static class DoubleLayer extends Pointer {
     static { Loader.load(); }
     /** Empty constructor. */
     public DoubleLayer() { }
@@ -13724,7 +13724,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
    * and making any other necessary adjustments so that the layer can
    * accomodate the bottom blobs.
    */
-  @Virtual public abstract void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
   /**
@@ -13892,11 +13892,11 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
    *        parameter at a particular index given by param_id.
    */
   public native void set_param_propagate_down(int param_id, @Cast("const bool") boolean value);
-  @Virtual protected abstract void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
   @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
-  @Virtual protected abstract void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down,
         @Const @ByRef DoubleBlobVector bottom);
   @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
@@ -14011,7 +14011,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
  * LossLayers are typically only capable of backpropagating to their first input
  * -- the predictions.
  */
-@Name("caffe::LossLayer<float>") public static abstract class FloatLossLayer extends FloatLayer {
+@Name("caffe::LossLayer<float>") public static class FloatLossLayer extends FloatLayer {
     static { Loader.load(); }
     /** Empty constructor. */
     public FloatLossLayer() { }
@@ -14041,7 +14041,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
    */
   @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
 }
-@Name("caffe::LossLayer<double>") public static abstract class DoubleLossLayer extends DoubleLayer {
+@Name("caffe::LossLayer<double>") public static class DoubleLossLayer extends DoubleLayer {
     static { Loader.load(); }
     /** Empty constructor. */
     public DoubleLossLayer() { }
@@ -14666,7 +14666,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  *        each element of the output depends only on the corresponding input
  *        element.
  */
-@Name("caffe::NeuronLayer<float>") public static abstract class FloatNeuronLayer extends FloatLayer {
+@Name("caffe::NeuronLayer<float>") public static class FloatNeuronLayer extends FloatLayer {
     static { Loader.load(); }
     /** Empty constructor. */
     public FloatNeuronLayer() { }
@@ -14681,7 +14681,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual public native int ExactNumBottomBlobs();
   @Virtual public native int ExactNumTopBlobs();
 }
-@Name("caffe::NeuronLayer<double>") public static abstract class DoubleNeuronLayer extends DoubleLayer {
+@Name("caffe::NeuronLayer<double>") public static class DoubleNeuronLayer extends DoubleLayer {
     static { Loader.load(); }
     /** Empty constructor. */
     public DoubleNeuronLayer() { }
@@ -16508,7 +16508,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  * @brief Abstract base class that factors out the BLAS code common to
  *        ConvolutionLayer and DeconvolutionLayer.
  */
-@Name("caffe::BaseConvolutionLayer<float>") @NoOffset public static abstract class FloatBaseConvolutionLayer extends FloatLayer {
+@Name("caffe::BaseConvolutionLayer<float>") @NoOffset public static class FloatBaseConvolutionLayer extends FloatLayer {
     static { Loader.load(); }
     /** Empty constructor. */
     public FloatBaseConvolutionLayer() { }
@@ -16523,10 +16523,10 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual public native int MinBottomBlobs();
   @Virtual public native int MinTopBlobs();
   @Virtual public native @Cast("bool") boolean EqualNumBottomTopBlobs();
-  @Virtual protected abstract @Cast("bool") boolean reverse_dimensions();
-  @Virtual protected abstract void compute_output_shape();
+  @Virtual protected native @Cast("bool") boolean reverse_dimensions();
+  @Virtual protected native void compute_output_shape();
 }
-@Name("caffe::BaseConvolutionLayer<double>") @NoOffset public static abstract class DoubleBaseConvolutionLayer extends DoubleLayer {
+@Name("caffe::BaseConvolutionLayer<double>") @NoOffset public static class DoubleBaseConvolutionLayer extends DoubleLayer {
     static { Loader.load(); }
     /** Empty constructor. */
     public DoubleBaseConvolutionLayer() { }
@@ -16541,8 +16541,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual public native int MinBottomBlobs();
   @Virtual public native int MinTopBlobs();
   @Virtual public native @Cast("bool") boolean EqualNumBottomTopBlobs();
-  @Virtual protected abstract @Cast("bool") boolean reverse_dimensions();
-  @Virtual protected abstract void compute_output_shape();
+  @Virtual protected native @Cast("bool") boolean reverse_dimensions();
+  @Virtual protected native void compute_output_shape();
 }
 
 /**

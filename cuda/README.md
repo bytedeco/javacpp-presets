@@ -20,9 +20,9 @@ Java API documentation is available here:
 
 Sample Usage
 ------------
-Here is a simple example of CUDNN ported to Java from the `mnistCUDNN.cpp` sample file included in `cudnn-sample-v2.tgz` available at:
+Here is a simple example of cuDNN ported to Java from the `mnistCUDNN.cpp` sample file included in `cudnn-sample-v2.tgz` available at:
 
- * https://developer.nvidia.com/cuDNN
+ * https://developer.nvidia.com/cudnn
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/MNISTCUDNN.java` source files below, simply execute on the command line:
 ```bash
