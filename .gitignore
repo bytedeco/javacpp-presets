@@ -6,6 +6,7 @@
 /libfreenect/target/
 /videoinput/target/
 /artoolkitplus/target/
+/chilitags/target/
 /flandmark/target/
 /fftw/target/
 /gsl/target/
@@ -21,6 +22,7 @@
 /libfreenect/cppbuild/
 /videoinput/cppbuild/
 /artoolkitplus/cppbuild/
+/chilitags/cppbuild/
 /flandmark/cppbuild/
 /fftw/cppbuild/
 /gsl/cppbuild/

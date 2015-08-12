@@ -44,6 +44,7 @@
     <module>libfreenect</module>
     <module>videoinput</module>
     <module>artoolkitplus</module>
+    <module>chilitags</module>
     <module>flandmark</module>
     <module>fftw</module>
     <module>gsl</module>
