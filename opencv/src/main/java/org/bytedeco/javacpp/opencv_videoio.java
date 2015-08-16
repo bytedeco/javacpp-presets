@@ -908,8 +908,8 @@ class can be used: :
      */
     public native @Cast("bool") boolean retrieve(@ByVal Mat image, int flag/*=0*/);
     public native @Cast("bool") boolean retrieve(@ByVal Mat image);
-    public native @ByRef @Name("operator>>") VideoCapture shiftRight(@ByRef Mat image);
-    public native @ByRef @Name("operator>>") VideoCapture shiftRight(@ByRef UMat image);
+    public native @ByRef @Name("operator >>") VideoCapture shiftRight(@ByRef Mat image);
+    public native @ByRef @Name("operator >>") VideoCapture shiftRight(@ByRef UMat image);
 
     /** @brief Grabs, decodes and returns the next video frame.
 
@@ -1066,7 +1066,7 @@ class can be used: :
     destructor.
      */
     public native void release();
-    public native @ByRef @Name("operator<<") VideoWriter shiftLeft(@Const @ByRef Mat image);
+    public native @ByRef @Name("operator <<") VideoWriter shiftLeft(@Const @ByRef Mat image);
 
     /** @brief Writes the next video frame
 

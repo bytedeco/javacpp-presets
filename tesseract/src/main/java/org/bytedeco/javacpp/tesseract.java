@@ -386,12 +386,12 @@ public static final int
     // If the current position is at an illegal UTF8 character, then print an
     // error message and step by one byte. If the current position is at a NULL
     // value, don't step past it.
-    public native @ByRef @Name("operator++") const_iterator increment();
+    public native @ByRef @Name("operator ++") const_iterator increment();
 
     // Return the UCS-4 value at the current position.
     // If the current position is at an illegal UTF8 value, return a single
     // space character.
-    public native @Name("operator*") int multiply();
+    public native @Name("operator *") int multiply();
 
     // Store the UTF-8 encoding of the current codepoint into buf, which must be
     // at least 4 bytes long. Return the number of bytes written.
@@ -1767,7 +1767,7 @@ public static final int
    */
   public PageIterator(@Const @ByRef PageIterator src) { allocate(src); }
   private native void allocate(@Const @ByRef PageIterator src);
-  public native @Const @ByRef @Name("operator=") PageIterator put(@Const @ByRef PageIterator src);
+  public native @Const @ByRef @Name("operator =") PageIterator put(@Const @ByRef PageIterator src);
 
   /** Are we positioned at the same location as other? */
   public native @Cast("bool") boolean PositionedAtSameWord(@Const PAGE_RES_IT other);
@@ -2487,27 +2487,27 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
 
 // #if STRING_IS_PROTECTED
 // #else
-    public native @Cast("char*") @ByRef @Name("operator[]") BytePointer get(@Cast("inT32") int index);
+    public native @Cast("char*") @ByRef @Name("operator []") BytePointer get(@Cast("inT32") int index);
 // #endif
     public native void split(byte c, StringGenericVector splited);
     public native void truncate_at(@Cast("inT32") int index);
 
-    public native @Cast("BOOL8") @Name("operator==") byte equals(@Const @ByRef STRING string);
-    public native @Cast("BOOL8") @Name("operator!=") byte notEquals(@Const @ByRef STRING string);
-    public native @Cast("BOOL8") @Name("operator!=") byte notEquals(@Cast("const char*") BytePointer string);
-    public native @Cast("BOOL8") @Name("operator!=") byte notEquals(String string);
+    public native @Cast("BOOL8") @Name("operator ==") byte equals(@Const @ByRef STRING string);
+    public native @Cast("BOOL8") @Name("operator !=") byte notEquals(@Const @ByRef STRING string);
+    public native @Cast("BOOL8") @Name("operator !=") byte notEquals(@Cast("const char*") BytePointer string);
+    public native @Cast("BOOL8") @Name("operator !=") byte notEquals(String string);
 
-    public native @ByRef @Name("operator=") STRING put(@Cast("const char*") BytePointer string);
-    public native @ByRef @Name("operator=") STRING put(String string);
-    public native @ByRef @Name("operator=") STRING put(@Const @ByRef STRING string);
+    public native @ByRef @Name("operator =") STRING put(@Cast("const char*") BytePointer string);
+    public native @ByRef @Name("operator =") STRING put(String string);
+    public native @ByRef @Name("operator =") STRING put(@Const @ByRef STRING string);
 
-    public native @ByVal @Name("operator+") STRING add(@Const @ByRef STRING string);
-    public native @ByVal @Name("operator+") STRING add(byte ch);
+    public native @ByVal @Name("operator +") STRING add(@Const @ByRef STRING string);
+    public native @ByVal @Name("operator +") STRING add(byte ch);
 
-    public native @ByRef @Name("operator+=") STRING addPut(@Cast("const char*") BytePointer string);
-    public native @ByRef @Name("operator+=") STRING addPut(String string);
-    public native @ByRef @Name("operator+=") STRING addPut(@Const @ByRef STRING string);
-    public native @ByRef @Name("operator+=") STRING addPut(byte ch);
+    public native @ByRef @Name("operator +=") STRING addPut(@Cast("const char*") BytePointer string);
+    public native @ByRef @Name("operator +=") STRING addPut(String string);
+    public native @ByRef @Name("operator +=") STRING addPut(@Const @ByRef STRING string);
+    public native @ByRef @Name("operator +=") STRING addPut(byte ch);
 
     // Assignment for strings which are not null-terminated.
     public native void assign(@Cast("const char*") BytePointer cstr, int len);
@@ -2585,8 +2585,8 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   // Copy
   public CharGenericVector(@Const @ByRef CharGenericVector other) { allocate(other); }
   private native void allocate(@Const @ByRef CharGenericVector other);
-  public native @ByRef @Name("operator+=") CharGenericVector addPut(@Const @ByRef CharGenericVector other);
-  public native @ByRef @Name("operator=") CharGenericVector put(@Const @ByRef CharGenericVector other);
+  public native @ByRef @Name("operator +=") CharGenericVector addPut(@Const @ByRef CharGenericVector other);
+  public native @ByRef @Name("operator =") CharGenericVector put(@Const @ByRef CharGenericVector other);
 
   // Reserve some memory.
   public native void reserve(int size);
@@ -2624,7 +2624,7 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
 
   // Push an element in the end of the array
   public native int push_back(@Cast("char") byte object);
-  public native @Name("operator+=") void addPut(@Cast("char") byte t);
+  public native @Name("operator +=") void addPut(@Cast("char") byte t);
 
   // Push an element in the end of the array if the same
   // element is not already contained in the array.
@@ -2778,8 +2778,8 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   // Copy
   public StringGenericVector(@Const @ByRef StringGenericVector other) { allocate(other); }
   private native void allocate(@Const @ByRef StringGenericVector other);
-  public native @ByRef @Name("operator+=") StringGenericVector addPut(@Const @ByRef StringGenericVector other);
-  public native @ByRef @Name("operator=") StringGenericVector put(@Const @ByRef StringGenericVector other);
+  public native @ByRef @Name("operator +=") StringGenericVector addPut(@Const @ByRef StringGenericVector other);
+  public native @ByRef @Name("operator =") StringGenericVector put(@Const @ByRef StringGenericVector other);
 
   // Reserve some memory.
   public native void reserve(int size);
@@ -2817,7 +2817,7 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
 
   // Push an element in the end of the array
   public native int push_back(@ByVal STRING object);
-  public native @Name("operator+=") void addPut(@ByVal STRING t);
+  public native @Name("operator +=") void addPut(@ByVal STRING t);
 
   // Push an element in the end of the array if the same
   // element is not already contained in the array.
@@ -2961,8 +2961,8 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   // Copy
   public IntGenericVector(@Const @ByRef IntGenericVector other) { allocate(other); }
   private native void allocate(@Const @ByRef IntGenericVector other);
-  public native @ByRef @Name("operator+=") IntGenericVector addPut(@Const @ByRef IntGenericVector other);
-  public native @ByRef @Name("operator=") IntGenericVector put(@Const @ByRef IntGenericVector other);
+  public native @ByRef @Name("operator +=") IntGenericVector addPut(@Const @ByRef IntGenericVector other);
+  public native @ByRef @Name("operator =") IntGenericVector put(@Const @ByRef IntGenericVector other);
 
   // Reserve some memory.
   public native void reserve(int size);
@@ -3000,7 +3000,7 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
 
   // Push an element in the end of the array
   public native int push_back(int object);
-  public native @Name("operator+=") void addPut(int t);
+  public native @Name("operator +=") void addPut(int t);
 
   // Push an element in the end of the array if the same
   // element is not already contained in the array.

@@ -1813,9 +1813,9 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
 
     /** this will count the bits in a ^ b
      */
-    public native @Cast("cv::Hamming::ResultType") @Name("operator()") int apply( @Cast("const unsigned char*") BytePointer a, @Cast("const unsigned char*") BytePointer b, int size );
-    public native @Cast("cv::Hamming::ResultType") @Name("operator()") int apply( @Cast("const unsigned char*") ByteBuffer a, @Cast("const unsigned char*") ByteBuffer b, int size );
-    public native @Cast("cv::Hamming::ResultType") @Name("operator()") int apply( @Cast("const unsigned char*") byte[] a, @Cast("const unsigned char*") byte[] b, int size );
+    public native @Cast("cv::Hamming::ResultType") @Name("operator ()") int apply( @Cast("const unsigned char*") BytePointer a, @Cast("const unsigned char*") BytePointer b, int size );
+    public native @Cast("cv::Hamming::ResultType") @Name("operator ()") int apply( @Cast("const unsigned char*") ByteBuffer a, @Cast("const unsigned char*") ByteBuffer b, int size );
+    public native @Cast("cv::Hamming::ResultType") @Name("operator ()") int apply( @Cast("const unsigned char*") byte[] a, @Cast("const unsigned char*") byte[] b, int size );
 }
 
 /////////////////////////////////// inline norms ////////////////////////////////////
@@ -2297,27 +2297,27 @@ to constructors of T that have up to 10 arguments, none of which are non-const r
 /** @relates cv::String
 /** @{ */
 
-@Namespace("cv") public static native @Str @Name("operator+") BytePointer add(@Str BytePointer lhs, @Str BytePointer rhs);
-@Namespace("cv") public static native @Str @Name("operator+") String add(@Str String lhs, @Str String rhs);
+@Namespace("cv") public static native @Str @Name("operator +") BytePointer add(@Str BytePointer lhs, @Str BytePointer rhs);
+@Namespace("cv") public static native @Str @Name("operator +") String add(@Str String lhs, @Str String rhs);
 
-@Namespace("cv") public static native @Str @Name("operator+") BytePointer add(@Str BytePointer lhs, @Cast("char") byte rhs);
-@Namespace("cv") public static native @Str @Name("operator+") String add(@Str String lhs, @Cast("char") byte rhs);
+@Namespace("cv") public static native @Str @Name("operator +") BytePointer add(@Str BytePointer lhs, @Cast("char") byte rhs);
+@Namespace("cv") public static native @Str @Name("operator +") String add(@Str String lhs, @Cast("char") byte rhs);
 
-@Namespace("cv") public static native @Str @Name("operator+") BytePointer add(@Cast("char") byte lhs, @Str BytePointer rhs);
-@Namespace("cv") public static native @Str @Name("operator+") String add(@Cast("char") byte lhs, @Str String rhs);
+@Namespace("cv") public static native @Str @Name("operator +") BytePointer add(@Cast("char") byte lhs, @Str BytePointer rhs);
+@Namespace("cv") public static native @Str @Name("operator +") String add(@Cast("char") byte lhs, @Str String rhs);
 
-@Namespace("cv") public static native @Cast("bool") @Name("operator==") boolean equals(@Str BytePointer lhs, @Str BytePointer rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator==") boolean equals(@Str String lhs, @Str String rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator!=") boolean notEquals(@Str BytePointer lhs, @Str BytePointer rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator!=") boolean notEquals(@Str String lhs, @Str String rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator<") boolean lessThan(@Str BytePointer lhs, @Str BytePointer rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator<") boolean lessThan(@Str String lhs, @Str String rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator<=") boolean lessThanEquals(@Str BytePointer lhs, @Str BytePointer rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator<=") boolean lessThanEquals(@Str String lhs, @Str String rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator>") boolean greaterThan(@Str BytePointer lhs, @Str BytePointer rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator>") boolean greaterThan(@Str String lhs, @Str String rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator>=") boolean greaterThanEquals(@Str BytePointer lhs, @Str BytePointer rhs);
-@Namespace("cv") public static native @Cast("bool") @Name("operator>=") boolean greaterThanEquals(@Str String lhs, @Str String rhs);
+@Namespace("cv") public static native @Cast("bool") @Name("operator ==") boolean equals(@Str BytePointer lhs, @Str BytePointer rhs);
+@Namespace("cv") public static native @Cast("bool") @Name("operator ==") boolean equals(@Str String lhs, @Str String rhs);
+@Namespace("cv") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Str BytePointer lhs, @Str BytePointer rhs);
+@Namespace("cv") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Str String lhs, @Str String rhs);
+@Namespace("cv") public static native @Cast("bool") @Name("operator <") boolean lessThan(@Str BytePointer lhs, @Str BytePointer rhs);
+@Namespace("cv") public static native @Cast("bool") @Name("operator <") boolean lessThan(@Str String lhs, @Str String rhs);
+@Namespace("cv") public static native @Cast("bool") @Name("operator <=") boolean lessThanEquals(@Str BytePointer lhs, @Str BytePointer rhs);
+@Namespace("cv") public static native @Cast("bool") @Name("operator <=") boolean lessThanEquals(@Str String lhs, @Str String rhs);
+@Namespace("cv") public static native @Cast("bool") @Name("operator >") boolean greaterThan(@Str BytePointer lhs, @Str BytePointer rhs);
+@Namespace("cv") public static native @Cast("bool") @Name("operator >") boolean greaterThan(@Str String lhs, @Str String rhs);
+@Namespace("cv") public static native @Cast("bool") @Name("operator >=") boolean greaterThanEquals(@Str BytePointer lhs, @Str BytePointer rhs);
+@Namespace("cv") public static native @Cast("bool") @Name("operator >=") boolean greaterThanEquals(@Str String lhs, @Str String rhs);
 
 /** @} relates cv::String */
 
@@ -2664,7 +2664,7 @@ The function returns true if the optimized code is enabled. Otherwise, it return
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ParallelLoopBody(Pointer p) { super(p); }
 
-    public native @Name("operator()") void apply(@Const @ByRef Range range);
+    public native @Name("operator ()") void apply(@Const @ByRef Range range);
 }
 
 /** @brief Parallel data processor
@@ -2692,7 +2692,7 @@ The function returns true if the optimized code is enabled. Otherwise, it return
     private native void allocate();
     public Mutex(@Const @ByRef Mutex m) { allocate(m); }
     private native void allocate(@Const @ByRef Mutex m);
-    public native @ByRef @Name("operator=") Mutex put(@Const @ByRef Mutex m);
+    public native @ByRef @Name("operator =") Mutex put(@Const @ByRef Mutex m);
 
     public native void lock();
     public native @Cast("bool") boolean trylock();
@@ -8680,7 +8680,7 @@ Example:
     public Point(@Const @ByRef Size sz) { allocate(sz); }
     private native void allocate(@Const @ByRef Size sz);
 
-    public native @ByRef @Name("operator=") Point put(@Const @ByRef Point pt);
+    public native @ByRef @Name("operator =") Point put(@Const @ByRef Point pt);
     /** conversion to another data type */
 
     /** conversion to the old-style C structures */
@@ -8719,7 +8719,7 @@ Example:
     public Point2f(@Const @ByRef Size2f sz) { allocate(sz); }
     private native void allocate(@Const @ByRef Size2f sz);
 
-    public native @ByRef @Name("operator=") Point2f put(@Const @ByRef Point2f pt);
+    public native @ByRef @Name("operator =") Point2f put(@Const @ByRef Point2f pt);
     /** conversion to another data type */
 
     /** conversion to the old-style C structures */
@@ -8758,7 +8758,7 @@ Example:
     public Point2d(@Const @ByRef Size2d sz) { allocate(sz); }
     private native void allocate(@Const @ByRef Size2d sz);
 
-    public native @ByRef @Name("operator=") Point2d put(@Const @ByRef Point2d pt);
+    public native @ByRef @Name("operator =") Point2d put(@Const @ByRef Point2d pt);
     /** conversion to another data type */
 
     /** conversion to the old-style C structures */
@@ -8816,7 +8816,7 @@ The following Point3_\<\> aliases are available:
     public Point3i(@Const @ByRef Point pt) { allocate(pt); }
     private native void allocate(@Const @ByRef Point pt);
 
-    public native @ByRef @Name("operator=") Point3i put(@Const @ByRef Point3i pt);
+    public native @ByRef @Name("operator =") Point3i put(@Const @ByRef Point3i pt);
     /** conversion to another data type */
     /** conversion to cv::Vec<> */
 
@@ -8853,7 +8853,7 @@ The following Point3_\<\> aliases are available:
     public Point3f(@Const @ByRef Point2f pt) { allocate(pt); }
     private native void allocate(@Const @ByRef Point2f pt);
 
-    public native @ByRef @Name("operator=") Point3f put(@Const @ByRef Point3f pt);
+    public native @ByRef @Name("operator =") Point3f put(@Const @ByRef Point3f pt);
     /** conversion to another data type */
     /** conversion to cv::Vec<> */
 
@@ -8890,7 +8890,7 @@ The following Point3_\<\> aliases are available:
     public Point3d(@Const @ByRef Point2d pt) { allocate(pt); }
     private native void allocate(@Const @ByRef Point2d pt);
 
-    public native @ByRef @Name("operator=") Point3d put(@Const @ByRef Point3d pt);
+    public native @ByRef @Name("operator =") Point3d put(@Const @ByRef Point3d pt);
     /** conversion to another data type */
     /** conversion to cv::Vec<> */
 
@@ -8945,7 +8945,7 @@ OpenCV defines the following Size_\<\> aliases:
     public Size(@Const @ByRef Point pt) { allocate(pt); }
     private native void allocate(@Const @ByRef Point pt);
 
-    public native @ByRef @Name("operator=") Size put(@Const @ByRef Size sz);
+    public native @ByRef @Name("operator =") Size put(@Const @ByRef Size sz);
     /** the area (width*height) */
     public native int area();
 
@@ -8976,7 +8976,7 @@ OpenCV defines the following Size_\<\> aliases:
     public Size2f(@Const @ByRef Point2f pt) { allocate(pt); }
     private native void allocate(@Const @ByRef Point2f pt);
 
-    public native @ByRef @Name("operator=") Size2f put(@Const @ByRef Size2f sz);
+    public native @ByRef @Name("operator =") Size2f put(@Const @ByRef Size2f sz);
     /** the area (width*height) */
     public native float area();
 
@@ -9007,7 +9007,7 @@ OpenCV defines the following Size_\<\> aliases:
     public Size2d(@Const @ByRef Point2d pt) { allocate(pt); }
     private native void allocate(@Const @ByRef Point2d pt);
 
-    public native @ByRef @Name("operator=") Size2d put(@Const @ByRef Size2d sz);
+    public native @ByRef @Name("operator =") Size2d put(@Const @ByRef Size2d sz);
     /** the area (width*height) */
     public native double area();
 
@@ -9088,7 +9088,7 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
     public Rect(@Const @ByRef Point pt1, @Const @ByRef Point pt2) { allocate(pt1, pt2); }
     private native void allocate(@Const @ByRef Point pt1, @Const @ByRef Point pt2);
 
-    public native @ByRef @Name("operator=") Rect put( @Const @ByRef Rect r );
+    public native @ByRef @Name("operator =") Rect put( @Const @ByRef Rect r );
     /** the top-left corner */
     public native @ByVal Point tl();
     /** the bottom-right corner */
@@ -9133,7 +9133,7 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
     public Rectf(@Const @ByRef Point2f pt1, @Const @ByRef Point2f pt2) { allocate(pt1, pt2); }
     private native void allocate(@Const @ByRef Point2f pt1, @Const @ByRef Point2f pt2);
 
-    public native @ByRef @Name("operator=") Rectf put( @Const @ByRef Rectf r );
+    public native @ByRef @Name("operator =") Rectf put( @Const @ByRef Rectf r );
     /** the top-left corner */
     public native @ByVal Point2f tl();
     /** the bottom-right corner */
@@ -9178,7 +9178,7 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
     public Rectd(@Const @ByRef Point2d pt1, @Const @ByRef Point2d pt2) { allocate(pt1, pt2); }
     private native void allocate(@Const @ByRef Point2d pt1, @Const @ByRef Point2d pt2);
 
-    public native @ByRef @Name("operator=") Rectd put( @Const @ByRef Rectd r );
+    public native @ByRef @Name("operator =") Rectd put( @Const @ByRef Rectd r );
     /** the top-left corner */
     public native @ByVal Point2d tl();
     /** the bottom-right corner */
@@ -9518,7 +9518,7 @@ descriptors.
     public native float distance(); public native DMatch distance(float distance);
 
     // less is better
-    public native @Cast("bool") @Name("operator<") boolean lessThan(@Const @ByRef DMatch m);
+    public native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef DMatch m);
 }
 
 
@@ -9812,21 +9812,21 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
 
 
 
-@Namespace("cv") public static native @Cast("bool") @Name("operator==") boolean equals(@Const @ByRef Range r1, @Const @ByRef Range r2);
+@Namespace("cv") public static native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef Range r1, @Const @ByRef Range r2);
 
-@Namespace("cv") public static native @Cast("bool") @Name("operator!=") boolean notEquals(@Const @ByRef Range r1, @Const @ByRef Range r2);
+@Namespace("cv") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef Range r1, @Const @ByRef Range r2);
 
-@Namespace("cv") public static native @Cast("bool") @Name("operator!") boolean not(@Const @ByRef Range r);
+@Namespace("cv") public static native @Cast("bool") @Name("operator !") boolean not(@Const @ByRef Range r);
 
-@Namespace("cv") public static native @ByVal @Name("operator&") Range and(@Const @ByRef Range r1, @Const @ByRef Range r2);
+@Namespace("cv") public static native @ByVal @Name("operator &") Range and(@Const @ByRef Range r1, @Const @ByRef Range r2);
 
-@Namespace("cv") public static native @ByRef @Name("operator&=") Range andPut(@ByRef Range r1, @Const @ByRef Range r2);
+@Namespace("cv") public static native @ByRef @Name("operator &=") Range andPut(@ByRef Range r1, @Const @ByRef Range r2);
 
-@Namespace("cv") public static native @ByVal @Name("operator+") Range add(@Const @ByRef Range r1, int delta);
+@Namespace("cv") public static native @ByVal @Name("operator +") Range add(@Const @ByRef Range r1, int delta);
 
-@Namespace("cv") public static native @ByVal @Name("operator+") Range add(int delta, @Const @ByRef Range r1);
+@Namespace("cv") public static native @ByVal @Name("operator +") Range add(int delta, @Const @ByRef Range r1);
 
-@Namespace("cv") public static native @ByVal @Name("operator-") Range subtract(@Const @ByRef Range r1, int delta);
+@Namespace("cv") public static native @ByVal @Name("operator -") Range subtract(@Const @ByRef Range r1, int delta);
 
 
 
@@ -12281,8 +12281,8 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
     @param maxComponents maximum number of components that PCA should
     retain; by default, all the components are retained.
     */
-    public native @ByRef @Name("operator()") PCA apply(@ByVal Mat data, @ByVal Mat mean, int flags, int maxComponents/*=0*/);
-    public native @ByRef @Name("operator()") PCA apply(@ByVal Mat data, @ByVal Mat mean, int flags);
+    public native @ByRef @Name("operator ()") PCA apply(@ByVal Mat data, @ByVal Mat mean, int flags, int maxComponents/*=0*/);
+    public native @ByRef @Name("operator ()") PCA apply(@ByVal Mat data, @ByVal Mat mean, int flags);
 
     /** @overload
     @param data input samples stored as the matrix rows or as the matrix
@@ -12295,7 +12295,7 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
     Using this parameter will let the %PCA decided how many components to
     retain but it will always keep at least 2.
      */
-    public native @ByRef @Name("operator()") PCA apply(@ByVal Mat data, @ByVal Mat mean, int flags, double retainedVariance);
+    public native @ByRef @Name("operator ()") PCA apply(@ByVal Mat data, @ByVal Mat mean, int flags, double retainedVariance);
 
     /** @brief Projects vector(s) to the principal component subspace.
 
@@ -12508,8 +12508,8 @@ and vt must be computed, which is not necessary most of the time.
     @param src decomposed matrix.
     @param flags operation flags (SVD::Flags)
       */
-    public native @ByRef @Name("operator()") SVD apply( @ByVal Mat src, int flags/*=0*/ );
-    public native @ByRef @Name("operator()") SVD apply( @ByVal Mat src );
+    public native @ByRef @Name("operator ()") SVD apply( @ByVal Mat src, int flags/*=0*/ );
+    public native @ByRef @Name("operator ()") SVD apply( @ByVal Mat src );
 
     /** @brief decomposes matrix and stores the results to user-provided matrices
 
@@ -12661,11 +12661,11 @@ introduced by G. Marsaglia and W. W. Tsang.
     second form returns the random number modulo N , which means that the
     result is in the range [0, N) .
     */
-    public native @Cast("unsigned") @Name("operator()") int apply();
+    public native @Cast("unsigned") @Name("operator ()") int apply();
     /** @overload
     @param N upper non-inclusive boundary of the returned random number.
     */
-    public native @Cast("unsigned") @Name("operator()") int apply(@Cast("unsigned") int N);
+    public native @Cast("unsigned") @Name("operator ()") int apply(@Cast("unsigned") int N);
 
     /** @brief returns uniformly distributed integer random number from [a,b) range
 
@@ -12781,8 +12781,8 @@ Inspired by http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937
     public native @Name("operator float") float asFloat();
     public native @Name("operator double") double asDouble();
 
-    public native @Cast("unsigned") @Name("operator()") int apply(@Cast("unsigned") int N);
-    public native @Cast("unsigned") @Name("operator()") int apply();
+    public native @Cast("unsigned") @Name("operator ()") int apply(@Cast("unsigned") int N);
+    public native @Cast("unsigned") @Name("operator ()") int apply();
 
     /** @brief returns uniformly distributed integer random number from [a,b) range
 
@@ -13122,26 +13122,26 @@ Here is example of SIFT use in your application via Algorithm interface:
 //     template<typename _Tp> CV_MAT_AUG_OPERATOR1(op, cvop, A, B)
 //     template<typename _Tp> CV_MAT_AUG_OPERATOR1(op, cvop, const A, B)
 
-@Namespace("cv") public static native @ByRef @Name("operator+=") Mat addPut( @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByRef @Name("operator+=") Mat addPut( @ByRef Mat a, @Const @ByRef Scalar b);
+@Namespace("cv") public static native @ByRef @Name("operator +=") Mat addPut( @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByRef @Name("operator +=") Mat addPut( @ByRef Mat a, @Const @ByRef Scalar b);
 
-@Namespace("cv") public static native @ByRef @Name("operator-=") Mat subtractPut( @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByRef @Name("operator-=") Mat subtractPut( @ByRef Mat a, @Const @ByRef Scalar b);
+@Namespace("cv") public static native @ByRef @Name("operator -=") Mat subtractPut( @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByRef @Name("operator -=") Mat subtractPut( @ByRef Mat a, @Const @ByRef Scalar b);
 
-@Namespace("cv") public static native @ByRef @Name("operator*=") Mat multiplyPut( @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByRef @Name("operator*=") Mat multiplyPut( @ByRef Mat a, double b);
+@Namespace("cv") public static native @ByRef @Name("operator *=") Mat multiplyPut( @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByRef @Name("operator *=") Mat multiplyPut( @ByRef Mat a, double b);
 
-@Namespace("cv") public static native @ByRef @Name("operator/=") Mat dividePut( @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByRef @Name("operator/=") Mat dividePut( @ByRef Mat a, double b);
+@Namespace("cv") public static native @ByRef @Name("operator /=") Mat dividePut( @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByRef @Name("operator /=") Mat dividePut( @ByRef Mat a, double b);
 
-@Namespace("cv") public static native @ByRef @Name("operator&=") Mat andPut( @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByRef @Name("operator&=") Mat andPut( @ByRef Mat a, @Const @ByRef Scalar b);
+@Namespace("cv") public static native @ByRef @Name("operator &=") Mat andPut( @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByRef @Name("operator &=") Mat andPut( @ByRef Mat a, @Const @ByRef Scalar b);
 
-@Namespace("cv") public static native @ByRef @Name("operator|=") Mat orPut( @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByRef @Name("operator|=") Mat orPut( @ByRef Mat a, @Const @ByRef Scalar b);
+@Namespace("cv") public static native @ByRef @Name("operator |=") Mat orPut( @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByRef @Name("operator |=") Mat orPut( @ByRef Mat a, @Const @ByRef Scalar b);
 
-@Namespace("cv") public static native @ByRef @Name("operator^=") Mat xorPut( @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByRef @Name("operator^=") Mat xorPut( @ByRef Mat a, @Const @ByRef Scalar b);
+@Namespace("cv") public static native @ByRef @Name("operator ^=") Mat xorPut( @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByRef @Name("operator ^=") Mat xorPut( @ByRef Mat a, @Const @ByRef Scalar b);
 
 // #undef CV_MAT_AUG_OPERATOR_T
 // #undef CV_MAT_AUG_OPERATOR
@@ -13585,11 +13585,11 @@ public static final int
     private native void allocate(IntBuffer _p);
     public MatSize(int[] _p) { allocate(_p); }
     private native void allocate(int[] _p);
-    public native @ByVal @Name("operator()") Size apply();
-    public native @ByRef @Name("operator[]") IntPointer get(int i);
+    public native @ByVal @Name("operator ()") Size apply();
+    public native @ByRef @Name("operator []") IntPointer get(int i);
     public native @Const @Name("operator const int*") IntPointer asIntPointer();
-    public native @Cast("bool") @Name("operator==") boolean equals(@Const @ByRef MatSize sz);
-    public native @Cast("bool") @Name("operator!=") boolean notEquals(@Const @ByRef MatSize sz);
+    public native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef MatSize sz);
+    public native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef MatSize sz);
 
     public native IntPointer p(); public native MatSize p(IntPointer p);
 }
@@ -13609,9 +13609,9 @@ public static final int
     private native void allocate();
     public MatStep(@Cast("size_t") long s) { allocate(s); }
     private native void allocate(@Cast("size_t") long s);
-    public native @Cast("size_t*") @ByRef @Name("operator[]") SizeTPointer get(int i);
+    public native @Cast("size_t*") @ByRef @Name("operator []") SizeTPointer get(int i);
     public native @Name("operator size_t") long asLong();
-    public native @ByRef @Name("operator=") MatStep put(@Cast("size_t") long s);
+    public native @ByRef @Name("operator =") MatStep put(@Cast("size_t") long s);
 
     public native @Cast("size_t*") SizeTPointer p(); public native MatStep p(SizeTPointer p);
     public native @Cast("size_t") long buf(int i); public native MatStep buf(int i, long buf);
@@ -14067,7 +14067,7 @@ including std::sort().
     no data is copied but the data is shared and the reference counter, if any, is incremented. Before
     assigning new data, the old data is de-referenced via Mat::release .
      */
-    public native @ByRef @Name("operator=") Mat put(@Const @ByRef Mat m);
+    public native @ByRef @Name("operator =") Mat put(@Const @ByRef Mat m);
 
     /** @overload
     @param expr Assigned matrix expression object. As opposite to the first form of the assignment
@@ -14076,7 +14076,7 @@ including std::sort().
     expressions is expanded to. For example, C=A+B is expanded to add(A, B, C), and add takes care of
     automatic C reallocation.
     */
-    public native @ByRef @Name("operator=") Mat put(@Const @ByRef MatExpr expr);
+    public native @ByRef @Name("operator =") Mat put(@Const @ByRef MatExpr expr);
 
     /** retrieve UMat from Mat */
     public native @ByVal UMat getUMat(int accessFlags, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
@@ -14235,7 +14235,7 @@ including std::sort().
     /** @brief Sets all or some of the array elements to the specified value.
     @param s Assigned scalar converted to the actual array type.
     */
-    public native @ByRef @Name("operator=") Mat put(@Const @ByRef Scalar s);
+    public native @ByRef @Name("operator =") Mat put(@Const @ByRef Scalar s);
 
     /** @brief Sets all or some of the array elements to the specified value.
 
@@ -14599,17 +14599,17 @@ including std::sort().
     @param colRange Start and end column of the extracted submatrix. The upper boundary is not included.
     To select all the columns, use Range::all().
      */
-    public native @ByVal @Name("operator()") Mat apply( @ByVal Range rowRange, @ByVal Range colRange );
+    public native @ByVal @Name("operator ()") Mat apply( @ByVal Range rowRange, @ByVal Range colRange );
 
     /** @overload
     @param roi Extracted submatrix specified as a rectangle.
     */
-    public native @ByVal @Name("operator()") Mat apply( @Const @ByRef Rect roi );
+    public native @ByVal @Name("operator ()") Mat apply( @Const @ByRef Rect roi );
 
     /** @overload
     @param ranges Array of selected ranges along each array dimension.
     */
-    public native @ByVal @Name("operator()") Mat apply( @Const Range ranges );
+    public native @ByVal @Name("operator ()") Mat apply( @Const Range ranges );
 
     // //! converts header to CvMat; no data is copied
     // operator CvMat() const;
@@ -15131,7 +15131,7 @@ To use Mat_ for multi-channel images/matrices, pass Vec as a Mat_ parameter:
 
     /** destructor - calls release() */
     /** assignment operators */
-    public native @ByRef @Name("operator=") UMat put(@Const @ByRef UMat m);
+    public native @ByRef @Name("operator =") UMat put(@Const @ByRef UMat m);
 
     public native @ByVal Mat getMat(int flags);
 
@@ -15169,7 +15169,7 @@ To use Mat_ for multi-channel images/matrices, pass Vec as a Mat_ parameter:
     public native void assignTo( @ByRef UMat m );
 
     /** sets every matrix element to s */
-    public native @ByRef @Name("operator=") UMat put(@Const @ByRef Scalar s);
+    public native @ByRef @Name("operator =") UMat put(@Const @ByRef Scalar s);
     /** sets some of the matrix elements to s, according to the mask */
     public native @ByRef UMat setTo(@ByVal Mat value, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
     public native @ByRef UMat setTo(@ByVal Mat value);
@@ -15233,9 +15233,9 @@ To use Mat_ for multi-channel images/matrices, pass Vec as a Mat_ parameter:
     public native @ByRef UMat adjustROI( int dtop, int dbottom, int dleft, int dright );
     /** extracts a rectangular sub-matrix */
     // (this is a generalized form of row, rowRange etc.)
-    public native @ByVal @Name("operator()") UMat apply( @ByVal Range rowRange, @ByVal Range colRange );
-    public native @ByVal @Name("operator()") UMat apply( @Const @ByRef Rect roi );
-    public native @ByVal @Name("operator()") UMat apply( @Const Range ranges );
+    public native @ByVal @Name("operator ()") UMat apply( @ByVal Range rowRange, @ByVal Range colRange );
+    public native @ByVal @Name("operator ()") UMat apply( @Const @ByRef Rect roi );
+    public native @ByVal @Name("operator ()") UMat apply( @Const Range ranges );
 
     /** returns true iff the matrix data is continuous */
     // (i.e. when there are no gaps between successive rows).
@@ -15488,9 +15488,9 @@ Elements can be accessed using the following methods:
     /** the destructor */
 
     /** assignment operator. This is O(1) operation, i.e. no data is copied */
-    public native @ByRef @Name("operator=") SparseMat put(@Const @ByRef SparseMat m);
+    public native @ByRef @Name("operator =") SparseMat put(@Const @ByRef SparseMat m);
     /** equivalent to the corresponding constructor */
-    public native @ByRef @Name("operator=") SparseMat put(@Const @ByRef Mat m);
+    public native @ByRef @Name("operator =") SparseMat put(@Const @ByRef Mat m);
 
     /** creates full copy of the matrix */
     public native @ByVal SparseMat clone();
@@ -15748,24 +15748,24 @@ notation of some operations:
     private native void allocate(@Const @ByRef MatConstIterator it);
 
     /** copy operator */
-    public native @ByRef @Name("operator=") MatConstIterator put(@Const @ByRef MatConstIterator it);
+    public native @ByRef @Name("operator =") MatConstIterator put(@Const @ByRef MatConstIterator it);
     /** returns the current matrix element */
-    public native @Cast("const uchar*") @Name("operator*") BytePointer multiply();
+    public native @Cast("const uchar*") @Name("operator *") BytePointer multiply();
     /** returns the i-th matrix element, relative to the current */
-    public native @Cast("const uchar*") @Name("operator[]") BytePointer get(@Cast("ptrdiff_t") long i);
+    public native @Cast("const uchar*") @Name("operator []") BytePointer get(@Cast("ptrdiff_t") long i);
 
     /** shifts the iterator forward by the specified number of elements */
-    public native @ByRef @Name("operator+=") MatConstIterator addPut(@Cast("ptrdiff_t") long ofs);
+    public native @ByRef @Name("operator +=") MatConstIterator addPut(@Cast("ptrdiff_t") long ofs);
     /** shifts the iterator backward by the specified number of elements */
-    public native @ByRef @Name("operator-=") MatConstIterator subtractPut(@Cast("ptrdiff_t") long ofs);
+    public native @ByRef @Name("operator -=") MatConstIterator subtractPut(@Cast("ptrdiff_t") long ofs);
     /** decrements the iterator */
-    public native @ByRef @Name("operator--") MatConstIterator decrement();
+    public native @ByRef @Name("operator --") MatConstIterator decrement();
     /** decrements the iterator */
-    public native @ByVal @Name("operator--") MatConstIterator decrement(int arg0);
+    public native @ByVal @Name("operator --") MatConstIterator decrement(int arg0);
     /** increments the iterator */
-    public native @ByRef @Name("operator++") MatConstIterator increment();
+    public native @ByRef @Name("operator ++") MatConstIterator increment();
     /** increments the iterator */
-    public native @ByVal @Name("operator++") MatConstIterator increment(int arg0);
+    public native @ByVal @Name("operator ++") MatConstIterator increment(int arg0);
     /** returns the current iterator position */
     public native @ByVal Point pos();
     /** returns the current iterator position */
@@ -15842,20 +15842,20 @@ notation of some operations:
     private native void allocate(@Const @ByRef SparseMatConstIterator it);
 
     /** the assignment operator */
-    public native @ByRef @Name("operator=") SparseMatConstIterator put(@Const @ByRef SparseMatConstIterator it);
+    public native @ByRef @Name("operator =") SparseMatConstIterator put(@Const @ByRef SparseMatConstIterator it);
 
     /** template method returning the current matrix element */
     /** returns the current node of the sparse matrix. it.node->idx is the current element index */
     public native @Const SparseMat.Node node();
 
     /** moves iterator to the previous element */
-    
+    public native @ByRef @Name("operator --") SparseMatConstIterator decrement();
     /** moves iterator to the previous element */
-    
+    public native @ByVal @Name("operator --") SparseMatConstIterator decrement(int arg0);
     /** moves iterator to the next element */
-    public native @ByRef @Name("operator++") SparseMatConstIterator increment();
+    public native @ByRef @Name("operator ++") SparseMatConstIterator increment();
     /** moves iterator to the next element */
-    public native @ByVal @Name("operator++") SparseMatConstIterator increment(int arg0);
+    public native @ByVal @Name("operator ++") SparseMatConstIterator increment(int arg0);
 
     /** moves iterator to the element after the last element */
     public native void seekEnd();
@@ -15898,15 +15898,15 @@ notation of some operations:
     private native void allocate(@Const @ByRef SparseMatIterator it);
 
     /** the assignment operator */
-    public native @ByRef @Name("operator=") SparseMatIterator put(@Const @ByRef SparseMatIterator it);
+    public native @ByRef @Name("operator =") SparseMatIterator put(@Const @ByRef SparseMatIterator it);
     /** returns read-write reference to the current sparse matrix element */
     /** returns pointer to the current sparse matrix node. it.node->idx is the index of the current element (do not modify it!) */
     public native SparseMat.Node node();
 
     /** moves iterator to the next element */
-    public native @ByRef @Name("operator++") SparseMatIterator increment();
+    public native @ByRef @Name("operator ++") SparseMatIterator increment();
     /** moves iterator to the next element */
-    public native @ByVal @Name("operator++") SparseMatIterator increment(int arg0);
+    public native @ByVal @Name("operator ++") SparseMatIterator increment(int arg0);
 }
 
 
@@ -16031,9 +16031,9 @@ The example below illustrates how you can compute a normalized and threshold 3D 
     public native void init(@Const @ByPtrPtr Mat arrays, Mat planes, @Cast("uchar**") @ByPtrPtr byte[] ptrs);
 
     /** proceeds to the next plane of every iterated matrix */
-    public native @ByRef @Name("operator++") NAryMatIterator increment();
+    public native @ByRef @Name("operator ++") NAryMatIterator increment();
     /** proceeds to the next plane of every iterated matrix (postfix increment operator) */
-    public native @ByVal @Name("operator++") NAryMatIterator increment(int arg0);
+    public native @ByVal @Name("operator ++") NAryMatIterator increment(int arg0);
 
     /** the iterated arrays */
     @MemberGetter public native @Const Mat arrays(int i);
@@ -16179,8 +16179,8 @@ Here are examples of matrix expressions:
     public native @ByVal MatExpr col(int x);
     public native @ByVal MatExpr diag(int d/*=0*/);
     public native @ByVal MatExpr diag();
-    public native @ByVal @Name("operator()") MatExpr apply( @Const @ByRef Range rowRange, @Const @ByRef Range colRange );
-    public native @ByVal @Name("operator()") MatExpr apply( @Const @ByRef Rect roi );
+    public native @ByVal @Name("operator ()") MatExpr apply( @Const @ByRef Range rowRange, @Const @ByRef Range colRange );
+    public native @ByVal @Name("operator ()") MatExpr apply( @Const @ByRef Rect roi );
 
     public native @ByVal MatExpr t();
     public native @ByVal MatExpr inv(int method/*=cv::DECOMP_LU*/);
@@ -16208,82 +16208,82 @@ Here are examples of matrix expressions:
 
  *  @relates cv::MatExpr
  *  @{ */
-@Namespace("cv") public static native @ByVal @Name("operator+") MatExpr add(@Const @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByVal @Name("operator+") MatExpr add(@Const @ByRef Mat a, @Const @ByRef Scalar s);
-@Namespace("cv") public static native @ByVal @Name("operator+") MatExpr add(@Const @ByRef Scalar s, @Const @ByRef Mat a);
-@Namespace("cv") public static native @ByVal @Name("operator+") MatExpr add(@Const @ByRef MatExpr e, @Const @ByRef Mat m);
-@Namespace("cv") public static native @ByVal @Name("operator+") MatExpr add(@Const @ByRef Mat m, @Const @ByRef MatExpr e);
-@Namespace("cv") public static native @ByVal @Name("operator+") MatExpr add(@Const @ByRef MatExpr e, @Const @ByRef Scalar s);
-@Namespace("cv") public static native @ByVal @Name("operator+") MatExpr add(@Const @ByRef Scalar s, @Const @ByRef MatExpr e);
-@Namespace("cv") public static native @ByVal @Name("operator+") MatExpr add(@Const @ByRef MatExpr e1, @Const @ByRef MatExpr e2);
+@Namespace("cv") public static native @ByVal @Name("operator +") MatExpr add(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator +") MatExpr add(@Const @ByRef Mat a, @Const @ByRef Scalar s);
+@Namespace("cv") public static native @ByVal @Name("operator +") MatExpr add(@Const @ByRef Scalar s, @Const @ByRef Mat a);
+@Namespace("cv") public static native @ByVal @Name("operator +") MatExpr add(@Const @ByRef MatExpr e, @Const @ByRef Mat m);
+@Namespace("cv") public static native @ByVal @Name("operator +") MatExpr add(@Const @ByRef Mat m, @Const @ByRef MatExpr e);
+@Namespace("cv") public static native @ByVal @Name("operator +") MatExpr add(@Const @ByRef MatExpr e, @Const @ByRef Scalar s);
+@Namespace("cv") public static native @ByVal @Name("operator +") MatExpr add(@Const @ByRef Scalar s, @Const @ByRef MatExpr e);
+@Namespace("cv") public static native @ByVal @Name("operator +") MatExpr add(@Const @ByRef MatExpr e1, @Const @ByRef MatExpr e2);
 
-@Namespace("cv") public static native @ByVal @Name("operator-") MatExpr subtract(@Const @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByVal @Name("operator-") MatExpr subtract(@Const @ByRef Mat a, @Const @ByRef Scalar s);
-@Namespace("cv") public static native @ByVal @Name("operator-") MatExpr subtract(@Const @ByRef Scalar s, @Const @ByRef Mat a);
-@Namespace("cv") public static native @ByVal @Name("operator-") MatExpr subtract(@Const @ByRef MatExpr e, @Const @ByRef Mat m);
-@Namespace("cv") public static native @ByVal @Name("operator-") MatExpr subtract(@Const @ByRef Mat m, @Const @ByRef MatExpr e);
-@Namespace("cv") public static native @ByVal @Name("operator-") MatExpr subtract(@Const @ByRef MatExpr e, @Const @ByRef Scalar s);
-@Namespace("cv") public static native @ByVal @Name("operator-") MatExpr subtract(@Const @ByRef Scalar s, @Const @ByRef MatExpr e);
-@Namespace("cv") public static native @ByVal @Name("operator-") MatExpr subtract(@Const @ByRef MatExpr e1, @Const @ByRef MatExpr e2);
+@Namespace("cv") public static native @ByVal @Name("operator -") MatExpr subtract(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator -") MatExpr subtract(@Const @ByRef Mat a, @Const @ByRef Scalar s);
+@Namespace("cv") public static native @ByVal @Name("operator -") MatExpr subtract(@Const @ByRef Scalar s, @Const @ByRef Mat a);
+@Namespace("cv") public static native @ByVal @Name("operator -") MatExpr subtract(@Const @ByRef MatExpr e, @Const @ByRef Mat m);
+@Namespace("cv") public static native @ByVal @Name("operator -") MatExpr subtract(@Const @ByRef Mat m, @Const @ByRef MatExpr e);
+@Namespace("cv") public static native @ByVal @Name("operator -") MatExpr subtract(@Const @ByRef MatExpr e, @Const @ByRef Scalar s);
+@Namespace("cv") public static native @ByVal @Name("operator -") MatExpr subtract(@Const @ByRef Scalar s, @Const @ByRef MatExpr e);
+@Namespace("cv") public static native @ByVal @Name("operator -") MatExpr subtract(@Const @ByRef MatExpr e1, @Const @ByRef MatExpr e2);
 
-@Namespace("cv") public static native @ByVal @Name("operator-") MatExpr subtract(@Const @ByRef Mat m);
-@Namespace("cv") public static native @ByVal @Name("operator-") MatExpr subtract(@Const @ByRef MatExpr e);
+@Namespace("cv") public static native @ByVal @Name("operator -") MatExpr subtract(@Const @ByRef Mat m);
+@Namespace("cv") public static native @ByVal @Name("operator -") MatExpr subtract(@Const @ByRef MatExpr e);
 
-@Namespace("cv") public static native @ByVal @Name("operator*") MatExpr multiply(@Const @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByVal @Name("operator*") MatExpr multiply(@Const @ByRef Mat a, double s);
-@Namespace("cv") public static native @ByVal @Name("operator*") MatExpr multiply(double s, @Const @ByRef Mat a);
-@Namespace("cv") public static native @ByVal @Name("operator*") MatExpr multiply(@Const @ByRef MatExpr e, @Const @ByRef Mat m);
-@Namespace("cv") public static native @ByVal @Name("operator*") MatExpr multiply(@Const @ByRef Mat m, @Const @ByRef MatExpr e);
-@Namespace("cv") public static native @ByVal @Name("operator*") MatExpr multiply(@Const @ByRef MatExpr e, double s);
-@Namespace("cv") public static native @ByVal @Name("operator*") MatExpr multiply(double s, @Const @ByRef MatExpr e);
-@Namespace("cv") public static native @ByVal @Name("operator*") MatExpr multiply(@Const @ByRef MatExpr e1, @Const @ByRef MatExpr e2);
+@Namespace("cv") public static native @ByVal @Name("operator *") MatExpr multiply(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator *") MatExpr multiply(@Const @ByRef Mat a, double s);
+@Namespace("cv") public static native @ByVal @Name("operator *") MatExpr multiply(double s, @Const @ByRef Mat a);
+@Namespace("cv") public static native @ByVal @Name("operator *") MatExpr multiply(@Const @ByRef MatExpr e, @Const @ByRef Mat m);
+@Namespace("cv") public static native @ByVal @Name("operator *") MatExpr multiply(@Const @ByRef Mat m, @Const @ByRef MatExpr e);
+@Namespace("cv") public static native @ByVal @Name("operator *") MatExpr multiply(@Const @ByRef MatExpr e, double s);
+@Namespace("cv") public static native @ByVal @Name("operator *") MatExpr multiply(double s, @Const @ByRef MatExpr e);
+@Namespace("cv") public static native @ByVal @Name("operator *") MatExpr multiply(@Const @ByRef MatExpr e1, @Const @ByRef MatExpr e2);
 
-@Namespace("cv") public static native @ByVal @Name("operator/") MatExpr divide(@Const @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByVal @Name("operator/") MatExpr divide(@Const @ByRef Mat a, double s);
-@Namespace("cv") public static native @ByVal @Name("operator/") MatExpr divide(double s, @Const @ByRef Mat a);
-@Namespace("cv") public static native @ByVal @Name("operator/") MatExpr divide(@Const @ByRef MatExpr e, @Const @ByRef Mat m);
-@Namespace("cv") public static native @ByVal @Name("operator/") MatExpr divide(@Const @ByRef Mat m, @Const @ByRef MatExpr e);
-@Namespace("cv") public static native @ByVal @Name("operator/") MatExpr divide(@Const @ByRef MatExpr e, double s);
-@Namespace("cv") public static native @ByVal @Name("operator/") MatExpr divide(double s, @Const @ByRef MatExpr e);
-@Namespace("cv") public static native @ByVal @Name("operator/") MatExpr divide(@Const @ByRef MatExpr e1, @Const @ByRef MatExpr e2);
+@Namespace("cv") public static native @ByVal @Name("operator /") MatExpr divide(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator /") MatExpr divide(@Const @ByRef Mat a, double s);
+@Namespace("cv") public static native @ByVal @Name("operator /") MatExpr divide(double s, @Const @ByRef Mat a);
+@Namespace("cv") public static native @ByVal @Name("operator /") MatExpr divide(@Const @ByRef MatExpr e, @Const @ByRef Mat m);
+@Namespace("cv") public static native @ByVal @Name("operator /") MatExpr divide(@Const @ByRef Mat m, @Const @ByRef MatExpr e);
+@Namespace("cv") public static native @ByVal @Name("operator /") MatExpr divide(@Const @ByRef MatExpr e, double s);
+@Namespace("cv") public static native @ByVal @Name("operator /") MatExpr divide(double s, @Const @ByRef MatExpr e);
+@Namespace("cv") public static native @ByVal @Name("operator /") MatExpr divide(@Const @ByRef MatExpr e1, @Const @ByRef MatExpr e2);
 
-@Namespace("cv") public static native @ByVal @Name("operator<") MatExpr lessThan(@Const @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByVal @Name("operator<") MatExpr lessThan(@Const @ByRef Mat a, double s);
-@Namespace("cv") public static native @ByVal @Name("operator<") MatExpr lessThan(double s, @Const @ByRef Mat a);
+@Namespace("cv") public static native @ByVal @Name("operator <") MatExpr lessThan(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator <") MatExpr lessThan(@Const @ByRef Mat a, double s);
+@Namespace("cv") public static native @ByVal @Name("operator <") MatExpr lessThan(double s, @Const @ByRef Mat a);
 
-@Namespace("cv") public static native @ByVal @Name("operator<=") MatExpr lessThanEquals(@Const @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByVal @Name("operator<=") MatExpr lessThanEquals(@Const @ByRef Mat a, double s);
-@Namespace("cv") public static native @ByVal @Name("operator<=") MatExpr lessThanEquals(double s, @Const @ByRef Mat a);
+@Namespace("cv") public static native @ByVal @Name("operator <=") MatExpr lessThanEquals(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator <=") MatExpr lessThanEquals(@Const @ByRef Mat a, double s);
+@Namespace("cv") public static native @ByVal @Name("operator <=") MatExpr lessThanEquals(double s, @Const @ByRef Mat a);
 
-@Namespace("cv") public static native @ByVal @Name("operator==") MatExpr equals(@Const @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByVal @Name("operator==") MatExpr equals(@Const @ByRef Mat a, double s);
-@Namespace("cv") public static native @ByVal @Name("operator==") MatExpr equals(double s, @Const @ByRef Mat a);
+@Namespace("cv") public static native @ByVal @Name("operator ==") MatExpr equals(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator ==") MatExpr equals(@Const @ByRef Mat a, double s);
+@Namespace("cv") public static native @ByVal @Name("operator ==") MatExpr equals(double s, @Const @ByRef Mat a);
 
-@Namespace("cv") public static native @ByVal @Name("operator!=") MatExpr notEquals(@Const @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByVal @Name("operator!=") MatExpr notEquals(@Const @ByRef Mat a, double s);
-@Namespace("cv") public static native @ByVal @Name("operator!=") MatExpr notEquals(double s, @Const @ByRef Mat a);
+@Namespace("cv") public static native @ByVal @Name("operator !=") MatExpr notEquals(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator !=") MatExpr notEquals(@Const @ByRef Mat a, double s);
+@Namespace("cv") public static native @ByVal @Name("operator !=") MatExpr notEquals(double s, @Const @ByRef Mat a);
 
-@Namespace("cv") public static native @ByVal @Name("operator>=") MatExpr greaterThanEquals(@Const @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByVal @Name("operator>=") MatExpr greaterThanEquals(@Const @ByRef Mat a, double s);
-@Namespace("cv") public static native @ByVal @Name("operator>=") MatExpr greaterThanEquals(double s, @Const @ByRef Mat a);
+@Namespace("cv") public static native @ByVal @Name("operator >=") MatExpr greaterThanEquals(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator >=") MatExpr greaterThanEquals(@Const @ByRef Mat a, double s);
+@Namespace("cv") public static native @ByVal @Name("operator >=") MatExpr greaterThanEquals(double s, @Const @ByRef Mat a);
 
-@Namespace("cv") public static native @ByVal @Name("operator>") MatExpr greaterThan(@Const @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByVal @Name("operator>") MatExpr greaterThan(@Const @ByRef Mat a, double s);
-@Namespace("cv") public static native @ByVal @Name("operator>") MatExpr greaterThan(double s, @Const @ByRef Mat a);
+@Namespace("cv") public static native @ByVal @Name("operator >") MatExpr greaterThan(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator >") MatExpr greaterThan(@Const @ByRef Mat a, double s);
+@Namespace("cv") public static native @ByVal @Name("operator >") MatExpr greaterThan(double s, @Const @ByRef Mat a);
 
-@Namespace("cv") public static native @ByVal @Name("operator&") MatExpr and(@Const @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByVal @Name("operator&") MatExpr and(@Const @ByRef Mat a, @Const @ByRef Scalar s);
-@Namespace("cv") public static native @ByVal @Name("operator&") MatExpr and(@Const @ByRef Scalar s, @Const @ByRef Mat a);
+@Namespace("cv") public static native @ByVal @Name("operator &") MatExpr and(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator &") MatExpr and(@Const @ByRef Mat a, @Const @ByRef Scalar s);
+@Namespace("cv") public static native @ByVal @Name("operator &") MatExpr and(@Const @ByRef Scalar s, @Const @ByRef Mat a);
 
-@Namespace("cv") public static native @ByVal @Name("operator|") MatExpr or(@Const @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByVal @Name("operator|") MatExpr or(@Const @ByRef Mat a, @Const @ByRef Scalar s);
-@Namespace("cv") public static native @ByVal @Name("operator|") MatExpr or(@Const @ByRef Scalar s, @Const @ByRef Mat a);
+@Namespace("cv") public static native @ByVal @Name("operator |") MatExpr or(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator |") MatExpr or(@Const @ByRef Mat a, @Const @ByRef Scalar s);
+@Namespace("cv") public static native @ByVal @Name("operator |") MatExpr or(@Const @ByRef Scalar s, @Const @ByRef Mat a);
 
-@Namespace("cv") public static native @ByVal @Name("operator^") MatExpr xor(@Const @ByRef Mat a, @Const @ByRef Mat b);
-@Namespace("cv") public static native @ByVal @Name("operator^") MatExpr xor(@Const @ByRef Mat a, @Const @ByRef Scalar s);
-@Namespace("cv") public static native @ByVal @Name("operator^") MatExpr xor(@Const @ByRef Scalar s, @Const @ByRef Mat a);
+@Namespace("cv") public static native @ByVal @Name("operator ^") MatExpr xor(@Const @ByRef Mat a, @Const @ByRef Mat b);
+@Namespace("cv") public static native @ByVal @Name("operator ^") MatExpr xor(@Const @ByRef Mat a, @Const @ByRef Scalar s);
+@Namespace("cv") public static native @ByVal @Name("operator ^") MatExpr xor(@Const @ByRef Scalar s, @Const @ByRef Mat a);
 
-@Namespace("cv") public static native @ByVal @Name("operator~") MatExpr not(@Const @ByRef Mat m);
+@Namespace("cv") public static native @ByVal @Name("operator ~") MatExpr not(@Const @ByRef Mat m);
 
 @Namespace("cv") public static native @ByVal MatExpr min(@Const @ByRef Mat a, @Const @ByRef Mat b);
 @Namespace("cv") public static native @ByVal MatExpr min(@Const @ByRef Mat a, double s);
@@ -16739,15 +16739,15 @@ data to/from a file.
     @param nodename Name of the file node.
     @returns Node with the given name.
      */
-    public native @ByVal @Name("operator[]") FileNode get(@Str BytePointer nodename);
-    public native @ByVal @Name("operator[]") FileNode get(@Str String nodename);
+    public native @ByVal @Name("operator []") FileNode get(@Str BytePointer nodename);
+    public native @ByVal @Name("operator []") FileNode get(@Str String nodename);
 
     /** @overload */
 
     /** @brief Returns the obsolete C FileStorage structure.
     @returns Pointer to the underlying C FileStorage structure
      */
-    public native @Name("operator*") CvFileStorage multiply();
+    public native @Name("operator *") CvFileStorage multiply();
 
     /** @overload */
 
@@ -16871,8 +16871,8 @@ storage is opened for writing, no data is stored in memory after it is written.
     @param nodename Name of an element in the mapping node.
     @returns Returns the element with the given identifier.
      */
-    public native @ByVal @Name("operator[]") FileNode get(@Str BytePointer nodename);
-    public native @ByVal @Name("operator[]") FileNode get(@Str String nodename);
+    public native @ByVal @Name("operator []") FileNode get(@Str BytePointer nodename);
+    public native @ByVal @Name("operator []") FileNode get(@Str String nodename);
 
     /** @overload
     @param nodename Name of an element in the mapping node.
@@ -16881,7 +16881,7 @@ storage is opened for writing, no data is stored in memory after it is written.
     /** @overload
     @param i Index of an element in the sequence node.
     */
-    public native @ByVal @Name("operator[]") FileNode get(int i);
+    public native @ByVal @Name("operator []") FileNode get(int i);
 
     /** @brief Returns type of the node.
     @returns Type of the node. See FileNode::Type
@@ -16920,7 +16920,7 @@ storage is opened for writing, no data is stored in memory after it is written.
 // #endif
 
     /** returns pointer to the underlying file node */
-    public native @Name("operator*") CvFileNode multiply();
+    public native @Name("operator *") CvFileNode multiply();
     /** returns pointer to the underlying file node */
 
     /** returns iterator pointing to the first node element */
@@ -16993,22 +16993,22 @@ sequence, stored in node. See the data reading sample in the beginning of the se
     private native void allocate(@Const @ByRef FileNodeIterator it);
 
     /** returns the currently observed element */
-    public native @ByVal @Name("operator*") FileNode multiply();
+    public native @ByVal @Name("operator *") FileNode multiply();
     /** accesses the currently observed element methods */
-    public native @ByVal @Name("operator->") FileNode access();
+    public native @ByVal @Name("operator ->") FileNode access();
 
     /** moves iterator to the next node */
-    public native @ByRef @Name("operator++") FileNodeIterator increment();
+    public native @ByRef @Name("operator ++") FileNodeIterator increment();
     /** moves iterator to the next node */
-    public native @ByVal @Name("operator++") FileNodeIterator increment(int arg0);
+    public native @ByVal @Name("operator ++") FileNodeIterator increment(int arg0);
     /** moves iterator to the previous node */
-    public native @ByRef @Name("operator--") FileNodeIterator decrement();
+    public native @ByRef @Name("operator --") FileNodeIterator decrement();
     /** moves iterator to the previous node */
-    public native @ByVal @Name("operator--") FileNodeIterator decrement(int arg0);
+    public native @ByVal @Name("operator --") FileNodeIterator decrement(int arg0);
     /** moves iterator forward by the specified offset (possibly negative) */
-    public native @ByRef @Name("operator+=") FileNodeIterator addPut(int ofs);
+    public native @ByRef @Name("operator +=") FileNodeIterator addPut(int ofs);
     /** moves iterator backward by the specified offset (possibly negative) */
-    public native @ByRef @Name("operator-=") FileNodeIterator subtractPut(int ofs);
+    public native @ByRef @Name("operator -=") FileNodeIterator subtractPut(int ofs);
 
     /** @brief Reads node elements to the buffer with the specified format.
 
@@ -17127,8 +17127,8 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 /** @brief Writes string to a file storage.
 @relates cv::FileStorage
  */
-@Namespace("cv") public static native @ByRef @Name("operator<<") FileStorage shiftLeft(@ByRef FileStorage fs, @Str BytePointer str);
-@Namespace("cv") public static native @ByRef @Name("operator<<") FileStorage shiftLeft(@ByRef FileStorage fs, @Str String str);
+@Namespace("cv") public static native @ByRef @Name("operator <<") FileStorage shiftLeft(@ByRef FileStorage fs, @Str BytePointer str);
+@Namespace("cv") public static native @ByRef @Name("operator <<") FileStorage shiftLeft(@ByRef FileStorage fs, @Str String str);
 
 /** @cond IGNORED */
     @Namespace("cv::internal") @NoOffset public static class WriteStructContext extends Pointer {
@@ -17197,8 +17197,8 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 
 /** @brief Writes data to a file storage.
  */
-@Namespace("cv") public static native @ByRef @Name("operator<<") FileStorage shiftLeft(@ByRef FileStorage fs, @Cast("char*") ByteBuffer value);
-@Namespace("cv") public static native @ByRef @Name("operator<<") FileStorage shiftLeft(@ByRef FileStorage fs, @Cast("char*") byte[] value);
+@Namespace("cv") public static native @ByRef @Name("operator <<") FileStorage shiftLeft(@ByRef FileStorage fs, @Cast("char*") ByteBuffer value);
+@Namespace("cv") public static native @ByRef @Name("operator <<") FileStorage shiftLeft(@ByRef FileStorage fs, @Cast("char*") byte[] value);
 
 /** @} FileStorage
 
@@ -17227,13 +17227,13 @@ sequence, stored in node. See the data reading sample in the beginning of the se
  *  @relates cv::FileNodeIterator
  *  @{ */
 
-@Namespace("cv") public static native @Cast("bool") @Name("operator==") boolean equals(@Const @ByRef FileNodeIterator it1, @Const @ByRef FileNodeIterator it2);
+@Namespace("cv") public static native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef FileNodeIterator it1, @Const @ByRef FileNodeIterator it2);
 
-@Namespace("cv") public static native @Cast("bool") @Name("operator!=") boolean notEquals(@Const @ByRef FileNodeIterator it1, @Const @ByRef FileNodeIterator it2);
+@Namespace("cv") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@Const @ByRef FileNodeIterator it1, @Const @ByRef FileNodeIterator it2);
 
-@Namespace("cv") public static native @Cast("ptrdiff_t") @Name("operator-") long subtract(@Const @ByRef FileNodeIterator it1, @Const @ByRef FileNodeIterator it2);
+@Namespace("cv") public static native @Cast("ptrdiff_t") @Name("operator -") long subtract(@Const @ByRef FileNodeIterator it1, @Const @ByRef FileNodeIterator it2);
 
-@Namespace("cv") public static native @Cast("bool") @Name("operator<") boolean lessThan(@Const @ByRef FileNodeIterator it1, @Const @ByRef FileNodeIterator it2);
+@Namespace("cv") public static native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef FileNodeIterator it1, @Const @ByRef FileNodeIterator it2);
 
 /** @} FileNodeIterator
 

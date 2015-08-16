@@ -7065,13 +7065,13 @@ for(int i = 0; i < it2.count; i++, ++it2)
     private native void allocate( @Const @ByRef Mat img, @ByVal Point pt1, @ByVal Point pt2 );
     /** @brief returns pointer to the current pixel
     */
-    public native @Cast("uchar*") @Name("operator*") BytePointer multiply();
+    public native @Cast("uchar*") @Name("operator *") BytePointer multiply();
     /** @brief prefix increment operator (++it). shifts iterator to the next pixel
     */
-    public native @ByRef @Name("operator++") LineIterator increment();
+    public native @ByRef @Name("operator ++") LineIterator increment();
     /** @brief postfix increment operator (it++). shifts iterator to the next pixel
     */
-    public native @ByVal @Name("operator++") LineIterator increment(int arg0);
+    public native @ByVal @Name("operator ++") LineIterator increment(int arg0);
     /** @brief returns coordinates of the current pixel
     */
     public native @ByVal Point pos();

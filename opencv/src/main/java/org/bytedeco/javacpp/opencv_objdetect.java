@@ -408,7 +408,7 @@ using a Boosted Cascade of Simple Features. IEEE CVPR, 2001. The paper is availa
 
     public SimilarRects(double _eps) { allocate(_eps); }
     private native void allocate(double _eps);
-    public native @Cast("bool") @Name("operator()") boolean apply(@Const @ByRef Rect r1, @Const @ByRef Rect r2);
+    public native @Cast("bool") @Name("operator ()") boolean apply(@Const @ByRef Rect r1, @Const @ByRef Rect r2);
     public native double eps(); public native SimilarRects eps(double eps);
 }
 

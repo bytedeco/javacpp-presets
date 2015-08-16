@@ -23,6 +23,18 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 
     @Index public native FloatLayerRegistry.Creator get(@StdString BytePointer i);
     public native FloatRegistry put(@StdString BytePointer i, FloatLayerRegistry.Creator value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter FloatLayerRegistry.Creator second();
+    }
 }
 
 @Name("std::map<std::string,caffe::LayerRegistry<double>::Creator>") public static class DoubleRegistry extends Pointer {
@@ -37,6 +49,18 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 
     @Index public native DoubleLayerRegistry.Creator get(@StdString BytePointer i);
     public native DoubleRegistry put(@StdString BytePointer i, DoubleLayerRegistry.Creator value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter DoubleLayerRegistry.Creator second();
+    }
 }
 
 @Name("std::map<std::string,int>") public static class StringIntMap extends Pointer {
@@ -51,6 +75,18 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 
     @Index public native int get(@StdString BytePointer i);
     public native StringIntMap put(@StdString BytePointer i, int value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter int second();
+    }
 }
 
 @Name("std::vector<std::string>") public static class StringVector extends Pointer {
@@ -622,7 +658,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     private native void allocate(@Cast("unsigned int") int seed);
     public RNG(@Const @ByRef RNG arg0) { allocate(arg0); }
     private native void allocate(@Const @ByRef RNG arg0);
-    public native @ByRef @Name("operator=") RNG put(@Const @ByRef RNG arg0);
+    public native @ByRef @Name("operator =") RNG put(@Const @ByRef RNG arg0);
     public native Pointer generator();
   }
 
@@ -1269,7 +1305,7 @@ public static final int
   public BlobShape(@Const @ByRef BlobShape from) { allocate(from); }
   private native void allocate(@Const @ByRef BlobShape from);
 
-  public native @ByRef @Name("operator=") BlobShape put(@Const @ByRef BlobShape from);
+  public native @ByRef @Name("operator =") BlobShape put(@Const @ByRef BlobShape from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -1333,7 +1369,7 @@ public static final int
   public BlobProto(@Const @ByRef BlobProto from) { allocate(from); }
   private native void allocate(@Const @ByRef BlobProto from);
 
-  public native @ByRef @Name("operator=") BlobProto put(@Const @ByRef BlobProto from);
+  public native @ByRef @Name("operator =") BlobProto put(@Const @ByRef BlobProto from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -1442,7 +1478,7 @@ public static final int
   public BlobProtoVector(@Const @ByRef BlobProtoVector from) { allocate(from); }
   private native void allocate(@Const @ByRef BlobProtoVector from);
 
-  public native @ByRef @Name("operator=") BlobProtoVector put(@Const @ByRef BlobProtoVector from);
+  public native @ByRef @Name("operator =") BlobProtoVector put(@Const @ByRef BlobProtoVector from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -1506,7 +1542,7 @@ public static final int
   public Datum(@Const @ByRef Datum from) { allocate(from); }
   private native void allocate(@Const @ByRef Datum from);
 
-  public native @ByRef @Name("operator=") Datum put(@Const @ByRef Datum from);
+  public native @ByRef @Name("operator =") Datum put(@Const @ByRef Datum from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -1617,7 +1653,7 @@ public static final int
   public FillerParameter(@Const @ByRef FillerParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef FillerParameter from);
 
-  public native @ByRef @Name("operator=") FillerParameter put(@Const @ByRef FillerParameter from);
+  public native @ByRef @Name("operator =") FillerParameter put(@Const @ByRef FillerParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -1756,7 +1792,7 @@ public static final int
   public NetParameter(@Const @ByRef NetParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef NetParameter from);
 
-  public native @ByRef @Name("operator=") NetParameter put(@Const @ByRef NetParameter from);
+  public native @ByRef @Name("operator =") NetParameter put(@Const @ByRef NetParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -1896,7 +1932,7 @@ public static final int
   public SolverParameter(@Const @ByRef SolverParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef SolverParameter from);
 
-  public native @ByRef @Name("operator=") SolverParameter put(@Const @ByRef SolverParameter from);
+  public native @ByRef @Name("operator =") SolverParameter put(@Const @ByRef SolverParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -2294,7 +2330,7 @@ public static final int
   public SolverState(@Const @ByRef SolverState from) { allocate(from); }
   private native void allocate(@Const @ByRef SolverState from);
 
-  public native @ByRef @Name("operator=") SolverState put(@Const @ByRef SolverState from);
+  public native @ByRef @Name("operator =") SolverState put(@Const @ByRef SolverState from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -2385,7 +2421,7 @@ public static final int
   public NetState(@Const @ByRef NetState from) { allocate(from); }
   private native void allocate(@Const @ByRef NetState from);
 
-  public native @ByRef @Name("operator=") NetState put(@Const @ByRef NetState from);
+  public native @ByRef @Name("operator =") NetState put(@Const @ByRef NetState from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -2471,7 +2507,7 @@ public static final int
   public NetStateRule(@Const @ByRef NetStateRule from) { allocate(from); }
   private native void allocate(@Const @ByRef NetStateRule from);
 
-  public native @ByRef @Name("operator=") NetStateRule put(@Const @ByRef NetStateRule from);
+  public native @ByRef @Name("operator =") NetStateRule put(@Const @ByRef NetStateRule from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -2580,7 +2616,7 @@ public static final int
   public ParamSpec(@Const @ByRef ParamSpec from) { allocate(from); }
   private native void allocate(@Const @ByRef ParamSpec from);
 
-  public native @ByRef @Name("operator=") ParamSpec put(@Const @ByRef ParamSpec from);
+  public native @ByRef @Name("operator =") ParamSpec put(@Const @ByRef ParamSpec from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -2690,7 +2726,7 @@ public static final int
   public LayerParameter(@Const @ByRef LayerParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef LayerParameter from);
 
-  public native @ByRef @Name("operator=") LayerParameter put(@Const @ByRef LayerParameter from);
+  public native @ByRef @Name("operator =") LayerParameter put(@Const @ByRef LayerParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -3192,7 +3228,7 @@ public static final int
   public TransformationParameter(@Const @ByRef TransformationParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef TransformationParameter from);
 
-  public native @ByRef @Name("operator=") TransformationParameter put(@Const @ByRef TransformationParameter from);
+  public native @ByRef @Name("operator =") TransformationParameter put(@Const @ByRef TransformationParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -3304,7 +3340,7 @@ public static final int
   public LossParameter(@Const @ByRef LossParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef LossParameter from);
 
-  public native @ByRef @Name("operator=") LossParameter put(@Const @ByRef LossParameter from);
+  public native @ByRef @Name("operator =") LossParameter put(@Const @ByRef LossParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -3374,7 +3410,7 @@ public static final int
   public AccuracyParameter(@Const @ByRef AccuracyParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef AccuracyParameter from);
 
-  public native @ByRef @Name("operator=") AccuracyParameter put(@Const @ByRef AccuracyParameter from);
+  public native @ByRef @Name("operator =") AccuracyParameter put(@Const @ByRef AccuracyParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -3451,7 +3487,7 @@ public static final int
   public ArgMaxParameter(@Const @ByRef ArgMaxParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef ArgMaxParameter from);
 
-  public native @ByRef @Name("operator=") ArgMaxParameter put(@Const @ByRef ArgMaxParameter from);
+  public native @ByRef @Name("operator =") ArgMaxParameter put(@Const @ByRef ArgMaxParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -3521,7 +3557,7 @@ public static final int
   public ConcatParameter(@Const @ByRef ConcatParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef ConcatParameter from);
 
-  public native @ByRef @Name("operator=") ConcatParameter put(@Const @ByRef ConcatParameter from);
+  public native @ByRef @Name("operator =") ConcatParameter put(@Const @ByRef ConcatParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -3591,7 +3627,7 @@ public static final int
   public ContrastiveLossParameter(@Const @ByRef ContrastiveLossParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef ContrastiveLossParameter from);
 
-  public native @ByRef @Name("operator=") ContrastiveLossParameter put(@Const @ByRef ContrastiveLossParameter from);
+  public native @ByRef @Name("operator =") ContrastiveLossParameter put(@Const @ByRef ContrastiveLossParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -3661,7 +3697,7 @@ public static final int
   public ConvolutionParameter(@Const @ByRef ConvolutionParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef ConvolutionParameter from);
 
-  public native @ByRef @Name("operator=") ConvolutionParameter put(@Const @ByRef ConvolutionParameter from);
+  public native @ByRef @Name("operator =") ConvolutionParameter put(@Const @ByRef ConvolutionParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -3847,7 +3883,7 @@ public static final int
   public DataParameter(@Const @ByRef DataParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef DataParameter from);
 
-  public native @ByRef @Name("operator=") DataParameter put(@Const @ByRef DataParameter from);
+  public native @ByRef @Name("operator =") DataParameter put(@Const @ByRef DataParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -3998,7 +4034,7 @@ public static final int
   public DropoutParameter(@Const @ByRef DropoutParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef DropoutParameter from);
 
-  public native @ByRef @Name("operator=") DropoutParameter put(@Const @ByRef DropoutParameter from);
+  public native @ByRef @Name("operator =") DropoutParameter put(@Const @ByRef DropoutParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -4061,7 +4097,7 @@ public static final int
   public DummyDataParameter(@Const @ByRef DummyDataParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef DummyDataParameter from);
 
-  public native @ByRef @Name("operator=") DummyDataParameter put(@Const @ByRef DummyDataParameter from);
+  public native @ByRef @Name("operator =") DummyDataParameter put(@Const @ByRef DummyDataParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -4165,7 +4201,7 @@ public static final int
   public EltwiseParameter(@Const @ByRef EltwiseParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef EltwiseParameter from);
 
-  public native @ByRef @Name("operator=") EltwiseParameter put(@Const @ByRef EltwiseParameter from);
+  public native @ByRef @Name("operator =") EltwiseParameter put(@Const @ByRef EltwiseParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -4264,7 +4300,7 @@ public static final int
   public ExpParameter(@Const @ByRef ExpParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef ExpParameter from);
 
-  public native @ByRef @Name("operator=") ExpParameter put(@Const @ByRef ExpParameter from);
+  public native @ByRef @Name("operator =") ExpParameter put(@Const @ByRef ExpParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -4341,7 +4377,7 @@ public static final int
   public FlattenParameter(@Const @ByRef FlattenParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef FlattenParameter from);
 
-  public native @ByRef @Name("operator=") FlattenParameter put(@Const @ByRef FlattenParameter from);
+  public native @ByRef @Name("operator =") FlattenParameter put(@Const @ByRef FlattenParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -4411,7 +4447,7 @@ public static final int
   public HDF5DataParameter(@Const @ByRef HDF5DataParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef HDF5DataParameter from);
 
-  public native @ByRef @Name("operator=") HDF5DataParameter put(@Const @ByRef HDF5DataParameter from);
+  public native @ByRef @Name("operator =") HDF5DataParameter put(@Const @ByRef HDF5DataParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -4494,7 +4530,7 @@ public static final int
   public HDF5OutputParameter(@Const @ByRef HDF5OutputParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef HDF5OutputParameter from);
 
-  public native @ByRef @Name("operator=") HDF5OutputParameter put(@Const @ByRef HDF5OutputParameter from);
+  public native @ByRef @Name("operator =") HDF5OutputParameter put(@Const @ByRef HDF5OutputParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -4563,7 +4599,7 @@ public static final int
   public HingeLossParameter(@Const @ByRef HingeLossParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef HingeLossParameter from);
 
-  public native @ByRef @Name("operator=") HingeLossParameter put(@Const @ByRef HingeLossParameter from);
+  public native @ByRef @Name("operator =") HingeLossParameter put(@Const @ByRef HingeLossParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -4646,7 +4682,7 @@ public static final int
   public ImageDataParameter(@Const @ByRef ImageDataParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef ImageDataParameter from);
 
-  public native @ByRef @Name("operator=") ImageDataParameter put(@Const @ByRef ImageDataParameter from);
+  public native @ByRef @Name("operator =") ImageDataParameter put(@Const @ByRef ImageDataParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -4804,7 +4840,7 @@ public static final int
   public InfogainLossParameter(@Const @ByRef InfogainLossParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef InfogainLossParameter from);
 
-  public native @ByRef @Name("operator=") InfogainLossParameter put(@Const @ByRef InfogainLossParameter from);
+  public native @ByRef @Name("operator =") InfogainLossParameter put(@Const @ByRef InfogainLossParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -4873,7 +4909,7 @@ public static final int
   public InnerProductParameter(@Const @ByRef InnerProductParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef InnerProductParameter from);
 
-  public native @ByRef @Name("operator=") InnerProductParameter put(@Const @ByRef InnerProductParameter from);
+  public native @ByRef @Name("operator =") InnerProductParameter put(@Const @ByRef InnerProductParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -4968,7 +5004,7 @@ public static final int
   public LogParameter(@Const @ByRef LogParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef LogParameter from);
 
-  public native @ByRef @Name("operator=") LogParameter put(@Const @ByRef LogParameter from);
+  public native @ByRef @Name("operator =") LogParameter put(@Const @ByRef LogParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -5045,7 +5081,7 @@ public static final int
   public LRNParameter(@Const @ByRef LRNParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef LRNParameter from);
 
-  public native @ByRef @Name("operator=") LRNParameter put(@Const @ByRef LRNParameter from);
+  public native @ByRef @Name("operator =") LRNParameter put(@Const @ByRef LRNParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -5156,7 +5192,7 @@ public static final int
   public MemoryDataParameter(@Const @ByRef MemoryDataParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef MemoryDataParameter from);
 
-  public native @ByRef @Name("operator=") MemoryDataParameter put(@Const @ByRef MemoryDataParameter from);
+  public native @ByRef @Name("operator =") MemoryDataParameter put(@Const @ByRef MemoryDataParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -5240,7 +5276,7 @@ public static final int
   public MVNParameter(@Const @ByRef MVNParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef MVNParameter from);
 
-  public native @ByRef @Name("operator=") MVNParameter put(@Const @ByRef MVNParameter from);
+  public native @ByRef @Name("operator =") MVNParameter put(@Const @ByRef MVNParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -5317,7 +5353,7 @@ public static final int
   public PoolingParameter(@Const @ByRef PoolingParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef PoolingParameter from);
 
-  public native @ByRef @Name("operator=") PoolingParameter put(@Const @ByRef PoolingParameter from);
+  public native @ByRef @Name("operator =") PoolingParameter put(@Const @ByRef PoolingParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -5499,7 +5535,7 @@ public static final int
   public PowerParameter(@Const @ByRef PowerParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef PowerParameter from);
 
-  public native @ByRef @Name("operator=") PowerParameter put(@Const @ByRef PowerParameter from);
+  public native @ByRef @Name("operator =") PowerParameter put(@Const @ByRef PowerParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -5576,7 +5612,7 @@ public static final int
   public PythonParameter(@Const @ByRef PythonParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef PythonParameter from);
 
-  public native @ByRef @Name("operator=") PythonParameter put(@Const @ByRef PythonParameter from);
+  public native @ByRef @Name("operator =") PythonParameter put(@Const @ByRef PythonParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -5658,7 +5694,7 @@ public static final int
   public ReductionParameter(@Const @ByRef ReductionParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef ReductionParameter from);
 
-  public native @ByRef @Name("operator=") ReductionParameter put(@Const @ByRef ReductionParameter from);
+  public native @ByRef @Name("operator =") ReductionParameter put(@Const @ByRef ReductionParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -5757,7 +5793,7 @@ public static final int
   public ReLUParameter(@Const @ByRef ReLUParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef ReLUParameter from);
 
-  public native @ByRef @Name("operator=") ReLUParameter put(@Const @ByRef ReLUParameter from);
+  public native @ByRef @Name("operator =") ReLUParameter put(@Const @ByRef ReLUParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -5848,7 +5884,7 @@ public static final int
   public ReshapeParameter(@Const @ByRef ReshapeParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef ReshapeParameter from);
 
-  public native @ByRef @Name("operator=") ReshapeParameter put(@Const @ByRef ReshapeParameter from);
+  public native @ByRef @Name("operator =") ReshapeParameter put(@Const @ByRef ReshapeParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -5927,7 +5963,7 @@ public static final int
   public SigmoidParameter(@Const @ByRef SigmoidParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef SigmoidParameter from);
 
-  public native @ByRef @Name("operator=") SigmoidParameter put(@Const @ByRef SigmoidParameter from);
+  public native @ByRef @Name("operator =") SigmoidParameter put(@Const @ByRef SigmoidParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -6011,7 +6047,7 @@ public static final int
   public SliceParameter(@Const @ByRef SliceParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef SliceParameter from);
 
-  public native @ByRef @Name("operator=") SliceParameter put(@Const @ByRef SliceParameter from);
+  public native @ByRef @Name("operator =") SliceParameter put(@Const @ByRef SliceParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -6089,7 +6125,7 @@ public static final int
   public SoftmaxParameter(@Const @ByRef SoftmaxParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef SoftmaxParameter from);
 
-  public native @ByRef @Name("operator=") SoftmaxParameter put(@Const @ByRef SoftmaxParameter from);
+  public native @ByRef @Name("operator =") SoftmaxParameter put(@Const @ByRef SoftmaxParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -6180,7 +6216,7 @@ public static final int
   public TanHParameter(@Const @ByRef TanHParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef TanHParameter from);
 
-  public native @ByRef @Name("operator=") TanHParameter put(@Const @ByRef TanHParameter from);
+  public native @ByRef @Name("operator =") TanHParameter put(@Const @ByRef TanHParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -6264,7 +6300,7 @@ public static final int
   public ThresholdParameter(@Const @ByRef ThresholdParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef ThresholdParameter from);
 
-  public native @ByRef @Name("operator=") ThresholdParameter put(@Const @ByRef ThresholdParameter from);
+  public native @ByRef @Name("operator =") ThresholdParameter put(@Const @ByRef ThresholdParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -6327,7 +6363,7 @@ public static final int
   public WindowDataParameter(@Const @ByRef WindowDataParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef WindowDataParameter from);
 
-  public native @ByRef @Name("operator=") WindowDataParameter put(@Const @ByRef WindowDataParameter from);
+  public native @ByRef @Name("operator =") WindowDataParameter put(@Const @ByRef WindowDataParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -6498,7 +6534,7 @@ public static final int
   public SPPParameter(@Const @ByRef SPPParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef SPPParameter from);
 
-  public native @ByRef @Name("operator=") SPPParameter put(@Const @ByRef SPPParameter from);
+  public native @ByRef @Name("operator =") SPPParameter put(@Const @ByRef SPPParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -6617,7 +6653,7 @@ public static final int
   public V1LayerParameter(@Const @ByRef V1LayerParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef V1LayerParameter from);
 
-  public native @ByRef @Name("operator=") V1LayerParameter put(@Const @ByRef V1LayerParameter from);
+  public native @ByRef @Name("operator =") V1LayerParameter put(@Const @ByRef V1LayerParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -7154,7 +7190,7 @@ public static final int
   public V0LayerParameter(@Const @ByRef V0LayerParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef V0LayerParameter from);
 
-  public native @ByRef @Name("operator=") V0LayerParameter put(@Const @ByRef V0LayerParameter from);
+  public native @ByRef @Name("operator =") V0LayerParameter put(@Const @ByRef V0LayerParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 
@@ -7536,7 +7572,7 @@ public static final int
   public PReLUParameter(@Const @ByRef PReLUParameter from) { allocate(from); }
   private native void allocate(@Const @ByRef PReLUParameter from);
 
-  public native @ByRef @Name("operator=") PReLUParameter put(@Const @ByRef PReLUParameter from);
+  public native @ByRef @Name("operator =") PReLUParameter put(@Const @ByRef PReLUParameter from);
 
   public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
 

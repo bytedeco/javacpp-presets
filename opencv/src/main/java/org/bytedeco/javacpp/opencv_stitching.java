@@ -898,7 +898,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     public FeaturesFinder(Pointer p) { super(p); }
 
     /** @overload */
-    public native @Name("operator()") void apply(@ByVal Mat image, @ByRef ImageFeatures features);
+    public native @Name("operator ()") void apply(@ByVal Mat image, @ByRef ImageFeatures features);
     /** @brief Finds features in the given image.
 
     @param image Source image
@@ -907,7 +907,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
     @sa detail::ImageFeatures, Rect_
     */
-    public native @Name("operator()") void apply(@ByVal Mat image, @ByRef ImageFeatures features, @Const @ByRef RectVector rois);
+    public native @Name("operator ()") void apply(@ByVal Mat image, @ByRef ImageFeatures features, @Const @ByRef RectVector rois);
     /** @brief Frees unused memory allocated before if there is any. */
     public native void collectGarbage();
 }
@@ -979,7 +979,7 @@ It's assumed that there is a homography between those images.
     private native void allocate();
     public MatchesInfo(@Const @ByRef MatchesInfo other) { allocate(other); }
     private native void allocate(@Const @ByRef MatchesInfo other);
-    public native @Const @ByRef @Name("operator=") MatchesInfo put(@Const @ByRef MatchesInfo other);
+    public native @Const @ByRef @Name("operator =") MatchesInfo put(@Const @ByRef MatchesInfo other);
 
     /** Images indices (optional) */
     public native int src_img_idx(); public native MatchesInfo src_img_idx(int src_img_idx);
@@ -1009,7 +1009,7 @@ It's assumed that there is a homography between those images.
     @param features2 Second image features
     @param matches_info Found matches
     */
-    public native @Name("operator()") void apply(@Const @ByRef ImageFeatures features1, @Const @ByRef ImageFeatures features2,
+    public native @Name("operator ()") void apply(@Const @ByRef ImageFeatures features1, @Const @ByRef ImageFeatures features2,
                          @ByRef MatchesInfo matches_info);
 
     /** @brief Performs images matching.
@@ -1022,9 +1022,9 @@ It's assumed that there is a homography between those images.
 
     @sa detail::MatchesInfo
     */
-    public native @Name("operator()") void apply(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches,
+    public native @Name("operator ()") void apply(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches,
                          @Const @ByRef(nullValue = "cv::UMat()") UMat mask/*=cv::UMat()*/);
-    public native @Name("operator()") void apply(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches);
+    public native @Name("operator ()") void apply(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches);
 
     /** @return True, if it's possible to use the same matcher instance in parallel, false otherwise
     */
@@ -1088,9 +1088,9 @@ ratio between descriptor distances is greater than the threshold match_conf
     public BestOf2NearestRangeMatcher() { allocate(); }
     private native void allocate();
 
-    public native @Name("operator()") void apply(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches,
+    public native @Name("operator ()") void apply(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches,
                          @Const @ByRef(nullValue = "cv::UMat()") UMat mask/*=cv::UMat()*/);
-    public native @Name("operator()") void apply(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches);
+    public native @Name("operator ()") void apply(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches);
 }
 
 /** @} stitching_match */
@@ -1232,8 +1232,8 @@ public static final int ENABLE_LOG = 0;
 
     public GraphEdge(int from, int to, float weight) { allocate(from, to, weight); }
     private native void allocate(int from, int to, float weight);
-    public native @Cast("bool") @Name("operator<") boolean lessThan(@Const @ByRef GraphEdge other);
-    public native @Cast("bool") @Name("operator>") boolean greaterThan(@Const @ByRef GraphEdge other);
+    public native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef GraphEdge other);
+    public native @Cast("bool") @Name("operator >") boolean greaterThan(@Const @ByRef GraphEdge other);
 
     public native int from(); public native GraphEdge from(int from);
     public native int to(); public native GraphEdge to(int to);
@@ -1355,7 +1355,7 @@ public static final int ENABLE_LOG = 0;
     private native void allocate();
     public CameraParams(@Const @ByRef CameraParams other) { allocate(other); }
     private native void allocate(@Const @ByRef CameraParams other);
-    public native @Const @ByRef @Name("operator=") CameraParams put(@Const @ByRef CameraParams other);
+    public native @Const @ByRef @Name("operator =") CameraParams put(@Const @ByRef CameraParams other);
     public native @ByVal Mat K();
 
     public native double focal(); public native CameraParams focal(double focal); // Focal length
@@ -1452,7 +1452,7 @@ rotations in respect to the first camera, for instance. :
     @param cameras Estimated camera parameters
     @return True in case of success, false otherwise
      */
-    public native @Cast("bool") @Name("operator()") boolean apply(@StdVector ImageFeatures features,
+    public native @Cast("bool") @Name("operator ()") boolean apply(@StdVector ImageFeatures features,
                          @StdVector MatchesInfo pairwise_matches,
                          @StdVector CameraParams cameras);
 }

@@ -42,7 +42,7 @@ We can also have everything downloaded and installed automatically with:
   libraryDependencies += "org.bytedeco.javacpp-presets" % moduleName % moduleVersion + "-1.0"
 ```
 
-where the `moduleName` and `moduleVersion` variables correspond to the desired module. Additionally, we need to either set the `platform.dependency` system property (via the `-D` command line option) to something like `android-arm`, or set the `platform.dependencies` one to `true` to get all the binaries for Android, Linux, Mac OS X, and Windows. **On build systems where this does not work, we need to add the platform-specific artifacts manually.**
+where the `moduleName` and `moduleVersion` variables correspond to the desired module. Additionally, we need to either set the `platform` system property (via the `-D` command line option) to something like `android-arm`, or set the `platform.dependencies` one to `true` to get all the binaries for Android, Linux, Mac OS X, and Windows. **On build systems where this does not work, we need to add the platform-specific artifacts manually.**
 
 
 Required Software
