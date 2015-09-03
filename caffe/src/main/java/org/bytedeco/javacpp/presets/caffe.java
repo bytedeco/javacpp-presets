@@ -22,6 +22,10 @@
 
 package org.bytedeco.javacpp.presets;
 
+import org.bytedeco.javacpp.FunctionPointer;
+import org.bytedeco.javacpp.Loader;
+import org.bytedeco.javacpp.Pointer;
+import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
@@ -32,11 +36,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit=opencv_core.class, target="org.bytedeco.javacpp.caffe", value={
+@Properties(inherit=opencv_highgui.class, target="org.bytedeco.javacpp.caffe", value={
     @Platform(value={"linux", "macosx"}, define="SHARED_PTR_NAMESPACE boost", include={"caffe/caffe.hpp", "caffe/util/device_alternate.hpp",
-        "caffe/common.hpp", "caffe/proto/caffe.pb.h", "caffe/util/math_functions.hpp", "caffe/syncedmem.hpp", "caffe/blob.hpp",
-        "caffe/data_transformer.hpp", "caffe/filler.hpp", "caffe/internal_thread.hpp", "caffe/data_layers.hpp", "caffe/layer_factory.hpp",
-        "caffe/layer.hpp", "caffe/loss_layers.hpp", "caffe/neuron_layers.hpp", "caffe/common_layers.hpp", "caffe/net.hpp", "caffe/solver.hpp",
+        "caffe/common.hpp", "caffe/proto/caffe.pb.h", "caffe/util/blocking_queue.hpp", "caffe/data_reader.hpp", "caffe/util/math_functions.hpp", "caffe/syncedmem.hpp",
+        "caffe/blob.hpp", "caffe/data_transformer.hpp", "caffe/filler.hpp", "caffe/internal_thread.hpp", "caffe/data_layers.hpp", "caffe/layer_factory.hpp",
+        "caffe/layer.hpp", "caffe/loss_layers.hpp", "caffe/neuron_layers.hpp", "caffe/common_layers.hpp", "caffe/net.hpp", "caffe/parallel.hpp", "caffe/solver.hpp",
         "caffe/vision_layers.hpp", "caffe/util/benchmark.hpp", "caffe/util/db.hpp", "caffe/util/db_leveldb.hpp", "caffe/util/db_lmdb.hpp",
         "caffe/util/io.hpp", "caffe/util/rng.hpp", "caffe/util/im2col.hpp", "caffe/util/insert_splits.hpp", "caffe/util/mkl_alternate.hpp",
         "caffe/util/upgrade_proto.hpp", /* "caffe/util/cudnn.hpp" */}, link="caffe", includepath={"/usr/local/cuda/include/",
@@ -44,11 +48,13 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class caffe implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("NOT_IMPLEMENTED", "NO_GPU", "CUDA_POST_KERNEL_CHECK").cppTypes().annotations())
-               .put(new Info("GFLAGS_GFLAGS_H_", "SWIG").define())
+               .put(new Info("CPU_ONLY", "GFLAGS_GFLAGS_H_", "SWIG").define())
                .put(new Info("cublasHandle_t", "curandGenerator_t").cast().valueTypes("Pointer"))
                .put(new Info("CBLAS_TRANSPOSE", "cublasStatus_t", "curandStatus_t", "hid_t").cast().valueTypes("int"))
                .put(new Info("std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
+
+               .put(new Info("caffe::BlockingQueue<caffe::Datum*>").pointerTypes("DatumBlockingQueue"))
 
                .put(new Info("google::protobuf::int8", "google::protobuf::uint8").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
                .put(new Info("google::protobuf::int16", "google::protobuf::uint16").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
@@ -74,7 +80,7 @@ public class caffe implements InfoMapper {
         }
 
         String classTemplates[] = { "Blob", "DataTransformer", "Filler", "ConstantFiller", "UniformFiller", "GaussianFiller", "PositiveUnitballFiller", "XavierFiller",
-                "BaseDataLayer", "BasePrefetchingDataLayer", "DataLayer", "DummyDataLayer", "HDF5DataLayer", "HDF5OutputLayer", "ImageDataLayer", "MemoryDataLayer",
+                "BaseDataLayer", "Batch", "BasePrefetchingDataLayer", "DataLayer", "DummyDataLayer", "HDF5DataLayer", "HDF5OutputLayer", "ImageDataLayer", "MemoryDataLayer",
                 "WindowDataLayer", "Layer", "LayerRegistry", "LayerRegisterer", "AccuracyLayer", "LossLayer", "ContrastiveLossLayer", "EuclideanLossLayer", "HingeLossLayer",
                 "InfogainLossLayer", "MultinomialLogisticLossLayer", "SigmoidCrossEntropyLossLayer", "SoftmaxWithLossLayer", "NeuronLayer", "AbsValLayer", "BNLLLayer",
                 "DropoutLayer", "ExpLayer", "PowerLayer", "ReLULayer", "SigmoidLayer", "TanHLayer", "ThresholdLayer", "PReLULayer", "ArgMaxLayer", "ConcatLayer", "EltwiseLayer",
@@ -89,6 +95,11 @@ public class caffe implements InfoMapper {
         }
         infoMap.put(new Info("caffe::BasePrefetchingDataLayer<float>::InternalThreadEntry()",
                              "caffe::BasePrefetchingDataLayer<double>::InternalThreadEntry()").skip())
+
+               .put(new Info("caffe::Batch<float>::data_").javaText("@MemberGetter public native @ByRef FloatBlob data_();"))
+               .put(new Info("caffe::Batch<double>::data_").javaText("@MemberGetter public native @ByRef DoubleBlob data_();"))
+               .put(new Info("caffe::Batch<float>::label_").javaText("@MemberGetter public native @ByRef FloatBlob label_();"))
+               .put(new Info("caffe::Batch<double>::label_").javaText("@MemberGetter public native @ByRef DoubleBlob label_();"))
 
                .put(new Info("caffe::GetFiller<float>").javaNames("GetFloatFiller"))
                .put(new Info("caffe::GetFiller<double>").javaNames("GetDoubleFiller"))
@@ -133,6 +144,17 @@ public class caffe implements InfoMapper {
                        "public DoubleLayer layer_by_name(BytePointer layer_name) { return layer_by_name(DoubleLayer.class, layer_name); }\n"
                      + "public DoubleLayer layer_by_name(String layer_name) { return layer_by_name(DoubleLayer.class, layer_name); };\n"
                      + "public native @Const @Cast({\"\", \"boost::shared_ptr<caffe::Layer<double> >\"}) @SharedPtr @ByVal <L extends DoubleLayer> L layer_by_name(Class<L> cls, @StdString BytePointer layer_name);\n"
-                     + "public native @Const @Cast({\"\", \"boost::shared_ptr<caffe::Layer<double> >\"}) @SharedPtr @ByVal <L extends DoubleLayer> L layer_by_name(Class<L> cls, @StdString String layer_name);\n"));
+                     + "public native @Const @Cast({\"\", \"boost::shared_ptr<caffe::Layer<double> >\"}) @SharedPtr @ByVal <L extends DoubleLayer> L layer_by_name(Class<L> cls, @StdString String layer_name);\n"))
+
+               .put(new Info("boost::function<caffe::SolverAction::Enum()>").pointerTypes("ActionCallback"));
+    }
+
+    public static class ActionCallback extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    ActionCallback(Pointer p) { super(p); }
+        protected ActionCallback() { allocate(); }
+        private native void allocate();
+        public native @Cast("caffe::SolverAction::Enum") int call();
     }
 }

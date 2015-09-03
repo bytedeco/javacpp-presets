@@ -7,6 +7,10 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.opencv_core.*;
+import static org.bytedeco.javacpp.opencv_imgproc.*;
+import static org.bytedeco.javacpp.opencv_imgcodecs.*;
+import static org.bytedeco.javacpp.opencv_videoio.*;
+import static org.bytedeco.javacpp.opencv_highgui.*;
 
 public class caffe extends org.bytedeco.javacpp.presets.caffe {
     static { Loader.load(); }
@@ -441,6 +445,7 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 // #include "caffe/layer.hpp"
 // #include "caffe/layer_factory.hpp"
 // #include "caffe/net.hpp"
+// #include "caffe/parallel.hpp"
 // #include "caffe/proto/caffe.pb.h"
 // #include "caffe/solver.hpp"
 // #include "caffe/util/benchmark.hpp"
@@ -484,67 +489,6 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 //     const vector<Blob<Dtype>*>& bottom) { NO_GPU; } 
 
 // #else  // Normal GPU + CPU Caffe.
-
-// #include <cublas_v2.h>
-// #include <cuda.h>
-// #include <cuda_runtime.h>
-// #include <curand.h>
-// #include <driver_types.h>  // cuda driver types
-// #ifdef USE_CUDNN  // cuDNN acceleration library.
-// #include "caffe/util/cudnn.hpp"
-// #endif
-
-//
-// CUDA macros
-//
-
-// CUDA: various checks for different function calls.
-// #define CUDA_CHECK(condition)
-//   /* Code block avoids redefinition of cudaError_t error */
-//   do {
-//     cudaError_t error = condition;
-//     CHECK_EQ(error, cudaSuccess) << " " << cudaGetErrorString(error);
-//   } while (0)
-
-// #define CUBLAS_CHECK(condition)
-//   do {
-//     cublasStatus_t status = condition;
-//     CHECK_EQ(status, CUBLAS_STATUS_SUCCESS) << " "
-//       << caffe::cublasGetErrorString(status);
-//   } while (0)
-
-// #define CURAND_CHECK(condition)
-//   do {
-//     curandStatus_t status = condition;
-//     CHECK_EQ(status, CURAND_STATUS_SUCCESS) << " "
-//       << caffe::curandGetErrorString(status);
-//   } while (0)
-
-// CUDA: grid stride looping
-// #define CUDA_KERNEL_LOOP(i, n)
-//   for (int i = blockIdx.x * blockDim.x + threadIdx.x;
-//        i < (n);
-//        i += blockDim.x * gridDim.x)
-
-// CUDA: check for error after kernel execution and exit loudly if there is one.
-// #define CUDA_POST_KERNEL_CHECK CUDA_CHECK(cudaPeekAtLastError())
-
-// CUDA: library error reporting.
-@Namespace("caffe") public static native @Cast("const char*") BytePointer cublasGetErrorString(@Cast("cublasStatus_t") int error);
-@Namespace("caffe") public static native @Cast("const char*") BytePointer curandGetErrorString(@Cast("curandStatus_t") int error);
-
-// CUDA: thread number configuration.
-// Use 1024 threads per block, which requires cuda sm_2x or above,
-// or fall back to attempt compatibility (best of luck to you).
-// #if __CUDA_ARCH__ >= 200
-    @Namespace("caffe") @MemberGetter public static native int CAFFE_CUDA_NUM_THREADS();
-// #else
-// #endif
-
-// CUDA: number of blocks for threads.
-@Namespace("caffe") public static native int CAFFE_GET_BLOCKS(int N);
-
-  // namespace caffe
 
 // #endif  // CPU_ONLY
 
@@ -641,7 +585,12 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Caffe(Pointer p) { super(p); }
 
+
+  // Thread local context for Caffe. Moved to common.cpp instead of
+  // including boost/thread.hpp to avoid a boost/NVCC issues (#1009, #1010)
+  // on OSX. Also fails on Linux with CUDA 7.0.18.
   public static native @ByRef Caffe Get();
+
   /** enum caffe::Caffe::Brew */
   public static final int CPU = 0, GPU = 1;
 
@@ -665,8 +614,6 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
   // Getters for boost rng, curand, and cublas handles
   public static native @ByRef RNG rng_stream();
 // #ifndef CPU_ONLY
-  public static native @Cast("cublasHandle_t") Pointer cublas_handle();
-  public static native @Cast("curandGenerator_t") Pointer curand_generator();
 // #endif
 
   // Returns the mode: running on CPU or GPU.
@@ -684,6 +631,11 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
   public static native void SetDevice(int device_id);
   // Prints the current GPU status.
   public static native void DeviceQuery();
+  // Parallel training info
+  public static native int solver_count();
+  public static native void set_solver_count(int val);
+  public static native @Cast("bool") boolean root_solver();
+  public static native void set_root_solver(@Cast("bool") boolean val);
 }
 
   // namespace caffe
@@ -751,6 +703,29 @@ public static final int
     @StdString BytePointer name, @Cast("caffe::FillerParameter_VarianceNorm*") IntBuffer value);
 @Namespace("caffe") public static native @Cast("bool") boolean FillerParameter_VarianceNorm_Parse(
     @StdString String name, @Cast("caffe::FillerParameter_VarianceNorm*") int[] value);
+/** enum caffe::SolverParameter_SnapshotFormat */
+public static final int
+  SolverParameter_SnapshotFormat_HDF5 = 0,
+  SolverParameter_SnapshotFormat_BINARYPROTO = 1;
+@Namespace("caffe") public static native @Cast("bool") boolean SolverParameter_SnapshotFormat_IsValid(int value);
+@Namespace("caffe") @MemberGetter public static native @Cast("const caffe::SolverParameter_SnapshotFormat") int SolverParameter_SnapshotFormat_SnapshotFormat_MIN();
+@Namespace("caffe") @MemberGetter public static native @Cast("const caffe::SolverParameter_SnapshotFormat") int SolverParameter_SnapshotFormat_SnapshotFormat_MAX();
+@Namespace("caffe") @MemberGetter public static native int SolverParameter_SnapshotFormat_SnapshotFormat_ARRAYSIZE();
+
+@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer SolverParameter_SnapshotFormat_descriptor();
+@Namespace("caffe") public static native @StdString BytePointer SolverParameter_SnapshotFormat_Name(@Cast("caffe::SolverParameter_SnapshotFormat") int value);
+@Namespace("caffe") public static native @Cast("bool") boolean SolverParameter_SnapshotFormat_Parse(
+    @StdString BytePointer name, @Cast("caffe::SolverParameter_SnapshotFormat*") IntPointer value);
+@Namespace("caffe") public static native @Cast("bool") boolean SolverParameter_SnapshotFormat_Parse(
+    @StdString String name, @Cast("caffe::SolverParameter_SnapshotFormat*") IntBuffer value);
+@Namespace("caffe") public static native @Cast("bool") boolean SolverParameter_SnapshotFormat_Parse(
+    @StdString BytePointer name, @Cast("caffe::SolverParameter_SnapshotFormat*") int[] value);
+@Namespace("caffe") public static native @Cast("bool") boolean SolverParameter_SnapshotFormat_Parse(
+    @StdString String name, @Cast("caffe::SolverParameter_SnapshotFormat*") IntPointer value);
+@Namespace("caffe") public static native @Cast("bool") boolean SolverParameter_SnapshotFormat_Parse(
+    @StdString BytePointer name, @Cast("caffe::SolverParameter_SnapshotFormat*") IntBuffer value);
+@Namespace("caffe") public static native @Cast("bool") boolean SolverParameter_SnapshotFormat_Parse(
+    @StdString String name, @Cast("caffe::SolverParameter_SnapshotFormat*") int[] value);
 /** enum caffe::SolverParameter_SolverMode */
 public static final int
   SolverParameter_SolverMode_CPU = 0,
@@ -778,7 +753,10 @@ public static final int
 public static final int
   SolverParameter_SolverType_SGD = 0,
   SolverParameter_SolverType_NESTEROV = 1,
-  SolverParameter_SolverType_ADAGRAD = 2;
+  SolverParameter_SolverType_ADAGRAD = 2,
+  SolverParameter_SolverType_RMSPROP = 3,
+  SolverParameter_SolverType_ADADELTA = 4,
+  SolverParameter_SolverType_ADAM = 5;
 @Namespace("caffe") public static native @Cast("bool") boolean SolverParameter_SolverType_IsValid(int value);
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::SolverParameter_SolverType") int SolverParameter_SolverType_SolverType_MIN();
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::SolverParameter_SolverType") int SolverParameter_SolverType_SolverType_MAX();
@@ -1431,6 +1409,22 @@ public static final int
   public native void set_diff(int index, float value);
   public native void add_diff(float value);
 
+  // repeated double double_data = 8 [packed = true];
+  public native int double_data_size();
+  public native void clear_double_data();
+  @MemberGetter public static native int kDoubleDataFieldNumber();
+  public native double double_data(int index);
+  public native void set_double_data(int index, double value);
+  public native void add_double_data(double value);
+
+  // repeated double double_diff = 9 [packed = true];
+  public native int double_diff_size();
+  public native void clear_double_diff();
+  @MemberGetter public static native int kDoubleDiffFieldNumber();
+  public native double double_diff(int index);
+  public native void set_double_diff(int index, double value);
+  public native void add_double_diff(double value);
+
   // optional int32 num = 1 [default = 0];
   public native @Cast("bool") boolean has_num();
   public native void clear_num();
@@ -1966,6 +1960,26 @@ public static final int
   public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
 
   // nested types ----------------------------------------------------
+  @MemberGetter public static native @Cast("const caffe::SolverParameter::SnapshotFormat") int HDF5();
+  @MemberGetter public static native @Cast("const caffe::SolverParameter::SnapshotFormat") int BINARYPROTO();
+  public static native @Cast("bool") boolean SnapshotFormat_IsValid(int value);
+  @MemberGetter public static native @Cast("const caffe::SolverParameter::SnapshotFormat") int SnapshotFormat_MIN();
+  @MemberGetter public static native @Cast("const caffe::SolverParameter::SnapshotFormat") int SnapshotFormat_MAX();
+  @MemberGetter public static native int SnapshotFormat_ARRAYSIZE();
+  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer SnapshotFormat_descriptor();
+  public static native @StdString BytePointer SnapshotFormat_Name(@Cast("caffe::SolverParameter::SnapshotFormat") int value);
+  public static native @Cast("bool") boolean SnapshotFormat_Parse(@StdString BytePointer name,
+        @Cast("caffe::SolverParameter::SnapshotFormat*") IntPointer value);
+  public static native @Cast("bool") boolean SnapshotFormat_Parse(@StdString String name,
+        @Cast("caffe::SolverParameter::SnapshotFormat*") IntBuffer value);
+  public static native @Cast("bool") boolean SnapshotFormat_Parse(@StdString BytePointer name,
+        @Cast("caffe::SolverParameter::SnapshotFormat*") int[] value);
+  public static native @Cast("bool") boolean SnapshotFormat_Parse(@StdString String name,
+        @Cast("caffe::SolverParameter::SnapshotFormat*") IntPointer value);
+  public static native @Cast("bool") boolean SnapshotFormat_Parse(@StdString BytePointer name,
+        @Cast("caffe::SolverParameter::SnapshotFormat*") IntBuffer value);
+  public static native @Cast("bool") boolean SnapshotFormat_Parse(@StdString String name,
+        @Cast("caffe::SolverParameter::SnapshotFormat*") int[] value);
   @MemberGetter public static native @Cast("const caffe::SolverParameter::SolverMode") int CPU();
   @MemberGetter public static native @Cast("const caffe::SolverParameter::SolverMode") int GPU();
   public static native @Cast("bool") boolean SolverMode_IsValid(int value);
@@ -1989,6 +2003,9 @@ public static final int
   @MemberGetter public static native @Cast("const caffe::SolverParameter::SolverType") int SGD();
   @MemberGetter public static native @Cast("const caffe::SolverParameter::SolverType") int NESTEROV();
   @MemberGetter public static native @Cast("const caffe::SolverParameter::SolverType") int ADAGRAD();
+  @MemberGetter public static native @Cast("const caffe::SolverParameter::SolverType") int RMSPROP();
+  @MemberGetter public static native @Cast("const caffe::SolverParameter::SolverType") int ADADELTA();
+  @MemberGetter public static native @Cast("const caffe::SolverParameter::SolverType") int ADAM();
   public static native @Cast("bool") boolean SolverType_IsValid(int value);
   @MemberGetter public static native @Cast("const caffe::SolverParameter::SolverType") int SolverType_MIN();
   @MemberGetter public static native @Cast("const caffe::SolverParameter::SolverType") int SolverType_MAX();
@@ -2262,6 +2279,13 @@ public static final int
   public native @Cast("bool") boolean snapshot_diff();
   public native void set_snapshot_diff(@Cast("bool") boolean value);
 
+  // optional .caffe.SolverParameter.SnapshotFormat snapshot_format = 37 [default = BINARYPROTO];
+  public native @Cast("bool") boolean has_snapshot_format();
+  public native void clear_snapshot_format();
+  @MemberGetter public static native int kSnapshotFormatFieldNumber();
+  public native @Cast("caffe::SolverParameter_SnapshotFormat") int snapshot_format();
+  public native void set_snapshot_format(@Cast("caffe::SolverParameter_SnapshotFormat") int value);
+
   // optional .caffe.SolverParameter.SolverMode solver_mode = 17 [default = GPU];
   public native @Cast("bool") boolean has_solver_mode();
   public native void clear_solver_mode();
@@ -2296,6 +2320,20 @@ public static final int
   @MemberGetter public static native int kDeltaFieldNumber();
   public native float delta();
   public native void set_delta(float value);
+
+  // optional float momentum2 = 39 [default = 0.999];
+  public native @Cast("bool") boolean has_momentum2();
+  public native void clear_momentum2();
+  @MemberGetter public static native int kMomentum2FieldNumber();
+  public native float momentum2();
+  public native void set_momentum2(float value);
+
+  // optional float rms_decay = 38;
+  public native @Cast("bool") boolean has_rms_decay();
+  public native void clear_rms_decay();
+  @MemberGetter public static native int kRmsDecayFieldNumber();
+  public native float rms_decay();
+  public native void set_rms_decay(float value);
 
   // optional bool debug_info = 23 [default = false];
   public native @Cast("bool") boolean has_debug_info();
@@ -2975,6 +3013,15 @@ public static final int
   public native EltwiseParameter release_eltwise_param();
   public native void set_allocated_eltwise_param(EltwiseParameter eltwise_param);
 
+  // optional .caffe.EmbedParameter embed_param = 137;
+  public native @Cast("bool") boolean has_embed_param();
+  public native void clear_embed_param();
+  @MemberGetter public static native int kEmbedParamFieldNumber();
+  public native @Const @ByRef EmbedParameter embed_param();
+  public native EmbedParameter mutable_embed_param();
+  public native EmbedParameter release_embed_param();
+  public native void set_allocated_embed_param(EmbedParameter embed_param);
+
   // optional .caffe.ExpParameter exp_param = 111;
   public native @Cast("bool") boolean has_exp_param();
   public native void clear_exp_param();
@@ -3199,6 +3246,15 @@ public static final int
   public native ThresholdParameter mutable_threshold_param();
   public native ThresholdParameter release_threshold_param();
   public native void set_allocated_threshold_param(ThresholdParameter threshold_param);
+
+  // optional .caffe.TileParameter tile_param = 138;
+  public native @Cast("bool") boolean has_tile_param();
+  public native void clear_tile_param();
+  @MemberGetter public static native int kTileParamFieldNumber();
+  public native @Const @ByRef TileParameter tile_param();
+  public native TileParameter mutable_tile_param();
+  public native TileParameter release_tile_param();
+  public native void set_allocated_tile_param(TileParameter tile_param);
 
   // optional .caffe.WindowDataParameter window_data_param = 129;
   public native @Cast("bool") boolean has_window_data_param();
@@ -4014,6 +4070,13 @@ public static final int
   @MemberGetter public static native int kForceEncodedColorFieldNumber();
   public native @Cast("bool") boolean force_encoded_color();
   public native void set_force_encoded_color(@Cast("bool") boolean value);
+
+  // optional uint32 prefetch = 10 [default = 4];
+  public native @Cast("bool") boolean has_prefetch();
+  public native void clear_prefetch();
+  @MemberGetter public static native int kPrefetchFieldNumber();
+  public native @Cast("google::protobuf::uint32") int prefetch();
+  public native void set_prefetch(@Cast("google::protobuf::uint32") int value);
 }
 // -------------------------------------------------------------------
 
@@ -4280,6 +4343,101 @@ public static final int
   @MemberGetter public static native int kStableProdGradFieldNumber();
   public native @Cast("bool") boolean stable_prod_grad();
   public native void set_stable_prod_grad(@Cast("bool") boolean value);
+}
+// -------------------------------------------------------------------
+
+@Namespace("caffe") @NoOffset public static class EmbedParameter extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public EmbedParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public EmbedParameter(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public EmbedParameter position(int position) {
+        return (EmbedParameter)super.position(position);
+    }
+
+  public EmbedParameter() { allocate(); }
+  private native void allocate();
+
+  public EmbedParameter(@Const @ByRef EmbedParameter from) { allocate(from); }
+  private native void allocate(@Const @ByRef EmbedParameter from);
+
+  public native @ByRef @Name("operator =") EmbedParameter put(@Const @ByRef EmbedParameter from);
+
+  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+
+  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef EmbedParameter default_instance();
+
+  public native void Swap(EmbedParameter other);
+
+  // implements Message ----------------------------------------------
+
+  public native EmbedParameter New();
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef EmbedParameter from);
+  public native void MergeFrom(@Const @ByRef EmbedParameter from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native int ByteSize();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+  public native void SerializeWithCachedSizes(
+        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+  public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
+  public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional uint32 num_output = 1;
+  public native @Cast("bool") boolean has_num_output();
+  public native void clear_num_output();
+  @MemberGetter public static native int kNumOutputFieldNumber();
+  public native @Cast("google::protobuf::uint32") int num_output();
+  public native void set_num_output(@Cast("google::protobuf::uint32") int value);
+
+  // optional uint32 input_dim = 2;
+  public native @Cast("bool") boolean has_input_dim();
+  public native void clear_input_dim();
+  @MemberGetter public static native int kInputDimFieldNumber();
+  public native @Cast("google::protobuf::uint32") int input_dim();
+  public native void set_input_dim(@Cast("google::protobuf::uint32") int value);
+
+  // optional bool bias_term = 3 [default = true];
+  public native @Cast("bool") boolean has_bias_term();
+  public native void clear_bias_term();
+  @MemberGetter public static native int kBiasTermFieldNumber();
+  public native @Cast("bool") boolean bias_term();
+  public native void set_bias_term(@Cast("bool") boolean value);
+
+  // optional .caffe.FillerParameter weight_filler = 4;
+  public native @Cast("bool") boolean has_weight_filler();
+  public native void clear_weight_filler();
+  @MemberGetter public static native int kWeightFillerFieldNumber();
+  public native @Const @ByRef FillerParameter weight_filler();
+  public native FillerParameter mutable_weight_filler();
+  public native FillerParameter release_weight_filler();
+  public native void set_allocated_weight_filler(FillerParameter weight_filler);
+
+  // optional .caffe.FillerParameter bias_filler = 5;
+  public native @Cast("bool") boolean has_bias_filler();
+  public native void clear_bias_filler();
+  @MemberGetter public static native int kBiasFillerFieldNumber();
+  public native @Const @ByRef FillerParameter bias_filler();
+  public native FillerParameter mutable_bias_filler();
+  public native FillerParameter release_bias_filler();
+  public native void set_allocated_bias_filler(FillerParameter bias_filler);
 }
 // -------------------------------------------------------------------
 
@@ -4732,7 +4890,7 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_source();
   public native void set_allocated_source(@StdString @Cast({"char*", "std::string*"}) BytePointer source);
 
-  // optional uint32 batch_size = 4;
+  // optional uint32 batch_size = 4 [default = 1];
   public native @Cast("bool") boolean has_batch_size();
   public native void clear_batch_size();
   @MemberGetter public static native int kBatchSizeFieldNumber();
@@ -5674,6 +5832,26 @@ public static final int
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_layer();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_layer();
   public native void set_allocated_layer(@StdString @Cast({"char*", "std::string*"}) BytePointer layer);
+
+  // optional string param_str = 3 [default = ""];
+  public native @Cast("bool") boolean has_param_str();
+  public native void clear_param_str();
+  @MemberGetter public static native int kParamStrFieldNumber();
+  public native @StdString BytePointer param_str();
+  public native void set_param_str(@StdString BytePointer value);
+  public native void set_param_str(@StdString String value);
+  public native void set_param_str(@Cast("const char*") BytePointer value, @Cast("size_t") long size);
+  public native void set_param_str(String value, @Cast("size_t") long size);
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_param_str();
+  public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_param_str();
+  public native void set_allocated_param_str(@StdString @Cast({"char*", "std::string*"}) BytePointer param_str);
+
+  // optional bool share_in_parallel = 4 [default = false];
+  public native @Cast("bool") boolean has_share_in_parallel();
+  public native void clear_share_in_parallel();
+  @MemberGetter public static native int kShareInParallelFieldNumber();
+  public native @Cast("bool") boolean share_in_parallel();
+  public native void set_share_in_parallel(@Cast("bool") boolean value);
 }
 // -------------------------------------------------------------------
 
@@ -6280,6 +6458,76 @@ public static final int
   @MemberGetter public static native int kEngineFieldNumber();
   public native @Cast("caffe::TanHParameter_Engine") int engine();
   public native void set_engine(@Cast("caffe::TanHParameter_Engine") int value);
+}
+// -------------------------------------------------------------------
+
+@Namespace("caffe") @NoOffset public static class TileParameter extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TileParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public TileParameter(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public TileParameter position(int position) {
+        return (TileParameter)super.position(position);
+    }
+
+  public TileParameter() { allocate(); }
+  private native void allocate();
+
+  public TileParameter(@Const @ByRef TileParameter from) { allocate(from); }
+  private native void allocate(@Const @ByRef TileParameter from);
+
+  public native @ByRef @Name("operator =") TileParameter put(@Const @ByRef TileParameter from);
+
+  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+
+  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef TileParameter default_instance();
+
+  public native void Swap(TileParameter other);
+
+  // implements Message ----------------------------------------------
+
+  public native TileParameter New();
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef TileParameter from);
+  public native void MergeFrom(@Const @ByRef TileParameter from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native int ByteSize();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+  public native void SerializeWithCachedSizes(
+        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+  public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
+  public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 axis = 1 [default = 1];
+  public native @Cast("bool") boolean has_axis();
+  public native void clear_axis();
+  @MemberGetter public static native int kAxisFieldNumber();
+  public native @Cast("google::protobuf::int32") int axis();
+  public native void set_axis(@Cast("google::protobuf::int32") int value);
+
+  // optional int32 tiles = 2;
+  public native @Cast("bool") boolean has_tiles();
+  public native void clear_tiles();
+  @MemberGetter public static native int kTilesFieldNumber();
+  public native @Cast("google::protobuf::int32") int tiles();
+  public native void set_tiles(@Cast("google::protobuf::int32") int value);
 }
 // -------------------------------------------------------------------
 
@@ -7673,6 +7921,24 @@ public static final int
 
 
 
+// repeated double double_data = 8 [packed = true];
+
+
+
+
+
+
+
+
+// repeated double double_diff = 9 [packed = true];
+
+
+
+
+
+
+
+
 // optional int32 num = 1 [default = 0];
 
 
@@ -8229,6 +8495,14 @@ public static final int
 
 
 
+// optional .caffe.SolverParameter.SnapshotFormat snapshot_format = 37 [default = BINARYPROTO];
+
+
+
+
+
+
+
 // optional .caffe.SolverParameter.SolverMode solver_mode = 17 [default = GPU];
 
 
@@ -8262,6 +8536,22 @@ public static final int
 
 
 // optional float delta = 31 [default = 1e-08];
+
+
+
+
+
+
+
+// optional float momentum2 = 39 [default = 0.999];
+
+
+
+
+
+
+
+// optional float rms_decay = 38;
 
 
 
@@ -8693,6 +8983,16 @@ public static final int
 
 
 
+// optional .caffe.EmbedParameter embed_param = 137;
+
+
+
+
+
+
+
+
+
 // optional .caffe.ExpParameter exp_param = 111;
 
 
@@ -8934,6 +9234,16 @@ public static final int
 
 
 // optional .caffe.ThresholdParameter threshold_param = 128;
+
+
+
+
+
+
+
+
+
+// optional .caffe.TileParameter tile_param = 138;
 
 
 
@@ -9341,6 +9651,14 @@ public static final int
 
 
 
+// optional uint32 prefetch = 10 [default = 4];
+
+
+
+
+
+
+
 // -------------------------------------------------------------------
 
 // DropoutParameter
@@ -9433,6 +9751,54 @@ public static final int
 
 
 // optional bool stable_prod_grad = 3 [default = true];
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// EmbedParameter
+
+// optional uint32 num_output = 1;
+
+
+
+
+
+
+
+// optional uint32 input_dim = 2;
+
+
+
+
+
+
+
+// optional bool bias_term = 3 [default = true];
+
+
+
+
+
+
+
+// optional .caffe.FillerParameter weight_filler = 4;
+
+
+
+
+
+
+
+
+
+// optional .caffe.FillerParameter bias_filler = 5;
+
+
 
 
 
@@ -9567,7 +9933,7 @@ public static final int
 
 
 
-// optional uint32 batch_size = 4;
+// optional uint32 batch_size = 4 [default = 1];
 
 
 
@@ -10024,6 +10390,27 @@ public static final int
 
 
 
+// optional string param_str = 3 [default = ""];
+
+
+
+
+
+
+
+
+
+
+
+
+// optional bool share_in_parallel = 4 [default = false];
+
+
+
+
+
+
+
 // -------------------------------------------------------------------
 
 // ReductionParameter
@@ -10168,6 +10555,26 @@ public static final int
 // TanHParameter
 
 // optional .caffe.TanHParameter.Engine engine = 1 [default = DEFAULT];
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// TileParameter
+
+// optional int32 axis = 1 [default = 1];
+
+
+
+
+
+
+
+// optional int32 tiles = 2;
 
 
 
@@ -11163,6 +11570,96 @@ public static final int
 // #endif  // PROTOBUF_caffe_2eproto__INCLUDED
 
 
+// Parsed from caffe/util/blocking_queue.hpp
+
+// #ifndef CAFFE_UTIL_BLOCKING_QUEUE_HPP_
+// #define CAFFE_UTIL_BLOCKING_QUEUE_HPP_
+
+// #include <queue>
+// #include <string>
+
+// #include "caffe/common.hpp"
+
+@Name("caffe::BlockingQueue<caffe::Datum*>") @NoOffset public static class DatumBlockingQueue extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DatumBlockingQueue(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public DatumBlockingQueue(int size) { allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public DatumBlockingQueue position(int position) {
+        return (DatumBlockingQueue)super.position(position);
+    }
+
+  public DatumBlockingQueue() { allocate(); }
+  private native void allocate();
+
+  public native void push(@ByPtrRef Datum t);
+
+  public native @Cast("bool") boolean try_pop(@Cast("caffe::Datum**") PointerPointer t);
+  public native @Cast("bool") boolean try_pop(@ByPtrPtr Datum t);
+
+  // This logs a message if the threads needs to be blocked
+  // useful for detecting e.g. when data feeding is too slow
+  public native Datum pop(@StdString BytePointer log_on_wait/*=""*/);
+  public native Datum pop();
+  public native Datum pop(@StdString String log_on_wait/*=""*/);
+
+  public native @Cast("bool") boolean try_peek(@Cast("caffe::Datum**") PointerPointer t);
+  public native @Cast("bool") boolean try_peek(@ByPtrPtr Datum t);
+
+  // Return element without removing it
+  public native Datum peek();
+
+  public native @Cast("size_t") long size();
+}
+
+  // namespace caffe
+
+// #endif
+
+
+// Parsed from caffe/data_reader.hpp
+
+// #ifndef CAFFE_DATA_READER_HPP_
+// #define CAFFE_DATA_READER_HPP_
+
+// #include <map>
+// #include <string>
+// #include <vector>
+
+// #include "caffe/common.hpp"
+// #include "caffe/internal_thread.hpp"
+// #include "caffe/util/blocking_queue.hpp"
+// #include "caffe/util/db.hpp"
+
+/**
+ * @brief Reads data from a source to queues available to data layers.
+ * A single reading thread is created per source, even if multiple solvers
+ * are running in parallel, e.g. for multi-GPU training. This makes sure
+ * databases are read sequentially, and that each solver accesses a different
+ * subset of the database. Data is distributed to solvers in a round-robin
+ * way to keep parallel training deterministic.
+ */
+@Namespace("caffe") @NoOffset public static class DataReader extends Pointer {
+    static { Loader.load(); }
+    /** Empty constructor. */
+    public DataReader() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DataReader(Pointer p) { super(p); }
+
+  public DataReader(@Const @ByRef LayerParameter param) { allocate(param); }
+  private native void allocate(@Const @ByRef LayerParameter param);
+
+  public native @ByRef DatumBlockingQueue free();
+  public native @ByRef DatumBlockingQueue full();
+}
+
+  // namespace caffe
+
+// #endif  // CAFFE_DATA_READER_HPP_
+
+
 // Parsed from caffe/util/math_functions.hpp
 
 // #ifndef CAFFE_UTIL_MATH_FUNCTIONS_H_
@@ -11437,288 +11934,6 @@ public static final int
 
 // #ifndef CPU_ONLY  // GPU
 
-// Decaf gpu gemm provides an interface that is almost the same as the cpu
-// gemm function - following the c convention and calling the fortran-order
-// gpu code under the hood.
-@Namespace("caffe") public static native @Name("caffe_gpu_gemm<float>") void caffe_gpu_gemm_float(@Cast("const CBLAS_TRANSPOSE") int TransA,
-    @Cast("const CBLAS_TRANSPOSE") int TransB, int M, int N, int K,
-    float alpha, @Const FloatPointer A, @Const FloatPointer B, float beta,
-    FloatPointer C);
-@Namespace("caffe") public static native @Name("caffe_gpu_gemm<float>") void caffe_gpu_gemm_float(@Cast("const CBLAS_TRANSPOSE") int TransA,
-    @Cast("const CBLAS_TRANSPOSE") int TransB, int M, int N, int K,
-    float alpha, @Const FloatBuffer A, @Const FloatBuffer B, float beta,
-    FloatBuffer C);
-@Namespace("caffe") public static native @Name("caffe_gpu_gemm<float>") void caffe_gpu_gemm_float(@Cast("const CBLAS_TRANSPOSE") int TransA,
-    @Cast("const CBLAS_TRANSPOSE") int TransB, int M, int N, int K,
-    float alpha, @Const float[] A, @Const float[] B, float beta,
-    float[] C);
-@Namespace("caffe") public static native @Name("caffe_gpu_gemm<double>") void caffe_gpu_gemm_double(@Cast("const CBLAS_TRANSPOSE") int TransA,
-    @Cast("const CBLAS_TRANSPOSE") int TransB, int M, int N, int K,
-    double alpha, @Const DoublePointer A, @Const DoublePointer B, double beta,
-    DoublePointer C);
-@Namespace("caffe") public static native @Name("caffe_gpu_gemm<double>") void caffe_gpu_gemm_double(@Cast("const CBLAS_TRANSPOSE") int TransA,
-    @Cast("const CBLAS_TRANSPOSE") int TransB, int M, int N, int K,
-    double alpha, @Const DoubleBuffer A, @Const DoubleBuffer B, double beta,
-    DoubleBuffer C);
-@Namespace("caffe") public static native @Name("caffe_gpu_gemm<double>") void caffe_gpu_gemm_double(@Cast("const CBLAS_TRANSPOSE") int TransA,
-    @Cast("const CBLAS_TRANSPOSE") int TransB, int M, int N, int K,
-    double alpha, @Const double[] A, @Const double[] B, double beta,
-    double[] C);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_gemv<float>") void caffe_gpu_gemv_float(@Cast("const CBLAS_TRANSPOSE") int TransA, int M, int N,
-    float alpha, @Const FloatPointer A, @Const FloatPointer x, float beta,
-    FloatPointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_gemv<float>") void caffe_gpu_gemv_float(@Cast("const CBLAS_TRANSPOSE") int TransA, int M, int N,
-    float alpha, @Const FloatBuffer A, @Const FloatBuffer x, float beta,
-    FloatBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_gemv<float>") void caffe_gpu_gemv_float(@Cast("const CBLAS_TRANSPOSE") int TransA, int M, int N,
-    float alpha, @Const float[] A, @Const float[] x, float beta,
-    float[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_gemv<double>") void caffe_gpu_gemv_double(@Cast("const CBLAS_TRANSPOSE") int TransA, int M, int N,
-    double alpha, @Const DoublePointer A, @Const DoublePointer x, double beta,
-    DoublePointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_gemv<double>") void caffe_gpu_gemv_double(@Cast("const CBLAS_TRANSPOSE") int TransA, int M, int N,
-    double alpha, @Const DoubleBuffer A, @Const DoubleBuffer x, double beta,
-    DoubleBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_gemv<double>") void caffe_gpu_gemv_double(@Cast("const CBLAS_TRANSPOSE") int TransA, int M, int N,
-    double alpha, @Const double[] A, @Const double[] x, double beta,
-    double[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_axpy<float>") void caffe_gpu_axpy_float(int N, float alpha, @Const FloatPointer X,
-    FloatPointer Y);
-@Namespace("caffe") public static native @Name("caffe_gpu_axpy<float>") void caffe_gpu_axpy_float(int N, float alpha, @Const FloatBuffer X,
-    FloatBuffer Y);
-@Namespace("caffe") public static native @Name("caffe_gpu_axpy<float>") void caffe_gpu_axpy_float(int N, float alpha, @Const float[] X,
-    float[] Y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_axpy<double>") void caffe_gpu_axpy_double(int N, double alpha, @Const DoublePointer X,
-    DoublePointer Y);
-@Namespace("caffe") public static native @Name("caffe_gpu_axpy<double>") void caffe_gpu_axpy_double(int N, double alpha, @Const DoubleBuffer X,
-    DoubleBuffer Y);
-@Namespace("caffe") public static native @Name("caffe_gpu_axpy<double>") void caffe_gpu_axpy_double(int N, double alpha, @Const double[] X,
-    double[] Y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_axpby<float>") void caffe_gpu_axpby_float(int N, float alpha, @Const FloatPointer X,
-    float beta, FloatPointer Y);
-@Namespace("caffe") public static native @Name("caffe_gpu_axpby<float>") void caffe_gpu_axpby_float(int N, float alpha, @Const FloatBuffer X,
-    float beta, FloatBuffer Y);
-@Namespace("caffe") public static native @Name("caffe_gpu_axpby<float>") void caffe_gpu_axpby_float(int N, float alpha, @Const float[] X,
-    float beta, float[] Y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_axpby<double>") void caffe_gpu_axpby_double(int N, double alpha, @Const DoublePointer X,
-    double beta, DoublePointer Y);
-@Namespace("caffe") public static native @Name("caffe_gpu_axpby<double>") void caffe_gpu_axpby_double(int N, double alpha, @Const DoubleBuffer X,
-    double beta, DoubleBuffer Y);
-@Namespace("caffe") public static native @Name("caffe_gpu_axpby<double>") void caffe_gpu_axpby_double(int N, double alpha, @Const double[] X,
-    double beta, double[] Y);
-
-@Namespace("caffe") public static native void caffe_gpu_memcpy(@Cast("const size_t") long N, @Const Pointer X, Pointer Y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_set<float>") void caffe_gpu_set_float(int N, float alpha, FloatPointer X);
-@Namespace("caffe") public static native @Name("caffe_gpu_set<float>") void caffe_gpu_set_float(int N, float alpha, FloatBuffer X);
-@Namespace("caffe") public static native @Name("caffe_gpu_set<float>") void caffe_gpu_set_float(int N, float alpha, float[] X);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_set<double>") void caffe_gpu_set_double(int N, double alpha, DoublePointer X);
-@Namespace("caffe") public static native @Name("caffe_gpu_set<double>") void caffe_gpu_set_double(int N, double alpha, DoubleBuffer X);
-@Namespace("caffe") public static native @Name("caffe_gpu_set<double>") void caffe_gpu_set_double(int N, double alpha, double[] X);
-
-@Namespace("caffe") public static native void caffe_gpu_memset(@Cast("const size_t") long N, int alpha, Pointer X);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_add_scalar<float>") void caffe_gpu_add_scalar_float(int N, float alpha, FloatPointer X);
-@Namespace("caffe") public static native @Name("caffe_gpu_add_scalar<float>") void caffe_gpu_add_scalar_float(int N, float alpha, FloatBuffer X);
-@Namespace("caffe") public static native @Name("caffe_gpu_add_scalar<float>") void caffe_gpu_add_scalar_float(int N, float alpha, float[] X);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_add_scalar<double>") void caffe_gpu_add_scalar_double(int N, double alpha, DoublePointer X);
-@Namespace("caffe") public static native @Name("caffe_gpu_add_scalar<double>") void caffe_gpu_add_scalar_double(int N, double alpha, DoubleBuffer X);
-@Namespace("caffe") public static native @Name("caffe_gpu_add_scalar<double>") void caffe_gpu_add_scalar_double(int N, double alpha, double[] X);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_scal<float>") void caffe_gpu_scal_float(int N, float alpha, FloatPointer X);
-@Namespace("caffe") public static native @Name("caffe_gpu_scal<float>") void caffe_gpu_scal_float(int N, float alpha, FloatBuffer X);
-@Namespace("caffe") public static native @Name("caffe_gpu_scal<float>") void caffe_gpu_scal_float(int N, float alpha, float[] X);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_scal<double>") void caffe_gpu_scal_double(int N, double alpha, DoublePointer X);
-@Namespace("caffe") public static native @Name("caffe_gpu_scal<double>") void caffe_gpu_scal_double(int N, double alpha, DoubleBuffer X);
-@Namespace("caffe") public static native @Name("caffe_gpu_scal<double>") void caffe_gpu_scal_double(int N, double alpha, double[] X);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_add<float>") void caffe_gpu_add_float(int N, @Const FloatPointer a, @Const FloatPointer b, FloatPointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_add<float>") void caffe_gpu_add_float(int N, @Const FloatBuffer a, @Const FloatBuffer b, FloatBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_add<float>") void caffe_gpu_add_float(int N, @Const float[] a, @Const float[] b, float[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_add<double>") void caffe_gpu_add_double(int N, @Const DoublePointer a, @Const DoublePointer b, DoublePointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_add<double>") void caffe_gpu_add_double(int N, @Const DoubleBuffer a, @Const DoubleBuffer b, DoubleBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_add<double>") void caffe_gpu_add_double(int N, @Const double[] a, @Const double[] b, double[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_sub<float>") void caffe_gpu_sub_float(int N, @Const FloatPointer a, @Const FloatPointer b, FloatPointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_sub<float>") void caffe_gpu_sub_float(int N, @Const FloatBuffer a, @Const FloatBuffer b, FloatBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_sub<float>") void caffe_gpu_sub_float(int N, @Const float[] a, @Const float[] b, float[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_sub<double>") void caffe_gpu_sub_double(int N, @Const DoublePointer a, @Const DoublePointer b, DoublePointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_sub<double>") void caffe_gpu_sub_double(int N, @Const DoubleBuffer a, @Const DoubleBuffer b, DoubleBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_sub<double>") void caffe_gpu_sub_double(int N, @Const double[] a, @Const double[] b, double[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_mul<float>") void caffe_gpu_mul_float(int N, @Const FloatPointer a, @Const FloatPointer b, FloatPointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_mul<float>") void caffe_gpu_mul_float(int N, @Const FloatBuffer a, @Const FloatBuffer b, FloatBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_mul<float>") void caffe_gpu_mul_float(int N, @Const float[] a, @Const float[] b, float[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_mul<double>") void caffe_gpu_mul_double(int N, @Const DoublePointer a, @Const DoublePointer b, DoublePointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_mul<double>") void caffe_gpu_mul_double(int N, @Const DoubleBuffer a, @Const DoubleBuffer b, DoubleBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_mul<double>") void caffe_gpu_mul_double(int N, @Const double[] a, @Const double[] b, double[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_div<float>") void caffe_gpu_div_float(int N, @Const FloatPointer a, @Const FloatPointer b, FloatPointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_div<float>") void caffe_gpu_div_float(int N, @Const FloatBuffer a, @Const FloatBuffer b, FloatBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_div<float>") void caffe_gpu_div_float(int N, @Const float[] a, @Const float[] b, float[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_div<double>") void caffe_gpu_div_double(int N, @Const DoublePointer a, @Const DoublePointer b, DoublePointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_div<double>") void caffe_gpu_div_double(int N, @Const DoubleBuffer a, @Const DoubleBuffer b, DoubleBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_div<double>") void caffe_gpu_div_double(int N, @Const double[] a, @Const double[] b, double[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_abs<float>") void caffe_gpu_abs_float(int n, @Const FloatPointer a, FloatPointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_abs<float>") void caffe_gpu_abs_float(int n, @Const FloatBuffer a, FloatBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_abs<float>") void caffe_gpu_abs_float(int n, @Const float[] a, float[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_abs<double>") void caffe_gpu_abs_double(int n, @Const DoublePointer a, DoublePointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_abs<double>") void caffe_gpu_abs_double(int n, @Const DoubleBuffer a, DoubleBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_abs<double>") void caffe_gpu_abs_double(int n, @Const double[] a, double[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_exp<float>") void caffe_gpu_exp_float(int n, @Const FloatPointer a, FloatPointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_exp<float>") void caffe_gpu_exp_float(int n, @Const FloatBuffer a, FloatBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_exp<float>") void caffe_gpu_exp_float(int n, @Const float[] a, float[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_exp<double>") void caffe_gpu_exp_double(int n, @Const DoublePointer a, DoublePointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_exp<double>") void caffe_gpu_exp_double(int n, @Const DoubleBuffer a, DoubleBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_exp<double>") void caffe_gpu_exp_double(int n, @Const double[] a, double[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_powx<float>") void caffe_gpu_powx_float(int n, @Const FloatPointer a, float b, FloatPointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_powx<float>") void caffe_gpu_powx_float(int n, @Const FloatBuffer a, float b, FloatBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_powx<float>") void caffe_gpu_powx_float(int n, @Const float[] a, float b, float[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_powx<double>") void caffe_gpu_powx_double(int n, @Const DoublePointer a, double b, DoublePointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_powx<double>") void caffe_gpu_powx_double(int n, @Const DoubleBuffer a, double b, DoubleBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_powx<double>") void caffe_gpu_powx_double(int n, @Const double[] a, double b, double[] y);
-
-// caffe_gpu_rng_uniform with two arguments generates integers in the range
-// [0, UINT_MAX].
-@Namespace("caffe") public static native void caffe_gpu_rng_uniform(int n, @Cast("unsigned int*") IntPointer r);
-@Namespace("caffe") public static native void caffe_gpu_rng_uniform(int n, @Cast("unsigned int*") IntBuffer r);
-@Namespace("caffe") public static native void caffe_gpu_rng_uniform(int n, @Cast("unsigned int*") int[] r);
-
-// caffe_gpu_rng_uniform with four arguments generates floats in the range
-// (a, b] (strictly greater than a, less than or equal to b) due to the
-// specification of curandGenerateUniform.  With a = 0, b = 1, just calls
-// curandGenerateUniform; with other limits will shift and scale the outputs
-// appropriately after calling curandGenerateUniform.
-@Namespace("caffe") public static native @Name("caffe_gpu_rng_uniform<float>") void caffe_gpu_rng_uniform_float(int n, float a, float b, FloatPointer r);
-@Namespace("caffe") public static native @Name("caffe_gpu_rng_uniform<float>") void caffe_gpu_rng_uniform_float(int n, float a, float b, FloatBuffer r);
-@Namespace("caffe") public static native @Name("caffe_gpu_rng_uniform<float>") void caffe_gpu_rng_uniform_float(int n, float a, float b, float[] r);
-@Namespace("caffe") public static native @Name("caffe_gpu_rng_uniform<double>") void caffe_gpu_rng_uniform_double(int n, double a, double b, DoublePointer r);
-@Namespace("caffe") public static native @Name("caffe_gpu_rng_uniform<double>") void caffe_gpu_rng_uniform_double(int n, double a, double b, DoubleBuffer r);
-@Namespace("caffe") public static native @Name("caffe_gpu_rng_uniform<double>") void caffe_gpu_rng_uniform_double(int n, double a, double b, double[] r);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_rng_gaussian<float>") void caffe_gpu_rng_gaussian_float(int n, float mu, float sigma,
-                            FloatPointer r);
-@Namespace("caffe") public static native @Name("caffe_gpu_rng_gaussian<float>") void caffe_gpu_rng_gaussian_float(int n, float mu, float sigma,
-                            FloatBuffer r);
-@Namespace("caffe") public static native @Name("caffe_gpu_rng_gaussian<float>") void caffe_gpu_rng_gaussian_float(int n, float mu, float sigma,
-                            float[] r);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_rng_gaussian<double>") void caffe_gpu_rng_gaussian_double(int n, double mu, double sigma,
-                            DoublePointer r);
-@Namespace("caffe") public static native @Name("caffe_gpu_rng_gaussian<double>") void caffe_gpu_rng_gaussian_double(int n, double mu, double sigma,
-                            DoubleBuffer r);
-@Namespace("caffe") public static native @Name("caffe_gpu_rng_gaussian<double>") void caffe_gpu_rng_gaussian_double(int n, double mu, double sigma,
-                            double[] r);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_rng_bernoulli<float>") void caffe_gpu_rng_bernoulli_float(int n, float p, IntPointer r);
-@Namespace("caffe") public static native @Name("caffe_gpu_rng_bernoulli<float>") void caffe_gpu_rng_bernoulli_float(int n, float p, IntBuffer r);
-@Namespace("caffe") public static native @Name("caffe_gpu_rng_bernoulli<float>") void caffe_gpu_rng_bernoulli_float(int n, float p, int[] r);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_rng_bernoulli<double>") void caffe_gpu_rng_bernoulli_double(int n, double p, IntPointer r);
-@Namespace("caffe") public static native @Name("caffe_gpu_rng_bernoulli<double>") void caffe_gpu_rng_bernoulli_double(int n, double p, IntBuffer r);
-@Namespace("caffe") public static native @Name("caffe_gpu_rng_bernoulli<double>") void caffe_gpu_rng_bernoulli_double(int n, double p, int[] r);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_dot<float>") void caffe_gpu_dot_float(int n, @Const FloatPointer x, @Const FloatPointer y, FloatPointer out);
-@Namespace("caffe") public static native @Name("caffe_gpu_dot<float>") void caffe_gpu_dot_float(int n, @Const FloatBuffer x, @Const FloatBuffer y, FloatBuffer out);
-@Namespace("caffe") public static native @Name("caffe_gpu_dot<float>") void caffe_gpu_dot_float(int n, @Const float[] x, @Const float[] y, float[] out);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_dot<double>") void caffe_gpu_dot_double(int n, @Const DoublePointer x, @Const DoublePointer y, DoublePointer out);
-@Namespace("caffe") public static native @Name("caffe_gpu_dot<double>") void caffe_gpu_dot_double(int n, @Const DoubleBuffer x, @Const DoubleBuffer y, DoubleBuffer out);
-@Namespace("caffe") public static native @Name("caffe_gpu_dot<double>") void caffe_gpu_dot_double(int n, @Const double[] x, @Const double[] y, double[] out);
-
-@Namespace("caffe") public static native @Cast("uint32_t") @Name("caffe_gpu_hamming_distance<float>") int caffe_gpu_hamming_distance_float(int n, @Const FloatPointer x,
-                                    @Const FloatPointer y);
-@Namespace("caffe") public static native @Cast("uint32_t") @Name("caffe_gpu_hamming_distance<float>") int caffe_gpu_hamming_distance_float(int n, @Const FloatBuffer x,
-                                    @Const FloatBuffer y);
-@Namespace("caffe") public static native @Cast("uint32_t") @Name("caffe_gpu_hamming_distance<float>") int caffe_gpu_hamming_distance_float(int n, @Const float[] x,
-                                    @Const float[] y);
-
-@Namespace("caffe") public static native @Cast("uint32_t") @Name("caffe_gpu_hamming_distance<double>") int caffe_gpu_hamming_distance_double(int n, @Const DoublePointer x,
-                                    @Const DoublePointer y);
-@Namespace("caffe") public static native @Cast("uint32_t") @Name("caffe_gpu_hamming_distance<double>") int caffe_gpu_hamming_distance_double(int n, @Const DoubleBuffer x,
-                                    @Const DoubleBuffer y);
-@Namespace("caffe") public static native @Cast("uint32_t") @Name("caffe_gpu_hamming_distance<double>") int caffe_gpu_hamming_distance_double(int n, @Const double[] x,
-                                    @Const double[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_asum<float>") void caffe_gpu_asum_float(int n, @Const FloatPointer x, FloatPointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_asum<float>") void caffe_gpu_asum_float(int n, @Const FloatBuffer x, FloatBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_asum<float>") void caffe_gpu_asum_float(int n, @Const float[] x, float[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_asum<double>") void caffe_gpu_asum_double(int n, @Const DoublePointer x, DoublePointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_asum<double>") void caffe_gpu_asum_double(int n, @Const DoubleBuffer x, DoubleBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_asum<double>") void caffe_gpu_asum_double(int n, @Const double[] x, double[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_sign<float>") void caffe_gpu_sign_float(int n, @Const FloatPointer x, FloatPointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_sign<float>") void caffe_gpu_sign_float(int n, @Const FloatBuffer x, FloatBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_sign<float>") void caffe_gpu_sign_float(int n, @Const float[] x, float[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_sign<double>") void caffe_gpu_sign_double(int n, @Const DoublePointer x, DoublePointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_sign<double>") void caffe_gpu_sign_double(int n, @Const DoubleBuffer x, DoubleBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_sign<double>") void caffe_gpu_sign_double(int n, @Const double[] x, double[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_sgnbit<float>") void caffe_gpu_sgnbit_float(int n, @Const FloatPointer x, FloatPointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_sgnbit<float>") void caffe_gpu_sgnbit_float(int n, @Const FloatBuffer x, FloatBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_sgnbit<float>") void caffe_gpu_sgnbit_float(int n, @Const float[] x, float[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_sgnbit<double>") void caffe_gpu_sgnbit_double(int n, @Const DoublePointer x, DoublePointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_sgnbit<double>") void caffe_gpu_sgnbit_double(int n, @Const DoubleBuffer x, DoubleBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_sgnbit<double>") void caffe_gpu_sgnbit_double(int n, @Const double[] x, double[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_fabs<float>") void caffe_gpu_fabs_float(int n, @Const FloatPointer x, FloatPointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_fabs<float>") void caffe_gpu_fabs_float(int n, @Const FloatBuffer x, FloatBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_fabs<float>") void caffe_gpu_fabs_float(int n, @Const float[] x, float[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_fabs<double>") void caffe_gpu_fabs_double(int n, @Const DoublePointer x, DoublePointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_fabs<double>") void caffe_gpu_fabs_double(int n, @Const DoubleBuffer x, DoubleBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_fabs<double>") void caffe_gpu_fabs_double(int n, @Const double[] x, double[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_scale<float>") void caffe_gpu_scale_float(int n, float alpha, @Const FloatPointer x, FloatPointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_scale<float>") void caffe_gpu_scale_float(int n, float alpha, @Const FloatBuffer x, FloatBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_scale<float>") void caffe_gpu_scale_float(int n, float alpha, @Const float[] x, float[] y);
-
-@Namespace("caffe") public static native @Name("caffe_gpu_scale<double>") void caffe_gpu_scale_double(int n, double alpha, @Const DoublePointer x, DoublePointer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_scale<double>") void caffe_gpu_scale_double(int n, double alpha, @Const DoubleBuffer x, DoubleBuffer y);
-@Namespace("caffe") public static native @Name("caffe_gpu_scale<double>") void caffe_gpu_scale_double(int n, double alpha, @Const double[] x, double[] y);
-
-// #define DEFINE_AND_INSTANTIATE_GPU_UNARY_FUNC(name, operation)
-// template<typename Dtype>
-// __global__ void name##_kernel(const int n, const Dtype* x, Dtype* y) {
-//   CUDA_KERNEL_LOOP(index, n) {
-//     operation;
-//   }
-// }
-// template <>
-// void caffe_gpu_##name<float>(const int n, const float* x, float* y) {
-//   /* NOLINT_NEXT_LINE(whitespace/operators) */
-//   name##_kernel<float><<<CAFFE_GET_BLOCKS(n), CAFFE_CUDA_NUM_THREADS>>>(
-//       n, x, y);
-// }
-// template <>
-// void caffe_gpu_##name<double>(const int n, const double* x, double* y) {
-//   /* NOLINT_NEXT_LINE(whitespace/operators) */
-//   name##_kernel<double><<<CAFFE_GET_BLOCKS(n), CAFFE_CUDA_NUM_THREADS>>>(
-//       n, x, y);
-// }
-
 // #endif  // !CPU_ONLY
 
   // namespace caffe
@@ -11736,20 +11951,11 @@ public static final int
 // #include "caffe/common.hpp"
 // #include "caffe/util/math_functions.hpp"
 
-// Theoretically, CaffeMallocHost and CaffeFreeHost should simply call the
-// cudaMallocHost and cudaFree functions in order to create pinned memory.
-// However, those codes rely on the existence of a cuda GPU (I don't know
-// why that is a must since allocating memory should not be accessing the
-// GPU resource, but it just creates an error as of Cuda 5.0) and will cause
-// problem when running on a machine without GPU. Thus, we simply define
-// these two functions for safety and possible future change if the problem
-// of calling cuda functions disappears in a future version.
-//
-// In practice, although we are creating unpinned memory here, as long as we
-// are constantly accessing them the memory pages almost always stays in
-// the physical memory (assuming we have large enough memory installed), and
-// does not seem to create a memory bottleneck here.
-
+// If CUDA is available and in GPU mode, host memory will be allocated pinned,
+// using cudaMallocHost. It avoids dynamic pinning for transfers (DMA).
+// The improvement in performance seems negligible in the single GPU case,
+// but might be more significant for parallel training. Most importantly,
+// it improved stability for large models on many GPUs.
 @Namespace("caffe") public static native void CaffeMallocHost(@Cast("void**") PointerPointer ptr, @Cast("size_t") long size);
 @Namespace("caffe") public static native void CaffeMallocHost(@Cast("void**") @ByPtrPtr Pointer ptr, @Cast("size_t") long size);
 
@@ -11780,6 +11986,7 @@ public static final int
   public native @Const Pointer cpu_data();
   public native void set_cpu_data(Pointer data);
   public native @Const Pointer gpu_data();
+  public native void set_gpu_data(Pointer data);
   public native Pointer mutable_cpu_data();
   public native Pointer mutable_gpu_data();
   /** enum caffe::SyncedMemory::SyncedHead */
@@ -11899,7 +12106,7 @@ public static final int
    * @brief Returns the 'canonical' version of a (usually) user-specified axis,
    *        allowing for negative indexing (e.g., -1 for the last axis).
    *
-   * @param index the axis index.
+   * @param axis_index the axis index.
    *        If 0 <= index < num_axes(), return index.
    *        If -num_axes <= index <= -1, return (num_axes() - (-index)),
    *        e.g., the last axis index (num_axes() - 1) if index == -1,
@@ -12091,7 +12298,7 @@ public static final int
    * @brief Returns the 'canonical' version of a (usually) user-specified axis,
    *        allowing for negative indexing (e.g., -1 for the last axis).
    *
-   * @param index the axis index.
+   * @param axis_index the axis index.
    *        If 0 <= index < num_axes(), return index.
    *        If -num_axes <= index <= -1, return (num_axes() - (-index)),
    *        e.g., the last axis index (num_axes() - 1) if index == -1,
@@ -12712,7 +12919,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
 /**
  * Virtual class encapsulate boost::thread for use in base class
  * The child class will acquire the ability to run a single thread,
- * by reimplementing the virutal function InternalThreadEntry.
+ * by reimplementing the virtual function InternalThreadEntry.
  */
 @Namespace("caffe") @NoOffset public static class InternalThread extends Pointer {
     static { Loader.load(); }
@@ -12728,11 +12935,15 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
   public InternalThread() { allocate(); }
   private native void allocate();
 
-  /** Returns true if the thread was successfully started. **/
-  public native @Cast("bool") boolean StartInternalThread();
+  /**
+   * Caffe's thread local state will be initialized using the current
+   * thread values, e.g. device id, solver index etc. The random seed
+   * is initialized using caffe_rng_rand.
+   */
+  public native void StartInternalThread();
 
   /** Will not return until the internal thread has exited. */
-  public native @Cast("bool") boolean WaitForInternalThreadToExit();
+  public native void StopInternalThread();
 
   public native @Cast("bool") boolean is_started();
 }
@@ -12751,16 +12962,17 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
 // #include <utility>
 // #include <vector>
 
-// #include "boost/scoped_ptr.hpp"
 // #include "hdf5.h"
 
 // #include "caffe/blob.hpp"
 // #include "caffe/common.hpp"
+// #include "caffe/data_reader.hpp"
 // #include "caffe/data_transformer.hpp"
 // #include "caffe/filler.hpp"
 // #include "caffe/internal_thread.hpp"
 // #include "caffe/layer.hpp"
 // #include "caffe/proto/caffe.pb.h"
+// #include "caffe/util/blocking_queue.hpp"
 // #include "caffe/util/db.hpp"
 
 /**
@@ -12782,6 +12994,8 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
   // This method may not be overridden except by the BasePrefetchingDataLayer.
   @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
+  // Data layers should be shared by multiple solvers in parallel
+  @Virtual public native @Cast("bool") boolean ShareInParallel();
   @Virtual public native void DataLayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
   // Data layers have no bottoms, so reshaping is trivial.
@@ -12807,6 +13021,8 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
   // This method may not be overridden except by the BasePrefetchingDataLayer.
   @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
+  // Data layers should be shared by multiple solvers in parallel
+  @Virtual public native @Cast("bool") boolean ShareInParallel();
   @Virtual public native void DataLayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
   // Data layers have no bottoms, so reshaping is trivial.
@@ -12819,6 +13035,42 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+@Name("caffe::Batch<float>") public static class FloatBatch extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public FloatBatch() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public FloatBatch(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FloatBatch(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public FloatBatch position(int position) {
+        return (FloatBatch)super.position(position);
+    }
+
+  @MemberGetter public native @ByRef FloatBlob data_();
+  @MemberGetter public native @ByRef FloatBlob label_();
+}
+
+@Name("caffe::Batch<double>") public static class DoubleBatch extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public DoubleBatch() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public DoubleBatch(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DoubleBatch(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public DoubleBatch position(int position) {
+        return (DoubleBatch)super.position(position);
+    }
+
+  @MemberGetter public native @ByRef DoubleBlob data_();
+  @MemberGetter public native @ByRef DoubleBlob label_();
+}
+
 @Name("caffe::BasePrefetchingDataLayer<float>") @NoOffset public static class FloatBasePrefetchingDataLayer extends FloatBaseDataLayer {
     static { Loader.load(); }
     /** Empty constructor. */
@@ -12828,8 +13080,6 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
     public InternalThread asInternalThread() { return asInternalThread(this); }
     @Namespace public static native @Name("static_cast<caffe::InternalThread*>") InternalThread asInternalThread(FloatBasePrefetchingDataLayer pointer);
 
-  public FloatBasePrefetchingDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
-  private native void allocate(@Const @ByRef LayerParameter param);
   // LayerSetUp: implements common data layer setup functionality, and calls
   // DataLayerSetUp to do special data layer setup for individual layer types.
   // This method may not be overridden.
@@ -12841,10 +13091,9 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
   @Virtual public native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
-  @Virtual public native void CreatePrefetchThread();
-  @Virtual public native void JoinPrefetchThread();
-  // The thread's function
-  
+  // Prefetches batches (asynchronously if to GPU memory)
+  @MemberGetter public static native int PREFETCH_COUNT();
+  @Virtual protected native void load_batch(FloatBatch batch);
 }
 
 @Name("caffe::BasePrefetchingDataLayer<double>") @NoOffset public static class DoubleBasePrefetchingDataLayer extends DoubleBaseDataLayer {
@@ -12856,8 +13105,6 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
     public InternalThread asInternalThread() { return asInternalThread(this); }
     @Namespace public static native @Name("static_cast<caffe::InternalThread*>") InternalThread asInternalThread(DoubleBasePrefetchingDataLayer pointer);
 
-  public DoubleBasePrefetchingDataLayer(@Const @ByRef LayerParameter param) { allocate(param); }
-  private native void allocate(@Const @ByRef LayerParameter param);
   // LayerSetUp: implements common data layer setup functionality, and calls
   // DataLayerSetUp to do special data layer setup for individual layer types.
   // This method may not be overridden.
@@ -12869,10 +13116,9 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
   @Virtual public native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
-  @Virtual public native void CreatePrefetchThread();
-  @Virtual public native void JoinPrefetchThread();
-  // The thread's function
-  
+  // Prefetches batches (asynchronously if to GPU memory)
+  @MemberGetter public static native int PREFETCH_COUNT();
+  @Virtual protected native void load_batch(DoubleBatch batch);
 }
 
 @Name("caffe::DataLayer<float>") @NoOffset public static class FloatDataLayer extends FloatBasePrefetchingDataLayer {
@@ -12886,12 +13132,13 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
   private native void allocate(@Const @ByRef LayerParameter param);
   @Virtual public native void DataLayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
-
+  // DataLayer uses DataReader instead for sharing for parallelism
+  @Virtual public native @Cast("bool") boolean ShareInParallel();
   @Virtual public native @Cast("const char*") BytePointer type();
   @Virtual public native int ExactNumBottomBlobs();
   @Virtual public native int MinTopBlobs();
   @Virtual public native int MaxTopBlobs();
-  @Virtual protected native void InternalThreadEntry();
+  @Virtual protected native void load_batch(FloatBatch batch);
 }
 
 @Name("caffe::DataLayer<double>") @NoOffset public static class DoubleDataLayer extends DoubleBasePrefetchingDataLayer {
@@ -12905,12 +13152,13 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
   private native void allocate(@Const @ByRef LayerParameter param);
   @Virtual public native void DataLayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
-
+  // DataLayer uses DataReader instead for sharing for parallelism
+  @Virtual public native @Cast("bool") boolean ShareInParallel();
   @Virtual public native @Cast("const char*") BytePointer type();
   @Virtual public native int ExactNumBottomBlobs();
   @Virtual public native int MinTopBlobs();
   @Virtual public native int MaxTopBlobs();
-  @Virtual protected native void InternalThreadEntry();
+  @Virtual protected native void load_batch(DoubleBatch batch);
 }
 
 /**
@@ -12929,6 +13177,8 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
   private native void allocate(@Const @ByRef LayerParameter param);
   @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
+  // Data layers should be shared by multiple solvers in parallel
+  @Virtual public native @Cast("bool") boolean ShareInParallel();
   // Data layers have no bottoms, so reshaping is trivial.
   @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
@@ -12954,6 +13204,8 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
   private native void allocate(@Const @ByRef LayerParameter param);
   @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
+  // Data layers should be shared by multiple solvers in parallel
+  @Virtual public native @Cast("bool") boolean ShareInParallel();
   // Data layers have no bottoms, so reshaping is trivial.
   @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
@@ -12985,6 +13237,8 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
   private native void allocate(@Const @ByRef LayerParameter param);
   @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
+  // Data layers should be shared by multiple solvers in parallel
+  @Virtual public native @Cast("bool") boolean ShareInParallel();
   // Data layers have no bottoms, so reshaping is trivial.
   @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
@@ -13013,6 +13267,8 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
   private native void allocate(@Const @ByRef LayerParameter param);
   @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
+  // Data layers should be shared by multiple solvers in parallel
+  @Virtual public native @Cast("bool") boolean ShareInParallel();
   // Data layers have no bottoms, so reshaping is trivial.
   @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
@@ -13047,6 +13303,8 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
   private native void allocate(@Const @ByRef LayerParameter param);
   @Virtual public native void LayerSetUp(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
+  // Data layers should be shared by multiple solvers in parallel
+  @Virtual public native @Cast("bool") boolean ShareInParallel();
   // Data layers have no bottoms, so reshaping is trivial.
   @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
@@ -13078,6 +13336,8 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
   private native void allocate(@Const @ByRef LayerParameter param);
   @Virtual public native void LayerSetUp(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
+  // Data layers should be shared by multiple solvers in parallel
+  @Virtual public native @Cast("bool") boolean ShareInParallel();
   // Data layers have no bottoms, so reshaping is trivial.
   @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
@@ -13120,7 +13380,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
   @Virtual public native int ExactNumBottomBlobs();
   @Virtual public native int ExactNumTopBlobs();
   @Virtual protected native void ShuffleImages();
-  @Virtual protected native void InternalThreadEntry();
+  @Virtual protected native void load_batch(FloatBatch batch);
 }
 @Name("caffe::ImageDataLayer<double>") @NoOffset public static class DoubleImageDataLayer extends DoubleBasePrefetchingDataLayer {
     static { Loader.load(); }
@@ -13138,7 +13398,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
   @Virtual public native int ExactNumBottomBlobs();
   @Virtual public native int ExactNumTopBlobs();
   @Virtual protected native void ShuffleImages();
-  @Virtual protected native void InternalThreadEntry();
+  @Virtual protected native void load_batch(DoubleBatch batch);
 }
 
 /**
@@ -13237,7 +13497,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
   @Virtual public native int ExactNumBottomBlobs();
   @Virtual public native int ExactNumTopBlobs();
   @Virtual protected native @Cast("unsigned int") int PrefetchRand();
-  @Virtual protected native void InternalThreadEntry();
+  @Virtual protected native void load_batch(FloatBatch batch);
 }
 @Name("caffe::WindowDataLayer<double>") @NoOffset public static class DoubleWindowDataLayer extends DoubleBasePrefetchingDataLayer {
     static { Loader.load(); }
@@ -13255,7 +13515,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
   @Virtual public native int ExactNumBottomBlobs();
   @Virtual public native int ExactNumTopBlobs();
   @Virtual protected native @Cast("unsigned int") int PrefetchRand();
-  @Virtual protected native void InternalThreadEntry();
+  @Virtual protected native void load_batch(DoubleBatch batch);
 }
 
   // namespace caffe
@@ -13308,6 +13568,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
 
 // #include <map>
 // #include <string>
+// #include <vector>
 
 // #include "caffe/common.hpp"
 // #include "caffe/proto/caffe.pb.h"
@@ -13336,6 +13597,8 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
 
   // Get a layer using a LayerParameter.
   public static native @Cast({"", "boost::shared_ptr<caffe::Layer<float> >"}) @SharedPtr @ByVal FloatLayer CreateLayer(@Const @ByRef LayerParameter param);
+
+  public static native @ByVal StringVector LayerTypeList();
 }
 
 @Name("caffe::LayerRegistry<double>") public static class DoubleLayerRegistry extends Pointer {
@@ -13362,6 +13625,8 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
 
   // Get a layer using a LayerParameter.
   public static native @Cast({"", "boost::shared_ptr<caffe::Layer<double> >"}) @SharedPtr @ByVal DoubleLayer CreateLayer(@Const @ByRef LayerParameter param);
+
+  public static native @ByVal StringVector LayerTypeList();
 }
 
 
@@ -13450,6 +13715,17 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
 // #include "caffe/util/device_alternate.hpp"
 
 /**
+ Forward declare boost::thread instead of including boost/thread.hpp
+ to avoid a boost/NVCC issues (#1009, #1010) on OSX.
+ */
+@Namespace("boost") @Opaque public static class mutex extends Pointer {
+    /** Empty constructor. */
+    public mutex() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public mutex(Pointer p) { super(p); }
+} 
+
+/**
  * @brief An interface for the units of computation which can be composed into a
  *        Net.
  *
@@ -13508,7 +13784,27 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
         @Const @ByRef FloatBlobVector top);
 
   /**
-   * @brief Adjust the shapes of top blobs and internal buffers to accomodate
+   * @brief Whether a layer should be shared by multiple nets during data
+   *        parallelism. By default, all layers except for data layers should
+   *        not be shared. data layers should be shared to ensure each worker
+   *        solver access data sequentially during data parallelism.
+   */
+  @Virtual public native @Cast("bool") boolean ShareInParallel();
+
+  /** @brief Return whether this layer is actually shared by other nets.
+   *         If ShareInParallel() is true and using more than one GPU and the
+   *         net has TRAIN phase, then this function is expected return true.
+   */
+  public native @Cast("bool") boolean IsShared();
+
+  /** @brief Set whether this layer is actually shared by other nets
+   *         If ShareInParallel() is true and using more than one GPU and the
+   *         net has TRAIN phase, then is_shared should be set true.
+   */
+  public native void SetShared(@Cast("bool") boolean is_shared);
+
+  /**
+   * @brief Adjust the shapes of top blobs and internal buffers to accommodate
    *        the shapes of the bottom blobs.
    *
    * @param bottom the input blobs, with the requested input shapes
@@ -13517,7 +13813,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
    * This method should reshape top blobs as needed according to the shapes
    * of the bottom (input) blobs, as well as reshaping any internal buffers
    * and making any other necessary adjustments so that the layer can
-   * accomodate the bottom blobs.
+   * accommodate the bottom blobs.
    */
   @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
@@ -13561,7 +13857,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
    * (Backward_cpu or Backward_gpu) to compute the bottom blob diffs given the
    * top blob diffs.
    *
-   * Your layer should implement Forward_cpu and (optionally) Forward_gpu.
+   * Your layer should implement Backward_cpu and (optionally) Backward_gpu.
    */
   public native void Backward(@Const @ByRef FloatBlobVector top,
         @Const @ByRef BoolVector propagate_down,
@@ -13749,7 +14045,27 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
         @Const @ByRef DoubleBlobVector top);
 
   /**
-   * @brief Adjust the shapes of top blobs and internal buffers to accomodate
+   * @brief Whether a layer should be shared by multiple nets during data
+   *        parallelism. By default, all layers except for data layers should
+   *        not be shared. data layers should be shared to ensure each worker
+   *        solver access data sequentially during data parallelism.
+   */
+  @Virtual public native @Cast("bool") boolean ShareInParallel();
+
+  /** @brief Return whether this layer is actually shared by other nets.
+   *         If ShareInParallel() is true and using more than one GPU and the
+   *         net has TRAIN phase, then this function is expected return true.
+   */
+  public native @Cast("bool") boolean IsShared();
+
+  /** @brief Set whether this layer is actually shared by other nets
+   *         If ShareInParallel() is true and using more than one GPU and the
+   *         net has TRAIN phase, then is_shared should be set true.
+   */
+  public native void SetShared(@Cast("bool") boolean is_shared);
+
+  /**
+   * @brief Adjust the shapes of top blobs and internal buffers to accommodate
    *        the shapes of the bottom blobs.
    *
    * @param bottom the input blobs, with the requested input shapes
@@ -13758,7 +14074,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
    * This method should reshape top blobs as needed according to the shapes
    * of the bottom (input) blobs, as well as reshaping any internal buffers
    * and making any other necessary adjustments so that the layer can
-   * accomodate the bottom blobs.
+   * accommodate the bottom blobs.
    */
   @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
@@ -13802,7 +14118,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
    * (Backward_cpu or Backward_gpu) to compute the bottom blob diffs given the
    * top blob diffs.
    *
-   * Your layer should implement Forward_cpu and (optionally) Forward_gpu.
+   * Your layer should implement Backward_cpu and (optionally) Backward_gpu.
    */
   public native void Backward(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down,
@@ -14002,7 +14318,11 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
 
   @Virtual public native @Cast("const char*") BytePointer type();
   @Virtual public native int ExactNumBottomBlobs();
-  @Virtual public native int ExactNumTopBlobs();
+
+  // If there are two top blobs, then the second blob will contain
+  // accuracies per class.
+  @Virtual public native int MinTopBlobs();
+  @Virtual public native int MaxTopBlos();
   @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
   @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
@@ -14032,7 +14352,11 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
 
   @Virtual public native @Cast("const char*") BytePointer type();
   @Virtual public native int ExactNumBottomBlobs();
-  @Virtual public native int ExactNumTopBlobs();
+
+  // If there are two top blobs, then the second blob will contain
+  // accuracies per class.
+  @Virtual public native int MinTopBlobs();
+  @Virtual public native int MaxTopBlos();
   @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
   @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
@@ -14111,9 +14435,9 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
 /**
  * @brief Computes the contrastive loss @f$
  *          E = \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d +
- *              \left(1-y\right) \max \left(margin-d, 0\right)
+ *              \left(1-y\right) \max \left(margin-d, 0\right)^2
  *          @f$ where @f$
- *          d = \left| \left| a_n - b_n \right| \right|_2^2 @f$. This can be
+ *          d = \left| \left| a_n - b_n \right| \right|_2 @f$. This can be
  *          used to train siamese networks.
  *
  * @param bottom input Blob vector (length 3)
@@ -14127,9 +14451,9 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
  *   -# @f$ (1 \times 1 \times 1 \times 1) @f$
  *      the computed contrastive loss: @f$ E =
  *          \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d +
- *          \left(1-y\right) \max \left(margin-d, 0\right)
+ *          \left(1-y\right) \max \left(margin-d, 0\right)^2
  *          @f$ where @f$
- *          d = \left| \left| a_n - b_n \right| \right|_2^2 @f$.
+ *          d = \left| \left| a_n - b_n \right| \right|_2 @f$.
  * This can be used to train siamese networks.
  */
 @Name("caffe::ContrastiveLossLayer<float>") @NoOffset public static class FloatContrastiveLossLayer extends FloatLossLayer {
@@ -15575,6 +15899,14 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 
 /**
+ * @brief A layer for learning "embeddings" of one-hot vector input.
+ *        Equivalent to an InnerProductLayer with one-hot vectors as input, but
+ *        for efficiency the input is the "hot" index of each column itself.
+ *
+ * TODO(dox): thorough documentation for Forward, Backward, and proto params.
+ */
+
+/**
  * @brief Takes two+ Blobs, interprets last Blob as a selector and
  *  filter remaining Blobs accordingly with selector data (0 means that
  * the corresponding item has to be filtered, non-zero means that corresponding
@@ -15988,6 +16320,10 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+/**
+ * @brief Copy a Blob along specified dimensions.
+ */
+
   // namespace caffe
 
 // #endif  // CAFFE_COMMON_LAYERS_HPP_
@@ -16022,10 +16358,20 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatNet(Pointer p) { super(p); }
 
+  public FloatNet(@Const @ByRef NetParameter param, @Const FloatNet root_net/*=NULL*/) { allocate(param, root_net); }
+  private native void allocate(@Const @ByRef NetParameter param, @Const FloatNet root_net/*=NULL*/);
   public FloatNet(@Const @ByRef NetParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef NetParameter param);
+  public FloatNet(@StdString BytePointer param_file, @Cast("caffe::Phase") int phase,
+        @Const FloatNet root_net/*=NULL*/) { allocate(param_file, phase, root_net); }
+  private native void allocate(@StdString BytePointer param_file, @Cast("caffe::Phase") int phase,
+        @Const FloatNet root_net/*=NULL*/);
   public FloatNet(@StdString BytePointer param_file, @Cast("caffe::Phase") int phase) { allocate(param_file, phase); }
   private native void allocate(@StdString BytePointer param_file, @Cast("caffe::Phase") int phase);
+  public FloatNet(@StdString String param_file, @Cast("caffe::Phase") int phase,
+        @Const FloatNet root_net/*=NULL*/) { allocate(param_file, phase, root_net); }
+  private native void allocate(@StdString String param_file, @Cast("caffe::Phase") int phase,
+        @Const FloatNet root_net/*=NULL*/);
   public FloatNet(@StdString String param_file, @Cast("caffe::Phase") int phase) { allocate(param_file, phase); }
   private native void allocate(@StdString String param_file, @Cast("caffe::Phase") int phase);
 
@@ -16075,6 +16421,12 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public native @StdString String Forward(@StdString String input_blob_protos, float[] loss/*=NULL*/);
 
   /**
+   * @brief Zeroes out the diffs of all net parameters.
+   *        Should be run before Backward.
+   */
+  public native void ClearParamDiffs();
+
+  /**
    * The network backward should take no input and output, since it solely
    * computes the gradient w.r.t the parameters, and the data has already been
    * provided during the forward pass.
@@ -16096,6 +16448,13 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   /** @brief Updates the network weights based on the diff values computed. */
   public native void Update();
+  /**
+   * @brief Shares weight data of owner blobs with shared blobs.
+   *
+   * Note: this is called by Net::Init, and thus should normally not be
+   * called manually.
+   */
+  public native void ShareWeights();
 
   /**
    * @brief For an already initialized net, implicitly copies (i.e., using no
@@ -16111,9 +16470,18 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public native void CopyTrainedLayersFrom(@Const @ByRef NetParameter param);
   public native void CopyTrainedLayersFrom(@StdString BytePointer trained_filename);
   public native void CopyTrainedLayersFrom(@StdString String trained_filename);
+  public native void CopyTrainedLayersFromBinaryProto(@StdString BytePointer trained_filename);
+  public native void CopyTrainedLayersFromBinaryProto(@StdString String trained_filename);
+  public native void CopyTrainedLayersFromHDF5(@StdString BytePointer trained_filename);
+  public native void CopyTrainedLayersFromHDF5(@StdString String trained_filename);
   /** @brief Writes the net to a proto. */
   public native void ToProto(NetParameter param, @Cast("bool") boolean write_diff/*=false*/);
   public native void ToProto(NetParameter param);
+  /** @brief Writes the net to an HDF5 file. */
+  public native void ToHDF5(@StdString BytePointer filename, @Cast("bool") boolean write_diff/*=false*/);
+  public native void ToHDF5(@StdString BytePointer filename);
+  public native void ToHDF5(@StdString String filename, @Cast("bool") boolean write_diff/*=false*/);
+  public native void ToHDF5(@StdString String filename);
 
   /** @brief returns the network name. */
   public native @StdString BytePointer name();
@@ -16142,9 +16510,13 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public native @Const @ByRef BoolVector layer_need_backward();
   /** @brief returns the parameters */
   public native @Const @ByRef FloatBlobSharedVector params();
-  /** @brief returns the parameter learning rate multipliers */
+  public native @Const @ByRef FloatBlobVector learnable_params();
+  /** @brief returns the learnable parameter learning rate multipliers */
   public native @StdVector FloatPointer params_lr();
+  public native @Const @ByRef BoolVector has_params_lr();
+  /** @brief returns the learnable parameter decay multipliers */
   public native @StdVector FloatPointer params_weight_decay();
+  public native @Const @ByRef BoolVector has_params_decay();
   public native @Const @ByRef StringIntMap param_names_index();
   public native @StdVector IntPointer param_owners();
   /** @brief Input and output blob numbers */
@@ -16187,10 +16559,20 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleNet(Pointer p) { super(p); }
 
+  public DoubleNet(@Const @ByRef NetParameter param, @Const DoubleNet root_net/*=NULL*/) { allocate(param, root_net); }
+  private native void allocate(@Const @ByRef NetParameter param, @Const DoubleNet root_net/*=NULL*/);
   public DoubleNet(@Const @ByRef NetParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef NetParameter param);
+  public DoubleNet(@StdString BytePointer param_file, @Cast("caffe::Phase") int phase,
+        @Const DoubleNet root_net/*=NULL*/) { allocate(param_file, phase, root_net); }
+  private native void allocate(@StdString BytePointer param_file, @Cast("caffe::Phase") int phase,
+        @Const DoubleNet root_net/*=NULL*/);
   public DoubleNet(@StdString BytePointer param_file, @Cast("caffe::Phase") int phase) { allocate(param_file, phase); }
   private native void allocate(@StdString BytePointer param_file, @Cast("caffe::Phase") int phase);
+  public DoubleNet(@StdString String param_file, @Cast("caffe::Phase") int phase,
+        @Const DoubleNet root_net/*=NULL*/) { allocate(param_file, phase, root_net); }
+  private native void allocate(@StdString String param_file, @Cast("caffe::Phase") int phase,
+        @Const DoubleNet root_net/*=NULL*/);
   public DoubleNet(@StdString String param_file, @Cast("caffe::Phase") int phase) { allocate(param_file, phase); }
   private native void allocate(@StdString String param_file, @Cast("caffe::Phase") int phase);
 
@@ -16240,6 +16622,12 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public native @StdString String Forward(@StdString String input_blob_protos, double[] loss/*=NULL*/);
 
   /**
+   * @brief Zeroes out the diffs of all net parameters.
+   *        Should be run before Backward.
+   */
+  public native void ClearParamDiffs();
+
+  /**
    * The network backward should take no input and output, since it solely
    * computes the gradient w.r.t the parameters, and the data has already been
    * provided during the forward pass.
@@ -16261,6 +16649,13 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   /** @brief Updates the network weights based on the diff values computed. */
   public native void Update();
+  /**
+   * @brief Shares weight data of owner blobs with shared blobs.
+   *
+   * Note: this is called by Net::Init, and thus should normally not be
+   * called manually.
+   */
+  public native void ShareWeights();
 
   /**
    * @brief For an already initialized net, implicitly copies (i.e., using no
@@ -16276,9 +16671,18 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public native void CopyTrainedLayersFrom(@Const @ByRef NetParameter param);
   public native void CopyTrainedLayersFrom(@StdString BytePointer trained_filename);
   public native void CopyTrainedLayersFrom(@StdString String trained_filename);
+  public native void CopyTrainedLayersFromBinaryProto(@StdString BytePointer trained_filename);
+  public native void CopyTrainedLayersFromBinaryProto(@StdString String trained_filename);
+  public native void CopyTrainedLayersFromHDF5(@StdString BytePointer trained_filename);
+  public native void CopyTrainedLayersFromHDF5(@StdString String trained_filename);
   /** @brief Writes the net to a proto. */
   public native void ToProto(NetParameter param, @Cast("bool") boolean write_diff/*=false*/);
   public native void ToProto(NetParameter param);
+  /** @brief Writes the net to an HDF5 file. */
+  public native void ToHDF5(@StdString BytePointer filename, @Cast("bool") boolean write_diff/*=false*/);
+  public native void ToHDF5(@StdString BytePointer filename);
+  public native void ToHDF5(@StdString String filename, @Cast("bool") boolean write_diff/*=false*/);
+  public native void ToHDF5(@StdString String filename);
 
   /** @brief returns the network name. */
   public native @StdString BytePointer name();
@@ -16307,9 +16711,13 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public native @Const @ByRef BoolVector layer_need_backward();
   /** @brief returns the parameters */
   public native @Const @ByRef DoubleBlobSharedVector params();
-  /** @brief returns the parameter learning rate multipliers */
+  public native @Const @ByRef DoubleBlobVector learnable_params();
+  /** @brief returns the learnable parameter learning rate multipliers */
   public native @StdVector FloatPointer params_lr();
+  public native @Const @ByRef BoolVector has_params_lr();
+  /** @brief returns the learnable parameter decay multipliers */
   public native @StdVector FloatPointer params_weight_decay();
+  public native @Const @ByRef BoolVector has_params_decay();
   public native @Const @ByRef StringIntMap param_names_index();
   public native @StdVector IntPointer param_owners();
   /** @brief Input and output blob numbers */
@@ -16352,15 +16760,84 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 // #endif  // CAFFE_NET_HPP_
 
 
+// Parsed from caffe/parallel.hpp
+
+// #ifndef CAFFE_PARALLEL_HPP_
+// #define CAFFE_PARALLEL_HPP_
+
+// #include <boost/date_time/posix_time/posix_time.hpp>
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/common.hpp"
+// #include "caffe/internal_thread.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+// #include "caffe/solver.hpp"
+// #include "caffe/syncedmem.hpp"
+// #include "caffe/util/blocking_queue.hpp"
+
+// Represents a net parameters. Once a net is created, its parameter buffers can
+// be replaced by ones from Params, to allow parallelization. Params ensures
+// parameters are allocated in one consecutive array.
+
+// Params stored in GPU memory.
+
+@Namespace("caffe") @NoOffset public static class DevicePair extends Pointer {
+    static { Loader.load(); }
+    /** Empty constructor. */
+    public DevicePair() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DevicePair(Pointer p) { super(p); }
+
+  public DevicePair(int parent, int device) { allocate(parent, device); }
+  private native void allocate(int parent, int device);
+  public native int parent();
+  public native int device();
+
+  // Group GPUs in pairs, by proximity depending on machine's topology
+  public static native void compute(@StdVector IntPointer devices, @StdVector DevicePair pairs);
+  public static native void compute(@StdVector IntBuffer devices, @StdVector DevicePair pairs);
+  public static native void compute(@StdVector int[] devices, @StdVector DevicePair pairs);
+}
+
+// Synchronous data parallelism using map-reduce between local GPUs.
+
+  // namespace caffe
+
+// #endif
+
+
 // Parsed from caffe/solver.hpp
 
 // #ifndef CAFFE_OPTIMIZATION_SOLVER_HPP_
 // #define CAFFE_OPTIMIZATION_SOLVER_HPP_
-
+// #include <boost/function.hpp>
 // #include <string>
 // #include <vector>
 
 // #include "caffe/net.hpp"
+
+/**
+  * @brief Enumeration of actions that a client of the Solver may request by
+  * implementing the Solver's action request function, which a
+  * a client may optionally provide in order to request early termination
+  * or saving a snapshot without exiting. In the executable caffe, this
+  * mechanism is used to allow the snapshot to be saved when stopping
+  * execution with a SIGINT (Ctrl-C).
+  */
+    /** enum caffe::SolverAction::Enum */
+    public static final int
+      NONE = 0,  // Take no special action.
+      STOP = 1,  // Stop training. snapshot_after_train controls whether a
+                 // snapshot is created.
+      SNAPSHOT = 2;  // Take a snapshot, and keep training.
+  
+
+/**
+ * @brief Type of a function that returns a Solver Action enumeration.
+ */
 
 /**
  * @brief An interface for classes that perform optimization on Net%s.
@@ -16378,20 +16855,39 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public native void Init(@Const @ByRef SolverParameter param);
   public native void InitTrainNet();
   public native void InitTestNets();
+
+  // Client of the Solver optionally may call this in order to set the function
+  // that the solver uses to see what action it should take (e.g. snapshot or
+  // exit training early).
+  public native void SetActionFunction(@ByVal ActionCallback func);
+  public native @Cast("caffe::SolverAction::Enum") int GetRequestedAction();
   // The main entry of the solver function. In default, iter will be zero. Pass
   // in a non-zero iter number to resume training for a pre-trained net.
   public native void Solve(@Cast("const char*") BytePointer resume_file/*=NULL*/);
   public native void Solve();
   public native void Solve(String resume_file/*=NULL*/);
   public native void Step(int iters);
-  // The Restore function implements how one should restore the solver to a
-  // previously snapshotted state. You should implement the RestoreSolverState()
-  // function that restores the state from a SolverState protocol buffer.
+  // The Restore method simply dispatches to one of the
+  // RestoreSolverStateFrom___ protected methods. You should implement these
+  // methods to restore the state from the appropriate snapshot type.
   public native void Restore(@Cast("const char*") BytePointer resume_file);
   public native void Restore(String resume_file);
+  public native @Const @ByRef SolverParameter param();
   public native @SharedPtr @ByVal FloatNet net();
   public native @Const @ByRef FloatNetSharedVector test_nets();
   public native int iter();
+
+  // Invoked at specific points during an iteration
+  public static class Callback extends Pointer {
+      static { Loader.load(); }
+      /** Empty constructor. */
+      public Callback() { }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Callback(Pointer p) { super(p); }
+  
+  }
+  public native @Cast("caffe::Solver<float>::Callback**") @StdVector PointerPointer callbacks();
+  public native void add_callback(Callback value);
 }
 @Name("caffe::Solver<double>") @NoOffset public static class DoubleSolver extends Pointer {
     static { Loader.load(); }
@@ -16403,22 +16899,45 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public native void Init(@Const @ByRef SolverParameter param);
   public native void InitTrainNet();
   public native void InitTestNets();
+
+  // Client of the Solver optionally may call this in order to set the function
+  // that the solver uses to see what action it should take (e.g. snapshot or
+  // exit training early).
+  public native void SetActionFunction(@ByVal ActionCallback func);
+  public native @Cast("caffe::SolverAction::Enum") int GetRequestedAction();
   // The main entry of the solver function. In default, iter will be zero. Pass
   // in a non-zero iter number to resume training for a pre-trained net.
   public native void Solve(@Cast("const char*") BytePointer resume_file/*=NULL*/);
   public native void Solve();
   public native void Solve(String resume_file/*=NULL*/);
   public native void Step(int iters);
-  // The Restore function implements how one should restore the solver to a
-  // previously snapshotted state. You should implement the RestoreSolverState()
-  // function that restores the state from a SolverState protocol buffer.
+  // The Restore method simply dispatches to one of the
+  // RestoreSolverStateFrom___ protected methods. You should implement these
+  // methods to restore the state from the appropriate snapshot type.
   public native void Restore(@Cast("const char*") BytePointer resume_file);
   public native void Restore(String resume_file);
+  public native @Const @ByRef SolverParameter param();
   public native @SharedPtr @ByVal DoubleNet net();
   public native @Const @ByRef DoubleNetSharedVector test_nets();
   public native int iter();
+
+  // Invoked at specific points during an iteration
+  public static class Callback extends Pointer {
+      static { Loader.load(); }
+      /** Empty constructor. */
+      public Callback() { }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Callback(Pointer p) { super(p); }
+  
+  }
+  public native @Cast("caffe::Solver<double>::Callback**") @StdVector PointerPointer callbacks();
+  public native void add_callback(Callback value);
 }
 
+/**
+ * @brief Solver that only computes gradients, used as worker
+ *        for multi-GPU training.
+ */
 
 /**
  * @brief Optimizes the parameters of a Net using
@@ -16516,6 +17035,15 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public DoubleAdaGradSolver(@StdString String param_file) { allocate(param_file); }
   private native void allocate(@StdString String param_file);
 }
+
+/**
+ * @brief AdamSolver, an algorithm for first-order gradient-based optimization
+ *        of stochastic objective functions, based on adaptive estimates of
+ *        lower-order moments. Described in [1].
+ *
+ * [1] D. P. Kingma and J. L. Ba, "ADAM: A Method for Stochastic Optimization."
+ *     arXiv preprint arXiv:1412.6980v8 (2014).
+ */
 
 @Namespace("caffe") public static native @Name("GetSolver<float>") FloatSolver GetFloatSolver(@Const @ByRef SolverParameter param);
 
@@ -17271,14 +17799,10 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
 // #include <string>
 
 // #include "google/protobuf/message.h"
-// #include "hdf5.h"
-// #include "hdf5_hl.h"
 
 // #include "caffe/blob.hpp"
 // #include "caffe/common.hpp"
 // #include "caffe/proto/caffe.pb.h"
-
-public static final int HDF5_NUM_DIMS = 4;
 
 @Namespace("caffe") public static native void MakeTempFilename(@StdString @Cast({"char*", "std::string*"}) BytePointer temp_filename);
 
@@ -17366,44 +17890,6 @@ public static final int HDF5_NUM_DIMS = 4;
 @Namespace("caffe") public static native @ByVal Mat DecodeDatumToCVMat(@Const @ByRef Datum datum, @Cast("bool") boolean is_color);
 
 @Namespace("caffe") public static native void CVMatToDatum(@Const @ByRef Mat cv_img, Datum datum);
-
-@Namespace("caffe") public static native @Name("hdf5_load_nd_dataset_helper<float>") void hdf5_load_nd_dataset_helper_float(
-    @Cast("hid_t") int file_id, @Cast("const char*") BytePointer dataset_name_, int min_dim, int max_dim,
-    FloatBlob blob);
-@Namespace("caffe") public static native @Name("hdf5_load_nd_dataset_helper<float>") void hdf5_load_nd_dataset_helper_float(
-    @Cast("hid_t") int file_id, String dataset_name_, int min_dim, int max_dim,
-    FloatBlob blob);
-
-@Namespace("caffe") public static native @Name("hdf5_load_nd_dataset_helper<double>") void hdf5_load_nd_dataset_helper_double(
-    @Cast("hid_t") int file_id, @Cast("const char*") BytePointer dataset_name_, int min_dim, int max_dim,
-    DoubleBlob blob);
-@Namespace("caffe") public static native @Name("hdf5_load_nd_dataset_helper<double>") void hdf5_load_nd_dataset_helper_double(
-    @Cast("hid_t") int file_id, String dataset_name_, int min_dim, int max_dim,
-    DoubleBlob blob);
-
-@Namespace("caffe") public static native @Name("hdf5_load_nd_dataset<float>") void hdf5_load_nd_dataset_float(
-    @Cast("hid_t") int file_id, @Cast("const char*") BytePointer dataset_name_, int min_dim, int max_dim,
-    FloatBlob blob);
-@Namespace("caffe") public static native @Name("hdf5_load_nd_dataset<float>") void hdf5_load_nd_dataset_float(
-    @Cast("hid_t") int file_id, String dataset_name_, int min_dim, int max_dim,
-    FloatBlob blob);
-
-@Namespace("caffe") public static native @Name("hdf5_load_nd_dataset<double>") void hdf5_load_nd_dataset_double(
-    @Cast("hid_t") int file_id, @Cast("const char*") BytePointer dataset_name_, int min_dim, int max_dim,
-    DoubleBlob blob);
-@Namespace("caffe") public static native @Name("hdf5_load_nd_dataset<double>") void hdf5_load_nd_dataset_double(
-    @Cast("hid_t") int file_id, String dataset_name_, int min_dim, int max_dim,
-    DoubleBlob blob);
-
-@Namespace("caffe") public static native @Name("hdf5_save_nd_dataset<float>") void hdf5_save_nd_dataset_float(
-    @Cast("const hid_t") int file_id, @StdString BytePointer dataset_name, @Const @ByRef FloatBlob blob);
-@Namespace("caffe") public static native @Name("hdf5_save_nd_dataset<float>") void hdf5_save_nd_dataset_float(
-    @Cast("const hid_t") int file_id, @StdString String dataset_name, @Const @ByRef FloatBlob blob);
-
-@Namespace("caffe") public static native @Name("hdf5_save_nd_dataset<double>") void hdf5_save_nd_dataset_double(
-    @Cast("const hid_t") int file_id, @StdString BytePointer dataset_name, @Const @ByRef DoubleBlob blob);
-@Namespace("caffe") public static native @Name("hdf5_save_nd_dataset<double>") void hdf5_save_nd_dataset_double(
-    @Cast("const hid_t") int file_id, @StdString String dataset_name, @Const @ByRef DoubleBlob blob);
 
   // namespace caffe
 
