@@ -6876,4 +6876,74 @@ public static final String FFMPEG_VERSION = "2.7.1";
 // #endif /* AVUTIL_FFVERSION_H */
 
 
+// Parsed from <libavutil/motion_vector.h>
+
+/*
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+// #ifndef AVUTIL_MOTION_VECTOR_H
+// #define AVUTIL_MOTION_VECTOR_H
+
+// #include <stdint.h>
+
+public static class AVMotionVector extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public AVMotionVector() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public AVMotionVector(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AVMotionVector(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public AVMotionVector position(int position) {
+        return (AVMotionVector)super.position(position);
+    }
+
+    /**
+     * Where the current macroblock comes from; negative value when it comes
+     * from the past, positive value when it comes from the future.
+     * XXX: set exact relative ref frame reference instead of a +/- 1 "direction".
+     */
+    public native int source(); public native AVMotionVector source(int source);
+    /**
+     * Width and height of the block.
+     */
+    public native @Cast("uint8_t") byte w(); public native AVMotionVector w(byte w);
+    public native @Cast("uint8_t") byte h(); public native AVMotionVector h(byte h);
+    /**
+     * Absolute source position. Can be outside the frame area.
+     */
+    public native short src_x(); public native AVMotionVector src_x(short src_x);
+    public native short src_y(); public native AVMotionVector src_y(short src_y);
+    /**
+     * Absolute destination position. Can be outside the frame area.
+     */
+    public native short dst_x(); public native AVMotionVector dst_x(short dst_x);
+    public native short dst_y(); public native AVMotionVector dst_y(short dst_y);
+    /**
+     * Extra flag information.
+     * Currently unused.
+     */
+    public native @Cast("uint64_t") long flags(); public native AVMotionVector flags(long flags);
+}
+
+// #endif /* AVUTIL_MOTION_VECTOR_H */
+
+
 }

@@ -1,5 +1,6 @@
 
  * Upgrade presets for Caffe
+ * Include `motion_vector.h` header file in the `avutil` module of FFmpeg
  * Add presets for Chilitags, thanks to Chris Walters for the financial contribution
  * Let users choose the runtime type of `layer_by_name()` from `FloatNet` or `DoubleNet` in `caffe` ([issue bytedeco/javacpp#25](https://github.com/bytedeco/javacpp/issues/25))
  * Add presets for the `face` and `xfeatures2d` modules of OpenCV 3.0 ([issue bytedeco/javacv#196](https://github.com/bytedeco/javacv/issues/196)) ([issue #54](https://github.com/bytedeco/javacpp-presets/issues/54))
