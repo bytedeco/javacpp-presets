@@ -33,8 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cufft.class, value = {
-    @Platform(value = {"linux-x86_64", "linux-ppc64", "macosx-x86_64", "windows-x86_64"},
-              include = "<cufftw.h>", link = "cufftw@.7.0")},
+    @Platform(include = "<cufftw.h>", link = "cufftw@.7.0")},
         target = "org.bytedeco.javacpp.cufftw")
 public class cufftw implements InfoMapper {
     public void map(InfoMap infoMap) {

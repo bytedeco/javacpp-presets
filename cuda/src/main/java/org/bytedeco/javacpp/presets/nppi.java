@@ -33,8 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = nppc.class, value = {
-    @Platform(value = {"linux-x86_64", "linux-ppc64", "macosx-x86_64", "windows-x86_64"},
-              include = {"<nppi.h>", "<nppi_support_functions.h>", "<nppi_data_exchange_and_initialization.h>",
+    @Platform(include = {"<nppi.h>", "<nppi_support_functions.h>", "<nppi_data_exchange_and_initialization.h>",
             "<nppi_arithmetic_and_logical_operations.h>", "<nppi_color_conversion.h>",
             "<nppi_threshold_and_compare_operations.h>", "<nppi_morphological_operations.h>",
             "<nppi_filtering_functions.h>", "<nppi_statistics_functions.h>",
