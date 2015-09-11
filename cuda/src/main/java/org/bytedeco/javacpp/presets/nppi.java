@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<nppi_threshold_and_compare_operations.h>", "<nppi_morphological_operations.h>",
             "<nppi_filtering_functions.h>", "<nppi_statistics_functions.h>",
             "<nppi_linear_transforms.h>", "<nppi_geometry_transforms.h>",
-            "<nppi_compression_functions.h>", "<nppi_computer_vision.h>"}, link = "nppi@.7.0")},
+            "<nppi_compression_functions.h>", "<nppi_computer_vision.h>"}, link = "nppi@.7.5")},
         target = "org.bytedeco.javacpp.nppi")
 public class nppi implements InfoMapper {
     public void map(InfoMap infoMap) {

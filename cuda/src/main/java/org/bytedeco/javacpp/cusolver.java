@@ -1519,12 +1519,80 @@ public static native @Cast("cusolverStatus_t") int cusolverDnZgebrd(
     int[] devInfo );
 
 
-public static native @Cast("cusolverStatus_t") int cusolverDnSsytrd(cusolverDnContext handle, @Cast("char") byte uplo, int n, FloatPointer A, int lda, FloatPointer D, FloatPointer E, FloatPointer tau, FloatPointer Work, int Lwork, IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnSsytrd(cusolverDnContext handle, @Cast("char") byte uplo, int n, FloatBuffer A, int lda, FloatBuffer D, FloatBuffer E, FloatBuffer tau, FloatBuffer Work, int Lwork, IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnSsytrd(cusolverDnContext handle, @Cast("char") byte uplo, int n, float[] A, int lda, float[] D, float[] E, float[] tau, float[] Work, int Lwork, int[] info);
-public static native @Cast("cusolverStatus_t") int cusolverDnDsytrd(cusolverDnContext handle, @Cast("char") byte uplo, int n, DoublePointer A, int lda, DoublePointer D, DoublePointer E, DoublePointer tau, DoublePointer Work, int Lwork, IntPointer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnDsytrd(cusolverDnContext handle, @Cast("char") byte uplo, int n, DoubleBuffer A, int lda, DoubleBuffer D, DoubleBuffer E, DoubleBuffer tau, DoubleBuffer Work, int Lwork, IntBuffer info);
-public static native @Cast("cusolverStatus_t") int cusolverDnDsytrd(cusolverDnContext handle, @Cast("char") byte uplo, int n, double[] A, int lda, double[] D, double[] E, double[] tau, double[] Work, int Lwork, int[] info);
+public static native @Cast("cusolverStatus_t") int cusolverDnSsytrd(
+    cusolverDnContext handle, 
+    byte uplo, 
+    int n, 
+    FloatPointer A, 
+    int lda, 
+    FloatPointer D, 
+    FloatPointer E, 
+    FloatPointer tau, 
+    FloatPointer Work, 
+    int Lwork, 
+    IntPointer info);
+public static native @Cast("cusolverStatus_t") int cusolverDnSsytrd(
+    cusolverDnContext handle, 
+    byte uplo, 
+    int n, 
+    FloatBuffer A, 
+    int lda, 
+    FloatBuffer D, 
+    FloatBuffer E, 
+    FloatBuffer tau, 
+    FloatBuffer Work, 
+    int Lwork, 
+    IntBuffer info);
+public static native @Cast("cusolverStatus_t") int cusolverDnSsytrd(
+    cusolverDnContext handle, 
+    byte uplo, 
+    int n, 
+    float[] A, 
+    int lda, 
+    float[] D, 
+    float[] E, 
+    float[] tau, 
+    float[] Work, 
+    int Lwork, 
+    int[] info);
+
+public static native @Cast("cusolverStatus_t") int cusolverDnDsytrd(
+    cusolverDnContext handle, 
+    byte uplo, 
+    int n, 
+    DoublePointer A, 
+    int lda, 
+    DoublePointer D, 
+    DoublePointer E, 
+    DoublePointer tau, 
+    DoublePointer Work, 
+    int Lwork, 
+    IntPointer info);
+public static native @Cast("cusolverStatus_t") int cusolverDnDsytrd(
+    cusolverDnContext handle, 
+    byte uplo, 
+    int n, 
+    DoubleBuffer A, 
+    int lda, 
+    DoubleBuffer D, 
+    DoubleBuffer E, 
+    DoubleBuffer tau, 
+    DoubleBuffer Work, 
+    int Lwork, 
+    IntBuffer info);
+public static native @Cast("cusolverStatus_t") int cusolverDnDsytrd(
+    cusolverDnContext handle, 
+    byte uplo, 
+    int n, 
+    double[] A, 
+    int lda, 
+    double[] D, 
+    double[] E, 
+    double[] tau, 
+    double[] Work, 
+    int Lwork, 
+    int[] info);
+
 /* bidiagonal factorization workspace query */
 public static native @Cast("cusolverStatus_t") int cusolverDnSgebrd_bufferSize( 
     cusolverDnContext handle, 
@@ -1657,8 +1725,8 @@ public static native @Cast("cusolverStatus_t") int cusolverDnZgesvd_bufferSize(
 
 public static native @Cast("cusolverStatus_t") int cusolverDnSgesvd(
     cusolverDnContext handle, 
-    @Cast("char") byte jobu, 
-    @Cast("char") byte jobvt, 
+    byte jobu, 
+    byte jobvt, 
     int m, 
     int n, 
     FloatPointer A, 
@@ -1674,8 +1742,8 @@ public static native @Cast("cusolverStatus_t") int cusolverDnSgesvd(
     IntPointer devInfo );
 public static native @Cast("cusolverStatus_t") int cusolverDnSgesvd(
     cusolverDnContext handle, 
-    @Cast("char") byte jobu, 
-    @Cast("char") byte jobvt, 
+    byte jobu, 
+    byte jobvt, 
     int m, 
     int n, 
     FloatBuffer A, 
@@ -1691,8 +1759,8 @@ public static native @Cast("cusolverStatus_t") int cusolverDnSgesvd(
     IntBuffer devInfo );
 public static native @Cast("cusolverStatus_t") int cusolverDnSgesvd(
     cusolverDnContext handle, 
-    @Cast("char") byte jobu, 
-    @Cast("char") byte jobvt, 
+    byte jobu, 
+    byte jobvt, 
     int m, 
     int n, 
     float[] A, 
@@ -1709,8 +1777,8 @@ public static native @Cast("cusolverStatus_t") int cusolverDnSgesvd(
 
 public static native @Cast("cusolverStatus_t") int cusolverDnDgesvd(
     cusolverDnContext handle, 
-    @Cast("char") byte jobu, 
-    @Cast("char") byte jobvt, 
+    byte jobu, 
+    byte jobvt, 
     int m, 
     int n, 
     DoublePointer A, 
@@ -1726,8 +1794,8 @@ public static native @Cast("cusolverStatus_t") int cusolverDnDgesvd(
     IntPointer devInfo );
 public static native @Cast("cusolverStatus_t") int cusolverDnDgesvd(
     cusolverDnContext handle, 
-    @Cast("char") byte jobu, 
-    @Cast("char") byte jobvt, 
+    byte jobu, 
+    byte jobvt, 
     int m, 
     int n, 
     DoubleBuffer A, 
@@ -1743,8 +1811,8 @@ public static native @Cast("cusolverStatus_t") int cusolverDnDgesvd(
     IntBuffer devInfo );
 public static native @Cast("cusolverStatus_t") int cusolverDnDgesvd(
     cusolverDnContext handle, 
-    @Cast("char") byte jobu, 
-    @Cast("char") byte jobvt, 
+    byte jobu, 
+    byte jobvt, 
     int m, 
     int n, 
     double[] A, 
@@ -1761,8 +1829,8 @@ public static native @Cast("cusolverStatus_t") int cusolverDnDgesvd(
 
 public static native @Cast("cusolverStatus_t") int cusolverDnCgesvd(
     cusolverDnContext handle, 
-    @Cast("char") byte jobu, 
-    @Cast("char") byte jobvt, 
+    byte jobu, 
+    byte jobvt, 
     int m, 
     int n, 
     @Cast("cuComplex*") float2 A,
@@ -1778,8 +1846,8 @@ public static native @Cast("cusolverStatus_t") int cusolverDnCgesvd(
     IntPointer devInfo );
 public static native @Cast("cusolverStatus_t") int cusolverDnCgesvd(
     cusolverDnContext handle, 
-    @Cast("char") byte jobu, 
-    @Cast("char") byte jobvt, 
+    byte jobu, 
+    byte jobvt, 
     int m, 
     int n, 
     @Cast("cuComplex*") float2 A,
@@ -1795,8 +1863,8 @@ public static native @Cast("cusolverStatus_t") int cusolverDnCgesvd(
     IntBuffer devInfo );
 public static native @Cast("cusolverStatus_t") int cusolverDnCgesvd(
     cusolverDnContext handle, 
-    @Cast("char") byte jobu, 
-    @Cast("char") byte jobvt, 
+    byte jobu, 
+    byte jobvt, 
     int m, 
     int n, 
     @Cast("cuComplex*") float2 A,
@@ -1813,8 +1881,8 @@ public static native @Cast("cusolverStatus_t") int cusolverDnCgesvd(
 
 public static native @Cast("cusolverStatus_t") int cusolverDnZgesvd(
     cusolverDnContext handle, 
-    @Cast("char") byte jobu, 
-    @Cast("char") byte jobvt, 
+    byte jobu, 
+    byte jobvt, 
     int m, 
     int n, 
     @Cast("cuDoubleComplex*") double2 A, 
@@ -1830,8 +1898,8 @@ public static native @Cast("cusolverStatus_t") int cusolverDnZgesvd(
     IntPointer devInfo );
 public static native @Cast("cusolverStatus_t") int cusolverDnZgesvd(
     cusolverDnContext handle, 
-    @Cast("char") byte jobu, 
-    @Cast("char") byte jobvt, 
+    byte jobu, 
+    byte jobvt, 
     int m, 
     int n, 
     @Cast("cuDoubleComplex*") double2 A, 
@@ -1847,8 +1915,8 @@ public static native @Cast("cusolverStatus_t") int cusolverDnZgesvd(
     IntBuffer devInfo );
 public static native @Cast("cusolverStatus_t") int cusolverDnZgesvd(
     cusolverDnContext handle, 
-    @Cast("char") byte jobu, 
-    @Cast("char") byte jobvt, 
+    byte jobu, 
+    byte jobvt, 
     int m, 
     int n, 
     @Cast("cuDoubleComplex*") double2 A, 
@@ -2762,8 +2830,8 @@ public static native @Cast("cusolverStatus_t") int cusolverRfBatchZeroPivot(
 // #endif
 // #endif
 
-// #if !defined(PEGASUS_H_)
-// #define PEGASUS_H_
+// #if !defined(CUSOLVERSP_H_)
+// #define CUSOLVERSP_H_
 
 // #include "cusparse.h"
 
@@ -4380,6 +4448,65 @@ public static native @Cast("cusolverStatus_t") int cusolverSpXcsrsymrcmHost(
     @Const int[] csrColIndA,
     int[] p);
 
+/* --------- CPU symmdq 
+ *   Symmetric minimum degree algorithm based on quotient graph
+ *
+ */
+public static native @Cast("cusolverStatus_t") int cusolverSpXcsrsymmdqHost(
+    cusolverSpContext handle,
+    int n,
+    int nnzA,
+    cusparseMatDescr descrA,
+    @Const IntPointer csrRowPtrA,
+    @Const IntPointer csrColIndA,
+    IntPointer p);
+public static native @Cast("cusolverStatus_t") int cusolverSpXcsrsymmdqHost(
+    cusolverSpContext handle,
+    int n,
+    int nnzA,
+    cusparseMatDescr descrA,
+    @Const IntBuffer csrRowPtrA,
+    @Const IntBuffer csrColIndA,
+    IntBuffer p);
+public static native @Cast("cusolverStatus_t") int cusolverSpXcsrsymmdqHost(
+    cusolverSpContext handle,
+    int n,
+    int nnzA,
+    cusparseMatDescr descrA,
+    @Const int[] csrRowPtrA,
+    @Const int[] csrColIndA,
+    int[] p);
+
+/* --------- CPU symmdq 
+ *   Symmetric Approximate minimum degree algorithm based on quotient graph
+ *
+ */
+public static native @Cast("cusolverStatus_t") int cusolverSpXcsrsymamdHost(
+    cusolverSpContext handle,
+    int n,
+    int nnzA,
+    cusparseMatDescr descrA,
+    @Const IntPointer csrRowPtrA,
+    @Const IntPointer csrColIndA,
+    IntPointer p);
+public static native @Cast("cusolverStatus_t") int cusolverSpXcsrsymamdHost(
+    cusolverSpContext handle,
+    int n,
+    int nnzA,
+    cusparseMatDescr descrA,
+    @Const IntBuffer csrRowPtrA,
+    @Const IntBuffer csrColIndA,
+    IntBuffer p);
+public static native @Cast("cusolverStatus_t") int cusolverSpXcsrsymamdHost(
+    cusolverSpContext handle,
+    int n,
+    int nnzA,
+    cusparseMatDescr descrA,
+    @Const int[] csrRowPtrA,
+    @Const int[] csrColIndA,
+    int[] p);
+
+
 /* --------- CPU permuation
  *   P*A*Q^T        
  *
@@ -4835,7 +4962,7 @@ public static native @Cast("cusolverStatus_t") int cusolverSpZcsrqrsvBatched(
 // #if defined(__cplusplus)
 // #endif /* __cplusplus */
 
-// #endif // define PEGASUS_H_
+// #endif // define CUSOLVERSP_H_
 
 
 

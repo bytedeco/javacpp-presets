@@ -86,6 +86,7 @@ public class cublas extends org.bytedeco.javacpp.presets.cublas {
 
 // #include "driver_types.h"
 // #include "cuComplex.h"   /* import complex data type */
+// #include "cuda_fp16.h"
 
 // #if defined(__cplusplus)
 // #endif /* __cplusplus */
@@ -137,6 +138,14 @@ public static final int
 public static final int 
     CUBLAS_ATOMICS_NOT_ALLOWED   = 0,  
     CUBLAS_ATOMICS_ALLOWED       = 1;
+
+/* Used by cublasSgemmEx */
+/** enum cublasDataType_t */
+public static final int
+     CUBLAS_DATA_FLOAT    = 0,
+     CUBLAS_DATA_DOUBLE   = 1,
+     CUBLAS_DATA_HALF     = 2,
+     CUBLAS_DATA_INT8     = 3;
 
 /* Opaque structure holding CUBLAS library context */
 @Opaque public static class cublasContext extends Pointer {
@@ -2818,7 +2827,74 @@ public static native @Cast("cublasStatus_t") int cublasZgemm_v2(cublasContext ha
                                                       int ldb, 
                                                       @Cast("const cuDoubleComplex*") double2 beta,  
                                                       @Cast("cuDoubleComplex*") double2 C,
-                                                      int ldc);                                                                                
+                                                      int ldc);             
+                                                      
+public static native @Cast("cublasStatus_t") int cublasHgemm(cublasContext handle, 
+                                                      @Cast("cublasOperation_t") int transa,
+                                                      @Cast("cublasOperation_t") int transb, 
+                                                      int m,
+                                                      int n,
+                                                      int k,
+                                                      @Const __half alpha,  
+                                                      @Const __half A, 
+                                                      int lda,
+                                                      @Const __half B,
+                                                      int ldb, 
+                                                      @Const __half beta,  
+                                                      __half C,
+                                                      int ldc);             
+/* IO in FP16/FP32, computation in float */                                                      
+public static native @Cast("cublasStatus_t") int cublasSgemmEx(cublasContext handle, 
+                                                      @Cast("cublasOperation_t") int transa,
+                                                      @Cast("cublasOperation_t") int transb, 
+                                                      int m,
+                                                      int n,
+                                                      int k,
+                                                      @Const FloatPointer alpha,  
+                                                      @Const Pointer A, 
+                                                      @Cast("cublasDataType_t") int Atype,
+                                                      int lda,
+                                                      @Const Pointer B,
+                                                      @Cast("cublasDataType_t") int Btype,
+                                                      int ldb, 
+                                                      @Const FloatPointer beta,  
+                                                      Pointer C,
+                                                      @Cast("cublasDataType_t") int Ctype,
+                                                      int ldc);
+public static native @Cast("cublasStatus_t") int cublasSgemmEx(cublasContext handle, 
+                                                      @Cast("cublasOperation_t") int transa,
+                                                      @Cast("cublasOperation_t") int transb, 
+                                                      int m,
+                                                      int n,
+                                                      int k,
+                                                      @Const FloatBuffer alpha,  
+                                                      @Const Pointer A, 
+                                                      @Cast("cublasDataType_t") int Atype,
+                                                      int lda,
+                                                      @Const Pointer B,
+                                                      @Cast("cublasDataType_t") int Btype,
+                                                      int ldb, 
+                                                      @Const FloatBuffer beta,  
+                                                      Pointer C,
+                                                      @Cast("cublasDataType_t") int Ctype,
+                                                      int ldc);
+public static native @Cast("cublasStatus_t") int cublasSgemmEx(cublasContext handle, 
+                                                      @Cast("cublasOperation_t") int transa,
+                                                      @Cast("cublasOperation_t") int transb, 
+                                                      int m,
+                                                      int n,
+                                                      int k,
+                                                      @Const float[] alpha,  
+                                                      @Const Pointer A, 
+                                                      @Cast("cublasDataType_t") int Atype,
+                                                      int lda,
+                                                      @Const Pointer B,
+                                                      @Cast("cublasDataType_t") int Btype,
+                                                      int ldb, 
+                                                      @Const float[] beta,  
+                                                      Pointer C,
+                                                      @Cast("cublasDataType_t") int Ctype,
+                                                      int ldc);                                                                                                                                                                                            
                             
 /* SYRK */
 public static native @Cast("cublasStatus_t") int cublasSsyrk_v2(cublasContext handle,

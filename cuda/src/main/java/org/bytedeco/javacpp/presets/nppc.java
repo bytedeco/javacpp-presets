@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cuda.class, value = {
-    @Platform(include = {"<npp.h>", "<nppversion.h>", "<nppdefs.h>", "<nppcore.h>"}, link = "nppc@.7.0")},
+    @Platform(include = {"<npp.h>", "<nppversion.h>", "<nppdefs.h>", "<nppcore.h>"}, link = "nppc@.7.5")},
         target = "org.bytedeco.javacpp.nppc")
 public class nppc implements InfoMapper {
     public void map(InfoMap infoMap) {

@@ -246,6 +246,74 @@ public static native @Cast("cufftResult") int cufftMakePlanMany(@Cast("cufftHand
                                        @Cast("cufftType") int type,
                                        int batch,
                                        @Cast("size_t*") SizeTPointer workSize);
+                                      
+public static native @Cast("cufftResult") int cufftMakePlanMany64(@Cast("cufftHandle") int plan, 
+                                         int rank, 
+                                         @Cast("long long int*") LongPointer n,
+                                         @Cast("long long int*") LongPointer inembed, 
+                                         @Cast("long long int") long istride, 
+                                         @Cast("long long int") long idist,
+                                         @Cast("long long int*") LongPointer onembed, 
+                                         @Cast("long long int") long ostride, @Cast("long long int") long odist,
+                                         @Cast("cufftType") int type, 
+                                         @Cast("long long int") long batch,
+                                         @Cast("size_t*") SizeTPointer workSize);
+public static native @Cast("cufftResult") int cufftMakePlanMany64(@Cast("cufftHandle") int plan, 
+                                         int rank, 
+                                         @Cast("long long int*") LongBuffer n,
+                                         @Cast("long long int*") LongBuffer inembed, 
+                                         @Cast("long long int") long istride, 
+                                         @Cast("long long int") long idist,
+                                         @Cast("long long int*") LongBuffer onembed, 
+                                         @Cast("long long int") long ostride, @Cast("long long int") long odist,
+                                         @Cast("cufftType") int type, 
+                                         @Cast("long long int") long batch,
+                                         @Cast("size_t*") SizeTPointer workSize);
+public static native @Cast("cufftResult") int cufftMakePlanMany64(@Cast("cufftHandle") int plan, 
+                                         int rank, 
+                                         @Cast("long long int*") long[] n,
+                                         @Cast("long long int*") long[] inembed, 
+                                         @Cast("long long int") long istride, 
+                                         @Cast("long long int") long idist,
+                                         @Cast("long long int*") long[] onembed, 
+                                         @Cast("long long int") long ostride, @Cast("long long int") long odist,
+                                         @Cast("cufftType") int type, 
+                                         @Cast("long long int") long batch,
+                                         @Cast("size_t*") SizeTPointer workSize);
+
+public static native @Cast("cufftResult") int cufftGetSizeMany64(@Cast("cufftHandle") int plan,
+                                        int rank,
+                                        @Cast("long long int*") LongPointer n,
+                                        @Cast("long long int*") LongPointer inembed, 
+                                        @Cast("long long int") long istride, @Cast("long long int") long idist,
+                                        @Cast("long long int*") LongPointer onembed, 
+                                        @Cast("long long int") long ostride, @Cast("long long int") long odist,
+                                        @Cast("cufftType") int type,
+                                        @Cast("long long int") long batch,
+                                        @Cast("size_t*") SizeTPointer workSize);
+public static native @Cast("cufftResult") int cufftGetSizeMany64(@Cast("cufftHandle") int plan,
+                                        int rank,
+                                        @Cast("long long int*") LongBuffer n,
+                                        @Cast("long long int*") LongBuffer inembed, 
+                                        @Cast("long long int") long istride, @Cast("long long int") long idist,
+                                        @Cast("long long int*") LongBuffer onembed, 
+                                        @Cast("long long int") long ostride, @Cast("long long int") long odist,
+                                        @Cast("cufftType") int type,
+                                        @Cast("long long int") long batch,
+                                        @Cast("size_t*") SizeTPointer workSize);
+public static native @Cast("cufftResult") int cufftGetSizeMany64(@Cast("cufftHandle") int plan,
+                                        int rank,
+                                        @Cast("long long int*") long[] n,
+                                        @Cast("long long int*") long[] inembed, 
+                                        @Cast("long long int") long istride, @Cast("long long int") long idist,
+                                        @Cast("long long int*") long[] onembed, 
+                                        @Cast("long long int") long ostride, @Cast("long long int") long odist,
+                                        @Cast("cufftType") int type,
+                                        @Cast("long long int") long batch,
+                                        @Cast("size_t*") SizeTPointer workSize);
+
+                                         
+                                      
                                    
 public static native @Cast("cufftResult") int cufftEstimate1d(int nx, 
                                      @Cast("cufftType") int type, 
@@ -282,9 +350,9 @@ public static native @Cast("cufftResult") int cufftEstimateMany(int rank,
                                        int batch,
                                        @Cast("size_t*") SizeTPointer workSize);
                                      
-public static native @Cast("cufftResult") int cufftCreate(@Cast("cufftHandle*") IntPointer cufftHandle);
-public static native @Cast("cufftResult") int cufftCreate(@Cast("cufftHandle*") IntBuffer cufftHandle);
-public static native @Cast("cufftResult") int cufftCreate(@Cast("cufftHandle*") int[] cufftHandle);                                     
+public static native @Cast("cufftResult") int cufftCreate(@Cast("cufftHandle*") IntPointer handle);
+public static native @Cast("cufftResult") int cufftCreate(@Cast("cufftHandle*") IntBuffer handle);
+public static native @Cast("cufftResult") int cufftCreate(@Cast("cufftHandle*") int[] handle);                                     
 
 public static native @Cast("cufftResult") int cufftGetSize1d(@Cast("cufftHandle") int handle, 
                                     int nx, 

@@ -1,5 +1,5 @@
 
- * Upgrade presets for Caffe, CUDNN 3
+ * Upgrade presets for Caffe, CUDA 7.5, cuDNN 3
  * Include `motion_vector.h` header file in the `avutil` module of FFmpeg
  * Add presets for Chilitags, thanks to Chris Walters for the financial contribution
  * Let users choose the runtime type of `layer_by_name()` from `FloatNet` or `DoubleNet` in `caffe` ([issue bytedeco/javacpp#25](https://github.com/bytedeco/javacpp/issues/25))

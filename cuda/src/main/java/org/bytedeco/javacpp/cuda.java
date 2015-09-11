@@ -70,7 +70,7 @@ public class cuda extends org.bytedeco.javacpp.presets.cuda {
  */
 // #if defined(CUDA_FORCE_API_VERSION)
 // #else
-    public static final int __CUDA_API_VERSION = 7000;
+    public static final int __CUDA_API_VERSION = 7050;
 // #endif /* CUDA_FORCE_API_VERSION */
 
 // #if defined(__CUDA_API_VERSION_INTERNAL) || defined(CUDA_API_PER_THREAD_DEFAULT_STREAM)
@@ -122,7 +122,7 @@ public class cuda extends org.bytedeco.javacpp.presets.cuda {
 /**
  * CUDA API version number
  */
-public static final int CUDA_VERSION = 7000;
+public static final int CUDA_VERSION = 7050;
 
 // #ifdef __cplusplus
 // #endif
@@ -1563,6 +1563,20 @@ public static final int CU_MEMHOSTREGISTER_PORTABLE =     0x01;
  * Flag for ::cuMemHostRegister()
  */
 public static final int CU_MEMHOSTREGISTER_DEVICEMAP =    0x02;
+
+/**
+ * If set, the passed memory pointer is treated as pointing to some
+ * memory-mapped I/O space, e.g. belonging to a third-party PCIe device.
+ * On Windows the flag is a no-op.
+ * On Linux that memory is marked as non cache-coherent for the GPU and
+ * is expected to be physically contiguous. It may return
+ * CUDA_ERROR_NOT_PERMITTED if run as an unprivileged user,
+ * CUDA_ERROR_NOT_SUPPORTED on older Linux kernel versions.
+ * On all other platforms, it is not supported and CUDA_ERROR_NOT_SUPPORTED
+ * is returned.
+ * Flag for ::cuMemHostRegister()
+ */
+public static final int CU_MEMHOSTREGISTER_IOMEMORY =     0x04;
 
 // #if __CUDA_API_VERSION >= 3020
 
@@ -5125,6 +5139,9 @@ public static native @Cast("CUresult") int cuIpcCloseMemHandle(@Cast("CUdevicept
  *   ::cuMemHostGetDevicePointer(). This feature is available only on GPUs
  *   with compute capability greater than or equal to 1.1.
  *
+ * - ::CU_MEMHOSTREGISTER_IOMEMORY: The pointer is treated as pointing to some
+ *   I/O memory space, e.g. the PCI Express resource of a 3rd party device.
+ *
  * All of these flags are orthogonal to one another: a developer may page-lock
  * memory that is portable or mapped with no restrictions.
  *
@@ -5150,7 +5167,9 @@ public static native @Cast("CUresult") int cuIpcCloseMemHandle(@Cast("CUdevicept
  * ::CUDA_ERROR_INVALID_CONTEXT,
  * ::CUDA_ERROR_INVALID_VALUE,
  * ::CUDA_ERROR_OUT_OF_MEMORY,
- * ::CUDA_ERROR_HOST_MEMORY_ALREADY_REGISTERED
+ * ::CUDA_ERROR_HOST_MEMORY_ALREADY_REGISTERED,
+ * ::CUDA_ERROR_NOT_PERMITTED,
+ * ::CUDA_ERROR_NOT_SUPPORTED
  * \notefnerr
  *
  * \sa ::cuMemHostUnregister, ::cuMemHostGetFlags, ::cuMemHostGetDevicePointer
@@ -10788,6 +10807,8 @@ public static native @Cast("CUresult") int cuDeviceCanAccessPeer(int[] canAccess
  * memory from the current context in \p peerContext, a separate symmetric call 
  * to ::cuCtxEnablePeerAccess() is required.
  *
+ * There is a system-wide maximum of eight peer connections per device.
+ *
  * Returns ::CUDA_ERROR_PEER_ACCESS_UNSUPPORTED if ::cuDeviceCanAccessPeer() indicates
  * that the ::CUdevice of the current context cannot directly access memory
  * from the ::CUdevice of \p peerContext.
@@ -11309,16 +11330,22 @@ public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**"
 
 // #endif /* __GNUC__ || __CUDA_LIBDEVICE__ || __CUDACC_RTC__ */
 
-// #if !defined(__GNUC__) || __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 3 && !defined(__clang__) )
+// #if (defined(__GNUC__) && (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 3 && !defined(__clang__)))) ||
+//     (defined(_MSC_VER) && _MSC_VER < 1900) ||
+//     (!defined(__GNUC__) && !defined(_MSC_VER))
 
 // #define __specialization_static
 //         static
 
-// #else /* !__GNUC__ || __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 3) */
+// #else /* (__GNUC__ && (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 3 && !__clang__))) ||
+//          (_MSC_VER && _MSC_VER < 1900) ||
+//          (!__GNUC__ && !_MSC_VER) */
 
 // #define __specialization_static
 
-// #endif /* !__GNUC__ || __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 3) */
+// #endif /* (__GNUC__ && (__GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 3 && !__clang__))) ||
+//          (_MSC_VER && _MSC_VER < 1900) ||
+//          (!__GNUC__ && !_MSC_VER) */
 
 // #if !defined(__CUDACC__) && !defined(__CUDABE__)
 
@@ -11357,13 +11384,21 @@ public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**"
 // #define __managed__
 //         __location__(managed)
         
-// #if defined(__CUDABE__) || !defined(__CUDACC__)
+// #if (defined(__CUDABE__) && !defined(__CUDACC_INTEGRATED__)) || !defined(__CUDACC__)
 // #define __device_builtin__
 // #define __device_builtin_texture_type__
 // #define __device_builtin_surface_type__
 // #define __cudart_builtin__
-// #else /* __CUDABE__  || !__CUDACC__ */
-// #endif /* __CUDABE__ || !__CUDACC__ */
+// #else /* (defined(__CUDABE__) && !defined(__CUDACC_INTEGRATED__))  || !__CUDACC__ */
+// #define __device_builtin__
+//         __location__(device_builtin)
+// #define __device_builtin_texture_type__
+//         __location__(device_builtin_texture_type)
+// #define __device_builtin_surface_type__
+//         __location__(device_builtin_surface_type)
+// #define __cudart_builtin__
+//         __location__(cudart_builtin)
+// #endif /* (defined(__CUDABE__) && !defined(__CUDACC_INTEGRATED__))  || !__CUDACC__ */
 
 // #if defined(__CUDACC__) && defined(__clang__)
 
@@ -11371,7 +11406,7 @@ public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**"
 // #error --- !!! The Clang version does not support __has_feature !!! ---
 // #endif /* !__has_feature */
 
-// #if __has_feature(cxx_atomic)
+// #if defined(__cplusplus) && defined(__CUDACC__)
 // #if (__has_feature(cxx_noexcept))
 // #define NV_CLANG_ATOMIC_NOEXCEPT noexcept
 // #define NV_CLANG_ATOMIC_NOEXCEPT_(x) noexcept(x)
@@ -11380,7 +11415,7 @@ public static native @Cast("CUresult") int cuGetExportTable(@Cast("const void**"
 // #define NV_CLANG_ATOMIC_NOEXCEPT_(x)
 // #endif /* __has_feature(cxx_noexcept) */
 // #define _Atomic(X) __nv_clang_atomic_t<X>
-// #endif /* __has_feature(cxx_atomic) */
+// #endif /* defined(__cplusplus) && defined(__CUDACC__) */
 
 // #endif /* __CUDACC__ && __clang__ */
 
@@ -11549,6 +11584,8 @@ public static final int cudaHostRegisterDefault =             0x00;
 public static final int cudaHostRegisterPortable =            0x01;
 /** Map registered memory into device space */
 public static final int cudaHostRegisterMapped =              0x02;
+/** Memory-mapped I/O space */
+public static final int cudaHostRegisterIoMemory =            0x04;
 
 /** Default peer addressing enable flag */
 public static final int cudaPeerAccessDefault =               0x00;
@@ -14943,24 +14980,15 @@ public static class double4 extends Pointer {
  * \subsection MemcpyAsynchronousBehavior Asynchronous
  *
  * <ol>
- * <li> For transfers from pageable host memory to device memory, host memory is
- * copied to a staging buffer immediately (no device synchronization is
- * performed). The function will return once the pageable buffer has been copied
- * to the staging memory. The DMA transfer to final destination may not have
- * completed.
- *
- * <li> For transfers between pinned host memory and device memory, the function
- * is fully asynchronous.
- * 
  * <li> For transfers from device memory to pageable host memory, the function
  * will return only once the copy has completed.
+ *
+ * <li> For transfers from any host memory to any host memory, the function is fully
+ * synchronous with respect to the host.
  * 
  * <li> For all other transfers, the function is fully asynchronous. If pageable
  * memory must first be staged to pinned memory, this will be handled
  * asynchronously with a worker thread.
- *
- * <li> For transfers from any host memory to any host memory, the function is fully
- * synchronous with respect to the host.
  * </ol>
  *
  * \section memset_sync_async_behavior Memset
@@ -14994,11 +15022,14 @@ public static class double4 extends Pointer {
  */
 
 /** CUDA Runtime API Version */
-public static final int CUDART_VERSION =  7000;
+public static final int CUDART_VERSION =  7050;
 
 // #include "host_defines.h"
 // #include "builtin_types.h"
+
+// #if !defined(__CUDACC_INTEGRATED__)
 // #include "cuda_device_runtime_api.h"
+// #endif /* !defined(__CUDACC_INTEGRATED__) */
 
 // #if defined(CUDA_API_PER_THREAD_DEFAULT_STREAM) || defined(__CUDA_API_VERSION_INTERNAL)
 //     #define __CUDART_API_PER_THREAD_DEFAULT_STREAM
@@ -15029,7 +15060,7 @@ public static final int CUDART_VERSION =  7000;
 // #endif /* !__dv */
 /** \endcond impl_private */
 
-// #if !defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 350)   /** Visible to SM>=3.5 and "__host__ __device__" only **/
+// #if !defined(__CUDACC_INTEGRATED__) && (!defined(__CUDA_ARCH__) || (__CUDA_ARCH__ >= 350))   /** Visible to SM>=3.5 and "__host__ __device__" only **/
 
 // #define CUDART_DEVICE __device__ 
 
@@ -16713,7 +16744,7 @@ public static native @Cast("cudaError_t") int cudaStreamCreateWithFlags(@ByPtrPt
  * ::cudaErrorInvalidValue
  * \notefnerr
  *
- * \note Stream priorities are supported only on Quadro and Tesla GPUs
+ * \note Stream priorities are supported only on GPUs
  * with compute capability 3.5 or higher.
  *
  * \note In the current implementation, only compute kernels launched in
@@ -17282,6 +17313,9 @@ public static native @Cast("cudaError_t") int cudaEventElapsedTime(float[] ms, C
  * Each pointer, from <tt>args[0]</tt> to <tt>args[N - 1]</tt>, point to the region
  * of memory from which the actual parameter will be copied.
  *
+ * For templated functions, pass the function symbol as follows:
+ * func_name<template_arg_0,...,template_arg_N>
+ *
  * \p sharedMem sets the amount of dynamic shared memory that will be available to
  * each thread block.
  *
@@ -17323,7 +17357,8 @@ public static native @Cast("cudaError_t") int cudaLaunchKernel(@Const Pointer fu
  *
  * \p func is a device function symbol and must be declared as a
  * \c __global__ function. If the specified function does not exist,
- * then ::cudaErrorInvalidDeviceFunction is returned.
+ * then ::cudaErrorInvalidDeviceFunction is returned. For templated functions,
+ * pass the function symbol as follows: func_name<template_arg_0,...,template_arg_N>
  *
  * This setting does nothing on devices where the size of the L1 cache and
  * shared memory are fixed.
@@ -17382,6 +17417,9 @@ public static native @Cast("cudaError_t") int cudaFuncSetCacheConfig(@Const Poin
  *
  * This function will do nothing on devices with fixed shared memory bank size.
  *
+ * For templated functions, pass the function symbol as follows:
+ * func_name<template_arg_0,...,template_arg_N>
+ *
  * The supported bank configurations are:
  * - ::cudaSharedMemBankSizeDefault: use the device's shared memory configuration
  *   when launching this function.
@@ -17417,7 +17455,8 @@ public static native @Cast("cudaError_t") int cudaFuncSetSharedMemConfig(@Const 
  * \p func is a device function symbol and must be declared as a
  * \c __global__ function. The fetched attributes are placed in \p attr.
  * If the specified function does not exist, then
- * ::cudaErrorInvalidDeviceFunction is returned.
+ * ::cudaErrorInvalidDeviceFunction is returned. For templated functions, pass
+ * the function symbol as follows: func_name<template_arg_0,...,template_arg_N>
  *
  * Note that some function attributes such as
  * \ref ::cudaFuncAttributes::maxThreadsPerBlock "maxThreadsPerBlock"
@@ -17448,6 +17487,8 @@ public static native @Cast("cudaError_t") int cudaFuncGetAttributes(cudaFuncAttr
  *
  * \param d - Double to convert
  *
+ * \deprecated This function is deprecated as of CUDA 7.5
+ *
  * Converts the double value of \p d to an internal float representation if
  * the device does not support double arithmetic. If the device does natively
  * support doubles, then this function does nothing.
@@ -17468,6 +17509,8 @@ public static native @Cast("cudaError_t") int cudaSetDoubleForDevice(double[] d)
 
 /**
  * \brief Converts a double argument after execution on a device
+ *
+ * \deprecated This function is deprecated as of CUDA 7.5
  *
  * Converts the double value of \p d from a potentially internal float
  * representation if the device does not support double arithmetic. If the
@@ -17681,7 +17724,8 @@ public static native @Cast("cudaError_t") int cudaSetupArgument(@Const Pointer a
  *
  * Launches the function \p func on the device. The parameter \p func must
  * be a device function symbol. The parameter specified by \p func must be
- * declared as a \p __global__ function.
+ * declared as a \p __global__ function. For templated functions, pass the
+ * function symbol as follows: func_name<template_arg_0,...,template_arg_N>
  * \ref ::cudaLaunch(const void*) "cudaLaunch()" must be preceded by a call to
  * ::cudaConfigureCall() since it pops the data that was pushed by
  * ::cudaConfigureCall() from the execution stack.
@@ -18120,6 +18164,11 @@ public static native @Cast("cudaError_t") int cudaHostAlloc(@Cast("void**") @ByP
  * - ::cudaHostRegisterMapped: Maps the allocation into the CUDA address
  *   space. The device pointer to the memory may be obtained by calling
  *   ::cudaHostGetDevicePointer().
+ *
+ * - ::cudaHostRegisterIoMemory: The passed memory pointer is treated as
+ *   pointing to some memory-mapped I/O space, e.g. belonging to a
+ *   third-party PCIe device, and it will marked as non cache-coherent and
+ *   contiguous.
  *
  * All of these flags are orthogonal to one another: a developer may page-lock
  * memory that is portable or mapped with no restrictions.
@@ -20131,6 +20180,8 @@ public static native @Cast("cudaError_t") int cudaDeviceCanAccessPeer(int[] canA
  * memory on the current device from \p peerDevice, a separate symmetric call 
  * to ::cudaDeviceEnablePeerAccess() is required.
  *
+ * Each device can support a system-wide maximum of eight peer connections.
+ *
  * Peer access is not supported in 32 bit applications.
  *
  * Returns ::cudaErrorInvalidDevice if ::cudaDeviceCanAccessPeer() indicates
@@ -21696,10 +21747,11 @@ public static native @ByVal double4 make_double4(double x, double y, double z, d
 // #if !defined(CU_COMPLEX_H_)
 // #define CU_COMPLEX_H_
 
-// When tyring to include C header file in C++ Code extern "C" is required
-// But the Standard QNX headers already have ifdef extern in them when compiling C++ Code
-// extern "C" cannot be nested
-// Hence keep the header out of extern "C" block
+/* When trying to include C header file in C++ Code extern "C" is required
+ * But the Standard QNX headers already have ifdef extern in them when compiling C++ Code
+ * extern "C" cannot be nested
+ * Hence keep the header out of extern "C" block
+ */
 
 // #include <math.h>       /* import fabsf, sqrt */
 
@@ -21805,6 +21857,1033 @@ public static native @ByVal @Cast("cuComplex*") float2 cuCfmaf( @ByVal @Cast("cu
 public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Cast("cuDoubleComplex*") double2 x, @ByVal @Cast("cuDoubleComplex*") double2 y, @ByVal @Cast("cuDoubleComplex*") double2 d);
 
 // #endif /* !defined(CU_COMPLEX_H_) */
+
+
+// Parsed from <cuda_fp16.h>
+
+/*
+ * Copyright 1993-2014 NVIDIA Corporation.  All rights reserved.
+ *
+ * NOTICE TO LICENSEE:
+ *
+ * This source code and/or documentation ("Licensed Deliverables") are
+ * subject to NVIDIA intellectual property rights under U.S. and
+ * international Copyright laws.
+ *
+ * These Licensed Deliverables contained herein is PROPRIETARY and
+ * CONFIDENTIAL to NVIDIA and is being provided under the terms and
+ * conditions of a form of NVIDIA software license agreement by and
+ * between NVIDIA and Licensee ("License Agreement") or electronically
+ * accepted by Licensee.  Notwithstanding any terms or conditions to
+ * the contrary in the License Agreement, reproduction or disclosure
+ * of the Licensed Deliverables to any third party without the express
+ * written consent of NVIDIA is prohibited.
+ *
+ * NOTWITHSTANDING ANY TERMS OR CONDITIONS TO THE CONTRARY IN THE
+ * LICENSE AGREEMENT, NVIDIA MAKES NO REPRESENTATION ABOUT THE
+ * SUITABILITY OF THESE LICENSED DELIVERABLES FOR ANY PURPOSE.  IT IS
+ * PROVIDED "AS IS" WITHOUT EXPRESS OR IMPLIED WARRANTY OF ANY KIND.
+ * NVIDIA DISCLAIMS ALL WARRANTIES WITH REGARD TO THESE LICENSED
+ * DELIVERABLES, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY,
+ * NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE.
+ * NOTWITHSTANDING ANY TERMS OR CONDITIONS TO THE CONTRARY IN THE
+ * LICENSE AGREEMENT, IN NO EVENT SHALL NVIDIA BE LIABLE FOR ANY
+ * SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, OR ANY
+ * DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+ * WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS
+ * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
+ * OF THESE LICENSED DELIVERABLES.
+ *
+ * U.S. Government End Users.  These Licensed Deliverables are a
+ * "commercial item" as that term is defined at 48 C.F.R. 2.101 (OCT
+ * 1995), consisting of "commercial computer software" and "commercial
+ * computer software documentation" as such terms are used in 48
+ * C.F.R. 12.212 (SEPT 1995) and is provided to the U.S. Government
+ * only as a commercial end item.  Consistent with 48 C.F.R.12.212 and
+ * 48 C.F.R. 227.7202-1 through 227.7202-4 (JUNE 1995), all
+ * U.S. Government End Users acquire the Licensed Deliverables with
+ * only those rights set forth herein.
+ *
+ * Any use of the Licensed Deliverables in individual and commercial
+ * software must include, in the user documentation and internal
+ * comments to the code, the above Disclaimer and U.S. Government End
+ * Users Notice.
+ */
+
+/**
+ * \defgroup CUDA_MATH_INTRINSIC_HALF Half Precision Intrinsics
+ * This section describes half precision intrinsic functions that are
+ * only supported in device code.
+ */
+
+/**
+ * \defgroup CUDA_MATH__HALF_ARITHMETIC Half Arithmetic Functions
+ * \ingroup CUDA_MATH_INTRINSIC_HALF
+ */
+
+/**
+ * \defgroup CUDA_MATH__HALF2_ARITHMETIC Half2 Arithmetic Functions
+ * \ingroup CUDA_MATH_INTRINSIC_HALF
+ */
+
+/**
+ * \defgroup CUDA_MATH__HALF_COMPARISON Half Comparison Functions
+ * \ingroup CUDA_MATH_INTRINSIC_HALF
+ */
+
+/**
+ * \defgroup CUDA_MATH__HALF2_COMPARISON Half2 Comparison Functions
+ * \ingroup CUDA_MATH_INTRINSIC_HALF
+ */
+
+/**
+ * \defgroup CUDA_MATH__HALF_MISC Half Precision Conversion And Data Movement
+ * \ingroup CUDA_MATH_INTRINSIC_HALF
+ */
+
+// #ifndef CUDA_FP16_H_JNESTUG4
+// #define CUDA_FP16_H_JNESTUG4
+
+public static class __half extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public __half() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public __half(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public __half(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public __half position(int position) {
+        return (__half)super.position(position);
+    }
+
+   public native @Cast("unsigned short") short x(); public native __half x(short x);
+}
+
+public static class __half2 extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public __half2() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public __half2(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public __half2(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public __half2 position(int position) {
+        return (__half2)super.position(position);
+    }
+
+   public native @Cast("unsigned int") int x(); public native __half2 x(int x);
+}
+
+// #ifndef CUDA_NO_HALF
+// #endif /*CUDA_NO_HALF*/
+
+// #if defined(__CUDACC__)
+
+// #if !defined(__cplusplus)
+// #include <stdbool.h>
+// #endif /*!defined(__cplusplus)*/
+
+// #if defined(__CUDACC_RTC__)
+// #define __CUDA_FP16_DECL__ __host__ __device__
+// #else /* !__CUDACC_RTC__ */
+// #define __CUDA_FP16_DECL__ static __device__ __inline__
+// #endif /* __CUDACC_RTC__ */
+
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Converts float number to half precision in round-to-nearest mode and
+ * returns \p half with converted value.
+ *
+ * Converts float number \p a to half precision in round-to-nearest mode.
+ *
+ * \return Returns \p half result with converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Converts \p half number to float.
+ *
+ * Converts half number \p a to float.
+ *
+ * \return Returns float result with converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Converts input to half precision in round-to-nearest mode and
+ * populates both halves of \p half2 with converted value.
+ *
+ * Converts input \p a to half precision in round-to-nearest mode and populates
+ * both halves of \p half2 with converted value.
+ *
+ * \return Returns \p half2 with both halves equal to the converted half
+ * precision number.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Converts both input floats to half precision in round-to-nearest mode
+ * and returns \p half2 with converted values.
+ *
+ * Converts both input floats to half precision in round-to-nearest mode and
+ * combines the results into one \p half2 number. Low 16 bits of the return
+ * value correspond to the input \p a, high 16 bits correspond to the input \p
+ * b.
+ *
+ * \return Returns \p half2 which has corresponding halves equal to the converted
+ * input floats.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Converts both components of float2 number to half precision in
+ * round-to-nearest mode and returns \p half2 with converted values.
+ *
+ * Converts both components of float2 to half precision in round-to-nearest mode
+ * and combines the results into one \p half2 number. Low 16 bits of the return
+ * value correspond to \p a.x and high 16 bits of the return value correspond to
+ * \p a.y.
+ *
+ * \return Returns \p half2 which has corresponding halves equal to the converted
+ * float2 components.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Converts both halves of \p half2 to float2 and returns the result.
+ *
+ * Converts both halves of \p half2 input \p a to float2 and returns the result.
+ *
+ * \return Returns converted float2.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Converts low 16 bits of \p half2 to float and returns the result
+ *
+ * Converts low 16 bits of \p half2 input \p a to 32 bit floating point number
+ * and returns the result.
+ *
+ * \return Returns low 16 bits of \p a converted to float.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Returns \p half2 with both halves equal to the input value.
+ *
+ * Returns \p half2 number with both halves equal to the input \p a \p half
+ * number.
+ *
+ * \return Returns \p half2 with both halves equal to the input \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Converts high 16 bits of \p half2 to float and returns the result
+ *
+ * Converts high 16 bits of \p half2 input \p a to 32 bit floating point number
+ * and returns the result.
+ *
+ * \return Returns high 16 bits of \p a converted to float.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Swaps both halves of the \p half2 input.
+ *
+ * Swaps both halves of the \p half2 input and returns a new \p half2 number
+ * with swapped halves.
+ *
+ * \return Returns \p half2 with halves swapped.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Extracts low 16 bits from each of the two \p half2 inputs and combines
+ * into one \p half2 number.
+ *
+ * Extracts low 16 bits from each of the two \p half2 inputs and combines into
+ * one \p half2 number. Low 16 bits from input \p a is stored in low 16 bits of
+ * the return value, low 16 bits from input \p b is stored in high 16 bits of
+ * the return value.
+ *
+ * \return Returns \p half2 which contains low 16 bits from \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Extracts high 16 bits from each of the two \p half2 inputs and combines
+ * into one \p half2 number.
+ *
+ * Extracts high 16 bits from each of the two \p half2 inputs and combines into
+ * one \p half2 number. High 16 bits from input \p a is stored in low 16 bits of
+ * the return value, high 16 bits from input \p b is stored in high 16 bits of
+ * the return value.
+ *
+ * \return Returns \p half2 which contains high 16 bits from \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Returns high 16 bits of \p half2 input.
+ *
+ * Returns high 16 bits of \p half2 input \p a.
+ *
+ * \return Returns \p half which contains high 16 bits of the input.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Returns low 16 bits of \p half2 input.
+ *
+ * Returns low 16 bits of \p half2 input \p a.
+ *
+ * \return Returns \p half which contains low 16 bits of the input.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_COMPARISON
+ * \brief Checks if the input \p half number is infinite.
+ *
+ * Checks if the input \p half number \p a is infinite.
+ *
+ * \return Returns -1 iff \p a is equal to negative infinity, 1 iff \p a is
+ * equal to positive infinity and 0 otherwise.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Combines two \p half numbers into one \p half2 number.
+ *
+ * Combines two input \p half number \p a and \p b into one \p half2 number.
+ * Input \p a is stored in low 16 bits of the return value, input \p b is stored
+ * in high 16 bits of the return value.
+ *
+ * \return Returns \p half2 number which has one half equal to \p a and the
+ * other to \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Extracts low 16 bits from \p half2 input.
+ *
+ * Extracts low 16 bits from \p half2 input \p a and returns a new \p half2
+ * number which has both halves equal to the extracted bits.
+ *
+ * \return Returns \p half2 with both halves equal to low 16 bits from the input.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Extracts high 16 bits from \p half2 input.
+ *
+ * Extracts high 16 bits from \p half2 input \p a and returns a new \p half2
+ * number which has both halves equal to the extracted bits.
+ *
+ * \return Returns \p half2 with both halves equal to high 16 bits from the
+ * input.
+ */
+
+// #if __CUDA_ARCH__ >= 300 || !defined(__CUDA_ARCH__)
+// #endif /*__CUDA_ARCH__ >= 300 || !defined(__CUDA_ARCH__) */
+
+// #if defined(__cplusplus) && ( __CUDA_ARCH__ >=320 || !defined(__CUDA_ARCH__) )
+// #endif /*defined(__cplusplus) && ( __CUDA_ARCH__ >=320 || !defined(__CUDA_ARCH__) )*/
+
+// #if __CUDA_ARCH__ >= 530 || !defined(__CUDA_ARCH__)
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs half2 vector if-equal comparison.
+ *
+ * Performs \p half2 vector if-equal comparison of inputs \p a and \p b.
+ * The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
+ * NaN inputs generate false results.
+ *
+ * \return Returns the \p half2 vector result of if-equal comparison of vectors
+ * \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector not-equal comparison.
+ *
+ * Performs \p half2 vector not-equal comparison of inputs \p a and \p b.
+ * The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
+ * NaN inputs generate false results.
+ *
+ * \return Returns the \p half2 vector result of not-equal comparison of vectors
+ * \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector less-equal comparison.
+ *
+ * Performs \p half2 vector less-equal comparison of inputs \p a and \p b.
+ * The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
+ * NaN inputs generate false results.
+ *
+ * \return Returns the \p half2 vector result of less-equal comparison of
+ * vectors \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector greater-equal comparison.
+ *
+ * Performs \p half2 vector greater-equal comparison of inputs \p a and \p b.
+ * The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
+ * NaN inputs generate false results.
+ *
+ * \return Returns the \p half2 vector result of greater-equal comparison of
+ * vectors \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector less-than comparison.
+ *
+ * Performs \p half2 vector less-than comparison of inputs \p a and \p b.
+ * The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
+ * NaN inputs generate false results.
+ *
+ * \return Returns the \p half2 vector result of less-than comparison of vectors
+ * \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector greater-than comparison.
+ *
+ * Performs \p half2 vector greater-than comparison of inputs \p a and \p b.
+ * The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
+ * NaN inputs generate false results.
+ *
+ * \return Returns the half2 vector result of greater-than comparison of vectors
+ * \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector unordered if-equal comparison.
+ *
+ * Performs \p half2 vector if-equal comparison of inputs \p a and \p b.
+ * The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
+ * NaN inputs generate true results.
+ *
+ * \return Returns the \p half2 vector result of unordered if-equal comparison
+ * of vectors \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector unordered not-equal comparison.
+ *
+ * Performs \p half2 vector not-equal comparison of inputs \p a and \p b.
+ * The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
+ * NaN inputs generate true results.
+ *
+ * \return Returns the \p half2 vector result of unordered not-equal comparison
+ * of vectors \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector unordered less-equal comparison.
+ *
+ * Performs \p half2 vector less-equal comparison of inputs \p a and \p b.
+ * The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
+ * NaN inputs generate true results.
+ *
+ * \return Returns the \p half2 vector result of unordered less-equal comparison
+ * of vectors \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector unordered greater-equal comparison.
+ *
+ * Performs \p half2 vector greater-equal comparison of inputs \p a and \p b.
+ * The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
+ * NaN inputs generate true results.
+ *
+ * \return Returns the \p half2 vector result of unordered greater-equal
+ * comparison of vectors \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector unordered less-than comparison.
+ *
+ * Performs \p half2 vector less-than comparison of inputs \p a and \p b.
+ * The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
+ * NaN inputs generate true results.
+ *
+ * \return Returns the \p half2 vector result of unordered less-than comparison
+ * of vectors \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector unordered greater-than comparison.
+ *
+ * Performs \p half2 vector greater-than comparison of inputs \p a and \p b.
+ * The corresponding \p half results are set to 1.0 for true, or 0.0 for false.
+ * NaN inputs generate true results.
+ *
+ * \return Returns the \p half2 vector result of unordered greater-than
+ * comparison of vectors \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Determine whether \p half2 argument is a NaN.
+ *
+ * Determine whether each half of input \p half2 number \p a is a NaN.
+ *
+ * \return Returns \p half2 which has the corresponding \p half results set to
+ * 1.0 for true, or 0.0 for false.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_ARITHMETIC
+ * \brief Performs \p half2 vector addition in round-to-nearest mode.
+ *
+ * Performs \p half2 vector add of inputs \p a and \p b, in round-to-nearest
+ * mode.
+ *
+ * \return Returns the \p half2 vector result of adding vectors \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_ARITHMETIC
+ * \brief Performs \p half2 vector subtraction in round-to-nearest mode.
+ *
+ * Subtracts \p half2 input vector \p b from input vector \p a in round-to-nearest
+ * mode.
+ *
+ * \return Returns the \p half2 vector result of subtraction vector \p b from \p
+ * a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_ARITHMETIC
+ * \brief Performs \p half2 vector multiplication in round-to-nearest mode.
+ *
+ * Performs \p half2 vector multiplication of inputs \p a and \p b, in
+ * round-to-nearest mode.
+ *
+ * \return Returns the \p half2 vector result of multiplying vectors \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_ARITHMETIC
+ * \brief Performs \p half2 vector addition in round-to-nearest mode, with
+ * saturation to [0.0, 1.0].
+ *
+ * Performs \p half2 vector add of inputs \p a and \p b, in round-to-nearest mode,
+ * and clamps the results to range [0.0, 1.0]. NaN results are flushed to +0.0.
+ *
+ * \return Returns the \p half2 vector result of adding vectors \p a and \p b
+ * with saturation.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_ARITHMETIC
+ * \brief Performs \p half2 vector subtraction in round-to-nearest mode, with
+ * saturation to [0.0, 1.0].
+ *
+ * Subtracts \p half2 input vector \p b from input vector \p a in round-to-nearest
+ * mode,
+ * and clamps the results to range [0.0, 1.0]. NaN results are flushed to +0.0.
+ *
+ * \return Returns the \p half2 vector result of subtraction vector \p b from \p a
+ * with saturation.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_ARITHMETIC
+ * \brief Performs \p half2 vector multiplication in round-to-nearest mode, with
+ * saturation to [0.0, 1.0].
+ *
+ * Performs \p half2 vector multiplication of inputs \p a and \p b, in
+ * round-to-nearest mode, and clamps the results to range [0.0, 1.0]. NaN
+ * results are flushed to +0.0.
+ *
+ * \return Returns the \p half2 vector result of multiplying vectors \p a and \p
+ * b with saturation.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_ARITHMETIC
+ * \brief Performs \p half2 vector fused multiply-add in round-to-nearest mode.
+ *
+ * Performs \p half2 vector multiply on inputs \p a and \p b,
+ * then performs a \p half2 vector add of the result with \p c,
+ * rounding the result once in round-to-nearest mode.
+ *
+ * \return Returns the \p half2 vector result of the fused multiply-add
+ * operation on vectors \p a, \p b, and \p c.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_ARITHMETIC
+ * \brief Performs \p half2 vector fused multiply-add in round-to-nearest mode,
+ * with saturation to [0.0, 1.0].
+ *
+ * Performs \p half2 vector multiply on inputs \p a and \p b,
+ * then performs a \p half2 vector add of the result with \p c,
+ * rounding the result once in round-to-nearest mode, and clamps the results to
+ * range [0.0, 1.0]. NaN results are flushed to +0.0.
+ *
+ * \return Returns the \p half2 vector result of the fused multiply-add
+ * operation on vectors \p a, \p b, and \p c with saturation.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_ARITHMETIC
+ * \brief Negates both halves of the input \p half2 number and returns the result.
+ *
+ * Negates both halves of the input \p half2 number \p a and returns the result.
+ *
+ * \return Returns \p half2 number with both halves negated.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_ARITHMETIC
+ * \brief Performs \p half addition in round-to-nearest mode.
+ *
+ * Performs \p half addition of inputs \p a and \p b, in round-to-nearest mode.
+ *
+ * \return Returns the \p half result of adding \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_ARITHMETIC
+ * \brief Performs \p half subtraction in round-to-nearest mode.
+ *
+ * Subtracts \p half input \p b from input \p a in round-to-nearest
+ * mode.
+ *
+ * \return Returns the \p half result of subtraction \p b from \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_ARITHMETIC
+ * \brief Performs \p half multiplication in round-to-nearest mode.
+ *
+ * Performs \p half multiplication of inputs \p a and \p b, in round-to-nearest
+ * mode.
+ *
+ * \return Returns the \p half result of multiplying \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_ARITHMETIC
+ * \brief Performs \p half addition in round-to-nearest mode, with saturation to
+ * [0.0, 1.0].
+ *
+ * Performs \p half add of inputs \p a and \p b, in round-to-nearest mode,
+ * and clamps the result to range [0.0, 1.0]. NaN results are flushed to +0.0.
+ *
+ * \return Returns the \p half result of adding \p a and \p b with saturation.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_ARITHMETIC
+ * \brief Performs \p half subtraction in round-to-nearest mode, with saturation
+ * to [0.0, 1.0].
+ *
+ * Subtracts \p half input \p b from input \p a in round-to-nearest
+ * mode,
+ * and clamps the result to range [0.0, 1.0]. NaN results are flushed to +0.0.
+ *
+ * \return Returns the \p half result of subtraction \p b from \p a
+ * with saturation.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_ARITHMETIC
+ * \brief Performs \p half multiplication in round-to-nearest mode, with
+ * saturation to [0.0, 1.0].
+ *
+ * Performs \p half multiplication of inputs \p a and \p b, in round-to-nearest
+ * mode, and clamps the result to range [0.0, 1.0]. NaN results are flushed to
+ * +0.0.
+ *
+ * \return Returns the \p half result of multiplying \p a and \p b with
+ * saturation.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_ARITHMETIC
+ * \brief Performs \p half fused multiply-add in round-to-nearest mode.
+ *
+ * Performs \p half multiply on inputs \p a and \p b,
+ * then performs a \p half add of the result with \p c,
+ * rounding the result once in round-to-nearest mode.
+ *
+ * \return Returns the \p half result of the fused multiply-add operation on \p
+ * a, \p b, and \p c.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_ARITHMETIC
+ * \brief Performs \p half fused multiply-add in round-to-nearest mode,
+ * with saturation to [0.0, 1.0].
+ *
+ * Performs \p half multiply on inputs \p a and \p b,
+ * then performs a \p half add of the result with \p c,
+ * rounding the result once in round-to-nearest mode, and clamps the result to
+ * range [0.0, 1.0]. NaN results are flushed to +0.0.
+ *
+ * \return Returns the \p half result of the fused multiply-add operation on \p
+ * a, \p b, and \p c with saturation.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_ARITHMETIC
+ * \brief Negates input \p half number and returns the result.
+ *
+ * Negates input \p half number and returns the result.
+ *
+ * \return Returns negated \p half input \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector if-equal comparison, and returns boolean true
+ * iff both \p half results are true, boolean false otherwise.
+ *
+ * Performs \p half2 vector if-equal comparison of inputs \p a and \p b.
+ * The bool result is set to true only if both \p half if-equal comparisons
+ * evaluate to true, or false otherwise.
+ * NaN inputs generate false results.
+ *
+ * \return Returns boolean true if both \p half results of if-equal comparison
+ * of vectors \p a and \p b are true, boolean false otherwise.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector not-equal comparison, and returns boolean
+ * true iff both \p half results are true, boolean false otherwise.
+ *
+ * Performs \p half2 vector not-equal comparison of inputs \p a and \p b.
+ * The bool result is set to true only if both \p half not-equal comparisons
+ * evaluate to true, or false otherwise.
+ * NaN inputs generate false results.
+ *
+ * \return Returns boolean true if both \p half results of not-equal comparison
+ * of vectors \p a and \p b are true, boolean false otherwise.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector less-equal comparison, and returns boolean
+ * true iff both \p half results are true, boolean false otherwise.
+ *
+ * Performs \p half2 vector less-equal comparison of inputs \p a and \p b.
+ * The bool result is set to true only if both \p half less-equal comparisons
+ * evaluate to true, or false otherwise.
+ * NaN inputs generate false results.
+ *
+ * \return Returns boolean true if both \p half results of less-equal comparison
+ * of vectors \p a and \p b are true, boolean false otherwise.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector greater-equal comparison, and returns boolean
+ * true iff both \p half results are true, boolean false otherwise.
+ *
+ * Performs \p half2 vector greater-equal comparison of inputs \p a and \p b.
+ * The bool result is set to true only if both \p half greater-equal comparisons
+ * evaluate to true, or false otherwise.
+ * NaN inputs generate false results.
+ *
+ * \return Returns boolean true if both \p half results of greater-equal
+ * comparison of vectors \p a and \p b are true, boolean false otherwise.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector less-than comparison, and returns boolean
+ * true iff both \p half results are true, boolean false otherwise.
+ *
+ * Performs \p half2 vector less-than comparison of inputs \p a and \p b.
+ * The bool result is set to true only if both \p half less-than comparisons
+ * evaluate to true, or false otherwise.
+ * NaN inputs generate false results.
+ *
+ * \return Returns boolean true if both \p half results of less-than comparison
+ * of vectors \p a and \p b are true, boolean false otherwise.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector greater-than comparison, and returns boolean
+ * true iff both \p half results are true, boolean false otherwise.
+ *
+ * Performs \p half2 vector greater-than comparison of inputs \p a and \p b.
+ * The bool result is set to true only if both \p half greater-than comparisons
+ * evaluate to true, or false otherwise.
+ * NaN inputs generate false results.
+ *
+ * \return Returns boolean true if both \p half results of greater-than
+ * comparison of vectors \p a and \p b are true, boolean false otherwise.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector unordered if-equal comparison, and returns
+ * boolean true iff both \p half results are true, boolean false otherwise.
+ *
+ * Performs \p half2 vector if-equal comparison of inputs \p a and \p b.
+ * The bool result is set to true only if both \p half if-equal comparisons
+ * evaluate to true, or false otherwise.
+ * NaN inputs generate true results.
+ *
+ * \return Returns boolean true if both \p half results of unordered if-equal
+ * comparison of vectors \p a and \p b are true, boolean false otherwise.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector unordered not-equal comparison, and returns
+ * boolean true iff both \p half results are true, boolean false otherwise.
+ *
+ * Performs \p half2 vector not-equal comparison of inputs \p a and \p b.
+ * The bool result is set to true only if both \p half not-equal comparisons
+ * evaluate to true, or false otherwise.
+ * NaN inputs generate true results.
+ *
+ * \return Returns boolean true if both \p half results of unordered not-equal
+ * comparison of vectors \p a and \p b are true, boolean false otherwise.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector unordered less-equal comparison, and returns
+ * boolean true iff both \p half results are true, boolean false otherwise.
+ *
+ * Performs \p half2 vector less-equal comparison of inputs \p a and \p b.
+ * The bool result is set to true only if both \p half less-equal comparisons
+ * evaluate to true, or false otherwise.
+ * NaN inputs generate true results.
+ *
+ * \return Returns boolean true if both \p half results of unordered less-equal
+ * comparison of vectors \p a and \p b are true, boolean false otherwise.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector unordered greater-equal comparison, and
+ * returns boolean true iff both \p half results are true, boolean false
+ * otherwise.
+ *
+ * Performs \p half2 vector greater-equal comparison of inputs \p a and \p b.
+ * The bool result is set to true only if both \p half greater-equal comparisons
+ * evaluate to true, or false otherwise.
+ * NaN inputs generate true results.
+ *
+ * \return Returns boolean true if both \p half results of unordered
+ * greater-equal comparison of vectors \p a and \p b are true, boolean false
+ * otherwise.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector unordered less-than comparison, and returns
+ * boolean true iff both \p half results are true, boolean false otherwise.
+ *
+ * Performs \p half2 vector less-than comparison of inputs \p a and \p b.
+ * The bool result is set to true only if both \p half less-than comparisons
+ * evaluate to true, or false otherwise.
+ * NaN inputs generate true results.
+ *
+ * \return Returns boolean true if both \p half results of unordered less-than
+ * comparison of vectors \p a and \p b are true, boolean false otherwise.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_COMPARISON
+ * \brief Performs \p half2 vector unordered greater-than comparison, and
+ * returns boolean true iff both \p half results are true, boolean false
+ * otherwise.
+ *
+ * Performs \p half2 vector greater-than comparison of inputs \p a and \p b.
+ * The bool result is set to true only if both \p half greater-than comparisons
+ * evaluate to true, or false otherwise.
+ * NaN inputs generate true results.
+ *
+ * \return Returns boolean true if both \p half results of unordered
+ * greater-than comparison of vectors \p a and \p b are true, boolean false
+ * otherwise.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_COMPARISON
+ * \brief Performs \p half if-equal comparison.
+ *
+ * Performs \p half if-equal comparison of inputs \p a and \p b.
+ * NaN inputs generate false results.
+ *
+ * \return Returns boolean result of if-equal comparison of \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_COMPARISON
+ * \brief Performs \p half not-equal comparison.
+ *
+ * Performs \p half not-equal comparison of inputs \p a and \p b.
+ * NaN inputs generate false results.
+ *
+ * \return Returns boolean result of not-equal comparison of \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_COMPARISON
+ * \brief Performs \p half less-equal comparison.
+ *
+ * Performs \p half less-equal comparison of inputs \p a and \p b.
+ * NaN inputs generate false results.
+ *
+ * \return Returns boolean result of less-equal comparison of \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_COMPARISON
+ * \brief Performs \p half greater-equal comparison.
+ *
+ * Performs \p half greater-equal comparison of inputs \p a and \p b.
+ * NaN inputs generate false results.
+ *
+ * \return Returns boolean result of greater-equal comparison of \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_COMPARISON
+ * \brief Performs \p half less-than comparison.
+ *
+ * Performs \p half less-than comparison of inputs \p a and \p b.
+ * NaN inputs generate false results.
+ *
+ * \return Returns boolean result of less-than comparison of \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_COMPARISON
+ * \brief Performs \p half greater-than comparison.
+ *
+ * Performs \p half greater-than comparison of inputs \p a and \p b.
+ * NaN inputs generate false results.
+ *
+ * \return Returns boolean result of greater-than comparison of \p a and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_COMPARISON
+ * \brief Performs \p half unordered if-equal comparison.
+ *
+ * Performs \p half if-equal comparison of inputs \p a and \p b.
+ * NaN inputs generate true results.
+ *
+ * \return Returns boolean result of unordered if-equal comparison of \p a and
+ * \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_COMPARISON
+ * \brief Performs \p half unordered not-equal comparison.
+ *
+ * Performs \p half not-equal comparison of inputs \p a and \p b.
+ * NaN inputs generate true results.
+ *
+ * \return Returns boolean result of unordered not-equal comparison of \p a and
+ * \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_COMPARISON
+ * \brief Performs \p half unordered less-equal comparison.
+ *
+ * Performs \p half less-equal comparison of inputs \p a and \p b.
+ * NaN inputs generate true results.
+ *
+ * \return Returns boolean result of unordered less-equal comparison of \p a and
+ * \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_COMPARISON
+ * \brief Performs \p half unordered greater-equal comparison.
+ *
+ * Performs \p half greater-equal comparison of inputs \p a and \p b.
+ * NaN inputs generate true results.
+ *
+ * \return Returns boolean result of unordered greater-equal comparison of \p a
+ * and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_COMPARISON
+ * \brief Performs \p half unordered less-than comparison.
+ *
+ * Performs \p half less-than comparison of inputs \p a and \p b.
+ * NaN inputs generate true results.
+ *
+ * \return Returns boolean result of unordered less-than comparison of \p a and
+ * \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_COMPARISON
+ * \brief Performs \p half unordered greater-than comparison.
+ *
+ * Performs \p half greater-than comparison of inputs \p a and \p b.
+ * NaN inputs generate true results.
+ *
+ * \return Returns boolean result of unordered greater-than comparison of \p a
+ * and \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_COMPARISON
+ * \brief Determine whether \p half argument is a NaN.
+ *
+ * Determine whether \p half value \p a is a NaN.
+ *
+ * \return Returns boolean true iff argument is a NaN, boolean false otherwise.
+ */
+
+// #endif /*if __CUDA_ARCH__ >= 530 || !defined(__CUDA_ARCH__)*/
+// #if __CUDA_ARCH__ >= 300 || !defined(__CUDA_ARCH__)
+/******************************************************************************
+ *                            __half2 warp shuffle                            *
+ ******************************************************************************/
+// #define SHUFFLE_HALF2_MACRO(name) do {
+//    __half2 r;
+//    asm("{"#name" %0,%1,%2,%3;\n}"
+//        :"=r"(r.x): "r"(var.x), "r"(delta), "r"(c));
+//    return r;
+// } while(0);
+// #undef SHUFFLE_HALF2_MACRO
+// #endif /*__CUDA_ARCH__ >= 300 || !defined(__CUDA_ARCH__)*/
+/******************************************************************************
+ *                          __half and __half2 __ldg                          *
+ ******************************************************************************/
+// #if defined(__cplusplus) && (__CUDA_ARCH__ >= 320 || !defined(__CUDA_ARCH__))
+// #if (defined(_MSC_VER) && defined(_WIN64)) || defined(__LP64__) || defined(__CUDACC_RTC__)
+// #define __LDG_PTR   "l"
+// #else
+// #define __LDG_PTR   "r"
+// #endif /*(defined(_MSC_VER) && defined(_WIN64)) || defined(__LP64__) || defined(__CUDACC_RTC__)*/
+// #undef __LDG_PTR
+// #endif /*defined(__cplusplus) && (__CUDA_ARCH__ >= 320 || !defined(__CUDA_ARCH__))*/
+// #if __CUDA_ARCH__ >= 530 || !defined(__CUDA_ARCH__)
+/******************************************************************************
+ *                             __half2 comparison                             *
+ ******************************************************************************/
+// #define COMPARISON_OP_HALF2_MACRO(name) do {
+//    __half2 val;
+//    asm( "{ "#name".f16x2.f16x2 %0,%1,%2;\n}"
+//         :"=r"(val.x) : "r"(a.x),"r"(b.x));
+//    return val;
+// } while(0);
+// #undef COMPARISON_OP_HALF2_MACRO
+// #define BOOL_COMPARISON_OP_HALF2_MACRO(name) do {
+//    __half2 val;
+//    asm( "{ "#name".f16x2.f16x2 %0,%1,%2;\n}"
+//         :"=r"(val.x) : "r"(a.x),"r"(b.x));
+//    if (val.x == 0x3C003C00)
+//       return true;
+//    else
+//       return false;
+// } while(0);
+// #undef BOOL_COMPARISON_OP_HALF2_MACRO
+/******************************************************************************
+ *                             __half comparison                              *
+ ******************************************************************************/
+// #define COMPARISON_OP_HALF_MACRO(name) do {
+//    unsigned short val;
+//    asm( "{ .reg .pred __$temp3;\n"
+//         "  setp."#name".f16  __$temp3, %1, %2;\n"
+//         "  selp.u16 %0, 1, 0, __$temp3;}"
+//         : "=h"(val) : "h"(a.x), "h"(b.x));
+//    return val ? true : false;
+// } while(0);
+// #undef COMPARISON_OP_HALF_MACRO
+/******************************************************************************
+ *                            __half2 arithmetic                             *
+ ******************************************************************************/
+// #define BINARY_OP_HALF2_MACRO(name) do {
+//    __half2 val;
+//    asm( "{"#name".f16x2 %0,%1,%2;\n}"
+//         :"=r"(val.x) : "r"(a.x),"r"(b.x));
+//    return val;
+// } while(0);
+// #undef BINARY_OP_HALF2_MACRO
+// #define TERNARY_OP_HALF2_MACRO(name) do {
+//    __half2 val;
+//    asm( "{"#name".f16x2 %0,%1,%2,%3;\n}"
+//         :"=r"(val.x) : "r"(a.x),"r"(b.x),"r"(c.x));
+//    return val;
+// } while(0);
+// #undef TERNARY_OP_HALF2_MACRO
+/******************************************************************************
+ *                             __half arithmetic                             *
+ ******************************************************************************/
+// #define BINARY_OP_HALF_MACRO(name) do {
+//    __half val;
+//    asm( "{"#name".f16 %0,%1,%2;\n}"
+//         :"=h"(val.x) : "h"(a.x),"h"(b.x));
+//    return val;
+// } while(0);
+// #undef BINARY_OP_HALF_MACRO
+// #define TERNARY_OP_HALF_MACRO(name) do {
+//    __half val;
+//    asm( "{"#name".f16 %0,%1,%2,%3;\n}"
+//         :"=h"(val.x) : "h"(a.x),"h"(b.x),"h"(c.x));
+//    return val;
+// } while(0);
+// #undef TERNARY_OP_HALF2_MACRO
+// #endif /*__CUDA_ARCH__ >= 530 || !defined(__CUDA_ARCH__)*/
+// #undef __CUDA_FP16_DECL__
+// #endif /*defined(__CUDACC__)*/
+// #endif /* end of include guard: CUDA_FP16_H_JNESTUG4 */
 
 
 }

@@ -145,8 +145,8 @@ public class nppc extends org.bytedeco.javacpp.presets.nppc {
 // #endif
 
 public static final int NPP_VERSION_MAJOR = 7;
-public static final int NPP_VERSION_MINOR = 0;
-public static final int NPP_VERSION_BUILD = 28;
+public static final int NPP_VERSION_MINOR = 5;
+public static final int NPP_VERSION_BUILD = 18;
 
 // #ifdef __cplusplus /* extern "C" */
 // #endif
@@ -157,7 +157,7 @@ public static final int NPP_VERSION_BUILD = 28;
 
 // Parsed from <nppdefs.h>
 
- /* Copyright 2009-2014 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2015 NVIDIA Corporation.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -268,6 +268,17 @@ public static final int
     NPPI_INTER_LANCZOS3_ADVANCED = 17,
     /**  Smooth edge filtering. */
     NPPI_SMOOTH_EDGE             =  (1 << 31); 
+
+/** 
+ * Bayer Grid Position Registration.
+ */
+/** enum NppiBayerGridPosition */
+public static final int
+    /**  Default registration position. */
+    NPPI_BAYER_BGGR         = 0,
+    NPPI_BAYER_RGGB         = 1,
+    NPPI_BAYER_GBRG         = 2,
+    NPPI_BAYER_GRBG         = 3; 
 
 /**
  * Fixed filter-kernel sizes.
@@ -434,8 +445,16 @@ public static final int
     NPP_CUDA_3_2             = 320,
     /**  Indicates that CUDA 3.5 capable device is machine's default device */
     NPP_CUDA_3_5             = 350,
-    /**  Indicates that CUDA 5.0 or better is machine's default device */
-    NPP_CUDA_5_0             = 500;
+    /**  Indicates that CUDA 3.7 capable device is machine's default device */
+    NPP_CUDA_3_7             = 370,
+    /**  Indicates that CUDA 5.0 capable device is machine's default device */
+    NPP_CUDA_5_0             = 500,
+    /**  Indicates that CUDA 5.2 capable device is machine's default device */
+    NPP_CUDA_5_2             = 520,
+    /**  Indicates that CUDA 5.3 capable device is machine's default device */
+    NPP_CUDA_5_3             = 530,
+    /**  Indicates that CUDA 6.0 or better is machine's default device */
+    NPP_CUDA_6_0             = 600;
 
 public static class NppLibraryVersion extends Pointer {
     static { Loader.load(); }
@@ -874,7 +893,8 @@ public static final int
     NPP_BORDER_NONE             =  NPP_BORDER_UNDEFINED, 
     NPP_BORDER_CONSTANT         = 1,
     NPP_BORDER_REPLICATE        = 2,
-    NPP_BORDER_WRAP             = 3;
+    NPP_BORDER_WRAP             = 3,
+    NPP_BORDER_MIRROR           = 4;
 
 
 /** enum NppHintAlgorithm */

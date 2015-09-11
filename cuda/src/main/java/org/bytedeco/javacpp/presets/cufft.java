@@ -33,10 +33,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cuda.class, value = {
-    @Platform(include = "<cufft.h>", link = "cufft@.7.0")},
+    @Platform(include = "<cufft.h>", link = "cufft@.7.5")},
         target = "org.bytedeco.javacpp.cufft")
 public class cufft implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("CUFFTAPI").cppTypes().annotations().cppText(""));
+        infoMap.put(new Info("CUFFTAPI").cppTypes().annotations().cppText(""))
+               .put(new Info("long long int").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"));
     }
 }

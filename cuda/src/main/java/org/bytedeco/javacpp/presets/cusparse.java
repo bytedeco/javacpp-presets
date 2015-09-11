@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cuda.class, value = {
-    @Platform(include = "<cusparse.h>", link = "cusparse@.7.0")},
+    @Platform(include = "<cusparse.h>", link = "cusparse@.7.5")},
         target = "org.bytedeco.javacpp.cusparse")
 public class cusparse implements InfoMapper {
     public void map(InfoMap infoMap) {
