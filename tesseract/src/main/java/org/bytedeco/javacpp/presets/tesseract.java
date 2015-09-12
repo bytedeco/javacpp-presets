@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 Samuel Audet
+ * Copyright (C) 2014-2015 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,8 +33,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(target="org.bytedeco.javacpp.tesseract", inherit=lept.class, value={
-    @Platform(define="TESS_CAPI_INCLUDE_BASEAPI", include={"tesseract/platform.h", "tesseract/apitypes.h", "tesseract/thresholder.h",
-        "tesseract/unichar.h", "tesseract/host.h", "tesseract/tesscallback.h", "tesseract/publictypes.h", "tesseract/pageiterator.h", "tesseract/ltrresultiterator.h",
+    @Platform(define="TESS_CAPI_INCLUDE_BASEAPI", include={"tesseract/platform.h", "tesseract/apitypes.h", "tesseract/unichar.h", "tesseract/host.h",
+        "tesseract/tesscallback.h", "tesseract/publictypes.h", "tesseract/thresholder.h", "tesseract/pageiterator.h", "tesseract/ltrresultiterator.h",
         "tesseract/resultiterator.h", "tesseract/strngs.h", "tesseract/genericvector.h", "tesseract/baseapi.h", "tesseract/capi.h"}, link="tesseract@.3"),
     @Platform(value="android", link="tesseract"),
     @Platform(value="windows", link="libtesseract", preload="libtesseract-3") })
@@ -66,6 +66,7 @@ public class tesseract implements InfoMapper {
                .put(new Info("TessResultCallback2<bool,FILE*,STRING const&>").pointerTypes("StringWriteCallback").define().virtualize())
                .put(new Info("TessResultCallback3<bool,FILE*,STRING*,bool>").pointerTypes("StringReadCallback").define().virtualize())
                .put(new Info("GenericVector<STRING>").pointerTypes("StringGenericVector").define())
+               .put(new Info("GenericVector<STRING>::WithinBounds").skip())
 
                .put(new Info("TessCallback1<int>").pointerTypes("IntClearCallback").define().virtualize())
                .put(new Info("TessResultCallback2<bool,int const&,int const&>").pointerTypes("IntCompareCallback").define().virtualize())

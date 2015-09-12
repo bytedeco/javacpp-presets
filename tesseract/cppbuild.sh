@@ -7,8 +7,8 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-TESSERACT_VERSION=3.03
-download "https://drive.google.com/uc?export=download&id=0B7l10Bj_LprhSGN2bTYwemVRREU" tesseract-$TESSERACT_VERSION.tar.gz
+TESSERACT_VERSION=3.04.00
+download https://github.com/tesseract-ocr/tesseract/archive/$TESSERACT_VERSION.tar.gz tesseract-$TESSERACT_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
@@ -50,7 +50,7 @@ case $PLATFORM in
         make install-strip
         ;;
     windows-x86)
-	cp vs2010/port/* ccutil/
+        cp vs2010/port/* ccutil/
         ./configure --prefix=$INSTALL_PATH CC="gcc -m32" CXX="g++ -m32 -fpermissive" LIBLEPT_HEADERSDIR="$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" CPPFLAGS="-I$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" LDFLAGS="-L$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/lib/"
         make -j4
         make install-strip

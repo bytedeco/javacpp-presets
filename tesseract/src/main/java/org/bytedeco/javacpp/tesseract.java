@@ -43,10 +43,12 @@ public class tesseract extends org.bytedeco.javacpp.presets.tesseract {
 // #define ultoa _ultoa
 // #endif  /* __GNUC__ */
 // #define SIGNED
+// #if defined(_MSC_VER)
 // #define snprintf _snprintf
 // #if (_MSC_VER <= 1400)
 // #define vsnprintf _vsnprintf
-// #endif /* _WIN32 */
+// #endif /* (_MSC_VER <= 1400) */
+// #endif /* defined(_MSC_VER) */
 // #else
 // #define __UNIX__
 // #include <limits.h>
@@ -133,142 +135,6 @@ public static final double M_PI = 3.14159265358979323846;
 // only the lower-level file.
 
 // #endif  // TESSERACT_API_APITYPES_H__
-
-
-// Parsed from tesseract/thresholder.h
-
-///////////////////////////////////////////////////////////////////////
-// File:        thresholder.h
-// Description: Base API for thresolding images in tesseract.
-// Author:      Ray Smith
-// Created:     Mon May 12 11:00:15 PDT 2008
-//
-// (C) Copyright 2008, Google Inc.
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-// http://www.apache.org/licenses/LICENSE-2.0
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-//
-///////////////////////////////////////////////////////////////////////
-
-// #ifndef TESSERACT_CCMAIN_THRESHOLDER_H__
-// #define TESSERACT_CCMAIN_THRESHOLDER_H__
-
-// #include          "platform.h"
-
-/** Base class for all tesseract image thresholding classes.
- *  Specific classes can add new thresholding methods by
- *  overriding ThresholdToPix.
- *  Each instance deals with a single image, but the design is intended to
- *  be useful for multiple calls to SetRectangle and ThresholdTo* if
- *  desired. */
-@Namespace("tesseract") @NoOffset public static class ImageThresholder extends Pointer {
-    static { Loader.load(); }
-    /** Empty constructor. */
-    public ImageThresholder() { }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public ImageThresholder(Pointer p) { super(p); }
-
-
-  /** Destroy the Pix if there is one, freeing memory. */
-  public native void Clear();
-
-  /** Return true if no image has been set. */
-  
-
-  /** SetImage makes a copy of all the image data, so it may be deleted
-   *  immediately after this call.
-   *  Greyscale of 8 and color of 24 or 32 bits per pixel may be given.
-   *  Palette color images will not work properly and must be converted to
-   *  24 bit.
-   *  Binary images of 1 bit per pixel may also be given but they must be
-   *  byte packed with the MSB of the first byte being the first pixel, and a
-   *  one pixel is WHITE. For binary images set bytes_per_pixel=0. */
-  
-
-  /** Store the coordinates of the rectangle to process for later use.
-   *  Doesn't actually do any thresholding. */
-  
-
-  /** Get enough parameters to be able to rebuild bounding boxes in the
-   *  original image (not just within the rectangle).
-   *  Left and top are enough with top-down coordinates, but
-   *  the height of the rectangle and the image are needed for bottom-up. */
-  public native void GetImageSizes(IntPointer left, IntPointer top, IntPointer width, IntPointer height,
-                               IntPointer imagewidth, IntPointer imageheight);
-  public native void GetImageSizes(IntBuffer left, IntBuffer top, IntBuffer width, IntBuffer height,
-                               IntBuffer imagewidth, IntBuffer imageheight);
-  public native void GetImageSizes(int[] left, int[] top, int[] width, int[] height,
-                               int[] imagewidth, int[] imageheight);
-
-  /** Return true if the source image is color. */
-  public native @Cast("bool") boolean IsColor();
-
-  /** Returns true if the source image is binary. */
-  public native @Cast("bool") boolean IsBinary();
-
-  public native int GetScaleFactor();
-
-  // Set the resolution of the source image in pixels per inch.
-  // This should be called right after SetImage(), and will let us return
-  // appropriate font sizes for the text.
-  public native void SetSourceYResolution(int ppi);
-  public native int GetSourceYResolution();
-  public native int GetScaledYResolution();
-  // Set the resolution of the source image in pixels per inch, as estimated
-  // by the thresholder from the text size found during thresholding.
-  // This value will be used to set internal size thresholds during recognition
-  // and will not influence the output "point size." The default value is
-  // the same as the source resolution. (yres_)
-  public native void SetEstimatedResolution(int ppi);
-  // Returns the estimated resolution, including any active scaling.
-  // This value will be used to set internal size thresholds during recognition.
-  public native int GetScaledEstimatedResolution();
-
-  /** Pix vs raw, which to use? Pix is the preferred input for efficiency,
-   *  since raw buffers are copied.
-   *  SetImage for Pix clones its input, so the source pix may be pixDestroyed
-   *  immediately after, but may not go away until after the Thresholder has
-   *  finished with it. */
-  
-
-  /** Threshold the source image as efficiently as possible to the output Pix.
-   *  Creates a Pix and sets pix to point to the resulting pointer.
-   *  Caller must use pixDestroy to free the created Pix. */
-  public native void ThresholdToPix(@Cast("Pix**") PointerPointer pix);
-  public native void ThresholdToPix(@ByPtrPtr PIX pix);
-
-  // Gets a pix that contains an 8 bit threshold value at each pixel. The
-  // returned pix may be an integer reduction of the binary image such that
-  // the scale factor may be inferred from the ratio of the sizes, even down
-  // to the extreme of a 1x1 pixel thresholds image.
-  // Ideally the 8 bit threshold should be the exact threshold used to generate
-  // the binary image in ThresholdToPix, but this is not a hard constraint.
-  // Returns NULL if the input is binary. PixDestroy after use.
-  public native PIX GetPixRectThresholds();
-
-  /** Get a clone/copy of the source image rectangle.
-   *  The returned Pix must be pixDestroyed.
-   *  This function will be used in the future by the page layout analysis, and
-   *  the layout analysis that uses it will only be available with Leptonica,
-   *  so there is no raw equivalent. */
-  
-
-  // Get a clone/copy of the source image rectangle, reduced to greyscale,
-  // and at the same resolution as the output binary.
-  // The returned Pix must be pixDestroyed.
-  // Provided to the classifier to extract features from the greyscale image.
-  
-}
-
-  // namespace tesseract.
-
-// #endif  // TESSERACT_CCMAIN_THRESHOLDER_H__
 
 
 // Parsed from tesseract/unichar.h
@@ -404,6 +270,8 @@ public static final int
     // Returns the number of bytes of the current codepoint. Returns 1 if the
     // current position is at an illegal UTF8 value.
     public native int utf8_len();
+    // Returns true if the UTF-8 encoding at the current position is legal.
+    public native @Cast("bool") boolean is_legal();
 
     // Return the pointer into the string at the current position.
     public native @Cast("const char*") BytePointer utf8_data();
@@ -420,6 +288,12 @@ public static final int
   public static native @ByVal const_iterator begin(String utf8_str, int byte_length);
   public static native @ByVal const_iterator end(@Cast("const char*") BytePointer utf8_str, int byte_length);
   public static native @ByVal const_iterator end(String utf8_str, int byte_length);
+
+  // Converts a utf-8 string to a vector of unicodes.
+  // Returns false if the input contains invalid UTF-8, and replaces
+  // the rest of the string with a single space.
+  public static native @Cast("bool") boolean UTF8ToUnicode(@Cast("const char*") BytePointer utf8_str, IntGenericVector unicodes);
+  public static native @Cast("bool") boolean UTF8ToUnicode(String utf8_str, IntGenericVector unicodes);
 }
 
 // #endif  // TESSERACT_CCUTIL_UNICHAR_H__
@@ -1555,28 +1429,26 @@ public static final int
   PSM_SPARSE_TEXT = 11,
   /** Sparse text with orientation and script det. */
   PSM_SPARSE_TEXT_OSD = 12,
+  /** Treat the image as a single text line, bypassing
+ *  hacks that are Tesseract-specific. */
+  PSM_RAW_LINE = 13,
 
   /** Number of enum entries. */
-  PSM_COUNT = 13;
+  PSM_COUNT = 14;
 
 /**
- * Macros that act on a PageSegMode to determine whether components of
+ * Inline functions that act on a PageSegMode to determine whether components of
  * layout analysis are enabled.
  * *Depend critically on the order of elements of PageSegMode.*
+ * NOTE that arg is an int for compatibility with INT_PARAM.
 */
-// #define PSM_OSD_ENABLED(pageseg_mode) ((pageseg_mode) <= PSM_AUTO_OSD ||
-//     (pageseg_mode) == PSM_SPARSE_TEXT_OSD)
-// #define PSM_COL_FIND_ENABLED(pageseg_mode)
-//   ((pageseg_mode) >= PSM_AUTO_OSD && (pageseg_mode) <= PSM_AUTO)
-// #define PSM_SPARSE(pageseg_mode)
-//   ((pageseg_mode) == PSM_SPARSE_TEXT || (pageseg_mode) == PSM_SPARSE_TEXT_OSD)
-// #define PSM_BLOCK_FIND_ENABLED(pageseg_mode)
-//   ((pageseg_mode) >= PSM_AUTO_OSD && (pageseg_mode) <= PSM_SINGLE_COLUMN)
-// #define PSM_LINE_FIND_ENABLED(pageseg_mode)
-//   ((pageseg_mode) >= PSM_AUTO_OSD && (pageseg_mode) <= PSM_SINGLE_BLOCK)
-// #define PSM_WORD_FIND_ENABLED(pageseg_mode)
-//   (((pageseg_mode) >= PSM_AUTO_OSD && (pageseg_mode) <= PSM_SINGLE_LINE) ||
-//    (pageseg_mode) == PSM_SPARSE_TEXT || (pageseg_mode) == PSM_SPARSE_TEXT_OSD)
+@Namespace("tesseract") public static native @Cast("bool") boolean PSM_OSD_ENABLED(int pageseg_mode);
+@Namespace("tesseract") public static native @Cast("bool") boolean PSM_ORIENTATION_ENABLED(int pageseg_mode);
+@Namespace("tesseract") public static native @Cast("bool") boolean PSM_COL_FIND_ENABLED(int pageseg_mode);
+@Namespace("tesseract") public static native @Cast("bool") boolean PSM_SPARSE(int pageseg_mode);
+@Namespace("tesseract") public static native @Cast("bool") boolean PSM_BLOCK_FIND_ENABLED(int pageseg_mode);
+@Namespace("tesseract") public static native @Cast("bool") boolean PSM_LINE_FIND_ENABLED(int pageseg_mode);
+@Namespace("tesseract") public static native @Cast("bool") boolean PSM_WORD_FIND_ENABLED(int pageseg_mode);
 
 /**
  * enum of the elements of the page hierarchy, used in ResultIterator
@@ -1648,6 +1520,143 @@ public static final int
   // namespace tesseract.
 
 // #endif  // TESSERACT_CCSTRUCT_PUBLICTYPES_H__
+
+
+// Parsed from tesseract/thresholder.h
+
+///////////////////////////////////////////////////////////////////////
+// File:        thresholder.h
+// Description: Base API for thresolding images in tesseract.
+// Author:      Ray Smith
+// Created:     Mon May 12 11:00:15 PDT 2008
+//
+// (C) Copyright 2008, Google Inc.
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+///////////////////////////////////////////////////////////////////////
+
+// #ifndef TESSERACT_CCMAIN_THRESHOLDER_H__
+// #define TESSERACT_CCMAIN_THRESHOLDER_H__
+
+// #include "platform.h"
+// #include "publictypes.h"
+
+/** Base class for all tesseract image thresholding classes.
+ *  Specific classes can add new thresholding methods by
+ *  overriding ThresholdToPix.
+ *  Each instance deals with a single image, but the design is intended to
+ *  be useful for multiple calls to SetRectangle and ThresholdTo* if
+ *  desired. */
+@Namespace("tesseract") @NoOffset public static class ImageThresholder extends Pointer {
+    static { Loader.load(); }
+    /** Empty constructor. */
+    public ImageThresholder() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ImageThresholder(Pointer p) { super(p); }
+
+
+  /** Destroy the Pix if there is one, freeing memory. */
+  public native void Clear();
+
+  /** Return true if no image has been set. */
+  
+
+  /** SetImage makes a copy of all the image data, so it may be deleted
+   *  immediately after this call.
+   *  Greyscale of 8 and color of 24 or 32 bits per pixel may be given.
+   *  Palette color images will not work properly and must be converted to
+   *  24 bit.
+   *  Binary images of 1 bit per pixel may also be given but they must be
+   *  byte packed with the MSB of the first byte being the first pixel, and a
+   *  one pixel is WHITE. For binary images set bytes_per_pixel=0. */
+  
+
+  /** Store the coordinates of the rectangle to process for later use.
+   *  Doesn't actually do any thresholding. */
+  
+
+  /** Get enough parameters to be able to rebuild bounding boxes in the
+   *  original image (not just within the rectangle).
+   *  Left and top are enough with top-down coordinates, but
+   *  the height of the rectangle and the image are needed for bottom-up. */
+  public native void GetImageSizes(IntPointer left, IntPointer top, IntPointer width, IntPointer height,
+                               IntPointer imagewidth, IntPointer imageheight);
+  public native void GetImageSizes(IntBuffer left, IntBuffer top, IntBuffer width, IntBuffer height,
+                               IntBuffer imagewidth, IntBuffer imageheight);
+  public native void GetImageSizes(int[] left, int[] top, int[] width, int[] height,
+                               int[] imagewidth, int[] imageheight);
+
+  /** Return true if the source image is color. */
+  public native @Cast("bool") boolean IsColor();
+
+  /** Returns true if the source image is binary. */
+  public native @Cast("bool") boolean IsBinary();
+
+  public native int GetScaleFactor();
+
+  // Set the resolution of the source image in pixels per inch.
+  // This should be called right after SetImage(), and will let us return
+  // appropriate font sizes for the text.
+  public native void SetSourceYResolution(int ppi);
+  public native int GetSourceYResolution();
+  public native int GetScaledYResolution();
+  // Set the resolution of the source image in pixels per inch, as estimated
+  // by the thresholder from the text size found during thresholding.
+  // This value will be used to set internal size thresholds during recognition
+  // and will not influence the output "point size." The default value is
+  // the same as the source resolution. (yres_)
+  public native void SetEstimatedResolution(int ppi);
+  // Returns the estimated resolution, including any active scaling.
+  // This value will be used to set internal size thresholds during recognition.
+  public native int GetScaledEstimatedResolution();
+
+  /** Pix vs raw, which to use? Pix is the preferred input for efficiency,
+   *  since raw buffers are copied.
+   *  SetImage for Pix clones its input, so the source pix may be pixDestroyed
+   *  immediately after, but may not go away until after the Thresholder has
+   *  finished with it. */
+  
+
+  /** Threshold the source image as efficiently as possible to the output Pix.
+   *  Creates a Pix and sets pix to point to the resulting pointer.
+   *  Caller must use pixDestroy to free the created Pix. */
+  public native void ThresholdToPix(@Cast("tesseract::PageSegMode") int pageseg_mode, @Cast("Pix**") PointerPointer pix);
+  public native void ThresholdToPix(@Cast("tesseract::PageSegMode") int pageseg_mode, @ByPtrPtr PIX pix);
+
+  // Gets a pix that contains an 8 bit threshold value at each pixel. The
+  // returned pix may be an integer reduction of the binary image such that
+  // the scale factor may be inferred from the ratio of the sizes, even down
+  // to the extreme of a 1x1 pixel thresholds image.
+  // Ideally the 8 bit threshold should be the exact threshold used to generate
+  // the binary image in ThresholdToPix, but this is not a hard constraint.
+  // Returns NULL if the input is binary. PixDestroy after use.
+  public native PIX GetPixRectThresholds();
+
+  /** Get a clone/copy of the source image rectangle.
+   *  The returned Pix must be pixDestroyed.
+   *  This function will be used in the future by the page layout analysis, and
+   *  the layout analysis that uses it will only be available with Leptonica,
+   *  so there is no raw equivalent. */
+  
+
+  // Get a clone/copy of the source image rectangle, reduced to greyscale,
+  // and at the same resolution as the output binary.
+  // The returned Pix must be pixDestroyed.
+  // Provided to the classifier to extract features from the greyscale image.
+  
+}
+
+  // namespace tesseract.
+
+// #endif  // TESSERACT_CCMAIN_THRESHOLDER_H__
 
 
 // Parsed from tesseract/pageiterator.h
@@ -1775,7 +1784,7 @@ public static final int
   // ============= Moving around within the page ============.
 
   /**
-   * Moves the iterator to point to the start of the page to begin an 
+   * Moves the iterator to point to the start of the page to begin an
    * iteration.
    */
   public native void Begin();
@@ -1869,6 +1878,18 @@ public static final int
   // relate to the original (full) image, rather than the rectangle.
 
   /**
+   * Controls what to include in a bounding box. Bounding boxes of all levels
+   * between RIL_WORD and RIL_BLOCK can include or exclude potential diacritics.
+   * Between layout analysis and recognition, it isn't known where all
+   * diacritics belong, so this control is used to include or exclude some
+   * diacritics that are above or below the main body of the word. In most cases
+   * where the placement is obvious, and after recognition, it doesn't make as
+   * much difference, as the diacritics will already be included in the word.
+   */
+  public native void SetBoundingBoxComponents(@Cast("bool") boolean include_upper_dots,
+                                  @Cast("bool") boolean include_lower_dots);
+
+  /**
    * Returns the bounding rectangle of the current object at the given level.
    * See comment on coordinate system above.
    * Returns false if there is no such object at the current position.
@@ -1935,13 +1956,14 @@ public static final int
    * padding, so the top-left position of the returned image is returned
    * in (left,top). These will most likely not match the coordinates
    * returned by BoundingBox.
+   * If you do not supply an original image, you will get a binary one.
    * Use pixDestroy to delete the image after use.
    */
-  public native PIX GetImage(@Cast("tesseract::PageIteratorLevel") int level, int padding,
+  public native PIX GetImage(@Cast("tesseract::PageIteratorLevel") int level, int padding, PIX original_img,
                   IntPointer left, IntPointer top);
-  public native PIX GetImage(@Cast("tesseract::PageIteratorLevel") int level, int padding,
+  public native PIX GetImage(@Cast("tesseract::PageIteratorLevel") int level, int padding, PIX original_img,
                   IntBuffer left, IntBuffer top);
-  public native PIX GetImage(@Cast("tesseract::PageIteratorLevel") int level, int padding,
+  public native PIX GetImage(@Cast("tesseract::PageIteratorLevel") int level, int padding, PIX original_img,
                   int[] left, int[] top);
 
   /**
@@ -2322,8 +2344,8 @@ public static final int
    */
 
   // ============= Moving around within the page ============.
-  /** 
-   * Moves the iterator to point to the start of the page to begin 
+  /**
+   * Moves the iterator to point to the start of the page to begin
    * an iteration.
    */
   public native void Begin();
@@ -2439,6 +2461,13 @@ public static final int
 // #include          <string.h>
 // #include          "platform.h"
 // #include          "memry.h"
+@Namespace("tesseract") @Opaque public static class TFile extends Pointer {
+    /** Empty constructor. */
+    public TFile() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TFile(Pointer p) { super(p); }
+}
+  // namespace tesseract.
 
 // STRING_IS_PROTECTED means that  string[index] = X is invalid
 // because you have to go through strings interface to modify it.
@@ -2470,12 +2499,21 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
     private native void allocate(@Cast("const char*") BytePointer string);
     public STRING(String string) { allocate(string); }
     private native void allocate(String string);
+    public STRING(@Cast("const char*") BytePointer data, int length) { allocate(data, length); }
+    private native void allocate(@Cast("const char*") BytePointer data, int length);
+    public STRING(String data, int length) { allocate(data, length); }
+    private native void allocate(String data, int length);
 
     // Writes to the given file. Returns false in case of error.
     public native @Cast("bool") boolean Serialize(@Cast("FILE*") Pointer fp);
     // Reads from the given file. Returns false in case of error.
     // If swap is true, assumes a big/little-endian swap is needed.
     public native @Cast("bool") boolean DeSerialize(@Cast("bool") boolean swap, @Cast("FILE*") Pointer fp);
+    // Writes to the given file. Returns false in case of error.
+    public native @Cast("bool") boolean Serialize(TFile fp);
+    // Reads from the given file. Returns false in case of error.
+    // If swap is true, assumes a big/little-endian swap is needed.
+    public native @Cast("bool") boolean DeSerialize(@Cast("bool") boolean swap, TFile fp);
 
     public native @Cast("BOOL8") byte contains(byte c);
     public native @Cast("inT32") int length();
@@ -2561,6 +2599,7 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
 // #include "errcode.h"
 // #include "helpers.h"
 // #include "ndminx.h"
+// #include "serialis.h"
 // #include "strngs.h"
 
 // Use PointerVector<T> below in preference to GenericVector<T*>, as that
@@ -2595,6 +2634,8 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
 
   // Resizes to size and sets all values to t.
   public native void init_to_size(int size, @Cast("char") byte t);
+  // Resizes to size without any initialization.
+  public native void resize_no_init(int size);
 
   // Return the size used.
   public native int size();
@@ -2681,21 +2722,26 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   public native @Cast("bool") boolean read(@Cast("FILE*") Pointer f, CharReadCallback cb, @Cast("bool") boolean swap);
   // Writes a vector of simple types to the given file. Assumes that bitwise
   // read/write of T will work. Returns false in case of error.
+  // TODO(rays) Change all callers to use TFile and remove deprecated methods.
   public native @Cast("bool") boolean Serialize(@Cast("FILE*") Pointer fp);
+  public native @Cast("bool") boolean Serialize(TFile fp);
   // Reads a vector of simple types from the given file. Assumes that bitwise
   // read/write will work with ReverseN according to sizeof(T).
   // Returns false in case of error.
   // If swap is true, assumes a big/little-endian swap is needed.
   public native @Cast("bool") boolean DeSerialize(@Cast("bool") boolean swap, @Cast("FILE*") Pointer fp);
+  public native @Cast("bool") boolean DeSerialize(@Cast("bool") boolean swap, TFile fp);
   // Writes a vector of classes to the given file. Assumes the existence of
   // bool T::Serialize(FILE* fp) const that returns false in case of error.
   // Returns false in case of error.
+  
   
   // Reads a vector of classes from the given file. Assumes the existence of
   // bool T::Deserialize(bool swap, FILE* fp) that returns false in case of
   // error. Also needs T::T() and T::T(constT&), as init_to_size is used in
   // this function. Returns false in case of error.
   // If swap is true, assumes a big/little-endian swap is needed.
+  
   
 
   // Allocates a new array of double the current_size, copies over the
@@ -2706,6 +2752,9 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   public static native @Cast("char*") BytePointer double_the_size_memcpy(int current_size, @Cast("char*") BytePointer data);
   public static native @Cast("char*") ByteBuffer double_the_size_memcpy(int current_size, @Cast("char*") ByteBuffer data);
   public static native @Cast("char*") byte[] double_the_size_memcpy(int current_size, @Cast("char*") byte[] data);
+
+  // Reverses the elements of the vector.
+  public native void reverse();
 
   // Sorts the members of this vector using the less than comparator (cmp_lt),
   // which compares the values. Useful for GenericVectors to primitive types.
@@ -2758,6 +2807,9 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
 
   // Swaps the elements with the given indices.
   public native void swap(int index1, int index2);
+  // Returns true if all elements of *this are within the given range.
+  // Only uses operator<
+  public native @Cast("bool") boolean WithinBounds(@Cast("const char") byte rangemin, @Cast("const char") byte rangemax);
 }
 @Name("GenericVector<STRING>") @NoOffset public static class StringGenericVector extends Pointer {
     static { Loader.load(); }
@@ -2788,6 +2840,8 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
 
   // Resizes to size and sets all values to t.
   public native void init_to_size(int size, @ByVal STRING t);
+  // Resizes to size without any initialization.
+  public native void resize_no_init(int size);
 
   // Return the size used.
   public native int size();
@@ -2874,22 +2928,27 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   public native @Cast("bool") boolean read(@Cast("FILE*") Pointer f, StringReadCallback cb, @Cast("bool") boolean swap);
   // Writes a vector of simple types to the given file. Assumes that bitwise
   // read/write of T will work. Returns false in case of error.
+  // TODO(rays) Change all callers to use TFile and remove deprecated methods.
   public native @Cast("bool") boolean Serialize(@Cast("FILE*") Pointer fp);
+  public native @Cast("bool") boolean Serialize(TFile fp);
   // Reads a vector of simple types from the given file. Assumes that bitwise
   // read/write will work with ReverseN according to sizeof(T).
   // Returns false in case of error.
   // If swap is true, assumes a big/little-endian swap is needed.
   public native @Cast("bool") boolean DeSerialize(@Cast("bool") boolean swap, @Cast("FILE*") Pointer fp);
+  public native @Cast("bool") boolean DeSerialize(@Cast("bool") boolean swap, TFile fp);
   // Writes a vector of classes to the given file. Assumes the existence of
   // bool T::Serialize(FILE* fp) const that returns false in case of error.
   // Returns false in case of error.
   public native @Cast("bool") boolean SerializeClasses(@Cast("FILE*") Pointer fp);
+  public native @Cast("bool") boolean SerializeClasses(TFile fp);
   // Reads a vector of classes from the given file. Assumes the existence of
   // bool T::Deserialize(bool swap, FILE* fp) that returns false in case of
   // error. Also needs T::T() and T::T(constT&), as init_to_size is used in
   // this function. Returns false in case of error.
   // If swap is true, assumes a big/little-endian swap is needed.
   public native @Cast("bool") boolean DeSerializeClasses(@Cast("bool") boolean swap, @Cast("FILE*") Pointer fp);
+  public native @Cast("bool") boolean DeSerializeClasses(@Cast("bool") boolean swap, TFile fp);
 
   // Allocates a new array of double the current_size, copies over the
   // information from data to the new location, deletes data and returns
@@ -2897,6 +2956,9 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   // This function uses memcpy to copy the data, instead of invoking
   // operator=() for each element like double_the_size() does.
   public static native STRING double_the_size_memcpy(int current_size, STRING data);
+
+  // Reverses the elements of the vector.
+  public native void reverse();
 
   // Sorts the members of this vector using the less than comparator (cmp_lt),
   // which compares the values. Useful for GenericVectors to primitive types.
@@ -2941,6 +3003,9 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
 
   // Swaps the elements with the given indices.
   public native void swap(int index1, int index2);
+  // Returns true if all elements of *this are within the given range.
+  // Only uses operator<
+  
 }
 @Name("GenericVector<int>") @NoOffset public static class IntGenericVector extends Pointer {
     static { Loader.load(); }
@@ -2971,6 +3036,8 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
 
   // Resizes to size and sets all values to t.
   public native void init_to_size(int size, int t);
+  // Resizes to size without any initialization.
+  public native void resize_no_init(int size);
 
   // Return the size used.
   public native int size();
@@ -3057,21 +3124,26 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   public native @Cast("bool") boolean read(@Cast("FILE*") Pointer f, IntReadCallback cb, @Cast("bool") boolean swap);
   // Writes a vector of simple types to the given file. Assumes that bitwise
   // read/write of T will work. Returns false in case of error.
+  // TODO(rays) Change all callers to use TFile and remove deprecated methods.
   public native @Cast("bool") boolean Serialize(@Cast("FILE*") Pointer fp);
+  public native @Cast("bool") boolean Serialize(TFile fp);
   // Reads a vector of simple types from the given file. Assumes that bitwise
   // read/write will work with ReverseN according to sizeof(T).
   // Returns false in case of error.
   // If swap is true, assumes a big/little-endian swap is needed.
   public native @Cast("bool") boolean DeSerialize(@Cast("bool") boolean swap, @Cast("FILE*") Pointer fp);
+  public native @Cast("bool") boolean DeSerialize(@Cast("bool") boolean swap, TFile fp);
   // Writes a vector of classes to the given file. Assumes the existence of
   // bool T::Serialize(FILE* fp) const that returns false in case of error.
   // Returns false in case of error.
+  
   
   // Reads a vector of classes from the given file. Assumes the existence of
   // bool T::Deserialize(bool swap, FILE* fp) that returns false in case of
   // error. Also needs T::T() and T::T(constT&), as init_to_size is used in
   // this function. Returns false in case of error.
   // If swap is true, assumes a big/little-endian swap is needed.
+  
   
 
   // Allocates a new array of double the current_size, copies over the
@@ -3082,6 +3154,9 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
   public static native IntPointer double_the_size_memcpy(int current_size, IntPointer data);
   public static native IntBuffer double_the_size_memcpy(int current_size, IntBuffer data);
   public static native int[] double_the_size_memcpy(int current_size, int[] data);
+
+  // Reverses the elements of the vector.
+  public native void reverse();
 
   // Sorts the members of this vector using the less than comparator (cmp_lt),
   // which compares the values. Useful for GenericVectors to primitive types.
@@ -3134,6 +3209,9 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
 
   // Swaps the elements with the given indices.
   public native void swap(int index1, int index2);
+  // Returns true if all elements of *this are within the given range.
+  // Only uses operator<
+  public native @Cast("bool") boolean WithinBounds(int rangemin, int rangemax);
 }
 
 // Function to read a GenericVector<char> from a whole file.
@@ -3164,7 +3242,7 @@ public static class FileWriter extends FunctionPointer {
 // The default FileWriter writes the vector of char to the filename file,
 // returning false on error.
 @Namespace("tesseract") public static native @Cast("bool") boolean SaveDataToFile(@Const @ByRef CharGenericVector data,
-                          @Const @ByRef STRING filename);
+                           @Const @ByRef STRING filename);
 
 // Used by sort()
 // return < 0 if t1 < t2
@@ -3279,10 +3357,12 @@ public static class FileWriter extends FunctionPointer {
 // read/write of T will work. Returns false in case of error.
 
 
+
 // Reads a vector of simple types from the given file. Assumes that bitwise
 // read/write will work with ReverseN according to sizeof(T).
 // Returns false in case of error.
 // If swap is true, assumes a big/little-endian swap is needed.
+
 
 
 // Writes a vector of classes to the given file. Assumes the existence of
@@ -3290,11 +3370,13 @@ public static class FileWriter extends FunctionPointer {
 // Returns false in case of error.
 
 
+
 // Reads a vector of classes from the given file. Assumes the existence of
 // bool T::Deserialize(bool swap, FILE* fp) that returns false in case of
 // error. Alse needs T::T() and T::T(constT&), as init_to_size is used in
 // this function. Returns false in case of error.
 // If swap is true, assumes a big/little-endian swap is needed.
+
 
 
 // This method clear the current object, then, does a shallow copy of
@@ -3345,6 +3427,11 @@ public static class FileWriter extends FunctionPointer {
 
 // #ifndef TESSERACT_API_BASEAPI_H__
 // #define TESSERACT_API_BASEAPI_H__
+
+public static final String TESSERACT_VERSION_STR = "3.04.00";
+public static final int TESSERACT_VERSION = 0x030400;
+// #define MAKE_VERSION(major, minor, patch) (((major) << 16) | ((minor) << 8) |
+//                                             (patch))
 
 // #include <stdio.h>
 // To avoid collision with other typenames include the ABSOLUTE MINIMUM
@@ -3840,7 +3927,7 @@ public static class FileWriter extends FunctionPointer {
    * Because of that, an implementation that sources and targets Pix may end up
    * with less copies than an implementation that does not.
    */
-  public native void SetImage(@Const PIX pix);
+  public native void SetImage(PIX pix);
 
   /**
    * Set the resolution of the source image in pixels per inch so font size
@@ -4001,7 +4088,11 @@ public static class FileWriter extends FunctionPointer {
    * Runs page layout analysis in the mode set by SetPageSegMode.
    * May optionally be called prior to Recognize to get access to just
    * the page layout results. Returns an iterator to the results.
-   * Returns NULL on error.
+   * If merge_similar_words is true, words are combined where suitable for use
+   * with a line recognizer. Use if you want to use AnalyseLayout to find the
+   * textlines, and then want to process textline fragments with an external
+   * line recognizer.
+   * Returns NULL on error or an empty page.
    * The returned iterator must be deleted after use.
    * WARNING! This class points to data held within the TessBaseAPI class, and
    * therefore can only be used while the TessBaseAPI class still exists and
@@ -4009,6 +4100,7 @@ public static class FileWriter extends FunctionPointer {
    * DetectOS, or anything else that changes the internal PAGE_RES.
    */
   public native PageIterator AnalyseLayout();
+  public native PageIterator AnalyseLayout(@Cast("bool") boolean merge_similar_words);
 
   /**
    * Recognize the image from SetAndThresholdImage, generating Tesseract
@@ -4027,53 +4119,46 @@ public static class FileWriter extends FunctionPointer {
   public native int RecognizeForChopTest(ETEXT_DESC monitor);
 
   /**
-   * Recognizes all the pages in the named file, as a multi-page tiff or
-   * list of filenames, or single image, and gets the appropriate kind of text
-   * according to parameters: tessedit_create_boxfile,
-   * tessedit_make_boxes_from_boxes, tessedit_write_unlv, tessedit_create_hocr.
-   * Calls ProcessPage on each page in the input file, which may be a
-   * multi-page tiff, single-page other file format, or a plain text list of
-   * images to read. If tessedit_page_number is non-negative, processing begins
-   * at that page of a multi-page tiff file, or filelist.
-   * The text is returned in text_out. Returns false on error.
-   * If non-zero timeout_millisec terminates processing after the timeout on
-   * a single page.
-   * If non-NULL and non-empty, and some page fails for some reason,
-   * the page is reprocessed with the retry_config config file. Useful
-   * for interactively debugging a bad page.
+   * Turns images into symbolic text.
+   *
+   * filename can point to a single image, a multi-page TIFF,
+   * or a plain text list of image filenames.
+   *
+   * retry_config is useful for debugging. If not NULL, you can fall
+   * back to an alternate configuration if a page fails for some
+   * reason.
+   *
+   * timeout_millisec terminates processing if any single page
+   * takes too long. Set to 0 for unlimited time.
+   *
+   * renderer is responible for creating the output. For example,
+   * use the TessTextRenderer if you want plaintext output, or
+   * the TessPDFRender to produce searchable PDF.
+   *
+   * If tessedit_page_number is non-negative, will only process that
+   * single page. Works for multi-page tiff file, or filelist.
+   *
+   * Returns true if successful, false on error.
    */
-  public native @Cast("bool") boolean ProcessPages(@Cast("const char*") BytePointer filename,
-                      @Cast("const char*") BytePointer retry_config, int timeout_millisec,
-                      STRING text_out);
-  public native @Cast("bool") boolean ProcessPages(String filename,
-                      String retry_config, int timeout_millisec,
-                      STRING text_out);
-
-  public native @Cast("bool") boolean ProcessPages(@Cast("const char*") BytePointer filename,
-                      @Cast("const char*") BytePointer retry_config, int timeout_millisec,
-                      TessResultRenderer renderer);
-  public native @Cast("bool") boolean ProcessPages(String filename,
-                      String retry_config, int timeout_millisec,
-                      TessResultRenderer renderer);
+  public native @Cast("bool") boolean ProcessPages(@Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer retry_config,
+                      int timeout_millisec, TessResultRenderer renderer);
+  public native @Cast("bool") boolean ProcessPages(String filename, String retry_config,
+                      int timeout_millisec, TessResultRenderer renderer);
+  // Does the real work of ProcessPages.
+  public native @Cast("bool") boolean ProcessPagesInternal(@Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer retry_config,
+                              int timeout_millisec, TessResultRenderer renderer);
+  public native @Cast("bool") boolean ProcessPagesInternal(String filename, String retry_config,
+                              int timeout_millisec, TessResultRenderer renderer);
 
   /**
-   * Recognizes a single page for ProcessPages, appending the text to text_out.
-   * The pix is the image processed - filename and page_index are metadata
-   * used by side-effect processes, such as reading a box file or formatting
-   * as hOCR.
-   * If non-zero timeout_millisec terminates processing after the timeout.
-   * If non-NULL and non-empty, and some page fails for some reason,
-   * the page is reprocessed with the retry_config config file. Useful
-   * for interactively debugging a bad page.
-   * The text is returned in text_out. Returns false on error.
+   * Turn a single image into symbolic text.
+   *
+   * The pix is the image processed. filename and page_index are
+   * metadata used by side-effect processes, such as reading a box
+   * file or formatting as hOCR.
+   *
+   * See ProcessPages for desciptions of other parameters.
    */
-  public native @Cast("bool") boolean ProcessPage(PIX pix, int page_index, @Cast("const char*") BytePointer filename,
-                     @Cast("const char*") BytePointer retry_config, int timeout_millisec,
-                     STRING text_out);
-  public native @Cast("bool") boolean ProcessPage(PIX pix, int page_index, String filename,
-                     String retry_config, int timeout_millisec,
-                     STRING text_out);
-
   public native @Cast("bool") boolean ProcessPage(PIX pix, int page_index, @Cast("const char*") BytePointer filename,
                      @Cast("const char*") BytePointer retry_config, int timeout_millisec,
                      TessResultRenderer renderer);
@@ -4184,6 +4269,10 @@ public static class FileWriter extends FunctionPointer {
    */
   public native int IsValidWord(@Cast("const char*") BytePointer word);
   public native int IsValidWord(String word);
+  // Returns true if utf8_character is defined in the UniCharset.
+  public native @Cast("bool") boolean IsValidCharacter(@Cast("const char*") BytePointer utf8_character);
+  public native @Cast("bool") boolean IsValidCharacter(String utf8_character);
+
 
   public native @Cast("bool") boolean GetTextDirection(IntPointer out_offset, FloatPointer out_slope);
   public native @Cast("bool") boolean GetTextDirection(IntBuffer out_offset, FloatBuffer out_slope);
@@ -4297,8 +4386,11 @@ public static class FileWriter extends FunctionPointer {
    * and let go of including the other headers.
    */
   public static native void DeleteBlockList(BLOCK_LIST block_list);
-}
+}  // class TessBaseAPI.
 
+/** Escape a char string - remove &<>"' with HTML codes. */
+@Namespace("tesseract") public static native @ByVal STRING HOcrEscape(@Cast("const char*") BytePointer text);
+@Namespace("tesseract") public static native @ByVal STRING HOcrEscape(String text);
   // namespace tesseract.
 
 // #endif  // TESSERACT_API_BASEAPI_H__
@@ -4354,12 +4446,18 @@ public static native void TessDeleteBlockList(BLOCK_LIST block_list);
 // #endif
 
 /* Renderer API */
-public static native TessResultRenderer TessTextRendererCreate();
-public static native TessResultRenderer TessHOcrRendererCreate();
-public static native TessResultRenderer TessPDFRendererCreate(@Cast("const char*") BytePointer datadir);
-public static native TessResultRenderer TessPDFRendererCreate(String datadir);
-public static native TessResultRenderer TessUnlvRendererCreate();
-public static native TessResultRenderer TessBoxTextRendererCreate();
+public static native TessResultRenderer TessTextRendererCreate(@Cast("const char*") BytePointer outputbase);
+public static native TessResultRenderer TessTextRendererCreate(String outputbase);
+public static native TessResultRenderer TessHOcrRendererCreate(@Cast("const char*") BytePointer outputbase);
+public static native TessResultRenderer TessHOcrRendererCreate(String outputbase);
+public static native TessResultRenderer TessHOcrRendererCreate2(@Cast("const char*") BytePointer outputbase, @Cast("BOOL") boolean font_info);
+public static native TessResultRenderer TessHOcrRendererCreate2(String outputbase, @Cast("BOOL") boolean font_info);
+public static native TessResultRenderer TessPDFRendererCreate(@Cast("const char*") BytePointer outputbase, @Cast("const char*") BytePointer datadir);
+public static native TessResultRenderer TessPDFRendererCreate(String outputbase, String datadir);
+public static native TessResultRenderer TessUnlvRendererCreate(@Cast("const char*") BytePointer outputbase);
+public static native TessResultRenderer TessUnlvRendererCreate(String outputbase);
+public static native TessResultRenderer TessBoxTextRendererCreate(@Cast("const char*") BytePointer outputbase);
+public static native TessResultRenderer TessBoxTextRendererCreate(String outputbase);
 
 public static native void TessDeleteResultRenderer(TessResultRenderer renderer);
 public static native void TessResultRendererInsert(TessResultRenderer renderer, TessResultRenderer next);
@@ -4367,14 +4465,8 @@ public static native TessResultRenderer TessResultRendererNext(TessResultRendere
 public static native @Cast("BOOL") boolean TessResultRendererBeginDocument(TessResultRenderer renderer, @Cast("const char*") BytePointer title);
 public static native @Cast("BOOL") boolean TessResultRendererBeginDocument(TessResultRenderer renderer, String title);
 public static native @Cast("BOOL") boolean TessResultRendererAddImage(TessResultRenderer renderer, TessBaseAPI api);
-public static native @Cast("BOOL") boolean TessResultRendererAddError(TessResultRenderer renderer, TessBaseAPI api);
 public static native @Cast("BOOL") boolean TessResultRendererEndDocument(TessResultRenderer renderer);
-public static native @Cast("BOOL") boolean TessResultRendererGetOutput(TessResultRenderer renderer, @Cast("const char**") PointerPointer data, IntPointer data_len);
-public static native @Cast("BOOL") boolean TessResultRendererGetOutput(TessResultRenderer renderer, @Cast("const char**") @ByPtrPtr BytePointer data, IntPointer data_len);
-public static native @Cast("BOOL") boolean TessResultRendererGetOutput(TessResultRenderer renderer, @Cast("const char**") @ByPtrPtr ByteBuffer data, IntBuffer data_len);
-public static native @Cast("BOOL") boolean TessResultRendererGetOutput(TessResultRenderer renderer, @Cast("const char**") @ByPtrPtr byte[] data, int[] data_len);
 
-public static native @Cast("const char*") BytePointer TessResultRendererTypename(TessResultRenderer renderer);
 public static native @Cast("const char*") BytePointer TessResultRendererExtention(TessResultRenderer renderer);
 public static native @Cast("const char*") BytePointer TessResultRendererTitle(TessResultRenderer renderer);
 public static native int TessResultRendererImageNum(TessResultRenderer renderer);
@@ -4452,31 +4544,31 @@ public static native int TessBaseAPIInit2(TessBaseAPI handle, String datapath, S
 public static native int TessBaseAPIInit3(TessBaseAPI handle, @Cast("const char*") BytePointer datapath, @Cast("const char*") BytePointer language);
 public static native int TessBaseAPIInit3(TessBaseAPI handle, String datapath, String language);
 
-public static native int TessBaseAPIInit4(TessBaseAPI handle, @Cast("const char*") BytePointer datapath, @Cast("const char*") BytePointer language, @Cast("TessOcrEngineMode") int mode, 
+public static native int TessBaseAPIInit4(TessBaseAPI handle, @Cast("const char*") BytePointer datapath, @Cast("const char*") BytePointer language, @Cast("TessOcrEngineMode") int mode,
     @Cast("char**") PointerPointer configs, int configs_size,
     @Cast("char**") PointerPointer vars_vec, @Cast("char**") PointerPointer vars_values, @Cast("size_t") long vars_vec_size,
     @Cast("BOOL") boolean set_only_non_debug_params);
-public static native int TessBaseAPIInit4(TessBaseAPI handle, @Cast("const char*") BytePointer datapath, @Cast("const char*") BytePointer language, @Cast("TessOcrEngineMode") int mode, 
+public static native int TessBaseAPIInit4(TessBaseAPI handle, @Cast("const char*") BytePointer datapath, @Cast("const char*") BytePointer language, @Cast("TessOcrEngineMode") int mode,
     @Cast("char**") @ByPtrPtr BytePointer configs, int configs_size,
     @Cast("char**") @ByPtrPtr BytePointer vars_vec, @Cast("char**") @ByPtrPtr BytePointer vars_values, @Cast("size_t") long vars_vec_size,
     @Cast("BOOL") boolean set_only_non_debug_params);
-public static native int TessBaseAPIInit4(TessBaseAPI handle, String datapath, String language, @Cast("TessOcrEngineMode") int mode, 
+public static native int TessBaseAPIInit4(TessBaseAPI handle, String datapath, String language, @Cast("TessOcrEngineMode") int mode,
     @Cast("char**") @ByPtrPtr ByteBuffer configs, int configs_size,
     @Cast("char**") @ByPtrPtr ByteBuffer vars_vec, @Cast("char**") @ByPtrPtr ByteBuffer vars_values, @Cast("size_t") long vars_vec_size,
     @Cast("BOOL") boolean set_only_non_debug_params);
-public static native int TessBaseAPIInit4(TessBaseAPI handle, @Cast("const char*") BytePointer datapath, @Cast("const char*") BytePointer language, @Cast("TessOcrEngineMode") int mode, 
+public static native int TessBaseAPIInit4(TessBaseAPI handle, @Cast("const char*") BytePointer datapath, @Cast("const char*") BytePointer language, @Cast("TessOcrEngineMode") int mode,
     @Cast("char**") @ByPtrPtr byte[] configs, int configs_size,
     @Cast("char**") @ByPtrPtr byte[] vars_vec, @Cast("char**") @ByPtrPtr byte[] vars_values, @Cast("size_t") long vars_vec_size,
     @Cast("BOOL") boolean set_only_non_debug_params);
-public static native int TessBaseAPIInit4(TessBaseAPI handle, String datapath, String language, @Cast("TessOcrEngineMode") int mode, 
+public static native int TessBaseAPIInit4(TessBaseAPI handle, String datapath, String language, @Cast("TessOcrEngineMode") int mode,
     @Cast("char**") @ByPtrPtr BytePointer configs, int configs_size,
     @Cast("char**") @ByPtrPtr BytePointer vars_vec, @Cast("char**") @ByPtrPtr BytePointer vars_values, @Cast("size_t") long vars_vec_size,
     @Cast("BOOL") boolean set_only_non_debug_params);
-public static native int TessBaseAPIInit4(TessBaseAPI handle, @Cast("const char*") BytePointer datapath, @Cast("const char*") BytePointer language, @Cast("TessOcrEngineMode") int mode, 
+public static native int TessBaseAPIInit4(TessBaseAPI handle, @Cast("const char*") BytePointer datapath, @Cast("const char*") BytePointer language, @Cast("TessOcrEngineMode") int mode,
     @Cast("char**") @ByPtrPtr ByteBuffer configs, int configs_size,
     @Cast("char**") @ByPtrPtr ByteBuffer vars_vec, @Cast("char**") @ByPtrPtr ByteBuffer vars_values, @Cast("size_t") long vars_vec_size,
     @Cast("BOOL") boolean set_only_non_debug_params);
-public static native int TessBaseAPIInit4(TessBaseAPI handle, String datapath, String language, @Cast("TessOcrEngineMode") int mode, 
+public static native int TessBaseAPIInit4(TessBaseAPI handle, String datapath, String language, @Cast("TessOcrEngineMode") int mode,
     @Cast("char**") @ByPtrPtr byte[] configs, int configs_size,
     @Cast("char**") @ByPtrPtr byte[] vars_vec, @Cast("char**") @ByPtrPtr byte[] vars_values, @Cast("size_t") long vars_vec_size,
     @Cast("BOOL") boolean set_only_non_debug_params);
@@ -4515,7 +4607,7 @@ public static native void TessBaseAPISetImage(TessBaseAPI handle, @Cast("const u
                                              int bytes_per_pixel, int bytes_per_line);
 public static native void TessBaseAPISetImage(TessBaseAPI handle, @Cast("const unsigned char*") byte[] imagedata, int width, int height,
                                              int bytes_per_pixel, int bytes_per_line);
-public static native void TessBaseAPISetImage2(TessBaseAPI handle, @Const PIX pix);
+public static native void TessBaseAPISetImage2(TessBaseAPI handle, PIX pix);
 
 public static native void TessBaseAPISetSourceResolution(TessBaseAPI handle, int ppi);
 
@@ -4578,22 +4670,14 @@ public static native @Cast("TessPageIterator*") PageIterator TessBaseAPIAnalyseL
 
 public static native int TessBaseAPIRecognize(TessBaseAPI handle, ETEXT_DESC monitor);
 public static native int TessBaseAPIRecognizeForChopTest(TessBaseAPI handle, ETEXT_DESC monitor);
-public static native @Cast("char*") BytePointer TessBaseAPIProcessPages(TessBaseAPI handle, @Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer retry_config,
-                                                 int timeout_millisec);
-public static native @Cast("char*") ByteBuffer TessBaseAPIProcessPages(TessBaseAPI handle, String filename, String retry_config,
-                                                 int timeout_millisec);
-public static native @Cast("BOOL") boolean TessBaseAPIProcessPages1(TessBaseAPI handle,  @Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer retry_config,
+public static native @Cast("BOOL") boolean TessBaseAPIProcessPages(TessBaseAPI handle,  @Cast("const char*") BytePointer filename, @Cast("const char*") BytePointer retry_config,
                                                  int timeout_millisec, TessResultRenderer renderer);
-public static native @Cast("BOOL") boolean TessBaseAPIProcessPages1(TessBaseAPI handle,  String filename, String retry_config,
+public static native @Cast("BOOL") boolean TessBaseAPIProcessPages(TessBaseAPI handle,  String filename, String retry_config,
                                                  int timeout_millisec, TessResultRenderer renderer);
-public static native @Cast("char*") BytePointer TessBaseAPIProcessPage(TessBaseAPI handle, PIX pix, int page_index, @Cast("const char*") BytePointer filename,
-                                                @Cast("const char*") BytePointer retry_config, int timeout_millisec);
-public static native @Cast("char*") ByteBuffer TessBaseAPIProcessPage(TessBaseAPI handle, PIX pix, int page_index, String filename,
-                                                String retry_config, int timeout_millisec);
-public static native @Cast("BOOL") boolean TessBaseAPIProcessPage1(TessBaseAPI handle, PIX pix, int page_index, @Cast("const char*") BytePointer filename,
-                                      @Cast("const char*") BytePointer retry_config, int timeout_millisec, TessResultRenderer renderer);
-public static native @Cast("BOOL") boolean TessBaseAPIProcessPage1(TessBaseAPI handle, PIX pix, int page_index, String filename,
-                                      String retry_config, int timeout_millisec, TessResultRenderer renderer);
+public static native @Cast("BOOL") boolean TessBaseAPIProcessPage(TessBaseAPI handle, PIX pix, int page_index, @Cast("const char*") BytePointer filename,
+                                               @Cast("const char*") BytePointer retry_config, int timeout_millisec, TessResultRenderer renderer);
+public static native @Cast("BOOL") boolean TessBaseAPIProcessPage(TessBaseAPI handle, PIX pix, int page_index, String filename,
+                                               String retry_config, int timeout_millisec, TessResultRenderer renderer);
 
 public static native @Cast("TessResultIterator*") ResultIterator TessBaseAPIGetIterator(TessBaseAPI handle);
 public static native @Cast("TessMutableIterator*") MutableIterator TessBaseAPIGetMutableIterator(TessBaseAPI handle);
@@ -4660,10 +4744,10 @@ public static native @Cast("TessCubeRecoContext*") CubeRecoContext TessBaseAPIGe
 
 public static native void TessBaseAPISetMinOrientationMargin(TessBaseAPI handle, double margin);
 // #ifdef TESS_CAPI_INCLUDE_BASEAPI
-public static native void TessBaseGetBlockTextOrientations(TessBaseAPI handle, @Cast("int**") PointerPointer block_orientation, @Cast("bool**") PointerPointer vertical_writing);
-public static native void TessBaseGetBlockTextOrientations(TessBaseAPI handle, @ByPtrPtr IntPointer block_orientation, @Cast("bool**") @ByPtrPtr BoolPointer vertical_writing);
-public static native void TessBaseGetBlockTextOrientations(TessBaseAPI handle, @ByPtrPtr IntBuffer block_orientation, @Cast("bool**") @ByPtrPtr BoolPointer vertical_writing);
-public static native void TessBaseGetBlockTextOrientations(TessBaseAPI handle, @ByPtrPtr int[] block_orientation, @Cast("bool**") @ByPtrPtr BoolPointer vertical_writing);
+public static native void TessBaseGetBlockTextOrientations(TessBaseAPI handle, @Cast("int**") PointerPointer block_orientation, @Cast("BOOL**") PointerPointer vertical_writing);
+public static native void TessBaseGetBlockTextOrientations(TessBaseAPI handle, @ByPtrPtr IntPointer block_orientation, @Cast("BOOL**") @ByPtrPtr BoolPointer vertical_writing);
+public static native void TessBaseGetBlockTextOrientations(TessBaseAPI handle, @ByPtrPtr IntBuffer block_orientation, @Cast("BOOL**") @ByPtrPtr BoolPointer vertical_writing);
+public static native void TessBaseGetBlockTextOrientations(TessBaseAPI handle, @ByPtrPtr int[] block_orientation, @Cast("BOOL**") @ByPtrPtr BoolPointer vertical_writing);
 
 public static native BLOCK_LIST TessBaseAPIFindLinesCreateBlockList(TessBaseAPI handle);
 // #endif
@@ -4689,11 +4773,11 @@ public static native @Cast("TessPolyBlockType") int TessPageIteratorBlockType(@C
 
 public static native PIX TessPageIteratorGetBinaryImage(@Cast("const TessPageIterator*") PageIterator handle, @Cast("TessPageIteratorLevel") int level);
 public static native PIX TessPageIteratorGetImage(@Cast("const TessPageIterator*") PageIterator handle, @Cast("TessPageIteratorLevel") int level, int padding,
-                                                  IntPointer left, IntPointer top);
+                                                  PIX original_image, IntPointer left, IntPointer top);
 public static native PIX TessPageIteratorGetImage(@Cast("const TessPageIterator*") PageIterator handle, @Cast("TessPageIteratorLevel") int level, int padding,
-                                                  IntBuffer left, IntBuffer top);
+                                                  PIX original_image, IntBuffer left, IntBuffer top);
 public static native PIX TessPageIteratorGetImage(@Cast("const TessPageIterator*") PageIterator handle, @Cast("TessPageIteratorLevel") int level, int padding,
-                                                  int[] left, int[] top);
+                                                  PIX original_image, int[] left, int[] top);
 
 public static native @Cast("BOOL") boolean TessPageIteratorBaseline(@Cast("const TessPageIterator*") PageIterator handle, @Cast("TessPageIteratorLevel") int level,
                                                   IntPointer x1, IntPointer y1, IntPointer x2, IntPointer y2);
@@ -4712,16 +4796,25 @@ public static native void TessPageIteratorOrientation(@Cast("TessPageIterator*")
                                                      @Cast("TessWritingDirection*") int[] writing_direction, @Cast("TessTextlineOrder*") int[] textline_order,
                                                      float[] deskew_angle);
 
+public static native void TessPageIteratorParagraphInfo(@Cast("TessPageIterator*") PageIterator handle, @Cast("TessParagraphJustification*") IntPointer justification,
+                                                       @Cast("BOOL*") BoolPointer is_list_item, @Cast("BOOL*") BoolPointer is_crown, IntPointer first_line_indent);
+public static native void TessPageIteratorParagraphInfo(@Cast("TessPageIterator*") PageIterator handle, @Cast("TessParagraphJustification*") IntBuffer justification,
+                                                       @Cast("BOOL*") BoolPointer is_list_item, @Cast("BOOL*") BoolPointer is_crown, IntBuffer first_line_indent);
+public static native void TessPageIteratorParagraphInfo(@Cast("TessPageIterator*") PageIterator handle, @Cast("TessParagraphJustification*") int[] justification,
+                                                       @Cast("BOOL*") BoolPointer is_list_item, @Cast("BOOL*") BoolPointer is_crown, int[] first_line_indent);
+
 /* Result iterator */
 
 public static native void TessResultIteratorDelete(@Cast("TessResultIterator*") ResultIterator handle);
 public static native @Cast("TessResultIterator*") ResultIterator TessResultIteratorCopy(@Cast("const TessResultIterator*") ResultIterator handle);
 public static native @Cast("TessPageIterator*") PageIterator TessResultIteratorGetPageIterator(@Cast("TessResultIterator*") ResultIterator handle);
 public static native @Cast("const TessPageIterator*") PageIterator TessResultIteratorGetPageIteratorConst(@Cast("const TessResultIterator*") ResultIterator handle);
+public static native @Cast("TessChoiceIterator*") ChoiceIterator TessResultIteratorGetChoiceIterator(@Cast("const TessResultIterator*") ResultIterator handle);
 
+public static native @Cast("BOOL") boolean TessResultIteratorNext(@Cast("TessResultIterator*") ResultIterator handle, @Cast("TessPageIteratorLevel") int level);
 public static native @Cast("char*") BytePointer TessResultIteratorGetUTF8Text(@Cast("const TessResultIterator*") ResultIterator handle, @Cast("TessPageIteratorLevel") int level);
 public static native float TessResultIteratorConfidence(@Cast("const TessResultIterator*") ResultIterator handle, @Cast("TessPageIteratorLevel") int level);
-
+public static native @Cast("const char*") BytePointer TessResultIteratorWordRecognitionLanguage(@Cast("const TessResultIterator*") ResultIterator handle);
 public static native @Cast("const char*") BytePointer TessResultIteratorWordFontAttributes(@Cast("const TessResultIterator*") ResultIterator handle, @Cast("BOOL*") BoolPointer is_bold, @Cast("BOOL*") BoolPointer is_italic,
                                                               @Cast("BOOL*") BoolPointer is_underlined, @Cast("BOOL*") BoolPointer is_monospace, @Cast("BOOL*") BoolPointer is_serif,
                                                               @Cast("BOOL*") BoolPointer is_smallcaps, IntPointer pointsize, IntPointer font_id);
@@ -4737,6 +4830,11 @@ public static native @Cast("BOOL") boolean TessResultIteratorWordIsNumeric(@Cast
 public static native @Cast("BOOL") boolean TessResultIteratorSymbolIsSuperscript(@Cast("const TessResultIterator*") ResultIterator handle);
 public static native @Cast("BOOL") boolean TessResultIteratorSymbolIsSubscript(@Cast("const TessResultIterator*") ResultIterator handle);
 public static native @Cast("BOOL") boolean TessResultIteratorSymbolIsDropcap(@Cast("const TessResultIterator*") ResultIterator handle);
+
+public static native void TessChoiceIteratorDelete(@Cast("TessChoiceIterator*") ChoiceIterator handle);
+public static native @Cast("BOOL") boolean TessChoiceIteratorNext(@Cast("TessChoiceIterator*") ChoiceIterator handle);
+public static native @Cast("const char*") BytePointer TessChoiceIteratorGetUTF8Text(@Cast("const TessChoiceIterator*") ChoiceIterator handle);
+public static native float TessChoiceIteratorConfidence(@Cast("const TessChoiceIterator*") ChoiceIterator handle);
 
 // #ifdef __cplusplus
 // #endif
