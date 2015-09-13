@@ -86,6 +86,26 @@ public static native void LLVMParseCommandLineOptions(int argc, @Cast("const cha
 public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") @ByPtrPtr byte[] argv,
                                  String Overview);
 
+/**
+ * This function will search through all previously loaded dynamic
+ * libraries for the symbol \p symbolName. If it is found, the address of
+ * that symbol is returned. If not, null is returned.
+ *
+ * @see sys::DynamicLibrary::SearchForAddressOfSymbol()
+ */
+public static native Pointer LLVMSearchForAddressOfSymbol(@Cast("const char*") BytePointer symbolName);
+public static native Pointer LLVMSearchForAddressOfSymbol(String symbolName);
+
+/**
+ * This functions permanently adds the symbol \p symbolName with the
+ * value \p symbolValue.  These symbols are searched before any
+ * libraries.
+ *
+ * @see sys::DynamicLibrary::AddSymbol()
+ */
+public static native void LLVMAddSymbol(@Cast("const char*") BytePointer symbolName, Pointer symbolValue);
+public static native void LLVMAddSymbol(String symbolName, Pointer symbolValue);
+
 // #ifdef __cplusplus
 // #endif
 
@@ -312,14 +332,15 @@ public static final int
     /* FIXME: These attributes are currently not included in the C API as
        a temporary measure until the API/ABI impact to the C API is understood
        and the path forward agreed upon.
-    LLVMAddressSafety = 1ULL << 32,
-    LLVMStackProtectStrongAttribute = 1ULL<<33,
-    LLVMCold = 1ULL << 34,
-    LLVMOptimizeNone = 1ULL << 35,
-    LLVMInAllocaAttribute = 1ULL << 36,
-    LLVMNonNullAttribute = 1ULL << 37,
-    LLVMJumpTableAttribute = 1ULL << 38,
-    LLVMDereferenceableAttribute = 1ULL << 39,
+    LLVMSanitizeAddressAttribute = 1ULL << 32,
+    LLVMStackProtectStrongAttribute = 1ULL<<35,
+    LLVMColdAttribute = 1ULL << 40,
+    LLVMOptimizeNoneAttribute = 1ULL << 42,
+    LLVMInAllocaAttribute = 1ULL << 43,
+    LLVMNonNullAttribute = 1ULL << 44,
+    LLVMJumpTableAttribute = 1ULL << 45,
+    LLVMConvergentAttribute = 1ULL << 46,
+    LLVMSafeStackAttribute = 1ULL << 47,
     */
 
 /** enum LLVMOpcode */
@@ -1292,6 +1313,13 @@ public static native @Cast("unsigned") int LLVMCountStructElementTypes(LLVMTypeR
  */
 public static native void LLVMGetStructElementTypes(LLVMTypeRef StructTy, @ByPtrPtr LLVMTypeRef Dest);
 public static native void LLVMGetStructElementTypes(LLVMTypeRef StructTy, @Cast("LLVMTypeRef*") PointerPointer Dest);
+
+/**
+ * Get the type of the element at a given index in the structure.
+ *
+ * @see llvm::StructType::getTypeAtIndex()
+ */
+public static native LLVMTypeRef LLVMStructGetTypeAtIndex(LLVMTypeRef StructTy, @Cast("unsigned") int i);
 
 /**
  * Determine whether a structure is packed.
@@ -2305,6 +2333,20 @@ public static native LLVMValueRef LLVMAddAlias(LLVMModuleRef M, LLVMTypeRef Ty, 
 public static native void LLVMDeleteFunction(LLVMValueRef Fn);
 
 /**
+ * Obtain the personality function attached to the function.
+ *
+ * @see llvm::Function::getPersonalityFn()
+ */
+public static native LLVMValueRef LLVMGetPersonalityFn(LLVMValueRef Fn);
+
+/**
+ * Set the personality function attached to the function.
+ *
+ * @see llvm::Function::setPersonalityFn()
+ */
+public static native void LLVMSetPersonalityFn(LLVMValueRef Fn, LLVMValueRef PersonalityFn);
+
+/**
  * Obtain the ID number from a function instance.
  *
  * @see llvm::Function::getIntrinsicID()
@@ -3111,11 +3153,9 @@ public static native LLVMValueRef LLVMBuildInvoke(LLVMBuilderRef arg0, LLVMValue
                              LLVMBasicBlockRef Then, LLVMBasicBlockRef Catch,
                              String Name);
 public static native LLVMValueRef LLVMBuildLandingPad(LLVMBuilderRef B, LLVMTypeRef Ty,
-                                 LLVMValueRef PersFn, @Cast("unsigned") int NumClauses,
-                                 @Cast("const char*") BytePointer Name);
+                                 @Cast("unsigned") int NumClauses, @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMBuildLandingPad(LLVMBuilderRef B, LLVMTypeRef Ty,
-                                 LLVMValueRef PersFn, @Cast("unsigned") int NumClauses,
-                                 String Name);
+                                 @Cast("unsigned") int NumClauses, String Name);
 public static native LLVMValueRef LLVMBuildResume(LLVMBuilderRef B, LLVMValueRef Exn);
 public static native LLVMValueRef LLVMBuildUnreachable(LLVMBuilderRef arg0);
 
@@ -4431,27 +4471,29 @@ public static native @Cast("LLVMBool") int LLVMParseIRInContext(LLVMContextRef C
 // #ifdef __cplusplus
 // #endif
 
-
-/* Note: LLVMLinkerPreserveSource has no effect. */
+/* This enum is provided for backwards-compatibility only. It has no effect. */
 /** enum LLVMLinkerMode */
 public static final int
-  LLVMLinkerDestroySource = 0, /* Allow source module to be destroyed. */
-  LLVMLinkerPreserveSource = 1; /* Preserve the source module. */
-
+  LLVMLinkerDestroySource = 0, /* This is the default behavior. */
+  LLVMLinkerPreserveSource_Removed = 1; /* This option has been deprecated and
+                                          should not be used. */
 
 /* Links the source module into the destination module, taking ownership
  * of the source module away from the caller. Optionally returns a
  * human-readable description of any errors that occurred in linking.
  * OutMessage must be disposed with LLVMDisposeMessage. The return value
- * is true if an error occurred, false otherwise. */
+ * is true if an error occurred, false otherwise.
+ *
+ * Note that the linker mode parameter \p Unused is no longer used, and has
+ * no effect. */
 public static native @Cast("LLVMBool") int LLVMLinkModules(LLVMModuleRef Dest, LLVMModuleRef Src,
-                         @Cast("LLVMLinkerMode") int Mode, @Cast("char**") PointerPointer OutMessage);
+                         @Cast("LLVMLinkerMode") int Unused, @Cast("char**") PointerPointer OutMessage);
 public static native @Cast("LLVMBool") int LLVMLinkModules(LLVMModuleRef Dest, LLVMModuleRef Src,
-                         @Cast("LLVMLinkerMode") int Mode, @Cast("char**") @ByPtrPtr BytePointer OutMessage);
+                         @Cast("LLVMLinkerMode") int Unused, @Cast("char**") @ByPtrPtr BytePointer OutMessage);
 public static native @Cast("LLVMBool") int LLVMLinkModules(LLVMModuleRef Dest, LLVMModuleRef Src,
-                         @Cast("LLVMLinkerMode") int Mode, @Cast("char**") @ByPtrPtr ByteBuffer OutMessage);
+                         @Cast("LLVMLinkerMode") int Unused, @Cast("char**") @ByPtrPtr ByteBuffer OutMessage);
 public static native @Cast("LLVMBool") int LLVMLinkModules(LLVMModuleRef Dest, LLVMModuleRef Src,
-                         @Cast("LLVMLinkerMode") int Mode, @Cast("char**") @ByPtrPtr byte[] OutMessage);
+                         @Cast("LLVMLinkerMode") int Unused, @Cast("char**") @ByPtrPtr byte[] OutMessage);
 
 // #ifdef __cplusplus
 // #endif
@@ -4574,7 +4616,7 @@ public static native @Cast("LLVMBool") int LLVMLinkModules(LLVMModuleRef Dest, L
  * @{
  */
 
-public static final int LTO_API_VERSION = 11;
+public static final int LTO_API_VERSION = 17;
 
 /**
  * \since prior to LTO_API_VERSION=3
@@ -4597,7 +4639,9 @@ public static final int
     LTO_SYMBOL_SCOPE_HIDDEN                =  0x00001000,
     LTO_SYMBOL_SCOPE_PROTECTED             =  0x00002000,
     LTO_SYMBOL_SCOPE_DEFAULT               =  0x00001800,
-    LTO_SYMBOL_SCOPE_DEFAULT_CAN_BE_HIDDEN =  0x00002800;
+    LTO_SYMBOL_SCOPE_DEFAULT_CAN_BE_HIDDEN =  0x00002800,
+    LTO_SYMBOL_COMDAT                      =  0x00004000,
+    LTO_SYMBOL_ALIAS                       =  0x00008000;
 
 /**
  * \since prior to LTO_API_VERSION=3
@@ -4712,7 +4756,7 @@ public static native lto_module_t lto_module_create_from_memory(@Const Pointer m
  * Loads an object file from memory with an extra path argument.
  * Returns NULL on error (check lto_get_error_message() for details).
  *
- * \since prior to LTO_API_VERSION=9
+ * \since LTO_API_VERSION=9
  */
 public static native lto_module_t lto_module_create_from_memory_with_path(@Const Pointer mem, @Cast("size_t") long length,
                                         @Cast("const char*") BytePointer path);
@@ -4819,35 +4863,14 @@ public static native @Cast("lto_symbol_attributes") int lto_module_get_symbol_at
 
 
 /**
- * Returns the number of dependent libraries in the object module.
+ * Returns the module's linker options.
  *
- * \since LTO_API_VERSION=8
- */
-public static native @Cast("unsigned int") int lto_module_get_num_deplibs(lto_module_t mod);
-
-
-/**
- * Returns the ith dependent library in the module.
+ * The linker options may consist of multiple flags. It is the linker's
+ * responsibility to split the flags using a platform-specific mechanism.
  *
- * \since LTO_API_VERSION=8
+ * \since LTO_API_VERSION=16
  */
-public static native @Cast("const char*") BytePointer lto_module_get_deplib(lto_module_t mod, @Cast("unsigned int") int index);
-
-
-/**
- * Returns the number of linker options in the object module.
- *
- * \since LTO_API_VERSION=8
- */
-public static native @Cast("unsigned int") int lto_module_get_num_linkeropts(lto_module_t mod);
-
-
-/**
- * Returns the ith linker option in the module.
- *
- * \since LTO_API_VERSION=8
- */
-public static native @Cast("const char*") BytePointer lto_module_get_linkeropt(lto_module_t mod, @Cast("unsigned int") int index);
+public static native @Cast("const char*") BytePointer lto_module_get_linkeropts(lto_module_t mod);
 
 
 /**
@@ -4935,6 +4958,16 @@ public static native void lto_codegen_dispose(lto_code_gen_t arg0);
 public static native @Cast("lto_bool_t") boolean lto_codegen_add_module(lto_code_gen_t cg, lto_module_t mod);
 
 /**
+ * Sets the object module for code generation. This will transfer the ownship of
+ * the module to code generator.
+ *
+ * \c cg and \c mod must both be in the same context.
+ *
+ * \since LTO_API_VERSION=13
+ */
+public static native void lto_codegen_set_module(lto_code_gen_t cg, lto_module_t mod);
+
+/**
  * Sets if debug info should be generated.
  * Returns true on error (check lto_get_error_message() for details).
  *
@@ -5006,6 +5039,8 @@ public static native @Cast("lto_bool_t") boolean lto_codegen_write_merged_module
 
 /**
  * Generates code for all added modules into one native object file.
+ * This calls lto_codegen_optimize then lto_codegen_compile_optimized.
+ *
  * On success returns a pointer to a generated mach-o/ELF buffer and
  * length set to the buffer size.  The buffer is owned by the
  * lto_code_gen_t and will be freed when lto_codegen_dispose()
@@ -5018,6 +5053,9 @@ public static native @Const Pointer lto_codegen_compile(lto_code_gen_t cg, @Cast
 
 /**
  * Generates code for all added modules into one native object file.
+ * This calls lto_codegen_optimize then lto_codegen_compile_optimized (instead
+ * of returning a generated mach-o/ELF buffer, it writes to a file).
+ *
  * The name of the file is written to name. Returns true on error.
  *
  * \since LTO_API_VERSION=5
@@ -5027,6 +5065,33 @@ public static native @Cast("lto_bool_t") boolean lto_codegen_compile_to_file(lto
 public static native @Cast("lto_bool_t") boolean lto_codegen_compile_to_file(lto_code_gen_t cg, @Cast("const char**") @ByPtrPtr ByteBuffer name);
 public static native @Cast("lto_bool_t") boolean lto_codegen_compile_to_file(lto_code_gen_t cg, @Cast("const char**") @ByPtrPtr byte[] name);
 
+/**
+ * Runs optimization for the merged module. Returns true on error.
+ *
+ * \since LTO_API_VERSION=12
+ */
+public static native @Cast("lto_bool_t") boolean lto_codegen_optimize(lto_code_gen_t cg);
+
+/**
+ * Generates code for the optimized merged module into one native object file.
+ * It will not run any IR optimizations on the merged module.
+ *
+ * On success returns a pointer to a generated mach-o/ELF buffer and length set
+ * to the buffer size.  The buffer is owned by the lto_code_gen_t and will be
+ * freed when lto_codegen_dispose() is called, or
+ * lto_codegen_compile_optimized() is called again. On failure, returns NULL
+ * (check lto_get_error_message() for details).
+ *
+ * \since LTO_API_VERSION=12
+ */
+public static native @Const Pointer lto_codegen_compile_optimized(lto_code_gen_t cg, @Cast("size_t*") SizeTPointer length);
+
+/**
+ * Returns the runtime API version.
+ *
+ * \since LTO_API_VERSION=12
+ */
+public static native @Cast("unsigned int") int lto_api_version();
 
 /**
  * Sets options to help debug codegen bugs.
@@ -5043,6 +5108,26 @@ public static native void lto_codegen_debug_options(lto_code_gen_t cg, String ar
  * \since LTO_API_VERSION=5
  */
 public static native void lto_initialize_disassembler();
+
+/**
+ * Sets if we should run internalize pass during optimization and code
+ * generation.
+ *
+ * \since LTO_API_VERSION=14
+ */
+public static native void lto_codegen_set_should_internalize(lto_code_gen_t cg,
+                                   @Cast("lto_bool_t") boolean ShouldInternalize);
+
+/**
+ * \brief Set whether to embed uselists in bitcode.
+ *
+ * Sets whether \a lto_codegen_write_merged_modules() should embed uselists in
+ * output bitcode.  This should be turned on for all -save-temps output.
+ *
+ * \since LTO_API_VERSION=15
+ */
+public static native void lto_codegen_set_should_embed_uselists(lto_code_gen_t cg,
+                                      @Cast("lto_bool_t") boolean ShouldEmbedUselists);
 
 // #ifdef __cplusplus
 // #endif
@@ -5158,7 +5243,6 @@ public static native @Cast("uint64_t") long LLVMGetSymbolAddress(LLVMSymbolItera
 public static native @Cast("uint64_t") long LLVMGetSymbolSize(LLVMSymbolIteratorRef SI);
 
 // RelocationRef accessors
-public static native @Cast("uint64_t") long LLVMGetRelocationAddress(LLVMRelocationIteratorRef RI);
 public static native @Cast("uint64_t") long LLVMGetRelocationOffset(LLVMRelocationIteratorRef RI);
 public static native LLVMSymbolIteratorRef LLVMGetRelocationSymbol(LLVMRelocationIteratorRef RI);
 public static native @Cast("uint64_t") long LLVMGetRelocationType(LLVMRelocationIteratorRef RI);
@@ -5568,7 +5652,7 @@ public static native @Cast("char*") BytePointer LLVMGetTargetMachineCPU(LLVMTarg
   LLVMDisposeMessage. */
 public static native @Cast("char*") BytePointer LLVMGetTargetMachineFeatureString(LLVMTargetMachineRef T);
 
-/** Returns the llvm::DataLayout used for this llvm:TargetMachine. */
+/** Deprecated: use LLVMGetDataLayout(LLVMModuleRef M) instead. */
 public static native LLVMTargetDataRef LLVMGetTargetMachineData(LLVMTargetMachineRef T);
 
 /** Set the target machine's ASM verbosity. */
@@ -6290,6 +6374,9 @@ public static native void LLVMPassManagerBuilderPopulateLTOPassManager(LLVMPassM
 
 /** See llvm::createAggressiveDCEPass function. */
 public static native void LLVMAddAggressiveDCEPass(LLVMPassManagerRef PM);
+
+/** See llvm::createBitTrackingDCEPass function. */
+public static native void LLVMAddBitTrackingDCEPass(LLVMPassManagerRef PM);
 
 /** See llvm::createAlignmentFromAssumptionsPass function. */
 public static native void LLVMAddAlignmentFromAssumptionsPass(LLVMPassManagerRef PM);
