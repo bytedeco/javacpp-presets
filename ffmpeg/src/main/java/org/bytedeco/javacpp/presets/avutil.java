@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2014 Samuel Audet
+ * Copyright (C) 2013-2015 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -37,7 +37,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "<libavutil/mathematics.h>", "<libavutil/rational.h>", "<libavutil/log.h>", "<libavutil/buffer.h>", "<libavutil/pixfmt.h>",
         "<libavutil/frame.h>", "<libavutil/samplefmt.h>", "<libavutil/channel_layout.h>", "<libavutil/cpu.h>", "<libavutil/dict.h>",
         "<libavutil/opt.h>", "<libavutil/audioconvert.h>", "<libavutil/pixdesc.h>", "<libavutil/imgutils.h>",
-        "<libavutil/downmix_info.h>", "<libavutil/stereo3d.h>", "<libavutil/ffversion.h>", "<libavutil/motion_vector.h>"},
+        "<libavutil/downmix_info.h>", "<libavutil/stereo3d.h>", "<libavutil/ffversion.h>", "<libavutil/motion_vector.h>",
+        "<libavutil/fifo.h>", "<libavutil/audio_fifo.h>"},
         includepath={"/usr/local/include/ffmpeg/", "/opt/local/include/ffmpeg/", "/usr/include/ffmpeg/"},
         link="avutil@.54", compiler={"default", "nodeprecated"}),
     @Platform(value="windows", includepath={"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, preload="avutil-54") })
@@ -50,8 +51,11 @@ public class avutil implements InfoMapper {
                .put(new Info("av_malloc_attrib", "av_alloc_size", "av_always_inline").cppTypes().annotations())
                .put(new Info("attribute_deprecated").annotations("@Deprecated"))
                .put(new Info("AVPanScan", "AVCodecContext").cast().pointerTypes("Pointer"))
+               .put(new Info("FF_API_VAAPI").define())
                .put(new Info("AV_PIX_FMT_ABI_GIT_MASTER", "AV_HAVE_INCOMPATIBLE_LIBAV_ABI", "!FF_API_XVMC",
                              "FF_API_GET_BITS_PER_SAMPLE_FMT", "FF_API_FIND_OPT").define(false))
-               .put(new Info("AV_PIX_FMT_Y400A", "ff_check_pixfmt_descriptors").skip());
+               .put(new Info("AV_PIX_FMT_Y400A", "ff_check_pixfmt_descriptors").skip())
+               .put(new Info("AV_CH_LAYOUT_HEXADECAGONAL").translate().cppTypes("long"))
+               .put(new Info("int (*)(void*, void*, int)").pointerTypes("Int_func_Pointer_Pointer_int"));
     }
 }

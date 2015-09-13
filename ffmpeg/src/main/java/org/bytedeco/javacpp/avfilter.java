@@ -355,12 +355,12 @@ public static native @Deprecated void avfilter_unref_buffer(AVFilterBufferRef re
  */
 public static native @Deprecated void avfilter_unref_bufferp(@Cast("AVFilterBufferRef**") PointerPointer ref);
 public static native @Deprecated void avfilter_unref_bufferp(@ByPtrPtr AVFilterBufferRef ref);
-// #endif
 
 /**
  * Get the number of channels of a buffer reference.
  */
 public static native @Deprecated int avfilter_ref_get_channels(AVFilterBufferRef ref);
+// #endif
 
 // #if FF_API_AVFILTERPAD_PUBLIC
 /**
@@ -1094,7 +1094,9 @@ public static class AVFilterLink extends Pointer {
         /** complete */
         AVLINK_INIT = 2;
 
+// #if FF_API_AVFILTERBUFFER
     public native @Cast("AVFilterPool*") Pointer pool(); public native AVFilterLink pool(Pointer pool);
+// #endif
 
     /**
      * Graph the filter belongs to.
@@ -1150,6 +1152,7 @@ public static class AVFilterLink extends Pointer {
      */
     public native int max_samples(); public native AVFilterLink max_samples(int max_samples);
 
+// #if FF_API_AVFILTERBUFFER
     /**
      * The buffer reference currently being received across the link by the
      * destination filter. This is used internally by the filter system to
@@ -1158,6 +1161,7 @@ public static class AVFilterLink extends Pointer {
      * by the filters.
      */
     public native AVFilterBufferRef cur_buf_copy(); public native AVFilterLink cur_buf_copy(AVFilterBufferRef cur_buf_copy);
+// #endif
 
     /**
      * True if the link is closed.
@@ -2288,6 +2292,7 @@ public static final int
      */
     AV_BUFFERSRC_FLAG_KEEP_REF = 8;
 
+// #if FF_API_AVFILTERBUFFER
 /**
  * Add buffer data in picref to buffer_src.
  *
@@ -2297,8 +2302,9 @@ public static final int
  * @return            >= 0 in case of success, a negative AVERROR code
  *                    in case of failure
  */
-public static native int av_buffersrc_add_ref(AVFilterContext buffer_src,
+public static native @Deprecated int av_buffersrc_add_ref(AVFilterContext buffer_src,
                          AVFilterBufferRef picref, int flags);
+// #endif
 
 /**
  * Get the number of failed requests.

@@ -66,7 +66,9 @@ public static native @Cast("const char*") BytePointer postproc_license();
 
 public static final int PP_QUALITY_MAX = 6;
 
-// #define QP_STORE_T int8_t
+// #if FF_API_QP_TYPE
+// #define QP_STORE_T int8_t //deprecated
+// #endif
 
 // #include <inttypes.h>
 

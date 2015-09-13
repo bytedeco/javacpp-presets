@@ -342,6 +342,12 @@ public static class AVIOContext extends Pointer {
      * This field is internal to libavformat and access from outside is not allowed.
      */
     public native int orig_buffer_size(); public native AVIOContext orig_buffer_size(int orig_buffer_size);
+
+    /**
+     * Threshold to favor readahead over seek.
+     * This is current internal only, do not use from outside.
+     */
+    public native int short_seek_threshold(); public native AVIOContext short_seek_threshold(int short_seek_threshold);
 }
 
 /* unbuffered I/O */
@@ -370,6 +376,27 @@ public static native String avio_find_protocol_name(String url);
  */
 public static native int avio_check(@Cast("const char*") BytePointer url, int flags);
 public static native int avio_check(String url, int flags);
+
+/**
+ * Move or rename a resource.
+ *
+ * @note url_src and url_dst should share the same protocol and authority.
+ *
+ * @param url_src url to resource to be moved
+ * @param url_dst new url to resource if the operation succeeded
+ * @return >=0 on success or negative on error.
+ */
+public static native int avpriv_io_move(@Cast("const char*") BytePointer url_src, @Cast("const char*") BytePointer url_dst);
+public static native int avpriv_io_move(String url_src, String url_dst);
+
+/**
+ * Delete a resource.
+ *
+ * @param url resource to be deleted.
+ * @return >=0 on success or negative on error.
+ */
+public static native int avpriv_io_delete(@Cast("const char*") BytePointer url);
+public static native int avpriv_io_delete(String url);
 
 /**
  * Open directory for reading.
@@ -806,7 +833,7 @@ public static native int avio_open_dyn_buf(@ByPtrPtr AVIOContext s);
 /**
  * Return the written size and a pointer to the buffer. The buffer
  * must be freed with av_free().
- * Padding of FF_INPUT_BUFFER_PADDING_SIZE is added to the buffer.
+ * Padding of AV_INPUT_BUFFER_PADDING_SIZE is added to the buffer.
  *
  * @param s IO context
  * @param pbuffer pointer to a byte buffer
@@ -878,6 +905,36 @@ public static native long avio_seek_time(AVIOContext h, int stream_index,
  */
 public static native int avio_read_to_bprint(AVIOContext h, AVBPrint pb, @Cast("size_t") long max_size);
 
+/**
+ * Accept and allocate a client context on a server context.
+ * @param  s the server context
+ * @param  c the client context, must be unallocated
+ * @return   >= 0 on success or a negative value corresponding
+ *           to an AVERROR on failure
+ */
+public static native int avio_accept(AVIOContext s, @Cast("AVIOContext**") PointerPointer c);
+public static native int avio_accept(AVIOContext s, @ByPtrPtr AVIOContext c);
+
+/**
+ * Perform one step of the protocol handshake to accept a new client.
+ * This function must be called on a client returned by avio_accept() before
+ * using it as a read/write context.
+ * It is separate from avio_accept() because it may block.
+ * A step of the handshake is defined by places where the application may
+ * decide to change the proceedings.
+ * For example, on a protocol with a request header and a reply header, each
+ * one can constitute a step because the application may use the parameters
+ * from the request to change parameters in the reply; or each individual
+ * chunk of the request can constitute a step.
+ * If the handshake is already finished, avio_handshake() does nothing and
+ * returns 0 immediately.
+ *
+ * @param  c the client context to perform the handshake on
+ * @return   0   on a complete and successful handshake
+ *           > 0 if the handshake progressed, but is not complete
+ *           < 0 for an AVERROR code
+ */
+public static native int avio_handshake(AVIOContext c);
 // #endif /* AVFORMAT_AVIO_H */
 
 
@@ -2228,7 +2285,6 @@ public static final int MAX_STD_TIMEBASES = (30*12+7+6);
     /**
      * Number of packets to buffer for codec probing
      */
-public static final int MAX_PROBE_PACKETS = 2500;
     public native int probe_packets(); public native AVStream probe_packets(int probe_packets);
 
     /**
@@ -2388,6 +2444,8 @@ public static final int MAX_REORDER_DELAY = 16;
      * - decoding: Set by libavformat to calculate sample_aspect_ratio internally
      */
     public native @ByRef AVRational display_aspect_ratio(); public native AVStream display_aspect_ratio(AVRational display_aspect_ratio);
+
+    public native @Cast("FFFrac*") Pointer priv_pts(); public native AVStream priv_pts(Pointer priv_pts);
 }
 
 public static native @ByVal AVRational av_stream_get_r_frame_rate(@Const AVStream s);
@@ -2700,6 +2758,7 @@ public static final int AVFMT_FLAG_KEEP_SIDE_DATA = 0x40000;
 /** Enable fast, but inaccurate seeks for some formats */
 public static final int AVFMT_FLAG_FAST_SEEK =   0x80000;
 
+// #if FF_API_PROBESIZE_32
     /**
      * @deprecated deprecated in favor of probesize2
      */
@@ -2709,6 +2768,7 @@ public static final int AVFMT_FLAG_FAST_SEEK =   0x80000;
      * @deprecated deprecated in favor of max_analyze_duration2
      */
     public native @Deprecated int max_analyze_duration(); public native AVFormatContext max_analyze_duration(int max_analyze_duration);
+// #endif
 
     @MemberGetter public native @Cast("const uint8_t*") BytePointer key();
     public native int keylen(); public native AVFormatContext keylen(int keylen);
@@ -3067,7 +3127,10 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
      * via AVOptions (NO direct access).
      * Can be set to 0 to let avformat choose using a heuristic.
      */
+// #if FF_API_PROBESIZE_32
     public native long max_analyze_duration2(); public native AVFormatContext max_analyze_duration2(long max_analyze_duration2);
+// #else
+// #endif
 
     /**
      * Maximum size of the data read from input for determining
@@ -3075,7 +3138,10 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
      * Demuxing only, set by the caller before avformat_open_input()
      * via AVOptions (NO direct access).
      */
+// #if FF_API_PROBESIZE_32
     public native long probesize2(); public native AVFormatContext probesize2(long probesize2);
+// #else
+// #endif
 
     /**
      * dump format separator.

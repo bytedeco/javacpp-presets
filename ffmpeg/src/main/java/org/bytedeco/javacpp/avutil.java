@@ -151,14 +151,6 @@ public class avutil extends org.bytedeco.javacpp.presets.avutil {
  *
  * @{
  *
- * @defgroup lavu_internal Internal
- *
- * Not exported functions, for internal usage only
- *
- * @{
- *
- * @}
- *
  * @defgroup preproc_misc Preprocessor String Macros
  *
  * @{
@@ -182,6 +174,13 @@ public class avutil extends org.bytedeco.javacpp.presets.avutil {
  * Return the LIBAVUTIL_VERSION_INT constant.
  */
 public static native @Cast("unsigned") int avutil_version();
+
+/**
+ * Return an informative version string. This usually is the actual release
+ * version number or a git commit description. This string has no fixed format
+ * and can change any time. It should never be parsed by code.
+ */
+public static native @Cast("const char*") BytePointer av_version_info();
 
 /**
  * Return the libavutil build-time configuration.
@@ -1543,12 +1542,12 @@ public static final int AV_LOG_VERBOSE =  40;
  */
 public static final int AV_LOG_DEBUG =    48;
 
-public static final int AV_LOG_MAX_OFFSET = (AV_LOG_DEBUG - AV_LOG_QUIET);
-
 /**
  * Extremely verbose debugging, useful for libav* development.
  */
 public static final int AV_LOG_TRACE =    56;
+
+public static final int AV_LOG_MAX_OFFSET = (AV_LOG_TRACE - AV_LOG_QUIET);
 
 /**
  * @}
@@ -2259,42 +2258,49 @@ public static final int
     /** packed BGR 5:5:5, 16bpp, (msb)1X 5B 5G 5R(lsb), little-endian, X=unused/undefined */
     AV_PIX_FMT_BGR555LE = 50,
 
+// #if FF_API_VAAPI
+    /** @name Deprecated pixel formats */
+    /**@{*/
     /** HW acceleration through VA API at motion compensation entry-point, Picture.data[3] contains a vaapi_render_state struct which contains macroblocks as well as various fields extracted from headers */
     AV_PIX_FMT_VAAPI_MOCO = 51,
     /** HW acceleration through VA API at IDCT entry-point, Picture.data[3] contains a vaapi_render_state struct which contains fields extracted from headers */
     AV_PIX_FMT_VAAPI_IDCT = 52,
     /** HW decoding through VA API, Picture.data[3] contains a vaapi_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers */
     AV_PIX_FMT_VAAPI_VLD = 53,
+    /**@}*/
+    AV_PIX_FMT_VAAPI =  AV_PIX_FMT_VAAPI_VLD,
+// #else
+// #endif
 
     /** planar YUV 4:2:0, 24bpp, (1 Cr & Cb sample per 2x2 Y samples), little-endian */
-    AV_PIX_FMT_YUV420P16LE = 54,
+    AV_PIX_FMT_YUV420P16LE =  AV_PIX_FMT_VAAPI_VLD + 1,
     /** planar YUV 4:2:0, 24bpp, (1 Cr & Cb sample per 2x2 Y samples), big-endian */
-    AV_PIX_FMT_YUV420P16BE = 55,
+    AV_PIX_FMT_YUV420P16BE =  AV_PIX_FMT_VAAPI_VLD + 2,
     /** planar YUV 4:2:2, 32bpp, (1 Cr & Cb sample per 2x1 Y samples), little-endian */
-    AV_PIX_FMT_YUV422P16LE = 56,
+    AV_PIX_FMT_YUV422P16LE =  AV_PIX_FMT_VAAPI_VLD + 3,
     /** planar YUV 4:2:2, 32bpp, (1 Cr & Cb sample per 2x1 Y samples), big-endian */
-    AV_PIX_FMT_YUV422P16BE = 57,
+    AV_PIX_FMT_YUV422P16BE =  AV_PIX_FMT_VAAPI_VLD + 4,
     /** planar YUV 4:4:4, 48bpp, (1 Cr & Cb sample per 1x1 Y samples), little-endian */
-    AV_PIX_FMT_YUV444P16LE = 58,
+    AV_PIX_FMT_YUV444P16LE =  AV_PIX_FMT_VAAPI_VLD + 5,
     /** planar YUV 4:4:4, 48bpp, (1 Cr & Cb sample per 1x1 Y samples), big-endian */
-    AV_PIX_FMT_YUV444P16BE = 59,
+    AV_PIX_FMT_YUV444P16BE =  AV_PIX_FMT_VAAPI_VLD + 6,
 // #if FF_API_VDPAU
     /** MPEG4 HW decoding with VDPAU, data[0] contains a vdpau_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers */
-    AV_PIX_FMT_VDPAU_MPEG4 = 60,
+    AV_PIX_FMT_VDPAU_MPEG4 =  AV_PIX_FMT_VAAPI_VLD + 7,
 // #endif
     /** HW decoding through DXVA2, Picture.data[3] contains a LPDIRECT3DSURFACE9 pointer */
-    AV_PIX_FMT_DXVA2_VLD = 61,
+    AV_PIX_FMT_DXVA2_VLD =  AV_PIX_FMT_VAAPI_VLD + 8,
 
     /** packed RGB 4:4:4, 16bpp, (msb)4X 4R 4G 4B(lsb), little-endian, X=unused/undefined */
-    AV_PIX_FMT_RGB444LE = 62,
+    AV_PIX_FMT_RGB444LE =  AV_PIX_FMT_VAAPI_VLD + 9,
     /** packed RGB 4:4:4, 16bpp, (msb)4X 4R 4G 4B(lsb), big-endian,    X=unused/undefined */
-    AV_PIX_FMT_RGB444BE = 63,
+    AV_PIX_FMT_RGB444BE =  AV_PIX_FMT_VAAPI_VLD + 10,
     /** packed BGR 4:4:4, 16bpp, (msb)4X 4B 4G 4R(lsb), little-endian, X=unused/undefined */
-    AV_PIX_FMT_BGR444LE = 64,
+    AV_PIX_FMT_BGR444LE =  AV_PIX_FMT_VAAPI_VLD + 11,
     /** packed BGR 4:4:4, 16bpp, (msb)4X 4B 4G 4R(lsb), big-endian,    X=unused/undefined */
-    AV_PIX_FMT_BGR444BE = 65,
+    AV_PIX_FMT_BGR444BE =  AV_PIX_FMT_VAAPI_VLD + 12,
     /** 8bit gray, 8bit alpha */
-    AV_PIX_FMT_YA8 = 66,
+    AV_PIX_FMT_YA8 =  AV_PIX_FMT_VAAPI_VLD + 13,
 
     /** alias for AV_PIX_FMT_YA8 */
     AV_PIX_FMT_Y400A =  AV_PIX_FMT_YA8,
@@ -2565,9 +2571,16 @@ public static final int
     AV_PIX_FMT_YUV440P12LE = 0x123+4 + 40,
     /** planar YUV 4:4:0,24bpp, (1 Cr & Cb sample per 1x2 Y samples), big-endian */
     AV_PIX_FMT_YUV440P12BE = 0x123+4 + 41,
+    /** packed AYUV 4:4:4,64bpp (1 Cr & Cb sample per 1x1 Y & A samples), little-endian */
+    AV_PIX_FMT_AYUV64LE = 0x123+4 + 42,
+    /** packed AYUV 4:4:4,64bpp (1 Cr & Cb sample per 1x1 Y & A samples), big-endian */
+    AV_PIX_FMT_AYUV64BE = 0x123+4 + 43,
+
+    /** hardware decoding through Videotoolbox */
+    AV_PIX_FMT_VIDEOTOOLBOX = 0x123+4 + 44,
 
     /** number of pixel formats, DO NOT USE THIS if you want to link with shared libav* because the number of formats might differ between versions */
-    AV_PIX_FMT_NB = 0x123+4 + 42;
+    AV_PIX_FMT_NB = 0x123+4 + 45;
 
 // #if FF_API_PIX_FMT
 // #include "old_pix_fmts.h"
@@ -2705,6 +2718,8 @@ public static native @MemberGetter int AV_PIX_FMT_XYZ12();
 public static final int AV_PIX_FMT_XYZ12 = AV_PIX_FMT_XYZ12();
 public static native @MemberGetter int AV_PIX_FMT_NV20();
 public static final int AV_PIX_FMT_NV20 = AV_PIX_FMT_NV20();
+public static native @MemberGetter int AV_PIX_FMT_AYUV64();
+public static final int AV_PIX_FMT_AYUV64 = AV_PIX_FMT_AYUV64();
 
 
 // #if FF_API_PIX_FMT
@@ -3428,7 +3443,7 @@ public static final int AV_FRAME_FLAG_CORRUPT =       (1 << 0);
 
     /**
      * frame timestamp estimated using various heuristics, in stream time base
-     * Code outside libavcodec should access this field using:
+     * Code outside libavutil should access this field using:
      * av_frame_get_best_effort_timestamp(frame)
      * - encoding: unused
      * - decoding: set by libavcodec, read by user.
@@ -3437,7 +3452,7 @@ public static final int AV_FRAME_FLAG_CORRUPT =       (1 << 0);
 
     /**
      * reordered pos from the last AVPacket that has been input into the decoder
-     * Code outside libavcodec should access this field using:
+     * Code outside libavutil should access this field using:
      * av_frame_get_pkt_pos(frame)
      * - encoding: unused
      * - decoding: Read by user.
@@ -3447,7 +3462,7 @@ public static final int AV_FRAME_FLAG_CORRUPT =       (1 << 0);
     /**
      * duration of the corresponding packet, expressed in
      * AVStream->time_base units, 0 if unknown.
-     * Code outside libavcodec should access this field using:
+     * Code outside libavutil should access this field using:
      * av_frame_get_pkt_duration(frame)
      * - encoding: unused
      * - decoding: Read by user.
@@ -3456,7 +3471,7 @@ public static final int AV_FRAME_FLAG_CORRUPT =       (1 << 0);
 
     /**
      * metadata.
-     * Code outside libavcodec should access this field using:
+     * Code outside libavutil should access this field using:
      * av_frame_get_metadata(frame)
      * - encoding: Set by user.
      * - decoding: Set by libavcodec.
@@ -3467,7 +3482,7 @@ public static final int AV_FRAME_FLAG_CORRUPT =       (1 << 0);
      * decode error flags of the frame, set to a combination of
      * FF_DECODE_ERROR_xxx flags if the decoder produced a frame, but there
      * were errors during the decoding.
-     * Code outside libavcodec should access this field using:
+     * Code outside libavutil should access this field using:
      * av_frame_get_decode_error_flags(frame)
      * - encoding: unused
      * - decoding: set by libavcodec, read by user.
@@ -3478,7 +3493,7 @@ public static final int FF_DECODE_ERROR_MISSING_REFERENCE =   2;
 
     /**
      * number of audio channels, only used for audio.
-     * Code outside libavcodec should access this field using:
+     * Code outside libavutil should access this field using:
      * av_frame_get_channels(frame)
      * - encoding: unused
      * - decoding: Read by user.
@@ -3504,7 +3519,7 @@ public static final int FF_DECODE_ERROR_MISSING_REFERENCE =   2;
 /**
  * Accessors for some AVFrame fields.
  * The position of these field in the structure is not part of the ABI,
- * they should not be accessed directly outside libavcodec.
+ * they should not be accessed directly outside libavutil.
  */
 public static native long av_frame_get_best_effort_timestamp(@Const AVFrame frame);
 public static native void av_frame_set_best_effort_timestamp(AVFrame frame, long val);
@@ -4155,6 +4170,7 @@ public static final int AV_CH_LAYOUT_7POINT1 =           (AV_CH_LAYOUT_5POINT1|A
 public static final int AV_CH_LAYOUT_7POINT1_WIDE =      (AV_CH_LAYOUT_5POINT1|AV_CH_FRONT_LEFT_OF_CENTER|AV_CH_FRONT_RIGHT_OF_CENTER);
 public static final int AV_CH_LAYOUT_7POINT1_WIDE_BACK = (AV_CH_LAYOUT_5POINT1_BACK|AV_CH_FRONT_LEFT_OF_CENTER|AV_CH_FRONT_RIGHT_OF_CENTER);
 public static final int AV_CH_LAYOUT_OCTAGONAL =         (AV_CH_LAYOUT_5POINT0|AV_CH_BACK_LEFT|AV_CH_BACK_CENTER|AV_CH_BACK_RIGHT);
+public static final long AV_CH_LAYOUT_HEXADECAGONAL =     (AV_CH_LAYOUT_OCTAGONAL|AV_CH_WIDE_LEFT|AV_CH_WIDE_RIGHT|AV_CH_TOP_BACK_LEFT|AV_CH_TOP_BACK_RIGHT|AV_CH_TOP_BACK_CENTER|AV_CH_TOP_FRONT_CENTER|AV_CH_TOP_FRONT_LEFT|AV_CH_TOP_FRONT_RIGHT);
 public static final int AV_CH_LAYOUT_STEREO_DOWNMIX =    (AV_CH_STEREO_LEFT|AV_CH_STEREO_RIGHT);
 
 /** enum AVMatrixEncoding */
@@ -5166,15 +5182,15 @@ public static native @Const @Deprecated AVOption av_set_q(Pointer obj, String na
 public static native @Const @Deprecated AVOption av_set_int(Pointer obj, @Cast("const char*") BytePointer name, long n);
 public static native @Const @Deprecated AVOption av_set_int(Pointer obj, String name, long n);
 
-public static native double av_get_double(Pointer obj, @Cast("const char*") BytePointer name, @Cast("const AVOption**") PointerPointer o_out);
-public static native double av_get_double(Pointer obj, @Cast("const char*") BytePointer name, @Const @ByPtrPtr AVOption o_out);
-public static native double av_get_double(Pointer obj, String name, @Const @ByPtrPtr AVOption o_out);
-public static native @ByVal AVRational av_get_q(Pointer obj, @Cast("const char*") BytePointer name, @Cast("const AVOption**") PointerPointer o_out);
-public static native @ByVal AVRational av_get_q(Pointer obj, @Cast("const char*") BytePointer name, @Const @ByPtrPtr AVOption o_out);
-public static native @ByVal AVRational av_get_q(Pointer obj, String name, @Const @ByPtrPtr AVOption o_out);
-public static native long av_get_int(Pointer obj, @Cast("const char*") BytePointer name, @Cast("const AVOption**") PointerPointer o_out);
-public static native long av_get_int(Pointer obj, @Cast("const char*") BytePointer name, @Const @ByPtrPtr AVOption o_out);
-public static native long av_get_int(Pointer obj, String name, @Const @ByPtrPtr AVOption o_out);
+public static native @Deprecated double av_get_double(Pointer obj, @Cast("const char*") BytePointer name, @Cast("const AVOption**") PointerPointer o_out);
+public static native @Deprecated double av_get_double(Pointer obj, @Cast("const char*") BytePointer name, @Const @ByPtrPtr AVOption o_out);
+public static native @Deprecated double av_get_double(Pointer obj, String name, @Const @ByPtrPtr AVOption o_out);
+public static native @Deprecated @ByVal AVRational av_get_q(Pointer obj, @Cast("const char*") BytePointer name, @Cast("const AVOption**") PointerPointer o_out);
+public static native @Deprecated @ByVal AVRational av_get_q(Pointer obj, @Cast("const char*") BytePointer name, @Const @ByPtrPtr AVOption o_out);
+public static native @Deprecated @ByVal AVRational av_get_q(Pointer obj, String name, @Const @ByPtrPtr AVOption o_out);
+public static native @Deprecated long av_get_int(Pointer obj, @Cast("const char*") BytePointer name, @Cast("const AVOption**") PointerPointer o_out);
+public static native @Deprecated long av_get_int(Pointer obj, @Cast("const char*") BytePointer name, @Const @ByPtrPtr AVOption o_out);
+public static native @Deprecated long av_get_int(Pointer obj, String name, @Const @ByPtrPtr AVOption o_out);
 public static native @Deprecated @Cast("const char*") BytePointer av_get_string(Pointer obj, @Cast("const char*") BytePointer name, @Cast("const AVOption**") PointerPointer o_out, @Cast("char*") BytePointer buf, int buf_len);
 public static native @Deprecated @Cast("const char*") BytePointer av_get_string(Pointer obj, @Cast("const char*") BytePointer name, @Const @ByPtrPtr AVOption o_out, @Cast("char*") BytePointer buf, int buf_len);
 public static native @Deprecated String av_get_string(Pointer obj, String name, @Const @ByPtrPtr AVOption o_out, @Cast("char*") ByteBuffer buf, int buf_len);
@@ -5203,9 +5219,16 @@ public static native int av_opt_show2(Pointer obj, Pointer av_log_obj, int req_f
  */
 public static native void av_opt_set_defaults(Pointer s);
 
-// #if FF_API_OLD_AVOPTIONS
-public static native @Deprecated void av_opt_set_defaults2(Pointer s, int mask, int flags);
-// #endif
+/**
+ * Set the values of all AVOption fields to their default values. Only these
+ * AVOption fields for which (opt->flags & mask) == flags will have their
+ * default applied to s.
+ *
+ * @param s an AVOption-enabled struct (its first member must be a pointer to AVClass)
+ * @param mask combination of AV_OPT_FLAG_*
+ * @param flags combination of AV_OPT_FLAG_*
+ */
+public static native void av_opt_set_defaults2(Pointer s, int mask, int flags);
 
 /**
  * Parse the key/value pairs list in opts. For each key/value pair
@@ -6872,7 +6895,7 @@ public static native AVStereo3D av_stereo3d_create_side_data(AVFrame frame);
 
 // #ifndef AVUTIL_FFVERSION_H
 // #define AVUTIL_FFVERSION_H
-public static final String FFMPEG_VERSION = "2.7.1";
+public static final String FFMPEG_VERSION = "2.8";
 // #endif /* AVUTIL_FFVERSION_H */
 
 
@@ -6944,6 +6967,384 @@ public static class AVMotionVector extends Pointer {
 }
 
 // #endif /* AVUTIL_MOTION_VECTOR_H */
+
+
+// Parsed from <libavutil/fifo.h>
+
+/*
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+/**
+ * @file
+ * a very simple circular buffer FIFO implementation
+ */
+
+// #ifndef AVUTIL_FIFO_H
+// #define AVUTIL_FIFO_H
+
+// #include <stdint.h>
+// #include "avutil.h"
+// #include "attributes.h"
+
+public static class AVFifoBuffer extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public AVFifoBuffer() { allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public AVFifoBuffer(int size) { allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AVFifoBuffer(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public AVFifoBuffer position(int position) {
+        return (AVFifoBuffer)super.position(position);
+    }
+
+    public native @Cast("uint8_t*") BytePointer buffer(); public native AVFifoBuffer buffer(BytePointer buffer);
+    public native @Cast("uint8_t*") BytePointer rptr(); public native AVFifoBuffer rptr(BytePointer rptr);
+    public native @Cast("uint8_t*") BytePointer wptr(); public native AVFifoBuffer wptr(BytePointer wptr);
+    public native @Cast("uint8_t*") BytePointer end(); public native AVFifoBuffer end(BytePointer end);
+    public native @Cast("uint32_t") int rndx(); public native AVFifoBuffer rndx(int rndx);
+    public native @Cast("uint32_t") int wndx(); public native AVFifoBuffer wndx(int wndx);
+}
+
+/**
+ * Initialize an AVFifoBuffer.
+ * @param size of FIFO
+ * @return AVFifoBuffer or NULL in case of memory allocation failure
+ */
+public static native AVFifoBuffer av_fifo_alloc(@Cast("unsigned int") int size);
+
+/**
+ * Initialize an AVFifoBuffer.
+ * @param nmemb number of elements
+ * @param size  size of the single element
+ * @return AVFifoBuffer or NULL in case of memory allocation failure
+ */
+public static native AVFifoBuffer av_fifo_alloc_array(@Cast("size_t") long nmemb, @Cast("size_t") long size);
+
+/**
+ * Free an AVFifoBuffer.
+ * @param f AVFifoBuffer to free
+ */
+public static native void av_fifo_free(AVFifoBuffer f);
+
+/**
+ * Free an AVFifoBuffer and reset pointer to NULL.
+ * @param f AVFifoBuffer to free
+ */
+public static native void av_fifo_freep(@Cast("AVFifoBuffer**") PointerPointer f);
+public static native void av_fifo_freep(@ByPtrPtr AVFifoBuffer f);
+
+/**
+ * Reset the AVFifoBuffer to the state right after av_fifo_alloc, in particular it is emptied.
+ * @param f AVFifoBuffer to reset
+ */
+public static native void av_fifo_reset(AVFifoBuffer f);
+
+/**
+ * Return the amount of data in bytes in the AVFifoBuffer, that is the
+ * amount of data you can read from it.
+ * @param f AVFifoBuffer to read from
+ * @return size
+ */
+public static native int av_fifo_size(@Const AVFifoBuffer f);
+
+/**
+ * Return the amount of space in bytes in the AVFifoBuffer, that is the
+ * amount of data you can write into it.
+ * @param f AVFifoBuffer to write into
+ * @return size
+ */
+public static native int av_fifo_space(@Const AVFifoBuffer f);
+
+/**
+ * Feed data from an AVFifoBuffer to a user-supplied callback.
+ * Similar as av_fifo_gereric_read but without discarding data.
+ * @param f AVFifoBuffer to read from
+ * @param buf_size number of bytes to read
+ * @param func generic read function
+ * @param dest data destination
+ */
+public static class Func_Pointer_Pointer_int extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    Func_Pointer_Pointer_int(Pointer p) { super(p); }
+    protected Func_Pointer_Pointer_int() { allocate(); }
+    private native void allocate();
+    public native void call(Pointer arg0, Pointer arg1, int arg2);
+}
+public static native int av_fifo_generic_peek(AVFifoBuffer f, Pointer dest, int buf_size, Func_Pointer_Pointer_int func);
+
+/**
+ * Feed data from an AVFifoBuffer to a user-supplied callback.
+ * @param f AVFifoBuffer to read from
+ * @param buf_size number of bytes to read
+ * @param func generic read function
+ * @param dest data destination
+ */
+public static native int av_fifo_generic_read(AVFifoBuffer f, Pointer dest, int buf_size, Func_Pointer_Pointer_int func);
+
+/**
+ * Feed data from a user-supplied callback to an AVFifoBuffer.
+ * @param f AVFifoBuffer to write to
+ * @param src data source; non-const since it may be used as a
+ * modifiable context by the function defined in func
+ * @param size number of bytes to write
+ * @param func generic write function; the first parameter is src,
+ * the second is dest_buf, the third is dest_buf_size.
+ * func must return the number of bytes written to dest_buf, or <= 0 to
+ * indicate no more data available to write.
+ * If func is NULL, src is interpreted as a simple byte array for source data.
+ * @return the number of bytes written to the FIFO
+ */
+public static class Int_func_Pointer_Pointer_int extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    Int_func_Pointer_Pointer_int(Pointer p) { super(p); }
+    protected Int_func_Pointer_Pointer_int() { allocate(); }
+    private native void allocate();
+    public native int call(Pointer arg0, Pointer arg1, int arg2);
+}
+public static native int av_fifo_generic_write(AVFifoBuffer f, Pointer src, int size, Int_func_Pointer_Pointer_int func);
+
+/**
+ * Resize an AVFifoBuffer.
+ * In case of reallocation failure, the old FIFO is kept unchanged.
+ *
+ * @param f AVFifoBuffer to resize
+ * @param size new AVFifoBuffer size in bytes
+ * @return <0 for failure, >=0 otherwise
+ */
+public static native int av_fifo_realloc2(AVFifoBuffer f, @Cast("unsigned int") int size);
+
+/**
+ * Enlarge an AVFifoBuffer.
+ * In case of reallocation failure, the old FIFO is kept unchanged.
+ * The new fifo size may be larger than the requested size.
+ *
+ * @param f AVFifoBuffer to resize
+ * @param additional_space the amount of space in bytes to allocate in addition to av_fifo_size()
+ * @return <0 for failure, >=0 otherwise
+ */
+public static native int av_fifo_grow(AVFifoBuffer f, @Cast("unsigned int") int additional_space);
+
+/**
+ * Read and discard the specified amount of data from an AVFifoBuffer.
+ * @param f AVFifoBuffer to read from
+ * @param size amount of data to read in bytes
+ */
+public static native void av_fifo_drain(AVFifoBuffer f, int size);
+
+/**
+ * Return a pointer to the data stored in a FIFO buffer at a certain offset.
+ * The FIFO buffer is not modified.
+ *
+ * @param f    AVFifoBuffer to peek at, f must be non-NULL
+ * @param offs an offset in bytes, its absolute value must be less
+ *             than the used buffer size or the returned pointer will
+ *             point outside to the buffer data.
+ *             The used buffer size can be checked with av_fifo_size().
+ */
+public static native @Cast("uint8_t*") BytePointer av_fifo_peek2(@Const AVFifoBuffer f, int offs);
+
+// #endif /* AVUTIL_FIFO_H */
+
+
+// Parsed from <libavutil/audio_fifo.h>
+
+/*
+ * Audio FIFO
+ * Copyright (c) 2012 Justin Ruggles <justin.ruggles@gmail.com>
+ *
+ * This file is part of FFmpeg.
+ *
+ * FFmpeg is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * FFmpeg is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with FFmpeg; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ */
+
+/**
+ * @file
+ * Audio FIFO Buffer
+ */
+
+// #ifndef AVUTIL_AUDIO_FIFO_H
+// #define AVUTIL_AUDIO_FIFO_H
+
+// #include "avutil.h"
+// #include "fifo.h"
+// #include "samplefmt.h"
+
+/**
+ * @addtogroup lavu_audio
+ * @{
+ *
+ * @defgroup lavu_audiofifo Audio FIFO Buffer
+ * @{
+ */
+
+/**
+ * Context for an Audio FIFO Buffer.
+ *
+ * - Operates at the sample level rather than the byte level.
+ * - Supports multiple channels with either planar or packed sample format.
+ * - Automatic reallocation when writing to a full buffer.
+ */
+@Opaque public static class AVAudioFifo extends Pointer {
+    /** Empty constructor. */
+    public AVAudioFifo() { }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AVAudioFifo(Pointer p) { super(p); }
+}
+
+/**
+ * Free an AVAudioFifo.
+ *
+ * @param af  AVAudioFifo to free
+ */
+public static native void av_audio_fifo_free(AVAudioFifo af);
+
+/**
+ * Allocate an AVAudioFifo.
+ *
+ * @param sample_fmt  sample format
+ * @param channels    number of channels
+ * @param nb_samples  initial allocation size, in samples
+ * @return            newly allocated AVAudioFifo, or NULL on error
+ */
+public static native AVAudioFifo av_audio_fifo_alloc(@Cast("AVSampleFormat") int sample_fmt, int channels,
+                                 int nb_samples);
+
+/**
+ * Reallocate an AVAudioFifo.
+ *
+ * @param af          AVAudioFifo to reallocate
+ * @param nb_samples  new allocation size, in samples
+ * @return            0 if OK, or negative AVERROR code on failure
+ */
+public static native int av_audio_fifo_realloc(AVAudioFifo af, int nb_samples);
+
+/**
+ * Write data to an AVAudioFifo.
+ *
+ * The AVAudioFifo will be reallocated automatically if the available space
+ * is less than nb_samples.
+ *
+ * @see enum AVSampleFormat
+ * The documentation for AVSampleFormat describes the data layout.
+ *
+ * @param af          AVAudioFifo to write to
+ * @param data        audio data plane pointers
+ * @param nb_samples  number of samples to write
+ * @return            number of samples actually written, or negative AVERROR
+ *                    code on failure. If successful, the number of samples
+ *                    actually written will always be nb_samples.
+ */
+public static native int av_audio_fifo_write(AVAudioFifo af, @Cast("void**") PointerPointer data, int nb_samples);
+public static native int av_audio_fifo_write(AVAudioFifo af, @Cast("void**") @ByPtrPtr Pointer data, int nb_samples);
+
+/**
+ * Peek data from an AVAudioFifo.
+ *
+ * @see enum AVSampleFormat
+ * The documentation for AVSampleFormat describes the data layout.
+ *
+ * @param af          AVAudioFifo to read from
+ * @param data        audio data plane pointers
+ * @param nb_samples  number of samples to peek
+ * @return            number of samples actually peek, or negative AVERROR code
+ *                    on failure. The number of samples actually peek will not
+ *                    be greater than nb_samples, and will only be less than
+ *                    nb_samples if av_audio_fifo_size is less than nb_samples.
+ */
+public static native int av_audio_fifo_peek(AVAudioFifo af, @Cast("void**") PointerPointer data, int nb_samples);
+public static native int av_audio_fifo_peek(AVAudioFifo af, @Cast("void**") @ByPtrPtr Pointer data, int nb_samples);
+
+/**
+ * Read data from an AVAudioFifo.
+ *
+ * @see enum AVSampleFormat
+ * The documentation for AVSampleFormat describes the data layout.
+ *
+ * @param af          AVAudioFifo to read from
+ * @param data        audio data plane pointers
+ * @param nb_samples  number of samples to read
+ * @return            number of samples actually read, or negative AVERROR code
+ *                    on failure. The number of samples actually read will not
+ *                    be greater than nb_samples, and will only be less than
+ *                    nb_samples if av_audio_fifo_size is less than nb_samples.
+ */
+public static native int av_audio_fifo_read(AVAudioFifo af, @Cast("void**") PointerPointer data, int nb_samples);
+public static native int av_audio_fifo_read(AVAudioFifo af, @Cast("void**") @ByPtrPtr Pointer data, int nb_samples);
+
+/**
+ * Drain data from an AVAudioFifo.
+ *
+ * Removes the data without reading it.
+ *
+ * @param af          AVAudioFifo to drain
+ * @param nb_samples  number of samples to drain
+ * @return            0 if OK, or negative AVERROR code on failure
+ */
+public static native int av_audio_fifo_drain(AVAudioFifo af, int nb_samples);
+
+/**
+ * Reset the AVAudioFifo buffer.
+ *
+ * This empties all data in the buffer.
+ *
+ * @param af  AVAudioFifo to reset
+ */
+public static native void av_audio_fifo_reset(AVAudioFifo af);
+
+/**
+ * Get the current number of samples in the AVAudioFifo available for reading.
+ *
+ * @param af  the AVAudioFifo to query
+ * @return    number of samples available for reading
+ */
+public static native int av_audio_fifo_size(AVAudioFifo af);
+
+/**
+ * Get the current number of samples in the AVAudioFifo available for writing.
+ *
+ * @param af  the AVAudioFifo to query
+ * @return    number of samples available for writing
+ */
+public static native int av_audio_fifo_space(AVAudioFifo af);
+
+/**
+ * @}
+ * @}
+ */
+
+// #endif /* AVUTIL_AUDIO_FIFO_H */
 
 
 }

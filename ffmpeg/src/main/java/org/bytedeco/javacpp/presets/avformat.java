@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(value="windows", preload="avformat-56") })
 public class avformat implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("URLContext").cast().pointerTypes("Pointer"))
+        infoMap.put(new Info("URLContext", "FFFrac").cast().pointerTypes("Pointer"))
                .put(new Info("AVPROBE_SCORE_RETRY", "AVPROBE_SCORE_STREAM_RETRY").translate(false))
                .put(new Info("LIBAVFORMAT_VERSION_MAJOR <= 54", "FF_API_ALLOC_OUTPUT_CONTEXT", "FF_API_FORMAT_PARAMETERS",
                              "FF_API_READ_PACKET", "FF_API_CLOSE_INPUT_FILE", "FF_API_NEW_STREAM", "FF_API_SET_PTS_INFO").define(false));

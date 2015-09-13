@@ -8,7 +8,7 @@ if [[ -z "$PLATFORM" ]]; then
 fi
 
 if [[ $PLATFORM == windows* ]]; then
-    FFMPEG_VERSION=20150619-git-bb3703a
+    FFMPEG_VERSION=20150909-git-2c1ec57
     [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
     download http://ffmpeg.zeranoe.com/builds/win$BITS/dev/ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z
     download http://ffmpeg.zeranoe.com/builds/win$BITS/shared/ffmpeg-$FFMPEG_VERSION-win$BITS-shared.7z ffmpeg-$FFMPEG_VERSION-win$BITS-shared.7z
@@ -24,7 +24,7 @@ else
     OPENSSL=openssl-1.0.2d
     X265=x265_1.7
     VPX_VERSION=v1.4.0
-    FFMPEG_VERSION=2.7.1
+    FFMPEG_VERSION=2.8
     download http://downloads.sourceforge.net/project/lame/lame/3.99/$LAME.tar.gz $LAME.tar.gz
     download http://downloads.xiph.org/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
     download http://sourceforge.net/projects/opencore-amr/files/opencore-amr/$OPENCORE_AMR.tar.gz/download $OPENCORE_AMR.tar.gz
