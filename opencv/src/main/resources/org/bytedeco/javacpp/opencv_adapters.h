@@ -39,21 +39,21 @@ static inline void SetLibraryPath(const char *path) {
 
 template<class T> class PtrAdapter {
 public:
-    PtrAdapter(const T* ptr, int size)  : ptr((T*)ptr), size(size), cvPtr2((T*)ptr), cvPtr(cvPtr2) { }
-    PtrAdapter(const cv::Ptr<T>& cvPtr) : ptr(0), size(0), cvPtr2(cvPtr), cvPtr(cvPtr2) { }
-    PtrAdapter(      cv::Ptr<T>& cvPtr) : ptr(0), size(0), cvPtr(cvPtr) { }
-    void assign(T* ptr, int size) {
+    PtrAdapter(const T* ptr, int size, void *owner)  : ptr((T*)ptr), size(size), owner(owner),
+            cvPtr2(owner != NULL && owner != ptr ? *(cv::Ptr<T>*)owner : cv::Ptr<T>((T*)ptr)), cvPtr(cvPtr2) { }
+    PtrAdapter(const cv::Ptr<T>& cvPtr) : ptr(0), size(0), owner(0), cvPtr2(cvPtr), cvPtr(cvPtr2) { }
+    PtrAdapter(      cv::Ptr<T>& cvPtr) : ptr(0), size(0), owner(0), cvPtr(cvPtr) { }
+    void assign(T* ptr, int size, void* owner) {
         this->ptr = ptr;
         this->size = size;
-        this->cvPtr = ptr;
+        this->owner = owner;
+        this->cvPtr = owner != NULL && owner != ptr ? *(cv::Ptr<T>*)owner : cv::Ptr<T>((T*)ptr);
     }
-    static void deallocate(void* ptr) { cv::Ptr<T> deallocator((T*)ptr); }
+    static void deallocate(void* owner) { delete (cv::Ptr<T>*)owner; }
     operator T*() {
-        // take ownership, if unique
         ptr = cvPtr.get();
-        if (&cvPtr == &cvPtr2) {
-            // hack to set cvPtr.owner->owned = NULL
-            *(T**)&cvPtr = NULL;
+        if (owner == NULL || owner == ptr) {
+            owner = new cv::Ptr<T>(cvPtr);
         }
         return ptr;
     }
@@ -62,32 +62,35 @@ public:
     operator cv::Ptr<T>*() { return ptr ? &cvPtr : 0; }
     T* ptr;
     int size;
+    void* owner;
     cv::Ptr<T> cvPtr2;
     cv::Ptr<T>& cvPtr;
 };
 
 class StrAdapter {
 public:
-    StrAdapter(const          char* ptr, size_t size) : ptr((char*)ptr), size(size),
+    StrAdapter(const          char* ptr, size_t size, void* owner) : ptr((char*)ptr), size(size), owner(owner),
         str2(ptr ? (char*)ptr : ""), str(str2) { }
-    StrAdapter(const signed   char* ptr, size_t size) : ptr((char*)ptr), size(size),
+    StrAdapter(const signed   char* ptr, size_t size, void* owner) : ptr((char*)ptr), size(size), owner(owner),
         str2(ptr ? (char*)ptr : ""), str(str2) { }
-    StrAdapter(const unsigned char* ptr, size_t size) : ptr((char*)ptr), size(size),
+    StrAdapter(const unsigned char* ptr, size_t size, void* owner) : ptr((char*)ptr), size(size), owner(owner),
         str2(ptr ? (char*)ptr : ""), str(str2) { }
-    StrAdapter(const cv::String& str) : ptr(0), size(0), str2(str), str(str2) { }
-    StrAdapter(      cv::String& str) : ptr(0), size(0), str(str) { }
-    void assign(char* ptr, size_t size) {
+    StrAdapter(const cv::String& str) : ptr(0), size(0), owner(0), str2(str), str(str2) { }
+    StrAdapter(      cv::String& str) : ptr(0), size(0), owner(0), str(str) { }
+    void assign(char* ptr, size_t size, void* owner) {
         this->ptr = ptr;
         this->size = size;
+        this->owner = owner;
         str = ptr ? ptr : "";
     }
-    static void deallocate(void* ptr) { free(ptr); }
+    static void deallocate(void* owner) { free(owner); }
     operator char*() {
         const char* c_str = str.c_str();
         if (ptr == NULL || strcmp(c_str, ptr) != 0) {
             ptr = strdup(c_str);
         }
         size = strlen(c_str) + 1;
+        owner = ptr;
         return ptr;
     }
     operator       signed   char*() { return (signed   char*)(operator char*)(); }
@@ -99,6 +102,7 @@ public:
     operator         cv::String*() { return ptr ? &str : 0; }
     char* ptr;
     size_t size;
+    void* owner;
     cv::String str2;
     cv::String& str;
 };

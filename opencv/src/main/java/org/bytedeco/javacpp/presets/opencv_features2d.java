@@ -38,5 +38,6 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         target = "org.bytedeco.javacpp.opencv_features2d")
 public class opencv_features2d implements InfoMapper {
     public void map(InfoMap infoMap) {
+//        infoMap.put(new Info("cv::Feature2D").pointerTypes("Feature2D").virtualize());
     }
 }
