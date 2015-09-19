@@ -1,4 +1,8 @@
 /target/
+/caffe/cppbuild/
+/caffe/target/
+/cuda/target/
+/cuda/cppbuild/
 /opencv/target/
 /ffmpeg/target/
 /flycapture/target/
@@ -13,8 +17,6 @@
 /llvm/target/
 /leptonica/target/
 /tesseract/target/
-/caffe/target/
-/cuda/target/
 /opencv/cppbuild/
 /ffmpeg/cppbuild/
 /flycapture/cppbuild/
@@ -29,6 +31,15 @@
 /llvm/cppbuild/
 /leptonica/cppbuild/
 /tesseract/cppbuild/
-/caffe/cppbuild/
-/cuda/cppbuild/
+
+# Mac
+.DS_Store
+
+# Eclipse
+.classpath
+.project
+.settings
+
+# IntelliJ
+*.iml
 
