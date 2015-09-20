@@ -4033,7 +4033,7 @@ public static class AVCodec extends Pointer {
         private native void allocate();
         public native int call(AVCodecContext arg0);
     }
-    public native Close_AVCodecContext close(); public native AVCodec close(Close_AVCodecContext close);
+    public native @Name("close") Close_AVCodecContext _close(); public native AVCodec _close(Close_AVCodecContext _close);
     /**
      * Flush buffers.
      * Will be called when seeking
@@ -6249,7 +6249,7 @@ public static class AVBitStreamFilter extends Pointer {
         private native void allocate();
         public native void call(AVBitStreamFilterContext bsfc);
     }
-    public native Close_AVBitStreamFilterContext close(); public native AVBitStreamFilter close(Close_AVBitStreamFilterContext close);
+    public native @Name("close") Close_AVBitStreamFilterContext _close(); public native AVBitStreamFilter _close(Close_AVBitStreamFilterContext _close);
     public native AVBitStreamFilter next(); public native AVBitStreamFilter next(AVBitStreamFilter next);
 }
 
