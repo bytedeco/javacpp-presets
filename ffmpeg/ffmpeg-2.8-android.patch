@@ -1,8 +1,8 @@
-diff -ruN ffmpeg-2.7/configure ffmpeg-2.7-android/configure
---- ffmpeg-2.7/configure	2015-06-10 08:27:49.000000000 +0900
-+++ ffmpeg-2.7-android/configure	2015-06-13 13:37:38.401719268 +0900
-@@ -5124,7 +5124,7 @@
-                                require smbclient libsmbclient.h smbc_init -lsmbclient; }
+diff -ruN ffmpeg-2.8/configure ffmpeg-2.8-android/configure
+--- ffmpeg-2.8/configure	2015-09-09 10:17:44.000000000 +0900
++++ ffmpeg-2.8-android/configure	2015-09-20 19:54:54.943265063 +0900
+@@ -5263,7 +5263,7 @@
+ enabled libsnappy         && require snappy snappy-c.h snappy_compress -lsnappy
  enabled libsoxr           && require libsoxr soxr.h soxr_create -lsoxr
  enabled libssh            && require_pkg_config libssh libssh/sftp.h sftp_init
 -enabled libspeex          && require_pkg_config speex speex/speex.h speex_decoder_init -lspeex
@@ -10,19 +10,19 @@ diff -ruN ffmpeg-2.7/configure ffmpeg-2.7-android/configure
  enabled libstagefright_h264 && require_cpp libstagefright_h264 "binder/ProcessState.h media/stagefright/MetaData.h
      media/stagefright/MediaBufferGroup.h media/stagefright/MediaDebug.h media/stagefright/MediaDefs.h
      media/stagefright/OMXClient.h media/stagefright/OMXCodec.h" android::OMXClient -lstagefright -lmedia -lutils -lbinder -lgnustl_static
-@@ -5154,7 +5154,7 @@
-                                  warn "using libx264 without pkg-config"; } } &&
-                              { check_cpp_condition x264.h "X264_BUILD >= 118" ||
-                                die "ERROR: libx264 must be installed and version must be >= 0.118."; }
--enabled libx265           && require_pkg_config x265 x265.h x265_encoder_encode &&
+@@ -5315,7 +5315,7 @@
+                                die "ERROR: libx264 must be installed and version must be >= 0.118."; } &&
+                              { check_cpp_condition x264.h "X264_MPEG2" &&
+                                enable libx262; }
+-enabled libx265           && require_pkg_config x265 x265.h x265_api_get &&
 +enabled libx265           && require x265 x265.h x265_encoder_encode -lx265 &&
                               { check_cpp_condition x265.h "X265_BUILD >= 57" ||
                                 die "ERROR: libx265 version must be >= 57."; }
  enabled libxavs           && require libxavs xavs.h xavs_encoder_encode -lxavs
-diff -ruN ffmpeg-2.7/library.mak ffmpeg-2.7-android/library.mak
---- ffmpeg-2.7/library.mak	2015-06-10 08:27:53.000000000 +0900
-+++ ffmpeg-2.7-android/library.mak	2015-06-13 13:37:38.401719268 +0900
-@@ -52,16 +52,13 @@
+diff -ruN ffmpeg-2.8/library.mak ffmpeg-2.8-android/library.mak
+--- ffmpeg-2.8/library.mak	2015-09-09 10:17:47.000000000 +0900
++++ ffmpeg-2.8-android/library.mak	2015-09-20 19:56:08.289795721 +0900
+@@ -53,16 +53,13 @@
  $(TESTPROGS) $(TOOLS): %$(EXESUF): %.o $(EXEOBJS)
  	$$(LD) $(LDFLAGS) $(LDEXEFLAGS) $$(LD_O) $$(filter %.o,$$^) $$(THISLIB) $(FFEXTRALIBS) $$(ELIBS)
  
@@ -32,7 +32,7 @@ diff -ruN ffmpeg-2.7/library.mak ffmpeg-2.7-android/library.mak
 -$(SUBDIR)$(SLIBNAME_WITH_MAJOR): $(OBJS) $(SLIBOBJS) $(SUBDIR)lib$(NAME).ver
 +$(SUBDIR)$(SLIBNAME): $(OBJS) $(SUBDIR)lib$(NAME).ver
  	$(SLIB_CREATE_DEF_CMD)
- 	$$(LD) $(SHFLAGS) $(LDFLAGS) $$(LD_O) $$(filter %.o,$$^) $(FFEXTRALIBS)
+ 	$$(LD) $(SHFLAGS) $(LDFLAGS) $(LDLIBFLAGS) $$(LD_O) $$(filter %.o,$$^) $(FFEXTRALIBS)
  	$(SLIB_EXTRA_CMD)
  
  ifdef SUBDIR
@@ -41,7 +41,7 @@ diff -ruN ffmpeg-2.7/library.mak ffmpeg-2.7-android/library.mak
  endif
  
  clean::
-@@ -73,9 +70,8 @@
+@@ -74,9 +71,8 @@
  
  install-lib$(NAME)-shared: $(SUBDIR)$(SLIBNAME)
  	$(Q)mkdir -p "$(SHLIBDIR)"
@@ -53,7 +53,7 @@ diff -ruN ffmpeg-2.7/library.mak ffmpeg-2.7-android/library.mak
  	$(if $(SLIB_INSTALL_EXTRA_SHLIB),$$(INSTALL) -m 644 $(SLIB_INSTALL_EXTRA_SHLIB:%=$(SUBDIR)%) "$(SHLIBDIR)")
  	$(if $(SLIB_INSTALL_EXTRA_LIB),$(Q)mkdir -p "$(LIBDIR)")
  	$(if $(SLIB_INSTALL_EXTRA_LIB),$$(INSTALL) -m 644 $(SLIB_INSTALL_EXTRA_LIB:%=$(SUBDIR)%) "$(LIBDIR)")
-@@ -94,9 +90,7 @@
+@@ -95,9 +91,7 @@
  	$$(INSTALL) -m 644 $$^ "$(PKGCONFIGDIR)"
  
  uninstall-libs::

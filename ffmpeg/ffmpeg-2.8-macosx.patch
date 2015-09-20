@@ -1,7 +1,7 @@
-diff -ruN ffmpeg-2.7/configure ffmpeg-2.7-macosx/configure
---- ffmpeg-2.7/configure	2015-06-10 08:27:49.000000000 +0900
-+++ ffmpeg-2.7-macosx/configure	2015-06-13 13:41:38.412560126 +0900
-@@ -4220,7 +4220,7 @@
+diff -ruN ffmpeg-2.8/configure ffmpeg-2.8-macosx/configure
+--- ffmpeg-2.8/configure	2015-09-09 10:17:44.000000000 +0900
++++ ffmpeg-2.8-macosx/configure	2015-09-20 19:57:09.167066160 +0900
+@@ -4323,7 +4323,7 @@
          ;;
      darwin)
          enabled ppc && add_asflags -force_cpusubtype_ALL
@@ -10,8 +10,8 @@ diff -ruN ffmpeg-2.7/configure ffmpeg-2.7-macosx/configure
          enabled x86_32 && append SHFLAGS -Wl,-read_only_relocs,suppress
          strip="${strip} -x"
          add_ldflags -Wl,-dynamic,-search_paths_first
-@@ -5124,7 +5124,7 @@
-                                require smbclient libsmbclient.h smbc_init -lsmbclient; }
+@@ -5263,7 +5263,7 @@
+ enabled libsnappy         && require snappy snappy-c.h snappy_compress -lsnappy
  enabled libsoxr           && require libsoxr soxr.h soxr_create -lsoxr
  enabled libssh            && require_pkg_config libssh libssh/sftp.h sftp_init
 -enabled libspeex          && require_pkg_config speex speex/speex.h speex_decoder_init -lspeex
@@ -19,11 +19,11 @@ diff -ruN ffmpeg-2.7/configure ffmpeg-2.7-macosx/configure
  enabled libstagefright_h264 && require_cpp libstagefright_h264 "binder/ProcessState.h media/stagefright/MetaData.h
      media/stagefright/MediaBufferGroup.h media/stagefright/MediaDebug.h media/stagefright/MediaDefs.h
      media/stagefright/OMXClient.h media/stagefright/OMXCodec.h" android::OMXClient -lstagefright -lmedia -lutils -lbinder -lgnustl_static
-@@ -5154,7 +5154,7 @@
-                                  warn "using libx264 without pkg-config"; } } &&
-                              { check_cpp_condition x264.h "X264_BUILD >= 118" ||
-                                die "ERROR: libx264 must be installed and version must be >= 0.118."; }
--enabled libx265           && require_pkg_config x265 x265.h x265_encoder_encode &&
+@@ -5315,7 +5315,7 @@
+                                die "ERROR: libx264 must be installed and version must be >= 0.118."; } &&
+                              { check_cpp_condition x264.h "X264_MPEG2" &&
+                                enable libx262; }
+-enabled libx265           && require_pkg_config x265 x265.h x265_api_get &&
 +enabled libx265           && require x265 x265.h x265_encoder_encode -lx265 &&
                               { check_cpp_condition x265.h "X265_BUILD >= 57" ||
                                 die "ERROR: libx265 version must be >= 57."; }
