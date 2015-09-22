@@ -37,9 +37,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit=opencv_highgui.class, target="org.bytedeco.javacpp.caffe", value={
-    @Platform(value={"linux", "macosx"}, define="SHARED_PTR_NAMESPACE boost", include={"caffe/caffe.hpp", "caffe/util/device_alternate.hpp",
+    @Platform(value={"linux", "macosx"}, define={"SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV"}, include={"caffe/caffe.hpp", "caffe/util/device_alternate.hpp",
         "caffe/common.hpp", "caffe/proto/caffe.pb.h", "caffe/util/blocking_queue.hpp", "caffe/data_reader.hpp", "caffe/util/math_functions.hpp", "caffe/syncedmem.hpp",
-        "caffe/blob.hpp", "caffe/data_transformer.hpp", "caffe/filler.hpp", "caffe/internal_thread.hpp", "caffe/data_layers.hpp", "caffe/layer_factory.hpp",
+        "caffe/blob.hpp", "caffe/data_transformer.hpp", "caffe/filler.hpp", "caffe/internal_thread.hpp", "caffe/util/hdf5.hpp", "caffe/data_layers.hpp", "caffe/layer_factory.hpp",
         "caffe/layer.hpp", "caffe/loss_layers.hpp", "caffe/neuron_layers.hpp", "caffe/common_layers.hpp", "caffe/net.hpp", "caffe/parallel.hpp", "caffe/solver.hpp",
         "caffe/vision_layers.hpp", "caffe/util/benchmark.hpp", "caffe/util/db.hpp", "caffe/util/db_leveldb.hpp", "caffe/util/db_lmdb.hpp",
         "caffe/util/io.hpp", "caffe/util/rng.hpp", "caffe/util/im2col.hpp", "caffe/util/insert_splits.hpp", "caffe/util/mkl_alternate.hpp",
