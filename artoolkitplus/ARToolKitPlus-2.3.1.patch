@@ -143,3 +143,52 @@ diff -ruN ARToolKitPlus-2.3.1/src/core/rppMultiGetTransMat.cpp ARToolKitPlus-2.3
                          config_patt_id.erase(c_iter);
                          c_iter = config_patt_id.end();
                          continue;
+
+diff -Naur ARToolKitPlus-2.3.1/include/ARToolKitPlus/Tracker.h ARToolKitPlus-2.3.1-patched/include/ARToolKitPlus/Tracker.h
+--- ARToolKitPlus-2.3.1/include/ARToolKitPlus/Tracker.h	2015-09-22 18:55:29.714656500 +0200
++++ ARToolKitPlus-2.3.1-patched/include/ARToolKitPlus/Tracker.h	2015-09-22 18:16:50.542938000 +0200
+@@ -586,8 +587,8 @@
+ 
+     HULL_TRACKING_MODE hullTrackingMode;
+ 
+-    static int screenWidth;
+-	static int screenHeight;
++    int screenWidth;
++    int screenHeight;
+     int thresh;
+ 
+     ARFloat gl_para[16];
+diff -Naur ARToolKitPlus-2.3.1/src/Tracker.cpp ARToolKitPlus-2.3.1-patched/src/Tracker.cpp
+--- ARToolKitPlus-2.3.1/src/Tracker.cpp	2014-10-05 21:46:01.000000000 +0200
++++ ARToolKitPlus-2.3.1-patched/src/Tracker.cpp	2015-09-22 18:27:47.665119000 +0200
+@@ -29,8 +29,8 @@
+ 
+ namespace ARToolKitPlus {
+ 
+-int Tracker::screenWidth;
+-int Tracker::screenHeight;
++// int Tracker::screenWidth;
++// int Tracker::screenHeight;
+ 
+ Tracker::Tracker(int imWidth, int imHeight, int maxImagePatterns, int pattWidth, int pattHeight, int pattSamples,
+         int maxLoadPatterns) :
+@@ -186,8 +186,9 @@
+     // (usually this image buffer should only be built once - unless we change camera resolution)
+     //
+ 
++
+     int newSize = screenWidth * screenHeight;
+ 
+     if (newSize == l_imageL_size)
+         return;
+ 
+@@ -345,7 +348,8 @@
+         return false;
+     }
+ 
+-    pCam->changeFrameSize(Tracker::screenWidth, Tracker::screenHeight);
++    // TODO: Why this ?
++    // pCam->changeFrameSize(screenWidth, screenHeight);
+ 
+     int i;
+     for (i = 0; i < 4; i++)
