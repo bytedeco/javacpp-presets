@@ -15849,9 +15849,9 @@ notation of some operations:
     public native @Const SparseMat.Node node();
 
     /** moves iterator to the previous element */
-    public native @ByRef @Name("operator --") SparseMatConstIterator decrement();
+    
     /** moves iterator to the previous element */
-    public native @ByVal @Name("operator --") SparseMatConstIterator decrement(int arg0);
+    
     /** moves iterator to the next element */
     public native @ByRef @Name("operator ++") SparseMatConstIterator increment();
     /** moves iterator to the next element */
