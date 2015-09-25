@@ -17349,9 +17349,9 @@ without any constraints.
             return (Function)super.position(position);
         }
     
-        @Virtual public native int getDims();
+        @Virtual(true) public native int getDims();
         @Virtual public native double getGradientEps();
-        @Virtual public native double calc(@Const DoublePointer x);
+        @Virtual(true) public native double calc(@Const DoublePointer x);
         @Virtual public native void getGradient(@Const DoublePointer x,DoublePointer grad);
     }
 

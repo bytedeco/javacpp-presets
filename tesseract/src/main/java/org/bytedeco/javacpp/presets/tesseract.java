@@ -90,7 +90,7 @@ public class tesseract implements InfoMapper {
 
                .put(new Info("tesseract::ImageThresholder()").javaText(""))
 
-               .put(new Info("TessBaseAPISetFillLatticeFunc", "TessBaseAPIInit", "TessCallbackUtils_::FailIsRepeatable", "LPBLOB", "kPolyBlockNames",
+               .put(new Info("TessBaseAPISetFillLatticeFunc", "TessBaseGetBlockTextOrientations", "TessBaseAPIInit", "TessCallbackUtils_::FailIsRepeatable", "LPBLOB", "kPolyBlockNames",
                              "tesseract::TessBaseAPI::SetFillLatticeFunc", "tesseract::ImageThresholder::GetPixRectGrey", "tesseract::ImageThresholder::GetPixRect",
                              "tesseract::ImageThresholder::SetRectangle", "tesseract::ImageThresholder::SetImage", "tesseract::ImageThresholder::IsEmpty",
                              "tesseract::ResultIterator::kComplexWord", "tesseract::ResultIterator::kMinorRunEnd", "tesseract::ResultIterator::kMinorRunStart",
