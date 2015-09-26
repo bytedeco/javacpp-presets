@@ -3,6 +3,7 @@
 set -eu
 
 [[ -z ${CMAKE:-} ]] && CMAKE=cmake
+[[ -z ${MAKEJ:-} ]] && MAKEJ=4
 
 KERNEL=(`uname -s | tr [A-Z] [a-z]`)
 ARCH=(`uname -m | tr [A-Z] [a-z]`)

@@ -1,4 +1,5 @@
 
+ * Provide `cppbuild.sh` script for Caffe that includes all dependencies ([pull #77](https://github.com/bytedeco/javacpp-presets/pull/77))
  * Upgrade presets for Caffe, CUDA 7.5, cuDNN 3, FFmpeg 2.8, LLVM 3.7.0, Tesseract 3.04
  * Include `motion_vector.h`, `fifo.h`, and `audio_fifo.h` header files in the `avutil` module of FFmpeg ([issue #79](https://github.com/bytedeco/javacpp-presets/issues/79))
  * Add presets for Chilitags, thanks to Chris Walters for the financial contribution
