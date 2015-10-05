@@ -597,7 +597,7 @@ public static class TessClosure extends Pointer {
         return (CharClearCallback)super.position(position);
     }
 
-  @Virtual(true) public native void Run(@Cast("char") byte arg0);
+  @Virtual public native void Run(@Cast("char") byte arg0);
 }
 
 @Name("TessCallback1<STRING>") public static class StringClearCallback extends Pointer {
@@ -614,7 +614,7 @@ public static class TessClosure extends Pointer {
         return (StringClearCallback)super.position(position);
     }
 
-  @Virtual(true) public native void Run(@ByVal STRING arg0);
+  @Virtual public native void Run(@ByVal STRING arg0);
 }
 
 @Name("TessCallback1<int>") public static class IntClearCallback extends Pointer {
@@ -631,7 +631,7 @@ public static class TessClosure extends Pointer {
         return (IntClearCallback)super.position(position);
     }
 
-  @Virtual(true) public native void Run(int arg0);
+  @Virtual public native void Run(int arg0);
 }
 
 @Name("TessResultCallback1<bool,int>") public static class DeleteCallback extends Pointer {
@@ -648,7 +648,7 @@ public static class TessClosure extends Pointer {
         return (DeleteCallback)super.position(position);
     }
 
-  @Virtual(true) public native @Cast("bool") boolean Run(int arg0);
+  @Virtual public native @Cast("bool") boolean Run(int arg0);
 }
 
 @Name("TessResultCallback2<bool,char const&,char const&>") public static class CharCompareCallback extends Pointer {
@@ -665,7 +665,7 @@ public static class TessClosure extends Pointer {
         return (CharCompareCallback)super.position(position);
     }
 
-  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("char const*") @ByRef BytePointer arg0,@Cast("char const*") @ByRef BytePointer arg1);
+  @Virtual public native @Cast("bool") boolean Run(@Cast("char const*") @ByRef BytePointer arg0,@Cast("char const*") @ByRef BytePointer arg1);
 }
 
 @Name("TessResultCallback2<bool,FILE*,char const&>") public static class CharWriteCallback extends Pointer {
@@ -682,7 +682,7 @@ public static class TessClosure extends Pointer {
         return (CharWriteCallback)super.position(position);
     }
 
-  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Cast("char const*") @ByRef BytePointer arg1);
+  @Virtual public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Cast("char const*") @ByRef BytePointer arg1);
 }
 
 @Name("TessResultCallback2<bool,STRING const&,STRING const&>") public static class StringCompareCallback extends Pointer {
@@ -699,7 +699,7 @@ public static class TessClosure extends Pointer {
         return (StringCompareCallback)super.position(position);
     }
 
-  @Virtual(true) public native @Cast("bool") boolean Run(@Const({false, true}) @ByRef STRING arg0,@Const({false, true}) @ByRef STRING arg1);
+  @Virtual public native @Cast("bool") boolean Run(@Const({false, true}) @ByRef STRING arg0,@Const({false, true}) @ByRef STRING arg1);
 }
 
 @Name("TessResultCallback2<bool,FILE*,STRING const&>") public static class StringWriteCallback extends Pointer {
@@ -716,7 +716,7 @@ public static class TessClosure extends Pointer {
         return (StringWriteCallback)super.position(position);
     }
 
-  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Const({false, true}) @ByRef STRING arg1);
+  @Virtual public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Const({false, true}) @ByRef STRING arg1);
 }
 
 @Name("TessResultCallback2<bool,int const&,int const&>") public static class IntCompareCallback extends Pointer {
@@ -733,7 +733,7 @@ public static class TessClosure extends Pointer {
         return (IntCompareCallback)super.position(position);
     }
 
-  @Virtual(true) public native @Cast("bool") boolean Run(@Const({false, true}) @ByRef IntPointer arg0,@Const({false, true}) @ByRef IntPointer arg1);
+  @Virtual public native @Cast("bool") boolean Run(@Const({false, true}) @ByRef IntPointer arg0,@Const({false, true}) @ByRef IntPointer arg1);
 }
 
 @Name("TessResultCallback2<bool,FILE*,int const&>") public static class IntWriteCallback extends Pointer {
@@ -750,7 +750,7 @@ public static class TessClosure extends Pointer {
         return (IntWriteCallback)super.position(position);
     }
 
-  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Const({false, true}) @ByRef IntPointer arg1);
+  @Virtual public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Const({false, true}) @ByRef IntPointer arg1);
 }
 
 @Name("TessCallback3<const UNICHARSET&,int,PAGE_RES*>") public static class TruthCallback3 extends Pointer {
@@ -767,7 +767,7 @@ public static class TessClosure extends Pointer {
         return (TruthCallback3)super.position(position);
     }
 
-  @Virtual(true) public native void Run(@Const @ByRef UNICHARSET arg0,int arg1,PAGE_RES arg2);
+  @Virtual public native void Run(@Const @ByRef UNICHARSET arg0,int arg1,PAGE_RES arg2);
 }
 
 @Name("TessResultCallback3<bool,FILE*,char*,bool>") public static class CharReadCallback extends Pointer {
@@ -784,7 +784,7 @@ public static class TessClosure extends Pointer {
         return (CharReadCallback)super.position(position);
     }
 
-  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Cast("char*") BytePointer arg1,@Cast("bool") boolean arg2);
+  @Virtual public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,@Cast("char*") BytePointer arg1,@Cast("bool") boolean arg2);
 }
 
 @Name("TessResultCallback3<bool,FILE*,STRING*,bool>") public static class StringReadCallback extends Pointer {
@@ -801,7 +801,7 @@ public static class TessClosure extends Pointer {
         return (StringReadCallback)super.position(position);
     }
 
-  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,STRING arg1,@Cast("bool") boolean arg2);
+  @Virtual public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,STRING arg1,@Cast("bool") boolean arg2);
 }
 
 @Name("TessResultCallback3<bool,FILE*,int*,bool>") public static class IntReadCallback extends Pointer {
@@ -818,7 +818,7 @@ public static class TessClosure extends Pointer {
         return (IntReadCallback)super.position(position);
     }
 
-  @Virtual(true) public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,IntPointer arg1,@Cast("bool") boolean arg2);
+  @Virtual public native @Cast("bool") boolean Run(@Cast("FILE*") Pointer arg0,IntPointer arg1,@Cast("bool") boolean arg2);
 }
 
 @Name("TessCallback4<const UNICHARSET&,int,tesseract::PageIterator*,Pix*>") public static class TruthCallback4 extends Pointer {
@@ -835,7 +835,7 @@ public static class TessClosure extends Pointer {
         return (TruthCallback4)super.position(position);
     }
 
-  @Virtual(true) public native void Run(@Const @ByRef UNICHARSET arg0,int arg1,PageIterator arg2,PIX arg3);
+  @Virtual public native void Run(@Const @ByRef UNICHARSET arg0,int arg1,PageIterator arg2,PIX arg3);
 }
 
 // #ifndef SWIG

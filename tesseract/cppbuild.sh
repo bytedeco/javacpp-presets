@@ -7,6 +7,8 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
+source ../../leptonica/cppbuild.sh "$@"
+
 TESSERACT_VERSION=3.04.00
 download https://github.com/tesseract-ocr/tesseract/archive/$TESSERACT_VERSION.tar.gz tesseract-$TESSERACT_VERSION.tar.gz
 
@@ -21,7 +23,7 @@ case $PLATFORM in
         patch -Np1 < ../../../tesseract-$TESSERACT_VERSION-android.patch
         cp "$ANDROID_ROOT/usr/lib/crtbegin_so.o" "$ANDROID_ROOT/usr/lib/crtend_so.o" api
         ar r api/librt.a "$ANDROID_ROOT/usr/lib/crtbegin_dynamic.o"
-        ./configure --prefix=$INSTALL_PATH --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT" LIBLEPT_HEADERSDIR="$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" CC="$ANDROID_BIN-gcc" CXX="$ANDROID_BIN-g++" STRIP="$ANDROID_BIN-strip" CPPFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -I$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/ -I$ANDROID_CPP/include/ -I$ANDROID_CPP/include/backward/ -I$ANDROID_CPP/libs/armeabi/include/ -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" LDFLAGS="-L$ANDROID_ROOT/usr/lib/ -L$ANDROID_CPP/libs/armeabi/ -nostdlib -Wl,--fix-cortex-a8 -L$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/lib/ -L./" LIBS="-lgnustl_static -lgcc -ldl -lz -lm -lc"
+        ./configure --prefix=$INSTALL_PATH --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT" LIBLEPT_HEADERSDIR="$INSTALL_PATH/include/" CC="$ANDROID_BIN-gcc" CXX="$ANDROID_BIN-g++" STRIP="$ANDROID_BIN-strip" CPPFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -I$INSTALL_PATH/include/ -I$ANDROID_CPP/include/ -I$ANDROID_CPP/include/backward/ -I$ANDROID_CPP/libs/armeabi/include/ -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" LDFLAGS="-L$ANDROID_ROOT/usr/lib/ -L$ANDROID_CPP/libs/armeabi/ -nostdlib -Wl,--fix-cortex-a8 -L$INSTALL_PATH/lib/ -L./" LIBS="-lgnustl_static -lgcc -ldl -lz -lm -lc"
         make -j4
         make install-strip
         ;;
@@ -29,35 +31,35 @@ case $PLATFORM in
         patch -Np1 < ../../../tesseract-$TESSERACT_VERSION-android.patch
         cp "$ANDROID_ROOT/usr/lib/crtbegin_so.o" "$ANDROID_ROOT/usr/lib/crtend_so.o" api
         ar r api/librt.a "$ANDROID_ROOT/usr/lib/crtbegin_dynamic.o"
-        ./configure --prefix=$INSTALL_PATH --host="i686-linux-android" --with-sysroot="$ANDROID_ROOT" LIBLEPT_HEADERSDIR="$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" CC="$ANDROID_BIN-gcc" CXX="$ANDROID_BIN-g++" STRIP="$ANDROID_BIN-strip" CPPFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -I$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/ -I$ANDROID_CPP/include/ -I$ANDROID_CPP/include/backward/ -I$ANDROID_CPP/libs/x86/include/ -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300 -L$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/lib/" LDFLAGS="-L$ANDROID_ROOT/usr/lib/ -L$ANDROID_CPP/libs/x86/ -nostdlib -L$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/lib/ -L." LIBS="-lgnustl_static -lgcc -ldl -lz -lm -lc"
+        ./configure --prefix=$INSTALL_PATH --host="i686-linux-android" --with-sysroot="$ANDROID_ROOT" LIBLEPT_HEADERSDIR="$INSTALL_PATH/include/" CC="$ANDROID_BIN-gcc" CXX="$ANDROID_BIN-g++" STRIP="$ANDROID_BIN-strip" CPPFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -I$INSTALL_PATH/include/ -I$ANDROID_CPP/include/ -I$ANDROID_CPP/include/backward/ -I$ANDROID_CPP/libs/x86/include/ -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300 -L$INSTALL_PATH/lib/" LDFLAGS="-L$ANDROID_ROOT/usr/lib/ -L$ANDROID_CPP/libs/x86/ -nostdlib -L$INSTALL_PATH/lib/ -L." LIBS="-lgnustl_static -lgcc -ldl -lz -lm -lc"
         make -j4
         make install-strip
         ;;
     linux-x86)
-        ./configure --prefix=$INSTALL_PATH CC="gcc -m32" CXX="g++ -m32" LIBLEPT_HEADERSDIR="$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" CPPFLAGS="-I$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" LDFLAGS="-L$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/lib/"
+        ./configure --prefix=$INSTALL_PATH CC="gcc -m32" CXX="g++ -m32" LIBLEPT_HEADERSDIR="$INSTALL_PATH/include/" CPPFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/"
         make -j4
         make install-strip
         ;;
     linux-x86_64)
-        ./configure --prefix=$INSTALL_PATH CC="gcc -m64" CXX="g++ -m64" LIBLEPT_HEADERSDIR="$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" CPPFLAGS="-I$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" LDFLAGS="-L$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/lib/"
+        ./configure --prefix=$INSTALL_PATH CC="gcc -m64" CXX="g++ -m64" LIBLEPT_HEADERSDIR="$INSTALL_PATH/include/" CPPFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/"
         make -j4
         make install-strip
         ;;
     macosx-*)
         patch -Np1 < ../../../tesseract-$TESSERACT_VERSION-macosx.patch
-        ./configure --prefix=$INSTALL_PATH LIBLEPT_HEADERSDIR="$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" CPPFLAGS="-I$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" LDFLAGS="-L$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/lib/"
+        ./configure --prefix=$INSTALL_PATH LIBLEPT_HEADERSDIR="$INSTALL_PATH/include/" CPPFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/"
         make -j4
         make install-strip
         ;;
     windows-x86)
         cp vs2010/port/* ccutil/
-        ./configure --prefix=$INSTALL_PATH CC="gcc -m32" CXX="g++ -m32 -fpermissive" LIBLEPT_HEADERSDIR="$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" CPPFLAGS="-I$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" LDFLAGS="-L$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/lib/"
+        ./configure --prefix=$INSTALL_PATH CC="gcc -m32" CXX="g++ -m32 -fpermissive" LIBLEPT_HEADERSDIR="$INSTALL_PATH/include/" CPPFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/"
         make -j4
         make install-strip
         ;;
     windows-x86_64)
         cp vs2010/port/* ccutil/
-        ./configure --prefix=$INSTALL_PATH CC="gcc -m64" CXX="g++ -m64 -fpermissive" LIBLEPT_HEADERSDIR="$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" CPPFLAGS="-I$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" LDFLAGS="-L$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/lib/"
+        ./configure --prefix=$INSTALL_PATH CC="gcc -m64" CXX="g++ -m64 -fpermissive" LIBLEPT_HEADERSDIR="$INSTALL_PATH/include/" CPPFLAGS="-I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/"
         make -j4
         make install-strip
         ;;
@@ -65,5 +67,7 @@ case $PLATFORM in
         echo "Error: Platform \"$PLATFORM\" is not supported"
         ;;
 esac
+
+cp $INSTALL_PATH/../../allheaders_min.h $INSTALL_PATH/include/leptonica
 
 cd ../..
