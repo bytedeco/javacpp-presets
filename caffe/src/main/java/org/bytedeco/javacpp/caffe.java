@@ -3577,6 +3577,13 @@ public static final int
   @MemberGetter public static native int kTopKFieldNumber();
   public native @Cast("google::protobuf::uint32") int top_k();
   public native void set_top_k(@Cast("google::protobuf::uint32") int value);
+
+  // optional int32 axis = 3;
+  public native @Cast("bool") boolean has_axis();
+  public native void clear_axis();
+  @MemberGetter public static native int kAxisFieldNumber();
+  public native @Cast("google::protobuf::int32") int axis();
+  public native void set_axis(@Cast("google::protobuf::int32") int value);
 }
 // -------------------------------------------------------------------
 
@@ -9361,6 +9368,14 @@ public static final int
 
 
 
+// optional int32 axis = 3;
+
+
+
+
+
+
+
 // -------------------------------------------------------------------
 
 // ConcatParameter
@@ -11939,10 +11954,10 @@ public static final int
 // The improvement in performance seems negligible in the single GPU case,
 // but might be more significant for parallel training. Most importantly,
 // it improved stability for large models on many GPUs.
-@Namespace("caffe") public static native void CaffeMallocHost(@Cast("void**") PointerPointer ptr, @Cast("size_t") long size);
-@Namespace("caffe") public static native void CaffeMallocHost(@Cast("void**") @ByPtrPtr Pointer ptr, @Cast("size_t") long size);
+@Namespace("caffe") public static native void CaffeMallocHost(@Cast("void**") PointerPointer ptr, @Cast("size_t") long size, @Cast("bool*") BoolPointer use_cuda);
+@Namespace("caffe") public static native void CaffeMallocHost(@Cast("void**") @ByPtrPtr Pointer ptr, @Cast("size_t") long size, @Cast("bool*") BoolPointer use_cuda);
 
-@Namespace("caffe") public static native void CaffeFreeHost(Pointer ptr);
+@Namespace("caffe") public static native void CaffeFreeHost(Pointer ptr, @Cast("bool") boolean use_cuda);
 
 
 /**
@@ -13163,7 +13178,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
 
   // Prefetches batches (asynchronously if to GPU memory)
   @MemberGetter public static native int PREFETCH_COUNT();
-  @Virtual protected native void load_batch(FloatBatch batch);
+  @Virtual(true) protected native void load_batch(FloatBatch batch);
 }
 
 @Name("caffe::BasePrefetchingDataLayer<double>") @NoOffset public static class DoubleBasePrefetchingDataLayer extends DoubleBaseDataLayer {
@@ -13188,7 +13203,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
 
   // Prefetches batches (asynchronously if to GPU memory)
   @MemberGetter public static native int PREFETCH_COUNT();
-  @Virtual protected native void load_batch(DoubleBatch batch);
+  @Virtual(true) protected native void load_batch(DoubleBatch batch);
 }
 
 @Name("caffe::DataLayer<float>") @NoOffset public static class FloatDataLayer extends FloatBasePrefetchingDataLayer {
@@ -13889,7 +13904,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
    * and making any other necessary adjustments so that the layer can
    * accommodate the bottom blobs.
    */
-  @Virtual public native void Reshape(@Const @ByRef FloatBlobVector bottom,
+  @Virtual(true) public native void Reshape(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
 
   /**
@@ -14057,11 +14072,11 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
    *        parameter at a particular index given by param_id.
    */
   public native void set_param_propagate_down(int param_id, @Cast("const bool") boolean value);
-  @Virtual protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
+  @Virtual(true) protected native void Forward_cpu(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
   @Virtual protected native void Forward_gpu(@Const @ByRef FloatBlobVector bottom,
         @Const @ByRef FloatBlobVector top);
-  @Virtual protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
+  @Virtual(true) protected native void Backward_cpu(@Const @ByRef FloatBlobVector top,
         @Const @ByRef BoolVector propagate_down,
         @Const @ByRef FloatBlobVector bottom);
   @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
@@ -14150,7 +14165,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
    * and making any other necessary adjustments so that the layer can
    * accommodate the bottom blobs.
    */
-  @Virtual public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual(true) public native void Reshape(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
 
   /**
@@ -14318,11 +14333,11 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
    *        parameter at a particular index given by param_id.
    */
   public native void set_param_propagate_down(int param_id, @Cast("const bool") boolean value);
-  @Virtual protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
+  @Virtual(true) protected native void Forward_cpu(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
   @Virtual protected native void Forward_gpu(@Const @ByRef DoubleBlobVector bottom,
         @Const @ByRef DoubleBlobVector top);
-  @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
+  @Virtual(true) protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down,
         @Const @ByRef DoubleBlobVector bottom);
   @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
@@ -15791,7 +15806,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  *
  * Intended for use after a classification layer to produce a prediction.
  * If parameter out_max_val is set to true, output is a vector of pairs
- * (max_ind, max_val) for each image.
+ * (max_ind, max_val) for each image. The axis parameter specifies an axis
+ * along which to maximise.
  *
  * NOTE: does not implement Backwards operation.
  */
@@ -15808,7 +15824,11 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    *   - top_k (\b optional uint, default 1).
    *     the number @f$ K @f$ of maximal items to output.
    *   - out_max_val (\b optional bool, default false).
-   *     if set, output a vector of pairs (max_ind, max_val) for each image.
+   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
+   *     output max_val along the specified axis.
+   *   - axis (\b optional int).
+   *     if set, maximise along the specified axis else maximise the flattened
+   *     trailing dimensions for each index of the first / num dimension.
    */
   public FloatArgMaxLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
@@ -15838,7 +15858,11 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    *   - top_k (\b optional uint, default 1).
    *     the number @f$ K @f$ of maximal items to output.
    *   - out_max_val (\b optional bool, default false).
-   *     if set, output a vector of pairs (max_ind, max_val) for each image.
+   *     if set, output a vector of pairs (max_ind, max_val) unless axis is set then
+   *     output max_val along the specified axis.
+   *   - axis (\b optional int).
+   *     if set, maximise along the specified axis else maximise the flattened
+   *     trailing dimensions for each index of the first / num dimension.
    */
   public DoubleArgMaxLayer(@Const @ByRef LayerParameter param) { allocate(param); }
   private native void allocate(@Const @ByRef LayerParameter param);
@@ -17169,8 +17193,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual public native int MinBottomBlobs();
   @Virtual public native int MinTopBlobs();
   @Virtual public native @Cast("bool") boolean EqualNumBottomTopBlobs();
-  @Virtual protected native @Cast("bool") boolean reverse_dimensions();
-  @Virtual protected native void compute_output_shape();
+  @Virtual(true) protected native @Cast("bool") boolean reverse_dimensions();
+  @Virtual(true) protected native void compute_output_shape();
 }
 @Name("caffe::BaseConvolutionLayer<double>") @NoOffset public static class DoubleBaseConvolutionLayer extends DoubleLayer {
     static { Loader.load(); }
@@ -17187,8 +17211,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual public native int MinBottomBlobs();
   @Virtual public native int MinTopBlobs();
   @Virtual public native @Cast("bool") boolean EqualNumBottomTopBlobs();
-  @Virtual protected native @Cast("bool") boolean reverse_dimensions();
-  @Virtual protected native void compute_output_shape();
+  @Virtual(true) protected native @Cast("bool") boolean reverse_dimensions();
+  @Virtual(true) protected native void compute_output_shape();
 }
 
 /**

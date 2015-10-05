@@ -107,7 +107,7 @@ case $PLATFORM in
         make install-strip
         ;;
     linux-x86)
-        export CC="gcc -m32 -fPIC"
+        export CC="$OLDCC -m32 -fPIC"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static
         make -j4
@@ -138,7 +138,7 @@ case $PLATFORM in
         make install-strip
         ;;
     linux-x86_64)
-        export CC="gcc -m64 -fPIC"
+        export CC="$OLDCC -m64 -fPIC"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static
         make -j4

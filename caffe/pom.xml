@@ -15,6 +15,10 @@
   <packaging>jar</packaging>
   <name>JavaCPP Presets for Caffe</name>
 
+  <properties>
+    <platform.oldcompiler>${platform.compiler}</platform.oldcompiler>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -39,6 +43,12 @@
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
         <configuration>
+          <propertyKeysAndValues>
+            <property>
+              <name>platform.compiler</name>
+              <value>${platform.oldcompiler}</value>
+            </property>
+          </propertyKeysAndValues>
           <classPaths>
             <classPath>${basedir}/../opencv/target/classes/</classPath>
             <classPath>${project.build.outputDirectory}</classPath>

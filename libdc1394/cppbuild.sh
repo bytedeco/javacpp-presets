@@ -18,12 +18,12 @@ cd libdc1394-$LIBDC1394_VERSION
 
 case $PLATFORM in
     linux-x86)
-        CC="gcc -m32" ./configure --prefix=$INSTALL_PATH
+        CC="$OLDCC -m32" ./configure --prefix=$INSTALL_PATH
         make -j4
         make install-strip
         ;;
     linux-x86_64)
-        CC="gcc -m64" ./configure --prefix=$INSTALL_PATH
+        CC="$OLDCC -m64" ./configure --prefix=$INSTALL_PATH
         make -j4
         make install-strip
         ;;

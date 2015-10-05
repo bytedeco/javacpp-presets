@@ -10,14 +10,24 @@ fi
 case $PLATFORM in
     linux-x86)
         export CPU_ONLY=1
-        export CC="gcc -m32"
-        export CXX="g++ -m32"
+        export CC="$OLDCC -m32"
+        export CXX="$OLDCXX -m32"
+        export FC="$OLDFC -m32"
+        export TOOLSET="${OLDCC:0:3}"
+        if [[ ${#OLDCC} -gt 3 ]]; then
+            export TOOLSET="${OLDCC:0:3}-${OLDCC:3:1}.${OLDCC:4:1}"
+        fi
         export BINARY=32
         export BLAS=open
         ;;
     linux-x86_64)
-        export CC="gcc -m64"
-        export CXX="g++ -m64"
+        export CC="$OLDCC -m64"
+        export CXX="$OLDCXX -m64"
+        export FC="$OLDFC -m64"
+        export TOOLSET="${OLDCC:0:3}"
+        if [[ ${#OLDCC} -gt 3 ]]; then
+            export TOOLSET="${OLDCC:0:3}-${OLDCC:3:1}.${OLDCC:4:1}"
+        fi
         export BINARY=64
         export BLAS=open
         ;;
@@ -25,6 +35,7 @@ case $PLATFORM in
         export CC="clang"
         export CXX="clang++"
         export LDFLAGS="-undefined dynamic_lookup"
+        export TOOLSET="clang"
         export BINARY=64
         export BLAS=atlas
         ;;
@@ -118,7 +129,7 @@ cd ../../..
 
 cd boost_$BOOST
 ./bootstrap.sh --with-libraries=system,thread
-./b2 install "--prefix=$INSTALL_PATH" address-model=$BINARY link=static "cxxflags=$CXXFLAGS"
+./b2 install "--prefix=$INSTALL_PATH" "address-model=$BINARY" link=static "toolset=$TOOLSET" "cxxflags=$CXXFLAGS"
 cd ..
 
 cd hdf5-$HDF5
@@ -132,7 +143,7 @@ if [[ $PLATFORM != macosx-* ]]; then
     # blas (requires fortran, e.g. sudo yum install gcc-gfortran)
     cd OpenBLAS-$OPENBLAS
     # CentOS compiler version can't compile AVX2 instructions, TODO update compiler
-    make -j $MAKEJ "CC=$CC" BINARY=$BINARY NO_AVX2=1 NO_SHARED=1
+    make -j $MAKEJ "CC=$CC" "FC=$FC" BINARY=$BINARY NO_AVX2=1 NO_SHARED=1
     make install "PREFIX=$INSTALL_PATH" NO_SHARED=1
     cd ..
 fi

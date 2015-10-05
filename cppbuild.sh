@@ -4,6 +4,9 @@ set -eu
 
 [[ -z ${CMAKE:-} ]] && CMAKE=cmake
 [[ -z ${MAKEJ:-} ]] && MAKEJ=4
+[[ -z ${OLDCC:-} ]] && OLDCC="gcc"
+[[ -z ${OLDCXX:-} ]] && OLDCXX="g++"
+[[ -z ${OLDFC:-} ]] && OLDFC="gfortran"
 
 KERNEL=(`uname -s | tr [A-Z] [a-z]`)
 ARCH=(`uname -m | tr [A-Z] [a-z]`)

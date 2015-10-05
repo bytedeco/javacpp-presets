@@ -15,6 +15,10 @@
   <packaging>jar</packaging>
   <name>JavaCPP Presets for CUDA</name>
 
+  <properties>
+    <platform.oldcompiler>${platform.compiler}</platform.oldcompiler>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -33,6 +37,14 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
+        <configuration>
+          <propertyKeysAndValues>
+            <property>
+              <name>platform.compiler</name>
+              <value>${platform.oldcompiler}</value>
+            </property>
+          </propertyKeysAndValues>
+        </configuration>
         <executions>
           <execution>
             <id>process-classes</id>

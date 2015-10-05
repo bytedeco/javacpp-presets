@@ -15,6 +15,10 @@
   <packaging>jar</packaging>
   <name>JavaCPP Presets for GSL</name>
 
+  <properties>
+    <platform.oldcompiler>${platform.compiler}</platform.oldcompiler>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.bytedeco</groupId>
@@ -36,6 +40,14 @@
       <plugin>
         <groupId>org.bytedeco</groupId>
         <artifactId>javacpp</artifactId>
+        <configuration>
+          <propertyKeysAndValues>
+            <property>
+              <name>platform.compiler</name>
+              <value>${platform.oldcompiler}</value>
+            </property>
+          </propertyKeysAndValues>
+        </configuration>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>
