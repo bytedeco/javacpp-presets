@@ -13,25 +13,21 @@ case $PLATFORM in
         export CC="$OLDCC -m32"
         export CXX="$OLDCXX -m32"
         export FC="$OLDFC -m32"
-        export TOOLSET="${OLDCC:0:3}"
-        if [[ ${#OLDCC} -gt 3 ]]; then
-            export TOOLSET="${OLDCC:0:3}-${OLDCC:3:1}.${OLDCC:4:1}"
-        fi
+        export TOOLSET=`echo $OLDCC | sed 's/\([a-zA-Z]*\)\([0-9]\)\([0-9]\)/\1-\2.\3/'`
         export BINARY=32
         export BLAS=open
         ;;
     linux-x86_64)
+        export CPU_ONLY=0
         export CC="$OLDCC -m64"
         export CXX="$OLDCXX -m64"
         export FC="$OLDFC -m64"
-        export TOOLSET="${OLDCC:0:3}"
-        if [[ ${#OLDCC} -gt 3 ]]; then
-            export TOOLSET="${OLDCC:0:3}-${OLDCC:3:1}.${OLDCC:4:1}"
-        fi
+        export TOOLSET=`echo $OLDCC | sed 's/\([a-zA-Z]*\)\([0-9]\)\([0-9]\)/\1-\2.\3/'`
         export BINARY=64
         export BLAS=open
         ;;
     macosx-*)
+        export CPU_ONLY=0
         export CC="clang"
         export CXX="clang++"
         export LDFLAGS="-undefined dynamic_lookup"
