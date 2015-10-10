@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "<libavutil/frame.h>", "<libavutil/samplefmt.h>", "<libavutil/channel_layout.h>", "<libavutil/cpu.h>", "<libavutil/dict.h>",
         "<libavutil/opt.h>", "<libavutil/audioconvert.h>", "<libavutil/pixdesc.h>", "<libavutil/imgutils.h>",
         "<libavutil/downmix_info.h>", "<libavutil/stereo3d.h>", "<libavutil/ffversion.h>", "<libavutil/motion_vector.h>",
-        "<libavutil/fifo.h>", "<libavutil/audio_fifo.h>"},
+        "<libavutil/fifo.h>", "<libavutil/audio_fifo.h>", "log_callback.h"},
         includepath={"/usr/local/include/ffmpeg/", "/opt/local/include/ffmpeg/", "/usr/include/ffmpeg/"},
         link="avutil@.54", compiler={"default", "nodeprecated"}),
     @Platform(value="windows", includepath={"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, preload="avutil-54") })
