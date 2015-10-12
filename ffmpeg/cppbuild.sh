@@ -7,7 +7,14 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-if [[ $PLATFORM == windows* ]]; then
+DISABLE="--disable-iconv --disable-libxcb --disable-opencl --disable-sdl"
+ENABLE="--enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx265 --enable-libvpx"
+
+# minimal configuration to support MPEG-4 streams with H.264 and AAC
+# DISABLE="--disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
+# ENABLE="--enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=aac --enable-decoder=h264 --enable-decoder=aac --enable-parser=h264 --enable-parser=aac --enable-muxer=mp4 --enable-muxer=rtsp --enable-demuxer=mov --enable-demuxer=rtsp --enable-protocol=file --enable-protocol=http --enable-protocol=rtp --enable-protocol=rtmp"
+
+if [[ $PLATFORM == windows* && !($DISABLE =~ "--disable-everything") ]]; then
     FFMPEG_VERSION=20150909-git-2c1ec57
     [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
     download http://ffmpeg.zeranoe.com/builds/win$BITS/dev/ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z
@@ -56,207 +63,291 @@ case $PLATFORM in
     android-arm)
         cd $LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux CC="$ANDROID_BIN-gcc" STRIP="$ANDROID_BIN-strip" CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" LDFLAGS="-nostdlib -Wl,--fix-cortex-a8" LIBS="-lgcc -ldl -lz -lm -lc"
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux CC="$ANDROID_BIN-gcc" STRIP="$ANDROID_BIN-strip" CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" LDFLAGS="-nostdlib -Wl,--fix-cortex-a8" LIBS="-lgcc -ldl -lz -lm -lc"
         cd libspeex
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../include
         make install
         cd ../../$OPENCORE_AMR
         BUILD_FLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux CC="$ANDROID_BIN-gcc" CXX="$ANDROID_BIN-g++" RANLIB="$ANDROID_BIN-ranlib" CFLAGS="$BUILD_FLAGS" CXXFLAGS="$BUILD_FLAGS" LDFLAGS="-nostdlib -Wl,--fix-cortex-a8" LIBS="-lgcc -ldl -lz -lm -lc"
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$OPENSSL
         CROSS_COMPILE="$ANDROID_BIN-" ./Configure android-armv7 -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300 no-shared --prefix=$INSTALL_PATH
-        ANDROID_DEV="$ANDROID_ROOT/usr" make
+        ANDROID_DEV="$ANDROID_ROOT/usr" make # fails with -j > 1
         make install
         cd ../openh264-$OPENH264_VERSION
-        make -j4 PREFIX=$INSTALL_PATH OS=android ARCH=arm USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" libraries install-static
+        make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=arm USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" libraries install-static
 #        cd ../$X264
 #        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=arm-linux --extra-cflags="-DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="-nostdlib -Wl,--fix-cortex-a8 -lgcc -ldl -lz -lm -lc"
-#        make -j4
+#        make -j $MAKEJ
 #        make install
         cd ../$X265
         patch -Np1 < ../../../$X265-android.patch || true
         $CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DCMAKE_TOOLCHAIN_FILE=android-arm.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../libvpx-$VPX_VERSION
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --sdk-path=$ANDROID_NDK --target=armv7-android-gcc --disable-runtime-cpu-detect --disable-neon --disable-neon-asm
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-android.patch
-        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-iconv --disable-libxcb --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx265 --enable-libvpx --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=arm --extra-cflags="-I../include/ -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="$ANDROID_ROOT/usr/lib/crtbegin_so.o -L../lib/ -L$ANDROID_CPP/libs/armeabi/ -nostdlib -Wl,--fix-cortex-a8" --extra-libs="-lgnustl_static -lgcc -ldl -lz -lm -lc" --disable-symver --disable-programs
-        make -j4
+        ./configure --prefix=.. $DISABLE $ENABLE --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=arm --extra-cflags="-I../include/ -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="$ANDROID_ROOT/usr/lib/crtbegin_so.o -L../lib/ -L$ANDROID_CPP/libs/armeabi/ -nostdlib -Wl,--fix-cortex-a8" --extra-libs="-lgnustl_static -lgcc -ldl -lz -lm -lc" --disable-symver --disable-programs
+        make -j $MAKEJ
         make install
         ;;
+
      android-x86)
         cd $LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CC="$ANDROID_BIN-gcc" STRIP="$ANDROID_BIN-strip" CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" LDFLAGS="-nostdlib" LIBS="-lgcc -ldl -lz -lm -lc"
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CC="$ANDROID_BIN-gcc" STRIP="$ANDROID_BIN-strip" CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" LDFLAGS="-nostdlib" LIBS="-lgcc -ldl -lz -lm -lc"
         cd libspeex
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../include
         make install
         cd ../../$OPENCORE_AMR
         BUILD_FLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CC="$ANDROID_BIN-gcc" CXX="$ANDROID_BIN-g++" RANLIB="$ANDROID_BIN-ranlib" CFLAGS="$BUILD_FLAGS" CXXFLAGS="$BUILD_FLAGS" LDFLAGS="-nostdlib" LIBS="-lgcc -ldl -lz -lm -lc"
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$OPENSSL
         CROSS_COMPILE="$ANDROID_BIN-" ./Configure android-x86 -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300 no-shared --prefix=$INSTALL_PATH
-        ANDROID_DEV="$ANDROID_ROOT/usr" make
+        ANDROID_DEV="$ANDROID_ROOT/usr" make # fails with -j > 1
         make install
         cd ../openh264-$OPENH264_VERSION
-        make -j4 PREFIX=$INSTALL_PATH OS=android ARCH=x86 NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" libraries install-static
+        make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86 NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" libraries install-static
 #        cd ../$X264
 #        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=i686-linux --extra-cflags="-DANDROID -fPIC -ffunction-sections -funwind-tables -mtune=atom -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="-nostdlib -lgcc -ldl -lz -lm -lc"
-#        make -j4
+#        make -j $MAKEJ
 #        make install
         cd ../$X265
         patch -Np1 < ../../../$X265-android.patch || true
         $CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DCMAKE_TOOLCHAIN_FILE=android-x86.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-        make -j4 x265-static
+        make -j $MAKEJ x265-static
         make install
         cd ../libvpx-$VPX_VERSION
         CROSS="$ANDROID_BIN-" ASFLAGS="-D__ANDROID__" CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -mtune=atom -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" LDFLAGS="--sysroot=$ANDROID_ROOT -nostdlib -lgcc -ldl -lz -lm -lc" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=x86-android-gcc
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-android.patch
-        ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-iconv --disable-libxcb --disable-opencl --disable-outdev=sdl --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx265 --enable-libvpx --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=atom --extra-cflags="-I../include/ -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="$ANDROID_ROOT/usr/lib/crtbegin_so.o -L../lib/ -L$ANDROID_CPP/libs/x86/ -nostdlib" --extra-libs="-lgnustl_static -lgcc -ldl -lz -lm -lc" --disable-symver --disable-programs
-        make -j4
+        ./configure --prefix=.. $DISABLE $ENABLE --enable-cross-compile --cross-prefix="$ANDROID_BIN-" --ranlib="$ANDROID_BIN-ranlib" --sysroot="$ANDROID_ROOT" --target-os=linux --arch=atom --extra-cflags="-I../include/ -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" --extra-ldflags="$ANDROID_ROOT/usr/lib/crtbegin_so.o -L../lib/ -L$ANDROID_CPP/libs/x86/ -nostdlib" --extra-libs="-lgnustl_static -lgcc -ldl -lz -lm -lc" --disable-symver --disable-programs
+        make -j $MAKEJ
         make install
         ;;
+
     linux-x86)
         cd $LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32 -msse2"
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32"
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$OPENCORE_AMR
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux CFLAGS="-m32" CXXFLAGS="-m32"
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$OPENSSL
         ./Configure linux-elf -m32 -fPIC no-shared --prefix=$INSTALL_PATH
-        make
+        make # fails with -j > 1
         make install
         cd ../openh264-$OPENH264_VERSION
-        make -j4 PREFIX=$INSTALL_PATH ARCH=x86 libraries install-static
+        make -j $MAKEJ DESTDIR=. PREFIX=.. AR=ar ARCH=x86 libraries install-static
 #        cd ../$X264
 #        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=i686-linux
-#        make -j4
+#        make -j $MAKEJ
 #        make install
         cd ../$X265
         CC="gcc -m32" CXX="g++ -m32" $CMAKE -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../libvpx-$VPX_VERSION
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=x86-linux-gcc
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-iconv --disable-libxcb --disable-opencl --disable-outdev=sdl --enable-x11grab --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx265 --enable-libvpx --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
-        make -j4
+        [[ $ENABLE =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $X11GRAB --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
+        make -j $MAKEJ
         make install
         ;;
+
     linux-x86_64)
         cd $LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64"
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$OPENCORE_AMR
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux CFLAGS="-m64" CXXFLAGS="-m64"
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$OPENSSL
         ./Configure linux-x86_64 -fPIC no-shared --prefix=$INSTALL_PATH
-        make
+        make # fails with -j > 1
         make install
         cd ../openh264-$OPENH264_VERSION
-        make -j4 PREFIX=$INSTALL_PATH ARCH=x86_64 libraries install-static
+        make -j $MAKEJ DESTDIR=. PREFIX=.. AR=ar ARCH=x86_64 libraries install-static
 #        cd ../$X264
 #        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=x86_64-linux
-#        make -j4
+#        make -j $MAKEJ
 #        make install
         cd ../$X265
         CC="gcc -m64" CXX="g++ -m64" $CMAKE -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../libvpx-$VPX_VERSION
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=x86_64-linux-gcc
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-iconv --disable-libxcb --disable-opencl --disable-outdev=sdl --enable-x11grab --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx265 --enable-libvpx --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
-        make -j4
+        [[ $ENABLE =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $X11GRAB --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
+        make -j $MAKEJ
         make install
         ;;
+
     macosx-*)
         cd $LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$SPEEX
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$OPENCORE_AMR
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$OPENSSL
         ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH
-        make
+        make # fails with -j > 1
         make install
         cd ../openh264-$OPENH264_VERSION
-        make -j4 PREFIX=$INSTALL_PATH libraries install-static
+        make -j $MAKEJ DESTDIR=. PREFIX=.. AR=ar libraries install-static
 #        cd ../$X264
 #        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl
-#        make -j4
+#        make -j $MAKEJ
 #        make install
         cd ../$X265
         CC="clang" CXX="clang++" $CMAKE -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../libvpx-$VPX_VERSION
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-macosx.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --disable-iconv --disable-libxcb --disable-opencl --disable-outdev=sdl --enable-indev=avfoundation --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx265 --enable-libvpx --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --disable-doc
-        make -j4
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=avfoundation --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --disable-doc --disable-programs
+        make -j $MAKEJ
         make install
         ;;
+
     windows-x86)
-        cp -r ffmpeg-$FFMPEG_VERSION-win32-dev/include .
-        cp -r ffmpeg-$FFMPEG_VERSION-win32-dev/lib .
-        cp -r ffmpeg-$FFMPEG_VERSION-win32-shared/bin .
-        cd include
+        if [[ !($DISABLE =~ "--disable-everything") ]]; then
+            cp -r ffmpeg-$FFMPEG_VERSION-win32-dev/include .
+            cp -r ffmpeg-$FFMPEG_VERSION-win32-dev/lib .
+            cp -r ffmpeg-$FFMPEG_VERSION-win32-shared/bin .
+            cd ..
+            return
+        fi
+
+        cd $LAME
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32 -msse2"
+        make -j $MAKEJ
+        make install
+        cd ../$SPEEX
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32"
+        make -j $MAKEJ
+        make install
+        cd ../$OPENCORE_AMR
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32" CXXFLAGS="-m32"
+        make -j $MAKEJ
+        make install
+        cd ../$OPENSSL
+        ./Configure mingw -fPIC no-shared --prefix=$INSTALL_PATH
+        make # fails with -j > 1
+        make install
+        cd ../openh264-$OPENH264_VERSION
+        make -j $MAKEJ DESTDIR=. PREFIX=.. AR=ar ARCH=x86 libraries install-static
+#        cd ../$X264
+#        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --build=i686-w64-mingw32
+#        make -j $MAKEJ
+#        make install
+        cd ../$X265
+        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        make -j $MAKEJ
+        make install
+        cd ../libvpx-$VPX_VERSION
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=x86-win32-gcc
+        make -j $MAKEJ
+        make install
+        cd ../ffmpeg-$FFMPEG_VERSION
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
+        make -j $MAKEJ
+        make install
         ;;
+
     windows-x86_64)
-        cp -r ffmpeg-$FFMPEG_VERSION-win64-dev/include .
-        cp -r ffmpeg-$FFMPEG_VERSION-win64-dev/lib .
-        cp -r ffmpeg-$FFMPEG_VERSION-win64-shared/bin .
-        cd include
+        if [[ !($DISABLE =~ "--disable-everything") ]]; then
+            cp -r ffmpeg-$FFMPEG_VERSION-win64-dev/include .
+            cp -r ffmpeg-$FFMPEG_VERSION-win64-dev/lib .
+            cp -r ffmpeg-$FFMPEG_VERSION-win64-shared/bin .
+            cd ..
+            return
+        fi
+
+        cd $LAME
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
+        make -j $MAKEJ
+        make install
+        cd ../$SPEEX
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
+        make -j $MAKEJ
+        make install
+        cd ../$OPENCORE_AMR
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64" CXXFLAGS="-m64"
+        make -j $MAKEJ
+        make install
+        cd ../$OPENSSL
+        ./Configure mingw64 -fPIC no-shared --prefix=$INSTALL_PATH
+        make # fails with -j > 1
+        make install
+        cd ../openh264-$OPENH264_VERSION
+        make -j $MAKEJ DESTDIR=. PREFIX=.. AR=ar ARCH=x86_64 libraries install-static
+#        cd ../$X264
+#        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --build=x86_64-w64-mingw32
+#        make -j $MAKEJ
+#        make install
+        cd ../$X265
+        CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        make -j $MAKEJ
+        make install
+        cd ../libvpx-$VPX_VERSION
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=x86_64-win64-gcc
+        make -j $MAKEJ
+        make install
+        cd ../ffmpeg-$FFMPEG_VERSION
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
+        make -j $MAKEJ
+        make install
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
