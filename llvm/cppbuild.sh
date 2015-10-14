@@ -9,6 +9,7 @@ fi
 
 LLVM_VERSION=3.7.0
 download http://llvm.org/releases/$LLVM_VERSION/llvm-$LLVM_VERSION.src.tar.xz llvm-$LLVM_VERSION.src.tar.xz
+download http://llvm.org/releases/$LLVM_VERSION/cfe-$LLVM_VERSION.src.tar.xz cfe-$LLVM_VERSION.src.tar.xz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
@@ -17,23 +18,29 @@ xz -dk ../llvm-$LLVM_VERSION.src.tar.xz
 tar -xvf ../llvm-$LLVM_VERSION.src.tar
 rm ../llvm-$LLVM_VERSION.src.tar
 cd llvm-$LLVM_VERSION.src
-mkdir build
-cd build
+mkdir -p build tools
+cd tools
+xz -dk ../../../cfe-$LLVM_VERSION.src.tar.xz
+tar -xvf ../../../cfe-$LLVM_VERSION.src.tar
+rm ../../../cfe-$LLVM_VERSION.src.tar
+rm -Rf clang
+mv cfe-$LLVM_VERSION.src clang
+cd ../build
 
 case $PLATFORM in
     linux-x86)
         ../configure --prefix=$INSTALL_PATH --enable-shared --enable-optimized CC="clang -m32" CXX="clang++ -m32"
-        make -j4
+        make -j $MAKEJ
         make install
         ;;
     linux-x86_64)
         ../configure --prefix=$INSTALL_PATH --enable-shared --enable-optimized CC="clang -m64" CXX="clang++ -m64"
-        make -j4
+        make -j $MAKEJ
         make install
         ;;
     macosx-*)
         ../configure --prefix=$INSTALL_PATH --enable-shared --enable-optimized
-        make -j4
+        make -j $MAKEJ
         make install
         ;;
     *)

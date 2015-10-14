@@ -1,4 +1,5 @@
 
+ * Add the `clang` module to the presets for LLVM
  * Propose for FFmpeg in the `cppbuild.sh` file a minimal configuration to support MPEG-4 streams with H.264 and AAC
  * Switch the H.264 encoder used by default in FFmpeg from x264 to the non-GPL OpenH264
  * Hack together `log_callback.h` to be able to redirect to Java log messages from FFmpeg
