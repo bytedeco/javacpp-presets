@@ -22,8 +22,8 @@ if [[ $PLATFORM == windows* && !($DISABLE =~ "--disable-everything") ]]; then
 
     mkdir -p $PLATFORM
     cd $PLATFORM
-     /C/Program\ Files/7-Zip/7z x -y ../ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z
-     /C/Program\ Files/7-Zip/7z x -y ../ffmpeg-$FFMPEG_VERSION-win$BITS-shared.7z
+    7z x -y ../ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z
+    7z x -y ../ffmpeg-$FFMPEG_VERSION-win$BITS-shared.7z
 else
     LAME=lame-3.99.5
     SPEEX=speex-1.2rc1

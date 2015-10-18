@@ -127,9 +127,10 @@ cd boost_$BOOST
 ./bootstrap.sh --with-libraries=system,thread
 ./b2 install "--prefix=$INSTALL_PATH" "address-model=$BINARY" link=static "toolset=$TOOLSET" "cxxflags=$CXXFLAGS"
 cd ..
+ln -sf libboost_thread.a lib/libboost_thread-mt.a
 
 cd hdf5-$HDF5
-./configure "--prefix=$INSTALL_PATH" --disable-shared
+LDFLAGS= ./configure "--prefix=$INSTALL_PATH" --disable-shared
 make -j $MAKEJ
 make install
 cd ..
@@ -138,8 +139,7 @@ cd ..
 if [[ $PLATFORM != macosx-* ]]; then
     # blas (requires fortran, e.g. sudo yum install gcc-gfortran)
     cd OpenBLAS-$OPENBLAS
-    # CentOS compiler version can't compile AVX2 instructions, TODO update compiler
-    make -j $MAKEJ "CC=$CC" "FC=$FC" BINARY=$BINARY NO_AVX2=1 NO_SHARED=1
+    make -j $MAKEJ "CC=$CC" "FC=$FC" BINARY=$BINARY NO_SHARED=1
     make install "PREFIX=$INSTALL_PATH" NO_SHARED=1
     cd ..
 fi
