@@ -6,7 +6,7 @@
  * Pick up `OLDCC`, `OLDCXX`, and `OLDFC` environment variables in `cppbuild.sh` and `platform.oldcompiler` system property in Maven to build with it libraries that can tolerate an older version of the C/C++ compiler on Linux
  * Upgrade all Maven dependencies and plugins to latest versions, thus bumping minimum requirements to Java SE 7, Android 4.0, and Maven 3.0
  * Provide `cppbuild.sh` script for Caffe that includes all dependencies ([pull #77](https://github.com/bytedeco/javacpp-presets/pull/77))
- * Upgrade presets for Caffe, CUDA 7.5, cuDNN 3, FFmpeg 2.8, LLVM 3.7.0, Tesseract 3.04
+ * Upgrade presets for Caffe, CUDA 7.5, cuDNN 3, FFmpeg 2.8.1, Speex 1.2rc2, x265 1.8, LLVM 3.7.0, Tesseract 3.04
  * Include `motion_vector.h`, `fifo.h`, and `audio_fifo.h` header files in the `avutil` module of FFmpeg ([issue #79](https://github.com/bytedeco/javacpp-presets/issues/79))
  * Add presets for Chilitags, thanks to Chris Walters for the financial contribution
  * Let users choose the runtime type of `layer_by_name()` from `FloatNet` or `DoubleNet` in `caffe` ([issue bytedeco/javacpp#25](https://github.com/bytedeco/javacpp/issues/25))
