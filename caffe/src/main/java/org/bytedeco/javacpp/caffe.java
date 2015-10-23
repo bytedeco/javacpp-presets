@@ -11664,8 +11664,6 @@ public static final int
 // #include <queue>
 // #include <string>
 
-// #include "caffe/common.hpp"
-
 @Name("caffe::BlockingQueue<caffe::Datum*>") @NoOffset public static class DatumBlockingQueue extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -12035,7 +12033,6 @@ public static final int
 // #include <cstdlib>
 
 // #include "caffe/common.hpp"
-// #include "caffe/util/math_functions.hpp"
 
 // If CUDA is available and in GPU mode, host memory will be allocated pinned,
 // using cudaMallocHost. It avoids dynamic pinning for transfers (DMA).
@@ -12098,7 +12095,6 @@ public static final int
 // #include "caffe/common.hpp"
 // #include "caffe/proto/caffe.pb.h"
 // #include "caffe/syncedmem.hpp"
-// #include "caffe/util/math_functions.hpp"
 
 @MemberGetter public static native int kMaxBlobAxes();
 
@@ -12762,7 +12758,6 @@ public static final int
 // #include <string>
 
 // #include "caffe/blob.hpp"
-// #include "caffe/common.hpp"
 // #include "caffe/proto/caffe.pb.h"
 // #include "caffe/syncedmem.hpp"
 // #include "caffe/util/math_functions.hpp"
@@ -13147,6 +13142,9 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
 // #include "caffe/proto/caffe.pb.h"
 // #include "caffe/util/blocking_queue.hpp"
 // #include "caffe/util/db.hpp"
+
+public static final String HDF5_DATA_DATASET_NAME = "data";
+public static final String HDF5_DATA_LABEL_NAME = "label";
 
 /**
  * @brief Provides base for data layers that feed blobs to the Net.
@@ -13889,7 +13887,7 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
 // #include "caffe/common.hpp"
 // #include "caffe/layer_factory.hpp"
 // #include "caffe/proto/caffe.pb.h"
-// #include "caffe/util/device_alternate.hpp"
+// #include "caffe/util/math_functions.hpp"
 
 /**
  Forward declare boost::thread instead of including boost/thread.hpp
@@ -14460,7 +14458,6 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
 // #include <vector>
 
 // #include "caffe/blob.hpp"
-// #include "caffe/common.hpp"
 // #include "caffe/layer.hpp"
 // #include "caffe/neuron_layers.hpp"
 // #include "caffe/proto/caffe.pb.h"
@@ -15194,9 +15191,6 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
 // #include "caffe/layer.hpp"
 // #include "caffe/proto/caffe.pb.h"
 
-public static final String HDF5_DATA_DATASET_NAME = "data";
-public static final String HDF5_DATA_LABEL_NAME = "label";
-
 /**
  * @brief An interface for layers that take one blob as input (@f$ x @f$)
  *        and produce one equally-sized blob as output (@f$ y @f$), where
@@ -15876,16 +15870,11 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 // #ifndef CAFFE_COMMON_LAYERS_HPP_
 // #define CAFFE_COMMON_LAYERS_HPP_
 
-// #include <string>
 // #include <utility>
 // #include <vector>
 
 // #include "caffe/blob.hpp"
-// #include "caffe/common.hpp"
-// #include "caffe/data_layers.hpp"
 // #include "caffe/layer.hpp"
-// #include "caffe/loss_layers.hpp"
-// #include "caffe/neuron_layers.hpp"
 // #include "caffe/proto/caffe.pb.h"
 
 /**
@@ -18100,7 +18089,6 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
 
 // #include "google/protobuf/message.h"
 
-// #include "caffe/blob.hpp"
 // #include "caffe/common.hpp"
 // #include "caffe/proto/caffe.pb.h"
 

@@ -745,10 +745,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         private native void allocate();
 
         /** Equality operator. */
-        public native @Cast("bool") @Name("operator==") boolean equals( @Const @ByRef PGRGuid guid );
+        public native @Cast("bool") @Name("operator ==") boolean equals( @Const @ByRef PGRGuid guid );
 
         /** Inequality operator. */
-        public native @Cast("bool") @Name("operator!=") boolean notEquals( @Const @ByRef PGRGuid guid );
+        public native @Cast("bool") @Name("operator !=") boolean notEquals( @Const @ByRef PGRGuid guid );
     }
 
     /** 
@@ -775,10 +775,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         private native void allocate( @Cast("unsigned int") int ipAddressVal );
 
         /** Equality operator. */
-        public native @Cast("bool") @Name("operator==") boolean equals( @Const @ByRef IPAddress address );
+        public native @Cast("bool") @Name("operator ==") boolean equals( @Const @ByRef IPAddress address );
 
         /** Inequality operator. */
-        public native @Cast("bool") @Name("operator!=") boolean notEquals( @Const @ByRef IPAddress address );
+        public native @Cast("bool") @Name("operator !=") boolean notEquals( @Const @ByRef IPAddress address );
     }
 
     /** MAC address. */
@@ -803,10 +803,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         private native void allocate( @Cast("unsigned int") int macAddressValHigh, @Cast("unsigned int") int macAddressValLow );
 
         /** Equality operator. */
-        public native @Cast("bool") @Name("operator==") boolean equals( @Const @ByRef MACAddress address );
+        public native @Cast("bool") @Name("operator ==") boolean equals( @Const @ByRef MACAddress address );
 
         /** Inequality operator. */
-        public native @Cast("bool") @Name("operator!=") boolean notEquals( @Const @ByRef MACAddress address );
+        public native @Cast("bool") @Name("operator !=") boolean notEquals( @Const @ByRef MACAddress address );
     }
 
     /** A GigE property. */
@@ -2157,29 +2157,29 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /**
          * Assignment operator.
          */
-        public native @ByRef @Name("operator=") Error put( @Const @ByRef Error error );
+        public native @ByRef @Name("operator =") Error put( @Const @ByRef Error error );
 
         /**
          * Equality operator.
          */
-        public native @Cast("bool") @Name("operator==") boolean equals( @Const @ByRef Error error );
+        public native @Cast("bool") @Name("operator ==") boolean equals( @Const @ByRef Error error );
 
         /**
          * Equality operator. This overloaded operator compares the
          * ErrorType of the Error against the specified ErrorType.
          */
-        public native @Cast("bool") @Name("operator==") boolean equals( @Cast("const FlyCapture2::ErrorType") int errorType );
+        public native @Cast("bool") @Name("operator ==") boolean equals( @Cast("const FlyCapture2::ErrorType") int errorType );
 
         /**
          * Inequality operator.
          */
-        public native @Cast("bool") @Name("operator!=") boolean notEquals( @Const @ByRef Error error );
+        public native @Cast("bool") @Name("operator !=") boolean notEquals( @Const @ByRef Error error );
 
         /**
          * Inequality operator. This overloaded operator compares the
          * ErrorType of the Error against the specified ErrorType.
          */
-        public native @Cast("bool") @Name("operator!=") boolean notEquals( @Cast("const FlyCapture2::ErrorType") int errorType );
+        public native @Cast("bool") @Name("operator !=") boolean notEquals( @Cast("const FlyCapture2::ErrorType") int errorType );
 
         /**
          * Retrieve the ErrorType of the error.
@@ -5024,7 +5024,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
          *
          * @param image The image to copy from.
          */
-        public native @ByRef @Name("operator=") Image put( @Const @ByRef Image image );
+        public native @ByRef @Name("operator =") Image put( @Const @ByRef Image image );
         
         /**
          * Indexing operator.
@@ -5033,7 +5033,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
          *
          * @return The address of the specified byte from the image data.
          */
-        public native @Cast("unsigned char*") @Name("operator[]") BytePointer get( @Cast("unsigned int") int index );
+        public native @Cast("unsigned char*") @Name("operator []") BytePointer get( @Cast("unsigned int") int index );
         
         /**
          * Indexing operator.
@@ -5043,7 +5043,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
          *
          * @return The address of the specified byte from the image data.
          */
-        public native @Cast("unsigned char*") @Name("operator()") BytePointer apply( 
+        public native @Cast("unsigned char*") @Name("operator ()") BytePointer apply( 
                     @Cast("unsigned int") int row, 
                     @Cast("unsigned int") int col );      
         
@@ -5923,7 +5923,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
          *
          * @param other The TopologyNode to copy from.
          */
-        public native @ByRef @Name("operator=") TopologyNode put( @Const @ByRef TopologyNode other );
+        public native @ByRef @Name("operator =") TopologyNode put( @Const @ByRef TopologyNode other );
 
         /**
          * Get the PGRGuid associated with the node.
@@ -6104,7 +6104,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
          *
          * @param other The ImageStatistics object to copy from.
          */
-        public native @ByRef @Name("operator=") ImageStatistics put( @Const @ByRef ImageStatistics other );
+        public native @ByRef @Name("operator =") ImageStatistics put( @Const @ByRef ImageStatistics other );
 
         /**
          * Enable all channels.

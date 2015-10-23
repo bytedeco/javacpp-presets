@@ -833,6 +833,25 @@ public static native int freenect_set_depth_mode(freenect_device dev, @Const @By
  */
 public static native int freenect_set_flag(freenect_device dev, @Cast("freenect_flag") int flag, @Cast("freenect_flag_value") int value);
 
+/**
+ * Returns the brightness of the IR sensor.
+ *
+ * @param dev Device to get IR brightness
+ *
+ * @return IR brightness value in the range 1 - 50, < 0 if error
+ */
+public static native int freenect_get_ir_brightness(freenect_device dev);
+
+/**
+ * Sets the brightness of the IR sensor.
+ * Note that this does not change the intensity of the IR projector.
+ *
+ * @param dev Device to set IR brightness
+ * @param brighness Brightness value in range 1 - 50
+ *
+ * @return 0 on success, < 0 if error
+ */
+public static native int freenect_set_ir_brightness(freenect_device dev, @Cast("uint16_t") short brightness);
 
 /**
  * Allows the user to specify a pointer to the audio firmware in memory for the Xbox 360 Kinect

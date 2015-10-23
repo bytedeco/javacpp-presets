@@ -7,7 +7,7 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-LIBFREENECT_VERSION=0.5.2
+LIBFREENECT_VERSION=0.5.3
 download https://github.com/OpenKinect/libfreenect/archive/v$LIBFREENECT_VERSION.zip libfreenect-$LIBFREENECT_VERSION.zip
 
 mkdir -p $PLATFORM
