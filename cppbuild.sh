@@ -84,11 +84,15 @@ case $PLATFORM in
         ;;
 esac
 
+TOP_PATH=`pwd`
+
 function download {
-    if [[ ! -e $2 ]]; then
+    mkdir -p "$TOP_PATH/downloads"
+    if [[ ! -e "$TOP_PATH/downloads/$2" ]]; then
         echo "Downloading $1"
-        curl -L $1 -o $2
+        curl -L "$1" -o "$TOP_PATH/downloads/$2"
     fi
+    ln -sf "$TOP_PATH/downloads/$2" "$2"
 }
 
 if [[ -z ${PROJECTS:-} ]]; then

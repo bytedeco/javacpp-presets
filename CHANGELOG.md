@@ -1,7 +1,8 @@
 
+ * Cache files downloaded by `cppbuild.sh` in the `downloads` subdirectory to prevent having to redownload everything after a clean
  * Add the `clang` module to the presets for LLVM
  * Propose for FFmpeg in the `cppbuild.sh` file a minimal configuration to support MPEG-4 streams with H.264 and AAC
- * Switch the H.264 encoder used by default in FFmpeg from x264 to the non-GPL OpenH264
+ * Add the non-GPL OpenH264 as an alternative H.264 encoder to x264 in FFmpeg
  * Hack together `log_callback.h` to be able to redirect to Java log messages from FFmpeg
  * Pick up `OLDCC`, `OLDCXX`, and `OLDFC` environment variables in `cppbuild.sh` and `platform.oldcompiler` system property in Maven to build with it libraries that can tolerate an older version of the C/C++ compiler on Linux
  * Upgrade all Maven dependencies and plugins to latest versions, thus bumping minimum requirements to Java SE 7, Android 4.0, and Maven 3.0

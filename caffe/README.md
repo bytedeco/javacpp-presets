@@ -243,7 +243,7 @@ public class caffe {
             }
 
             logger.info("Starting Optimization");
-            FloatSolver solver = GetFloatSolver(solver_param);
+            FloatSolver solver = FloatSolverRegistry.CreateSolver(solver_param);
 
             if (snapshot.length() > 0) {
                 logger.info("Resuming from " + snapshot);

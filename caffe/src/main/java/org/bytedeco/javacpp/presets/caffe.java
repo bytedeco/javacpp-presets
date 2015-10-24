@@ -65,28 +65,29 @@ public class caffe implements InfoMapper {
                              "leveldb::Iterator", "leveldb::DB", "MDB_txn", "MDB_cursor", "MDB_dbi", "boost::mt19937").cast().pointerTypes("Pointer"))
                .put(new Info("google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField").skip());
 
-        String[] functionTemplates = { "caffe_cpu_gemv", "caffe_axpy", "caffe_cpu_axpby", "caffe_copy", "caffe_set", "caffe_memset", "caffe_add_scalar",
+        String[] functionTemplates = { "caffe_cpu_gemm", "caffe_cpu_gemv", "caffe_axpy", "caffe_cpu_axpby", "caffe_copy", "caffe_set", "caffe_add_scalar",
                 "caffe_scal", "caffe_sqr", "caffe_add", "caffe_sub", "caffe_mul", "caffe_div", "caffe_powx", "caffe_nextafter", "caffe_rng_uniform",
-                "caffe_rng_gaussian", "caffe_rng_bernoulli", "caffe_rng_bernoulli", "caffe_exp", "caffe_abs", "caffe_cpu_dot", "caffe_cpu_strided_dot",
+                "caffe_rng_gaussian", "caffe_rng_bernoulli", "caffe_rng_bernoulli", "caffe_exp", "caffe_log", "caffe_abs", "caffe_cpu_dot", "caffe_cpu_strided_dot",
                 "caffe_cpu_hamming_distance", "caffe_cpu_asum", "caffe_sign", "caffe_cpu_scale", "caffe_gpu_gemm", "caffe_gpu_gemv", "caffe_gpu_axpy",
                 "caffe_gpu_axpby", "caffe_gpu_memcpy", "caffe_gpu_set", "caffe_gpu_memset", "caffe_gpu_add_scalar", "caffe_gpu_scal", "caffe_gpu_add",
-                "caffe_gpu_sub", "caffe_gpu_mul", "caffe_gpu_div", "caffe_gpu_abs", "caffe_gpu_exp", "caffe_gpu_powx", "caffe_gpu_rng_uniform",
+                "caffe_gpu_sub", "caffe_gpu_mul", "caffe_gpu_div", "caffe_gpu_abs", "caffe_gpu_exp", "caffe_gpu_log", "caffe_gpu_powx", "caffe_gpu_rng_uniform",
                 "caffe_gpu_rng_gaussian", "caffe_gpu_rng_bernoulli", "caffe_gpu_dot", "caffe_gpu_hamming_distance", "caffe_gpu_asum", "caffe_gpu_sign",
                 "caffe_gpu_sgnbit", "caffe_gpu_fabs", "caffe_gpu_scale", "hdf5_load_nd_dataset_helper", "hdf5_load_nd_dataset", "hdf5_save_nd_dataset",
-                "im2col_cpu", "col2im_cpu", "im2col_gpu", "col2im_gpu" };
+                "im2col_nd_cpu", "im2col_cpu", "col2im_nd_cpu", "col2im_cpu", "im2col_nd_gpu", "im2col_gpu", "col2im_nd_gpu", "col2im_gpu" };
         for (String t : functionTemplates) {
             infoMap.put(new Info("caffe::" + t + "<float>").javaNames(t + "_float"))
                    .put(new Info("caffe::" + t + "<double>").javaNames(t + "_double"));
         }
 
-        String classTemplates[] = { "Blob", "DataTransformer", "Filler", "ConstantFiller", "UniformFiller", "GaussianFiller", "PositiveUnitballFiller", "XavierFiller",
+        String classTemplates[] = { "Blob", "DataTransformer", "Filler", "ConstantFiller", "UniformFiller", "GaussianFiller", "PositiveUnitballFiller", "XavierFiller", "MSRAFiller", "BilinearFiller",
                 "BaseDataLayer", "Batch", "BasePrefetchingDataLayer", "DataLayer", "DummyDataLayer", "HDF5DataLayer", "HDF5OutputLayer", "ImageDataLayer", "MemoryDataLayer",
                 "WindowDataLayer", "Layer", "LayerRegistry", "LayerRegisterer", "AccuracyLayer", "LossLayer", "ContrastiveLossLayer", "EuclideanLossLayer", "HingeLossLayer",
                 "InfogainLossLayer", "MultinomialLogisticLossLayer", "SigmoidCrossEntropyLossLayer", "SoftmaxWithLossLayer", "NeuronLayer", "AbsValLayer", "BNLLLayer",
-                "DropoutLayer", "ExpLayer", "PowerLayer", "ReLULayer", "SigmoidLayer", "TanHLayer", "ThresholdLayer", "PReLULayer", "ArgMaxLayer", "ConcatLayer", "EltwiseLayer",
-                "FlattenLayer", "InnerProductLayer", "MVNLayer", "SilenceLayer", "SoftmaxLayer", "SplitLayer", "SliceLayer", "Net", "Solver", "SGDSolver", "NesterovSolver",
-                "AdaGradSolver", "BaseConvolutionLayer", "ConvolutionLayer", "DeconvolutionLayer", "Im2colLayer", "LRNLayer", "PoolingLayer",
-                /* "CuDNNReLULayer", "CuDNNSigmoidLayer", "CuDNNTanHLayer", "CuDNNSoftmaxLayer", "CuDNNConvolutionLayer", "CuDNNPoolingLayer" */ };
+                "DropoutLayer", "ExpLayer", "PowerLayer", "ReLULayer", "SigmoidLayer", "TanHLayer", "ThresholdLayer", "PReLULayer", "PythonLayer", "ArgMaxLayer", "BatchNormLayer",
+                "BatchReindexLayer", "ConcatLayer", "EltwiseLayer", "EmbedLayer", "FilterLayer", "FlattenLayer", "InnerProductLayer", "MVNLayer", "ReshapeLayer", "ReductionLayer",
+                "SilenceLayer", "SoftmaxLayer", "SplitLayer", "SliceLayer", "TileLayer", "Net", "Solver", "WorkerSolver", "SolverRegistry", "SolverRegisterer", "SGDSolver", "NesterovSolver",
+                "AdaGradSolver", "RMSPropSolver", "AdaDeltaSolver", "AdamSolver",  "BaseConvolutionLayer", "ConvolutionLayer", "DeconvolutionLayer", "Im2colLayer", "LRNLayer", "PoolingLayer",
+                /* "SPPLayer", "CuDNNReLULayer", "CuDNNSigmoidLayer", "CuDNNTanHLayer", "CuDNNSoftmaxLayer", "CuDNNConvolutionLayer", "CuDNNPoolingLayer" */ };
         for (String t : classTemplates) {
             boolean purify = t.equals("BaseDataLayer") || t.equals("LossLayer") || t.equals("NeuronLayer");
             boolean virtualize = t.endsWith("Layer");

@@ -43,6 +43,10 @@
         <configuration>
           <propertyKeysAndValues>
             <property>
+              <name>platform.root</name>
+              <value>${platform.root}</value>
+            </property>
+            <property>
               <name>platform.compiler</name>
               <value>${platform.oldcompiler}</value>
             </property>
