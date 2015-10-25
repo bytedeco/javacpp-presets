@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * libfreenect 0.5.2  http://openkinect.org/
+ * libfreenect 0.5.3  http://openkinect.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -21,7 +21,7 @@ Sample Usage
 ------------
 Here is a simple example of libfreenect ported to Java from this C source file:
 
- * https://github.com/OpenKinect/libfreenect/blob/v0.5.0/examples/glpclview.c
+ * https://github.com/OpenKinect/libfreenect/blob/v0.5.3/examples/glpclview.c
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/GLPCLView.java` source files below, simply execute on the command line:
 ```bash
@@ -34,23 +34,23 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.libfreenect</groupId>
     <artifactId>glpclview</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>libfreenect</artifactId>
-            <version>0.5.2-1.0</version>
+            <version>0.5.3-1.1</version>
         </dependency>
         <dependency>
           <groupId>org.jogamp.gluegen</groupId>
           <artifactId>gluegen-rt-main</artifactId>
-          <version>2.0.2</version>
+          <version>2.3.1</version>
           <optional>true</optional>
         </dependency>
         <dependency>
           <groupId>org.jogamp.jogl</groupId>
           <artifactId>jogl-all-main</artifactId>
-          <version>2.0.2</version>
+          <version>2.3.1</version>
           <optional>true</optional>
         </dependency>
     </dependencies>
@@ -87,14 +87,14 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
  * either License.
  */
 
+import com.jogamp.opengl.*;
+import com.jogamp.opengl.awt.*;
+import com.jogamp.opengl.glu.*;
+import com.jogamp.opengl.util.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.nio.*;
-import javax.media.opengl.*;
-import javax.media.opengl.awt.*;
-import javax.media.opengl.glu.*;
 import javax.swing.*;
-import com.jogamp.opengl.util.*;
 import org.bytedeco.javacpp.*;
 import static java.lang.Math.*;
 import static org.bytedeco.javacpp.freenect.*;
@@ -273,7 +273,7 @@ public class GLPCLView {
         canvas = new GLCanvas();
         canvas.addGLEventListener(new GLEventListener() {
             @Override public void init(GLAutoDrawable glautodrawable) {
-                InitGL(glautodrawable.getGL().getGL2(), glautodrawable.getWidth(), glautodrawable.getHeight());
+                InitGL(glautodrawable.getGL().getGL2(), glautodrawable.getSurfaceWidth(), glautodrawable.getSurfaceHeight());
             }
 
             @Override public void display(GLAutoDrawable glautodrawable) {

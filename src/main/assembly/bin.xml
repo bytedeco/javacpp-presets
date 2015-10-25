@@ -14,7 +14,10 @@
         <include>**/README*</include>
         <include>**/APACHE*</include>
         <include>**/COPYING*</include>
+        <include>**/gpl*</include>
         <include>**/GPL*</include>
+        <include>**/lgpl*</include>
+        <include>**/LGPL*</include>
         <include>**/LICENSE*</include>
         <include>**/*license*</include>
         <include>NOTICE*</include>

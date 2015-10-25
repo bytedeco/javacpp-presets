@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * LLVM 3.6.1  http://llvm.org/
+ * LLVM 3.7.0  http://llvm.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -35,12 +35,12 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.llvm</groupId>
     <artifactId>fac</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>llvm</artifactId>
-            <version>3.6.1-1.0</version>
+            <version>3.7.0-1.1</version>
         </dependency>
     </dependencies>
 </project>

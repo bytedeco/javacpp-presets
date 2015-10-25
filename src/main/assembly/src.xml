@@ -10,6 +10,7 @@
       <useDefaultExcludes>true</useDefaultExcludes>
       <excludes>
         <!-- TODO: use expresssions instead: ${project.build.sourceDirectory}, etc -->
+        <exclude>downloads/**</exclude>
         <exclude>**/target/**</exclude>
         <exclude>**/cppbuild/**</exclude>
       </excludes>

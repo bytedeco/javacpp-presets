@@ -1,4 +1,6 @@
 
+### October 25, 2015 version 1.1
+ * Build the Maven artifacts for Linux in a CentOS 6 Docker container, for maximum compatibility ([issue #22](https://github.com/bytedeco/javacpp-presets/issues/22))
  * Cache files downloaded by `cppbuild.sh` in the `downloads` subdirectory to prevent having to redownload everything after a clean
  * Add the `clang` module to the presets for LLVM
  * Propose for FFmpeg in the `cppbuild.sh` file a minimal configuration to support MPEG-4 streams with H.264 and AAC
