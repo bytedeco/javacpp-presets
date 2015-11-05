@@ -28,6 +28,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>javacpp</artifactId>
+      <version>${project.parent.version}</version>
     </dependency>
   </dependencies>
 
@@ -58,7 +59,7 @@
             <classPath>${project.build.outputDirectory}</classPath>
           </classPaths>
           <includePaths>
-            <includePath>${basedir}/../opencv/target/classes/org/bytedeco/javacpp/</includePath>
+            <includePath>${basedir}/../opencv/target/classes/org/bytedeco/javacpp/include/</includePath>
             <includePath>${basedir}/../opencv/cppbuild/${platform}/include/opencv/</includePath>
             <includePath>${basedir}/../opencv/cppbuild/${platform}/include/</includePath>
             <includePath>${basedir}/cppbuild/${platform}/include/</includePath>
