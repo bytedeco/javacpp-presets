@@ -51,6 +51,9 @@
               <value>${platform.oldcompiler}</value>
             </property>
           </propertyKeysAndValues>
+          <includePaths>
+            <includePath>${basedir}/src/main/resources/org/bytedeco/javacpp/include</includePath>
+          </includePaths>
         </configuration>
       </plugin>
       <plugin>

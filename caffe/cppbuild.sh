@@ -86,7 +86,7 @@ export CFLAGS="-fPIC"
 export CXXFLAGS="-fPIC"
 
 cd glog-$GLOG
-./configure "--prefix=$INSTALL_PATH" --disable-shared
+./configure "--prefix=$INSTALL_PATH"
 make -j $MAKEJ
 make install
 cd ..
@@ -94,43 +94,43 @@ cd ..
 cd gflags-$GFLAGS
 mkdir -p build
 cd build
-"$CMAKE" -DBUILD_SHARED_LIBS=OFF "-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH" ..
+"$CMAKE" -DBUILD_SHARED_LIBS=ON "-DCMAKE_INSTALL_PREFIX=$INSTALL_PATH" ..
 make -j $MAKEJ
 make install
 cd ../..
 
 cd protobuf-$PROTO
-./configure "--prefix=$INSTALL_PATH" --disable-shared
+./configure "--prefix=$INSTALL_PATH"
 make -j $MAKEJ
 make install
 cd ..
 
 cd leveldb-$LEVELDB
 make -j $MAKEJ
-cp -a libleveldb.a "$INSTALL_PATH/lib"
 cp -a include/leveldb "$INSTALL_PATH/include/"
+cp -a libleveldb.* "$INSTALL_PATH/lib"
 cd ..
 
 cd snappy-$SNAPPY
-./configure "--prefix=$INSTALL_PATH" --disable-shared
+./configure "--prefix=$INSTALL_PATH"
 make -j $MAKEJ
 make install
 cd ..
 
 cd lmdb-LMDB_$LMDB/libraries/liblmdb
 make -j $MAKEJ "CC=$CC" "XCFLAGS=$CFLAGS" "CPPFLAGS=$CXXFLAGS"
-cp -a lmdb.h ../../../include/
-cp -a liblmdb.a ../../../lib/
+cp -a lmdb.h "$INSTALL_PATH/include/"
+cp -a liblmdb.so "$INSTALL_PATH/lib"
 cd ../../..
 
 cd boost_$BOOST
 ./bootstrap.sh --with-libraries=system,thread
-./b2 install "--prefix=$INSTALL_PATH" "address-model=$BINARY" link=static "toolset=$TOOLSET" "cxxflags=$CXXFLAGS"
+./b2 install "--prefix=$INSTALL_PATH" "address-model=$BINARY" "toolset=$TOOLSET" "cxxflags=$CXXFLAGS"
 cd ..
-ln -sf libboost_thread.a lib/libboost_thread-mt.a
+ln -sf libboost_thread.so lib/libboost_thread-mt.so
 
 cd hdf5-$HDF5
-LDFLAGS= ./configure "--prefix=$INSTALL_PATH" --disable-shared
+LDFLAGS= ./configure "--prefix=$INSTALL_PATH"
 make -j $MAKEJ
 make install
 cd ..
@@ -139,10 +139,14 @@ cd ..
 if [[ $PLATFORM != macosx-* ]]; then
     # blas (requires fortran, e.g. sudo yum install gcc-gfortran)
     cd OpenBLAS-$OPENBLAS
-    make -j $MAKEJ "CC=$CC" "FC=$FC" BINARY=$BINARY NO_SHARED=1
-    make install "PREFIX=$INSTALL_PATH" NO_SHARED=1
+    make -j $MAKEJ "CC=$CC" "FC=$FC" BINARY=$BINARY
+    make install "PREFIX=$INSTALL_PATH"
     cd ..
 fi
+
+# Make sure only shared libs are used
+rm "$INSTALL_PATH"/lib/*.a
+rm "$INSTALL_PATH"/lib/*.la
 
 cd caffe-$CAFFE_VERSION
 cp Makefile.config.example Makefile.config

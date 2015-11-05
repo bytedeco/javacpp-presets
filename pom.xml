@@ -219,7 +219,7 @@
                 <include>org/bytedeco/javacpp/presets/*</include>
               </includes>
               <excludes>
-                <exclude>org/bytedeco/javacpp/*.h</exclude>
+                <exclude>org/bytedeco/javacpp/include/</exclude>
                 <exclude>org/bytedeco/javacpp/linux-*/</exclude>
                 <exclude>org/bytedeco/javacpp/macosx-*/</exclude>
                 <exclude>org/bytedeco/javacpp/windows-*/</exclude>
@@ -239,6 +239,20 @@
               <includes>
                 <include>${platform.library.path}/</include>
                 <include>org/bytedeco/javacpp/${platform}/</include>
+              </includes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>include</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <classifier>include</classifier>
+              <skipIfEmpty>true</skipIfEmpty>
+              <includes>
+                <include>org/bytedeco/javacpp/include/</include>
               </includes>
             </configuration>
           </execution>
@@ -279,6 +293,15 @@
                   <artifactId>${project.artifactId}</artifactId>
                   <version>${project.version}</version>
                   <classifier>${platform}</classifier>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.parent.build.directory}</outputDirectory>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>${project.artifactId}</artifactId>
+                  <version>${project.version}</version>
+                  <classifier>include</classifier>
                   <type>jar</type>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.parent.build.directory}</outputDirectory>

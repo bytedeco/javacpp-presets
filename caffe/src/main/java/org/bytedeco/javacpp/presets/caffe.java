@@ -37,14 +37,18 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit=opencv_highgui.class, target="org.bytedeco.javacpp.caffe", value={
-    @Platform(value={"linux", "macosx"}, define={"CPU_ONLY", "SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV"}, include={"caffe/caffe.hpp", "caffe/util/device_alternate.hpp",
-        "caffe/common.hpp", "caffe/proto/caffe.pb.h", "caffe/util/blocking_queue.hpp", "caffe/data_reader.hpp", "caffe/util/math_functions.hpp", "caffe/syncedmem.hpp",
-        "caffe/blob.hpp", "caffe/data_transformer.hpp", "caffe/filler.hpp", "caffe/internal_thread.hpp", "caffe/util/hdf5.hpp", "caffe/data_layers.hpp", "caffe/layer_factory.hpp",
-        "caffe/layer.hpp", "caffe/loss_layers.hpp", "caffe/neuron_layers.hpp", "caffe/common_layers.hpp", "caffe/net.hpp", "caffe/parallel.hpp", "caffe/solver.hpp", "caffe/solver_factory.hpp",
-        "caffe/sgd_solvers.hpp", "caffe/vision_layers.hpp", "caffe/util/benchmark.hpp", "caffe/util/db.hpp", "caffe/util/db_leveldb.hpp", "caffe/util/db_lmdb.hpp",
-        "caffe/util/io.hpp", "caffe/util/rng.hpp", "caffe/util/im2col.hpp", "caffe/util/insert_splits.hpp", "caffe/util/mkl_alternate.hpp",
-        "caffe/util/upgrade_proto.hpp", /* "caffe/util/cudnn.hpp" */}, link="caffe", includepath={"/usr/local/cuda/include/",
-        "/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}, linkpath="/usr/local/cuda/lib/") })
+    @Platform(value={"linux", "macosx"},
+        define={"CPU_ONLY", "SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV"},
+        include={"caffe/caffe.hpp", "caffe/util/device_alternate.hpp", "caffe/common.hpp", "caffe/proto/caffe.pb.h", "caffe/util/blocking_queue.hpp",
+            "caffe/data_reader.hpp", "caffe/util/math_functions.hpp", "caffe/syncedmem.hpp", "caffe/blob.hpp", "caffe/data_transformer.hpp",
+            "caffe/filler.hpp", "caffe/internal_thread.hpp", "caffe/util/hdf5.hpp", "caffe/data_layers.hpp", "caffe/layer_factory.hpp",
+            "caffe/layer.hpp", "caffe/loss_layers.hpp", "caffe/neuron_layers.hpp", "caffe/common_layers.hpp", "caffe/net.hpp", "caffe/parallel.hpp",
+            "caffe/solver.hpp", "caffe/solver_factory.hpp", "caffe/sgd_solvers.hpp", "caffe/vision_layers.hpp", "caffe/util/benchmark.hpp",
+            "caffe/util/db.hpp", "caffe/util/db_leveldb.hpp", "caffe/util/db_lmdb.hpp", "caffe/util/io.hpp", "caffe/util/rng.hpp", "caffe/util/im2col.hpp", 
+            "caffe/util/insert_splits.hpp", "caffe/util/mkl_alternate.hpp", "caffe/util/upgrade_proto.hpp", /* "caffe/util/cudnn.hpp" */},
+        link={"glog", "gflags", "protobuf", "boost_system", "boost_thread", "hdf5_hl", "hdf5", "leveldb", "snappy", "lmdb", "openblas", "caffe"},
+        includepath={"/usr/local/cuda/include/", "/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"},
+        linkpath="/usr/local/cuda/lib/") })
 public class caffe implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("NOT_IMPLEMENTED", "NO_GPU", "CUDA_POST_KERNEL_CHECK").cppTypes().annotations())
