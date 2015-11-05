@@ -1,4 +1,6 @@
 
+ * Fix the `cppbuild.sh` script for FFmpeg, failing to build x264 on Windows
+
 ### October 25, 2015 version 1.1
  * Build the Maven artifacts for Linux in a CentOS 6 Docker container, for maximum compatibility ([issue #22](https://github.com/bytedeco/javacpp-presets/issues/22))
  * Cache files downloaded by `cppbuild.sh` in the `downloads` subdirectory to prevent having to redownload everything after a clean
