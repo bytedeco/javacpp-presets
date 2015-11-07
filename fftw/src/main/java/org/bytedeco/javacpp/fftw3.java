@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -105,9 +105,9 @@ public static final int
 public static class fftw_iodim_do_not_use_me extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public fftw_iodim_do_not_use_me() { allocate(); }
+    public fftw_iodim_do_not_use_me() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public fftw_iodim_do_not_use_me(int size) { allocateArray(size); }
+    public fftw_iodim_do_not_use_me(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftw_iodim_do_not_use_me(Pointer p) { super(p); }
     private native void allocate();
@@ -125,9 +125,9 @@ public static class fftw_iodim_do_not_use_me extends Pointer {
 public static class fftw_iodim64_do_not_use_me extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public fftw_iodim64_do_not_use_me() { allocate(); }
+    public fftw_iodim64_do_not_use_me() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public fftw_iodim64_do_not_use_me(int size) { allocateArray(size); }
+    public fftw_iodim64_do_not_use_me(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftw_iodim64_do_not_use_me(Pointer p) { super(p); }
     private native void allocate();

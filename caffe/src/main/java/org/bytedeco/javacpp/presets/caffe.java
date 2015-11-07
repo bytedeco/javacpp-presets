@@ -53,7 +53,7 @@ public class caffe implements InfoMapper {
                .put(new Info("CBLAS_TRANSPOSE", "cublasStatus_t", "curandStatus_t", "hid_t").cast().valueTypes("int"))
                .put(new Info("std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
-
+               .put(new Info("std::vector<caffe::Datum>").pointerTypes("DatumVector").define())
                .put(new Info("caffe::BlockingQueue<caffe::Datum*>").pointerTypes("DatumBlockingQueue"))
 
                .put(new Info("google::protobuf::int8", "google::protobuf::uint8").cast().valueTypes("byte").pointerTypes("BytePointer", "ByteBuffer", "byte[]"))
@@ -147,6 +147,10 @@ public class caffe implements InfoMapper {
                      + "public native @Const @Cast({\"\", \"boost::shared_ptr<caffe::Layer<double> >\"}) @SharedPtr @ByVal <L extends DoubleLayer> L layer_by_name(Class<L> cls, @StdString BytePointer layer_name);\n"
                      + "public native @Const @Cast({\"\", \"boost::shared_ptr<caffe::Layer<double> >\"}) @SharedPtr @ByVal <L extends DoubleLayer> L layer_by_name(Class<L> cls, @StdString String layer_name);\n"))
 
+               .put(new Info("caffe::Solver<float>::Callback").pointerTypes("FloatSolver.Callback"))
+               .put(new Info("std::vector<caffe::Solver<float>::Callback*>").pointerTypes("FloatCallbackVector").define())
+               .put(new Info("caffe::Solver<double>::Callback").pointerTypes("DoubleSolver.Callback"))
+               .put(new Info("std::vector<caffe::Solver<double>::Callback*>").pointerTypes("DoubleCallbackVector").define())
                .put(new Info("boost::function<caffe::SolverAction::Enum()>").pointerTypes("ActionCallback"));
     }
 

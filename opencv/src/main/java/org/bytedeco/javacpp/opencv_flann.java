@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -16,8 +16,8 @@ public class opencv_flann extends org.bytedeco.javacpp.presets.opencv_flann {
 /***********************************************************************
  * Software License Agreement (BSD License)
  *
- * Copyright 2008-2011  Marius Muja (mariusm@cs.ubc.ca). All rights reserved.
- * Copyright 2008-2011  David G. Lowe (lowe@cs.ubc.ca). All rights reserved.
+ * Copyright 2008-2011  Marius Muja (mariusm\cs.ubc.ca). All rights reserved.
+ * Copyright 2008-2011  David G. Lowe (lowe\cs.ubc.ca). All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -29,7 +29,7 @@ public class opencv_flann extends org.bytedeco.javacpp.presets.opencv_flann {
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR {@code }AS IS'' AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
  * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
  * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
@@ -236,13 +236,13 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IndexParams(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public IndexParams(int size) { allocateArray(size); }
+    public IndexParams(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public IndexParams position(int position) {
         return (IndexParams)super.position(position);
     }
 
-    public IndexParams() { allocate(); }
+    public IndexParams() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     public native @Str BytePointer getString(@Str BytePointer key, @Str BytePointer defaultVal/*=cv::String()*/);
@@ -291,9 +291,9 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KDTreeIndexParams(Pointer p) { super(p); }
 
-    public KDTreeIndexParams(int trees/*=4*/) { allocate(trees); }
+    public KDTreeIndexParams(int trees/*=4*/) { super((Pointer)null); allocate(trees); }
     private native void allocate(int trees/*=4*/);
-    public KDTreeIndexParams() { allocate(); }
+    public KDTreeIndexParams() { super((Pointer)null); allocate(); }
     private native void allocate();
 }
 
@@ -302,13 +302,13 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LinearIndexParams(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public LinearIndexParams(int size) { allocateArray(size); }
+    public LinearIndexParams(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public LinearIndexParams position(int position) {
         return (LinearIndexParams)super.position(position);
     }
 
-    public LinearIndexParams() { allocate(); }
+    public LinearIndexParams() { super((Pointer)null); allocate(); }
     private native void allocate();
 }
 
@@ -317,17 +317,17 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CompositeIndexParams(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CompositeIndexParams(int size) { allocateArray(size); }
+    public CompositeIndexParams(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CompositeIndexParams position(int position) {
         return (CompositeIndexParams)super.position(position);
     }
 
     public CompositeIndexParams(int trees/*=4*/, int branching/*=32*/, int iterations/*=11*/,
-                             @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2f*/ ) { allocate(trees, branching, iterations, centers_init, cb_index); }
+                             @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2f*/ ) { super((Pointer)null); allocate(trees, branching, iterations, centers_init, cb_index); }
     private native void allocate(int trees/*=4*/, int branching/*=32*/, int iterations/*=11*/,
                              @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2f*/ );
-    public CompositeIndexParams( ) { allocate(); }
+    public CompositeIndexParams( ) { super((Pointer)null); allocate(); }
     private native void allocate( );
 }
 
@@ -336,17 +336,17 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AutotunedIndexParams(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AutotunedIndexParams(int size) { allocateArray(size); }
+    public AutotunedIndexParams(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public AutotunedIndexParams position(int position) {
         return (AutotunedIndexParams)super.position(position);
     }
 
     public AutotunedIndexParams(float target_precision/*=0.8f*/, float build_weight/*=0.01f*/,
-                             float memory_weight/*=0*/, float sample_fraction/*=0.1f*/) { allocate(target_precision, build_weight, memory_weight, sample_fraction); }
+                             float memory_weight/*=0*/, float sample_fraction/*=0.1f*/) { super((Pointer)null); allocate(target_precision, build_weight, memory_weight, sample_fraction); }
     private native void allocate(float target_precision/*=0.8f*/, float build_weight/*=0.01f*/,
                              float memory_weight/*=0*/, float sample_fraction/*=0.1f*/);
-    public AutotunedIndexParams() { allocate(); }
+    public AutotunedIndexParams() { super((Pointer)null); allocate(); }
     private native void allocate();
 }
 
@@ -355,17 +355,17 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HierarchicalClusteringIndexParams(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public HierarchicalClusteringIndexParams(int size) { allocateArray(size); }
+    public HierarchicalClusteringIndexParams(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public HierarchicalClusteringIndexParams position(int position) {
         return (HierarchicalClusteringIndexParams)super.position(position);
     }
 
     public HierarchicalClusteringIndexParams(int branching/*=32*/,
-                          @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, int trees/*=4*/, int leaf_size/*=100*/ ) { allocate(branching, centers_init, trees, leaf_size); }
+                          @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, int trees/*=4*/, int leaf_size/*=100*/ ) { super((Pointer)null); allocate(branching, centers_init, trees, leaf_size); }
     private native void allocate(int branching/*=32*/,
                           @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, int trees/*=4*/, int leaf_size/*=100*/ );
-    public HierarchicalClusteringIndexParams( ) { allocate(); }
+    public HierarchicalClusteringIndexParams( ) { super((Pointer)null); allocate(); }
     private native void allocate( );
 }
 
@@ -374,17 +374,17 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KMeansIndexParams(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public KMeansIndexParams(int size) { allocateArray(size); }
+    public KMeansIndexParams(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public KMeansIndexParams position(int position) {
         return (KMeansIndexParams)super.position(position);
     }
 
     public KMeansIndexParams(int branching/*=32*/, int iterations/*=11*/,
-                          @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2f*/ ) { allocate(branching, iterations, centers_init, cb_index); }
+                          @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2f*/ ) { super((Pointer)null); allocate(branching, iterations, centers_init, cb_index); }
     private native void allocate(int branching/*=32*/, int iterations/*=11*/,
                           @Cast("cvflann::flann_centers_init_t") int centers_init/*=cvflann::FLANN_CENTERS_RANDOM*/, float cb_index/*=0.2f*/ );
-    public KMeansIndexParams( ) { allocate(); }
+    public KMeansIndexParams( ) { super((Pointer)null); allocate(); }
     private native void allocate( );
 }
 
@@ -395,7 +395,7 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LshIndexParams(Pointer p) { super(p); }
 
-    public LshIndexParams(int table_number, int key_size, int multi_probe_level) { allocate(table_number, key_size, multi_probe_level); }
+    public LshIndexParams(int table_number, int key_size, int multi_probe_level) { super((Pointer)null); allocate(table_number, key_size, multi_probe_level); }
     private native void allocate(int table_number, int key_size, int multi_probe_level);
 }
 
@@ -406,9 +406,9 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SavedIndexParams(Pointer p) { super(p); }
 
-    public SavedIndexParams(@Str BytePointer filename) { allocate(filename); }
+    public SavedIndexParams(@Str BytePointer filename) { super((Pointer)null); allocate(filename); }
     private native void allocate(@Str BytePointer filename);
-    public SavedIndexParams(@Str String filename) { allocate(filename); }
+    public SavedIndexParams(@Str String filename) { super((Pointer)null); allocate(filename); }
     private native void allocate(@Str String filename);
 }
 
@@ -417,15 +417,15 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SearchParams(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SearchParams(int size) { allocateArray(size); }
+    public SearchParams(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public SearchParams position(int position) {
         return (SearchParams)super.position(position);
     }
 
-    public SearchParams( int checks/*=32*/, float eps/*=0*/, @Cast("bool") boolean sorted/*=true*/ ) { allocate(checks, eps, sorted); }
+    public SearchParams( int checks/*=32*/, float eps/*=0*/, @Cast("bool") boolean sorted/*=true*/ ) { super((Pointer)null); allocate(checks, eps, sorted); }
     private native void allocate( int checks/*=32*/, float eps/*=0*/, @Cast("bool") boolean sorted/*=true*/ );
-    public SearchParams( ) { allocate(); }
+    public SearchParams( ) { super((Pointer)null); allocate(); }
     private native void allocate( );
 }
 
@@ -434,17 +434,17 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Index(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Index(int size) { allocateArray(size); }
+    public Index(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Index position(int position) {
         return (Index)super.position(position);
     }
 
-    public Index() { allocate(); }
+    public Index() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public Index(@ByVal Mat features, @Const @ByRef IndexParams params, @Cast("cvflann::flann_distance_t") int distType/*=cvflann::FLANN_DIST_L2*/) { allocate(features, params, distType); }
+    public Index(@ByVal Mat features, @Const @ByRef IndexParams params, @Cast("cvflann::flann_distance_t") int distType/*=cvflann::FLANN_DIST_L2*/) { super((Pointer)null); allocate(features, params, distType); }
     private native void allocate(@ByVal Mat features, @Const @ByRef IndexParams params, @Cast("cvflann::flann_distance_t") int distType/*=cvflann::FLANN_DIST_L2*/);
-    public Index(@ByVal Mat features, @Const @ByRef IndexParams params) { allocate(features, params); }
+    public Index(@ByVal Mat features, @Const @ByRef IndexParams params) { super((Pointer)null); allocate(features, params); }
     private native void allocate(@ByVal Mat features, @Const @ByRef IndexParams params);
 
     public native void build(@ByVal Mat features, @Const @ByRef IndexParams params, @Cast("cvflann::flann_distance_t") int distType/*=cvflann::FLANN_DIST_L2*/);

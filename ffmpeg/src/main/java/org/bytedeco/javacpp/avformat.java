@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -38,8 +38,8 @@ public class avformat extends org.bytedeco.javacpp.presets.avformat {
 // #define AVFORMAT_AVIO_H
 
 /**
- * @file
- * @ingroup lavf_io
+ * \file
+ * \ingroup lavf_io
  * Buffered I/O operations
  */
 
@@ -68,9 +68,9 @@ public static final int AVIO_SEEKABLE_NORMAL = 0x0001;
 public static class AVIOInterruptCB extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVIOInterruptCB() { allocate(); }
+    public AVIOInterruptCB() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVIOInterruptCB(int size) { allocateArray(size); }
+    public AVIOInterruptCB(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVIOInterruptCB(Pointer p) { super(p); }
     private native void allocate();
@@ -117,9 +117,9 @@ public static final int
 public static class AVIODirEntry extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVIODirEntry() { allocate(); }
+    public AVIODirEntry() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVIODirEntry(int size) { allocateArray(size); }
+    public AVIODirEntry(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVIODirEntry(Pointer p) { super(p); }
     private native void allocate();
@@ -157,9 +157,9 @@ public static class AVIODirEntry extends Pointer {
 public static class AVIODirContext extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVIODirContext() { allocate(); }
+    public AVIODirContext() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVIODirContext(int size) { allocateArray(size); }
+    public AVIODirContext(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVIODirContext(Pointer p) { super(p); }
     private native void allocate();
@@ -178,7 +178,7 @@ public static class AVIODirContext extends Pointer {
  * version bump.
  * sizeof(AVIOContext) must not be used outside libav*.
  *
- * @note None of the function pointers in AVIOContext should be called
+ * \note None of the function pointers in AVIOContext should be called
  *       directly, they should only be set by the client application
  *       when implementing custom I/O. Normally these are set to the
  *       function pointers specified in avio_alloc_context()
@@ -186,9 +186,9 @@ public static class AVIODirContext extends Pointer {
 public static class AVIOContext extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVIOContext() { allocate(); }
+    public AVIOContext() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVIOContext(int size) { allocateArray(size); }
+    public AVIOContext(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVIOContext(Pointer p) { super(p); }
     private native void allocate();
@@ -368,7 +368,7 @@ public static native String avio_find_protocol_name(String url);
  * AVERROR code in case of failure. The returned access flags are
  * masked by the value in flags.
  *
- * @note This function is intrinsically unsafe, in the sense that the
+ * \note This function is intrinsically unsafe, in the sense that the
  * checked resource may change its existence or permission status from
  * one call to another. Thus you should not trust the returned value,
  * unless you are sure that no other processes are accessing the
@@ -380,7 +380,7 @@ public static native int avio_check(String url, int flags);
 /**
  * Move or rename a resource.
  *
- * @note url_src and url_dst should share the same protocol and authority.
+ * \note url_src and url_dst should share the same protocol and authority.
  *
  * @param url_src url to resource to be moved
  * @param url_dst new url to resource if the operation succeeded
@@ -429,7 +429,7 @@ public static native int avio_read_dir(AVIODirContext s, @ByPtrPtr AVIODirEntry 
 /**
  * Close directory.
  *
- * @note Entries created using avio_read_dir() are not deleted and must be
+ * \note Entries created using avio_read_dir() are not deleted and must be
  * freeded with avio_free_directory_entry().
  *
  * @param s         directory read context.
@@ -639,7 +639,7 @@ public static native int avio_feof(AVIOContext s);
 public static native @Deprecated int url_feof(AVIOContext s);
 // #endif
 
-/** @warning currently size is limited */
+/** \warning currently size is limited */
 public static native int avio_printf(AVIOContext s, @Cast("const char*") BytePointer fmt);
 public static native int avio_printf(AVIOContext s, String fmt);
 
@@ -664,10 +664,10 @@ public static native int avio_read(AVIOContext s, @Cast("unsigned char*") ByteBu
 public static native int avio_read(AVIOContext s, @Cast("unsigned char*") byte[] buf, int size);
 
 /**
- * @name Functions for reading from AVIOContext
- * @{
+ * \name Functions for reading from AVIOContext
+ * \{
  *
- * @note return 0 if EOF, so you cannot use it if EOF handling is
+ * \note return 0 if EOF, so you cannot use it if EOF handling is
  *       necessary
  */
 public static native int avio_r8(AVIOContext s);
@@ -680,7 +680,7 @@ public static native @Cast("unsigned int") int avio_rb24(AVIOContext s);
 public static native @Cast("unsigned int") int avio_rb32(AVIOContext s);
 public static native @Cast("uint64_t") long avio_rb64(AVIOContext s);
 /**
- * @}
+ * \}
  */
 
 /**
@@ -714,10 +714,10 @@ public static native int avio_get_str16be(AVIOContext pb, int maxlen, @Cast("cha
 
 
 /**
- * @name URL open modes
+ * \name URL open modes
  * The flags argument to avio_open must be one of the following
  * constants, optionally ORed with other flags.
- * @{
+ * \{
  */
 /** read-only */
 public static final int AVIO_FLAG_READ =  1;
@@ -726,7 +726,7 @@ public static final int AVIO_FLAG_WRITE = 2;
 /** read-write pseudo flag */
 public static final int AVIO_FLAG_READ_WRITE = (AVIO_FLAG_READ|AVIO_FLAG_WRITE);
 /**
- * @}
+ * \}
  */
 
 /**
@@ -754,7 +754,7 @@ public static final int AVIO_FLAG_DIRECT = 0x8000;
 /**
  * Create and initialize a AVIOContext for accessing the
  * resource indicated by url.
- * @note When the resource indicated by url has been opened in
+ * \note When the resource indicated by url has been opened in
  * read+write mode, the AVIOContext can be used only for writing.
  *
  * @param s Used to return the pointer to the created AVIOContext.
@@ -772,7 +772,7 @@ public static native int avio_open(@ByPtrPtr AVIOContext s, String url, int flag
 /**
  * Create and initialize a AVIOContext for accessing the
  * resource indicated by url.
- * @note When the resource indicated by url has been opened in
+ * \note When the resource indicated by url has been opened in
  * read+write mode, the AVIOContext can be used only for writing.
  *
  * @param s Used to return the pointer to the created AVIOContext.
@@ -964,19 +964,19 @@ public static native int avio_handshake(AVIOContext c);
 // #define AVFORMAT_AVFORMAT_H
 
 /**
- * @file
- * @ingroup libavf
+ * \file
+ * \ingroup libavf
  * Main libavformat public API header
  */
 
 /**
- * @defgroup libavf I/O and Muxing/Demuxing Library
- * @{
+ * \defgroup libavf I/O and Muxing/Demuxing Library
+ * \{
  *
  * Libavformat (lavf) is a library for dealing with various media container
  * formats. Its main two purposes are demuxing - i.e. splitting a media file
  * into component streams, and the reverse process of muxing - writing supplied
- * data in a specified container format. It also has an @ref lavf_io
+ * data in a specified container format. It also has an \ref lavf_io
  * "I/O module" which supports a number of protocols for accessing the data (e.g.
  * file, tcp, http and others). Before using lavf, you need to call
  * av_register_all() to register all compiled muxers, demuxers and protocols.
@@ -998,47 +998,47 @@ public static native int avio_handshake(AVIOContext c);
  * avformat_open_input() might do that for you).
  *
  * Most importantly an AVFormatContext contains:
- * @li the @ref AVFormatContext.iformat "input" or @ref AVFormatContext.oformat
+ * \li the \ref AVFormatContext.iformat "input" or \ref AVFormatContext.oformat
  * "output" format. It is either autodetected or set by user for input;
  * always set by user for output.
- * @li an @ref AVFormatContext.streams "array" of AVStreams, which describe all
+ * \li an \ref AVFormatContext.streams "array" of AVStreams, which describe all
  * elementary streams stored in the file. AVStreams are typically referred to
  * using their index in this array.
- * @li an @ref AVFormatContext.pb "I/O context". It is either opened by lavf or
+ * \li an \ref AVFormatContext.pb "I/O context". It is either opened by lavf or
  * set by user for input, always set by user for output (unless you are dealing
  * with an AVFMT_NOFILE format).
  *
- * @section lavf_options Passing options to (de)muxers
- * It is possible to configure lavf muxers and demuxers using the @ref avoptions
+ * \section lavf_options Passing options to (de)muxers
+ * It is possible to configure lavf muxers and demuxers using the \ref avoptions
  * mechanism. Generic (format-independent) libavformat options are provided by
  * AVFormatContext, they can be examined from a user program by calling
  * av_opt_next() / av_opt_find() on an allocated AVFormatContext (or its AVClass
  * from avformat_get_class()). Private (format-specific) options are provided by
  * AVFormatContext.priv_data if and only if AVInputFormat.priv_class /
  * AVOutputFormat.priv_class of the corresponding format struct is non-NULL.
- * Further options may be provided by the @ref AVFormatContext.pb "I/O context",
+ * Further options may be provided by the \ref AVFormatContext.pb "I/O context",
  * if its AVClass is non-NULL, and the protocols layer. See the discussion on
- * nesting in @ref avoptions documentation to learn how to access those.
+ * nesting in \ref avoptions documentation to learn how to access those.
  *
- * @defgroup lavf_decoding Demuxing
- * @{
- * Demuxers read a media file and split it into chunks of data (@em packets). A
- * @ref AVPacket "packet" contains one or more encoded frames which belongs to a
+ * \defgroup lavf_decoding Demuxing
+ * \{
+ * Demuxers read a media file and split it into chunks of data (\em packets). A
+ * \ref AVPacket "packet" contains one or more encoded frames which belongs to a
  * single elementary stream. In the lavf API this process is represented by the
  * avformat_open_input() function for opening a file, av_read_frame() for
  * reading a single packet and finally avformat_close_input(), which does the
  * cleanup.
  *
- * @section lavf_decoding_open Opening a media file
+ * \section lavf_decoding_open Opening a media file
  * The minimum information required to open a file is its URL or filename, which
  * is passed to avformat_open_input(), as in the following code:
- * @code
+ * <pre><code>
  * const char    *url = "in.mp3";
  * AVFormatContext *s = NULL;
  * int ret = avformat_open_input(&s, url, NULL, NULL);
  * if (ret < 0)
  *     abort();
- * @endcode
+ * </code></pre>
  * The above code attempts to allocate an AVFormatContext, open the
  * specified file (autodetecting the format) and read the header, exporting the
  * information stored there into s. Some formats do not have a header or do not
@@ -1051,14 +1051,14 @@ public static native int avio_handshake(AVIOContext c);
  * avformat_open_input(). One such case is when you want to use custom functions
  * for reading input data instead of lavf internal I/O layer.
  * To do that, create your own AVIOContext with avio_alloc_context(), passing
- * your reading callbacks to it. Then set the @em pb field of your
+ * your reading callbacks to it. Then set the \em pb field of your
  * AVFormatContext to newly created AVIOContext.
  *
  * Since the format of the opened file is in general not known until after
  * avformat_open_input() has returned, it is not possible to set demuxer private
  * options on a preallocated context. Instead, the options should be passed to
  * avformat_open_input() wrapped in an AVDictionary:
- * @code
+ * <pre><code>
  * AVDictionary *options = NULL;
  * av_dict_set(&options, "video_size", "640x480", 0);
  * av_dict_set(&options, "pixel_format", "rgb24", 0);
@@ -1066,7 +1066,7 @@ public static native int avio_handshake(AVIOContext c);
  * if (avformat_open_input(&s, url, NULL, &options) < 0)
  *     abort();
  * av_dict_free(&options);
- * @endcode
+ * </code></pre>
  * This code passes the private options 'video_size' and 'pixel_format' to the
  * demuxer. They would be necessary for e.g. the rawvideo demuxer, since it
  * cannot know how to interpret raw video data otherwise. If the format turns
@@ -1075,18 +1075,18 @@ public static native int avio_handshake(AVIOContext c);
  * options are then returned in the options dictionary (recognized options are
  * consumed). The calling program can handle such unrecognized options as it
  * wishes, e.g.
- * @code
+ * <pre><code>
  * AVDictionaryEntry *e;
  * if (e = av_dict_get(options, "", NULL, AV_DICT_IGNORE_SUFFIX)) {
  *     fprintf(stderr, "Option %s not recognized by the demuxer.\n", e->key);
  *     abort();
  * }
- * @endcode
+ * </code></pre>
  *
  * After you have finished reading the file, you must close it with
  * avformat_close_input(). It will free everything associated with the file.
  *
- * @section lavf_decoding_read Reading from an opened file
+ * \section lavf_decoding_read Reading from an opened file
  * Reading data from an opened AVFormatContext is done by repeatedly calling
  * av_read_frame() on it. Each call, if successful, will return an AVPacket
  * containing encoded data for one AVStream, identified by
@@ -1110,12 +1110,12 @@ public static native int avio_handshake(AVIOContext c);
  * In both cases, the packet must be freed with av_free_packet() when it is no
  * longer needed.
  *
- * @section lavf_decoding_seek Seeking
- * @}
+ * \section lavf_decoding_seek Seeking
+ * \}
  *
- * @defgroup lavf_encoding Muxing
- * @{
- * Muxers take encoded data in the form of @ref AVPacket "AVPackets" and write
+ * \defgroup lavf_encoding Muxing
+ * \{
+ * Muxers take encoded data in the form of \ref AVPacket "AVPackets" and write
  * it into files or other output bytestreams in the specified container format.
  *
  * The main API functions for muxing are avformat_write_header() for writing the
@@ -1126,27 +1126,27 @@ public static native int avio_handshake(AVIOContext c);
  * avformat_alloc_context() to create a muxing context. The caller then sets up
  * the muxer by filling the various fields in this context:
  *
- * - The @ref AVFormatContext.oformat "oformat" field must be set to select the
+ * - The \ref AVFormatContext.oformat "oformat" field must be set to select the
  *   muxer that will be used.
- * - Unless the format is of the AVFMT_NOFILE type, the @ref AVFormatContext.pb
+ * - Unless the format is of the AVFMT_NOFILE type, the \ref AVFormatContext.pb
  *   "pb" field must be set to an opened IO context, either returned from
  *   avio_open2() or a custom one.
  * - Unless the format is of the AVFMT_NOSTREAMS type, at least one stream must
  *   be created with the avformat_new_stream() function. The caller should fill
- *   the @ref AVStream.codec "stream codec context" information, such as the
- *   codec @ref AVCodecContext.codec_type "type", @ref AVCodecContext.codec_id
+ *   the \ref AVStream.codec "stream codec context" information, such as the
+ *   codec \ref AVCodecContext.codec_type "type", \ref AVCodecContext.codec_id
  *   "id" and other parameters (e.g. width / height, the pixel or sample format,
- *   etc.) as known. The @ref AVStream.time_base "stream timebase" should
+ *   etc.) as known. The \ref AVStream.time_base "stream timebase" should
  *   be set to the timebase that the caller desires to use for this stream (note
  *   that the timebase actually used by the muxer can be different, as will be
  *   described later).
  * - It is advised to manually initialize only the relevant fields in
- *   AVCodecContext, rather than using @ref avcodec_copy_context() during
+ *   AVCodecContext, rather than using \ref avcodec_copy_context() during
  *   remuxing: there is no guarantee that the codec context values remain valid
  *   for both input and output format contexts.
- * - The caller may fill in additional information, such as @ref
- *   AVFormatContext.metadata "global" or @ref AVStream.metadata "per-stream"
- *   metadata, @ref AVFormatContext.chapters "chapters", @ref
+ * - The caller may fill in additional information, such as \ref
+ *   AVFormatContext.metadata "global" or \ref AVStream.metadata "per-stream"
+ *   metadata, \ref AVFormatContext.chapters "chapters", \ref
  *   AVFormatContext.programs "programs", etc. as described in the
  *   AVFormatContext documentation. Whether such information will actually be
  *   stored in the output depends on what the container format and the muxer
@@ -1171,11 +1171,11 @@ public static native int avio_handshake(AVIOContext c);
  * to flush any buffered packets and finalize the output file, then close the IO
  * context (if any) and finally free the muxing context with
  * avformat_free_context().
- * @}
+ * \}
  *
- * @defgroup lavf_io I/O Read/Write
- * @{
- * @section lavf_io_dirlist Directory listing
+ * \defgroup lavf_io I/O Read/Write
+ * \{
+ * \section lavf_io_dirlist Directory listing
  * The directory listing API makes it possible to list files on remote servers.
  *
  * Some of possible use cases:
@@ -1183,24 +1183,24 @@ public static native int avio_handshake(AVIOContext c);
  * - a recursive media finder providing a player with an ability to play all
  * files from a given directory.
  *
- * @subsection lavf_io_dirlist_open Opening a directory
+ * \subsection lavf_io_dirlist_open Opening a directory
  * At first, a directory needs to be opened by calling avio_open_dir()
  * supplied with a URL and, optionally, ::AVDictionary containing
  * protocol-specific parameters. The function returns zero or positive
  * integer and allocates AVIODirContext on success.
  *
- * @code
+ * <pre><code>
  * AVIODirContext *ctx = NULL;
  * if (avio_open_dir(&ctx, "smb://example.com/some_dir", NULL) < 0) {
  *     fprintf(stderr, "Cannot open directory.\n");
  *     abort();
  * }
- * @endcode
+ * </code></pre>
  *
  * This code tries to open a sample directory using smb protocol without
  * any additional parameters.
  *
- * @subsection lavf_io_dirlist_read Reading entries
+ * \subsection lavf_io_dirlist_read Reading entries
  * Each directory's entry (i.e. file, another directory, anything else
  * within ::AVIODirEntryType) is represented by AVIODirEntry.
  * Reading consecutive entries from an opened AVIODirContext is done by
@@ -1209,7 +1209,7 @@ public static native int avio_handshake(AVIOContext c);
  * NULL entry has been read -- it means there are no entries left to be
  * read. The following code reads all entries from a directory associated
  * with ctx and prints their names to standard output.
- * @code
+ * <pre><code>
  * AVIODirEntry *entry = NULL;
  * for (;;) {
  *     if (avio_read_dir(ctx, &entry) < 0) {
@@ -1221,25 +1221,25 @@ public static native int avio_handshake(AVIOContext c);
  *     printf("%s\n", entry->name);
  *     avio_free_directory_entry(&entry);
  * }
- * @endcode
- * @}
+ * </code></pre>
+ * \}
  *
- * @defgroup lavf_codec Demuxers
- * @{
- * @defgroup lavf_codec_native Native Demuxers
- * @{
- * @}
- * @defgroup lavf_codec_wrappers External library wrappers
- * @{
- * @}
- * @}
- * @defgroup lavf_protos I/O Protocols
- * @{
- * @}
- * @defgroup lavf_internal Internal
- * @{
- * @}
- * @}
+ * \defgroup lavf_codec Demuxers
+ * \{
+ * \defgroup lavf_codec_native Native Demuxers
+ * \{
+ * \}
+ * \defgroup lavf_codec_wrappers External library wrappers
+ * \{
+ * \}
+ * \}
+ * \defgroup lavf_protos I/O Protocols
+ * \{
+ * \}
+ * \defgroup lavf_internal Internal
+ * \{
+ * \}
+ * \}
  *
  */
 
@@ -1266,16 +1266,16 @@ public static native int avio_handshake(AVIOContext c);
 }
 
 /**
- * @defgroup metadata_api Public Metadata API
- * @{
- * @ingroup libavf
+ * \defgroup metadata_api Public Metadata API
+ * \{
+ * \ingroup libavf
  * The metadata API allows libavformat to export metadata tags to a client
  * application when demuxing. Conversely it allows a client application to
  * set metadata when muxing.
  *
  * Metadata is exported or set as pairs of key/value strings in the 'metadata'
  * fields of the AVFormatContext, AVStream, AVChapter and AVProgram structs
- * using the @ref lavu_dict "AVDictionary" API. Like all strings in FFmpeg,
+ * using the \ref lavu_dict "AVDictionary" API. Like all strings in FFmpeg,
  * metadata is assumed to be UTF-8 encoded Unicode. Note that metadata
  * exported by demuxers isn't checked to be valid UTF-8 in most cases.
  *
@@ -1309,7 +1309,7 @@ public static native int avio_handshake(AVIOContext c);
  *    with no generic equivalents are left as they are stored in the container.
  *    Follows a list of generic tag names:
  *
- @verbatim
+ <pre>
  album        -- name of the set this work belongs to
  album_artist -- main creator of the set/album, if different from artist.
                  e.g. "Various Artists" for compilation albums.
@@ -1336,11 +1336,11 @@ public static native int avio_handshake(AVIOContext c);
  title        -- name of the work.
  track        -- number of this work in the set, can be in form current/total.
  variant_bitrate -- the total bitrate of the bitrate variant that the current stream is part of
- @endverbatim
+ </pre>
  *
  * Look in the examples section for an application example how to use the Metadata API.
  *
- * @}
+ * \}
  */
 
 /* packet functions */
@@ -1385,9 +1385,9 @@ public static native int av_append_packet(AVIOContext s, AVPacket pkt, int size)
 public static class AVFrac extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVFrac() { allocate(); }
+    public AVFrac() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVFrac(int size) { allocateArray(size); }
+    public AVFrac(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFrac(Pointer p) { super(p); }
     private native void allocate();
@@ -1418,9 +1418,9 @@ public static class AVFrac extends Pointer {
 public static class AVProbeData extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVProbeData() { allocate(); }
+    public AVProbeData() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVProbeData(int size) { allocateArray(size); }
+    public AVProbeData(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVProbeData(Pointer p) { super(p); }
     private native void allocate();
@@ -1506,15 +1506,15 @@ public static final int AVFMT_TS_NEGATIVE =  0x40000;
 public static final int AVFMT_SEEK_TO_PTS =   0x4000000;
 
 /**
- * @addtogroup lavf_encoding
- * @{
+ * \addtogroup lavf_encoding
+ * \{
  */
 public static class AVOutputFormat extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVOutputFormat() { allocate(); }
+    public AVOutputFormat() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVOutputFormat(int size) { allocateArray(size); }
+    public AVOutputFormat(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVOutputFormat(Pointer p) { super(p); }
     private native void allocate();
@@ -1721,19 +1721,19 @@ public static class AVOutputFormat extends Pointer {
     public native @Cast("AVCodecID") int data_codec(); public native AVOutputFormat data_codec(int data_codec);
 }
 /**
- * @}
+ * \}
  */
 
 /**
- * @addtogroup lavf_decoding
- * @{
+ * \addtogroup lavf_decoding
+ * \{
  */
 public static class AVInputFormat extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVInputFormat() { allocate(); }
+    public AVInputFormat() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVInputFormat(int size) { allocateArray(size); }
+    public AVInputFormat(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVInputFormat(Pointer p) { super(p); }
     private native void allocate();
@@ -1985,7 +1985,7 @@ public static class AVInputFormat extends Pointer {
     public native Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery free_device_capabilities(); public native AVInputFormat free_device_capabilities(Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery free_device_capabilities);
 }
 /**
- * @}
+ * \}
  */
 
 /** enum AVStreamParseType */
@@ -2009,9 +2009,9 @@ public static final int
 public static class AVIndexEntry extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVIndexEntry() { allocate(); }
+    public AVIndexEntry() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVIndexEntry(int size) { allocateArray(size); }
+    public AVIndexEntry(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVIndexEntry(Pointer p) { super(p); }
     private native void allocate();
@@ -2089,9 +2089,9 @@ public static final int AV_PTS_WRAP_SUB_OFFSET =  -1;
 public static class AVStream extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVStream() { allocate(); }
+    public AVStream() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVStream(int size) { allocateArray(size); }
+    public AVStream(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVStream(Pointer p) { super(p); }
     private native void allocate();
@@ -2148,7 +2148,7 @@ public static class AVStream extends Pointer {
      * Only set this if you are absolutely 100% sure that the value you set
      * it to really is the pts of the first frame.
      * This may be undefined (AV_NOPTS_VALUE).
-     * @note The ASF header does NOT contain a correct start_time the ASF
+     * \note The ASF header does NOT contain a correct start_time the ASF
      * demuxer must NOT set this.
      */
     public native long start_time(); public native AVStream start_time(long start_time);
@@ -2474,9 +2474,9 @@ public static final int AV_PROGRAM_RUNNING = 1;
 public static class AVProgram extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVProgram() { allocate(); }
+    public AVProgram() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVProgram(int size) { allocateArray(size); }
+    public AVProgram(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVProgram(Pointer p) { super(p); }
     private native void allocate();
@@ -2520,9 +2520,9 @@ public static final int AVFMTCTX_NOHEADER =      0x0001;
 public static class AVChapter extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVChapter() { allocate(); }
+    public AVChapter() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVChapter(int size) { allocateArray(size); }
+    public AVChapter(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVChapter(Pointer p) { super(p); }
     private native void allocate();
@@ -2596,9 +2596,9 @@ public static final int
 public static class AVFormatContext extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVFormatContext() { allocate(); }
+    public AVFormatContext() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVFormatContext(int size) { allocateArray(size); }
+    public AVFormatContext(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFormatContext(Pointer p) { super(p); }
     private native void allocate();
@@ -2608,7 +2608,7 @@ public static class AVFormatContext extends Pointer {
     }
 
     /**
-     * A class for logging and @ref avoptions. Set by avformat_alloc_context().
+     * A class for logging and \ref avoptions. Set by avformat_alloc_context().
      * Exports (de)muxer private options if they exist.
      */
     @MemberGetter public native @Const AVClass av_class();
@@ -3170,7 +3170,7 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
      * If NULL then some simple checks are used together with avio_open2().
      *
      * Must not be accessed directly from outside avformat.
-     * @See av_format_set_open_cb()
+     * \See av_format_set_open_cb()
      *
      * Demuxing: Set by user.
      */
@@ -3219,9 +3219,9 @@ public static native @Cast("AVDurationEstimationMethod") int av_fmt_ctx_get_dura
 public static class AVPacketList extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVPacketList() { allocate(); }
+    public AVPacketList() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVPacketList(int size) { allocateArray(size); }
+    public AVPacketList(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVPacketList(Pointer p) { super(p); }
     private native void allocate();
@@ -3236,12 +3236,12 @@ public static class AVPacketList extends Pointer {
 
 
 /**
- * @defgroup lavf_core Core functions
- * @ingroup libavf
+ * \defgroup lavf_core Core functions
+ * \ingroup libavf
  *
  * Functions for querying libavformat capabilities, allocating core structures,
  * etc.
- * @{
+ * \{
  */
 
 /**
@@ -3361,7 +3361,7 @@ public static native @Cast("uint8_t*") byte[] av_stream_get_side_data(AVStream s
 public static native AVProgram av_new_program(AVFormatContext s, int id);
 
 /**
- * @}
+ * \}
  */
 
 
@@ -3389,8 +3389,8 @@ public static native int avformat_alloc_output_context2(@ByPtrPtr AVFormatContex
                                    String format_name, String filename);
 
 /**
- * @addtogroup lavf_decoding
- * @{
+ * \addtogroup lavf_decoding
+ * \{
  */
 
 /**
@@ -3491,7 +3491,7 @@ public static native int av_probe_input_buffer(AVIOContext pb, @ByPtrPtr AVInput
  *
  * @return 0 on success, a negative AVERROR on failure.
  *
- * @note If you want to use custom IO, preallocate the format context and set its pb field.
+ * \note If you want to use custom IO, preallocate the format context and set its pb field.
  */
 public static native int avformat_open_input(@Cast("AVFormatContext**") PointerPointer ps, @Cast("const char*") BytePointer filename, AVInputFormat fmt, @Cast("AVDictionary**") PointerPointer options);
 public static native int avformat_open_input(@ByPtrPtr AVFormatContext ps, @Cast("const char*") BytePointer filename, AVInputFormat fmt, @ByPtrPtr AVDictionary options);
@@ -3514,10 +3514,10 @@ public static native @Deprecated int av_demuxer_open(AVFormatContext ic);
  *                 On return each dictionary will be filled with options that were not found.
  * @return >=0 if OK, AVERROR_xxx on error
  *
- * @note this function isn't guaranteed to open all the codecs, so
+ * \note this function isn't guaranteed to open all the codecs, so
  *       options being non-empty at return is a perfectly normal behavior.
  *
- * @todo Let the user decide somehow what information is needed so that
+ * \todo Let the user decide somehow what information is needed so that
  *       we do not waste time getting stuff the user does not need.
  */
 public static native int avformat_find_stream_info(AVFormatContext ic, @Cast("AVDictionary**") PointerPointer options);
@@ -3556,7 +3556,7 @@ public static native AVProgram av_find_program_from_stream(AVFormatContext ic, A
  *          AVERROR_STREAM_NOT_FOUND if no stream with the requested type
  *          could be found,
  *          AVERROR_DECODER_NOT_FOUND if streams were found but no decoder
- * @note  If av_find_best_stream returns successfully and decoder_ret is not
+ * \note  If av_find_best_stream returns successfully and decoder_ret is not
  *        NULL, then *decoder_ret is guaranteed to be set to a valid AVCodec.
  */
 public static native int av_find_best_stream(AVFormatContext ic,
@@ -3638,7 +3638,7 @@ public static native int av_seek_frame(AVFormatContext s, int stream_index, long
  * @param flags flags
  * @return >=0 on success, error code otherwise
  *
- * @note This is part of the new seek API which is still under construction.
+ * \note This is part of the new seek API which is still under construction.
  *       Thus do not use this yet. It may change at any time, do not expect
  *       ABI compatibility yet!
  */
@@ -3682,7 +3682,7 @@ public static native int av_read_pause(AVFormatContext s);
 public static native void avformat_close_input(@Cast("AVFormatContext**") PointerPointer s);
 public static native void avformat_close_input(@ByPtrPtr AVFormatContext s);
 /**
- * @}
+ * \}
  */
 
 /** seek backward */
@@ -3695,8 +3695,8 @@ public static final int AVSEEK_FLAG_ANY =      4;
 public static final int AVSEEK_FLAG_FRAME =    8;
 
 /**
- * @addtogroup lavf_encoding
- * @{
+ * \addtogroup lavf_encoding
+ * \{
  */
 /**
  * Allocate the stream private data and write the stream header to
@@ -3736,11 +3736,11 @@ public static native int avformat_write_header(AVFormatContext s, @ByPtrPtr AVDi
  *            muxers that buffer up data internally before writing it to the
  *            output.
  *            <br>
- *            Packet's @ref AVPacket.stream_index "stream_index" field must be
- *            set to the index of the corresponding stream in @ref
+ *            Packet's \ref AVPacket.stream_index "stream_index" field must be
+ *            set to the index of the corresponding stream in \ref
  *            AVFormatContext.streams "s->streams". It is very strongly
- *            recommended that timing information (@ref AVPacket.pts "pts", @ref
- *            AVPacket.dts "dts", @ref AVPacket.duration "duration") is set to
+ *            recommended that timing information (\ref AVPacket.pts "pts", \ref
+ *            AVPacket.dts "dts", \ref AVPacket.duration "duration") is set to
  *            correct values.
  * @return < 0 on error, = 0 if OK, 1 if flushed and there is no more data to flush
  *
@@ -3769,11 +3769,11 @@ public static native int av_write_frame(AVFormatContext s, AVPacket pkt);
  *            This parameter can be NULL (at any time, not just at the end), to
  *            flush the interleaving queues.
  *            <br>
- *            Packet's @ref AVPacket.stream_index "stream_index" field must be
- *            set to the index of the corresponding stream in @ref
+ *            Packet's \ref AVPacket.stream_index "stream_index" field must be
+ *            set to the index of the corresponding stream in \ref
  *            AVFormatContext.streams "s->streams". It is very strongly
- *            recommended that timing information (@ref AVPacket.pts "pts", @ref
- *            AVPacket.dts "dts", @ref AVPacket.duration "duration") is set to
+ *            recommended that timing information (\ref AVPacket.pts "pts", \ref
+ *            AVPacket.dts "dts", \ref AVPacket.duration "duration") is set to
  *            correct values.
  *
  * @return 0 on success, a negative AVERROR on error. Libavformat will always
@@ -3885,14 +3885,14 @@ public static native int av_get_output_timestamp(AVFormatContext s, int stream,
 
 
 /**
- * @}
+ * \}
  */
 
 
 /**
- * @defgroup lavf_misc Utility functions
- * @ingroup libavf
- * @{
+ * \defgroup lavf_misc Utility functions
+ * \ingroup libavf
+ * \{
  *
  * Miscellaneous utility functions related to both muxing and demuxing
  * (or neither).
@@ -4173,16 +4173,16 @@ public static native int avformat_query_codec(@Const AVOutputFormat ofmt, @Cast(
                          int std_compliance);
 
 /**
- * @defgroup riff_fourcc RIFF FourCCs
- * @{
+ * \defgroup riff_fourcc RIFF FourCCs
+ * \{
  * Get the tables mapping RIFF FourCCs to libavcodec AVCodecIDs. The tables are
  * meant to be passed to av_codec_get_id()/av_codec_get_tag() as in the
  * following code:
- * @code
+ * <pre><code>
  * uint32_t tag = MKTAG('H', '2', '6', '4');
  * const struct AVCodecTag *table[] = { avformat_get_riff_video_tags(), 0 };
  * enum AVCodecID id = av_codec_get_id(table, tag);
- * @endcode
+ * </code></pre>
  */
 /**
  * @return the table mapping RIFF FourCCs for video to libavcodec AVCodecID.
@@ -4202,7 +4202,7 @@ public static native @Const AVCodecTag avformat_get_mov_video_tags();
 public static native @Const AVCodecTag avformat_get_mov_audio_tags();
 
 /**
- * @}
+ * \}
  */
 
 /**
@@ -4245,7 +4245,7 @@ public static native @ByVal AVRational av_guess_frame_rate(AVFormatContext ctx, 
  *          0  if st is not matched by spec;
  *          AVERROR code if spec is invalid
  *
- * @note  A stream specifier can match several streams in the format.
+ * \note  A stream specifier can match several streams in the format.
  */
 public static native int avformat_match_stream_specifier(AVFormatContext s, AVStream st,
                                     @Cast("const char*") BytePointer spec);
@@ -4256,7 +4256,7 @@ public static native int avformat_queue_attached_pictures(AVFormatContext s);
 
 
 /**
- * @}
+ * \}
  */
 
 // #endif /* AVFORMAT_AVFORMAT_H */

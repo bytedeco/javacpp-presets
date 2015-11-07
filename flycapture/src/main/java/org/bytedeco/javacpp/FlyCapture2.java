@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -115,7 +115,7 @@ public static final int NULL = 0;
 public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 // #endif
     /** 
-     * @defgroup GlobalConstants Global constants
+     * \defgroup GlobalConstants Global constants
      */
 
     /*@{*/ 
@@ -129,7 +129,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /*@}*/  
 
     /** 
-     * @defgroup Enumerations Enumerations 
+     * \defgroup Enumerations Enumerations 
      */
 
     /*@{*/ 
@@ -677,7 +677,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /*@}*/ 
 
     /** 
-     * @defgroup GigEEnums GigE specific enumerations
+     * \defgroup GigEEnums GigE specific enumerations
      *
      * These enumerations are specific to GigE camera operation only.
      */
@@ -695,7 +695,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /*@}*/
 
     /** 
-     * @defgroup Structures Structures 
+     * \defgroup Structures Structures 
      */
 
     /*@{*/ 
@@ -704,9 +704,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     @Namespace("FlyCapture2") public static class FC2Version extends Pointer {
         static { Loader.load(); }
         /** Default native constructor. */
-        public FC2Version() { allocate(); }
+        public FC2Version() { super((Pointer)null); allocate(); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public FC2Version(int size) { allocateArray(size); }
+        public FC2Version(int size) { super((Pointer)null); allocateArray(size); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public FC2Version(Pointer p) { super(p); }
         private native void allocate();
@@ -731,7 +731,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public PGRGuid(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public PGRGuid(int size) { allocateArray(size); }
+        public PGRGuid(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public PGRGuid position(int position) {
             return (PGRGuid)super.position(position);
@@ -741,7 +741,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         @MemberGetter public native @Cast("unsigned int*") IntPointer value();
 
         /** Constructor. */
-        public PGRGuid() { allocate(); }
+        public PGRGuid() { super((Pointer)null); allocate(); }
         private native void allocate();
 
         /** Equality operator. */
@@ -752,7 +752,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     }
 
     /** 
-     * @defgroup GigEStructures GigE specific structures
+     * \defgroup GigEStructures GigE specific structures
      *
      * These structures are specific to GigE camera operation only.
      */
@@ -768,10 +768,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned char") byte octets(int i); public native IPAddress octets(int i, byte octets);
         @MemberGetter public native @Cast("unsigned char*") BytePointer octets();
 
-        public IPAddress() { allocate(); }
+        public IPAddress() { super((Pointer)null); allocate(); }
         private native void allocate();
 
-        public IPAddress( @Cast("unsigned int") int ipAddressVal ) { allocate(ipAddressVal); }
+        public IPAddress( @Cast("unsigned int") int ipAddressVal ) { super((Pointer)null); allocate(ipAddressVal); }
         private native void allocate( @Cast("unsigned int") int ipAddressVal );
 
         /** Equality operator. */
@@ -787,7 +787,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public MACAddress(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public MACAddress(int size) { allocateArray(size); }
+        public MACAddress(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public MACAddress position(int position) {
             return (MACAddress)super.position(position);
@@ -796,10 +796,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned char") byte octets(int i); public native MACAddress octets(int i, byte octets);
         @MemberGetter public native @Cast("unsigned char*") BytePointer octets();
 
-        public MACAddress() { allocate(); }
+        public MACAddress() { super((Pointer)null); allocate(); }
         private native void allocate(); 
 
-        public MACAddress( @Cast("unsigned int") int macAddressValHigh, @Cast("unsigned int") int macAddressValLow ) { allocate(macAddressValHigh, macAddressValLow); }
+        public MACAddress( @Cast("unsigned int") int macAddressValHigh, @Cast("unsigned int") int macAddressValLow ) { super((Pointer)null); allocate(macAddressValHigh, macAddressValLow); }
         private native void allocate( @Cast("unsigned int") int macAddressValHigh, @Cast("unsigned int") int macAddressValLow );
 
         /** Equality operator. */
@@ -813,9 +813,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     @Namespace("FlyCapture2") public static class GigEProperty extends Pointer {
         static { Loader.load(); }
         /** Default native constructor. */
-        public GigEProperty() { allocate(); }
+        public GigEProperty() { super((Pointer)null); allocate(); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public GigEProperty(int size) { allocateArray(size); }
+        public GigEProperty(int size) { super((Pointer)null); allocateArray(size); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public GigEProperty(Pointer p) { super(p); }
         private native void allocate();
@@ -847,7 +847,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public GigEStreamChannel(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public GigEStreamChannel(int size) { allocateArray(size); }
+        public GigEStreamChannel(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public GigEStreamChannel position(int position) {
             return (GigEStreamChannel)super.position(position);
@@ -871,7 +871,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 			This is deprecated, use hostPort instead. */
 		public native @Cast("unsigned int*") @ByRef IntPointer hostPost(); public native GigEStreamChannel hostPost(IntPointer hostPost);
 
-		public GigEStreamChannel() { allocate(); }
+		public GigEStreamChannel() { super((Pointer)null); allocate(); }
 		private native void allocate();
     }
 
@@ -884,7 +884,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public GigEConfig(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public GigEConfig(int size) { allocateArray(size); }
+        public GigEConfig(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public GigEConfig position(int position) {
             return (GigEConfig)super.position(position);
@@ -905,7 +905,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
          */
         public native @Cast("unsigned int") int registerTimeout(); public native GigEConfig registerTimeout(int registerTimeout);
 
-		public GigEConfig() { allocate(); }
+		public GigEConfig() { super((Pointer)null); allocate(); }
 		private native void allocate();
     }
 
@@ -915,7 +915,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public GigEImageSettingsInfo(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public GigEImageSettingsInfo(int size) { allocateArray(size); }
+        public GigEImageSettingsInfo(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public GigEImageSettingsInfo position(int position) {
             return (GigEImageSettingsInfo)super.position(position);
@@ -941,7 +941,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native GigEImageSettingsInfo reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public GigEImageSettingsInfo() { allocate(); }
+        public GigEImageSettingsInfo() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
 
@@ -951,7 +951,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public GigEImageSettings(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public GigEImageSettings(int size) { allocateArray(size); }
+        public GigEImageSettings(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public GigEImageSettings position(int position) {
             return (GigEImageSettings)super.position(position);
@@ -971,14 +971,14 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native GigEImageSettings reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public GigEImageSettings() { allocate(); }
+        public GigEImageSettings() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
 
     /*@}*/
 
     /** 
-    * @defgroup IIDCStructures IIDC specific structures
+    * \defgroup IIDCStructures IIDC specific structures
     *
     * These structures are specific to IIDC camera operation only.
     */
@@ -991,7 +991,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Format7ImageSettings(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public Format7ImageSettings(int size) { allocateArray(size); }
+        public Format7ImageSettings(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public Format7ImageSettings position(int position) {
             return (Format7ImageSettings)super.position(position);
@@ -1013,7 +1013,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native Format7ImageSettings reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public Format7ImageSettings() { allocate(); }
+        public Format7ImageSettings() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
 
@@ -1023,7 +1023,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Format7Info(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public Format7Info(int size) { allocateArray(size); }
+        public Format7Info(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public Format7Info position(int position) {
             return (Format7Info)super.position(position);
@@ -1061,7 +1061,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native Format7Info reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public Format7Info() { allocate(); }
+        public Format7Info() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
 
@@ -1071,7 +1071,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Format7PacketInfo(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public Format7PacketInfo(int size) { allocateArray(size); }
+        public Format7PacketInfo(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public Format7PacketInfo position(int position) {
             return (Format7PacketInfo)super.position(position);
@@ -1087,7 +1087,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native Format7PacketInfo reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public Format7PacketInfo() { allocate(); }
+        public Format7PacketInfo() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
 
@@ -1102,7 +1102,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public FC2Config(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public FC2Config(int size) { allocateArray(size); }
+        public FC2Config(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public FC2Config position(int position) {
             return (FC2Config)super.position(position);
@@ -1188,7 +1188,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native FC2Config reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public FC2Config() { allocate(); }
+        public FC2Config() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
 
@@ -1235,10 +1235,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native PropertyInfo reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public PropertyInfo() { allocate(); }
+        public PropertyInfo() { super((Pointer)null); allocate(); }
         private native void allocate();
 
-        public PropertyInfo( @Cast("FlyCapture2::PropertyType") int propType ) { allocate(propType); }
+        public PropertyInfo( @Cast("FlyCapture2::PropertyType") int propType ) { super((Pointer)null); allocate(propType); }
         private native void allocate( @Cast("FlyCapture2::PropertyType") int propType );
     }   
 
@@ -1284,10 +1284,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native Property reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public Property() { allocate(); }
+        public Property() { super((Pointer)null); allocate(); }
         private native void allocate();
 
-        public Property( @Cast("FlyCapture2::PropertyType") int propType ) { allocate(propType); }
+        public Property( @Cast("FlyCapture2::PropertyType") int propType ) { super((Pointer)null); allocate(propType); }
         private native void allocate( @Cast("FlyCapture2::PropertyType") int propType );
     }
 
@@ -1299,7 +1299,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public TriggerModeInfo(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public TriggerModeInfo(int size) { allocateArray(size); }
+        public TriggerModeInfo(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public TriggerModeInfo position(int position) {
             return (TriggerModeInfo)super.position(position);
@@ -1325,7 +1325,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native TriggerModeInfo reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public TriggerModeInfo() { allocate(); }
+        public TriggerModeInfo() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
 
@@ -1335,7 +1335,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public TriggerMode(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public TriggerMode(int size) { allocateArray(size); }
+        public TriggerMode(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public TriggerMode position(int position) {
             return (TriggerMode)super.position(position);
@@ -1355,7 +1355,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native TriggerMode reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public TriggerMode() { allocate(); }
+        public TriggerMode() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
 
@@ -1365,7 +1365,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public StrobeInfo(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public StrobeInfo(int size) { allocateArray(size); }
+        public StrobeInfo(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public StrobeInfo position(int position) {
             return (StrobeInfo)super.position(position);
@@ -1389,7 +1389,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native StrobeInfo reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public StrobeInfo() { allocate(); }
+        public StrobeInfo() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
 
@@ -1399,7 +1399,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public StrobeControl(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public StrobeControl(int size) { allocateArray(size); }
+        public StrobeControl(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public StrobeControl position(int position) {
             return (StrobeControl)super.position(position);
@@ -1419,7 +1419,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native StrobeControl reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
     
-        public StrobeControl() { allocate(); }
+        public StrobeControl() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
     
@@ -1429,7 +1429,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public TimeStamp(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public TimeStamp(int size) { allocateArray(size); }
+        public TimeStamp(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public TimeStamp position(int position) {
             return (TimeStamp)super.position(position);
@@ -1449,7 +1449,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native TimeStamp reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public TimeStamp() { allocate(); }
+        public TimeStamp() { super((Pointer)null); allocate(); }
         private native void allocate();
     }    
 
@@ -1459,7 +1459,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public ConfigROM(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public ConfigROM(int size) { allocateArray(size); }
+        public ConfigROM(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public ConfigROM position(int position) {
             return (ConfigROM)super.position(position);
@@ -1492,7 +1492,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native ConfigROM reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public ConfigROM() { allocate(); }
+        public ConfigROM() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
 
@@ -1502,7 +1502,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public CameraInfo(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public CameraInfo(int size) { allocateArray(size); }
+        public CameraInfo(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public CameraInfo position(int position) {
             return (CameraInfo)super.position(position);
@@ -1548,7 +1548,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 		/** PCIe Bus Speed, set to PCIE_BUSSPEED_UNKNOWN for unsupported drivers **/
 		public native @Cast("FlyCapture2::PCIeBusSpeed") int pcieBusSpeed(); public native CameraInfo pcieBusSpeed(int pcieBusSpeed);
 
-        /** @name IIDC specific information */
+        /** \name IIDC specific information */
         /*@{*/ 
 
         /** DCAM version. */
@@ -1558,7 +1558,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 
         /*@}*/       
 
-        /** @name GigE specific information */
+        /** \name GigE specific information */
         /*@{*/ 
 
         /** GigE Vision version. */
@@ -1594,7 +1594,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native CameraInfo reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public CameraInfo() { allocate(); }
+        public CameraInfo() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
 
@@ -1604,7 +1604,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public EmbeddedImageInfoProperty(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public EmbeddedImageInfoProperty(int size) { allocateArray(size); }
+        public EmbeddedImageInfoProperty(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public EmbeddedImageInfoProperty position(int position) {
             return (EmbeddedImageInfoProperty)super.position(position);
@@ -1615,7 +1615,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Whether this property is on or off. */
         public native @Cast("bool") boolean onOff(); public native EmbeddedImageInfoProperty onOff(boolean onOff);
 
-        public EmbeddedImageInfoProperty() { allocate(); }
+        public EmbeddedImageInfoProperty() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
 
@@ -1623,9 +1623,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     @Namespace("FlyCapture2") public static class EmbeddedImageInfo extends Pointer {
         static { Loader.load(); }
         /** Default native constructor. */
-        public EmbeddedImageInfo() { allocate(); }
+        public EmbeddedImageInfo() { super((Pointer)null); allocate(); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public EmbeddedImageInfo(int size) { allocateArray(size); }
+        public EmbeddedImageInfo(int size) { super((Pointer)null); allocateArray(size); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public EmbeddedImageInfo(Pointer p) { super(p); }
         private native void allocate();
@@ -1652,7 +1652,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public ImageMetadata(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public ImageMetadata(int size) { allocateArray(size); }
+        public ImageMetadata(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public ImageMetadata position(int position) {
             return (ImageMetadata)super.position(position);
@@ -1683,7 +1683,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native ImageMetadata reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public ImageMetadata() { allocate(); }
+        public ImageMetadata() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
 
@@ -1693,7 +1693,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public LUTData(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public LUTData(int size) { allocateArray(size); }
+        public LUTData(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public LUTData position(int position) {
             return (LUTData)super.position(position);
@@ -1717,7 +1717,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native LUTData reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public LUTData() { allocate(); }
+        public LUTData() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
 
@@ -1727,7 +1727,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public CameraStats(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public CameraStats(int size) { allocateArray(size); }
+        public CameraStats(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public CameraStats position(int position) {
             return (CameraStats)super.position(position);
@@ -1790,13 +1790,13 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native CameraStats reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public CameraStats() { allocate(); }
+        public CameraStats() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
 
 
     /** 
-     * @defgroup ImageSaveStructures Image saving structures.
+     * \defgroup ImageSaveStructures Image saving structures.
      *
      * These structures define various parameters used for saving images.
      */
@@ -1809,7 +1809,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public PNGOption(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public PNGOption(int size) { allocateArray(size); }
+        public PNGOption(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public PNGOption position(int position) {
             return (PNGOption)super.position(position);
@@ -1823,7 +1823,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native PNGOption reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public PNGOption() { allocate(); }
+        public PNGOption() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
 
@@ -1833,7 +1833,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public PPMOption(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public PPMOption(int size) { allocateArray(size); }
+        public PPMOption(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public PPMOption position(int position) {
             return (PPMOption)super.position(position);
@@ -1845,7 +1845,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native PPMOption reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public PPMOption() { allocate(); }
+        public PPMOption() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
        
@@ -1855,7 +1855,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public PGMOption(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public PGMOption(int size) { allocateArray(size); }
+        public PGMOption(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public PGMOption position(int position) {
             return (PGMOption)super.position(position);
@@ -1867,7 +1867,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native PGMOption reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public PGMOption() { allocate(); }
+        public PGMOption() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
 
@@ -1877,7 +1877,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public TIFFOption(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public TIFFOption(int size) { allocateArray(size); }
+        public TIFFOption(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public TIFFOption position(int position) {
             return (TIFFOption)super.position(position);
@@ -1917,7 +1917,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native TIFFOption reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public TIFFOption() { allocate(); }
+        public TIFFOption() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
 
@@ -1927,7 +1927,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public JPEGOption(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public JPEGOption(int size) { allocateArray(size); }
+        public JPEGOption(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public JPEGOption position(int position) {
             return (JPEGOption)super.position(position);
@@ -1947,7 +1947,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native JPEGOption reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public JPEGOption() { allocate(); }
+        public JPEGOption() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
 
@@ -1957,7 +1957,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public JPG2Option(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public JPG2Option(int size) { allocateArray(size); }
+        public JPG2Option(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public JPG2Option position(int position) {
             return (JPG2Option)super.position(position);
@@ -1969,7 +1969,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @Cast("unsigned int") int reserved(int i); public native JPG2Option reserved(int i, int reserved);
         @MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-        public JPG2Option() { allocate(); }
+        public JPG2Option() { super((Pointer)null); allocate(); }
         private native void allocate();
     }
 
@@ -1979,7 +1979,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 	    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
 	    public BMPOption(Pointer p) { super(p); }
 	    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-	    public BMPOption(int size) { allocateArray(size); }
+	    public BMPOption(int size) { super((Pointer)null); allocateArray(size); }
 	    private native void allocateArray(int size);
 	    @Override public BMPOption position(int position) {
 	        return (BMPOption)super.position(position);
@@ -1990,7 +1990,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 		public native @Cast("unsigned int") int reserved(int i); public native BMPOption reserved(int i, int reserved);
 		@MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-		public BMPOption() { allocate(); }
+		public BMPOption() { super((Pointer)null); allocate(); }
 		private native void allocate();
 	}
 
@@ -2000,7 +2000,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 	    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
 	    public MJPGOption(Pointer p) { super(p); }
 	    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-	    public MJPGOption(int size) { allocateArray(size); }
+	    public MJPGOption(int size) { super((Pointer)null); allocateArray(size); }
 	    private native void allocateArray(int size);
 	    @Override public MJPGOption position(int position) {
 	        return (MJPGOption)super.position(position);
@@ -2015,7 +2015,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 		public native @Cast("unsigned int") int reserved(int i); public native MJPGOption reserved(int i, int reserved);
 		@MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-		public MJPGOption() { allocate(); }
+		public MJPGOption() { super((Pointer)null); allocate(); }
 		private native void allocate();
 	}
 
@@ -2025,7 +2025,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 	    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
 	    public H264Option(Pointer p) { super(p); }
 	    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-	    public H264Option(int size) { allocateArray(size); }
+	    public H264Option(int size) { super((Pointer)null); allocateArray(size); }
 	    private native void allocateArray(int size);
 	    @Override public H264Option position(int position) {
 	        return (H264Option)super.position(position);
@@ -2047,7 +2047,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 		public native @Cast("unsigned int") int reserved(int i); public native H264Option reserved(int i, int reserved);
 		@MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-		public H264Option() { allocate(); }
+		public H264Option() { super((Pointer)null); allocate(); }
 		private native void allocate();
 	}
 
@@ -2057,7 +2057,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public AVIOption(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public AVIOption(int size) { allocateArray(size); }
+        public AVIOption(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public AVIOption position(int position) {
             return (AVIOption)super.position(position);
@@ -2070,7 +2070,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 		public native @Cast("unsigned int") int reserved(int i); public native AVIOption reserved(int i, int reserved);
 		@MemberGetter public native @Cast("unsigned int*") IntPointer reserved();
 
-		public AVIOption() { allocate(); }
+		public AVIOption() { super((Pointer)null); allocate(); }
 		private native void allocate();
     }    
 
@@ -2131,7 +2131,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Error(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public Error(int size) { allocateArray(size); }
+        public Error(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public Error position(int position) {
             return (Error)super.position(position);
@@ -2141,13 +2141,13 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /**
          * Default constructor.
          */
-        public Error() { allocate(); }
+        public Error() { super((Pointer)null); allocate(); }
         private native void allocate();
 
         /**
          * Copy constructor.
          */
-        public Error( @Const @ByRef Error error ) { allocate(error); }
+        public Error( @Const @ByRef Error error ) { super((Pointer)null); allocate(error); }
         private native void allocate( @Const @ByRef Error error );
 
         /**
@@ -2310,7 +2310,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public BusManager(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public BusManager(int size) { allocateArray(size); }
+        public BusManager(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public BusManager position(int position) {
             return (BusManager)super.position(position);
@@ -2320,7 +2320,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /**
          * Default constructor.
          */
-        public BusManager() { allocate(); }
+        public BusManager() { super((Pointer)null); allocate(); }
         private native void allocate();
 
         /**
@@ -2726,7 +2726,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      * The CameraBase class is an abstract base class that defines a general
      * interface to a camera.
      *
-     * @nosubgrouping
+     * \nosubgrouping
      */
     @Namespace("FlyCapture2") @NoOffset public static class CameraBase extends Pointer {
         static { Loader.load(); }
@@ -2745,7 +2745,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
          */
 
         /** 
-         * @name Connection and Image Retrieval
+         * \name Connection and Image Retrieval
          *
          * These functions deal with connections and image retrieval from
          * the camera.
@@ -2971,7 +2971,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /*@}*/
 
         /** 
-         * @name Information and Properties
+         * \name Information and Properties
          *
          * These functions deal with information and properties can be
          * retrieved from the camera.
@@ -3043,7 +3043,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /*@}*/
 
         /** 
-         * @name General Purpose Input / Output
+         * \name General Purpose Input / Output
          *
          * These functions deal with general GPIO pin control on the camera.
          */
@@ -3086,7 +3086,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /*@}*/       
 
         /** 
-         * @name Trigger
+         * \name Trigger
          *
          * These functions deal with trigger control on the camera.
          */
@@ -3205,7 +3205,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /*@}*/       
 
         /** 
-         * @name Strobe
+         * \name Strobe
          *
          * These functions deal with strobe control on the camera.
          */
@@ -3259,7 +3259,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /*@}*/                      
 
         /** 
-         * @name Look Up Table
+         * \name Look Up Table
          *
          * These functions deal with Look Up Table control on the camera.
          */
@@ -3392,7 +3392,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /*@}*/       
 
         /** 
-         * @name Memory Channels
+         * \name Memory Channels
          *
          * These functions deal with memory channel control on the camera.
          */
@@ -3458,7 +3458,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /*@}*/       
 
         /** 
-         * @name Embedded Image Information
+         * \name Embedded Image Information
          *
          * These functions deal with embedded image information control 
          * on the camera.
@@ -3492,7 +3492,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /*@}*/       
 
         /** 
-         * @name Register Operation
+         * \name Register Operation
          *
          * These functions deal with register operation on the camera.
          */
@@ -3673,14 +3673,14 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      * physical camera. However, isochronous transmission to more than
      * 1 Camera object is not supported.
      *
-     * @nosubgrouping
+     * \nosubgrouping
      */
     @Namespace("FlyCapture2") public static class Camera extends CameraBase {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Camera(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public Camera(int size) { allocateArray(size); }
+        public Camera(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public Camera position(int position) {
             return (Camera)super.position(position);
@@ -3690,7 +3690,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /**
          * Default constructor.
          */
-        public Camera() { allocate(); }
+        public Camera() { super((Pointer)null); allocate(); }
         private native void allocate();
 
         /**
@@ -3698,7 +3698,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
          */                
 
         /** 
-         * @name DCAM Formats
+         * \name DCAM Formats
          *
          * These functions deal with DCAM video mode and frame rate 
          * on the camera.
@@ -3768,7 +3768,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /*@}*/       
 
         /** 
-         * @name Format7
+         * \name Format7
          *
          * These functions deal with Format7 custom image control on the camera.
          */
@@ -4105,14 +4105,14 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      *
      * Please see Camera.h for basic functions that this class inherits from.
      *
-     * @nosubgrouping
+     * \nosubgrouping
      */
     @Namespace("FlyCapture2") public static class GigECamera extends CameraBase {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public GigECamera(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public GigECamera(int size) { allocateArray(size); }
+        public GigECamera(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public GigECamera position(int position) {
             return (GigECamera)super.position(position);
@@ -4122,7 +4122,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /**
          * Default constructor.
          */
-        public GigECamera() { allocate(); }
+        public GigECamera() { super((Pointer)null); allocate(); }
         private native void allocate();
 
         /**
@@ -4130,7 +4130,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
          */
 
         /** 
-         * @name GVCP Register Operation
+         * \name GVCP Register Operation
          *
          * These functions deal with GVCP register operation on the camera.
          */
@@ -4262,7 +4262,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /*@}*/ 
 
         /** 
-         * @name GigE property manipulation
+         * \name GigE property manipulation
          *
          * These functions deal with GigE properties.
          */
@@ -4306,7 +4306,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /*@}*/ 
 
         /** 
-         * @name GigE image settings
+         * \name GigE image settings
          *
          * These functions deal with GigE image setting.
          */
@@ -4373,7 +4373,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /*@}*/ 
 
         /** 
-         * @name GigE image binning settings
+         * \name GigE image binning settings
          *
          * These functions deal with GigE image binning settings.
          */
@@ -4407,7 +4407,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /*@}*/ 
 
         /** 
-         * @name GigE image stream configuration
+         * \name GigE image stream configuration
          *
          * These functions deal with GigE image stream configuration.
          */
@@ -4703,7 +4703,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Image(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public Image(int size) { allocateArray(size); }
+        public Image(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public Image position(int position) {
             return (Image)super.position(position);
@@ -4771,7 +4771,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /**
          * Default constructor.
          */
-        public Image() { allocate(); }
+        public Image() { super((Pointer)null); allocate(); }
         private native void allocate();
 
         /**
@@ -4795,7 +4795,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned char*") BytePointer pData, 
                     @Cast("unsigned int") int dataSize,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { allocate(rows, cols, stride, pData, dataSize, format, bayerFormat); }
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { super((Pointer)null); allocate(rows, cols, stride, pData, dataSize, format, bayerFormat); }
         private native void allocate( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4810,7 +4810,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned int") int stride, 
                     @Cast("unsigned char*") BytePointer pData, 
                     @Cast("unsigned int") int dataSize,
-                    @Cast("FlyCapture2::PixelFormat") int format ) { allocate(rows, cols, stride, pData, dataSize, format); }
+                    @Cast("FlyCapture2::PixelFormat") int format ) { super((Pointer)null); allocate(rows, cols, stride, pData, dataSize, format); }
         private native void allocate( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4825,7 +4825,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned char*") ByteBuffer pData, 
                     @Cast("unsigned int") int dataSize,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { allocate(rows, cols, stride, pData, dataSize, format, bayerFormat); }
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { super((Pointer)null); allocate(rows, cols, stride, pData, dataSize, format, bayerFormat); }
         private native void allocate( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4840,7 +4840,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned int") int stride, 
                     @Cast("unsigned char*") ByteBuffer pData, 
                     @Cast("unsigned int") int dataSize,
-                    @Cast("FlyCapture2::PixelFormat") int format ) { allocate(rows, cols, stride, pData, dataSize, format); }
+                    @Cast("FlyCapture2::PixelFormat") int format ) { super((Pointer)null); allocate(rows, cols, stride, pData, dataSize, format); }
         private native void allocate( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4855,7 +4855,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned char*") byte[] pData, 
                     @Cast("unsigned int") int dataSize,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { allocate(rows, cols, stride, pData, dataSize, format, bayerFormat); }
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { super((Pointer)null); allocate(rows, cols, stride, pData, dataSize, format, bayerFormat); }
         private native void allocate( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4870,7 +4870,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned int") int stride, 
                     @Cast("unsigned char*") byte[] pData, 
                     @Cast("unsigned int") int dataSize,
-                    @Cast("FlyCapture2::PixelFormat") int format ) { allocate(rows, cols, stride, pData, dataSize, format); }
+                    @Cast("FlyCapture2::PixelFormat") int format ) { super((Pointer)null); allocate(rows, cols, stride, pData, dataSize, format); }
         private native void allocate( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4902,7 +4902,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned int") int dataSize,
                     @Cast("unsigned int") int receivedDataSize,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { allocate(rows, cols, stride, pData, dataSize, receivedDataSize, format, bayerFormat); }
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { super((Pointer)null); allocate(rows, cols, stride, pData, dataSize, receivedDataSize, format, bayerFormat); }
         private native void allocate( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4920,7 +4920,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned int") int dataSize,
                     @Cast("unsigned int") int receivedDataSize,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { allocate(rows, cols, stride, pData, dataSize, receivedDataSize, format, bayerFormat); }
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { super((Pointer)null); allocate(rows, cols, stride, pData, dataSize, receivedDataSize, format, bayerFormat); }
         private native void allocate( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4938,7 +4938,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned int") int dataSize,
                     @Cast("unsigned int") int receivedDataSize,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { allocate(rows, cols, stride, pData, dataSize, receivedDataSize, format, bayerFormat); }
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { super((Pointer)null); allocate(rows, cols, stride, pData, dataSize, receivedDataSize, format, bayerFormat); }
         private native void allocate( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4960,19 +4960,19 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
          */ 
         public Image(
                     @Cast("unsigned char*") BytePointer pData,
-                    @Cast("unsigned int") int dataSize) { allocate(pData, dataSize); }
+                    @Cast("unsigned int") int dataSize) { super((Pointer)null); allocate(pData, dataSize); }
         private native void allocate(
                     @Cast("unsigned char*") BytePointer pData,
                     @Cast("unsigned int") int dataSize);
         public Image(
                     @Cast("unsigned char*") ByteBuffer pData,
-                    @Cast("unsigned int") int dataSize) { allocate(pData, dataSize); }
+                    @Cast("unsigned int") int dataSize) { super((Pointer)null); allocate(pData, dataSize); }
         private native void allocate(
                     @Cast("unsigned char*") ByteBuffer pData,
                     @Cast("unsigned int") int dataSize);
         public Image(
                     @Cast("unsigned char*") byte[] pData,
-                    @Cast("unsigned int") int dataSize) { allocate(pData, dataSize); }
+                    @Cast("unsigned int") int dataSize) { super((Pointer)null); allocate(pData, dataSize); }
         private native void allocate(
                     @Cast("unsigned char*") byte[] pData,
                     @Cast("unsigned int") int dataSize);
@@ -4989,7 +4989,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
                     @Cast("FlyCapture2::PixelFormat") int format, 
-                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { allocate(rows, cols, format, bayerFormat); }
+                    @Cast("FlyCapture2::BayerTileFormat") int bayerFormat/*=FlyCapture2::NONE*/ ) { super((Pointer)null); allocate(rows, cols, format, bayerFormat); }
         private native void allocate( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -4998,7 +4998,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public Image( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
-                    @Cast("FlyCapture2::PixelFormat") int format ) { allocate(rows, cols, format); }
+                    @Cast("FlyCapture2::PixelFormat") int format ) { super((Pointer)null); allocate(rows, cols, format); }
         private native void allocate( 
                     @Cast("unsigned int") int rows,
                     @Cast("unsigned int") int cols,
@@ -5008,7 +5008,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
          * Copy constructor. Both images will point to the same image buffer
          * internally.
          */
-        public Image( @Const @ByRef Image image ) { allocate(image); }
+        public Image( @Const @ByRef Image image ) { super((Pointer)null); allocate(image); }
         private native void allocate( @Const @ByRef Image image );
         
         /**
@@ -5488,9 +5488,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     @Namespace("FlyCapture2") public static class SystemInfo extends Pointer {
         static { Loader.load(); }
         /** Default native constructor. */
-        public SystemInfo() { allocate(); }
+        public SystemInfo() { super((Pointer)null); allocate(); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public SystemInfo(int size) { allocateArray(size); }
+        public SystemInfo(int size) { super((Pointer)null); allocateArray(size); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public SystemInfo(Pointer p) { super(p); }
         private native void allocate();
@@ -5717,7 +5717,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public AVIRecorder(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public AVIRecorder(int size) { allocateArray(size); }
+        public AVIRecorder(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public AVIRecorder position(int position) {
             return (AVIRecorder)super.position(position);
@@ -5727,7 +5727,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /**
          * Default constructor.
          */
-        public AVIRecorder() { allocate(); }
+        public AVIRecorder() { super((Pointer)null); allocate(); }
         private native void allocate();
 
         /**
@@ -5857,7 +5857,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public TopologyNode(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public TopologyNode(int size) { allocateArray(size); }
+        public TopologyNode(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public TopologyNode position(int position) {
             return (TopologyNode)super.position(position);
@@ -5886,7 +5886,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /**
          * Default constructor.
          */
-        public TopologyNode() { allocate(); }
+        public TopologyNode() { super((Pointer)null); allocate(); }
         private native void allocate();
         
         /**
@@ -5901,7 +5901,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @ByVal PGRGuid guid,
                     int deviceId,
                     @Cast("FlyCapture2::TopologyNode::NodeType") int nodeType,
-                    @Cast("FlyCapture2::InterfaceType") int interfaceType ) { allocate(guid, deviceId, nodeType, interfaceType); }
+                    @Cast("FlyCapture2::InterfaceType") int interfaceType ) { super((Pointer)null); allocate(guid, deviceId, nodeType, interfaceType); }
         private native void allocate( 
                     @ByVal PGRGuid guid,
                     int deviceId,
@@ -5915,7 +5915,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /**
          * Copy constructor.
          */
-        public TopologyNode( @Const @ByRef TopologyNode other ) { allocate(other); }
+        public TopologyNode( @Const @ByRef TopologyNode other ) { super((Pointer)null); allocate(other); }
         private native void allocate( @Const @ByRef TopologyNode other );
 
         /**
@@ -6062,7 +6062,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public ImageStatistics(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public ImageStatistics(int size) { allocateArray(size); }
+        public ImageStatistics(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public ImageStatistics position(int position) {
             return (ImageStatistics)super.position(position);
@@ -6086,7 +6086,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /**
          * Default constructor.
          */
-        public ImageStatistics() { allocate(); }
+        public ImageStatistics() { super((Pointer)null); allocate(); }
         private native void allocate();
        
         /**
@@ -6096,7 +6096,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         /**
          * Copy constructor.
          */
-        public ImageStatistics( @Const @ByRef ImageStatistics other ) { allocate(other); }
+        public ImageStatistics( @Const @ByRef ImageStatistics other ) { super((Pointer)null); allocate(other); }
         private native void allocate( @Const @ByRef ImageStatistics other );
 
         /**

@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -50,7 +50,7 @@ public class dc1394 extends org.bytedeco.javacpp.presets.dc1394 {
 
 /** \file dc1394/dc1394.h
     \brief Main include file, which include all others.
-
+<p>
     More details soon
 */
 
@@ -99,7 +99,7 @@ public class dc1394 extends org.bytedeco.javacpp.presets.dc1394 {
 
 /** \file dc1394/types.h
     \brief Various types that must be defined here
-
+<p>
     More details soon
 */
 
@@ -208,9 +208,9 @@ public static final int DC1394_BYTE_ORDER_NUM =       (DC1394_BYTE_ORDER_MAX - D
 public static class dc1394color_codings_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public dc1394color_codings_t() { allocate(); }
+    public dc1394color_codings_t() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394color_codings_t(int size) { allocateArray(size); }
+    public dc1394color_codings_t(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394color_codings_t(Pointer p) { super(p); }
     private native void allocate();
@@ -230,9 +230,9 @@ public static class dc1394color_codings_t extends Pointer {
 public static class dc1394video_modes_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public dc1394video_modes_t() { allocate(); }
+    public dc1394video_modes_t() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394video_modes_t(int size) { allocateArray(size); }
+    public dc1394video_modes_t(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394video_modes_t(Pointer p) { super(p); }
     private native void allocate();
@@ -319,10 +319,10 @@ public static final int
 
 /** \file dc1394/log.h
     \brief Functions to log errors, warning and debug messages
-    \author Damien Douxchamps: coding
-    \author Rudolf Leitgeb: coding
-    \author Peter Antoniac: documentation maintainer
-
+    @author Damien Douxchamps: coding
+    @author Rudolf Leitgeb: coding
+    @author Peter Antoniac: documentation maintainer
+<p>
     More details soon
 */
 
@@ -574,9 +574,9 @@ public static native void dc1394_log_debug(String format);
 
 /** \file dc1394/camera.h
     \brief Basic system and camera functions
-    \author Damien Douxchamps: coding
-    \author Peter Antoniac: documentation maintainer
-
+    @author Damien Douxchamps: coding
+    @author Peter Antoniac: documentation maintainer
+<p>
     More details soon
 */
 
@@ -648,9 +648,9 @@ public static final int DC1394_PHY_DELAY_NUM =        (DC1394_PHY_DELAY_MAX - DC
 public static class dc1394camera_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public dc1394camera_t() { allocate(); }
+    public dc1394camera_t() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394camera_t(int size) { allocateArray(size); }
+    public dc1394camera_t(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394camera_t(Pointer p) { super(p); }
     private native void allocate();
@@ -701,9 +701,9 @@ public static class dc1394camera_t extends Pointer {
 public static class dc1394camera_id_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public dc1394camera_id_t() { allocate(); }
+    public dc1394camera_id_t() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394camera_id_t(int size) { allocateArray(size); }
+    public dc1394camera_id_t(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394camera_id_t(Pointer p) { super(p); }
     private native void allocate();
@@ -724,9 +724,9 @@ public static class dc1394camera_id_t extends Pointer {
 public static class dc1394camera_list_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public dc1394camera_list_t() { allocate(); }
+    public dc1394camera_list_t() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394camera_list_t(int size) { allocateArray(size); }
+    public dc1394camera_list_t(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394camera_list_t(Pointer p) { super(p); }
     private native void allocate();
@@ -875,12 +875,12 @@ public static native @Cast("dc1394error_t") int dc1394_camera_print_info(dc1394c
 
 /** \file dc1394/control.h
     \brief Diverse controls of camera features
-    \author Gord Peters: main writer
-    \author Chris Urmson: some additions
-    \author Damien Douxchamps: some additions
-    \author Peter Antoniac: documentation maintainer
-    \author Rudolf Leitgeb: documentation writer
-
+    @author Gord Peters: main writer
+    @author Chris Urmson: some additions
+    @author Damien Douxchamps: some additions
+    @author Peter Antoniac: documentation maintainer
+    @author Rudolf Leitgeb: documentation writer
+<p>
     This is the main include file of the library. It lists most of the library
     functions, enumerations and data structures.
 */
@@ -976,9 +976,9 @@ public static final int DC1394_FEATURE_MODE_NUM =     (DC1394_FEATURE_MODE_MAX -
 public static class dc1394feature_modes_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public dc1394feature_modes_t() { allocate(); }
+    public dc1394feature_modes_t() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394feature_modes_t(int size) { allocateArray(size); }
+    public dc1394feature_modes_t(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394feature_modes_t(Pointer p) { super(p); }
     private native void allocate();
@@ -998,9 +998,9 @@ public static class dc1394feature_modes_t extends Pointer {
 public static class dc1394trigger_modes_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public dc1394trigger_modes_t() { allocate(); }
+    public dc1394trigger_modes_t() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394trigger_modes_t(int size) { allocateArray(size); }
+    public dc1394trigger_modes_t(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394trigger_modes_t(Pointer p) { super(p); }
     private native void allocate();
@@ -1020,9 +1020,9 @@ public static class dc1394trigger_modes_t extends Pointer {
 public static class dc1394trigger_sources_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public dc1394trigger_sources_t() { allocate(); }
+    public dc1394trigger_sources_t() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394trigger_sources_t(int size) { allocateArray(size); }
+    public dc1394trigger_sources_t(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394trigger_sources_t(Pointer p) { super(p); }
     private native void allocate();
@@ -1044,9 +1044,9 @@ public static class dc1394trigger_sources_t extends Pointer {
 public static class dc1394feature_info_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public dc1394feature_info_t() { allocate(); }
+    public dc1394feature_info_t() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394feature_info_t(int size) { allocateArray(size); }
+    public dc1394feature_info_t(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394feature_info_t(Pointer p) { super(p); }
     private native void allocate();
@@ -1092,9 +1092,9 @@ public static class dc1394feature_info_t extends Pointer {
 public static class dc1394featureset_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public dc1394featureset_t() { allocate(); }
+    public dc1394featureset_t() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394featureset_t(int size) { allocateArray(size); }
+    public dc1394featureset_t(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394featureset_t(Pointer p) { super(p); }
     private native void allocate();
@@ -1441,9 +1441,9 @@ public static native @Cast("dc1394error_t") int dc1394_memory_load(dc1394camera_
 
 /** \file dc1394/capture.h
     \brief Capture functions
-    \author Damien Douxchamps: coding
-    \author Peter Antoniac: documentation maintainer
-
+    @author Damien Douxchamps: coding
+    @author Peter Antoniac: documentation maintainer
+<p>
     More details soon
 */
 
@@ -1571,10 +1571,10 @@ public static native void dc1394_capture_set_callback(dc1394camera_t camera,
 
 /** \file dc1394/conversions.h
     \brief functions to convert video formats
-    \author Damien Douxchamps: coding
-    \author Frederic Devernay: coding
-    \author Peter Antoniac: documentation maintainer
-
+    @author Damien Douxchamps: coding
+    @author Frederic Devernay: coding
+    @author Peter Antoniac: documentation maintainer
+<p>
     More details soon
 */
 
@@ -1797,7 +1797,7 @@ public static native @Cast("dc1394error_t") int dc1394_deinterlace_stereo_frames
 
 /** \file dc1394/format7.h
     \brief Functions to control Format_7 (aka scalable format, ROI)
-
+<p>
     More details soon
 */
 
@@ -1807,9 +1807,9 @@ public static native @Cast("dc1394error_t") int dc1394_deinterlace_stereo_frames
 public static class dc1394format7mode_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public dc1394format7mode_t() { allocate(); }
+    public dc1394format7mode_t() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394format7mode_t(int size) { allocateArray(size); }
+    public dc1394format7mode_t(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394format7mode_t(Pointer p) { super(p); }
     private native void allocate();
@@ -1855,9 +1855,9 @@ public static class dc1394format7mode_t extends Pointer {
 public static class dc1394format7modeset_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public dc1394format7modeset_t() { allocate(); }
+    public dc1394format7modeset_t() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394format7modeset_t(int size) { allocateArray(size); }
+    public dc1394format7modeset_t(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394format7modeset_t(Pointer p) { super(p); }
     private native void allocate();
@@ -2086,9 +2086,9 @@ public static native @Cast("dc1394error_t") int dc1394_format7_get_roi(dc1394cam
 
 /** \file dc1394/iso.h
     \brief Functions to manually manage the ISO resources (channels and bandwidth)
-    \author Damien Douxchamps: coding
-    \author Peter Antoniac: documentation maintainer
-
+    @author Damien Douxchamps: coding
+    @author Peter Antoniac: documentation maintainer
+<p>
     More details soon
 */
 
@@ -2132,7 +2132,7 @@ public static native @Cast("dc1394error_t") int dc1394_iso_set_persist(dc1394cam
  * is freed or if the application shuts down prematurely.  If the channel
  * needs to persist beyond the lifetime of this application, call
  * \a dc1394_iso_set_persist() first.  Note that this function does _not_
- * automatically program @a camera to use the allocated channel for isochronous
+ * automatically program \a camera to use the allocated channel for isochronous
  * streaming.  You must do that manually using \a dc1394_video_set_iso_channel().
  *
  * @return \a DC1394_SUCCESS if the operation succeeded.  The allocated
@@ -2259,9 +2259,9 @@ public static native @Cast("dc1394error_t") int dc1394_iso_release_all(dc1394cam
 
 /** \file dc1394/register.h
     \brief Functions to directly access camera registers.
-    \author Damien Douxchamps: coding
-    \author Peter Antoniac: documentation maintainer
-
+    @author Damien Douxchamps: coding
+    @author Peter Antoniac: documentation maintainer
+<p>
     More details soon
 */
 
@@ -2499,7 +2499,7 @@ public static native @Cast("dc1394error_t") int dc1394_set_strobe_register(dc139
 
 /** \file dc1394/video.h
     \brief Functions related to video modes, formats, framerate and video flow.
-
+<p>
     More details soon
 */
 
@@ -2568,9 +2568,9 @@ public static final int DC1394_OPERATION_MODE_NUM =   (DC1394_OPERATION_MODE_MAX
 public static class dc1394framerates_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public dc1394framerates_t() { allocate(); }
+    public dc1394framerates_t() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394framerates_t(int size) { allocateArray(size); }
+    public dc1394framerates_t(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394framerates_t(Pointer p) { super(p); }
     private native void allocate();
@@ -2596,9 +2596,9 @@ public static class dc1394framerates_t extends Pointer {
 public static class dc1394video_frame_t extends dc1394video_frame_t_abstract {
     static { Loader.load(); }
     /** Default native constructor. */
-    public dc1394video_frame_t() { allocate(); }
+    public dc1394video_frame_t() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394video_frame_t(int size) { allocateArray(size); }
+    public dc1394video_frame_t(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394video_frame_t(Pointer p) { super(p); }
     private native void allocate();
@@ -2806,9 +2806,9 @@ public static native @Cast("dc1394error_t") int dc1394_video_get_bandwidth_usage
 
 /** \file dc1394/utils.h
     \brief Utility functions
-    \author Damien Douxchamps: coding
-    \author Peter Antoniac: documentation maintainer
-
+    @author Damien Douxchamps: coding
+    @author Peter Antoniac: documentation maintainer
+<p>
     More details soon
 */
 

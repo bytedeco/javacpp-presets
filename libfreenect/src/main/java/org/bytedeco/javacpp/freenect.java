@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -80,9 +80,9 @@ public static final int
 public static class freenect_device_attributes extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public freenect_device_attributes() { allocate(); }
+    public freenect_device_attributes() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public freenect_device_attributes(int size) { allocateArray(size); }
+    public freenect_device_attributes(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_device_attributes(Pointer p) { super(p); }
     private native void allocate();
@@ -162,7 +162,7 @@ public static final int
 	FREENECT_MIRROR_VIDEO       =  1 << 17,
 	FREENECT_NEAR_MODE          =  1 << 18; // K4W only
 
-/** Possible values for setting each `freenect_flag` */
+/** Possible values for setting each {@code freenect_flag} */
 /** enum freenect_flag_value */
 public static final int
 	FREENECT_OFF = 0,
@@ -174,9 +174,9 @@ public static final int
 public static class freenect_frame_mode extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public freenect_frame_mode() { allocate(); }
+    public freenect_frame_mode() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public freenect_frame_mode(int size) { allocateArray(size); }
+    public freenect_frame_mode(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_frame_mode(Pointer p) { super(p); }
     private native void allocate();
@@ -241,9 +241,9 @@ public static final int
 public static class freenect_raw_tilt_state extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public freenect_raw_tilt_state() { allocate(); }
+    public freenect_raw_tilt_state() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public freenect_raw_tilt_state(int size) { allocateArray(size); }
+    public freenect_raw_tilt_state(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_raw_tilt_state(Pointer p) { super(p); }
     private native void allocate();
@@ -827,7 +827,7 @@ public static native int freenect_set_depth_mode(freenect_device dev, @Const @By
  * Enables or disables the specified flag.
  * 
  * @param flag Feature to set
- * @param value `FREENECT_OFF` or `FREENECT_ON`
+ * @param value {@code FREENECT_OFF} or {@code FREENECT_ON}
  * 
  * @return 0 on success, < 0 if error
  */
@@ -921,9 +921,9 @@ public static native void freenect_set_fw_address_k4w(freenect_context ctx, @Cas
 public static class freenect_reg_info extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public freenect_reg_info() { allocate(); }
+    public freenect_reg_info() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public freenect_reg_info(int size) { allocateArray(size); }
+    public freenect_reg_info(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_reg_info(Pointer p) { super(p); }
     private native void allocate();
@@ -980,9 +980,9 @@ public static class freenect_reg_info extends Pointer {
 public static class freenect_reg_pad_info extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public freenect_reg_pad_info() { allocate(); }
+    public freenect_reg_pad_info() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public freenect_reg_pad_info(int size) { allocateArray(size); }
+    public freenect_reg_pad_info(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_reg_pad_info(Pointer p) { super(p); }
     private native void allocate();
@@ -1000,9 +1000,9 @@ public static class freenect_reg_pad_info extends Pointer {
 public static class freenect_zero_plane_info extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public freenect_zero_plane_info() { allocate(); }
+    public freenect_zero_plane_info() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public freenect_zero_plane_info(int size) { allocateArray(size); }
+    public freenect_zero_plane_info(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_zero_plane_info(Pointer p) { super(p); }
     private native void allocate();
@@ -1021,9 +1021,9 @@ public static class freenect_zero_plane_info extends Pointer {
 public static class freenect_registration extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public freenect_registration() { allocate(); }
+    public freenect_registration() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public freenect_registration(int size) { allocateArray(size); }
+    public freenect_registration(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_registration(Pointer p) { super(p); }
     private native void allocate();
@@ -1112,9 +1112,9 @@ public static native void freenect_map_rgb_to_depth( freenect_device dev,
 public static class freenect_sample_51 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public freenect_sample_51() { allocate(); }
+    public freenect_sample_51() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public freenect_sample_51(int size) { allocateArray(size); }
+    public freenect_sample_51(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_sample_51(Pointer p) { super(p); }
     private native void allocate();

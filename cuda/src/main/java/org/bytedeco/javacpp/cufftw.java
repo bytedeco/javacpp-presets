@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -129,9 +129,9 @@ public static final int FFTW_UNALIGNED =          0x10;
 public static class fftw_iodim extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public fftw_iodim() { allocate(); }
+    public fftw_iodim() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public fftw_iodim(int size) { allocateArray(size); }
+    public fftw_iodim(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftw_iodim(Pointer p) { super(p); }
     private native void allocate();
@@ -148,9 +148,9 @@ public static class fftw_iodim extends Pointer {
 public static class fftw_iodim64 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public fftw_iodim64() { allocate(); }
+    public fftw_iodim64() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public fftw_iodim64(int size) { allocateArray(size); }
+    public fftw_iodim64(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftw_iodim64(Pointer p) { super(p); }
     private native void allocate();

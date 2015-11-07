@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -70,23 +70,23 @@ public class opencv_ml extends org.bytedeco.javacpp.presets.opencv_ml {
 // #include <iostream>
 
 /**
-  @defgroup ml Machine Learning
-
+  \defgroup ml Machine Learning
+<p>
   The Machine Learning Library (MLL) is a set of classes and functions for statistical
   classification, regression, and clustering of data.
-
+<p>
   Most of the classification and regression algorithms are implemented as C++ classes. As the
   algorithms have different sets of features (like an ability to handle missing measurements or
   categorical input variables), there is a little common ground between the classes. This common
   ground is defined by the class cv::ml::StatModel that all the other ML classes are derived from.
-
-  See detailed overview here: @ref ml_intro.
+<p>
+  See detailed overview here: \ref ml_intro.
  */
 
-/** @addtogroup ml
- *  @{
+/** \addtogroup ml
+ *  \{
 
-/** @brief Variable types */
+/** \brief Variable types */
 /** enum cv::ml::VariableTypes */
 public static final int
     /** same as VAR_ORDERED */
@@ -96,13 +96,13 @@ public static final int
     /** categorical variables */
     VAR_CATEGORICAL  = 1;
 
-/** @brief %Error types */
+/** \brief %Error types */
 /** enum cv::ml::ErrorTypes */
 public static final int
     TEST_ERROR = 0,
     TRAIN_ERROR = 1;
 
-/** @brief Sample types */
+/** \brief Sample types */
 /** enum cv::ml::SampleTypes */
 public static final int
     /** each training sample is a row of samples */
@@ -110,8 +110,8 @@ public static final int
     /** each training sample occupies a column of samples */
     COL_SAMPLE = 1;
 
-/** @brief The structure represents the logarithmic grid range of statmodel parameters.
-
+/** \brief The structure represents the logarithmic grid range of statmodel parameters.
+<p>
 It is used for optimizing statmodel accuracy by varying model parameters, the accuracy estimate
 being computed by cross-validation.
  */
@@ -120,25 +120,25 @@ being computed by cross-validation.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ParamGrid(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ParamGrid(int size) { allocateArray(size); }
+    public ParamGrid(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public ParamGrid position(int position) {
         return (ParamGrid)super.position(position);
     }
 
-    /** @brief Default constructor */
-    public ParamGrid() { allocate(); }
+    /** \brief Default constructor */
+    public ParamGrid() { super((Pointer)null); allocate(); }
     private native void allocate();
-    /** @brief Constructor with parameters */
-    public ParamGrid(double _minVal, double _maxVal, double _logStep) { allocate(_minVal, _maxVal, _logStep); }
+    /** \brief Constructor with parameters */
+    public ParamGrid(double _minVal, double _maxVal, double _logStep) { super((Pointer)null); allocate(_minVal, _maxVal, _logStep); }
     private native void allocate(double _minVal, double _maxVal, double _logStep);
 
     /** Minimum value of the statmodel parameter. Default value is 0. */
     public native double minVal(); public native ParamGrid minVal(double minVal);
     /** Maximum value of the statmodel parameter. Default value is 0. */
     public native double maxVal(); public native ParamGrid maxVal(double maxVal);
-    /** @brief Logarithmic step for iterating the statmodel parameter.
-
+    /** \brief Logarithmic step for iterating the statmodel parameter.
+<p>
     The grid determines the following iteration sequence of the statmodel parameter values:
     \f[(minVal, minVal*step, minVal*{step}^2, \dots,  minVal*{logStep}^n),\f]
     where \f$n\f$ is the maximal index satisfying
@@ -148,14 +148,14 @@ being computed by cross-validation.
     public native double logStep(); public native ParamGrid logStep(double logStep);
 }
 
-/** @brief Class encapsulating training data.
-
+/** \brief Class encapsulating training data.
+<p>
 Please note that the class only specifies the interface of training data, but not implementation.
 All the statistical model classes in _ml_ module accepts Ptr\<TrainData\> as parameter. In other
 words, you can create your own class derived from TrainData and pass smart pointer to the instance
 of this class into StatModel::train.
-
-@sa @ref ml_intro_data
+<p>
+\sa \ref ml_intro_data
  */
 @Namespace("cv::ml") public static class TrainData extends Pointer {
     static { Loader.load(); }
@@ -179,15 +179,15 @@ of this class into StatModel::train.
     public native @ByVal Mat getSamples();
     public native @ByVal Mat getMissing();
 
-    /** @brief Returns matrix of train samples
-
+    /** \brief Returns matrix of train samples
+<p>
     @param layout The requested layout. If it's different from the initial one, the matrix is
         transposed. See ml::SampleTypes.
     @param compressSamples if true, the function returns only the training samples (specified by
         sampleIdx)
     @param compressVars if true, the function returns the shorter training samples, containing only
         the active variables.
-
+<p>
     In current implementation the function tries to avoid physical data copying and returns the
     matrix stored inside TrainData (unless the transposition or compression is needed).
      */
@@ -196,17 +196,17 @@ of this class into StatModel::train.
                                     @Cast("bool") boolean compressVars/*=true*/);
     public native @ByVal Mat getTrainSamples();
 
-    /** @brief Returns the vector of responses
-
+    /** \brief Returns the vector of responses
+<p>
     The function returns ordered or the original categorical responses. Usually it's used in
     regression algorithms.
      */
     public native @ByVal Mat getTrainResponses();
 
-    /** @brief Returns the vector of normalized categorical responses
-
-    The function returns vector of responses. Each response is integer from `0` to `<number of
-    classes>-1`. The actual label value can be retrieved then from the class label vector, see
+    /** \brief Returns the vector of normalized categorical responses
+<p>
+    The function returns vector of responses. Each response is integer from {@code 0} to {@code <number of
+    classes>-1}. The actual label value can be retrieved then from the class label vector, see
     TrainData::getClassLabels.
      */
     public native @ByVal Mat getTrainNormCatResponses();
@@ -232,8 +232,8 @@ of this class into StatModel::train.
 
     public native int getCatCount(int vi);
 
-    /** @brief Returns the vector of class labels
-
+    /** \brief Returns the vector of class labels
+<p>
     The function returns vector of unique labels occurred in the responses.
      */
     public native @ByVal Mat getClassLabels();
@@ -241,19 +241,19 @@ of this class into StatModel::train.
     public native @ByVal Mat getCatOfs();
     public native @ByVal Mat getCatMap();
 
-    /** @brief Splits the training data into the training and test parts
-    @sa TrainData::setTrainTestSplitRatio
+    /** \brief Splits the training data into the training and test parts
+    \sa TrainData::setTrainTestSplitRatio
      */
     public native void setTrainTestSplit(int count, @Cast("bool") boolean shuffle/*=true*/);
     public native void setTrainTestSplit(int count);
 
-    /** @brief Splits the training data into the training and test parts
-
+    /** \brief Splits the training data into the training and test parts
+<p>
     The function selects a subset of specified relative size and then returns it as the training
     set. If the function is not called, all the data is used for training. Please, note that for
     each of TrainData::getTrain\* there is corresponding TrainData::getTest\*, so that the test
     subset can be retrieved and processed as well.
-    @sa TrainData::setTrainTestSplit
+    \sa TrainData::setTrainTestSplit
      */
     public native void setTrainTestSplitRatio(double ratio, @Cast("bool") boolean shuffle/*=true*/);
     public native void setTrainTestSplitRatio(double ratio);
@@ -261,19 +261,19 @@ of this class into StatModel::train.
 
     public static native @ByVal Mat getSubVector(@Const @ByRef Mat vec, @Const @ByRef Mat idx);
 
-    /** @brief Reads the dataset from a .csv file and returns the ready-to-use training data.
-
+    /** \brief Reads the dataset from a .csv file and returns the ready-to-use training data.
+<p>
     @param filename The input file name
     @param headerLineCount The number of lines in the beginning to skip; besides the header, the
-        function also skips empty lines and lines staring with `#`
+        function also skips empty lines and lines staring with {@code #}
     @param responseStartIdx Index of the first output variable. If -1, the function considers the
         last variable as the response
     @param responseEndIdx Index of the last output variable + 1. If -1, then there is single
         response variable at responseStartIdx.
     @param varTypeSpec The optional text string that specifies the variables' types. It has the
-        format `ord[n1-n2,n3,n4-n5,...]cat[n6,n7-n8,...]`. That is, variables from `n1 to n2`
-        (inclusive range), `n3`, `n4 to n5` ... are considered ordered and `n6`, `n7 to n8` ... are
-        considered as categorical. The range `[n1..n2] + [n3] + [n4..n5] + ... + [n6] + [n7..n8]`
+        format {@code ord[n1-n2,n3,n4-n5,...]cat[n6,n7-n8,...]}. That is, variables from {@code n1 to n2}
+        (inclusive range), {@code n3}, {@code n4 to n5} ... are considered ordered and {@code n6}, {@code n7 to n8} ... are
+        considered as categorical. The range {@code [n1..n2] + [n3] + [n4..n5] + ... + [n6] + [n7..n8]}
         should cover all the variables. If varTypeSpec is not specified, then algorithm uses the
         following rules:
         - all input variables are considered ordered by default. If some column contains has non-
@@ -307,8 +307,8 @@ of this class into StatModel::train.
     public static native @Ptr TrainData loadFromCSV(@Str String filename,
                                           int headerLineCount);
 
-    /** @brief Creates training data from in-memory arrays.
-
+    /** \brief Creates training data from in-memory arrays.
+<p>
     @param samples matrix of samples. It should have CV_32F type.
     @param layout see ml::SampleTypes.
     @param responses matrix of responses. If the responses are scalar, they should be stored as a
@@ -322,8 +322,8 @@ of this class into StatModel::train.
         vector (CV_32S) containing 0-based sample indices or byte vector (CV_8U) containing a mask
         of training samples.
     @param sampleWeights optional vector with weights for each sample. It should have CV_32F type.
-    @param varType optional vector of type CV_8U and size `<number_of_variables_in_samples> +
-        <number_of_variables_in_responses>`, containing types of each input and output variable. See
+    @param varType optional vector of type CV_8U and size {@code <number_of_variables_in_samples> +
+        <number_of_variables_in_responses>}, containing types of each input and output variable. See
         ml::VariableTypes.
      */
     public static native @Ptr TrainData create(@ByVal Mat samples, int layout, @ByVal Mat responses,
@@ -332,7 +332,7 @@ of this class into StatModel::train.
     public static native @Ptr TrainData create(@ByVal Mat samples, int layout, @ByVal Mat responses);
 }
 
-/** @brief Base class for statistical models in OpenCV ML.
+/** \brief Base class for statistical models in OpenCV ML.
  */
 @Namespace("cv::ml") public static class StatModel extends Algorithm {
     static { Loader.load(); }
@@ -350,18 +350,18 @@ of this class into StatModel::train.
         COMPRESSED_INPUT= 2,
         PREPROCESSED_INPUT= 4;
 
-    /** @brief Returns the number of variables in training samples */
+    /** \brief Returns the number of variables in training samples */
     public native int getVarCount();
 
     public native @Cast("bool") boolean empty();
 
-    /** @brief Returns true if the model is trained */
+    /** \brief Returns true if the model is trained */
     public native @Cast("bool") boolean isTrained();
-    /** @brief Returns true if the model is classifier */
+    /** \brief Returns true if the model is classifier */
     public native @Cast("bool") boolean isClassifier();
 
-    /** @brief Trains the statistical model
-
+    /** \brief Trains the statistical model
+<p>
     @param trainData training data that can be loaded from file using TrainData::loadFromCSV or
         created with TrainData::create.
     @param flags optional flags, depending on the model. Some of the models can be updated with the
@@ -370,16 +370,16 @@ of this class into StatModel::train.
     public native @Cast("bool") boolean train( @Ptr TrainData trainData, int flags/*=0*/ );
     public native @Cast("bool") boolean train( @Ptr TrainData trainData );
 
-    /** @brief Trains the statistical model
-
+    /** \brief Trains the statistical model
+<p>
     @param samples training samples
     @param layout See ml::SampleTypes.
     @param responses vector of responses associated with the training samples.
     */
     public native @Cast("bool") boolean train( @ByVal Mat samples, int layout, @ByVal Mat responses );
 
-    /** @brief Computes error on the training or test dataset
-
+    /** \brief Computes error on the training or test dataset
+<p>
     @param data the training data
     @param test if true, the error is computed over the test subset of the data, otherwise it's
         computed over the training subset of the data. Please note that if you loaded a completely
@@ -387,14 +387,14 @@ of this class into StatModel::train.
         the test subset at all with TrainData::setTrainTestSplitRatio and specify test=false, so
         that the error is computed for the whole new set. Yes, this sounds a bit confusing.
     @param resp the optional output responses.
-
+<p>
     The method uses StatModel::predict to compute the error. For regression models the error is
     computed as RMS, for classifiers - as a percent of missclassified samples (0%-100%).
      */
     public native float calcError( @Ptr TrainData data, @Cast("bool") boolean test, @ByVal Mat resp );
 
-    /** @brief Predicts response(s) for the provided sample(s)
-
+    /** \brief Predicts response(s) for the provided sample(s)
+<p>
     @param samples The input samples, floating-point matrix
     @param results The optional output matrix of results.
     @param flags The optional flags, model-dependent. See cv::ml::StatModel::Flags.
@@ -402,9 +402,9 @@ of this class into StatModel::train.
     public native float predict( @ByVal Mat samples, @ByVal(nullValue = "cv::noArray()") Mat results/*=cv::noArray()*/, int flags/*=0*/ );
     public native float predict( @ByVal Mat samples );
 
-    /** @brief Create and train model with default parameters
-
-    The class must implement static `create()` method with no parameters or with all default parameter values
+    /** \brief Create and train model with default parameters
+<p>
+    The class must implement static {@code create()} method with no parameters or with all default parameter values
     */
 }
 
@@ -412,9 +412,9 @@ of this class into StatModel::train.
 *                                 Normal Bayes Classifier                                *
 \****************************************************************************************/
 
-/** @brief Bayes classifier for normally distributed data.
-
-@sa @ref ml_intro_bayes
+/** \brief Bayes classifier for normally distributed data.
+<p>
+\sa \ref ml_intro_bayes
  */
 @Namespace("cv::ml") public static class NormalBayesClassifier extends StatModel {
     static { Loader.load(); }
@@ -423,8 +423,8 @@ of this class into StatModel::train.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NormalBayesClassifier(Pointer p) { super(p); }
 
-    /** @brief Predicts the response for sample(s).
-
+    /** \brief Predicts the response for sample(s).
+<p>
     The method estimates the most probable classes for input vectors. Input vectors (one or more)
     are stored as rows of the matrix inputs. In case of multiple input vectors, there should be one
     output vector outputs. The predicted class for a single input vector is returned by the method.
@@ -445,9 +445,9 @@ of this class into StatModel::train.
 *                          K-Nearest Neighbour Classifier                                *
 \****************************************************************************************/
 
-/** @brief The class implements K-Nearest Neighbors model
-
-@sa @ref ml_intro_knn
+/** \brief The class implements K-Nearest Neighbors model
+<p>
+\sa \ref ml_intro_knn
  */
 @Namespace("cv::ml") public static class KNearest extends StatModel {
     static { Loader.load(); }
@@ -460,51 +460,51 @@ of this class into StatModel::train.
     /** Default number of neighbors to use in predict method. */
     /** @see setDefaultK */
     public native int getDefaultK();
-    /** @copybrief getDefaultK @see getDefaultK */
+    /** \copybrief getDefaultK @see getDefaultK */
     public native void setDefaultK(int val);
 
     /** Whether classification or regression model should be trained. */
     /** @see setIsClassifier */
     public native @Cast("bool") boolean getIsClassifier();
-    /** @copybrief getIsClassifier @see getIsClassifier */
+    /** \copybrief getIsClassifier @see getIsClassifier */
     public native void setIsClassifier(@Cast("bool") boolean val);
 
     /** Parameter for KDTree implementation. */
     /** @see setEmax */
     public native int getEmax();
-    /** @copybrief getEmax @see getEmax */
+    /** \copybrief getEmax @see getEmax */
     public native void setEmax(int val);
 
     /** %Algorithm type, one of KNearest::Types. */
     /** @see setAlgorithmType */
     public native int getAlgorithmType();
-    /** @copybrief getAlgorithmType @see getAlgorithmType */
+    /** \copybrief getAlgorithmType @see getAlgorithmType */
     public native void setAlgorithmType(int val);
 
-    /** @brief Finds the neighbors and predicts responses for input vectors.
-
+    /** \brief Finds the neighbors and predicts responses for input vectors.
+<p>
     @param samples Input samples stored by rows. It is a single-precision floating-point matrix of
-        `<number_of_samples> * k` size.
+        {@code <number_of_samples> * k} size.
     @param k Number of used nearest neighbors. Should be greater than 1.
     @param results Vector with results of prediction (regression or classification) for each input
-        sample. It is a single-precision floating-point vector with `<number_of_samples>` elements.
+        sample. It is a single-precision floating-point vector with {@code <number_of_samples>} elements.
     @param neighborResponses Optional output values for corresponding neighbors. It is a single-
-        precision floating-point matrix of `<number_of_samples> * k` size.
+        precision floating-point matrix of {@code <number_of_samples> * k} size.
     @param dist Optional output distances from the input vectors to the corresponding neighbors. It
-        is a single-precision floating-point matrix of `<number_of_samples> * k` size.
-
+        is a single-precision floating-point matrix of {@code <number_of_samples> * k} size.
+<p>
     For each input vector (a row of the matrix samples), the method finds the k nearest neighbors.
     In case of regression, the predicted result is a mean value of the particular vector's neighbor
     responses. In case of classification, the class is determined by voting.
-
+<p>
     For each input vector, the neighbors are sorted by their distances to the vector.
-
+<p>
     In case of C++ interface you can use output pointers to empty matrices and the function will
     allocate memory itself.
-
+<p>
     If only a single input vector is passed, all output matrices are optional and the predicted
     value is returned by the method.
-
+<p>
     The function is parallelized with the TBB library.
      */
     public native float findNearest( @ByVal Mat samples, int k,
@@ -514,15 +514,15 @@ of this class into StatModel::train.
     public native float findNearest( @ByVal Mat samples, int k,
                                    @ByVal Mat results );
 
-    /** @brief Implementations of KNearest algorithm
+    /** \brief Implementations of KNearest algorithm
        */
     /** enum cv::ml::KNearest::Types */
     public static final int
         BRUTE_FORCE= 1,
         KDTREE= 2;
 
-    /** @brief Creates the empty model
-
+    /** \brief Creates the empty model
+<p>
     The static method creates empty %KNearest classifier. It should be then trained using StatModel::train method.
      */
     public static native @Ptr KNearest create();
@@ -532,9 +532,9 @@ of this class into StatModel::train.
 *                                   Support Vector Machines                              *
 \****************************************************************************************/
 
-/** @brief Support Vector Machines.
-
-@sa @ref ml_intro_svm
+/** \brief Support Vector Machines.
+<p>
+\sa \ref ml_intro_svm
  */
 @Namespace("cv::ml") public static class SVM extends StatModel {
     static { Loader.load(); }
@@ -561,68 +561,68 @@ of this class into StatModel::train.
     See SVM::Types. Default value is SVM::C_SVC. */
     /** @see setType */
     public native int getType();
-    /** @copybrief getType @see getType */
+    /** \copybrief getType @see getType */
     public native void setType(int val);
 
     /** Parameter \f$\gamma\f$ of a kernel function.
     For SVM::POLY, SVM::RBF, SVM::SIGMOID or SVM::CHI2. Default value is 1. */
     /** @see setGamma */
     public native double getGamma();
-    /** @copybrief getGamma @see getGamma */
+    /** \copybrief getGamma @see getGamma */
     public native void setGamma(double val);
 
     /** Parameter _coef0_ of a kernel function.
     For SVM::POLY or SVM::SIGMOID. Default value is 0.*/
     /** @see setCoef0 */
     public native double getCoef0();
-    /** @copybrief getCoef0 @see getCoef0 */
+    /** \copybrief getCoef0 @see getCoef0 */
     public native void setCoef0(double val);
 
     /** Parameter _degree_ of a kernel function.
     For SVM::POLY. Default value is 0. */
     /** @see setDegree */
     public native double getDegree();
-    /** @copybrief getDegree @see getDegree */
+    /** \copybrief getDegree @see getDegree */
     public native void setDegree(double val);
 
     /** Parameter _C_ of a %SVM optimization problem.
     For SVM::C_SVC, SVM::EPS_SVR or SVM::NU_SVR. Default value is 0. */
     /** @see setC */
     public native double getC();
-    /** @copybrief getC @see getC */
+    /** \copybrief getC @see getC */
     public native void setC(double val);
 
     /** Parameter \f$\nu\f$ of a %SVM optimization problem.
     For SVM::NU_SVC, SVM::ONE_CLASS or SVM::NU_SVR. Default value is 0. */
     /** @see setNu */
     public native double getNu();
-    /** @copybrief getNu @see getNu */
+    /** \copybrief getNu @see getNu */
     public native void setNu(double val);
 
     /** Parameter \f$\epsilon\f$ of a %SVM optimization problem.
     For SVM::EPS_SVR. Default value is 0. */
     /** @see setP */
     public native double getP();
-    /** @copybrief getP @see getP */
+    /** \copybrief getP @see getP */
     public native void setP(double val);
 
     /** Optional weights in the SVM::C_SVC problem, assigned to particular classes.
-    They are multiplied by _C_ so the parameter _C_ of class _i_ becomes `classWeights(i) * C`. Thus
+    They are multiplied by _C_ so the parameter _C_ of class _i_ becomes {@code classWeights(i) * C}. Thus
     these weights affect the misclassification penalty for different classes. The larger weight,
     the larger penalty on misclassification of data from the corresponding class. Default value is
     empty Mat. */
     /** @see setClassWeights */
     public native @ByVal Mat getClassWeights();
-    /** @copybrief getClassWeights @see getClassWeights */
+    /** \copybrief getClassWeights @see getClassWeights */
     public native void setClassWeights(@Const @ByRef Mat val);
 
     /** Termination criteria of the iterative %SVM training procedure which solves a partial
     case of constrained quadratic optimization problem.
     You can specify tolerance and/or the maximum number of iterations. Default value is
-    `TermCriteria( TermCriteria::MAX_ITER + TermCriteria::EPS, 1000, FLT_EPSILON )`; */
+    {@code TermCriteria( TermCriteria::MAX_ITER + TermCriteria::EPS, 1000, FLT_EPSILON )}; */
     /** @see setTermCriteria */
     public native @ByVal TermCriteria getTermCriteria();
-    /** @copybrief getTermCriteria @see getTermCriteria */
+    /** \copybrief getTermCriteria @see getTermCriteria */
     public native void setTermCriteria(@Const @ByRef TermCriteria val);
 
     /** Type of a %SVM kernel.
@@ -656,11 +656,11 @@ of this class into StatModel::train.
         penalty multiplier C is used. */
         EPS_SVR= 103,
         /** \f$\nu\f$-Support Vector Regression. \f$\nu\f$ is used instead of p.
-        See @cite LibSVM for details. */
+        See \cite LibSVM for details. */
         NU_SVR= 104;
 
-    /** @brief %SVM kernel type
-
+    /** \brief %SVM kernel type
+<p>
     A comparison of different kernels on the following 2D test case with four classes. Four
     SVM::C_SVC SVMs have been trained (one against rest) with auto_train. Evaluation on three
     different kernels (SVM::CHI2, SVM::INTER, SVM::RBF). The color depicts the class with max score.
@@ -698,8 +698,8 @@ of this class into StatModel::train.
         COEF= 4,
         DEGREE= 5;
 
-    /** @brief Trains an %SVM with optimal parameters.
-
+    /** \brief Trains an %SVM with optimal parameters.
+<p>
     @param data the training data that can be constructed using TrainData::create or
         TrainData::loadFromCSV.
     @param kFold Cross-validation parameter. The training set is divided into kFold subsets. One
@@ -714,20 +714,20 @@ of this class into StatModel::train.
     @param balanced If true and the problem is 2-class classification then the method creates more
         balanced cross-validation subsets that is proportions between classes in subsets are close
         to such proportion in the whole train dataset.
-
+<p>
     The method trains the %SVM model automatically by choosing the optimal parameters C, gamma, p,
     nu, coef0, degree. Parameters are considered optimal when the cross-validation
     estimate of the test set error is minimal.
-
+<p>
     If there is no need to optimize a parameter, the corresponding grid step should be set to any
-    value less than or equal to 1. For example, to avoid optimization in gamma, set `gammaGrid.step
-    = 0`, `gammaGrid.minVal`, `gamma_grid.maxVal` as arbitrary numbers. In this case, the value
-    `Gamma` is taken for gamma.
-
+    value less than or equal to 1. For example, to avoid optimization in gamma, set {@code gammaGrid.step
+    = 0}, {@code gammaGrid.minVal}, {@code gamma_grid.maxVal} as arbitrary numbers. In this case, the value
+    {@code Gamma} is taken for gamma.
+<p>
     And, finally, if the optimization in a parameter is required but the corresponding grid is
     unknown, you may call the function SVM::getDefaultGrid. To generate a grid, for example, for
-    gamma, call `SVM::getDefaultGrid(SVM::GAMMA)`.
-
+    gamma, call {@code SVM::getDefaultGrid(SVM::GAMMA)}.
+<p>
     This function works for the classification (SVM::C_SVC or SVM::NU_SVC) as well as for the
     regression (SVM::EPS_SVR or SVM::NU_SVR). If it is SVM::ONE_CLASS, no optimization is made and
     the usual %SVM with parameters specified in params is executed.
@@ -742,15 +742,15 @@ of this class into StatModel::train.
                         @Cast("bool") boolean balanced/*=false*/);
     public native @Cast("bool") boolean trainAuto( @Ptr TrainData data);
 
-    /** @brief Retrieves all the support vectors
-
+    /** \brief Retrieves all the support vectors
+<p>
     The method returns all the support vector as floating-point matrix, where support vectors are
     stored as matrix rows.
      */
     public native @ByVal Mat getSupportVectors();
 
-    /** @brief Retrieves the decision function
-
+    /** \brief Retrieves the decision function
+<p>
     @param i the index of the decision function. If the problem solved is regression, 1-class or
         2-class classification, then there will be just one decision function and the index should
         always be 0. Otherwise, in the case of N-class classification, there will be \f$N(N-1)/2\f$
@@ -760,17 +760,17 @@ of this class into StatModel::train.
     @param svidx the optional output vector of indices of support vectors within the matrix of
         support vectors (which can be retrieved by SVM::getSupportVectors). In the case of linear
         %SVM each decision function consists of a single "compressed" support vector.
-
+<p>
     The method returns rho parameter of the decision function, a scalar subtracted from the weighted
     sum of kernel responses.
      */
     public native double getDecisionFunction(int i, @ByVal Mat alpha, @ByVal Mat svidx);
 
-    /** @brief Generates a grid for %SVM parameters.
-
+    /** \brief Generates a grid for %SVM parameters.
+<p>
     @param param_id %SVM parameters IDs that must be one of the SVM::ParamTypes. The grid is
     generated for the parameter with this ID.
-
+<p>
     The function generates a grid for the specified parameter of the %SVM algorithm. The grid may be
     passed to the function SVM::trainAuto.
      */
@@ -786,9 +786,9 @@ of this class into StatModel::train.
 *                              Expectation - Maximization                                *
 \****************************************************************************************/
 
-/** @brief The class implements the Expectation Maximization algorithm.
-
-@sa @ref ml_intro_em
+/** \brief The class implements the Expectation Maximization algorithm.
+<p>
+\sa \ref ml_intro_em
  */
 @Namespace("cv::ml") public static class EM extends StatModel {
     static { Loader.load(); }
@@ -832,14 +832,14 @@ of this class into StatModel::train.
     case in ML yet. */
     /** @see setClustersNumber */
     public native int getClustersNumber();
-    /** @copybrief getClustersNumber @see getClustersNumber */
+    /** \copybrief getClustersNumber @see getClustersNumber */
     public native void setClustersNumber(int val);
 
     /** Constraint on covariance matrices which defines type of matrices.
     See EM::Types. */
     /** @see setCovarianceMatrixType */
     public native int getCovarianceMatrixType();
-    /** @copybrief getCovarianceMatrixType @see getCovarianceMatrixType */
+    /** \copybrief getCovarianceMatrixType @see getCovarianceMatrixType */
     public native void setCovarianceMatrixType(int val);
 
     /** The termination criteria of the %EM algorithm.
@@ -848,46 +848,46 @@ of this class into StatModel::train.
     maximum number of iterations is EM::DEFAULT_MAX_ITERS=100. */
     /** @see setTermCriteria */
     public native @ByVal TermCriteria getTermCriteria();
-    /** @copybrief getTermCriteria @see getTermCriteria */
+    /** \copybrief getTermCriteria @see getTermCriteria */
     public native void setTermCriteria(@Const @ByRef TermCriteria val);
 
-    /** @brief Returns weights of the mixtures
-
+    /** \brief Returns weights of the mixtures
+<p>
     Returns vector with the number of elements equal to the number of mixtures.
      */
     public native @ByVal Mat getWeights();
-    /** @brief Returns the cluster centers (means of the Gaussian mixture)
-
+    /** \brief Returns the cluster centers (means of the Gaussian mixture)
+<p>
     Returns matrix with the number of rows equal to the number of mixtures and number of columns
     equal to the space dimensionality.
      */
     public native @ByVal Mat getMeans();
-    /** @brief Returns covariation matrices
-
+    /** \brief Returns covariation matrices
+<p>
     Returns vector of covariation matrices. Number of matrices is the number of gaussian mixtures,
     each matrix is a square floating-point matrix NxN, where N is the space dimensionality.
      */
     public native void getCovs(@ByRef MatVector covs);
 
-    /** @brief Returns a likelihood logarithm value and an index of the most probable mixture component
+    /** \brief Returns a likelihood logarithm value and an index of the most probable mixture component
     for the given sample.
-
+<p>
     @param sample A sample for classification. It should be a one-channel matrix of
         \f$1 \times dims\f$ or \f$dims \times 1\f$ size.
     @param probs Optional output matrix that contains posterior probabilities of each component
         given the sample. It has \f$1 \times nclusters\f$ size and CV_64FC1 type.
-
+<p>
     The method returns a two-element double vector. Zero element is a likelihood logarithm value for
     the sample. First element is an index of the most probable mixture component for the given
     sample.
      */
     public native @ByVal Point2d predict2(@ByVal Mat sample, @ByVal Mat probs);
 
-    /** @brief Estimate the Gaussian mixture parameters from a samples set.
-
+    /** \brief Estimate the Gaussian mixture parameters from a samples set.
+<p>
     This variation starts with Expectation step. Initial values of the model parameters will be
     estimated by the k-means algorithm.
-
+<p>
     Unlike many of the ML models, %EM is an unsupervised learning algorithm and it does not take
     responses (class labels or function values) as input. Instead, it computes the *Maximum
     Likelihood Estimate* of the Gaussian mixture parameters from an input sample set, stores all the
@@ -895,10 +895,10 @@ of this class into StatModel::train.
     covs[k], \f$\pi_k\f$ in weights , and optionally computes the output "class label" for each
     sample: \f$\texttt{labels}_i=\texttt{arg max}_k(p_{i,k}), i=1..N\f$ (indices of the most
     probable mixture component for each sample).
-
+<p>
     The trained model can be used further for prediction, just like any other classifier. The
     trained model is similar to the NormalBayesClassifier.
-
+<p>
     @param samples Samples from which the Gaussian mixture model will be estimated. It should be a
         one-channel matrix, each row of which is a sample. If the matrix does not have CV_64F type
         it will be converted to the inner matrix of such type for the further computing.
@@ -917,12 +917,12 @@ of this class into StatModel::train.
                              @ByVal(nullValue = "cv::noArray()") Mat probs/*=cv::noArray()*/);
     public native @Cast("bool") boolean trainEM(@ByVal Mat samples);
 
-    /** @brief Estimate the Gaussian mixture parameters from a samples set.
-
+    /** \brief Estimate the Gaussian mixture parameters from a samples set.
+<p>
     This variation starts with Expectation step. You need to provide initial means \f$a_k\f$ of
     mixture components. Optionally you can pass initial weights \f$\pi_k\f$ and covariance matrices
     \f$S_k\f$ of mixture components.
-
+<p>
     @param samples Samples from which the Gaussian mixture model will be estimated. It should be a
         one-channel matrix, each row of which is a sample. If the matrix does not have CV_64F type
         it will be converted to the inner matrix of such type for the further computing.
@@ -952,11 +952,11 @@ of this class into StatModel::train.
                             @ByVal(nullValue = "cv::noArray()") Mat probs/*=cv::noArray()*/);
     public native @Cast("bool") boolean trainE(@ByVal Mat samples, @ByVal Mat means0);
 
-    /** @brief Estimate the Gaussian mixture parameters from a samples set.
-
+    /** \brief Estimate the Gaussian mixture parameters from a samples set.
+<p>
     This variation starts with Maximization step. You need to provide initial probabilities
     \f$p_{i,k}\f$ to use this option.
-
+<p>
     @param samples Samples from which the Gaussian mixture model will be estimated. It should be a
         one-channel matrix, each row of which is a sample. If the matrix does not have CV_64F type
         it will be converted to the inner matrix of such type for the further computing.
@@ -987,14 +987,14 @@ of this class into StatModel::train.
 *                                      Decision Tree                                     *
 \****************************************************************************************/
 
-/** @brief The class represents a single decision tree or a collection of decision trees.
-
+/** \brief The class represents a single decision tree or a collection of decision trees.
+<p>
 The current public interface of the class allows user to train only a single decision tree, however
 the class is capable of storing multiple decision trees and using them for prediction (by summing
 responses or using a voting schemes), and the derived from DTrees classes (such as RTrees and Boost)
 use this capability to implement decision tree ensembles.
-
-@sa @ref ml_intro_trees
+<p>
+\sa \ref ml_intro_trees
 */
 @Namespace("cv::ml") public static class DTrees extends StatModel {
     static { Loader.load(); }
@@ -1020,25 +1020,25 @@ use this capability to implement decision tree ensembles.
     Default value is 10.*/
     /** @see setMaxCategories */
     public native int getMaxCategories();
-    /** @copybrief getMaxCategories @see getMaxCategories */
+    /** \copybrief getMaxCategories @see getMaxCategories */
     public native void setMaxCategories(int val);
 
     /** The maximum possible depth of the tree.
     That is the training algorithms attempts to split a node while its depth is less than maxDepth.
     The root node has zero depth. The actual depth may be smaller if the other termination criteria
-    are met (see the outline of the training procedure @ref ml_intro_trees "here"), and/or if the
+    are met (see the outline of the training procedure \ref ml_intro_trees "here"), and/or if the
     tree is pruned. Default value is INT_MAX.*/
     /** @see setMaxDepth */
     public native int getMaxDepth();
-    /** @copybrief getMaxDepth @see getMaxDepth */
+    /** \copybrief getMaxDepth @see getMaxDepth */
     public native void setMaxDepth(int val);
 
     /** If the number of samples in a node is less than this parameter then the node will not be split.
-
+<p>
     Default value is 10.*/
     /** @see setMinSampleCount */
     public native int getMinSampleCount();
-    /** @copybrief getMinSampleCount @see getMinSampleCount */
+    /** \copybrief getMinSampleCount @see getMinSampleCount */
     public native void setMinSampleCount(int val);
 
     /** If CVFolds \> 1 then algorithms prunes the built decision tree using K-fold
@@ -1046,16 +1046,16 @@ use this capability to implement decision tree ensembles.
     Default value is 10.*/
     /** @see setCVFolds */
     public native int getCVFolds();
-    /** @copybrief getCVFolds @see getCVFolds */
+    /** \copybrief getCVFolds @see getCVFolds */
     public native void setCVFolds(int val);
 
     /** If true then surrogate splits will be built.
     These splits allow to work with missing data and compute variable importance correctly.
     Default value is false.
-    @note currently it's not implemented.*/
+    \note currently it's not implemented.*/
     /** @see setUseSurrogates */
     public native @Cast("bool") boolean getUseSurrogates();
-    /** @copybrief getUseSurrogates @see getUseSurrogates */
+    /** \copybrief getUseSurrogates @see getUseSurrogates */
     public native void setUseSurrogates(@Cast("bool") boolean val);
 
     /** If true then a pruning will be harsher.
@@ -1063,7 +1063,7 @@ use this capability to implement decision tree ensembles.
     accurate. Default value is true.*/
     /** @see setUse1SERule */
     public native @Cast("bool") boolean getUse1SERule();
-    /** @copybrief getUse1SERule @see getUse1SERule */
+    /** \copybrief getUse1SERule @see getUse1SERule */
     public native void setUse1SERule(@Cast("bool") boolean val);
 
     /** If true then pruned branches are physically removed from the tree.
@@ -1071,7 +1071,7 @@ use this capability to implement decision tree ensembles.
     pruned less aggressively) tree. Default value is true.*/
     /** @see setTruncatePrunedTree */
     public native @Cast("bool") boolean getTruncatePrunedTree();
-    /** @copybrief getTruncatePrunedTree @see getTruncatePrunedTree */
+    /** \copybrief getTruncatePrunedTree @see getTruncatePrunedTree */
     public native void setTruncatePrunedTree(@Cast("bool") boolean val);
 
     /** Termination criteria for regression trees.
@@ -1080,11 +1080,11 @@ use this capability to implement decision tree ensembles.
     value is 0.01f*/
     /** @see setRegressionAccuracy */
     public native float getRegressionAccuracy();
-    /** @copybrief getRegressionAccuracy @see getRegressionAccuracy */
+    /** \copybrief getRegressionAccuracy @see getRegressionAccuracy */
     public native void setRegressionAccuracy(float val);
 
-    /** @brief The array of a priori class probabilities, sorted by the class label value.
-
+    /** \brief The array of a priori class probabilities, sorted by the class label value.
+<p>
     The parameter can be used to tune the decision tree preferences toward a certain class. For
     example, if you want to detect some rare anomaly occurrence, the training base will likely
     contain much more normal cases than anomalies, so a very good classification performance
@@ -1092,7 +1092,7 @@ use this capability to implement decision tree ensembles.
     specified, where the anomaly probability is artificially increased (up to 0.5 or even
     greater), so the weight of the misclassified anomalies becomes much bigger, and the tree is
     adjusted properly.
-
+<p>
     You can also think about this parameter as weights of prediction categories which determine
     relative weights that you give to misclassification. That is, if the weight of the first
     category is 1 and the weight of the second category is 10, then each mistake in predicting
@@ -1100,23 +1100,23 @@ use this capability to implement decision tree ensembles.
     Default value is empty Mat.*/
     /** @see setPriors */
     public native @ByVal Mat getPriors();
-    /** @copybrief getPriors @see getPriors */
+    /** \copybrief getPriors @see getPriors */
     public native void setPriors(@Const @ByRef Mat val);
 
-    /** @brief The class represents a decision tree node.
+    /** \brief The class represents a decision tree node.
      */
     @NoOffset public static class Node extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Node(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public Node(int size) { allocateArray(size); }
+        public Node(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public Node position(int position) {
             return (Node)super.position(position);
         }
     
-        public Node() { allocate(); }
+        public Node() { super((Pointer)null); allocate(); }
         private native void allocate();
         /** Value at the node: a class label in case of classification or estimated
          *  function value in case of regression. */
@@ -1137,20 +1137,20 @@ use this capability to implement decision tree ensembles.
         public native int split(); public native Node split(int split);
     }
 
-    /** @brief The class represents split in a decision tree.
+    /** \brief The class represents split in a decision tree.
      */
     @NoOffset public static class Split extends Pointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Split(Pointer p) { super(p); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public Split(int size) { allocateArray(size); }
+        public Split(int size) { super((Pointer)null); allocateArray(size); }
         private native void allocateArray(int size);
         @Override public Split position(int position) {
             return (Split)super.position(position);
         }
     
-        public Split() { allocate(); }
+        public Split() { super((Pointer)null); allocate(); }
         private native void allocate();
         /** Index of variable on which the split is created. */
         public native int varIdx(); public native Split varIdx(int varIdx);
@@ -1163,43 +1163,43 @@ use this capability to implement decision tree ensembles.
         public native int next(); public native Split next(int next);
         /** The threshold value in case of split on an ordered variable.
                               The rule is:
-                              @code{.none}
+                              <pre><code>{.none}
                               if var_value < c
                                 then next_node <- left
                                 else next_node <- right
-                              @endcode */
+                              </code></pre> */
         public native float c(); public native Split c(float c);
         /** Offset of the bitset used by the split on a categorical variable.
                                     The rule is:
-                                    @code{.none}
+                                    <pre><code>{.none}
                                     if bitset[var_value] == 1
                                         then next_node <- left
                                         else next_node <- right
-                                    @endcode */
+                                    </code></pre> */
         public native int subsetOfs(); public native Split subsetOfs(int subsetOfs);
     }
 
-    /** @brief Returns indices of root nodes
+    /** \brief Returns indices of root nodes
     */
     public native @StdVector IntPointer getRoots();
-    /** @brief Returns all the nodes
-
+    /** \brief Returns all the nodes
+<p>
     all the node indices are indices in the returned vector
      */
     public native @StdVector Node getNodes();
-    /** @brief Returns all the splits
-
+    /** \brief Returns all the splits
+<p>
     all the split indices are indices in the returned vector
      */
     public native @StdVector Split getSplits();
-    /** @brief Returns all the bitsets for categorical splits
-
+    /** \brief Returns all the bitsets for categorical splits
+<p>
     Split::subsetOfs is an offset in the returned vector
      */
     public native @StdVector IntPointer getSubsets();
 
-    /** @brief Creates the empty model
-
+    /** \brief Creates the empty model
+<p>
     The static method creates empty decision tree with the specified parameters. It should be then
     trained using train method (see StatModel::train). Alternatively, you can load the model from
     file using Algorithm::load\<DTrees\>(filename).
@@ -1211,9 +1211,9 @@ use this capability to implement decision tree ensembles.
 *                                   Random Trees Classifier                              *
 \****************************************************************************************/
 
-/** @brief The class implements the random forest predictor.
-
-@sa @ref ml_intro_rtrees
+/** \brief The class implements the random forest predictor.
+<p>
+\sa \ref ml_intro_rtrees
  */
 @Namespace("cv::ml") public static class RTrees extends DTrees {
     static { Loader.load(); }
@@ -1227,7 +1227,7 @@ use this capability to implement decision tree ensembles.
     Default value is false.*/
     /** @see setCalculateVarImportance */
     public native @Cast("bool") boolean getCalculateVarImportance();
-    /** @copybrief getCalculateVarImportance @see getCalculateVarImportance */
+    /** \copybrief getCalculateVarImportance @see getCalculateVarImportance */
     public native void setCalculateVarImportance(@Cast("bool") boolean val);
 
     /** The size of the randomly selected subset of features at each tree node and that are used
@@ -1236,7 +1236,7 @@ use this capability to implement decision tree ensembles.
     features. Default value is 0.*/
     /** @see setActiveVarCount */
     public native int getActiveVarCount();
-    /** @copybrief getActiveVarCount @see getActiveVarCount */
+    /** \copybrief getActiveVarCount @see getActiveVarCount */
     public native void setActiveVarCount(int val);
 
     /** The termination criteria that specifies when the training algorithm stops.
@@ -1248,7 +1248,7 @@ use this capability to implement decision tree ensembles.
     TermCriteria::EPS, 50, 0.1)*/
     /** @see setTermCriteria */
     public native @ByVal TermCriteria getTermCriteria();
-    /** @copybrief getTermCriteria @see getTermCriteria */
+    /** \copybrief getTermCriteria @see getTermCriteria */
     public native void setTermCriteria(@Const @ByRef TermCriteria val);
 
     /** Returns the variable importance array.
@@ -1269,9 +1269,9 @@ use this capability to implement decision tree ensembles.
 *                                   Boosted tree classifier                              *
 \****************************************************************************************/
 
-/** @brief Boosted tree classifier derived from DTrees
-
-@sa @ref ml_intro_boost
+/** \brief Boosted tree classifier derived from DTrees
+<p>
+\sa \ref ml_intro_boost
  */
 @Namespace("cv::ml") public static class Boost extends DTrees {
     static { Loader.load(); }
@@ -1284,14 +1284,14 @@ use this capability to implement decision tree ensembles.
     See Boost::Types. Default value is Boost::REAL. */
     /** @see setBoostType */
     public native int getBoostType();
-    /** @copybrief getBoostType @see getBoostType */
+    /** \copybrief getBoostType @see getBoostType */
     public native void setBoostType(int val);
 
     /** The number of weak classifiers.
     Default value is 100. */
     /** @see setWeakCount */
     public native int getWeakCount();
-    /** @copybrief getWeakCount @see getWeakCount */
+    /** \copybrief getWeakCount @see getWeakCount */
     public native void setWeakCount(int val);
 
     /** A threshold between 0 and 1 used to save computational time.
@@ -1299,7 +1299,7 @@ use this capability to implement decision tree ensembles.
     iteration of training. Set this parameter to 0 to turn off this functionality. Default value is 0.95.*/
     /** @see setWeightTrimRate */
     public native double getWeightTrimRate();
-    /** @copybrief getWeightTrimRate @see getWeightTrimRate */
+    /** \copybrief getWeightTrimRate @see getWeightTrimRate */
     public native void setWeightTrimRate(double val);
 
     /** Boosting type.
@@ -1357,17 +1357,17 @@ public:
 
 /////////////////////////////////// Multi-Layer Perceptrons //////////////////////////////
 
-/** @brief Artificial Neural Networks - Multi-Layer Perceptrons.
-
+/** \brief Artificial Neural Networks - Multi-Layer Perceptrons.
+<p>
 Unlike many other models in ML that are constructed and trained at once, in the MLP model these
 steps are separated. First, a network with the specified topology is created using the non-default
 constructor or the method ANN_MLP::create. All the weights are set to zeros. Then, the network is
 trained using a set of input and output vectors. The training procedure can be repeated more than
 once, that is, the weights can be adjusted based on the new training data.
-
+<p>
 Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
-
-@sa @ref ml_intro_ann
+<p>
+\sa \ref ml_intro_ann
  */
 @Namespace("cv::ml") public static class ANN_MLP extends StatModel {
     static { Loader.load(); }
@@ -1381,7 +1381,7 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
     public static final int
         /** The back-propagation algorithm. */
         BACKPROP= 0,
-        /** The RPROP algorithm. See @cite RPROP93 for details. */
+        /** The RPROP algorithm. See \cite RPROP93 for details. */
         RPROP= 1;
 
     /** Sets training method and common parameters.
@@ -1407,13 +1407,13 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
     /**  Integer vector specifying the number of neurons in each layer including the input and output layers.
     The very first element specifies the number of elements in the input layer.
     The last element - number of elements in the output layer. Default value is empty Mat.
-    @sa getLayerSizes */
+    \sa getLayerSizes */
     public native void setLayerSizes(@ByVal Mat _layer_sizes);
 
     /**  Integer vector specifying the number of neurons in each layer including the input and output layers.
     The very first element specifies the number of elements in the input layer.
     The last element - number of elements in the output layer.
-    @sa setLayerSizes */
+    \sa setLayerSizes */
     public native @ByVal Mat getLayerSizes();
 
     /** Termination criteria of the training algorithm.
@@ -1422,14 +1422,14 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
     TermCriteria(TermCriteria::MAX_ITER + TermCriteria::EPS, 1000, 0.01).*/
     /** @see setTermCriteria */
     public native @ByVal TermCriteria getTermCriteria();
-    /** @copybrief getTermCriteria @see getTermCriteria */
+    /** \copybrief getTermCriteria @see getTermCriteria */
     public native void setTermCriteria(@ByVal TermCriteria val);
 
     /** BPROP: Strength of the weight gradient term.
     The recommended value is about 0.1. Default value is 0.1.*/
     /** @see setBackpropWeightScale */
     public native double getBackpropWeightScale();
-    /** @copybrief getBackpropWeightScale @see getBackpropWeightScale */
+    /** \copybrief getBackpropWeightScale @see getBackpropWeightScale */
     public native void setBackpropWeightScale(double val);
 
     /** BPROP: Strength of the momentum term (the difference between weights on the 2 previous iterations).
@@ -1438,42 +1438,42 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
     Default value is 0.1.*/
     /** @see setBackpropMomentumScale */
     public native double getBackpropMomentumScale();
-    /** @copybrief getBackpropMomentumScale @see getBackpropMomentumScale */
+    /** \copybrief getBackpropMomentumScale @see getBackpropMomentumScale */
     public native void setBackpropMomentumScale(double val);
 
     /** RPROP: Initial value \f$\Delta_0\f$ of update-values \f$\Delta_{ij}\f$.
     Default value is 0.1.*/
     /** @see setRpropDW0 */
     public native double getRpropDW0();
-    /** @copybrief getRpropDW0 @see getRpropDW0 */
+    /** \copybrief getRpropDW0 @see getRpropDW0 */
     public native void setRpropDW0(double val);
 
     /** RPROP: Increase factor \f$\eta^+\f$.
     It must be \>1. Default value is 1.2.*/
     /** @see setRpropDWPlus */
     public native double getRpropDWPlus();
-    /** @copybrief getRpropDWPlus @see getRpropDWPlus */
+    /** \copybrief getRpropDWPlus @see getRpropDWPlus */
     public native void setRpropDWPlus(double val);
 
     /** RPROP: Decrease factor \f$\eta^-\f$.
     It must be \<1. Default value is 0.5.*/
     /** @see setRpropDWMinus */
     public native double getRpropDWMinus();
-    /** @copybrief getRpropDWMinus @see getRpropDWMinus */
+    /** \copybrief getRpropDWMinus @see getRpropDWMinus */
     public native void setRpropDWMinus(double val);
 
     /** RPROP: Update-values lower limit \f$\Delta_{min}\f$.
     It must be positive. Default value is FLT_EPSILON.*/
     /** @see setRpropDWMin */
     public native double getRpropDWMin();
-    /** @copybrief getRpropDWMin @see getRpropDWMin */
+    /** \copybrief getRpropDWMin @see getRpropDWMin */
     public native void setRpropDWMin(double val);
 
     /** RPROP: Update-values upper limit \f$\Delta_{max}\f$.
     It must be \>1. Default value is 50.*/
     /** @see setRpropDWMax */
     public native double getRpropDWMax();
-    /** @copybrief getRpropDWMax @see getRpropDWMax */
+    /** \copybrief getRpropDWMax @see getRpropDWMax */
     public native void setRpropDWMax(double val);
 
     /** possible activation functions */
@@ -1482,7 +1482,7 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
         /** Identity function: \f$f(x)=x\f$ */
         IDENTITY = 0,
         /** Symmetrical sigmoid: \f$f(x)=\beta*(1-e^{-\alpha x})/(1+e^{-\alpha x}\f$
-        @note
+        \note
         If you are using the default sigmoid activation function with the default parameter values
         fparam1=0 and fparam2=0 then the function used is y = 1.7159\*tanh(2/3 \* x), so the output
         will range from [-1.7159, 1.7159], instead of [0,1].*/
@@ -1509,8 +1509,8 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
 
     public native @ByVal Mat getWeights(int layerIdx);
 
-    /** @brief Creates empty model
-
+    /** \brief Creates empty model
+<p>
     Use StatModel::train to train the model, Algorithm::load\<ANN_MLP\>(filename) to load the pre-trained model.
     Note that the train method has optional flags: ANN_MLP::TrainFlags.
      */
@@ -1521,9 +1521,9 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
 *                           Logistic Regression                                          *
 \****************************************************************************************/
 
-/** @brief Implements Logistic Regression classifier.
-
-@sa @ref ml_intro_lr
+/** \brief Implements Logistic Regression classifier.
+<p>
+\sa \ref ml_intro_lr
  */
 @Namespace("cv::ml") public static class LogisticRegression extends StatModel {
     static { Loader.load(); }
@@ -1536,25 +1536,25 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
     /** Learning rate. */
     /** @see setLearningRate */
     public native double getLearningRate();
-    /** @copybrief getLearningRate @see getLearningRate */
+    /** \copybrief getLearningRate @see getLearningRate */
     public native void setLearningRate(double val);
 
     /** Number of iterations. */
     /** @see setIterations */
     public native int getIterations();
-    /** @copybrief getIterations @see getIterations */
+    /** \copybrief getIterations @see getIterations */
     public native void setIterations(int val);
 
     /** Kind of regularization to be applied. See LogisticRegression::RegKinds. */
     /** @see setRegularization */
     public native int getRegularization();
-    /** @copybrief getRegularization @see getRegularization */
+    /** \copybrief getRegularization @see getRegularization */
     public native void setRegularization(int val);
 
     /** Kind of training method used. See LogisticRegression::Methods. */
     /** @see setTrainMethod */
     public native int getTrainMethod();
-    /** @copybrief getTrainMethod @see getTrainMethod */
+    /** \copybrief getTrainMethod @see getTrainMethod */
     public native void setTrainMethod(int val);
 
     /** Specifies the number of training samples taken in each step of Mini-Batch Gradient
@@ -1562,13 +1562,13 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
     has to take values less than the total number of training samples. */
     /** @see setMiniBatchSize */
     public native int getMiniBatchSize();
-    /** @copybrief getMiniBatchSize @see getMiniBatchSize */
+    /** \copybrief getMiniBatchSize @see getMiniBatchSize */
     public native void setMiniBatchSize(int val);
 
     /** Termination criteria of the algorithm. */
     /** @see setTermCriteria */
     public native @ByVal TermCriteria getTermCriteria();
-    /** @copybrief getTermCriteria @see getTermCriteria */
+    /** \copybrief getTermCriteria @see getTermCriteria */
     public native void setTermCriteria(@ByVal TermCriteria val);
 
     /** Regularization kinds */
@@ -1588,8 +1588,8 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
         /** Set MiniBatchSize to a positive integer when using this method. */
         MINI_BATCH = 1;
 
-    /** @brief Predicts responses for input samples and returns a float type.
-
+    /** \brief Predicts responses for input samples and returns a float type.
+<p>
     @param samples The input data for the prediction algorithm. Matrix [m x n], where each row
         contains variables (features) of one object being classified. Should have data type CV_32F.
     @param results Predicted labels as a column matrix of type CV_32S.
@@ -1598,15 +1598,15 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
     public native float predict( @ByVal Mat samples, @ByVal(nullValue = "cv::noArray()") Mat results/*=cv::noArray()*/, int flags/*=0*/ );
     public native float predict( @ByVal Mat samples );
 
-    /** @brief This function returns the trained paramters arranged across rows.
-
+    /** \brief This function returns the trained paramters arranged across rows.
+<p>
     For a two class classifcation problem, it returns a row matrix. It returns learnt paramters of
     the Logistic Regression as a matrix of type CV_32F.
      */
     public native @ByVal Mat get_learnt_thetas();
 
-    /** @brief Creates empty model.
-
+    /** \brief Creates empty model.
+<p>
     Creates Logistic Regression model with parameters given.
      */
     public static native @Ptr LogisticRegression create();
@@ -1616,8 +1616,8 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
 *                           Auxilary functions declarations                              *
 \****************************************************************************************/
 
-/** @brief Generates _sample_ from multivariate normal distribution
-
+/** \brief Generates _sample_ from multivariate normal distribution
+<p>
 @param mean an average row vector
 @param cov symmetric covariation matrix
 @param nsamples returned samples count
@@ -1625,14 +1625,14 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
 */
 @Namespace("cv::ml") public static native void randMVNormal( @ByVal Mat mean, @ByVal Mat cov, int nsamples, @ByVal Mat samples);
 
-/** @brief Generates sample from gaussian mixture distribution */
+/** \brief Generates sample from gaussian mixture distribution */
 
 
-/** @brief Creates test set */
+/** \brief Creates test set */
 @Namespace("cv::ml") public static native void createConcentricSpheresTestSet( int nsamples, int nfeatures, int nclasses,
                                                 @ByVal Mat samples, @ByVal Mat responses);
 
-/** @} ml */
+/** \} ml */
 
 
 

@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -64,41 +64,41 @@ the use of this software, even if advised of the possibility of such damage.
 // #include "opencv2/features2d.hpp"
 // #include "opencv2/xfeatures2d/nonfree.hpp"
 
-/** @defgroup xfeatures2d Extra 2D Features Framework
-@{
-    @defgroup xfeatures2d_experiment Experimental 2D Features Algorithms
-
+/** \defgroup xfeatures2d Extra 2D Features Framework
+\{
+    \defgroup xfeatures2d_experiment Experimental 2D Features Algorithms
+<p>
 This section describes experimental algorithms for 2d feature detection.
-
-    @defgroup xfeatures2d_nonfree Non-free 2D Features Algorithms
-
+<p>
+    \defgroup xfeatures2d_nonfree Non-free 2D Features Algorithms
+<p>
 This section describes two popular algorithms for 2d feature detection, SIFT and SURF, that are
 known to be patented. Use them at your own risk.
-
-@}
+<p>
+\}
 */
 
-/** @addtogroup xfeatures2d_experiment
- *  @{
+/** \addtogroup xfeatures2d_experiment
+ *  \{
 
-/** @brief Class implementing the FREAK (*Fast Retina Keypoint*) keypoint descriptor, described in @cite AOV12 .
-
+/** \brief Class implementing the FREAK (*Fast Retina Keypoint*) keypoint descriptor, described in \cite AOV12 .
+<p>
 The algorithm propose a novel keypoint descriptor inspired by the human visual system and more
 precisely the retina, coined Fast Retina Key- point (FREAK). A cascade of binary strings is
 computed by efficiently comparing image intensities over a retinal sampling pattern. FREAKs are in
 general faster to compute with lower memory load and also more robust than SIFT, SURF or BRISK.
 They are competitive alternatives to existing keypoints in particular for embedded applications.
-
-@note
+<p>
+\note
    -   An example on how to use the FREAK descriptor can be found at
         opencv_source_code/samples/cpp/freak_demo.cpp
  */
 @Namespace("cv::xfeatures2d") public static class FREAK extends Feature2D {
     static { Loader.load(); }
     /** Default native constructor. */
-    public FREAK() { allocate(); }
+    public FREAK() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FREAK(int size) { allocateArray(size); }
+    public FREAK(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FREAK(Pointer p) { super(p); }
     private native void allocate();
@@ -138,14 +138,14 @@ They are competitive alternatives to existing keypoints in particular for embedd
 }
 
 
-/** @brief The class implements the keypoint detector introduced by @cite Agrawal08, synonym of StarDetector. :
+/** \brief The class implements the keypoint detector introduced by \cite Agrawal08, synonym of StarDetector. :
  */
 @Namespace("cv::xfeatures2d") public static class StarDetector extends Feature2D {
     static { Loader.load(); }
     /** Default native constructor. */
-    public StarDetector() { allocate(); }
+    public StarDetector() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public StarDetector(int size) { allocateArray(size); }
+    public StarDetector(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StarDetector(Pointer p) { super(p); }
     private native void allocate();
@@ -166,18 +166,18 @@ They are competitive alternatives to existing keypoints in particular for embedd
  * BRIEF Descriptor
  */
 
-/** @brief Class for computing BRIEF descriptors described in @cite calon2010 .
-
+/** \brief Class for computing BRIEF descriptors described in \cite calon2010 .
+<p>
 @param bytes legth of the descriptor in bytes, valid values are: 16, 32 (default) or 64 .
 @param use_orientation sample patterns using keypoints orientation, disabled by default.
-
+<p>
  */
 @Namespace("cv::xfeatures2d") public static class BriefDescriptorExtractor extends Feature2D {
     static { Loader.load(); }
     /** Default native constructor. */
-    public BriefDescriptorExtractor() { allocate(); }
+    public BriefDescriptorExtractor() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public BriefDescriptorExtractor(int size) { allocateArray(size); }
+    public BriefDescriptorExtractor(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BriefDescriptorExtractor(Pointer p) { super(p); }
     private native void allocate();
@@ -190,17 +190,17 @@ They are competitive alternatives to existing keypoints in particular for embedd
     public static native @Ptr BriefDescriptorExtractor create( );
 }
 
-/** @brief Class implementing the locally uniform comparison image descriptor, described in @cite LUCID
-
+/** \brief Class implementing the locally uniform comparison image descriptor, described in \cite LUCID
+<p>
 An image descriptor that can be computed very fast, while being
 about as robust as, for example, SURF or BRIEF.
  */
 @Namespace("cv::xfeatures2d") public static class LUCID extends Feature2D {
     static { Loader.load(); }
     /** Default native constructor. */
-    public LUCID() { allocate(); }
+    public LUCID() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public LUCID(int size) { allocateArray(size); }
+    public LUCID(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LUCID(Pointer p) { super(p); }
     private native void allocate();
@@ -224,26 +224,26 @@ about as robust as, for example, SURF or BRIEF.
 /** latch Class for computing the LATCH descriptor.
 If you find this code useful, please add a reference to the following paper in your work:
 Gil Levi and Tal Hassner, "LATCH: Learned Arrangements of Three Patch Codes", arXiv preprint arXiv:1501.03719, 15 Jan. 2015
-
+<p>
 LATCH is a binary descriptor based on learned comparisons of triplets of image patches.
-
+<p>
 * bytes is the size of the descriptor - can be 64, 32, 16, 8, 4, 2 or 1
 * rotationInvariance - whether or not the descriptor should compansate for orientation changes.
 * half_ssd_size - the size of half of the mini-patches size. For example, if we would like to compare triplets of patches of size 7x7x
     then the half_ssd_size should be (7-1)/2 = 3.
-
+<p>
 Note: the descriptor can be coupled with any keypoint extractor. The only demand is that if you use set rotationInvariance = True then 
     you will have to use an extractor which estimates the patch orientation (in degrees). Examples for such extractors are ORB and SIFT.
-
+<p>
 Note: a complete example can be found under /samples/cpp/tutorial_code/xfeatures2D/latch_match.cpp
-
+<p>
 */
 @Namespace("cv::xfeatures2d") public static class LATCH extends Feature2D {
     static { Loader.load(); }
     /** Default native constructor. */
-    public LATCH() { allocate(); }
+    public LATCH() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public LATCH(int size) { allocateArray(size); }
+    public LATCH(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LATCH(Pointer p) { super(p); }
     private native void allocate();
@@ -256,8 +256,8 @@ Note: a complete example can be found under /samples/cpp/tutorial_code/xfeatures
 	public static native @Ptr LATCH create();
 }
 
-/** @brief Class implementing DAISY descriptor, described in @cite Tola10
-
+/** \brief Class implementing DAISY descriptor, described in \cite Tola10
+<p>
 @param radius radius of the descriptor at the initial scale
 @param q_radius amount of radial range division quantity
 @param q_theta amount of angular range division quantity
@@ -270,7 +270,7 @@ DAISY::NRM_SIFT mean that descriptors are normalized for L2 norm equal to 1.0 bu
 @param H optional 3x3 homography matrix used to warp the grid of daisy but sampling keypoints remains unwarped on image
 @param interpolation switch to disable interpolation for speed improvement at minor quality loss
 @param use_orientation sample patterns using keypoints orientation, disabled by default.
-
+<p>
  */
 @Namespace("cv::xfeatures2d") public static class DAISY extends Feature2D {
     static { Loader.load(); }
@@ -287,7 +287,7 @@ DAISY::NRM_SIFT mean that descriptors are normalized for L2 norm equal to 1.0 bu
                     @Cast("bool") boolean interpolation/*=true*/, @Cast("bool") boolean use_orientation/*=false*/ );
     public static native @Ptr DAISY create( );
 
-    /** @overload
+    /** \overload
      * @param image image to extract descriptors
      * @param keypoints of interest within image
      * @param descriptors resulted descriptors array
@@ -298,14 +298,14 @@ DAISY::NRM_SIFT mean that descriptors are normalized for L2 norm equal to 1.0 bu
                               @ByRef KeyPointVectorVector keypoints,
                               @ByVal MatVector descriptors );
 
-    /** @overload
+    /** \overload
      * @param image image to extract descriptors
      * @param roi region of interest within image
      * @param descriptors resulted descriptors array for roi image pixels
      */
     public native void compute( @ByVal Mat image, @ByVal Rect roi, @ByVal Mat descriptors );
 
-    /**@overload
+    /**\overload
      * @param image image to extract descriptors
      * @param descriptors resulted descriptors array for all image pixels
      */
@@ -356,7 +356,7 @@ DAISY::NRM_SIFT mean that descriptors are normalized for L2 norm equal to 1.0 bu
 }
 
 
-/** @} */
+/** \} */
 
 
 
@@ -413,18 +413,18 @@ DAISY::NRM_SIFT mean that descriptors are normalized for L2 norm equal to 1.0 bu
 
 // #include "opencv2/features2d.hpp"
 
-/** @addtogroup xfeatures2d_nonfree
- *  @{
+/** \addtogroup xfeatures2d_nonfree
+ *  \{
 
-/** @brief Class for extracting keypoints and computing descriptors using the Scale Invariant Feature Transform
-(SIFT) algorithm by D. Lowe @cite Lowe04 .
+/** \brief Class for extracting keypoints and computing descriptors using the Scale Invariant Feature Transform
+(SIFT) algorithm by D. Lowe \cite Lowe04 .
  */
 @Namespace("cv::xfeatures2d") public static class SIFT extends Feature2D {
     static { Loader.load(); }
     /** Default native constructor. */
-    public SIFT() { allocate(); }
+    public SIFT() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SIFT(int size) { allocateArray(size); }
+    public SIFT(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SIFT(Pointer p) { super(p); }
     private native void allocate();
@@ -436,17 +436,17 @@ DAISY::NRM_SIFT mean that descriptors are normalized for L2 norm equal to 1.0 bu
     /**
     @param nfeatures The number of best features to retain. The features are ranked by their scores
     (measured in SIFT algorithm as the local contrast)
-
+<p>
     @param nOctaveLayers The number of layers in each octave. 3 is the value used in D. Lowe paper. The
     number of octaves is computed automatically from the image resolution.
-
+<p>
     @param contrastThreshold The contrast threshold used to filter out weak features in semi-uniform
     (low-contrast) regions. The larger the threshold, the less features are produced by the detector.
-
+<p>
     @param edgeThreshold The threshold used to filter out edge-like features. Note that the its meaning
     is different from the contrastThreshold, i.e. the larger the edgeThreshold, the less features are
     filtered out (more features are retained).
-
+<p>
     @param sigma The sigma of the Gaussian applied to the input image at the octave \#0. If your image
     is captured with a weak camera with soft lenses, you might want to reduce the number.
      */
@@ -456,8 +456,8 @@ DAISY::NRM_SIFT mean that descriptors are normalized for L2 norm equal to 1.0 bu
     public static native @Ptr SIFT create();
 }
 
-/** @brief Class for extracting Speeded Up Robust Features from an image @cite Bay06 .
-
+/** \brief Class for extracting Speeded Up Robust Features from an image \cite Bay06 .
+<p>
 The algorithm parameters:
 -   member int extended
     -   0 means that the basic descriptors (64 elements each) shall be computed
@@ -479,7 +479,7 @@ If you want to get very large features, use the larger value. If you want just s
 features, decrease it.
 -   member int nOctaveLayers
 The number of images within each octave of a gaussian pyramid. It is set to 2 by default.
-@note
+\note
    -   An example using the SURF feature detector can be found at
         opencv_source_code/samples/cpp/generic_descriptor_match.cpp
     -   Another example using the SURF feature detector, extractor and matcher can be found at
@@ -522,7 +522,7 @@ The number of images within each octave of a gaussian pyramid. It is set to 2 by
     public native @Cast("bool") boolean getUpright();
 }
 
-/** @} */
+/** \} */
 
 
  /* namespace cv */

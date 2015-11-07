@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -43,15 +43,15 @@ public class avdevice extends org.bytedeco.javacpp.presets.avdevice {
 // #include "version.h"
 
 /**
- * @file
- * @ingroup lavd
+ * \file
+ * \ingroup lavd
  * Main libavdevice API header
  */
 
 /**
- * @defgroup lavd Special devices muxing/demuxing library
- * @{
- * Libavdevice is a complementary library to @ref libavf "libavformat". It
+ * \defgroup lavd Special devices muxing/demuxing library
+ * \{
+ * Libavdevice is a complementary library to \ref libavf "libavformat". It
  * provides various "special" platform-specific muxers and demuxers, e.g. for
  * grabbing devices, audio capture and playback etc. As a consequence, the
  * (de)muxers in libavdevice are of the AVFMT_NOFILE type (they use their own
@@ -61,7 +61,7 @@ public class avdevice extends org.bytedeco.javacpp.presets.avdevice {
  *
  * To use libavdevice, simply call avdevice_register_all() to register all
  * compiled muxers and demuxers. They all use standard libavformat API.
- * @}
+ * \}
  */
 
 // #include "libavutil/log.h"
@@ -86,7 +86,7 @@ public static native @Cast("const char*") BytePointer avdevice_license();
 
 /**
  * Initialize libavdevice and register all the input and output devices.
- * @warning This function is not thread safe.
+ * \warning This function is not thread safe.
  */
 public static native void avdevice_register_all();
 
@@ -129,9 +129,9 @@ public static native AVOutputFormat av_output_video_device_next(AVOutputFormat d
 public static class AVDeviceRect extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVDeviceRect() { allocate(); }
+    public AVDeviceRect() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVDeviceRect(int size) { allocateArray(size); }
+    public AVDeviceRect(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDeviceRect(Pointer p) { super(p); }
     private native void allocate();
@@ -275,7 +275,7 @@ public static final int
      * frame and all one-shot initializations should be done here.
      * Application is allowed to ignore preferred window buffer size.
      *
-     * @note: Application is obligated to inform about window buffer size
+     * \note: Application is obligated to inform about window buffer size
      *        with AV_APP_TO_DEV_WINDOW_SIZE message.
      *
      * data: AVDeviceRect: preferred size of the window buffer.
@@ -344,7 +344,7 @@ public static final int
      * Device informs that buffer is readable/writable.
      * When possible, device informs how many bytes can be read/write.
      *
-     * @warning Device may not inform when number of bytes than can be read/write changes.
+     * \warning Device may not inform when number of bytes than can be read/write changes.
      *
      * data: int64_t: amount of bytes available to read/write.
      *       NULL: amount of bytes available to read/write is not known.
@@ -442,7 +442,7 @@ public static native int avdevice_dev_to_app_control_message(AVFormatContext s,
  *
  * Example of the usage basing on opengl output device:
  *
- * @code
+ * <pre><code>
  *  AVFormatContext *oc = NULL;
  *  AVDeviceCapabilitiesQuery *caps = NULL;
  *  AVOptionRanges *ranges;
@@ -471,7 +471,7 @@ public static native int avdevice_dev_to_app_control_message(AVFormatContext s,
  *  //clean up code
  *  avdevice_capabilities_free(&query, oc);
  *  avformat_free_context(oc);
- * @endcode
+ * </code></pre>
  */
 
 /**
@@ -483,9 +483,9 @@ public static native int avdevice_dev_to_app_control_message(AVFormatContext s,
 public static class AVDeviceCapabilitiesQuery extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVDeviceCapabilitiesQuery() { allocate(); }
+    public AVDeviceCapabilitiesQuery() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVDeviceCapabilitiesQuery(int size) { allocateArray(size); }
+    public AVDeviceCapabilitiesQuery(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDeviceCapabilitiesQuery(Pointer p) { super(p); }
     private native void allocate();
@@ -551,9 +551,9 @@ public static native void avdevice_capabilities_free(@ByPtrPtr AVDeviceCapabilit
 public static class AVDeviceInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVDeviceInfo() { allocate(); }
+    public AVDeviceInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVDeviceInfo(int size) { allocateArray(size); }
+    public AVDeviceInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDeviceInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -574,9 +574,9 @@ public static class AVDeviceInfo extends Pointer {
 public static class AVDeviceInfoList extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVDeviceInfoList() { allocate(); }
+    public AVDeviceInfoList() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVDeviceInfoList(int size) { allocateArray(size); }
+    public AVDeviceInfoList(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDeviceInfoList(Pointer p) { super(p); }
     private native void allocate();
@@ -599,7 +599,7 @@ public static class AVDeviceInfoList extends Pointer {
  *
  * Returns available device names and their parameters.
  *
- * @note: Some devices may accept system-dependent device names that cannot be
+ * \note: Some devices may accept system-dependent device names that cannot be
  *        autodetected. The list returned by this function cannot be assumed to
  *        be always completed.
  *
@@ -633,7 +633,7 @@ public static native void avdevice_free_list_devices(@ByPtrPtr AVDeviceInfoList 
  *                         that affects device-private options.
  * @param[out] device_list list of autodetected devices
  * @return count of autodetected devices, negative on error.
- * @note device argument takes precedence over device_name when both are set.
+ * \note device argument takes precedence over device_name when both are set.
  */
 public static native int avdevice_list_input_sources(AVInputFormat device, @Cast("const char*") BytePointer device_name,
                                 AVDictionary device_options, @Cast("AVDeviceInfoList**") PointerPointer device_list);

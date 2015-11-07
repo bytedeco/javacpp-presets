@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -61,12 +61,12 @@ public class opencv_video extends org.bytedeco.javacpp.helper.opencv_video {
 // #define __OPENCV_VIDEO_HPP__
 
 /**
-  @defgroup video Video Analysis
-  @{
-    @defgroup video_motion Motion Analysis
-    @defgroup video_track Object Tracking
-    @defgroup video_c C API
-  @}
+  \defgroup video Video Analysis
+  \{
+    \defgroup video_motion Motion Analysis
+    \defgroup video_track Object Tracking
+    \defgroup video_c C API
+  \}
 */
 
 // #include "opencv2/video/tracking.hpp"
@@ -132,8 +132,8 @@ public class opencv_video extends org.bytedeco.javacpp.helper.opencv_video {
 // #ifdef __cplusplus
 // #endif
 
-/** @addtogroup video_c
-  @{
+/** \addtogroup video_c
+  \{
 */
 
 /****************************************************************************************\
@@ -255,9 +255,9 @@ standard Kalman filter (in G. Welch' and G. Bishop's notation):
 public static class CvKalman extends AbstractCvKalman {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvKalman() { allocate(); }
+    public CvKalman() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvKalman(int size) { allocateArray(size); }
+    public CvKalman(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvKalman(Pointer p) { super(p); }
     private native void allocate();
@@ -329,7 +329,7 @@ public static native @Const CvMat cvKalmanCorrect( CvKalman kalman, @Const CvMat
 public static native @Const CvMat cvKalmanUpdateByTime(CvKalman arg1, CvMat arg2);
 public static native @Const CvMat cvKalmanUpdateByMeasurement(CvKalman arg1, CvMat arg2);
 
-/** @} video_c */
+/** \} video_c */
 
 // #ifdef __cplusplus // extern "C"
 // #endif
@@ -389,37 +389,37 @@ public static native @Const CvMat cvKalmanUpdateByMeasurement(CvKalman arg1, CvM
 // #include "opencv2/core.hpp"
 // #include "opencv2/imgproc.hpp"
 
-/** @addtogroup video_track
- *  @{ */
+/** \addtogroup video_track
+ *  \{ */
 
 /** enum cv:: */
 public static final int OPTFLOW_USE_INITIAL_FLOW     = 4,
        OPTFLOW_LK_GET_MIN_EIGENVALS = 8,
        OPTFLOW_FARNEBACK_GAUSSIAN   = 256;
 
-/** @brief Finds an object center, size, and orientation.
-
+/** \brief Finds an object center, size, and orientation.
+<p>
 @param probImage Back projection of the object histogram. See calcBackProject.
 @param window Initial search window.
 @param criteria Stop criteria for the underlying meanShift.
 returns
 (in old interfaces) Number of iterations CAMSHIFT took to converge
-The function implements the CAMSHIFT object tracking algorithm @cite Bradski98 . First, it finds an
+The function implements the CAMSHIFT object tracking algorithm \cite Bradski98 . First, it finds an
 object center using meanShift and then adjusts the window size and finds the optimal rotation. The
 function returns the rotated rectangle structure that includes the object position, size, and
 orientation. The next position of the search window can be obtained with RotatedRect::boundingRect()
-
+<p>
 See the OpenCV sample camshiftdemo.c that tracks colored objects.
-
-@note
+<p>
+\note
 -   (Python) A sample explaining the camshift tracking algorithm can be found at
     opencv_source_code/samples/python2/camshift.py
  */
 @Namespace("cv") public static native @ByVal RotatedRect CamShift( @ByVal Mat probImage, @ByRef Rect window,
                                    @ByVal TermCriteria criteria );
 
-/** @brief Finds an object on a back projection image.
-
+/** \brief Finds an object on a back projection image.
+<p>
 @param probImage Back projection of the object histogram. See calcBackProject for details.
 @param window Initial search window.
 @param criteria Stop criteria for the iterative search algorithm.
@@ -435,14 +435,14 @@ calcBackProject to this function. But better results can be obtained if you pre-
 projection and remove the noise. For example, you can do this by retrieving connected components
 with findContours , throwing away contours with small area ( contourArea ), and rendering the
 remaining contours with drawContours.
-
-@note
+<p>
+\note
 -   A mean-shift tracking sample can be found at opencv_source_code/samples/cpp/camshiftdemo.cpp
  */
 @Namespace("cv") public static native int meanShift( @ByVal Mat probImage, @ByRef Rect window, @ByVal TermCriteria criteria );
 
-/** @brief Constructs the image pyramid which can be passed to calcOpticalFlowPyrLK.
-
+/** \brief Constructs the image pyramid which can be passed to calcOpticalFlowPyrLK.
+<p>
 @param img 8-bit input image.
 @param pyramid output pyramid.
 @param winSize window size of optical flow algorithm. Must be not less than winSize argument of
@@ -464,9 +464,9 @@ to force data copying.
 @Namespace("cv") public static native int buildOpticalFlowPyramid( @ByVal Mat img, @ByVal MatVector pyramid,
                                           @ByVal Size winSize, int maxLevel );
 
-/** @brief Calculates an optical flow for a sparse feature set using the iterative Lucas-Kanade method with
+/** \brief Calculates an optical flow for a sparse feature set using the iterative Lucas-Kanade method with
 pyramids.
-
+<p>
 @param prevImg first 8-bit input image or pyramid constructed by buildOpticalFlowPyramid.
 @param nextImg second input image or pyramid of the same size and the same type as prevImg.
 @param prevPts vector of 2D points for which the flow needs to be found; point coordinates must be
@@ -494,16 +494,16 @@ moves by less than criteria.epsilon.
      around the original and a moved point, divided by number of pixels in a window, is used as a
      error measure.
 @param minEigThreshold the algorithm calculates the minimum eigen value of a 2x2 normal matrix of
-optical flow equations (this matrix is called a spatial gradient matrix in @cite Bouguet00), divided
+optical flow equations (this matrix is called a spatial gradient matrix in \cite Bouguet00), divided
 by number of pixels in a window; if this value is less than minEigThreshold, then a corresponding
 feature is filtered out and its flow is not processed, so it allows to remove bad points and get a
 performance boost.
-
+<p>
 The function implements a sparse iterative version of the Lucas-Kanade optical flow in pyramids. See
-@cite Bouguet00 . The function is parallelized with the TBB library.
-
-@note
-
+\cite Bouguet00 . The function is parallelized with the TBB library.
+<p>
+\note
+<p>
 -   An example using the Lucas-Kanade optical flow algorithm can be found at
     opencv_source_code/samples/cpp/lkdemo.cpp
 -   (Python) An example using the Lucas-Kanade optical flow algorithm can be found at
@@ -521,8 +521,8 @@ The function implements a sparse iterative version of the Lucas-Kanade optical f
                                         @ByVal Mat prevPts, @ByVal Mat nextPts,
                                         @ByVal Mat status, @ByVal Mat err );
 
-/** @brief Computes a dense optical flow using the Gunnar Farneback's algorithm.
-
+/** \brief Computes a dense optical flow using the Gunnar Farneback's algorithm.
+<p>
 @param prev first 8-bit single-channel input image.
 @param next second input image of the same size and the same type as prev.
 @param flow computed flow image that has the same size as prev and type CV_32FC2.
@@ -547,13 +547,13 @@ good value would be poly_sigma=1.5.
      option gives z more accurate flow than with a box filter, at the cost of lower speed;
      normally, winsize for a Gaussian window should be set to a larger value to achieve the same
      level of robustness.
-
-The function finds an optical flow for each prev pixel using the @cite Farneback2003 algorithm so that
-
+<p>
+The function finds an optical flow for each prev pixel using the \cite Farneback2003 algorithm so that
+<p>
 \f[\texttt{prev} (y,x)  \sim \texttt{next} ( y + \texttt{flow} (y,x)[1],  x + \texttt{flow} (y,x)[0])\f]
-
-@note
-
+<p>
+\note
+<p>
 -   An example using the optical flow algorithm described by Gunnar Farneback can be found at
     opencv_source_code/samples/cpp/fback.cpp
 -   (Python) An example using the optical flow algorithm described by Gunnar Farneback can be
@@ -564,31 +564,31 @@ The function finds an optical flow for each prev pixel using the @cite Farneback
                                             int iterations, int poly_n, double poly_sigma,
                                             int flags );
 
-/** @brief Computes an optimal affine transformation between two 2D point sets.
-
+/** \brief Computes an optimal affine transformation between two 2D point sets.
+<p>
 @param src First input 2D point set stored in std::vector or Mat, or an image stored in Mat.
 @param dst Second input 2D point set of the same size and the same type as A, or another image.
 @param fullAffine If true, the function finds an optimal affine transformation with no additional
 restrictions (6 degrees of freedom). Otherwise, the class of transformations to choose from is
 limited to combinations of translation, rotation, and uniform scaling (5 degrees of freedom).
-
+<p>
 The function finds an optimal affine transform *[A|b]* (a 2 x 3 floating-point matrix) that
 approximates best the affine transformation between:
-
+<p>
 *   Two point sets
 *   Two raster images. In this case, the function first finds some features in the src image and
     finds the corresponding features in dst image. After that, the problem is reduced to the first
     case.
 In case of point sets, the problem is formulated as follows: you need to find a 2x2 matrix *A* and
 2x1 vector *b* so that:
-
+<p>
 \f[[A^*|b^*] = arg  \min _{[A|b]}  \sum _i  \| \texttt{dst}[i] - A { \texttt{src}[i]}^T - b  \| ^2\f]
 where src[i] and dst[i] are the i-th points in src and dst, respectively
 \f$[A|b]\f$ can be either arbitrary (when fullAffine=true ) or have a form of
 \f[\begin{bmatrix} a_{11} & a_{12} & b_1  \\ -a_{12} & a_{11} & b_2  \end{bmatrix}\f]
 when fullAffine=false.
-
-@sa
+<p>
+\sa
 getAffineTransform, getPerspectiveTransform, findHomography
  */
 @Namespace("cv") public static native @ByVal Mat estimateRigidTransform( @ByVal Mat src, @ByVal Mat dst, @Cast("bool") boolean fullAffine );
@@ -601,8 +601,8 @@ public static final int
     MOTION_AFFINE      = 2,
     MOTION_HOMOGRAPHY  = 3;
 
-/** @brief Finds the geometric transform (warp) between two images in terms of the ECC criterion @cite EP08 .
-
+/** \brief Finds the geometric transform (warp) between two images in terms of the ECC criterion \cite EP08 .
+<p>
 @param templateImage single-channel template image; CV_8U or CV_32F array.
 @param inputImage single-channel input image which should be warped with the final warpMatrix in
 order to provide an image similar to templateImage, same type as temlateImage.
@@ -616,27 +616,27 @@ order to provide an image similar to templateImage, same type as temlateImage.
  -   **MOTION_AFFINE** sets an affine motion model (DEFAULT); six parameters are estimated;
      warpMatrix is \f$2\times 3\f$.
  -   **MOTION_HOMOGRAPHY** sets a homography as a motion model; eight parameters are
-     estimated;\`warpMatrix\` is \f$3\times 3\f$.
+     estimated;\{@code warpMatrix\} is \f$3\times 3\f$.
 @param criteria parameter, specifying the termination criteria of the ECC algorithm;
 criteria.epsilon defines the threshold of the increment in the correlation coefficient between two
 iterations (a negative criteria.epsilon makes criteria.maxcount the only termination criterion).
 Default values are shown in the declaration above.
 @param inputMask An optional mask to indicate valid values of inputImage.
-
+<p>
 The function estimates the optimum transformation (warpMatrix) with respect to ECC criterion
-(@cite EP08), that is
-
+(\cite EP08), that is
+<p>
 \f[\texttt{warpMatrix} = \texttt{warpMatrix} = \arg\max_{W} \texttt{ECC}(\texttt{templateImage}(x,y),\texttt{inputImage}(x',y'))\f]
-
+<p>
 where
-
+<p>
 \f[\begin{bmatrix} x' \\ y' \end{bmatrix} = W \cdot \begin{bmatrix} x \\ y \\ 1 \end{bmatrix}\f]
-
+<p>
 (the equation holds with homogeneous coordinates for homography). It returns the final enhanced
 correlation coefficient, that is the correlation coefficient between the template image and the
 final warped input image. When a \f$3\times 3\f$ matrix is given with motionType =0, 1 or 2, the third
 row is ignored.
-
+<p>
 Unlike findHomography and estimateRigidTransform, the function findTransformECC implements an
 area-based alignment that builds on intensity similarities. In essence, the function updates the
 initial transformation that roughly aligns the images. If this information is missing, the identity
@@ -647,8 +647,8 @@ content approximately). Use inverse warping in the second image to take an image
 one, i.e. use the flag WARP_INVERSE_MAP with warpAffine or warpPerspective. See also the OpenCV
 sample image_alignment.cpp that demonstrates the use of the function. Note that the function throws
 an exception if algorithm does not converges.
-
-@sa
+<p>
+\sa
 estimateRigidTransform, findHomography
  */
 @Namespace("cv") public static native double findTransformECC( @ByVal Mat templateImage, @ByVal Mat inputImage,
@@ -658,14 +658,14 @@ estimateRigidTransform, findHomography
 @Namespace("cv") public static native double findTransformECC( @ByVal Mat templateImage, @ByVal Mat inputImage,
                                       @ByVal Mat warpMatrix);
 
-/** @brief Kalman filter class.
-
+/** \brief Kalman filter class.
+<p>
 The class implements a standard Kalman filter <http://en.wikipedia.org/wiki/Kalman_filter>,
-@cite Welch95 . However, you can modify transitionMatrix, controlMatrix, and measurementMatrix to get
+\cite Welch95 . However, you can modify transitionMatrix, controlMatrix, and measurementMatrix to get
 an extended Kalman filter functionality. See the OpenCV sample kalman.cpp.
-
-@note
-
+<p>
+\note
+<p>
 -   An example using the standard Kalman filter can be found at
     opencv_source_code/samples/cpp/kalman.cpp
  */
@@ -674,32 +674,32 @@ an extended Kalman filter functionality. See the OpenCV sample kalman.cpp.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KalmanFilter(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public KalmanFilter(int size) { allocateArray(size); }
+    public KalmanFilter(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public KalmanFilter position(int position) {
         return (KalmanFilter)super.position(position);
     }
 
-    /** @brief The constructors.
-
-    @note In C API when CvKalman\* kalmanFilter structure is not needed anymore, it should be released
+    /** \brief The constructors.
+<p>
+    \note In C API when CvKalman\* kalmanFilter structure is not needed anymore, it should be released
     with cvReleaseKalman(&kalmanFilter)
      */
-    public KalmanFilter() { allocate(); }
+    public KalmanFilter() { super((Pointer)null); allocate(); }
     private native void allocate();
-    /** @overload
+    /** \overload
     @param dynamParams Dimensionality of the state.
     @param measureParams Dimensionality of the measurement.
     @param controlParams Dimensionality of the control vector.
     @param type Type of the created matrices that should be CV_32F or CV_64F.
     */
-    public KalmanFilter( int dynamParams, int measureParams, int controlParams/*=0*/, int type/*=CV_32F*/ ) { allocate(dynamParams, measureParams, controlParams, type); }
+    public KalmanFilter( int dynamParams, int measureParams, int controlParams/*=0*/, int type/*=CV_32F*/ ) { super((Pointer)null); allocate(dynamParams, measureParams, controlParams, type); }
     private native void allocate( int dynamParams, int measureParams, int controlParams/*=0*/, int type/*=CV_32F*/ );
-    public KalmanFilter( int dynamParams, int measureParams ) { allocate(dynamParams, measureParams); }
+    public KalmanFilter( int dynamParams, int measureParams ) { super((Pointer)null); allocate(dynamParams, measureParams); }
     private native void allocate( int dynamParams, int measureParams );
 
-    /** @brief Re-initializes Kalman filter. The previous content is destroyed.
-
+    /** \brief Re-initializes Kalman filter. The previous content is destroyed.
+<p>
     @param dynamParams Dimensionality of the state.
     @param measureParams Dimensionality of the measurement.
     @param controlParams Dimensionality of the control vector.
@@ -708,15 +708,15 @@ an extended Kalman filter functionality. See the OpenCV sample kalman.cpp.
     public native void init( int dynamParams, int measureParams, int controlParams/*=0*/, int type/*=CV_32F*/ );
     public native void init( int dynamParams, int measureParams );
 
-    /** @brief Computes a predicted state.
-
+    /** \brief Computes a predicted state.
+<p>
     @param control The optional input control
      */
     public native @Const @ByRef Mat predict( @Const @ByRef(nullValue = "cv::Mat()") Mat control/*=cv::Mat()*/ );
     public native @Const @ByRef Mat predict( );
 
-    /** @brief Updates the predicted state from the measurement.
-
+    /** \brief Updates the predicted state from the measurement.
+<p>
     @param measurement The measured system parameters
      */
     public native @Const @ByRef Mat correct( @Const @ByRef Mat measurement );
@@ -758,57 +758,57 @@ an extended Kalman filter functionality. See the OpenCV sample kalman.cpp.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DenseOpticalFlow(Pointer p) { super(p); }
 
-    /** @brief Calculates an optical flow.
-
+    /** \brief Calculates an optical flow.
+<p>
     @param I0 first 8-bit single-channel input image.
     @param I1 second input image of the same size and the same type as prev.
     @param flow computed flow image that has the same size as prev and type CV_32FC2.
      */
     public native void calc( @ByVal Mat I0, @ByVal Mat I1, @ByVal Mat flow );
-    /** @brief Releases all inner buffers.
+    /** \brief Releases all inner buffers.
     */
     public native void collectGarbage();
 }
 
-/** @brief "Dual TV L1" Optical Flow Algorithm.
-
-The class implements the "Dual TV L1" optical flow algorithm described in @cite Zach2007 and
-@cite Javier2012 .
+/** \brief "Dual TV L1" Optical Flow Algorithm.
+<p>
+The class implements the "Dual TV L1" optical flow algorithm described in \cite Zach2007 and
+\cite Javier2012 .
 Here are important members of the class that control the algorithm, which you can set after
 constructing the class instance:
-
+<p>
 -   member double tau
     Time step of the numerical scheme.
-
+<p>
 -   member double lambda
     Weight parameter for the data term, attachment parameter. This is the most relevant
     parameter, which determines the smoothness of the output. The smaller this parameter is,
     the smoother the solutions we obtain. It depends on the range of motions of the images, so
     its value should be adapted to each image sequence.
-
+<p>
 -   member double theta
     Weight parameter for (u - v)\^2, tightness parameter. It serves as a link between the
     attachment and the regularization terms. In theory, it should have a small value in order
     to maintain both parts in correspondence. The method is stable for a large range of values
     of this parameter.
-
+<p>
 -   member int nscales
     Number of scales used to create the pyramid of images.
-
+<p>
 -   member int warps
     Number of warpings per scale. Represents the number of times that I1(x+u0) and grad(
     I1(x+u0) ) are computed per scale. This is a parameter that assures the stability of the
     method. It also affects the running time, so it is a compromise between speed and
     accuracy.
-
+<p>
 -   member double epsilon
     Stopping criterion threshold used in the numerical scheme, which is a trade-off between
     precision and running time. A small value will yield more accurate solutions at the
     expense of a slower convergence.
-
+<p>
 -   member int iterations
     Stopping criterion iterations number used in the numerical scheme.
-
+<p>
 C. Zach, T. Pock and H. Bischof, "A Duality Based Approach for Realtime TV-L1 Optical Flow".
 Javier Sanchez, Enric Meinhardt-Llopis and Gabriele Facciolo. "TV-L1 Optical Flow Estimation".
 */
@@ -819,73 +819,73 @@ Javier Sanchez, Enric Meinhardt-Llopis and Gabriele Facciolo. "TV-L1 Optical Flo
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DualTVL1OpticalFlow(Pointer p) { super(p); }
 
-    /** @brief Time step of the numerical scheme
+    /** \brief Time step of the numerical scheme
     /** @see setTau */
     public native double getTau();
-    /** @copybrief getTau @see getTau */
+    /** \copybrief getTau @see getTau */
     public native void setTau(double val);
-    /** @brief Weight parameter for the data term, attachment parameter
+    /** \brief Weight parameter for the data term, attachment parameter
     /** @see setLambda */
     public native double getLambda();
-    /** @copybrief getLambda @see getLambda */
+    /** \copybrief getLambda @see getLambda */
     public native void setLambda(double val);
-    /** @brief Weight parameter for (u - v)^2, tightness parameter
+    /** \brief Weight parameter for (u - v)^2, tightness parameter
     /** @see setTheta */
     public native double getTheta();
-    /** @copybrief getTheta @see getTheta */
+    /** \copybrief getTheta @see getTheta */
     public native void setTheta(double val);
-    /** @brief coefficient for additional illumination variation term
+    /** \brief coefficient for additional illumination variation term
     /** @see setGamma */
     public native double getGamma();
-    /** @copybrief getGamma @see getGamma */
+    /** \copybrief getGamma @see getGamma */
     public native void setGamma(double val);
-    /** @brief Number of scales used to create the pyramid of images
+    /** \brief Number of scales used to create the pyramid of images
     /** @see setScalesNumber */
     public native int getScalesNumber();
-    /** @copybrief getScalesNumber @see getScalesNumber */
+    /** \copybrief getScalesNumber @see getScalesNumber */
     public native void setScalesNumber(int val);
-    /** @brief Number of warpings per scale
+    /** \brief Number of warpings per scale
     /** @see setWarpingsNumber */
     public native int getWarpingsNumber();
-    /** @copybrief getWarpingsNumber @see getWarpingsNumber */
+    /** \copybrief getWarpingsNumber @see getWarpingsNumber */
     public native void setWarpingsNumber(int val);
-    /** @brief Stopping criterion threshold used in the numerical scheme, which is a trade-off between precision and running time
+    /** \brief Stopping criterion threshold used in the numerical scheme, which is a trade-off between precision and running time
     /** @see setEpsilon */
     public native double getEpsilon();
-    /** @copybrief getEpsilon @see getEpsilon */
+    /** \copybrief getEpsilon @see getEpsilon */
     public native void setEpsilon(double val);
-    /** @brief Inner iterations (between outlier filtering) used in the numerical scheme
+    /** \brief Inner iterations (between outlier filtering) used in the numerical scheme
     /** @see setInnerIterations */
     public native int getInnerIterations();
-    /** @copybrief getInnerIterations @see getInnerIterations */
+    /** \copybrief getInnerIterations @see getInnerIterations */
     public native void setInnerIterations(int val);
-    /** @brief Outer iterations (number of inner loops) used in the numerical scheme
+    /** \brief Outer iterations (number of inner loops) used in the numerical scheme
     /** @see setOuterIterations */
     public native int getOuterIterations();
-    /** @copybrief getOuterIterations @see getOuterIterations */
+    /** \copybrief getOuterIterations @see getOuterIterations */
     public native void setOuterIterations(int val);
-    /** @brief Use initial flow
+    /** \brief Use initial flow
     /** @see setUseInitialFlow */
     public native @Cast("bool") boolean getUseInitialFlow();
-    /** @copybrief getUseInitialFlow @see getUseInitialFlow */
+    /** \copybrief getUseInitialFlow @see getUseInitialFlow */
     public native void setUseInitialFlow(@Cast("bool") boolean val);
-    /** @brief Step between scales (<1)
+    /** \brief Step between scales (<1)
     /** @see setScaleStep */
     public native double getScaleStep();
-    /** @copybrief getScaleStep @see getScaleStep */
+    /** \copybrief getScaleStep @see getScaleStep */
     public native void setScaleStep(double val);
-    /** @brief Median filter kernel size (1 = no filter) (3 or 5)
+    /** \brief Median filter kernel size (1 = no filter) (3 or 5)
     /** @see setMedianFiltering */
     public native int getMedianFiltering();
-    /** @copybrief getMedianFiltering @see getMedianFiltering */
+    /** \copybrief getMedianFiltering @see getMedianFiltering */
     public native void setMedianFiltering(int val);
 }
 
-/** @brief Creates instance of cv::DenseOpticalFlow
+/** \brief Creates instance of cv::DenseOpticalFlow
 */
 @Namespace("cv") public static native @Ptr DualTVL1OpticalFlow createOptFlow_DualTVL1();
 
-/** @} video_track */
+/** \} video_track */
 
  // cv
 
@@ -942,11 +942,11 @@ Javier Sanchez, Enric Meinhardt-Llopis and Gabriele Facciolo. "TV-L1 Optical Flo
 
 // #include "opencv2/core.hpp"
 
-/** @addtogroup video_motion
- *  @{
+/** \addtogroup video_motion
+ *  \{
 
-/** @brief Base class for background/foreground segmentation. :
-
+/** \brief Base class for background/foreground segmentation. :
+<p>
 The class is only used to define the common interface for the whole family of background/foreground
 segmentation algorithms.
  */
@@ -957,8 +957,8 @@ segmentation algorithms.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BackgroundSubtractor(Pointer p) { super(p); }
 
-    /** @brief Computes a foreground mask.
-
+    /** \brief Computes a foreground mask.
+<p>
     @param image Next video frame.
     @param fgmask The output foreground mask as an 8-bit binary image.
     @param learningRate The value between 0 and 1 that indicates how fast the background model is
@@ -969,21 +969,21 @@ segmentation algorithms.
     public native void apply(@ByVal Mat image, @ByVal Mat fgmask, double learningRate/*=-1*/);
     public native void apply(@ByVal Mat image, @ByVal Mat fgmask);
 
-    /** @brief Computes a background image.
-
+    /** \brief Computes a background image.
+<p>
     @param backgroundImage The output background image.
-
-    @note Sometimes the background image can be very blurry, as it contain the average background
+<p>
+    \note Sometimes the background image can be very blurry, as it contain the average background
     statistics.
      */
     public native void getBackgroundImage(@ByVal Mat backgroundImage);
 }
 
 
-/** @brief Gaussian Mixture-based Background/Foreground Segmentation Algorithm.
-
-The class implements the Gaussian mixture model background subtraction described in @cite Zivkovic2004
-and @cite Zivkovic2006 .
+/** \brief Gaussian Mixture-based Background/Foreground Segmentation Algorithm.
+<p>
+The class implements the Gaussian mixture model background subtraction described in \cite Zivkovic2004
+and \cite Zivkovic2006 .
  */
 @Namespace("cv") public static class BackgroundSubtractorMOG2 extends BackgroundSubtractor {
     static { Loader.load(); }
@@ -992,45 +992,45 @@ and @cite Zivkovic2006 .
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BackgroundSubtractorMOG2(Pointer p) { super(p); }
 
-    /** @brief Returns the number of last frames that affect the background model
+    /** \brief Returns the number of last frames that affect the background model
     */
     public native int getHistory();
-    /** @brief Sets the number of last frames that affect the background model
+    /** \brief Sets the number of last frames that affect the background model
     */
     public native void setHistory(int history);
 
-    /** @brief Returns the number of gaussian components in the background model
+    /** \brief Returns the number of gaussian components in the background model
     */
     public native int getNMixtures();
-    /** @brief Sets the number of gaussian components in the background model.
-
+    /** \brief Sets the number of gaussian components in the background model.
+<p>
     The model needs to be reinitalized to reserve memory.
     */
     public native void setNMixtures(int nmixtures);//needs reinitialization!
 
-    /** @brief Returns the "background ratio" parameter of the algorithm
-
+    /** \brief Returns the "background ratio" parameter of the algorithm
+<p>
     If a foreground pixel keeps semi-constant value for about backgroundRatio\*history frames, it's
     considered background and added to the model as a center of a new component. It corresponds to TB
     parameter in the paper.
      */
     public native double getBackgroundRatio();
-    /** @brief Sets the "background ratio" parameter of the algorithm
+    /** \brief Sets the "background ratio" parameter of the algorithm
     */
     public native void setBackgroundRatio(double ratio);
 
-    /** @brief Returns the variance threshold for the pixel-model match
-
+    /** \brief Returns the variance threshold for the pixel-model match
+<p>
     The main threshold on the squared Mahalanobis distance to decide if the sample is well described by
     the background model or not. Related to Cthr from the paper.
      */
     public native double getVarThreshold();
-    /** @brief Sets the variance threshold for the pixel-model match
+    /** \brief Sets the variance threshold for the pixel-model match
     */
     public native void setVarThreshold(double varThreshold);
 
-    /** @brief Returns the variance threshold for the pixel-model match used for new mixture component generation
-
+    /** \brief Returns the variance threshold for the pixel-model match used for new mixture component generation
+<p>
     Threshold for the squared Mahalanobis distance that helps decide when a sample is close to the
     existing components (corresponds to Tg in the paper). If a pixel is not close to any component, it
     is considered foreground or added as a new component. 3 sigma =\> Tg=3\*3=9 is default. A smaller Tg
@@ -1038,14 +1038,14 @@ and @cite Zivkovic2006 .
     they can grow too large.
      */
     public native double getVarThresholdGen();
-    /** @brief Sets the variance threshold for the pixel-model match used for new mixture component generation
+    /** \brief Sets the variance threshold for the pixel-model match used for new mixture component generation
     */
     public native void setVarThresholdGen(double varThresholdGen);
 
-    /** @brief Returns the initial variance of each gaussian component
+    /** \brief Returns the initial variance of each gaussian component
     */
     public native double getVarInit();
-    /** @brief Sets the initial variance of each gaussian component
+    /** \brief Sets the initial variance of each gaussian component
     */
     public native void setVarInit(double varInit);
 
@@ -1055,52 +1055,52 @@ and @cite Zivkovic2006 .
     public native double getVarMax();
     public native void setVarMax(double varMax);
 
-    /** @brief Returns the complexity reduction threshold
-
+    /** \brief Returns the complexity reduction threshold
+<p>
     This parameter defines the number of samples needed to accept to prove the component exists. CT=0.05
     is a default value for all the samples. By setting CT=0 you get an algorithm very similar to the
     standard Stauffer&Grimson algorithm.
      */
     public native double getComplexityReductionThreshold();
-    /** @brief Sets the complexity reduction threshold
+    /** \brief Sets the complexity reduction threshold
     */
     public native void setComplexityReductionThreshold(double ct);
 
-    /** @brief Returns the shadow detection flag
-
+    /** \brief Returns the shadow detection flag
+<p>
     If true, the algorithm detects shadows and marks them. See createBackgroundSubtractorMOG2 for
     details.
      */
     public native @Cast("bool") boolean getDetectShadows();
-    /** @brief Enables or disables shadow detection
+    /** \brief Enables or disables shadow detection
     */
     public native void setDetectShadows(@Cast("bool") boolean detectShadows);
 
-    /** @brief Returns the shadow value
-
+    /** \brief Returns the shadow value
+<p>
     Shadow value is the value used to mark shadows in the foreground mask. Default value is 127. Value 0
     in the mask always means background, 255 means foreground.
      */
     public native int getShadowValue();
-    /** @brief Sets the shadow value
+    /** \brief Sets the shadow value
     */
     public native void setShadowValue(int value);
 
-    /** @brief Returns the shadow threshold
-
+    /** \brief Returns the shadow threshold
+<p>
     A shadow is detected if pixel is a darker version of the background. The shadow threshold (Tau in
     the paper) is a threshold defining how much darker the shadow can be. Tau= 0.5 means that if a pixel
     is more than twice darker then it is not shadow. See Prati, Mikic, Trivedi and Cucchiarra,
     *Detecting Moving Shadows...*, IEEE PAMI,2003.
      */
     public native double getShadowThreshold();
-    /** @brief Sets the shadow threshold
+    /** \brief Sets the shadow threshold
     */
     public native void setShadowThreshold(double threshold);
 }
 
-/** @brief Creates MOG2 Background Subtractor
-
+/** \brief Creates MOG2 Background Subtractor
+<p>
 @param history Length of the history.
 @param varThreshold Threshold on the squared Mahalanobis distance between the pixel and the model
 to decide whether a pixel is well described by the background model. This parameter does not
@@ -1112,9 +1112,9 @@ speed a bit, so if you do not need this feature, set the parameter to false.
                                    @Cast("bool") boolean detectShadows/*=true*/);
 @Namespace("cv") public static native @Ptr BackgroundSubtractorMOG2 createBackgroundSubtractorMOG2();
 
-/** @brief K-nearest neigbours - based Background/Foreground Segmentation Algorithm.
-
-The class implements the K-nearest neigbours background subtraction described in @cite Zivkovic2006 .
+/** \brief K-nearest neigbours - based Background/Foreground Segmentation Algorithm.
+<p>
+The class implements the K-nearest neigbours background subtraction described in \cite Zivkovic2006 .
 Very efficient if number of foreground pixels is low.
  */
 @Namespace("cv") public static class BackgroundSubtractorKNN extends BackgroundSubtractor {
@@ -1124,77 +1124,77 @@ Very efficient if number of foreground pixels is low.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BackgroundSubtractorKNN(Pointer p) { super(p); }
 
-    /** @brief Returns the number of last frames that affect the background model
+    /** \brief Returns the number of last frames that affect the background model
     */
     public native int getHistory();
-    /** @brief Sets the number of last frames that affect the background model
+    /** \brief Sets the number of last frames that affect the background model
     */
     public native void setHistory(int history);
 
-    /** @brief Returns the number of data samples in the background model
+    /** \brief Returns the number of data samples in the background model
     */
     public native int getNSamples();
-    /** @brief Sets the number of data samples in the background model.
-
+    /** \brief Sets the number of data samples in the background model.
+<p>
     The model needs to be reinitalized to reserve memory.
     */
     public native void setNSamples(int _nN);//needs reinitialization!
 
-    /** @brief Returns the threshold on the squared distance between the pixel and the sample
-
+    /** \brief Returns the threshold on the squared distance between the pixel and the sample
+<p>
     The threshold on the squared distance between the pixel and the sample to decide whether a pixel is
     close to a data sample.
      */
     public native double getDist2Threshold();
-    /** @brief Sets the threshold on the squared distance
+    /** \brief Sets the threshold on the squared distance
     */
     public native void setDist2Threshold(double _dist2Threshold);
 
-    /** @brief Returns the number of neighbours, the k in the kNN.
-
+    /** \brief Returns the number of neighbours, the k in the kNN.
+<p>
     K is the number of samples that need to be within dist2Threshold in order to decide that that
     pixel is matching the kNN background model.
      */
     public native int getkNNSamples();
-    /** @brief Sets the k in the kNN. How many nearest neigbours need to match.
+    /** \brief Sets the k in the kNN. How many nearest neigbours need to match.
     */
     public native void setkNNSamples(int _nkNN);
 
-    /** @brief Returns the shadow detection flag
-
+    /** \brief Returns the shadow detection flag
+<p>
     If true, the algorithm detects shadows and marks them. See createBackgroundSubtractorKNN for
     details.
      */
     public native @Cast("bool") boolean getDetectShadows();
-    /** @brief Enables or disables shadow detection
+    /** \brief Enables or disables shadow detection
     */
     public native void setDetectShadows(@Cast("bool") boolean detectShadows);
 
-    /** @brief Returns the shadow value
-
+    /** \brief Returns the shadow value
+<p>
     Shadow value is the value used to mark shadows in the foreground mask. Default value is 127. Value 0
     in the mask always means background, 255 means foreground.
      */
     public native int getShadowValue();
-    /** @brief Sets the shadow value
+    /** \brief Sets the shadow value
     */
     public native void setShadowValue(int value);
 
-    /** @brief Returns the shadow threshold
-
+    /** \brief Returns the shadow threshold
+<p>
     A shadow is detected if pixel is a darker version of the background. The shadow threshold (Tau in
     the paper) is a threshold defining how much darker the shadow can be. Tau= 0.5 means that if a pixel
     is more than twice darker then it is not shadow. See Prati, Mikic, Trivedi and Cucchiarra,
     *Detecting Moving Shadows...*, IEEE PAMI,2003.
      */
     public native double getShadowThreshold();
-    /** @brief Sets the shadow threshold
+    /** \brief Sets the shadow threshold
      */
     public native void setShadowThreshold(double threshold);
 }
 
-/** @brief Creates KNN Background Subtractor
-
+/** \brief Creates KNN Background Subtractor
+<p>
 @param history Length of the history.
 @param dist2Threshold Threshold on the squared distance between the pixel and the sample to decide
 whether a pixel is close to that sample. This parameter does not affect the background update.
@@ -1205,7 +1205,7 @@ speed a bit, so if you do not need this feature, set the parameter to false.
                                    @Cast("bool") boolean detectShadows/*=true*/);
 @Namespace("cv") public static native @Ptr BackgroundSubtractorKNN createBackgroundSubtractorKNN();
 
-/** @} video_motion */
+/** \} video_motion */
 
  // cv
 

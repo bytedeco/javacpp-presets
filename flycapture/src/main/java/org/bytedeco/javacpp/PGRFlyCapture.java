@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -416,9 +416,9 @@ public static final int
 public static class FlyCaptureInfoEx extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public FlyCaptureInfoEx() { allocate(); }
+    public FlyCaptureInfoEx() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FlyCaptureInfoEx(int size) { allocateArray(size); }
+    public FlyCaptureInfoEx(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlyCaptureInfoEx(Pointer p) { super(p); }
     private native void allocate();
@@ -466,9 +466,9 @@ public static class FlyCaptureInfoEx extends Pointer {
 public static class FlyCaptureDriverInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public FlyCaptureDriverInfo() { allocate(); }
+    public FlyCaptureDriverInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FlyCaptureDriverInfo(int size) { allocateArray(size); }
+    public FlyCaptureDriverInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlyCaptureDriverInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -622,9 +622,9 @@ public static final int
 public static class FlyCaptureTimestamp extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public FlyCaptureTimestamp() { allocate(); }
+    public FlyCaptureTimestamp() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FlyCaptureTimestamp(int size) { allocateArray(size); }
+    public FlyCaptureTimestamp(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlyCaptureTimestamp(Pointer p) { super(p); }
     private native void allocate();
@@ -659,9 +659,9 @@ public static class FlyCaptureTimestamp extends Pointer {
 public static class FlyCaptureImage extends AbstractFlyCaptureImage {
     static { Loader.load(); }
     /** Default native constructor. */
-    public FlyCaptureImage() { allocate(); }
+    public FlyCaptureImage() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FlyCaptureImage(int size) { allocateArray(size); }
+    public FlyCaptureImage(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlyCaptureImage(Pointer p) { super(p); }
     private native void allocate();
@@ -3113,9 +3113,9 @@ public static native @Cast("FlyCaptureError") int flycaptureGetLookUpTableChanne
 public static class FlyCaptureImagePlus extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public FlyCaptureImagePlus() { allocate(); }
+    public FlyCaptureImagePlus() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FlyCaptureImagePlus(int size) { allocateArray(size); }
+    public FlyCaptureImagePlus(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlyCaptureImagePlus(Pointer p) { super(p); }
     private native void allocate();
@@ -3177,9 +3177,9 @@ public static class FlyCaptureImagePlus extends Pointer {
 public static class FlyCaptureImageEvent extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public FlyCaptureImageEvent() { allocate(); }
+    public FlyCaptureImageEvent() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FlyCaptureImageEvent(int size) { allocateArray(size); }
+    public FlyCaptureImageEvent(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlyCaptureImageEvent(Pointer p) { super(p); }
     private native void allocate();
@@ -3242,9 +3242,9 @@ public static class FlyCaptureImageEvent extends Pointer {
 public static class FlyCapturePacketInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public FlyCapturePacketInfo() { allocate(); }
+    public FlyCapturePacketInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FlyCapturePacketInfo(int size) { allocateArray(size); }
+    public FlyCapturePacketInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlyCapturePacketInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -4192,9 +4192,9 @@ public static final int FLYCAPTURE_BUS_MESSAGE =   999999999;
 public static class FlyCaptureSystemTime extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public FlyCaptureSystemTime() { allocate(); }
+    public FlyCaptureSystemTime() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FlyCaptureSystemTime(int size) { allocateArray(size); }
+    public FlyCaptureSystemTime(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlyCaptureSystemTime(Pointer p) { super(p); }
     private native void allocate();
@@ -4243,9 +4243,9 @@ public static final int
 public static class FlyCaptureMessage extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public FlyCaptureMessage() { allocate(); }
+    public FlyCaptureMessage() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FlyCaptureMessage(int size) { allocateArray(size); }
+    public FlyCaptureMessage(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlyCaptureMessage(Pointer p) { super(p); }
     private native void allocate();

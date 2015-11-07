@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -37,8 +37,8 @@ public class swscale extends org.bytedeco.javacpp.presets.swscale {
 // #define SWSCALE_SWSCALE_H
 
 /**
- * @file
- * @ingroup libsws
+ * \file
+ * \ingroup libsws
  * external API header
  */
 
@@ -50,8 +50,8 @@ public class swscale extends org.bytedeco.javacpp.presets.swscale {
 // #include "version.h"
 
 /**
- * @defgroup libsws Color conversion and scaling
- * @{
+ * \defgroup libsws Color conversion and scaling
+ * \{
  *
  * Return the LIBSWSCALE_VERSION_INT constant.
  */
@@ -137,9 +137,9 @@ public static native @Const IntPointer sws_getCoefficients(int colorspace);
 public static class SwsVector extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public SwsVector() { allocate(); }
+    public SwsVector() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SwsVector(int size) { allocateArray(size); }
+    public SwsVector(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SwsVector(Pointer p) { super(p); }
     private native void allocate();
@@ -158,9 +158,9 @@ public static class SwsVector extends Pointer {
 public static class SwsFilter extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public SwsFilter() { allocate(); }
+    public SwsFilter() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SwsFilter(int size) { allocateArray(size); }
+    public SwsFilter(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SwsFilter(Pointer p) { super(p); }
     private native void allocate();
@@ -240,7 +240,7 @@ public static native void sws_freeContext(SwsContext swsContext);
  *              frequency
  *              For SWS_LANCZOS param[0] tunes the width of the window function
  * @return a pointer to an allocated context, or NULL in case of error
- * @note this function is to be removed after a saner alternative is
+ * \note this function is to be removed after a saner alternative is
  *       written
  */
 public static native SwsContext sws_getContext(int srcW, int srcH, @Cast("AVPixelFormat") int srcFormat,
@@ -453,7 +453,7 @@ public static native void sws_convertPalette8ToPacked24(@Cast("const uint8_t*") 
 public static native @Const AVClass sws_get_class();
 
 /**
- * @}
+ * \}
  */
 
 // #endif /* SWSCALE_SWSCALE_H */

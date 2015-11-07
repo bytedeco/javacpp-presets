@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -635,9 +635,9 @@ public static final int
 public static class cudnnConvolutionFwdAlgoPerf_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public cudnnConvolutionFwdAlgoPerf_t() { allocate(); }
+    public cudnnConvolutionFwdAlgoPerf_t() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public cudnnConvolutionFwdAlgoPerf_t(int size) { allocateArray(size); }
+    public cudnnConvolutionFwdAlgoPerf_t(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudnnConvolutionFwdAlgoPerf_t(Pointer p) { super(p); }
     private native void allocate();
@@ -769,9 +769,9 @@ public static final int
 public static class cudnnConvolutionBwdFilterAlgoPerf_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public cudnnConvolutionBwdFilterAlgoPerf_t() { allocate(); }
+    public cudnnConvolutionBwdFilterAlgoPerf_t() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public cudnnConvolutionBwdFilterAlgoPerf_t(int size) { allocateArray(size); }
+    public cudnnConvolutionBwdFilterAlgoPerf_t(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudnnConvolutionBwdFilterAlgoPerf_t(Pointer p) { super(p); }
     private native void allocate();
@@ -900,9 +900,9 @@ public static final int
 public static class cudnnConvolutionBwdDataAlgoPerf_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public cudnnConvolutionBwdDataAlgoPerf_t() { allocate(); }
+    public cudnnConvolutionBwdDataAlgoPerf_t() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public cudnnConvolutionBwdDataAlgoPerf_t(int size) { allocateArray(size); }
+    public cudnnConvolutionBwdDataAlgoPerf_t(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudnnConvolutionBwdDataAlgoPerf_t(Pointer p) { super(p); }
     private native void allocate();

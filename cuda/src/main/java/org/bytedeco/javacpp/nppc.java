@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -239,7 +239,7 @@ public static final int NPP_VERSION_BUILD = 18;
 
 
 /** \defgroup typedefs_npp NPP Type Definitions and Constants
- * @{
+ * \{
  */
 
 /** 
@@ -459,9 +459,9 @@ public static final int
 public static class NppLibraryVersion extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public NppLibraryVersion() { allocate(); }
+    public NppLibraryVersion() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NppLibraryVersion(int size) { allocateArray(size); }
+    public NppLibraryVersion(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NppLibraryVersion(Pointer p) { super(p); }
     private native void allocate();
@@ -479,7 +479,7 @@ public static class NppLibraryVersion extends Pointer {
 }
 
 /** \defgroup npp_basic_types Basic NPP Data Types
- * @{
+ * \{
  */
 
 
@@ -502,9 +502,9 @@ public static class NppLibraryVersion extends Pointer {
 public static class Npp8uc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public Npp8uc() { allocate(); }
+    public Npp8uc() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Npp8uc(int size) { allocateArray(size); }
+    public Npp8uc(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Npp8uc(Pointer p) { super(p); }
     private native void allocate();
@@ -526,9 +526,9 @@ public static class Npp8uc extends Pointer {
 public static class Npp16uc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public Npp16uc() { allocate(); }
+    public Npp16uc() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Npp16uc(int size) { allocateArray(size); }
+    public Npp16uc(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Npp16uc(Pointer p) { super(p); }
     private native void allocate();
@@ -550,9 +550,9 @@ public static class Npp16uc extends Pointer {
 public static class Npp16sc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public Npp16sc() { allocate(); }
+    public Npp16sc() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Npp16sc(int size) { allocateArray(size); }
+    public Npp16sc(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Npp16sc(Pointer p) { super(p); }
     private native void allocate();
@@ -574,9 +574,9 @@ public static class Npp16sc extends Pointer {
 public static class Npp32uc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public Npp32uc() { allocate(); }
+    public Npp32uc() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Npp32uc(int size) { allocateArray(size); }
+    public Npp32uc(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Npp32uc(Pointer p) { super(p); }
     private native void allocate();
@@ -598,9 +598,9 @@ public static class Npp32uc extends Pointer {
 public static class Npp32sc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public Npp32sc() { allocate(); }
+    public Npp32sc() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Npp32sc(int size) { allocateArray(size); }
+    public Npp32sc(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Npp32sc(Pointer p) { super(p); }
     private native void allocate();
@@ -622,9 +622,9 @@ public static class Npp32sc extends Pointer {
 public static class Npp32fc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public Npp32fc() { allocate(); }
+    public Npp32fc() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Npp32fc(int size) { allocateArray(size); }
+    public Npp32fc(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Npp32fc(Pointer p) { super(p); }
     private native void allocate();
@@ -646,9 +646,9 @@ public static class Npp32fc extends Pointer {
 public static class Npp64sc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public Npp64sc() { allocate(); }
+    public Npp64sc() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Npp64sc(int size) { allocateArray(size); }
+    public Npp64sc(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Npp64sc(Pointer p) { super(p); }
     private native void allocate();
@@ -670,9 +670,9 @@ public static class Npp64sc extends Pointer {
 public static class Npp64fc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public Npp64fc() { allocate(); }
+    public Npp64fc() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Npp64fc(int size) { allocateArray(size); }
+    public Npp64fc(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Npp64fc(Pointer p) { super(p); }
     private native void allocate();
@@ -740,9 +740,9 @@ public static final double NPP_MAXABS_64F =  ( 1.7976931348623158e+308 );
 public static class NppiPoint extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public NppiPoint() { allocate(); }
+    public NppiPoint() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NppiPoint(int size) { allocateArray(size); }
+    public NppiPoint(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NppiPoint(Pointer p) { super(p); }
     private native void allocate();
@@ -765,9 +765,9 @@ public static class NppiPoint extends Pointer {
 public static class NppiSize extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public NppiSize() { allocate(); }
+    public NppiSize() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NppiSize(int size) { allocateArray(size); }
+    public NppiSize(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NppiSize(Pointer p) { super(p); }
     private native void allocate();
@@ -792,9 +792,9 @@ public static class NppiSize extends Pointer {
 public static class NppiRect extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public NppiRect() { allocate(); }
+    public NppiRect() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NppiRect(int size) { allocateArray(size); }
+    public NppiRect(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NppiRect(Pointer p) { super(p); }
     private native void allocate();
@@ -926,9 +926,9 @@ public static final int
 public static class NppiHaarClassifier_32f extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public NppiHaarClassifier_32f() { allocate(); }
+    public NppiHaarClassifier_32f() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NppiHaarClassifier_32f(int size) { allocateArray(size); }
+    public NppiHaarClassifier_32f(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NppiHaarClassifier_32f(Pointer p) { super(p); }
     private native void allocate();
@@ -949,9 +949,9 @@ public static class NppiHaarClassifier_32f extends Pointer {
 public static class NppiHaarBuffer extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public NppiHaarBuffer() { allocate(); }
+    public NppiHaarBuffer() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NppiHaarBuffer(int size) { allocateArray(size); }
+    public NppiHaarBuffer(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NppiHaarBuffer(Pointer p) { super(p); }
     private native void allocate();
@@ -1060,13 +1060,13 @@ public static final int
 /** \defgroup core_npp NPP Core
  * Basic functions for library management, in particular library version
  * and device property query functions.
- * @{
+ * \{
  */
 
 /**
  * Get the NPP library version.
  *
- * \return A struct containing separate values for major and minor revision 
+ * @return A struct containing separate values for major and minor revision 
  *      and build number.
  */
 public static native @Const NppLibraryVersion nppGetLibVersion();
@@ -1077,7 +1077,7 @@ public static native @Const NppLibraryVersion nppGetLibVersion();
  * Before trying to call any NPP functions, the user should make a call
  * this function to ensure that the current machine has a CUDA capable device.
  *
- * \return An enum value representing if a CUDA capable device was found and what
+ * @return An enum value representing if a CUDA capable device was found and what
  *      level of compute capabilities it supports.
  */
 public static native @Cast("NppGpuComputeCapability") int nppGetGpuComputeCapability();
@@ -1085,28 +1085,28 @@ public static native @Cast("NppGpuComputeCapability") int nppGetGpuComputeCapabi
 /**
  * Get the number of Streaming Multiprocessors (SM) on the active CUDA device.
  *
- * \return Number of SMs of the default CUDA device.
+ * @return Number of SMs of the default CUDA device.
  */
 public static native int nppGetGpuNumSMs();
 
 /**
  * Get the maximum number of threads per block on the active CUDA device.
  *
- * \return Maximum number of threads per block on the active CUDA device.
+ * @return Maximum number of threads per block on the active CUDA device.
  */
 public static native int nppGetMaxThreadsPerBlock();
 
 /**
  * Get the maximum number of threads per SM for the active GPU
  *
- * \return Maximum number of threads per SM for the active GPU
+ * @return Maximum number of threads per SM for the active GPU
  */
 public static native int nppGetMaxThreadsPerSM();
 
 /** 
  * Get the name of the active CUDA device.
  *
- * \return Name string of the active graphics-card/compute device in a system.
+ * @return Name string of the active graphics-card/compute device in a system.
  */
 public static native @Cast("const char*") BytePointer nppGetGpuName();
 
@@ -1122,12 +1122,12 @@ public static native CUstream_st nppGetStream();
 
 /**
  * Set the NPP CUDA stream.
- * \see nppGetStream()
+ * @see nppGetStream()
  */
 public static native void nppSetStream(CUstream_st hStream);
 
 
-/** @} Module LabelCoreNPP */
+/** \} Module LabelCoreNPP */
 
 
 // #ifdef __cplusplus /* extern "C" */

@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -37,25 +37,25 @@ public class swresample extends org.bytedeco.javacpp.presets.swresample {
 // #define SWRESAMPLE_SWRESAMPLE_H
 
 /**
- * @file
- * @ingroup lswr
+ * \file
+ * \ingroup lswr
  * libswresample public header
  */
 
 /**
- * @defgroup lswr Libswresample
- * @{
+ * \defgroup lswr Libswresample
+ * \{
  *
  * Libswresample (lswr) is a library that handles audio resampling, sample
  * format conversion and mixing.
  *
  * Interaction with lswr is done through SwrContext, which is
  * allocated with swr_alloc() or swr_alloc_set_opts(). It is opaque, so all parameters
- * must be set with the @ref avoptions API.
+ * must be set with the \ref avoptions API.
  *
  * The first thing you will need to do in order to use lswr is to allocate
  * SwrContext. This can be done with swr_alloc() or swr_alloc_set_opts(). If you
- * are using the former, you must set options through the @ref avoptions API.
+ * are using the former, you must set options through the \ref avoptions API.
  * The latter function provides the same feature, but it allows you to set some
  * common options in the same statement.
  *
@@ -63,7 +63,7 @@ public class swresample extends org.bytedeco.javacpp.presets.swresample {
  * format to interleaved signed 16-bit integer, downsampling from 48kHz to
  * 44.1kHz and downmixing from 5.1 channels to stereo (using the default mixing
  * matrix). This is using the swr_alloc() function.
- * @code
+ * <pre><code>
  * SwrContext *swr = swr_alloc();
  * av_opt_set_channel_layout(swr, "in_channel_layout",  AV_CH_LAYOUT_5POINT1, 0);
  * av_opt_set_channel_layout(swr, "out_channel_layout", AV_CH_LAYOUT_STEREO,  0);
@@ -71,10 +71,10 @@ public class swresample extends org.bytedeco.javacpp.presets.swresample {
  * av_opt_set_int(swr, "out_sample_rate",    44100,                0);
  * av_opt_set_sample_fmt(swr, "in_sample_fmt",  AV_SAMPLE_FMT_FLTP, 0);
  * av_opt_set_sample_fmt(swr, "out_sample_fmt", AV_SAMPLE_FMT_S16,  0);
- * @endcode
+ * </code></pre>
  *
  * The same job can be done using swr_alloc_set_opts() as well:
- * @code
+ * <pre><code>
  * SwrContext *swr = swr_alloc_set_opts(NULL,  // we're allocating a new context
  *                       AV_CH_LAYOUT_STEREO,  // out_ch_layout
  *                       AV_SAMPLE_FMT_S16,    // out_sample_fmt
@@ -84,11 +84,11 @@ public class swresample extends org.bytedeco.javacpp.presets.swresample {
  *                       48000,                // in_sample_rate
  *                       0,                    // log_offset
  *                       NULL);                // log_ctx
- * @endcode
+ * </code></pre>
  *
  * Once all values have been set, it must be initialized with swr_init(). If
  * you need to change the conversion parameters, you can change the parameters
- * using @ref AVOptions, as described above in the first example; or by using
+ * using \ref AVOptions, as described above in the first example; or by using
  * swr_alloc_set_opts(), but with the first argument the allocated context.
  * You must then call swr_init() again.
  *
@@ -101,7 +101,7 @@ public class swresample extends org.bytedeco.javacpp.presets.swresample {
  * swr_convert() with NULL in and 0 in_count.
  *
  * The samples used in the conversion process can be managed with the libavutil
- * @ref lavu_sampmanip "samples manipulation" API, including av_samples_alloc()
+ * \ref lavu_sampmanip "samples manipulation" API, including av_samples_alloc()
  * function used in the following example.
  *
  * The delay between input and output, can at any time be found by using
@@ -109,7 +109,7 @@ public class swresample extends org.bytedeco.javacpp.presets.swresample {
  *
  * The following code demonstrates the conversion loop assuming the parameters
  * from above and caller-defined functions get_input() and handle_output():
- * @code
+ * <pre><code>
  * uint8_t **input;
  * int in_samples;
  *
@@ -124,7 +124,7 @@ public class swresample extends org.bytedeco.javacpp.presets.swresample {
  *     handle_output(output, out_samples);
  *     av_freep(&output);
  * }
- * @endcode
+ * </code></pre>
  *
  * When the conversion is finished, the conversion
  * context and everything associated with it must be freed with swr_free().
@@ -147,9 +147,9 @@ public static final int SWR_CH_MAX = 32;
 // #endif
 
 /**
- * @name Option constants
- * These constants are used for the @ref avoptions interface for lswr.
- * @{
+ * \name Option constants
+ * These constants are used for the \ref avoptions interface for lswr.
+ * \{
  *
  */
 
@@ -199,13 +199,13 @@ public static final int
     SWR_FILTER_TYPE_KAISER = 2;
 
 /**
- * @}
+ * \}
  */
 
 /**
  * The libswresample context. Unlike libavcodec and libavformat, this structure
  * is opaque. This means that if you would like to set options, you must use
- * the @ref avoptions API and cannot directly set values to members of the
+ * the \ref avoptions API and cannot directly set values to members of the
  * structure.
  */
 @Opaque public static class SwrContext extends Pointer {
@@ -225,8 +225,8 @@ public static final int
 public static native @Const AVClass swr_get_class();
 
 /**
- * @name SwrContext constructor functions
- * @{
+ * \name SwrContext constructor functions
+ * \{
  */
 
 /**
@@ -242,7 +242,7 @@ public static native SwrContext swr_alloc();
 
 /**
  * Initialize context after user parameters have been set.
- * @note The context must be configured using the AVOption API.
+ * \note The context must be configured using the AVOption API.
  *
  * @see av_opt_set_int()
  * @see av_opt_set_dict()
@@ -287,10 +287,10 @@ public static native SwrContext swr_alloc_set_opts(SwrContext s,
                                       int log_offset, Pointer log_ctx);
 
 /**
- * @}
+ * \}
  *
- * @name SwrContext destructor functions
- * @{
+ * \name SwrContext destructor functions
+ * \{
  */
 
 /**
@@ -314,10 +314,10 @@ public static native void swr_free(@ByPtrPtr SwrContext s);
 public static native void swr_close(SwrContext s);
 
 /**
- * @}
+ * \}
  *
- * @name Core conversion functions
- * @{
+ * \name Core conversion functions
+ * \{
  */
 
 /** Convert audio.
@@ -351,10 +351,10 @@ public static native int swr_convert(SwrContext s, @Cast("uint8_t**") @ByPtrPtr 
  * Convert the next timestamp from input to output
  * timestamps are in 1/(in_sample_rate * out_sample_rate) units.
  *
- * @note There are 2 slightly differently behaving modes.
- *       @li When automatic timestamp compensation is not used, (min_compensation >= FLT_MAX)
+ * \note There are 2 slightly differently behaving modes.
+ *       \li When automatic timestamp compensation is not used, (min_compensation >= FLT_MAX)
  *              in this case timestamps will be passed through with delays compensated
- *       @li When automatic timestamp compensation is used, (min_compensation < FLT_MAX)
+ *       \li When automatic timestamp compensation is used, (min_compensation < FLT_MAX)
  *              in this case the output timestamps will match output sample numbers.
  *              See ffmpeg-resampler(1) for the two modes of compensation.
  *
@@ -367,12 +367,12 @@ public static native int swr_convert(SwrContext s, @Cast("uint8_t**") @ByPtrPtr 
 public static native long swr_next_pts(SwrContext s, long pts);
 
 /**
- * @}
+ * \}
  *
- * @name Low-level option setting functions
+ * \name Low-level option setting functions
  * These functons provide a means to set low-level options that is not possible
  * with the AVOption API.
- * @{
+ * \{
  */
 
 /**
@@ -385,11 +385,11 @@ public static native long swr_next_pts(SwrContext s, long pts);
  * @param[in]     sample_delta  delta in PTS per sample
  * @param[in]     compensation_distance number of samples to compensate for
  * @return    >= 0 on success, AVERROR error codes if:
- *            @li @c s is NULL,
- *            @li @c compensation_distance is less than 0,
- *            @li @c compensation_distance is 0 but sample_delta is not,
- *            @li compensation unsupported by resampler, or
- *            @li swr_init() fails when called.
+ *            \li \c s is NULL,
+ *            \li \c compensation_distance is less than 0,
+ *            \li \c compensation_distance is 0 but sample_delta is not,
+ *            \li compensation unsupported by resampler, or
+ *            \li swr_init() fails when called.
  */
 public static native int swr_set_compensation(SwrContext s, int sample_delta, int compensation_distance);
 
@@ -419,10 +419,10 @@ public static native int swr_set_matrix(SwrContext s, @Const DoubleBuffer matrix
 public static native int swr_set_matrix(SwrContext s, @Const double[] matrix, int stride);
 
 /**
- * @}
+ * \}
  *
- * @name Sample handling functions
- * @{
+ * \name Sample handling functions
+ * \{
  */
 
 /**
@@ -464,16 +464,16 @@ public static native int swr_inject_silence(SwrContext s, int count);
  *
  * @param s     swr context
  * @param base  timebase in which the returned delay will be:
- *              @li if it's set to 1 the returned delay is in seconds
- *              @li if it's set to 1000 the returned delay is in milliseconds
- *              @li if it's set to the input sample rate then the returned
+ *              \li if it's set to 1 the returned delay is in seconds
+ *              \li if it's set to 1000 the returned delay is in milliseconds
+ *              \li if it's set to the input sample rate then the returned
  *                  delay is in input samples
- *              @li if it's set to the output sample rate then the returned
+ *              \li if it's set to the output sample rate then the returned
  *                  delay is in output samples
- *              @li if it's the least common multiple of in_sample_rate and
+ *              \li if it's the least common multiple of in_sample_rate and
  *                  out_sample_rate then an exact rounding-free delay will be
  *                  returned
- * @returns     the delay in 1 / @c base units.
+ * @return     the delay in 1 / \c base units.
  */
 public static native long swr_get_delay(SwrContext s, long base);
 
@@ -485,52 +485,52 @@ public static native long swr_get_delay(SwrContext s, long base);
  * swr_get_out_samples() returns for the same number of input samples.
  *
  * @param in_samples    number of input samples.
- * @note any call to swr_inject_silence(), swr_convert(), swr_next_pts()
+ * \note any call to swr_inject_silence(), swr_convert(), swr_next_pts()
  *       or swr_set_compensation() invalidates this limit
- * @note it is recommended to pass the correct available buffer size
+ * \note it is recommended to pass the correct available buffer size
  *       to all functions like swr_convert() even if swr_get_out_samples()
  *       indicates that less would be used.
- * @returns an upper bound on the number of samples that the next swr_convert
+ * @return an upper bound on the number of samples that the next swr_convert
  *          will output or a negative value to indicate an error
  */
 public static native int swr_get_out_samples(SwrContext s, int in_samples);
 
 /**
- * @}
+ * \}
  *
- * @name Configuration accessors
- * @{
+ * \name Configuration accessors
+ * \{
  */
 
 /**
- * Return the @ref LIBSWRESAMPLE_VERSION_INT constant.
+ * Return the \ref LIBSWRESAMPLE_VERSION_INT constant.
  *
  * This is useful to check if the build-time libswresample has the same version
  * as the run-time one.
  *
- * @returns     the unsigned int-typed version
+ * @return     the unsigned int-typed version
  */
 public static native @Cast("unsigned") int swresample_version();
 
 /**
  * Return the swr build-time configuration.
  *
- * @returns     the build-time @c ./configure flags
+ * @return     the build-time \c ./configure flags
  */
 public static native @Cast("const char*") BytePointer swresample_configuration();
 
 /**
  * Return the swr license.
  *
- * @returns     the license of libswresample, determined at build-time
+ * @return     the license of libswresample, determined at build-time
  */
 public static native @Cast("const char*") BytePointer swresample_license();
 
 /**
- * @}
+ * \}
  *
- * @name AVFrame based API
- * @{
+ * \name AVFrame based API
+ * \{
  */
 
 /**
@@ -587,8 +587,8 @@ public static native int swr_convert_frame(SwrContext swr,
 public static native int swr_config_frame(SwrContext swr, @Const AVFrame out, @Const AVFrame in);
 
 /**
- * @}
- * @}
+ * \}
+ * \}
  */
 
 // #endif /* SWRESAMPLE_SWRESAMPLE_H */

@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -832,9 +832,9 @@ public static final double CV_LOG2 = 0.69314718055994530941723212145818;
 public static class Cv32suf extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public Cv32suf() { allocate(); }
+    public Cv32suf() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Cv32suf(int size) { allocateArray(size); }
+    public Cv32suf(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Cv32suf(Pointer p) { super(p); }
     private native void allocate();
@@ -851,9 +851,9 @@ public static class Cv32suf extends Pointer {
 public static class Cv64suf extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public Cv64suf() { allocate(); }
+    public Cv64suf() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Cv64suf(int size) { allocateArray(size); }
+    public Cv64suf(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Cv64suf(Pointer p) { super(p); }
     private native void allocate();
@@ -884,8 +884,8 @@ public static class Cv64suf extends Pointer {
 // #  include "tegra_round.hpp"
 // #endif
 
-/** @addtogroup core_utils
- *  @{ */
+/** \addtogroup core_utils
+ *  \{ */
 
 // #if CV_VFP
     // 1. general scheme
@@ -904,16 +904,16 @@ public static class Cv64suf extends Pointer {
 //     #define ARM_ROUND_FLT(value) ARM_ROUND(value, "vcvtr.s32.f32 %[temp], %[value]\n vmov %[res], %[temp]")
 // #endif // CV_VFP
 
-/** @brief Rounds floating-point number to the nearest integer
-
+/** \brief Rounds floating-point number to the nearest integer
+<p>
  @param value floating-point number. If the value is outside of INT_MIN ... INT_MAX range, the
  result is not defined.
  */
 public static native int cvRound( double value );
 
 
-/** @brief Rounds floating-point number to the nearest integer not larger than the original.
-
+/** \brief Rounds floating-point number to the nearest integer not larger than the original.
+<p>
  The function computes an integer i such that:
  \f[i \le \texttt{value} < i+1\f]
  @param value floating-point number. If the value is outside of INT_MIN ... INT_MAX range, the
@@ -921,8 +921,8 @@ public static native int cvRound( double value );
  */
 public static native int cvFloor( double value );
 
-/** @brief Rounds floating-point number to the nearest integer not larger than the original.
-
+/** \brief Rounds floating-point number to the nearest integer not larger than the original.
+<p>
  The function computes an integer i such that:
  \f[i \le \texttt{value} < i+1\f]
  @param value floating-point number. If the value is outside of INT_MIN ... INT_MAX range, the
@@ -930,46 +930,46 @@ public static native int cvFloor( double value );
  */
 public static native int cvCeil( double value );
 
-/** @brief Determines if the argument is Not A Number.
-
+/** \brief Determines if the argument is Not A Number.
+<p>
  @param value The input floating-point value
-
+<p>
  The function returns 1 if the argument is Not A Number (as defined by IEEE754 standard), 0
  otherwise. */
 public static native int cvIsNaN( double value );
 
-/** @brief Determines if the argument is Infinity.
-
+/** \brief Determines if the argument is Infinity.
+<p>
  @param value The input floating-point value
-
+<p>
  The function returns 1 if the argument is a plus or minus infinity (as defined by IEEE754 standard)
  and 0 otherwise. */
 public static native int cvIsInf( double value );
 
 // #ifdef __cplusplus
 
-/** @overload */
+/** \overload */
 public static native int cvRound(float value);
 
-/** @overload */
+/** \overload */
 public static native int cvRound( int value );
 
-/** @overload */
+/** \overload */
 public static native int cvFloor( float value );
 
-/** @overload */
+/** \overload */
 public static native int cvFloor( int value );
 
-/** @overload */
+/** \overload */
 public static native int cvCeil( float value );
 
-/** @overload */
+/** \overload */
 public static native int cvCeil( int value );
 
-/** @overload */
+/** \overload */
 public static native int cvIsNaN( float value );
 
-/** @overload */
+/** \overload */
 public static native int cvIsInf( float value );
 
 // #include <algorithm>
@@ -978,88 +978,88 @@ public static native int cvIsInf( float value );
 
 /**
  Template function for accurate conversion from one primitive type to another.
-
+<p>
  The functions saturate_cast resemble the standard C++ cast operations, such as static_cast\<T\>()
  and others. They perform an efficient and accurate conversion from one primitive type to another
  (see the introduction chapter). saturate in the name means that when the input value v is out of the
  range of the target type, the result is not formed just by taking low bits of the input, but instead
  the value is clipped. For example:
- @code
+ <pre><code>
  uchar a = saturate_cast<uchar>(-100); // a = 0 (UCHAR_MIN)
  short b = saturate_cast<short>(33333.33333); // b = 32767 (SHRT_MAX)
- @endcode
+ </code></pre>
  Such clipping is done when the target type is unsigned char , signed char , unsigned short or
  signed short . For 32-bit integers, no clipping is done.
-
+<p>
  When the parameter is a floating-point value and the target type is an integer (8-, 16- or 32-bit),
  the floating-point value is first rounded to the nearest integer and then clipped if needed (when
  the target type is 8- or 16-bit).
-
+<p>
  This operation is used in the simplest or most complex image processing functions in OpenCV.
-
+<p>
  @param v Function parameter.
- @sa add, subtract, multiply, divide, Mat::convertTo
+ \sa add, subtract, multiply, divide, Mat::convertTo
  */
 
-/** @overload */
+/** \overload */
 @Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(@Cast("schar") byte v);
 @Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(@Cast("schar") byte v);
 @Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(@Cast("schar") byte v);
 @Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(@Cast("schar") byte v);
 @Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(@Cast("schar") byte v);
 @Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(@Cast("schar") byte v);
-/** @overload */
+/** \overload */
 
-/** @overload */
+/** \overload */
 @Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(short v);
 @Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(short v);
 @Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(short v);
 @Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(short v);
 @Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(short v);
 @Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(short v);
-/** @overload */
+/** \overload */
 
-/** @overload */
+/** \overload */
 @Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(int v);
 @Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(int v);
 @Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(int v);
 @Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(int v);
 @Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(int v);
 @Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(int v);
-/** @overload */
+/** \overload */
 @Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(float v);
 @Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(float v);
 @Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(float v);
 @Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(float v);
 @Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(float v);
 @Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(float v);
-/** @overload */
+/** \overload */
 @Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(double v);
 @Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(double v);
 @Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(double v);
 @Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(double v);
 @Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(double v);
 @Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(double v);
-/** @overload */
+/** \overload */
 @Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(@Cast("int64") long v);
 @Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(@Cast("int64") long v);
 @Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(@Cast("int64") long v);
 @Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(@Cast("int64") long v);
 @Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(@Cast("int64") long v);
 @Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(@Cast("int64") long v);
-/** @overload */
+/** \overload */
 
-/** @cond IGNORED */
+/** \cond IGNORED */
 
 // we intentionally do not clip negative numbers, to make -1 become 0xffffffff etc.
 
-/** @endcond */
+/** \endcond */
 
 
 
 // #endif // __cplusplus
 
-/** @} core_utils */
+/** \} core_utils */
 
 // #endif //__OPENCV_HAL_H__
 
@@ -1414,8 +1414,8 @@ public static final int CV_SUBMINOR_VERSION = CV_VERSION_REVISION;
 // #include "opencv2/core/cvstd.hpp"
 // #include "opencv2/hal.hpp"
 
-/** @addtogroup core_utils
- *  @{ */
+/** \addtogroup core_utils
+ *  \{ */
 /** error codes */
 /** enum cv::Error::Code */
 public static final int
@@ -1523,10 +1523,10 @@ public static final int
     OpenCLNoAMDBlasFft= -223;
  //Error
 
-/** @} core_utils
+/** \} core_utils
 
- *  @addtogroup core_array
- *  @{
+ *  \addtogroup core_array
+ *  \{
 
  *  matrix decomposition types */
 /** enum cv::DecompTypes */
@@ -1555,12 +1555,12 @@ public static final int
 \f[norm =  \forkthree{\|\texttt{src1}\|_{L_{\infty}} =  \max _I | \texttt{src1} (I)|}{if  \(\texttt{normType} = \texttt{NORM\_INF}\) }
 { \| \texttt{src1} \| _{L_1} =  \sum _I | \texttt{src1} (I)|}{if  \(\texttt{normType} = \texttt{NORM\_L1}\) }
 { \| \texttt{src1} \| _{L_2} =  \sqrt{\sum_I \texttt{src1}(I)^2} }{if  \(\texttt{normType} = \texttt{NORM\_L2}\) }\f]
-
+<p>
 - Absolute norm for two arrays
 \f[norm =  \forkthree{\|\texttt{src1}-\texttt{src2}\|_{L_{\infty}} =  \max _I | \texttt{src1} (I) -  \texttt{src2} (I)|}{if  \(\texttt{normType} = \texttt{NORM\_INF}\) }
 { \| \texttt{src1} - \texttt{src2} \| _{L_1} =  \sum _I | \texttt{src1} (I) -  \texttt{src2} (I)|}{if  \(\texttt{normType} = \texttt{NORM\_L1}\) }
 { \| \texttt{src1} - \texttt{src2} \| _{L_2} =  \sqrt{\sum_I (\texttt{src1}(I) - \texttt{src2}(I))^2} }{if  \(\texttt{normType} = \texttt{NORM\_L2}\) }\f]
-
+<p>
 - Relative norm for two arrays
 \f[norm =  \forkthree{\frac{\|\texttt{src1}-\texttt{src2}\|_{L_{\infty}}    }{\|\texttt{src2}\|_{L_{\infty}} }}{if  \(\texttt{normType} = \texttt{NORM\_RELATIVE\_INF}\) }
 { \frac{\|\texttt{src1}-\texttt{src2}\|_{L_1} }{\|\texttt{src2}\|_{L_1}} }{if  \(\texttt{normType} = \texttt{NORM\_RELATIVE\_L1}\) }
@@ -1640,21 +1640,21 @@ public static final int
         perform 3D and higher-dimensional transforms and so forth.*/
     DCT_ROWS           =  DFT_ROWS;
 
-/** Various border types, image boundaries are denoted with `|`
+/** Various border types, image boundaries are denoted with {@code |}
  *  @see borderInterpolate, copyMakeBorder */
 /** enum cv::BorderTypes */
 public static final int
-    /** `iiiiii|abcdefgh|iiiiiii`  with some specified `i` */
+    /** {@code iiiiii|abcdefgh|iiiiiii}  with some specified {@code i} */
     BORDER_CONSTANT    = 0,
-    /** `aaaaaa|abcdefgh|hhhhhhh` */
+    /** {@code aaaaaa|abcdefgh|hhhhhhh} */
     BORDER_REPLICATE   = 1,
-    /** `fedcba|abcdefgh|hgfedcb` */
+    /** {@code fedcba|abcdefgh|hgfedcb} */
     BORDER_REFLECT     = 2,
-    /** `cdefgh|abcdefgh|abcdefg` */
+    /** {@code cdefgh|abcdefgh|abcdefg} */
     BORDER_WRAP        = 3,
-    /** `gfedcb|abcdefgh|gfedcba` */
+    /** {@code gfedcb|abcdefgh|gfedcba} */
     BORDER_REFLECT_101 = 4,
-    /** `uvwxyz|absdefgh|ijklmno` */
+    /** {@code uvwxyz|absdefgh|ijklmno} */
     BORDER_TRANSPARENT = 5,
 
     /** same as BORDER_REFLECT_101 */
@@ -1664,12 +1664,12 @@ public static final int
     /** do not look outside of ROI */
     BORDER_ISOLATED    = 16;
 
-/** @} core_array
+/** \} core_array
 
- *  @addtogroup core_utils
- *  @{
+ *  \addtogroup core_utils
+ *  \{
 
- *  @cond IGNORED
+ *  \cond IGNORED
 
 //////////////// static assert ///////////////// */
 // #define CVAUX_CONCAT_EXP(a, b) a##b
@@ -1703,10 +1703,10 @@ public static final int
 // #define CV_SUPPRESS_DEPRECATED_START
 // #define CV_SUPPRESS_DEPRECATED_END
 // #endif
-/** @endcond
+/** \endcond
 
-/** @brief Signals an error and raises the exception.
-
+/** \brief Signals an error and raises the exception.
+<p>
 By default the function prints information about the error to stderr,
 then it either stops if setBreakOnError() had been called before or raises the exception.
 It is possible to alternate error processing by using redirectError().
@@ -1743,34 +1743,34 @@ It is possible to alternate error processing by using redirectError().
 // #define CV_Func ""
 // #endif
 
-/** @brief Call the error handler.
-
+/** \brief Call the error handler.
+<p>
 Currently, the error handler prints the error code and the error message to the standard
-error stream `stderr`. In the Debug configuration, it then provokes memory access violation, so that
+error stream {@code stderr}. In the Debug configuration, it then provokes memory access violation, so that
 the execution stack and all the parameters can be analyzed by the debugger. In the Release
 configuration, the exception is thrown.
-
+<p>
 @param code one of Error::Code
 @param msg error message
 */
 // #define CV_Error( code, msg ) cv::error( code, msg, CV_Func, __FILE__, __LINE__ )
 
-/**  @brief Call the error handler.
-
+/**  \brief Call the error handler.
+<p>
 This macro can be used to construct an error message on-fly to include some dynamic information,
 for example:
-@code
+<pre><code>
     // note the extra parentheses around the formatted text message
     CV_Error_( CV_StsOutOfRange,
     ("the value at (%d, %d)=%g is out of range", badPt.x, badPt.y, badValue));
-@endcode
+</code></pre>
 @param code one of Error::Code
 @param args printf-like formatted error message in parentheses
 */
 // #define CV_Error_( code, args ) cv::error( code, cv::format args, CV_Func, __FILE__, __LINE__ )
 
-/** @brief Checks a condition at runtime and throws exception if it fails
-
+/** \brief Checks a condition at runtime and throws exception if it fails
+<p>
 The macros CV_Assert (and CV_DbgAssert(expr)) evaluate the specified expression. If it is 0, the macros
 raise an error (see cv::error). The macro CV_Assert checks the condition in both Debug and Release
 configurations while CV_DbgAssert is only retained in the Debug configuration.
@@ -1797,9 +1797,9 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
 @Namespace("cv") public static class Hamming extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public Hamming() { allocate(); }
+    public Hamming() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Hamming(int size) { allocateArray(size); }
+    public Hamming(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Hamming(Pointer p) { super(p); }
     private native void allocate();
@@ -1836,8 +1836,8 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
 
 
 
-/** @brief Computes the cube root of an argument.
-
+/** \brief Computes the cube root of an argument.
+<p>
  The function cubeRoot computes \f$\sqrt[3]{\texttt{val}}\f$. Negative arguments are handled correctly.
  NaN and Inf are not handled. The accuracy approaches the maximum possible accuracy for
  single-precision data.
@@ -1845,8 +1845,8 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
  */
 @Namespace("cv") public static native float cubeRoot(float val);
 
-/** @brief Calculates the angle of a 2D vector in degrees.
-
+/** \brief Calculates the angle of a 2D vector in degrees.
+<p>
  The function fastAtan2 calculates the full-range angle of an input 2D vector. The angle is measured
  in degrees and varies from 0 to 360 degrees. The accuracy is about 0.3 degrees.
  @param x x-coordinate of the vector.
@@ -1873,7 +1873,7 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
 
 ////////////////// forward declarations for important OpenCV types //////////////////
 
-/** @cond IGNORED */
+/** \cond IGNORED */
     @Namespace("cv::ogl") @Opaque public static class Buffer extends Pointer {
         /** Empty constructor. */
         public Buffer() { }
@@ -1925,18 +1925,18 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
 
  // ipp
 
-/** @endcond
+/** \endcond
 
- *  @} core_utils
+ *  \} core_utils
 
- *  @addtogroup core_utils_neon
- *  @{ */
+ *  \addtogroup core_utils_neon
+ *  \{ */
 
 // #if CV_NEON
 
 // #endif
 
-/** @} core_utils_neon */
+/** \} core_utils_neon */
 
  // cv
 
@@ -2021,21 +2021,21 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
 // #else
 // #endif
 
-/** @addtogroup core_utils
- *  @{
+/** \addtogroup core_utils
+ *  \{
 
 //////////////////////////// memory management functions ////////////////////////////
 
-/** @brief Allocates an aligned memory buffer.
-
+/** \brief Allocates an aligned memory buffer.
+<p>
 The function allocates the buffer of the specified size and returns it. When the buffer size is 16
 bytes or more, the returned buffer is aligned to 16 bytes.
 @param bufSize Allocated buffer size.
  */
 @Namespace("cv") public static native Pointer fastMalloc(@Cast("size_t") long bufSize);
 
-/** @brief Deallocates a memory buffer.
-
+/** \brief Deallocates a memory buffer.
+<p>
 The function deallocates the buffer allocated with fastMalloc . If NULL pointer is passed, the
 function does nothing. C version of the function clears the pointer *pptr* to avoid problems with
 double memory deallocation.
@@ -2047,18 +2047,18 @@ double memory deallocation.
   The STL-compilant memory Allocator based on cv::fastMalloc() and cv::fastFree()
 */
 
-/** @} core_utils
+/** \} core_utils
 
- *  @cond IGNORED */
+ *  \cond IGNORED */
 
 // Metafunction to avoid taking a reference to void.
 
 @Name("cv::detail::RefOrVoid<void>") public static class RefOrVoid extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public RefOrVoid() { allocate(); }
+    public RefOrVoid() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public RefOrVoid(int size) { allocateArray(size); }
+    public RefOrVoid(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RefOrVoid(Pointer p) { super(p); }
     private native void allocate();
@@ -2083,20 +2083,20 @@ double memory deallocation.
 
 
 
-/** @endcond
+/** \endcond
 
- *  @addtogroup core_basic
- *  @{
+ *  \addtogroup core_basic
+ *  \{
 
-/** @brief Template class for smart pointers with shared ownership
-
+/** \brief Template class for smart pointers with shared ownership
+<p>
 A Ptr\<T\> pretends to be a pointer to an object of type T. Unlike an ordinary pointer, however, the
 object will be automatically cleaned up once all Ptr instances pointing to it are destroyed.
-
+<p>
 Ptr is similar to boost::shared_ptr that is part of the Boost library
 (<http://www.boost.org/doc/libs/release/libs/smart_ptr/shared_ptr.htm>) and std::shared_ptr from
 the [C++11](http://en.wikipedia.org/wiki/C++11) standard.
-
+<p>
 This class provides the following advantages:
 -   Default constructor, copy constructor, and assignment operator for an arbitrary C++ class or C
     structure. For some objects, like files, windows, mutexes, sockets, and others, a copy
@@ -2117,7 +2117,7 @@ This class provides the following advantages:
     objects of different types in the same container is to store pointers to the base class (Base\*)
     instead but then you lose the automatic memory management. Again, by using Ptr\<Base\> instead
     of raw pointers, you can solve the problem.
-
+<p>
 A Ptr is said to *own* a pointer - that is, for each Ptr there is a pointer that will be deleted
 once all Ptr instances that own it are destroyed. The owned pointer may be null, in which case
 nothing is deleted. Each Ptr also *stores* a pointer. The stored pointer is the pointer the Ptr
@@ -2125,33 +2125,33 @@ pretends to be; that is, the one you get when you use Ptr::get or the conversion
 usually the same as the owned pointer, but if you use casts or the general shared-ownership
 constructor, the two may diverge: the Ptr will still own the original pointer, but will itself point
 to something else.
-
+<p>
 The owned pointer is treated as a black box. The only thing Ptr needs to know about it is how to
 delete it. This knowledge is encapsulated in the *deleter* - an auxiliary object that is associated
 with the owned pointer and shared between all Ptr instances that own it. The default deleter is an
 instance of DefaultDeleter, which uses the standard C++ delete operator; as such it will work with
 any pointer allocated with the standard new operator.
-
+<p>
 However, if the pointer must be deleted in a different way, you must specify a custom deleter upon
 Ptr construction. A deleter is simply a callable object that accepts the pointer as its sole
 argument. For example, if you want to wrap FILE, you may do so as follows:
-@code
+<pre><code>
     Ptr<FILE> f(fopen("myfile.txt", "w"), fclose);
     if(!f) throw ...;
     fprintf(f, ....);
     ...
     // the file will be closed automatically by f's destructor.
-@endcode
+</code></pre>
 Alternatively, if you want all pointers of a particular type to be deleted the same way, you can
 specialize DefaultDeleter<T>::operator() for that type, like this:
-@code
+<pre><code>
     namespace cv {
     template<> void DefaultDeleter<FILE>::operator ()(FILE * obj) const
     {
         fclose(obj);
     }
     }
-@endcode
+</code></pre>
 For convenience, the following types from the OpenCV C API already have such a specialization that
 calls the appropriate release function:
 -   CvCapture
@@ -2163,10 +2163,10 @@ calls the appropriate release function:
 -   CvSparseMat
 -   CvVideoWriter
 -   IplImage
-@note The shared ownership mechanism is implemented with reference counting. As such, cyclic
+\note The shared ownership mechanism is implemented with reference counting. As such, cyclic
 ownership (e.g. when object a contains a Ptr to object b, which contains a Ptr to object a) will
 lead to all involved objects never being cleaned up. Avoid such situations.
-@note It is safe to concurrently read (but not write) a Ptr instance from multiple threads and
+\note It is safe to concurrently read (but not write) a Ptr instance from multiple threads and
 therefore it is normally safe to use it in multi-threaded applications. The same is true for Mat and
 other C++ OpenCV classes that use internal reference counts.
 */
@@ -2175,30 +2175,30 @@ other C++ OpenCV classes that use internal reference counts.
 
 /** Return whether ptr1.get() and ptr2.get() are equal and not equal, respectively. */
 
-/** `makePtr<T>(...)` is equivalent to `Ptr<T>(new T(...))`. It is shorter than the latter, and it's
+/** {@code makePtr<T>(...)} is equivalent to {@code Ptr<T>(new T(...))}. It is shorter than the latter, and it's
 marginally safer than using a constructor or Ptr::reset, since it ensures that the owned pointer
 is new and thus not owned by any other Ptr instance.
 Unfortunately, perfect forwarding is impossible to implement in C++03, and so makePtr is limited
 to constructors of T that have up to 10 arguments, none of which are non-const references.
  */
-/** @overload */
-/** @overload */
-/** @overload */
-/** @overload */
-/** @overload */
-/** @overload */
-/** @overload */
-/** @overload */
-/** @overload */
-/** @overload */
+/** \overload */
+/** \overload */
+/** \overload */
+/** \overload */
+/** \overload */
+/** \overload */
+/** \overload */
+/** \overload */
+/** \overload */
+/** \overload */
 
 //////////////////////////////// string class //////////////////////////////// //for string constructor from FileNode
 
-/** @} core_basic
+/** \} core_basic
 
 ////////////////////////// cv::String implementation /////////////////////////
 
- *  @cond IGNORED */
+ *  \cond IGNORED */
 
 
 
@@ -2290,12 +2290,12 @@ to constructors of T that have up to 10 arguments, none of which are non-const r
 
 
 
-/** @endcond */
+/** \endcond */
 
 // ************************* cv::String non-member functions *************************
 
-/** @relates cv::String
-/** @{ */
+/** \relates cv::String
+/** \{ */
 
 @Namespace("cv") public static native @Str @Name("operator +") BytePointer add(@Str BytePointer lhs, @Str BytePointer rhs);
 @Namespace("cv") public static native @Str @Name("operator +") String add(@Str String lhs, @Str String rhs);
@@ -2319,7 +2319,7 @@ to constructors of T that have up to 10 arguments, none of which are non-const r
 @Namespace("cv") public static native @Cast("bool") @Name("operator >=") boolean greaterThanEquals(@Str BytePointer lhs, @Str BytePointer rhs);
 @Namespace("cv") public static native @Cast("bool") @Name("operator >=") boolean greaterThanEquals(@Str String lhs, @Str String rhs);
 
-/** @} relates cv::String */
+/** \} relates cv::String */
 
  // cv
 
@@ -2394,11 +2394,11 @@ to constructors of T that have up to 10 arguments, none of which are non-const r
 // #define CV_IMPL_ADD(impl)
 // #endif
 
-/** @addtogroup core_utils
- *  @{
+/** \addtogroup core_utils
+ *  \{
 
-/** @brief  Automatically Allocated Buffer Class
-
+/** \brief  Automatically Allocated Buffer Class
+<p>
  The class is used for temporary buffers in functions and methods.
  If a temporary buffer is usually small (a few K's of memory),
  but its size depends on the parameters, it makes sense to create a small
@@ -2407,11 +2407,11 @@ to constructors of T that have up to 10 arguments, none of which are non-const r
  and released after the processing. Therefore, in typical cases, when the buffer size is small,
  there is no overhead associated with malloc()/free().
  At the same time, there is no limit on the size of processed data.
-
+<p>
  This is what AutoBuffer does. The template takes 2 parameters - type of the buffer elements and
  the number of stack-allocated elements. Here is how the class is used:
-
- \code
+<p>
+ <pre><code>
  void my_func(const cv::Mat& m)
  {
     cv::AutoBuffer<float> buf; // create automatic buffer containing 1000 floats
@@ -2421,15 +2421,15 @@ to constructors of T that have up to 10 arguments, none of which are non-const r
                           // dynamically and deallocated in cv::AutoBuffer destructor
     ...
  }
- \endcode
+ </code></pre>
 */
 
-/**  @brief Sets/resets the break-on-error mode.
-
+/**  \brief Sets/resets the break-on-error mode.
+<p>
 When the break-on-error mode is set, the default error handler issues a hardware exception, which
 can make debugging more convenient.
-
-\return the previous state
+<p>
+@return the previous state
  */
 @Namespace("cv") public static native @Cast("bool") boolean setBreakOnError(@Cast("bool") boolean flag); public static class ErrorCallback extends FunctionPointer {
     static { Loader.load(); }
@@ -2443,22 +2443,22 @@ can make debugging more convenient.
 }
 
 
-/** @brief Sets the new error handler and the optional user data.
-
+/** \brief Sets the new error handler and the optional user data.
+<p>
   The function sets the new error handler, called from cv::error().
-
-  \param errCallback the new error handler. If NULL, the default error handler is used.
-  \param userdata the optional user data pointer, passed to the callback.
-  \param prevUserdata the optional output parameter where the previous user data pointer is stored
-
-  \return the previous error handler
+<p>
+  @param errCallback the new error handler. If NULL, the default error handler is used.
+  @param userdata the optional user data pointer, passed to the callback.
+  @param prevUserdata the optional output parameter where the previous user data pointer is stored
+<p>
+  @return the previous error handler
 */
 @Namespace("cv") public static native ErrorCallback redirectError( ErrorCallback errCallback, Pointer userdata/*=0*/, @Cast("void**") PointerPointer prevUserdata/*=0*/);
 @Namespace("cv") public static native ErrorCallback redirectError( ErrorCallback errCallback);
 @Namespace("cv") public static native ErrorCallback redirectError( ErrorCallback errCallback, Pointer userdata/*=0*/, @Cast("void**") @ByPtrPtr Pointer prevUserdata/*=0*/);
 
-/** @brief Returns a text string formatted using the printf-like expression.
-
+/** \brief Returns a text string formatted using the printf-like expression.
+<p>
 The function acts like sprintf but forms and returns an STL string. It can be used to form an error
 message in the Exception constructor.
 @param fmt printf-compatible formatting specifiers.
@@ -2473,88 +2473,88 @@ message in the Exception constructor.
 @Namespace("cv") public static native void glob(@Str String pattern, @ByRef StringVector result, @Cast("bool") boolean recursive/*=false*/);
 @Namespace("cv") public static native void glob(@Str String pattern, @ByRef StringVector result);
 
-/** @brief OpenCV will try to set the number of threads for the next parallel region.
-
+/** \brief OpenCV will try to set the number of threads for the next parallel region.
+<p>
 If threads == 0, OpenCV will disable threading optimizations and run all it's functions
 sequentially. Passing threads \< 0 will reset threads number to system default. This function must
 be called outside of parallel region.
-
+<p>
 OpenCV will try to run it's functions with specified threads number, but some behaviour differs from
 framework:
--   `TBB` – User-defined parallel constructions will run with the same threads number, if
+-   {@code TBB} – User-defined parallel constructions will run with the same threads number, if
     another does not specified. If late on user creates own scheduler, OpenCV will be use it.
--   `OpenMP` – No special defined behaviour.
--   `Concurrency` – If threads == 1, OpenCV will disable threading optimizations and run it's
+-   {@code OpenMP} – No special defined behaviour.
+-   {@code Concurrency} – If threads == 1, OpenCV will disable threading optimizations and run it's
     functions sequentially.
--   `GCD` – Supports only values \<= 0.
--   `C=` – No special defined behaviour.
+-   {@code GCD} – Supports only values \<= 0.
+-   {@code C=} – No special defined behaviour.
 @param nthreads Number of threads used by OpenCV.
-@sa getNumThreads, getThreadNum
+\sa getNumThreads, getThreadNum
  */
 @Namespace("cv") public static native void setNumThreads(int nthreads);
 
-/** @brief Returns the number of threads used by OpenCV for parallel regions.
-
+/** \brief Returns the number of threads used by OpenCV for parallel regions.
+<p>
 Always returns 1 if OpenCV is built without threading support.
-
+<p>
 The exact meaning of return value depends on the threading framework used by OpenCV library:
-- `TBB` – The number of threads, that OpenCV will try to use for parallel regions. If there is
+- {@code TBB} – The number of threads, that OpenCV will try to use for parallel regions. If there is
   any tbb::thread_scheduler_init in user code conflicting with OpenCV, then function returns
   default number of threads used by TBB library.
-- `OpenMP` – An upper bound on the number of threads that could be used to form a new team.
-- `Concurrency` – The number of threads, that OpenCV will try to use for parallel regions.
-- `GCD` – Unsupported; returns the GCD thread pool limit (512) for compatibility.
-- `C=` – The number of threads, that OpenCV will try to use for parallel regions, if before
+- {@code OpenMP} – An upper bound on the number of threads that could be used to form a new team.
+- {@code Concurrency} – The number of threads, that OpenCV will try to use for parallel regions.
+- {@code GCD} – Unsupported; returns the GCD thread pool limit (512) for compatibility.
+- {@code C=} – The number of threads, that OpenCV will try to use for parallel regions, if before
   called setNumThreads with threads \> 0, otherwise returns the number of logical CPUs,
   available for the process.
-@sa setNumThreads, getThreadNum
+\sa setNumThreads, getThreadNum
  */
 @Namespace("cv") public static native int getNumThreads();
 
-/** @brief Returns the index of the currently executed thread within the current parallel region. Always
+/** \brief Returns the index of the currently executed thread within the current parallel region. Always
 returns 0 if called outside of parallel region.
-
+<p>
 The exact meaning of return value depends on the threading framework used by OpenCV library:
-- `TBB` – Unsupported with current 4.1 TBB release. May be will be supported in future.
-- `OpenMP` – The thread number, within the current team, of the calling thread.
-- `Concurrency` – An ID for the virtual processor that the current context is executing on (0
+- {@code TBB} – Unsupported with current 4.1 TBB release. May be will be supported in future.
+- {@code OpenMP} – The thread number, within the current team, of the calling thread.
+- {@code Concurrency} – An ID for the virtual processor that the current context is executing on (0
   for master thread and unique number for others, but not necessary 1,2,3,...).
-- `GCD` – System calling thread's ID. Never returns 0 inside parallel region.
-- `C=` – The index of the current parallel task.
-@sa setNumThreads, getNumThreads
+- {@code GCD} – System calling thread's ID. Never returns 0 inside parallel region.
+- {@code C=} – The index of the current parallel task.
+\sa setNumThreads, getNumThreads
  */
 @Namespace("cv") public static native int getThreadNum();
 
-/** @brief Returns full configuration time cmake output.
-
+/** \brief Returns full configuration time cmake output.
+<p>
 Returned value is raw cmake output including version control system revision, compiler version,
 compiler flags, enabled modules and third party libraries, etc. Output format depends on target
 architecture.
  */
 @Namespace("cv") public static native @Str BytePointer getBuildInformation();
 
-/** @brief Returns the number of ticks.
-
+/** \brief Returns the number of ticks.
+<p>
 The function returns the number of ticks after the certain event (for example, when the machine was
 turned on). It can be used to initialize RNG or to measure a function execution time by reading the
 tick count before and after the function call. See also the tick frequency.
  */
 @Namespace("cv") public static native @Cast("int64") long getTickCount();
 
-/** @brief Returns the number of ticks per second.
-
+/** \brief Returns the number of ticks per second.
+<p>
 The function returns the number of ticks per second. That is, the following code computes the
 execution time in seconds:
-@code
+<pre><code>
     double t = (double)getTickCount();
     // do something ...
     t = ((double)getTickCount() - t)/getTickFrequency();
-@endcode
+</code></pre>
  */
 @Namespace("cv") public static native double getTickFrequency();
 
-/** @brief Returns the number of CPU ticks.
-
+/** \brief Returns the number of CPU ticks.
+<p>
 The function returns the current number of CPU ticks on some architectures (such as x86, x64,
 PowerPC). On other platforms the function is equivalent to getTickCount. It can also be used for
 very accurate time measurements, as well as for RNG initialization. Note that in case of multi-CPU
@@ -2567,8 +2567,8 @@ execution time.
  */
 @Namespace("cv") public static native @Cast("int64") long getCPUTickCount();
 
-/** @brief Available CPU features.
-
+/** \brief Available CPU features.
+<p>
 remember to keep this list identical to the one in cvdef.h
 */
 /** enum cv::CpuFeatures */
@@ -2598,8 +2598,8 @@ public static final int
 
     CPU_NEON            = 100;
 
-/** @brief Returns true if the specified feature is supported by the host hardware.
-
+/** \brief Returns true if the specified feature is supported by the host hardware.
+<p>
 The function returns true if the host hardware supports the specified feature. When user calls
 setUseOptimized(false), the subsequent calls to checkHardwareSupport() will return false until
 setUseOptimized(true) is called. This way user can dynamically switch on and off the optimized code
@@ -2608,21 +2608,21 @@ in OpenCV.
  */
 @Namespace("cv") public static native @Cast("bool") boolean checkHardwareSupport(int feature);
 
-/** @brief Returns the number of logical CPUs available for the process.
+/** \brief Returns the number of logical CPUs available for the process.
  */
 @Namespace("cv") public static native int getNumberOfCPUs();
 
 
-/** @brief Aligns a pointer to the specified number of bytes.
-
+/** \brief Aligns a pointer to the specified number of bytes.
+<p>
 The function returns the aligned pointer of the same type as the input pointer:
 \f[\texttt{(\_Tp*)(((size\_t)ptr + n-1) \& -n)}\f]
 @param ptr Aligned pointer.
 @param n Alignment size that must be a power of two.
  */
 
-/** @brief Aligns a buffer size to the specified number of bytes.
-
+/** \brief Aligns a buffer size to the specified number of bytes.
+<p>
 The function returns the minimum number that is greater or equal to sz and is divisible by n :
 \f[\texttt{(sz + n-1) \& -n}\f]
 @param sz Buffer size to align.
@@ -2630,14 +2630,14 @@ The function returns the minimum number that is greater or equal to sz and is di
  */
 @Namespace("cv") public static native @Cast("size_t") long alignSize(@Cast("size_t") long sz, int n);
 
-/** @brief Enables or disables the optimized code.
-
+/** \brief Enables or disables the optimized code.
+<p>
 The function can be used to dynamically turn on and off optimized code (code that uses SSE2, AVX,
 and other instructions on the platforms that support it). It sets a global flag that is further
 checked by OpenCV functions. Since the flag is not checked in the inner OpenCV loops, it is only
 safe to call the function on the very top level in your application where you can be sure that no
 other OpenCV function is currently executed.
-
+<p>
 By default, the optimized code is enabled unless you disable it in CMake. The current status can be
 retrieved using useOptimized.
 @param onoff The boolean flag specifying whether the optimized code should be used (onoff=true)
@@ -2645,8 +2645,8 @@ or not (onoff=false).
  */
 @Namespace("cv") public static native void setUseOptimized(@Cast("bool") boolean onoff);
 
-/** @brief Returns the status of optimized code usage.
-
+/** \brief Returns the status of optimized code usage.
+<p>
 The function returns true if the optimized code is enabled. Otherwise, it returns false.
  */
 @Namespace("cv") public static native @Cast("bool") boolean useOptimized();
@@ -2655,7 +2655,7 @@ The function returns true if the optimized code is enabled. Otherwise, it return
 
 /////////////////////////////// Parallel Primitives //////////////////////////////////
 
-/** @brief Base class for parallel data processors
+/** \brief Base class for parallel data processors
 */
 @Namespace("cv") public static class ParallelLoopBody extends Pointer {
     static { Loader.load(); }
@@ -2667,7 +2667,7 @@ The function returns true if the optimized code is enabled. Otherwise, it return
     public native @Name("operator ()") void apply(@Const @ByRef Range range);
 }
 
-/** @brief Parallel data processor
+/** \brief Parallel data processor
 */
 @Namespace("cv") public static native void parallel_for_(@Const @ByRef Range range, @Const @ByRef ParallelLoopBody body, double nstripes/*=-1.*/);
 @Namespace("cv") public static native void parallel_for_(@Const @ByRef Range range, @Const @ByRef ParallelLoopBody body);
@@ -2682,15 +2682,15 @@ The function returns true if the optimized code is enabled. Otherwise, it return
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Mutex(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Mutex(int size) { allocateArray(size); }
+    public Mutex(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Mutex position(int position) {
         return (Mutex)super.position(position);
     }
 
-    public Mutex() { allocate(); }
+    public Mutex() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public Mutex(@Const @ByRef Mutex m) { allocate(m); }
+    public Mutex(@Const @ByRef Mutex m) { super((Pointer)null); allocate(m); }
     private native void allocate(@Const @ByRef Mutex m);
     public native @ByRef @Name("operator =") Mutex put(@Const @ByRef Mutex m);
 
@@ -2713,7 +2713,7 @@ The function returns true if the optimized code is enabled. Otherwise, it return
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AutoLock(Pointer p) { super(p); }
 
-    public AutoLock(@ByRef Mutex m) { allocate(m); }
+    public AutoLock(@ByRef Mutex m) { super((Pointer)null); allocate(m); }
     private native void allocate(@ByRef Mutex m);
 }
 
@@ -2730,10 +2730,10 @@ The function returns true if the optimized code is enabled. Otherwise, it return
     public native Pointer getData();
 }
 
-/** @brief Designed for command line parsing
-
+/** \brief Designed for command line parsing
+<p>
 The sample below demonstrates how to use CommandLineParser:
-@code
+<pre><code>
     CommandLineParser parser(argc, argv, keys);
     parser.about("Application name v1.0.0");
 
@@ -2759,20 +2759,20 @@ The sample below demonstrates how to use CommandLineParser:
         parser.printErrors();
         return 0;
     }
-@endcode
-
+</code></pre>
+<p>
 ### Keys syntax
-
+<p>
 The keys parameter is a string containing several blocks, each one is enclosed in curley braces and
-describes one argument. Each argument contains three parts separated by the `|` symbol:
-
--# argument names is a space-separated list of option synonyms (to mark argument as positional, prefix it with the `@` symbol)
+describes one argument. Each argument contains three parts separated by the {@code |} symbol:
+<p>
+-# argument names is a space-separated list of option synonyms (to mark argument as positional, prefix it with the {@code @} symbol)
 -# default value will be used if the argument was not provided (can be empty)
 -# help message (can be empty)
-
+<p>
 For example:
-
-@code{.cpp}
+<p>
+<pre><code>{.cpp}
     const String keys =
         "{help h usage ? |      | print this message   }"
         "{@image1        |      | image1 for compare   }"
@@ -2784,13 +2784,13 @@ For example:
         "{ts timestamp   |      | use time stamp       }"
         ;
 }
-@endcode
-
+</code></pre>
+<p>
 ### Usage
-
+<p>
 For the described keys:
-
-@code{.sh}
+<p>
+<pre><code>{.sh}
     # Good call (3 positional parameters: image1, image2 and repeat; N is 200, ts is true)
     $ ./app -N=200 1.png 2.jpg 19 -ts
 
@@ -2798,12 +2798,12 @@ For the described keys:
     $ ./app -fps=aaa
     ERRORS:
     Exception: can not convert: [aaa] to [double]
-@endcode
+</code></pre>
  */
 
-/** @} core_utils
+/** \} core_utils
 
- *  @cond IGNORED
+ *  \cond IGNORED
 
 /////////////////////////////// AutoBuffer implementation //////////////////////////////////////// */
 
@@ -2834,7 +2834,7 @@ For the described keys:
 
 // #endif // OPENCV_NOSTL
 
-/** @endcond */
+/** \endcond */
 
  //namespace cv
 
@@ -2945,12 +2945,12 @@ For the described keys:
 // #  include "opencv2/core.hpp"
 // #endif
 
-/** @addtogroup core_c
-    @{
+/** \addtogroup core_c
+    \{
 */
 
-/** @brief This is the "metatype" used *only* as a function parameter.
-
+/** \brief This is the "metatype" used *only* as a function parameter.
+<p>
 It denotes that the function accepts arrays of multiple types, such as IplImage*, CvMat* or even
 CvSeq* sometimes. The particular array type is determined at runtime by analyzing the first 4
 bytes of the header. In C++ interface the role of CvArr is played by InputArray and OutputArray.
@@ -3074,19 +3074,19 @@ public static final int
 
 public static final long CV_RNG_COEFF = 4164903690L;
 
-/** @brief Initializes a random number generator state.
-
+/** \brief Initializes a random number generator state.
+<p>
 The function initializes a random number generator and returns the state. The pointer to the state
 can be then passed to the cvRandInt, cvRandReal and cvRandArr functions. In the current
 implementation a multiply-with-carry generator is used.
 @param seed 64-bit value used to initiate a random sequence
-@sa the C++ class RNG replaced CvRNG.
+\sa the C++ class RNG replaced CvRNG.
  */
 public static native @Cast("CvRNG") long cvRNG( @Cast("int64") long seed/*=-1*/);
 public static native @Cast("CvRNG") long cvRNG();
 
-/** @brief Returns a 32-bit unsigned integer and updates RNG.
-
+/** \brief Returns a 32-bit unsigned integer and updates RNG.
+<p>
 The function returns a uniformly-distributed random 32-bit unsigned integer and updates the RNG
 state. It is similar to the rand() function from the C runtime library, except that OpenCV functions
 always generates a 32-bit random number, regardless of the platform.
@@ -3096,8 +3096,8 @@ public static native @Cast("unsigned") int cvRandInt( @Cast("CvRNG*") LongPointe
 public static native @Cast("unsigned") int cvRandInt( @Cast("CvRNG*") LongBuffer rng );
 public static native @Cast("unsigned") int cvRandInt( @Cast("CvRNG*") long[] rng );
 
-/** @brief Returns a floating-point random number and updates RNG.
-
+/** \brief Returns a floating-point random number and updates RNG.
+<p>
 The function returns a uniformly-distributed random floating-point number between 0 and 1 (1 is not
 included).
 @param rng RNG state initialized by cvRNG
@@ -3149,7 +3149,7 @@ public static final int IPL_BORDER_WRAP =       3;
 
 /** The IplImage is taken from the Intel Image Processing Library, in which the format is native. OpenCV
 only supports a subset of possible IplImage formats, as outlined in the parameter list above.
-
+<p>
 In addition to the above restrictions, OpenCV handles ROIs differently. OpenCV functions require
 that the image size or ROI size of all source and destination images match exactly. On the other
 hand, the Intel Image Processing Library processes the area of intersection between the source and
@@ -3160,7 +3160,7 @@ destination images (or ROIs), allowing them to vary independently.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IplImage(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public IplImage(int size) { allocateArray(size); }
+    public IplImage(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public IplImage position(int position) {
         return (IplImage)super.position(position);
@@ -3224,9 +3224,9 @@ destination images (or ROIs), allowing them to vary independently.
     public native @Cast("char*") BytePointer imageDataOrigin(); public native IplImage imageDataOrigin(BytePointer imageDataOrigin);
 
 // #ifdef __cplusplus
-    public IplImage() { allocate(); }
+    public IplImage() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public IplImage(@Const @ByRef Mat m) { allocate(m); }
+    public IplImage(@Const @ByRef Mat m) { super((Pointer)null); allocate(m); }
     private native void allocate(@Const @ByRef Mat m);
 // #endif
 }
@@ -3241,9 +3241,9 @@ destination images (or ROIs), allowing them to vary independently.
 public static class IplROI extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public IplROI() { allocate(); }
+    public IplROI() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public IplROI(int size) { allocateArray(size); }
+    public IplROI(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IplROI(Pointer p) { super(p); }
     private native void allocate();
@@ -3263,9 +3263,9 @@ public static class IplROI extends Pointer {
 public static class IplConvKernel extends org.bytedeco.javacpp.helper.opencv_imgproc.AbstractIplConvKernel {
     static { Loader.load(); }
     /** Default native constructor. */
-    public IplConvKernel() { allocate(); }
+    public IplConvKernel() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public IplConvKernel(int size) { allocateArray(size); }
+    public IplConvKernel(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IplConvKernel(Pointer p) { super(p); }
     private native void allocate();
@@ -3285,9 +3285,9 @@ public static class IplConvKernel extends org.bytedeco.javacpp.helper.opencv_img
 public static class IplConvKernelFP extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public IplConvKernelFP() { allocate(); }
+    public IplConvKernelFP() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public IplConvKernelFP(int size) { allocateArray(size); }
+    public IplConvKernelFP(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IplConvKernelFP(Pointer p) { super(p); }
     private native void allocate();
@@ -3345,13 +3345,13 @@ public static final String CV_TYPE_NAME_MAT =    "opencv-matrix";
 
 /** Matrix elements are stored row by row. Element (i, j) (i - 0-based row index, j - 0-based column
 index) of a matrix can be retrieved or modified using CV_MAT_ELEM macro:
-
+<p>
     uchar pixval = CV_MAT_ELEM(grayimg, uchar, i, j)
     CV_MAT_ELEM(cameraMatrix, float, 0, 2) = image.width*0.5f;
-
+<p>
 To access multiple-channel matrices, you can use
 CV_MAT_ELEM(matrix, type, i, j\*nchannels + channel_idx).
-
+<p>
 @deprecated CvMat is now obsolete; consider using Mat instead.
  */
 @NoOffset public static class CvMat extends AbstractCvMat {
@@ -3359,7 +3359,7 @@ CV_MAT_ELEM(matrix, type, i, j\*nchannels + channel_idx).
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvMat(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvMat(int size) { allocateArray(size); }
+    public CvMat(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvMat position(int position) {
         return (CvMat)super.position(position);
@@ -3388,11 +3388,11 @@ CV_MAT_ELEM(matrix, type, i, j\*nchannels + channel_idx).
 
 
 // #ifdef __cplusplus
-    public CvMat() { allocate(); }
+    public CvMat() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public CvMat(@Const @ByRef CvMat m) { allocate(m); }
+    public CvMat(@Const @ByRef CvMat m) { super((Pointer)null); allocate(m); }
     private native void allocate(@Const @ByRef CvMat m);
-    public CvMat(@Const @ByRef Mat m) { allocate(m); }
+    public CvMat(@Const @ByRef Mat m) { super((Pointer)null); allocate(m); }
     private native void allocate(@Const @ByRef Mat m);
 // #endif
 
@@ -3458,8 +3458,8 @@ public static native @ByVal CvMat cvMat( int rows, int cols, int type);
 // #define CV_MAT_ELEM( mat, elemtype, row, col )
 //     (*(elemtype*)CV_MAT_ELEM_PTR_FAST( mat, row, col, sizeof(elemtype)))
 
-/** @brief Returns the particular element of single-channel floating-point matrix.
-
+/** \brief Returns the particular element of single-channel floating-point matrix.
+<p>
 The function is a fast replacement for cvGetReal2D in the case of single-channel floating-point
 matrices. It is faster because it is inline, it does fewer checks for array type and array element
 type, and it checks for the row and column ranges only in debug mode.
@@ -3469,8 +3469,8 @@ type, and it checks for the row and column ranges only in debug mode.
  */
 public static native double cvmGet( @Const CvMat mat, int row, int col );
 
-/** @brief Sets a specific element of a single-channel floating-point matrix.
-
+/** \brief Sets a specific element of a single-channel floating-point matrix.
+<p>
 The function is a fast replacement for cvSetReal2D in the case of single-channel floating-point
 matrices. It is faster because it is inline, it does fewer checks for array type and array element
 type, and it checks for the row and column ranges only in debug mode.
@@ -3503,7 +3503,7 @@ public static final int CV_MAX_DIM_HEAP =       1024;
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvMatND(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvMatND(int size) { allocateArray(size); }
+    public CvMatND(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvMatND position(int position) {
         return (CvMatND)super.position(position);
@@ -3525,9 +3525,9 @@ public static final int CV_MAX_DIM_HEAP =       1024;
         @Name({"dim", ".step"}) public native int dim_step(int i); public native CvMatND dim_step(int i, int dim_step);
 
 // #ifdef __cplusplus
-    public CvMatND() { allocate(); }
+    public CvMatND() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public CvMatND(@Const @ByRef Mat m) { allocate(m); }
+    public CvMatND(@Const @ByRef Mat m) { super((Pointer)null); allocate(m); }
     private native void allocate(@Const @ByRef Mat m);
 // #endif
 }
@@ -3549,9 +3549,9 @@ public static final String CV_TYPE_NAME_SPARSE_MAT =    "opencv-sparse-matrix";
 public static class CvSparseMat extends AbstractCvSparseMat {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvSparseMat() { allocate(); }
+    public CvSparseMat() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvSparseMat(int size) { allocateArray(size); }
+    public CvSparseMat(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSparseMat(Pointer p) { super(p); }
     private native void allocate();
@@ -3595,9 +3595,9 @@ public static class CvSparseMat extends AbstractCvSparseMat {
 public static class CvSparseNode extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvSparseNode() { allocate(); }
+    public CvSparseNode() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvSparseNode(int size) { allocateArray(size); }
+    public CvSparseNode(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSparseNode(Pointer p) { super(p); }
     private native void allocate();
@@ -3613,9 +3613,9 @@ public static class CvSparseNode extends Pointer {
 public static class CvSparseMatIterator extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvSparseMatIterator() { allocate(); }
+    public CvSparseMatIterator() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvSparseMatIterator(int size) { allocateArray(size); }
+    public CvSparseMatIterator(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSparseMatIterator(Pointer p) { super(p); }
     private native void allocate();
@@ -3653,9 +3653,9 @@ public static final int CV_HIST_UNIFORM =       1;
 public static class CvHistogram extends org.bytedeco.javacpp.helper.opencv_imgproc.AbstractCvHistogram {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvHistogram() { allocate(); }
+    public CvHistogram() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvHistogram(int size) { allocateArray(size); }
+    public CvHistogram(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvHistogram(Pointer p) { super(p); }
     private native void allocate();
@@ -3695,13 +3695,13 @@ public static class CvHistogram extends org.bytedeco.javacpp.helper.opencv_imgpr
 \****************************************************************************************/
 
 /*************************************** CvRect *****************************************/
-/** @sa Rect_ */
+/** \sa Rect_ */
 @NoOffset public static class CvRect extends AbstractCvRect {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvRect(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvRect(int size) { allocateArray(size); }
+    public CvRect(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvRect position(int position) {
         return (CvRect)super.position(position);
@@ -3713,9 +3713,9 @@ public static class CvHistogram extends org.bytedeco.javacpp.helper.opencv_imgpr
     public native int height(); public native CvRect height(int height);
 
 // #ifdef __cplusplus
-    public CvRect(int _x/*=0*/, int _y/*=0*/, int w/*=0*/, int h/*=0*/) { allocate(_x, _y, w, h); }
+    public CvRect(int _x/*=0*/, int _y/*=0*/, int w/*=0*/, int h/*=0*/) { super((Pointer)null); allocate(_x, _y, w, h); }
     private native void allocate(int _x/*=0*/, int _y/*=0*/, int w/*=0*/, int h/*=0*/);
-    public CvRect() { allocate(); }
+    public CvRect() { super((Pointer)null); allocate(); }
     private native void allocate();
 // #endif
 }
@@ -3735,14 +3735,14 @@ public static final int CV_TERMCRIT_ITER =    1;
 public static final int CV_TERMCRIT_NUMBER =  CV_TERMCRIT_ITER;
 public static final int CV_TERMCRIT_EPS =     2;
 
-/** @sa TermCriteria
+/** \sa TermCriteria
  */
 @NoOffset public static class CvTermCriteria extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvTermCriteria(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvTermCriteria(int size) { allocateArray(size); }
+    public CvTermCriteria(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvTermCriteria position(int position) {
         return (CvTermCriteria)super.position(position);
@@ -3756,11 +3756,11 @@ public static final int CV_TERMCRIT_EPS =     2;
     public native double epsilon(); public native CvTermCriteria epsilon(double epsilon);
 
 // #ifdef __cplusplus
-    public CvTermCriteria(int _type/*=0*/, int _iter/*=0*/, double _eps/*=0*/) { allocate(_type, _iter, _eps); }
+    public CvTermCriteria(int _type/*=0*/, int _iter/*=0*/, double _eps/*=0*/) { super((Pointer)null); allocate(_type, _iter, _eps); }
     private native void allocate(int _type/*=0*/, int _iter/*=0*/, double _eps/*=0*/);
-    public CvTermCriteria() { allocate(); }
+    public CvTermCriteria() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public CvTermCriteria(@Const @ByRef TermCriteria t) { allocate(t); }
+    public CvTermCriteria(@Const @ByRef TermCriteria t) { super((Pointer)null); allocate(t); }
     private native void allocate(@Const @ByRef TermCriteria t);
     public native @ByVal @Name("operator cv::TermCriteria") TermCriteria asTermCriteria();
 // #endif
@@ -3777,7 +3777,7 @@ public static native @ByVal CvTermCriteria cvTermCriteria( int type, int max_ite
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvPoint(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvPoint(int size) { allocateArray(size); }
+    public CvPoint(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvPoint position(int position) {
         return (CvPoint)super.position(position);
@@ -3787,9 +3787,9 @@ public static native @ByVal CvTermCriteria cvTermCriteria( int type, int max_ite
     public native int y(); public native CvPoint y(int y);
 
 // #ifdef __cplusplus
-    public CvPoint(int _x/*=0*/, int _y/*=0*/) { allocate(_x, _y); }
+    public CvPoint(int _x/*=0*/, int _y/*=0*/) { super((Pointer)null); allocate(_x, _y); }
     private native void allocate(int _x/*=0*/, int _y/*=0*/);
-    public CvPoint() { allocate(); }
+    public CvPoint() { super((Pointer)null); allocate(); }
     private native void allocate();
 // #endif
 }
@@ -3803,7 +3803,7 @@ public static native @ByVal CvPoint cvPoint( int x, int y );
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvPoint2D32f(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvPoint2D32f(int size) { allocateArray(size); }
+    public CvPoint2D32f(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvPoint2D32f position(int position) {
         return (CvPoint2D32f)super.position(position);
@@ -3813,9 +3813,9 @@ public static native @ByVal CvPoint cvPoint( int x, int y );
     public native float y(); public native CvPoint2D32f y(float y);
 
 // #ifdef __cplusplus
-    public CvPoint2D32f(float _x/*=0*/, float _y/*=0*/) { allocate(_x, _y); }
+    public CvPoint2D32f(float _x/*=0*/, float _y/*=0*/) { super((Pointer)null); allocate(_x, _y); }
     private native void allocate(float _x/*=0*/, float _y/*=0*/);
-    public CvPoint2D32f() { allocate(); }
+    public CvPoint2D32f() { super((Pointer)null); allocate(); }
     private native void allocate();
 // #endif
 }
@@ -3839,7 +3839,7 @@ public static native @ByVal @Cast("CvPoint*") int[] cvPointFrom32f( @ByVal @Cast
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvPoint3D32f(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvPoint3D32f(int size) { allocateArray(size); }
+    public CvPoint3D32f(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvPoint3D32f position(int position) {
         return (CvPoint3D32f)super.position(position);
@@ -3850,9 +3850,9 @@ public static native @ByVal @Cast("CvPoint*") int[] cvPointFrom32f( @ByVal @Cast
     public native float z(); public native CvPoint3D32f z(float z);
 
 // #ifdef __cplusplus
-    public CvPoint3D32f(float _x/*=0*/, float _y/*=0*/, float _z/*=0*/) { allocate(_x, _y, _z); }
+    public CvPoint3D32f(float _x/*=0*/, float _y/*=0*/, float _z/*=0*/) { super((Pointer)null); allocate(_x, _y, _z); }
     private native void allocate(float _x/*=0*/, float _y/*=0*/, float _z/*=0*/);
-    public CvPoint3D32f() { allocate(); }
+    public CvPoint3D32f() { super((Pointer)null); allocate(); }
     private native void allocate();
 // #endif
 }
@@ -3864,9 +3864,9 @@ public static native @ByVal CvPoint3D32f cvPoint3D32f( double x, double y, doubl
 public static class CvPoint2D64f extends AbstractCvPoint2D64f {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvPoint2D64f() { allocate(); }
+    public CvPoint2D64f() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvPoint2D64f(int size) { allocateArray(size); }
+    public CvPoint2D64f(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvPoint2D64f(Pointer p) { super(p); }
     private native void allocate();
@@ -3886,9 +3886,9 @@ public static native @ByVal CvPoint2D64f cvPoint2D64f( double x, double y );
 public static class CvPoint3D64f extends AbstractCvPoint3D64f {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvPoint3D64f() { allocate(); }
+    public CvPoint3D64f() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvPoint3D64f(int size) { allocateArray(size); }
+    public CvPoint3D64f(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvPoint3D64f(Pointer p) { super(p); }
     private native void allocate();
@@ -3913,7 +3913,7 @@ public static native @ByVal CvPoint3D64f cvPoint3D64f( double x, double y, doubl
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSize(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvSize(int size) { allocateArray(size); }
+    public CvSize(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvSize position(int position) {
         return (CvSize)super.position(position);
@@ -3923,9 +3923,9 @@ public static native @ByVal CvPoint3D64f cvPoint3D64f( double x, double y, doubl
     public native int height(); public native CvSize height(int height);
 
 // #ifdef __cplusplus
-    public CvSize(int w/*=0*/, int h/*=0*/) { allocate(w, h); }
+    public CvSize(int w/*=0*/, int h/*=0*/) { super((Pointer)null); allocate(w, h); }
     private native void allocate(int w/*=0*/, int h/*=0*/);
-    public CvSize() { allocate(); }
+    public CvSize() { super((Pointer)null); allocate(); }
     private native void allocate();
 // #endif
 }
@@ -3938,7 +3938,7 @@ public static native @ByVal CvSize cvSize( int width, int height );
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSize2D32f(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvSize2D32f(int size) { allocateArray(size); }
+    public CvSize2D32f(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvSize2D32f position(int position) {
         return (CvSize2D32f)super.position(position);
@@ -3948,9 +3948,9 @@ public static native @ByVal CvSize cvSize( int width, int height );
     public native float height(); public native CvSize2D32f height(float height);
 
 // #ifdef __cplusplus
-    public CvSize2D32f(float w/*=0*/, float h/*=0*/) { allocate(w, h); }
+    public CvSize2D32f(float w/*=0*/, float h/*=0*/) { super((Pointer)null); allocate(w, h); }
     private native void allocate(float w/*=0*/, float h/*=0*/);
-    public CvSize2D32f() { allocate(); }
+    public CvSize2D32f() { super((Pointer)null); allocate(); }
     private native void allocate();
 // #endif
 }
@@ -3958,14 +3958,14 @@ public static native @ByVal CvSize cvSize( int width, int height );
 /** constructs CvSize2D32f structure. */
 public static native @ByVal CvSize2D32f cvSize2D32f( double width, double height );
 
-/** @sa RotatedRect
+/** \sa RotatedRect
  */
 @NoOffset public static class CvBox2D extends AbstractCvBox2D {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvBox2D(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvBox2D(int size) { allocateArray(size); }
+    public CvBox2D(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvBox2D position(int position) {
         return (CvBox2D)super.position(position);
@@ -3980,15 +3980,15 @@ public static native @ByVal CvSize2D32f cvSize2D32f( double width, double height
     public native float angle(); public native CvBox2D angle(float angle);
 
 // #ifdef __cplusplus
-    public CvBox2D(@ByVal(nullValue = "CvPoint2D32f()") CvPoint2D32f c/*=CvPoint2D32f()*/, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s/*=CvSize2D32f()*/, float a/*=0*/) { allocate(c, s, a); }
+    public CvBox2D(@ByVal(nullValue = "CvPoint2D32f()") CvPoint2D32f c/*=CvPoint2D32f()*/, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s/*=CvSize2D32f()*/, float a/*=0*/) { super((Pointer)null); allocate(c, s, a); }
     private native void allocate(@ByVal(nullValue = "CvPoint2D32f()") CvPoint2D32f c/*=CvPoint2D32f()*/, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s/*=CvSize2D32f()*/, float a/*=0*/);
-    public CvBox2D() { allocate(); }
+    public CvBox2D() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public CvBox2D(@ByVal(nullValue = "CvPoint2D32f()") @Cast("CvPoint2D32f*") FloatBuffer c/*=CvPoint2D32f()*/, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s/*=CvSize2D32f()*/, float a/*=0*/) { allocate(c, s, a); }
+    public CvBox2D(@ByVal(nullValue = "CvPoint2D32f()") @Cast("CvPoint2D32f*") FloatBuffer c/*=CvPoint2D32f()*/, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s/*=CvSize2D32f()*/, float a/*=0*/) { super((Pointer)null); allocate(c, s, a); }
     private native void allocate(@ByVal(nullValue = "CvPoint2D32f()") @Cast("CvPoint2D32f*") FloatBuffer c/*=CvPoint2D32f()*/, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s/*=CvSize2D32f()*/, float a/*=0*/);
-    public CvBox2D(@ByVal(nullValue = "CvPoint2D32f()") @Cast("CvPoint2D32f*") float[] c/*=CvPoint2D32f()*/, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s/*=CvSize2D32f()*/, float a/*=0*/) { allocate(c, s, a); }
+    public CvBox2D(@ByVal(nullValue = "CvPoint2D32f()") @Cast("CvPoint2D32f*") float[] c/*=CvPoint2D32f()*/, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s/*=CvSize2D32f()*/, float a/*=0*/) { super((Pointer)null); allocate(c, s, a); }
     private native void allocate(@ByVal(nullValue = "CvPoint2D32f()") @Cast("CvPoint2D32f*") float[] c/*=CvPoint2D32f()*/, @ByVal(nullValue = "CvSize2D32f()") CvSize2D32f s/*=CvSize2D32f()*/, float a/*=0*/);
-    public CvBox2D(@Const @ByRef RotatedRect rr) { allocate(rr); }
+    public CvBox2D(@Const @ByRef RotatedRect rr) { super((Pointer)null); allocate(rr); }
     private native void allocate(@Const @ByRef RotatedRect rr);
     public native @ByVal @Name("operator cv::RotatedRect") RotatedRect asRotatedRect();
 // #endif
@@ -3999,9 +3999,9 @@ public static native @ByVal CvSize2D32f cvSize2D32f( double width, double height
 public static class CvLineIterator extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvLineIterator() { allocate(); }
+    public CvLineIterator() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvLineIterator(int size) { allocateArray(size); }
+    public CvLineIterator(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvLineIterator(Pointer p) { super(p); }
     private native void allocate();
@@ -4032,7 +4032,7 @@ public static final CvSlice CV_WHOLE_SEQ =  cvSlice(0, CV_WHOLE_SEQ_END_INDEX);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSlice(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvSlice(int size) { allocateArray(size); }
+    public CvSlice(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvSlice position(int position) {
         return (CvSlice)super.position(position);
@@ -4042,11 +4042,11 @@ public static final CvSlice CV_WHOLE_SEQ =  cvSlice(0, CV_WHOLE_SEQ_END_INDEX);
     public native int end_index(); public native CvSlice end_index(int end_index);
 
 // #if defined(__cplusplus) && !defined(__CUDACC__)
-    public CvSlice(int start/*=0*/, int end/*=0*/) { allocate(start, end); }
+    public CvSlice(int start/*=0*/, int end/*=0*/) { super((Pointer)null); allocate(start, end); }
     private native void allocate(int start/*=0*/, int end/*=0*/);
-    public CvSlice() { allocate(); }
+    public CvSlice() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public CvSlice(@Const @ByRef Range r) { allocate(r); }
+    public CvSlice(@Const @ByRef Range r) { super((Pointer)null); allocate(r); }
     private native void allocate(@Const @ByRef Range r);
     public native @ByVal @Name("operator cv::Range") Range asRange();
 // #endif
@@ -4057,14 +4057,14 @@ public static native @ByVal CvSlice cvSlice( int start, int end );
 
 
 /************************************* CvScalar *****************************************/
-/** @sa Scalar_
+/** \sa Scalar_
  */
 @NoOffset public static class CvScalar extends AbstractCvScalar {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvScalar(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvScalar(int size) { allocateArray(size); }
+    public CvScalar(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CvScalar position(int position) {
         return (CvScalar)super.position(position);
@@ -4074,11 +4074,11 @@ public static native @ByVal CvSlice cvSlice( int start, int end );
     @MemberGetter public native DoublePointer val();
 
 // #ifdef __cplusplus
-    public CvScalar() { allocate(); }
+    public CvScalar() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public CvScalar(double d0, double d1/*=0*/, double d2/*=0*/, double d3/*=0*/) { allocate(d0, d1, d2, d3); }
+    public CvScalar(double d0, double d1/*=0*/, double d2/*=0*/, double d3/*=0*/) { super((Pointer)null); allocate(d0, d1, d2, d3); }
     private native void allocate(double d0, double d1/*=0*/, double d2/*=0*/, double d3/*=0*/);
-    public CvScalar(double d0) { allocate(d0); }
+    public CvScalar(double d0) { super((Pointer)null); allocate(d0); }
     private native void allocate(double d0);
 // #endif
 }
@@ -4101,9 +4101,9 @@ public static native @ByVal CvScalar cvScalarAll( double val0123 );
 public static class CvMemBlock extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvMemBlock() { allocate(); }
+    public CvMemBlock() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvMemBlock(int size) { allocateArray(size); }
+    public CvMemBlock(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvMemBlock(Pointer p) { super(p); }
     private native void allocate();
@@ -4121,9 +4121,9 @@ public static final int CV_STORAGE_MAGIC_VAL =    0x42890000;
 public static class CvMemStorage extends AbstractCvMemStorage {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvMemStorage() { allocate(); }
+    public CvMemStorage() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvMemStorage(int size) { allocateArray(size); }
+    public CvMemStorage(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvMemStorage(Pointer p) { super(p); }
     private native void allocate();
@@ -4153,9 +4153,9 @@ public static class CvMemStorage extends AbstractCvMemStorage {
 public static class CvMemStoragePos extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvMemStoragePos() { allocate(); }
+    public CvMemStoragePos() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvMemStoragePos(int size) { allocateArray(size); }
+    public CvMemStoragePos(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvMemStoragePos(Pointer p) { super(p); }
     private native void allocate();
@@ -4174,9 +4174,9 @@ public static class CvMemStoragePos extends Pointer {
 public static class CvSeqBlock extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvSeqBlock() { allocate(); }
+    public CvSeqBlock() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvSeqBlock(int size) { allocateArray(size); }
+    public CvSeqBlock(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSeqBlock(Pointer p) { super(p); }
     private native void allocate();
@@ -4227,9 +4227,9 @@ public static class CvSeqBlock extends Pointer {
 public static class CvSeq extends AbstractCvSeq {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvSeq() { allocate(); }
+    public CvSeq() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvSeq(int size) { allocateArray(size); }
+    public CvSeq(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSeq(Pointer p) { super(p); }
     private native void allocate();
@@ -4271,7 +4271,7 @@ public static final String CV_TYPE_NAME_SEQ =             "opencv-sequence";
 public static final String CV_TYPE_NAME_SEQ_TREE =        "opencv-sequence-tree";
 
 /*************************************** Set ********************************************/
-/** @brief Set
+/** \brief Set
   Order is not preserved. There can be gaps between sequence elements.
   After the element has been inserted it stays in the same place all the time.
   The MSB(most-significant or sign bit) of the first field (flags) is 0 iff the element exists.
@@ -4283,9 +4283,9 @@ public static final String CV_TYPE_NAME_SEQ_TREE =        "opencv-sequence-tree"
 public static class CvSetElem extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvSetElem() { allocate(); }
+    public CvSetElem() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvSetElem(int size) { allocateArray(size); }
+    public CvSetElem(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSetElem(Pointer p) { super(p); }
     private native void allocate();
@@ -4306,9 +4306,9 @@ public static class CvSetElem extends Pointer {
 public static class CvSet extends AbstractCvSet {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvSet() { allocate(); }
+    public CvSet() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvSet(int size) { allocateArray(size); }
+    public CvSet(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSet(Pointer p) { super(p); }
     private native void allocate();
@@ -4358,25 +4358,25 @@ public static final int CV_SET_ELEM_FREE_FLAG = CV_SET_ELEM_FREE_FLAG();
 
 /************************************* Graph ********************************************/
 
-/** @name Graph
-
+/** \name Graph
+<p>
 We represent a graph as a set of vertices. Vertices contain their adjacency lists (more exactly,
 pointers to first incoming or outcoming edge (or 0 if isolated vertex)). Edges are stored in
 another set. There is a singly-linked list of incoming/outcoming edges for each vertex.
-
+<p>
 Each edge consists of:
-
+<p>
 - Two pointers to the starting and ending vertices (vtx[0] and vtx[1] respectively).
-
+<p>
     A graph may be oriented or not. In the latter case, edges between vertex i to vertex j are not
 distinguished during search operations.
-
+<p>
 - Two pointers to next edges for the starting and ending vertices, where next[0] points to the
 next edge in the vtx[0] adjacency list and next[1] points to the next edge in the vtx[1]
 adjacency list.
-
+<p>
 @see CvGraphEdge, CvGraphVtx, CvGraphVtx2D, CvGraph
-@{
+\{
 */
 // #define CV_GRAPH_EDGE_FIELDS()
 //     int flags;
@@ -4393,9 +4393,9 @@ adjacency list.
 public static class CvGraphEdge extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvGraphEdge() { allocate(); }
+    public CvGraphEdge() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvGraphEdge(int size) { allocateArray(size); }
+    public CvGraphEdge(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvGraphEdge(Pointer p) { super(p); }
     private native void allocate();
@@ -4415,9 +4415,9 @@ public static class CvGraphEdge extends Pointer {
 public static class CvGraphVtx extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvGraphVtx() { allocate(); }
+    public CvGraphVtx() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvGraphVtx(int size) { allocateArray(size); }
+    public CvGraphVtx(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvGraphVtx(Pointer p) { super(p); }
     private native void allocate();
@@ -4433,9 +4433,9 @@ public static class CvGraphVtx extends Pointer {
 public static class CvGraphVtx2D extends CvGraphVtx {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvGraphVtx2D() { allocate(); }
+    public CvGraphVtx2D() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvGraphVtx2D(int size) { allocateArray(size); }
+    public CvGraphVtx2D(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvGraphVtx2D(Pointer p) { super(p); }
     private native void allocate();
@@ -4460,9 +4460,9 @@ public static class CvGraphVtx2D extends CvGraphVtx {
 public static class CvGraph extends AbstractCvGraph {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvGraph() { allocate(); }
+    public CvGraph() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvGraph(int size) { allocateArray(size); }
+    public CvGraph(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvGraph(Pointer p) { super(p); }
     private native void allocate();
@@ -4505,16 +4505,16 @@ public static class CvGraph extends AbstractCvGraph {
 
 public static final String CV_TYPE_NAME_GRAPH = "opencv-graph";
 
-/** @} */
+/** \} */
 
 /*********************************** Chain/Countour *************************************/
 
 public static class CvChain extends CvSeq {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvChain() { allocate(); }
+    public CvChain() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvChain(int size) { allocateArray(size); }
+    public CvChain(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvChain(Pointer p) { super(p); }
     private native void allocate();
@@ -4562,9 +4562,9 @@ public static class CvChain extends CvSeq {
 public static class CvContour extends CvSeq {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvContour() { allocate(); }
+    public CvContour() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvContour(int size) { allocateArray(size); }
+    public CvContour(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvContour(Pointer p) { super(p); }
     private native void allocate();
@@ -4754,9 +4754,9 @@ public static final int CV_SEQ_INDEX =           (CV_SEQ_KIND_GENERIC  | CV_SEQ_
 public static class CvSeqWriter extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvSeqWriter() { allocate(); }
+    public CvSeqWriter() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvSeqWriter(int size) { allocateArray(size); }
+    public CvSeqWriter(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSeqWriter(Pointer p) { super(p); }
     private native void allocate();
@@ -4793,9 +4793,9 @@ public static class CvSeqWriter extends Pointer {
 public static class CvSeqReader extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvSeqReader() { allocate(); }
+    public CvSeqReader() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvSeqReader(int size) { allocateArray(size); }
+    public CvSeqReader(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvSeqReader(Pointer p) { super(p); }
     private native void allocate();
@@ -4954,8 +4954,8 @@ public static final int CV_STORAGE_FORMAT_AUTO =   0;
 public static final int CV_STORAGE_FORMAT_XML =    8;
 public static final int CV_STORAGE_FORMAT_YAML =  16;
 
-/** @brief List of attributes. :
-
+/** \brief List of attributes. :
+<p>
 In the current implementation, attributes are used to pass extra parameters when writing user
 objects (see cvWrite). XML attributes inside tags are not supported, aside from the object type
 specification (type_id attribute).
@@ -4964,9 +4964,9 @@ specification (type_id attribute).
 public static class CvAttrList extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvAttrList() { allocate(); }
+    public CvAttrList() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvAttrList(int size) { allocateArray(size); }
+    public CvAttrList(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvAttrList(Pointer p) { super(p); }
     private native void allocate();
@@ -5032,9 +5032,9 @@ public static final int CV_NODE_SEQ_SIMPLE = 256;
 public static class CvString extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvString() { allocate(); }
+    public CvString() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvString(int size) { allocateArray(size); }
+    public CvString(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvString(Pointer p) { super(p); }
     private native void allocate();
@@ -5052,9 +5052,9 @@ public static class CvString extends Pointer {
 public static class CvStringHashNode extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvStringHashNode() { allocate(); }
+    public CvStringHashNode() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvStringHashNode(int size) { allocateArray(size); }
+    public CvStringHashNode(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvStringHashNode(Pointer p) { super(p); }
     private native void allocate();
@@ -5079,9 +5079,9 @@ public static class CvStringHashNode extends Pointer {
 public static class CvFileNode extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvFileNode() { allocate(); }
+    public CvFileNode() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvFileNode(int size) { allocateArray(size); }
+    public CvFileNode(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvFileNode(Pointer p) { super(p); }
     private native void allocate();
@@ -5152,8 +5152,8 @@ public static class CvFileNode extends Pointer {
 // #ifdef __cplusplus
 // #endif
 
-/** @brief Type information
-
+/** \brief Type information
+<p>
 The structure contains information about one of the standard or user-defined types. Instances of the
 type may or may not contain a pointer to the corresponding CvTypeInfo structure. In any case, there
 is a way to find the type info structure for a given object using the cvTypeOf function.
@@ -5165,9 +5165,9 @@ specialized types from generic standard types and override the basic methods.
 public static class CvTypeInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvTypeInfo() { allocate(); }
+    public CvTypeInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvTypeInfo(int size) { allocateArray(size); }
+    public CvTypeInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvTypeInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -5204,9 +5204,9 @@ public static class CvTypeInfo extends Pointer {
 public static class CvPluginFuncInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvPluginFuncInfo() { allocate(); }
+    public CvPluginFuncInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvPluginFuncInfo(int size) { allocateArray(size); }
+    public CvPluginFuncInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvPluginFuncInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -5226,9 +5226,9 @@ public static class CvPluginFuncInfo extends Pointer {
 public static class CvModuleInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvModuleInfo() { allocate(); }
+    public CvModuleInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvModuleInfo(int size) { allocateArray(size); }
+    public CvModuleInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvModuleInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -5243,7 +5243,7 @@ public static class CvModuleInfo extends Pointer {
     public native CvPluginFuncInfo func_tab(); public native CvModuleInfo func_tab(CvPluginFuncInfo func_tab);
 }
 
-/** @} */
+/** \} */
 
 // #endif /*__OPENCV_CORE_TYPES_H__*/
 
@@ -5318,21 +5318,21 @@ public static class CvModuleInfo extends Pointer {
 // #ifdef __cplusplus
 // #endif
 
-/** @addtogroup core_c
-    @{
+/** \addtogroup core_c
+    \{
 */
 
 /****************************************************************************************\
 *          Array allocation, deallocation, initialization and access to elements         *
 \****************************************************************************************/
 
-/** `malloc` wrapper.
+/** {@code malloc} wrapper.
    If there is no enough memory, the function
    (as well as other OpenCV functions that call cvAlloc)
    raises an error. */
 public static native Pointer cvAlloc( @Cast("size_t") long size );
 
-/** `free` wrapper.
+/** {@code free} wrapper.
    Here and further all the memory releasing functions
    (that all call cvFree) take double pointer in order to
    to clear pointer to the data after releasing it.
@@ -5341,16 +5341,16 @@ public static native Pointer cvAlloc( @Cast("size_t") long size );
 public static native void cvFree_( Pointer ptr );
 // #define cvFree(ptr) (cvFree_(*(ptr)), *(ptr)=0)
 
-/** @brief Creates an image header but does not allocate the image data.
-
+/** \brief Creates an image header but does not allocate the image data.
+<p>
 @param size Image width and height
 @param depth Image depth (see cvCreateImage )
 @param channels Number of channels (see cvCreateImage )
  */
 public static native IplImage cvCreateImageHeader( @ByVal CvSize size, int depth, int channels );
 
-/** @brief Initializes an image header that was previously allocated.
-
+/** \brief Initializes an image header that was previously allocated.
+<p>
 The returned IplImage\* points to the initialized header.
 @param image Image header to initialize
 @param size Image width and height
@@ -5365,13 +5365,13 @@ public static native IplImage cvInitImageHeader( IplImage image, @ByVal CvSize s
 public static native IplImage cvInitImageHeader( IplImage image, @ByVal CvSize size, int depth,
                                    int channels);
 
-/** @brief Creates an image header and allocates the image data.
-
+/** \brief Creates an image header and allocates the image data.
+<p>
 This function call is equivalent to the following code:
-@code
+<pre><code>
     header = cvCreateImageHeader(size, depth, channels);
     cvCreateData(header);
-@endcode
+</code></pre>
 @param size Image width and height
 @param depth Bit depth of image elements. See IplImage for valid depths.
 @param channels Number of channels per pixel. See IplImage for details. This function only creates
@@ -5379,32 +5379,32 @@ images with interleaved channels.
  */
 public static native IplImage cvCreateImage( @ByVal CvSize size, int depth, int channels );
 
-/** @brief Deallocates an image header.
-
+/** \brief Deallocates an image header.
+<p>
 This call is an analogue of :
-@code
+<pre><code>
     if(image )
     {
         iplDeallocate(*image, IPL_IMAGE_HEADER | IPL_IMAGE_ROI);
         *image = 0;
     }
-@endcode
+</code></pre>
 but it does not use IPL functions by default (see the CV_TURN_ON_IPL_COMPATIBILITY macro).
 @param image Double pointer to the image header
  */
 public static native void cvReleaseImageHeader( @Cast("IplImage**") PointerPointer image );
 public static native void cvReleaseImageHeader( @ByPtrPtr IplImage image );
 
-/** @brief Deallocates the image header and the image data.
-
+/** \brief Deallocates the image header and the image data.
+<p>
 This call is a shortened form of :
-@code
+<pre><code>
     if(*image )
     {
         cvReleaseData(*image);
         cvReleaseImageHeader(image);
     }
-@endcode
+</code></pre>
 @param image Double pointer to the image header
 */
 public static native void cvReleaseImage( @Cast("IplImage**") PointerPointer image );
@@ -5413,8 +5413,8 @@ public static native void cvReleaseImage( @ByPtrPtr IplImage image );
 /** Creates a copy of IPL image (widthStep may differ) */
 public static native IplImage cvCloneImage( @Const IplImage image );
 
-/** @brief Sets the channel of interest in an IplImage.
-
+/** \brief Sets the channel of interest in an IplImage.
+<p>
 If the ROI is set to NULL and the coi is *not* 0, the ROI is allocated. Most OpenCV functions do
 *not* support the COI setting, so to process an individual image/matrix channel one may copy (via
 cvCopy or cvSplit) the channel to a separate image/matrix, process it and then copy the result
@@ -5425,19 +5425,19 @@ etc. Note that the channel indices become 1-based.
  */
 public static native void cvSetImageCOI( IplImage image, int coi );
 
-/** @brief Returns the index of the channel of interest.
-
+/** \brief Returns the index of the channel of interest.
+<p>
 Returns the channel of interest of in an IplImage. Returned values correspond to the coi in
 cvSetImageCOI.
 @param image A pointer to the image header
  */
 public static native int cvGetImageCOI( @Const IplImage image );
 
-/** @brief Sets an image Region Of Interest (ROI) for a given rectangle.
-
+/** \brief Sets an image Region Of Interest (ROI) for a given rectangle.
+<p>
 If the original image ROI was NULL and the rect is not the whole image, the ROI structure is
 allocated.
-
+<p>
 Most OpenCV functions support the use of ROI and treat the image rectangle as a separate image. For
 example, all of the pixel coordinates are counted from the top-left (or bottom-left) corner of the
 ROI, not the original image.
@@ -5446,26 +5446,26 @@ ROI, not the original image.
  */
 public static native void cvSetImageROI( IplImage image, @ByVal CvRect rect );
 
-/** @brief Resets the image ROI to include the entire image and releases the ROI structure.
-
+/** \brief Resets the image ROI to include the entire image and releases the ROI structure.
+<p>
 This produces a similar result to the following, but in addition it releases the ROI structure. :
-@code
+<pre><code>
     cvSetImageROI(image, cvRect(0, 0, image->width, image->height ));
     cvSetImageCOI(image, 0);
-@endcode
+</code></pre>
 @param image A pointer to the image header
  */
 public static native void cvResetImageROI( IplImage image );
 
-/** @brief Returns the image ROI.
-
+/** \brief Returns the image ROI.
+<p>
 If there is no ROI set, cvRect(0,0,image-\>width,image-\>height) is returned.
 @param image A pointer to the image header
  */
 public static native @ByVal CvRect cvGetImageROI( @Const IplImage image );
 
-/** @brief Creates a matrix header but does not allocate the matrix data.
-
+/** \brief Creates a matrix header but does not allocate the matrix data.
+<p>
 The function allocates a new matrix header and returns a pointer to it. The matrix data can then be
 allocated using cvCreateData or set explicitly to user-allocated data via cvSetData.
 @param rows Number of rows in the matrix
@@ -5476,11 +5476,11 @@ public static native CvMat cvCreateMatHeader( int rows, int cols, int type );
 
 public static final int CV_AUTOSTEP =  0x7fffffff;
 
-/** @brief Initializes a pre-allocated matrix header.
-
+/** \brief Initializes a pre-allocated matrix header.
+<p>
 This function is often used to process raw data with OpenCV matrix functions. For example, the
 following code computes the matrix product of two matrices, stored as ordinary arrays:
-@code
+<pre><code>
     double a[] = { 1, 2, 3, 4,
                    5, 6, 7, 8,
                    9, 10, 11, 12 };
@@ -5499,7 +5499,7 @@ following code computes the matrix product of two matrices, stored as ordinary a
 
     cvMatMulAdd(&Ma, &Mb, 0, &Mc);
     // the c array now contains the product of a (3x4) and b (4x3)
-@endcode
+</code></pre>
 @param mat A pointer to the matrix header to be initialized
 @param rows Number of rows in the matrix
 @param cols Number of columns in the matrix
@@ -5514,13 +5514,13 @@ public static native CvMat cvInitMatHeader( CvMat mat, int rows, int cols,
 public static native CvMat cvInitMatHeader( CvMat mat, int rows, int cols,
                               int type );
 
-/** @brief Creates a matrix header and allocates the matrix data.
-
+/** \brief Creates a matrix header and allocates the matrix data.
+<p>
 The function call is equivalent to the following code:
-@code
+<pre><code>
     CvMat* mat = cvCreateMatHeader(rows, cols, type);
     cvCreateData(mat);
-@endcode
+</code></pre>
 @param rows Number of rows in the matrix
 @param cols Number of columns in the matrix
 @param type The type of the matrix elements in the form
@@ -5530,24 +5530,24 @@ example, CV _ 8UC1 means the elements are 8-bit unsigned and the there is 1 chan
  */
 public static native CvMat cvCreateMat( int rows, int cols, int type );
 
-/** @brief Deallocates a matrix.
-
+/** \brief Deallocates a matrix.
+<p>
 The function decrements the matrix data reference counter and deallocates matrix header. If the data
 reference counter is 0, it also deallocates the data. :
-@code
+<pre><code>
     if(*mat )
         cvDecRefData(*mat);
     cvFree((void**)mat);
-@endcode
+</code></pre>
 @param mat Double pointer to the matrix
  */
 public static native void cvReleaseMat( @Cast("CvMat**") PointerPointer mat );
 public static native void cvReleaseMat( @ByPtrPtr CvMat mat );
 
-/** @brief Decrements an array data reference counter.
-
+/** \brief Decrements an array data reference counter.
+<p>
 The function decrements the data reference counter in a CvMat or CvMatND if the reference counter
-
+<p>
 pointer is not NULL. If the counter reaches zero, the data is deallocated. In the current
 implementation the reference counter is not NULL only if the data was allocated using the
 cvCreateData function. The counter will be NULL in other cases such as: external data was assigned
@@ -5557,8 +5557,8 @@ converted from an image or n-dimensional matrix header.
  */
 public static native void cvDecRefData( CvArr arr );
 
-/** @brief Increments array data reference counter.
-
+/** \brief Increments array data reference counter.
+<p>
 The function increments CvMat or CvMatND data reference counter and returns the new counter value if
 the reference counter pointer is not NULL, otherwise it returns zero.
 @param arr Array header
@@ -5570,10 +5570,10 @@ public static native int cvIncRefData( CvArr arr );
 public static native CvMat cvCloneMat( @Const CvMat mat );
 
 
-/** @brief Returns matrix header corresponding to the rectangular sub-array of input image or matrix.
-
+/** \brief Returns matrix header corresponding to the rectangular sub-array of input image or matrix.
+<p>
 The function returns header, corresponding to a specified rectangle of the input array. In other
-
+<p>
 words, it allows the user to treat a rectangular part of input array as a stand-alone array. ROI is
 taken into account by the function so the sub-array of ROI is actually extracted.
 @param arr Input array
@@ -5583,8 +5583,8 @@ taken into account by the function so the sub-array of ROI is actually extracted
 public static native CvMat cvGetSubRect( @Const CvArr arr, CvMat submat, @ByVal CvRect rect );
 public static native CvMat cvGetSubArr(CvArr arg1, CvMat arg2, @ByVal CvRect arg3);
 
-/** @brief Returns array row or row span.
-
+/** \brief Returns array row or row span.
+<p>
 The functions return the header, corresponding to a specified row/row span of the input array.
 cvGetRow(arr, submat, row) is a shortcut for cvGetRows(arr, submat, row, row+1).
 @param arr Input array
@@ -5600,7 +5600,7 @@ public static native CvMat cvGetRows( @Const CvArr arr, CvMat submat,
 public static native CvMat cvGetRows( @Const CvArr arr, CvMat submat,
                         int start_row, int end_row);
 
-/** @overload
+/** \overload
 @param arr Input array
 @param submat Pointer to the resulting sub-array header
 @param row Zero-based index of the selected row
@@ -5608,10 +5608,10 @@ public static native CvMat cvGetRows( @Const CvArr arr, CvMat submat,
 public static native CvMat cvGetRow( @Const CvArr arr, CvMat submat, int row );
 
 
-/** @brief Returns one of more array columns.
-
+/** \brief Returns one of more array columns.
+<p>
 The functions return the header, corresponding to a specified column span of the input array. That
-
+<p>
 is, no data is copied. Therefore, any modifications of the submatrix will affect the original array.
 If you need to copy the columns, use cvCloneMat. cvGetCol(arr, submat, col) is a shortcut for
 cvGetCols(arr, submat, col, col+1).
@@ -5623,15 +5623,15 @@ cvGetCols(arr, submat, col, col+1).
 public static native CvMat cvGetCols( @Const CvArr arr, CvMat submat,
                         int start_col, int end_col );
 
-/** @overload
+/** \overload
 @param arr Input array
 @param submat Pointer to the resulting sub-array header
 @param col Zero-based index of the selected column
 */
 public static native CvMat cvGetCol( @Const CvArr arr, CvMat submat, int col );
 
-/** @brief Returns one of array diagonals.
-
+/** \brief Returns one of array diagonals.
+<p>
 The function returns the header, corresponding to a specified diagonal of the input array.
 @param arr Input array
 @param submat Pointer to the resulting sub-array header
@@ -5650,8 +5650,8 @@ public static native void cvScalarToRawData( @Const CvScalar scalar, Pointer dat
 
 public static native void cvRawDataToScalar( @Const Pointer data, int type, CvScalar scalar );
 
-/** @brief Creates a new matrix header but does not allocate the matrix data.
-
+/** \brief Creates a new matrix header but does not allocate the matrix data.
+<p>
 The function allocates a header for a multi-dimensional dense array. The array data can further be
 allocated using cvCreateData or set explicitly to user-allocated data via cvSetData.
 @param dims Number of array dimensions
@@ -5662,13 +5662,13 @@ public static native CvMatND cvCreateMatNDHeader( int dims, @Const IntPointer si
 public static native CvMatND cvCreateMatNDHeader( int dims, @Const IntBuffer sizes, int type );
 public static native CvMatND cvCreateMatNDHeader( int dims, @Const int[] sizes, int type );
 
-/** @brief Creates the header and allocates the data for a multi-dimensional dense array.
-
+/** \brief Creates the header and allocates the data for a multi-dimensional dense array.
+<p>
 This function call is equivalent to the following code:
-@code
+<pre><code>
     CvMatND* mat = cvCreateMatNDHeader(dims, sizes, type);
     cvCreateData(mat);
-@endcode
+</code></pre>
 @param dims Number of array dimensions. This must not exceed CV_MAX_DIM (32 by default, but can be
 changed at build time).
 @param sizes Array of dimension sizes.
@@ -5678,8 +5678,8 @@ public static native CvMatND cvCreateMatND( int dims, @Const IntPointer sizes, i
 public static native CvMatND cvCreateMatND( int dims, @Const IntBuffer sizes, int type );
 public static native CvMatND cvCreateMatND( int dims, @Const int[] sizes, int type );
 
-/** @brief Initializes a pre-allocated multi-dimensional array header.
-
+/** \brief Initializes a pre-allocated multi-dimensional array header.
+<p>
 @param mat A pointer to the array header to be initialized
 @param dims The number of array dimensions
 @param sizes An array of dimension sizes
@@ -5699,15 +5699,15 @@ public static native CvMatND cvInitMatNDHeader( CvMatND mat, int dims, @Const in
 public static native CvMatND cvInitMatNDHeader( CvMatND mat, int dims, @Const int[] sizes,
                                     int type );
 
-/** @brief Deallocates a multi-dimensional array.
-
+/** \brief Deallocates a multi-dimensional array.
+<p>
 The function decrements the array data reference counter and releases the array header. If the
 reference counter reaches 0, it also deallocates the data. :
-@code
+<pre><code>
     if(*mat )
         cvDecRefData(*mat);
     cvFree((void**)mat);
-@endcode
+</code></pre>
 @param mat Double pointer to the array
  */
 public static native void cvReleaseMatND( @Cast("CvMatND**") PointerPointer mat );
@@ -5716,8 +5716,8 @@ public static native void cvReleaseMatND( @ByPtrPtr CvMatND mat );
 /** Creates a copy of CvMatND (except, may be, steps) */
 public static native CvMatND cvCloneMatND( @Const CvMatND mat );
 
-/** @brief Creates sparse array.
-
+/** \brief Creates sparse array.
+<p>
 The function allocates a multi-dimensional sparse array. Initially the array contain no elements,
 that is PtrND and other related functions will return 0 for every index.
 @param dims Number of array dimensions. In contrast to the dense matrix, the number of dimensions is
@@ -5729,8 +5729,8 @@ public static native CvSparseMat cvCreateSparseMat( int dims, @Const IntPointer 
 public static native CvSparseMat cvCreateSparseMat( int dims, @Const IntBuffer sizes, int type );
 public static native CvSparseMat cvCreateSparseMat( int dims, @Const int[] sizes, int type );
 
-/** @brief Deallocates sparse array.
-
+/** \brief Deallocates sparse array.
+<p>
 The function releases the sparse array and clears the array pointer upon exit.
 @param mat Double pointer to the array
  */
@@ -5740,8 +5740,8 @@ public static native void cvReleaseSparseMat( @ByPtrPtr CvSparseMat mat );
 /** Creates a copy of CvSparseMat (except, may be, zero items) */
 public static native CvSparseMat cvCloneSparseMat( @Const CvSparseMat mat );
 
-/** @brief Initializes sparse array elements iterator.
-
+/** \brief Initializes sparse array elements iterator.
+<p>
 The function initializes iterator of sparse array elements and returns pointer to the first element,
 or NULL if the array is empty.
 @param mat Input array
@@ -5750,12 +5750,12 @@ or NULL if the array is empty.
 public static native CvSparseNode cvInitSparseMatIterator( @Const CvSparseMat mat,
                                               CvSparseMatIterator mat_iterator );
 
-/** @brief Returns the next sparse matrix element
-
+/** \brief Returns the next sparse matrix element
+<p>
 The function moves iterator to the next sparse matrix element and returns pointer to it. In the
 current version there is no any particular order of the elements, because they are stored in the
 hash table. The sample below demonstrates how to iterate through the sparse matrix:
-@code
+<pre><code>
     // print all the non-zero sparse matrix elements and compute their sum
     double sum = 0;
     int i, dims = cvGetDims(sparsemat);
@@ -5775,7 +5775,7 @@ hash table. The sample below demonstrates how to iterate through the sparse matr
     }
 
     printf("nTotal sum = %g\n", sum);
-@endcode
+</code></pre>
 @param mat_iterator Sparse array iterator
  */
 public static native CvSparseNode cvGetNextSparseNode( CvSparseMatIterator mat_iterator );
@@ -5787,9 +5787,9 @@ public static final int CV_MAX_ARR = 10;
 public static class CvNArrayIterator extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvNArrayIterator() { allocate(); }
+    public CvNArrayIterator() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvNArrayIterator(int size) { allocateArray(size); }
+    public CvNArrayIterator(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvNArrayIterator(Pointer p) { super(p); }
     private native void allocate();
@@ -5839,30 +5839,30 @@ public static native int cvInitNArrayIterator( int count, @ByPtrPtr CvArr arrs,
 public static native int cvNextNArraySlice( CvNArrayIterator array_iterator );
 
 
-/** @brief Returns type of array elements.
-
+/** \brief Returns type of array elements.
+<p>
 The function returns type of the array elements. In the case of IplImage the type is converted to
 CvMat-like representation. For example, if the image has been created as:
-@code
+<pre><code>
     IplImage* img = cvCreateImage(cvSize(640, 480), IPL_DEPTH_8U, 3);
-@endcode
+</code></pre>
 The code cvGetElemType(img) will return CV_8UC3.
 @param arr Input array
  */
 public static native int cvGetElemType( @Const CvArr arr );
 
-/** @brief Return number of array dimensions
-
+/** \brief Return number of array dimensions
+<p>
 The function returns the array dimensionality and the array of dimension sizes. In the case of
 IplImage or CvMat it always returns 2 regardless of number of image/matrix rows. For example, the
 following code calculates total number of array elements:
-@code
+<pre><code>
     int sizes[CV_MAX_DIM];
     int i, total = 1;
     int dims = cvGetDims(arr, size);
     for(i = 0; i < dims; i++ )
         total *= sizes[i];
-@endcode
+</code></pre>
 @param arr Input array
 @param sizes Optional output vector of the array dimension sizes. For 2d arrays the number of rows
 (height) goes first, number of columns (width) next.
@@ -5873,8 +5873,8 @@ public static native int cvGetDims( @Const CvArr arr, IntBuffer sizes/*=NULL*/ )
 public static native int cvGetDims( @Const CvArr arr, int[] sizes/*=NULL*/ );
 
 
-/** @brief Returns array size along the specified dimension.
-
+/** \brief Returns array size along the specified dimension.
+<p>
 @param arr Input array
 @param index Zero-based dimension index (for matrices 0 means number of rows, 1 means number of
 columns; for images 0 means height, 1 means width)
@@ -5882,15 +5882,15 @@ columns; for images 0 means height, 1 means width)
 public static native int cvGetDimSize( @Const CvArr arr, int index );
 
 
-/** @brief Return pointer to a particular array element.
-
+/** \brief Return pointer to a particular array element.
+<p>
 The functions return a pointer to a specific array element. Number of array dimension should match
 to the number of indices passed to the function except for cvPtr1D function that can be used for
 sequential access to 1D, 2D or nD dense arrays.
-
+<p>
 The functions can be used for sparse arrays as well - if the requested node does not exist they
 create it and set it to zero.
-
+<p>
 All these as well as other functions accessing array elements ( cvGetND , cvGetRealND , cvSet
 , cvSetND , cvSetRealND ) raise an error in case if the element index is out of range.
 @param arr Input array
@@ -5901,12 +5901,12 @@ public static native @Cast("uchar*") BytePointer cvPtr1D( @Const CvArr arr, int 
 public static native @Cast("uchar*") BytePointer cvPtr1D( @Const CvArr arr, int idx0);
 public static native @Cast("uchar*") ByteBuffer cvPtr1D( @Const CvArr arr, int idx0, IntBuffer type/*=NULL*/);
 public static native @Cast("uchar*") byte[] cvPtr1D( @Const CvArr arr, int idx0, int[] type/*=NULL*/);
-/** @overload */
+/** \overload */
 public static native @Cast("uchar*") BytePointer cvPtr2D( @Const CvArr arr, int idx0, int idx1, IntPointer type/*=NULL*/ );
 public static native @Cast("uchar*") BytePointer cvPtr2D( @Const CvArr arr, int idx0, int idx1 );
 public static native @Cast("uchar*") ByteBuffer cvPtr2D( @Const CvArr arr, int idx0, int idx1, IntBuffer type/*=NULL*/ );
 public static native @Cast("uchar*") byte[] cvPtr2D( @Const CvArr arr, int idx0, int idx1, int[] type/*=NULL*/ );
-/** @overload */
+/** \overload */
 public static native @Cast("uchar*") BytePointer cvPtr3D( @Const CvArr arr, int idx0, int idx1, int idx2,
                       IntPointer type/*=NULL*/);
 public static native @Cast("uchar*") BytePointer cvPtr3D( @Const CvArr arr, int idx0, int idx1, int idx2);
@@ -5914,7 +5914,7 @@ public static native @Cast("uchar*") ByteBuffer cvPtr3D( @Const CvArr arr, int i
                       IntBuffer type/*=NULL*/);
 public static native @Cast("uchar*") byte[] cvPtr3D( @Const CvArr arr, int idx0, int idx1, int idx2,
                       int[] type/*=NULL*/);
-/** @overload
+/** \overload
 @param arr Input array
 @param idx Array of the element indices
 @param type Optional output parameter: type of matrix elements
@@ -5937,19 +5937,19 @@ public static native @Cast("uchar*") byte[] cvPtrND( @Const CvArr arr, @Const in
                       @Cast("unsigned*") int[] precalc_hashval/*=NULL*/);
 public static native @Cast("uchar*") byte[] cvPtrND( @Const CvArr arr, @Const int[] idx);
 
-/** @brief Return a specific array element.
-
+/** \brief Return a specific array element.
+<p>
 The functions return a specific array element. In the case of a sparse array the functions return 0
 if the requested node does not exist (no new node is created by the functions).
 @param arr Input array
 @param idx0 The first zero-based component of the element index
  */
 public static native @ByVal CvScalar cvGet1D( @Const CvArr arr, int idx0 );
-/** @overload */
+/** \overload */
 public static native @ByVal CvScalar cvGet2D( @Const CvArr arr, int idx0, int idx1 );
-/** @overload */
+/** \overload */
 public static native @ByVal CvScalar cvGet3D( @Const CvArr arr, int idx0, int idx1, int idx2 );
-/** @overload
+/** \overload
 @param arr Input array
 @param idx Array of the element indices
 */
@@ -5957,23 +5957,23 @@ public static native @ByVal CvScalar cvGetND( @Const CvArr arr, @Const IntPointe
 public static native @ByVal CvScalar cvGetND( @Const CvArr arr, @Const IntBuffer idx );
 public static native @ByVal CvScalar cvGetND( @Const CvArr arr, @Const int[] idx );
 
-/** @brief Return a specific element of single-channel 1D, 2D, 3D or nD array.
-
+/** \brief Return a specific element of single-channel 1D, 2D, 3D or nD array.
+<p>
 Returns a specific element of a single-channel array. If the array has multiple channels, a runtime
 error is raised. Note that Get?D functions can be used safely for both single-channel and
 multiple-channel arrays though they are a bit slower.
-
+<p>
 In the case of a sparse array the functions return 0 if the requested node does not exist (no new
 node is created by the functions).
 @param arr Input array. Must have a single channel.
 @param idx0 The first zero-based component of the element index
  */
 public static native double cvGetReal1D( @Const CvArr arr, int idx0 );
-/** @overload */
+/** \overload */
 public static native double cvGetReal2D( @Const CvArr arr, int idx0, int idx1 );
-/** @overload */
+/** \overload */
 public static native double cvGetReal3D( @Const CvArr arr, int idx0, int idx1, int idx2 );
-/** @overload
+/** \overload
 @param arr Input array. Must have a single channel.
 @param idx Array of the element indices
 */
@@ -5981,8 +5981,8 @@ public static native double cvGetRealND( @Const CvArr arr, @Const IntPointer idx
 public static native double cvGetRealND( @Const CvArr arr, @Const IntBuffer idx );
 public static native double cvGetRealND( @Const CvArr arr, @Const int[] idx );
 
-/** @brief Change the particular array element.
-
+/** \brief Change the particular array element.
+<p>
 The functions assign the new value to a particular array element. In the case of a sparse array the
 functions create the node if it does not exist yet.
 @param arr Input array
@@ -5990,11 +5990,11 @@ functions create the node if it does not exist yet.
 @param value The assigned value
  */
 public static native void cvSet1D( CvArr arr, int idx0, @ByVal CvScalar value );
-/** @overload */
+/** \overload */
 public static native void cvSet2D( CvArr arr, int idx0, int idx1, @ByVal CvScalar value );
-/** @overload */
+/** \overload */
 public static native void cvSet3D( CvArr arr, int idx0, int idx1, int idx2, @ByVal CvScalar value );
-/** @overload
+/** \overload
 @param arr Input array
 @param idx Array of the element indices
 @param value The assigned value
@@ -6003,24 +6003,24 @@ public static native void cvSetND( CvArr arr, @Const IntPointer idx, @ByVal CvSc
 public static native void cvSetND( CvArr arr, @Const IntBuffer idx, @ByVal CvScalar value );
 public static native void cvSetND( CvArr arr, @Const int[] idx, @ByVal CvScalar value );
 
-/** @brief Change a specific array element.
-
+/** \brief Change a specific array element.
+<p>
 The functions assign a new value to a specific element of a single-channel array. If the array has
 multiple channels, a runtime error is raised. Note that the Set\*D function can be used safely for
 both single-channel and multiple-channel arrays, though they are a bit slower.
-
+<p>
 In the case of a sparse array the functions create the node if it does not yet exist.
 @param arr Input array
 @param idx0 The first zero-based component of the element index
 @param value The assigned value
  */
 public static native void cvSetReal1D( CvArr arr, int idx0, double value );
-/** @overload */
+/** \overload */
 public static native void cvSetReal2D( CvArr arr, int idx0, int idx1, double value );
-/** @overload */
+/** \overload */
 public static native void cvSetReal3D( CvArr arr, int idx0,
                         int idx1, int idx2, double value );
-/** @overload
+/** \overload
 @param arr Input array
 @param idx Array of the element indices
 @param value The assigned value
@@ -6035,18 +6035,18 @@ public static native void cvClearND( CvArr arr, @Const IntPointer idx );
 public static native void cvClearND( CvArr arr, @Const IntBuffer idx );
 public static native void cvClearND( CvArr arr, @Const int[] idx );
 
-/** @brief Returns matrix header for arbitrary array.
-
+/** \brief Returns matrix header for arbitrary array.
+<p>
 The function returns a matrix header for the input array that can be a matrix - CvMat, an image -
 IplImage, or a multi-dimensional dense array - CvMatND (the third option is allowed only if
 allowND != 0) . In the case of matrix the function simply returns the input pointer. In the case of
 IplImage\* or CvMatND it initializes the header structure with parameters of the current image ROI
 and returns &header. Because COI is not supported by CvMat, it is returned separately.
-
+<p>
 The function provides an easy way to handle both types of arrays - IplImage and CvMat using the same
 code. Input array must have non-zero data pointer, otherwise the function will report an error.
-
-@note If the input array is IplImage with planar data layout and COI set, the function returns the
+<p>
+\note If the input array is IplImage with planar data layout and COI set, the function returns the
 pointer to the selected plane and COI == 0. This feature allows user to process IplImage structures
 with planar data layout, even though OpenCV does not support such images.
 @param arr Input array
@@ -6055,7 +6055,7 @@ with planar data layout, even though OpenCV does not support such images.
 @param allowND If non-zero, the function accepts multi-dimensional dense arrays (CvMatND\*) and
 returns 2D matrix (if CvMatND has two dimensions) or 1D matrix (when CvMatND has 1 dimension or
 more than 2 dimensions). The CvMatND array must be continuous.
-@sa cvGetImage, cvarrToMat.
+\sa cvGetImage, cvarrToMat.
  */
 public static native CvMat cvGetMat( @Const CvArr arr, CvMat header,
                        IntPointer coi/*=NULL*/,
@@ -6068,8 +6068,8 @@ public static native CvMat cvGetMat( @Const CvArr arr, CvMat header,
                        int[] coi/*=NULL*/,
                        int allowND/*=0*/);
 
-/** @brief Returns image header for arbitrary array.
-
+/** \brief Returns image header for arbitrary array.
+<p>
 The function returns the image header for the input array that can be a matrix (CvMat) or image
 (IplImage). In the case of an image the function simply returns the input pointer. In the case of
 CvMat it initializes an image_header structure with the parameters of the input matrix. Note that
@@ -6081,13 +6081,13 @@ this function, we will get different headers if the ROI is set in the original i
 public static native IplImage cvGetImage( @Const CvArr arr, IplImage image_header );
 
 
-/** @brief Changes the shape of a multi-dimensional array without copying the data.
-
+/** \brief Changes the shape of a multi-dimensional array without copying the data.
+<p>
 The function is an advanced version of cvReshape that can work with multi-dimensional arrays as
 well (though it can work with ordinary images and matrices) and change the number of dimensions.
-
+<p>
 Below are the two samples from the cvReshape description rewritten using cvReshapeMatND:
-@code
+<pre><code>
     IplImage* color_img = cvCreateImage(cvSize(320,240), IPL_DEPTH_8U, 3);
     IplImage gray_img_hdr, *gray_img;
     gray_img = (IplImage*)cvReshapeMatND(color_img, sizeof(gray_img_hdr), &gray_img_hdr, 1, 0, 0);
@@ -6096,15 +6096,15 @@ Below are the two samples from the cvReshape description rewritten using cvResha
     CvMatND* mat = cvCreateMatND(3, size, CV_32F);
     CvMat row_header, *row;
     row = (CvMat*)cvReshapeMatND(mat, sizeof(row_header), &row_header, 0, 1, 0);
-@endcode
+</code></pre>
 In C, the header file for this function includes a convenient macro cvReshapeND that does away with
 the sizeof_header parameter. So, the lines containing the call to cvReshapeMatND in the examples
 may be replaced as follow:
-@code
+<pre><code>
     gray_img = (IplImage*)cvReshapeND(color_img, &gray_img_hdr, 1, 0, 0);
     ...
     row = (CvMat*)cvReshapeND(mat, &row_header, 0, 1, 0);
-@endcode
+</code></pre>
 @param arr Input array
 @param sizeof_header Size of output header to distinguish between IplImage, CvMat and CvMatND
 output headers
@@ -6131,26 +6131,26 @@ public static native CvArr cvReshapeMatND( @Const CvArr arr,
 //       cvReshapeMatND( (arr), sizeof(*(header)), (header),
 //                       (new_cn), (new_dims), (new_sizes))
 
-/** @brief Changes shape of matrix/image without copying data.
-
+/** \brief Changes shape of matrix/image without copying data.
+<p>
 The function initializes the CvMat header so that it points to the same data as the original array
 but has a different shape - different number of channels, different number of rows, or both.
-
+<p>
 The following example code creates one image buffer and two image headers, the first is for a
 320x240x3 image and the second is for a 960x240x1 image:
-@code
+<pre><code>
     IplImage* color_img = cvCreateImage(cvSize(320,240), IPL_DEPTH_8U, 3);
     CvMat gray_mat_hdr;
     IplImage gray_img_hdr, *gray_img;
     cvReshape(color_img, &gray_mat_hdr, 1);
     gray_img = cvGetImage(&gray_mat_hdr, &gray_img_hdr);
-@endcode
+</code></pre>
 And the next example converts a 3x3 matrix to a single 1x9 vector:
-@code
+<pre><code>
     CvMat* mat = cvCreateMat(3, 3, CV_32F);
     CvMat row_header, *row;
     row = cvReshape(mat, &row_header, 0, 1);
-@endcode
+</code></pre>
 @param arr Input array
 @param header Output header to be filled
 @param new_cn New number of channels. 'new_cn = 0' means that the number of channels remains
@@ -6167,8 +6167,8 @@ public static native CvMat cvReshape( @Const CvArr arr, CvMat header,
    vertical direction to fill destination array */
 public static native void cvRepeat( @Const CvArr src, CvArr dst );
 
-/** @brief Allocates array data
-
+/** \brief Allocates array data
+<p>
 The function allocates image, matrix or multi-dimensional dense array data. Note that in the case of
 matrix types OpenCV allocation functions are used. In the case of IplImage they are used unless
 CV_TURN_ON_IPL_COMPATIBILITY() has been called before. In the latter case IPL functions are used
@@ -6177,8 +6177,8 @@ to allocate the data.
  */
 public static native void cvCreateData( CvArr arr );
 
-/** @brief Releases array data.
-
+/** \brief Releases array data.
+<p>
 The function releases the array data. In the case of CvMat or CvMatND it simply calls
 cvDecRefData(), that is the function can not deallocate external data. See also the note to
 cvCreateData .
@@ -6186,8 +6186,8 @@ cvCreateData .
  */
 public static native void cvReleaseData( CvArr arr );
 
-/** @brief Assigns user data to the array header.
-
+/** \brief Assigns user data to the array header.
+<p>
 The function assigns user data to the array header. Header should be initialized before using
 cvCreateMatHeader, cvCreateImageHeader, cvCreateMatNDHeader, cvInitMatHeader,
 cvInitImageHeader or cvInitMatNDHeader.
@@ -6197,16 +6197,16 @@ cvInitImageHeader or cvInitMatNDHeader.
  */
 public static native void cvSetData( CvArr arr, Pointer data, int step );
 
-/** @brief Retrieves low-level information about the array.
-
+/** \brief Retrieves low-level information about the array.
+<p>
 The function fills output variables with low-level information about the array data. All output
-
+<p>
 parameters are optional, so some of the pointers may be set to NULL. If the array is IplImage with
 ROI set, the parameters of ROI are returned.
-
+<p>
 The following example shows how to get access to array elements. It computes absolute values of the
 array elements :
-@code
+<pre><code>
     float* data;
     int step;
     CvSize size;
@@ -6217,7 +6217,7 @@ array elements :
     for(int y = 0; y < size.height; y++, data += step )
         for(int x = 0; x < size.width; x++ )
             data[x] = (float)fabs(data[x]);
-@endcode
+</code></pre>
 @param arr Array header
 @param data Output pointer to the whole image origin or ROI origin if ROI is set
 @param step Output full row length in bytes
@@ -6239,20 +6239,20 @@ public static native void cvGetRawData( @Const CvArr arr, @Cast("uchar**") @ByPt
                          CvSize roi_size/*=NULL*/);
 public static native void cvGetRawData( @Const CvArr arr, @Cast("uchar**") @ByPtrPtr byte[] data);
 
-/** @brief Returns size of matrix or image ROI.
-
+/** \brief Returns size of matrix or image ROI.
+<p>
 The function returns number of rows (CvSize::height) and number of columns (CvSize::width) of the
 input matrix or image. In the case of image the size of ROI is returned.
 @param arr array header
  */
 public static native @ByVal CvSize cvGetSize( @Const CvArr arr );
 
-/** @brief Copies one array to another.
-
+/** \brief Copies one array to another.
+<p>
 The function copies selected elements from an input array to an output array:
-
+<p>
 \f[\texttt{dst} (I)= \texttt{src} (I)  \quad \text{if} \quad \texttt{mask} (I)  \ne 0.\f]
-
+<p>
 If any of the passed arrays is of IplImage type, then its ROI and COI fields are used. Both arrays
 must have the same type, the same number of dimensions, and the same size. The function can also
 copy sparse arrays (mask is not supported in this case).
@@ -6265,8 +6265,8 @@ public static native void cvCopy( @Const CvArr src, CvArr dst,
                      @Const CvArr mask/*=NULL*/ );
 public static native void cvCopy( @Const CvArr src, CvArr dst );
 
-/** @brief Sets every element of an array to a given value.
-
+/** \brief Sets every element of an array to a given value.
+<p>
 The function copies the scalar value to every selected element of the destination array:
 \f[\texttt{arr} (I)= \texttt{value} \quad \text{if} \quad \texttt{mask} (I)  \ne 0\f]
 If array arr is of IplImage type, then is ROI used, but COI must not be set.
@@ -6279,8 +6279,8 @@ public static native void cvSet( CvArr arr, @ByVal CvScalar value,
                     @Const CvArr mask/*=NULL*/ );
 public static native void cvSet( CvArr arr, @ByVal CvScalar value );
 
-/** @brief Clears the array.
-
+/** \brief Clears the array.
+<p>
 The function clears the array. In the case of dense arrays (CvMat, CvMatND or IplImage),
 cvZero(array) is equivalent to cvSet(array,cvScalarAll(0),0). In the case of sparse arrays all the
 elements are removed.
@@ -6316,16 +6316,16 @@ public static native void cvMixChannels( @Const @ByPtrPtr CvArr src, int src_cou
                             @ByPtrPtr CvArr dst, int dst_count,
                             @Const int[] from_to, int pair_count );
 
-/** @brief Converts one array to another with optional linear transformation.
-
+/** \brief Converts one array to another with optional linear transformation.
+<p>
 The function has several different purposes, and thus has several different names. It copies one
 array to another with optional scaling, which is performed first, and/or optional type conversion,
 performed after:
-
+<p>
 \f[\texttt{dst} (I) =  \texttt{scale} \texttt{src} (I) + ( \texttt{shift} _0, \texttt{shift} _1,...)\f]
-
+<p>
 All the channels of multi-channel arrays are processed independently.
-
+<p>
 The type of conversion is done with rounding and saturation, that is if the result of scaling +
 conversion can not be represented exactly by a value of the destination array element type, it is
 set to the nearest representable value on the real axis.
@@ -6417,12 +6417,12 @@ public static native void cvAddWeighted( @Const CvArr src1, double alpha,
                             @Const CvArr src2, double beta,
                             double gamma, CvArr dst );
 
-/** @brief Calculates the dot product of two arrays in Euclidean metrics.
-
+/** \brief Calculates the dot product of two arrays in Euclidean metrics.
+<p>
 The function calculates and returns the Euclidean dot product of two arrays.
-
+<p>
 \f[src1  \bullet src2 =  \sum _I ( \texttt{src1} (I)  \texttt{src2} (I))\f]
-
+<p>
 In the case of multiple channel arrays, the results for all channels are accumulated. In particular,
 cvDotProduct(a,a) where a is a complex vector, will return \f$||\texttt{a}||^2\f$. The function can
 process multi-dimensional arrays, row by row, layer by layer, and so on.
@@ -6568,8 +6568,8 @@ public static native int cvCheckArray(CvArr arg1, int arg2, double arg3, double 
 public static final int CV_RAND_UNI =      0;
 public static final int CV_RAND_NORMAL =   1;
 
-/** @brief Fills an array with random numbers and updates the RNG state.
-
+/** \brief Fills an array with random numbers and updates the RNG state.
+<p>
 The function fills the destination array with uniformly or normally distributed random numbers.
 @param rng CvRNG state initialized by cvRNG
 @param arr The destination array
@@ -6582,7 +6582,7 @@ is the mean value of the random numbers.
 @param param2 The second parameter of the distribution. In the case of a uniform distribution it
 is the exclusive upper boundary of the random numbers range. In the case of a normal distribution
 it is the standard deviation of the random numbers.
-@sa randu, randn, RNG::fill.
+\sa randu, randn, RNG::fill.
  */
 public static native void cvRandArr( @Cast("CvRNG*") LongPointer rng, CvArr arr, int dist_type,
                       @ByVal CvScalar param1, @ByVal CvScalar param2 );
@@ -6623,8 +6623,8 @@ public static native void cvSolvePoly(@Const CvMat coeffs, CvMat roots2);
 *                                Matrix operations                                       *
 \****************************************************************************************/
 
-/** @brief Calculates the cross product of two 3D vectors.
-
+/** \brief Calculates the cross product of two 3D vectors.
+<p>
 The function calculates the cross product of two 3D vectors:
 \f[\texttt{dst} =  \texttt{src1} \times \texttt{src2}\f]
 or:
@@ -6745,10 +6745,10 @@ public static native void cvSetIdentity( CvArr mat );
 /** Fills matrix with given range of numbers */
 public static native CvArr cvRange( CvArr mat, double start, double end );
 
-/**   @anchor core_c_CovarFlags
-@name Flags for cvCalcCovarMatrix
+/**   \anchor core_c_CovarFlags
+\name Flags for cvCalcCovarMatrix
 @see cvCalcCovarMatrix
-  @{
+  \{
 */
 
 /** flag for cvCalcCovarMatrix, transpose([v1-avg, v2-avg,...]) * [v1-avg,v2-avg,...] */
@@ -6770,10 +6770,10 @@ public static final int CV_COVAR_ROWS =      8;
 /** flag for cvCalcCovarMatrix, all the input vectors are stored in a single matrix, as its columns */
 public static final int CV_COVAR_COLS =     16;
 
-/** @} */
+/** \} */
 
 /** Calculates covariation matrix for a set of vectors
-@see @ref core_c_CovarFlags "flags"
+@see \ref core_c_CovarFlags "flags"
 */
 public static native void cvCalcCovarMatrix( @Cast("const CvArr**") PointerPointer vects, int count,
                                 CvArr cov_mat, CvArr avg, int flags );
@@ -6832,9 +6832,9 @@ public static native void cvMinMaxLoc( @Const CvArr arr, double[] min_val, doubl
                           @Const CvArr mask/*=NULL*/ );
 public static native void cvMinMaxLoc( @Const CvArr arr, double[] min_val, double[] max_val );
 
-/** @anchor core_c_NormFlags
-  @name Flags for cvNorm and cvNormalize
-  @{
+/** \anchor core_c_NormFlags
+  \name Flags for cvNorm and cvNormalize
+  \{
 */
 public static final int CV_C =            1;
 public static final int CV_L1 =           2;
@@ -6850,7 +6850,7 @@ public static final int CV_DIFF_L2 =      (CV_DIFF | CV_L2);
 public static final int CV_RELATIVE_C =   (CV_RELATIVE | CV_C);
 public static final int CV_RELATIVE_L1 =  (CV_RELATIVE | CV_L1);
 public static final int CV_RELATIVE_L2 =  (CV_RELATIVE | CV_L2);
-/** @} */
+/** \} */
 
 /** Finds norm, difference norm or relative difference norm for an array (or two arrays)
 @see ref core_c_NormFlags "flags"
@@ -6867,17 +6867,17 @@ public static native void cvNormalize( @Const CvArr src, CvArr dst,
                           @Const CvArr mask/*=NULL*/ );
 public static native void cvNormalize( @Const CvArr src, CvArr dst );
 
-/** @anchor core_c_ReduceFlags
-  @name Flags for cvReduce
-  @{
+/** \anchor core_c_ReduceFlags
+  \name Flags for cvReduce
+  \{
 */
 public static final int CV_REDUCE_SUM = 0;
 public static final int CV_REDUCE_AVG = 1;
 public static final int CV_REDUCE_MAX = 2;
 public static final int CV_REDUCE_MIN = 3;
-/** @} */
+/** \} */
 
-/** @see @ref core_c_ReduceFlags "flags" */
+/** @see \ref core_c_ReduceFlags "flags" */
 public static native void cvReduce( @Const CvArr src, CvArr dst, int dim/*=-1*/,
                        int op/*=CV_REDUCE_SUM*/ );
 public static native void cvReduce( @Const CvArr src, CvArr dst );
@@ -6886,9 +6886,9 @@ public static native void cvReduce( @Const CvArr src, CvArr dst );
 *                      Discrete Linear Transforms and Related Functions                  *
 \****************************************************************************************/
 
-/** @anchor core_c_DftFlags
-  @name Flags for cvDFT, cvDCT and cvMulSpectrums
-  @{
+/** \anchor core_c_DftFlags
+  \name Flags for cvDFT, cvDCT and cvMulSpectrums
+  \{
   */
 public static final int CV_DXT_FORWARD =  0;
 public static final int CV_DXT_INVERSE =  1;
@@ -6900,7 +6900,7 @@ public static final int CV_DXT_INVERSE_SCALE = CV_DXT_INV_SCALE;
 public static final int CV_DXT_ROWS =     4;
 /** conjugate the second argument of cvMulSpectrums */
 public static final int CV_DXT_MUL_CONJ = 8;
-/** @} */
+/** \} */
 
 /** Discrete Fourier Transform:
     complex->complex,
@@ -7286,9 +7286,9 @@ public static final int CV_GRAPH_FORWARD_EDGE_FLAG =       (1 << 28);
 public static class CvGraphScanner extends AbstractCvGraphScanner {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvGraphScanner() { allocate(); }
+    public CvGraphScanner() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvGraphScanner(int size) { allocateArray(size); }
+    public CvGraphScanner(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvGraphScanner(Pointer p) { super(p); }
     private native void allocate();
@@ -7333,9 +7333,9 @@ public static native void cvLUT( @Const CvArr src, CvArr dst, @Const CvArr lut )
 public static class CvTreeNodeIterator extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvTreeNodeIterator() { allocate(); }
+    public CvTreeNodeIterator() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvTreeNodeIterator(int size) { allocateArray(size); }
+    public CvTreeNodeIterator(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvTreeNodeIterator(Pointer p) { super(p); }
     private native void allocate();
@@ -7363,7 +7363,7 @@ public static native void cvInsertNodeIntoTree( Pointer node, Pointer parent, Po
 public static native void cvRemoveNodeFromTree( Pointer node, Pointer frame );
 
 /** Gathers pointers to all the sequences,
-   accessible from the `first`, to the single sequence */
+   accessible from the {@code first}, to the single sequence */
 public static native CvSeq cvTreeToNodeSeq( @Const Pointer first, int header_size,
                               CvMemStorage storage );
 
@@ -7434,16 +7434,16 @@ public static native int cvUseOptimized( int on_off );
     public native IplImage call(@Const IplImage arg0);
 }
 
-/** @brief Makes OpenCV use IPL functions for allocating IplImage and IplROI structures.
-
+/** \brief Makes OpenCV use IPL functions for allocating IplImage and IplROI structures.
+<p>
 Normally, the function is not called directly. Instead, a simple macro
 CV_TURN_ON_IPL_COMPATIBILITY() is used that calls cvSetIPLAllocators and passes there pointers
 to IPL allocation functions. :
-@code
+<pre><code>
     ...
     CV_TURN_ON_IPL_COMPATIBILITY()
     ...
-@endcode
+</code></pre>
 @param create_header pointer to a function, creating IPL image header.
 @param allocate_data pointer to a function, allocating IPL image data.
 @param deallocate pointer to a function, deallocating IPL image.
@@ -7466,8 +7466,8 @@ public static native void cvSetIPLAllocators( Cv_iplCreateImageHeader create_hea
 
 /********************************** High-level functions ********************************/
 
-/** @brief Opens file storage for reading or writing data.
-
+/** \brief Opens file storage for reading or writing data.
+<p>
 The function opens file storage for reading or writing data. In the latter case, a new file is
 created or an existing file is rewritten. The type of the read or written file is determined by the
 filename extension: .xml for XML and .yml or .yaml for YAML. The function returns a pointer to the
@@ -7490,8 +7490,8 @@ public static native CvFileStorage cvOpenFileStorage( String filename, CvMemStor
 public static native CvFileStorage cvOpenFileStorage( String filename, CvMemStorage memstorage,
                                           int flags );
 
-/** @brief Releases file storage.
-
+/** \brief Releases file storage.
+<p>
 The function closes the file associated with the storage and releases all the temporary structures.
 It must be called after all I/O operations with the storage are finished.
 @param fs Double pointer to the released file storage
@@ -7503,8 +7503,8 @@ public static native void cvReleaseFileStorage( @ByPtrPtr CvFileStorage fs );
 public static native @Cast("const char*") BytePointer cvAttrValue( @Const CvAttrList attr, @Cast("const char*") BytePointer attr_name );
 public static native String cvAttrValue( @Const CvAttrList attr, String attr_name );
 
-/** @brief Starts writing a new structure.
-
+/** \brief Starts writing a new structure.
+<p>
 The function starts writing a compound structure (collection) that can be a sequence or a map. After
 all the structure fields, which can be scalars or structures, are written, cvEndWriteStruct should
 be called. The function can be used to group some objects or to implement the write function for a
@@ -7539,14 +7539,14 @@ public static native void cvStartWriteStruct( CvFileStorage fs, String name,
 public static native void cvStartWriteStruct( CvFileStorage fs, String name,
                                 int struct_flags);
 
-/** @brief Finishes writing to a file node collection.
+/** \brief Finishes writing to a file node collection.
 @param fs File storage
-@sa cvStartWriteStruct.
+\sa cvStartWriteStruct.
  */
 public static native void cvEndWriteStruct( CvFileStorage fs );
 
-/** @brief Writes an integer value.
-
+/** \brief Writes an integer value.
+<p>
 The function writes a single integer value (with or without a name) to the file storage.
 @param fs File storage
 @param name Name of the written value. Should be NULL if and only if the parent structure is a
@@ -7556,14 +7556,14 @@ sequence.
 public static native void cvWriteInt( CvFileStorage fs, @Cast("const char*") BytePointer name, int value );
 public static native void cvWriteInt( CvFileStorage fs, String name, int value );
 
-/** @brief Writes a floating-point value.
-
+/** \brief Writes a floating-point value.
+<p>
 The function writes a single floating-point value (with or without a name) to file storage. Special
 values are encoded as follows: NaN (Not A Number) as .NaN, infinity as +.Inf or -.Inf.
-
+<p>
 The following example shows how to use the low-level writing functions to store custom structures,
 such as termination criteria, without registering a new type. :
-@code
+<pre><code>
     void write_termcriteria( CvFileStorage* fs, const char* struct_name,
                              CvTermCriteria* termcrit )
     {
@@ -7575,7 +7575,7 @@ such as termination criteria, without registering a new type. :
             cvWriteReal( fs, "accuracy", termcrit->epsilon );
         cvEndWriteStruct( fs );
     }
-@endcode
+</code></pre>
 @param fs File storage
 @param name Name of the written value. Should be NULL if and only if the parent structure is a
 sequence.
@@ -7584,8 +7584,8 @@ sequence.
 public static native void cvWriteReal( CvFileStorage fs, @Cast("const char*") BytePointer name, double value );
 public static native void cvWriteReal( CvFileStorage fs, String name, double value );
 
-/** @brief Writes a text string.
-
+/** \brief Writes a text string.
+<p>
 The function writes a text string to file storage.
 @param fs File storage
 @param name Name of the written string . Should be NULL if and only if the parent structure is a
@@ -7604,8 +7604,8 @@ public static native void cvWriteString( CvFileStorage fs, String name,
 public static native void cvWriteString( CvFileStorage fs, String name,
                            String str );
 
-/** @brief Writes a comment.
-
+/** \brief Writes a comment.
+<p>
 The function writes a comment into file storage. The comments are skipped when the storage is read.
 @param fs File storage
 @param comment The written comment, single-line or multi-line
@@ -7618,14 +7618,14 @@ public static native void cvWriteComment( CvFileStorage fs, @Cast("const char*")
 public static native void cvWriteComment( CvFileStorage fs, String comment,
                             int eol_comment );
 
-/** @brief Writes an object to file storage.
-
+/** \brief Writes an object to file storage.
+<p>
 The function writes an object to file storage. First, the appropriate type info is found using
 cvTypeOf. Then, the write method associated with the type info is called.
-
+<p>
 Attributes are used to customize the writing procedure. The standard types support the following
 attributes (all the dt attributes have the same format as in cvWriteRawData):
-
+<p>
 -# CvSeq
     -   **header_dt** description of user fields of the sequence header that follow CvSeq, or
         CvChain (if the sequence is a Freeman chain) or CvContour (if the sequence is a contour or
@@ -7638,9 +7638,9 @@ attributes (all the dt attributes have the same format as in cvWriteRawData):
     -   **vertex_dt** description of user fields of graph vertices
     -   **edge_dt** description of user fields of graph edges (note that the edge weight is
         always written, so there is no need to specify it explicitly)
-
+<p>
 Below is the code that creates the YAML file shown in the CvFileStorage description:
-@code
+<pre><code>
     #include "cxcore.h"
 
     int main( int argc, char** argv )
@@ -7655,7 +7655,7 @@ Below is the code that creates the YAML file shown in the CvFileStorage descript
         cvReleaseMat( &mat );
         return 0;
     }
-@endcode
+</code></pre>
 @param fs File storage
 @param name Name of the written object. Should be NULL if and only if the parent structure is a
 sequence.
@@ -7670,11 +7670,11 @@ public static native void cvWrite( CvFileStorage fs, String name, @Const Pointer
                          @ByVal(nullValue = "cvAttrList()") CvAttrList attributes/*=cvAttrList()*/);
 public static native void cvWrite( CvFileStorage fs, String name, @Const Pointer ptr);
 
-/** @brief Starts the next stream.
-
+/** \brief Starts the next stream.
+<p>
 The function finishes the currently written stream and starts the next stream. In the case of XML
 the file with multiple streams looks like this:
-@code{.xml}
+<pre><code>{.xml}
     <opencv_storage>
     <!-- stream #1 data -->
     </opencv_storage>
@@ -7682,22 +7682,22 @@ the file with multiple streams looks like this:
     <!-- stream #2 data -->
     </opencv_storage>
     ...
-@endcode
+</code></pre>
 The YAML file will look like this:
-@code{.yaml}
+<pre><code>{.yaml}
     %YAML:1.0
     # stream #1 data
     ...
     ---
     # stream #2 data
-@endcode
+</code></pre>
 This is useful for concatenating files or for resuming the writing process.
 @param fs File storage
  */
 public static native void cvStartNextStream( CvFileStorage fs );
 
-/** @brief Writes multiple numbers.
-
+/** \brief Writes multiple numbers.
+<p>
 The function writes an array, whose elements consist of single or multiple numbers. The function
 call can be replaced with a loop containing a few cvWriteInt and cvWriteReal calls, but a single
 call is more efficient. Note that because none of the elements have a name, they should be written
@@ -7705,29 +7705,29 @@ to a sequence rather than a map.
 @param fs File storage
 @param src Pointer to the written array
 @param len Number of the array elements to write
-@param dt Specification of each array element, see @ref format_spec "format specification"
+@param dt Specification of each array element, see \ref format_spec "format specification"
  */
 public static native void cvWriteRawData( CvFileStorage fs, @Const Pointer src,
                                 int len, @Cast("const char*") BytePointer dt );
 public static native void cvWriteRawData( CvFileStorage fs, @Const Pointer src,
                                 int len, String dt );
 
-/** @brief Returns a unique pointer for a given name.
-
+/** \brief Returns a unique pointer for a given name.
+<p>
 The function returns a unique pointer for each particular file node name. This pointer can be then
 passed to the cvGetFileNode function that is faster than cvGetFileNodeByName because it compares
 text strings by comparing pointers rather than the strings' content.
-
+<p>
 Consider the following example where an array of points is encoded as a sequence of 2-entry maps:
-@code
+<pre><code>
     points:
       - { x: 10, y: 10 }
       - { x: 20, y: 20 }
       - { x: 30, y: 30 }
       # ...
-@endcode
+</code></pre>
 Then, it is possible to get hashed "x" and "y" pointers to speed up decoding of the points. :
-@code
+<pre><code>
     #include "cxcore.h"
 
     int main( int argc, char** argv )
@@ -7771,7 +7771,7 @@ Then, it is possible to get hashed "x" and "y" pointers to speed up decoding of 
         cvReleaseFileStorage( &fs );
         return 0;
     }
-@endcode
+</code></pre>
 Please note that whatever method of accessing a map you are using, it is still much slower than
 using plain sequences; for example, in the above example, it is more efficient to encode the points
 as pairs of integers in a single numeric sequence.
@@ -7789,8 +7789,8 @@ public static native CvStringHashNode cvGetHashedKey( CvFileStorage fs, String n
                                         int create_missing/*=0*/);
 public static native CvStringHashNode cvGetHashedKey( CvFileStorage fs, String name);
 
-/** @brief Retrieves one of the top-level nodes of the file storage.
-
+/** \brief Retrieves one of the top-level nodes of the file storage.
+<p>
 The function returns one of the top-level file nodes. The top-level nodes do not have a name, they
 correspond to the streams that are stored one after another in the file storage. If the index is out
 of range, the function returns a NULL pointer, so all the top-level nodes can be iterated by
@@ -7804,8 +7804,8 @@ public static native CvFileNode cvGetRootFileNode( @Const CvFileStorage fs,
                                      int stream_index/*=0*/ );
 public static native CvFileNode cvGetRootFileNode( @Const CvFileStorage fs );
 
-/** @brief Finds a node in a map or file storage.
-
+/** \brief Finds a node in a map or file storage.
+<p>
 The function finds a file node. It is a faster version of cvGetFileNodeByName (see
 cvGetHashedKey discussion). Also, the function can insert a new node, if it is not in the map yet.
 @param fs File storage
@@ -7820,8 +7820,8 @@ public static native CvFileNode cvGetFileNode( CvFileStorage fs, CvFileNode map,
 public static native CvFileNode cvGetFileNode( CvFileStorage fs, CvFileNode map,
                                  @Const CvStringHashNode key );
 
-/** @brief Finds a node in a map or file storage.
-
+/** \brief Finds a node in a map or file storage.
+<p>
 The function finds a file node by name. The node is searched either in map or, if the pointer is
 NULL, among the top-level file storage nodes. Using this function for maps and cvGetSeqElem (or
 sequence reader) for sequences, it is possible to navigate through the file storage. To speed up
@@ -7839,8 +7839,8 @@ public static native CvFileNode cvGetFileNodeByName( @Const CvFileStorage fs,
                                        @Const CvFileNode map,
                                        String name );
 
-/** @brief Retrieves an integer value from a file node.
-
+/** \brief Retrieves an integer value from a file node.
+<p>
 The function returns an integer that is represented by the file node. If the file node is NULL, the
 default_value is returned (thus, it is convenient to call the function right after cvGetFileNode
 without checking for a NULL pointer). If the file node has type CV_NODE_INT, then node-\>data.i is
@@ -7852,8 +7852,8 @@ and returned. Otherwise the error is reported.
 public static native int cvReadInt( @Const CvFileNode node, int default_value/*=0*/ );
 public static native int cvReadInt( @Const CvFileNode node );
 
-/** @brief Finds a file node and returns its value.
-
+/** \brief Finds a file node and returns its value.
+<p>
 The function is a simple superposition of cvGetFileNodeByName and cvReadInt.
 @param fs File storage
 @param map The parent map. If it is NULL, the function searches a top-level node.
@@ -7869,8 +7869,8 @@ public static native int cvReadIntByName( @Const CvFileStorage fs, @Const CvFile
 public static native int cvReadIntByName( @Const CvFileStorage fs, @Const CvFileNode map,
                          String name );
 
-/** @brief Retrieves a floating-point value from a file node.
-
+/** \brief Retrieves a floating-point value from a file node.
+<p>
 The function returns a floating-point value that is represented by the file node. If the file node
 is NULL, the default_value is returned (thus, it is convenient to call the function right after
 cvGetFileNode without checking for a NULL pointer). If the file node has type CV_NODE_REAL ,
@@ -7882,8 +7882,8 @@ is converted to floating-point and returned. Otherwise the result is not determi
 public static native double cvReadReal( @Const CvFileNode node, double default_value/*=0.*/ );
 public static native double cvReadReal( @Const CvFileNode node );
 
-/** @brief Finds a file node and returns its value.
-
+/** \brief Finds a file node and returns its value.
+<p>
 The function is a simple superposition of cvGetFileNodeByName and cvReadReal .
 @param fs File storage
 @param map The parent map. If it is NULL, the function searches a top-level node.
@@ -7899,8 +7899,8 @@ public static native double cvReadRealByName( @Const CvFileStorage fs, @Const Cv
 public static native double cvReadRealByName( @Const CvFileStorage fs, @Const CvFileNode map,
                         String name );
 
-/** @brief Retrieves a text string from a file node.
-
+/** \brief Retrieves a text string from a file node.
+<p>
 The function returns a text string that is represented by the file node. If the file node is NULL,
 the default_value is returned (thus, it is convenient to call the function right after
 cvGetFileNode without checking for a NULL pointer). If the file node has type CV_NODE_STR , then
@@ -7914,8 +7914,8 @@ public static native @Cast("const char*") BytePointer cvReadString( @Const CvFil
 public static native String cvReadString( @Const CvFileNode node,
                         String default_value/*=NULL*/ );
 
-/** @brief Finds a file node by its name and returns its value.
-
+/** \brief Finds a file node by its name and returns its value.
+<p>
 The function is a simple superposition of cvGetFileNodeByName and cvReadString .
 @param fs File storage
 @param map The parent map. If it is NULL, the function searches a top-level node.
@@ -7932,8 +7932,8 @@ public static native String cvReadStringByName( @Const CvFileStorage fs, @Const 
                         String name );
 
 
-/** @brief Decodes an object and returns a pointer to it.
-
+/** \brief Decodes an object and returns a pointer to it.
+<p>
 The function decodes a user object (creates an object in a native representation from the file
 storage subtree) and returns it. The object to be decoded must be an instance of a registered type
 that supports the read method (see CvTypeInfo). The type of the object is determined by the type
@@ -7950,8 +7950,8 @@ public static native Pointer cvRead( CvFileStorage fs, CvFileNode node,
                         CvAttrList attributes/*=NULL*/);
 public static native Pointer cvRead( CvFileStorage fs, CvFileNode node);
 
-/** @brief Finds an object by name and decodes it.
-
+/** \brief Finds an object by name and decodes it.
+<p>
 The function is a simple superposition of cvGetFileNodeByName and cvRead.
 @param fs File storage
 @param map The parent map. If it is NULL, the function searches a top-level node.
@@ -7968,8 +7968,8 @@ public static native Pointer cvReadByName( CvFileStorage fs, @Const CvFileNode m
                               String name );
 
 
-/** @brief Initializes the file node sequence reader.
-
+/** \brief Initializes the file node sequence reader.
+<p>
 The function initializes the sequence reader to read data from a file node. The initialized reader
 can be then passed to cvReadRawDataSlice.
 @param fs File storage
@@ -7979,8 +7979,8 @@ can be then passed to cvReadRawDataSlice.
 public static native void cvStartReadRawData( @Const CvFileStorage fs, @Const CvFileNode src,
                                CvSeqReader reader );
 
-/** @brief Initializes file node sequence reader.
-
+/** \brief Initializes file node sequence reader.
+<p>
 The function reads one or more elements from the file node, representing a sequence, to a
 user-specified array. The total number of read sequence elements is a product of total and the
 number of components in each array element. For example, if dt=2if, the function will read total\*3
@@ -7997,8 +7997,8 @@ public static native void cvReadRawDataSlice( @Const CvFileStorage fs, CvSeqRead
 public static native void cvReadRawDataSlice( @Const CvFileStorage fs, CvSeqReader reader,
                                int count, Pointer dst, String dt );
 
-/** @brief Reads multiple numbers.
-
+/** \brief Reads multiple numbers.
+<p>
 The function reads elements from a file node that represents a sequence of scalars.
 @param fs File storage
 @param src The file node (a sequence) to read numbers from
@@ -8010,8 +8010,8 @@ public static native void cvReadRawData( @Const CvFileStorage fs, @Const CvFileN
 public static native void cvReadRawData( @Const CvFileStorage fs, @Const CvFileNode src,
                           Pointer dst, String dt );
 
-/** @brief Writes a file node to another file storage.
-
+/** \brief Writes a file node to another file storage.
+<p>
 The function writes a copy of a file node to file storage. Possible applications of the function are
 merging several file storages into one and conversion between XML and YAML formats.
 @param fs Destination file storage
@@ -8028,8 +8028,8 @@ public static native void cvWriteFileNode( CvFileStorage fs, @Cast("const char*"
 public static native void cvWriteFileNode( CvFileStorage fs, String new_node_name,
                             @Const CvFileNode node, int embed );
 
-/** @brief Returns the name of a file node.
-
+/** \brief Returns the name of a file node.
+<p>
 The function returns the name of a file node or NULL, if the file node does not have a name or if
 node is NULL.
 @param node File node
@@ -8038,16 +8038,16 @@ public static native @Cast("const char*") BytePointer cvGetFileNodeName( @Const 
 
 /*********************************** Adding own types ***********************************/
 
-/** @brief Registers a new type.
-
+/** \brief Registers a new type.
+<p>
 The function registers a new type, which is described by info . The function creates a copy of the
 structure, so the user should delete it after calling the function.
 @param info Type info structure
  */
 public static native void cvRegisterType( @Const CvTypeInfo info );
 
-/** @brief Unregisters the type.
-
+/** \brief Unregisters the type.
+<p>
 The function unregisters a type with a specified name. If the name is unknown, it is possible to
 locate the type info by an instance of the type using cvTypeOf or by iterating the type list,
 starting from cvFirstType, and then calling cvUnregisterType(info-\>typeName).
@@ -8056,15 +8056,15 @@ starting from cvFirstType, and then calling cvUnregisterType(info-\>typeName).
 public static native void cvUnregisterType( @Cast("const char*") BytePointer type_name );
 public static native void cvUnregisterType( String type_name );
 
-/** @brief Returns the beginning of a type list.
-
+/** \brief Returns the beginning of a type list.
+<p>
 The function returns the first type in the list of registered types. Navigation through the list can
 be done via the prev and next fields of the CvTypeInfo structure.
  */
 public static native CvTypeInfo cvFirstType();
 
-/** @brief Finds a type by its name.
-
+/** \brief Finds a type by its name.
+<p>
 The function finds a registered type by its name. It returns NULL if there is no type with the
 specified name.
 @param type_name Type name
@@ -8072,8 +8072,8 @@ specified name.
 public static native CvTypeInfo cvFindType( @Cast("const char*") BytePointer type_name );
 public static native CvTypeInfo cvFindType( String type_name );
 
-/** @brief Returns the type of an object.
-
+/** \brief Returns the type of an object.
+<p>
 The function finds the type of a given object. It iterates through the list of registered types and
 calls the is_instance function/method for every type info structure with that object until one of
 them returns non-zero or until the whole list has been traversed. In the latter case, the function
@@ -8082,16 +8082,16 @@ returns NULL.
  */
 public static native CvTypeInfo cvTypeOf( @Const Pointer struct_ptr );
 
-/** @brief Releases an object.
-
+/** \brief Releases an object.
+<p>
 The function finds the type of a given object and calls release with the double pointer.
 @param struct_ptr Double pointer to the object
  */
 public static native void cvRelease( @Cast("void**") PointerPointer struct_ptr );
 public static native void cvRelease( @Cast("void**") @ByPtrPtr Pointer struct_ptr );
 
-/** @brief Makes a clone of an object.
-
+/** \brief Makes a clone of an object.
+<p>
 The function finds the type of a given object and calls clone with the passed object. Of course, if
 you know the object type, for example, struct_ptr is CvMat\*, it is faster to call the specific
 function, like cvCloneMat.
@@ -8099,8 +8099,8 @@ function, like cvCloneMat.
  */
 public static native Pointer cvClone( @Const Pointer struct_ptr );
 
-/** @brief Saves an object to a file.
-
+/** \brief Saves an object to a file.
+<p>
 The function saves an object to a file. It provides a simple interface to cvWrite .
 @param filename File name
 @param struct_ptr Object to save
@@ -8119,8 +8119,8 @@ public static native void cvSave( String filename, @Const Pointer struct_ptr,
                     @ByVal(nullValue = "cvAttrList()") CvAttrList attributes/*=cvAttrList()*/);
 public static native void cvSave( String filename, @Const Pointer struct_ptr);
 
-/** @brief Loads an object from a file.
-
+/** \brief Loads an object from a file.
+<p>
 The function loads an object from a file. It basically reads the specified file, find the first
 top-level node and calls cvRead for that node. If the file node does not have type information or
 the type information can not be found by the type name, the function returns NULL. After the object
@@ -8334,15 +8334,15 @@ public static final String cvFuncName = "";
 // #define __CV_END__         goto exit; exit: ; }
 // #define __CV_EXIT__        goto exit
 
-/** @} core_c */
+/** \} core_c */
 
 // #ifdef __cplusplus // extern "C"
 // #endif
 
 // #ifdef __cplusplus
 
-/** @addtogroup core_c_glue
- *  @{
+/** \addtogroup core_c_glue
+ *  \{
 
  *  class for automatic module/RTTI data registration/unregistration */
 @NoOffset public static class CvType extends Pointer {
@@ -8354,22 +8354,22 @@ public static final String cvFuncName = "";
 
     public CvType( @Cast("const char*") BytePointer type_name,
                 CvIsInstanceFunc is_instance, CvReleaseFunc release/*=0*/,
-                CvReadFunc read/*=0*/, CvWriteFunc write/*=0*/, CvCloneFunc clone/*=0*/ ) { allocate(type_name, is_instance, release, read, write, clone); }
+                CvReadFunc read/*=0*/, CvWriteFunc write/*=0*/, CvCloneFunc clone/*=0*/ ) { super((Pointer)null); allocate(type_name, is_instance, release, read, write, clone); }
     private native void allocate( @Cast("const char*") BytePointer type_name,
                 CvIsInstanceFunc is_instance, CvReleaseFunc release/*=0*/,
                 CvReadFunc read/*=0*/, CvWriteFunc write/*=0*/, CvCloneFunc clone/*=0*/ );
     public CvType( @Cast("const char*") BytePointer type_name,
-                CvIsInstanceFunc is_instance ) { allocate(type_name, is_instance); }
+                CvIsInstanceFunc is_instance ) { super((Pointer)null); allocate(type_name, is_instance); }
     private native void allocate( @Cast("const char*") BytePointer type_name,
                 CvIsInstanceFunc is_instance );
     public CvType( String type_name,
                 CvIsInstanceFunc is_instance, CvReleaseFunc release/*=0*/,
-                CvReadFunc read/*=0*/, CvWriteFunc write/*=0*/, CvCloneFunc clone/*=0*/ ) { allocate(type_name, is_instance, release, read, write, clone); }
+                CvReadFunc read/*=0*/, CvWriteFunc write/*=0*/, CvCloneFunc clone/*=0*/ ) { super((Pointer)null); allocate(type_name, is_instance, release, read, write, clone); }
     private native void allocate( String type_name,
                 CvIsInstanceFunc is_instance, CvReleaseFunc release/*=0*/,
                 CvReadFunc read/*=0*/, CvWriteFunc write/*=0*/, CvCloneFunc clone/*=0*/ );
     public CvType( String type_name,
-                CvIsInstanceFunc is_instance ) { allocate(type_name, is_instance); }
+                CvIsInstanceFunc is_instance ) { super((Pointer)null); allocate(type_name, is_instance); }
     private native void allocate( String type_name,
                 CvIsInstanceFunc is_instance );
     public native CvTypeInfo info(); public native CvType info(CvTypeInfo info);
@@ -8378,12 +8378,12 @@ public static final String cvFuncName = "";
     
 }
 
-/** @} */
+/** \} */
 
 // #include "opencv2/core/utility.hpp"
 
-/** @addtogroup core_c_glue
- *  @{
+/** \addtogroup core_c_glue
+ *  \{
 
 /////////////////////////////////////////// glue ///////////////////////////////////////////
 
@@ -8418,10 +8418,10 @@ public static final String cvFuncName = "";
 
 /**
  Template Sequence Class derived from CvSeq
-
+<p>
  The class provides more convenient access to sequence elements,
  STL-style operations and iterators.
-
+<p>
  \note The class is targeted for simple data types,
     i.e. no constructors or destructors
     are called for the sequence elements.
@@ -8539,7 +8539,7 @@ public static final String cvFuncName = "";
 
 
 
-/** @} */
+/** \} */
 
  // cv
 
@@ -8607,13 +8607,13 @@ public static final String cvFuncName = "";
 // #include "opencv2/core/cvstd.hpp"
 // #include "opencv2/core/matx.hpp"
 
-/** @addtogroup core_basic
- *  @{
+/** \addtogroup core_basic
+ *  \{
 
 //////////////////////////////// Complex //////////////////////////////
 
-/** @brief  A complex number class.
-
+/** \brief  A complex number class.
+<p>
   The template class is similar and compatible with std::complex, however it provides slightly
   more convenient access to the real and imaginary parts using through the simple field access, as opposite
   to std::complex::real() and std::complex::imag().
@@ -8623,14 +8623,14 @@ public static final String cvFuncName = "";
 
 //////////////////////////////// Point_ ////////////////////////////////
 
-/** @brief Template class for 2D points specified by its coordinates `x` and `y`.
-
+/** \brief Template class for 2D points specified by its coordinates {@code x} and {@code y}.
+<p>
 An instance of the class is interchangeable with C structures, CvPoint and CvPoint2D32f . There is
 also a cast operator to convert point coordinates to the specified type. The conversion from
 floating-point coordinates to integer coordinates is done by rounding. Commonly, the conversion
 uses this operation for each of the coordinates. Besides the class members listed in the
 declaration above, the following operations on points are implemented:
-@code
+<pre><code>
     pt1 = pt2 + pt3;
     pt1 = pt2 - pt3;
     pt1 = pt2 * a;
@@ -8643,27 +8643,27 @@ declaration above, the following operations on points are implemented:
     double value = norm(pt); // L2 norm
     pt1 == pt2;
     pt1 != pt2;
-@endcode
+</code></pre>
 For your convenience, the following type aliases are defined:
-@code
+<pre><code>
     typedef Point_<int> Point2i;
     typedef Point2i Point;
     typedef Point_<float> Point2f;
     typedef Point_<double> Point2d;
-@endcode
+</code></pre>
 Example:
-@code
+<pre><code>
     Point2f a(0.3f, 0.f), b(0.f, 0.4f);
     Point pt = (a + b)*10.f;
     cout << pt.x << ", " << pt.y << endl;
-@endcode
+</code></pre>
 */
 @Name("cv::Point_<int>") @NoOffset public static class Point extends IntPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Point(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Point(int size) { allocateArray(size); }
+    public Point(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Point position(int position) {
         return (Point)super.position(position);
@@ -8671,13 +8671,13 @@ Example:
 
 
     // various constructors
-    public Point() { allocate(); }
+    public Point() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public Point(int _x, int _y) { allocate(_x, _y); }
+    public Point(int _x, int _y) { super((Pointer)null); allocate(_x, _y); }
     private native void allocate(int _x, int _y);
-    public Point(@Const @ByRef Point pt) { allocate(pt); }
+    public Point(@Const @ByRef Point pt) { super((Pointer)null); allocate(pt); }
     private native void allocate(@Const @ByRef Point pt);
-    public Point(@Const @ByRef Size sz) { allocate(sz); }
+    public Point(@Const @ByRef Size sz) { super((Pointer)null); allocate(sz); }
     private native void allocate(@Const @ByRef Size sz);
 
     public native @ByRef @Name("operator =") Point put(@Const @ByRef Point pt);
@@ -8702,7 +8702,7 @@ Example:
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Point2f(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Point2f(int size) { allocateArray(size); }
+    public Point2f(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Point2f position(int position) {
         return (Point2f)super.position(position);
@@ -8710,13 +8710,13 @@ Example:
 
 
     // various constructors
-    public Point2f() { allocate(); }
+    public Point2f() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public Point2f(float _x, float _y) { allocate(_x, _y); }
+    public Point2f(float _x, float _y) { super((Pointer)null); allocate(_x, _y); }
     private native void allocate(float _x, float _y);
-    public Point2f(@Const @ByRef Point2f pt) { allocate(pt); }
+    public Point2f(@Const @ByRef Point2f pt) { super((Pointer)null); allocate(pt); }
     private native void allocate(@Const @ByRef Point2f pt);
-    public Point2f(@Const @ByRef Size2f sz) { allocate(sz); }
+    public Point2f(@Const @ByRef Size2f sz) { super((Pointer)null); allocate(sz); }
     private native void allocate(@Const @ByRef Size2f sz);
 
     public native @ByRef @Name("operator =") Point2f put(@Const @ByRef Point2f pt);
@@ -8741,7 +8741,7 @@ Example:
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Point2d(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Point2d(int size) { allocateArray(size); }
+    public Point2d(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Point2d position(int position) {
         return (Point2d)super.position(position);
@@ -8749,13 +8749,13 @@ Example:
 
 
     // various constructors
-    public Point2d() { allocate(); }
+    public Point2d() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public Point2d(double _x, double _y) { allocate(_x, _y); }
+    public Point2d(double _x, double _y) { super((Pointer)null); allocate(_x, _y); }
     private native void allocate(double _x, double _y);
-    public Point2d(@Const @ByRef Point2d pt) { allocate(pt); }
+    public Point2d(@Const @ByRef Point2d pt) { super((Pointer)null); allocate(pt); }
     private native void allocate(@Const @ByRef Point2d pt);
-    public Point2d(@Const @ByRef Size2d sz) { allocate(sz); }
+    public Point2d(@Const @ByRef Size2d sz) { super((Pointer)null); allocate(sz); }
     private native void allocate(@Const @ByRef Size2d sz);
 
     public native @ByRef @Name("operator =") Point2d put(@Const @ByRef Point2d pt);
@@ -8780,18 +8780,18 @@ Example:
 
 //////////////////////////////// Point3_ ////////////////////////////////
 
-/** @brief Template class for 3D points specified by its coordinates `x`, `y` and `z`.
-
+/** \brief Template class for 3D points specified by its coordinates {@code x}, {@code y} and {@code z}.
+<p>
 An instance of the class is interchangeable with the C structure CvPoint2D32f . Similarly to
 Point_ , the coordinates of 3D points can be converted to another type. The vector arithmetic and
 comparison operations are also supported.
-
+<p>
 The following Point3_\<\> aliases are available:
-@code
+<pre><code>
     typedef Point3_<int> Point3i;
     typedef Point3_<float> Point3f;
     typedef Point3_<double> Point3d;
-@endcode
+</code></pre>
 @see cv::Point3i, cv::Point3f and cv::Point3d
 */
 @Name("cv::Point3_<int>") @NoOffset public static class Point3i extends IntPointer {
@@ -8799,7 +8799,7 @@ The following Point3_\<\> aliases are available:
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Point3i(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Point3i(int size) { allocateArray(size); }
+    public Point3i(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Point3i position(int position) {
         return (Point3i)super.position(position);
@@ -8807,13 +8807,13 @@ The following Point3_\<\> aliases are available:
 
 
     // various constructors
-    public Point3i() { allocate(); }
+    public Point3i() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public Point3i(int _x, int _y, int _z) { allocate(_x, _y, _z); }
+    public Point3i(int _x, int _y, int _z) { super((Pointer)null); allocate(_x, _y, _z); }
     private native void allocate(int _x, int _y, int _z);
-    public Point3i(@Const @ByRef Point3i pt) { allocate(pt); }
+    public Point3i(@Const @ByRef Point3i pt) { super((Pointer)null); allocate(pt); }
     private native void allocate(@Const @ByRef Point3i pt);
-    public Point3i(@Const @ByRef Point pt) { allocate(pt); }
+    public Point3i(@Const @ByRef Point pt) { super((Pointer)null); allocate(pt); }
     private native void allocate(@Const @ByRef Point pt);
 
     public native @ByRef @Name("operator =") Point3i put(@Const @ByRef Point3i pt);
@@ -8836,7 +8836,7 @@ The following Point3_\<\> aliases are available:
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Point3f(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Point3f(int size) { allocateArray(size); }
+    public Point3f(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Point3f position(int position) {
         return (Point3f)super.position(position);
@@ -8844,13 +8844,13 @@ The following Point3_\<\> aliases are available:
 
 
     // various constructors
-    public Point3f() { allocate(); }
+    public Point3f() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public Point3f(float _x, float _y, float _z) { allocate(_x, _y, _z); }
+    public Point3f(float _x, float _y, float _z) { super((Pointer)null); allocate(_x, _y, _z); }
     private native void allocate(float _x, float _y, float _z);
-    public Point3f(@Const @ByRef Point3f pt) { allocate(pt); }
+    public Point3f(@Const @ByRef Point3f pt) { super((Pointer)null); allocate(pt); }
     private native void allocate(@Const @ByRef Point3f pt);
-    public Point3f(@Const @ByRef Point2f pt) { allocate(pt); }
+    public Point3f(@Const @ByRef Point2f pt) { super((Pointer)null); allocate(pt); }
     private native void allocate(@Const @ByRef Point2f pt);
 
     public native @ByRef @Name("operator =") Point3f put(@Const @ByRef Point3f pt);
@@ -8873,7 +8873,7 @@ The following Point3_\<\> aliases are available:
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Point3d(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Point3d(int size) { allocateArray(size); }
+    public Point3d(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Point3d position(int position) {
         return (Point3d)super.position(position);
@@ -8881,13 +8881,13 @@ The following Point3_\<\> aliases are available:
 
 
     // various constructors
-    public Point3d() { allocate(); }
+    public Point3d() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public Point3d(double _x, double _y, double _z) { allocate(_x, _y, _z); }
+    public Point3d(double _x, double _y, double _z) { super((Pointer)null); allocate(_x, _y, _z); }
     private native void allocate(double _x, double _y, double _z);
-    public Point3d(@Const @ByRef Point3d pt) { allocate(pt); }
+    public Point3d(@Const @ByRef Point3d pt) { super((Pointer)null); allocate(pt); }
     private native void allocate(@Const @ByRef Point3d pt);
-    public Point3d(@Const @ByRef Point2d pt) { allocate(pt); }
+    public Point3d(@Const @ByRef Point2d pt) { super((Pointer)null); allocate(pt); }
     private native void allocate(@Const @ByRef Point2d pt);
 
     public native @ByRef @Name("operator =") Point3d put(@Const @ByRef Point3d pt);
@@ -8910,25 +8910,25 @@ The following Point3_\<\> aliases are available:
 
 //////////////////////////////// Size_ ////////////////////////////////
 
-/** @brief Template class for specifying the size of an image or rectangle.
-
+/** \brief Template class for specifying the size of an image or rectangle.
+<p>
 The class includes two members called width and height. The structure can be converted to and from
 the old OpenCV structures CvSize and CvSize2D32f . The same set of arithmetic and comparison
 operations as for Point_ is available.
-
+<p>
 OpenCV defines the following Size_\<\> aliases:
-@code
+<pre><code>
     typedef Size_<int> Size2i;
     typedef Size2i Size;
     typedef Size_<float> Size2f;
-@endcode
+</code></pre>
 */
 @Name("cv::Size_<int>") @NoOffset public static class Size extends IntPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Size(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Size(int size) { allocateArray(size); }
+    public Size(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Size position(int position) {
         return (Size)super.position(position);
@@ -8936,13 +8936,13 @@ OpenCV defines the following Size_\<\> aliases:
 
 
     /** various constructors */
-    public Size() { allocate(); }
+    public Size() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public Size(int _width, int _height) { allocate(_width, _height); }
+    public Size(int _width, int _height) { super((Pointer)null); allocate(_width, _height); }
     private native void allocate(int _width, int _height);
-    public Size(@Const @ByRef Size sz) { allocate(sz); }
+    public Size(@Const @ByRef Size sz) { super((Pointer)null); allocate(sz); }
     private native void allocate(@Const @ByRef Size sz);
-    public Size(@Const @ByRef Point pt) { allocate(pt); }
+    public Size(@Const @ByRef Point pt) { super((Pointer)null); allocate(pt); }
     private native void allocate(@Const @ByRef Point pt);
 
     public native @ByRef @Name("operator =") Size put(@Const @ByRef Size sz);
@@ -8959,7 +8959,7 @@ OpenCV defines the following Size_\<\> aliases:
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Size2f(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Size2f(int size) { allocateArray(size); }
+    public Size2f(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Size2f position(int position) {
         return (Size2f)super.position(position);
@@ -8967,13 +8967,13 @@ OpenCV defines the following Size_\<\> aliases:
 
 
     /** various constructors */
-    public Size2f() { allocate(); }
+    public Size2f() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public Size2f(float _width, float _height) { allocate(_width, _height); }
+    public Size2f(float _width, float _height) { super((Pointer)null); allocate(_width, _height); }
     private native void allocate(float _width, float _height);
-    public Size2f(@Const @ByRef Size2f sz) { allocate(sz); }
+    public Size2f(@Const @ByRef Size2f sz) { super((Pointer)null); allocate(sz); }
     private native void allocate(@Const @ByRef Size2f sz);
-    public Size2f(@Const @ByRef Point2f pt) { allocate(pt); }
+    public Size2f(@Const @ByRef Point2f pt) { super((Pointer)null); allocate(pt); }
     private native void allocate(@Const @ByRef Point2f pt);
 
     public native @ByRef @Name("operator =") Size2f put(@Const @ByRef Size2f sz);
@@ -8990,7 +8990,7 @@ OpenCV defines the following Size_\<\> aliases:
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Size2d(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Size2d(int size) { allocateArray(size); }
+    public Size2d(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Size2d position(int position) {
         return (Size2d)super.position(position);
@@ -8998,13 +8998,13 @@ OpenCV defines the following Size_\<\> aliases:
 
 
     /** various constructors */
-    public Size2d() { allocate(); }
+    public Size2d() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public Size2d(double _width, double _height) { allocate(_width, _height); }
+    public Size2d(double _width, double _height) { super((Pointer)null); allocate(_width, _height); }
     private native void allocate(double _width, double _height);
-    public Size2d(@Const @ByRef Size2d sz) { allocate(sz); }
+    public Size2d(@Const @ByRef Size2d sz) { super((Pointer)null); allocate(sz); }
     private native void allocate(@Const @ByRef Size2d sz);
-    public Size2d(@Const @ByRef Point2d pt) { allocate(pt); }
+    public Size2d(@Const @ByRef Point2d pt) { super((Pointer)null); allocate(pt); }
     private native void allocate(@Const @ByRef Point2d pt);
 
     public native @ByRef @Name("operator =") Size2d put(@Const @ByRef Size2d sz);
@@ -9021,28 +9021,28 @@ OpenCV defines the following Size_\<\> aliases:
 
 //////////////////////////////// Rect_ ////////////////////////////////
 
-/** @brief Template class for 2D rectangles
-
+/** \brief Template class for 2D rectangles
+<p>
 described by the following parameters:
 -   Coordinates of the top-left corner. This is a default interpretation of Rect_::x and Rect_::y
     in OpenCV. Though, in your algorithms you may count x and y from the bottom-left corner.
 -   Rectangle width and height.
-
+<p>
 OpenCV typically assumes that the top and left boundary of the rectangle are inclusive, while the
 right and bottom boundaries are not. For example, the method Rect_::contains returns true if
-
+<p>
 \f[x  \leq pt.x < x+width,
       y  \leq pt.y < y+height\f]
-
+<p>
 Virtually every loop over an image ROI in OpenCV (where ROI is specified by Rect_\<int\> ) is
 implemented as:
-@code
+<pre><code>
     for(int y = roi.y; y < roi.y + roi.height; y++)
         for(int x = roi.x; x < roi.x + roi.width; x++)
         {
             // ...
         }
-@endcode
+</code></pre>
 In addition to the class members, the following operations on rectangles are implemented:
 -   \f$\texttt{rect} = \texttt{rect} \pm \texttt{point}\f$ (shifting a rectangle by a certain offset)
 -   \f$\texttt{rect} = \texttt{rect} \pm \texttt{size}\f$ (expanding or shrinking a rectangle by a
@@ -9052,16 +9052,16 @@ In addition to the class members, the following operations on rectangles are imp
 -   rect = rect1 | rect2 (minimum area rectangle containing rect1 and rect2 )
 -   rect &= rect1, rect |= rect1 (and the corresponding augmenting operations)
 -   rect == rect1, rect != rect1 (rectangle comparison)
-
+<p>
 This is an example how the partial ordering on rectangles can be established (rect1 \f$\subseteq\f$
 rect2):
-@code
+<pre><code>
     template<typename _Tp> inline bool
     operator <= (const Rect_<_Tp>& r1, const Rect_<_Tp>& r2)
     {
         return (r1 & r2) == r1;
     }
-@endcode
+</code></pre>
 For your convenience, the Rect_\<\> alias is available: cv::Rect
 */
 @Name("cv::Rect_<int>") @NoOffset public static class Rect extends IntPointer {
@@ -9069,7 +9069,7 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Rect(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Rect(int size) { allocateArray(size); }
+    public Rect(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Rect position(int position) {
         return (Rect)super.position(position);
@@ -9077,15 +9077,15 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
 
 
     /** various constructors */
-    public Rect() { allocate(); }
+    public Rect() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public Rect(int _x, int _y, int _width, int _height) { allocate(_x, _y, _width, _height); }
+    public Rect(int _x, int _y, int _width, int _height) { super((Pointer)null); allocate(_x, _y, _width, _height); }
     private native void allocate(int _x, int _y, int _width, int _height);
-    public Rect(@Const @ByRef Rect r) { allocate(r); }
+    public Rect(@Const @ByRef Rect r) { super((Pointer)null); allocate(r); }
     private native void allocate(@Const @ByRef Rect r);
-    public Rect(@Const @ByRef Point org, @Const @ByRef Size sz) { allocate(org, sz); }
+    public Rect(@Const @ByRef Point org, @Const @ByRef Size sz) { super((Pointer)null); allocate(org, sz); }
     private native void allocate(@Const @ByRef Point org, @Const @ByRef Size sz);
-    public Rect(@Const @ByRef Point pt1, @Const @ByRef Point pt2) { allocate(pt1, pt2); }
+    public Rect(@Const @ByRef Point pt1, @Const @ByRef Point pt2) { super((Pointer)null); allocate(pt1, pt2); }
     private native void allocate(@Const @ByRef Point pt1, @Const @ByRef Point pt2);
 
     public native @ByRef @Name("operator =") Rect put( @Const @ByRef Rect r );
@@ -9114,7 +9114,7 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Rectf(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Rectf(int size) { allocateArray(size); }
+    public Rectf(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Rectf position(int position) {
         return (Rectf)super.position(position);
@@ -9122,15 +9122,15 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
 
 
     /** various constructors */
-    public Rectf() { allocate(); }
+    public Rectf() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public Rectf(float _x, float _y, float _width, float _height) { allocate(_x, _y, _width, _height); }
+    public Rectf(float _x, float _y, float _width, float _height) { super((Pointer)null); allocate(_x, _y, _width, _height); }
     private native void allocate(float _x, float _y, float _width, float _height);
-    public Rectf(@Const @ByRef Rectf r) { allocate(r); }
+    public Rectf(@Const @ByRef Rectf r) { super((Pointer)null); allocate(r); }
     private native void allocate(@Const @ByRef Rectf r);
-    public Rectf(@Const @ByRef Point2f org, @Const @ByRef Size2f sz) { allocate(org, sz); }
+    public Rectf(@Const @ByRef Point2f org, @Const @ByRef Size2f sz) { super((Pointer)null); allocate(org, sz); }
     private native void allocate(@Const @ByRef Point2f org, @Const @ByRef Size2f sz);
-    public Rectf(@Const @ByRef Point2f pt1, @Const @ByRef Point2f pt2) { allocate(pt1, pt2); }
+    public Rectf(@Const @ByRef Point2f pt1, @Const @ByRef Point2f pt2) { super((Pointer)null); allocate(pt1, pt2); }
     private native void allocate(@Const @ByRef Point2f pt1, @Const @ByRef Point2f pt2);
 
     public native @ByRef @Name("operator =") Rectf put( @Const @ByRef Rectf r );
@@ -9159,7 +9159,7 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Rectd(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Rectd(int size) { allocateArray(size); }
+    public Rectd(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Rectd position(int position) {
         return (Rectd)super.position(position);
@@ -9167,15 +9167,15 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
 
 
     /** various constructors */
-    public Rectd() { allocate(); }
+    public Rectd() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public Rectd(double _x, double _y, double _width, double _height) { allocate(_x, _y, _width, _height); }
+    public Rectd(double _x, double _y, double _width, double _height) { super((Pointer)null); allocate(_x, _y, _width, _height); }
     private native void allocate(double _x, double _y, double _width, double _height);
-    public Rectd(@Const @ByRef Rectd r) { allocate(r); }
+    public Rectd(@Const @ByRef Rectd r) { super((Pointer)null); allocate(r); }
     private native void allocate(@Const @ByRef Rectd r);
-    public Rectd(@Const @ByRef Point2d org, @Const @ByRef Size2d sz) { allocate(org, sz); }
+    public Rectd(@Const @ByRef Point2d org, @Const @ByRef Size2d sz) { super((Pointer)null); allocate(org, sz); }
     private native void allocate(@Const @ByRef Point2d org, @Const @ByRef Size2d sz);
-    public Rectd(@Const @ByRef Point2d pt1, @Const @ByRef Point2d pt2) { allocate(pt1, pt2); }
+    public Rectd(@Const @ByRef Point2d pt1, @Const @ByRef Point2d pt2) { super((Pointer)null); allocate(pt1, pt2); }
     private native void allocate(@Const @ByRef Point2d pt1, @Const @ByRef Point2d pt2);
 
     public native @ByRef @Name("operator =") Rectd put( @Const @ByRef Rectd r );
@@ -9204,13 +9204,13 @@ For your convenience, the Rect_\<\> alias is available: cv::Rect
 
 ///////////////////////////// RotatedRect /////////////////////////////
 
-/** @brief The class represents rotated (i.e. not up-right) rectangles on a plane.
-
+/** \brief The class represents rotated (i.e. not up-right) rectangles on a plane.
+<p>
 Each rectangle is specified by the center point (mass center), length of each side (represented by
 cv::Size2f structure) and the rotation angle in degrees.
-
+<p>
 The sample below demonstrates how to use RotatedRect:
-@code
+<pre><code>
     Mat image(200, 200, CV_8UC3, Scalar(0));
     RotatedRect rRect = RotatedRect(Point2f(100,100), Size2f(100,50), 30);
 
@@ -9224,24 +9224,24 @@ The sample below demonstrates how to use RotatedRect:
 
     imshow("rectangles", image);
     waitKey(0);
-@endcode
+</code></pre>
 ![image](pics/rotatedrect.png)
-
-@sa CamShift, fitEllipse, minAreaRect, CvBox2D
+<p>
+\sa CamShift, fitEllipse, minAreaRect, CvBox2D
 */
 @Namespace("cv") @NoOffset public static class RotatedRect extends FloatPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RotatedRect(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public RotatedRect(int size) { allocateArray(size); }
+    public RotatedRect(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public RotatedRect position(int position) {
         return (RotatedRect)super.position(position);
     }
 
     /** various constructors */
-    public RotatedRect() { allocate(); }
+    public RotatedRect() { super((Pointer)null); allocate(); }
     private native void allocate();
     /**
     @param center The rectangle mass center.
@@ -9249,13 +9249,13 @@ The sample below demonstrates how to use RotatedRect:
     @param angle The rotation angle in a clockwise direction. When the angle is 0, 90, 180, 270 etc.,
     the rectangle becomes an up-right rectangle.
     */
-    public RotatedRect(@Const @ByRef Point2f center, @Const @ByRef Size2f size, float angle) { allocate(center, size, angle); }
+    public RotatedRect(@Const @ByRef Point2f center, @Const @ByRef Size2f size, float angle) { super((Pointer)null); allocate(center, size, angle); }
     private native void allocate(@Const @ByRef Point2f center, @Const @ByRef Size2f size, float angle);
     /**
     Any 3 end points of the RotatedRect. They must be given in order (either clockwise or
     anticlockwise).
      */
-    public RotatedRect(@Const @ByRef Point2f point1, @Const @ByRef Point2f point2, @Const @ByRef Point2f point3) { allocate(point1, point2, point3); }
+    public RotatedRect(@Const @ByRef Point2f point1, @Const @ByRef Point2f point2, @Const @ByRef Point2f point3) { super((Pointer)null); allocate(point1, point2, point3); }
     private native void allocate(@Const @ByRef Point2f point1, @Const @ByRef Point2f point2, @Const @ByRef Point2f point3);
 
     /** returns 4 vertices of the rectangle
@@ -9274,18 +9274,18 @@ The sample below demonstrates how to use RotatedRect:
 
 //////////////////////////////// Range /////////////////////////////////
 
-/** @brief Template class specifying a continuous subsequence (slice) of a sequence.
-
+/** \brief Template class specifying a continuous subsequence (slice) of a sequence.
+<p>
 The class is used to specify a row or a column span in a matrix ( Mat ) and for many other purposes.
 Range(a,b) is basically the same as a:b in Matlab or a..b in Python. As in Python, start is an
 inclusive left boundary of the range and end is an exclusive right boundary of the range. Such a
 half-opened interval is usually denoted as \f$[start,end)\f$ .
-
+<p>
 The static method Range::all() returns a special variable that means "the whole sequence" or "the
 whole range", just like " : " in Matlab or " ... " in Python. All the methods and functions in
 OpenCV that take Range support this special Range::all() value. But, of course, in case of your own
 custom processing, you will probably have to check and handle it explicitly:
-@code
+<pre><code>
     void my_function(..., const Range& r, ....)
     {
         if(r == Range::all()) {
@@ -9295,22 +9295,22 @@ custom processing, you will probably have to check and handle it explicitly:
             // process [r.start, r.end)
         }
     }
-@endcode
+</code></pre>
 */
 @Namespace("cv") @NoOffset public static class Range extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Range(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Range(int size) { allocateArray(size); }
+    public Range(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Range position(int position) {
         return (Range)super.position(position);
     }
 
-    public Range() { allocate(); }
+    public Range() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public Range(int _start, int _end) { allocate(_start, _end); }
+    public Range(int _start, int _end) { super((Pointer)null); allocate(_start, _end); }
     private native void allocate(int _start, int _end);
     public native int size();
     public native @Cast("bool") boolean empty();
@@ -9324,8 +9324,8 @@ custom processing, you will probably have to check and handle it explicitly:
 
 //////////////////////////////// Scalar_ ///////////////////////////////
 
-/** @brief Template class for a 4-element vector derived from Vec.
-
+/** \brief Template class for a 4-element vector derived from Vec.
+<p>
 Being derived from Vec\<_Tp, 4\> , Scalar_ and Scalar can be used just as typical 4-element
 vectors. In addition, they can be converted to/from CvScalar . The type Scalar is widely used in
 OpenCV to pass pixel values.
@@ -9335,20 +9335,20 @@ OpenCV to pass pixel values.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Scalar(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Scalar(int size) { allocateArray(size); }
+    public Scalar(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Scalar position(int position) {
         return (Scalar)super.position(position);
     }
 
     /** various constructors */
-    public Scalar() { allocate(); }
+    public Scalar() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public Scalar(double v0, double v1, double v2/*=0*/, double v3/*=0*/) { allocate(v0, v1, v2, v3); }
+    public Scalar(double v0, double v1, double v2/*=0*/, double v3/*=0*/) { super((Pointer)null); allocate(v0, v1, v2, v3); }
     private native void allocate(double v0, double v1, double v2/*=0*/, double v3/*=0*/);
-    public Scalar(double v0, double v1) { allocate(v0, v1); }
+    public Scalar(double v0, double v1) { super((Pointer)null); allocate(v0, v1); }
     private native void allocate(double v0, double v1);
-    public Scalar(double v0) { allocate(v0); }
+    public Scalar(double v0) { super((Pointer)null); allocate(v0); }
     private native void allocate(double v0);
 
     /** returns a scalar with all elements set to v0 */
@@ -9371,12 +9371,12 @@ OpenCV to pass pixel values.
 
 /////////////////////////////// KeyPoint ////////////////////////////////
 
-/** @brief Data structure for salient point detectors.
-
+/** \brief Data structure for salient point detectors.
+<p>
 The class instance stores a keypoint, i.e. a point feature found by one of many available keypoint
 detectors, such as Harris corner detector, cv::FAST, cv::StarDetector, cv::SURF, cv::SIFT,
 cv::LDetector etc.
-
+<p>
 The keypoint is characterized by the 2D position, scale (proportional to the diameter of the
 neighborhood that needs to be taken into account), orientation and some other parameters. The
 keypoint neighborhood is then analyzed by another algorithm that builds a descriptor (usually
@@ -9388,14 +9388,14 @@ can then be matched using cv::KDTree or another method.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KeyPoint(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public KeyPoint(int size) { allocateArray(size); }
+    public KeyPoint(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public KeyPoint position(int position) {
         return (KeyPoint)super.position(position);
     }
 
     /** the default constructor */
-    public KeyPoint() { allocate(); }
+    public KeyPoint() { super((Pointer)null); allocate(); }
     private native void allocate();
     /**
     @param _pt x & y coordinates of the keypoint
@@ -9405,9 +9405,9 @@ can then be matched using cv::KDTree or another method.
     @param _octave pyramid octave in which the keypoint has been detected
     @param _class_id object id
      */
-    public KeyPoint(@ByVal Point2f _pt, float _size, float _angle/*=-1*/, float _response/*=0*/, int _octave/*=0*/, int _class_id/*=-1*/) { allocate(_pt, _size, _angle, _response, _octave, _class_id); }
+    public KeyPoint(@ByVal Point2f _pt, float _size, float _angle/*=-1*/, float _response/*=0*/, int _octave/*=0*/, int _class_id/*=-1*/) { super((Pointer)null); allocate(_pt, _size, _angle, _response, _octave, _class_id); }
     private native void allocate(@ByVal Point2f _pt, float _size, float _angle/*=-1*/, float _response/*=0*/, int _octave/*=0*/, int _class_id/*=-1*/);
-    public KeyPoint(@ByVal Point2f _pt, float _size) { allocate(_pt, _size); }
+    public KeyPoint(@ByVal Point2f _pt, float _size) { super((Pointer)null); allocate(_pt, _size); }
     private native void allocate(@ByVal Point2f _pt, float _size);
     /**
     @param x x-coordinate of the keypoint
@@ -9418,9 +9418,9 @@ can then be matched using cv::KDTree or another method.
     @param _octave pyramid octave in which the keypoint has been detected
     @param _class_id object id
      */
-    public KeyPoint(float x, float y, float _size, float _angle/*=-1*/, float _response/*=0*/, int _octave/*=0*/, int _class_id/*=-1*/) { allocate(x, y, _size, _angle, _response, _octave, _class_id); }
+    public KeyPoint(float x, float y, float _size, float _angle/*=-1*/, float _response/*=0*/, int _octave/*=0*/, int _class_id/*=-1*/) { super((Pointer)null); allocate(x, y, _size, _angle, _response, _octave, _class_id); }
     private native void allocate(float x, float y, float _size, float _angle/*=-1*/, float _response/*=0*/, int _octave/*=0*/, int _class_id/*=-1*/);
-    public KeyPoint(float x, float y, float _size) { allocate(x, y, _size); }
+    public KeyPoint(float x, float y, float _size) { super((Pointer)null); allocate(x, y, _size); }
     private native void allocate(float x, float y, float _size);
 
     public native @Cast("size_t") long hash();
@@ -9428,7 +9428,7 @@ can then be matched using cv::KDTree or another method.
     /**
     This method converts vector of keypoints to vector of points or the reverse, where each keypoint is
     assigned the same size and the same orientation.
-
+<p>
     @param keypoints Keypoints obtained from any feature detection algorithm like SIFT/SURF/ORB
     @param points2f Array of (x,y) coordinates of each keypoint
     @param keypointIndexes Array of indexes of keypoints to be converted to points. (Acts like a mask to
@@ -9445,7 +9445,7 @@ can then be matched using cv::KDTree or another method.
     public static native void convert(@Const @ByRef KeyPointVector keypoints,
                                     @ByRef Point2fVector points2f,
                                     @StdVector int[] keypointIndexes/*=std::vector<int>()*/);
-    /** @overload
+    /** \overload
     @param points2f Array of (x,y) coordinates of each keypoint
     @param keypoints Keypoints obtained from any feature detection algorithm like SIFT/SURF/ORB
     @param size keypoint diameter
@@ -9488,8 +9488,8 @@ can then be matched using cv::KDTree or another method.
 
 //////////////////////////////// DMatch /////////////////////////////////
 
-/** @brief Class for matching keypoint descriptors
-
+/** \brief Class for matching keypoint descriptors
+<p>
 query descriptor index, train descriptor index, train image index, and distance between
 descriptors.
 */
@@ -9498,17 +9498,17 @@ descriptors.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DMatch(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public DMatch(int size) { allocateArray(size); }
+    public DMatch(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public DMatch position(int position) {
         return (DMatch)super.position(position);
     }
 
-    public DMatch() { allocate(); }
+    public DMatch() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public DMatch(int _queryIdx, int _trainIdx, float _distance) { allocate(_queryIdx, _trainIdx, _distance); }
+    public DMatch(int _queryIdx, int _trainIdx, float _distance) { super((Pointer)null); allocate(_queryIdx, _trainIdx, _distance); }
     private native void allocate(int _queryIdx, int _trainIdx, float _distance);
-    public DMatch(int _queryIdx, int _trainIdx, int _imgIdx, float _distance) { allocate(_queryIdx, _trainIdx, _imgIdx, _distance); }
+    public DMatch(int _queryIdx, int _trainIdx, int _imgIdx, float _distance) { super((Pointer)null); allocate(_queryIdx, _trainIdx, _imgIdx, _distance); }
     private native void allocate(int _queryIdx, int _trainIdx, int _imgIdx, float _distance);
 
     public native int queryIdx(); public native DMatch queryIdx(int queryIdx); // query descriptor index
@@ -9525,8 +9525,8 @@ descriptors.
 
 ///////////////////////////// TermCriteria //////////////////////////////
 
-/** @brief The class defining termination criteria for iterative algorithms.
-
+/** \brief The class defining termination criteria for iterative algorithms.
+<p>
 You can initialize it by default constructor and then override any parameters, or the structure may
 be fully initialized using the advanced variant of the constructor.
 */
@@ -9535,7 +9535,7 @@ be fully initialized using the advanced variant of the constructor.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TermCriteria(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public TermCriteria(int size) { allocateArray(size); }
+    public TermCriteria(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public TermCriteria position(int position) {
         return (TermCriteria)super.position(position);
@@ -9554,14 +9554,14 @@ be fully initialized using the advanced variant of the constructor.
         EPS= 2;
 
     /** default constructor */
-    public TermCriteria() { allocate(); }
+    public TermCriteria() { super((Pointer)null); allocate(); }
     private native void allocate();
     /**
     @param type The type of termination criteria, one of TermCriteria::Type
     @param maxCount The maximum number of iterations or elements to compute.
     @param epsilon The desired accuracy or change in parameters at which the iterative algorithm stops.
     */
-    public TermCriteria(int type, int maxCount, double epsilon) { allocate(type, maxCount, epsilon); }
+    public TermCriteria(int type, int maxCount, double epsilon) { super((Pointer)null); allocate(type, maxCount, epsilon); }
     private native void allocate(int type, int maxCount, double epsilon);
 
     /** the type of termination criteria: COUNT, EPS or COUNT + EPS */
@@ -9571,42 +9571,42 @@ be fully initialized using the advanced variant of the constructor.
 }
 
 
-/** @} core_basic
+/** \} core_basic
 
 ///////////////////////// raster image moments //////////////////////////
 
- *  @addtogroup imgproc_shape
- *  @{
+ *  \addtogroup imgproc_shape
+ *  \{
 
-/** @brief struct returned by cv::moments
-
+/** \brief struct returned by cv::moments
+<p>
 The spatial moments \f$\texttt{Moments::m}_{ji}\f$ are computed as:
-
+<p>
 \f[\texttt{m} _{ji}= \sum _{x,y}  \left ( \texttt{array} (x,y)  \cdot x^j  \cdot y^i \right )\f]
-
+<p>
 The central moments \f$\texttt{Moments::mu}_{ji}\f$ are computed as:
-
+<p>
 \f[\texttt{mu} _{ji}= \sum _{x,y}  \left ( \texttt{array} (x,y)  \cdot (x -  \bar{x} )^j  \cdot (y -  \bar{y} )^i \right )\f]
-
+<p>
 where \f$(\bar{x}, \bar{y})\f$ is the mass center:
-
+<p>
 \f[\bar{x} = \frac{\texttt{m}_{10}}{\texttt{m}_{00}} , \; \bar{y} = \frac{\texttt{m}_{01}}{\texttt{m}_{00}}\f]
-
+<p>
 The normalized central moments \f$\texttt{Moments::nu}_{ij}\f$ are computed as:
-
+<p>
 \f[\texttt{nu} _{ji}= \frac{\texttt{mu}_{ji}}{\texttt{m}_{00}^{(i+j)/2+1}} .\f]
-
-@note
+<p>
+\note
 \f$\texttt{mu}_{00}=\texttt{m}_{00}\f$, \f$\texttt{nu}_{00}=1\f$
 \f$\texttt{nu}_{10}=\texttt{mu}_{10}=\texttt{mu}_{01}=\texttt{mu}_{10}=0\f$ , hence the values are not
 stored.
-
+<p>
 The moments of a contour are defined in the same way but computed using the Green's formula (see
 <http://en.wikipedia.org/wiki/Green_theorem>). So, due to a limited raster resolution, the moments
 computed for a contour are slightly different from the moments computed for the same rasterized
 contour.
-
-@note
+<p>
+\note
 Since the contour moments are computed using Green formula, you may get seemingly odd results for
 contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped contours.
  */
@@ -9615,18 +9615,18 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Moments(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Moments(int size) { allocateArray(size); }
+    public Moments(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Moments position(int position) {
         return (Moments)super.position(position);
     }
 
     /** the default constructor */
-    public Moments() { allocate(); }
+    public Moments() { super((Pointer)null); allocate(); }
     private native void allocate();
     /** the full constructor */
     public Moments(double m00, double m10, double m01, double m20, double m11,
-                double m02, double m30, double m21, double m12, double m03 ) { allocate(m00, m10, m01, m20, m11, m02, m30, m21, m12, m03); }
+                double m02, double m30, double m21, double m12, double m03 ) { super((Pointer)null); allocate(m00, m10, m01, m20, m11, m02, m30, m21, m12, m03); }
     private native void allocate(double m00, double m10, double m01, double m20, double m11,
                 double m02, double m30, double m21, double m12, double m03 );
     ////! the conversion from CvMoments
@@ -9634,8 +9634,8 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
     ////! the conversion to CvMoments
     //operator CvMoments() const;
 
-    /** @name spatial moments
-     *  @{ */
+    /** \name spatial moments
+     *  \{ */
     public native double m00(); public native Moments m00(double m00);
     public native double m10(); public native Moments m10(double m10);
     public native double m01(); public native Moments m01(double m01);
@@ -9646,10 +9646,10 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
     public native double m21(); public native Moments m21(double m21);
     public native double m12(); public native Moments m12(double m12);
     public native double m03(); public native Moments m03(double m03);
-    /** @}
+    /** \}
 
-     *  @name central moments
-     *  @{ */
+     *  \name central moments
+     *  \{ */
     public native double mu20(); public native Moments mu20(double mu20);
     public native double mu11(); public native Moments mu11(double mu11);
     public native double mu02(); public native Moments mu02(double mu02);
@@ -9657,10 +9657,10 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
     public native double mu21(); public native Moments mu21(double mu21);
     public native double mu12(); public native Moments mu12(double mu12);
     public native double mu03(); public native Moments mu03(double mu03);
-    /** @}
+    /** \}
 
-     *  @name central normalized moments
-     *  @{ */
+     *  \name central normalized moments
+     *  \{ */
     public native double nu20(); public native Moments nu20(double nu20);
     public native double nu11(); public native Moments nu11(double nu11);
     public native double nu02(); public native Moments nu02(double nu02);
@@ -9668,12 +9668,12 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
     public native double nu21(); public native Moments nu21(double nu21);
     public native double nu12(); public native Moments nu12(double nu12);
     public native double nu03(); public native Moments nu03(double nu03);
-    /** @} */
+    /** \} */
 }
 
-/** @} imgproc_shape
+/** \} imgproc_shape
 
- *  @cond IGNORED
+ *  \cond IGNORED
 
 /////////////////////////////////////////////////////////////////////////
 ///////////////////////////// Implementation ////////////////////////////
@@ -9882,7 +9882,7 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
 
 
 
-/** @endcond */
+/** \endcond */
 
  // cv
 
@@ -9952,42 +9952,42 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
 // #include "opencv2/core/persistence.hpp"
 
 /**
-@defgroup core Core functionality
-@{
-    @defgroup core_basic Basic structures
-    @defgroup core_c C structures and operations
-    @{
-        @defgroup core_c_glue Connections with C++
-    @}
-    @defgroup core_array Operations on arrays
-    @defgroup core_xml XML/YAML Persistence
-    @defgroup core_cluster Clustering
-    @defgroup core_utils Utility and system functions and macros
-    @{
-        @defgroup core_utils_neon NEON utilities
-    @}
-    @defgroup core_opengl OpenGL interoperability
-    @defgroup core_ipp Intel IPP Asynchronous C/C++ Converters
-    @defgroup core_optim Optimization Algorithms
-    @defgroup core_directx DirectX interoperability
-    @defgroup core_eigen Eigen support
-    @defgroup core_opencl OpenCL support
-@}
+\defgroup core Core functionality
+\{
+    \defgroup core_basic Basic structures
+    \defgroup core_c C structures and operations
+    \{
+        \defgroup core_c_glue Connections with C++
+    \}
+    \defgroup core_array Operations on arrays
+    \defgroup core_xml XML/YAML Persistence
+    \defgroup core_cluster Clustering
+    \defgroup core_utils Utility and system functions and macros
+    \{
+        \defgroup core_utils_neon NEON utilities
+    \}
+    \defgroup core_opengl OpenGL interoperability
+    \defgroup core_ipp Intel IPP Asynchronous C/C++ Converters
+    \defgroup core_optim Optimization Algorithms
+    \defgroup core_directx DirectX interoperability
+    \defgroup core_eigen Eigen support
+    \defgroup core_opencl OpenCL support
+\}
  */
 
-/** @addtogroup core_utils
- *  @{
+/** \addtogroup core_utils
+ *  \{
 
-/** @brief Class passed to an error.
-
+/** \brief Class passed to an error.
+<p>
 This class encapsulates all or almost all necessary
 information about the error happened in the program. The exception is
 usually constructed and thrown implicitly via CV_Error and CV_Error_ macros.
 @see error
  */
 
-/** @brief Signals an error and raises the exception.
-
+/** \brief Signals an error and raises the exception.
+<p>
 By default the function prints information about the error to stderr,
 then it either stops if cv::setBreakOnError() had been called before or raises the exception.
 It is possible to alternate error processing by using cv::redirectError().
@@ -10010,10 +10010,10 @@ public static final int /** each matrix row is sorted independently */
  *  mutually exclusive. */
                  SORT_DESCENDING   = 16;
 
-/** @} core_utils
+/** \} core_utils
 
- *  @addtogroup core
- *  @{
+ *  \addtogroup core
+ *  \{
 
  *  Covariation flags */
 /** enum cv::CovarFlags */
@@ -10109,28 +10109,28 @@ public static final int /** the output is the sum of all rows/columns of the mat
                    REDUCE_MIN = 3;
 
 
-/** @brief Swaps two matrices
+/** \brief Swaps two matrices
 */
 @Namespace("cv") public static native void swap(@ByRef Mat a, @ByRef Mat b);
-/** @overload */
+/** \overload */
 @Namespace("cv") public static native void swap( @ByRef UMat a, @ByRef UMat b );
 
-/** @} core
+/** \} core
 
- *  @addtogroup core_array
- *  @{
+ *  \addtogroup core_array
+ *  \{
 
-/** @brief Computes the source location of an extrapolated pixel.
-
+/** \brief Computes the source location of an extrapolated pixel.
+<p>
 The function computes and returns the coordinate of a donor pixel corresponding to the specified
 extrapolated pixel when using the specified extrapolation border mode. For example, if you use
 cv::BORDER_WRAP mode in the horizontal direction, cv::BORDER_REFLECT_101 in the vertical direction and
 want to compute value of the "virtual" pixel Point(-5, 100) in a floating-point image img , it
 looks like:
-@code{.cpp}
+<pre><code>{.cpp}
     float val = img.at<float>(borderInterpolate(100, img.rows, cv::BORDER_REFLECT_101),
                               borderInterpolate(-5, img.cols, cv::BORDER_WRAP));
-@endcode
+</code></pre>
 Normally, the function is not called directly. It is used inside filtering functions and also in
 copyMakeBorder.
 @param p 0-based coordinate of the extrapolated pixel along one of the axes, likely \<0 or \>= len
@@ -10138,22 +10138,22 @@ copyMakeBorder.
 @param borderType Border type, one of the cv::BorderTypes, except for cv::BORDER_TRANSPARENT and
 cv::BORDER_ISOLATED . When borderType==cv::BORDER_CONSTANT , the function always returns -1, regardless
 of p and len.
-
-@sa copyMakeBorder
+<p>
+\sa copyMakeBorder
 */
 @Namespace("cv") public static native int borderInterpolate(int p, int len, int borderType);
 
-/** @brief Forms a border around an image.
-
+/** \brief Forms a border around an image.
+<p>
 The function copies the source image into the middle of the destination image. The areas to the
 left, to the right, above and below the copied source image will be filled with extrapolated
 pixels. This is not what filtering functions based on it do (they extrapolate pixels on-fly), but
 what other more complex functions, including your own, may do to simplify image boundary handling.
-
+<p>
 The function supports the mode when src is already in the middle of dst . In this case, the
 function does not copy src itself but simply constructs the border, for example:
-
-@code{.cpp}
+<p>
+<pre><code>{.cpp}
     // let border be the same in all directions
     int border=2;
     // constructs a larger image to fit both the image and the border
@@ -10167,11 +10167,11 @@ function does not copy src itself but simply constructs the border, for example:
                    border, border, BORDER_REPLICATE);
     // now do some custom filtering ...
     ...
-@endcode
-@note When the source image is a part (ROI) of a bigger image, the function will try to use the
+</code></pre>
+\note When the source image is a part (ROI) of a bigger image, the function will try to use the
 pixels outside of the ROI to form a border. To disable this feature and always do extrapolation, as
 if src was not a ROI, use borderType | BORDER_ISOLATED.
-
+<p>
 @param src Source image.
 @param dst Destination image of the same type as src and the size Size(src.cols+left+right,
 src.rows+top+bottom) .
@@ -10183,8 +10183,8 @@ to extrapolate. For example, top=1, bottom=1, left=1, right=1 mean that 1 pixel-
 to be built.
 @param borderType Border type. See borderInterpolate for details.
 @param value Border value if borderType==BORDER_CONSTANT .
-
-@sa  borderInterpolate
+<p>
+\sa  borderInterpolate
 */
 @Namespace("cv") public static native void copyMakeBorder(@ByVal Mat src, @ByVal Mat dst,
                                  int top, int bottom, int left, int right,
@@ -10193,32 +10193,32 @@ to be built.
                                  int top, int bottom, int left, int right,
                                  int borderType );
 
-/** @brief Calculates the per-element sum of two arrays or an array and a scalar.
-
+/** \brief Calculates the per-element sum of two arrays or an array and a scalar.
+<p>
 The function add calculates:
 - Sum of two arrays when both input arrays have the same size and the same number of channels:
 \f[\texttt{dst}(I) =  \texttt{saturate} ( \texttt{src1}(I) +  \texttt{src2}(I)) \quad \texttt{if mask}(I) \ne0\f]
 - Sum of an array and a scalar when src2 is constructed from Scalar or has the same number of
-elements as `src1.channels()`:
+elements as {@code src1.channels()}:
 \f[\texttt{dst}(I) =  \texttt{saturate} ( \texttt{src1}(I) +  \texttt{src2} ) \quad \texttt{if mask}(I) \ne0\f]
 - Sum of a scalar and an array when src1 is constructed from Scalar or has the same number of
-elements as `src2.channels()`:
+elements as {@code src2.channels()}:
 \f[\texttt{dst}(I) =  \texttt{saturate} ( \texttt{src1} +  \texttt{src2}(I) ) \quad \texttt{if mask}(I) \ne0\f]
-where `I` is a multi-dimensional index of array elements. In case of multi-channel arrays, each
+where {@code I} is a multi-dimensional index of array elements. In case of multi-channel arrays, each
 channel is processed independently.
-
+<p>
 The first function in the list above can be replaced with matrix expressions:
-@code{.cpp}
+<pre><code>{.cpp}
     dst = src1 + src2;
     dst += src1; // equivalent to add(dst, src1, dst);
-@endcode
+</code></pre>
 The input arrays and the output array can all have the same or different depths. For example, you
 can add a 16-bit unsigned array to a 8-bit signed array and store the sum as a 32-bit
 floating-point array. Depth of the output array is determined by the dtype parameter. In the second
 and third cases above, as well as in the first case, when src1.depth() == src2.depth(), dtype can
 be set to the default -1. In this case, the output array will have the same depth as the input
 array, be it src1, src2 or both.
-@note Saturation is not applied when the output array has the depth CV_32S. You may even get
+\note Saturation is not applied when the output array has the depth CV_32S. You may even get
 result of an incorrect sign in the case of overflow.
 @param src1 first input array or a scalar.
 @param src2 second input array or a scalar.
@@ -10227,40 +10227,40 @@ depth is defined by dtype or src1/src2.
 @param mask optional operation mask - 8-bit single channel array, that specifies elements of the
 output array to be changed.
 @param dtype optional depth of the output array (see the discussion below).
-@sa subtract, addWeighted, scaleAdd, Mat::convertTo
+\sa subtract, addWeighted, scaleAdd, Mat::convertTo
 */
 @Namespace("cv") public static native void add(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst,
                       @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/, int dtype/*=-1*/);
 @Namespace("cv") public static native void add(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst);
 
-/** @brief Calculates the per-element difference between two arrays or array and a scalar.
-
+/** \brief Calculates the per-element difference between two arrays or array and a scalar.
+<p>
 The function subtract calculates:
 - Difference between two arrays, when both input arrays have the same size and the same number of
 channels:
     \f[\texttt{dst}(I) =  \texttt{saturate} ( \texttt{src1}(I) -  \texttt{src2}(I)) \quad \texttt{if mask}(I) \ne0\f]
 - Difference between an array and a scalar, when src2 is constructed from Scalar or has the same
-number of elements as `src1.channels()`:
+number of elements as {@code src1.channels()}:
     \f[\texttt{dst}(I) =  \texttt{saturate} ( \texttt{src1}(I) -  \texttt{src2} ) \quad \texttt{if mask}(I) \ne0\f]
 - Difference between a scalar and an array, when src1 is constructed from Scalar or has the same
-number of elements as `src2.channels()`:
+number of elements as {@code src2.channels()}:
     \f[\texttt{dst}(I) =  \texttt{saturate} ( \texttt{src1} -  \texttt{src2}(I) ) \quad \texttt{if mask}(I) \ne0\f]
-- The reverse difference between a scalar and an array in the case of `SubRS`:
+- The reverse difference between a scalar and an array in the case of {@code SubRS}:
     \f[\texttt{dst}(I) =  \texttt{saturate} ( \texttt{src2} -  \texttt{src1}(I) ) \quad \texttt{if mask}(I) \ne0\f]
 where I is a multi-dimensional index of array elements. In case of multi-channel arrays, each
 channel is processed independently.
-
+<p>
 The first function in the list above can be replaced with matrix expressions:
-@code{.cpp}
+<pre><code>{.cpp}
     dst = src1 - src2;
     dst -= src1; // equivalent to subtract(dst, src1, dst);
-@endcode
+</code></pre>
 The input arrays and the output array can all have the same or different depths. For example, you
 can subtract to 8-bit unsigned arrays and store the difference in a 16-bit signed array. Depth of
 the output array is determined by dtype parameter. In the second and third cases above, as well as
 in the first case, when src1.depth() == src2.depth(), dtype can be set to the default -1. In this
 case the output array will have the same depth as the input array, be it src1, src2 or both.
-@note Saturation is not applied when the output array has the depth CV_32S. You may even get
+\note Saturation is not applied when the output array has the depth CV_32S. You may even get
 result of an incorrect sign in the case of overflow.
 @param src1 first input array or a scalar.
 @param src2 second input array or a scalar.
@@ -10268,24 +10268,24 @@ result of an incorrect sign in the case of overflow.
 @param mask optional operation mask; this is an 8-bit single channel array that specifies elements
 of the output array to be changed.
 @param dtype optional depth of the output array
-@sa  add, addWeighted, scaleAdd, Mat::convertTo
+\sa  add, addWeighted, scaleAdd, Mat::convertTo
   */
 @Namespace("cv") public static native void subtract(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst,
                            @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/, int dtype/*=-1*/);
 @Namespace("cv") public static native void subtract(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst);
 
 
-/** @brief Calculates the per-element scaled product of two arrays.
-
+/** \brief Calculates the per-element scaled product of two arrays.
+<p>
 The function multiply calculates the per-element product of two arrays:
-
+<p>
 \f[\texttt{dst} (I)= \texttt{saturate} ( \texttt{scale} \cdot \texttt{src1} (I)  \cdot \texttt{src2} (I))\f]
-
-There is also a @ref MatrixExpressions -friendly variant of the first function. See Mat::mul .
-
+<p>
+There is also a \ref MatrixExpressions -friendly variant of the first function. See Mat::mul .
+<p>
 For a not-per-element matrix product, see gemm .
-
-@note Saturation is not applied when the output array has the depth
+<p>
+\note Saturation is not applied when the output array has the depth
 CV_32S. You may even get result of an incorrect sign in the case of
 overflow.
 @param src1 first input array.
@@ -10293,7 +10293,7 @@ overflow.
 @param dst output array of the same size and type as src1.
 @param scale optional scale factor.
 @param dtype optional depth of the output array
-@sa add, subtract, divide, scaleAdd, addWeighted, accumulate, accumulateProduct, accumulateSquare,
+\sa add, subtract, divide, scaleAdd, addWeighted, accumulate, accumulateProduct, accumulateSquare,
 Mat::convertTo
 */
 @Namespace("cv") public static native void multiply(@ByVal Mat src1, @ByVal Mat src2,
@@ -10301,17 +10301,17 @@ Mat::convertTo
 @Namespace("cv") public static native void multiply(@ByVal Mat src1, @ByVal Mat src2,
                            @ByVal Mat dst);
 
-/** @brief Performs per-element division of two arrays or a scalar by an array.
-
+/** \brief Performs per-element division of two arrays or a scalar by an array.
+<p>
 The functions divide divide one array by another:
 \f[\texttt{dst(I) = saturate(src1(I)*scale/src2(I))}\f]
 or a scalar by an array when there is no src1 :
 \f[\texttt{dst(I) = saturate(scale/src2(I))}\f]
-
+<p>
 When src2(I) is zero, dst(I) will also be zero. Different channels of
 multi-channel arrays are processed independently.
-
-@note Saturation is not applied when the output array has the depth CV_32S. You may even get
+<p>
+\note Saturation is not applied when the output array has the depth CV_32S. You may even get
 result of an incorrect sign in the case of overflow.
 @param src1 first input array.
 @param src2 second input array of the same size and type as src1.
@@ -10319,49 +10319,49 @@ result of an incorrect sign in the case of overflow.
 @param dst output array of the same size and type as src2.
 @param dtype optional depth of the output array; if -1, dst will have depth src2.depth(), but in
 case of an array-by-array division, you can only pass -1 when src1.depth()==src2.depth().
-@sa  multiply, add, subtract
+\sa  multiply, add, subtract
 */
 @Namespace("cv") public static native void divide(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst,
                          double scale/*=1*/, int dtype/*=-1*/);
 @Namespace("cv") public static native void divide(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst);
 
-/** @overload */
+/** \overload */
 @Namespace("cv") public static native void divide(double scale, @ByVal Mat src2,
                          @ByVal Mat dst, int dtype/*=-1*/);
 @Namespace("cv") public static native void divide(double scale, @ByVal Mat src2,
                          @ByVal Mat dst);
 
-/** @brief Calculates the sum of a scaled array and another array.
-
+/** \brief Calculates the sum of a scaled array and another array.
+<p>
 The function scaleAdd is one of the classical primitive linear algebra operations, known as DAXPY
 or SAXPY in [BLAS](http://en.wikipedia.org/wiki/Basic_Linear_Algebra_Subprograms). It calculates
 the sum of a scaled array and another array:
 \f[\texttt{dst} (I)= \texttt{scale} \cdot \texttt{src1} (I) +  \texttt{src2} (I)\f]
 The function can also be emulated with a matrix expression, for example:
-@code{.cpp}
+<pre><code>{.cpp}
     Mat A(3, 3, CV_64F);
     ...
     A.row(0) = A.row(1)*2 + A.row(2);
-@endcode
+</code></pre>
 @param src1 first input array.
 @param alpha scale factor for the first array.
 @param src2 second input array of the same size and type as src1.
 @param dst output array of the same size and type as src1.
-@sa add, addWeighted, subtract, Mat::dot, Mat::convertTo
+\sa add, addWeighted, subtract, Mat::dot, Mat::convertTo
 */
 @Namespace("cv") public static native void scaleAdd(@ByVal Mat src1, double alpha, @ByVal Mat src2, @ByVal Mat dst);
 
-/** @brief Calculates the weighted sum of two arrays.
-
+/** \brief Calculates the weighted sum of two arrays.
+<p>
 The function addWeighted calculates the weighted sum of two arrays as follows:
 \f[\texttt{dst} (I)= \texttt{saturate} ( \texttt{src1} (I)* \texttt{alpha} +  \texttt{src2} (I)* \texttt{beta} +  \texttt{gamma} )\f]
 where I is a multi-dimensional index of array elements. In case of multi-channel arrays, each
 channel is processed independently.
 The function can be replaced with a matrix expression:
-@code{.cpp}
+<pre><code>{.cpp}
     dst = src1*alpha + src2*beta + gamma;
-@endcode
-@note Saturation is not applied when the output array has the depth CV_32S. You may even get
+</code></pre>
+\note Saturation is not applied when the output array has the depth CV_32S. You may even get
 result of an incorrect sign in the case of overflow.
 @param src1 first input array.
 @param alpha weight of the first array elements.
@@ -10371,15 +10371,15 @@ result of an incorrect sign in the case of overflow.
 @param dst output array that has the same size and number of channels as the input arrays.
 @param dtype optional depth of the output array; when both input arrays have the same depth, dtype
 can be set to -1, which will be equivalent to src1.depth().
-@sa  add, subtract, scaleAdd, Mat::convertTo
+\sa  add, subtract, scaleAdd, Mat::convertTo
 */
 @Namespace("cv") public static native void addWeighted(@ByVal Mat src1, double alpha, @ByVal Mat src2,
                               double beta, double gamma, @ByVal Mat dst, int dtype/*=-1*/);
 @Namespace("cv") public static native void addWeighted(@ByVal Mat src1, double alpha, @ByVal Mat src2,
                               double beta, double gamma, @ByVal Mat dst);
 
-/** @brief Scales, calculates absolute values, and converts the result to 8-bit.
-
+/** \brief Scales, calculates absolute values, and converts the result to 8-bit.
+<p>
 On each element of the input array, the function convertScaleAbs
 performs three operations sequentially: scaling, taking an absolute
 value, conversion to an unsigned 8-bit type:
@@ -10389,26 +10389,26 @@ independently. When the output is not 8-bit, the operation can be
 emulated by calling the Mat::convertTo method (or by using matrix
 expressions) and then by calculating an absolute value of the result.
 For example:
-@code{.cpp}
+<pre><code>{.cpp}
     Mat_<float> A(30,30);
     randu(A, Scalar(-100), Scalar(100));
     Mat_<float> B = A*5 + 3;
     B = abs(B);
     // Mat_<float> B = abs(A*5+3) will also do the job,
     // but it will allocate a temporary matrix
-@endcode
+</code></pre>
 @param src input array.
 @param dst output array.
 @param alpha optional scale factor.
 @param beta optional delta added to the scaled values.
-@sa  Mat::convertTo, cv::abs(const Mat&)
+\sa  Mat::convertTo, cv::abs(const Mat&)
 */
 @Namespace("cv") public static native void convertScaleAbs(@ByVal Mat src, @ByVal Mat dst,
                                   double alpha/*=1*/, double beta/*=0*/);
 @Namespace("cv") public static native void convertScaleAbs(@ByVal Mat src, @ByVal Mat dst);
 
-/** @brief Performs a look-up table transform of an array.
-
+/** \brief Performs a look-up table transform of an array.
+<p>
 The function LUT fills the output array with values from the look-up table. Indices of the entries
 are taken from the input array. That is, the function processes each element of src as follows:
 \f[\texttt{dst} (I)  \leftarrow \texttt{lut(src(I) + d)}\f]
@@ -10419,58 +10419,58 @@ where
 either have a single channel (in this case the same table is used for all channels) or the same
 number of channels as in the input array.
 @param dst output array of the same size and number of channels as src, and the same depth as lut.
-@sa  convertScaleAbs, Mat::convertTo
+\sa  convertScaleAbs, Mat::convertTo
 */
 @Namespace("cv") public static native void LUT(@ByVal Mat src, @ByVal Mat lut, @ByVal Mat dst);
 
-/** @brief Calculates the sum of array elements.
-
+/** \brief Calculates the sum of array elements.
+<p>
 The functions sum calculate and return the sum of array elements,
 independently for each channel.
 @param src input array that must have from 1 to 4 channels.
-@sa  countNonZero, mean, meanStdDev, norm, minMaxLoc, reduce
+\sa  countNonZero, mean, meanStdDev, norm, minMaxLoc, reduce
 */
 @Namespace("cv") public static native @ByVal @Name("sum") Scalar sumElems(@ByVal Mat src);
 
-/** @brief Counts non-zero array elements.
-
+/** \brief Counts non-zero array elements.
+<p>
 The function returns the number of non-zero elements in src :
 \f[\sum _{I: \; \texttt{src} (I) \ne0 } 1\f]
 @param src single-channel array.
-@sa  mean, meanStdDev, norm, minMaxLoc, calcCovarMatrix
+\sa  mean, meanStdDev, norm, minMaxLoc, calcCovarMatrix
 */
 @Namespace("cv") public static native int countNonZero( @ByVal Mat src );
 
-/** @brief Returns the list of locations of non-zero pixels
-
+/** \brief Returns the list of locations of non-zero pixels
+<p>
 Given a binary matrix (likely returned from an operation such
 as threshold(), compare(), >, ==, etc, return all of
 the non-zero indices as a cv::Mat or std::vector<cv::Point> (x,y)
 For example:
-@code{.cpp}
+<pre><code>{.cpp}
     cv::Mat binaryImage; // input, binary image
     cv::Mat locations;   // output, locations of non-zero pixels
     cv::findNonZero(binaryImage, locations);
 
     // access pixel coordinates
     Point pnt = locations.at<Point>(i);
-@endcode
+</code></pre>
 or
-@code{.cpp}
+<pre><code>{.cpp}
     cv::Mat binaryImage; // input, binary image
     vector<Point> locations;   // output, locations of non-zero pixels
     cv::findNonZero(binaryImage, locations);
 
     // access pixel coordinates
     Point pnt = locations[i];
-@endcode
+</code></pre>
 @param src single-channel array (type CV_8UC1)
 @param idx the output array, type of cv::Mat or std::vector<Point>, corresponding to non-zero indices in the input
 */
 @Namespace("cv") public static native void findNonZero( @ByVal Mat src, @ByVal Mat idx );
 
-/** @brief Calculates an average (mean) of array elements.
-
+/** \brief Calculates an average (mean) of array elements.
+<p>
 The function mean calculates the mean value M of array elements,
 independently for each channel, and return it:
 \f[\begin{array}{l} N =  \sum _{I: \; \texttt{mask} (I) \ne 0} 1 \\ M_c =  \left ( \sum _{I: \; \texttt{mask} (I) \ne 0}{ \texttt{mtx} (I)_c} \right )/N \end{array}\f]
@@ -10478,20 +10478,20 @@ When all the mask elements are 0's, the functions return Scalar::all(0)
 @param src input array that should have from 1 to 4 channels so that the result can be stored in
 Scalar_ .
 @param mask optional operation mask.
-@sa  countNonZero, meanStdDev, norm, minMaxLoc
+\sa  countNonZero, meanStdDev, norm, minMaxLoc
 */
 @Namespace("cv") public static native @ByVal Scalar mean(@ByVal Mat src, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native @ByVal Scalar mean(@ByVal Mat src);
 
 /** Calculates a mean and standard deviation of array elements.
-
+<p>
 The function meanStdDev calculates the mean and the standard deviation M
 of array elements independently for each channel and returns it via the
 output parameters:
 \f[\begin{array}{l} N =  \sum _{I, \texttt{mask} (I)  \ne 0} 1 \\ \texttt{mean} _c =  \frac{\sum_{ I: \; \texttt{mask}(I) \ne 0} \texttt{src} (I)_c}{N} \\ \texttt{stddev} _c =  \sqrt{\frac{\sum_{ I: \; \texttt{mask}(I) \ne 0} \left ( \texttt{src} (I)_c -  \texttt{mean} _c \right )^2}{N}} \end{array}\f]
 When all the mask elements are 0's, the functions return
 mean=stddev=Scalar::all(0).
-@note The calculated standard deviation is only the diagonal of the
+\note The calculated standard deviation is only the diagonal of the
 complete normalized covariance matrix. If the full matrix is needed, you
 can reshape the multi-channel array M x N to the single-channel array
 M\*N x mtx.channels() (only possible when the matrix is continuous) and
@@ -10501,42 +10501,42 @@ Scalar_ 's.
 @param mean output parameter: calculated mean value.
 @param stddev output parameter: calculateded standard deviation.
 @param mask optional operation mask.
-@sa  countNonZero, mean, norm, minMaxLoc, calcCovarMatrix
+\sa  countNonZero, mean, norm, minMaxLoc, calcCovarMatrix
 */
 @Namespace("cv") public static native void meanStdDev(@ByVal Mat src, @ByVal Mat mean, @ByVal Mat stddev,
                              @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native void meanStdDev(@ByVal Mat src, @ByVal Mat mean, @ByVal Mat stddev);
 
-/** @brief Calculates an absolute array norm, an absolute difference norm, or a
+/** \brief Calculates an absolute array norm, an absolute difference norm, or a
 relative difference norm.
-
+<p>
 The functions norm calculate an absolute norm of src1 (when there is no
 src2 ):
-
+<p>
 \f[norm =  \forkthree{\|\texttt{src1}\|_{L_{\infty}} =  \max _I | \texttt{src1} (I)|}{if  \(\texttt{normType} = \texttt{NORM\_INF}\) }
 { \| \texttt{src1} \| _{L_1} =  \sum _I | \texttt{src1} (I)|}{if  \(\texttt{normType} = \texttt{NORM\_L1}\) }
 { \| \texttt{src1} \| _{L_2} =  \sqrt{\sum_I \texttt{src1}(I)^2} }{if  \(\texttt{normType} = \texttt{NORM\_L2}\) }\f]
-
+<p>
 or an absolute or relative difference norm if src2 is there:
-
+<p>
 \f[norm =  \forkthree{\|\texttt{src1}-\texttt{src2}\|_{L_{\infty}} =  \max _I | \texttt{src1} (I) -  \texttt{src2} (I)|}{if  \(\texttt{normType} = \texttt{NORM\_INF}\) }
 { \| \texttt{src1} - \texttt{src2} \| _{L_1} =  \sum _I | \texttt{src1} (I) -  \texttt{src2} (I)|}{if  \(\texttt{normType} = \texttt{NORM\_L1}\) }
 { \| \texttt{src1} - \texttt{src2} \| _{L_2} =  \sqrt{\sum_I (\texttt{src1}(I) - \texttt{src2}(I))^2} }{if  \(\texttt{normType} = \texttt{NORM\_L2}\) }\f]
-
+<p>
 or
-
+<p>
 \f[norm =  \forkthree{\frac{\|\texttt{src1}-\texttt{src2}\|_{L_{\infty}}    }{\|\texttt{src2}\|_{L_{\infty}} }}{if  \(\texttt{normType} = \texttt{NORM\_RELATIVE\_INF}\) }
 { \frac{\|\texttt{src1}-\texttt{src2}\|_{L_1} }{\|\texttt{src2}\|_{L_1}} }{if  \(\texttt{normType} = \texttt{NORM\_RELATIVE\_L1}\) }
 { \frac{\|\texttt{src1}-\texttt{src2}\|_{L_2} }{\|\texttt{src2}\|_{L_2}} }{if  \(\texttt{normType} = \texttt{NORM\_RELATIVE\_L2}\) }\f]
-
+<p>
 The functions norm return the calculated norm.
-
+<p>
 When the mask parameter is specified and it is not empty, the norm is
 calculated only over the region specified by the mask.
-
+<p>
 A multi-channel input arrays are treated as a single-channel, that is,
 the results for all channels are combined.
-
+<p>
 @param src1 first input array.
 @param normType type of the norm (see cv::NormTypes).
 @param mask optional operation mask; it must have the same size as src1 and CV_8UC1 type.
@@ -10544,7 +10544,7 @@ the results for all channels are combined.
 @Namespace("cv") public static native double norm(@ByVal Mat src1, int normType/*=cv::NORM_L2*/, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native double norm(@ByVal Mat src1);
 
-/** @overload
+/** \overload
 @param src1 first input array.
 @param src2 second input array of the same size and the same type as src1.
 @param normType type of the norm (cv::NormTypes).
@@ -10553,23 +10553,23 @@ the results for all channels are combined.
 @Namespace("cv") public static native double norm(@ByVal Mat src1, @ByVal Mat src2,
                          int normType/*=cv::NORM_L2*/, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native double norm(@ByVal Mat src1, @ByVal Mat src2);
-/** @overload
+/** \overload
 @param src first input array.
 @param normType type of the norm (see cv::NormTypes).
 */
 @Namespace("cv") public static native double norm( @Const @ByRef SparseMat src, int normType );
 
-/** @brief computes PSNR image/video quality metric
-
+/** \brief computes PSNR image/video quality metric
+<p>
 see http://en.wikipedia.org/wiki/Peak_signal-to-noise_ratio for details
-@todo document
+\todo document
   */
 @Namespace("cv") public static native double PSNR(@ByVal Mat src1, @ByVal Mat src2);
 
-/** @brief naive nearest neighbor finder
-
+/** \brief naive nearest neighbor finder
+<p>
 see http://en.wikipedia.org/wiki/Nearest_neighbor_search
-@todo document
+\todo document
   */
 @Namespace("cv") public static native void batchDistance(@ByVal Mat src1, @ByVal Mat src2,
                                 @ByVal Mat dist, int dtype, @ByVal Mat nidx,
@@ -10579,21 +10579,21 @@ see http://en.wikipedia.org/wiki/Nearest_neighbor_search
 @Namespace("cv") public static native void batchDistance(@ByVal Mat src1, @ByVal Mat src2,
                                 @ByVal Mat dist, int dtype, @ByVal Mat nidx);
 
-/** @brief Normalizes the norm or value range of an array.
-
+/** \brief Normalizes the norm or value range of an array.
+<p>
 The functions normalize scale and shift the input array elements so that
 \f[\| \texttt{dst} \| _{L_p}= \texttt{alpha}\f]
 (where p=Inf, 1 or 2) when normType=NORM_INF, NORM_L1, or NORM_L2, respectively; or so that
 \f[\min _I  \texttt{dst} (I)= \texttt{alpha} , \, \, \max _I  \texttt{dst} (I)= \texttt{beta}\f]
-
+<p>
 when normType=NORM_MINMAX (for dense arrays only). The optional mask specifies a sub-array to be
 normalized. This means that the norm or min-n-max are calculated over the sub-array, and then this
 sub-array is modified to be normalized. If you want to only use the mask to calculate the norm or
 min-max but modify the whole array, you can use norm and Mat::convertTo.
-
+<p>
 In case of sparse matrices, only the non-zero values are analyzed and transformed. Because of this,
 the range transformation for sparse matrices is not allowed since it can shift the zero level.
-
+<p>
 @param src input array.
 @param dst output array of the same size as src .
 @param alpha norm value to normalize to or the lower range boundary in case of the range
@@ -10604,13 +10604,13 @@ normalization.
 @param dtype when negative, the output array has the same type as src; otherwise, it has the same
 number of channels as src and the depth =CV_MAT_DEPTH(dtype).
 @param mask optional operation mask.
-@sa norm, Mat::convertTo, SparseMat::convertTo
+\sa norm, Mat::convertTo, SparseMat::convertTo
 */
 @Namespace("cv") public static native void normalize( @ByVal Mat src, @ByVal Mat dst, double alpha/*=1*/, double beta/*=0*/,
                              int norm_type/*=cv::NORM_L2*/, int dtype/*=-1*/, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native void normalize( @ByVal Mat src, @ByVal Mat dst);
 
-/** @overload
+/** \overload
 @param src input array.
 @param dst output array of the same size as src .
 @param alpha norm value to normalize to or the lower range boundary in case of the range
@@ -10619,12 +10619,12 @@ normalization.
 */
 @Namespace("cv") public static native void normalize( @Const @ByRef SparseMat src, @ByRef SparseMat dst, double alpha, int normType );
 
-/** @brief Finds the global minimum and maximum in an array.
-
+/** \brief Finds the global minimum and maximum in an array.
+<p>
 The functions minMaxLoc find the minimum and maximum element values and their positions. The
 extremums are searched across the whole array or, if mask is not an empty array, in the specified
 array region.
-
+<p>
 The functions do not work with multi-channel arrays. If you need to find minimum or maximum
 elements across all the channels, use Mat::reshape first to reinterpret the array as
 single-channel. Or you may extract the particular channel using either extractImageCOI , or
@@ -10635,7 +10635,7 @@ mixChannels , or split .
 @param minLoc pointer to the returned minimum location (in 2D case); NULL is used if not required.
 @param maxLoc pointer to the returned maximum location (in 2D case); NULL is used if not required.
 @param mask optional mask used to select a sub-array.
-@sa max, min, compare, inRange, extractImageCOI, mixChannels, split, Mat::reshape
+\sa max, min, compare, inRange, extractImageCOI, mixChannels, split, Mat::reshape
 */
 @Namespace("cv") public static native void minMaxLoc(@ByVal Mat src, DoublePointer minVal,
                             DoublePointer maxVal/*=0*/, Point minLoc/*=0*/,
@@ -10651,8 +10651,8 @@ mixChannels , or split .
 @Namespace("cv") public static native void minMaxLoc(@ByVal Mat src, double[] minVal);
 
 
-/** @brief Finds the global minimum and maximum in an array
-
+/** \brief Finds the global minimum and maximum in an array
+<p>
 The function minMaxIdx finds the minimum and maximum element values and their positions. The
 extremums are searched across the whole array or, if mask is not an empty array, in the specified
 array region. The function does not work with multi-channel arrays. If you need to find minimum or
@@ -10660,7 +10660,7 @@ maximum elements across all the channels, use Mat::reshape first to reinterpret 
 single-channel. Or you may extract the particular channel using either extractImageCOI , or
 mixChannels , or split . In case of a sparse matrix, the minimum is found among non-zero elements
 only.
-@note When minIdx is not NULL, it must have at least 2 elements (as well as maxIdx), even if src is
+\note When minIdx is not NULL, it must have at least 2 elements (as well as maxIdx), even if src is
 a single-row or single-column matrix. In OpenCV (following MATLAB) each array has at least 2
 dimensions, i.e. single-column matrix is Mx1 matrix (and therefore minIdx/maxIdx will be
 (i1,0)/(i2,0)) and single-row matrix is 1xN matrix (and therefore minIdx/maxIdx will be
@@ -10684,7 +10684,7 @@ in each dimension are stored there sequentially.
                           int[] minIdx/*=0*/, int[] maxIdx/*=0*/, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native void minMaxIdx(@ByVal Mat src, double[] minVal);
 
-/** @overload
+/** \overload
 @param a input single-channel array.
 @param minVal pointer to the returned minimum value; NULL is used if not required.
 @param maxVal pointer to the returned maximum value; NULL is used if not required.
@@ -10706,8 +10706,8 @@ in each dimension are stored there sequentially.
 @Namespace("cv") public static native void minMaxLoc(@Const @ByRef SparseMat a, double[] minVal,
                           double[] maxVal);
 
-/** @brief Reduces a matrix to a vector.
-
+/** \brief Reduces a matrix to a vector.
+<p>
 The function reduce reduces the matrix to a vector by treating the matrix rows/columns as a set of
 1D vectors and performing the specified operation on the vectors until a single row/column is
 obtained. For example, the function can be used to compute horizontal and vertical projections of a
@@ -10721,17 +10721,17 @@ a single row. 1 means that the matrix is reduced to a single column.
 @param rtype reduction operation that could be one of cv::ReduceTypes
 @param dtype when negative, the output vector will have the same type as the input matrix,
 otherwise, its type will be CV_MAKE_TYPE(CV_MAT_DEPTH(dtype), src.channels()).
-@sa repeat
+\sa repeat
 */
 @Namespace("cv") public static native void reduce(@ByVal Mat src, @ByVal Mat dst, int dim, int rtype, int dtype/*=-1*/);
 @Namespace("cv") public static native void reduce(@ByVal Mat src, @ByVal Mat dst, int dim, int rtype);
 
-/** @brief Creates one multichannel array out of several single-channel ones.
-
+/** \brief Creates one multichannel array out of several single-channel ones.
+<p>
 The functions merge merge several arrays to make a single multi-channel array. That is, each
 element of the output array will be a concatenation of the elements of the input arrays, where
 elements of i-th input array are treated as mv[i].channels()-element vectors.
-
+<p>
 The function split does the reverse operation. If you need to shuffle channels in some other
 advanced way, use mixChannels .
 @param mv input array of matrices to be merged; all the matrices in mv must have the same
@@ -10739,11 +10739,11 @@ size and the same depth.
 @param count number of input matrices when mv is a plain C array; it must be greater than zero.
 @param dst output array of the same size and the same depth as mv[0]; The number of channels will
 be the total number of channels in the matrix array.
-@sa  mixChannels, split, Mat::reshape
+\sa  mixChannels, split, Mat::reshape
 */
 @Namespace("cv") public static native void merge(@Const Mat mv, @Cast("size_t") long count, @ByVal Mat dst);
 
-/** @overload
+/** \overload
 @param mv input vector of matrices to be merged; all the matrices in mv must have the same
 size and the same depth.
 @param dst output array of the same size and the same depth as mv[0]; The number of channels will
@@ -10751,8 +10751,8 @@ be the total number of channels in the matrix array.
   */
 @Namespace("cv") public static native void merge(@ByVal MatVector mv, @ByVal Mat dst);
 
-/** @brief Divides a multi-channel array into several single-channel arrays.
-
+/** \brief Divides a multi-channel array into several single-channel arrays.
+<p>
 The functions split split a multi-channel array into separate single-channel arrays:
 \f[\texttt{mv} [c](I) =  \texttt{src} (I)_c\f]
 If you need to extract a single channel or do some other sophisticated channel permutation, use
@@ -10760,26 +10760,26 @@ mixChannels .
 @param src input multi-channel array.
 @param mvbegin output array; the number of arrays must match src.channels(); the arrays themselves are
 reallocated, if needed.
-@sa merge, mixChannels, cvtColor
+\sa merge, mixChannels, cvtColor
 */
 @Namespace("cv") public static native void split(@Const @ByRef Mat src, Mat mvbegin);
 
-/** @overload
+/** \overload
 @param m input multi-channel array.
 @param mv output vector of arrays; the arrays themselves are reallocated, if needed.
 */
 @Namespace("cv") public static native void split(@ByVal Mat m, @ByVal MatVector mv);
 
-/** @brief Copies specified channels from input arrays to the specified channels of
+/** \brief Copies specified channels from input arrays to the specified channels of
 output arrays.
-
+<p>
 The functions mixChannels provide an advanced mechanism for shuffling image channels.
-
+<p>
 split and merge and some forms of cvtColor are partial cases of mixChannels .
-
+<p>
 In the example below, the code splits a 4-channel RGBA image into a 3-channel BGR (with R and B
 channels swapped) and a separate alpha-channel image:
-@code{.cpp}
+<pre><code>{.cpp}
     Mat rgba( 100, 100, CV_8UC4, Scalar(1,2,3,4) );
     Mat bgr( rgba.rows, rgba.cols, CV_8UC3 );
     Mat alpha( rgba.rows, rgba.cols, CV_8UC1 );
@@ -10791,8 +10791,8 @@ channels swapped) and a separate alpha-channel image:
     // rgba[2] -> bgr[0], rgba[3] -> alpha[0]
     int from_to[] = { 0,2, 1,1, 2,0, 3,3 };
     mixChannels( &rgba, 1, out, 2, from_to, 4 );
-@endcode
-@note Unlike many other new-style C++ functions in OpenCV (see the introduction section and
+</code></pre>
+\note Unlike many other new-style C++ functions in OpenCV (see the introduction section and
 Mat::create ), mixChannels requires the output arrays to be pre-allocated before calling the
 function.
 @param src input array or vector of matricesl; all of the matrices must have the same size and the
@@ -10809,7 +10809,7 @@ src[0].channels() + src[1].channels()-1, and so on, the same scheme is used for 
 channels; as a special case, when fromTo[k\*2] is negative, the corresponding output channel is
 filled with zero .
 @param npairs number of index pairs in fromTo.
-@sa split, merge, cvtColor
+\sa split, merge, cvtColor
 */
 @Namespace("cv") public static native void mixChannels(@Const Mat src, @Cast("size_t") long nsrcs, Mat dst, @Cast("size_t") long ndsts,
                             @Const IntPointer fromTo, @Cast("size_t") long npairs);
@@ -10818,7 +10818,7 @@ filled with zero .
 @Namespace("cv") public static native void mixChannels(@Const Mat src, @Cast("size_t") long nsrcs, Mat dst, @Cast("size_t") long ndsts,
                             @Const int[] fromTo, @Cast("size_t") long npairs);
 
-/** @overload
+/** \overload
 @param src input array or vector of matricesl; all of the matrices must have the same size and the
 same depth.
 @param dst output array or vector of matrices; all the matrices *must be allocated*; their size and
@@ -10839,7 +10839,7 @@ filled with zero .
 @Namespace("cv") public static native void mixChannels(@ByVal MatVector src, @ByVal MatVector dst,
                             @Const int[] fromTo, @Cast("size_t") long npairs);
 
-/** @overload
+/** \overload
 @param src input array or vector of matricesl; all of the matrices must have the same size and the
 same depth.
 @param dst output array or vector of matrices; all the matrices *must be allocated*; their size and
@@ -10859,18 +10859,18 @@ filled with zero .
 @Namespace("cv") public static native void mixChannels(@ByVal MatVector src, @ByVal MatVector dst,
                               @StdVector int[] fromTo);
 
-/** @brief extracts a single channel from src (coi is 0-based index)
-@todo document
+/** \brief extracts a single channel from src (coi is 0-based index)
+\todo document
 */
 @Namespace("cv") public static native void extractChannel(@ByVal Mat src, @ByVal Mat dst, int coi);
 
-/** @brief inserts a single channel to dst (coi is 0-based index)
-@todo document
+/** \brief inserts a single channel to dst (coi is 0-based index)
+\todo document
 */
 @Namespace("cv") public static native void insertChannel(@ByVal Mat src, @ByVal Mat dst, int coi);
 
-/** @brief Flips a 2D array around vertical, horizontal, or both axes.
-
+/** \brief Flips a 2D array around vertical, horizontal, or both axes.
+<p>
 The function flip flips the array in one of three different ways (row
 and column indices are 0-based):
 \f[\texttt{dst} _{ij} =
@@ -10899,26 +10899,26 @@ The example scenarios of using the function are the following:
 flipping around the x-axis and positive value (for example, 1) means
 flipping around y-axis. Negative value (for example, -1) means flipping
 around both axes.
-@sa transpose , repeat , completeSymm
+\sa transpose , repeat , completeSymm
 */
 @Namespace("cv") public static native void flip(@ByVal Mat src, @ByVal Mat dst, int flipCode);
 
-/** @brief Fills the output array with repeated copies of the input array.
-
+/** \brief Fills the output array with repeated copies of the input array.
+<p>
 The functions repeat duplicate the input array one or more times along each of the two axes:
 \f[\texttt{dst} _{ij}= \texttt{src} _{i\mod src.rows, \; j\mod src.cols }\f]
-The second variant of the function is more convenient to use with @ref MatrixExpressions.
+The second variant of the function is more convenient to use with \ref MatrixExpressions.
 @param src input array to replicate.
 @param dst output array of the same type as src.
 @param ny Flag to specify how many times the src is repeated along the
 vertical axis.
 @param nx Flag to specify how many times the src is repeated along the
 horizontal axis.
-@sa reduce
+\sa reduce
 */
 @Namespace("cv") public static native void repeat(@ByVal Mat src, int ny, int nx, @ByVal Mat dst);
 
-/** @overload
+/** \overload
 @param src input array to replicate.
 @param ny Flag to specify how many times the src is repeated along the
 vertical axis.
@@ -10927,10 +10927,10 @@ horizontal axis.
   */
 @Namespace("cv") public static native @ByVal Mat repeat(@Const @ByRef Mat src, int ny, int nx);
 
-/** @brief Applies horizontal concatenation to given matrices.
-
+/** \brief Applies horizontal concatenation to given matrices.
+<p>
 The function horizontally concatenates two or more cv::Mat matrices (with the same number of rows).
-@code{.cpp}
+<pre><code>{.cpp}
     cv::Mat matArray[] = { cv::Mat(4, 1, CV_8UC1, cv::Scalar(1)),
                            cv::Mat(4, 1, CV_8UC1, cv::Scalar(2)),
                            cv::Mat(4, 1, CV_8UC1, cv::Scalar(3)),};
@@ -10942,15 +10942,15 @@ The function horizontally concatenates two or more cv::Mat matrices (with the sa
     // 1, 2, 3;
     // 1, 2, 3;
     // 1, 2, 3]
-@endcode
+</code></pre>
 @param src input array or vector of matrices. all of the matrices must have the same number of rows and the same depth.
 @param nsrc number of matrices in src.
 @param dst output array. It has the same number of rows and depth as the src, and the sum of cols of the src.
-@sa cv::vconcat(const Mat*, size_t, OutputArray), @sa cv::vconcat(InputArrayOfArrays, OutputArray) and @sa cv::vconcat(InputArray, InputArray, OutputArray)
+\sa cv::vconcat(const Mat*, size_t, OutputArray), \sa cv::vconcat(InputArrayOfArrays, OutputArray) and \sa cv::vconcat(InputArray, InputArray, OutputArray)
 */
 @Namespace("cv") public static native void hconcat(@Const Mat src, @Cast("size_t") long nsrc, @ByVal Mat dst);
-/** @overload
- @code{.cpp}
+/** \overload
+ <pre><code>{.cpp}
     cv::Mat_<float> A = (cv::Mat_<float>(3, 2) << 1, 4,
                                                   2, 5,
                                                   3, 6);
@@ -10964,14 +10964,14 @@ The function horizontally concatenates two or more cv::Mat matrices (with the sa
     //[1, 4, 7, 10;
     // 2, 5, 8, 11;
     // 3, 6, 9, 12]
- @endcode
+ </code></pre>
  @param src1 first input array to be considered for horizontal concatenation.
  @param src2 second input array to be considered for horizontal concatenation.
  @param dst output array. It has the same number of rows and depth as the src1 and src2, and the sum of cols of the src1 and src2.
  */
 @Namespace("cv") public static native void hconcat(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst);
-/** @overload
- @code{.cpp}
+/** \overload
+ <pre><code>{.cpp}
     std::vector<cv::Mat> matrices = { cv::Mat(4, 1, CV_8UC1, cv::Scalar(1)),
                                       cv::Mat(4, 1, CV_8UC1, cv::Scalar(2)),
                                       cv::Mat(4, 1, CV_8UC1, cv::Scalar(3)),};
@@ -10983,17 +10983,17 @@ The function horizontally concatenates two or more cv::Mat matrices (with the sa
     // 1, 2, 3;
     // 1, 2, 3;
     // 1, 2, 3]
- @endcode
+ </code></pre>
  @param src input array or vector of matrices. all of the matrices must have the same number of rows and the same depth.
  @param dst output array. It has the same number of rows and depth as the src, and the sum of cols of the src.
 same depth.
  */
 @Namespace("cv") public static native void hconcat(@ByVal MatVector src, @ByVal Mat dst);
 
-/** @brief Applies vertical concatenation to given matrices.
-
+/** \brief Applies vertical concatenation to given matrices.
+<p>
 The function vertically concatenates two or more cv::Mat matrices (with the same number of cols).
-@code{.cpp}
+<pre><code>{.cpp}
     cv::Mat matArray[] = { cv::Mat(1, 4, CV_8UC1, cv::Scalar(1)),
                            cv::Mat(1, 4, CV_8UC1, cv::Scalar(2)),
                            cv::Mat(1, 4, CV_8UC1, cv::Scalar(3)),};
@@ -11004,15 +11004,15 @@ The function vertically concatenates two or more cv::Mat matrices (with the same
     //[1,   1,   1,   1;
     // 2,   2,   2,   2;
     // 3,   3,   3,   3]
-@endcode
+</code></pre>
 @param src input array or vector of matrices. all of the matrices must have the same number of cols and the same depth.
 @param nsrc number of matrices in src.
 @param dst output array. It has the same number of cols and depth as the src, and the sum of rows of the src.
-@sa cv::hconcat(const Mat*, size_t, OutputArray), @sa cv::hconcat(InputArrayOfArrays, OutputArray) and @sa cv::hconcat(InputArray, InputArray, OutputArray)
+\sa cv::hconcat(const Mat*, size_t, OutputArray), \sa cv::hconcat(InputArrayOfArrays, OutputArray) and \sa cv::hconcat(InputArray, InputArray, OutputArray)
 */
 @Namespace("cv") public static native void vconcat(@Const Mat src, @Cast("size_t") long nsrc, @ByVal Mat dst);
-/** @overload
- @code{.cpp}
+/** \overload
+ <pre><code>{.cpp}
     cv::Mat_<float> A = (cv::Mat_<float>(3, 2) << 1, 7,
                                                   2, 8,
                                                   3, 9);
@@ -11029,14 +11029,14 @@ The function vertically concatenates two or more cv::Mat matrices (with the same
     // 4, 10;
     // 5, 11;
     // 6, 12]
- @endcode
+ </code></pre>
  @param src1 first input array to be considered for vertical concatenation.
  @param src2 second input array to be considered for vertical concatenation.
  @param dst output array. It has the same number of cols and depth as the src1 and src2, and the sum of rows of the src1 and src2.
  */
 @Namespace("cv") public static native void vconcat(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst);
-/** @overload
- @code{.cpp}
+/** \overload
+ <pre><code>{.cpp}
     std::vector<cv::Mat> matrices = { cv::Mat(1, 4, CV_8UC1, cv::Scalar(1)),
                                       cv::Mat(1, 4, CV_8UC1, cv::Scalar(2)),
                                       cv::Mat(1, 4, CV_8UC1, cv::Scalar(3)),};
@@ -11047,25 +11047,25 @@ The function vertically concatenates two or more cv::Mat matrices (with the same
     //[1,   1,   1,   1;
     // 2,   2,   2,   2;
     // 3,   3,   3,   3]
- @endcode
+ </code></pre>
  @param src input array or vector of matrices. all of the matrices must have the same number of cols and the same depth
  @param dst output array. It has the same number of cols and depth as the src, and the sum of rows of the src.
 same depth.
  */
 @Namespace("cv") public static native void vconcat(@ByVal MatVector src, @ByVal Mat dst);
 
-/** @brief computes bitwise conjunction of the two arrays (dst = src1 & src2)
+/** \brief computes bitwise conjunction of the two arrays (dst = src1 & src2)
 Calculates the per-element bit-wise conjunction of two arrays or an
 array and a scalar.
-
+<p>
 The function calculates the per-element bit-wise logical conjunction for:
 *   Two arrays when src1 and src2 have the same size:
     \f[\texttt{dst} (I) =  \texttt{src1} (I)  \wedge \texttt{src2} (I) \quad \texttt{if mask} (I) \ne0\f]
 *   An array and a scalar when src2 is constructed from Scalar or has
-    the same number of elements as `src1.channels()`:
+    the same number of elements as {@code src1.channels()}:
     \f[\texttt{dst} (I) =  \texttt{src1} (I)  \wedge \texttt{src2} \quad \texttt{if mask} (I) \ne0\f]
 *   A scalar and an array when src1 is constructed from Scalar or has
-    the same number of elements as `src2.channels()`:
+    the same number of elements as {@code src2.channels()}:
     \f[\texttt{dst} (I) =  \texttt{src1}  \wedge \texttt{src2} (I) \quad \texttt{if mask} (I) \ne0\f]
 In case of floating-point arrays, their machine-specific bit
 representations (usually IEEE754-compliant) are used for the operation.
@@ -11084,17 +11084,17 @@ specifies elements of the output array to be changed.
 @Namespace("cv") public static native void bitwise_and(@ByVal Mat src1, @ByVal Mat src2,
                               @ByVal Mat dst);
 
-/** @brief Calculates the per-element bit-wise disjunction of two arrays or an
+/** \brief Calculates the per-element bit-wise disjunction of two arrays or an
 array and a scalar.
-
+<p>
 The function calculates the per-element bit-wise logical disjunction for:
 *   Two arrays when src1 and src2 have the same size:
     \f[\texttt{dst} (I) =  \texttt{src1} (I)  \vee \texttt{src2} (I) \quad \texttt{if mask} (I) \ne0\f]
 *   An array and a scalar when src2 is constructed from Scalar or has
-    the same number of elements as `src1.channels()`:
+    the same number of elements as {@code src1.channels()}:
     \f[\texttt{dst} (I) =  \texttt{src1} (I)  \vee \texttt{src2} \quad \texttt{if mask} (I) \ne0\f]
 *   A scalar and an array when src1 is constructed from Scalar or has
-    the same number of elements as `src2.channels()`:
+    the same number of elements as {@code src2.channels()}:
     \f[\texttt{dst} (I) =  \texttt{src1}  \vee \texttt{src2} (I) \quad \texttt{if mask} (I) \ne0\f]
 In case of floating-point arrays, their machine-specific bit
 representations (usually IEEE754-compliant) are used for the operation.
@@ -11113,18 +11113,18 @@ specifies elements of the output array to be changed.
 @Namespace("cv") public static native void bitwise_or(@ByVal Mat src1, @ByVal Mat src2,
                              @ByVal Mat dst);
 
-/** @brief Calculates the per-element bit-wise "exclusive or" operation on two
+/** \brief Calculates the per-element bit-wise "exclusive or" operation on two
 arrays or an array and a scalar.
-
+<p>
 The function calculates the per-element bit-wise logical "exclusive-or"
 operation for:
 *   Two arrays when src1 and src2 have the same size:
     \f[\texttt{dst} (I) =  \texttt{src1} (I)  \oplus \texttt{src2} (I) \quad \texttt{if mask} (I) \ne0\f]
 *   An array and a scalar when src2 is constructed from Scalar or has
-    the same number of elements as `src1.channels()`:
+    the same number of elements as {@code src1.channels()}:
     \f[\texttt{dst} (I) =  \texttt{src1} (I)  \oplus \texttt{src2} \quad \texttt{if mask} (I) \ne0\f]
 *   A scalar and an array when src1 is constructed from Scalar or has
-    the same number of elements as `src2.channels()`:
+    the same number of elements as {@code src2.channels()}:
     \f[\texttt{dst} (I) =  \texttt{src1}  \oplus \texttt{src2} (I) \quad \texttt{if mask} (I) \ne0\f]
 In case of floating-point arrays, their machine-specific bit
 representations (usually IEEE754-compliant) are used for the operation.
@@ -11143,8 +11143,8 @@ specifies elements of the output array to be changed.
 @Namespace("cv") public static native void bitwise_xor(@ByVal Mat src1, @ByVal Mat src2,
                               @ByVal Mat dst);
 
-/** @brief  Inverts every bit of an array.
-
+/** \brief  Inverts every bit of an array.
+<p>
 The function calculates per-element bit-wise inversion of the input
 array:
 \f[\texttt{dst} (I) =  \neg \texttt{src} (I)\f]
@@ -11161,43 +11161,43 @@ specifies elements of the output array to be changed.
                               @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
 @Namespace("cv") public static native void bitwise_not(@ByVal Mat src, @ByVal Mat dst);
 
-/** @brief Calculates the per-element absolute difference between two arrays or between an array and a scalar.
-
+/** \brief Calculates the per-element absolute difference between two arrays or between an array and a scalar.
+<p>
 The function absdiff calculates:
 *   Absolute difference between two arrays when they have the same
     size and type:
     \f[\texttt{dst}(I) =  \texttt{saturate} (| \texttt{src1}(I) -  \texttt{src2}(I)|)\f]
 *   Absolute difference between an array and a scalar when the second
     array is constructed from Scalar or has as many elements as the
-    number of channels in `src1`:
+    number of channels in {@code src1}:
     \f[\texttt{dst}(I) =  \texttt{saturate} (| \texttt{src1}(I) -  \texttt{src2} |)\f]
 *   Absolute difference between a scalar and an array when the first
     array is constructed from Scalar or has as many elements as the
-    number of channels in `src2`:
+    number of channels in {@code src2}:
     \f[\texttt{dst}(I) =  \texttt{saturate} (| \texttt{src1} -  \texttt{src2}(I) |)\f]
     where I is a multi-dimensional index of array elements. In case of
     multi-channel arrays, each channel is processed independently.
-@note Saturation is not applied when the arrays have the depth CV_32S.
+\note Saturation is not applied when the arrays have the depth CV_32S.
 You may even get a negative value in the case of overflow.
 @param src1 first input array or a scalar.
 @param src2 second input array or a scalar.
 @param dst output array that has the same size and type as input arrays.
-@sa cv::abs(const Mat&)
+\sa cv::abs(const Mat&)
 */
 @Namespace("cv") public static native void absdiff(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst);
 
-/** @brief  Checks if array elements lie between the elements of two other arrays.
-
+/** \brief  Checks if array elements lie between the elements of two other arrays.
+<p>
 The function checks the range as follows:
 -   For every element of a single-channel input array:
     \f[\texttt{dst} (I)= \texttt{lowerb} (I)_0  \leq \texttt{src} (I)_0 \leq  \texttt{upperb} (I)_0\f]
 -   For two-channel arrays:
     \f[\texttt{dst} (I)= \texttt{lowerb} (I)_0  \leq \texttt{src} (I)_0 \leq  \texttt{upperb} (I)_0  \land \texttt{lowerb} (I)_1  \leq \texttt{src} (I)_1 \leq  \texttt{upperb} (I)_1\f]
 -   and so forth.
-
+<p>
 That is, dst (I) is set to 255 (all 1 -bits) if src (I) is within the
 specified 1D, 2D, 3D, ... box and 0 otherwise.
-
+<p>
 When the lower and/or upper boundary parameters are scalars, the indexes
 (I) at lowerb and upperb in the above formulas should be omitted.
 @param src first input array.
@@ -11208,8 +11208,8 @@ When the lower and/or upper boundary parameters are scalars, the indexes
 @Namespace("cv") public static native void inRange(@ByVal Mat src, @ByVal Mat lowerb,
                           @ByVal Mat upperb, @ByVal Mat dst);
 
-/** @brief Performs the per-element comparison of two arrays or an array and scalar value.
-
+/** \brief Performs the per-element comparison of two arrays or an array and scalar value.
+<p>
 The function compares:
 *   Elements of two arrays when src1 and src2 have the same size:
     \f[\texttt{dst} (I) =  \texttt{src1} (I)  \,\texttt{cmpop}\, \texttt{src2} (I)\f]
@@ -11222,22 +11222,22 @@ The function compares:
 When the comparison result is true, the corresponding element of output
 array is set to 255. The comparison operations can be replaced with the
 equivalent matrix expressions:
-@code{.cpp}
+<pre><code>{.cpp}
     Mat dst1 = src1 >= src2;
     Mat dst2 = src1 < 8;
     ...
-@endcode
+</code></pre>
 @param src1 first input array or a scalar; when it is an array, it must have a single channel.
 @param src2 second input array or a scalar; when it is an array, it must have a single channel.
 @param dst output array of type ref CV_8U that has the same size and the same number of channels as
     the input arrays.
 @param cmpop a flag, that specifies correspondence between the arrays (cv::CmpTypes)
-@sa checkRange, min, max, threshold
+\sa checkRange, min, max, threshold
 */
 @Namespace("cv") public static native void compare(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst, int cmpop);
 
-/** @brief Calculates per-element minimum of two arrays or an array and a scalar.
-
+/** \brief Calculates per-element minimum of two arrays or an array and a scalar.
+<p>
 The functions min calculate the per-element minimum of two arrays:
 \f[\texttt{dst} (I)= \min ( \texttt{src1} (I), \texttt{src2} (I))\f]
 or array and a scalar:
@@ -11245,19 +11245,19 @@ or array and a scalar:
 @param src1 first input array.
 @param src2 second input array of the same size and type as src1.
 @param dst output array of the same size and type as src1.
-@sa max, compare, inRange, minMaxLoc
+\sa max, compare, inRange, minMaxLoc
 */
 @Namespace("cv") public static native void min(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst);
-/** @overload
+/** \overload
 needed to avoid conflicts with const _Tp& std::min(const _Tp&, const _Tp&, _Compare)
 */
-/** @overload
+/** \overload
 needed to avoid conflicts with const _Tp& std::min(const _Tp&, const _Tp&, _Compare)
 */
 @Namespace("cv") public static native void min(@Const @ByRef UMat src1, @Const @ByRef UMat src2, @ByRef UMat dst);
 
-/** @brief Calculates per-element maximum of two arrays or an array and a scalar.
-
+/** \brief Calculates per-element maximum of two arrays or an array and a scalar.
+<p>
 The functions max calculate the per-element maximum of two arrays:
 \f[\texttt{dst} (I)= \max ( \texttt{src1} (I), \texttt{src2} (I))\f]
 or array and a scalar:
@@ -11265,19 +11265,19 @@ or array and a scalar:
 @param src1 first input array.
 @param src2 second input array of the same size and type as src1 .
 @param dst output array of the same size and type as src1.
-@sa  min, compare, inRange, minMaxLoc, @ref MatrixExpressions
+\sa  min, compare, inRange, minMaxLoc, \ref MatrixExpressions
 */
 @Namespace("cv") public static native void max(@ByVal Mat src1, @ByVal Mat src2, @ByVal Mat dst);
-/** @overload
+/** \overload
 needed to avoid conflicts with const _Tp& std::min(const _Tp&, const _Tp&, _Compare)
 */
-/** @overload
+/** \overload
 needed to avoid conflicts with const _Tp& std::min(const _Tp&, const _Tp&, _Compare)
 */
 @Namespace("cv") public static native void max(@Const @ByRef UMat src1, @Const @ByRef UMat src2, @ByRef UMat dst);
 
-/** @brief Calculates a square root of array elements.
-
+/** \brief Calculates a square root of array elements.
+<p>
 The functions sqrt calculate a square root of each input array element.
 In case of multi-channel arrays, each channel is processed
 independently. The accuracy is approximately the same as of the built-in
@@ -11287,69 +11287,69 @@ std::sqrt .
 */
 @Namespace("cv") public static native void sqrt(@ByVal Mat src, @ByVal Mat dst);
 
-/** @brief Raises every array element to a power.
-
+/** \brief Raises every array element to a power.
+<p>
 The function pow raises every element of the input array to power :
 \f[\texttt{dst} (I) =  \fork{\texttt{src}(I)^power}{if \texttt{power} is integer}{|\texttt{src}(I)|^power}{otherwise}\f]
-
+<p>
 So, for a non-integer power exponent, the absolute values of input array
 elements are used. However, it is possible to get true values for
 negative values using some extra operations. In the example below,
 computing the 5th root of array src shows:
-@code{.cpp}
+<pre><code>{.cpp}
     Mat mask = src < 0;
     pow(src, 1./5, dst);
     subtract(Scalar::all(0), dst, dst, mask);
-@endcode
+</code></pre>
 For some values of power, such as integer values, 0.5 and -0.5,
 specialized faster algorithms are used.
-
+<p>
 Special values (NaN, Inf) are not handled.
 @param src input array.
 @param power exponent of power.
 @param dst output array of the same size and type as src.
-@sa sqrt, exp, log, cartToPolar, polarToCart
+\sa sqrt, exp, log, cartToPolar, polarToCart
 */
 @Namespace("cv") public static native void pow(@ByVal Mat src, double power, @ByVal Mat dst);
 
-/** @brief Calculates the exponent of every array element.
-
+/** \brief Calculates the exponent of every array element.
+<p>
 The function exp calculates the exponent of every element of the input
 array:
 \f[\texttt{dst} [I] = e^{ src(I) }\f]
-
+<p>
 The maximum relative error is about 7e-6 for single-precision input and
 less than 1e-10 for double-precision input. Currently, the function
 converts denormalized values to zeros on output. Special values (NaN,
 Inf) are not handled.
 @param src input array.
 @param dst output array of the same size and type as src.
-@sa log , cartToPolar , polarToCart , phase , pow , sqrt , magnitude
+\sa log , cartToPolar , polarToCart , phase , pow , sqrt , magnitude
 */
 @Namespace("cv") public static native void exp(@ByVal Mat src, @ByVal Mat dst);
 
-/** @brief Calculates the natural logarithm of every array element.
-
+/** \brief Calculates the natural logarithm of every array element.
+<p>
 The function log calculates the natural logarithm of the absolute value
 of every element of the input array:
 \f[\texttt{dst} (I) =  \fork{\log |\texttt{src}(I)|}{if \(\texttt{src}(I) \ne 0\) }{\texttt{C}}{otherwise}\f]
-
+<p>
 where C is a large negative number (about -700 in the current
 implementation). The maximum relative error is about 7e-6 for
 single-precision input and less than 1e-10 for double-precision input.
 Special values (NaN, Inf) are not handled.
 @param src input array.
 @param dst output array of the same size and type as src .
-@sa exp, cartToPolar, polarToCart, phase, pow, sqrt, magnitude
+\sa exp, cartToPolar, polarToCart, phase, pow, sqrt, magnitude
 */
 @Namespace("cv") public static native void log(@ByVal Mat src, @ByVal Mat dst);
 
-/** @brief Calculates x and y coordinates of 2D vectors from their magnitude and angle.
-
+/** \brief Calculates x and y coordinates of 2D vectors from their magnitude and angle.
+<p>
 The function polarToCart calculates the Cartesian coordinates of each 2D
 vector represented by the corresponding elements of magnitude and angle:
 \f[\begin{array}{l} \texttt{x} (I) =  \texttt{magnitude} (I) \cos ( \texttt{angle} (I)) \\ \texttt{y} (I) =  \texttt{magnitude} (I) \sin ( \texttt{angle} (I)) \\ \end{array}\f]
-
+<p>
 The relative accuracy of the estimated coordinates is about 1e-6.
 @param magnitude input floating-point array of magnitudes of 2D vectors;
 it can be an empty matrix (=Mat()), in this case, the function assumes
@@ -11362,19 +11362,19 @@ size and type as angle.
 size and type as angle.
 @param angleInDegrees when true, the input angles are measured in
 degrees, otherwise, they are measured in radians.
-@sa cartToPolar, magnitude, phase, exp, log, pow, sqrt
+\sa cartToPolar, magnitude, phase, exp, log, pow, sqrt
 */
 @Namespace("cv") public static native void polarToCart(@ByVal Mat magnitude, @ByVal Mat angle,
                               @ByVal Mat x, @ByVal Mat y, @Cast("bool") boolean angleInDegrees/*=false*/);
 @Namespace("cv") public static native void polarToCart(@ByVal Mat magnitude, @ByVal Mat angle,
                               @ByVal Mat x, @ByVal Mat y);
 
-/** @brief Calculates the magnitude and angle of 2D vectors.
-
+/** \brief Calculates the magnitude and angle of 2D vectors.
+<p>
 The function cartToPolar calculates either the magnitude, angle, or both
 for every 2D vector (x(I),y(I)):
 \f[\begin{array}{l} \texttt{magnitude} (I)= \sqrt{\texttt{x}(I)^2+\texttt{y}(I)^2} , \\ \texttt{angle} (I)= \texttt{atan2} ( \texttt{y} (I), \texttt{x} (I))[ \cdot180 / \pi ] \end{array}\f]
-
+<p>
 The angles are calculated with accuracy about 0.3 degrees. For the point
 (0,0), the angle is set to 0.
 @param x array of x-coordinates; this must be a single-precision or
@@ -11385,7 +11385,7 @@ double-precision floating-point array.
 x; the angles are measured in radians (from 0 to 2\*Pi) or in degrees (0 to 360 degrees).
 @param angleInDegrees a flag, indicating whether the angles are measured
 in radians (which is by default), or in degrees.
-@sa Sobel, Scharr
+\sa Sobel, Scharr
 */
 @Namespace("cv") public static native void cartToPolar(@ByVal Mat x, @ByVal Mat y,
                               @ByVal Mat magnitude, @ByVal Mat angle,
@@ -11393,12 +11393,12 @@ in radians (which is by default), or in degrees.
 @Namespace("cv") public static native void cartToPolar(@ByVal Mat x, @ByVal Mat y,
                               @ByVal Mat magnitude, @ByVal Mat angle);
 
-/** @brief Calculates the rotation angle of 2D vectors.
-
+/** \brief Calculates the rotation angle of 2D vectors.
+<p>
 The function phase calculates the rotation angle of each 2D vector that
 is formed from the corresponding elements of x and y :
 \f[\texttt{angle} (I) =  \texttt{atan2} ( \texttt{y} (I), \texttt{x} (I))\f]
-
+<p>
 The angle estimation accuracy is about 0.3 degrees. When x(I)=y(I)=0 ,
 the corresponding angle(I) is set to 0.
 @param x input floating-point array of x-coordinates of 2D vectors.
@@ -11413,8 +11413,8 @@ degrees, otherwise, they are measured in radians.
                         @Cast("bool") boolean angleInDegrees/*=false*/);
 @Namespace("cv") public static native void phase(@ByVal Mat x, @ByVal Mat y, @ByVal Mat angle);
 
-/** @brief Calculates the magnitude of 2D vectors.
-
+/** \brief Calculates the magnitude of 2D vectors.
+<p>
 The function magnitude calculates the magnitude of 2D vectors formed
 from the corresponding elements of x and y arrays:
 \f[\texttt{dst} (I) =  \sqrt{\texttt{x}(I)^2 + \texttt{y}(I)^2}\f]
@@ -11422,12 +11422,12 @@ from the corresponding elements of x and y arrays:
 @param y floating-point array of y-coordinates of the vectors; it must
 have the same size as x.
 @param magnitude output array of the same size and type as x.
-@sa cartToPolar, polarToCart, phase, sqrt
+\sa cartToPolar, polarToCart, phase, sqrt
 */
 @Namespace("cv") public static native void magnitude(@ByVal Mat x, @ByVal Mat y, @ByVal Mat magnitude);
 
-/** @brief Checks every element of an input array for invalid values.
-
+/** \brief Checks every element of an input array for invalid values.
+<p>
 The functions checkRange check that every array element is neither NaN nor infinite. When minVal \<
 -DBL_MAX and maxVal \< DBL_MAX, the functions also check that each value is between minVal and
 maxVal. In case of multi-channel arrays, each channel is processed independently. If some values
@@ -11445,27 +11445,27 @@ elements.
                             double minVal/*=-DBL_MAX*/, double maxVal/*=DBL_MAX*/);
 @Namespace("cv") public static native @Cast("bool") boolean checkRange(@ByVal Mat a);
 
-/** @brief converts NaN's to the given number
+/** \brief converts NaN's to the given number
 */
 @Namespace("cv") public static native void patchNaNs(@ByVal Mat a, double val/*=0*/);
 @Namespace("cv") public static native void patchNaNs(@ByVal Mat a);
 
-/** @brief Performs generalized matrix multiplication.
-
+/** \brief Performs generalized matrix multiplication.
+<p>
 The function performs generalized matrix multiplication similar to the
 gemm functions in BLAS level 3. For example,
-`gemm(src1, src2, alpha, src3, beta, dst, GEMM_1_T + GEMM_3_T)`
+{@code gemm(src1, src2, alpha, src3, beta, dst, GEMM_1_T + GEMM_3_T)}
 corresponds to
 \f[\texttt{dst} =  \texttt{alpha} \cdot \texttt{src1} ^T  \cdot \texttt{src2} +  \texttt{beta} \cdot \texttt{src3} ^T\f]
-
+<p>
 In case of complex (two-channel) data, performed a complex matrix
 multiplication.
-
+<p>
 The function can be replaced with a matrix expression. For example, the
 above call can be replaced with:
-@code{.cpp}
+<pre><code>{.cpp}
     dst = alpha*src1.t()*src2 + beta*src3.t();
-@endcode
+</code></pre>
 @param src1 first multiplied input matrix that could be real(CV_32FC1,
 CV_64FC1) or complex(CV_32FC2, CV_64FC2).
 @param src2 second multiplied input matrix of the same type as src1.
@@ -11476,15 +11476,15 @@ should have the same type as src1 and src2.
 @param dst output matrix; it has the proper size and the same type as
 input matrices.
 @param flags operation flags (cv::GemmFlags)
-@sa mulTransposed , transform
+\sa mulTransposed , transform
 */
 @Namespace("cv") public static native void gemm(@ByVal Mat src1, @ByVal Mat src2, double alpha,
                        @ByVal Mat src3, double beta, @ByVal Mat dst, int flags/*=0*/);
 @Namespace("cv") public static native void gemm(@ByVal Mat src1, @ByVal Mat src2, double alpha,
                        @ByVal Mat src3, double beta, @ByVal Mat dst);
 
-/** @brief Calculates the product of a matrix and its transposition.
-
+/** \brief Calculates the product of a matrix and its transposition.
+<p>
 The function mulTransposed calculates the product of src and its
 transposition:
 \f[\texttt{dst} = \texttt{scale} ( \texttt{src} - \texttt{delta} )^T ( \texttt{src} - \texttt{delta} )\f]
@@ -11509,37 +11509,37 @@ output matrix. See the dtype parameter description below.
 @param dtype Optional type of the output matrix. When it is negative,
 the output matrix will have the same type as src . Otherwise, it will be
 type=CV_MAT_DEPTH(dtype) that should be either CV_32F or CV_64F .
-@sa calcCovarMatrix, gemm, repeat, reduce
+\sa calcCovarMatrix, gemm, repeat, reduce
 */
 @Namespace("cv") public static native void mulTransposed( @ByVal Mat src, @ByVal Mat dst, @Cast("bool") boolean aTa,
                                  @ByVal(nullValue = "cv::noArray()") Mat delta/*=cv::noArray()*/,
                                  double scale/*=1*/, int dtype/*=-1*/ );
 @Namespace("cv") public static native void mulTransposed( @ByVal Mat src, @ByVal Mat dst, @Cast("bool") boolean aTa );
 
-/** @brief Transposes a matrix.
-
+/** \brief Transposes a matrix.
+<p>
 The function transpose transposes the matrix src :
 \f[\texttt{dst} (i,j) =  \texttt{src} (j,i)\f]
-@note No complex conjugation is done in case of a complex matrix. It it
+\note No complex conjugation is done in case of a complex matrix. It it
 should be done separately if needed.
 @param src input array.
 @param dst output array of the same type as src.
 */
 @Namespace("cv") public static native void transpose(@ByVal Mat src, @ByVal Mat dst);
 
-/** @brief Performs the matrix transformation of every array element.
-
+/** \brief Performs the matrix transformation of every array element.
+<p>
 The function transform performs the matrix transformation of every
 element of the array src and stores the results in dst :
 \f[\texttt{dst} (I) =  \texttt{m} \cdot \texttt{src} (I)\f]
 (when m.cols=src.channels() ), or
 \f[\texttt{dst} (I) =  \texttt{m} \cdot [ \texttt{src} (I); 1]\f]
 (when m.cols=src.channels()+1 )
-
+<p>
 Every element of the N -channel array src is interpreted as N -element
 vector that is transformed using the M x N or M x (N+1) matrix m to
 M-element vector - the corresponding element of the output array dst .
-
+<p>
 The function may be used for geometrical transformation of
 N -dimensional points, arbitrary linear color space transformation (such
 as various kinds of RGB to YUV transforms), shuffling the image
@@ -11549,12 +11549,12 @@ m.cols or m.cols-1.
 @param dst output array of the same size and depth as src; it has as
 many channels as m.rows.
 @param m transformation 2x2 or 2x3 floating-point matrix.
-@sa perspectiveTransform, getAffineTransform, estimateRigidTransform, warpAffine, warpPerspective
+\sa perspectiveTransform, getAffineTransform, estimateRigidTransform, warpAffine, warpPerspective
 */
 @Namespace("cv") public static native void transform(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat m );
 
-/** @brief Performs the perspective matrix transformation of vectors.
-
+/** \brief Performs the perspective matrix transformation of vectors.
+<p>
 The function perspectiveTransform transforms every element of src by
 treating it as a 2D or 3D vector, in the following way:
 \f[(x, y, z)  \rightarrow (x'/w, y'/w, z'/w)\f]
@@ -11562,11 +11562,11 @@ where
 \f[(x', y', z', w') =  \texttt{mat} \cdot \begin{bmatrix} x & y & z & 1  \end{bmatrix}\f]
 and
 \f[w =  \fork{w'}{if \(w' \ne 0\)}{\infty}{otherwise}\f]
-
+<p>
 Here a 3D vector transformation is shown. In case of a 2D vector
 transformation, the z component is omitted.
-
-@note The function transforms a sparse set of 2D or 3D vectors. If you
+<p>
+\note The function transforms a sparse set of 2D or 3D vectors. If you
 want to transform an image using perspective transformation, use
 warpPerspective . If you have an inverse problem, that is, you want to
 compute the most probable perspective transformation out of several
@@ -11576,12 +11576,12 @@ findHomography .
 element is a 2D/3D vector to be transformed.
 @param dst output array of the same size and type as src.
 @param m 3x3 or 4x4 floating-point transformation matrix.
-@sa  transform, warpPerspective, getPerspectiveTransform, findHomography
+\sa  transform, warpPerspective, getPerspectiveTransform, findHomography
 */
 @Namespace("cv") public static native void perspectiveTransform(@ByVal Mat src, @ByVal Mat dst, @ByVal Mat m );
 
-/** @brief Copies the lower or the upper half of a square matrix to another half.
-
+/** \brief Copies the lower or the upper half of a square matrix to another half.
+<p>
 The function completeSymm copies the lower half of a square matrix to
 its another half. The matrix diagonal remains unchanged:
 *   \f$\texttt{mtx}_{ij}=\texttt{mtx}_{ji}\f$ for \f$i > j\f$ if
@@ -11591,46 +11591,46 @@ its another half. The matrix diagonal remains unchanged:
 @param mtx input-output floating-point square matrix.
 @param lowerToUpper operation flag; if true, the lower half is copied to
 the upper half. Otherwise, the upper half is copied to the lower half.
-@sa flip, transpose
+\sa flip, transpose
 */
 @Namespace("cv") public static native void completeSymm(@ByVal Mat mtx, @Cast("bool") boolean lowerToUpper/*=false*/);
 @Namespace("cv") public static native void completeSymm(@ByVal Mat mtx);
 
-/** @brief Initializes a scaled identity matrix.
-
+/** \brief Initializes a scaled identity matrix.
+<p>
 The function setIdentity initializes a scaled identity matrix:
 \f[\texttt{mtx} (i,j)= \fork{\texttt{value}}{ if \(i=j\)}{0}{otherwise}\f]
-
+<p>
 The function can also be emulated using the matrix initializers and the
 matrix expressions:
-@code
+<pre><code>
     Mat A = Mat::eye(4, 3, CV_32F)*5;
     // A will be set to [[5, 0, 0], [0, 5, 0], [0, 0, 5], [0, 0, 0]]
-@endcode
+</code></pre>
 @param mtx matrix to initialize (not necessarily square).
 @param s value to assign to diagonal elements.
-@sa Mat::zeros, Mat::ones, Mat::setTo, Mat::operator=
+\sa Mat::zeros, Mat::ones, Mat::setTo, Mat::operator=
 */
 @Namespace("cv") public static native void setIdentity(@ByVal Mat mtx, @Const @ByRef(nullValue = "cv::Scalar(1)") Scalar s/*=cv::Scalar(1)*/);
 @Namespace("cv") public static native void setIdentity(@ByVal Mat mtx);
 
-/** @brief Returns the determinant of a square floating-point matrix.
-
+/** \brief Returns the determinant of a square floating-point matrix.
+<p>
 The function determinant calculates and returns the determinant of the
 specified matrix. For small matrices ( mtx.cols=mtx.rows\<=3 ), the
 direct method is used. For larger matrices, the function uses LU
 factorization with partial pivoting.
-
+<p>
 For symmetric positively-determined matrices, it is also possible to use
 eigen decomposition to calculate the determinant.
 @param mtx input matrix that must have CV_32FC1 or CV_64FC1 type and
 square size.
-@sa trace, invert, solve, eigen, @ref MatrixExpressions
+\sa trace, invert, solve, eigen, \ref MatrixExpressions
 */
 @Namespace("cv") public static native double determinant(@ByVal Mat mtx);
 
-/** @brief Returns the trace of a matrix.
-
+/** \brief Returns the trace of a matrix.
+<p>
 The function trace returns the sum of the diagonal elements of the
 matrix mtx .
 \f[\mathrm{tr} ( \texttt{mtx} ) =  \sum _i  \texttt{mtx} (i,i)\f]
@@ -11638,112 +11638,112 @@ matrix mtx .
 */
 @Namespace("cv") public static native @ByVal Scalar trace(@ByVal Mat mtx);
 
-/** @brief Finds the inverse or pseudo-inverse of a matrix.
-
+/** \brief Finds the inverse or pseudo-inverse of a matrix.
+<p>
 The function invert inverts the matrix src and stores the result in dst
 . When the matrix src is singular or non-square, the function calculates
 the pseudo-inverse matrix (the dst matrix) so that norm(src\*dst - I) is
 minimal, where I is an identity matrix.
-
+<p>
 In case of the DECOMP_LU method, the function returns non-zero value if
 the inverse has been successfully calculated and 0 if src is singular.
-
+<p>
 In case of the DECOMP_SVD method, the function returns the inverse
 condition number of src (the ratio of the smallest singular value to the
 largest singular value) and 0 if src is singular. The SVD method
 calculates a pseudo-inverse matrix if src is singular.
-
+<p>
 Similarly to DECOMP_LU, the method DECOMP_CHOLESKY works only with
 non-singular square matrices that should also be symmetrical and
 positively defined. In this case, the function stores the inverted
 matrix in dst and returns non-zero. Otherwise, it returns 0.
-
+<p>
 @param src input floating-point M x N matrix.
 @param dst output matrix of N x M size and the same type as src.
 @param flags inversion method (cv::DecompTypes)
-@sa solve, SVD
+\sa solve, SVD
 */
 @Namespace("cv") public static native double invert(@ByVal Mat src, @ByVal Mat dst, int flags/*=cv::DECOMP_LU*/);
 @Namespace("cv") public static native double invert(@ByVal Mat src, @ByVal Mat dst);
 
-/** @brief Solves one or more linear systems or least-squares problems.
-
+/** \brief Solves one or more linear systems or least-squares problems.
+<p>
 The function solve solves a linear system or least-squares problem (the
 latter is possible with SVD or QR methods, or by specifying the flag
 DECOMP_NORMAL ):
 \f[\texttt{dst} =  \arg \min _X \| \texttt{src1} \cdot \texttt{X} -  \texttt{src2} \|\f]
-
+<p>
 If DECOMP_LU or DECOMP_CHOLESKY method is used, the function returns 1
 if src1 (or \f$\texttt{src1}^T\texttt{src1}\f$ ) is non-singular. Otherwise,
 it returns 0. In the latter case, dst is not valid. Other methods find a
 pseudo-solution in case of a singular left-hand side part.
-
-@note If you want to find a unity-norm solution of an under-defined
+<p>
+\note If you want to find a unity-norm solution of an under-defined
 singular system \f$\texttt{src1}\cdot\texttt{dst}=0\f$ , the function solve
 will not do the work. Use SVD::solveZ instead.
-
+<p>
 @param src1 input matrix on the left-hand side of the system.
 @param src2 input matrix on the right-hand side of the system.
 @param dst output solution.
 @param flags solution (matrix inversion) method (cv::DecompTypes)
-@sa invert, SVD, eigen
+\sa invert, SVD, eigen
 */
 @Namespace("cv") public static native @Cast("bool") boolean solve(@ByVal Mat src1, @ByVal Mat src2,
                         @ByVal Mat dst, int flags/*=cv::DECOMP_LU*/);
 @Namespace("cv") public static native @Cast("bool") boolean solve(@ByVal Mat src1, @ByVal Mat src2,
                         @ByVal Mat dst);
 
-/** @brief Sorts each row or each column of a matrix.
-
+/** \brief Sorts each row or each column of a matrix.
+<p>
 The function sort sorts each matrix row or each matrix column in
 ascending or descending order. So you should pass two operation flags to
 get desired behaviour. If you want to sort matrix rows or columns
 lexicographically, you can use STL std::sort generic function with the
 proper comparison predicate.
-
+<p>
 @param src input single-channel array.
 @param dst output array of the same size and type as src.
 @param flags operation flags, a combination of cv::SortFlags
-@sa sortIdx, randShuffle
+\sa sortIdx, randShuffle
 */
 @Namespace("cv") public static native void sort(@ByVal Mat src, @ByVal Mat dst, int flags);
 
-/** @brief Sorts each row or each column of a matrix.
-
+/** \brief Sorts each row or each column of a matrix.
+<p>
 The function sortIdx sorts each matrix row or each matrix column in the
 ascending or descending order. So you should pass two operation flags to
 get desired behaviour. Instead of reordering the elements themselves, it
 stores the indices of sorted elements in the output array. For example:
-@code
+<pre><code>
     Mat A = Mat::eye(3,3,CV_32F), B;
     sortIdx(A, B, SORT_EVERY_ROW + SORT_ASCENDING);
     // B will probably contain
     // (because of equal elements in A some permutations are possible):
     // [[1, 2, 0], [0, 2, 1], [0, 1, 2]]
-@endcode
+</code></pre>
 @param src input single-channel array.
 @param dst output integer array of the same size as src.
 @param flags operation flags that could be a combination of cv::SortFlags
-@sa sort, randShuffle
+\sa sort, randShuffle
 */
 @Namespace("cv") public static native void sortIdx(@ByVal Mat src, @ByVal Mat dst, int flags);
 
-/** @brief Finds the real roots of a cubic equation.
-
+/** \brief Finds the real roots of a cubic equation.
+<p>
 The function solveCubic finds the real roots of a cubic equation:
 -   if coeffs is a 4-element vector:
 \f[\texttt{coeffs} [0] x^3 +  \texttt{coeffs} [1] x^2 +  \texttt{coeffs} [2] x +  \texttt{coeffs} [3] = 0\f]
 -   if coeffs is a 3-element vector:
 \f[x^3 +  \texttt{coeffs} [0] x^2 +  \texttt{coeffs} [1] x +  \texttt{coeffs} [2] = 0\f]
-
+<p>
 The roots are stored in the roots array.
 @param coeffs equation coefficients, an array of 3 or 4 elements.
 @param roots output array of real roots that has 1 or 3 elements.
 */
 @Namespace("cv") public static native int solveCubic(@ByVal Mat coeffs, @ByVal Mat roots);
 
-/** @brief Finds the real or complex roots of a polynomial equation.
-
+/** \brief Finds the real or complex roots of a polynomial equation.
+<p>
 The function solvePoly finds real and complex roots of a polynomial equation:
 \f[\texttt{coeffs} [n] x^{n} +  \texttt{coeffs} [n-1] x^{n-1} + ... +  \texttt{coeffs} [1] x +  \texttt{coeffs} [0] = 0\f]
 @param coeffs array of polynomial coefficients.
@@ -11753,14 +11753,14 @@ The function solvePoly finds real and complex roots of a polynomial equation:
 @Namespace("cv") public static native double solvePoly(@ByVal Mat coeffs, @ByVal Mat roots, int maxIters/*=300*/);
 @Namespace("cv") public static native double solvePoly(@ByVal Mat coeffs, @ByVal Mat roots);
 
-/** @brief Calculates eigenvalues and eigenvectors of a symmetric matrix.
-
+/** \brief Calculates eigenvalues and eigenvectors of a symmetric matrix.
+<p>
 The functions eigen calculate just eigenvalues, or eigenvalues and eigenvectors of the symmetric
 matrix src:
-@code
+<pre><code>
     src*eigenvectors.row(i).t() = eigenvalues.at<srcType>(i)*eigenvectors.row(i).t()
-@endcode
-@note in the new and the old interfaces different ordering of eigenvalues and eigenvectors
+</code></pre>
+\note in the new and the old interfaces different ordering of eigenvalues and eigenvectors
 parameters is used.
 @param src input matrix that must have CV_32FC1 or CV_64FC1 type, square size and be symmetrical
 (src ^T^ == src).
@@ -11769,14 +11769,14 @@ in the descending order.
 @param eigenvectors output matrix of eigenvectors; it has the same size and type as src; the
 eigenvectors are stored as subsequent matrix rows, in the same order as the corresponding
 eigenvalues.
-@sa completeSymm , PCA
+\sa completeSymm , PCA
 */
 @Namespace("cv") public static native @Cast("bool") boolean eigen(@ByVal Mat src, @ByVal Mat eigenvalues,
                         @ByVal(nullValue = "cv::noArray()") Mat eigenvectors/*=cv::noArray()*/);
 @Namespace("cv") public static native @Cast("bool") boolean eigen(@ByVal Mat src, @ByVal Mat eigenvalues);
 
-/** @brief Calculates the covariance matrix of a set of vectors.
-
+/** \brief Calculates the covariance matrix of a set of vectors.
+<p>
 The functions calcCovarMatrix calculate the covariance matrix and, optionally, the mean vector of
 the set of input vectors.
 @param samples samples stored as separate matrices
@@ -11785,16 +11785,16 @@ the set of input vectors.
 @param mean input or output (depending on the flags) array as the average value of the input vectors.
 @param flags operation flags as a combination of cv::CovarFlags
 @param ctype type of the matrixl; it equals 'CV_64F' by default.
-@sa PCA, mulTransposed, Mahalanobis
-@todo InputArrayOfArrays
+\sa PCA, mulTransposed, Mahalanobis
+\todo InputArrayOfArrays
 */
 @Namespace("cv") public static native void calcCovarMatrix( @Const Mat samples, int nsamples, @ByRef Mat covar, @ByRef Mat mean,
                                  int flags, int ctype/*=CV_64F*/);
 @Namespace("cv") public static native void calcCovarMatrix( @Const Mat samples, int nsamples, @ByRef Mat covar, @ByRef Mat mean,
                                  int flags);
 
-/** @overload
-@note use cv::COVAR_ROWS or cv::COVAR_COLS flag
+/** \overload
+\note use cv::COVAR_ROWS or cv::COVAR_COLS flag
 @param samples samples stored as rows/columns of a single matrix.
 @param covar output covariance matrix of the type ctype and square size.
 @param mean input or output (depending on the flags) array as the average value of the input vectors.
@@ -11832,8 +11832,8 @@ the set of input vectors.
 @Namespace("cv") public static native void SVBackSubst( @ByVal Mat w, @ByVal Mat u, @ByVal Mat vt,
                                @ByVal Mat rhs, @ByVal Mat dst );
 
-/** @brief Calculates the Mahalanobis distance between two vectors.
-
+/** \brief Calculates the Mahalanobis distance between two vectors.
+<p>
 The function Mahalanobis calculates and returns the weighted distance between two vectors:
 \f[d( \texttt{vec1} , \texttt{vec2} )= \sqrt{\sum_{i,j}{\texttt{icovar(i,j)}\cdot(\texttt{vec1}(I)-\texttt{vec2}(I))\cdot(\texttt{vec1(j)}-\texttt{vec2(j)})} }\f]
 The covariance matrix may be calculated using the cv::calcCovarMatrix function and then inverted using
@@ -11844,8 +11844,8 @@ the invert function (preferably using the cv::DECOMP_SVD method, as the most acc
 */
 @Namespace("cv") public static native double Mahalanobis(@ByVal Mat v1, @ByVal Mat v2, @ByVal Mat icovar);
 
-/** @brief Performs a forward or inverse Discrete Fourier transform of a 1D or 2D floating-point array.
-
+/** \brief Performs a forward or inverse Discrete Fourier transform of a 1D or 2D floating-point array.
+<p>
 The function performs one of the following:
 -   Forward the Fourier transform of a 1D vector of N elements:
     \f[Y = F^{(N)}  \cdot X,\f]
@@ -11857,15 +11857,15 @@ The function performs one of the following:
     \f[Y = F^{(M)}  \cdot X  \cdot F^{(N)}\f]
 -   Inverse the 2D Fourier transform of a M x N matrix:
     \f[\begin{array}{l} X'=  \left (F^{(M)} \right )^*  \cdot Y  \cdot \left (F^{(N)} \right )^* \\ X =  \frac{1}{M \cdot N} \cdot X' \end{array}\f]
-
+<p>
 In case of real (single-channel) data, the output spectrum of the forward Fourier transform or input
 spectrum of the inverse Fourier transform can be represented in a packed format called *CCS*
 (complex-conjugate-symmetrical). It was borrowed from IPL (Intel\* Image Processing Library). Here
 is how 2D *CCS* spectrum looks:
 \f[\begin{bmatrix} Re Y_{0,0} & Re Y_{0,1} & Im Y_{0,1} & Re Y_{0,2} & Im Y_{0,2} &  \cdots & Re Y_{0,N/2-1} & Im Y_{0,N/2-1} & Re Y_{0,N/2}  \\ Re Y_{1,0} & Re Y_{1,1} & Im Y_{1,1} & Re Y_{1,2} & Im Y_{1,2} &  \cdots & Re Y_{1,N/2-1} & Im Y_{1,N/2-1} & Re Y_{1,N/2}  \\ Im Y_{1,0} & Re Y_{2,1} & Im Y_{2,1} & Re Y_{2,2} & Im Y_{2,2} &  \cdots & Re Y_{2,N/2-1} & Im Y_{2,N/2-1} & Im Y_{1,N/2}  \\ \hdotsfor{9} \\ Re Y_{M/2-1,0} &  Re Y_{M-3,1}  & Im Y_{M-3,1} &  \hdotsfor{3} & Re Y_{M-3,N/2-1} & Im Y_{M-3,N/2-1}& Re Y_{M/2-1,N/2}  \\ Im Y_{M/2-1,0} &  Re Y_{M-2,1}  & Im Y_{M-2,1} &  \hdotsfor{3} & Re Y_{M-2,N/2-1} & Im Y_{M-2,N/2-1}& Im Y_{M/2-1,N/2}  \\ Re Y_{M/2,0}  &  Re Y_{M-1,1} &  Im Y_{M-1,1} &  \hdotsfor{3} & Re Y_{M-1,N/2-1} & Im Y_{M-1,N/2-1}& Re Y_{M/2,N/2} \end{bmatrix}\f]
-
+<p>
 In case of 1D transform of a real vector, the output looks like the first row of the matrix above.
-
+<p>
 So, the function chooses an operation mode depending on the flags and size of the input array:
 -   If DFT_ROWS is set or the input array has a single row or single column, the function
     performs a 1D forward or inverse transform of each row of a matrix when DFT_ROWS is set.
@@ -11887,16 +11887,16 @@ So, the function chooses an operation mode depending on the flags and size of th
     is set, the output is a real array of the same size as input. The function performs a 1D or 2D
     inverse transformation of the whole input array or each individual row, depending on the flags
     DFT_INVERSE and DFT_ROWS.
-
+<p>
 If DFT_SCALE is set, the scaling is done after the transformation.
-
+<p>
 Unlike dct , the function supports arrays of arbitrary size. But only those arrays are processed
 efficiently, whose sizes can be factorized in a product of small prime numbers (2, 3, and 5 in the
 current implementation). Such an efficient DFT size can be calculated using the getOptimalDFTSize
 method.
-
+<p>
 The sample below illustrates how to calculate a DFT-based convolution of two 2D real arrays:
-@code
+<pre><code>
     void convolveDFT(InputArray A, InputArray B, OutputArray C)
     {
         // reallocate the output array if needed
@@ -11936,7 +11936,7 @@ The sample below illustrates how to calculate a DFT-based convolution of two 2D 
 
         // all the temporary buffers will be deallocated automatically
     }
-@endcode
+</code></pre>
 To optimize this sample, consider the following approaches:
 -   Since nonzeroRows != 0 is passed to the forward transform calls and since A and B are copied to
     the top-left corners of tempA and tempB, respectively, it is not necessary to clear the whole
@@ -11953,12 +11953,12 @@ To optimize this sample, consider the following approaches:
     somewhere in the middle.
 -   If different tiles in C can be calculated in parallel and, thus, the convolution is done by
     parts, the loop can be threaded.
-
+<p>
 All of the above improvements have been implemented in matchTemplate and filter2D . Therefore, by
 using them, you can get the performance even better than with the above theoretically optimal
 implementation. Though, those two functions actually calculate cross-correlation, not convolution,
 so you need to "flip" the second convolution operand B vertically and horizontally using flip .
-@note
+\note
 -   An example using the discrete fourier transform can be found at
     opencv_source_code/samples/cpp/dft.cpp
 -   (Python) An example using the dft functionality to perform Wiener deconvolution can be found
@@ -11973,18 +11973,18 @@ nonzeroRows rows of the input array (DFT_INVERSE is not set) or only the first n
 output array (DFT_INVERSE is set) contain non-zeros, thus, the function can handle the rest of the
 rows more efficiently and save some time; this technique is very useful for calculating array
 cross-correlation or convolution using DFT.
-@sa dct , getOptimalDFTSize , mulSpectrums, filter2D , matchTemplate , flip , cartToPolar ,
+\sa dct , getOptimalDFTSize , mulSpectrums, filter2D , matchTemplate , flip , cartToPolar ,
 magnitude , phase
 */
 @Namespace("cv") public static native void dft(@ByVal Mat src, @ByVal Mat dst, int flags/*=0*/, int nonzeroRows/*=0*/);
 @Namespace("cv") public static native void dft(@ByVal Mat src, @ByVal Mat dst);
 
-/** @brief Calculates the inverse Discrete Fourier Transform of a 1D or 2D array.
-
+/** \brief Calculates the inverse Discrete Fourier Transform of a 1D or 2D array.
+<p>
 idft(src, dst, flags) is equivalent to dft(src, dst, flags | DFT_INVERSE) .
-@note None of dft and idft scales the result by default. So, you should pass DFT_SCALE to one of
+\note None of dft and idft scales the result by default. So, you should pass DFT_SCALE to one of
 dft or idft explicitly to make these transforms mutually inverse.
-@sa dft, dct, idct, mulSpectrums, getOptimalDFTSize
+\sa dft, dct, idct, mulSpectrums, getOptimalDFTSize
 @param src input floating-point real or complex array.
 @param dst output array whose size and type depend on the flags.
 @param flags operation flags (see dft and cv::DftFlags).
@@ -11994,8 +11994,8 @@ the convolution sample in dft description.
 @Namespace("cv") public static native void idft(@ByVal Mat src, @ByVal Mat dst, int flags/*=0*/, int nonzeroRows/*=0*/);
 @Namespace("cv") public static native void idft(@ByVal Mat src, @ByVal Mat dst);
 
-/** @brief Performs a forward or inverse discrete Cosine transform of 1D or 2D array.
-
+/** \brief Performs a forward or inverse discrete Cosine transform of 1D or 2D array.
+<p>
 The function dct performs a forward or inverse discrete Cosine transform (DCT) of a 1D or 2D
 floating-point array:
 -   Forward Cosine transform of a 1D vector of N elements:
@@ -12011,47 +12011,47 @@ floating-point array:
     \f[Y = C^{(N)}  \cdot X  \cdot \left (C^{(N)} \right )^T\f]
 -   Inverse 2D Cosine transform of M x N matrix:
     \f[X =  \left (C^{(N)} \right )^T  \cdot X  \cdot C^{(N)}\f]
-
+<p>
 The function chooses the mode of operation by looking at the flags and size of the input array:
 -   If (flags & DCT_INVERSE) == 0 , the function does a forward 1D or 2D transform. Otherwise, it
     is an inverse 1D or 2D transform.
 -   If (flags & DCT_ROWS) != 0 , the function performs a 1D transform of each row.
 -   If the array is a single column or a single row, the function performs a 1D transform.
 -   If none of the above is true, the function performs a 2D transform.
-
-@note Currently dct supports even-size arrays (2, 4, 6 ...). For data analysis and approximation, you
+<p>
+\note Currently dct supports even-size arrays (2, 4, 6 ...). For data analysis and approximation, you
 can pad the array when necessary.
 Also, the function performance depends very much, and not monotonically, on the array size (see
 getOptimalDFTSize ). In the current implementation DCT of a vector of size N is calculated via DFT
 of a vector of size N/2 . Thus, the optimal DCT size N1 \>= N can be calculated as:
-@code
+<pre><code>
     size_t getOptimalDCTSize(size_t N) { return 2*getOptimalDFTSize((N+1)/2); }
     N1 = getOptimalDCTSize(N);
-@endcode
+</code></pre>
 @param src input floating-point array.
 @param dst output array of the same size and type as src .
 @param flags transformation flags as a combination of cv::DftFlags (DCT_*)
-@sa dft , getOptimalDFTSize , idct
+\sa dft , getOptimalDFTSize , idct
 */
 @Namespace("cv") public static native void dct(@ByVal Mat src, @ByVal Mat dst, int flags/*=0*/);
 @Namespace("cv") public static native void dct(@ByVal Mat src, @ByVal Mat dst);
 
-/** @brief Calculates the inverse Discrete Cosine Transform of a 1D or 2D array.
-
+/** \brief Calculates the inverse Discrete Cosine Transform of a 1D or 2D array.
+<p>
 idct(src, dst, flags) is equivalent to dct(src, dst, flags | DCT_INVERSE).
 @param src input floating-point single-channel array.
 @param dst output array of the same size and type as src.
 @param flags operation flags.
-@sa  dct, dft, idft, getOptimalDFTSize
+\sa  dct, dft, idft, getOptimalDFTSize
 */
 @Namespace("cv") public static native void idct(@ByVal Mat src, @ByVal Mat dst, int flags/*=0*/);
 @Namespace("cv") public static native void idct(@ByVal Mat src, @ByVal Mat dst);
 
-/** @brief Performs the per-element multiplication of two Fourier spectrums.
-
+/** \brief Performs the per-element multiplication of two Fourier spectrums.
+<p>
 The function mulSpectrums performs the per-element multiplication of the two CCS-packed or complex
 matrices that are results of a real or complex Fourier transform.
-
+<p>
 The function, together with dft and idft , may be used to calculate convolution (pass conjB=false )
 or correlation (pass conjB=true ) of two arrays rapidly. When the arrays are complex, they are
 simply multiplied (per element) with an optional conjugation of the second-array elements. When the
@@ -12060,7 +12060,7 @@ arrays are real, they are assumed to be CCS-packed (see dft for details).
 @param b second input array of the same size and type as src1 .
 @param c output array of the same size and type as src1 .
 @param flags operation flags; currently, the only supported flag is cv::DFT_ROWS, which indicates that
-each row of src1 and src2 is an independent 1D Fourier spectrum. If you do not want to use this flag, then simply add a `0` as value.
+each row of src1 and src2 is an independent 1D Fourier spectrum. If you do not want to use this flag, then simply add a {@code 0} as value.
 @param conjB optional flag that conjugates the second input array before the multiplication (true)
 or not (false).
 */
@@ -12069,54 +12069,54 @@ or not (false).
 @Namespace("cv") public static native void mulSpectrums(@ByVal Mat a, @ByVal Mat b, @ByVal Mat c,
                                int flags);
 
-/** @brief Returns the optimal DFT size for a given vector size.
-
+/** \brief Returns the optimal DFT size for a given vector size.
+<p>
 DFT performance is not a monotonic function of a vector size. Therefore, when you calculate
 convolution of two arrays or perform the spectral analysis of an array, it usually makes sense to
 pad the input data with zeros to get a bit larger array that can be transformed much faster than the
 original one. Arrays whose size is a power-of-two (2, 4, 8, 16, 32, ...) are the fastest to process.
 Though, the arrays whose size is a product of 2's, 3's, and 5's (for example, 300 = 5\*5\*3\*2\*2)
 are also processed quite efficiently.
-
+<p>
 The function getOptimalDFTSize returns the minimum number N that is greater than or equal to vecsize
 so that the DFT of a vector of size N can be processed efficiently. In the current implementation N
 = 2 ^p^ \* 3 ^q^ \* 5 ^r^ for some integer p, q, r.
-
+<p>
 The function returns a negative number if vecsize is too large (very close to INT_MAX ).
-
+<p>
 While the function cannot be used directly to estimate the optimal vector size for DCT transform
 (since the current DCT implementation supports only even-size vectors), it can be easily processed
 as getOptimalDFTSize((vecsize+1)/2)\*2.
 @param vecsize vector size.
-@sa dft , dct , idft , idct , mulSpectrums
+\sa dft , dct , idft , idct , mulSpectrums
 */
 @Namespace("cv") public static native int getOptimalDFTSize(int vecsize);
 
-/** @brief Returns the default random number generator.
-
+/** \brief Returns the default random number generator.
+<p>
 The function theRNG returns the default random number generator. For each thread, there is a
 separate random number generator, so you can use the function safely in multi-thread environments.
 If you just need to get a single random number using this generator or initialize an array, you can
 use randu or randn instead. But if you are going to generate many random numbers inside a loop, it
 is much faster to use this function to retrieve the generator and then use RNG::operator _Tp() .
-@sa RNG, randu, randn
+\sa RNG, randu, randn
 */
 @Namespace("cv") public static native @ByRef RNG theRNG();
 
-/** @brief Generates a single uniformly-distributed random number or an array of random numbers.
-
+/** \brief Generates a single uniformly-distributed random number or an array of random numbers.
+<p>
 Non-template variant of the function fills the matrix dst with uniformly-distributed
 random numbers from the specified range:
 \f[\texttt{low} _c  \leq \texttt{dst} (I)_c <  \texttt{high} _c\f]
 @param dst output array of random numbers; the array must be pre-allocated.
 @param low inclusive lower boundary of the generated random numbers.
 @param high exclusive upper boundary of the generated random numbers.
-@sa RNG, randn, theRNG
+\sa RNG, randn, theRNG
 */
 @Namespace("cv") public static native void randu(@ByVal Mat dst, @ByVal Mat low, @ByVal Mat high);
 
-/** @brief Fills the array with normally distributed random numbers.
-
+/** \brief Fills the array with normally distributed random numbers.
+<p>
 The function randn fills the matrix dst with normally distributed random numbers with the specified
 mean vector and the standard deviation matrix. The generated random numbers are clipped to fit the
 value range of the output array data type.
@@ -12124,12 +12124,12 @@ value range of the output array data type.
 @param mean mean value (expectation) of the generated random numbers.
 @param stddev standard deviation of the generated random numbers; it can be either a vector (in
 which case a diagonal standard deviation matrix is assumed) or a square matrix.
-@sa RNG, randu
+\sa RNG, randu
 */
 @Namespace("cv") public static native void randn(@ByVal Mat dst, @ByVal Mat mean, @ByVal Mat stddev);
 
-/** @brief Shuffles the array elements randomly.
-
+/** \brief Shuffles the array elements randomly.
+<p>
 The function randShuffle shuffles the specified 1D array by randomly choosing pairs of elements and
 swapping them. The number of such swap operations will be dst.rows\*dst.cols\*iterFactor .
 @param dst input/output numerical 1D array.
@@ -12137,13 +12137,13 @@ swapping them. The number of such swap operations will be dst.rows\*dst.cols\*it
 below).
 @param rng optional random number generator used for shuffling; if it is zero, theRNG () is used
 instead.
-@sa RNG, sort
+\sa RNG, sort
 */
 @Namespace("cv") public static native void randShuffle(@ByVal Mat dst, double iterFactor/*=1.*/, RNG rng/*=0*/);
 @Namespace("cv") public static native void randShuffle(@ByVal Mat dst);
 
-/** @brief Principal Component Analysis
-
+/** \brief Principal Component Analysis
+<p>
 The class is used to calculate a special basis for a set of vectors. The
 basis will consist of eigenvectors of the covariance matrix calculated
 from the input set of vectors. The class %PCA can also transform
@@ -12160,15 +12160,15 @@ vector from a high-dimensional space with a much shorter vector
 consisting of the projected vector's coordinates in the subspace. Such a
 transformation is also known as Karhunen-Loeve Transform, or KLT.
 See http://en.wikipedia.org/wiki/Principal_component_analysis
-
+<p>
 The sample below is the function that takes two matrices. The first
 function stores a set of vectors (a row per vector) that is used to
 calculate PCA. The second function stores another "test" set of vectors
 (a row per vector). First, these vectors are compressed with PCA, then
 reconstructed back, and then the reconstruction error norm is computed
 and printed for each vector. :
-
-@code{.cpp}
+<p>
+<pre><code>{.cpp}
 using namespace cv;
 
 PCA compressPCA(const Mat& pcaset, int maxComponents,
@@ -12204,15 +12204,15 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
     }
     return pca;
 }
-@endcode
-@sa calcCovarMatrix, mulTransposed, SVD, dft, dct
+</code></pre>
+\sa calcCovarMatrix, mulTransposed, SVD, dft, dct
 */
 @Namespace("cv") @NoOffset public static class PCA extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PCA(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PCA(int size) { allocateArray(size); }
+    public PCA(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public PCA position(int position) {
         return (PCA)super.position(position);
@@ -12226,29 +12226,29 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
                  //!
                  USE_AVG     = 2;  //!
 
-    /** @brief default constructor
-
+    /** \brief default constructor
+<p>
     The default constructor initializes an empty %PCA structure. The other
     constructors initialize the structure and call PCA::operator()().
     */
-    public PCA() { allocate(); }
+    public PCA() { super((Pointer)null); allocate(); }
     private native void allocate();
 
-    /** @overload
+    /** \overload
     @param data input samples stored as matrix rows or matrix columns.
-    @param mean optional mean value; if the matrix is empty (@c noArray()),
+    @param mean optional mean value; if the matrix is empty (\c noArray()),
     the mean is computed from the data.
     @param flags operation flags; currently the parameter is only used to
     specify the data layout (PCA::Flags)
     @param maxComponents maximum number of components that %PCA should
     retain; by default, all the components are retained.
     */
-    public PCA(@ByVal Mat data, @ByVal Mat mean, int flags, int maxComponents/*=0*/) { allocate(data, mean, flags, maxComponents); }
+    public PCA(@ByVal Mat data, @ByVal Mat mean, int flags, int maxComponents/*=0*/) { super((Pointer)null); allocate(data, mean, flags, maxComponents); }
     private native void allocate(@ByVal Mat data, @ByVal Mat mean, int flags, int maxComponents/*=0*/);
-    public PCA(@ByVal Mat data, @ByVal Mat mean, int flags) { allocate(data, mean, flags); }
+    public PCA(@ByVal Mat data, @ByVal Mat mean, int flags) { super((Pointer)null); allocate(data, mean, flags); }
     private native void allocate(@ByVal Mat data, @ByVal Mat mean, int flags);
 
-    /** @overload
+    /** \overload
     @param data input samples stored as matrix rows or matrix columns.
     @param mean optional mean value; if the matrix is empty (noArray()),
     the mean is computed from the data.
@@ -12258,20 +12258,20 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
     Using this parameter will let the PCA decided how many components to
     retain but it will always keep at least 2.
     */
-    public PCA(@ByVal Mat data, @ByVal Mat mean, int flags, double retainedVariance) { allocate(data, mean, flags, retainedVariance); }
+    public PCA(@ByVal Mat data, @ByVal Mat mean, int flags, double retainedVariance) { super((Pointer)null); allocate(data, mean, flags, retainedVariance); }
     private native void allocate(@ByVal Mat data, @ByVal Mat mean, int flags, double retainedVariance);
 
-    /** @brief performs %PCA
-
+    /** \brief performs %PCA
+<p>
     The operator performs %PCA of the supplied dataset. It is safe to reuse
     the same PCA structure for multiple datasets. That is, if the structure
     has been previously used with another dataset, the existing internal
-    data is reclaimed and the new eigenvalues, @ref eigenvectors , and @ref
+    data is reclaimed and the new eigenvalues, \ref eigenvectors , and \ref
     mean are allocated and computed.
-
+<p>
     The computed eigenvalues are sorted from the largest to the smallest and
     the corresponding eigenvectors are stored as eigenvectors rows.
-
+<p>
     @param data input samples stored as the matrix rows or as the matrix
     columns.
     @param mean optional mean value; if the matrix is empty (noArray()),
@@ -12284,7 +12284,7 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
     public native @ByRef @Name("operator ()") PCA apply(@ByVal Mat data, @ByVal Mat mean, int flags, int maxComponents/*=0*/);
     public native @ByRef @Name("operator ()") PCA apply(@ByVal Mat data, @ByVal Mat mean, int flags);
 
-    /** @overload
+    /** \overload
     @param data input samples stored as the matrix rows or as the matrix
     columns.
     @param mean optional mean value; if the matrix is empty (noArray()),
@@ -12297,8 +12297,8 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
      */
     public native @ByRef @Name("operator ()") PCA apply(@ByVal Mat data, @ByVal Mat mean, int flags, double retainedVariance);
 
-    /** @brief Projects vector(s) to the principal component subspace.
-
+    /** \brief Projects vector(s) to the principal component subspace.
+<p>
     The methods project one or more vectors to the principal component
     subspace, where each vector projection is represented by coefficients in
     the principal component basis. The first form of the method returns the
@@ -12307,28 +12307,28 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
     efficient in a processing loop.
     @param vec input vector(s); must have the same dimensionality and the
     same layout as the input data used at %PCA phase, that is, if
-    DATA_AS_ROW are specified, then `vec.cols==data.cols`
-    (vector dimensionality) and `vec.rows` is the number of vectors to
+    DATA_AS_ROW are specified, then {@code vec.cols==data.cols}
+    (vector dimensionality) and {@code vec.rows} is the number of vectors to
     project, and the same is true for the PCA::DATA_AS_COL case.
     */
     public native @ByVal Mat project(@ByVal Mat vec);
 
-    /** @overload
+    /** \overload
     @param vec input vector(s); must have the same dimensionality and the
     same layout as the input data used at PCA phase, that is, if
-    DATA_AS_ROW are specified, then `vec.cols==data.cols`
-    (vector dimensionality) and `vec.rows` is the number of vectors to
+    DATA_AS_ROW are specified, then {@code vec.cols==data.cols}
+    (vector dimensionality) and {@code vec.rows} is the number of vectors to
     project, and the same is true for the PCA::DATA_AS_COL case.
     @param result output vectors; in case of PCA::DATA_AS_COL, the
     output matrix has as many columns as the number of input vectors, this
-    means that `result.cols==vec.cols` and the number of rows match the
-    number of principal components (for example, `maxComponents` parameter
+    means that {@code result.cols==vec.cols} and the number of rows match the
+    number of principal components (for example, {@code maxComponents} parameter
     passed to the constructor).
      */
     public native void project(@ByVal Mat vec, @ByVal Mat result);
 
-    /** @brief Reconstructs vectors from their PC projections.
-
+    /** \brief Reconstructs vectors from their PC projections.
+<p>
     The methods are inverse operations to PCA::project. They take PC
     coordinates of projected vectors and reconstruct the original vectors.
     Unless all the principal components have been retained, the
@@ -12342,7 +12342,7 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
      */
     public native @ByVal Mat backProject(@ByVal Mat vec);
 
-    /** @overload
+    /** \overload
     @param vec coordinates of the vectors in the principal component
     subspace, the layout and size are the same as of PCA::project output
     vectors.
@@ -12351,8 +12351,8 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
      */
     public native void backProject(@ByVal Mat vec, @ByVal Mat result);
 
-    /** @brief write and load PCA matrix
-
+    /** \brief write and load PCA matrix
+<p>
 */
     public native void write(@ByRef FileStorage fs );
     public native void read(@Const @ByRef FileNode fs);
@@ -12365,26 +12365,26 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
     public native @ByRef Mat mean(); public native PCA mean(Mat mean);
 }
 
-/** @example pca.cpp
+/** \example pca.cpp
   An example using %PCA for dimensionality reduction while maintaining an amount of variance
  */
 
 /**
-   @brief Linear Discriminant Analysis
-   @todo document this class
+   \brief Linear Discriminant Analysis
+   \todo document this class
  */
 @Namespace("cv") @NoOffset public static class LDA extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LDA(Pointer p) { super(p); }
 
-    /** @brief constructor
+    /** \brief constructor
     Initializes a LDA with num_components (default 0) and specifies how
     samples are aligned (default dataAsRow=true).
     */
-    public LDA(int num_components/*=0*/) { allocate(num_components); }
+    public LDA(int num_components/*=0*/) { super((Pointer)null); allocate(num_components); }
     private native void allocate(int num_components/*=0*/);
-    public LDA() { allocate(); }
+    public LDA() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     /** Initializes and performs a Discriminant Analysis with Fisher's
@@ -12392,9 +12392,9 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
      in labels. If 0 (or less) number of components are given, they are
      automatically determined for given data in computation.
     */
-    public LDA(@ByVal MatVector src, @ByVal Mat labels, int num_components/*=0*/) { allocate(src, labels, num_components); }
+    public LDA(@ByVal MatVector src, @ByVal Mat labels, int num_components/*=0*/) { super((Pointer)null); allocate(src, labels, num_components); }
     private native void allocate(@ByVal MatVector src, @ByVal Mat labels, int num_components/*=0*/);
-    public LDA(@ByVal MatVector src, @ByVal Mat labels) { allocate(src, labels); }
+    public LDA(@ByVal MatVector src, @ByVal Mat labels) { super((Pointer)null); allocate(src, labels); }
     private native void allocate(@ByVal MatVector src, @ByVal Mat labels);
 
     /** Serializes this object to a given filename.
@@ -12442,26 +12442,26 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
     public static native @ByVal Mat subspaceReconstruct(@ByVal Mat W, @ByVal Mat mean, @ByVal Mat src);
 }
 
-/** @brief Singular Value Decomposition
-
+/** \brief Singular Value Decomposition
+<p>
 Class for computing Singular Value Decomposition of a floating-point
 matrix. The Singular Value Decomposition is used to solve least-square
 problems, under-determined linear systems, invert matrices, compute
 condition numbers, and so on.
-
+<p>
 If you want to compute a condition number of a matrix or an absolute value of
-its determinant, you do not need `u` and `vt`. You can pass
+its determinant, you do not need {@code u} and {@code vt}. You can pass
 flags=SVD::NO_UV|... . Another flag SVD::FULL_UV indicates that full-size u
 and vt must be computed, which is not necessary most of the time.
-
-@sa invert, solve, eigen, determinant
+<p>
+\sa invert, solve, eigen, determinant
 */
 @Namespace("cv") @NoOffset public static class SVD extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SVD(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SVD(int size) { allocateArray(size); }
+    public SVD(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public SVD position(int position) {
         return (SVD)super.position(position);
@@ -12472,7 +12472,7 @@ and vt must be computed, which is not necessary most of the time.
         /** allow the algorithm to modify the decomposed matrix; it can save space and speed up
             processing. currently ignored. */
         MODIFY_A = 1,
-        /** indicates that only a vector of singular values `w` is to be processed, while u and vt
+        /** indicates that only a vector of singular values {@code w} is to be processed, while u and vt
             will be set to empty matrices */
         NO_UV    = 2,
         /** when the matrix is not square, by default the algorithm produces u and vt matrices of
@@ -12480,29 +12480,29 @@ and vt must be computed, which is not necessary most of the time.
             specified, u and vt will be full-size square orthogonal matrices.*/
         FULL_UV  = 4;
 
-    /** @brief the default constructor
-
+    /** \brief the default constructor
+<p>
     initializes an empty SVD structure
       */
-    public SVD() { allocate(); }
+    public SVD() { super((Pointer)null); allocate(); }
     private native void allocate();
 
-    /** @overload
+    /** \overload
     initializes an empty SVD structure and then calls SVD::operator()
     @param src decomposed matrix.
     @param flags operation flags (SVD::Flags)
       */
-    public SVD( @ByVal Mat src, int flags/*=0*/ ) { allocate(src, flags); }
+    public SVD( @ByVal Mat src, int flags/*=0*/ ) { super((Pointer)null); allocate(src, flags); }
     private native void allocate( @ByVal Mat src, int flags/*=0*/ );
-    public SVD( @ByVal Mat src ) { allocate(src); }
+    public SVD( @ByVal Mat src ) { super((Pointer)null); allocate(src); }
     private native void allocate( @ByVal Mat src );
 
-    /** @brief the operator that performs SVD. The previously allocated u, w and vt are released.
-
+    /** \brief the operator that performs SVD. The previously allocated u, w and vt are released.
+<p>
     The operator performs the singular value decomposition of the supplied
-    matrix. The u,`vt` , and the vector of singular values w are stored in
+    matrix. The u,{@code vt} , and the vector of singular values w are stored in
     the structure. The same SVD structure can be reused many times with
-    different matrices. Each time, if needed, the previous u,`vt` , and w
+    different matrices. Each time, if needed, the previous u,{@code vt} , and w
     are reclaimed and the new matrices are created, which is all handled by
     Mat::create.
     @param src decomposed matrix.
@@ -12511,17 +12511,17 @@ and vt must be computed, which is not necessary most of the time.
     public native @ByRef @Name("operator ()") SVD apply( @ByVal Mat src, int flags/*=0*/ );
     public native @ByRef @Name("operator ()") SVD apply( @ByVal Mat src );
 
-    /** @brief decomposes matrix and stores the results to user-provided matrices
-
+    /** \brief decomposes matrix and stores the results to user-provided matrices
+<p>
     The methods/functions perform SVD of matrix. Unlike SVD::SVD constructor
     and SVD::operator(), they store the results to the user-provided
     matrices:
-
-    @code{.cpp}
+<p>
+    <pre><code>{.cpp}
     Mat A, w, u, vt;
     SVD::compute(A, w, u, vt);
-    @endcode
-
+    </code></pre>
+<p>
     @param src decomposed matrix
     @param w calculated singular values
     @param u calculated left singular vectors
@@ -12533,7 +12533,7 @@ and vt must be computed, which is not necessary most of the time.
     public static native void compute( @ByVal Mat src, @ByVal Mat w,
                              @ByVal Mat u, @ByVal Mat vt );
 
-    /** @overload
+    /** \overload
     computes singular values of a matrix
     @param src decomposed matrix
     @param w calculated singular values
@@ -12542,14 +12542,14 @@ and vt must be computed, which is not necessary most of the time.
     public static native void compute( @ByVal Mat src, @ByVal Mat w, int flags/*=0*/ );
     public static native void compute( @ByVal Mat src, @ByVal Mat w );
 
-    /** @brief performs back substitution
+    /** \brief performs back substitution
       */
     public static native void backSubst( @ByVal Mat w, @ByVal Mat u,
                                @ByVal Mat vt, @ByVal Mat rhs,
                                @ByVal Mat dst );
 
-    /** @brief solves an under-determined singular linear system
-
+    /** \brief solves an under-determined singular linear system
+<p>
     The method finds a unit-length solution x of a singular linear system
     A\*x = 0. Depending on the rank of A, there can be no solutions, a
     single solution or an infinite number of solutions. In general, the
@@ -12560,23 +12560,23 @@ and vt must be computed, which is not necessary most of the time.
       */
     public static native void solveZ( @ByVal Mat src, @ByVal Mat dst );
 
-    /** @brief performs a singular value back substitution.
-
+    /** \brief performs a singular value back substitution.
+<p>
     The method calculates a back substitution for the specified right-hand
     side:
-
+<p>
     \f[\texttt{x} =  \texttt{vt} ^T  \cdot diag( \texttt{w} )^{-1}  \cdot \texttt{u} ^T  \cdot \texttt{rhs} \sim \texttt{A} ^{-1}  \cdot \texttt{rhs}\f]
-
+<p>
     Using this technique you can either get a very accurate solution of the
     convenient linear system, or the best (in the least-squares terms)
     pseudo-solution of an overdetermined linear system.
-
+<p>
     @param rhs right-hand side of a linear system (u\*w\*v')\*dst = rhs to
     be solved, where A has been previously decomposed.
-
+<p>
     @param dst found solution of the system.
-
-    @note Explicit SVD with the further back substitution only makes sense
+<p>
+    \note Explicit SVD with the further back substitution only makes sense
     if you need to solve many linear systems with the same left-hand side
     (for example, src ). If all you need is to solve a single system
     (possibly with multiple rhs immediately available), simply call solve
@@ -12584,19 +12584,19 @@ and vt must be computed, which is not necessary most of the time.
       */
     public native void backSubst( @ByVal Mat rhs, @ByVal Mat dst );
 
-    /** @todo document */
+    /** \todo document */
 
-    /** @todo document */
+    /** \todo document */
 
-    /** @todo document */
+    /** \todo document */
 
     public native @ByRef Mat u(); public native SVD u(Mat u);
     public native @ByRef Mat w(); public native SVD w(Mat w);
     public native @ByRef Mat vt(); public native SVD vt(Mat vt);
 }
 
-/** @brief Random Number Generator
-
+/** \brief Random Number Generator
+<p>
 Random number generator. It encapsulates the state (currently, a 64-bit
 integer) and has methods to return scalar random values and to fill
 arrays with random values. Currently it supports uniform and Gaussian
@@ -12616,20 +12616,20 @@ introduced by G. Marsaglia and W. W. Tsang.
     public static final int UNIFORM = 0,
            NORMAL  = 1;
 
-    /** @brief constructor
-
+    /** \brief constructor
+<p>
     These are the RNG constructors. The first form sets the state to some
     pre-defined value, equal to 2\*\*32-1 in the current implementation. The
     second form sets the state to the specified value. If you passed state=0
     , the constructor uses the above default value instead to avoid the
     singular random number sequence, consisting of all zeros.
     */
-    public RNG() { allocate(); }
+    public RNG() { super((Pointer)null); allocate(); }
     private native void allocate();
-    /** @overload
+    /** \overload
     @param state 64-bit value used to initialize the RNG.
     */
-    public RNG(@Cast("uint64") int state) { allocate(state); }
+    public RNG(@Cast("uint64") int state) { super((Pointer)null); allocate(state); }
     private native void allocate(@Cast("uint64") int state);
     /**The method updates the state using the MWC algorithm and returns the
     next 32-bit random number.*/
@@ -12642,39 +12642,39 @@ introduced by G. Marsaglia and W. W. Tsang.
     from [0,1) range.
     */
     public native @Name("operator uchar") byte asByte();
-    /** @overload */
-    /** @overload */
+    /** \overload */
+    /** \overload */
     public native @Name("operator ushort") short asShort();
-    /** @overload */
-    /** @overload */
+    /** \overload */
+    /** \overload */
     public native @Name("operator unsigned") int asInt();
-    /** @overload */
-    /** @overload */
+    /** \overload */
+    /** \overload */
     public native @Name("operator float") float asFloat();
-    /** @overload */
+    /** \overload */
     public native @Name("operator double") double asDouble();
 
-    /** @brief returns a random integer sampled uniformly from [0, N).
-
+    /** \brief returns a random integer sampled uniformly from [0, N).
+<p>
     The methods transform the state using the MWC algorithm and return the
     next random number. The first form is equivalent to RNG::next . The
     second form returns the random number modulo N , which means that the
     result is in the range [0, N) .
     */
     public native @Cast("unsigned") @Name("operator ()") int apply();
-    /** @overload
+    /** \overload
     @param N upper non-inclusive boundary of the returned random number.
     */
     public native @Cast("unsigned") @Name("operator ()") int apply(@Cast("unsigned") int N);
 
-    /** @brief returns uniformly distributed integer random number from [a,b) range
-
+    /** \brief returns uniformly distributed integer random number from [a,b) range
+<p>
     The methods transform the state using the MWC algorithm and return the
     next uniformly-distributed random number of the specified type, deduced
     from the input parameter type, from the range [a, b) . There is a nuance
     illustrated by the following sample:
-
-    @code{.cpp}
+<p>
+    <pre><code>{.cpp}
     RNG rng;
 
     // always produces 0
@@ -12692,8 +12692,8 @@ introduced by G. Marsaglia and W. W. Tsang.
     // may cause compiler error because of ambiguity:
     //  RNG::uniform(0, (int)0.999999)? or RNG::uniform((double)0, 0.99999)?
     double d = rng.uniform(0, 0.999999);
-    @endcode
-
+    </code></pre>
+<p>
     The compiler does not take into account the type of the variable to
     which you assign the result of RNG::uniform . The only thing that
     matters to the compiler is the type of a and b parameters. So, if you
@@ -12704,13 +12704,13 @@ introduced by G. Marsaglia and W. W. Tsang.
     @param b upper non-inclusive boundary of the returned random numbers.
       */
     public native int uniform(int a, int b);
-    /** @overload */
+    /** \overload */
     public native float uniform(float a, float b);
-    /** @overload */
+    /** \overload */
     public native double uniform(double a, double b);
 
-    /** @brief Fills arrays with random numbers.
-
+    /** \brief Fills arrays with random numbers.
+<p>
     @param mat 2D or N-dimensional matrix; currently matrices with more than
     4 channels are not supported by the methods, use Mat::reshape as a
     possible workaround.
@@ -12732,7 +12732,7 @@ introduced by G. Marsaglia and W. W. Tsang.
     <tt>theRNG().fill(mat_8u, RNG::UNIFORM, -DBL_MAX, DBL_MAX)</tt> will likely
     produce array mostly filled with 0's and 255's, since the range (0, 255)
     is significantly smaller than [-DBL_MAX, DBL_MAX).
-
+<p>
     Each of the methods fills the matrix with the random values from the
     specified distribution. As the new numbers are generated, the RNG state
     is updated accordingly. In case of multiple-channel images, every
@@ -12746,9 +12746,9 @@ introduced by G. Marsaglia and W. W. Tsang.
     public native void fill( @ByVal Mat mat, int distType, @ByVal Mat a, @ByVal Mat b, @Cast("bool") boolean saturateRange/*=false*/ );
     public native void fill( @ByVal Mat mat, int distType, @ByVal Mat a, @ByVal Mat b );
 
-    /** @brief Returns the next random number sampled from the Gaussian distribution
+    /** \brief Returns the next random number sampled from the Gaussian distribution
     @param sigma standard deviation of the distribution.
-
+<p>
     The method transforms the state using the MWC algorithm and returns the
     next random number from the Gaussian distribution N(0,sigma) . That is,
     the mean value of the returned random numbers is zero and the standard
@@ -12759,19 +12759,19 @@ introduced by G. Marsaglia and W. W. Tsang.
     public native @Cast("uint64") int state(); public native RNG state(int state);
 }
 
-/** @brief Mersenne Twister random number generator
-
+/** \brief Mersenne Twister random number generator
+<p>
 Inspired by http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937ar.c
-@todo document
+\todo document
  */
 @Namespace("cv") @NoOffset public static class RNG_MT19937 extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RNG_MT19937(Pointer p) { super(p); }
 
-    public RNG_MT19937() { allocate(); }
+    public RNG_MT19937() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public RNG_MT19937(@Cast("unsigned") int s) { allocate(s); }
+    public RNG_MT19937(@Cast("unsigned") int s) { super((Pointer)null); allocate(s); }
     private native void allocate(@Cast("unsigned") int s);
     public native void seed(@Cast("unsigned") int s);
 
@@ -12784,36 +12784,36 @@ Inspired by http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937
     public native @Cast("unsigned") @Name("operator ()") int apply(@Cast("unsigned") int N);
     public native @Cast("unsigned") @Name("operator ()") int apply();
 
-    /** @brief returns uniformly distributed integer random number from [a,b) range
-
+    /** \brief returns uniformly distributed integer random number from [a,b) range
+<p>
 */
     public native int uniform(int a, int b);
-    /** @brief returns uniformly distributed floating-point random number from [a,b) range
-
+    /** \brief returns uniformly distributed floating-point random number from [a,b) range
+<p>
 */
     public native float uniform(float a, float b);
-    /** @brief returns uniformly distributed double-precision floating-point random number from [a,b) range
-
+    /** \brief returns uniformly distributed double-precision floating-point random number from [a,b) range
+<p>
 */
     public native double uniform(double a, double b);
 }
 
-/** @} core_array
+/** \} core_array
 
- *  @addtogroup core_cluster
- *   @{
+ *  \addtogroup core_cluster
+ *   \{
 
-/** @example kmeans.cpp
+/** \example kmeans.cpp
   An example on K-means clustering
 */
 
-/** @brief Finds centers of clusters and groups input samples around the clusters.
-
+/** \brief Finds centers of clusters and groups input samples around the clusters.
+<p>
 The function kmeans implements a k-means algorithm that finds the centers of cluster_count clusters
 and groups the input samples around the clusters. As an output, \f$\texttt{labels}_i\f$ contains a
 0-based cluster index for the sample stored in the \f$i^{th}\f$ row of the samples matrix.
-
-@note
+<p>
+\note
 -   (Python) An example on K-means clustering can be found at
     opencv_source_code/samples/python2/kmeans.py
 @param data Data for clustering. An array of N-Dimensional points with float coordinates is needed.
@@ -12847,14 +12847,14 @@ pass them with the ( flags = KMEANS_USE_INITIAL_LABELS ) flag, and then choose t
                             @ByVal TermCriteria criteria, int attempts,
                             int flags );
 
-/** @} core_cluster
+/** \} core_cluster
 
- *  @addtogroup core_basic
- *  @{
+ *  \addtogroup core_basic
+ *  \{
 
 /////////////////////////////// Formatted output of cv::Mat ///////////////////////////
 
-/** @todo document */
+/** \todo document */
 @Namespace("cv") public static class Formatted extends Pointer {
     static { Loader.load(); }
     /** Empty constructor. */
@@ -12866,7 +12866,7 @@ pass them with the ( flags = KMEANS_USE_INITIAL_LABELS ) flag, and then choose t
     public native void reset();
 }
 
-/** @todo document */
+/** \todo document */
 @Namespace("cv") public static class Formatter extends Pointer {
     static { Loader.load(); }
     /** Empty constructor. */
@@ -12899,16 +12899,16 @@ pass them with the ( flags = KMEANS_USE_INITIAL_LABELS ) flag, and then choose t
 //////////////////////////////////////// Algorithm ////////////////////////////////////
 
 
-/** @brief This is a base class for all more or less complex algorithms in OpenCV
-
+/** \brief This is a base class for all more or less complex algorithms in OpenCV
+<p>
 especially for classes of algorithms, for which there can be multiple implementations. The examples
 are stereo correspondence (for which there are algorithms like block matching, semi-global block
 matching, graph-cut etc.), background subtraction (which can be done using mixture-of-gaussians
 models, codebook-based algorithm etc.), optical flow (block matching, Lucas-Kanade, Horn-Schunck
 etc.).
-
+<p>
 Here is example of SIFT use in your application via Algorithm interface:
-@code
+<pre><code>
     #include "opencv2/opencv.hpp"
     #include "opencv2/xfeatures2d.hpp"
     using namespace cv::xfeatures2d;
@@ -12931,71 +12931,71 @@ Here is example of SIFT use in your application via Algorithm interface:
     Mat image = imread("myimage.png", 0), descriptors;
     vector<KeyPoint> keypoints;
     sift->detectAndCompute(image, noArray(), keypoints, descriptors);
-@endcode
+</code></pre>
  */
 @Namespace("cv") public static class Algorithm extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Algorithm(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Algorithm(int size) { allocateArray(size); }
+    public Algorithm(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Algorithm position(int position) {
         return (Algorithm)super.position(position);
     }
 
-    public Algorithm() { allocate(); }
+    public Algorithm() { super((Pointer)null); allocate(); }
     private native void allocate();
 
-    /** @brief Clears the algorithm state
+    /** \brief Clears the algorithm state
     */
     public native void clear();
 
-    /** @brief Stores algorithm parameters in a file storage
+    /** \brief Stores algorithm parameters in a file storage
     */
     public native void write(@ByRef FileStorage fs);
 
-    /** @brief Reads algorithm parameters from a file storage
+    /** \brief Reads algorithm parameters from a file storage
     */
     public native void read(@Const @ByRef FileNode fn);
 
-    /** @brief Returns true if the Algorithm is empty (e.g. in the very beginning or after unsuccessful read
+    /** \brief Returns true if the Algorithm is empty (e.g. in the very beginning or after unsuccessful read
      */
     public native @Cast("bool") boolean empty();
 
-    /** @brief Reads algorithm from the file node
-
+    /** \brief Reads algorithm from the file node
+<p>
      This is static template method of Algorithm. It's usage is following (in the case of SVM):
-     @code
+     <pre><code>
      Ptr<SVM> svm = Algorithm::read<SVM>(fn);
-     @endcode
+     </code></pre>
      In order to make this method work, the derived class must overwrite Algorithm::read(const
      FileNode& fn) and also have static create() method without parameters
      (or with all the optional parameters)
      */
 
-    /** @brief Loads algorithm from the file
-
+    /** \brief Loads algorithm from the file
+<p>
      @param filename Name of the file to read.
      @param objname The optional name of the node to read (if empty, the first top-level node will be used)
-
+<p>
      This is static template method of Algorithm. It's usage is following (in the case of SVM):
-     @code
+     <pre><code>
      Ptr<SVM> svm = Algorithm::load<SVM>("my_svm_model.xml");
-     @endcode
+     </code></pre>
      In order to make this method work, the derived class must overwrite Algorithm::read(const
      FileNode& fn).
      */
 
-    /** @brief Loads algorithm from a String
-
+    /** \brief Loads algorithm from a String
+<p>
      @param strModel The string variable containing the model you want to load.
      @param objname The optional name of the node to read (if empty, the first top-level node will be used)
-
+<p>
      This is static template method of Algorithm. It's usage is following (in the case of SVM):
-     @code
+     <pre><code>
      Ptr<SVM> svm = Algorithm::loadFromString<SVM>(myStringModel);
-     @endcode
+     </code></pre>
      */
 
     /** Saves the algorithm to a file.
@@ -13011,9 +13011,9 @@ Here is example of SIFT use in your application via Algorithm interface:
 @Namespace("cv") public static class Param extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public Param() { allocate(); }
+    public Param() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Param(int size) { allocateArray(size); }
+    public Param(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Param(Pointer p) { super(p); }
     private native void allocate();
@@ -13027,7 +13027,7 @@ Here is example of SIFT use in your application via Algorithm interface:
            UNSIGNED_INT= 8, UINT64= 9, UCHAR= 11;
 }
 
-/** @} core_basic */
+/** \} core_basic */
 
  //namespace cv
 
@@ -13093,7 +13093,7 @@ Here is example of SIFT use in your application via Algorithm interface:
 
 // #include <cstdio>
 
-/** @cond IGNORED */
+/** \cond IGNORED */
 
 ////////////////////////////// Matx methods depending on core API /////////////////////////////
 
@@ -13206,26 +13206,26 @@ Here is example of SIFT use in your application via Algorithm interface:
 @Namespace("cv") public static native int print(@Const @ByRef UMat mtx, @Cast("FILE*") Pointer stream/*=stdout*/);
 @Namespace("cv") public static native int print(@Const @ByRef UMat mtx);
 
-/** @endcond
+/** \endcond
 
 /****************************************************************************************\
 *                                  Auxiliary algorithms                                  *
 \****************************************************************************************/
 
-/** @brief Splits an element set into equivalency classes.
-
+/** \brief Splits an element set into equivalency classes.
+<p>
 The generic function partition implements an \f$O(N^2)\f$ algorithm for splitting a set of \f$N\f$ elements
 into one or more equivalency classes, as described in
 <http://en.wikipedia.org/wiki/Disjoint-set_data_structure> . The function returns the number of
 equivalency classes.
 @param _vec Set of elements stored as a vector.
 @param labels Output vector of labels. It contains as many elements as vec. Each label labels[i] is
-a 0-based cluster index of `vec[i]`.
+a 0-based cluster index of {@code vec[i]}.
 @param predicate Equivalence predicate (pointer to a boolean function of two arguments or an
 instance of the class that has the method bool operator()(const _Tp& a, const _Tp& b) ). The
 predicate returns true when the elements are certainly in the same class, and returns false if they
 may or may not be in the same class.
-@ingroup core_cluster
+\ingroup core_cluster
 */
 
  // cv
@@ -13244,8 +13244,8 @@ may or may not be in the same class.
 // #ifndef __OPENCV_CORE_BUFFER_POOL_HPP__
 // #define __OPENCV_CORE_BUFFER_POOL_HPP__
 
-/** @addtogroup core
- *  @{ */
+/** \addtogroup core
+ *  \{ */
 
 @Namespace("cv") public static class BufferPoolController extends Pointer {
     static { Loader.load(); }
@@ -13260,7 +13260,7 @@ may or may not be in the same class.
     public native void freeAllReservedBuffers();
 }
 
-/** @} */
+/** \} */
 
 
 
@@ -13323,8 +13323,8 @@ may or may not be in the same class.
 
 // #include "opencv2/core/bufferpool.hpp"
 
-/** @addtogroup core_basic
- *  @{ */
+/** \addtogroup core_basic
+ *  \{ */
 
 /** enum cv:: */
 public static final int ACCESS_READ= 1<<24, ACCESS_WRITE= 1<<25,
@@ -13332,21 +13332,21 @@ public static final int ACCESS_READ= 1<<24, ACCESS_WRITE= 1<<25,
 
 //////////////////////// Input/Output Array Arguments /////////////////////////////////
 
-/** @brief This is the proxy class for passing read-only input arrays into OpenCV functions.
-
+/** \brief This is the proxy class for passing read-only input arrays into OpenCV functions.
+<p>
 It is defined as:
-@code
+<pre><code>
     typedef const _InputArray& InputArray;
-@endcode
-where _InputArray is a class that can be constructed from `Mat`, `Mat_<T>`, `Matx<T, m, n>`,
-`std::vector<T>`, `std::vector<std::vector<T> >` or `std::vector<Mat>`. It can also be constructed
+</code></pre>
+where _InputArray is a class that can be constructed from {@code Mat}, {@code Mat_<T>}, {@code Matx<T, m, n>},
+{@code std::vector<T>}, {@code std::vector<std::vector<T> >} or {@code std::vector<Mat>}. It can also be constructed
 from a matrix expression.
-
+<p>
 Since this is mostly implementation-level class, and its interface may change in future versions, we
 do not describe it in details. There are a few key things, though, that should be kept in mind:
-
+<p>
 -   When you see in the reference manual or in OpenCV source code a function that takes
-    InputArray, it means that you can actually pass `Mat`, `Matx`, `vector<T>` etc. (see above the
+    InputArray, it means that you can actually pass {@code Mat}, {@code Matx}, {@code vector<T>} etc. (see above the
     complete list).
 -   Optional input arguments: If some of the input arrays may be empty, pass cv::noArray() (or
     simply cv::Mat() as you probably did before).
@@ -13356,23 +13356,23 @@ do not describe it in details. There are a few key things, though, that should b
     multiple types, you can use InputArray (or OutputArray) for the respective parameters. Inside
     a function you should use _InputArray::getMat() method to construct a matrix header for the
     array (without copying data). _InputArray::kind() can be used to distinguish Mat from
-    `vector<>` etc., but normally it is not needed.
-
+    {@code vector<>} etc., but normally it is not needed.
+<p>
 Here is how you can use a function that takes InputArray :
-@code
+<pre><code>
     std::vector<Point2f> vec;
     // points or a circle
     for( int i = 0; i < 30; i++ )
         vec.push_back(Point2f((float)(100 + 30*cos(i*CV_PI*2/5)),
                               (float)(100 - 30*sin(i*CV_PI*2/5))));
     cv::transform(vec, vec, cv::Matx23f(0.707, -0.707, 10, 0.707, 0.707, 20));
-@endcode
+</code></pre>
 That is, we form an STL vector containing points, and apply in-place affine transformation to the
-vector using the 2x3 matrix created inline as `Matx<float, 2, 3>` instance.
-
+vector using the 2x3 matrix created inline as {@code Matx<float, 2, 3>} instance.
+<p>
 Here is how such a function can be implemented (for simplicity, we implement a very specific case of
 it, according to the assertion statement inside) :
-@code
+<pre><code>
     void myAffineTransform(InputArray _src, OutputArray _dst, InputArray _m)
     {
         // get Mat headers for input arrays. This is O(1) operation,
@@ -13397,12 +13397,12 @@ it, according to the assertion statement inside) :
                                                 m.at<float>(1, 2));
             }
     }
-@endcode
+</code></pre>
 There is another related type, InputArrayOfArrays, which is currently defined as a synonym for
 InputArray:
-@code
+<pre><code>
     typedef InputArray InputArrayOfArrays;
-@endcode
+</code></pre>
 It denotes function arguments that are either vectors of vectors or vectors of matrices. A separate
 synonym is needed to generate Python/Java etc. wrappers properly. At the function implementation
 level their use is similar, but _InputArray::getMat(idx) should be used to get header for the
@@ -13411,30 +13411,30 @@ number of components (vectors/matrices) of the outer vector.
  */
 
 
-/** @brief This type is very similar to InputArray except that it is used for input/output and output function
+/** \brief This type is very similar to InputArray except that it is used for input/output and output function
 parameters.
-
-Just like with InputArray, OpenCV users should not care about OutputArray, they just pass `Mat`,
-`vector<T>` etc. to the functions. The same limitation as for `InputArray`: *Do not explicitly
+<p>
+Just like with InputArray, OpenCV users should not care about OutputArray, they just pass {@code Mat},
+{@code vector<T>} etc. to the functions. The same limitation as for {@code InputArray}: *Do not explicitly
 create OutputArray instances* applies here too.
-
+<p>
 If you want to make your function polymorphic (i.e. accept different arrays as output parameters),
 it is also not very difficult. Take the sample above as the reference. Note that
 _OutputArray::create() needs to be called before _OutputArray::getMat(). This way you guarantee
 that the output array is properly allocated.
-
+<p>
 Optional output parameters. If you do not need certain output array to be computed and returned to
 you, pass cv::noArray(), just like you would in the case of optional input array. At the
 implementation level, use _OutputArray::needed() to check if certain output array needs to be
 computed or not.
-
+<p>
 There are several synonyms for OutputArray that are used to assist automatic Python/Java/... wrapper
 generators:
-@code
+<pre><code>
     typedef OutputArray OutputArrayOfArrays;
     typedef OutputArray InputOutputArray;
     typedef OutputArray InputOutputArrayOfArrays;
-@endcode
+</code></pre>
  */
 
 public static Mat noArray() { return null; }
@@ -13453,7 +13453,7 @@ public static final int
 
     __UMAT_USAGE_FLAGS_32BIT =  0x7fffffff; // Binary compatibility hint
 
-/** @brief  Custom array allocator
+/** \brief  Custom array allocator
 */
 @Namespace("cv") public static class MatAllocator extends Pointer {
     static { Loader.load(); }
@@ -13496,17 +13496,17 @@ public static final int
 
 //////////////////////////////// MatCommaInitializer //////////////////////////////////
 
-/** @brief  Comma-separated Matrix Initializer
-
+/** \brief  Comma-separated Matrix Initializer
+<p>
  The class instances are usually not created explicitly.
  Instead, they are created on "matrix << firstValue" operator.
-
+<p>
  The sample below initializes 2x2 rotation matrix:
-
- \code
+<p>
+ <pre><code>
  double angle = 30, a = cos(angle*CV_PI/180), b = sin(angle*CV_PI/180);
  Mat R = (Mat_<double>(2,2) << a, -b, b, a);
- \endcode
+ </code></pre>
 */
 
 
@@ -13527,7 +13527,7 @@ public static final int
     public static final int COPY_ON_MAP= 1, HOST_COPY_OBSOLETE= 2,
         DEVICE_COPY_OBSOLETE= 4, TEMP_UMAT= 8, TEMP_COPIED_UMAT= 24,
         USER_ALLOCATED= 32, DEVICE_MEM_MAPPED= 64;
-    public UMatData(@Const MatAllocator allocator) { allocate(allocator); }
+    public UMatData(@Const MatAllocator allocator) { super((Pointer)null); allocate(allocator); }
     private native void allocate(@Const MatAllocator allocator);
 
     // provide atomic access to the structure
@@ -13566,7 +13566,7 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UMatDataAutoLock(Pointer p) { super(p); }
 
-    public UMatDataAutoLock(UMatData u) { allocate(u); }
+    public UMatDataAutoLock(UMatData u) { super((Pointer)null); allocate(u); }
     private native void allocate(UMatData u);
     public native UMatData u(); public native UMatDataAutoLock u(UMatData u);
 }
@@ -13579,11 +13579,11 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MatSize(Pointer p) { super(p); }
 
-    public MatSize(IntPointer _p) { allocate(_p); }
+    public MatSize(IntPointer _p) { super((Pointer)null); allocate(_p); }
     private native void allocate(IntPointer _p);
-    public MatSize(IntBuffer _p) { allocate(_p); }
+    public MatSize(IntBuffer _p) { super((Pointer)null); allocate(_p); }
     private native void allocate(IntBuffer _p);
-    public MatSize(int[] _p) { allocate(_p); }
+    public MatSize(int[] _p) { super((Pointer)null); allocate(_p); }
     private native void allocate(int[] _p);
     public native @ByVal @Name("operator ()") Size apply();
     public native @ByRef @Name("operator []") IntPointer get(int i);
@@ -13599,15 +13599,15 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MatStep(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public MatStep(int size) { allocateArray(size); }
+    public MatStep(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public MatStep position(int position) {
         return (MatStep)super.position(position);
     }
 
-    public MatStep() { allocate(); }
+    public MatStep() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public MatStep(@Cast("size_t") long s) { allocate(s); }
+    public MatStep(@Cast("size_t") long s) { super((Pointer)null); allocate(s); }
     private native void allocate(@Cast("size_t") long s);
     public native @Cast("size_t*") @ByRef @Name("operator []") SizeTPointer get(int i);
     public native @Name("operator size_t") long asLong();
@@ -13618,68 +13618,68 @@ public static final int
     @MemberGetter public native @Cast("size_t*") SizeTPointer buf();
 }
 
-/** @example cout_mat.cpp
+/** \example cout_mat.cpp
 An example demonstrating the serial out capabilities of cv::Mat
 */
 
- /** @brief n-dimensional dense array class
-
+ /** \brief n-dimensional dense array class
+<p>
 The class Mat represents an n-dimensional dense numerical single-channel or multi-channel array. It
 can be used to store real or complex-valued vectors and matrices, grayscale or color images, voxel
 volumes, vector fields, point clouds, tensors, histograms (though, very high-dimensional histograms
-may be better stored in a SparseMat ). The data layout of the array `M` is defined by the array
-`M.step[]`, so that the address of element \f$(i_0,...,i_{M.dims-1})\f$, where \f$0\leq i_k<M.size[k]\f$, is
+may be better stored in a SparseMat ). The data layout of the array {@code M} is defined by the array
+{@code M.step[]}, so that the address of element \f$(i_0,...,i_{M.dims-1})\f$, where \f$0\leq i_k<M.size[k]\f$, is
 computed as:
 \f[addr(M_{i_0,...,i_{M.dims-1}}) = M.data + M.step[0]*i_0 + M.step[1]*i_1 + ... + M.step[M.dims-1]*i_{M.dims-1}\f]
 In case of a 2-dimensional array, the above formula is reduced to:
 \f[addr(M_{i,j}) = M.data + M.step[0]*i + M.step[1]*j\f]
-Note that `M.step[i] >= M.step[i+1]` (in fact, `M.step[i] >= M.step[i+1]*M.size[i+1]` ). This means
+Note that {@code M.step[i] >= M.step[i+1]} (in fact, {@code M.step[i] >= M.step[i+1]*M.size[i+1]} ). This means
 that 2-dimensional matrices are stored row-by-row, 3-dimensional matrices are stored plane-by-plane,
 and so on. M.step[M.dims-1] is minimal and always equal to the element size M.elemSize() .
-
+<p>
 So, the data layout in Mat is fully compatible with CvMat, IplImage, and CvMatND types from OpenCV
 1.x. It is also compatible with the majority of dense array types from the standard toolkits and
 SDKs, such as Numpy (ndarray), Win32 (independent device bitmaps), and others, that is, with any
 array that uses *steps* (or *strides*) to compute the position of a pixel. Due to this
 compatibility, it is possible to make a Mat header for user-allocated data and process it in-place
 using OpenCV functions.
-
+<p>
 There are many different ways to create a Mat object. The most popular options are listed below:
-
+<p>
 - Use the create(nrows, ncols, type) method or the similar Mat(nrows, ncols, type[, fillValue])
 constructor. A new array of the specified size and type is allocated. type has the same meaning as
 in the cvCreateMat method. For example, CV_8UC1 means a 8-bit single-channel array, CV_32FC2
 means a 2-channel (complex) floating-point array, and so on.
-@code
+<pre><code>
     // make a 7x7 complex matrix filled with 1+3j.
     Mat M(7,7,CV_32FC2,Scalar(1,3));
     // and now turn M to a 100x60 15-channel 8-bit matrix.
     // The old content will be deallocated
     M.create(100,60,CV_8UC(15));
-@endcode
+</code></pre>
 As noted in the introduction to this chapter, create() allocates only a new array when the shape
 or type of the current array are different from the specified ones.
-
+<p>
 - Create a multi-dimensional array:
-@code
+<pre><code>
     // create a 100x100x100 8-bit array
     int sz[] = {100, 100, 100};
     Mat bigCube(3, sz, CV_8U, Scalar::all(0));
-@endcode
+</code></pre>
 It passes the number of dimensions =1 to the Mat constructor but the created array will be
 2-dimensional with the number of columns set to 1. So, Mat::dims is always \>= 2 (can also be 0
 when the array is empty).
-
+<p>
 - Use a copy constructor or assignment operator where there can be an array or expression on the
 right side (see below). As noted in the introduction, the array assignment is an O(1) operation
 because it only copies the header and increases the reference counter. The Mat::clone() method can
 be used to get a full (deep) copy of the array when you need it.
-
+<p>
 - Construct a header for a part of another array. It can be a single row, single column, several
 rows, several columns, rectangular region in the array (called a *minor* in algebra) or a
 diagonal. Such operations are also O(1) because the new header references the same data. You can
 actually modify a part of the array using this feature, for example:
-@code
+<pre><code>
     // add the 5-th row, multiplied by 3 to the 3rd row
     M.row(3) = M.row(3) + M.row(5)*3;
     // now copy the 7-th column to the 1-st column
@@ -13693,10 +13693,10 @@ actually modify a part of the array using this feature, for example:
     // fill the ROI with (0,255,0) (which is green in RGB space);
     // the original 320x240 image will be modified
     roi = Scalar(0,255,0);
-@endcode
+</code></pre>
 Due to the additional datastart and dataend members, it is possible to compute a relative
 sub-array position in the main *container* array using locateROI():
-@code
+<pre><code>
     Mat A = Mat::eye(10, 10, CV_32S);
     // extracts A columns, 1 (inclusive) to 3 (exclusive).
     Mat B = A(Range::all(), Range(1, 3));
@@ -13706,66 +13706,66 @@ sub-array position in the main *container* array using locateROI():
     Size size; Point ofs;
     C.locateROI(size, ofs);
     // size will be (width=10,height=10) and the ofs will be (x=1, y=5)
-@endcode
-As in case of whole matrices, if you need a deep copy, use the `clone()` method of the extracted
+</code></pre>
+As in case of whole matrices, if you need a deep copy, use the {@code clone()} method of the extracted
 sub-matrices.
-
+<p>
 - Make a header for user-allocated data. It can be useful to do the following:
     -# Process "foreign" data using OpenCV (for example, when you implement a DirectShow\* filter or
     a processing module for gstreamer, and so on). For example:
-    @code
+    <pre><code>
         void process_video_frame(const unsigned char* pixels,
                                  int width, int height, int step)
         {
             Mat img(height, width, CV_8UC3, pixels, step);
             GaussianBlur(img, img, Size(7,7), 1.5, 1.5);
         }
-    @endcode
+    </code></pre>
     -# Quickly initialize small matrices and/or get a super-fast element access.
-    @code
+    <pre><code>
         double m[3][3] = {{a, b, c}, {d, e, f}, {g, h, i}};
         Mat M = Mat(3, 3, CV_64F, m).inv();
-    @endcode
+    </code></pre>
     .
     Partial yet very common cases of this *user-allocated data* case are conversions from CvMat and
     IplImage to Mat. For this purpose, there is function cv::cvarrToMat taking pointers to CvMat or
     IplImage and the optional flag indicating whether to copy the data or not.
-    @snippet samples/cpp/image.cpp iplimage
-
+    \snippet samples/cpp/image.cpp iplimage
+<p>
 - Use MATLAB-style array initializers, zeros(), ones(), eye(), for example:
-@code
+<pre><code>
     // create a double-precision identity martix and add it to M.
     M += Mat::eye(M.rows, M.cols, CV_64F);
-@endcode
-
+</code></pre>
+<p>
 - Use a comma-separated initializer:
-@code
+<pre><code>
     // create a 3x3 double-precision identity matrix
     Mat M = (Mat_<double>(3,3) << 1, 0, 0, 0, 1, 0, 0, 0, 1);
-@endcode
+</code></pre>
 With this approach, you first call a constructor of the Mat class with the proper parameters, and
-then you just put `<< operator` followed by comma-separated values that can be constants,
+then you just put {@code << operator} followed by comma-separated values that can be constants,
 variables, expressions, and so on. Also, note the extra parentheses required to avoid compilation
 errors.
-
+<p>
 Once the array is created, it is automatically managed via a reference-counting mechanism. If the
 array header is built on top of user-allocated data, you should handle the data by yourself. The
 array data is deallocated when no one points to it. If you want to release the data pointed by a
 array header before the array destructor is called, use Mat::release().
-
+<p>
 The next important thing to learn about the array class is element access. This manual already
 described how to compute an address of each array element. Normally, you are not required to use the
 formula directly in the code. If you know the array element type (which can be retrieved using the
 method Mat::type() ), you can access the element \f$M_{ij}\f$ of a 2-dimensional array as:
-@code
+<pre><code>
     M.at<double>(i,j) += 1.f;
-@endcode
-assuming that `M` is a double-precision floating-point array. There are several variants of the method
+</code></pre>
+assuming that {@code M} is a double-precision floating-point array. There are several variants of the method
 at for a different number of dimensions.
-
+<p>
 If you need to process a whole row of a 2D array, the most efficient way is to get the pointer to
 the row first, and then just use the plain C operator [] :
-@code
+<pre><code>
     // compute sum of positive matrix elements
     // (assuming that M isa double-precision matrix)
     double sum=0;
@@ -13775,13 +13775,13 @@ the row first, and then just use the plain C operator [] :
         for(int j = 0; j < M.cols; j++)
             sum += std::max(Mi[j], 0.);
     }
-@endcode
+</code></pre>
 Some operations, like the one above, do not actually depend on the array shape. They just process
 elements of an array one by one (or elements from multiple arrays that have the same coordinates,
 for example, array addition). Such operations are called *element-wise*. It makes sense to check
 whether all the input/output arrays are continuous, namely, have no gaps at the end of each row. If
 yes, process them as a long single row:
-@code
+<pre><code>
     // compute the sum of positive matrix elements, optimized variant
     double sum=0;
     int cols = M.cols, rows = M.rows;
@@ -13796,18 +13796,18 @@ yes, process them as a long single row:
         for(int j = 0; j < cols; j++)
             sum += std::max(Mi[j], 0.);
     }
-@endcode
+</code></pre>
 In case of the continuous matrix, the outer loop body is executed just once. So, the overhead is
 smaller, which is especially noticeable in case of small matrices.
-
+<p>
 Finally, there are STL-style iterators that are smart enough to skip gaps between successive rows:
-@code
+<pre><code>
     // compute sum of positive matrix elements, iterator-based variant
     double sum=0;
     MatConstIterator_<double> it = M.begin<double>(), it_end = M.end<double>();
     for(; it != it_end; ++it)
         sum += std::max(*it, 0.);
-@endcode
+</code></pre>
 The matrix iterators are random-access iterators, so they can be passed to any STL algorithm,
 including std::sort().
 */
@@ -13816,7 +13816,7 @@ including std::sort().
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Mat(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Mat(int size) { allocateArray(size); }
+    public Mat(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public Mat position(int position) {
         return (Mat)super.position(position);
@@ -13828,28 +13828,28 @@ including std::sort().
     The constructed matrix can further be assigned to another matrix or matrix expression or can be
     allocated with Mat::create . In the former case, the old content is de-referenced.
      */
-    public Mat() { allocate(); }
+    public Mat() { super((Pointer)null); allocate(); }
     private native void allocate();
 
-    /** @overload
+    /** \overload
     @param rows Number of rows in a 2D array.
     @param cols Number of columns in a 2D array.
     @param type Array type. Use CV_8UC1, ..., CV_64FC4 to create 1-4 channel matrices, or
     CV_8UC(n), ..., CV_64FC(n) to create multi-channel (up to CV_CN_MAX channels) matrices.
     */
-    public Mat(int rows, int cols, int type) { allocate(rows, cols, type); }
+    public Mat(int rows, int cols, int type) { super((Pointer)null); allocate(rows, cols, type); }
     private native void allocate(int rows, int cols, int type);
 
-    /** @overload
+    /** \overload
     @param size 2D array size: Size(cols, rows) . In the Size() constructor, the number of rows and the
     number of columns go in the reverse order.
     @param type Array type. Use CV_8UC1, ..., CV_64FC4 to create 1-4 channel matrices, or
     CV_8UC(n), ..., CV_64FC(n) to create multi-channel (up to CV_CN_MAX channels) matrices.
       */
-    public Mat(@ByVal Size size, int type) { allocate(size, type); }
+    public Mat(@ByVal Size size, int type) { super((Pointer)null); allocate(size, type); }
     private native void allocate(@ByVal Size size, int type);
 
-    /** @overload
+    /** \overload
     @param rows Number of rows in a 2D array.
     @param cols Number of columns in a 2D array.
     @param type Array type. Use CV_8UC1, ..., CV_64FC4 to create 1-4 channel matrices, or
@@ -13858,10 +13858,10 @@ including std::sort().
     the particular value after the construction, use the assignment operator
     Mat::operator=(const Scalar& value) .
     */
-    public Mat(int rows, int cols, int type, @Const @ByRef Scalar s) { allocate(rows, cols, type, s); }
+    public Mat(int rows, int cols, int type, @Const @ByRef Scalar s) { super((Pointer)null); allocate(rows, cols, type, s); }
     private native void allocate(int rows, int cols, int type, @Const @ByRef Scalar s);
 
-    /** @overload
+    /** \overload
     @param size 2D array size: Size(cols, rows) . In the Size() constructor, the number of rows and the
     number of columns go in the reverse order.
     @param type Array type. Use CV_8UC1, ..., CV_64FC4 to create 1-4 channel matrices, or
@@ -13870,23 +13870,23 @@ including std::sort().
     the particular value after the construction, use the assignment operator
     Mat::operator=(const Scalar& value) .
       */
-    public Mat(@ByVal Size size, int type, @Const @ByRef Scalar s) { allocate(size, type, s); }
+    public Mat(@ByVal Size size, int type, @Const @ByRef Scalar s) { super((Pointer)null); allocate(size, type, s); }
     private native void allocate(@ByVal Size size, int type, @Const @ByRef Scalar s);
 
-    /** @overload
+    /** \overload
     @param ndims Array dimensionality.
     @param sizes Array of integers specifying an n-dimensional array shape.
     @param type Array type. Use CV_8UC1, ..., CV_64FC4 to create 1-4 channel matrices, or
     CV_8UC(n), ..., CV_64FC(n) to create multi-channel (up to CV_CN_MAX channels) matrices.
     */
-    public Mat(int ndims, @Const IntPointer sizes, int type) { allocate(ndims, sizes, type); }
+    public Mat(int ndims, @Const IntPointer sizes, int type) { super((Pointer)null); allocate(ndims, sizes, type); }
     private native void allocate(int ndims, @Const IntPointer sizes, int type);
-    public Mat(int ndims, @Const IntBuffer sizes, int type) { allocate(ndims, sizes, type); }
+    public Mat(int ndims, @Const IntBuffer sizes, int type) { super((Pointer)null); allocate(ndims, sizes, type); }
     private native void allocate(int ndims, @Const IntBuffer sizes, int type);
-    public Mat(int ndims, @Const int[] sizes, int type) { allocate(ndims, sizes, type); }
+    public Mat(int ndims, @Const int[] sizes, int type) { super((Pointer)null); allocate(ndims, sizes, type); }
     private native void allocate(int ndims, @Const int[] sizes, int type);
 
-    /** @overload
+    /** \overload
     @param ndims Array dimensionality.
     @param sizes Array of integers specifying an n-dimensional array shape.
     @param type Array type. Use CV_8UC1, ..., CV_64FC4 to create 1-4 channel matrices, or
@@ -13895,24 +13895,24 @@ including std::sort().
     the particular value after the construction, use the assignment operator
     Mat::operator=(const Scalar& value) .
     */
-    public Mat(int ndims, @Const IntPointer sizes, int type, @Const @ByRef Scalar s) { allocate(ndims, sizes, type, s); }
+    public Mat(int ndims, @Const IntPointer sizes, int type, @Const @ByRef Scalar s) { super((Pointer)null); allocate(ndims, sizes, type, s); }
     private native void allocate(int ndims, @Const IntPointer sizes, int type, @Const @ByRef Scalar s);
-    public Mat(int ndims, @Const IntBuffer sizes, int type, @Const @ByRef Scalar s) { allocate(ndims, sizes, type, s); }
+    public Mat(int ndims, @Const IntBuffer sizes, int type, @Const @ByRef Scalar s) { super((Pointer)null); allocate(ndims, sizes, type, s); }
     private native void allocate(int ndims, @Const IntBuffer sizes, int type, @Const @ByRef Scalar s);
-    public Mat(int ndims, @Const int[] sizes, int type, @Const @ByRef Scalar s) { allocate(ndims, sizes, type, s); }
+    public Mat(int ndims, @Const int[] sizes, int type, @Const @ByRef Scalar s) { super((Pointer)null); allocate(ndims, sizes, type, s); }
     private native void allocate(int ndims, @Const int[] sizes, int type, @Const @ByRef Scalar s);
 
-    /** @overload
+    /** \overload
     @param m Array that (as a whole or partly) is assigned to the constructed matrix. No data is copied
     by these constructors. Instead, the header pointing to m data or its sub-array is constructed and
     associated with it. The reference counter, if any, is incremented. So, when you modify the matrix
     formed using such a constructor, you also modify the corresponding elements of m . If you want to
     have an independent copy of the sub-array, use Mat::clone() .
     */
-    public Mat(@Const @ByRef Mat m) { allocate(m); }
+    public Mat(@Const @ByRef Mat m) { super((Pointer)null); allocate(m); }
     private native void allocate(@Const @ByRef Mat m);
 
-    /** @overload
+    /** \overload
     @param rows Number of rows in a 2D array.
     @param cols Number of columns in a 2D array.
     @param type Array type. Use CV_8UC1, ..., CV_64FC4 to create 1-4 channel matrices, or
@@ -13943,7 +13943,7 @@ including std::sort().
     public Mat(FloatPointer p) { this(p.limit - p.position, 1, CV_32FC1, p); }
     public Mat(DoublePointer p) { this(p.limit - p.position, 1, CV_64FC1, p); }
 
-    /** @overload
+    /** \overload
     @param size 2D array size: Size(cols, rows) . In the Size() constructor, the number of rows and the
     number of columns go in the reverse order.
     @param type Array type. Use CV_8UC1, ..., CV_64FC4 to create 1-4 channel matrices, or
@@ -13957,12 +13957,12 @@ including std::sort().
     the end of each row, if any. If the parameter is missing (set to AUTO_STEP ), no padding is assumed
     and the actual step is calculated as cols*elemSize(). See Mat::elemSize.
     */
-    public Mat(@ByVal Size size, int type, Pointer data, @Cast("size_t") long step/*=AUTO_STEP*/) { allocate(size, type, data, step); }
+    public Mat(@ByVal Size size, int type, Pointer data, @Cast("size_t") long step/*=AUTO_STEP*/) { super((Pointer)null); allocate(size, type, data, step); }
     private native void allocate(@ByVal Size size, int type, Pointer data, @Cast("size_t") long step/*=AUTO_STEP*/);
-    public Mat(@ByVal Size size, int type, Pointer data) { allocate(size, type, data); }
+    public Mat(@ByVal Size size, int type, Pointer data) { super((Pointer)null); allocate(size, type, data); }
     private native void allocate(@ByVal Size size, int type, Pointer data);
 
-    /** @overload
+    /** \overload
     @param ndims Array dimensionality.
     @param sizes Array of integers specifying an n-dimensional array shape.
     @param type Array type. Use CV_8UC1, ..., CV_64FC4 to create 1-4 channel matrices, or
@@ -13975,20 +13975,20 @@ including std::sort().
     @param steps Array of ndims-1 steps in case of a multi-dimensional array (the last step is always
     set to the element size). If not specified, the matrix is assumed to be continuous.
     */
-    public Mat(int ndims, @Const IntPointer sizes, int type, Pointer data, @Cast("const size_t*") SizeTPointer steps/*=0*/) { allocate(ndims, sizes, type, data, steps); }
+    public Mat(int ndims, @Const IntPointer sizes, int type, Pointer data, @Cast("const size_t*") SizeTPointer steps/*=0*/) { super((Pointer)null); allocate(ndims, sizes, type, data, steps); }
     private native void allocate(int ndims, @Const IntPointer sizes, int type, Pointer data, @Cast("const size_t*") SizeTPointer steps/*=0*/);
-    public Mat(int ndims, @Const IntPointer sizes, int type, Pointer data) { allocate(ndims, sizes, type, data); }
+    public Mat(int ndims, @Const IntPointer sizes, int type, Pointer data) { super((Pointer)null); allocate(ndims, sizes, type, data); }
     private native void allocate(int ndims, @Const IntPointer sizes, int type, Pointer data);
-    public Mat(int ndims, @Const IntBuffer sizes, int type, Pointer data, @Cast("const size_t*") SizeTPointer steps/*=0*/) { allocate(ndims, sizes, type, data, steps); }
+    public Mat(int ndims, @Const IntBuffer sizes, int type, Pointer data, @Cast("const size_t*") SizeTPointer steps/*=0*/) { super((Pointer)null); allocate(ndims, sizes, type, data, steps); }
     private native void allocate(int ndims, @Const IntBuffer sizes, int type, Pointer data, @Cast("const size_t*") SizeTPointer steps/*=0*/);
-    public Mat(int ndims, @Const IntBuffer sizes, int type, Pointer data) { allocate(ndims, sizes, type, data); }
+    public Mat(int ndims, @Const IntBuffer sizes, int type, Pointer data) { super((Pointer)null); allocate(ndims, sizes, type, data); }
     private native void allocate(int ndims, @Const IntBuffer sizes, int type, Pointer data);
-    public Mat(int ndims, @Const int[] sizes, int type, Pointer data, @Cast("const size_t*") SizeTPointer steps/*=0*/) { allocate(ndims, sizes, type, data, steps); }
+    public Mat(int ndims, @Const int[] sizes, int type, Pointer data, @Cast("const size_t*") SizeTPointer steps/*=0*/) { super((Pointer)null); allocate(ndims, sizes, type, data, steps); }
     private native void allocate(int ndims, @Const int[] sizes, int type, Pointer data, @Cast("const size_t*") SizeTPointer steps/*=0*/);
-    public Mat(int ndims, @Const int[] sizes, int type, Pointer data) { allocate(ndims, sizes, type, data); }
+    public Mat(int ndims, @Const int[] sizes, int type, Pointer data) { super((Pointer)null); allocate(ndims, sizes, type, data); }
     private native void allocate(int ndims, @Const int[] sizes, int type, Pointer data);
 
-    /** @overload
+    /** \overload
     @param m Array that (as a whole or partly) is assigned to the constructed matrix. No data is copied
     by these constructors. Instead, the header pointing to m data or its sub-array is constructed and
     associated with it. The reference counter, if any, is incremented. So, when you modify the matrix
@@ -13998,12 +13998,12 @@ including std::sort().
     end is exclusive. Use Range::all() to take all the rows.
     @param colRange Range of the m columns to take. Use Range::all() to take all the columns.
     */
-    public Mat(@Const @ByRef Mat m, @Const @ByRef Range rowRange, @Const @ByRef(nullValue = "cv::Range::all()") Range colRange/*=cv::Range::all()*/) { allocate(m, rowRange, colRange); }
+    public Mat(@Const @ByRef Mat m, @Const @ByRef Range rowRange, @Const @ByRef(nullValue = "cv::Range::all()") Range colRange/*=cv::Range::all()*/) { super((Pointer)null); allocate(m, rowRange, colRange); }
     private native void allocate(@Const @ByRef Mat m, @Const @ByRef Range rowRange, @Const @ByRef(nullValue = "cv::Range::all()") Range colRange/*=cv::Range::all()*/);
-    public Mat(@Const @ByRef Mat m, @Const @ByRef Range rowRange) { allocate(m, rowRange); }
+    public Mat(@Const @ByRef Mat m, @Const @ByRef Range rowRange) { super((Pointer)null); allocate(m, rowRange); }
     private native void allocate(@Const @ByRef Mat m, @Const @ByRef Range rowRange);
 
-    /** @overload
+    /** \overload
     @param m Array that (as a whole or partly) is assigned to the constructed matrix. No data is copied
     by these constructors. Instead, the header pointing to m data or its sub-array is constructed and
     associated with it. The reference counter, if any, is incremented. So, when you modify the matrix
@@ -14011,10 +14011,10 @@ including std::sort().
     have an independent copy of the sub-array, use Mat::clone() .
     @param roi Region of interest.
     */
-    public Mat(@Const @ByRef Mat m, @Const @ByRef Rect roi) { allocate(m, roi); }
+    public Mat(@Const @ByRef Mat m, @Const @ByRef Rect roi) { super((Pointer)null); allocate(m, roi); }
     private native void allocate(@Const @ByRef Mat m, @Const @ByRef Rect roi);
 
-    /** @overload
+    /** \overload
     @param m Array that (as a whole or partly) is assigned to the constructed matrix. No data is copied
     by these constructors. Instead, the header pointing to m data or its sub-array is constructed and
     associated with it. The reference counter, if any, is incremented. So, when you modify the matrix
@@ -14023,7 +14023,7 @@ including std::sort().
     @param ranges Array of selected ranges of m along each dimensionality.
     */
 
-    /** @overload
+    /** \overload
     @param vec STL vector whose elements form the matrix. The matrix has a single column and the number
     of rows equal to the number of vector elements. Type of the matrix matches the type of vector
     elements. The constructor can handle arbitrary types, for which there is a properly declared
@@ -14040,27 +14040,27 @@ including std::sort().
     destructed.
     */
 
-    /** @overload
+    /** \overload
     */
 
-    /** @overload
+    /** \overload
     */
 
-    /** @overload
+    /** \overload
     */
 
-    /** @overload
+    /** \overload
     */
 
-    /** @overload
+    /** \overload
     */
 
     /** download data from GpuMat */
 
     /** destructor - calls release() */
 
-    /** @brief assignment operators
-
+    /** \brief assignment operators
+<p>
     These are available assignment operators. Since they all are very different, make sure to read the
     operator parameters description.
     @param m Assigned, right-hand-side matrix. Matrix assignment is an O(1) operation. This means that
@@ -14069,7 +14069,7 @@ including std::sort().
      */
     public native @ByRef @Name("operator =") Mat put(@Const @ByRef Mat m);
 
-    /** @overload
+    /** \overload
     @param expr Assigned matrix expression object. As opposite to the first form of the assignment
     operation, the second form can reuse already allocated matrix if it has the right size and type to
     fit the matrix expression result. It is automatically handled by the real function that the matrix
@@ -14082,43 +14082,43 @@ including std::sort().
     public native @ByVal UMat getUMat(int accessFlags, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
     public native @ByVal UMat getUMat(int accessFlags);
 
-    /** @brief Creates a matrix header for the specified matrix row.
-
+    /** \brief Creates a matrix header for the specified matrix row.
+<p>
     The method makes a new header for the specified matrix row and returns it. This is an O(1)
     operation, regardless of the matrix size. The underlying data of the new matrix is shared with the
     original matrix. Here is the example of one of the classical basic matrix processing operations,
     axpy, used by LU and many other algorithms:
-    @code
+    <pre><code>
         inline void matrix_axpy(Mat& A, int i, int j, double alpha)
         {
             A.row(i) += A.row(j)*alpha;
         }
-    @endcode
-    @note In the current implementation, the following code does not work as expected:
-    @code
+    </code></pre>
+    \note In the current implementation, the following code does not work as expected:
+    <pre><code>
         Mat A;
         ...
         A.row(i) = A.row(j); // will not work
-    @endcode
+    </code></pre>
     This happens because A.row(i) forms a temporary header that is further assigned to another header.
     Remember that each of these operations is O(1), that is, no data is copied. Thus, the above
     assignment is not true if you may have expected the j-th row to be copied to the i-th row. To
     achieve that, you should either turn this simple assignment into an expression or use the
     Mat::copyTo method:
-    @code
+    <pre><code>
         Mat A;
         ...
         // works, but looks a bit obscure.
         A.row(i) = A.row(j) + 0;
         // this is a bit longer, but the recommended method.
         A.row(j).copyTo(A.row(i));
-    @endcode
+    </code></pre>
     @param y A 0-based row index.
      */
     public native @ByVal Mat row(int y);
 
-    /** @brief Creates a matrix header for the specified matrix column.
-
+    /** \brief Creates a matrix header for the specified matrix column.
+<p>
     The method makes a new header for the specified matrix column and returns it. This is an O(1)
     operation, regardless of the matrix size. The underlying data of the new matrix is shared with the
     original matrix. See also the Mat::row description.
@@ -14126,8 +14126,8 @@ including std::sort().
      */
     public native @ByVal Mat col(int x);
 
-    /** @brief Creates a matrix header for the specified row span.
-
+    /** \brief Creates a matrix header for the specified row span.
+<p>
     The method makes a new header for the specified row span of the matrix. Similarly to Mat::row and
     Mat::col , this is an O(1) operation.
     @param startrow An inclusive 0-based start index of the row span.
@@ -14135,13 +14135,13 @@ including std::sort().
      */
     public native @ByVal Mat rowRange(int startrow, int endrow);
 
-    /** @overload
+    /** \overload
     @param r Range structure containing both the start and the end indices.
     */
     public native @ByVal Mat rowRange(@Const @ByRef Range r);
 
-    /** @brief Creates a matrix header for the specified column span.
-
+    /** \brief Creates a matrix header for the specified column span.
+<p>
     The method makes a new header for the specified column span of the matrix. Similarly to Mat::row and
     Mat::col , this is an O(1) operation.
     @param startcol An inclusive 0-based start index of the column span.
@@ -14149,50 +14149,50 @@ including std::sort().
      */
     public native @ByVal Mat colRange(int startcol, int endcol);
 
-    /** @overload
+    /** \overload
     @param r Range structure containing both the start and the end indices.
     */
     public native @ByVal Mat colRange(@Const @ByRef Range r);
 
-    /** @brief Extracts a diagonal from a matrix
-
+    /** \brief Extracts a diagonal from a matrix
+<p>
     The method makes a new header for the specified matrix diagonal. The new matrix is represented as a
     single-column matrix. Similarly to Mat::row and Mat::col, this is an O(1) operation.
     @param d index of the diagonal, with the following values:
-    - `d=0` is the main diagonal.
-    - `d>0` is a diagonal from the lower half. For example, d=1 means the diagonal is set
+    - {@code d=0} is the main diagonal.
+    - {@code d>0} is a diagonal from the lower half. For example, d=1 means the diagonal is set
       immediately below the main one.
-    - `d<0` is a diagonal from the upper half. For example, d=-1 means the diagonal is set
+    - {@code d<0} is a diagonal from the upper half. For example, d=-1 means the diagonal is set
       immediately above the main one.
      */
     public native @ByVal Mat diag(int d/*=0*/);
     public native @ByVal Mat diag();
 
-    /** @brief creates a diagonal matrix
-
+    /** \brief creates a diagonal matrix
+<p>
     The method makes a new header for the specified matrix diagonal. The new matrix is represented as a
     single-column matrix. Similarly to Mat::row and Mat::col, this is an O(1) operation.
     @param d Single-column matrix that forms a diagonal matrix
      */
     public static native @ByVal Mat diag(@Const @ByRef Mat d);
 
-    /** @brief Creates a full copy of the array and the underlying data.
-
+    /** \brief Creates a full copy of the array and the underlying data.
+<p>
     The method creates a full copy of the array. The original step[] is not taken into account. So, the
     array copy is a continuous array occupying total()*elemSize() bytes.
      */
     public native @ByVal Mat clone();
 
-    /** @brief Copies the matrix to another one.
-
+    /** \brief Copies the matrix to another one.
+<p>
     The method copies the matrix data to another matrix. Before copying the data, the method invokes :
-    @code
+    <pre><code>
         m.create(this->size(), this->type());
-    @endcode
+    </code></pre>
     so that the destination matrix is reallocated if needed. While m.copyTo(m); works flawlessly, the
     function does not handle the case of a partial overlap between the source and the destination
     matrices.
-
+<p>
     When the operation mask is specified, if the Mat::create call shown above reallocates the matrix,
     the newly allocated matrix is initialized with all zeros before copying the data.
     @param m Destination matrix. If it does not have a proper size or type before the operation, it is
@@ -14200,18 +14200,18 @@ including std::sort().
      */
     public native void copyTo( @ByVal Mat m );
 
-    /** @overload
+    /** \overload
     @param m Destination matrix. If it does not have a proper size or type before the operation, it is
     reallocated.
     @param mask Operation mask. Its non-zero elements indicate which matrix elements need to be copied.
     */
     public native void copyTo( @ByVal Mat m, @ByVal Mat mask );
 
-    /** @brief Converts an array to another data type with optional scaling.
-
+    /** \brief Converts an array to another data type with optional scaling.
+<p>
     The method converts source pixel values to the target data type. saturate_cast\<\> is applied at
     the end to avoid possible overflows:
-
+<p>
     \f[m(x,y) = saturate \_ cast<rType>( \alpha (*this)(x,y) +  \beta )\f]
     @param m output matrix; if it does not have a proper size or type before the operation, it is
     reallocated.
@@ -14223,22 +14223,22 @@ including std::sort().
     public native void convertTo( @ByVal Mat m, int rtype, double alpha/*=1*/, double beta/*=0*/ );
     public native void convertTo( @ByVal Mat m, int rtype );
 
-    /** @brief Provides a functional form of convertTo.
-
-    This is an internally used method called by the @ref MatrixExpressions engine.
+    /** \brief Provides a functional form of convertTo.
+<p>
+    This is an internally used method called by the \ref MatrixExpressions engine.
     @param m Destination array.
     @param type Desired destination array depth (or -1 if it should be the same as the source type).
      */
     public native void assignTo( @ByRef Mat m, int type/*=-1*/ );
     public native void assignTo( @ByRef Mat m );
 
-    /** @brief Sets all or some of the array elements to the specified value.
+    /** \brief Sets all or some of the array elements to the specified value.
     @param s Assigned scalar converted to the actual array type.
     */
     public native @ByRef @Name("operator =") Mat put(@Const @ByRef Scalar s);
 
-    /** @brief Sets all or some of the array elements to the specified value.
-
+    /** \brief Sets all or some of the array elements to the specified value.
+<p>
     This is an advanced variant of the Mat::operator=(const Scalar& s) operator.
     @param value Assigned scalar converted to the actual array type.
     @param mask Operation mask of the same size as \*this.
@@ -14246,8 +14246,8 @@ including std::sort().
     public native @ByRef Mat setTo(@ByVal Mat value, @ByVal(nullValue = "cv::noArray()") Mat mask/*=cv::noArray()*/);
     public native @ByRef Mat setTo(@ByVal Mat value);
 
-    /** @brief Changes the shape and/or the number of channels of a 2D matrix without copying the data.
-
+    /** \brief Changes the shape and/or the number of channels of a 2D matrix without copying the data.
+<p>
     The method makes a new matrix header for \*this elements. The new matrix may have a different size
     and/or different number of channels. Any combination is possible if:
     -   No extra elements are included into the new matrix and no elements are excluded. Consequently,
@@ -14255,10 +14255,10 @@ including std::sort().
     -   No data is copied. That is, this is an O(1) operation. Consequently, if you change the number of
         rows, or the operation changes the indices of elements row in some other way, the matrix must be
         continuous. See Mat::isContinuous .
-
+<p>
     For example, if there is a set of 3D points stored as an STL vector, and you want to represent the
     points as a 3xN matrix, do the following:
-    @code
+    <pre><code>
         std::vector<Point3f> vec;
         ...
         Mat pointMat = Mat(vec). // convert vector to Mat, O(1) operation
@@ -14266,32 +14266,32 @@ including std::sort().
                                       // Also, an O(1) operation
                              t(); // finally, transpose the Nx3 matrix.
                                   // This involves copying all the elements
-    @endcode
+    </code></pre>
     @param cn New number of channels. If the parameter is 0, the number of channels remains the same.
     @param rows New number of rows. If the parameter is 0, the number of rows remains the same.
      */
     public native @ByVal Mat reshape(int cn, int rows/*=0*/);
     public native @ByVal Mat reshape(int cn);
 
-    /** @overload */
+    /** \overload */
     public native @ByVal Mat reshape(int cn, int newndims, @Const IntPointer newsz);
     public native @ByVal Mat reshape(int cn, int newndims, @Const IntBuffer newsz);
     public native @ByVal Mat reshape(int cn, int newndims, @Const int[] newsz);
 
-    /** @brief Transposes a matrix.
-
+    /** \brief Transposes a matrix.
+<p>
     The method performs matrix transposition by means of matrix expressions. It does not perform the
     actual transposition but returns a temporary matrix transposition object that can be further used as
     a part of more complex matrix expressions or can be assigned to a matrix:
-    @code
+    <pre><code>
         Mat A1 = A + Mat::eye(A.size(), A.type())*lambda;
         Mat C = A1.t()*A1; // compute (A + lambda*I)^t * (A + lamda*I)
-    @endcode
+    </code></pre>
      */
     public native @ByVal MatExpr t();
 
-    /** @brief Inverses a matrix.
-
+    /** \brief Inverses a matrix.
+<p>
     The method performs a matrix inversion by means of matrix expressions. This means that a temporary
     matrix inversion object is returned by the method and can be used further as a part of more complex
     matrix expressions or can be assigned to a matrix.
@@ -14300,23 +14300,23 @@ including std::sort().
     public native @ByVal MatExpr inv(int method/*=cv::DECOMP_LU*/);
     public native @ByVal MatExpr inv();
 
-    /** @brief Performs an element-wise multiplication or division of the two matrices.
-
+    /** \brief Performs an element-wise multiplication or division of the two matrices.
+<p>
     The method returns a temporary object encoding per-element array multiplication, with optional
     scale. Note that this is not a matrix multiplication that corresponds to a simpler "\*" operator.
-
+<p>
     Example:
-    @code
+    <pre><code>
         Mat C = A.mul(5/B); // equivalent to divide(A, B, C, 5)
-    @endcode
+    </code></pre>
     @param m Another array of the same type and the same size as \*this, or a matrix expression.
     @param scale Optional scale factor.
      */
     public native @ByVal MatExpr mul(@ByVal Mat m, double scale/*=1*/);
     public native @ByVal MatExpr mul(@ByVal Mat m);
 
-    /** @brief Computes a cross-product of two 3-element vectors.
-
+    /** \brief Computes a cross-product of two 3-element vectors.
+<p>
     The method computes a cross-product of two 3-element vectors. The vectors must be 3-element
     floating-point vectors of the same shape and size. The result is another 3-element vector of the
     same shape and type as operands.
@@ -14324,8 +14324,8 @@ including std::sort().
      */
     public native @ByVal Mat cross(@ByVal Mat m);
 
-    /** @brief Computes a dot-product of two vectors.
-
+    /** \brief Computes a dot-product of two vectors.
+<p>
     The method computes a dot-product of two matrices. If the matrices are not single-column or
     single-row vectors, the top-to-bottom left-to-right scan ordering is used to treat them as 1D
     vectors. The vectors must have the same size and type. If the matrices have more than one channel,
@@ -14334,14 +14334,14 @@ including std::sort().
      */
     public native double dot(@ByVal Mat m);
 
-    /** @brief Returns a zero array of the specified size and type.
-
+    /** \brief Returns a zero array of the specified size and type.
+<p>
     The method returns a Matlab-style zero array initializer. It can be used to quickly form a constant
     array as a function parameter, part of a matrix expression, or as a matrix initializer. :
-    @code
+    <pre><code>
         Mat A;
         A = Mat::zeros(3, 3, CV_32F);
-    @endcode
+    </code></pre>
     In the example above, a new matrix is allocated only if A is not a 3x3 floating-point matrix.
     Otherwise, the existing matrix A is filled with zeros.
     @param rows Number of rows.
@@ -14350,26 +14350,26 @@ including std::sort().
      */
     public static native @ByVal MatExpr zeros(int rows, int cols, int type);
 
-    /** @overload
+    /** \overload
     @param size Alternative to the matrix size specification Size(cols, rows) .
     @param type Created matrix type.
     */
     public static native @ByVal MatExpr zeros(@ByVal Size size, int type);
 
-    /** @overload
+    /** \overload
     @param ndims Array dimensionality.
     @param sz Array of integers specifying the array shape.
     @param type Created matrix type.
     */
     
 
-    /** @brief Returns an array of all 1's of the specified size and type.
-
+    /** \brief Returns an array of all 1's of the specified size and type.
+<p>
     The method returns a Matlab-style 1's array initializer, similarly to Mat::zeros. Note that using
     this method you can initialize an array with an arbitrary value, using the following Matlab idiom:
-    @code
+    <pre><code>
         Mat A = Mat::ones(100, 100, CV_8U)*3; // make 100x100 matrix filled with 3.
-    @endcode
+    </code></pre>
     The above operation does not form a 100x100 matrix of 1's and then multiply it by 3. Instead, it
     just remembers the scale factor (3 in this case) and use it when actually invoking the matrix
     initializer.
@@ -14379,66 +14379,66 @@ including std::sort().
      */
     public static native @ByVal MatExpr ones(int rows, int cols, int type);
 
-    /** @overload
+    /** \overload
     @param size Alternative to the matrix size specification Size(cols, rows) .
     @param type Created matrix type.
     */
     public static native @ByVal MatExpr ones(@ByVal Size size, int type);
 
-    /** @overload
+    /** \overload
     @param ndims Array dimensionality.
     @param sz Array of integers specifying the array shape.
     @param type Created matrix type.
     */
     
 
-    /** @brief Returns an identity matrix of the specified size and type.
-
+    /** \brief Returns an identity matrix of the specified size and type.
+<p>
     The method returns a Matlab-style identity matrix initializer, similarly to Mat::zeros. Similarly to
     Mat::ones, you can use a scale operation to create a scaled identity matrix efficiently:
-    @code
+    <pre><code>
         // make a 4x4 diagonal matrix with 0.1's on the diagonal.
         Mat A = Mat::eye(4, 4, CV_32F)*0.1;
-    @endcode
+    </code></pre>
     @param rows Number of rows.
     @param cols Number of columns.
     @param type Created matrix type.
      */
     public static native @ByVal MatExpr eye(int rows, int cols, int type);
 
-    /** @overload
+    /** \overload
     @param size Alternative matrix size specification as Size(cols, rows) .
     @param type Created matrix type.
     */
     public static native @ByVal MatExpr eye(@ByVal Size size, int type);
 
-    /** @brief Allocates new array data if needed.
-
+    /** \brief Allocates new array data if needed.
+<p>
     This is one of the key Mat methods. Most new-style OpenCV functions and methods that produce arrays
     call this method for each output array. The method uses the following algorithm:
-
+<p>
     -# If the current array shape and the type match the new ones, return immediately. Otherwise,
        de-reference the previous data by calling Mat::release.
     -# Initialize the new header.
     -# Allocate the new data of total()\*elemSize() bytes.
     -# Allocate the new, associated with the data, reference counter and set it to 1.
-
+<p>
     Such a scheme makes the memory management robust and efficient at the same time and helps avoid
     extra typing for you. This means that usually there is no need to explicitly allocate output arrays.
     That is, instead of writing:
-    @code
+    <pre><code>
         Mat color;
         ...
         Mat gray(color.rows, color.cols, color.depth());
         cvtColor(color, gray, COLOR_BGR2GRAY);
-    @endcode
+    </code></pre>
     you can simply write:
-    @code
+    <pre><code>
         Mat color;
         ...
         Mat gray;
         cvtColor(color, gray, COLOR_BGR2GRAY);
-    @endcode
+    </code></pre>
     because cvtColor, as well as the most of OpenCV functions, calls Mat::create() for the output array
     internally.
     @param rows New number of rows.
@@ -14447,13 +14447,13 @@ including std::sort().
      */
     public native void create(int rows, int cols, int type);
 
-    /** @overload
+    /** \overload
     @param size Alternative new matrix size specification: Size(cols, rows)
     @param type New matrix type.
     */
     public native void create(@ByVal Size size, int type);
 
-    /** @overload
+    /** \overload
     @param ndims New array dimensionality.
     @param sizes Array of integers specifying a new array shape.
     @param type New matrix type.
@@ -14462,8 +14462,8 @@ including std::sort().
     public native void create(int ndims, @Const IntBuffer sizes, int type);
     public native void create(int ndims, @Const int[] sizes, int type);
 
-    /** @brief Increments the reference counter.
-
+    /** \brief Increments the reference counter.
+<p>
     The method increments the reference counter associated with the matrix data. If the matrix header
     points to an external data set (see Mat::Mat ), the reference counter is NULL, and the method has no
     effect in this case. Normally, to avoid memory leaks, the method should not be called explicitly. It
@@ -14473,13 +14473,13 @@ including std::sort().
      */
     public native void addref();
 
-    /** @brief Decrements the reference counter and deallocates the matrix if needed.
-
+    /** \brief Decrements the reference counter and deallocates the matrix if needed.
+<p>
     The method decrements the reference counter associated with the matrix data. When the reference
     counter reaches 0, the matrix data is deallocated and the data and the reference counter pointers
     are set to NULL's. If the matrix header points to an external data set (see Mat::Mat ), the
     reference counter is NULL, and the method has no effect in this case.
-
+<p>
     This method can be called manually to force the matrix data deallocation. But since this method is
     automatically called in the destructor, or by any other method that changes the data pointer, it is
     usually not needed. The reference counter decrement and check for 0 is an atomic operation on the
@@ -14493,8 +14493,8 @@ including std::sort().
     /** internal use function; properly re-allocates _size, _step arrays */
     public native void copySize(@Const @ByRef Mat m);
 
-    /** @brief Reserves space for the certain number of rows.
-
+    /** \brief Reserves space for the certain number of rows.
+<p>
     The method reserves space for sz rows. If the matrix already has enough space to store sz rows,
     nothing happens. If the matrix is reallocated, the first Mat::rows rows are preserved. The method
     emulates the corresponding method of the STL vector class.
@@ -14502,8 +14502,8 @@ including std::sort().
      */
     public native void reserve(@Cast("size_t") long sz);
 
-    /** @brief Changes the number of matrix rows.
-
+    /** \brief Changes the number of matrix rows.
+<p>
     The methods change the number of matrix rows. If the matrix is reallocated, the first
     min(Mat::rows, sz) rows are preserved. The methods emulate the corresponding methods of the STL
     vector class.
@@ -14511,7 +14511,7 @@ including std::sort().
      */
     public native void resize(@Cast("size_t") long sz);
 
-    /** @overload
+    /** \overload
     @param sz New number of rows.
     @param s Value assigned to the newly added elements.
      */
@@ -14520,25 +14520,25 @@ including std::sort().
     /** internal function */
     public native void push_back_(@Const Pointer elem);
 
-    /** @brief Adds elements to the bottom of the matrix.
-
+    /** \brief Adds elements to the bottom of the matrix.
+<p>
     The methods add one or more elements to the bottom of the matrix. They emulate the corresponding
     method of the STL vector class. When elem is Mat , its type and the number of columns must be the
     same as in the container matrix.
     @param elem Added element(s).
      */
 
-    /** @overload
+    /** \overload
     @param elem Added element(s).
     */
 
-    /** @overload
+    /** \overload
     @param m Added line(s).
     */
     public native void push_back(@Const @ByRef Mat m);
 
-    /** @brief Removes elements from the bottom of the matrix.
-
+    /** \brief Removes elements from the bottom of the matrix.
+<p>
     The method removes one or more rows from the bottom of the matrix.
     @param nelems Number of removed rows. If it is greater than the total number of rows, an exception
     is thrown.
@@ -14546,8 +14546,8 @@ including std::sort().
     public native void pop_back(@Cast("size_t") long nelems/*=1*/);
     public native void pop_back();
 
-    /** @brief Locates the matrix header within a parent matrix.
-
+    /** \brief Locates the matrix header within a parent matrix.
+<p>
     After you extracted a submatrix from a matrix using Mat::row, Mat::col, Mat::rowRange,
     Mat::colRange, and others, the resultant submatrix points just to the part of the original big
     matrix. However, each submatrix contains information (represented by datastart and dataend
@@ -14559,40 +14559,40 @@ including std::sort().
      */
     public native void locateROI( @ByRef Size wholeSize, @ByRef Point ofs );
 
-    /** @brief Adjusts a submatrix size and position within the parent matrix.
-
+    /** \brief Adjusts a submatrix size and position within the parent matrix.
+<p>
     The method is complimentary to Mat::locateROI . The typical use of these functions is to determine
     the submatrix position within the parent matrix and then shift the position somehow. Typically, it
     can be required for filtering operations when pixels outside of the ROI should be taken into
     account. When all the method parameters are positive, the ROI needs to grow in all directions by the
     specified amount, for example:
-    @code
+    <pre><code>
         A.adjustROI(2, 2, 2, 2);
-    @endcode
+    </code></pre>
     In this example, the matrix size is increased by 4 elements in each direction. The matrix is shifted
     by 2 elements to the left and 2 elements up, which brings in all the necessary pixels for the
     filtering with the 5x5 kernel.
-
+<p>
     adjustROI forces the adjusted ROI to be inside of the parent matrix that is boundaries of the
     adjusted ROI are constrained by boundaries of the parent matrix. For example, if the submatrix A is
     located in the first row of a parent matrix and you called A.adjustROI(2, 2, 2, 2) then A will not
     be increased in the upward direction.
-
+<p>
     The function is used internally by the OpenCV filtering functions, like filter2D , morphological
     operations, and so on.
     @param dtop Shift of the top submatrix boundary upwards.
     @param dbottom Shift of the bottom submatrix boundary downwards.
     @param dleft Shift of the left submatrix boundary to the left.
     @param dright Shift of the right submatrix boundary to the right.
-    @sa copyMakeBorder
+    \sa copyMakeBorder
      */
     public native @ByRef Mat adjustROI( int dtop, int dbottom, int dleft, int dright );
 
-    /** @brief Extracts a rectangular submatrix.
-
+    /** \brief Extracts a rectangular submatrix.
+<p>
     The operators make a new header for the specified sub-array of \*this . They are the most
     generalized forms of Mat::row, Mat::col, Mat::rowRange, and Mat::colRange . For example,
-    `A(Range(0, 10), Range::all())` is equivalent to `A.rowRange(0, 10)`. Similarly to all of the above,
+    {@code A(Range(0, 10), Range::all())} is equivalent to {@code A.rowRange(0, 10)}. Similarly to all of the above,
     the operators are O(1) operations, that is, no matrix data is copied.
     @param rowRange Start and end row of the extracted submatrix. The upper boundary is not included. To
     select all the rows, use Range::all().
@@ -14601,12 +14601,12 @@ including std::sort().
      */
     public native @ByVal @Name("operator ()") Mat apply( @ByVal Range rowRange, @ByVal Range colRange );
 
-    /** @overload
+    /** \overload
     @param roi Extracted submatrix specified as a rectangle.
     */
     public native @ByVal @Name("operator ()") Mat apply( @Const @ByRef Rect roi );
 
-    /** @overload
+    /** \overload
     @param ranges Array of selected ranges along each array dimension.
     */
     public native @ByVal @Name("operator ()") Mat apply( @Const Range ranges );
@@ -14618,31 +14618,31 @@ including std::sort().
     // //! converts header to IplImage; no data is copied
     // operator IplImage() const;
 
-    /** @brief Reports whether the matrix is continuous or not.
-
+    /** \brief Reports whether the matrix is continuous or not.
+<p>
     The method returns true if the matrix elements are stored continuously without gaps at the end of
     each row. Otherwise, it returns false. Obviously, 1x1 or 1xN matrices are always continuous.
     Matrices created with Mat::create are always continuous. But if you extract a part of the matrix
     using Mat::col, Mat::diag, and so on, or constructed a matrix header for externally allocated data,
     such matrices may no longer have this property.
-
+<p>
     The continuity flag is stored as a bit in the Mat::flags field and is computed automatically when
     you construct a matrix header. Thus, the continuity check is a very fast operation, though
     theoretically it could be done as follows:
-    @code
+    <pre><code>
         // alternative implementation of Mat::isContinuous()
         bool myCheckMatContinuity(const Mat& m)
         {
             //return (m.flags & Mat::CONTINUOUS_FLAG) != 0;
             return m.rows == 1 || m.step == m.cols*m.elemSize();
         }
-    @endcode
+    </code></pre>
     The method is used in quite a few of OpenCV functions. The point is that element-wise operations
     (such as arithmetic and logical operations, math functions, alpha blending, color space
     transformations, and others) do not depend on the image geometry. Thus, if all the input and output
     arrays are continuous, the functions can process them as very long single-row vectors. The example
     below illustrates how an alpha-blending function can be implemented:
-    @code
+    <pre><code>
         template<typename T>
         void alphaBlendRGBA(const Mat& src1, const Mat& src2, Mat& dst)
         {
@@ -14683,10 +14683,10 @@ including std::sort().
                 }
             }
         }
-    @endcode
+    </code></pre>
     This approach, while being very simple, can boost the performance of a simple element-operation by
     10-20 percents, especially if the image is rather small and the operation is quite simple.
-
+<p>
     Another OpenCV idiom in this function, a call of Mat::create for the destination array, that
     allocates the destination array unless it already has the proper size and type. And while the newly
     allocated arrays are always continuous, you still need to check the destination array because
@@ -14697,29 +14697,29 @@ including std::sort().
     /** returns true if the matrix is a submatrix of another matrix */
     public native @Cast("bool") boolean isSubmatrix();
 
-    /** @brief Returns the matrix element size in bytes.
-
+    /** \brief Returns the matrix element size in bytes.
+<p>
     The method returns the matrix element size in bytes. For example, if the matrix type is CV_16SC3 ,
     the method returns 3\*sizeof(short) or 6.
      */
     public native @Cast("size_t") long elemSize();
 
-    /** @brief Returns the size of each matrix element channel in bytes.
-
+    /** \brief Returns the size of each matrix element channel in bytes.
+<p>
     The method returns the matrix element channel size in bytes, that is, it ignores the number of
     channels. For example, if the matrix type is CV_16SC3 , the method returns sizeof(short) or 2.
      */
     public native @Cast("size_t") long elemSize1();
 
-    /** @brief Returns the type of a matrix element.
-
+    /** \brief Returns the type of a matrix element.
+<p>
     The method returns a matrix element type. This is an identifier compatible with the CvMat type
     system, like CV_16SC3 or 16-bit signed 3-channel array, and so on.
      */
     public native int type();
 
-    /** @brief Returns the depth of a matrix element.
-
+    /** \brief Returns the depth of a matrix element.
+<p>
     The method returns the identifier of the matrix element depth (the type of each individual channel).
     For example, for a 16-bit signed element array, the method returns CV_16S . A complete list of
     matrix types contains the following values:
@@ -14733,29 +14733,29 @@ including std::sort().
      */
     public native int depth();
 
-    /** @brief Returns the number of matrix channels.
-
+    /** \brief Returns the number of matrix channels.
+<p>
     The method returns the number of matrix channels.
      */
     public native int channels();
 
-    /** @brief Returns a normalized step.
-
+    /** \brief Returns a normalized step.
+<p>
     The method returns a matrix step divided by Mat::elemSize1() . It can be useful to quickly access an
     arbitrary matrix element.
      */
     public native @Cast("size_t") long step1(int i/*=0*/);
     public native @Cast("size_t") long step1();
 
-    /** @brief Returns true if the array has no elements.
-
+    /** \brief Returns true if the array has no elements.
+<p>
     The method returns true if Mat::total() is 0 or if Mat::data is NULL. Because of pop_back() and
-    resize() methods `M.total() == 0` does not imply that `M.data == NULL`.
+    resize() methods {@code M.total() == 0} does not imply that {@code M.data == NULL}.
      */
     public native @Cast("bool") boolean empty();
 
-    /** @brief Returns the total number of array elements.
-
+    /** \brief Returns the total number of array elements.
+<p>
     The method returns the number of array elements (a number of pixels if the array represents an
     image).
      */
@@ -14765,110 +14765,110 @@ including std::sort().
     public native int checkVector(int elemChannels, int depth/*=-1*/, @Cast("bool") boolean requireContinuous/*=true*/);
     public native int checkVector(int elemChannels);
 
-    /** @brief Returns a pointer to the specified matrix row.
-
-    The methods return `uchar*` or typed pointer to the specified matrix row. See the sample in
+    /** \brief Returns a pointer to the specified matrix row.
+<p>
+    The methods return {@code uchar*} or typed pointer to the specified matrix row. See the sample in
     Mat::isContinuous to know how to use these methods.
     @param i0 A 0-based row index.
      */
     public native @Cast("uchar*") BytePointer ptr(int i0/*=0*/);
     public native @Cast("uchar*") BytePointer ptr();
-    /** @overload */
+    /** \overload */
 
-    /** @overload */
+    /** \overload */
     public native @Cast("uchar*") BytePointer ptr(int i0, int i1);
-    /** @overload */
+    /** \overload */
 
-    /** @overload */
+    /** \overload */
     public native @Cast("uchar*") BytePointer ptr(int i0, int i1, int i2);
-    /** @overload */
+    /** \overload */
 
-    /** @overload */
+    /** \overload */
     public native @Cast("uchar*") BytePointer ptr(@Const IntPointer idx);
     public native @Cast("uchar*") ByteBuffer ptr(@Const IntBuffer idx);
     public native @Cast("uchar*") byte[] ptr(@Const int[] idx);
-    /** @overload */
-    /** @overload */
-    /** @overload */
+    /** \overload */
+    /** \overload */
+    /** \overload */
 
-    /** @overload */
-    /** @overload */
-    /** @overload */
-    /** @overload */
-    /** @overload */
-    /** @overload */
-    /** @overload */
-    /** @overload */
-    /** @overload */
-    /** @overload */
+    /** \overload */
+    /** \overload */
+    /** \overload */
+    /** \overload */
+    /** \overload */
+    /** \overload */
+    /** \overload */
+    /** \overload */
+    /** \overload */
+    /** \overload */
 
-    /** @brief Returns a reference to the specified array element.
-
+    /** \brief Returns a reference to the specified array element.
+<p>
     The template methods return a reference to the specified array element. For the sake of higher
     performance, the index range checks are only performed in the Debug configuration.
-
+<p>
     Note that the variants with a single index (i) can be used to access elements of single-row or
     single-column 2-dimensional arrays. That is, if, for example, A is a 1 x N floating-point matrix and
-    B is an M x 1 integer matrix, you can simply write `A.at<float>(k+4)` and `B.at<int>(2*i+1)`
-    instead of `A.at<float>(0,k+4)` and `B.at<int>(2*i+1,0)`, respectively.
-
+    B is an M x 1 integer matrix, you can simply write {@code A.at<float>(k+4)} and {@code B.at<int>(2*i+1)}
+    instead of {@code A.at<float>(0,k+4)} and {@code B.at<int>(2*i+1,0)}, respectively.
+<p>
     The example below initializes a Hilbert matrix:
-    @code
+    <pre><code>
         Mat H(100, 100, CV_64F);
         for(int i = 0; i < H.rows; i++)
             for(int j = 0; j < H.cols; j++)
                 H.at<double>(i,j)=1./(i+j+1);
-    @endcode
+    </code></pre>
     @param i0 Index along the dimension 0
      */
-    /** @overload
+    /** \overload
     @param i0 Index along the dimension 0
     */
-    /** @overload
+    /** \overload
     @param i0 Index along the dimension 0
     @param i1 Index along the dimension 1
     */
-    /** @overload
+    /** \overload
     @param i0 Index along the dimension 0
     @param i1 Index along the dimension 1
     */
 
-    /** @overload
-    @param i0 Index along the dimension 0
-    @param i1 Index along the dimension 1
-    @param i2 Index along the dimension 2
-    */
-    /** @overload
+    /** \overload
     @param i0 Index along the dimension 0
     @param i1 Index along the dimension 1
     @param i2 Index along the dimension 2
     */
-
-    /** @overload
-    @param idx Array of Mat::dims indices.
-    */
-    /** @overload
-    @param idx Array of Mat::dims indices.
+    /** \overload
+    @param i0 Index along the dimension 0
+    @param i1 Index along the dimension 1
+    @param i2 Index along the dimension 2
     */
 
-    /** @overload */
-    /** @overload */
+    /** \overload
+    @param idx Array of Mat::dims indices.
+    */
+    /** \overload
+    @param idx Array of Mat::dims indices.
+    */
 
-    /** @overload
+    /** \overload */
+    /** \overload */
+
+    /** \overload
     special versions for 2D arrays (especially convenient for referencing image pixels)
     @param pt Element position specified as Point(j,i) .
     */
-    /** @overload
+    /** \overload
     special versions for 2D arrays (especially convenient for referencing image pixels)
     @param pt Element position specified as Point(j,i) .
     */
 
-    /** @brief Returns the matrix iterator and sets it to the first matrix element.
-
+    /** \brief Returns the matrix iterator and sets it to the first matrix element.
+<p>
     The methods return the matrix read-only or read-write iterators. The use of matrix iterators is very
     similar to the use of bi-directional STL iterators. In the example below, the alpha blending
     function is rewritten using the matrix iterators:
-    @code
+    <pre><code>
         template<typename T>
         void alphaBlendRGBA(const Mat& src1, const Mat& src2, Mat& dst)
         {
@@ -14897,22 +14897,22 @@ including std::sort().
                              saturate_cast<T>((1 - (1-alpha)*(1-beta))*alpha_scale));
             }
         }
-    @endcode
+    </code></pre>
      */
 
-    /** @brief Returns the matrix iterator and sets it to the after-last matrix element.
-
+    /** \brief Returns the matrix iterator and sets it to the after-last matrix element.
+<p>
     The methods return the matrix read-only or read-write iterators, set to the point following the last
     matrix element.
      */
 
-    /** @brief Invoke with arguments functor, and runs the functor over all matrix element.
-
+    /** \brief Invoke with arguments functor, and runs the functor over all matrix element.
+<p>
     The methos runs operation in parallel. Operation is passed by arguments. Operation have to be a
     function pointer, a function object or a lambda(C++11).
-
+<p>
     All of below operation is equal. Put 0xFF to first channel of all matrix elements:
-    @code
+    <pre><code>
         Mat image(1920, 1080, CV_8UC3);
         typedef cv::Point3_<uint8_t> Pixel;
 
@@ -14942,9 +14942,9 @@ including std::sort().
         image.forEach<Pixel>([](Pixel &p, const int * position) -> void {
             p.x = 255;
         });
-    @endcode
+    </code></pre>
     position parameter is index of current pixel:
-    @code
+    <pre><code>
         // Creating 3D matrix (255 x 255 x 255) typed uint8_t,
         //  and initialize all elements by the value which equals elements position.
         //  i.e. pixels (x,y,z) = (1,2,3) is (b,g,r) = (1,2,3).
@@ -14959,9 +14959,9 @@ including std::sort().
             pixel.y = position[1];
             pixel.z = position[2];
         });
-    @endcode
+    </code></pre>
      */
-    /** @overload */
+    /** \overload */
 
     /** enum cv::Mat:: */
     public static final int MAGIC_VAL  =  0x42FF0000, AUTO_STEP = 0, CONTINUOUS_FLAG =  CV_MAT_CONT_FLAG, SUBMATRIX_FLAG =  CV_SUBMAT_FLAG;
@@ -15005,9 +15005,9 @@ including std::sort().
 
 ///////////////////////////////// Mat_<_Tp> ////////////////////////////////////
 
-/** @brief Template matrix class derived from Mat
-
-@code
+/** \brief Template matrix class derived from Mat
+<p>
+<pre><code>
     template<typename _Tp> class Mat_ : public Mat
     {
     public:
@@ -15015,23 +15015,23 @@ including std::sort().
         //         and
         // no new extra fields
     };
-@endcode
-The class `Mat_<_Tp>` is a *thin* template wrapper on top of the Mat class. It does not have any
+</code></pre>
+The class {@code Mat_<_Tp>} is a *thin* template wrapper on top of the Mat class. It does not have any
 extra data fields. Nor this class nor Mat has any virtual methods. Thus, references or pointers to
 these two classes can be freely but carefully converted one to another. For example:
-@code
+<pre><code>
     // create a 100x100 8-bit matrix
     Mat M(100,100,CV_8U);
     // this will be compiled fine. no any data conversion will be done.
     Mat_<float>& M1 = (Mat_<float>&)M;
     // the program is likely to crash at the statement below
     M1(99,99) = 1.f;
-@endcode
+</code></pre>
 While Mat is sufficient in most cases, Mat_ can be more convenient if you use a lot of element
 access operations and if you know matrix type at the compilation time. Note that
-`Mat::at(int y,int x)` and `Mat_::operator()(int y,int x)` do absolutely the same
+{@code Mat::at(int y,int x)} and {@code Mat_::operator()(int y,int x)} do absolutely the same
 and run at the same speed, but the latter is certainly shorter:
-@code
+<pre><code>
     Mat_<double> M(20,20);
     for(int i = 0; i < M.rows; i++)
         for(int j = 0; j < M.cols; j++)
@@ -15039,9 +15039,9 @@ and run at the same speed, but the latter is certainly shorter:
     Mat E, V;
     eigen(M,E,V);
     cout << E.at<double>(0,0)/E.at<double>(M.rows-1,0);
-@endcode
+</code></pre>
 To use Mat_ for multi-channel images/matrices, pass Vec as a Mat_ parameter:
-@code
+<pre><code>
     // allocate a 320x240 color image and fill it with green (in RGB space)
     Mat_<Vec3b> img(240, 320, Vec3b(0,255,0));
     // now draw a diagonal white line
@@ -15051,76 +15051,76 @@ To use Mat_ for multi-channel images/matrices, pass Vec as a Mat_ parameter:
     for(int i = 0; i < img.rows; i++)
         for(int j = 0; j < img.cols; j++)
             img(i,j)[2] ^= (uchar)(i ^ j);
-@endcode
+</code></pre>
  */
 
-/** @todo document */
+/** \todo document */
 @Namespace("cv") @NoOffset public static class UMat extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UMat(Pointer p) { super(p); }
 
     /** default constructor */
-    public UMat(@Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { allocate(usageFlags); }
+    public UMat(@Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { super((Pointer)null); allocate(usageFlags); }
     private native void allocate(@Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
-    public UMat() { allocate(); }
+    public UMat() { super((Pointer)null); allocate(); }
     private native void allocate();
     /** constructs 2D matrix of the specified size and type */
     // (_type is CV_8UC1, CV_64FC3, CV_32SC(12) etc.)
-    public UMat(int rows, int cols, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { allocate(rows, cols, type, usageFlags); }
+    public UMat(int rows, int cols, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { super((Pointer)null); allocate(rows, cols, type, usageFlags); }
     private native void allocate(int rows, int cols, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
-    public UMat(int rows, int cols, int type) { allocate(rows, cols, type); }
+    public UMat(int rows, int cols, int type) { super((Pointer)null); allocate(rows, cols, type); }
     private native void allocate(int rows, int cols, int type);
-    public UMat(@ByVal Size size, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { allocate(size, type, usageFlags); }
+    public UMat(@ByVal Size size, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { super((Pointer)null); allocate(size, type, usageFlags); }
     private native void allocate(@ByVal Size size, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
-    public UMat(@ByVal Size size, int type) { allocate(size, type); }
+    public UMat(@ByVal Size size, int type) { super((Pointer)null); allocate(size, type); }
     private native void allocate(@ByVal Size size, int type);
     /** constucts 2D matrix and fills it with the specified value _s. */
-    public UMat(int rows, int cols, int type, @Const @ByRef Scalar s, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { allocate(rows, cols, type, s, usageFlags); }
+    public UMat(int rows, int cols, int type, @Const @ByRef Scalar s, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { super((Pointer)null); allocate(rows, cols, type, s, usageFlags); }
     private native void allocate(int rows, int cols, int type, @Const @ByRef Scalar s, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
-    public UMat(int rows, int cols, int type, @Const @ByRef Scalar s) { allocate(rows, cols, type, s); }
+    public UMat(int rows, int cols, int type, @Const @ByRef Scalar s) { super((Pointer)null); allocate(rows, cols, type, s); }
     private native void allocate(int rows, int cols, int type, @Const @ByRef Scalar s);
-    public UMat(@ByVal Size size, int type, @Const @ByRef Scalar s, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { allocate(size, type, s, usageFlags); }
+    public UMat(@ByVal Size size, int type, @Const @ByRef Scalar s, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { super((Pointer)null); allocate(size, type, s, usageFlags); }
     private native void allocate(@ByVal Size size, int type, @Const @ByRef Scalar s, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
-    public UMat(@ByVal Size size, int type, @Const @ByRef Scalar s) { allocate(size, type, s); }
+    public UMat(@ByVal Size size, int type, @Const @ByRef Scalar s) { super((Pointer)null); allocate(size, type, s); }
     private native void allocate(@ByVal Size size, int type, @Const @ByRef Scalar s);
 
     /** constructs n-dimensional matrix */
-    public UMat(int ndims, @Const IntPointer sizes, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { allocate(ndims, sizes, type, usageFlags); }
+    public UMat(int ndims, @Const IntPointer sizes, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { super((Pointer)null); allocate(ndims, sizes, type, usageFlags); }
     private native void allocate(int ndims, @Const IntPointer sizes, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
-    public UMat(int ndims, @Const IntPointer sizes, int type) { allocate(ndims, sizes, type); }
+    public UMat(int ndims, @Const IntPointer sizes, int type) { super((Pointer)null); allocate(ndims, sizes, type); }
     private native void allocate(int ndims, @Const IntPointer sizes, int type);
-    public UMat(int ndims, @Const IntBuffer sizes, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { allocate(ndims, sizes, type, usageFlags); }
+    public UMat(int ndims, @Const IntBuffer sizes, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { super((Pointer)null); allocate(ndims, sizes, type, usageFlags); }
     private native void allocate(int ndims, @Const IntBuffer sizes, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
-    public UMat(int ndims, @Const IntBuffer sizes, int type) { allocate(ndims, sizes, type); }
+    public UMat(int ndims, @Const IntBuffer sizes, int type) { super((Pointer)null); allocate(ndims, sizes, type); }
     private native void allocate(int ndims, @Const IntBuffer sizes, int type);
-    public UMat(int ndims, @Const int[] sizes, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { allocate(ndims, sizes, type, usageFlags); }
+    public UMat(int ndims, @Const int[] sizes, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { super((Pointer)null); allocate(ndims, sizes, type, usageFlags); }
     private native void allocate(int ndims, @Const int[] sizes, int type, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
-    public UMat(int ndims, @Const int[] sizes, int type) { allocate(ndims, sizes, type); }
+    public UMat(int ndims, @Const int[] sizes, int type) { super((Pointer)null); allocate(ndims, sizes, type); }
     private native void allocate(int ndims, @Const int[] sizes, int type);
-    public UMat(int ndims, @Const IntPointer sizes, int type, @Const @ByRef Scalar s, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { allocate(ndims, sizes, type, s, usageFlags); }
+    public UMat(int ndims, @Const IntPointer sizes, int type, @Const @ByRef Scalar s, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { super((Pointer)null); allocate(ndims, sizes, type, s, usageFlags); }
     private native void allocate(int ndims, @Const IntPointer sizes, int type, @Const @ByRef Scalar s, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
-    public UMat(int ndims, @Const IntPointer sizes, int type, @Const @ByRef Scalar s) { allocate(ndims, sizes, type, s); }
+    public UMat(int ndims, @Const IntPointer sizes, int type, @Const @ByRef Scalar s) { super((Pointer)null); allocate(ndims, sizes, type, s); }
     private native void allocate(int ndims, @Const IntPointer sizes, int type, @Const @ByRef Scalar s);
-    public UMat(int ndims, @Const IntBuffer sizes, int type, @Const @ByRef Scalar s, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { allocate(ndims, sizes, type, s, usageFlags); }
+    public UMat(int ndims, @Const IntBuffer sizes, int type, @Const @ByRef Scalar s, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { super((Pointer)null); allocate(ndims, sizes, type, s, usageFlags); }
     private native void allocate(int ndims, @Const IntBuffer sizes, int type, @Const @ByRef Scalar s, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
-    public UMat(int ndims, @Const IntBuffer sizes, int type, @Const @ByRef Scalar s) { allocate(ndims, sizes, type, s); }
+    public UMat(int ndims, @Const IntBuffer sizes, int type, @Const @ByRef Scalar s) { super((Pointer)null); allocate(ndims, sizes, type, s); }
     private native void allocate(int ndims, @Const IntBuffer sizes, int type, @Const @ByRef Scalar s);
-    public UMat(int ndims, @Const int[] sizes, int type, @Const @ByRef Scalar s, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { allocate(ndims, sizes, type, s, usageFlags); }
+    public UMat(int ndims, @Const int[] sizes, int type, @Const @ByRef Scalar s, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/) { super((Pointer)null); allocate(ndims, sizes, type, s, usageFlags); }
     private native void allocate(int ndims, @Const int[] sizes, int type, @Const @ByRef Scalar s, @Cast("cv::UMatUsageFlags") int usageFlags/*=cv::USAGE_DEFAULT*/);
-    public UMat(int ndims, @Const int[] sizes, int type, @Const @ByRef Scalar s) { allocate(ndims, sizes, type, s); }
+    public UMat(int ndims, @Const int[] sizes, int type, @Const @ByRef Scalar s) { super((Pointer)null); allocate(ndims, sizes, type, s); }
     private native void allocate(int ndims, @Const int[] sizes, int type, @Const @ByRef Scalar s);
 
     /** copy constructor */
-    public UMat(@Const @ByRef UMat m) { allocate(m); }
+    public UMat(@Const @ByRef UMat m) { super((Pointer)null); allocate(m); }
     private native void allocate(@Const @ByRef UMat m);
 
     /** creates a matrix header for a part of the bigger matrix */
-    public UMat(@Const @ByRef UMat m, @Const @ByRef Range rowRange, @Const @ByRef(nullValue = "cv::Range::all()") Range colRange/*=cv::Range::all()*/) { allocate(m, rowRange, colRange); }
+    public UMat(@Const @ByRef UMat m, @Const @ByRef Range rowRange, @Const @ByRef(nullValue = "cv::Range::all()") Range colRange/*=cv::Range::all()*/) { super((Pointer)null); allocate(m, rowRange, colRange); }
     private native void allocate(@Const @ByRef UMat m, @Const @ByRef Range rowRange, @Const @ByRef(nullValue = "cv::Range::all()") Range colRange/*=cv::Range::all()*/);
-    public UMat(@Const @ByRef UMat m, @Const @ByRef Range rowRange) { allocate(m, rowRange); }
+    public UMat(@Const @ByRef UMat m, @Const @ByRef Range rowRange) { super((Pointer)null); allocate(m, rowRange); }
     private native void allocate(@Const @ByRef UMat m, @Const @ByRef Range rowRange);
-    public UMat(@Const @ByRef UMat m, @Const @ByRef Rect roi) { allocate(m, roi); }
+    public UMat(@Const @ByRef UMat m, @Const @ByRef Rect roi) { super((Pointer)null); allocate(m, roi); }
     private native void allocate(@Const @ByRef UMat m, @Const @ByRef Rect roi);
     /** builds matrix from std::vector with or without copying the data */
     /** builds matrix from cv::Vec; the data is copied by default */
@@ -15310,8 +15310,8 @@ To use Mat_ for multi-channel images/matrices, pass Vec as a Mat_ parameter:
 
 /////////////////////////// multi-dimensional sparse matrix //////////////////////////
 
-/** @brief The class SparseMat represents multi-dimensional sparse numerical arrays.
-
+/** \brief The class SparseMat represents multi-dimensional sparse numerical arrays.
+<p>
 Such a sparse array can store elements of any type that Mat can store. *Sparse* means that only
 non-zero elements are stored (though, as a result of operations on a sparse matrix, some of its
 stored elements can actually become 0. It is up to you to detect such elements and delete them
@@ -15320,7 +15320,7 @@ filled so that the search time is O(1) in average (regardless of whether element
 Elements can be accessed using the following methods:
 -   Query operations (SparseMat::ptr and the higher-level SparseMat::ref, SparseMat::value and
     SparseMat::find), for example:
-    @code
+    <pre><code>
         const int dims = 5;
         int size[] = {10, 10, 10, 10, 10};
         SparseMat sparse_mat(dims, size, CV_32F);
@@ -15331,10 +15331,10 @@ Elements can be accessed using the following methods:
                 idx[k] = rand()
             sparse_mat.ref<float>(idx) += 1.f;
         }
-    @endcode
+    </code></pre>
 -   Sparse matrix iterators. They are similar to MatIterator but different from NAryMatIterator.
     That is, the iteration loop is familiar to STL users:
-    @code
+    <pre><code>
         // prints elements of a sparse floating-point matrix
         // and the sum of elements.
         SparseMatConstIterator_<float>
@@ -15353,7 +15353,7 @@ Elements can be accessed using the following methods:
             s += *it;
         }
         printf("Element sum is %g\n", s);
-    @endcode
+    </code></pre>
     If you run this loop, you will notice that elements are not enumerated in a logical order
     (lexicographical, and so on). They come in the same order as they are stored in the hash table
     (semi-randomly). You may collect pointers to the nodes and sort them to get the proper ordering.
@@ -15362,7 +15362,7 @@ Elements can be accessed using the following methods:
 -   Combination of the above 2 methods when you need to process 2 or more sparse matrices
     simultaneously. For example, this is how you can compute unnormalized cross-correlation of the 2
     floating-point sparse matrices:
-    @code
+    <pre><code>
         double cross_corr(const SparseMat& a, const SparseMat& b)
         {
             const SparseMat *_a = &a, *_b = &b;
@@ -15386,14 +15386,14 @@ Elements can be accessed using the following methods:
             }
             return ccorr;
         }
-    @endcode
+    </code></pre>
  */
 @Namespace("cv") @NoOffset public static class SparseMat extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparseMat(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SparseMat(int size) { allocateArray(size); }
+    public SparseMat(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public SparseMat position(int position) {
         return (SparseMat)super.position(position);
@@ -15411,11 +15411,11 @@ Elements can be accessed using the following methods:
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Hdr(Pointer p) { super(p); }
     
-        public Hdr(int _dims, @Const IntPointer _sizes, int _type) { allocate(_dims, _sizes, _type); }
+        public Hdr(int _dims, @Const IntPointer _sizes, int _type) { super((Pointer)null); allocate(_dims, _sizes, _type); }
         private native void allocate(int _dims, @Const IntPointer _sizes, int _type);
-        public Hdr(int _dims, @Const IntBuffer _sizes, int _type) { allocate(_dims, _sizes, _type); }
+        public Hdr(int _dims, @Const IntBuffer _sizes, int _type) { super((Pointer)null); allocate(_dims, _sizes, _type); }
         private native void allocate(int _dims, @Const IntBuffer _sizes, int _type);
-        public Hdr(int _dims, @Const int[] _sizes, int _type) { allocate(_dims, _sizes, _type); }
+        public Hdr(int _dims, @Const int[] _sizes, int _type) { super((Pointer)null); allocate(_dims, _sizes, _type); }
         private native void allocate(int _dims, @Const int[] _sizes, int _type);
         public native void clear();
         public native int refcount(); public native Hdr refcount(int refcount);
@@ -15434,9 +15434,9 @@ Elements can be accessed using the following methods:
     public static class Node extends Pointer {
         static { Loader.load(); }
         /** Default native constructor. */
-        public Node() { allocate(); }
+        public Node() { super((Pointer)null); allocate(); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public Node(int size) { allocateArray(size); }
+        public Node(int size) { super((Pointer)null); allocateArray(size); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Node(Pointer p) { super(p); }
         private native void allocate();
@@ -15454,35 +15454,35 @@ Elements can be accessed using the following methods:
         @MemberGetter public native IntPointer idx();
     }
 
-    /** @brief Various SparseMat constructors.
+    /** \brief Various SparseMat constructors.
      */
-    public SparseMat() { allocate(); }
+    public SparseMat() { super((Pointer)null); allocate(); }
     private native void allocate();
 
-    /** @overload
+    /** \overload
     @param dims Array dimensionality.
     @param _sizes Sparce matrix size on all dementions.
     @param _type Sparse matrix data type.
     */
-    public SparseMat(int dims, @Const IntPointer _sizes, int _type) { allocate(dims, _sizes, _type); }
+    public SparseMat(int dims, @Const IntPointer _sizes, int _type) { super((Pointer)null); allocate(dims, _sizes, _type); }
     private native void allocate(int dims, @Const IntPointer _sizes, int _type);
-    public SparseMat(int dims, @Const IntBuffer _sizes, int _type) { allocate(dims, _sizes, _type); }
+    public SparseMat(int dims, @Const IntBuffer _sizes, int _type) { super((Pointer)null); allocate(dims, _sizes, _type); }
     private native void allocate(int dims, @Const IntBuffer _sizes, int _type);
-    public SparseMat(int dims, @Const int[] _sizes, int _type) { allocate(dims, _sizes, _type); }
+    public SparseMat(int dims, @Const int[] _sizes, int _type) { super((Pointer)null); allocate(dims, _sizes, _type); }
     private native void allocate(int dims, @Const int[] _sizes, int _type);
 
-    /** @overload
+    /** \overload
     @param m Source matrix for copy constructor. If m is dense matrix (ocvMat) then it will be converted
     to sparse representation.
     */
-    public SparseMat(@Const @ByRef SparseMat m) { allocate(m); }
+    public SparseMat(@Const @ByRef SparseMat m) { super((Pointer)null); allocate(m); }
     private native void allocate(@Const @ByRef SparseMat m);
 
-    /** @overload
+    /** \overload
     @param m Source matrix for copy constructor. If m is dense matrix (ocvMat) then it will be converted
     to sparse representation.
     */
-    public SparseMat(@Const @ByRef Mat m) { allocate(m); }
+    public SparseMat(@Const @ByRef Mat m) { super((Pointer)null); allocate(m); }
     private native void allocate(@Const @ByRef Mat m);
 
     /** the destructor */
@@ -15569,7 +15569,7 @@ Elements can be accessed using the following methods:
     public native @Cast("size_t") long hash(@Const IntBuffer idx);
     public native @Cast("size_t") long hash(@Const int[] idx);
 
-    /**@{
+    /**\{
     /**
      specialized variants for 1D, 2D, 3D cases and the generic_type one for n-D case.
      return pointer to the matrix element.
@@ -15596,13 +15596,13 @@ Elements can be accessed using the following methods:
     public native @Cast("uchar*") ByteBuffer ptr(@Const IntBuffer idx, @Cast("bool") boolean createMissing);
     public native @Cast("uchar*") byte[] ptr(@Const int[] idx, @Cast("bool") boolean createMissing, @Cast("size_t*") SizeTPointer hashval/*=0*/);
     public native @Cast("uchar*") byte[] ptr(@Const int[] idx, @Cast("bool") boolean createMissing);
-    /**@}
+    /**\}
 
-     * @{
+     * \{
     /**
      return read-write reference to the specified sparse matrix element.
-
-     `ref<_Tp>(i0,...[,hashval])` is equivalent to `*(_Tp*)ptr(i0,...,true[,hashval])`.
+<p>
+     {@code ref<_Tp>(i0,...[,hashval])} is equivalent to {@code *(_Tp*)ptr(i0,...,true[,hashval])}.
      The methods always return a valid reference.
      If the element did not exist, it is created and initialiazed with 0.
     */
@@ -15610,38 +15610,38 @@ Elements can be accessed using the following methods:
     /** returns reference to the specified element (2D case) */
     /** returns reference to the specified element (3D case) */
     /** returns reference to the specified element (nD case) */
-    /**@}
+    /**\}
 
-     * @{
+     * \{
     /**
      return value of the specified sparse matrix element.
-
-     `value<_Tp>(i0,...[,hashval])` is equivalent to
-     @code
+<p>
+     {@code value<_Tp>(i0,...[,hashval])} is equivalent to
+     <pre><code>
      { const _Tp* p = find<_Tp>(i0,...[,hashval]); return p ? *p : _Tp(); }
-     @endcode
-
+     </code></pre>
+<p>
      That is, if the element did not exist, the methods return 0.
      */
     /** returns value of the specified element (1D case) */
     /** returns value of the specified element (2D case) */
     /** returns value of the specified element (3D case) */
     /** returns value of the specified element (nD case) */
-    /**@}
+    /**\}
 
-     * @{
+     * \{
     /**
      Return pointer to the specified sparse matrix element if it exists
-
-     `find<_Tp>(i0,...[,hashval])` is equivalent to `(_const Tp*)ptr(i0,...false[,hashval])`.
-
+<p>
+     {@code find<_Tp>(i0,...[,hashval])} is equivalent to {@code (_const Tp*)ptr(i0,...false[,hashval])}.
+<p>
      If the specified element does not exist, the methods return NULL.
     */
     /** returns pointer to the specified element (1D case) */
     /** returns pointer to the specified element (2D case) */
     /** returns pointer to the specified element (3D case) */
     /** returns pointer to the specified element (nD case) */
-    /**@}
+    /**\}
 
      *  erases the specified element (2D case) */
     public native void erase(int i0, int i1, @Cast("size_t*") SizeTPointer hashval/*=0*/);
@@ -15657,7 +15657,7 @@ Elements can be accessed using the following methods:
     public native void erase(@Const int[] idx, @Cast("size_t*") SizeTPointer hashval/*=0*/);
     public native void erase(@Const int[] idx);
 
-    /**@{
+    /**\{
     /**
        return the sparse matrix iterator pointing to the first sparse matrix element
     */
@@ -15666,7 +15666,7 @@ Elements can be accessed using the following methods:
     /** returns the sparse matrix iterator at the matrix beginning */
     /** returns the read-only sparse matrix iterator at the matrix beginning */
     /** returns the read-only sparse matrix iterator at the matrix beginning */
-    /**@}
+    /**\}
     /**
        return the sparse matrix iterator pointing to the element following the last sparse matrix element
     */
@@ -15696,16 +15696,16 @@ Elements can be accessed using the following methods:
 
 ///////////////////////////////// SparseMat_<_Tp> ////////////////////////////////////
 
-/** @brief Template sparse n-dimensional array class derived from SparseMat
-
+/** \brief Template sparse n-dimensional array class derived from SparseMat
+<p>
 SparseMat_ is a thin wrapper on top of SparseMat created in the same way as Mat_ . It simplifies
 notation of some operations:
-@code
+<pre><code>
     int sz[] = {10, 20, 30};
     SparseMat_<double> M(3, sz);
     ...
     M.ref(1, 2, 3) = M(4, 5, 6) + M(7, 8, 9);
-@endcode
+</code></pre>
  */
 
 
@@ -15717,7 +15717,7 @@ notation of some operations:
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MatConstIterator(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public MatConstIterator(int size) { allocateArray(size); }
+    public MatConstIterator(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public MatConstIterator position(int position) {
         return (MatConstIterator)super.position(position);
@@ -15728,23 +15728,23 @@ notation of some operations:
 // #endif
 
     /** default constructor */
-    public MatConstIterator() { allocate(); }
+    public MatConstIterator() { super((Pointer)null); allocate(); }
     private native void allocate();
     /** constructor that sets the iterator to the beginning of the matrix */
-    public MatConstIterator(@Const Mat _m) { allocate(_m); }
+    public MatConstIterator(@Const Mat _m) { super((Pointer)null); allocate(_m); }
     private native void allocate(@Const Mat _m);
     /** constructor that sets the iterator to the specified element of the matrix */
-    public MatConstIterator(@Const Mat _m, int _row, int _col/*=0*/) { allocate(_m, _row, _col); }
+    public MatConstIterator(@Const Mat _m, int _row, int _col/*=0*/) { super((Pointer)null); allocate(_m, _row, _col); }
     private native void allocate(@Const Mat _m, int _row, int _col/*=0*/);
-    public MatConstIterator(@Const Mat _m, int _row) { allocate(_m, _row); }
+    public MatConstIterator(@Const Mat _m, int _row) { super((Pointer)null); allocate(_m, _row); }
     private native void allocate(@Const Mat _m, int _row);
     /** constructor that sets the iterator to the specified element of the matrix */
-    public MatConstIterator(@Const Mat _m, @ByVal Point _pt) { allocate(_m, _pt); }
+    public MatConstIterator(@Const Mat _m, @ByVal Point _pt) { super((Pointer)null); allocate(_m, _pt); }
     private native void allocate(@Const Mat _m, @ByVal Point _pt);
     /** constructor that sets the iterator to the specified element of the matrix */
     
     /** copy constructor */
-    public MatConstIterator(@Const @ByRef MatConstIterator it) { allocate(it); }
+    public MatConstIterator(@Const @ByRef MatConstIterator it) { super((Pointer)null); allocate(it); }
     private native void allocate(@Const @ByRef MatConstIterator it);
 
     /** copy operator */
@@ -15794,51 +15794,51 @@ notation of some operations:
 
 ////////////////////////////////// MatConstIterator_ /////////////////////////////////
 
-/** @brief Matrix read-only iterator
+/** \brief Matrix read-only iterator
  */
 
 
 
 //////////////////////////////////// MatIterator_ ////////////////////////////////////
 
-/** @brief Matrix read-write iterator
+/** \brief Matrix read-write iterator
 */
 
 
 
 /////////////////////////////// SparseMatConstIterator ///////////////////////////////
 
-/**  @brief Read-Only Sparse Matrix Iterator.
-
+/**  \brief Read-Only Sparse Matrix Iterator.
+<p>
  Here is how to use the iterator to compute the sum of floating-point sparse matrix elements:
-
- \code
+<p>
+ <pre><code>
  SparseMatConstIterator it = m.begin(), it_end = m.end();
  double s = 0;
  CV_Assert( m.type() == CV_32F );
  for( ; it != it_end; ++it )
     s += it.value<float>();
- \endcode
+ </code></pre>
 */
 @Namespace("cv") @NoOffset public static class SparseMatConstIterator extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparseMatConstIterator(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SparseMatConstIterator(int size) { allocateArray(size); }
+    public SparseMatConstIterator(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public SparseMatConstIterator position(int position) {
         return (SparseMatConstIterator)super.position(position);
     }
 
     /** the default constructor */
-    public SparseMatConstIterator() { allocate(); }
+    public SparseMatConstIterator() { super((Pointer)null); allocate(); }
     private native void allocate();
     /** the full constructor setting the iterator to the first sparse matrix element */
-    public SparseMatConstIterator(@Const SparseMat _m) { allocate(_m); }
+    public SparseMatConstIterator(@Const SparseMat _m) { super((Pointer)null); allocate(_m); }
     private native void allocate(@Const SparseMat _m);
     /** the copy constructor */
-    public SparseMatConstIterator(@Const @ByRef SparseMatConstIterator it) { allocate(it); }
+    public SparseMatConstIterator(@Const @ByRef SparseMatConstIterator it) { super((Pointer)null); allocate(it); }
     private native void allocate(@Const @ByRef SparseMatConstIterator it);
 
     /** the assignment operator */
@@ -15869,8 +15869,8 @@ notation of some operations:
 
 ////////////////////////////////// SparseMatIterator /////////////////////////////////
 
-/** @brief  Read-write Sparse Matrix Iterator
-
+/** \brief  Read-write Sparse Matrix Iterator
+<p>
  The class is similar to cv::SparseMatConstIterator,
  but can be used for in-place modification of the matrix elements.
 */
@@ -15879,22 +15879,22 @@ notation of some operations:
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparseMatIterator(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SparseMatIterator(int size) { allocateArray(size); }
+    public SparseMatIterator(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public SparseMatIterator position(int position) {
         return (SparseMatIterator)super.position(position);
     }
 
     /** the default constructor */
-    public SparseMatIterator() { allocate(); }
+    public SparseMatIterator() { super((Pointer)null); allocate(); }
     private native void allocate();
     /** the full constructor setting the iterator to the first sparse matrix element */
-    public SparseMatIterator(SparseMat _m) { allocate(_m); }
+    public SparseMatIterator(SparseMat _m) { super((Pointer)null); allocate(_m); }
     private native void allocate(SparseMat _m);
     /** the full constructor setting the iterator to the specified sparse matrix element */
     
     /** the copy constructor */
-    public SparseMatIterator(@Const @ByRef SparseMatIterator it) { allocate(it); }
+    public SparseMatIterator(@Const @ByRef SparseMatIterator it) { super((Pointer)null); allocate(it); }
     private native void allocate(@Const @ByRef SparseMatIterator it);
 
     /** the assignment operator */
@@ -15913,8 +15913,8 @@ notation of some operations:
 
 /////////////////////////////// SparseMatConstIterator_ //////////////////////////////
 
-/** @brief  Template Read-Only Sparse Matrix Iterator Class.
-
+/** \brief  Template Read-Only Sparse Matrix Iterator Class.
+<p>
  This is the derived from SparseMatConstIterator class that
  introduces more convenient operator *() for accessing the current element.
 */
@@ -15923,8 +15923,8 @@ notation of some operations:
 
 ///////////////////////////////// SparseMatIterator_ /////////////////////////////////
 
-/** @brief  Template Read-Write Sparse Matrix Iterator Class.
-
+/** \brief  Template Read-Write Sparse Matrix Iterator Class.
+<p>
  This is the derived from cv::SparseMatConstIterator_ class that
  introduces more convenient operator *() for accessing the current element.
 */
@@ -15933,18 +15933,18 @@ notation of some operations:
 
 /////////////////////////////////// NAryMatIterator //////////////////////////////////
 
-/** @brief n-ary multi-dimensional array iterator.
-
+/** \brief n-ary multi-dimensional array iterator.
+<p>
 Use the class to implement unary, binary, and, generally, n-ary element-wise operations on
 multi-dimensional arrays. Some of the arguments of an n-ary function may be continuous arrays, some
 may be not. It is possible to use conventional MatIterator 's for each array but incrementing all of
 the iterators after each small operations may be a big overhead. In this case consider using
 NAryMatIterator to iterate through several matrices simultaneously as long as they have the same
-geometry (dimensionality and all the dimension sizes are the same). On each iteration `it.planes[0]`,
-`it.planes[1]`,... will be the slices of the corresponding matrices.
-
+geometry (dimensionality and all the dimension sizes are the same). On each iteration {@code it.planes[0]},
+{@code it.planes[1]},... will be the slices of the corresponding matrices.
+<p>
 The example below illustrates how you can compute a normalized and threshold 3D color histogram:
-@code
+<pre><code>
     void computeNormalizedColorHist(const Mat& image, Mat& hist, int N, double minProb)
     {
         const int histSize[] = {N, N, N};
@@ -15983,43 +15983,43 @@ The example below illustrates how you can compute a normalized and threshold 3D 
         for(int p = 0; p < it.nplanes; p++, ++it)
             it.planes[0] *= s;
     }
-@endcode
+</code></pre>
  */
 @Namespace("cv") @NoOffset public static class NAryMatIterator extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NAryMatIterator(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NAryMatIterator(int size) { allocateArray(size); }
+    public NAryMatIterator(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public NAryMatIterator position(int position) {
         return (NAryMatIterator)super.position(position);
     }
 
     /** the default constructor */
-    public NAryMatIterator() { allocate(); }
+    public NAryMatIterator() { super((Pointer)null); allocate(); }
     private native void allocate();
     /** the full constructor taking arbitrary number of n-dim matrices */
-    public NAryMatIterator(@Cast("const cv::Mat**") PointerPointer arrays, @Cast("uchar**") PointerPointer ptrs, int narrays/*=-1*/) { allocate(arrays, ptrs, narrays); }
+    public NAryMatIterator(@Cast("const cv::Mat**") PointerPointer arrays, @Cast("uchar**") PointerPointer ptrs, int narrays/*=-1*/) { super((Pointer)null); allocate(arrays, ptrs, narrays); }
     private native void allocate(@Cast("const cv::Mat**") PointerPointer arrays, @Cast("uchar**") PointerPointer ptrs, int narrays/*=-1*/);
-    public NAryMatIterator(@Const @ByPtrPtr Mat arrays, @Cast("uchar**") @ByPtrPtr BytePointer ptrs) { allocate(arrays, ptrs); }
+    public NAryMatIterator(@Const @ByPtrPtr Mat arrays, @Cast("uchar**") @ByPtrPtr BytePointer ptrs) { super((Pointer)null); allocate(arrays, ptrs); }
     private native void allocate(@Const @ByPtrPtr Mat arrays, @Cast("uchar**") @ByPtrPtr BytePointer ptrs);
-    public NAryMatIterator(@Const @ByPtrPtr Mat arrays, @Cast("uchar**") @ByPtrPtr BytePointer ptrs, int narrays/*=-1*/) { allocate(arrays, ptrs, narrays); }
+    public NAryMatIterator(@Const @ByPtrPtr Mat arrays, @Cast("uchar**") @ByPtrPtr BytePointer ptrs, int narrays/*=-1*/) { super((Pointer)null); allocate(arrays, ptrs, narrays); }
     private native void allocate(@Const @ByPtrPtr Mat arrays, @Cast("uchar**") @ByPtrPtr BytePointer ptrs, int narrays/*=-1*/);
-    public NAryMatIterator(@Const @ByPtrPtr Mat arrays, @Cast("uchar**") @ByPtrPtr ByteBuffer ptrs, int narrays/*=-1*/) { allocate(arrays, ptrs, narrays); }
+    public NAryMatIterator(@Const @ByPtrPtr Mat arrays, @Cast("uchar**") @ByPtrPtr ByteBuffer ptrs, int narrays/*=-1*/) { super((Pointer)null); allocate(arrays, ptrs, narrays); }
     private native void allocate(@Const @ByPtrPtr Mat arrays, @Cast("uchar**") @ByPtrPtr ByteBuffer ptrs, int narrays/*=-1*/);
-    public NAryMatIterator(@Const @ByPtrPtr Mat arrays, @Cast("uchar**") @ByPtrPtr ByteBuffer ptrs) { allocate(arrays, ptrs); }
+    public NAryMatIterator(@Const @ByPtrPtr Mat arrays, @Cast("uchar**") @ByPtrPtr ByteBuffer ptrs) { super((Pointer)null); allocate(arrays, ptrs); }
     private native void allocate(@Const @ByPtrPtr Mat arrays, @Cast("uchar**") @ByPtrPtr ByteBuffer ptrs);
-    public NAryMatIterator(@Const @ByPtrPtr Mat arrays, @Cast("uchar**") @ByPtrPtr byte[] ptrs, int narrays/*=-1*/) { allocate(arrays, ptrs, narrays); }
+    public NAryMatIterator(@Const @ByPtrPtr Mat arrays, @Cast("uchar**") @ByPtrPtr byte[] ptrs, int narrays/*=-1*/) { super((Pointer)null); allocate(arrays, ptrs, narrays); }
     private native void allocate(@Const @ByPtrPtr Mat arrays, @Cast("uchar**") @ByPtrPtr byte[] ptrs, int narrays/*=-1*/);
-    public NAryMatIterator(@Const @ByPtrPtr Mat arrays, @Cast("uchar**") @ByPtrPtr byte[] ptrs) { allocate(arrays, ptrs); }
+    public NAryMatIterator(@Const @ByPtrPtr Mat arrays, @Cast("uchar**") @ByPtrPtr byte[] ptrs) { super((Pointer)null); allocate(arrays, ptrs); }
     private native void allocate(@Const @ByPtrPtr Mat arrays, @Cast("uchar**") @ByPtrPtr byte[] ptrs);
     /** the full constructor taking arbitrary number of n-dim matrices */
-    public NAryMatIterator(@Cast("const cv::Mat**") PointerPointer arrays, Mat planes, int narrays/*=-1*/) { allocate(arrays, planes, narrays); }
+    public NAryMatIterator(@Cast("const cv::Mat**") PointerPointer arrays, Mat planes, int narrays/*=-1*/) { super((Pointer)null); allocate(arrays, planes, narrays); }
     private native void allocate(@Cast("const cv::Mat**") PointerPointer arrays, Mat planes, int narrays/*=-1*/);
-    public NAryMatIterator(@Const @ByPtrPtr Mat arrays, Mat planes) { allocate(arrays, planes); }
+    public NAryMatIterator(@Const @ByPtrPtr Mat arrays, Mat planes) { super((Pointer)null); allocate(arrays, planes); }
     private native void allocate(@Const @ByPtrPtr Mat arrays, Mat planes);
-    public NAryMatIterator(@Const @ByPtrPtr Mat arrays, Mat planes, int narrays/*=-1*/) { allocate(arrays, planes, narrays); }
+    public NAryMatIterator(@Const @ByPtrPtr Mat arrays, Mat planes, int narrays/*=-1*/) { super((Pointer)null); allocate(arrays, planes, narrays); }
     private native void allocate(@Const @ByPtrPtr Mat arrays, Mat planes, int narrays/*=-1*/);
     /** the separate iterator initialization method */
     public native void init(@Cast("const cv::Mat**") PointerPointer arrays, Mat planes, @Cast("uchar**") PointerPointer ptrs, int narrays/*=-1*/);
@@ -16101,37 +16101,37 @@ The example below illustrates how you can compute a normalized and threshold 3D 
     public native int type(@Const @ByRef MatExpr expr);
 }
 
-/** @brief Matrix expression representation
-@anchor MatrixExpressions
+/** \brief Matrix expression representation
+\anchor MatrixExpressions
 This is a list of implemented matrix operations that can be combined in arbitrary complex
 expressions (here A, B stand for matrices ( Mat ), s for a scalar ( Scalar ), alpha for a
 real-valued scalar ( double )):
--   Addition, subtraction, negation: `A+B`, `A-B`, `A+s`, `A-s`, `s+A`, `s-A`, `-A`
--   Scaling: `A*alpha`
--   Per-element multiplication and division: `A.mul(B)`, `A/B`, `alpha/A`
--   Matrix multiplication: `A*B`
--   Transposition: `A.t()` (means A<sup>T</sup>)
+-   Addition, subtraction, negation: {@code A+B}, {@code A-B}, {@code A+s}, {@code A-s}, {@code s+A}, {@code s-A}, {@code -A}
+-   Scaling: {@code A*alpha}
+-   Per-element multiplication and division: {@code A.mul(B)}, {@code A/B}, {@code alpha/A}
+-   Matrix multiplication: {@code A*B}
+-   Transposition: {@code A.t()} (means A<sup>T</sup>)
 -   Matrix inversion and pseudo-inversion, solving linear systems and least-squares problems:
-    `A.inv([method]) (~ A<sup>-1</sup>)`,   `A.inv([method])*B (~ X: AX=B)`
--   Comparison: `A cmpop B`, `A cmpop alpha`, `alpha cmpop A`, where *cmpop* is one of
-  `>`, `>=`, `==`, `!=`, `<=`, `<`. The result of comparison is an 8-bit single channel mask whose
+    {@code A.inv([method]) (~ A<sup>-1</sup>)},   {@code A.inv([method])*B (~ X: AX=B)}
+-   Comparison: {@code A cmpop B}, {@code A cmpop alpha}, {@code alpha cmpop A}, where *cmpop* is one of
+  {@code >}, {@code >=}, {@code ==}, {@code !=}, {@code <=}, {@code <}. The result of comparison is an 8-bit single channel mask whose
     elements are set to 255 (if the particular element or pair of elements satisfy the condition) or
     0.
--   Bitwise logical operations: `A logicop B`, `A logicop s`, `s logicop A`, `~A`, where *logicop* is one of
-  `&`, `|`, `^`.
--   Element-wise minimum and maximum: `min(A, B)`, `min(A, alpha)`, `max(A, B)`, `max(A, alpha)`
--   Element-wise absolute value: `abs(A)`
--   Cross-product, dot-product: `A.cross(B)`, `A.dot(B)`
+-   Bitwise logical operations: {@code A logicop B}, {@code A logicop s}, {@code s logicop A}, {@code ~A}, where *logicop* is one of
+  {@code &}, {@code |}, {@code ^}.
+-   Element-wise minimum and maximum: {@code min(A, B)}, {@code min(A, alpha)}, {@code max(A, B)}, {@code max(A, alpha)}
+-   Element-wise absolute value: {@code abs(A)}
+-   Cross-product, dot-product: {@code A.cross(B)}, {@code A.dot(B)}
 -   Any function of matrix or matrices and scalars that returns a matrix or a scalar, such as norm,
     mean, sum, countNonZero, trace, determinant, repeat, and others.
 -   Matrix initializers ( Mat::eye(), Mat::zeros(), Mat::ones() ), matrix comma-separated
     initializers, matrix constructors and operators that extract sub-matrices (see Mat description).
 -   Mat_<destination_type>() constructors to cast the result to the proper type.
-@note Comma-separated initializers and probably some other operations may require additional
+\note Comma-separated initializers and probably some other operations may require additional
 explicit Mat() or Mat_<T>() constructor calls to resolve a possible ambiguity.
-
+<p>
 Here are examples of matrix expressions:
-@code
+<pre><code>
     // compute pseudo-inverse of A, equivalent to A.inv(DECOMP_SVD)
     SVD svd(A);
     Mat pinvA = svd.vt.t()*Mat::diag(1./svd.w)*svd.u.t();
@@ -16145,29 +16145,29 @@ Here are examples of matrix expressions:
     Mat lowConstrastMask = abs(img - blurred) < threshold;
     Mat sharpened = img*(1+amount) + blurred*(-amount);
     img.copyTo(sharpened, lowContrastMask);
-@endcode
+</code></pre>
 */
 @Namespace("cv") @NoOffset public static class MatExpr extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MatExpr(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public MatExpr(int size) { allocateArray(size); }
+    public MatExpr(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public MatExpr position(int position) {
         return (MatExpr)super.position(position);
     }
 
-    public MatExpr() { allocate(); }
+    public MatExpr() { super((Pointer)null); allocate(); }
     private native void allocate();
-    public MatExpr(@Const @ByRef Mat m) { allocate(m); }
+    public MatExpr(@Const @ByRef Mat m) { super((Pointer)null); allocate(m); }
     private native void allocate(@Const @ByRef Mat m);
 
     public MatExpr(@Const MatOp _op, int _flags, @Const @ByRef(nullValue = "cv::Mat()") Mat _a/*=cv::Mat()*/, @Const @ByRef(nullValue = "cv::Mat()") Mat _b/*=cv::Mat()*/,
-                @Const @ByRef(nullValue = "cv::Mat()") Mat _c/*=cv::Mat()*/, double _alpha/*=1*/, double _beta/*=1*/, @Const @ByRef(nullValue = "cv::Scalar()") Scalar _s/*=cv::Scalar()*/) { allocate(_op, _flags, _a, _b, _c, _alpha, _beta, _s); }
+                @Const @ByRef(nullValue = "cv::Mat()") Mat _c/*=cv::Mat()*/, double _alpha/*=1*/, double _beta/*=1*/, @Const @ByRef(nullValue = "cv::Scalar()") Scalar _s/*=cv::Scalar()*/) { super((Pointer)null); allocate(_op, _flags, _a, _b, _c, _alpha, _beta, _s); }
     private native void allocate(@Const MatOp _op, int _flags, @Const @ByRef(nullValue = "cv::Mat()") Mat _a/*=cv::Mat()*/, @Const @ByRef(nullValue = "cv::Mat()") Mat _b/*=cv::Mat()*/,
                 @Const @ByRef(nullValue = "cv::Mat()") Mat _c/*=cv::Mat()*/, double _alpha/*=1*/, double _beta/*=1*/, @Const @ByRef(nullValue = "cv::Scalar()") Scalar _s/*=cv::Scalar()*/);
-    public MatExpr(@Const MatOp _op, int _flags) { allocate(_op, _flags); }
+    public MatExpr(@Const MatOp _op, int _flags) { super((Pointer)null); allocate(_op, _flags); }
     private native void allocate(@Const MatOp _op, int _flags);
 
     public native @ByVal @Name("operator cv::Mat") Mat asMat();
@@ -16204,10 +16204,10 @@ Here are examples of matrix expressions:
     public native @ByRef Scalar s(); public native MatExpr s(Scalar s);
 }
 
-/** @} core_basic
+/** \} core_basic
 
- *  @relates cv::MatExpr
- *  @{ */
+ *  \relates cv::MatExpr
+ *  \{ */
 @Namespace("cv") public static native @ByVal @Name("operator +") MatExpr add(@Const @ByRef Mat a, @Const @ByRef Mat b);
 @Namespace("cv") public static native @ByVal @Name("operator +") MatExpr add(@Const @ByRef Mat a, @Const @ByRef Scalar s);
 @Namespace("cv") public static native @ByVal @Name("operator +") MatExpr add(@Const @ByRef Scalar s, @Const @ByRef Mat a);
@@ -16293,25 +16293,25 @@ Here are examples of matrix expressions:
 @Namespace("cv") public static native @ByVal MatExpr max(@Const @ByRef Mat a, double s);
 @Namespace("cv") public static native @ByVal MatExpr max(double s, @Const @ByRef Mat a);
 
-/** @brief Calculates an absolute value of each matrix element.
-
+/** \brief Calculates an absolute value of each matrix element.
+<p>
 abs is a meta-function that is expanded to one of absdiff or convertScaleAbs forms:
-- C = abs(A-B) is equivalent to `absdiff(A, B, C)`
-- C = abs(A) is equivalent to `absdiff(A, Scalar::all(0), C)`
-- C = `Mat_<Vec<uchar,n> >(abs(A*alpha + beta))` is equivalent to `convertScaleAbs(A, C, alpha,
-beta)`
-
+- C = abs(A-B) is equivalent to {@code absdiff(A, B, C)}
+- C = abs(A) is equivalent to {@code absdiff(A, Scalar::all(0), C)}
+- C = {@code Mat_<Vec<uchar,n> >(abs(A*alpha + beta))} is equivalent to {@code convertScaleAbs(A, C, alpha,
+beta)}
+<p>
 The output matrix has the same size and the same type as the input one except for the last case,
 where C is depth=CV_8U .
 @param m matrix.
-@sa @ref MatrixExpressions, absdiff, convertScaleAbs
+\sa \ref MatrixExpressions, absdiff, convertScaleAbs
  */
 @Namespace("cv") public static native @ByVal MatExpr abs(@Const @ByRef Mat m);
-/** @overload
+/** \overload
 @param e matrix expression.
 */
 @Namespace("cv") public static native @ByVal MatExpr abs(@Const @ByRef MatExpr e);
-/** @} relates cv::MatExpr */
+/** \} relates cv::MatExpr */
 
  // cv
 
@@ -16371,20 +16371,20 @@ where C is depth=CV_8U .
 // #ifndef __cplusplus
 // #endif
 
-/** @addtogroup core_c
- *  @{
+/** \addtogroup core_c
+ *  \{
 
-/** @brief "black box" representation of the file storage associated with a file on disk.
-
+/** \brief "black box" representation of the file storage associated with a file on disk.
+<p>
 Several functions that are described below take CvFileStorage\* as inputs and allow the user to
 save or to load hierarchical collections that consist of scalar values, standard CXCore objects
 (such as matrices, sequences, graphs), and user-defined objects.
-
+<p>
 OpenCV can read and write data in XML (<http://www.w3c.org/XML>) or YAML (<http://www.yaml.org>)
 formats. Below is an example of 3x3 floating-point identity matrix A, stored in XML and YAML files
 using CXCore functions:
 XML:
-@code{.xml}
+<pre><code>{.xml}
     <?xml version="1.0">
     <opencv_storage>
     <A type_id="opencv-matrix">
@@ -16394,30 +16394,30 @@ XML:
       <data>1. 0. 0. 0. 1. 0. 0. 0. 1.</data>
     </A>
     </opencv_storage>
-@endcode
+</code></pre>
 YAML:
-@code{.yaml}
+<pre><code>{.yaml}
     %YAML:1.0
     A: !!opencv-matrix
       rows: 3
       cols: 3
       dt: f
       data: [ 1., 0., 0., 0., 1., 0., 0., 0., 1.]
-@endcode
+</code></pre>
 As it can be seen from the examples, XML uses nested tags to represent hierarchy, while YAML uses
 indentation for that purpose (similar to the Python programming language).
-
+<p>
 The same functions can read and write data in both formats; the particular format is determined by
 the extension of the opened file, ".xml" for XML files and ".yml" or ".yaml" for YAML.
  */
 
-/** @} core_c */
+/** \} core_c */
 
 // #include "opencv2/core/types.hpp"
 // #include "opencv2/core/mat.hpp"
 
-/** @addtogroup core_xml
-
+/** \addtogroup core_xml
+<p>
 XML/YAML file storages.     {#xml_storage}
 =======================
 Writing to a file storage.
@@ -16426,18 +16426,18 @@ You can store and then restore various OpenCV data structures to/from XML (<http
 or YAML (<http://www.yaml.org>) formats. Also, it is possible store and load arbitrarily complex
 data structures, which include OpenCV data structures, as well as primitive data types (integer and
 floating-point numbers and text strings) as their elements.
-
+<p>
 Use the following procedure to write something to XML or YAML:
 -# Create new FileStorage and open it for writing. It can be done with a single call to
 FileStorage::FileStorage constructor that takes a filename, or you can use the default constructor
 and then call FileStorage::open. Format of the file (XML or YAML) is determined from the filename
 extension (".xml" and ".yml"/".yaml", respectively)
--# Write all the data you want using the streaming operator `<<`, just like in the case of STL
+-# Write all the data you want using the streaming operator {@code <<}, just like in the case of STL
 streams.
 -# Close the file using FileStorage::release. FileStorage destructor also closes the file.
-
+<p>
 Here is an example:
-@code
+<pre><code>
     #include "opencv2/opencv.hpp"
     #include <time.h>
 
@@ -16469,11 +16469,11 @@ Here is an example:
         fs.release();
         return 0;
     }
-@endcode
+</code></pre>
 The sample above stores to XML and integer, text string (calibration date), 2 matrices, and a custom
 structure "feature", which includes feature coordinates and LBP (local binary pattern) value. Here
 is output of the sample:
-@code{.yaml}
+<pre><code>{.yaml}
 %YAML:1.0
 frameCount: 5
 calibrationDate: "Fri Jun 17 14:09:29 2011\n"
@@ -16492,56 +16492,56 @@ features:
    - { x:167, y:49, lbp:[ 1, 0, 0, 1, 1, 0, 1, 1 ] }
    - { x:298, y:130, lbp:[ 0, 0, 0, 1, 0, 0, 1, 1 ] }
    - { x:344, y:158, lbp:[ 1, 1, 0, 0, 0, 0, 1, 0 ] }
-@endcode
-
+</code></pre>
+<p>
 As an exercise, you can replace ".yml" with ".xml" in the sample above and see, how the
 corresponding XML file will look like.
-
+<p>
 Several things can be noted by looking at the sample code and the output:
-
+<p>
 -   The produced YAML (and XML) consists of heterogeneous collections that can be nested. There are 2
     types of collections: named collections (mappings) and unnamed collections (sequences). In mappings
     each element has a name and is accessed by name. This is similar to structures and std::map in
     C/C++ and dictionaries in Python. In sequences elements do not have names, they are accessed by
     indices. This is similar to arrays and std::vector in C/C++ and lists, tuples in Python.
     "Heterogeneous" means that elements of each single collection can have different types.
-
+<p>
     Top-level collection in YAML/XML is a mapping. Each matrix is stored as a mapping, and the matrix
     elements are stored as a sequence. Then, there is a sequence of features, where each feature is
     represented a mapping, and lbp value in a nested sequence.
-
+<p>
 -   When you write to a mapping (a structure), you write element name followed by its value. When you
     write to a sequence, you simply write the elements one by one. OpenCV data structures (such as
-    cv::Mat) are written in absolutely the same way as simple C data structures - using `<<`
+    cv::Mat) are written in absolutely the same way as simple C data structures - using {@code <<}
     operator.
-
--   To write a mapping, you first write the special string `{` to the storage, then write the
-    elements as pairs (`fs << <element_name> << <element_value>`) and then write the closing
-    `}`.
-
--   To write a sequence, you first write the special string `[`, then write the elements, then
-    write the closing `]`.
-
+<p>
+-   To write a mapping, you first write the special string {@code {} to the storage, then write the
+    elements as pairs ({@code fs << <element_name> << <element_value>}) and then write the closing
+    {@code }}.
+<p>
+-   To write a sequence, you first write the special string {@code [}, then write the elements, then
+    write the closing {@code ]}.
+<p>
 -   In YAML (but not XML), mappings and sequences can be written in a compact Python-like inline
     form. In the sample above matrix elements, as well as each feature, including its lbp value, is
-    stored in such inline form. To store a mapping/sequence in a compact form, put `:` after the
-    opening character, e.g. use `{:` instead of `{` and `[:` instead of `[`. When the
-    data is written to XML, those extra `:` are ignored.
-
+    stored in such inline form. To store a mapping/sequence in a compact form, put {@code :} after the
+    opening character, e.g. use {@code {:} instead of {@code {} and {@code [:} instead of {@code [}. When the
+    data is written to XML, those extra {@code :} are ignored.
+<p>
 Reading data from a file storage.
 ---------------------------------
 To read the previously written XML or YAML file, do the following:
 -#  Open the file storage using FileStorage::FileStorage constructor or FileStorage::open method.
     In the current implementation the whole file is parsed and the whole representation of file
     storage is built in memory as a hierarchy of file nodes (see FileNode)
-
+<p>
 -#  Read the data you are interested in. Use FileStorage::operator [], FileNode::operator []
     and/or FileNodeIterator.
-
+<p>
 -#  Close the storage using FileStorage::release.
-
+<p>
 Here is how to read the file created by the code sample above:
-@code
+<pre><code>
     FileStorage fs2("test.yml", FileStorage::READ);
 
     // first method: use (type) operator on FileNode.
@@ -16577,38 +16577,38 @@ Here is how to read the file created by the code sample above:
         cout << ")" << endl;
     }
     fs2.release();
-@endcode
-
+</code></pre>
+<p>
 Format specification    {#format_spec}
 --------------------
-`([count]{u|c|w|s|i|f|d})`... where the characters correspond to fundamental C++ types:
--   `u` 8-bit unsigned number
--   `c` 8-bit signed number
--   `w` 16-bit unsigned number
--   `s` 16-bit signed number
--   `i` 32-bit signed number
--   `f` single precision floating-point number
--   `d` double precision floating-point number
--   `r` pointer, 32 lower bits of which are written as a signed integer. The type can be used to
+{@code ([count]{u|c|w|s|i|f|d})}... where the characters correspond to fundamental C++ types:
+-   {@code u} 8-bit unsigned number
+-   {@code c} 8-bit signed number
+-   {@code w} 16-bit unsigned number
+-   {@code s} 16-bit signed number
+-   {@code i} 32-bit signed number
+-   {@code f} single precision floating-point number
+-   {@code d} double precision floating-point number
+-   {@code r} pointer, 32 lower bits of which are written as a signed integer. The type can be used to
     store structures with links between the elements.
-
-`count` is the optional counter of values of a given type. For example, `2if` means that each array
+<p>
+{@code count} is the optional counter of values of a given type. For example, {@code 2if} means that each array
 element is a structure of 2 integers, followed by a single-precision floating-point number. The
-equivalent notations of the above specification are `iif`, `2i1f` and so forth. Other examples: `u`
-means that the array consists of bytes, and `2d` means the array consists of pairs of doubles.
-
-@see @ref filestorage.cpp
+equivalent notations of the above specification are {@code iif}, {@code 2i1f} and so forth. Other examples: {@code u}
+means that the array consists of bytes, and {@code 2d} means the array consists of pairs of doubles.
+<p>
+@see \ref filestorage.cpp
 */
 
-/** @{
+/** \{
 
-/** @example filestorage.cpp
+/** \example filestorage.cpp
 A complete example using the FileStorage interface
 */
 
 ////////////////////////// XML & YAML I/O ////////////////////////// */
 
-/** @brief XML/YAML file storage class that encapsulates all the information necessary for writing or reading
+/** \brief XML/YAML file storage class that encapsulates all the information necessary for writing or reading
 data to/from a file.
  */
 @Namespace("cv") @NoOffset public static class FileStorage extends Pointer {
@@ -16616,7 +16616,7 @@ data to/from a file.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FileStorage(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FileStorage(int size) { allocateArray(size); }
+    public FileStorage(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public FileStorage position(int position) {
         return (FileStorage)super.position(position);
@@ -16649,15 +16649,15 @@ data to/from a file.
         NAME_EXPECTED  = 2,
         INSIDE_MAP     = 4;
 
-    /** @brief The constructors.
-
+    /** \brief The constructors.
+<p>
     The full constructor opens the file. Alternatively you can use the default constructor and then
     call FileStorage::open.
      */
-    public FileStorage() { allocate(); }
+    public FileStorage() { super((Pointer)null); allocate(); }
     private native void allocate();
 
-    /** @overload
+    /** \overload
     @param source Name of the file to open or the text string to read the data from. Extension of the
     file (.xml or .yml/.yaml) determines its format (XML or YAML respectively). Also you can append .gz
     to work with compressed files, for example myHugeMatrix.xml.gz. If both FileStorage::WRITE and
@@ -16667,25 +16667,25 @@ data to/from a file.
     @param encoding Encoding of the file. Note that UTF-16 XML encoding is not supported currently and
     you should use 8-bit encoding instead of it.
     */
-    public FileStorage(@Str BytePointer source, int flags, @Str BytePointer encoding/*=cv::String()*/) { allocate(source, flags, encoding); }
+    public FileStorage(@Str BytePointer source, int flags, @Str BytePointer encoding/*=cv::String()*/) { super((Pointer)null); allocate(source, flags, encoding); }
     private native void allocate(@Str BytePointer source, int flags, @Str BytePointer encoding/*=cv::String()*/);
-    public FileStorage(@Str BytePointer source, int flags) { allocate(source, flags); }
+    public FileStorage(@Str BytePointer source, int flags) { super((Pointer)null); allocate(source, flags); }
     private native void allocate(@Str BytePointer source, int flags);
-    public FileStorage(@Str String source, int flags, @Str String encoding/*=cv::String()*/) { allocate(source, flags, encoding); }
+    public FileStorage(@Str String source, int flags, @Str String encoding/*=cv::String()*/) { super((Pointer)null); allocate(source, flags, encoding); }
     private native void allocate(@Str String source, int flags, @Str String encoding/*=cv::String()*/);
-    public FileStorage(@Str String source, int flags) { allocate(source, flags); }
+    public FileStorage(@Str String source, int flags) { super((Pointer)null); allocate(source, flags); }
     private native void allocate(@Str String source, int flags);
 
-    /** @overload */
-    public FileStorage(CvFileStorage fs, @Cast("bool") boolean owning/*=true*/) { allocate(fs, owning); }
+    /** \overload */
+    public FileStorage(CvFileStorage fs, @Cast("bool") boolean owning/*=true*/) { super((Pointer)null); allocate(fs, owning); }
     private native void allocate(CvFileStorage fs, @Cast("bool") boolean owning/*=true*/);
-    public FileStorage(CvFileStorage fs) { allocate(fs); }
+    public FileStorage(CvFileStorage fs) { super((Pointer)null); allocate(fs); }
     private native void allocate(CvFileStorage fs);
 
     /** the destructor. calls release() */
 
-    /** @brief Opens a file.
-
+    /** \brief Opens a file.
+<p>
     See description of parameters in FileStorage::FileStorage. The method calls FileStorage::release
     before opening the file.
     @param filename Name of the file to open or the text string to read the data from.
@@ -16702,60 +16702,60 @@ data to/from a file.
     public native @Cast("bool") boolean open(@Str String filename, int flags, @Str String encoding/*=cv::String()*/);
     public native @Cast("bool") boolean open(@Str String filename, int flags);
 
-    /** @brief Checks whether the file is opened.
-
-    @returns true if the object is associated with the current file and false otherwise. It is a
+    /** \brief Checks whether the file is opened.
+<p>
+    @return true if the object is associated with the current file and false otherwise. It is a
     good practice to call this method after you tried to open a file.
      */
     public native @Cast("bool") boolean isOpened();
 
-    /** @brief Closes the file and releases all the memory buffers.
-
+    /** \brief Closes the file and releases all the memory buffers.
+<p>
     Call this method after all I/O operations with the storage are finished.
      */
     public native void release();
 
-    /** @brief Closes the file and releases all the memory buffers.
-
+    /** \brief Closes the file and releases all the memory buffers.
+<p>
     Call this method after all I/O operations with the storage are finished. If the storage was
     opened for writing data and FileStorage::WRITE was specified
      */
     public native @Str BytePointer releaseAndGetString();
 
-    /** @brief Returns the first element of the top-level mapping.
-    @returns The first element of the top-level mapping.
+    /** \brief Returns the first element of the top-level mapping.
+    @return The first element of the top-level mapping.
      */
     public native @ByVal FileNode getFirstTopLevelNode();
 
-    /** @brief Returns the top-level mapping
+    /** \brief Returns the top-level mapping
     @param streamidx Zero-based index of the stream. In most cases there is only one stream in the file.
     However, YAML supports multiple streams and so there can be several.
-    @returns The top-level mapping.
+    @return The top-level mapping.
      */
     public native @ByVal FileNode root(int streamidx/*=0*/);
     public native @ByVal FileNode root();
 
-    /** @brief Returns the specified element of the top-level mapping.
+    /** \brief Returns the specified element of the top-level mapping.
     @param nodename Name of the file node.
-    @returns Node with the given name.
+    @return Node with the given name.
      */
     public native @ByVal @Name("operator []") FileNode get(@Str BytePointer nodename);
     public native @ByVal @Name("operator []") FileNode get(@Str String nodename);
 
-    /** @overload */
+    /** \overload */
 
-    /** @brief Returns the obsolete C FileStorage structure.
-    @returns Pointer to the underlying C FileStorage structure
+    /** \brief Returns the obsolete C FileStorage structure.
+    @return Pointer to the underlying C FileStorage structure
      */
     public native @Name("operator *") CvFileStorage multiply();
 
-    /** @overload */
+    /** \overload */
 
-    /** @brief Writes multiple numbers.
-
+    /** \brief Writes multiple numbers.
+<p>
     Writes one or more numbers of the specified format to the currently written structure. Usually it is
-    more convenient to use operator `<<` instead of this method.
-    @param fmt Specification of each array element, see @ref format_spec "format specification"
+    more convenient to use operator {@code <<} instead of this method.
+    @param fmt Specification of each array element, see \ref format_spec "format specification"
     @param vec Pointer to the written array.
     @param len Number of the uchar elements to write.
      */
@@ -16766,7 +16766,7 @@ data to/from a file.
     public native void writeRaw( @Str BytePointer fmt, @Cast("const uchar*") ByteBuffer vec, @Cast("size_t") long len );
     public native void writeRaw( @Str String fmt, @Cast("const uchar*") byte[] vec, @Cast("size_t") long len );
 
-    /** @brief Writes the registered C structure (CvMat, CvMatND, CvSeq).
+    /** \brief Writes the registered C structure (CvMat, CvMatND, CvSeq).
     @param name Name of the written object.
     @param obj Pointer to the object.
     @see ocvWrite for details.
@@ -16774,9 +16774,9 @@ data to/from a file.
     public native void writeObj( @Str BytePointer name, @Const Pointer obj );
     public native void writeObj( @Str String name, @Const Pointer obj );
 
-    /** @brief Returns the normalized object name for the specified name of a file.
+    /** \brief Returns the normalized object name for the specified name of a file.
     @param filename Name of a file
-    @returns The normalized object name.
+    @return The normalized object name.
      */
     public static native @Str BytePointer getDefaultObjectName(@Str BytePointer filename);
     public static native @Str String getDefaultObjectName(@Str String filename);
@@ -16793,15 +16793,15 @@ data to/from a file.
 
 
 
-/** @brief File Storage Node class.
-
+/** \brief File Storage Node class.
+<p>
 The node is used to store each and every element of the file storage opened for reading. When
 XML/YAML file is read, it is first parsed and stored in the memory as a hierarchical collection of
 nodes. Each node can be a “leaf” that is contain a single number or a string, or be a collection of
 other nodes. There can be named collections (mappings) where each element has a name and it is
 accessed by a name, and ordered collections (sequences) where elements do not have names but rather
 accessed by index. Type of the file node can be determined using FileNode::type method.
-
+<p>
 Note that file nodes are only used for navigating file storages opened for reading. When a file
 storage is opened for writing, no data is stored in memory after it is written.
  */
@@ -16810,7 +16810,7 @@ storage is opened for writing, no data is stored in memory after it is written.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FileNode(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FileNode(int size) { allocateArray(size); }
+    public FileNode(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public FileNode position(int position) {
         return (FileNode)super.position(position);
@@ -16846,45 +16846,45 @@ storage is opened for writing, no data is stored in memory after it is written.
         EMPTY     = 32,
         /** the node has a name (i.e. it is element of a mapping) */
         NAMED     = 64;
-    /** @brief The constructors.
-
+    /** \brief The constructors.
+<p>
     These constructors are used to create a default file node, construct it from obsolete structures or
     from the another file node.
      */
-    public FileNode() { allocate(); }
+    public FileNode() { super((Pointer)null); allocate(); }
     private native void allocate();
 
-    /** @overload
+    /** \overload
     @param fs Pointer to the obsolete file storage structure.
     @param node File node to be used as initialization for the created file node.
     */
-    public FileNode(@Const CvFileStorage fs, @Const CvFileNode node) { allocate(fs, node); }
+    public FileNode(@Const CvFileStorage fs, @Const CvFileNode node) { super((Pointer)null); allocate(fs, node); }
     private native void allocate(@Const CvFileStorage fs, @Const CvFileNode node);
 
-    /** @overload
+    /** \overload
     @param node File node to be used as initialization for the created file node.
     */
-    public FileNode(@Const @ByRef FileNode node) { allocate(node); }
+    public FileNode(@Const @ByRef FileNode node) { super((Pointer)null); allocate(node); }
     private native void allocate(@Const @ByRef FileNode node);
 
-    /** @brief Returns element of a mapping node or a sequence node.
+    /** \brief Returns element of a mapping node or a sequence node.
     @param nodename Name of an element in the mapping node.
-    @returns Returns the element with the given identifier.
+    @return Returns the element with the given identifier.
      */
     public native @ByVal @Name("operator []") FileNode get(@Str BytePointer nodename);
     public native @ByVal @Name("operator []") FileNode get(@Str String nodename);
 
-    /** @overload
+    /** \overload
     @param nodename Name of an element in the mapping node.
     */
 
-    /** @overload
+    /** \overload
     @param i Index of an element in the sequence node.
     */
     public native @ByVal @Name("operator []") FileNode get(int i);
 
-    /** @brief Returns type of the node.
-    @returns Type of the node. See FileNode::Type
+    /** \brief Returns type of the node.
+    @return Type of the node. See FileNode::Type
      */
     public native int type();
 
@@ -16928,10 +16928,10 @@ storage is opened for writing, no data is stored in memory after it is written.
     /** returns iterator pointing to the element following the last node element */
     public native @ByVal FileNodeIterator end();
 
-    /** @brief Reads node elements to the buffer with the specified format.
-
-    Usually it is more convenient to use operator `>>` instead of this method.
-    @param fmt Specification of each array element. See @ref format_spec "format specification"
+    /** \brief Reads node elements to the buffer with the specified format.
+<p>
+    Usually it is more convenient to use operator {@code >>} instead of this method.
+    @param fmt Specification of each array element. See \ref format_spec "format specification"
     @param vec Pointer to the destination array.
     @param len Number of elements to read. If it is greater than number of remaining elements then all
     of them will be read.
@@ -16952,8 +16952,8 @@ storage is opened for writing, no data is stored in memory after it is written.
 }
 
 
-/** @brief used to iterate through sequences and mappings.
-
+/** \brief used to iterate through sequences and mappings.
+<p>
 A standard STL notation, with node.begin(), node.end() denoting the beginning and the end of a
 sequence, stored in node. See the data reading sample in the beginning of the section.
  */
@@ -16962,34 +16962,34 @@ sequence, stored in node. See the data reading sample in the beginning of the se
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FileNodeIterator(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FileNodeIterator(int size) { allocateArray(size); }
+    public FileNodeIterator(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public FileNodeIterator position(int position) {
         return (FileNodeIterator)super.position(position);
     }
 
-    /** @brief The constructors.
-
+    /** \brief The constructors.
+<p>
     These constructors are used to create a default iterator, set it to specific element in a file node
     or construct it from another iterator.
      */
-    public FileNodeIterator() { allocate(); }
+    public FileNodeIterator() { super((Pointer)null); allocate(); }
     private native void allocate();
 
-    /** @overload
+    /** \overload
     @param fs File storage for the iterator.
     @param node File node for the iterator.
     @param ofs Index of the element in the node. The created iterator will point to this element.
     */
-    public FileNodeIterator(@Const CvFileStorage fs, @Const CvFileNode node, @Cast("size_t") long ofs/*=0*/) { allocate(fs, node, ofs); }
+    public FileNodeIterator(@Const CvFileStorage fs, @Const CvFileNode node, @Cast("size_t") long ofs/*=0*/) { super((Pointer)null); allocate(fs, node, ofs); }
     private native void allocate(@Const CvFileStorage fs, @Const CvFileNode node, @Cast("size_t") long ofs/*=0*/);
-    public FileNodeIterator(@Const CvFileStorage fs, @Const CvFileNode node) { allocate(fs, node); }
+    public FileNodeIterator(@Const CvFileStorage fs, @Const CvFileNode node) { super((Pointer)null); allocate(fs, node); }
     private native void allocate(@Const CvFileStorage fs, @Const CvFileNode node);
 
-    /** @overload
+    /** \overload
     @param it Iterator to be used as initialization for the created iterator.
     */
-    public FileNodeIterator(@Const @ByRef FileNodeIterator it) { allocate(it); }
+    public FileNodeIterator(@Const @ByRef FileNodeIterator it) { super((Pointer)null); allocate(it); }
     private native void allocate(@Const @ByRef FileNodeIterator it);
 
     /** returns the currently observed element */
@@ -17010,10 +17010,10 @@ sequence, stored in node. See the data reading sample in the beginning of the se
     /** moves iterator backward by the specified offset (possibly negative) */
     public native @ByRef @Name("operator -=") FileNodeIterator subtractPut(int ofs);
 
-    /** @brief Reads node elements to the buffer with the specified format.
-
-    Usually it is more convenient to use operator `>>` instead of this method.
-    @param fmt Specification of each array element. See @ref format_spec "format specification"
+    /** \brief Reads node elements to the buffer with the specified format.
+<p>
+    Usually it is more convenient to use operator {@code >>} instead of this method.
+    @param fmt Specification of each array element. See \ref format_spec "format specification"
     @param vec Pointer to the destination array.
     @param maxCount Number of elements to read. If it is greater than number of remaining elements then
     all of them will be read.
@@ -17040,9 +17040,9 @@ sequence, stored in node. See the data reading sample in the beginning of the se
     public static class SeqReader extends Pointer {
         static { Loader.load(); }
         /** Default native constructor. */
-        public SeqReader() { allocate(); }
+        public SeqReader() { super((Pointer)null); allocate(); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public SeqReader(int size) { allocateArray(size); }
+        public SeqReader(int size) { super((Pointer)null); allocateArray(size); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public SeqReader(Pointer p) { super(p); }
         private native void allocate();
@@ -17067,12 +17067,12 @@ sequence, stored in node. See the data reading sample in the beginning of the se
     public native @Cast("size_t") long remaining(); public native FileNodeIterator remaining(long remaining);
 }
 
-/** @} core_xml
+/** \} core_xml
 
 /////////////////// XML & YAML I/O implementation //////////////////
 
- *  @relates cv::FileStorage
- *  @{ */
+ *  \relates cv::FileStorage
+ *  \{ */
 
 @Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str BytePointer name, int value );
 @Namespace("cv") public static native void write( @ByRef FileStorage fs, @Str String name, int value );
@@ -17097,10 +17097,10 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native void writeScalar( @ByRef FileStorage fs, @Str BytePointer value );
 @Namespace("cv") public static native void writeScalar( @ByRef FileStorage fs, @Str String value );
 
-/** @}
+/** \}
 
- *  @relates cv::FileNode
- *  @{ */
+ *  \relates cv::FileNode
+ *  \{ */
 
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef IntPointer value, int default_value);
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef IntBuffer value, int default_value);
@@ -17122,15 +17122,15 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef Range value, @Const @ByRef Range default_value);
 
-/** @}
+/** \}
 
-/** @brief Writes string to a file storage.
-@relates cv::FileStorage
+/** \brief Writes string to a file storage.
+\relates cv::FileStorage
  */
 @Namespace("cv") public static native @ByRef @Name("operator <<") FileStorage shiftLeft(@ByRef FileStorage fs, @Str BytePointer str);
 @Namespace("cv") public static native @ByRef @Name("operator <<") FileStorage shiftLeft(@ByRef FileStorage fs, @Str String str);
 
-/** @cond IGNORED */
+/** \cond IGNORED */
     @Namespace("cv::internal") @NoOffset public static class WriteStructContext extends Pointer {
         static { Loader.load(); }
         /** Empty constructor. */
@@ -17138,22 +17138,22 @@ sequence, stored in node. See the data reading sample in the beginning of the se
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public WriteStructContext(Pointer p) { super(p); }
     
-        public WriteStructContext(@ByRef FileStorage _fs, @Str BytePointer name, int flags, @Str BytePointer typeName/*=cv::String()*/) { allocate(_fs, name, flags, typeName); }
+        public WriteStructContext(@ByRef FileStorage _fs, @Str BytePointer name, int flags, @Str BytePointer typeName/*=cv::String()*/) { super((Pointer)null); allocate(_fs, name, flags, typeName); }
         private native void allocate(@ByRef FileStorage _fs, @Str BytePointer name, int flags, @Str BytePointer typeName/*=cv::String()*/);
-        public WriteStructContext(@ByRef FileStorage _fs, @Str BytePointer name, int flags) { allocate(_fs, name, flags); }
+        public WriteStructContext(@ByRef FileStorage _fs, @Str BytePointer name, int flags) { super((Pointer)null); allocate(_fs, name, flags); }
         private native void allocate(@ByRef FileStorage _fs, @Str BytePointer name, int flags);
-        public WriteStructContext(@ByRef FileStorage _fs, @Str String name, int flags, @Str String typeName/*=cv::String()*/) { allocate(_fs, name, flags, typeName); }
+        public WriteStructContext(@ByRef FileStorage _fs, @Str String name, int flags, @Str String typeName/*=cv::String()*/) { super((Pointer)null); allocate(_fs, name, flags, typeName); }
         private native void allocate(@ByRef FileStorage _fs, @Str String name, int flags, @Str String typeName/*=cv::String()*/);
-        public WriteStructContext(@ByRef FileStorage _fs, @Str String name, int flags) { allocate(_fs, name, flags); }
+        public WriteStructContext(@ByRef FileStorage _fs, @Str String name, int flags) { super((Pointer)null); allocate(_fs, name, flags); }
         private native void allocate(@ByRef FileStorage _fs, @Str String name, int flags);
     }
 
  // internal
 
-/** @endcond
+/** \endcond
 
- *  @relates cv::FileStorage
- *  @{ */
+ *  \relates cv::FileStorage
+ *  \{ */
 
 @Namespace("cv") public static native void write( @ByRef FileStorage fs, int value );
 
@@ -17169,10 +17169,10 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str BytePointer name, @Const @ByRef Range r );
 @Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str String name, @Const @ByRef Range r );
 
-/** @} FileStorage
+/** \} FileStorage
 
- *  @relates cv::FileNode
- *  @{ */
+ *  \relates cv::FileNode
+ *  \{ */
 
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("bool*") @ByRef BoolPointer value, @Cast("bool") boolean default_value);
 
@@ -17184,48 +17184,48 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("ushort*") @ByRef ShortBuffer value, @Cast("ushort") short default_value);
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("ushort*") @ByRef short[] value, @Cast("ushort") short default_value);
 
-/** @} FileNode
+/** \} FileNode
 
- *  @relates cv::FileStorage
- *  @{
+ *  \relates cv::FileStorage
+ *  \{
 
-/** @brief Writes data to a file storage.
+/** \brief Writes data to a file storage.
  */
 
-/** @brief Writes data to a file storage.
+/** \brief Writes data to a file storage.
  */
 
-/** @brief Writes data to a file storage.
+/** \brief Writes data to a file storage.
  */
 @Namespace("cv") public static native @ByRef @Name("operator <<") FileStorage shiftLeft(@ByRef FileStorage fs, @Cast("char*") ByteBuffer value);
 @Namespace("cv") public static native @ByRef @Name("operator <<") FileStorage shiftLeft(@ByRef FileStorage fs, @Cast("char*") byte[] value);
 
-/** @} FileStorage
+/** \} FileStorage
 
- *  @relates cv::FileNodeIterator
- *  @{
+ *  \relates cv::FileNodeIterator
+ *  \{
 
-/** @brief Reads data from a file storage.
+/** \brief Reads data from a file storage.
  */
 
-/** @brief Reads data from a file storage.
+/** \brief Reads data from a file storage.
  */
 
-/** @} FileNodeIterator
+/** \} FileNodeIterator
 
- *  @relates cv::FileNode
- *  @{
+ *  \relates cv::FileNode
+ *  \{
 
-/** @brief Reads data from a file storage.
+/** \brief Reads data from a file storage.
  */
 
-/** @brief Reads data from a file storage.
+/** \brief Reads data from a file storage.
  */
 
-/** @} FileNode
+/** \} FileNode
 
- *  @relates cv::FileNodeIterator
- *  @{ */
+ *  \relates cv::FileNodeIterator
+ *  \{ */
 
 @Namespace("cv") public static native @Cast("bool") @Name("operator ==") boolean equals(@Const @ByRef FileNodeIterator it1, @Const @ByRef FileNodeIterator it2);
 
@@ -17235,11 +17235,9 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 
 @Namespace("cv") public static native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef FileNodeIterator it1, @Const @ByRef FileNodeIterator it2);
 
-/** @} FileNodeIterator
+/** \} FileNodeIterator
 
- *  @cond IGNORED */
-
-
+ *  \cond IGNORED */
 
 
 
@@ -17263,7 +17261,9 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 
 
 
-/** @endcond */
+
+
+/** \endcond */
 
  // cv
 
@@ -17318,13 +17318,13 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 
 // #include "opencv2/core.hpp"
 
-/** @addtogroup core_optim
+/** \addtogroup core_optim
 The algorithms in this section minimize or maximize function value within specified constraints or
 without any constraints.
-@{
+\{
 */
 
-/** @brief Basic interface for all solvers
+/** \brief Basic interface for all solvers
  */
 @Namespace("cv") public static class MinProblemSolver extends Algorithm {
     static { Loader.load(); }
@@ -17333,14 +17333,14 @@ without any constraints.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MinProblemSolver(Pointer p) { super(p); }
 
-    /** @brief Represents function being optimized
+    /** \brief Represents function being optimized
      */
     @Const public static class Function extends Pointer {
         static { Loader.load(); }
         /** Default native constructor. */
-        public Function() { allocate(); }
+        public Function() { super((Pointer)null); allocate(); }
         /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public Function(int size) { allocateArray(size); }
+        public Function(int size) { super((Pointer)null); allocateArray(size); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Function(Pointer p) { super(p); }
         private native void allocate();
@@ -17355,35 +17355,35 @@ without any constraints.
         @Virtual public native void getGradient(@Const DoublePointer x,DoublePointer grad);
     }
 
-    /** @brief Getter for the optimized function.
-
+    /** \brief Getter for the optimized function.
+<p>
     The optimized function is represented by Function interface, which requires derivatives to
     implement the sole method calc(double*) to evaluate the function.
-
+<p>
     @return Smart-pointer to an object that implements Function interface - it represents the
     function that is being optimized. It can be empty, if no function was given so far.
      */
     public native @Ptr Function getFunction();
 
-    /** @brief Setter for the optimized function.
-
+    /** \brief Setter for the optimized function.
+<p>
     *It should be called at least once before the call to* minimize(), as default value is not usable.
-
+<p>
     @param f The new function to optimize.
      */
     public native void setFunction(@Ptr Function f);
 
-    /** @brief Getter for the previously set terminal criteria for this algorithm.
-
+    /** \brief Getter for the previously set terminal criteria for this algorithm.
+<p>
     @return Deep copy of the terminal criteria used at the moment.
      */
     public native @ByVal TermCriteria getTermCriteria();
 
-    /** @brief Set terminal criteria for solver.
-
+    /** \brief Set terminal criteria for solver.
+<p>
     This method *is not necessary* to be called before the first call to minimize(), as the default
     value is sensible.
-
+<p>
     Algorithm stops when the number of function evaluations done exceeds termcrit.maxCount, when
     the function values at the vertices of simplex are within termcrit.epsilon range or simplex
     becomes so small that it can enclosed in a box with termcrit.epsilon sides, whatever comes
@@ -17392,13 +17392,13 @@ without any constraints.
      */
     public native void setTermCriteria(@Const @ByRef TermCriteria termcrit);
 
-    /** @brief actually runs the algorithm and performs the minimization.
-
+    /** \brief actually runs the algorithm and performs the minimization.
+<p>
     The sole input parameter determines the centroid of the starting simplex (roughly, it tells
     where to start), all the others (terminal criteria, initial step, function to be minimized) are
     supposed to be set via the setters before the call to this method or the default values (not
     always sensible) will be used.
-
+<p>
     @param x The initial point, that will become a centroid of an initial simplex. After the algorithm
     will terminate, it will be setted to the point where the algorithm stops, the point of possible
     minimum.
@@ -17407,35 +17407,35 @@ without any constraints.
     public native double minimize(@ByVal Mat x);
 }
 
-/** @brief This class is used to perform the non-linear non-constrained minimization of a function,
-
-defined on an `n`-dimensional Euclidean space, using the **Nelder-Mead method**, also known as
+/** \brief This class is used to perform the non-linear non-constrained minimization of a function,
+<p>
+defined on an {@code n}-dimensional Euclidean space, using the **Nelder-Mead method**, also known as
 **downhill simplex method**. The basic idea about the method can be obtained from
 <http://en.wikipedia.org/wiki/Nelder-Mead_method>.
-
+<p>
 It should be noted, that this method, although deterministic, is rather a heuristic and therefore
 may converge to a local minima, not necessary a global one. It is iterative optimization technique,
-which at each step uses an information about the values of a function evaluated only at `n+1`
-points, arranged as a *simplex* in `n`-dimensional space (hence the second name of the method). At
+which at each step uses an information about the values of a function evaluated only at {@code n+1}
+points, arranged as a *simplex* in {@code n}-dimensional space (hence the second name of the method). At
 each step new point is chosen to evaluate function at, obtained value is compared with previous
 ones and based on this information simplex changes it's shape , slowly moving to the local minimum.
 Thus this method is using *only* function values to make decision, on contrary to, say, Nonlinear
 Conjugate Gradient method (which is also implemented in optim).
-
+<p>
 Algorithm stops when the number of function evaluations done exceeds termcrit.maxCount, when the
 function values at the vertices of simplex are within termcrit.epsilon range or simplex becomes so
 small that it can enclosed in a box with termcrit.epsilon sides, whatever comes first, for some
 defined by user positive integer termcrit.maxCount and positive non-integer termcrit.epsilon.
-
-@note DownhillSolver is a derivative of the abstract interface
+<p>
+\note DownhillSolver is a derivative of the abstract interface
 cv::MinProblemSolver, which in turn is derived from the Algorithm interface and is used to
 encapsulate the functionality, common to all non-linear optimization algorithms in the optim
 module.
-
-@note term criteria should meet following condition:
-@code
+<p>
+\note term criteria should meet following condition:
+<pre><code>
     termcrit.type == (TermCriteria::MAX_ITER + TermCriteria::EPS) && termcrit.epsilon > 0 && termcrit.maxCount > 0
-@endcode
+</code></pre>
  */
 @Namespace("cv") public static class DownhillSolver extends MinProblemSolver {
     static { Loader.load(); }
@@ -17444,17 +17444,17 @@ module.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DownhillSolver(Pointer p) { super(p); }
 
-    /** @brief Returns the initial step that will be used in downhill simplex algorithm.
-
+    /** \brief Returns the initial step that will be used in downhill simplex algorithm.
+<p>
     @param step Initial step that will be used in algorithm. Note, that although corresponding setter
     accepts column-vectors as well as row-vectors, this method will return a row-vector.
     @see DownhillSolver::setInitStep
      */
     public native void getInitStep(@ByVal Mat step);
 
-    /** @brief Sets the initial step that will be used in downhill simplex algorithm.
-
-    Step, together with initial point (givin in DownhillSolver::minimize) are two `n`-dimensional
+    /** \brief Sets the initial step that will be used in downhill simplex algorithm.
+<p>
+    Step, together with initial point (givin in DownhillSolver::minimize) are two {@code n}-dimensional
     vectors that are used to determine the shape of initial simplex. Roughly said, initial point
     determines the position of a simplex (it will become simplex's centroid), while step determines the
     spread (size in each dimension) of a simplex. To be more precise, if \f$s,x_0\in\mathbb{R}^n\f$ are
@@ -17462,14 +17462,14 @@ module.
     \f$v_0:=x_0-\frac{1}{2} s\f$ and \f$v_i:=x_0+s_i\f$ for \f$i=1,2,\dots,n\f$ where \f$s_i\f$ denotes
     projections of the initial step of *n*-th coordinate (the result of projection is treated to be
     vector given by \f$s_i:=e_i\cdot\left<e_i\cdot s\right>\f$, where \f$e_i\f$ form canonical basis)
-
+<p>
     @param step Initial step that will be used in algorithm. Roughly said, it determines the spread
     (size in each dimension) of an initial simplex.
      */
     public native void setInitStep(@ByVal Mat step);
 
-    /** @brief This function returns the reference to the ready-to-use DownhillSolver object.
-
+    /** \brief This function returns the reference to the ready-to-use DownhillSolver object.
+<p>
     All the parameters are optional, so this procedure can be called even without parameters at
     all. In this case, the default values will be used. As default value for terminal criteria are
     the only sensible ones, MinProblemSolver::setFunction() and DownhillSolver::setInitStep()
@@ -17490,9 +17490,9 @@ module.
     public static native @Ptr DownhillSolver create();
 }
 
-/** @brief This class is used to perform the non-linear non-constrained minimization of a function
+/** \brief This class is used to perform the non-linear non-constrained minimization of a function
 with known gradient,
-
+<p>
 defined on an *n*-dimensional Euclidean space, using the **Nonlinear Conjugate Gradient method**.
 The implementation was done based on the beautifully clear explanatory article [An Introduction to
 the Conjugate Gradient Method Without the Agonizing
@@ -17500,7 +17500,7 @@ Pain](http://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf) by Jo
 Shewchuk. The method can be seen as an adaptation of a standard Conjugate Gradient method (see, for
 example <http://en.wikipedia.org/wiki/Conjugate_gradient_method>) for numerically solving the
 systems of linear equations.
-
+<p>
 It should be noted, that this method, although deterministic, is rather a heuristic method and
 therefore may converge to a local minima, not necessary a global one. What is even more disastrous,
 most of its behaviour is ruled by gradient, therefore it essentially cannot distinguish between
@@ -17508,20 +17508,20 @@ local minima and maxima. Therefore, if it starts sufficiently near to the local 
 converge to it. Another obvious restriction is that it should be possible to compute the gradient of
 a function at any point, thus it is preferable to have analytic expression for gradient and
 computational burden should be born by the user.
-
+<p>
 The latter responsibility is accompilished via the getGradient method of a
 MinProblemSolver::Function interface (which represents function being optimized). This method takes
 point a point in *n*-dimensional space (first argument represents the array of coordinates of that
 point) and comput its gradient (it should be stored in the second argument as an array).
-
-@note class ConjGradSolver thus does not add any new methods to the basic MinProblemSolver interface.
-
-@note term criteria should meet following condition:
-@code
+<p>
+\note class ConjGradSolver thus does not add any new methods to the basic MinProblemSolver interface.
+<p>
+\note term criteria should meet following condition:
+<pre><code>
     termcrit.type == (TermCriteria::MAX_ITER + TermCriteria::EPS) && termcrit.epsilon > 0 && termcrit.maxCount > 0
     // or
     termcrit.type == TermCriteria::MAX_ITER) && termcrit.maxCount > 0
-@endcode
+</code></pre>
  */
 @Namespace("cv") public static class ConjGradSolver extends MinProblemSolver {
     static { Loader.load(); }
@@ -17530,8 +17530,8 @@ point) and comput its gradient (it should be stored in the second argument as an
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConjGradSolver(Pointer p) { super(p); }
 
-    /** @brief This function returns the reference to the ready-to-use ConjGradSolver object.
-
+    /** \brief This function returns the reference to the ready-to-use ConjGradSolver object.
+<p>
     All the parameters are optional, so this procedure can be called even without parameters at
     all. In this case, the default values will be used. As default value for terminal criteria are
     the only sensible ones, MinProblemSolver::setFunction() should be called upon the obtained
@@ -17560,32 +17560,32 @@ public static final int
     /** there are multiple maxima for target function - the arbitrary one is returned */
     SOLVELP_MULTI    = 1;
 
-/** @brief Solve given (non-integer) linear programming problem using the Simplex Algorithm (Simplex Method).
-
+/** \brief Solve given (non-integer) linear programming problem using the Simplex Algorithm (Simplex Method).
+<p>
 What we mean here by "linear programming problem" (or LP problem, for short) can be formulated as:
-
+<p>
 \f[\mbox{Maximize } c\cdot x\\
  \mbox{Subject to:}\\
  Ax\leq b\\
  x\geq 0\f]
-
-Where \f$c\f$ is fixed `1`-by-`n` row-vector, \f$A\f$ is fixed `m`-by-`n` matrix, \f$b\f$ is fixed `m`-by-`1`
-column vector and \f$x\f$ is an arbitrary `n`-by-`1` column vector, which satisfies the constraints.
-
+<p>
+Where \f$c\f$ is fixed {@code 1}-by-{@code n} row-vector, \f$A\f$ is fixed {@code m}-by-{@code n} matrix, \f$b\f$ is fixed {@code m}-by-{@code 1}
+column vector and \f$x\f$ is an arbitrary {@code n}-by-{@code 1} column vector, which satisfies the constraints.
+<p>
 Simplex algorithm is one of many algorithms that are designed to handle this sort of problems
 efficiently. Although it is not optimal in theoretical sense (there exist algorithms that can solve
 any problem written as above in polynomial time, while simplex method degenerates to exponential
 time for some special cases), it is well-studied, easy to implement and is shown to work well for
 real-life purposes.
-
+<p>
 The particular implementation is taken almost verbatim from **Introduction to Algorithms, third
 edition** by T. H. Cormen, C. E. Leiserson, R. L. Rivest and Clifford Stein. In particular, the
 Bland's rule <http://en.wikipedia.org/wiki/Bland%27s_rule> is used to prevent cycling.
-
+<p>
 @param Func This row-vector corresponds to \f$c\f$ in the LP problem formulation (see above). It should
 contain 32- or 64-bit floating point numbers. As a convenience, column-vector may be also submitted,
 in the latter case it is understood to correspond to \f$c^T\f$.
-@param Constr `m`-by-`n+1` matrix, whose rightmost column corresponds to \f$b\f$ in formulation above
+@param Constr {@code m}-by-{@code n+1} matrix, whose rightmost column corresponds to \f$b\f$ in formulation above
 and the remaining to \f$A\f$. It should containt 32- or 64-bit floating point numbers.
 @param z The solution will be returned here as a column-vector - it corresponds to \f$c\f$ in the
 formulation above. It will contain 64-bit floating point numbers.
@@ -17593,7 +17593,7 @@ formulation above. It will contain 64-bit floating point numbers.
  */
 @Namespace("cv") public static native int solveLP(@Const @ByRef Mat Func, @Const @ByRef Mat Constr, @ByRef Mat z);
 
-/** @} */
+/** \} */
 
 // cv
 

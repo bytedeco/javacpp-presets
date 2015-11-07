@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -63,8 +63,8 @@ public class opencv_imgcodecs extends org.bytedeco.javacpp.helper.opencv_imgcode
 // #ifdef __cplusplus
 // #endif /* __cplusplus */
 
-/** @addtogroup imgcodecs_c
-  @{
+/** \addtogroup imgcodecs_c
+  \{
   */
 
 /** enum  */
@@ -181,7 +181,7 @@ public static native int cvvSaveImage(@Cast("const char*") BytePointer arg1, CvA
 public static native int cvvSaveImage(String arg1, CvArr arg2, int[] arg3);
 public static native void cvvConvertImage(CvArr arg1, CvArr arg2, int arg3);
 
-/** @} imgcodecs_c */
+/** \} imgcodecs_c */
 
 // #ifdef __cplusplus
 // #endif
@@ -239,17 +239,17 @@ public static native void cvvConvertImage(CvArr arg1, CvArr arg2, int arg3);
 // #include "opencv2/core.hpp"
 
 /**
-  @defgroup imgcodecs Image file reading and writing
-  @{
-    @defgroup imgcodecs_c C API
-    @defgroup imgcodecs_ios iOS glue
-  @}
+  \defgroup imgcodecs Image file reading and writing
+  \{
+    \defgroup imgcodecs_c C API
+    \defgroup imgcodecs_ios iOS glue
+  \}
 */
 
 //////////////////////////////// image codec ////////////////////////////////
 
-/** @addtogroup imgcodecs
- *  @{
+/** \addtogroup imgcodecs
+ *  \{
 
  *  Imread flags */
 /** enum cv::ImreadModes */
@@ -302,17 +302,17 @@ public static final int
        IMWRITE_PNG_STRATEGY_RLE          = 3,
        IMWRITE_PNG_STRATEGY_FIXED        = 4;
 
-/** @brief Loads an image from a file.
-
-@anchor imread
-
+/** \brief Loads an image from a file.
+<p>
+\anchor imread
+<p>
 @param filename Name of file to be loaded.
-@param flags Flag that can take values of @ref cv::ImreadModes
-
+@param flags Flag that can take values of \ref cv::ImreadModes
+<p>
 The function imread loads an image from the specified file and returns it. If the image cannot be
 read (because of missing file, improper permissions, unsupported or invalid format), the function
 returns an empty matrix ( Mat::data==NULL ). Currently, the following file formats are supported:
-
+<p>
 -   Windows bitmaps - \*.bmp, \*.dib (always supported)
 -   JPEG files - \*.jpeg, \*.jpg, \*.jpe (see the *Notes* section)
 -   JPEG 2000 files - \*.jp2 (see the *Notes* section)
@@ -321,9 +321,9 @@ returns an empty matrix ( Mat::data==NULL ). Currently, the following file forma
 -   Portable image format - \*.pbm, \*.pgm, \*.ppm (always supported)
 -   Sun rasters - \*.sr, \*.ras (always supported)
 -   TIFF files - \*.tiff, \*.tif (see the *Notes* section)
-
-@note
-
+<p>
+\note
+<p>
 -   The function determines the type of an image by the content, not by the file extension.
 -   On Microsoft Windows\* OS and MacOSX\*, the codecs shipped with an OpenCV image (libjpeg,
     libpng, libtiff, and libjasper) are used by default. So, OpenCV can always read JPEGs, PNGs,
@@ -334,46 +334,46 @@ returns an empty matrix ( Mat::data==NULL ). Currently, the following file forma
     codecs supplied with an OS image. Install the relevant packages (do not forget the development
     files, for example, "libjpeg-dev", in Debian\* and Ubuntu\*) to get the codec support or turn
     on the OPENCV_BUILD_3RDPARTY_LIBS flag in CMake.
-
-@note In the case of color images, the decoded images will have the channels stored in B G R order.
+<p>
+\note In the case of color images, the decoded images will have the channels stored in B G R order.
  */
 @Namespace("cv") public static native @ByVal Mat imread( @Str BytePointer filename, int flags/*=cv::IMREAD_COLOR*/ );
 @Namespace("cv") public static native @ByVal Mat imread( @Str BytePointer filename );
 @Namespace("cv") public static native @ByVal Mat imread( @Str String filename, int flags/*=cv::IMREAD_COLOR*/ );
 @Namespace("cv") public static native @ByVal Mat imread( @Str String filename );
 
-/** @brief Loads a multi-page image from a file. (see imread for details.)
-
+/** \brief Loads a multi-page image from a file. (see imread for details.)
+<p>
 @param filename Name of file to be loaded.
-@param flags Flag that can take values of @ref cv::ImreadModes, default with IMREAD_ANYCOLOR.
+@param flags Flag that can take values of \ref cv::ImreadModes, default with IMREAD_ANYCOLOR.
 @param mats A vector of Mat objects holding each page, if more than one.
-
+<p>
 */
 @Namespace("cv") public static native @Cast("bool") boolean imreadmulti(@Str BytePointer filename, @ByRef MatVector mats, int flags/*=cv::IMREAD_ANYCOLOR*/);
 @Namespace("cv") public static native @Cast("bool") boolean imreadmulti(@Str BytePointer filename, @ByRef MatVector mats);
 @Namespace("cv") public static native @Cast("bool") boolean imreadmulti(@Str String filename, @ByRef MatVector mats, int flags/*=cv::IMREAD_ANYCOLOR*/);
 @Namespace("cv") public static native @Cast("bool") boolean imreadmulti(@Str String filename, @ByRef MatVector mats);
 
-/** @brief Saves an image to a specified file.
-
+/** \brief Saves an image to a specified file.
+<p>
 @param filename Name of the file.
 @param img Image to be saved.
-@param params Format-specific save parameters encoded as pairs, see @ref cv::ImwriteFlags
+@param params Format-specific save parameters encoded as pairs, see \ref cv::ImwriteFlags
 paramId_1, paramValue_1, paramId_2, paramValue_2, ... .
-
+<p>
 The function imwrite saves the image to the specified file. The image format is chosen based on the
 filename extension (see imread for the list of extensions). Only 8-bit (or 16-bit unsigned (CV_16U)
 in case of PNG, JPEG 2000, and TIFF) single-channel or 3-channel (with 'BGR' channel order) images
 can be saved using this function. If the format, depth or channel order is different, use
 Mat::convertTo , and cvtColor to convert it before saving. Or, use the universal FileStorage I/O
 functions to save the image to XML or YAML format.
-
+<p>
 It is possible to store PNG images with an alpha channel using this function. To do this, create
 8-bit (or 16-bit) 4-channel image BGRA, where the alpha channel goes last. Fully transparent pixels
 should have alpha set to 0, fully opaque pixels should have alpha set to 255/65535. The sample below
 shows how to create such a BGRA image and store to PNG file. It also demonstrates how to set custom
 compression parameters :
-@code
+<pre><code>
     #include <vector>
     #include <stdio.h>
     #include <opencv2/opencv.hpp>
@@ -416,7 +416,7 @@ compression parameters :
         fprintf(stdout, "Saved PNG file with alpha data.\n");
         return 0;
     }
-@endcode
+</code></pre>
  */
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str BytePointer filename, @ByVal Mat img,
               @StdVector IntPointer params/*=std::vector<int>()*/);
@@ -433,36 +433,36 @@ compression parameters :
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str String filename, @ByVal Mat img,
               @StdVector int[] params/*=std::vector<int>()*/);
 
-/** @overload */
+/** \overload */
 @Namespace("cv") public static native @ByVal Mat imdecode( @ByVal Mat buf, int flags );
 
-/** @brief Reads an image from a buffer in memory.
-
+/** \brief Reads an image from a buffer in memory.
+<p>
 @param buf Input array or vector of bytes.
-@param flags The same flags as in imread, see @ref cv::ImreadModes.
+@param flags The same flags as in imread, see \ref cv::ImreadModes.
 @param dst The optional output placeholder for the decoded matrix. It can save the image
 reallocations when the function is called repeatedly for images of the same size.
-
+<p>
 The function reads an image from the specified buffer in the memory. If the buffer is too short or
 contains invalid data, the empty matrix/image is returned.
-
+<p>
 See imread for the list of supported formats and flags description.
-
-@note In the case of color images, the decoded images will have the channels stored in B G R order.
+<p>
+\note In the case of color images, the decoded images will have the channels stored in B G R order.
  */
 @Namespace("cv") public static native @ByVal Mat imdecode( @ByVal Mat buf, int flags, Mat dst);
 
-/** @brief Encodes an image into a memory buffer.
-
+/** \brief Encodes an image into a memory buffer.
+<p>
 @param ext File extension that defines the output format.
 @param img Image to be written.
 @param buf Output buffer resized to fit the compressed image.
-@param params Format-specific parameters. See imwrite and @ref cv::ImwriteFlags.
-
+@param params Format-specific parameters. See imwrite and \ref cv::ImwriteFlags.
+<p>
 The function compresses the image and stores it in the memory buffer that is resized to fit the
 result. See imwrite for the list of supported formats and flags description.
-
-@note cvEncodeImage returns single-row matrix of type CV_8UC1 that contains encoded image as array
+<p>
+\note cvEncodeImage returns single-row matrix of type CV_8UC1 that contains encoded image as array
 of bytes.
  */
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @Str BytePointer ext, @ByVal Mat img,
@@ -496,7 +496,7 @@ of bytes.
 @Namespace("cv") public static native @Cast("bool") boolean imencode( @Str String ext, @ByVal Mat img,
                             @Cast("uchar*") @StdVector byte[] buf);
 
-/** @} imgcodecs */
+/** \} imgcodecs */
 
  // cv
 

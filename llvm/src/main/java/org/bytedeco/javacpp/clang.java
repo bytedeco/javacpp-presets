@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -151,7 +151,7 @@ public static final int
  * \defgroup CINDEX_STRING String manipulation routines
  * \ingroup CINDEX
  *
- * @{
+ * \{
  */
 
 /**
@@ -165,9 +165,9 @@ public static final int
 public static class CXString extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXString() { allocate(); }
+    public CXString() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXString(int size) { allocateArray(size); }
+    public CXString(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXString(Pointer p) { super(p); }
     private native void allocate();
@@ -191,7 +191,7 @@ public static native @Cast("const char*") BytePointer clang_getCString(@ByVal CX
 public static native void clang_disposeString(@ByVal CXString string);
 
 /**
- * @}
+ * \}
  */
 
 // #ifdef __cplusplus
@@ -228,7 +228,7 @@ public static native void clang_disposeString(@ByVal CXString string);
 /** \defgroup COMPILATIONDB CompilationDatabase functions
  * \ingroup CINDEX
  *
- * @{
+ * \{
  */
 
 /**
@@ -377,7 +377,7 @@ public static native @ByVal CXString clang_CompileCommand_getMappedSourcePath(CX
 public static native @ByVal CXString clang_CompileCommand_getMappedSourceContent(CXCompileCommand arg0, @Cast("unsigned") int I);
 
 /**
- * @}
+ * \}
  */
 
 // #ifdef __cplusplus
@@ -413,7 +413,7 @@ public static native @ByVal CXString clang_CompileCommand_getMappedSourceContent
 
 /**
  * \defgroup BUILD_SYSTEM Build system utilities
- * @{
+ * \{
  */
 
 /**
@@ -437,14 +437,14 @@ public static native @Cast("unsigned long long") long clang_getBuildSessionTimes
  * \brief Create a \c CXVirtualFileOverlay object.
  * Must be disposed with \c clang_VirtualFileOverlay_dispose().
  *
- * \param options is reserved, always pass 0.
+ * @param options is reserved, always pass 0.
  */
 public static native CXVirtualFileOverlay clang_VirtualFileOverlay_create(@Cast("unsigned") int options);
 
 /**
  * \brief Map an absolute virtual file path to an absolute real one.
  * The virtual path must be canonicalized (not contain "."/"..").
- * \returns 0 for success, non-zero to indicate an error.
+ * @return 0 for success, non-zero to indicate an error.
  */
 public static native @Cast("CXErrorCode") int clang_VirtualFileOverlay_addFileMapping(CXVirtualFileOverlay arg0,
                                         @Cast("const char*") BytePointer virtualPath,
@@ -457,7 +457,7 @@ public static native @Cast("CXErrorCode") int clang_VirtualFileOverlay_addFileMa
  * \brief Set the case sensitivity for the \c CXVirtualFileOverlay object.
  * The \c CXVirtualFileOverlay object is case-sensitive by default, this
  * option can be used to override the default.
- * \returns 0 for success, non-zero to indicate an error.
+ * @return 0 for success, non-zero to indicate an error.
  */
 public static native @Cast("CXErrorCode") int clang_VirtualFileOverlay_setCaseSensitivity(CXVirtualFileOverlay arg0,
 											int caseSensitive);
@@ -465,11 +465,11 @@ public static native @Cast("CXErrorCode") int clang_VirtualFileOverlay_setCaseSe
 /**
  * \brief Write out the \c CXVirtualFileOverlay object to a char buffer.
  *
- * \param options is reserved, always pass 0.
- * \param out_buffer_ptr pointer to receive the buffer pointer, which should be
+ * @param options is reserved, always pass 0.
+ * @param out_buffer_ptr pointer to receive the buffer pointer, which should be
  * disposed using \c clang_free().
- * \param out_buffer_size pointer to receive the buffer size.
- * \returns 0 for success, non-zero to indicate an error.
+ * @param out_buffer_size pointer to receive the buffer size.
+ * @return 0 for success, non-zero to indicate an error.
  */
 public static native @Cast("CXErrorCode") int clang_VirtualFileOverlay_writeToBuffer(CXVirtualFileOverlay arg0, @Cast("unsigned") int options,
                                        @Cast("char**") PointerPointer out_buffer_ptr,
@@ -488,7 +488,7 @@ public static native @Cast("CXErrorCode") int clang_VirtualFileOverlay_writeToBu
  * \brief free memory allocated by libclang, such as the buffer returned by
  * \c CXVirtualFileOverlay() or \c clang_ModuleMapDescriptor_writeToBuffer().
  *
- * \param buffer memory pointer to free.
+ * @param buffer memory pointer to free.
  */
 public static native void clang_free(Pointer buffer);
 
@@ -511,13 +511,13 @@ public static native void clang_VirtualFileOverlay_dispose(CXVirtualFileOverlay 
  * \brief Create a \c CXModuleMapDescriptor object.
  * Must be disposed with \c clang_ModuleMapDescriptor_dispose().
  *
- * \param options is reserved, always pass 0.
+ * @param options is reserved, always pass 0.
  */
 public static native CXModuleMapDescriptor clang_ModuleMapDescriptor_create(@Cast("unsigned") int options);
 
 /**
  * \brief Sets the framework module name that the module.map describes.
- * \returns 0 for success, non-zero to indicate an error.
+ * @return 0 for success, non-zero to indicate an error.
  */
 public static native @Cast("CXErrorCode") int clang_ModuleMapDescriptor_setFrameworkModuleName(CXModuleMapDescriptor arg0,
                                                  @Cast("const char*") BytePointer name);
@@ -526,7 +526,7 @@ public static native @Cast("CXErrorCode") int clang_ModuleMapDescriptor_setFrame
 
 /**
  * \brief Sets the umbrealla header name that the module.map describes.
- * \returns 0 for success, non-zero to indicate an error.
+ * @return 0 for success, non-zero to indicate an error.
  */
 public static native @Cast("CXErrorCode") int clang_ModuleMapDescriptor_setUmbrellaHeader(CXModuleMapDescriptor arg0,
                                             @Cast("const char*") BytePointer name);
@@ -536,11 +536,11 @@ public static native @Cast("CXErrorCode") int clang_ModuleMapDescriptor_setUmbre
 /**
  * \brief Write out the \c CXModuleMapDescriptor object to a char buffer.
  *
- * \param options is reserved, always pass 0.
- * \param out_buffer_ptr pointer to receive the buffer pointer, which should be
+ * @param options is reserved, always pass 0.
+ * @param out_buffer_ptr pointer to receive the buffer pointer, which should be
  * disposed using \c clang_free().
- * \param out_buffer_size pointer to receive the buffer size.
- * \returns 0 for success, non-zero to indicate an error.
+ * @param out_buffer_size pointer to receive the buffer size.
+ * @return 0 for success, non-zero to indicate an error.
  */
 public static native @Cast("CXErrorCode") int clang_ModuleMapDescriptor_writeToBuffer(CXModuleMapDescriptor arg0, @Cast("unsigned") int options,
                                        @Cast("char**") PointerPointer out_buffer_ptr,
@@ -561,7 +561,7 @@ public static native @Cast("CXErrorCode") int clang_ModuleMapDescriptor_writeToB
 public static native void clang_ModuleMapDescriptor_dispose(CXModuleMapDescriptor arg0);
 
 /**
- * @}
+ * \}
  */
 
 // #ifdef __cplusplus
@@ -644,7 +644,7 @@ public static final int CINDEX_VERSION = CINDEX_VERSION();
  * To avoid namespace pollution, data types are prefixed with "CX" and
  * functions are prefixed with "clang_".
  *
- * @{
+ * \{
  */
 
 /**
@@ -689,9 +689,9 @@ public static final int CINDEX_VERSION = CINDEX_VERSION();
 public static class CXUnsavedFile extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXUnsavedFile() { allocate(); }
+    public CXUnsavedFile() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXUnsavedFile(int size) { allocateArray(size); }
+    public CXUnsavedFile(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXUnsavedFile(Pointer p) { super(p); }
     private native void allocate();
@@ -750,9 +750,9 @@ public static final int
 public static class CXVersion extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXVersion() { allocate(); }
+    public CXVersion() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXVersion(int size) { allocateArray(size); }
+    public CXVersion(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXVersion(Pointer p) { super(p); }
     private native void allocate();
@@ -793,7 +793,7 @@ public static class CXVersion extends Pointer {
  *
  * Here is an example:
  *
- * \code
+ * <pre><code>
  *   // excludeDeclsFromPCH = 1, displayDiagnostics=1
  *   Idx = clang_createIndex(1, 1);
  *
@@ -814,7 +814,7 @@ public static class CXVersion extends Pointer {
  *   clang_visitChildren(clang_getTranslationUnitCursor(TU),
  *                       TranslationUnitVisitor, 0);
  *   clang_disposeTranslationUnit(TU);
- * \endcode
+ * </code></pre>
  *
  * This process of creating the 'pch', loading it separately, and using it (via
  * -include-pch) allows 'excludeDeclsFromPCH' to remove redundant callbacks
@@ -868,21 +868,21 @@ public static final int
  * \brief Sets general options associated with a CXIndex.
  *
  * For example:
- * \code
+ * <pre><code>
  * CXIndex idx = ...;
  * clang_CXIndex_setGlobalOptions(idx,
  *     clang_CXIndex_getGlobalOptions(idx) |
  *     CXGlobalOpt_ThreadBackgroundPriorityForIndexing);
- * \endcode
+ * </code></pre>
  *
- * \param options A bitmask of options, a bitwise OR of CXGlobalOpt_XXX flags.
+ * @param options A bitmask of options, a bitwise OR of CXGlobalOpt_XXX flags.
  */
 public static native void clang_CXIndex_setGlobalOptions(CXIndex arg0, @Cast("unsigned") int options);
 
 /**
  * \brief Gets the general options associated with a CXIndex.
  *
- * \returns A bitmask of options, a bitwise OR of CXGlobalOpt_XXX flags that
+ * @return A bitmask of options, a bitwise OR of CXGlobalOpt_XXX flags that
  * are associated with the given CXIndex object.
  */
 public static native @Cast("unsigned") int clang_CXIndex_getGlobalOptions(CXIndex arg0);
@@ -890,7 +890,7 @@ public static native @Cast("unsigned") int clang_CXIndex_getGlobalOptions(CXInde
 /**
  * \defgroup CINDEX_FILES File manipulation routines
  *
- * @{
+ * \{
  */
 
 /**
@@ -921,9 +921,9 @@ public static native @ByVal @Cast("time_t*") Pointer clang_getFileTime(CXFile SF
 public static class CXFileUniqueID extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXFileUniqueID() { allocate(); }
+    public CXFileUniqueID() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXFileUniqueID(int size) { allocateArray(size); }
+    public CXFileUniqueID(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXFileUniqueID(Pointer p) { super(p); }
     private native void allocate();
@@ -939,9 +939,9 @@ public static class CXFileUniqueID extends Pointer {
 /**
  * \brief Retrieve the unique ID for the given \c file.
  *
- * \param file the file to get the ID for.
- * \param outID stores the returned CXFileUniqueID.
- * \returns If there was a failure getting the unique ID, returns non-zero,
+ * @param file the file to get the ID for.
+ * @param outID stores the returned CXFileUniqueID.
+ * @return If there was a failure getting the unique ID, returns non-zero,
  * otherwise returns 0.
 */
 public static native int clang_getFileUniqueID(CXFile file, CXFileUniqueID outID);
@@ -956,11 +956,11 @@ public static native @Cast("unsigned") int clang_isFileMultipleIncludeGuarded(CX
 /**
  * \brief Retrieve a file handle within the given translation unit.
  *
- * \param tu the translation unit
+ * @param tu the translation unit
  *
- * \param file_name the name of the file.
+ * @param file_name the name of the file.
  *
- * \returns the file handle for the named file in the translation unit \p tu,
+ * @return the file handle for the named file in the translation unit \p tu,
  * or a NULL file handle if the file was not a part of this translation unit.
  */
 public static native CXFile clang_getFile(CXTranslationUnit tu,
@@ -975,7 +975,7 @@ public static native CXFile clang_getFile(CXTranslationUnit tu,
 public static native int clang_File_isEqual(CXFile file1, CXFile file2);
 
 /**
- * @}
+ * \}
  */
 
 /**
@@ -988,7 +988,7 @@ public static native int clang_File_isEqual(CXFile file1, CXFile file2);
  * point in the program or for a range of points in the program, and extract
  * specific location information from those data types.
  *
- * @{
+ * \{
  */
 
 /**
@@ -1001,9 +1001,9 @@ public static native int clang_File_isEqual(CXFile file1, CXFile file2);
 public static class CXSourceLocation extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXSourceLocation() { allocate(); }
+    public CXSourceLocation() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXSourceLocation(int size) { allocateArray(size); }
+    public CXSourceLocation(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXSourceLocation(Pointer p) { super(p); }
     private native void allocate();
@@ -1026,9 +1026,9 @@ public static class CXSourceLocation extends Pointer {
 public static class CXSourceRange extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXSourceRange() { allocate(); }
+    public CXSourceRange() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXSourceRange(int size) { allocateArray(size); }
+    public CXSourceRange(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXSourceRange(Pointer p) { super(p); }
     private native void allocate();
@@ -1053,7 +1053,7 @@ public static native @ByVal CXSourceLocation clang_getNullLocation();
  * the same translation unit, refer to exactly the same point in the source
  * code.
  *
- * \returns non-zero if the source locations refer to the same location, zero
+ * @return non-zero if the source locations refer to the same location, zero
  * if they refer to different locations.
  */
 public static native @Cast("unsigned") int clang_equalLocations(@ByVal CXSourceLocation loc1,
@@ -1101,7 +1101,7 @@ public static native @ByVal CXSourceRange clang_getRange(@ByVal CXSourceLocation
 /**
  * \brief Determine whether two ranges are equivalent.
  *
- * \returns non-zero if the ranges are the same, zero if they differ.
+ * @return non-zero if the ranges are the same, zero if they differ.
  */
 public static native @Cast("unsigned") int clang_equalRanges(@ByVal CXSourceRange range1,
                                           @ByVal CXSourceRange range2);
@@ -1118,19 +1118,19 @@ public static native int clang_Range_isNull(@ByVal CXSourceRange range);
  * If the location refers into a macro expansion, retrieves the
  * location of the macro expansion.
  *
- * \param location the location within a source file that will be decomposed
+ * @param location the location within a source file that will be decomposed
  * into its parts.
  *
- * \param file [out] if non-NULL, will be set to the file to which the given
+ * @param file [out] if non-NULL, will be set to the file to which the given
  * source location points.
  *
- * \param line [out] if non-NULL, will be set to the line to which the given
+ * @param line [out] if non-NULL, will be set to the line to which the given
  * source location points.
  *
- * \param column [out] if non-NULL, will be set to the column to which the given
+ * @param column [out] if non-NULL, will be set to the column to which the given
  * source location points.
  *
- * \param offset [out] if non-NULL, will be set to the offset into the
+ * @param offset [out] if non-NULL, will be set to the offset into the
  * buffer to which the given source location points.
  */
 public static native void clang_getExpansionLocation(@ByVal CXSourceLocation location,
@@ -1155,14 +1155,14 @@ public static native void clang_getExpansionLocation(@ByVal CXSourceLocation loc
  *
  * Example: given the following source code in a file somefile.c
  *
- * \code
+ * <pre><code>
  * #123 "dummy.c" 1
  *
  * static int func(void)
  * {
  *     return 0;
  * }
- * \endcode
+ * </code></pre>
  *
  * the location information returned by this function would be
  *
@@ -1172,10 +1172,10 @@ public static native void clang_getExpansionLocation(@ByVal CXSourceLocation loc
  *
  * File: somefile.c Line: 3 Column: 12
  *
- * \param location the location within a source file that will be decomposed
+ * @param location the location within a source file that will be decomposed
  * into its parts.
  *
- * \param filename [out] if non-NULL, will be set to the filename of the
+ * @param filename [out] if non-NULL, will be set to the filename of the
  * source location. Note that filenames returned will be for "virtual" files,
  * which don't necessarily exist on the machine running clang - e.g. when
  * parsing preprocessed output obtained from a different environment. If
@@ -1183,10 +1183,10 @@ public static native void clang_getExpansionLocation(@ByVal CXSourceLocation loc
  * using \c clang_disposeString() once you've finished with it. For an invalid
  * source location, an empty string is returned.
  *
- * \param line [out] if non-NULL, will be set to the line number of the
+ * @param line [out] if non-NULL, will be set to the line number of the
  * source location. For an invalid source location, zero is returned.
  *
- * \param column [out] if non-NULL, will be set to the column number of the
+ * @param column [out] if non-NULL, will be set to the column number of the
  * source location. For an invalid source location, zero is returned.
  */
 public static native void clang_getPresumedLocation(@ByVal CXSourceLocation location,
@@ -1233,19 +1233,19 @@ public static native void clang_getInstantiationLocation(@ByVal CXSourceLocation
  * If the location refers into a macro instantiation, return where the
  * location was originally spelled in the source file.
  *
- * \param location the location within a source file that will be decomposed
+ * @param location the location within a source file that will be decomposed
  * into its parts.
  *
- * \param file [out] if non-NULL, will be set to the file to which the given
+ * @param file [out] if non-NULL, will be set to the file to which the given
  * source location points.
  *
- * \param line [out] if non-NULL, will be set to the line to which the given
+ * @param line [out] if non-NULL, will be set to the line to which the given
  * source location points.
  *
- * \param column [out] if non-NULL, will be set to the column to which the given
+ * @param column [out] if non-NULL, will be set to the column to which the given
  * source location points.
  *
- * \param offset [out] if non-NULL, will be set to the offset into the
+ * @param offset [out] if non-NULL, will be set to the offset into the
  * buffer to which the given source location points.
  */
 public static native void clang_getSpellingLocation(@ByVal CXSourceLocation location,
@@ -1272,19 +1272,19 @@ public static native void clang_getSpellingLocation(@ByVal CXSourceLocation loca
  * expanded or where the macro argument was written, if the location points at
  * a macro argument.
  *
- * \param location the location within a source file that will be decomposed
+ * @param location the location within a source file that will be decomposed
  * into its parts.
  *
- * \param file [out] if non-NULL, will be set to the file to which the given
+ * @param file [out] if non-NULL, will be set to the file to which the given
  * source location points.
  *
- * \param line [out] if non-NULL, will be set to the line to which the given
+ * @param line [out] if non-NULL, will be set to the line to which the given
  * source location points.
  *
- * \param column [out] if non-NULL, will be set to the column to which the given
+ * @param column [out] if non-NULL, will be set to the column to which the given
  * source location points.
  *
- * \param offset [out] if non-NULL, will be set to the offset into the
+ * @param offset [out] if non-NULL, will be set to the offset into the
  * buffer to which the given source location points.
  */
 public static native void clang_getFileLocation(@ByVal CXSourceLocation location,
@@ -1321,9 +1321,9 @@ public static native @ByVal CXSourceLocation clang_getRangeEnd(@ByVal CXSourceRa
 public static class CXSourceRangeList extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXSourceRangeList() { allocate(); }
+    public CXSourceRangeList() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXSourceRangeList(int size) { allocateArray(size); }
+    public CXSourceRangeList(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXSourceRangeList(Pointer p) { super(p); }
     private native void allocate();
@@ -1355,13 +1355,13 @@ public static native CXSourceRangeList clang_getSkippedRanges(CXTranslationUnit 
 public static native void clang_disposeSourceRangeList(CXSourceRangeList ranges);
 
 /**
- * @}
+ * \}
  */
 
 /**
  * \defgroup CINDEX_DIAG Diagnostic reporting
  *
- * @{
+ * \{
  */
 
 /**
@@ -1428,10 +1428,10 @@ public static native @Cast("unsigned") int clang_getNumDiagnosticsInSet(CXDiagno
 /**
  * \brief Retrieve a diagnostic associated with the given CXDiagnosticSet.
  *
- * \param Diags the CXDiagnosticSet to query.
- * \param Index the zero-based diagnostic number to retrieve.
+ * @param Diags the CXDiagnosticSet to query.
+ * @param Index the zero-based diagnostic number to retrieve.
  *
- * \returns the requested diagnostic. This diagnostic must be freed
+ * @return the requested diagnostic. This diagnostic must be freed
  * via a call to \c clang_disposeDiagnostic().
  */
 public static native CXDiagnostic clang_getDiagnosticInSet(CXDiagnosticSet Diags,
@@ -1471,13 +1471,13 @@ public static final int
  * \brief Deserialize a set of diagnostics from a Clang diagnostics bitcode
  * file.
  *
- * \param file The name of the file to deserialize.
- * \param error A pointer to a enum value recording if there was a problem
+ * @param file The name of the file to deserialize.
+ * @param error A pointer to a enum value recording if there was a problem
  *        deserializing the diagnostics.
- * \param errorString A pointer to a CXString for recording the error string
+ * @param errorString A pointer to a CXString for recording the error string
  *        if the file was not successfully loaded.
  *
- * \returns A loaded CXDiagnosticSet if successful, and NULL otherwise.  These
+ * @return A loaded CXDiagnosticSet if successful, and NULL otherwise.  These
  * diagnostics should be released using clang_disposeDiagnosticSet().
  */
 public static native CXDiagnosticSet clang_loadDiagnostics(@Cast("const char*") BytePointer file,
@@ -1521,10 +1521,10 @@ public static native @Cast("unsigned") int clang_getNumDiagnostics(CXTranslation
 /**
  * \brief Retrieve a diagnostic associated with the given translation unit.
  *
- * \param Unit the translation unit to query.
- * \param Index the zero-based diagnostic number to retrieve.
+ * @param Unit the translation unit to query.
+ * @param Index the zero-based diagnostic number to retrieve.
  *
- * \returns the requested diagnostic. This diagnostic must be freed
+ * @return the requested diagnostic. This diagnostic must be freed
  * via a call to \c clang_disposeDiagnostic().
  */
 public static native CXDiagnostic clang_getDiagnostic(CXTranslationUnit Unit,
@@ -1534,7 +1534,7 @@ public static native CXDiagnostic clang_getDiagnostic(CXTranslationUnit Unit,
  * \brief Retrieve the complete set of diagnostics associated with a
  *        translation unit.
  *
- * \param Unit the translation unit to query.
+ * @param Unit the translation unit to query.
  */
 public static native CXDiagnosticSet clang_getDiagnosticSetFromTU(CXTranslationUnit Unit);  
 
@@ -1558,9 +1558,9 @@ public static final int
    * When set, diagnostics will be prefixed by the file, line, and
    * (optionally) column to which the diagnostic refers. For example,
    *
-   * \code
+   * <pre><code>
    * test.c:28: warning: extra tokens at end of #endif directive
-   * \endcode
+   * </code></pre>
    *
    * This option corresponds to the clang flag \c -fshow-source-location.
    */
@@ -1619,12 +1619,12 @@ public static final int
  * \c clang_defaultDiagnosticDisplayOptions() function returns the set of
  * options that most closely mimics the behavior of the clang compiler.
  *
- * \param Diagnostic The diagnostic to print.
+ * @param Diagnostic The diagnostic to print.
  *
- * \param Options A set of options that control the diagnostic display,
+ * @param Options A set of options that control the diagnostic display,
  * created by combining \c CXDiagnosticDisplayOptions values.
  *
- * \returns A new string containing for formatted diagnostic.
+ * @return A new string containing for formatted diagnostic.
  */
 public static native @ByVal CXString clang_formatDiagnostic(CXDiagnostic Diagnostic,
                                                @Cast("unsigned") int Options);
@@ -1633,7 +1633,7 @@ public static native @ByVal CXString clang_formatDiagnostic(CXDiagnostic Diagnos
  * \brief Retrieve the set of display options most similar to the
  * default behavior of the clang compiler.
  *
- * \returns A set of display options suitable for use with \c
+ * @return A set of display options suitable for use with \c
  * clang_formatDiagnostic().
  */
 public static native @Cast("unsigned") int clang_defaultDiagnosticDisplayOptions();
@@ -1660,12 +1660,12 @@ public static native @ByVal CXString clang_getDiagnosticSpelling(CXDiagnostic ar
  * \brief Retrieve the name of the command-line option that enabled this
  * diagnostic.
  *
- * \param Diag The diagnostic to be queried.
+ * @param Diag The diagnostic to be queried.
  *
- * \param Disable If non-NULL, will be set to the option that disables this
+ * @param Disable If non-NULL, will be set to the option that disables this
  * diagnostic (if any).
  *
- * \returns A string that contains the command-line option used to enable this
+ * @return A string that contains the command-line option used to enable this
  * warning, such as "-Wconversion" or "-pedantic". 
  */
 public static native @ByVal CXString clang_getDiagnosticOption(CXDiagnostic Diag,
@@ -1678,7 +1678,7 @@ public static native @ByVal CXString clang_getDiagnosticOption(CXDiagnostic Diag
  * diagnostics (e.g., diagnostics under the same warning flag). This routine 
  * retrieves the category number for the given diagnostic.
  *
- * \returns The number of the category that contains this diagnostic, or zero
+ * @return The number of the category that contains this diagnostic, or zero
  * if this diagnostic is uncategorized.
  */
 public static native @Cast("unsigned") int clang_getDiagnosticCategory(CXDiagnostic arg0);
@@ -1688,17 +1688,17 @@ public static native @Cast("unsigned") int clang_getDiagnosticCategory(CXDiagnos
  *  is now deprecated.  Use clang_getDiagnosticCategoryText()
  *  instead.
  *
- * \param Category A diagnostic category number, as returned by 
+ * @param Category A diagnostic category number, as returned by 
  * \c clang_getDiagnosticCategory().
  *
- * \returns The name of the given diagnostic category.
+ * @return The name of the given diagnostic category.
  */
 public static native @ByVal CXString clang_getDiagnosticCategoryName(@Cast("unsigned") int Category);
 
 /**
  * \brief Retrieve the diagnostic category text for a given diagnostic.
  *
- * \returns The text of the given diagnostic category.
+ * @return The text of the given diagnostic category.
  */
 public static native @ByVal CXString clang_getDiagnosticCategoryText(CXDiagnostic arg0);
   
@@ -1715,11 +1715,11 @@ public static native @Cast("unsigned") int clang_getDiagnosticNumRanges(CXDiagno
  * code. On the command line, Clang displays source ranges by
  * underlining them with '~' characters.
  *
- * \param Diagnostic the diagnostic whose range is being extracted.
+ * @param Diagnostic the diagnostic whose range is being extracted.
  *
- * \param Range the zero-based index specifying which range to
+ * @param Range the zero-based index specifying which range to
  *
- * \returns the requested source range.
+ * @return the requested source range.
  */
 public static native @ByVal CXSourceRange clang_getDiagnosticRange(CXDiagnostic Diagnostic,
                                                       @Cast("unsigned") int Range);
@@ -1743,16 +1743,16 @@ public static native @Cast("unsigned") int clang_getDiagnosticNumFixIts(CXDiagno
  * insertion location, and the replacement string provides the text to
  * insert).
  *
- * \param Diagnostic The diagnostic whose fix-its are being queried.
+ * @param Diagnostic The diagnostic whose fix-its are being queried.
  *
- * \param FixIt The zero-based index of the fix-it.
+ * @param FixIt The zero-based index of the fix-it.
  *
- * \param ReplacementRange The source range whose contents will be
+ * @param ReplacementRange The source range whose contents will be
  * replaced with the returned replacement string. Note that source
  * ranges are half-open ranges [a, b), so the source code should be
  * replaced from a and up to (but not including) b.
  *
- * \returns A string containing text that should be replace the source
+ * @return A string containing text that should be replace the source
  * code indicated by the \c ReplacementRange.
  */
 public static native @ByVal CXString clang_getDiagnosticFixIt(CXDiagnostic Diagnostic,
@@ -1760,7 +1760,7 @@ public static native @ByVal CXString clang_getDiagnosticFixIt(CXDiagnostic Diagn
                                                CXSourceRange ReplacementRange);
 
 /**
- * @}
+ * \}
  */
 
 /**
@@ -1770,7 +1770,7 @@ public static native @ByVal CXString clang_getDiagnosticFixIt(CXDiagnostic Diagn
  * translation units from files, either by parsing the contents of the files or
  * by reading in a serialized representation of a translation unit.
  *
- * @{
+ * \{
  */
 
 /**
@@ -1794,25 +1794,25 @@ public static native @ByVal CXString clang_getTranslationUnitSpelling(CXTranslat
  *   '-fsyntax-only'
  *   '-o \<output file>'  (both '-o' and '\<output file>' are ignored)
  *
- * \param CIdx The index object with which the translation unit will be
+ * @param CIdx The index object with which the translation unit will be
  * associated.
  *
- * \param source_filename The name of the source file to load, or NULL if the
+ * @param source_filename The name of the source file to load, or NULL if the
  * source file is included in \p clang_command_line_args.
  *
- * \param num_clang_command_line_args The number of command-line arguments in
+ * @param num_clang_command_line_args The number of command-line arguments in
  * \p clang_command_line_args.
  *
- * \param clang_command_line_args The command-line arguments that would be
+ * @param clang_command_line_args The command-line arguments that would be
  * passed to the \c clang executable if it were being invoked out-of-process.
  * These command-line options will be parsed and will affect how the translation
  * unit is parsed. Note that the following options are ignored: '-c',
  * '-emit-ast', '-fsyntax-only' (which is the default), and '-o \<output file>'.
  *
- * \param num_unsaved_files the number of unsaved file entries in \p
+ * @param num_unsaved_files the number of unsaved file entries in \p
  * unsaved_files.
  *
- * \param unsaved_files the files that have not yet been saved to disk
+ * @param unsaved_files the files that have not yet been saved to disk
  * but may be required for code completion, including the contents of
  * those files.  The contents and name of these files (as specified by
  * CXUnsavedFile) are copied when necessary, so the client only needs to
@@ -1884,10 +1884,10 @@ public static native CXTranslationUnit clang_createTranslationUnit(
 /**
  * \brief Create a translation unit from an AST file (\c -emit-ast).
  *
- * \param[out] out_TU A non-NULL pointer to store the created
+ * @param[out] out_TU A non-NULL pointer to store the created
  * \c CXTranslationUnit.
  *
- * \returns Zero on success, otherwise returns an error code.
+ * @return Zero on success, otherwise returns an error code.
  */
 public static native @Cast("CXErrorCode") int clang_createTranslationUnit2(
     CXIndex CIdx,
@@ -2077,39 +2077,39 @@ public static native CXTranslationUnit clang_parseTranslationUnit(CXIndex CIdx,
  * command-line arguments so that the compilation can be configured in the same
  * way that the compiler is configured on the command line.
  *
- * \param CIdx The index object with which the translation unit will be 
+ * @param CIdx The index object with which the translation unit will be 
  * associated.
  *
- * \param source_filename The name of the source file to load, or NULL if the
+ * @param source_filename The name of the source file to load, or NULL if the
  * source file is included in \c command_line_args.
  *
- * \param command_line_args The command-line arguments that would be
+ * @param command_line_args The command-line arguments that would be
  * passed to the \c clang executable if it were being invoked out-of-process.
  * These command-line options will be parsed and will affect how the translation
  * unit is parsed. Note that the following options are ignored: '-c', 
  * '-emit-ast', '-fsyntax-only' (which is the default), and '-o \<output file>'.
  *
- * \param num_command_line_args The number of command-line arguments in
+ * @param num_command_line_args The number of command-line arguments in
  * \c command_line_args.
  *
- * \param unsaved_files the files that have not yet been saved to disk
+ * @param unsaved_files the files that have not yet been saved to disk
  * but may be required for parsing, including the contents of
  * those files.  The contents and name of these files (as specified by
  * CXUnsavedFile) are copied when necessary, so the client only needs to
  * guarantee their validity until the call to this function returns.
  *
- * \param num_unsaved_files the number of unsaved file entries in \p
+ * @param num_unsaved_files the number of unsaved file entries in \p
  * unsaved_files.
  *
- * \param options A bitmask of options that affects how the translation unit
+ * @param options A bitmask of options that affects how the translation unit
  * is managed but not its compilation. This should be a bitwise OR of the
  * CXTranslationUnit_XXX flags.
  *
- * \param[out] out_TU A non-NULL pointer to store the created
+ * @param[out] out_TU A non-NULL pointer to store the created
  * \c CXTranslationUnit, describing the parsed code and containing any
  * diagnostics produced by the compiler.
  *
- * \returns Zero on success, otherwise returns an error code.
+ * @return Zero on success, otherwise returns an error code.
  */
 public static native @Cast("CXErrorCode") int clang_parseTranslationUnit2(CXIndex CIdx,
                             @Cast("const char*") BytePointer source_filename,
@@ -2239,15 +2239,15 @@ public static final int
  * header, used as a precompiled header when parsing other translation
  * units.
  *
- * \param TU The translation unit to save.
+ * @param TU The translation unit to save.
  *
- * \param FileName The file to which the translation unit will be saved.
+ * @param FileName The file to which the translation unit will be saved.
  *
- * \param options A bitmask of options that affects how the translation unit
+ * @param options A bitmask of options that affects how the translation unit
  * is saved. This should be a bitwise OR of the
  * CXSaveTranslationUnit_XXX flags.
  *
- * \returns A value that will match one of the enumerators of the CXSaveError
+ * @return A value that will match one of the enumerators of the CXSaveError
  * enumeration. Zero (CXSaveError_None) indicates that the translation unit was 
  * saved successfully, while a non-zero value indicates that a problem occurred.
  */
@@ -2305,24 +2305,24 @@ public static native @Cast("unsigned") int clang_defaultReparseOptions(CXTransla
  * However, it may be more efficient to reparse a translation 
  * unit using this routine.
  *
- * \param TU The translation unit whose contents will be re-parsed. The
+ * @param TU The translation unit whose contents will be re-parsed. The
  * translation unit must originally have been built with 
  * \c clang_createTranslationUnitFromSourceFile().
  *
- * \param num_unsaved_files The number of unsaved file entries in \p
+ * @param num_unsaved_files The number of unsaved file entries in \p
  * unsaved_files.
  *
- * \param unsaved_files The files that have not yet been saved to disk
+ * @param unsaved_files The files that have not yet been saved to disk
  * but may be required for parsing, including the contents of
  * those files.  The contents and name of these files (as specified by
  * CXUnsavedFile) are copied when necessary, so the client only needs to
  * guarantee their validity until the call to this function returns.
  * 
- * \param options A bitset of options composed of the flags in CXReparse_Flags.
+ * @param options A bitset of options composed of the flags in CXReparse_Flags.
  * The function \c clang_defaultReparseOptions() produces a default set of
  * options recommended for most uses, based on the translation unit.
  *
- * \returns 0 if the sources could be reparsed.  A non-zero error code will be
+ * @return 0 if the sources could be reparsed.  A non-zero error code will be
  * returned if reparsing was impossible, such that the translation unit is
  * invalid. In such cases, the only valid call for \c TU is
  * \c clang_disposeTranslationUnit(TU).  The error codes returned by this
@@ -2368,9 +2368,9 @@ public static native @Cast("const char*") BytePointer clang_getTUResourceUsageNa
 public static class CXTUResourceUsageEntry extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXTUResourceUsageEntry() { allocate(); }
+    public CXTUResourceUsageEntry() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXTUResourceUsageEntry(int size) { allocateArray(size); }
+    public CXTUResourceUsageEntry(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXTUResourceUsageEntry(Pointer p) { super(p); }
     private native void allocate();
@@ -2392,9 +2392,9 @@ public static class CXTUResourceUsageEntry extends Pointer {
 public static class CXTUResourceUsage extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXTUResourceUsage() { allocate(); }
+    public CXTUResourceUsage() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXTUResourceUsage(int size) { allocateArray(size); }
+    public CXTUResourceUsage(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXTUResourceUsage(Pointer p) { super(p); }
     private native void allocate();
@@ -2424,7 +2424,7 @@ public static native @ByVal CXTUResourceUsage clang_getCXTUResourceUsage(CXTrans
 public static native void clang_disposeCXTUResourceUsage(@ByVal CXTUResourceUsage usage);
 
 /**
- * @}
+ * \}
  */
 
 /**
@@ -2464,13 +2464,13 @@ public static final int
   CXCursor_VarDecl                       = 9,
   /** \brief A function or method parameter. */
   CXCursor_ParmDecl                      = 10,
-  /** \brief An Objective-C \@interface. */
+  /** \brief An Objective-C \\interface. */
   CXCursor_ObjCInterfaceDecl             = 11,
-  /** \brief An Objective-C \@interface for a category. */
+  /** \brief An Objective-C \\interface for a category. */
   CXCursor_ObjCCategoryDecl              = 12,
-  /** \brief An Objective-C \@protocol declaration. */
+  /** \brief An Objective-C \\protocol declaration. */
   CXCursor_ObjCProtocolDecl              = 13,
-  /** \brief An Objective-C \@property declaration. */
+  /** \brief An Objective-C \\property declaration. */
   CXCursor_ObjCPropertyDecl              = 14,
   /** \brief An Objective-C instance variable. */
   CXCursor_ObjCIvarDecl                  = 15,
@@ -2478,9 +2478,9 @@ public static final int
   CXCursor_ObjCInstanceMethodDecl        = 16,
   /** \brief An Objective-C class method. */
   CXCursor_ObjCClassMethodDecl           = 17,
-  /** \brief An Objective-C \@implementation. */
+  /** \brief An Objective-C \\implementation. */
   CXCursor_ObjCImplementationDecl        = 18,
-  /** \brief An Objective-C \@implementation for a category. */
+  /** \brief An Objective-C \\implementation for a category. */
   CXCursor_ObjCCategoryImplDecl          = 19,
   /** \brief A typedef */
   CXCursor_TypedefDecl                   = 20,
@@ -2516,9 +2516,9 @@ public static final int
   CXCursor_UsingDeclaration              = 35,
   /** \brief A C++ alias declaration */
   CXCursor_TypeAliasDecl                 = 36,
-  /** \brief An Objective-C \@synthesize definition. */
+  /** \brief An Objective-C \\synthesize definition. */
   CXCursor_ObjCSynthesizeDecl            = 37,
-  /** \brief An Objective-C \@dynamic definition. */
+  /** \brief An Objective-C \\dynamic definition. */
   CXCursor_ObjCDynamicDecl               = 38,
   /** \brief An access specifier. */
   CXCursor_CXXAccessSpecifier            = 39,
@@ -2537,10 +2537,10 @@ public static final int
    * A type reference occurs anywhere where a type is named but not
    * declared. For example, given:
    *
-   * \code
+   * <pre><code>
    * typedef unsigned size_type;
    * size_type size;
-   * \endcode
+   * </code></pre>
    *
    * The typedef is a declaration of size_type (CXCursor_TypedefDecl),
    * while the type of the variable "size" is referenced. The cursor
@@ -2568,12 +2568,12 @@ public static final int
    * This cursor kind is used to describe the jump to "start_over" in the 
    * goto statement in the following example:
    *
-   * \code
+   * <pre><code>
    *   start_over:
    *     ++counter;
    *
    *     goto start_over;
-   * \endcode
+   * </code></pre>
    *
    * A label reference cursor refers to a label statement.
    */
@@ -2586,7 +2586,7 @@ public static final int
    * An overloaded declaration reference cursor occurs in C++ templates where
    * a dependent name refers to a function. For example:
    *
-   * \code
+   * <pre><code>
    * template<typename T> void swap(T&, T&);
    *
    * struct X { ... };
@@ -2602,7 +2602,7 @@ public static final int
    *
    * struct Y { };
    * void swap(Y&, Y&);
-   * \endcode
+   * </code></pre>
    *
    * Here, the identifier "swap" is associated with an overloaded declaration
    * reference. In the template definition, "swap" refers to either of the two
@@ -2774,9 +2774,9 @@ public static final int
    * notion (C++ [expr.type.conv]).
    *
    * Example:
-   * \code
+   * <pre><code>
    *   x = int(0.5);
-   * \endcode
+   * </code></pre>
    */
   CXCursor_CXXFunctionalCastExpr         = 128,
 
@@ -2817,28 +2817,28 @@ public static final int
    */
   CXCursor_UnaryExpr                     = 136,
 
-  /** \brief An Objective-C string literal i.e. @"foo".
+  /** \brief An Objective-C string literal i.e. \"foo".
    */
   CXCursor_ObjCStringLiteral             = 137,
 
-  /** \brief An Objective-C \@encode expression.
+  /** \brief An Objective-C \\encode expression.
    */
   CXCursor_ObjCEncodeExpr                = 138,
 
-  /** \brief An Objective-C \@selector expression.
+  /** \brief An Objective-C \\selector expression.
    */
   CXCursor_ObjCSelectorExpr              = 139,
 
-  /** \brief An Objective-C \@protocol expression.
+  /** \brief An Objective-C \\protocol expression.
    */
   CXCursor_ObjCProtocolExpr              = 140,
 
   /** \brief An Objective-C "bridged" cast expression, which casts between
    * Objective-C pointers and C pointers, transferring ownership in the process.
    *
-   * \code
+   * <pre><code>
    *   NSString *str = (__bridge_transfer NSString *)CFCreateString();
-   * \endcode
+   * </code></pre>
    */
   CXCursor_ObjCBridgedCastExpr           = 141,
 
@@ -2848,24 +2848,24 @@ public static final int
    * A pack expansion expression contains a pattern (which itself is an
    * expression) followed by an ellipsis. For example:
    *
-   * \code
+   * <pre><code>
    * template<typename F, typename ...Types>
    * void forward(F f, Types &&...args) {
    *  f(static_cast<Types&&>(args)...);
    * }
-   * \endcode
+   * </code></pre>
    */
   CXCursor_PackExpansionExpr             = 142,
 
   /** \brief Represents an expression that computes the length of a parameter
    * pack.
    *
-   * \code
+   * <pre><code>
    * template<typename ...Types>
    * struct count {
    *   static const unsigned value = sizeof...(Types);
    * };
-   * \endcode
+   * </code></pre>
    */
   CXCursor_SizeOfPackExpr                = 143,
 
@@ -2911,10 +2911,10 @@ public static final int
    * This cursor kind is used to describe the "start_over:" label statement in 
    * the following example:
    *
-   * \code
+   * <pre><code>
    *   start_over:
    *     ++counter;
-   * \endcode
+   * </code></pre>
    *
    */
   CXCursor_LabelStmt                     = 201,
@@ -2979,23 +2979,23 @@ public static final int
   CXCursor_GCCAsmStmt                    = 215,
   CXCursor_AsmStmt                       =  CXCursor_GCCAsmStmt,
 
-  /** \brief Objective-C's overall \@try-\@catch-\@finally statement.
+  /** \brief Objective-C's overall \\try-\\catch-\\finally statement.
    */
   CXCursor_ObjCAtTryStmt                 = 216,
 
-  /** \brief Objective-C's \@catch statement.
+  /** \brief Objective-C's \\catch statement.
    */
   CXCursor_ObjCAtCatchStmt               = 217,
 
-  /** \brief Objective-C's \@finally statement.
+  /** \brief Objective-C's \\finally statement.
    */
   CXCursor_ObjCAtFinallyStmt             = 218,
 
-  /** \brief Objective-C's \@throw statement.
+  /** \brief Objective-C's \\throw statement.
    */
   CXCursor_ObjCAtThrowStmt               = 219,
 
-  /** \brief Objective-C's \@synchronized statement.
+  /** \brief Objective-C's \\synchronized statement.
    */
   CXCursor_ObjCAtSynchronizedStmt        = 220,
 
@@ -3225,9 +3225,9 @@ public static final int
 public static class CXCursor extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXCursor() { allocate(); }
+    public CXCursor() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXCursor(int size) { allocateArray(size); }
+    public CXCursor(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXCursor(Pointer p) { super(p); }
     private native void allocate();
@@ -3245,7 +3245,7 @@ public static class CXCursor extends Pointer {
 /**
  * \defgroup CINDEX_CURSOR_MANIP Cursor manipulations
  *
- * @{
+ * \{
  */
 
 /**
@@ -3365,9 +3365,9 @@ public static native @Cast("CXLinkageKind") int clang_getCursorLinkage(@ByVal CX
  * \brief Determine the availability of the entity that this cursor refers to,
  * taking the current target platform into account.
  *
- * \param cursor The cursor to query.
+ * @param cursor The cursor to query.
  *
- * \returns The availability of the cursor.
+ * @return The availability of the cursor.
  */
 public static native @Cast("CXAvailabilityKind") int clang_getCursorAvailability(@ByVal CXCursor cursor);
 
@@ -3378,9 +3378,9 @@ public static native @Cast("CXAvailabilityKind") int clang_getCursorAvailability
 public static class CXPlatformAvailability extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXPlatformAvailability() { allocate(); }
+    public CXPlatformAvailability() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXPlatformAvailability(int size) { allocateArray(size); }
+    public CXPlatformAvailability(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXPlatformAvailability(Pointer p) { super(p); }
     private native void allocate();
@@ -3425,31 +3425,31 @@ public static class CXPlatformAvailability extends Pointer {
  * \brief Determine the availability of the entity that this cursor refers to
  * on any platforms for which availability information is known.
  *
- * \param cursor The cursor to query.
+ * @param cursor The cursor to query.
  *
- * \param always_deprecated If non-NULL, will be set to indicate whether the 
+ * @param always_deprecated If non-NULL, will be set to indicate whether the 
  * entity is deprecated on all platforms.
  *
- * \param deprecated_message If non-NULL, will be set to the message text 
+ * @param deprecated_message If non-NULL, will be set to the message text 
  * provided along with the unconditional deprecation of this entity. The client
  * is responsible for deallocating this string.
  *
- * \param always_unavailable If non-NULL, will be set to indicate whether the
+ * @param always_unavailable If non-NULL, will be set to indicate whether the
  * entity is unavailable on all platforms.
  *
- * \param unavailable_message If non-NULL, will be set to the message text
+ * @param unavailable_message If non-NULL, will be set to the message text
  * provided along with the unconditional unavailability of this entity. The 
  * client is responsible for deallocating this string.
  *
- * \param availability If non-NULL, an array of CXPlatformAvailability instances
+ * @param availability If non-NULL, an array of CXPlatformAvailability instances
  * that will be populated with platform availability information, up to either
  * the number of platforms for which availability information is available (as
  * returned by this function) or \c availability_size, whichever is smaller.
  *
- * \param availability_size The number of elements available in the 
+ * @param availability_size The number of elements available in the 
  * \c availability array.
  *
- * \returns The number of platforms (N) for which availability information is
+ * @return The number of platforms (N) for which availability information is
  * available (which is unrelated to \c availability_size).
  *
  * Note that the client is responsible for calling 
@@ -3528,7 +3528,7 @@ public static native void clang_disposeCXCursorSet(CXCursorSet cset);
 /**
  * \brief Queries a CXCursorSet to see if it contains a specific CXCursor.
  *
- * \returns non-zero if the set contains the specified cursor.
+ * @return non-zero if the set contains the specified cursor.
 */
 public static native @Cast("unsigned") int clang_CXCursorSet_contains(CXCursorSet cset,
                                                    @ByVal CXCursor cursor);
@@ -3536,7 +3536,7 @@ public static native @Cast("unsigned") int clang_CXCursorSet_contains(CXCursorSe
 /**
  * \brief Inserts a CXCursor into a CXCursorSet.
  *
- * \returns zero if the CXCursor was already in the set, and non-zero otherwise.
+ * @return zero if the CXCursor was already in the set, and non-zero otherwise.
 */
 public static native @Cast("unsigned") int clang_CXCursorSet_insert(CXCursorSet cset,
                                                  @ByVal CXCursor cursor);
@@ -3550,13 +3550,13 @@ public static native @Cast("unsigned") int clang_CXCursorSet_insert(CXCursorSet 
  * \c clang_getCursorLexicalParent()). They diverge when declarations or
  * definitions are provided out-of-line. For example:
  *
- * \code
+ * <pre><code>
  * class C {
  *  void f();
  * };
  *
  * void C::f() { }
- * \endcode
+ * </code></pre>
  *
  * In the out-of-line definition of \c C::f, the semantic parent is
  * the class \c C, of which this function is a member. The lexical parent is
@@ -3585,13 +3585,13 @@ public static native @ByVal CXCursor clang_getCursorSemanticParent(@ByVal CXCurs
  * \c clang_getCursorSemanticParent()). They diverge when declarations or
  * definitions are provided out-of-line. For example:
  *
- * \code
+ * <pre><code>
  * class C {
  *  void f();
  * };
  *
  * void C::f() { }
- * \endcode
+ * </code></pre>
  *
  * In the out-of-line definition of \c C::f, the semantic parent is
  * the class \c C, of which this function is a member. The lexical parent is
@@ -3641,17 +3641,17 @@ public static native @ByVal CXCursor clang_getCursorLexicalParent(@ByVal CXCurso
  * invoke this function again, given the previously-found overridden
  * methods, to map out the complete method-override set.
  *
- * \param cursor A cursor representing an Objective-C or C++
+ * @param cursor A cursor representing an Objective-C or C++
  * method. This routine will compute the set of methods that this
  * method overrides.
  * 
- * \param overridden A pointer whose pointee will be replaced with a
+ * @param overridden A pointer whose pointee will be replaced with a
  * pointer to an array of cursors, representing the set of overridden
  * methods. If there are no overridden methods, the pointee will be
  * set to NULL. The pointee must be freed via a call to 
  * \c clang_disposeOverriddenCursors().
  *
- * \param num_overridden A pointer to the number of overridden
+ * @param num_overridden A pointer to the number of overridden
  * functions, will be set to the number of overridden functions in the
  * array pointed to by \p overridden.
  */
@@ -3681,7 +3681,7 @@ public static native void clang_disposeOverriddenCursors(CXCursor overridden);
 public static native CXFile clang_getIncludedFile(@ByVal CXCursor cursor);
   
 /**
- * @}
+ * \}
  */
 
 /**
@@ -3692,7 +3692,7 @@ public static native CXFile clang_getIncludedFile(@ByVal CXCursor cursor);
  * described entities occur in the source code. The mapping is provided in
  * both directions, so one can map from source code to the AST and back.
  *
- * @{
+ * \{
  */
 
 /**
@@ -3707,7 +3707,7 @@ public static native CXFile clang_getIncludedFile(@ByVal CXCursor cursor);
  * "x" or "y" (e.g., on the + or the whitespace around it), clang_getCursor()
  * will return a cursor referring to the "+" expression.
  *
- * \returns a cursor representing the entity at the given source location, or
+ * @return a cursor representing the entity at the given source location, or
  * a NULL cursor if no such entity can be found.
  */
 public static native @ByVal CXCursor clang_getCursor(CXTranslationUnit arg0, @ByVal CXSourceLocation arg1);
@@ -3738,13 +3738,13 @@ public static native @ByVal CXSourceLocation clang_getCursorLocation(@ByVal CXCu
 public static native @ByVal CXSourceRange clang_getCursorExtent(@ByVal CXCursor arg0);
 
 /**
- * @}
+ * \}
  */
     
 /**
  * \defgroup CINDEX_TYPES Type information for CXCursors
  *
- * @{
+ * \{
  */
 
 /**
@@ -3844,9 +3844,9 @@ public static final int
 public static class CXType extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXType() { allocate(); }
+    public CXType() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXType(int size) { allocateArray(size); }
+    public CXType(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXType(Pointer p) { super(p); }
     private native void allocate();
@@ -4055,7 +4055,7 @@ public static native @Cast("unsigned long long") long clang_Cursor_getTemplateAr
 /**
  * \brief Determine whether two CXTypes represent the same type.
  *
- * \returns non-zero if the CXTypes represent the same type and
+ * @return non-zero if the CXTypes represent the same type and
  *          zero otherwise.
  */
 public static native @Cast("unsigned") int clang_equalTypes(@ByVal CXType A, @ByVal CXType B);
@@ -4384,9 +4384,9 @@ public static native @Cast("CX_StorageClass") int clang_Cursor_getStorageClass(@
  * \brief Determine the number of overloaded declarations referenced by a 
  * \c CXCursor_OverloadedDeclRef cursor.
  *
- * \param cursor The cursor whose overloaded declarations are being queried.
+ * @param cursor The cursor whose overloaded declarations are being queried.
  *
- * \returns The number of overloaded declarations referenced by \c cursor. If it
+ * @return The number of overloaded declarations referenced by \c cursor. If it
  * is not a \c CXCursor_OverloadedDeclRef cursor, returns 0.
  */
 public static native @Cast("unsigned") int clang_getNumOverloadedDecls(@ByVal CXCursor cursor);
@@ -4395,12 +4395,12 @@ public static native @Cast("unsigned") int clang_getNumOverloadedDecls(@ByVal CX
  * \brief Retrieve a cursor for one of the overloaded declarations referenced
  * by a \c CXCursor_OverloadedDeclRef cursor.
  *
- * \param cursor The cursor whose overloaded declarations are being queried.
+ * @param cursor The cursor whose overloaded declarations are being queried.
  *
- * \param index The zero-based index into the set of overloaded declarations in
+ * @param index The zero-based index into the set of overloaded declarations in
  * the cursor.
  *
- * \returns A cursor representing the declaration referenced by the given 
+ * @return A cursor representing the declaration referenced by the given 
  * \c cursor at the specified \c index. If the cursor does not have an 
  * associated set of overloaded declarations, or if the index is out of bounds,
  * returns \c clang_getNullCursor();
@@ -4409,13 +4409,13 @@ public static native @ByVal CXCursor clang_getOverloadedDecl(@ByVal CXCursor cur
                                                 @Cast("unsigned") int index);
   
 /**
- * @}
+ * \}
  */
   
 /**
  * \defgroup CINDEX_ATTRIBUTES Information for attributes
  *
- * @{
+ * \{
  */
 
 
@@ -4427,7 +4427,7 @@ public static native @ByVal CXCursor clang_getOverloadedDecl(@ByVal CXCursor cur
 public static native @ByVal CXType clang_getIBOutletCollectionType(@ByVal CXCursor arg0);
 
 /**
- * @}
+ * \}
  */
 
 /**
@@ -4436,7 +4436,7 @@ public static native @ByVal CXType clang_getIBOutletCollectionType(@ByVal CXCurs
  * These routines provide the ability to traverse the abstract syntax tree
  * using cursors.
  *
- * @{
+ * \{
  */
 
 /**
@@ -4495,17 +4495,17 @@ public static class CXCursorVisitor extends FunctionPointer {
  * \c CXChildVisit_Recurse. The traversal may also be ended prematurely, if
  * the visitor returns \c CXChildVisit_Break.
  *
- * \param parent the cursor whose child may be visited. All kinds of
+ * @param parent the cursor whose child may be visited. All kinds of
  * cursors can be visited, including invalid cursors (which, by
  * definition, have no children).
  *
- * \param visitor the visitor function that will be invoked for each
+ * @param visitor the visitor function that will be invoked for each
  * child of \p parent.
  *
- * \param client_data pointer data supplied by the client, which will
+ * @param client_data pointer data supplied by the client, which will
  * be passed to the visitor each time it is invoked.
  *
- * \returns a non-zero value if the traversal was terminated
+ * @return a non-zero value if the traversal was terminated
  * prematurely by the visitor returning \c CXChildVisit_Break.
  */
 public static native @Cast("unsigned") int clang_visitChildren(@ByVal CXCursor parent,
@@ -4517,7 +4517,7 @@ public static native @Cast("unsigned") int clang_visitChildren(@ByVal CXCursor p
 // #endif
 
 /**
- * @}
+ * \}
  */
 
 /**
@@ -4528,7 +4528,7 @@ public static native @Cast("unsigned") int clang_visitChildren(@ByVal CXCursor p
  * by cursors, follow reference cursors to the declarations they reference,
  * and associate declarations with their definitions.
  *
- * @{
+ * \{
  */
 
 /**
@@ -4603,10 +4603,10 @@ public static native @ByVal CXString clang_getCursorSpelling(@ByVal CXCursor arg
  * Objective-C methods and Objective-C message expressions, there are multiple
  * pieces for each selector identifier.
  * 
- * \param pieceIndex the index of the spelling name piece. If this is greater
+ * @param pieceIndex the index of the spelling name piece. If this is greater
  * than the actual number of pieces, it will return a NULL (invalid) range.
  *  
- * \param options Reserved.
+ * @param options Reserved.
  */
 public static native @ByVal CXSourceRange clang_Cursor_getSpellingNameRange(@ByVal CXCursor arg0,
                                                           @Cast("unsigned") int pieceIndex,
@@ -4642,12 +4642,12 @@ public static native @ByVal CXCursor clang_getCursorReferenced(@ByVal CXCursor a
  *  unit, but only one of those declarations can also be a
  *  definition. For example, given:
  *
- *  \code
+ *  <pre><code>
  *  int f(int, int);
  *  int g(int x, int y) { return f(x, y); }
  *  int f(int a, int b) { return a + b; }
  *  int f(int, int);
- *  \endcode
+ *  </code></pre>
  *
  *  there are three declarations of the function "f", but only the
  *  second one is a definition. The clang_getCursorDefinition()
@@ -4676,13 +4676,13 @@ public static native @Cast("unsigned") int clang_isCursorDefinition(@ByVal CXCur
  * times within a single translation unit. For example, a structure type can
  * be forward-declared (possibly multiple times) and later defined:
  *
- * \code
+ * <pre><code>
  * struct X;
  * struct X;
  * struct X {
  *   int member;
  * };
- * \endcode
+ * </code></pre>
  *
  * The declarations and the definition of \c X are represented by three 
  * different cursors, all of which are declarations of the same underlying 
@@ -4691,7 +4691,7 @@ public static native @Cast("unsigned") int clang_isCursorDefinition(@ByVal CXCur
  * determine if two cursors are declarations of the same underlying entity by
  * comparing their canonical cursors.
  *
- * \returns The canonical cursor for the entity referred to by the given cursor.
+ * @return The canonical cursor for the entity referred to by the given cursor.
  */
 public static native @ByVal CXCursor clang_getCanonicalCursor(@ByVal CXCursor arg0);
 
@@ -4703,7 +4703,7 @@ public static native @ByVal CXCursor clang_getCanonicalCursor(@ByVal CXCursor ar
  * After getting a cursor with #clang_getCursor, this can be called to
  * determine if the location points to a selector identifier.
  *
- * \returns The selector index if the cursor is an Objective-C method or message
+ * @return The selector index if the cursor is an Objective-C method or message
  * expression and the cursor is pointing to a selector identifier, or -1
  * otherwise.
  */
@@ -4752,7 +4752,7 @@ public static final int
  * associated property attributes. The bits are formed from
  * \c CXObjCPropertyAttrKind.
  *
- * \param reserved Reserved for future use, pass 0.
+ * @param reserved Reserved for future use, pass 0.
  */
 public static native @Cast("unsigned") int clang_Cursor_getObjCPropertyAttributes(@ByVal CXCursor C,
                                                              @Cast("unsigned") int reserved);
@@ -4781,8 +4781,8 @@ public static native @Cast("unsigned") int clang_Cursor_getObjCDeclQualifiers(@B
 
 /**
  * \brief Given a cursor that represents an Objective-C method or property
- * declaration, return non-zero if the declaration was affected by "@optional".
- * Returns zero if the cursor is not such a declaration or it is "@required".
+ * declaration, return non-zero if the declaration was affected by "\optional".
+ * Returns zero if the cursor is not such a declaration or it is "\required".
  */
 public static native @Cast("unsigned") int clang_Cursor_isObjCOptional(@ByVal CXCursor C);
 
@@ -4812,12 +4812,12 @@ public static native @ByVal CXString clang_Cursor_getRawCommentText(@ByVal CXCur
 public static native @ByVal CXString clang_Cursor_getBriefCommentText(@ByVal CXCursor C);
 
 /**
- * @}
+ * \}
  */
 
 /** \defgroup CINDEX_MANGLE Name Mangling API Functions
  *
- * @{
+ * \{
  */
 
 /**
@@ -4826,7 +4826,7 @@ public static native @ByVal CXString clang_Cursor_getBriefCommentText(@ByVal CXC
 public static native @ByVal CXString clang_Cursor_getMangling(@ByVal CXCursor arg0);
 
 /**
- * @}
+ * \}
  */
 
 /**
@@ -4834,7 +4834,7 @@ public static native @ByVal CXString clang_Cursor_getMangling(@ByVal CXCursor ar
  *
  * The functions in this group provide access to information about modules.
  *
- * @{
+ * \{
  */
 
 @Namespace @Name("void") @Opaque public static class CXModule extends Pointer {
@@ -4856,62 +4856,62 @@ public static native CXModule clang_Cursor_getModule(@ByVal CXCursor C);
 public static native CXModule clang_getModuleForFile(CXTranslationUnit arg0, CXFile arg1);
 
 /**
- * \param Module a module object.
+ * @param Module a module object.
  *
- * \returns the module file where the provided module object came from.
+ * @return the module file where the provided module object came from.
  */
 public static native CXFile clang_Module_getASTFile(CXModule Module);
 
 /**
- * \param Module a module object.
+ * @param Module a module object.
  *
- * \returns the parent of a sub-module or NULL if the given module is top-level,
+ * @return the parent of a sub-module or NULL if the given module is top-level,
  * e.g. for 'std.vector' it will return the 'std' module.
  */
 public static native CXModule clang_Module_getParent(CXModule Module);
 
 /**
- * \param Module a module object.
+ * @param Module a module object.
  *
- * \returns the name of the module, e.g. for the 'std.vector' sub-module it
+ * @return the name of the module, e.g. for the 'std.vector' sub-module it
  * will return "vector".
  */
 public static native @ByVal CXString clang_Module_getName(CXModule Module);
 
 /**
- * \param Module a module object.
+ * @param Module a module object.
  *
- * \returns the full name of the module, e.g. "std.vector".
+ * @return the full name of the module, e.g. "std.vector".
  */
 public static native @ByVal CXString clang_Module_getFullName(CXModule Module);
 
 /**
- * \param Module a module object.
+ * @param Module a module object.
  *
- * \returns non-zero if the module is a system one.
+ * @return non-zero if the module is a system one.
  */
 public static native int clang_Module_isSystem(CXModule Module);
 
 /**
- * \param Module a module object.
+ * @param Module a module object.
  *
- * \returns the number of top level headers associated with this module.
+ * @return the number of top level headers associated with this module.
  */
 public static native @Cast("unsigned") int clang_Module_getNumTopLevelHeaders(CXTranslationUnit arg0,
                                                            CXModule Module);
 
 /**
- * \param Module a module object.
+ * @param Module a module object.
  *
- * \param Index top level header index (zero-based).
+ * @param Index top level header index (zero-based).
  *
- * \returns the specified top level header associated with the module.
+ * @return the specified top level header associated with the module.
  */
 public static native CXFile clang_Module_getTopLevelHeader(CXTranslationUnit arg0,
                                       CXModule Module, @Cast("unsigned") int Index);
 
 /**
- * @}
+ * \}
  */
 
 /**
@@ -4920,7 +4920,7 @@ public static native CXFile clang_Module_getTopLevelHeader(CXTranslationUnit arg
  * The routines in this group provide access information in the ASTs specific
  * to C++ language features.
  *
- * @{
+ * \{
  */
 
 /**
@@ -4958,10 +4958,10 @@ public static native @Cast("unsigned") int clang_CXXMethod_isConst(@ByVal CXCurs
  * cursor. For example, it can describe whether a class template cursor is
  * declared with "struct", "class" or "union".
  *
- * \param C The cursor to query. This cursor should represent a template
+ * @param C The cursor to query. This cursor should represent a template
  * declaration.
  *
- * \returns The cursor kind of the specializations that would be generated
+ * @return The cursor kind of the specializations that would be generated
  * by instantiating the template \p C. If \p C is not a template, returns
  * \c CXCursor_NoDeclFound.
  */
@@ -4988,10 +4988,10 @@ public static native @Cast("CXCursorKind") int clang_getTemplateCursorKind(@ByVa
  * templates have the same notions of specializations and instantiations that
  * templates do, so this routine treats them similarly.
  *
- * \param C A cursor that may be a specialization of a template or a member
+ * @param C A cursor that may be a specialization of a template or a member
  * of a template.
  *
- * \returns If the given cursor is a specialization or instantiation of a 
+ * @return If the given cursor is a specialization or instantiation of a 
  * template or a member thereof, the template or member that it specializes or
  * from which it was instantiated. Otherwise, returns a NULL cursor.
  */
@@ -5001,18 +5001,18 @@ public static native @ByVal CXCursor clang_getSpecializedCursorTemplate(@ByVal C
  * \brief Given a cursor that references something else, return the source range
  * covering that reference.
  *
- * \param C A cursor pointing to a member reference, a declaration reference, or
+ * @param C A cursor pointing to a member reference, a declaration reference, or
  * an operator call.
- * \param NameFlags A bitset with three independent flags: 
+ * @param NameFlags A bitset with three independent flags: 
  * CXNameRange_WantQualifier, CXNameRange_WantTemplateArgs, and
  * CXNameRange_WantSinglePiece.
- * \param PieceIndex For contiguous names or when passing the flag 
+ * @param PieceIndex For contiguous names or when passing the flag 
  * CXNameRange_WantSinglePiece, only one piece with index 0 is 
  * available. When the CXNameRange_WantSinglePiece flag is not passed for a
  * non-contiguous names, this index can be used to retrieve the individual
  * pieces of the name. See also CXNameRange_WantSinglePiece.
  *
- * \returns The piece of the name pointed to by the given cursor. If there is no
+ * @return The piece of the name pointed to by the given cursor. If there is no
  * name, or if the PieceIndex is out-of-range, a null-cursor will be returned.
  */
 public static native @ByVal CXSourceRange clang_getCursorReferenceNameRange(@ByVal CXCursor C,
@@ -5038,15 +5038,15 @@ public static final int
    *
    * Non-contiguous names occur in Objective-C when a selector with two or more
    * parameters is used, or in C++ when using an operator:
-   * \code
+   * <pre><code>
    * [object doSomething:here withValue:there]; // Objective-C
    * return some_vector[1]; // C++
-   * \endcode
+   * </code></pre>
    */
   CXNameRange_WantSinglePiece =  0x4;
   
 /**
- * @}
+ * \}
  */
 
 /**
@@ -5056,7 +5056,7 @@ public static final int
  * translation unit, along with a semantic mapping of those tokens to
  * their corresponding cursors.
  *
- * @{
+ * \{
  */
 
 /**
@@ -5095,9 +5095,9 @@ public static final int
 public static class CXToken extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXToken() { allocate(); }
+    public CXToken() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXToken(int size) { allocateArray(size); }
+    public CXToken(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXToken(Pointer p) { super(p); }
     private native void allocate();
@@ -5139,16 +5139,16 @@ public static native @ByVal CXSourceRange clang_getTokenExtent(CXTranslationUnit
  * \brief Tokenize the source code described by the given range into raw
  * lexical tokens.
  *
- * \param TU the translation unit whose text is being tokenized.
+ * @param TU the translation unit whose text is being tokenized.
  *
- * \param Range the source range in which text should be tokenized. All of the
+ * @param Range the source range in which text should be tokenized. All of the
  * tokens produced by tokenization will fall within this source range,
  *
- * \param Tokens this pointer will be set to point to the array of tokens
+ * @param Tokens this pointer will be set to point to the array of tokens
  * that occur within the given source range. The returned pointer must be
  * freed with clang_disposeTokens() before the translation unit is destroyed.
  *
- * \param NumTokens will be set to the number of tokens in the \c *Tokens
+ * @param NumTokens will be set to the number of tokens in the \c *Tokens
  * array.
  *
  */
@@ -5182,13 +5182,13 @@ public static native void clang_tokenize(CXTranslationUnit TU, @ByVal CXSourceRa
  * part of the full syntax of the function call expression, which is
  * not provided as an annotation.
  *
- * \param TU the translation unit that owns the given tokens.
+ * @param TU the translation unit that owns the given tokens.
  *
- * \param Tokens the set of tokens to annotate.
+ * @param Tokens the set of tokens to annotate.
  *
- * \param NumTokens the number of tokens in \p Tokens.
+ * @param NumTokens the number of tokens in \p Tokens.
  *
- * \param Cursors an array of \p NumTokens cursors, whose contents will be
+ * @param Cursors an array of \p NumTokens cursors, whose contents will be
  * replaced with the cursors corresponding to each token.
  */
 public static native void clang_annotateTokens(CXTranslationUnit TU,
@@ -5202,7 +5202,7 @@ public static native void clang_disposeTokens(CXTranslationUnit TU,
                                         CXToken Tokens, @Cast("unsigned") int NumTokens);
 
 /**
- * @}
+ * \}
  */
 
 /**
@@ -5211,7 +5211,7 @@ public static native void clang_disposeTokens(CXTranslationUnit TU,
  * These routines are used for testing and debugging, only, and should not
  * be relied upon.
  *
- * @{
+ * \{
  */
 
 /* for debug/testing */
@@ -5257,7 +5257,7 @@ public static native void clang_executeOnThread(Fn_Pointer fn, Pointer user_data
                                           @Cast("unsigned") int stack_size);
 
 /**
- * @}
+ * \}
  */
 
 /**
@@ -5269,7 +5269,7 @@ public static native void clang_executeOnThread(Fn_Pointer fn, Pointer user_data
  * use at that particular point in the source code. These data structures and
  * routines provide support for code completion.
  *
- * @{
+ * \{
  */
 
 /**
@@ -5298,9 +5298,9 @@ public static native void clang_executeOnThread(Fn_Pointer fn, Pointer user_data
 public static class CXCompletionResult extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXCompletionResult() { allocate(); }
+    public CXCompletionResult() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXCompletionResult(int size) { allocateArray(size); }
+    public CXCompletionResult(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXCompletionResult(Pointer p) { super(p); }
     private native void allocate();
@@ -5348,9 +5348,9 @@ public static final int
    * For example, optional chunks can be used to describe the placeholders for
    * arguments that match up with defaulted function parameters, e.g. given:
    *
-   * \code
+   * <pre><code>
    * void f(int x, float y = 3.14, double z = 2.71828);
-   * \endcode
+   * </code></pre>
    *
    * The code-completion string for this function would contain:
    *   - a TypedText chunk for "f".
@@ -5419,9 +5419,9 @@ public static final int
    * information about a parameter corresponding to the argument at the
    * code-completion point. For example, given a function
    *
-   * \code
+   * <pre><code>
    * int add(int x, int y);
-   * \endcode
+   * </code></pre>
    *
    * and the source code \c add(, where the code-completion point is after the
    * "(", the code-completion string will contain a "current parameter" chunk
@@ -5502,11 +5502,11 @@ public static final int
 /**
  * \brief Determine the kind of a particular chunk within a completion string.
  *
- * \param completion_string the completion string to query.
+ * @param completion_string the completion string to query.
  *
- * \param chunk_number the 0-based index of the chunk in the completion string.
+ * @param chunk_number the 0-based index of the chunk in the completion string.
  *
- * \returns the kind of the chunk at the index \c chunk_number.
+ * @return the kind of the chunk at the index \c chunk_number.
  */
 public static native @Cast("CXCompletionChunkKind") int clang_getCompletionChunkKind(CXCompletionString completion_string,
                              @Cast("unsigned") int chunk_number);
@@ -5515,11 +5515,11 @@ public static native @Cast("CXCompletionChunkKind") int clang_getCompletionChunk
  * \brief Retrieve the text associated with a particular chunk within a
  * completion string.
  *
- * \param completion_string the completion string to query.
+ * @param completion_string the completion string to query.
  *
- * \param chunk_number the 0-based index of the chunk in the completion string.
+ * @param chunk_number the 0-based index of the chunk in the completion string.
  *
- * \returns the text associated with the chunk at index \c chunk_number.
+ * @return the text associated with the chunk at index \c chunk_number.
  */
 public static native @ByVal CXString clang_getCompletionChunkText(CXCompletionString completion_string,
                              @Cast("unsigned") int chunk_number);
@@ -5528,11 +5528,11 @@ public static native @ByVal CXString clang_getCompletionChunkText(CXCompletionSt
  * \brief Retrieve the completion string associated with a particular chunk
  * within a completion string.
  *
- * \param completion_string the completion string to query.
+ * @param completion_string the completion string to query.
  *
- * \param chunk_number the 0-based index of the chunk in the completion string.
+ * @param chunk_number the 0-based index of the chunk in the completion string.
  *
- * \returns the completion string associated with the chunk at index
+ * @return the completion string associated with the chunk at index
  * \c chunk_number.
  */
 public static native CXCompletionString clang_getCompletionChunkCompletionString(CXCompletionString completion_string,
@@ -5550,9 +5550,9 @@ public static native @Cast("unsigned") int clang_getNumCompletionChunks(CXComple
  * particular completion is the completion that the user will select. The
  * priority is selected by various internal heuristics.
  *
- * \param completion_string The completion string to query.
+ * @param completion_string The completion string to query.
  *
- * \returns The priority of this completion string. Smaller values indicate
+ * @return The priority of this completion string. Smaller values indicate
  * higher-priority (more likely) completions.
  */
 public static native @Cast("unsigned") int clang_getCompletionPriority(CXCompletionString completion_string);
@@ -5561,9 +5561,9 @@ public static native @Cast("unsigned") int clang_getCompletionPriority(CXComplet
  * \brief Determine the availability of the entity that this code-completion
  * string refers to.
  *
- * \param completion_string The completion string to query.
+ * @param completion_string The completion string to query.
  *
- * \returns The availability of the completion string.
+ * @return The availability of the completion string.
  */
 public static native @Cast("CXAvailabilityKind") int clang_getCompletionAvailability(CXCompletionString completion_string);
 
@@ -5571,9 +5571,9 @@ public static native @Cast("CXAvailabilityKind") int clang_getCompletionAvailabi
  * \brief Retrieve the number of annotations associated with the given
  * completion string.
  *
- * \param completion_string the completion string to query.
+ * @param completion_string the completion string to query.
  *
- * \returns the number of annotations associated with the given completion
+ * @return the number of annotations associated with the given completion
  * string.
  */
 public static native @Cast("unsigned") int clang_getCompletionNumAnnotations(CXCompletionString completion_string);
@@ -5581,12 +5581,12 @@ public static native @Cast("unsigned") int clang_getCompletionNumAnnotations(CXC
 /**
  * \brief Retrieve the annotation associated with the given completion string.
  *
- * \param completion_string the completion string to query.
+ * @param completion_string the completion string to query.
  *
- * \param annotation_number the 0-based index of the annotation of the
+ * @param annotation_number the 0-based index of the annotation of the
  * completion string.
  *
- * \returns annotation string associated with the completion at index
+ * @return annotation string associated with the completion at index
  * \c annotation_number, or a NULL string if that annotation is not available.
  */
 public static native @ByVal CXString clang_getCompletionAnnotation(CXCompletionString completion_string,
@@ -5600,12 +5600,12 @@ public static native @ByVal CXString clang_getCompletionAnnotation(CXCompletionS
  * a code completion for an Objective-C method would have the method's class
  * or protocol as its context.
  *
- * \param completion_string The code completion string whose parent is
+ * @param completion_string The code completion string whose parent is
  * being queried.
  *
- * \param kind DEPRECATED: always set to CXCursor_NotImplemented if non-NULL.
+ * @param kind DEPRECATED: always set to CXCursor_NotImplemented if non-NULL.
  *
- * \returns The name of the completion parent, e.g., "NSObject" if
+ * @return The name of the completion parent, e.g., "NSObject" if
  * the completion string represents a method in the NSObject class.
  */
 public static native @ByVal CXString clang_getCompletionParent(CXCompletionString completion_string,
@@ -5625,9 +5625,9 @@ public static native @ByVal CXString clang_getCompletionBriefComment(CXCompletio
  * \brief Retrieve a completion string for an arbitrary declaration or macro
  * definition cursor.
  *
- * \param cursor The cursor to query.
+ * @param cursor The cursor to query.
  *
- * \returns A non-context-sensitive completion string for declaration and macro
+ * @return A non-context-sensitive completion string for declaration and macro
  * definition cursors, or NULL for other kinds of cursors.
  */
 public static native CXCompletionString clang_getCursorCompletionString(@ByVal CXCursor cursor);
@@ -5642,9 +5642,9 @@ public static native CXCompletionString clang_getCursorCompletionString(@ByVal C
 public static class CXCodeCompleteResults extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXCodeCompleteResults() { allocate(); }
+    public CXCodeCompleteResults() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXCodeCompleteResults(int size) { allocateArray(size); }
+    public CXCodeCompleteResults(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXCodeCompleteResults(Pointer p) { super(p); }
     private native void allocate();
@@ -5860,39 +5860,39 @@ public static native @Cast("unsigned") int clang_defaultCodeCompleteOptions();
  * results from the filtering of results on a per-character basis, which must
  * have a lower latency.
  *
- * \param TU The translation unit in which code-completion should
+ * @param TU The translation unit in which code-completion should
  * occur. The source files for this translation unit need not be
  * completely up-to-date (and the contents of those source files may
  * be overridden via \p unsaved_files). Cursors referring into the
  * translation unit may be invalidated by this invocation.
  *
- * \param complete_filename The name of the source file where code
+ * @param complete_filename The name of the source file where code
  * completion should be performed. This filename may be any file
  * included in the translation unit.
  *
- * \param complete_line The line at which code-completion should occur.
+ * @param complete_line The line at which code-completion should occur.
  *
- * \param complete_column The column at which code-completion should occur.
+ * @param complete_column The column at which code-completion should occur.
  * Note that the column should point just after the syntactic construct that
  * initiated code completion, and not in the middle of a lexical token.
  *
- * \param unsaved_files the Tiles that have not yet been saved to disk
+ * @param unsaved_files the Tiles that have not yet been saved to disk
  * but may be required for parsing or code completion, including the
  * contents of those files.  The contents and name of these files (as
  * specified by CXUnsavedFile) are copied when necessary, so the
  * client only needs to guarantee their validity until the call to
  * this function returns.
  *
- * \param num_unsaved_files The number of unsaved file entries in \p
+ * @param num_unsaved_files The number of unsaved file entries in \p
  * unsaved_files.
  *
- * \param options Extra options that control the behavior of code
+ * @param options Extra options that control the behavior of code
  * completion, expressed as a bitwise OR of the enumerators of the
  * CXCodeComplete_Flags enumeration. The 
  * \c clang_defaultCodeCompleteOptions() function returns a default set
  * of code-completion options.
  *
- * \returns If successful, a new \c CXCodeCompleteResults structure
+ * @return If successful, a new \c CXCodeCompleteResults structure
  * containing code-completion results, which should eventually be
  * freed with \c clang_disposeCodeCompleteResults(). If code
  * completion fails, returns NULL.
@@ -5916,8 +5916,8 @@ public static native CXCodeCompleteResults clang_codeCompleteAt(CXTranslationUni
  * \brief Sort the code-completion results in case-insensitive alphabetical 
  * order.
  *
- * \param Results The set of results to sort.
- * \param NumResults The number of results in \p Results.
+ * @param Results The set of results to sort.
+ * @param NumResults The number of results in \p Results.
  */
 public static native void clang_sortCodeCompletionResults(CXCompletionResult Results,
                                      @Cast("unsigned") int NumResults);
@@ -5936,10 +5936,10 @@ public static native @Cast("unsigned") int clang_codeCompleteGetNumDiagnostics(C
 /**
  * \brief Retrieve a diagnostic associated with the given code completion.
  *
- * \param Results the code completion results to query.
- * \param Index the zero-based diagnostic number to retrieve.
+ * @param Results the code completion results to query.
+ * @param Index the zero-based diagnostic number to retrieve.
  *
- * \returns the requested diagnostic. This diagnostic must be freed
+ * @return the requested diagnostic. This diagnostic must be freed
  * via a call to \c clang_disposeDiagnostic().
  */
 public static native CXDiagnostic clang_codeCompleteGetDiagnostic(CXCodeCompleteResults Results,
@@ -5949,9 +5949,9 @@ public static native CXDiagnostic clang_codeCompleteGetDiagnostic(CXCodeComplete
  * \brief Determines what completions are appropriate for the context
  * the given code completion.
  * 
- * \param Results the code completion results to query
+ * @param Results the code completion results to query
  *
- * \returns the kinds of completions that are appropriate for use
+ * @return the kinds of completions that are appropriate for use
  * along with the given code completion results.
  */
 public static native @Cast("unsigned long long") long clang_codeCompleteGetContexts(
@@ -5964,13 +5964,13 @@ public static native @Cast("unsigned long long") long clang_codeCompleteGetConte
  * message sends); if there is not a container, this function will return
  * CXCursor_InvalidCode.
  *
- * \param Results the code completion results to query
+ * @param Results the code completion results to query
  *
- * \param IsIncomplete on return, this value will be false if Clang has complete
+ * @param IsIncomplete on return, this value will be false if Clang has complete
  * information about the container. If Clang does not have complete
  * information, this value will be true.
  *
- * \returns the container kind, or CXCursor_InvalidCode if there is not a
+ * @return the container kind, or CXCursor_InvalidCode if there is not a
  * container
  */
 public static native @Cast("CXCursorKind") int clang_codeCompleteGetContainerKind(
@@ -5988,9 +5988,9 @@ public static native @Cast("CXCursorKind") int clang_codeCompleteGetContainerKin
  * context. If there is not a container for the current context, this
  * function will return the empty string.
  *
- * \param Results the code completion results to query
+ * @param Results the code completion results to query
  *
- * \returns the USR for the container
+ * @return the USR for the container
  */
 public static native @ByVal CXString clang_codeCompleteGetContainerUSR(CXCodeCompleteResults Results);
   
@@ -6001,22 +6001,22 @@ public static native @ByVal CXString clang_codeCompleteGetContainerUSR(CXCodeCom
  * non-empty string for CXCompletionContext_ObjCInstanceMessage and
  * CXCompletionContext_ObjCClassMessage.
  *
- * \param Results the code completion results to query
+ * @param Results the code completion results to query
  *
- * \returns the selector (or partial selector) that has been entered thus far
+ * @return the selector (or partial selector) that has been entered thus far
  * for an Objective-C message send.
  */
 public static native @ByVal CXString clang_codeCompleteGetObjCSelector(CXCodeCompleteResults Results);
   
 /**
- * @}
+ * \}
  */
 
 
 /**
  * \defgroup CINDEX_MISC Miscellaneous utility functions
  *
- * @{
+ * \{
  */
 
 /**
@@ -6029,7 +6029,7 @@ public static native @ByVal CXString clang_getClangVersion();
 /**
  * \brief Enable/disable crash recovery.
  *
- * \param isEnabled Flag to indicate if crash recovery is enabled.  A non-zero
+ * @param isEnabled Flag to indicate if crash recovery is enabled.  A non-zero
  *        value enables crash recovery, while 0 disables it.
  */
 public static native void clang_toggleCrashRecovery(@Cast("unsigned") int isEnabled);
@@ -6068,12 +6068,12 @@ public static native void clang_getInclusions(CXTranslationUnit tu,
                                         CXClientData client_data);
 
 /**
- * @}
+ * \}
  */
 
 /** \defgroup CINDEX_REMAPPING Remapping functions
  *
- * @{
+ * \{
  */
 
 /**
@@ -6089,9 +6089,9 @@ public static native void clang_getInclusions(CXTranslationUnit tu,
 /**
  * \brief Retrieve a remapping.
  *
- * \param path the path that contains metadata about remappings.
+ * @param path the path that contains metadata about remappings.
  *
- * \returns the requested remapping. This remapping must be freed
+ * @return the requested remapping. This remapping must be freed
  * via a call to \c clang_remap_dispose(). Can return NULL if an error occurred.
  */
 public static native CXRemapping clang_getRemappings(@Cast("const char*") BytePointer path);
@@ -6100,11 +6100,11 @@ public static native CXRemapping clang_getRemappings(String path);
 /**
  * \brief Retrieve a remapping.
  *
- * \param filePaths pointer to an array of file paths containing remapping info.
+ * @param filePaths pointer to an array of file paths containing remapping info.
  *
- * \param numFiles number of file paths.
+ * @param numFiles number of file paths.
  *
- * \returns the requested remapping. This remapping must be freed
+ * @return the requested remapping. This remapping must be freed
  * via a call to \c clang_remap_dispose(). Can return NULL if an error occurred.
  */
 public static native CXRemapping clang_getRemappingsFromFileList(@Cast("const char**") PointerPointer filePaths,
@@ -6124,9 +6124,9 @@ public static native @Cast("unsigned") int clang_remap_getNumFiles(CXRemapping a
 /**
  * \brief Get the original and the associated filename from the remapping.
  * 
- * \param original If non-NULL, will be set to the original filename.
+ * @param original If non-NULL, will be set to the original filename.
  *
- * \param transformed If non-NULL, will be set to the filename that the original
+ * @param transformed If non-NULL, will be set to the filename that the original
  * is associated with.
  */
 public static native void clang_remap_getFilenames(CXRemapping arg0, @Cast("unsigned") int index,
@@ -6138,12 +6138,12 @@ public static native void clang_remap_getFilenames(CXRemapping arg0, @Cast("unsi
 public static native void clang_remap_dispose(CXRemapping arg0);
 
 /**
- * @}
+ * \}
  */
 
 /** \defgroup CINDEX_HIGH Higher level API functions
  *
- * @{
+ * \{
  */
 
 /** enum CXVisitorResult */
@@ -6154,9 +6154,9 @@ public static final int
 public static class CXCursorAndRangeVisitor extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXCursorAndRangeVisitor() { allocate(); }
+    public CXCursorAndRangeVisitor() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXCursorAndRangeVisitor(int size) { allocateArray(size); }
+    public CXCursorAndRangeVisitor(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXCursorAndRangeVisitor(Pointer p) { super(p); }
     private native void allocate();
@@ -6196,16 +6196,16 @@ public static final int
 /**
  * \brief Find references of a declaration in a specific file.
  * 
- * \param cursor pointing to a declaration or a reference of one.
+ * @param cursor pointing to a declaration or a reference of one.
  *
- * \param file to search for references.
+ * @param file to search for references.
  *
- * \param visitor callback that will receive pairs of CXCursor/CXSourceRange for
+ * @param visitor callback that will receive pairs of CXCursor/CXSourceRange for
  * each reference found.
  * The CXSourceRange will point inside the file; if the reference is inside
  * a macro (and not a macro argument) the CXSourceRange will be invalid.
  *
- * \returns one of the CXResult enumerators.
+ * @return one of the CXResult enumerators.
  */
 public static native @Cast("CXResult") int clang_findReferencesInFile(@ByVal CXCursor cursor, CXFile file,
                                                @ByVal CXCursorAndRangeVisitor visitor);
@@ -6213,14 +6213,14 @@ public static native @Cast("CXResult") int clang_findReferencesInFile(@ByVal CXC
 /**
  * \brief Find #import/#include directives in a specific file.
  *
- * \param TU translation unit containing the file to query.
+ * @param TU translation unit containing the file to query.
  *
- * \param file to search for #import/#include directives.
+ * @param file to search for #import/#include directives.
  *
- * \param visitor callback that will receive pairs of CXCursor/CXSourceRange for
+ * @param visitor callback that will receive pairs of CXCursor/CXSourceRange for
  * each directive found.
  *
- * \returns one of the CXResult enumerators.
+ * @return one of the CXResult enumerators.
  */
 public static native @Cast("CXResult") int clang_findIncludesInFile(CXTranslationUnit TU,
                                                  CXFile file,
@@ -6280,9 +6280,9 @@ public static native @Cast("CXResult") int clang_findIncludesInFile(CXTranslatio
 public static class CXIdxLoc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXIdxLoc() { allocate(); }
+    public CXIdxLoc() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxLoc(int size) { allocateArray(size); }
+    public CXIdxLoc(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxLoc(Pointer p) { super(p); }
     private native void allocate();
@@ -6302,9 +6302,9 @@ public static class CXIdxLoc extends Pointer {
 public static class CXIdxIncludedFileInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXIdxIncludedFileInfo() { allocate(); }
+    public CXIdxIncludedFileInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxIncludedFileInfo(int size) { allocateArray(size); }
+    public CXIdxIncludedFileInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxIncludedFileInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -6340,9 +6340,9 @@ public static class CXIdxIncludedFileInfo extends Pointer {
 public static class CXIdxImportedASTFileInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXIdxImportedASTFileInfo() { allocate(); }
+    public CXIdxImportedASTFileInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxImportedASTFileInfo(int size) { allocateArray(size); }
+    public CXIdxImportedASTFileInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxImportedASTFileInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -6439,9 +6439,9 @@ public static final int
 public static class CXIdxAttrInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXIdxAttrInfo() { allocate(); }
+    public CXIdxAttrInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxAttrInfo(int size) { allocateArray(size); }
+    public CXIdxAttrInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxAttrInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -6458,9 +6458,9 @@ public static class CXIdxAttrInfo extends Pointer {
 public static class CXIdxEntityInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXIdxEntityInfo() { allocate(); }
+    public CXIdxEntityInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxEntityInfo(int size) { allocateArray(size); }
+    public CXIdxEntityInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxEntityInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -6483,9 +6483,9 @@ public static class CXIdxEntityInfo extends Pointer {
 public static class CXIdxContainerInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXIdxContainerInfo() { allocate(); }
+    public CXIdxContainerInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxContainerInfo(int size) { allocateArray(size); }
+    public CXIdxContainerInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxContainerInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -6500,9 +6500,9 @@ public static class CXIdxContainerInfo extends Pointer {
 public static class CXIdxIBOutletCollectionAttrInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXIdxIBOutletCollectionAttrInfo() { allocate(); }
+    public CXIdxIBOutletCollectionAttrInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxIBOutletCollectionAttrInfo(int size) { allocateArray(size); }
+    public CXIdxIBOutletCollectionAttrInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxIBOutletCollectionAttrInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -6524,9 +6524,9 @@ public static final int
 public static class CXIdxDeclInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXIdxDeclInfo() { allocate(); }
+    public CXIdxDeclInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxDeclInfo(int size) { allocateArray(size); }
+    public CXIdxDeclInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxDeclInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -6570,9 +6570,9 @@ public static final int
 public static class CXIdxObjCContainerDeclInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXIdxObjCContainerDeclInfo() { allocate(); }
+    public CXIdxObjCContainerDeclInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxObjCContainerDeclInfo(int size) { allocateArray(size); }
+    public CXIdxObjCContainerDeclInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxObjCContainerDeclInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -6588,9 +6588,9 @@ public static class CXIdxObjCContainerDeclInfo extends Pointer {
 public static class CXIdxBaseClassInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXIdxBaseClassInfo() { allocate(); }
+    public CXIdxBaseClassInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxBaseClassInfo(int size) { allocateArray(size); }
+    public CXIdxBaseClassInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxBaseClassInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -6607,9 +6607,9 @@ public static class CXIdxBaseClassInfo extends Pointer {
 public static class CXIdxObjCProtocolRefInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXIdxObjCProtocolRefInfo() { allocate(); }
+    public CXIdxObjCProtocolRefInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxObjCProtocolRefInfo(int size) { allocateArray(size); }
+    public CXIdxObjCProtocolRefInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxObjCProtocolRefInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -6626,9 +6626,9 @@ public static class CXIdxObjCProtocolRefInfo extends Pointer {
 public static class CXIdxObjCProtocolRefListInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXIdxObjCProtocolRefListInfo() { allocate(); }
+    public CXIdxObjCProtocolRefListInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxObjCProtocolRefListInfo(int size) { allocateArray(size); }
+    public CXIdxObjCProtocolRefListInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxObjCProtocolRefListInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -6645,9 +6645,9 @@ public static class CXIdxObjCProtocolRefListInfo extends Pointer {
 public static class CXIdxObjCInterfaceDeclInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXIdxObjCInterfaceDeclInfo() { allocate(); }
+    public CXIdxObjCInterfaceDeclInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxObjCInterfaceDeclInfo(int size) { allocateArray(size); }
+    public CXIdxObjCInterfaceDeclInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxObjCInterfaceDeclInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -6664,9 +6664,9 @@ public static class CXIdxObjCInterfaceDeclInfo extends Pointer {
 public static class CXIdxObjCCategoryDeclInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXIdxObjCCategoryDeclInfo() { allocate(); }
+    public CXIdxObjCCategoryDeclInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxObjCCategoryDeclInfo(int size) { allocateArray(size); }
+    public CXIdxObjCCategoryDeclInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxObjCCategoryDeclInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -6685,9 +6685,9 @@ public static class CXIdxObjCCategoryDeclInfo extends Pointer {
 public static class CXIdxObjCPropertyDeclInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXIdxObjCPropertyDeclInfo() { allocate(); }
+    public CXIdxObjCPropertyDeclInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxObjCPropertyDeclInfo(int size) { allocateArray(size); }
+    public CXIdxObjCPropertyDeclInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxObjCPropertyDeclInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -6704,9 +6704,9 @@ public static class CXIdxObjCPropertyDeclInfo extends Pointer {
 public static class CXIdxCXXClassDeclInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXIdxCXXClassDeclInfo() { allocate(); }
+    public CXIdxCXXClassDeclInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxCXXClassDeclInfo(int size) { allocateArray(size); }
+    public CXIdxCXXClassDeclInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxCXXClassDeclInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -6742,9 +6742,9 @@ public static final int
 public static class CXIdxEntityRefInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXIdxEntityRefInfo() { allocate(); }
+    public CXIdxEntityRefInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxEntityRefInfo(int size) { allocateArray(size); }
+    public CXIdxEntityRefInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxEntityRefInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -6766,9 +6766,9 @@ public static class CXIdxEntityRefInfo extends Pointer {
   /**
    * \brief Immediate "parent" of the reference. For example:
    * 
-   * \code
+   * <pre><code>
    * Foo *var;
-   * \endcode
+   * </code></pre>
    * 
    * The parent of reference of type 'Foo' is the variable 'var'.
    * For references inside statement bodies of functions/methods,
@@ -6788,9 +6788,9 @@ public static class CXIdxEntityRefInfo extends Pointer {
 public static class IndexerCallbacks extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public IndexerCallbacks() { allocate(); }
+    public IndexerCallbacks() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public IndexerCallbacks(int size) { allocateArray(size); }
+    public IndexerCallbacks(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IndexerCallbacks(Pointer p) { super(p); }
     private native void allocate();
@@ -6964,7 +6964,7 @@ public static native void clang_index_setClientEntity(@Const CXIdxEntityInfo arg
  * \brief An indexing action/session, to be applied to one or multiple
  * translation units.
  *
- * \param CIdx The index object with which the index action will be associated.
+ * @param CIdx The index object with which the index action will be associated.
  */
 public static native CXIndexAction clang_IndexAction_create(CXIndex CIdx);
 
@@ -7018,22 +7018,22 @@ public static final int
  * \brief Index the given source file and the translation unit corresponding
  * to that file via callbacks implemented through #IndexerCallbacks.
  *
- * \param client_data pointer data supplied by the client, which will
+ * @param client_data pointer data supplied by the client, which will
  * be passed to the invoked callbacks.
  *
- * \param index_callbacks Pointer to indexing callbacks that the client
+ * @param index_callbacks Pointer to indexing callbacks that the client
  * implements.
  *
- * \param index_callbacks_size Size of #IndexerCallbacks structure that gets
+ * @param index_callbacks_size Size of #IndexerCallbacks structure that gets
  * passed in index_callbacks.
  *
- * \param index_options A bitmask of options that affects how indexing is
+ * @param index_options A bitmask of options that affects how indexing is
  * performed. This should be a bitwise OR of the CXIndexOpt_XXX flags.
  *
- * \param[out] out_TU pointer to store a \c CXTranslationUnit that can be
+ * @param[out] out_TU pointer to store a \c CXTranslationUnit that can be
  * reused after indexing is finished. Set to \c NULL if you do not require it.
  *
- * \returns 0 on success or if there were errors from which the compiler could
+ * @return 0 on success or if there were errors from which the compiler could
  * recover.  If there is a failure from which there is no recovery, returns
  * a non-zero \c CXErrorCode.
  *
@@ -7137,7 +7137,7 @@ public static native int clang_indexSourceFile(CXIndexAction arg0,
  *
  * The parameters are the same as #clang_indexSourceFile.
  * 
- * \returns If there is a failure from which there is no recovery, returns
+ * @return If there is a failure from which there is no recovery, returns
  * non-zero, otherwise returns 0.
  */
 public static native int clang_indexTranslationUnit(CXIndexAction arg0,
@@ -7208,15 +7208,15 @@ public static class CXFieldVisitor extends FunctionPointer {
  * visited field. The traversal may be ended prematurely, if
  * the visitor returns \c CXFieldVisit_Break.
  *
- * \param T the record type whose field may be visited.
+ * @param T the record type whose field may be visited.
  *
- * \param visitor the visitor function that will be invoked for each
+ * @param visitor the visitor function that will be invoked for each
  * field of \p T.
  *
- * \param client_data pointer data supplied by the client, which will
+ * @param client_data pointer data supplied by the client, which will
  * be passed to the visitor each time it is invoked.
  *
- * \returns a non-zero value if the traversal was terminated
+ * @return a non-zero value if the traversal was terminated
  * prematurely by the visitor returning \c CXFieldVisit_Break.
  */
 public static native @Cast("unsigned") int clang_Type_visitFields(@ByVal CXType T,
@@ -7225,11 +7225,11 @@ public static native @Cast("unsigned") int clang_Type_visitFields(@ByVal CXType 
 
 
 /**
- * @}
+ * \}
  */
 
 /**
- * @}
+ * \}
  */
 
 // #ifdef __cplusplus
@@ -7269,7 +7269,7 @@ public static native @Cast("unsigned") int clang_Type_visitFields(@ByVal CXType 
  * comments. These facilities are distinct from the core and may be subject to
  * their own schedule of stability and deprecation.
  *
- * @{
+ * \{
  */
 
 /**
@@ -7278,9 +7278,9 @@ public static native @Cast("unsigned") int clang_Type_visitFields(@ByVal CXType 
 public static class CXComment extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CXComment() { allocate(); }
+    public CXComment() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXComment(int size) { allocateArray(size); }
+    public CXComment(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXComment(Pointer p) { super(p); }
     private native void allocate();
@@ -7330,9 +7330,9 @@ public static final int
    * inline content.
    *
    * For example:
-   * \verbatim
+   * <pre>
    * <br> <br /> <a href="http://example.org/">
-   * \endverbatim
+   * </pre>
    */
   CXComment_HTMLStartTag = 3,
 
@@ -7340,9 +7340,9 @@ public static final int
    * \brief HTML end tag.  Considered inline content.
    *
    * For example:
-   * \verbatim
+   * <pre>
    * </a>
-   * \endverbatim
+   * </pre>
    */
   CXComment_HTMLEndTag = 4,
 
@@ -7361,16 +7361,16 @@ public static final int
    *
    * For example: \\brief has 0 word-like arguments and a paragraph argument.
    *
-   * AST nodes of special kinds that parser knows about (e. g., \\param
+   * AST nodes of special kinds that parser knows about (e. g., \@param
    * command) have their own node kinds.
    */
   CXComment_BlockCommand = 6,
 
   /**
-   * \brief A \\param or \\arg command that describes the function parameter
+   * \brief A \@param or \\arg command that describes the function parameter
    * (name, passing direction, description).
    *
-   * For example: \\param [in] ParamName description.
+   * For example: \@param [in] ParamName description.
    */
   CXComment_ParamCommand = 7,
 
@@ -7388,9 +7388,9 @@ public static final int
    * text (\c CXComment_VerbatimBlockLine child nodes).
    *
    * For example:
-   * \\verbatim
+   * \<pre>
    * aaa
-   * \\endverbatim
+   * \</pre>
    */
   CXComment_VerbatimBlockCommand = 9,
 
@@ -7440,7 +7440,7 @@ public static final int
   CXCommentInlineCommandRenderKind_Emphasized = 3;
 
 /**
- * \brief Describes parameter passing direction for \\param or \\arg command.
+ * \brief Describes parameter passing direction for \@param or \\arg command.
  */
 /** enum CXCommentParamPassDirection */
 public static final int
@@ -7460,25 +7460,25 @@ public static final int
   CXCommentParamPassDirection_InOut = 2;
 
 /**
- * \param Comment AST node of any kind.
+ * @param Comment AST node of any kind.
  *
- * \returns the type of the AST node.
+ * @return the type of the AST node.
  */
 public static native @Cast("CXCommentKind") int clang_Comment_getKind(@ByVal CXComment Comment);
 
 /**
- * \param Comment AST node of any kind.
+ * @param Comment AST node of any kind.
  *
- * \returns number of children of the AST node.
+ * @return number of children of the AST node.
  */
 public static native @Cast("unsigned") int clang_Comment_getNumChildren(@ByVal CXComment Comment);
 
 /**
- * \param Comment AST node of any kind.
+ * @param Comment AST node of any kind.
  *
- * \param ChildIdx child index (zero-based).
+ * @param ChildIdx child index (zero-based).
  *
- * \returns the specified child of the AST node.
+ * @return the specified child of the AST node.
  */
 public static native @ByVal CXComment clang_Comment_getChild(@ByVal CXComment Comment, @Cast("unsigned") int ChildIdx);
 
@@ -7489,178 +7489,178 @@ public static native @ByVal CXComment clang_Comment_getChild(@ByVal CXComment Co
  * Other AST nodes (except \c CXComment_Paragraph and \c CXComment_Text) are
  * never considered whitespace.
  *
- * \returns non-zero if \c Comment is whitespace.
+ * @return non-zero if \c Comment is whitespace.
  */
 public static native @Cast("unsigned") int clang_Comment_isWhitespace(@ByVal CXComment Comment);
 
 /**
- * \returns non-zero if \c Comment is inline content and has a newline
+ * @return non-zero if \c Comment is inline content and has a newline
  * immediately following it in the comment text.  Newlines between paragraphs
  * do not count.
  */
 public static native @Cast("unsigned") int clang_InlineContentComment_hasTrailingNewline(@ByVal CXComment Comment);
 
 /**
- * \param Comment a \c CXComment_Text AST node.
+ * @param Comment a \c CXComment_Text AST node.
  *
- * \returns text contained in the AST node.
+ * @return text contained in the AST node.
  */
 public static native @ByVal CXString clang_TextComment_getText(@ByVal CXComment Comment);
 
 /**
- * \param Comment a \c CXComment_InlineCommand AST node.
+ * @param Comment a \c CXComment_InlineCommand AST node.
  *
- * \returns name of the inline command.
+ * @return name of the inline command.
  */
 public static native @ByVal CXString clang_InlineCommandComment_getCommandName(@ByVal CXComment Comment);
 
 /**
- * \param Comment a \c CXComment_InlineCommand AST node.
+ * @param Comment a \c CXComment_InlineCommand AST node.
  *
- * \returns the most appropriate rendering mode, chosen on command
+ * @return the most appropriate rendering mode, chosen on command
  * semantics in Doxygen.
  */
 public static native @Cast("CXCommentInlineCommandRenderKind") int clang_InlineCommandComment_getRenderKind(@ByVal CXComment Comment);
 
 /**
- * \param Comment a \c CXComment_InlineCommand AST node.
+ * @param Comment a \c CXComment_InlineCommand AST node.
  *
- * \returns number of command arguments.
+ * @return number of command arguments.
  */
 public static native @Cast("unsigned") int clang_InlineCommandComment_getNumArgs(@ByVal CXComment Comment);
 
 /**
- * \param Comment a \c CXComment_InlineCommand AST node.
+ * @param Comment a \c CXComment_InlineCommand AST node.
  *
- * \param ArgIdx argument index (zero-based).
+ * @param ArgIdx argument index (zero-based).
  *
- * \returns text of the specified argument.
+ * @return text of the specified argument.
  */
 public static native @ByVal CXString clang_InlineCommandComment_getArgText(@ByVal CXComment Comment,
                                                @Cast("unsigned") int ArgIdx);
 
 /**
- * \param Comment a \c CXComment_HTMLStartTag or \c CXComment_HTMLEndTag AST
+ * @param Comment a \c CXComment_HTMLStartTag or \c CXComment_HTMLEndTag AST
  * node.
  *
- * \returns HTML tag name.
+ * @return HTML tag name.
  */
 public static native @ByVal CXString clang_HTMLTagComment_getTagName(@ByVal CXComment Comment);
 
 /**
- * \param Comment a \c CXComment_HTMLStartTag AST node.
+ * @param Comment a \c CXComment_HTMLStartTag AST node.
  *
- * \returns non-zero if tag is self-closing (for example, &lt;br /&gt;).
+ * @return non-zero if tag is self-closing (for example, &lt;br /&gt;).
  */
 public static native @Cast("unsigned") int clang_HTMLStartTagComment_isSelfClosing(@ByVal CXComment Comment);
 
 /**
- * \param Comment a \c CXComment_HTMLStartTag AST node.
+ * @param Comment a \c CXComment_HTMLStartTag AST node.
  *
- * \returns number of attributes (name-value pairs) attached to the start tag.
+ * @return number of attributes (name-value pairs) attached to the start tag.
  */
 public static native @Cast("unsigned") int clang_HTMLStartTag_getNumAttrs(@ByVal CXComment Comment);
 
 /**
- * \param Comment a \c CXComment_HTMLStartTag AST node.
+ * @param Comment a \c CXComment_HTMLStartTag AST node.
  *
- * \param AttrIdx attribute index (zero-based).
+ * @param AttrIdx attribute index (zero-based).
  *
- * \returns name of the specified attribute.
+ * @return name of the specified attribute.
  */
 public static native @ByVal CXString clang_HTMLStartTag_getAttrName(@ByVal CXComment Comment, @Cast("unsigned") int AttrIdx);
 
 /**
- * \param Comment a \c CXComment_HTMLStartTag AST node.
+ * @param Comment a \c CXComment_HTMLStartTag AST node.
  *
- * \param AttrIdx attribute index (zero-based).
+ * @param AttrIdx attribute index (zero-based).
  *
- * \returns value of the specified attribute.
+ * @return value of the specified attribute.
  */
 public static native @ByVal CXString clang_HTMLStartTag_getAttrValue(@ByVal CXComment Comment, @Cast("unsigned") int AttrIdx);
 
 /**
- * \param Comment a \c CXComment_BlockCommand AST node.
+ * @param Comment a \c CXComment_BlockCommand AST node.
  *
- * \returns name of the block command.
+ * @return name of the block command.
  */
 public static native @ByVal CXString clang_BlockCommandComment_getCommandName(@ByVal CXComment Comment);
 
 /**
- * \param Comment a \c CXComment_BlockCommand AST node.
+ * @param Comment a \c CXComment_BlockCommand AST node.
  *
- * \returns number of word-like arguments.
+ * @return number of word-like arguments.
  */
 public static native @Cast("unsigned") int clang_BlockCommandComment_getNumArgs(@ByVal CXComment Comment);
 
 /**
- * \param Comment a \c CXComment_BlockCommand AST node.
+ * @param Comment a \c CXComment_BlockCommand AST node.
  *
- * \param ArgIdx argument index (zero-based).
+ * @param ArgIdx argument index (zero-based).
  *
- * \returns text of the specified word-like argument.
+ * @return text of the specified word-like argument.
  */
 public static native @ByVal CXString clang_BlockCommandComment_getArgText(@ByVal CXComment Comment,
                                               @Cast("unsigned") int ArgIdx);
 
 /**
- * \param Comment a \c CXComment_BlockCommand or
+ * @param Comment a \c CXComment_BlockCommand or
  * \c CXComment_VerbatimBlockCommand AST node.
  *
- * \returns paragraph argument of the block command.
+ * @return paragraph argument of the block command.
  */
 public static native @ByVal CXComment clang_BlockCommandComment_getParagraph(@ByVal CXComment Comment);
 
 /**
- * \param Comment a \c CXComment_ParamCommand AST node.
+ * @param Comment a \c CXComment_ParamCommand AST node.
  *
- * \returns parameter name.
+ * @return parameter name.
  */
 public static native @ByVal CXString clang_ParamCommandComment_getParamName(@ByVal CXComment Comment);
 
 /**
- * \param Comment a \c CXComment_ParamCommand AST node.
+ * @param Comment a \c CXComment_ParamCommand AST node.
  *
- * \returns non-zero if the parameter that this AST node represents was found
+ * @return non-zero if the parameter that this AST node represents was found
  * in the function prototype and \c clang_ParamCommandComment_getParamIndex
  * function will return a meaningful value.
  */
 public static native @Cast("unsigned") int clang_ParamCommandComment_isParamIndexValid(@ByVal CXComment Comment);
 
 /**
- * \param Comment a \c CXComment_ParamCommand AST node.
+ * @param Comment a \c CXComment_ParamCommand AST node.
  *
- * \returns zero-based parameter index in function prototype.
+ * @return zero-based parameter index in function prototype.
  */
 public static native @Cast("unsigned") int clang_ParamCommandComment_getParamIndex(@ByVal CXComment Comment);
 
 /**
- * \param Comment a \c CXComment_ParamCommand AST node.
+ * @param Comment a \c CXComment_ParamCommand AST node.
  *
- * \returns non-zero if parameter passing direction was specified explicitly in
+ * @return non-zero if parameter passing direction was specified explicitly in
  * the comment.
  */
 public static native @Cast("unsigned") int clang_ParamCommandComment_isDirectionExplicit(@ByVal CXComment Comment);
 
 /**
- * \param Comment a \c CXComment_ParamCommand AST node.
+ * @param Comment a \c CXComment_ParamCommand AST node.
  *
- * \returns parameter passing direction.
+ * @return parameter passing direction.
  */
 public static native @Cast("CXCommentParamPassDirection") int clang_ParamCommandComment_getDirection(
                                                             @ByVal CXComment Comment);
 
 /**
- * \param Comment a \c CXComment_TParamCommand AST node.
+ * @param Comment a \c CXComment_TParamCommand AST node.
  *
- * \returns template parameter name.
+ * @return template parameter name.
  */
 public static native @ByVal CXString clang_TParamCommandComment_getParamName(@ByVal CXComment Comment);
 
 /**
- * \param Comment a \c CXComment_TParamCommand AST node.
+ * @param Comment a \c CXComment_TParamCommand AST node.
  *
- * \returns non-zero if the parameter that this AST node represents was found
+ * @return non-zero if the parameter that this AST node represents was found
  * in the template parameter list and
  * \c clang_TParamCommandComment_getDepth and
  * \c clang_TParamCommandComment_getIndex functions will return a meaningful
@@ -7669,31 +7669,31 @@ public static native @ByVal CXString clang_TParamCommandComment_getParamName(@By
 public static native @Cast("unsigned") int clang_TParamCommandComment_isParamPositionValid(@ByVal CXComment Comment);
 
 /**
- * \param Comment a \c CXComment_TParamCommand AST node.
+ * @param Comment a \c CXComment_TParamCommand AST node.
  *
- * \returns zero-based nesting depth of this parameter in the template parameter list.
+ * @return zero-based nesting depth of this parameter in the template parameter list.
  *
  * For example,
- * \verbatim
+ * <pre>
  *     template<typename C, template<typename T> class TT>
  *     void test(TT<int> aaa);
- * \endverbatim
+ * </pre>
  * for C and TT nesting depth is 0,
  * for T nesting depth is 1.
  */
 public static native @Cast("unsigned") int clang_TParamCommandComment_getDepth(@ByVal CXComment Comment);
 
 /**
- * \param Comment a \c CXComment_TParamCommand AST node.
+ * @param Comment a \c CXComment_TParamCommand AST node.
  *
- * \returns zero-based parameter index in the template parameter list at a
+ * @return zero-based parameter index in the template parameter list at a
  * given nesting depth.
  *
  * For example,
- * \verbatim
+ * <pre>
  *     template<typename C, template<typename T> class TT>
  *     void test(TT<int> aaa);
- * \endverbatim
+ * </pre>
  * for C and TT nesting depth is 0, so we can ask for index at depth 0:
  * at depth 0 C's index is 0, TT's index is 1.
  *
@@ -7704,26 +7704,26 @@ public static native @Cast("unsigned") int clang_TParamCommandComment_getDepth(@
 public static native @Cast("unsigned") int clang_TParamCommandComment_getIndex(@ByVal CXComment Comment, @Cast("unsigned") int Depth);
 
 /**
- * \param Comment a \c CXComment_VerbatimBlockLine AST node.
+ * @param Comment a \c CXComment_VerbatimBlockLine AST node.
  *
- * \returns text contained in the AST node.
+ * @return text contained in the AST node.
  */
 public static native @ByVal CXString clang_VerbatimBlockLineComment_getText(@ByVal CXComment Comment);
 
 /**
- * \param Comment a \c CXComment_VerbatimLine AST node.
+ * @param Comment a \c CXComment_VerbatimLine AST node.
  *
- * \returns text contained in the AST node.
+ * @return text contained in the AST node.
  */
 public static native @ByVal CXString clang_VerbatimLineComment_getText(@ByVal CXComment Comment);
 
 /**
  * \brief Convert an HTML tag AST node to string.
  *
- * \param Comment a \c CXComment_HTMLStartTag or \c CXComment_HTMLEndTag AST
+ * @param Comment a \c CXComment_HTMLStartTag or \c CXComment_HTMLEndTag AST
  * node.
  *
- * \returns string containing an HTML tag.
+ * @return string containing an HTML tag.
  */
 public static native @ByVal CXString clang_HTMLTagComment_getAsString(@ByVal CXComment Comment);
 
@@ -7735,8 +7735,8 @@ public static native @ByVal CXString clang_HTMLTagComment_getAsString(@ByVal CXC
  *
  * Currently the following CSS classes are used:
  * \li "para-brief" for \\brief paragraph and equivalent commands;
- * \li "para-returns" for \\returns paragraph and equivalent commands;
- * \li "word-returns" for the "Returns" word in \\returns paragraph.
+ * \li "para-returns" for \@return paragraph and equivalent commands;
+ * \li "word-returns" for the "Returns" word in \@return paragraph.
  *
  * Function argument documentation is rendered as a \<dl\> list with arguments
  * sorted in function prototype order.  CSS classes used:
@@ -7754,9 +7754,9 @@ public static native @ByVal CXString clang_HTMLTagComment_getAsString(@ByVal CXC
  * \li "tparam-name-index-invalid" and "tparam-descr-index-invalid" are used if
  * parameter position is invalid.
  *
- * \param Comment a \c CXComment_FullComment AST node.
+ * @param Comment a \c CXComment_FullComment AST node.
  *
- * \returns string containing an HTML fragment.
+ * @return string containing an HTML fragment.
  */
 public static native @ByVal CXString clang_FullComment_getAsHTML(@ByVal CXComment Comment);
 
@@ -7766,14 +7766,14 @@ public static native @ByVal CXString clang_FullComment_getAsHTML(@ByVal CXCommen
  * A Relax NG schema for the XML can be found in comment-xml-schema.rng file
  * inside clang source tree.
  *
- * \param Comment a \c CXComment_FullComment AST node.
+ * @param Comment a \c CXComment_FullComment AST node.
  *
- * \returns string containing an XML document.
+ * @return string containing an XML document.
  */
 public static native @ByVal CXString clang_FullComment_getAsXML(@ByVal CXComment Comment);
 
 /**
- * @}
+ * \}
  */
 
 

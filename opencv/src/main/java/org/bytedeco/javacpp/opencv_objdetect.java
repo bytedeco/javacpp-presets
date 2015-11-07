@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -71,8 +71,8 @@ public class opencv_objdetect extends org.bytedeco.javacpp.helper.opencv_objdete
 // #include <vector>
 // #endif
 
-/** @addtogroup objdetect_c
-  @{
+/** \addtogroup objdetect_c
+  \{
   */
 
 /****************************************************************************************\
@@ -91,9 +91,9 @@ public static final int CV_HAAR_FEATURE_MAX =  3;
 public static class CvHaarFeature extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvHaarFeature() { allocate(); }
+    public CvHaarFeature() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvHaarFeature(int size) { allocateArray(size); }
+    public CvHaarFeature(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvHaarFeature(Pointer p) { super(p); }
     private native void allocate();
@@ -110,9 +110,9 @@ public static class CvHaarFeature extends Pointer {
 public static class CvHaarClassifier extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvHaarClassifier() { allocate(); }
+    public CvHaarClassifier() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvHaarClassifier(int size) { allocateArray(size); }
+    public CvHaarClassifier(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvHaarClassifier(Pointer p) { super(p); }
     private native void allocate();
@@ -132,9 +132,9 @@ public static class CvHaarClassifier extends Pointer {
 public static class CvHaarStageClassifier extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvHaarStageClassifier() { allocate(); }
+    public CvHaarStageClassifier() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvHaarStageClassifier(int size) { allocateArray(size); }
+    public CvHaarStageClassifier(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvHaarStageClassifier(Pointer p) { super(p); }
     private native void allocate();
@@ -162,9 +162,9 @@ public static class CvHaarStageClassifier extends Pointer {
 public static class CvHaarClassifierCascade extends AbstractCvHaarClassifierCascade {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvHaarClassifierCascade() { allocate(); }
+    public CvHaarClassifierCascade() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvHaarClassifierCascade(int size) { allocateArray(size); }
+    public CvHaarClassifierCascade(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvHaarClassifierCascade(Pointer p) { super(p); }
     private native void allocate();
@@ -185,9 +185,9 @@ public static class CvHaarClassifierCascade extends AbstractCvHaarClassifierCasc
 public static class CvAvgComp extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CvAvgComp() { allocate(); }
+    public CvAvgComp() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvAvgComp(int size) { allocateArray(size); }
+    public CvAvgComp(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvAvgComp(Pointer p) { super(p); }
     private native void allocate();
@@ -242,7 +242,7 @@ public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCasc
 public static native int cvRunHaarClassifierCascade( @Const CvHaarClassifierCascade cascade,
                                        @ByVal @Cast("CvPoint*") int[] pt);
 
-/** @} objdetect_c */
+/** \} objdetect_c */
 
 // #ifdef __cplusplus
 
@@ -333,19 +333,19 @@ public static native CvSeq cvHaarDetectObjectsForROC( @Const CvArr image,
 // #include "opencv2/core.hpp"
 
 /**
-@defgroup objdetect Object Detection
-
+\defgroup objdetect Object Detection
+<p>
 Haar Feature-based Cascade Classifier for Object Detection
 ----------------------------------------------------------
-
-The object detector described below has been initially proposed by Paul Viola @cite Viola01 and
-improved by Rainer Lienhart @cite Lienhart02 .
-
+<p>
+The object detector described below has been initially proposed by Paul Viola \cite Viola01 and
+improved by Rainer Lienhart \cite Lienhart02 .
+<p>
 First, a classifier (namely a *cascade of boosted classifiers working with haar-like features*) is
 trained with a few hundred sample views of a particular object (i.e., a face or a car), called
 positive examples, that are scaled to the same size (say, 20x20), and negative examples - arbitrary
 images of the same size.
-
+<p>
 After a classifier is trained, it can be applied to a region of interest (of the same size as used
 during the training) in an input image. The classifier outputs a "1" if the region is likely to show
 the object (i.e., face/car), and "0" otherwise. To search for the object in the whole image one can
@@ -354,7 +354,7 @@ classifier is designed so that it can be easily "resized" in order to be able to
 interest at different sizes, which is more efficient than resizing the image itself. So, to find an
 object of an unknown size in the image the scan procedure should be done several times at different
 scales.
-
+<p>
 The word "cascade" in the classifier name means that the resultant classifier consists of several
 simpler classifiers (*stages*) that are applied subsequently to a region of interest until at some
 stage the candidate is rejected or all the stages are passed. The word "boosted" means that the
@@ -364,9 +364,9 @@ Adaboost, Real Adaboost, Gentle Adaboost and Logitboost are supported. The basic
 decision-tree classifiers with at least 2 leaves. Haar-like features are the input to the basic
 classifiers, and are calculated as described below. The current algorithm uses the following
 Haar-like features:
-
+<p>
 ![image](pics/haarfeatures.png)
-
+<p>
 The feature used in a particular classifier is specified by its shape (1a, 2b etc.), position within
 the region of interest and the scale (this scale is not the same as the scale used at the detection
 stage, though these two scales are multiplied). For example, in the case of the third line feature
@@ -375,25 +375,25 @@ rectangle covering the whole feature (including the two white stripes and the bl
 middle) and the sum of the image pixels under the black stripe multiplied by 3 in order to
 compensate for the differences in the size of areas. The sums of pixel values over a rectangular
 regions are calculated rapidly using integral images (see below and the integral description).
-
+<p>
 To see the object detector at work, have a look at the facedetect demo:
 <https://github.com/Itseez/opencv/tree/master/samples/cpp/dbt_face_detection.cpp>
-
+<p>
 The following reference is for the detection part only. There is a separate application called
 opencv_traincascade that can train a cascade of boosted classifiers from a set of samples.
-
-@note In the new C++ interface it is also possible to use LBP (local binary pattern) features in
+<p>
+\note In the new C++ interface it is also possible to use LBP (local binary pattern) features in
 addition to Haar-like features. .. [Viola01] Paul Viola and Michael J. Jones. Rapid Object Detection
 using a Boosted Cascade of Simple Features. IEEE CVPR, 2001. The paper is available online at
 <http://research.microsoft.com/en-us/um/people/viola/Pubs/Detect/violaJones_CVPR2001.pdf>
-
-@{
-    @defgroup objdetect_c C API
-@}
+<p>
+\{
+    \defgroup objdetect_c C API
+\}
  */
 
-/** @addtogroup objdetect
- *  @{
+/** \addtogroup objdetect
+ *  \{
 
 ///////////////////////////// Object Detection ////////////////////////////
 
@@ -406,20 +406,20 @@ using a Boosted Cascade of Simple Features. IEEE CVPR, 2001. The paper is availa
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SimilarRects(Pointer p) { super(p); }
 
-    public SimilarRects(double _eps) { allocate(_eps); }
+    public SimilarRects(double _eps) { super((Pointer)null); allocate(_eps); }
     private native void allocate(double _eps);
     public native @Cast("bool") @Name("operator ()") boolean apply(@Const @ByRef Rect r1, @Const @ByRef Rect r2);
     public native double eps(); public native SimilarRects eps(double eps);
 }
 
-/** @brief Groups the object candidate rectangles.
-
+/** \brief Groups the object candidate rectangles.
+<p>
 @param rectList Input/output vector of rectangles. Output vector includes retained and grouped
 rectangles. (The Python list is not modified in place.)
 @param groupThreshold Minimum possible number of rectangles minus 1. The threshold is used in a
 group of rectangles to retain it.
 @param eps Relative difference between sides of the rectangles to merge them into a group.
-
+<p>
 The function is a wrapper for the generic function partition . It clusters all the input rectangles
 using the rectangle equivalence criteria that combines rectangles with similar sizes and similar
 locations. The similarity is defined by eps. When eps=0 , no clustering is done at all. If
@@ -429,7 +429,7 @@ cluster, the average rectangle is computed and put into the output rectangle lis
  */
 @Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, int groupThreshold, double eps/*=0.2*/);
 @Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, int groupThreshold);
-/** @overload */
+/** \overload */
 @Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @StdVector IntPointer weights,
                                   int groupThreshold, double eps/*=0.2*/);
 @Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @StdVector IntPointer weights,
@@ -442,14 +442,14 @@ cluster, the average rectangle is computed and put into the output rectangle lis
                                   int groupThreshold, double eps/*=0.2*/);
 @Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @StdVector int[] weights,
                                   int groupThreshold);
-/** @overload */
+/** \overload */
 @Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, int groupThreshold,
                                   double eps, @StdVector IntPointer weights, @StdVector DoublePointer levelWeights );
 @Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, int groupThreshold,
                                   double eps, @StdVector IntBuffer weights, @StdVector DoubleBuffer levelWeights );
 @Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, int groupThreshold,
                                   double eps, @StdVector int[] weights, @StdVector double[] levelWeights );
-/** @overload */
+/** \overload */
 @Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @StdVector IntPointer rejectLevels,
                                   @StdVector DoublePointer levelWeights, int groupThreshold, double eps/*=0.2*/);
 @Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @StdVector IntPointer rejectLevels,
@@ -462,7 +462,7 @@ cluster, the average rectangle is computed and put into the output rectangle lis
                                   @StdVector double[] levelWeights, int groupThreshold, double eps/*=0.2*/);
 @Namespace("cv") public static native void groupRectangles(@ByRef RectVector rectList, @StdVector int[] rejectLevels,
                                   @StdVector double[] levelWeights, int groupThreshold);
-/** @overload */
+/** \overload */
 @Namespace("cv") public static native void groupRectangles_meanshift(@ByRef RectVector rectList, @StdVector DoublePointer foundWeights,
                                             @StdVector DoublePointer foundScales,
                                             double detectThreshold/*=0.0*/, @ByVal(nullValue = "cv::Size(64, 128)") Size winDetSize/*=cv::Size(64, 128)*/);
@@ -566,49 +566,49 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
     public native @Ptr MaskGenerator getMaskGenerator();
 }
 
-/** @brief Cascade classifier class for object detection.
+/** \brief Cascade classifier class for object detection.
  */
 @Namespace("cv") @NoOffset public static class CascadeClassifier extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CascadeClassifier(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CascadeClassifier(int size) { allocateArray(size); }
+    public CascadeClassifier(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public CascadeClassifier position(int position) {
         return (CascadeClassifier)super.position(position);
     }
 
-    public CascadeClassifier() { allocate(); }
+    public CascadeClassifier() { super((Pointer)null); allocate(); }
     private native void allocate();
-    /** @brief Loads a classifier from a file.
-
+    /** \brief Loads a classifier from a file.
+<p>
     @param filename Name of the file from which the classifier is loaded.
      */
-    public CascadeClassifier(@Str BytePointer filename) { allocate(filename); }
+    public CascadeClassifier(@Str BytePointer filename) { super((Pointer)null); allocate(filename); }
     private native void allocate(@Str BytePointer filename);
-    public CascadeClassifier(@Str String filename) { allocate(filename); }
+    public CascadeClassifier(@Str String filename) { super((Pointer)null); allocate(filename); }
     private native void allocate(@Str String filename);
-    /** @brief Checks whether the classifier has been loaded.
+    /** \brief Checks whether the classifier has been loaded.
     */
     public native @Cast("bool") boolean empty();
-    /** @brief Loads a classifier from a file.
-
+    /** \brief Loads a classifier from a file.
+<p>
     @param filename Name of the file from which the classifier is loaded. The file may contain an old
     HAAR classifier trained by the haartraining application or a new cascade classifier trained by the
     traincascade application.
      */
     public native @Cast("bool") boolean load( @Str BytePointer filename );
     public native @Cast("bool") boolean load( @Str String filename );
-    /** @brief Reads a classifier from a FileStorage node.
-
-    @note The file may contain a new cascade classifier (trained traincascade application) only.
+    /** \brief Reads a classifier from a FileStorage node.
+<p>
+    \note The file may contain a new cascade classifier (trained traincascade application) only.
      */
     public native @Cast("bool") boolean read( @Const @ByRef FileNode node );
 
-    /** @brief Detects objects of different sizes in the input image. The detected objects are returned as a list
+    /** \brief Detects objects of different sizes in the input image. The detected objects are returned as a list
     of rectangles.
-
+<p>
     @param image Matrix of the type CV_8U containing an image where objects are detected.
     @param objects Vector of rectangles where each rectangle contains the detected object, the
     rectangles may be partially outside the original image.
@@ -619,10 +619,10 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
     cvHaarDetectObjects. It is not used for a new cascade.
     @param minSize Minimum possible object size. Objects smaller than that are ignored.
     @param maxSize Maximum possible object size. Objects larger than that are ignored.
-
+<p>
     The function is parallelized with the TBB library.
-
-    @note
+<p>
+    \note
        -   (Python) A face detection example using cascade classifiers can be found at
             opencv_source_code/samples/python2/facedetect.py
     */
@@ -635,7 +635,7 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
     public native void detectMultiScale( @ByVal Mat image,
                               @ByRef RectVector objects );
 
-    /** @overload
+    /** \overload
     @param image Matrix of the type CV_8U containing an image where objects are detected.
     @param objects Vector of rectangles where each rectangle contains the detected object, the
     rectangles may be partially outside the original image.
@@ -681,8 +681,8 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
                               @ByRef RectVector objects,
                               @StdVector int[] numDetections );
 
-    /** @overload
-    if `outputRejectLevels` is `true` returns `rejectLevels` and `levelWeights`
+    /** \overload
+    if {@code outputRejectLevels} is {@code true} returns {@code rejectLevels} and {@code levelWeights}
     */
     public native @Name("detectMultiScale") void detectMultiScale3( @ByVal Mat image,
                                       @ByRef RectVector objects,
@@ -746,9 +746,9 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
 @Namespace("cv") public static class DetectionROI extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public DetectionROI() { allocate(); }
+    public DetectionROI() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public DetectionROI(int size) { allocateArray(size); }
+    public DetectionROI(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetectionROI(Pointer p) { super(p); }
     private native void allocate();
@@ -770,7 +770,7 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HOGDescriptor(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public HOGDescriptor(int size) { allocateArray(size); }
+    public HOGDescriptor(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public HOGDescriptor position(int position) {
         return (HOGDescriptor)super.position(position);
@@ -781,30 +781,30 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
     /** enum cv::HOGDescriptor:: */
     public static final int DEFAULT_NLEVELS = 64;
 
-    public HOGDescriptor() { allocate(); }
+    public HOGDescriptor() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     public HOGDescriptor(@ByVal Size _winSize, @ByVal Size _blockSize, @ByVal Size _blockStride,
                       @ByVal Size _cellSize, int _nbins, int _derivAperture/*=1*/, double _winSigma/*=-1*/,
                       int _histogramNormType/*=cv::HOGDescriptor::L2Hys*/,
                       double _L2HysThreshold/*=0.2*/, @Cast("bool") boolean _gammaCorrection/*=false*/,
-                      int _nlevels/*=cv::HOGDescriptor::DEFAULT_NLEVELS*/, @Cast("bool") boolean _signedGradient/*=false*/) { allocate(_winSize, _blockSize, _blockStride, _cellSize, _nbins, _derivAperture, _winSigma, _histogramNormType, _L2HysThreshold, _gammaCorrection, _nlevels, _signedGradient); }
+                      int _nlevels/*=cv::HOGDescriptor::DEFAULT_NLEVELS*/, @Cast("bool") boolean _signedGradient/*=false*/) { super((Pointer)null); allocate(_winSize, _blockSize, _blockStride, _cellSize, _nbins, _derivAperture, _winSigma, _histogramNormType, _L2HysThreshold, _gammaCorrection, _nlevels, _signedGradient); }
     private native void allocate(@ByVal Size _winSize, @ByVal Size _blockSize, @ByVal Size _blockStride,
                       @ByVal Size _cellSize, int _nbins, int _derivAperture/*=1*/, double _winSigma/*=-1*/,
                       int _histogramNormType/*=cv::HOGDescriptor::L2Hys*/,
                       double _L2HysThreshold/*=0.2*/, @Cast("bool") boolean _gammaCorrection/*=false*/,
                       int _nlevels/*=cv::HOGDescriptor::DEFAULT_NLEVELS*/, @Cast("bool") boolean _signedGradient/*=false*/);
     public HOGDescriptor(@ByVal Size _winSize, @ByVal Size _blockSize, @ByVal Size _blockStride,
-                      @ByVal Size _cellSize, int _nbins) { allocate(_winSize, _blockSize, _blockStride, _cellSize, _nbins); }
+                      @ByVal Size _cellSize, int _nbins) { super((Pointer)null); allocate(_winSize, _blockSize, _blockStride, _cellSize, _nbins); }
     private native void allocate(@ByVal Size _winSize, @ByVal Size _blockSize, @ByVal Size _blockStride,
                       @ByVal Size _cellSize, int _nbins);
 
-    public HOGDescriptor(@Str BytePointer filename) { allocate(filename); }
+    public HOGDescriptor(@Str BytePointer filename) { super((Pointer)null); allocate(filename); }
     private native void allocate(@Str BytePointer filename);
-    public HOGDescriptor(@Str String filename) { allocate(filename); }
+    public HOGDescriptor(@Str String filename) { super((Pointer)null); allocate(filename); }
     private native void allocate(@Str String filename);
 
-    public HOGDescriptor(@Const @ByRef HOGDescriptor d) { allocate(d); }
+    public HOGDescriptor(@Const @ByRef HOGDescriptor d) { super((Pointer)null); allocate(d); }
     private native void allocate(@Const @ByRef HOGDescriptor d);
 
     public native @Cast("size_t") long getDescriptorSize();
@@ -963,7 +963,7 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
     public native void groupRectangles(@ByRef RectVector rectList, @StdVector double[] weights, int groupThreshold, double eps);
 }
 
-/** @} objdetect */
+/** \} objdetect */
 
 
 
@@ -1029,8 +1029,8 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
 
 // #include <vector>
 
-/** @addtogroup objdetect
- *  @{ */
+/** \addtogroup objdetect
+ *  \{ */
 
 @Namespace("cv") @NoOffset public static class DetectionBasedTracker extends Pointer {
     static { Loader.load(); }
@@ -1044,7 +1044,7 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public Parameters(Pointer p) { super(p); }
             /** Native array allocator. Access with {@link Pointer#position(int)}. */
-            public Parameters(int size) { allocateArray(size); }
+            public Parameters(int size) { super((Pointer)null); allocateArray(size); }
             private native void allocateArray(int size);
             @Override public Parameters position(int position) {
                 return (Parameters)super.position(position);
@@ -1053,7 +1053,7 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
             public native int maxTrackLifetime(); public native Parameters maxTrackLifetime(int maxTrackLifetime);
             public native int minDetectionPeriod(); public native Parameters minDetectionPeriod(int minDetectionPeriod); //the minimal time between run of the big object detector (on the whole frame) in ms (1000 mean 1 sec), default=0
 
-            public Parameters() { allocate(); }
+            public Parameters() { super((Pointer)null); allocate(); }
             private native void allocate();
         }
 
@@ -1077,7 +1077,7 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
                 public native void setMinNeighbours(int value);
         }
 
-        public DetectionBasedTracker(@Ptr IDetector mainDetector, @Ptr IDetector trackingDetector, @Const @ByRef Parameters params) { allocate(mainDetector, trackingDetector, params); }
+        public DetectionBasedTracker(@Ptr IDetector mainDetector, @Ptr IDetector trackingDetector, @Const @ByRef Parameters params) { super((Pointer)null); allocate(mainDetector, trackingDetector, params); }
         private native void allocate(@Ptr IDetector mainDetector, @Ptr IDetector trackingDetector, @Const @ByRef Parameters params);
 
         public native @Cast("bool") boolean run();
@@ -1107,7 +1107,7 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
             public native int id(); public native ExtObject id(int id);
             public native @ByRef Rect location(); public native ExtObject location(Rect location);
             public native @Cast("cv::DetectionBasedTracker::ObjectStatus") int status(); public native ExtObject status(int status);
-            public ExtObject(int _id, @ByVal Rect _location, @Cast("cv::DetectionBasedTracker::ObjectStatus") int _status) { allocate(_id, _location, _status); }
+            public ExtObject(int _id, @ByVal Rect _location, @Cast("cv::DetectionBasedTracker::ObjectStatus") int _status) { super((Pointer)null); allocate(_id, _location, _status); }
             private native void allocate(int _id, @ByVal Rect _location, @Cast("cv::DetectionBasedTracker::ObjectStatus") int _status);
         }
         public native void getObjects(@StdVector ExtObject result);
@@ -1116,7 +1116,7 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
         public native int addObject(@Const @ByRef Rect location);
 }
 
-/** @} objdetect */
+/** \} objdetect */
 
  //end of cv namespace
 // #endif

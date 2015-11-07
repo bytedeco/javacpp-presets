@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -68,7 +68,7 @@ public class curand extends org.bytedeco.javacpp.presets.curand {
 /**
  * \defgroup HOST Host API
  *
- * @{
+ * \{
  */
 
 // #include <cuda_runtime.h>
@@ -87,7 +87,7 @@ public class curand extends org.bytedeco.javacpp.presets.curand {
 /* CURAND Host API datatypes */
 
 /**  
- * @{
+ * \{
  */
 
 /**
@@ -290,7 +290,7 @@ public static final int
 /** \endcond */
 
 /**
- * @}
+ * \}
  */
 
 /**
@@ -362,10 +362,10 @@ public static final int
  * - \p offset = 0
  * - \p ordering = CURAND_ORDERING_QUASI_DEFAULT
  *
- * \param generator - Pointer to generator
- * \param rng_type - Type of generator to create
+ * @param generator - Pointer to generator
+ * @param rng_type - Type of generator to create
  *
- * \return 
+ * @return 
  * - CURAND_STATUS_ALLOCATION_FAILED, if memory could not be allocated \n
  * - CURAND_STATUS_INITIALIZATION_FAILED if there was a problem setting up the GPU \n
  * - CURAND_STATUS_VERSION_MISMATCH if the header file version does not match the 
@@ -442,10 +442,10 @@ public static native @Cast("curandStatus_t") int curandCreateGenerator(@ByPtrPtr
  * - \p offset = 0
  * - \p ordering = CURAND_ORDERING_QUASI_DEFAULT
  *
- * \param generator - Pointer to generator
- * \param rng_type - Type of generator to create
+ * @param generator - Pointer to generator
+ * @param rng_type - Type of generator to create
  *
- * \return
+ * @return
  * - CURAND_STATUS_ALLOCATION_FAILED if memory could not be allocated \n
  * - CURAND_STATUS_INITIALIZATION_FAILED if there was a problem setting up the GPU \n
  * - CURAND_STATUS_VERSION_MISMATCH if the header file version does not match the
@@ -460,9 +460,9 @@ public static native @Cast("curandStatus_t") int curandCreateGeneratorHost(@ByPt
  *
  * Destroy an existing generator and free all memory associated with its state.
  *
- * \param generator - Generator to destroy
+ * @param generator - Generator to destroy
  *
- * \return
+ * @return
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_SUCCESS if generator was destroyed successfully \n
  */
@@ -476,9 +476,9 @@ public static native @Cast("curandStatus_t") int curandDestroyGenerator(curandGe
  * The only supported configuration is CURAND version equal to CUDA Runtime
  * version.
  *
- * \param version - CURAND library version
+ * @param version - CURAND library version
  *
- * \return
+ * @return
  * - CURAND_STATUS_SUCCESS if the version number was successfully returned \n
  */
 public static native @Cast("curandStatus_t") int curandGetVersion(IntPointer version);
@@ -491,10 +491,10 @@ public static native @Cast("curandStatus_t") int curandGetVersion(int[] version)
  * Set the current stream for CURAND kernel launches.  All library functions
  * will use this stream until set again.
  *
- * \param generator - Generator to modify
- * \param stream - Stream to use or ::NULL for null stream
+ * @param generator - Generator to modify
+ * @param stream - Stream to use or ::NULL for null stream
  *
- * \return
+ * @return
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_SUCCESS if stream was set successfully \n
  */
@@ -508,10 +508,10 @@ public static native @Cast("curandStatus_t") int curandSetStream(curandGenerator
  * Different seeds will often not be statistically correlated with each other,
  * but some pairs of seed values may generate sequences which are statistically correlated.
  *
- * \param generator - Generator to modify
- * \param seed - Seed value
+ * @param generator - Generator to modify
+ * @param seed - Seed value
  * 
- * \return
+ * @return
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_TYPE_ERROR if the generator is not a pseudorandom number generator \n
  * - CURAND_STATUS_SUCCESS if generator seed was set successfully \n
@@ -526,10 +526,10 @@ public static native @Cast("curandStatus_t") int curandSetPseudoRandomGeneratorS
  * All values of offset are valid.  The offset position is absolute, not 
  * relative to the current position in the sequence.
  *
- * \param generator - Generator to modify
- * \param offset - Absolute offset position
+ * @param generator - Generator to modify
+ * @param offset - Absolute offset position
  *
- * \return
+ * @return
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_SUCCESS if generator offset was set successfully \n
  */
@@ -548,10 +548,10 @@ public static native @Cast("curandStatus_t") int curandSetGeneratorOffset(curand
  * Legal values of \p order for quasirandom generators are:
  * - CURAND_ORDERING_QUASI_DEFAULT
  *
- * \param generator - Generator to modify
- * \param order - Ordering of results
+ * @param generator - Generator to modify
+ * @param order - Ordering of results
  *
- * \return
+ * @return
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_OUT_OF_RANGE if the ordering is not valid \n
  * - CURAND_STATUS_SUCCESS if generator ordering was set successfully \n
@@ -566,10 +566,10 @@ public static native @Cast("curandStatus_t") int curandSetGeneratorOrdering(cura
  * 
  * Legal values for \p num_dimensions are 1 to 20000.
  * 
- * \param generator - Generator to modify
- * \param num_dimensions - Number of dimensions
+ * @param generator - Generator to modify
+ * @param num_dimensions - Number of dimensions
  *
- * \return
+ * @return
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_OUT_OF_RANGE if num_dimensions is not valid \n
  * - CURAND_STATUS_TYPE_ERROR if the generator is not a quasirandom number generator \n
@@ -587,12 +587,12 @@ public static native @Cast("curandStatus_t") int curandSetQuasiRandomGeneratorDi
  *
  * Results are 32-bit values with every bit random.
  *
- * \param generator - Generator to use
- * \param outputPtr - Pointer to device memory to store CUDA-generated results, or
+ * @param generator - Generator to use
+ * @param outputPtr - Pointer to device memory to store CUDA-generated results, or
  *                 Pointer to host memory to store CPU-generated results
- * \param num - Number of random 32-bit values to generate
+ * @param num - Number of random 32-bit values to generate
  *
- * \return
+ * @return
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_PREEXISTING_FAILURE if there was an existing error from 
  *     a previous kernel launch \n
@@ -617,12 +617,12 @@ public static native @Cast("curandStatus_t") int curandGenerate(curandGenerator_
  *
  * Results are 64-bit values with every bit random.
  *
- * \param generator - Generator to use
- * \param outputPtr - Pointer to device memory to store CUDA-generated results, or
+ * @param generator - Generator to use
+ * @param outputPtr - Pointer to device memory to store CUDA-generated results, or
  *                 Pointer to host memory to store CPU-generated results
- * \param num - Number of random 64-bit values to generate
+ * @param num - Number of random 64-bit values to generate
  *
- * \return
+ * @return
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_PREEXISTING_FAILURE if there was an existing error from 
  *     a previous kernel launch \n
@@ -647,12 +647,12 @@ public static native @Cast("curandStatus_t") int curandGenerateLongLong(curandGe
  * Results are 32-bit floating point values between \p 0.0f and \p 1.0f,
  * excluding \p 0.0f and including \p 1.0f.
  *
- * \param generator - Generator to use
- * \param outputPtr - Pointer to device memory to store CUDA-generated results, or
+ * @param generator - Generator to use
+ * @param outputPtr - Pointer to device memory to store CUDA-generated results, or
  *                 Pointer to host memory to store CPU-generated results
- * \param num - Number of floats to generate
+ * @param num - Number of floats to generate
  *
- * \return
+ * @return
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_PREEXISTING_FAILURE if there was an existing error from
  *    a previous kernel launch \n
@@ -676,12 +676,12 @@ public static native @Cast("curandStatus_t") int curandGenerateUniform(curandGen
  * Results are 64-bit double precision floating point values between 
  * \p 0.0 and \p 1.0, excluding \p 0.0 and including \p 1.0.
  *
- * \param generator - Generator to use
- * \param outputPtr - Pointer to device memory to store CUDA-generated results, or
+ * @param generator - Generator to use
+ * @param outputPtr - Pointer to device memory to store CUDA-generated results, or
  *                 Pointer to host memory to store CPU-generated results
- * \param num - Number of doubles to generate
+ * @param num - Number of doubles to generate
  *
- * \return
+ * @return
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_PREEXISTING_FAILURE if there was an existing error from
  *    a previous kernel launch \n
@@ -720,14 +720,14 @@ public static native @Cast("curandStatus_t") int curandGenerateUniformDouble(cur
  * library, so different versions of CURAND may give slightly different
  * numerical values.
  *
- * \param generator - Generator to use
- * \param outputPtr - Pointer to device memory to store CUDA-generated results, or
+ * @param generator - Generator to use
+ * @param outputPtr - Pointer to device memory to store CUDA-generated results, or
  *                 Pointer to host memory to store CPU-generated results
- * \param n - Number of floats to generate
- * \param mean - Mean of normal distribution
- * \param stddev - Standard deviation of normal distribution
+ * @param n - Number of floats to generate
+ * @param mean - Mean of normal distribution
+ * @param stddev - Standard deviation of normal distribution
  *
- * \return
+ * @return
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_PREEXISTING_FAILURE if there was an existing error from
  *    a previous kernel launch \n
@@ -769,14 +769,14 @@ public static native @Cast("curandStatus_t") int curandGenerateNormal(curandGene
  * library, so different versions of CURAND may give slightly different
  * numerical values.
  *
- * \param generator - Generator to use
- * \param outputPtr - Pointer to device memory to store CUDA-generated results, or
+ * @param generator - Generator to use
+ * @param outputPtr - Pointer to device memory to store CUDA-generated results, or
  *                 Pointer to host memory to store CPU-generated results
- * \param n - Number of doubles to generate
- * \param mean - Mean of normal distribution
- * \param stddev - Standard deviation of normal distribution
+ * @param n - Number of doubles to generate
+ * @param mean - Mean of normal distribution
+ * @param stddev - Standard deviation of normal distribution
  *
- * \return
+ * @return
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_PREEXISTING_FAILURE if there was an existing error from
  *    a previous kernel launch \n
@@ -820,14 +820,14 @@ public static native @Cast("curandStatus_t") int curandGenerateNormalDouble(cura
  * library, so different versions of CURAND may give slightly different
  * numerical values.
  *
- * \param generator - Generator to use
- * \param outputPtr - Pointer to device memory to store CUDA-generated results, or
+ * @param generator - Generator to use
+ * @param outputPtr - Pointer to device memory to store CUDA-generated results, or
  *                 Pointer to host memory to store CPU-generated results
- * \param n - Number of floats to generate
- * \param mean - Mean of associated normal distribution
- * \param stddev - Standard deviation of associated normal distribution
+ * @param n - Number of floats to generate
+ * @param mean - Mean of associated normal distribution
+ * @param stddev - Standard deviation of associated normal distribution
  *
- * \return
+ * @return
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_PREEXISTING_FAILURE if there was an existing error from
  *    a previous kernel launch \n
@@ -870,14 +870,14 @@ public static native @Cast("curandStatus_t") int curandGenerateLogNormal(curandG
  * library, so different versions of CURAND may give slightly different
  * numerical values.
  *
- * \param generator - Generator to use
- * \param outputPtr - Pointer to device memory to store CUDA-generated results, or
+ * @param generator - Generator to use
+ * @param outputPtr - Pointer to device memory to store CUDA-generated results, or
  *                 Pointer to host memory to store CPU-generated results
- * \param n - Number of doubles to generate
- * \param mean - Mean of normal distribution
- * \param stddev - Standard deviation of normal distribution
+ * @param n - Number of doubles to generate
+ * @param mean - Mean of normal distribution
+ * @param stddev - Standard deviation of normal distribution
  *
- * \return
+ * @return
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_PREEXISTING_FAILURE if there was an existing error from
  *    a previous kernel launch \n
@@ -901,12 +901,12 @@ public static native @Cast("curandStatus_t") int curandGenerateLogNormalDouble(c
  * Construct the histogram array for the Poisson distribution with lambda \p lambda.
  * For lambda greater than 2000, an approximation with a normal distribution is used.
  *
- * \param lambda - lambda for the Poisson distribution
+ * @param lambda - lambda for the Poisson distribution
  *
  *
- * \param discrete_distribution - pointer to the histogram in device memory
+ * @param discrete_distribution - pointer to the histogram in device memory
  *
- * \return
+ * @return
  * - CURAND_STATUS_ALLOCATION_FAILED if memory could not be allocated \n
  * - CURAND_STATUS_DOUBLE_PRECISION_REQUIRED if the GPU does not support double precision \n
  * - CURAND_STATUS_INITIALIZATION_FAILED if there was a problem setting up the GPU \n
@@ -926,9 +926,9 @@ public static native @Cast("curandStatus_t") int curandCreatePoissonDistribution
  *
  * Destroy the histogram array for a discrete distribution created by curandCreatePoissonDistribution.
  *
- * \param discrete_distribution - pointer to device memory where the histogram is stored
+ * @param discrete_distribution - pointer to device memory where the histogram is stored
  *
- * \return
+ * @return
  * - CURAND_STATUS_NOT_INITIALIZED if the histogram was never created \n
  * - CURAND_STATUS_SUCCESS if the histogram was destroyed successfully \n
  */
@@ -945,13 +945,13 @@ public static native @Cast("curandStatus_t") int curandDestroyDistribution(curan
  *
  * Results are 32-bit unsigned int point values with Poisson distribution, with lambda \p lambda.
  *
- * \param generator - Generator to use
- * \param outputPtr - Pointer to device memory to store CUDA-generated results, or
+ * @param generator - Generator to use
+ * @param outputPtr - Pointer to device memory to store CUDA-generated results, or
  *                 Pointer to host memory to store CPU-generated results
- * \param n - Number of unsigned ints to generate
- * \param lambda - lambda for the Poisson distribution
+ * @param n - Number of unsigned ints to generate
+ * @param lambda - lambda for the Poisson distribution
  *
- * \return
+ * @return
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_PREEXISTING_FAILURE if there was an existing error from
  *    a previous kernel launch \n
@@ -987,9 +987,9 @@ public static native @Cast("curandStatus_t") int curandGeneratePoissonMethod(cur
  * It can be called manually for performance testing reasons to separate
  * timings for starting state generation and random number generation.
  *
- * \param generator - Generator to update
+ * @param generator - Generator to update
  *
- * \return
+ * @return
  * - CURAND_STATUS_NOT_INITIALIZED if the generator was never created \n
  * - CURAND_STATUS_PREEXISTING_FAILURE if there was an existing error from 
  *     a previous kernel launch \n
@@ -1012,10 +1012,10 @@ public static native @Cast("curandStatus_t") int curandGenerateSeeds(curandGener
  * - CURAND_DIRECTION_VECTORS_32_JOEKUO6 (20,000 dimensions)
  * - CURAND_SCRAMBLED_DIRECTION_VECTORS_32_JOEKUO6 (20,000 dimensions)
  *
- * \param vectors - Address of pointer in which to return direction vectors
- * \param set - Which set of direction vectors to use
+ * @param vectors - Address of pointer in which to return direction vectors
+ * @param set - Which set of direction vectors to use
  *
- * \return
+ * @return
  * - CURAND_STATUS_OUT_OF_RANGE if the choice of set is invalid \n
  * - CURAND_STATUS_SUCCESS if the pointer was set successfully \n
  */
@@ -1034,9 +1034,9 @@ public static native @Cast("curandStatus_t") int curandGetDirectionVectors32(@Ca
  * The array contains constants for many dimensions.  Each dimension
  * has a single unsigned int constant.
  *
- * \param constants - Address of pointer in which to return scramble constants
+ * @param constants - Address of pointer in which to return scramble constants
  *
- * \return
+ * @return
  * - CURAND_STATUS_SUCCESS if the pointer was set successfully \n
  */
 public static native @Cast("curandStatus_t") int curandGetScrambleConstants32(@Cast("unsigned int**") PointerPointer constants);
@@ -1058,10 +1058,10 @@ public static native @Cast("curandStatus_t") int curandGetScrambleConstants32(@C
  * - CURAND_DIRECTION_VECTORS_64_JOEKUO6 (20,000 dimensions)
  * - CURAND_SCRAMBLED_DIRECTION_VECTORS_64_JOEKUO6 (20,000 dimensions)
  *
- * \param vectors - Address of pointer in which to return direction vectors
- * \param set - Which set of direction vectors to use
+ * @param vectors - Address of pointer in which to return direction vectors
+ * @param set - Which set of direction vectors to use
  *
- * \return
+ * @return
  * - CURAND_STATUS_OUT_OF_RANGE if the choice of set is invalid \n
  * - CURAND_STATUS_SUCCESS if the pointer was set successfully \n
  */
@@ -1080,9 +1080,9 @@ public static native @Cast("curandStatus_t") int curandGetDirectionVectors64(@Ca
  * The array contains constants for many dimensions.  Each dimension
  * has a single unsigned long long constant.
  *
- * \param constants - Address of pointer in which to return scramble constants
+ * @param constants - Address of pointer in which to return scramble constants
  *
- * \return
+ * @return
  * - CURAND_STATUS_SUCCESS if the pointer was set successfully \n
  */
 public static native @Cast("curandStatus_t") int curandGetScrambleConstants64(@Cast("unsigned long long**") PointerPointer constants);
@@ -1090,7 +1090,7 @@ public static native @Cast("curandStatus_t") int curandGetScrambleConstants64(@C
 public static native @Cast("curandStatus_t") int curandGetScrambleConstants64(@Cast("unsigned long long**") @ByPtrPtr LongBuffer constants);
 public static native @Cast("curandStatus_t") int curandGetScrambleConstants64(@Cast("unsigned long long**") @ByPtrPtr long[] constants);
 
-/** @} */
+/** \} */
 
 // #if defined(__cplusplus)
 // #endif /* __cplusplus */

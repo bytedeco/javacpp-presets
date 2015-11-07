@@ -1,4 +1,5 @@
 
+ * Define commonly used Caffe `std::vector` types (`DatumVector`, `FloatCallbackVector`, and `DoubleCallbackVector`) for ease of use and performance reasons
  * Fix the `cppbuild.sh` script for FFmpeg, failing to build x264 on Windows
 
 ### October 25, 2015 version 1.1

@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -76,7 +76,7 @@ Thanks to:
 */
 /////////////////////////////////////////////////////////
 
-
+// #pragma comment(lib,"Strmiids.lib") 
 
 // #include <stdlib.h>
 // #include <stdio.h>
@@ -88,7 +88,7 @@ Thanks to:
 
 //this is for TryEnterCriticalSection
 // #ifndef _WIN32_WINNT
-// 	#   define _WIN32_WINNT 0x400
+// 	#   define _WIN32_WINNT 0x501
 // #endif
 // #include <windows.h>
 
@@ -283,14 +283,14 @@ public static native int comInitCount(); public static native void comInitCount(
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public videoDevice(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public videoDevice(int size) { allocateArray(size); }
+    public videoDevice(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public videoDevice position(int position) {
         return (videoDevice)super.position(position);
     }
 
 
-		public videoDevice() { allocate(); }
+		public videoDevice() { super((Pointer)null); allocate(); }
 		private native void allocate();
 		public native void setSize(int w, int h);
 		public native void NukeDownstream(IBaseFilter pBF);
@@ -355,13 +355,13 @@ public static native int comInitCount(); public static native void comInitCount(
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public videoInput(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public videoInput(int size) { allocateArray(size); }
+    public videoInput(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public videoInput position(int position) {
         return (videoInput)super.position(position);
     }
 
-		public videoInput() { allocate(); }
+		public videoInput() { super((Pointer)null); allocate(); }
 		private native void allocate();
 
 		//turns off console messages - default is to print messages

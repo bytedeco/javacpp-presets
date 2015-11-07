@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -35,28 +35,28 @@ public class avutil extends org.bytedeco.javacpp.presets.avutil {
 // #define AVUTIL_AVUTIL_H
 
 /**
- * @file
+ * \file
  * external API header
  */
 
 /**
- * @mainpage
+ * \mainpage
  *
- * @section ffmpeg_intro Introduction
+ * \section ffmpeg_intro Introduction
  *
  * This document describes the usage of the different libraries
  * provided by FFmpeg.
  *
- * @li @ref libavc "libavcodec" encoding/decoding library
- * @li @ref lavfi "libavfilter" graph-based frame editing library
- * @li @ref libavf "libavformat" I/O and muxing/demuxing library
- * @li @ref lavd "libavdevice" special devices muxing/demuxing library
- * @li @ref lavu "libavutil" common utility library
- * @li @ref lswr "libswresample" audio resampling, format conversion and mixing
- * @li @ref lpp  "libpostproc" post processing library
- * @li @ref libsws "libswscale" color conversion and scaling library
+ * \li \ref libavc "libavcodec" encoding/decoding library
+ * \li \ref lavfi "libavfilter" graph-based frame editing library
+ * \li \ref libavf "libavformat" I/O and muxing/demuxing library
+ * \li \ref lavd "libavdevice" special devices muxing/demuxing library
+ * \li \ref lavu "libavutil" common utility library
+ * \li \ref lswr "libswresample" audio resampling, format conversion and mixing
+ * \li \ref lpp  "libpostproc" post processing library
+ * \li \ref libsws "libswscale" color conversion and scaling library
  *
- * @section ffmpeg_versioning Versioning and compatibility
+ * \section ffmpeg_versioning Versioning and compatibility
  *
  * Each of the FFmpeg libraries contains a version.h header, which defines a
  * major, minor and micro version number with the
@@ -91,83 +91,83 @@ public class avutil extends org.bytedeco.javacpp.presets.avutil {
  */
 
 /**
- * @defgroup lavu Common utility functions
+ * \defgroup lavu Common utility functions
  *
- * @brief
+ * \brief
  * libavutil contains the code shared across all the other FFmpeg
  * libraries
  *
- * @note In order to use the functions provided by avutil you must include
+ * \note In order to use the functions provided by avutil you must include
  * the specific header.
  *
- * @{
+ * \{
  *
- * @defgroup lavu_crypto Crypto and Hashing
+ * \defgroup lavu_crypto Crypto and Hashing
  *
- * @{
- * @}
+ * \{
+ * \}
  *
- * @defgroup lavu_math Maths
- * @{
+ * \defgroup lavu_math Maths
+ * \{
  *
- * @}
+ * \}
  *
- * @defgroup lavu_string String Manipulation
+ * \defgroup lavu_string String Manipulation
  *
- * @{
+ * \{
  *
- * @}
+ * \}
  *
- * @defgroup lavu_mem Memory Management
+ * \defgroup lavu_mem Memory Management
  *
- * @{
+ * \{
  *
- * @}
+ * \}
  *
- * @defgroup lavu_data Data Structures
- * @{
+ * \defgroup lavu_data Data Structures
+ * \{
  *
- * @}
+ * \}
  *
- * @defgroup lavu_audio Audio related
+ * \defgroup lavu_audio Audio related
  *
- * @{
+ * \{
  *
- * @}
+ * \}
  *
- * @defgroup lavu_error Error Codes
+ * \defgroup lavu_error Error Codes
  *
- * @{
+ * \{
  *
- * @}
+ * \}
  *
- * @defgroup lavu_log Logging Facility
+ * \defgroup lavu_log Logging Facility
  *
- * @{
+ * \{
  *
- * @}
+ * \}
  *
- * @defgroup lavu_misc Other
+ * \defgroup lavu_misc Other
  *
- * @{
+ * \{
  *
- * @defgroup preproc_misc Preprocessor String Macros
+ * \defgroup preproc_misc Preprocessor String Macros
  *
- * @{
+ * \{
  *
- * @}
+ * \}
  *
- * @defgroup version_utils Library Version Macros
+ * \defgroup version_utils Library Version Macros
  *
- * @{
+ * \{
  *
- * @}
+ * \}
  */
 
 
 /**
- * @addtogroup lavu_ver
- * @{
+ * \addtogroup lavu_ver
+ * \{
  */
 
 /**
@@ -193,12 +193,12 @@ public static native @Cast("const char*") BytePointer avutil_configuration();
 public static native @Cast("const char*") BytePointer avutil_license();
 
 /**
- * @}
+ * \}
  */
 
 /**
- * @addtogroup lavu_media Media Type
- * @brief Media Type
+ * \addtogroup lavu_media Media Type
+ * \brief Media Type
  */
 
 /** enum AVMediaType */
@@ -221,13 +221,13 @@ public static final int
 public static native @Cast("const char*") BytePointer av_get_media_type_string(@Cast("AVMediaType") int media_type);
 
 /**
- * @defgroup lavu_const Constants
- * @{
+ * \defgroup lavu_const Constants
+ * \{
  *
- * @defgroup lavu_enc Encoding specific
+ * \defgroup lavu_enc Encoding specific
  *
- * @note those definition should move to avcodec
- * @{
+ * \note those definition should move to avcodec
+ * \{
  */
 
 public static final int FF_LAMBDA_SHIFT = 7;
@@ -239,16 +239,16 @@ public static final int FF_LAMBDA_MAX = (256*128-1);
 public static final int FF_QUALITY_SCALE = FF_LAMBDA_SCALE; //FIXME maybe remove
 
 /**
- * @}
- * @defgroup lavu_time Timestamp specific
+ * \}
+ * \defgroup lavu_time Timestamp specific
  *
  * FFmpeg internal timebase and timestamp definitions
  *
- * @{
+ * \{
  */
 
 /**
- * @brief Undefined timestamp value
+ * \brief Undefined timestamp value
  *
  * Usually reported by demuxer that work on containers that do not provide
  * either pts or dts.
@@ -270,13 +270,13 @@ public static final int AV_TIME_BASE =            1000000;
 // #define AV_TIME_BASE_Q          (AVRational){1, AV_TIME_BASE}
 
 /**
- * @}
- * @}
- * @defgroup lavu_picture Image related
+ * \}
+ * \}
+ * \defgroup lavu_picture Image related
  *
  * AVPicture types, pixel formats and basic image planes manipulation.
  *
- * @{
+ * \{
  */
 
 /** enum AVPictureType */
@@ -308,7 +308,7 @@ public static final int
 public static native @Cast("char") byte av_get_picture_type_char(@Cast("AVPictureType") int pict_type);
 
 /**
- * @}
+ * \}
  */
 
 // #include "common.h"
@@ -360,8 +360,8 @@ public static native @Cast("FILE*") Pointer av_fopen_utf8(String path, String mo
 public static native @ByVal AVRational av_get_time_base_q();
 
 /**
- * @}
- * @}
+ * \}
+ * \}
  */
 
 // #endif /* AVUTIL_AVUTIL_H */
@@ -388,7 +388,7 @@ public static native @ByVal AVRational av_get_time_base_q();
  */
 
 /**
- * @file
+ * \file
  * error code definitions
  */
 
@@ -399,9 +399,9 @@ public static native @ByVal AVRational av_get_time_base_q();
 // #include <stddef.h>
 
 /**
- * @addtogroup lavu_error
+ * \addtogroup lavu_error
  *
- * @{
+ * \{
  */
 
 
@@ -537,7 +537,7 @@ public static native @Cast("char*") byte[] av_make_error_string(@Cast("char*") b
 //     av_make_error_string((char[AV_ERROR_MAX_STRING_SIZE]){0}, AV_ERROR_MAX_STRING_SIZE, errnum)
 
 /**
- * @}
+ * \}
  */
 
 // #endif /* AVUTIL_ERROR_H */
@@ -566,7 +566,7 @@ public static native @Cast("char*") byte[] av_make_error_string(@Cast("char*") b
  */
 
 /**
- * @file
+ * \file
  * memory handling functions
  */
 
@@ -581,8 +581,8 @@ public static native @Cast("char*") byte[] av_make_error_string(@Cast("char*") b
 // #include "avutil.h"
 
 /**
- * @addtogroup lavu_mem
- * @{
+ * \addtogroup lavu_mem
+ * \{
  */
 
 
@@ -649,7 +649,7 @@ public static native Pointer av_malloc_array(@Cast("size_t") long nmemb, @Cast("
  * reallocated.
  * @return Pointer to a newly-reallocated block or NULL if the block
  * cannot be reallocated or the function is used to free the memory block.
- * @warning Pointers originating from the av_malloc() family of functions must
+ * \warning Pointers originating from the av_malloc() family of functions must
  *          not be passed to av_realloc(). The former can be implemented using
  *          memalign() (or other functions), and there is no guarantee that
  *          pointers from such functions can be passed to realloc() at all.
@@ -679,7 +679,7 @@ public static native Pointer av_realloc_f(Pointer ptr, @Cast("size_t") long nele
  * @param   size Size in bytes for the memory block to be allocated or
  *          reallocated
  * @return  Zero on success, an AVERROR error code on failure.
- * @warning Pointers originating from the av_malloc() family of functions must
+ * \warning Pointers originating from the av_malloc() family of functions must
  *          not be passed to av_reallocp(). The former can be implemented using
  *          memalign() (or other functions), and there is no guarantee that
  *          pointers from such functions can be passed to realloc() at all.
@@ -698,7 +698,7 @@ public static native int av_reallocp(Pointer ptr, @Cast("size_t") long size);
  * @param size Size of the single element
  * @return Pointer to a newly-reallocated block or NULL if the block
  * cannot be reallocated or the function is used to free the memory block.
- * @warning Pointers originating from the av_malloc() family of functions must
+ * \warning Pointers originating from the av_malloc() family of functions must
  *          not be passed to av_realloc(). The former can be implemented using
  *          memalign() (or other functions), and there is no guarantee that
  *          pointers from such functions can be passed to realloc() at all.
@@ -717,7 +717,7 @@ public static native Pointer av_realloc_array(Pointer ptr, @Cast("size_t") long 
  * @param nmemb Number of elements
  * @param size Size of the single element
  * @return Zero on success, an AVERROR error code on failure.
- * @warning Pointers originating from the av_malloc() family of functions must
+ * \warning Pointers originating from the av_malloc() family of functions must
  *          not be passed to av_realloc(). The former can be implemented using
  *          memalign() (or other functions), and there is no guarantee that
  *          pointers from such functions can be passed to realloc() at all.
@@ -730,8 +730,8 @@ public static native int av_reallocp_array(Pointer ptr, @Cast("size_t") long nme
  * Free a memory block which has been allocated with av_malloc(z)() or
  * av_realloc().
  * @param ptr Pointer to the memory block which should be freed.
- * @note ptr = NULL is explicitly allowed.
- * @note It is recommended that you use av_freep() instead.
+ * \note ptr = NULL is explicitly allowed.
+ * \note It is recommended that you use av_freep() instead.
  * @see av_freep()
  */
 public static native void av_free(Pointer ptr);
@@ -802,7 +802,7 @@ public static native Pointer av_memdup(@Const Pointer p, @Cast("size_t") long si
  * av_realloc() and set the pointer pointing to it to NULL.
  * @param ptr Pointer to the pointer to the memory block which should
  * be freed.
- * @note passing a pointer to a NULL pointer is safe and leads to no action.
+ * \note passing a pointer to a NULL pointer is safe and leads to no action.
  * @see av_free()
  */
 public static native void av_freep(Pointer ptr);
@@ -929,7 +929,7 @@ public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") Int
 public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
 
 /**
- * @}
+ * \}
  */
 
 // #endif /* AVUTIL_MEM_H */
@@ -1003,8 +1003,8 @@ public static final int INFINITY = INFINITY();
 // #endif
 
 /**
- * @addtogroup lavu_math
- * @{
+ * \addtogroup lavu_math
+ * \{
  */
 
 
@@ -1107,7 +1107,7 @@ public static native long av_add_stable(@ByVal AVRational ts_tb, long ts, @ByVal
 
 
     /**
- * @}
+ * \}
  */
 
 // #endif /* AVUTIL_MATHEMATICS_H */
@@ -1137,9 +1137,9 @@ public static native long av_add_stable(@ByVal AVRational ts_tb, long ts, @ByVal
  */
 
 /**
- * @file
+ * \file
  * rational numbers
- * @author Michael Niedermayer <michaelni@gmx.at>
+ * @author Michael Niedermayer <michaelni\gmx.at>
  */
 
 // #ifndef AVUTIL_RATIONAL_H
@@ -1150,8 +1150,8 @@ public static native long av_add_stable(@ByVal AVRational ts_tb, long ts, @ByVal
 // #include "attributes.h"
 
 /**
- * @addtogroup lavu_math
- * @{
+ * \addtogroup lavu_math
+ * \{
  */
 
 /**
@@ -1160,9 +1160,9 @@ public static native long av_add_stable(@ByVal AVRational ts_tb, long ts, @ByVal
 public static class AVRational extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVRational() { allocate(); }
+    public AVRational() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVRational(int size) { allocateArray(size); }
+    public AVRational(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVRational(Pointer p) { super(p); }
     private native void allocate();
@@ -1180,7 +1180,7 @@ public static class AVRational extends Pointer {
 /**
  * Create a rational.
  * Useful for compilers that do not support compound literals.
- * @note  The return value is not reduced.
+ * \note  The return value is not reduced.
  */
 public static native @ByVal AVRational av_make_q(int num, int den);
 
@@ -1284,7 +1284,7 @@ public static native int av_find_nearest_q_idx(@ByVal AVRational q, @Const AVRat
 public static native @Cast("uint32_t") int av_q2intfloat(@ByVal AVRational q);
 
 /**
- * @}
+ * \}
  */
 
 // #endif /* AVUTIL_RATIONAL_H */
@@ -1360,9 +1360,9 @@ public static final int
 public static class AVClass extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVClass() { allocate(); }
+    public AVClass() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVClass(int size) { allocateArray(size); }
+    public AVClass(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVClass(Pointer p) { super(p); }
     private native void allocate();
@@ -1489,13 +1489,13 @@ public static class AVClass extends Pointer {
 }
 
 /**
- * @addtogroup lavu_log
+ * \addtogroup lavu_log
  *
- * @{
+ * \{
  *
- * @defgroup lavu_log_constants Logging Constants
+ * \defgroup lavu_log_constants Logging Constants
  *
- * @{
+ * \{
  */
 
 /**
@@ -1550,14 +1550,14 @@ public static final int AV_LOG_TRACE =    56;
 public static final int AV_LOG_MAX_OFFSET = (AV_LOG_TRACE - AV_LOG_QUIET);
 
 /**
- * @}
+ * \}
  */
 
 /**
  * Sets additional colors for extended debugging sessions.
- * @code
+ * <pre><code>
    av_log(ctx, AV_LOG_DEBUG|AV_LOG_C(134), "Message in purple\n");
-   @endcode
+   </code></pre>
  * Requires 256color terminal support. Uses outside debugging is not
  * recommended.
  */
@@ -1572,7 +1572,7 @@ public static final int AV_LOG_MAX_OFFSET = (AV_LOG_TRACE - AV_LOG_QUIET);
  *
  * @param avcl A pointer to an arbitrary struct of which the first field is a
  *        pointer to an AVClass struct or NULL if general log.
- * @param level The importance level of the message expressed using a @ref
+ * @param level The importance level of the message expressed using a \ref
  *        lavu_log_constants "Logging Constant".
  * @param fmt The format string (printf-compatible) that specifies how
  *        subsequent arguments are converted to output.
@@ -1590,7 +1590,7 @@ public static native void av_log(Pointer avcl, int level, String fmt);
  *
  * @param avcl A pointer to an arbitrary struct of which the first field is a
  *        pointer to an AVClass struct.
- * @param level The importance level of the message expressed using a @ref
+ * @param level The importance level of the message expressed using a \ref
  *        lavu_log_constants "Logging Constant".
  * @param fmt The format string (printf-compatible) that specifies how
  *        subsequent arguments are converted to output.
@@ -1620,7 +1620,7 @@ public static native void av_log_set_level(int level);
 /**
  * Set the logging callback
  *
- * @note The callback must be thread safe, even if the application does not use
+ * \note The callback must be thread safe, even if the application does not use
  *       threads itself as some codecs are multithreaded.
  *
  * @see av_log_default_callback
@@ -1653,7 +1653,7 @@ public static native void av_log_set_callback(Callback_Pointer_int_String_Pointe
  *
  * @param avcl A pointer to an arbitrary struct of which the first field is a
  *        pointer to an AVClass struct.
- * @param level The importance level of the message expressed using a @ref
+ * @param level The importance level of the message expressed using a \ref
  *        lavu_log_constants "Logging Constant".
  * @param fmt The format string (printf-compatible) that specifies how
  *        subsequent arguments are converted to output.
@@ -1722,7 +1722,7 @@ public static final int AV_LOG_SKIP_REPEATED = 1;
  * Include the log severity in messages originating from codecs.
  *
  * Results in messages such as:
- * [rawvideo @ 0xDEADBEEF] [error] encode did not produce valid pts
+ * [rawvideo \ 0xDEADBEEF] [error] encode did not produce valid pts
  */
 public static final int AV_LOG_PRINT_LEVEL = 2;
 
@@ -1730,7 +1730,7 @@ public static native void av_log_set_flags(int arg);
 public static native int av_log_get_flags();
 
 /**
- * @}
+ * \}
  */
 
 // #endif /* AVUTIL_LOG_H */
@@ -1757,8 +1757,8 @@ public static native int av_log_get_flags();
  */
 
 /**
- * @file
- * @ingroup lavu_buffer
+ * \file
+ * \ingroup lavu_buffer
  * refcounted data buffer API
  */
 
@@ -1768,10 +1768,10 @@ public static native int av_log_get_flags();
 // #include <stdint.h>
 
 /**
- * @defgroup lavu_buffer AVBuffer
- * @ingroup lavu_data
+ * \defgroup lavu_buffer AVBuffer
+ * \ingroup lavu_data
  *
- * @{
+ * \{
  * AVBuffer is an API for reference-counted data buffers.
  *
  * There are two core objects in this API -- AVBuffer and AVBufferRef. AVBuffer
@@ -1798,11 +1798,11 @@ public static native int av_log_get_flags();
  * however that is safe only when all the existing references are under its
  * control.
  *
- * @note Referencing and unreferencing the buffers is thread-safe and thus
+ * \note Referencing and unreferencing the buffers is thread-safe and thus
  * may be done from multiple threads simultaneously without any need for
  * additional locking.
  *
- * @note Two different references to the same buffer can point to different
+ * \note Two different references to the same buffer can point to different
  * parts of the buffer (i.e. their AVBufferRef.data will not be equal).
  */
 
@@ -1826,9 +1826,9 @@ public static native int av_log_get_flags();
 public static class AVBufferRef extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVBufferRef() { allocate(); }
+    public AVBufferRef() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVBufferRef(int size) { allocateArray(size); }
+    public AVBufferRef(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVBufferRef(Pointer p) { super(p); }
     private native void allocate();
@@ -1982,7 +1982,7 @@ public static native int av_buffer_make_writable(@ByPtrPtr AVBufferRef buf);
  * @param size required new buffer size.
  * @return 0 on success, a negative AVERROR on failure.
  *
- * @note the buffer is actually reallocated with av_realloc() only if it was
+ * \note the buffer is actually reallocated with av_realloc() only if it was
  * initially allocated through av_buffer_realloc(NULL) and there is only one
  * reference to it (i.e. the one passed to this function). In all other cases
  * a new buffer is allocated and the data is copied.
@@ -1991,14 +1991,14 @@ public static native int av_buffer_realloc(@Cast("AVBufferRef**") PointerPointer
 public static native int av_buffer_realloc(@ByPtrPtr AVBufferRef buf, int size);
 
 /**
- * @}
+ * \}
  */
 
 /**
- * @defgroup lavu_bufferpool AVBufferPool
- * @ingroup lavu_data
+ * \defgroup lavu_bufferpool AVBufferPool
+ * \ingroup lavu_data
  *
- * @{
+ * \{
  * AVBufferPool is an API for a lock-free thread-safe pool of AVBuffers.
  *
  * Frequently allocating and freeing large buffers may be slow. AVBufferPool is
@@ -2075,7 +2075,7 @@ public static native void av_buffer_pool_uninit(@ByPtrPtr AVBufferPool pool);
 public static native AVBufferRef av_buffer_pool_get(AVBufferPool pool);
 
 /**
- * @}
+ * \}
  */
 
 // #endif /* AVUTIL_BUFFER_H */
@@ -2107,7 +2107,7 @@ public static native AVBufferRef av_buffer_pool_get(AVBufferPool pool);
 // #define AVUTIL_PIXFMT_H
 
 /**
- * @file
+ * \file
  * pixel format definitions
  *
  */
@@ -2121,14 +2121,14 @@ public static final int AVPALETTE_COUNT = 256;
 /**
  * Pixel format.
  *
- * @note
+ * \note
  * AV_PIX_FMT_RGB32 is handled in an endian-specific manner. An RGBA
  * color is put together as:
  *  (A << 24) | (R << 16) | (G << 8) | B
  * This is stored as BGRA on little-endian CPU architectures and ARGB on
  * big-endian CPUs.
  *
- * @par
+ * \par
  * When the pixel format is palettized RGB32 (AV_PIX_FMT_PAL8), the palettized
  * image data is stored in AVFrame.data[0]. The palette is transported in
  * AVFrame.data[1], is 1024 bytes long (256 4-byte entries) and is
@@ -2138,7 +2138,7 @@ public static final int AVPALETTE_COUNT = 256;
  * This is important as many custom PAL8 video codecs that were designed
  * to run on the IBM VGA graphics adapter use 6-bit palette components.
  *
- * @par
+ * \par
  * For all the 8bit per pixel formats, an RGB32 palette is in data[1] like
  * for pal8. This palette is filled in automatically by the function
  * allocating the picture.
@@ -2259,15 +2259,15 @@ public static final int
     AV_PIX_FMT_BGR555LE = 50,
 
 // #if FF_API_VAAPI
-    /** @name Deprecated pixel formats */
-    /**@{*/
+    /** \name Deprecated pixel formats */
+    /**\{*/
     /** HW acceleration through VA API at motion compensation entry-point, Picture.data[3] contains a vaapi_render_state struct which contains macroblocks as well as various fields extracted from headers */
     AV_PIX_FMT_VAAPI_MOCO = 51,
     /** HW acceleration through VA API at IDCT entry-point, Picture.data[3] contains a vaapi_render_state struct which contains fields extracted from headers */
     AV_PIX_FMT_VAAPI_IDCT = 52,
     /** HW decoding through VA API, Picture.data[3] contains a vaapi_render_state struct which contains the bitstream of the slices as well as various fields extracted from headers */
     AV_PIX_FMT_VAAPI_VLD = 53,
-    /**@}*/
+    /**\}*/
     AV_PIX_FMT_VAAPI =  AV_PIX_FMT_VAAPI_VLD,
 // #else
 // #endif
@@ -2931,8 +2931,8 @@ public static final int
  */
 
 /**
- * @file
- * @ingroup lavu_frame
+ * \file
+ * \ingroup lavu_frame
  * reference-counted frame API
  */
 
@@ -2951,10 +2951,10 @@ public static final int
 
 
 /**
- * @defgroup lavu_frame AVFrame
- * @ingroup lavu_data
+ * \defgroup lavu_frame AVFrame
+ * \ingroup lavu_data
  *
- * @{
+ * \{
  * AVFrame is an abstraction for reference-counted raw multimedia data.
  */
 
@@ -3012,12 +3012,12 @@ public static final int
      * Recommmends skipping the specified number of samples. This is exported
      * only if the "skip_manual" AVOption is set in libavcodec.
      * This has the same format as AV_PKT_DATA_SKIP_SAMPLES.
-     * @code
+     * <pre><code>
      * u32le number of samples to skip from start of this packet
      * u32le number of samples to skip from end of this packet
      * u8    reason for start skip
      * u8    reason for end   skip (0=padding silence, 1=convergence)
-     * @endcode
+     * </code></pre>
      */
     AV_FRAME_DATA_SKIP_SAMPLES = 9,
 
@@ -3047,9 +3047,9 @@ public static final int
 public static class AVFrameSideData extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVFrameSideData() { allocate(); }
+    public AVFrameSideData() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVFrameSideData(int size) { allocateArray(size); }
+    public AVFrameSideData(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFrameSideData(Pointer p) { super(p); }
     private native void allocate();
@@ -3097,9 +3097,9 @@ public static class AVFrameSideData extends Pointer {
 public static class AVFrame extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVFrame() { allocate(); }
+    public AVFrame() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVFrame(int size) { allocateArray(size); }
+    public AVFrame(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFrame(Pointer p) { super(p); }
     private native void allocate();
@@ -3133,7 +3133,7 @@ public static final int AV_NUM_DATA_POINTERS = 8;
      * Some code requires such alignment other code can be slower without
      * correct alignment, for yet other it makes no difference.
      *
-     * @note The linesize may be larger than the size of usable data -- there
+     * \note The linesize may be larger than the size of usable data -- there
      * may be extra padding present for performance reasons.
      */
     public native int linesize(int i); public native AVFrame linesize(int i, int linesize);
@@ -3247,13 +3247,13 @@ public static final int AV_NUM_DATA_POINTERS = 8;
 
     /**
      * motion vector table
-     * @code
+     * <pre><code>
      * example:
      * int mv_sample_log2= 4 - motion_subsample_log2;
      * int mb_width= (width+15)>>4;
      * int mv_stride= (mb_width << mv_sample_log2) + 1;
      * motion_val[direction][x + y*mv_stride][0->mv_x, 1->mv_y];
-     * @endcode
+     * </code></pre>
      */
     public native short motion_val(int i, int j, int k); public native AVFrame motion_val(int i, int j, int k, short motion_val);
     @MemberGetter public native @Cast("int16_t(*)[2]") ShortPointer motion_val();
@@ -3398,10 +3398,10 @@ public static final int AV_NUM_DATA_POINTERS = 8;
     public native int nb_side_data(); public native AVFrame nb_side_data(int nb_side_data);
 
 /**
- * @defgroup lavu_frame_flags AV_FRAME_FLAGS
+ * \defgroup lavu_frame_flags AV_FRAME_FLAGS
  * Flags describing additional frame properties.
  *
- * @{
+ * \{
  */
 
 /**
@@ -3409,11 +3409,11 @@ public static final int AV_NUM_DATA_POINTERS = 8;
  */
 public static final int AV_FRAME_FLAG_CORRUPT =       (1 << 0);
 /**
- * @}
+ * \}
  */
 
     /**
-     * Frame flags, a combination of @ref lavu_frame_flags
+     * Frame flags, a combination of \ref lavu_frame_flags
      */
     public native int flags(); public native AVFrame flags(int flags);
 
@@ -3561,7 +3561,7 @@ public static native @Cast("const char*") BytePointer av_get_colorspace_name(@Ca
  *
  * @return An AVFrame filled with default values or NULL on failure.
  *
- * @note this only allocates the AVFrame itself, not the data buffers. Those
+ * \note this only allocates the AVFrame itself, not the data buffers. Those
  * must be allocated through other means, e.g. with av_frame_get_buffer() or
  * manually.
  */
@@ -3720,7 +3720,7 @@ public static native void av_frame_remove_side_data(AVFrame frame, @Cast("AVFram
 public static native @Cast("const char*") BytePointer av_frame_side_data_name(@Cast("AVFrameSideDataType") int type);
 
 /**
- * @}
+ * \}
  */
 
 // #endif /* AVUTIL_FRAME_H */
@@ -3755,13 +3755,13 @@ public static native @Cast("const char*") BytePointer av_frame_side_data_name(@C
 // #include "attributes.h"
 
 /**
- * @addtogroup lavu_audio
- * @{
+ * \addtogroup lavu_audio
+ * \{
  *
- * @defgroup lavu_sampfmts Audio sample formats
+ * \defgroup lavu_sampfmts Audio sample formats
  *
  * Audio sample format enumeration and related convenience functions.
- * @{
+ * \{
  *
  */
 
@@ -3778,7 +3778,7 @@ public static native @Cast("const char*") BytePointer av_frame_side_data_name(@C
  * - The data layout as used in av_samples_fill_arrays() and elsewhere in FFmpeg
  *   (such as AVFrame in libavcodec) is as follows:
  *
- * @par
+ * \par
  * For planar sample formats, each audio channel is in a separate data plane,
  * and linesize is the buffer size, in bytes, for a single plane. All data
  * planes must be the same size. For packed sample formats, only the first data
@@ -3908,12 +3908,12 @@ public static native int av_samples_get_buffer_size(int[] linesize, int nb_chann
                                @Cast("AVSampleFormat") int sample_fmt, int align);
 
 /**
- * @}
+ * \}
  *
- * @defgroup lavu_sampmanip Samples manipulation
+ * \defgroup lavu_sampmanip Samples manipulation
  *
  * Functions that manipulate audio samples
- * @{
+ * \{
  */
 
 /**
@@ -3943,7 +3943,7 @@ public static native int av_samples_get_buffer_size(int[] linesize, int nb_chann
  * @param sample_fmt       the sample format
  * @param align            buffer size alignment (0 = default, 1 = no alignment)
  * @return                 >=0 on success or a negative error code on failure
- * @todo return minimum size in bytes required for the buffer in case
+ * \todo return minimum size in bytes required for the buffer in case
  * of success at the next bump
  */
 public static native int av_samples_fill_arrays(@Cast("uint8_t**") PointerPointer audio_data, IntPointer linesize,
@@ -3978,7 +3978,7 @@ public static native int av_samples_fill_arrays(@Cast("uint8_t**") @ByPtrPtr byt
  * @param nb_samples       number of samples per channel
  * @param align            buffer size alignment (0 = default, 1 = no alignment)
  * @return                 >=0 on success or a negative error code on failure
- * @todo return the size of the allocated buffer in case of success at the next bump
+ * \todo return the size of the allocated buffer in case of success at the next bump
  * @see av_samples_fill_arrays()
  * @see av_samples_alloc_array_and_samples()
  */
@@ -4050,8 +4050,8 @@ public static native int av_samples_set_silence(@Cast("uint8_t**") @ByPtrPtr byt
                            int nb_channels, @Cast("AVSampleFormat") int sample_fmt);
 
 /**
- * @}
- * @}
+ * \}
+ * \}
  */
 // #endif /* AVUTIL_SAMPLEFMT_H */
 
@@ -4085,26 +4085,26 @@ public static native int av_samples_set_silence(@Cast("uint8_t**") @ByPtrPtr byt
 // #include <stdint.h>
 
 /**
- * @file
+ * \file
  * audio channel layout utility functions
  */
 
 /**
- * @addtogroup lavu_audio
- * @{
+ * \addtogroup lavu_audio
+ * \{
  */
 
 /**
- * @defgroup channel_masks Audio channel masks
+ * \defgroup channel_masks Audio channel masks
  *
  * A channel layout is a 64-bits integer with a bit set for every channel.
  * The number of bits set must be equal to the number of channels.
  * The value 0 means that the channel layout is not known.
- * @note this data structure is not powerful enough to handle channels
+ * \note this data structure is not powerful enough to handle channels
  * combinations that have the same channel multiple times, such as
  * dual-mono.
  *
- * @{
+ * \{
  */
 public static final int AV_CH_FRONT_LEFT =             0x00000001;
 public static final int AV_CH_FRONT_RIGHT =            0x00000002;
@@ -4140,9 +4140,9 @@ public static final long AV_CH_LOW_FREQUENCY_2 =        0x0000000800000000L;
 public static final long AV_CH_LAYOUT_NATIVE =          0x8000000000000000L;
 
 /**
- * @}
- * @defgroup channel_mask_c Audio channel layouts
- * @{
+ * \}
+ * \defgroup channel_mask_c Audio channel layouts
+ * \{
  * */
 public static final int AV_CH_LAYOUT_MONO =              (AV_CH_FRONT_CENTER);
 public static final int AV_CH_LAYOUT_STEREO =            (AV_CH_FRONT_LEFT|AV_CH_FRONT_RIGHT);
@@ -4199,7 +4199,7 @@ public static final int
  * - a channel layout mask, in hexadecimal starting with "0x" (see the
  *   AV_CH_* macros).
  *
- * @warning Starting from the next major bump the trailing character
+ * \warning Starting from the next major bump the trailing character
  * 'c' to specify a number of channels will be required, while a
  * channel layout mask could also be specified as a decimal number
  * (if and only if not followed by "c").
@@ -4292,8 +4292,8 @@ public static native int av_get_standard_channel_layout(@Cast("unsigned") int in
                                    @Cast("const char**") @ByPtrPtr byte[] name);
 
 /**
- * @}
- * @}
+ * \}
+ * \}
  */
 
 // #endif /* AVUTIL_CHANNEL_LAYOUT_H */
@@ -4417,7 +4417,7 @@ public static native void av_force_cpu_flags(int flags);
  * This function is mainly useful for testing.
  * Please use av_force_cpu_flags() and av_get_cpu_flags() instead which are more flexible
  *
- * @warning this function is not thread safe.
+ * \warning this function is not thread safe.
  */
 public static native @Deprecated void av_set_cpu_flags_mask(int mask);
 
@@ -4475,7 +4475,7 @@ public static native int av_cpu_count();
  */
 
 /**
- * @file
+ * \file
  * Public dictionary API.
  * @deprecated
  *  AVDictionary is provided for compatibility with libav. It is both in
@@ -4493,12 +4493,12 @@ public static native int av_cpu_count();
 // #include "version.h"
 
 /**
- * @addtogroup lavu_dict AVDictionary
- * @ingroup lavu_data
+ * \addtogroup lavu_dict AVDictionary
+ * \ingroup lavu_data
  *
- * @brief Simple key:value store
+ * \brief Simple key:value store
  *
- * @{
+ * \{
  * Dictionaries are used for storing key:value pairs. To create
  * an AVDictionary, simply pass an address of a NULL pointer to
  * av_dict_set(). NULL can be used as an empty dictionary wherever
@@ -4507,7 +4507,7 @@ public static native int av_cpu_count();
  * entries and finally av_dict_free() to free the dictionary
  * and all its contents.
  *
- @code
+ <pre><code>
    AVDictionary *d = NULL;           // "create" an empty dictionary
    AVDictionaryEntry *t = NULL;
 
@@ -4521,7 +4521,7 @@ public static native int av_cpu_count();
        <....>                             // iterate over all entries in d
    }
    av_dict_free(&d);
- @endcode
+ </code></pre>
  *
  */
 
@@ -4545,9 +4545,9 @@ public static final int AV_DICT_APPEND =         32;
 public static class AVDictionaryEntry extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVDictionaryEntry() { allocate(); }
+    public AVDictionaryEntry() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVDictionaryEntry(int size) { allocateArray(size); }
+    public AVDictionaryEntry(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDictionaryEntry(Pointer p) { super(p); }
     private native void allocate();
@@ -4654,7 +4654,7 @@ public static native int av_dict_parse_string(@ByPtrPtr AVDictionary pm, String 
  *            this function will allocate a struct for you and put it in *dst
  * @param src pointer to source AVDictionary struct
  * @param flags flags to use when setting entries in *dst
- * @note metadata is read using the AV_DICT_IGNORE_SUFFIX flag
+ * \note metadata is read using the AV_DICT_IGNORE_SUFFIX flag
  */
 public static native void av_dict_copy(@Cast("AVDictionary**") PointerPointer dst, @Const AVDictionary src, int flags);
 public static native void av_dict_copy(@ByPtrPtr AVDictionary dst, @Const AVDictionary src, int flags);
@@ -4671,7 +4671,7 @@ public static native void av_dict_free(@ByPtrPtr AVDictionary m);
  *
  * Create a string containing dictionary's entries.
  * Such string may be passed back to av_dict_parse_string().
- * @note String is escaped with backslashes ('\').
+ * \note String is escaped with backslashes ('\').
  *
  * @param[in]  m             dictionary
  * @param[out] buffer        Pointer to buffer that will be allocated with string containg entries.
@@ -4679,7 +4679,7 @@ public static native void av_dict_free(@ByPtrPtr AVDictionary m);
  * @param[in]  key_val_sep   character used to separate key from value
  * @param[in]  pairs_sep     character used to separate two pairs from each other
  * @return                   >= 0 on success, negative on error
- * @warning Separators cannot be neither '\\' nor '\0'. They also cannot be the same.
+ * \warning Separators cannot be neither '\\' nor '\0'. They also cannot be the same.
  */
 public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**") PointerPointer buffer,
                        byte key_val_sep, byte pairs_sep);
@@ -4691,7 +4691,7 @@ public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**
                        byte key_val_sep, byte pairs_sep);
 
 /**
- * @}
+ * \}
  */
 
 // #endif /* AVUTIL_DICT_H */
@@ -4724,7 +4724,7 @@ public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**
 // #define AVUTIL_OPT_H
 
 /**
- * @file
+ * \file
  * AVOptions
  */
 
@@ -4737,14 +4737,14 @@ public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**
 // #include "version.h"
 
 /**
- * @defgroup avoptions AVOptions
- * @ingroup lavu_data
- * @{
+ * \defgroup avoptions AVOptions
+ * \ingroup lavu_data
+ * \{
  * AVOptions provide a generic system to declare options on arbitrary structs
  * ("objects"). An option can have a help text, a type and a range of possible
  * values. Options may then be enumerated, read and written to.
  *
- * @section avoptions_implement Implementing AVOptions
+ * \section avoptions_implement Implementing AVOptions
  * This section describes how to add AVOptions capabilities to a struct.
  *
  * All AVOptions-related information is stored in an AVClass. Therefore
@@ -4757,7 +4757,7 @@ public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**
  * should also be set when applicable, but are not required.
  *
  * The following example illustrates an AVOptions-enabled struct:
- * @code
+ * <pre><code>
  * typedef struct test_struct {
  *     AVClass *class;
  *     int      int_opt;
@@ -4782,7 +4782,7 @@ public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**
  *     .option     = test_options,
  *     .version    = LIBAVUTIL_VERSION_INT,
  * };
- * @endcode
+ * </code></pre>
  *
  * Next, when allocating your struct, you must ensure that the AVClass pointer
  * is set to the correct value. Then, av_opt_set_defaults() can be called to
@@ -4794,7 +4794,7 @@ public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**
  *
  * Continuing with the above example:
  *
- * @code
+ * <pre><code>
  * test_struct *alloc_test_struct(void)
  * {
  *     test_struct *ret = av_malloc(sizeof(*ret));
@@ -4807,9 +4807,9 @@ public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**
  *     av_opt_free(*foo);
  *     av_freep(foo);
  * }
- * @endcode
+ * </code></pre>
  *
- * @subsection avoptions_implement_nesting Nesting
+ * \subsection avoptions_implement_nesting Nesting
  *      It may happen that an AVOptions-enabled struct contains another
  *      AVOptions-enabled struct as a member (e.g. AVCodecContext in
  *      libavcodec exports generic options, while its priv_data field exports
@@ -4820,7 +4820,7 @@ public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**
  *      Assuming that the test_struct from above now also contains a
  *      child_struct field:
  *
- *      @code
+ *      <pre><code>
  *      typedef struct child_struct {
  *          AVClass *class;
  *          int flags_opt;
@@ -4848,7 +4848,7 @@ public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**
  *      {
  *          return prev ? NULL : &child_class;
  *      }
- *      @endcode
+ *      </code></pre>
  *      Putting child_next() and child_class_next() as defined above into
  *      test_class will now make child_struct's options accessible through
  *      test_struct (again, proper setup as described above needs to be done on
@@ -4863,7 +4863,7 @@ public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**
  *      iterating. OTOH child_class_next() on AVCodecContext.av_class will
  *      iterate over all available codecs with private options.
  *
- * @subsection avoptions_implement_named_constants Named constants
+ * \subsection avoptions_implement_named_constants Named constants
  *      It is possible to create named constants for options. Simply set the unit
  *      field of the option the constants should apply to a string and
  *      create the constants themselves as options of type AV_OPT_TYPE_CONST
@@ -4872,18 +4872,18 @@ public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**
  *      constant.
  *      For example, to add some named constants for the test_flags option
  *      above, put the following into the child_opts array:
- *      @code
+ *      <pre><code>
  *      { "test_flags", "This is a test option of flags type.",
  *        offsetof(child_struct, flags_opt), AV_OPT_TYPE_FLAGS, { .i64 = 0 }, INT_MIN, INT_MAX, "test_unit" },
  *      { "flag1", "This is a flag with value 16", 0, AV_OPT_TYPE_CONST, { .i64 = 16 }, 0, 0, "test_unit" },
- *      @endcode
+ *      </code></pre>
  *
- * @section avoptions_use Using AVOptions
+ * \section avoptions_use Using AVOptions
  * This section deals with accessing options in an AVOptions-enabled struct.
  * Such structs in FFmpeg are e.g. AVCodecContext in libavcodec or
  * AVFormatContext in libavformat.
  *
- * @subsection avoptions_use_examine Examining AVOptions
+ * \subsection avoptions_use_examine Examining AVOptions
  * The basic functions for examining options are av_opt_next(), which iterates
  * over all options defined for one object, and av_opt_find(), which searches
  * for an option with the given name.
@@ -4901,7 +4901,7 @@ public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**
  * from it. In that case you should call av_opt_child_next() recursively (and
  * av_opt_next() on each result).
  *
- * @subsection avoptions_use_get_set Reading and writing AVOptions
+ * \subsection avoptions_use_get_set Reading and writing AVOptions
  * When setting options, you often have a string read directly from the
  * user. In such a case, simply passing it to av_opt_set() is enough. For
  * non-string type options, av_opt_set() will parse the string according to the
@@ -4974,9 +4974,9 @@ public static final int
 public static class AVOption extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVOption() { allocate(); }
+    public AVOption() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVOption(int size) { allocateArray(size); }
+    public AVOption(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVOption(Pointer p) { super(p); }
     private native void allocate();
@@ -4989,7 +4989,7 @@ public static class AVOption extends Pointer {
 
     /**
      * short English help text
-     * @todo What about other languages?
+     * \todo What about other languages?
      */
     @MemberGetter public native @Cast("const char*") BytePointer help();
 
@@ -5052,9 +5052,9 @@ public static final int AV_OPT_FLAG_FILTERING_PARAM = (1<<16);
 public static class AVOptionRange extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVOptionRange() { allocate(); }
+    public AVOptionRange() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVOptionRange(int size) { allocateArray(size); }
+    public AVOptionRange(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVOptionRange(Pointer p) { super(p); }
     private native void allocate();
@@ -5090,9 +5090,9 @@ public static class AVOptionRange extends Pointer {
 public static class AVOptionRanges extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVOptionRanges() { allocate(); }
+    public AVOptionRanges() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVOptionRanges(int size) { allocateArray(size); }
+    public AVOptionRanges(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVOptionRanges(Pointer p) { super(p); }
     private native void allocate();
@@ -5112,13 +5112,13 @@ public static class AVOptionRanges extends Pointer {
      * component index 1: range of width.
      * component index 2: range of height.
      *
-     * @note To obtain multi-component version of this structure, user must
+     * \note To obtain multi-component version of this structure, user must
      *       provide AV_OPT_MULTI_COMPONENT_RANGE to av_opt_query_ranges or
      *       av_opt_query_ranges_default function.
      *
      * Multi-component range can be read as in following example:
      *
-     * @code
+     * <pre><code>
      * int range_index, component_index;
      * AVOptionRanges *ranges;
      * AVOptionRange *range[3]; //may require more than 3 in the future.
@@ -5129,7 +5129,7 @@ public static class AVOptionRanges extends Pointer {
      *     //do something with range here.
      * }
      * av_opt_freep_ranges(&ranges);
-     * @endcode
+     * </code></pre>
      */
     public native AVOptionRange range(int i); public native AVOptionRanges range(int i, AVOptionRange range);
     @MemberGetter public native @Cast("AVOptionRange**") PointerPointer range();
@@ -5410,8 +5410,8 @@ public static final int
     AV_OPT_FLAG_IMPLICIT_KEY = 1;
 
 /**
- * @defgroup opt_eval_funcs Evaluating option strings
- * @{
+ * \defgroup opt_eval_funcs Evaluating option strings
+ * \{
  * This group of functions can be used to evaluate option strings
  * and get numbers out of them. They do the same thing as av_opt_set(),
  * except the result is written into the caller-supplied pointer.
@@ -5456,7 +5456,7 @@ public static native int av_opt_eval_double(Pointer obj, @Const AVOption o, Stri
 public static native int av_opt_eval_q(Pointer obj, @Const AVOption o, @Cast("const char*") BytePointer val, AVRational q_out);
 public static native int av_opt_eval_q(Pointer obj, @Const AVOption o, String val, AVRational q_out);
 /**
- * @}
+ * \}
  */
 
 /** Search in possible children of the
@@ -5494,7 +5494,7 @@ public static final int AV_OPT_MULTI_COMPONENT_RANGE = 0x1000;
  * @return A pointer to the option found, or NULL if no option
  *         was found.
  *
- * @note Options found with AV_OPT_SEARCH_CHILDREN flag may not be settable
+ * \note Options found with AV_OPT_SEARCH_CHILDREN flag may not be settable
  * directly with av_opt_set(). Use special calls which take an options
  * AVDictionary (e.g. avformat_open_input()) to set options found with this
  * flag.
@@ -5560,8 +5560,8 @@ public static native Pointer av_opt_child_next(Pointer obj, Pointer prev);
 public static native @Const AVClass av_opt_child_class_next(@Const AVClass parent, @Const AVClass prev);
 
 /**
- * @defgroup opt_set_funcs Option setting functions
- * @{
+ * \defgroup opt_set_funcs Option setting functions
+ * \{
  * Those functions set the field of obj with the given name to value.
  *
  * @param[in] obj A struct whose first element is a pointer to an AVClass.
@@ -5610,7 +5610,7 @@ public static native int av_opt_set_video_rate(Pointer obj, String name, @ByVal 
 public static native int av_opt_set_channel_layout(Pointer obj, @Cast("const char*") BytePointer name, long ch_layout, int search_flags);
 public static native int av_opt_set_channel_layout(Pointer obj, String name, long ch_layout, int search_flags);
 /**
- * @note Any old dictionary present is discarded and replaced with a copy of the new one. The
+ * \note Any old dictionary present is discarded and replaced with a copy of the new one. The
  * caller still owns val is and responsible for freeing it.
  */
 public static native int av_opt_set_dict_val(Pointer obj, @Cast("const char*") BytePointer name, @Const AVDictionary val, int search_flags);
@@ -5633,12 +5633,12 @@ public static native int av_opt_set_dict_val(Pointer obj, String name, @Const AV
 //                     av_int_list_length(val, term) * sizeof(*(val)), flags))
 
 /**
- * @}
+ * \}
  */
 
 /**
- * @defgroup opt_get_funcs Option getting functions
- * @{
+ * \defgroup opt_get_funcs Option getting functions
+ * \{
  * Those functions get a value of the option with the given name from an object.
  *
  * @param[in] obj a struct whose first element is a pointer to an AVClass.
@@ -5649,7 +5649,7 @@ public static native int av_opt_set_dict_val(Pointer obj, String name, @Const AV
  * @return >=0 on success, a negative error code otherwise
  */
 /**
- * @note the returned string will be av_malloc()ed and must be av_free()ed by the caller
+ * \note the returned string will be av_malloc()ed and must be av_free()ed by the caller
  */
 public static native int av_opt_get(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, @Cast("uint8_t**") PointerPointer out_val);
 public static native int av_opt_get(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, @Cast("uint8_t**") @ByPtrPtr BytePointer out_val);
@@ -5706,14 +5706,14 @@ public static native int av_opt_get_dict_val(Pointer obj, @Cast("const char*") B
 public static native int av_opt_get_dict_val(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, @ByPtrPtr AVDictionary out_val);
 public static native int av_opt_get_dict_val(Pointer obj, String name, int search_flags, @ByPtrPtr AVDictionary out_val);
 /**
- * @}
+ * \}
  */
 /**
  * Gets a pointer to the requested field in a struct.
  * This function allows accessing a struct even when its fields are moved or
  * renamed since the application making the access has been compiled,
  *
- * @returns a pointer to the field, it can be cast to the correct type and read
+ * @return a pointer to the field, it can be cast to the correct type and read
  *          or written to.
  */
 public static native Pointer av_opt_ptr(@Const AVClass avclass, Pointer obj, @Cast("const char*") BytePointer name);
@@ -5821,7 +5821,7 @@ public static final int AV_OPT_SERIALIZE_OPT_FLAGS_EXACT =            0x00000002
  * @param[in]  key_val_sep   character used to separate key from value
  * @param[in]  pairs_sep     character used to separate two pairs from each other
  * @return                   >= 0 on success, negative on error
- * @warning Separators cannot be neither '\\' nor '\0'. They also cannot be the same.
+ * \warning Separators cannot be neither '\\' nor '\0'. They also cannot be the same.
  */
 public static native int av_opt_serialize(Pointer obj, int opt_flags, int flags, @Cast("char**") PointerPointer buffer,
                      byte key_val_sep, byte pairs_sep);
@@ -5832,7 +5832,7 @@ public static native int av_opt_serialize(Pointer obj, int opt_flags, int flags,
 public static native int av_opt_serialize(Pointer obj, int opt_flags, int flags, @Cast("char**") @ByPtrPtr byte[] buffer,
                      byte key_val_sep, byte pairs_sep);
 /**
- * @}
+ * \}
  */
 
 // #endif /* AVUTIL_OPT_H */
@@ -5882,9 +5882,9 @@ public static native int av_opt_serialize(Pointer obj, int opt_flags, int flags,
 public static class AVComponentDescriptor extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVComponentDescriptor() { allocate(); }
+    public AVComponentDescriptor() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVComponentDescriptor(int size) { allocateArray(size); }
+    public AVComponentDescriptor(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVComponentDescriptor(Pointer p) { super(p); }
     private native void allocate();
@@ -5927,16 +5927,16 @@ public static class AVComponentDescriptor extends Pointer {
  * stored in the up to 4 data planes of an image. It also stores the
  * subsampling factors and number of components.
  *
- * @note This is separate of the colorspace (RGB, YCbCr, YPbPr, JPEG-style YUV
+ * \note This is separate of the colorspace (RGB, YCbCr, YPbPr, JPEG-style YUV
  *       and all the YUV variants) AVPixFmtDescriptor just stores how values
  *       are stored not what these values represent.
  */
 public static class AVPixFmtDescriptor extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVPixFmtDescriptor() { allocate(); }
+    public AVPixFmtDescriptor() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVPixFmtDescriptor(int size) { allocateArray(size); }
+    public AVPixFmtDescriptor(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVPixFmtDescriptor(Pointer p) { super(p); }
     private native void allocate();
@@ -6341,11 +6341,11 @@ public static native @Cast("const char*") BytePointer av_chroma_location_name(@C
 // #define AVUTIL_IMGUTILS_H
 
 /**
- * @file
+ * \file
  * misc image utilities
  *
- * @addtogroup lavu_picture
- * @{
+ * \addtogroup lavu_picture
+ * \{
  */
 
 // #include "avutil.h"
@@ -6578,7 +6578,7 @@ public static native int av_image_check_size(@Cast("unsigned int") int w, @Cast(
 public static native int av_image_check_sar(@Cast("unsigned int") int w, @Cast("unsigned int") int h, @ByVal AVRational sar);
 
 /**
- * @}
+ * \}
  */
 
 
@@ -6613,18 +6613,18 @@ public static native int av_image_check_sar(@Cast("unsigned int") int w, @Cast("
 // #include "frame.h"
 
 /**
- * @file
+ * \file
  * audio downmix medatata
  */
 
 /**
- * @addtogroup lavu_audio
- * @{
+ * \addtogroup lavu_audio
+ * \{
  */
 
 /**
- * @defgroup downmix_info Audio downmix metadata
- * @{
+ * \defgroup downmix_info Audio downmix metadata
+ * \{
  */
 
 /**
@@ -6652,9 +6652,9 @@ public static final int
 public static class AVDownmixInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVDownmixInfo() { allocate(); }
+    public AVDownmixInfo() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVDownmixInfo(int size) { allocateArray(size); }
+    public AVDownmixInfo(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDownmixInfo(Pointer p) { super(p); }
     private native void allocate();
@@ -6712,11 +6712,11 @@ public static class AVDownmixInfo extends Pointer {
 public static native AVDownmixInfo av_downmix_info_update_side_data(AVFrame frame);
 
 /**
- * @}
+ * \}
  */
 
 /**
- * @}
+ * \}
  */
 
 // #endif /* AVUTIL_DOWNMIX_INFO_H */
@@ -6843,15 +6843,15 @@ public static final int AV_STEREO3D_FLAG_INVERT =     (1 << 0);
  * Stereo 3D type: this structure describes how two videos are packed
  * within a single video surface, with additional information as needed.
  *
- * @note The struct must be allocated with av_stereo3d_alloc() and
+ * \note The struct must be allocated with av_stereo3d_alloc() and
  *       its size is not a part of the public ABI.
  */
 public static class AVStereo3D extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVStereo3D() { allocate(); }
+    public AVStereo3D() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVStereo3D(int size) { allocateArray(size); }
+    public AVStereo3D(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVStereo3D(Pointer p) { super(p); }
     private native void allocate();
@@ -6927,9 +6927,9 @@ public static final String FFMPEG_VERSION = "2.8.1";
 public static class AVMotionVector extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVMotionVector() { allocate(); }
+    public AVMotionVector() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVMotionVector(int size) { allocateArray(size); }
+    public AVMotionVector(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVMotionVector(Pointer p) { super(p); }
     private native void allocate();
@@ -6990,7 +6990,7 @@ public static class AVMotionVector extends Pointer {
  */
 
 /**
- * @file
+ * \file
  * a very simple circular buffer FIFO implementation
  */
 
@@ -7004,9 +7004,9 @@ public static class AVMotionVector extends Pointer {
 public static class AVFifoBuffer extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public AVFifoBuffer() { allocate(); }
+    public AVFifoBuffer() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVFifoBuffer(int size) { allocateArray(size); }
+    public AVFifoBuffer(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFifoBuffer(Pointer p) { super(p); }
     private native void allocate();
@@ -7190,7 +7190,7 @@ public static native @Cast("uint8_t*") BytePointer av_fifo_peek2(@Const AVFifoBu
  */
 
 /**
- * @file
+ * \file
  * Audio FIFO Buffer
  */
 
@@ -7202,11 +7202,11 @@ public static native @Cast("uint8_t*") BytePointer av_fifo_peek2(@Const AVFifoBu
 // #include "samplefmt.h"
 
 /**
- * @addtogroup lavu_audio
- * @{
+ * \addtogroup lavu_audio
+ * \{
  *
- * @defgroup lavu_audiofifo Audio FIFO Buffer
- * @{
+ * \defgroup lavu_audiofifo Audio FIFO Buffer
+ * \{
  */
 
 /**
@@ -7340,8 +7340,8 @@ public static native int av_audio_fifo_size(AVAudioFifo af);
 public static native int av_audio_fifo_space(AVAudioFifo af);
 
 /**
- * @}
- * @}
+ * \}
+ * \}
  */
 
 // #endif /* AVUTIL_AUDIO_FIFO_H */

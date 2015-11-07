@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -71,8 +71,8 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 // #include <vector>
 // #include "opencv2/core.hpp"
 
-/** @addtogroup videostab
- *  @{ */
+/** \addtogroup videostab
+ *  \{ */
 
 @Namespace("cv::videostab") public static class IFrameSource extends Pointer {
     static { Loader.load(); }
@@ -88,9 +88,9 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 @Namespace("cv::videostab") public static class NullFrameSource extends IFrameSource {
     static { Loader.load(); }
     /** Default native constructor. */
-    public NullFrameSource() { allocate(); }
+    public NullFrameSource() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NullFrameSource(int size) { allocateArray(size); }
+    public NullFrameSource(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NullFrameSource(Pointer p) { super(p); }
     private native void allocate();
@@ -110,13 +110,13 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VideoFileSource(Pointer p) { super(p); }
 
-    public VideoFileSource(@Str BytePointer path, @Cast("bool") boolean volatileFrame/*=false*/) { allocate(path, volatileFrame); }
+    public VideoFileSource(@Str BytePointer path, @Cast("bool") boolean volatileFrame/*=false*/) { super((Pointer)null); allocate(path, volatileFrame); }
     private native void allocate(@Str BytePointer path, @Cast("bool") boolean volatileFrame/*=false*/);
-    public VideoFileSource(@Str BytePointer path) { allocate(path); }
+    public VideoFileSource(@Str BytePointer path) { super((Pointer)null); allocate(path); }
     private native void allocate(@Str BytePointer path);
-    public VideoFileSource(@Str String path, @Cast("bool") boolean volatileFrame/*=false*/) { allocate(path, volatileFrame); }
+    public VideoFileSource(@Str String path, @Cast("bool") boolean volatileFrame/*=false*/) { super((Pointer)null); allocate(path, volatileFrame); }
     private native void allocate(@Str String path, @Cast("bool") boolean volatileFrame/*=false*/);
-    public VideoFileSource(@Str String path) { allocate(path); }
+    public VideoFileSource(@Str String path) { super((Pointer)null); allocate(path); }
     private native void allocate(@Str String path);
 
     public native void reset();
@@ -128,7 +128,7 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
     public native double fps();
 }
 
-/** @} */
+/** \} */
 
  // namespace videostab
  // namespace cv
@@ -185,8 +185,8 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 
 // #include "opencv2/core.hpp"
 
-/** @addtogroup videostab
- *  @{ */
+/** \addtogroup videostab
+ *  \{ */
 
 @Namespace("cv::videostab") public static class ILog extends Pointer {
     static { Loader.load(); }
@@ -202,9 +202,9 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 @Namespace("cv::videostab") public static class NullLog extends ILog {
     static { Loader.load(); }
     /** Default native constructor. */
-    public NullLog() { allocate(); }
+    public NullLog() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NullLog(int size) { allocateArray(size); }
+    public NullLog(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NullLog(Pointer p) { super(p); }
     private native void allocate();
@@ -220,9 +220,9 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 @Namespace("cv::videostab") public static class LogToStdout extends ILog {
     static { Loader.load(); }
     /** Default native constructor. */
-    public LogToStdout() { allocate(); }
+    public LogToStdout() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public LogToStdout(int size) { allocateArray(size); }
+    public LogToStdout(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LogToStdout(Pointer p) { super(p); }
     private native void allocate();
@@ -235,7 +235,7 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
     public native void print(String format);
 }
 
-/** @} */
+/** \} */
 
  // namespace videostab
  // namespace cv
@@ -295,11 +295,11 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 // #include <algorithm>
 // #include "opencv2/core.hpp"
 
-/** @addtogroup videostab_marching
- *  @{
+/** \addtogroup videostab_marching
+ *  \{
 
-/** @brief Describes the Fast Marching Method implementation.
-
+/** \brief Describes the Fast Marching Method implementation.
+<p>
   See http://iwi.eldoc.ub.rug.nl/FILES/root/2004/JGraphToolsTelea/2004JGraphToolsTelea.pdf
  */
 @Namespace("cv::videostab") @NoOffset public static class FastMarchingMethod extends Pointer {
@@ -307,17 +307,17 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FastMarchingMethod(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FastMarchingMethod(int size) { allocateArray(size); }
+    public FastMarchingMethod(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public FastMarchingMethod position(int position) {
         return (FastMarchingMethod)super.position(position);
     }
 
-    public FastMarchingMethod() { allocate(); }
+    public FastMarchingMethod() { super((Pointer)null); allocate(); }
     private native void allocate();
 
-    /** @brief Template method that runs the Fast Marching Method.
-
+    /** \brief Template method that runs the Fast Marching Method.
+<p>
     @param mask Image mask. 0 value indicates that the pixel value must be inpainted, 255 indicates
     that the pixel value is known, other values aren't acceptable.
     @param inpaint Inpainting functor that overloads void operator ()(int x, int y).
@@ -330,7 +330,7 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
     public native @ByVal Mat distanceMap();
 }
 
-/** @} */
+/** \} */
 
  // namespace videostab
  // namespace cv
@@ -393,8 +393,8 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 // #ifdef HAVE_OPENCV_CUDAOPTFLOW
 // #endif
 
-/** @addtogroup videostab
- *  @{ */
+/** \addtogroup videostab
+ *  \{ */
 
 @Namespace("cv::videostab") public static class ISparseOptFlowEstimator extends Pointer {
     static { Loader.load(); }
@@ -425,13 +425,13 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PyrLkOptFlowEstimatorBase(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PyrLkOptFlowEstimatorBase(int size) { allocateArray(size); }
+    public PyrLkOptFlowEstimatorBase(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public PyrLkOptFlowEstimatorBase position(int position) {
         return (PyrLkOptFlowEstimatorBase)super.position(position);
     }
 
-    public PyrLkOptFlowEstimatorBase() { allocate(); }
+    public PyrLkOptFlowEstimatorBase() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     public native void setWinSize(@ByVal Size val);
@@ -444,9 +444,9 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 @Namespace("cv::videostab") public static class SparsePyrLkOptFlowEstimator extends PyrLkOptFlowEstimatorBase {
     static { Loader.load(); }
     /** Default native constructor. */
-    public SparsePyrLkOptFlowEstimator() { allocate(); }
+    public SparsePyrLkOptFlowEstimator() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SparsePyrLkOptFlowEstimator(int size) { allocateArray(size); }
+    public SparsePyrLkOptFlowEstimator(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparsePyrLkOptFlowEstimator(Pointer p) { super(p); }
     private native void allocate();
@@ -466,7 +466,7 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 
 // #endif
 
-/** @} */
+/** \} */
 
  // namespace videostab
  // namespace cv
@@ -524,10 +524,10 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 // #include <cmath>
 // #include "opencv2/core.hpp"
 
-/** @addtogroup videostab_motion
- *  @{
+/** \addtogroup videostab_motion
+ *  \{
 
-/** @brief Describes motion model between two point clouds.
+/** \brief Describes motion model between two point clouds.
  */
 /** enum cv::videostab::MotionModel */
 public static final int
@@ -540,14 +540,14 @@ public static final int
     MM_HOMOGRAPHY = 6,
     MM_UNKNOWN = 7;
 
-/** @brief Describes RANSAC method parameters.
+/** \brief Describes RANSAC method parameters.
  */
 @Namespace("cv::videostab") @NoOffset public static class RansacParams extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RansacParams(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public RansacParams(int size) { allocateArray(size); }
+    public RansacParams(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public RansacParams position(int position) {
         return (RansacParams)super.position(position);
@@ -562,15 +562,15 @@ public static final int
     /** probability of success */
     public native float prob(); public native RansacParams prob(float prob);
 
-    public RansacParams() { allocate(); }
+    public RansacParams() { super((Pointer)null); allocate(); }
     private native void allocate();
-    /** @brief Constructor
+    /** \brief Constructor
     @param size Subset size.
     @param thresh Maximum re-projection error value to classify as inlier.
     @param eps Maximum ratio of incorrect correspondences.
     @param prob Required success probability.
      */
-    public RansacParams(int size, float thresh, float eps, float prob) { allocate(size, thresh, eps, prob); }
+    public RansacParams(int size, float thresh, float eps, float prob) { super((Pointer)null); allocate(size, thresh, eps, prob); }
     private native void allocate(int size, float thresh, float eps, float prob);
 
     /**
@@ -587,7 +587,7 @@ public static final int
 
 
 
-/** @} */
+/** \} */
 
  // namespace videostab
  // namespace cv
@@ -646,8 +646,8 @@ public static final int
 // #include "opencv2/core.hpp"
 // #include "opencv2/videostab/motion_core.hpp"
 
-/** @addtogroup videostab
- *  @{ */
+/** \addtogroup videostab
+ *  \{ */
 
 @Namespace("cv::videostab") public static class IOutlierRejector extends Pointer {
     static { Loader.load(); }
@@ -664,9 +664,9 @@ public static final int
 @Namespace("cv::videostab") public static class NullOutlierRejector extends IOutlierRejector {
     static { Loader.load(); }
     /** Default native constructor. */
-    public NullOutlierRejector() { allocate(); }
+    public NullOutlierRejector() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NullOutlierRejector(int size) { allocateArray(size); }
+    public NullOutlierRejector(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NullOutlierRejector(Pointer p) { super(p); }
     private native void allocate();
@@ -684,13 +684,13 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TranslationBasedLocalOutlierRejector(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public TranslationBasedLocalOutlierRejector(int size) { allocateArray(size); }
+    public TranslationBasedLocalOutlierRejector(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public TranslationBasedLocalOutlierRejector position(int position) {
         return (TranslationBasedLocalOutlierRejector)super.position(position);
     }
 
-    public TranslationBasedLocalOutlierRejector() { allocate(); }
+    public TranslationBasedLocalOutlierRejector() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     public native void setCellSize(@ByVal Size val);
@@ -703,7 +703,7 @@ public static final int
                 @ByVal Size frameSize, @ByVal Mat points0, @ByVal Mat points1, @ByVal Mat mask);
 }
 
-/** @} */
+/** \} */
 
  // namespace videostab
  // namespace cv
@@ -770,13 +770,13 @@ public static final int
 // #ifdef HAVE_OPENCV_CUDAIMGPROC
 // #endif
 
-/** @addtogroup videostab_motion
- *  @{
+/** \addtogroup videostab_motion
+ *  \{
 
-/** @brief Estimates best global motion between two 2D point clouds in the least-squares sense.
-
-@note Works in-place and changes input point arrays.
-
+/** \brief Estimates best global motion between two 2D point clouds in the least-squares sense.
+<p>
+\note Works in-place and changes input point arrays.
+<p>
 @param points0 Source set of 2D points (32F).
 @param points1 Destination set of 2D points (32F).
 @param model Motion model (up to MM_AFFINE).
@@ -795,8 +795,8 @@ public static final int
         @ByVal Mat points0, @ByVal Mat points1, int model/*=cv::videostab::MM_AFFINE*/,
         float[] rmse/*=0*/);
 
-/** @brief Estimates best global motion between two 2D point clouds robustly (using RANSAC method).
-
+/** \brief Estimates best global motion between two 2D point clouds robustly (using RANSAC method).
+<p>
 @param points0 Source set of 2D points (32F).
 @param points1 Destination set of 2D points (32F).
 @param model Motion model. See cv::videostab::MotionModel.
@@ -819,7 +819,7 @@ public static final int
         @Const @ByRef(nullValue = "cv::videostab::RansacParams::default2dMotion(cv::videostab::MM_AFFINE)") RansacParams params/*=cv::videostab::RansacParams::default2dMotion(cv::videostab::MM_AFFINE)*/,
         float[] rmse/*=0*/, int[] ninliers/*=0*/);
 
-/** @brief Base class for all global motion estimation methods.
+/** \brief Base class for all global motion estimation methods.
  */
 @Namespace("cv::videostab") @NoOffset public static class MotionEstimatorBase extends Pointer {
     static { Loader.load(); }
@@ -829,8 +829,8 @@ public static final int
     public MotionEstimatorBase(Pointer p) { super(p); }
 
 
-    /** @brief Sets motion model.
-
+    /** \brief Sets motion model.
+<p>
     @param val Motion model. See cv::videostab::MotionModel.
      */
     public native void setMotionModel(@Cast("cv::videostab::MotionModel") int val);
@@ -840,8 +840,8 @@ public static final int
     */
     public native @Cast("cv::videostab::MotionModel") int motionModel();
 
-    /** @brief Estimates global motion between two 2D point clouds.
-
+    /** \brief Estimates global motion between two 2D point clouds.
+<p>
     @param points0 Source set of 2D points (32F).
     @param points1 Destination set of 2D points (32F).
     @param ok Indicates whether motion was estimated successfully.
@@ -851,16 +851,16 @@ public static final int
     public native @ByVal Mat estimate(@ByVal Mat points0, @ByVal Mat points1);
 }
 
-/** @brief Describes a robust RANSAC-based global 2D motion estimation method which minimizes L2 error.
+/** \brief Describes a robust RANSAC-based global 2D motion estimation method which minimizes L2 error.
  */
 @Namespace("cv::videostab") @NoOffset public static class MotionEstimatorRansacL2 extends MotionEstimatorBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MotionEstimatorRansacL2(Pointer p) { super(p); }
 
-    public MotionEstimatorRansacL2(@Cast("cv::videostab::MotionModel") int model/*=cv::videostab::MM_AFFINE*/) { allocate(model); }
+    public MotionEstimatorRansacL2(@Cast("cv::videostab::MotionModel") int model/*=cv::videostab::MM_AFFINE*/) { super((Pointer)null); allocate(model); }
     private native void allocate(@Cast("cv::videostab::MotionModel") int model/*=cv::videostab::MM_AFFINE*/);
-    public MotionEstimatorRansacL2() { allocate(); }
+    public MotionEstimatorRansacL2() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     public native void setRansacParams(@Const @ByRef RansacParams val);
@@ -873,25 +873,25 @@ public static final int
     public native @ByVal Mat estimate(@ByVal Mat points0, @ByVal Mat points1);
 }
 
-/** @brief Describes a global 2D motion estimation method which minimizes L1 error.
-
-@note To be able to use this method you must build OpenCV with CLP library support. :
+/** \brief Describes a global 2D motion estimation method which minimizes L1 error.
+<p>
+\note To be able to use this method you must build OpenCV with CLP library support. :
  */
 @Namespace("cv::videostab") @NoOffset public static class MotionEstimatorL1 extends MotionEstimatorBase {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MotionEstimatorL1(Pointer p) { super(p); }
 
-    public MotionEstimatorL1(@Cast("cv::videostab::MotionModel") int model/*=cv::videostab::MM_AFFINE*/) { allocate(model); }
+    public MotionEstimatorL1(@Cast("cv::videostab::MotionModel") int model/*=cv::videostab::MM_AFFINE*/) { super((Pointer)null); allocate(model); }
     private native void allocate(@Cast("cv::videostab::MotionModel") int model/*=cv::videostab::MM_AFFINE*/);
-    public MotionEstimatorL1() { allocate(); }
+    public MotionEstimatorL1() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     public native @ByVal Mat estimate(@ByVal Mat points0, @ByVal Mat points1, @Cast("bool*") BoolPointer ok/*=0*/);
     public native @ByVal Mat estimate(@ByVal Mat points0, @ByVal Mat points1);
 }
 
-/** @brief Base class for global 2D motion estimation methods which take frames as input.
+/** \brief Base class for global 2D motion estimation methods which take frames as input.
  */
 @Namespace("cv::videostab") @NoOffset public static class ImageMotionEstimatorBase extends Pointer {
     static { Loader.load(); }
@@ -915,9 +915,9 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FromFileMotionReader(Pointer p) { super(p); }
 
-    public FromFileMotionReader(@Str BytePointer path) { allocate(path); }
+    public FromFileMotionReader(@Str BytePointer path) { super((Pointer)null); allocate(path); }
     private native void allocate(@Str BytePointer path);
-    public FromFileMotionReader(@Str String path) { allocate(path); }
+    public FromFileMotionReader(@Str String path) { super((Pointer)null); allocate(path); }
     private native void allocate(@Str String path);
 
     public native @ByVal Mat estimate(@Const @ByRef Mat frame0, @Const @ByRef Mat frame1, @Cast("bool*") BoolPointer ok/*=0*/);
@@ -931,9 +931,9 @@ public static final int
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ToFileMotionWriter(Pointer p) { super(p); }
 
-    public ToFileMotionWriter(@Str BytePointer path, @Ptr ImageMotionEstimatorBase estimator) { allocate(path, estimator); }
+    public ToFileMotionWriter(@Str BytePointer path, @Ptr ImageMotionEstimatorBase estimator) { super((Pointer)null); allocate(path, estimator); }
     private native void allocate(@Str BytePointer path, @Ptr ImageMotionEstimatorBase estimator);
-    public ToFileMotionWriter(@Str String path, @Ptr ImageMotionEstimatorBase estimator) { allocate(path, estimator); }
+    public ToFileMotionWriter(@Str String path, @Ptr ImageMotionEstimatorBase estimator) { super((Pointer)null); allocate(path, estimator); }
     private native void allocate(@Str String path, @Ptr ImageMotionEstimatorBase estimator);
 
     public native void setMotionModel(@Cast("cv::videostab::MotionModel") int val);
@@ -943,7 +943,7 @@ public static final int
     public native @ByVal Mat estimate(@Const @ByRef Mat frame0, @Const @ByRef Mat frame1);
 }
 
-/** @brief Describes a global 2D motion estimation method which uses keypoints detection and optical flow for
+/** \brief Describes a global 2D motion estimation method which uses keypoints detection and optical flow for
 matching.
  */
 @Namespace("cv::videostab") @NoOffset public static class KeypointBasedMotionEstimator extends ImageMotionEstimatorBase {
@@ -953,7 +953,7 @@ matching.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KeypointBasedMotionEstimator(Pointer p) { super(p); }
 
-    public KeypointBasedMotionEstimator(@Ptr MotionEstimatorBase estimator) { allocate(estimator); }
+    public KeypointBasedMotionEstimator(@Ptr MotionEstimatorBase estimator) { super((Pointer)null); allocate(estimator); }
     private native void allocate(@Ptr MotionEstimatorBase estimator);
 
     public native void setMotionModel(@Cast("cv::videostab::MotionModel") int val);
@@ -976,8 +976,8 @@ matching.
 
 // #endif // defined(HAVE_OPENCV_CUDAIMGPROC) && defined(HAVE_OPENCV_CUDAOPTFLOW)
 
-/** @brief Computes motion between two frames assuming that all the intermediate motions are known.
-
+/** \brief Computes motion between two frames assuming that all the intermediate motions are known.
+<p>
 @param from Source frame index.
 @param to Destination frame index.
 @param motions Pair-wise motions. motions[i] denotes motion from the frame i to the frame i+1
@@ -985,7 +985,7 @@ matching.
  */
 @Namespace("cv::videostab") public static native @ByVal Mat getMotion(int from, int to, @Const @ByRef MatVector motions);
 
-/** @} */
+/** \} */
 
  // namespace videostab
  // namespace cv
@@ -1045,8 +1045,8 @@ matching.
 // #include "opencv2/core.hpp"
 // #include "opencv2/videostab/global_motion.hpp"
 
-/** @addtogroup videostab_motion
- *  @{ */
+/** \addtogroup videostab_motion
+ *  \{ */
 
 @Namespace("cv::videostab") public static class IMotionStabilizer extends Pointer {
     static { Loader.load(); }
@@ -1065,9 +1065,9 @@ matching.
 @Namespace("cv::videostab") public static class MotionStabilizationPipeline extends IMotionStabilizer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public MotionStabilizationPipeline() { allocate(); }
+    public MotionStabilizationPipeline() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public MotionStabilizationPipeline(int size) { allocateArray(size); }
+    public MotionStabilizationPipeline(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MotionStabilizationPipeline(Pointer p) { super(p); }
     private native void allocate();
@@ -1105,15 +1105,15 @@ matching.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GaussianMotionFilter(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public GaussianMotionFilter(int size) { allocateArray(size); }
+    public GaussianMotionFilter(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public GaussianMotionFilter position(int position) {
         return (GaussianMotionFilter)super.position(position);
     }
 
-    public GaussianMotionFilter(int radius/*=15*/, float stdev/*=-1.f*/) { allocate(radius, stdev); }
+    public GaussianMotionFilter(int radius/*=15*/, float stdev/*=-1.f*/) { super((Pointer)null); allocate(radius, stdev); }
     private native void allocate(int radius/*=15*/, float stdev/*=-1.f*/);
-    public GaussianMotionFilter() { allocate(); }
+    public GaussianMotionFilter() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     public native void setParams(int radius, float stdev/*=-1.f*/);
@@ -1132,9 +1132,9 @@ matching.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LpMotionStabilizer(Pointer p) { super(p); }
 
-    public LpMotionStabilizer(@Cast("cv::videostab::MotionModel") int model/*=cv::videostab::MM_SIMILARITY*/) { allocate(model); }
+    public LpMotionStabilizer(@Cast("cv::videostab::MotionModel") int model/*=cv::videostab::MM_SIMILARITY*/) { super((Pointer)null); allocate(model); }
     private native void allocate(@Cast("cv::videostab::MotionModel") int model/*=cv::videostab::MM_SIMILARITY*/);
-    public LpMotionStabilizer() { allocate(); }
+    public LpMotionStabilizer() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     public native void setMotionModel(@Cast("cv::videostab::MotionModel") int val);
@@ -1167,7 +1167,7 @@ matching.
 
 @Namespace("cv::videostab") public static native float estimateOptimalTrimRatio(@Const @ByRef Mat M, @ByVal Size size);
 
-/** @} */
+/** \} */
 
  // namespace videostab
  // namespace
@@ -1229,8 +1229,8 @@ matching.
 // #include "opencv2/videostab/global_motion.hpp"
 // #include "opencv2/photo.hpp"
 
-/** @addtogroup videostab
- *  @{ */
+/** \addtogroup videostab
+ *  \{ */
 
 @Namespace("cv::videostab") @NoOffset public static class InpainterBase extends Pointer {
     static { Loader.load(); }
@@ -1267,9 +1267,9 @@ matching.
 @Namespace("cv::videostab") public static class NullInpainter extends InpainterBase {
     static { Loader.load(); }
     /** Default native constructor. */
-    public NullInpainter() { allocate(); }
+    public NullInpainter() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NullInpainter(int size) { allocateArray(size); }
+    public NullInpainter(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NullInpainter(Pointer p) { super(p); }
     private native void allocate();
@@ -1284,9 +1284,9 @@ matching.
 @Namespace("cv::videostab") public static class InpaintingPipeline extends InpainterBase {
     static { Loader.load(); }
     /** Default native constructor. */
-    public InpaintingPipeline() { allocate(); }
+    public InpaintingPipeline() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public InpaintingPipeline(int size) { allocateArray(size); }
+    public InpaintingPipeline(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public InpaintingPipeline(Pointer p) { super(p); }
     private native void allocate();
@@ -1313,13 +1313,13 @@ matching.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConsistentMosaicInpainter(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ConsistentMosaicInpainter(int size) { allocateArray(size); }
+    public ConsistentMosaicInpainter(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public ConsistentMosaicInpainter position(int position) {
         return (ConsistentMosaicInpainter)super.position(position);
     }
 
-    public ConsistentMosaicInpainter() { allocate(); }
+    public ConsistentMosaicInpainter() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     public native void setStdevThresh(float val);
@@ -1333,13 +1333,13 @@ matching.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MotionInpainter(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public MotionInpainter(int size) { allocateArray(size); }
+    public MotionInpainter(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public MotionInpainter position(int position) {
         return (MotionInpainter)super.position(position);
     }
 
-    public MotionInpainter() { allocate(); }
+    public MotionInpainter() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     public native void setOptFlowEstimator(@Ptr IDenseOptFlowEstimator val);
@@ -1360,9 +1360,9 @@ matching.
 @Namespace("cv::videostab") @NoOffset public static class ColorAverageInpainter extends InpainterBase {
     static { Loader.load(); }
     /** Default native constructor. */
-    public ColorAverageInpainter() { allocate(); }
+    public ColorAverageInpainter() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ColorAverageInpainter(int size) { allocateArray(size); }
+    public ColorAverageInpainter(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ColorAverageInpainter(Pointer p) { super(p); }
     private native void allocate();
@@ -1379,15 +1379,15 @@ matching.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ColorInpainter(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ColorInpainter(int size) { allocateArray(size); }
+    public ColorInpainter(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public ColorInpainter position(int position) {
         return (ColorInpainter)super.position(position);
     }
 
-    public ColorInpainter(int method/*=cv::INPAINT_TELEA*/, double radius/*=2.*/) { allocate(method, radius); }
+    public ColorInpainter(int method/*=cv::INPAINT_TELEA*/, double radius/*=2.*/) { super((Pointer)null); allocate(method, radius); }
     private native void allocate(int method/*=cv::INPAINT_TELEA*/, double radius/*=2.*/);
-    public ColorInpainter() { allocate(); }
+    public ColorInpainter() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     public native void inpaint(int idx, @ByRef Mat frame, @ByRef Mat mask);
@@ -1403,7 +1403,7 @@ matching.
         @Const @ByRef Mat flowMask, @Const @ByRef Mat flowX, @Const @ByRef Mat flowY, @Const @ByRef Mat frame1, @Const @ByRef Mat mask1,
         float distThresh, @ByRef Mat frame0, @ByRef Mat mask0);
 
-/** @} */
+/** \} */
 
  // namespace videostab
  // namespace cv
@@ -1461,8 +1461,8 @@ matching.
 // #include <vector>
 // #include "opencv2/core.hpp"
 
-/** @addtogroup videostab
- *  @{ */
+/** \addtogroup videostab
+ *  \{ */
 
 @Namespace("cv::videostab") public static native float calcBlurriness(@Const @ByRef Mat frame);
 
@@ -1497,9 +1497,9 @@ matching.
 @Namespace("cv::videostab") public static class NullDeblurer extends DeblurerBase {
     static { Loader.load(); }
     /** Default native constructor. */
-    public NullDeblurer() { allocate(); }
+    public NullDeblurer() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NullDeblurer(int size) { allocateArray(size); }
+    public NullDeblurer(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NullDeblurer(Pointer p) { super(p); }
     private native void allocate();
@@ -1516,13 +1516,13 @@ matching.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public WeightingDeblurer(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public WeightingDeblurer(int size) { allocateArray(size); }
+    public WeightingDeblurer(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public WeightingDeblurer position(int position) {
         return (WeightingDeblurer)super.position(position);
     }
 
-    public WeightingDeblurer() { allocate(); }
+    public WeightingDeblurer() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     public native void setSensitivity(float val);
@@ -1531,7 +1531,7 @@ matching.
     public native void deblur(int idx, @ByRef Mat frame);
 }
 
-/** @} */
+/** \} */
 
  // namespace videostab
  // namespace cv
@@ -1592,8 +1592,8 @@ matching.
 // #include "opencv2/videostab/global_motion.hpp"
 // #include "opencv2/videostab/log.hpp"
 
-/** @addtogroup videostab
- *  @{ */
+/** \addtogroup videostab
+ *  \{ */
 
 @Namespace("cv::videostab") @NoOffset public static class WobbleSuppressorBase extends Pointer {
     static { Loader.load(); }
@@ -1627,9 +1627,9 @@ matching.
 @Namespace("cv::videostab") public static class NullWobbleSuppressor extends WobbleSuppressorBase {
     static { Loader.load(); }
     /** Default native constructor. */
-    public NullWobbleSuppressor() { allocate(); }
+    public NullWobbleSuppressor() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NullWobbleSuppressor(int size) { allocateArray(size); }
+    public NullWobbleSuppressor(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NullWobbleSuppressor(Pointer p) { super(p); }
     private native void allocate();
@@ -1655,9 +1655,9 @@ matching.
 @Namespace("cv::videostab") public static class MoreAccurateMotionWobbleSuppressor extends MoreAccurateMotionWobbleSuppressorBase {
     static { Loader.load(); }
     /** Default native constructor. */
-    public MoreAccurateMotionWobbleSuppressor() { allocate(); }
+    public MoreAccurateMotionWobbleSuppressor() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public MoreAccurateMotionWobbleSuppressor(int size) { allocateArray(size); }
+    public MoreAccurateMotionWobbleSuppressor(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MoreAccurateMotionWobbleSuppressor(Pointer p) { super(p); }
     private native void allocate();
@@ -1672,7 +1672,7 @@ matching.
 // #if defined(HAVE_OPENCV_CUDAWARPING)
 // #endif
 
-/** @} */
+/** \} */
 
  // namespace videostab
  // namespace cv
@@ -1739,8 +1739,8 @@ matching.
 // #include "opencv2/videostab/deblurring.hpp"
 // #include "opencv2/videostab/wobble_suppression.hpp"
 
-/** @addtogroup videostab
- *  @{ */
+/** \addtogroup videostab
+ *  \{ */
 
 @Namespace("cv::videostab") @NoOffset public static class StabilizerBase extends Pointer {
     static { Loader.load(); }
@@ -1783,7 +1783,7 @@ matching.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OnePassStabilizer(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public OnePassStabilizer(int size) { allocateArray(size); }
+    public OnePassStabilizer(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public OnePassStabilizer position(int position) {
         return (OnePassStabilizer)super.position(position);
@@ -1791,7 +1791,7 @@ matching.
     public IFrameSource asIFrameSource() { return asIFrameSource(this); }
     @Namespace public static native @Name("static_cast<cv::videostab::IFrameSource*>") IFrameSource asIFrameSource(OnePassStabilizer pointer);
 
-    public OnePassStabilizer() { allocate(); }
+    public OnePassStabilizer() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     public native void setMotionFilter(@Ptr MotionFilterBase val);
@@ -1806,7 +1806,7 @@ matching.
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TwoPassStabilizer(Pointer p) { super(p); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public TwoPassStabilizer(int size) { allocateArray(size); }
+    public TwoPassStabilizer(int size) { super((Pointer)null); allocateArray(size); }
     private native void allocateArray(int size);
     @Override public TwoPassStabilizer position(int position) {
         return (TwoPassStabilizer)super.position(position);
@@ -1814,7 +1814,7 @@ matching.
     public IFrameSource asIFrameSource() { return asIFrameSource(this); }
     @Namespace public static native @Name("static_cast<cv::videostab::IFrameSource*>") IFrameSource asIFrameSource(TwoPassStabilizer pointer);
 
-    public TwoPassStabilizer() { allocate(); }
+    public TwoPassStabilizer() { super((Pointer)null); allocate(); }
     private native void allocate();
 
     public native void setMotionStabilizer(@Ptr IMotionStabilizer val);
@@ -1830,7 +1830,7 @@ matching.
     public native @ByVal Mat nextFrame();
 }
 
-/** @} */
+/** \} */
 
  // namespace videostab
  // namespace cv
@@ -1888,10 +1888,10 @@ matching.
 // #include <vector>
 // #include "opencv2/imgproc.hpp"
 
-/** @addtogroup videostab
- *  @{ */
+/** \addtogroup videostab
+ *  \{ */
 
-/** @} */
+/** \} */
 
  // namespace videostab
  // namespace cv
@@ -1947,35 +1947,35 @@ matching.
 // #define __OPENCV_VIDEOSTAB_HPP__
 
 /**
-  @defgroup videostab Video Stabilization
-
+  \defgroup videostab Video Stabilization
+<p>
 The video stabilization module contains a set of functions and classes that can be used to solve the
 problem of video stabilization. There are a few methods implemented, most of them are descibed in
-the papers @cite OF06 and @cite G11 . However, there are some extensions and deviations from the orginal
+the papers \cite OF06 and \cite G11 . However, there are some extensions and deviations from the orginal
 paper methods.
-
+<p>
 ### References
-
+<p>
  1. "Full-Frame Video Stabilization with Motion Inpainting"
      Yasuyuki Matsushita, Eyal Ofek, Weina Ge, Xiaoou Tang, Senior Member, and Heung-Yeung Shum
  2. "Auto-Directed Video Stabilization with Robust L1 Optimal Camera Paths"
      Matthias Grundmann, Vivek Kwatra, Irfan Essa
-
-     @{
-         @defgroup videostab_motion Global Motion Estimation
-
+<p>
+     \{
+         \defgroup videostab_motion Global Motion Estimation
+<p>
 The video stabilization module contains a set of functions and classes for global motion estimation
 between point clouds or between images. In the last case features are extracted and matched
 internally. For the sake of convenience the motion estimation functions are wrapped into classes.
 Both the functions and the classes are available.
-
-         @defgroup videostab_marching Fast Marching Method
-
-The Fast Marching Method @cite Telea04 is used in of the video stabilization routines to do motion and
+<p>
+         \defgroup videostab_marching Fast Marching Method
+<p>
+The Fast Marching Method \cite Telea04 is used in of the video stabilization routines to do motion and
 color inpainting. The method is implemented is a flexible way and it's made public for other users.
-
-     @}
-
+<p>
+     \}
+<p>
 */
 
 // #include "opencv2/videostab/stabilizer.hpp"

@@ -1,4 +1,4 @@
-// Targeted by JavaCPP version 1.1
+// Targeted by JavaCPP version 1.2-SNAPSHOT
 
 package org.bytedeco.javacpp;
 
@@ -335,9 +335,9 @@ public static final int
 @Name("L_WallTimer") public static class L_WALLTIMER extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_WALLTIMER() { allocate(); }
+    public L_WALLTIMER() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_WALLTIMER(int size) { allocateArray(size); }
+    public L_WALLTIMER(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_WALLTIMER(Pointer p) { super(p); }
     private native void allocate();
@@ -615,9 +615,9 @@ public static final int NUMA_VERSION_NUMBER =     1;
 @Name("Numa") public static class NUMA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public NUMA() { allocate(); }
+    public NUMA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NUMA(int size) { allocateArray(size); }
+    public NUMA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NUMA(Pointer p) { super(p); }
     private native void allocate();
@@ -639,9 +639,9 @@ public static final int NUMA_VERSION_NUMBER =     1;
 @Name("Numaa") public static class NUMAA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public NUMAA() { allocate(); }
+    public NUMAA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NUMAA(int size) { allocateArray(size); }
+    public NUMAA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NUMAA(Pointer p) { super(p); }
     private native void allocate();
@@ -661,9 +661,9 @@ public static final int NUMA_VERSION_NUMBER =     1;
 @Name("Numa2d") public static class NUMA2D extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public NUMA2D() { allocate(); }
+    public NUMA2D() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NUMA2D(int size) { allocateArray(size); }
+    public NUMA2D(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NUMA2D(Pointer p) { super(p); }
     private native void allocate();
@@ -684,9 +684,9 @@ public static final int NUMA_VERSION_NUMBER =     1;
 @Name("NumaHash") public static class NUMAHASH extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public NUMAHASH() { allocate(); }
+    public NUMAHASH() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NUMAHASH(int size) { allocateArray(size); }
+    public NUMAHASH(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NUMAHASH(Pointer p) { super(p); }
     private native void allocate();
@@ -708,9 +708,9 @@ public static final int DNA_VERSION_NUMBER =     1;
 @Name("L_Dna") public static class L_DNA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_DNA() { allocate(); }
+    public L_DNA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_DNA(int size) { allocateArray(size); }
+    public L_DNA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_DNA(Pointer p) { super(p); }
     private native void allocate();
@@ -732,9 +732,9 @@ public static final int DNA_VERSION_NUMBER =     1;
 @Name("L_Dnaa") public static class L_DNAA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_DNAA() { allocate(); }
+    public L_DNAA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_DNAA(int size) { allocateArray(size); }
+    public L_DNAA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_DNAA(Pointer p) { super(p); }
     private native void allocate();
@@ -756,9 +756,9 @@ public static final int SARRAY_VERSION_NUMBER =     1;
 @Name("Sarray") public static class SARRAY extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public SARRAY() { allocate(); }
+    public SARRAY() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SARRAY(int size) { allocateArray(size); }
+    public SARRAY(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SARRAY(Pointer p) { super(p); }
     private native void allocate();
@@ -779,9 +779,9 @@ public static final int SARRAY_VERSION_NUMBER =     1;
 @Name("L_Bytea") public static class L_BYTEA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_BYTEA() { allocate(); }
+    public L_BYTEA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_BYTEA(int size) { allocateArray(size); }
+    public L_BYTEA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_BYTEA(Pointer p) { super(p); }
     private native void allocate();
@@ -874,9 +874,9 @@ public static final int
 @Name("ByteBuffer") public static class BBUFFER extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public BBUFFER() { allocate(); }
+    public BBUFFER() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public BBUFFER(int size) { allocateArray(size); }
+    public BBUFFER(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BBUFFER(Pointer p) { super(p); }
     private native void allocate();
@@ -973,9 +973,9 @@ public static final int
 @Name("L_Heap") public static class L_HEAP extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_HEAP() { allocate(); }
+    public L_HEAP() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_HEAP(int size) { allocateArray(size); }
+    public L_HEAP(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_HEAP(Pointer p) { super(p); }
     private native void allocate();
@@ -1059,9 +1059,9 @@ public static final int
 @Name("DoubleLinkedList") public static class DLLIST extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public DLLIST() { allocate(); }
+    public DLLIST() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public DLLIST(int size) { allocateArray(size); }
+    public DLLIST(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DLLIST(Pointer p) { super(p); }
     private native void allocate();
@@ -1148,9 +1148,9 @@ public static final int
 @Name("L_Ptra") public static class L_PTRA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_PTRA() { allocate(); }
+    public L_PTRA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_PTRA(int size) { allocateArray(size); }
+    public L_PTRA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_PTRA(Pointer p) { super(p); }
     private native void allocate();
@@ -1171,9 +1171,9 @@ public static final int
 @Name("L_Ptraa") public static class L_PTRAA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_PTRAA() { allocate(); }
+    public L_PTRAA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_PTRAA(int size) { allocateArray(size); }
+    public L_PTRAA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_PTRAA(Pointer p) { super(p); }
     private native void allocate();
@@ -1281,9 +1281,9 @@ public static final int
 @Name("L_Queue") public static class L_QUEUE extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_QUEUE() { allocate(); }
+    public L_QUEUE() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_QUEUE(int size) { allocateArray(size); }
+    public L_QUEUE(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_QUEUE(Pointer p) { super(p); }
     private native void allocate();
@@ -1365,9 +1365,9 @@ public static final int
 @Name("L_Stack") public static class L_STACK extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_STACK() { allocate(); }
+    public L_STACK() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_STACK(int size) { allocateArray(size); }
+    public L_STACK(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_STACK(Pointer p) { super(p); }
     private native void allocate();
@@ -1645,9 +1645,9 @@ public static final int
 @Name("L_Bmf") public static class L_BMF extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_BMF() { allocate(); }
+    public L_BMF() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_BMF(int size) { allocateArray(size); }
+    public L_BMF(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_BMF(Pointer p) { super(p); }
     private native void allocate();
@@ -1764,9 +1764,9 @@ public static final int
 @Name("CCBord") public static class CCBORD extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CCBORD() { allocate(); }
+    public CCBORD() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CCBORD(int size) { allocateArray(size); }
+    public CCBORD(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CCBORD(Pointer p) { super(p); }
     private native void allocate();
@@ -1790,9 +1790,9 @@ public static final int
 @Name("CCBorda") public static class CCBORDA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public CCBORDA() { allocate(); }
+    public CCBORDA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CCBORDA(int size) { allocateArray(size); }
+    public CCBORDA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CCBORDA(Pointer p) { super(p); }
     private native void allocate();
@@ -1915,9 +1915,9 @@ public static final int DEWARP_VERSION_NUMBER =      4;
 @Name("L_Dewarpa") public static class L_DEWARPA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_DEWARPA() { allocate(); }
+    public L_DEWARPA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_DEWARPA(int size) { allocateArray(size); }
+    public L_DEWARPA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_DEWARPA(Pointer p) { super(p); }
     private native void allocate();
@@ -1962,9 +1962,9 @@ public static final int DEWARP_VERSION_NUMBER =      4;
 @Name("L_Dewarp") public static class L_DEWARP extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_DEWARP() { allocate(); }
+    public L_DEWARP() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_DEWARP(int size) { allocateArray(size); }
+    public L_DEWARP(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_DEWARP(Pointer p) { super(p); }
     private native void allocate();
@@ -2083,9 +2083,9 @@ public static final int
 @Name("GPlot") public static class GPLOT extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public GPLOT() { allocate(); }
+    public GPLOT() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public GPLOT(int size) { allocateArray(size); }
+    public GPLOT(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GPLOT(Pointer p) { super(p); }
     private native void allocate();
@@ -2260,9 +2260,9 @@ public static final int
 @Name("L_Compressed_Data") public static class L_COMP_DATA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_COMP_DATA() { allocate(); }
+    public L_COMP_DATA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_COMP_DATA(int size) { allocateArray(size); }
+    public L_COMP_DATA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_COMP_DATA(Pointer p) { super(p); }
     private native void allocate();
@@ -2308,9 +2308,9 @@ public static final int
 @Name("L_Pdf_Data") public static class L_PDF_DATA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_PDF_DATA() { allocate(); }
+    public L_PDF_DATA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_PDF_DATA(int size) { allocateArray(size); }
+    public L_PDF_DATA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_PDF_DATA(Pointer p) { super(p); }
     private native void allocate();
@@ -2392,9 +2392,9 @@ public static final int
 @Name("JbClasser") public static class JBCLASSER extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public JBCLASSER() { allocate(); }
+    public JBCLASSER() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public JBCLASSER(int size) { allocateArray(size); }
+    public JBCLASSER(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public JBCLASSER(Pointer p) { super(p); }
     private native void allocate();
@@ -2456,9 +2456,9 @@ public static final int
 @Name("JbData") public static class JBDATA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public JBDATA() { allocate(); }
+    public JBDATA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public JBDATA(int size) { allocateArray(size); }
+    public JBDATA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public JBDATA(Pointer p) { super(p); }
     private native void allocate();
@@ -2567,9 +2567,9 @@ public static final int SEL_VERSION_NUMBER =    1;
 @Name("Sel") public static class SEL extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public SEL() { allocate(); }
+    public SEL() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SEL(int size) { allocateArray(size); }
+    public SEL(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SEL(Pointer p) { super(p); }
     private native void allocate();
@@ -2590,9 +2590,9 @@ public static final int SEL_VERSION_NUMBER =    1;
 @Name("Sela") public static class SELA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public SELA() { allocate(); }
+    public SELA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SELA(int size) { allocateArray(size); }
+    public SELA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SELA(Pointer p) { super(p); }
     private native void allocate();
@@ -2616,9 +2616,9 @@ public static final int KERNEL_VERSION_NUMBER =    2;
 @Name("L_Kernel") public static class L_KERNEL extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_KERNEL() { allocate(); }
+    public L_KERNEL() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_KERNEL(int size) { allocateArray(size); }
+    public L_KERNEL(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_KERNEL(Pointer p) { super(p); }
     private native void allocate();
@@ -2898,9 +2898,9 @@ public static final int
 @Name("Pix") public static class PIX extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public PIX() { allocate(); }
+    public PIX() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PIX(int size) { allocateArray(size); }
+    public PIX(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PIX(Pointer p) { super(p); }
     private native void allocate();
@@ -2930,9 +2930,9 @@ public static final int
 @Name("PixColormap") public static class PIXCMAP extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public PIXCMAP() { allocate(); }
+    public PIXCMAP() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PIXCMAP(int size) { allocateArray(size); }
+    public PIXCMAP(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PIXCMAP(Pointer p) { super(p); }
     private native void allocate();
@@ -2955,9 +2955,9 @@ public static final int
 @Name("RGBA_Quad") public static class RGBA_QUAD extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public RGBA_QUAD() { allocate(); }
+    public RGBA_QUAD() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public RGBA_QUAD(int size) { allocateArray(size); }
+    public RGBA_QUAD(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RGBA_QUAD(Pointer p) { super(p); }
     private native void allocate();
@@ -3217,9 +3217,9 @@ public static final int BOXAA_VERSION_NUMBER =      3;
 @Name("Pixa") public static class PIXA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public PIXA() { allocate(); }
+    public PIXA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PIXA(int size) { allocateArray(size); }
+    public PIXA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PIXA(Pointer p) { super(p); }
     private native void allocate();
@@ -3240,9 +3240,9 @@ public static final int BOXAA_VERSION_NUMBER =      3;
 @Name("Pixaa") public static class PIXAA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public PIXAA() { allocate(); }
+    public PIXAA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PIXAA(int size) { allocateArray(size); }
+    public PIXAA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PIXAA(Pointer p) { super(p); }
     private native void allocate();
@@ -3265,9 +3265,9 @@ public static final int BOXAA_VERSION_NUMBER =      3;
 @Name("Box") public static class BOX extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public BOX() { allocate(); }
+    public BOX() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public BOX(int size) { allocateArray(size); }
+    public BOX(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BOX(Pointer p) { super(p); }
     private native void allocate();
@@ -3287,9 +3287,9 @@ public static final int BOXAA_VERSION_NUMBER =      3;
 @Name("Boxa") public static class BOXA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public BOXA() { allocate(); }
+    public BOXA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public BOXA(int size) { allocateArray(size); }
+    public BOXA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BOXA(Pointer p) { super(p); }
     private native void allocate();
@@ -3308,9 +3308,9 @@ public static final int BOXAA_VERSION_NUMBER =      3;
 @Name("Boxaa") public static class BOXAA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public BOXAA() { allocate(); }
+    public BOXAA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public BOXAA(int size) { allocateArray(size); }
+    public BOXAA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BOXAA(Pointer p) { super(p); }
     private native void allocate();
@@ -3334,9 +3334,9 @@ public static final int PTA_VERSION_NUMBER =      1;
 @Name("Pta") public static class PTA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public PTA() { allocate(); }
+    public PTA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PTA(int size) { allocateArray(size); }
+    public PTA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PTA(Pointer p) { super(p); }
     private native void allocate();
@@ -3359,9 +3359,9 @@ public static final int PTA_VERSION_NUMBER =      1;
 @Name("Ptaa") public static class PTAA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public PTAA() { allocate(); }
+    public PTAA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PTAA(int size) { allocateArray(size); }
+    public PTAA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PTAA(Pointer p) { super(p); }
     private native void allocate();
@@ -3383,9 +3383,9 @@ public static final int PTA_VERSION_NUMBER =      1;
 @Name("Pixacc") public static class PIXACC extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public PIXACC() { allocate(); }
+    public PIXACC() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PIXACC(int size) { allocateArray(size); }
+    public PIXACC(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PIXACC(Pointer p) { super(p); }
     private native void allocate();
@@ -3408,9 +3408,9 @@ public static final int PTA_VERSION_NUMBER =      1;
 @Name("PixTiling") public static class PIXTILING extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public PIXTILING() { allocate(); }
+    public PIXTILING() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PIXTILING(int size) { allocateArray(size); }
+    public PIXTILING(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PIXTILING(Pointer p) { super(p); }
     private native void allocate();
@@ -3438,9 +3438,9 @@ public static final int FPIX_VERSION_NUMBER =      2;
 @Name("FPix") public static class FPIX extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public FPIX() { allocate(); }
+    public FPIX() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FPIX(int size) { allocateArray(size); }
+    public FPIX(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FPIX(Pointer p) { super(p); }
     private native void allocate();
@@ -3464,9 +3464,9 @@ public static final int FPIX_VERSION_NUMBER =      2;
 @Name("FPixa") public static class FPIXA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public FPIXA() { allocate(); }
+    public FPIXA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FPIXA(int size) { allocateArray(size); }
+    public FPIXA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FPIXA(Pointer p) { super(p); }
     private native void allocate();
@@ -3491,9 +3491,9 @@ public static final int DPIX_VERSION_NUMBER =      2;
 @Name("DPix") public static class DPIX extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public DPIX() { allocate(); }
+    public DPIX() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public DPIX(int size) { allocateArray(size); }
+    public DPIX(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DPIX(Pointer p) { super(p); }
     private native void allocate();
@@ -3520,9 +3520,9 @@ public static final int DPIX_VERSION_NUMBER =      2;
 @Name("PixComp") public static class PIXC extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public PIXC() { allocate(); }
+    public PIXC() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PIXC(int size) { allocateArray(size); }
+    public PIXC(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PIXC(Pointer p) { super(p); }
     private native void allocate();
@@ -3555,9 +3555,9 @@ public static final int PIXACOMP_VERSION_NUMBER =      2;
 @Name("PixaComp") public static class PIXAC extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public PIXAC() { allocate(); }
+    public PIXAC() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PIXAC(int size) { allocateArray(size); }
+    public PIXAC(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PIXAC(Pointer p) { super(p); }
     private native void allocate();
@@ -4184,9 +4184,9 @@ public static final int RECOG_VERSION_NUMBER =      1;
 @Name("L_Recoga") public static class L_RECOGA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_RECOGA() { allocate(); }
+    public L_RECOGA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_RECOGA(int size) { allocateArray(size); }
+    public L_RECOGA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_RECOGA(Pointer p) { super(p); }
     private native void allocate();
@@ -4206,9 +4206,9 @@ public static final int RECOG_VERSION_NUMBER =      1;
 @Name("L_Recog") public static class L_RECOG extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_RECOG() { allocate(); }
+    public L_RECOG() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_RECOG(int size) { allocateArray(size); }
+    public L_RECOG(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_RECOG(Pointer p) { super(p); }
     private native void allocate();
@@ -4291,9 +4291,9 @@ public static final int RECOG_VERSION_NUMBER =      1;
 @Name("L_Rch") public static class L_RCH extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_RCH() { allocate(); }
+    public L_RCH() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_RCH(int size) { allocateArray(size); }
+    public L_RCH(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_RCH(Pointer p) { super(p); }
     private native void allocate();
@@ -4318,9 +4318,9 @@ public static final int RECOG_VERSION_NUMBER =      1;
 @Name("L_Rcha") public static class L_RCHA extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_RCHA() { allocate(); }
+    public L_RCHA() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_RCHA(int size) { allocateArray(size); }
+    public L_RCHA(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_RCHA(Pointer p) { super(p); }
     private native void allocate();
@@ -4344,9 +4344,9 @@ public static final int RECOG_VERSION_NUMBER =      1;
 @Name("L_Rdid") public static class L_RDID extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_RDID() { allocate(); }
+    public L_RDID() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_RDID(int size) { allocateArray(size); }
+    public L_RDID(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_RDID(Pointer p) { super(p); }
     private native void allocate();
@@ -4531,9 +4531,9 @@ public static final int
 @Name("L_RegParams") public static class L_REGPARAMS extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_REGPARAMS() { allocate(); }
+    public L_REGPARAMS() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_REGPARAMS(int size) { allocateArray(size); }
+    public L_REGPARAMS(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_REGPARAMS(Pointer p) { super(p); }
     private native void allocate();
@@ -4606,9 +4606,9 @@ public static final int
 @Name("L_StrCode") public static class L_STRCODE extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_STRCODE() { allocate(); }
+    public L_STRCODE() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_STRCODE(int size) { allocateArray(size); }
+    public L_STRCODE(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_STRCODE(Pointer p) { super(p); }
     private native void allocate();
@@ -4681,9 +4681,9 @@ public static final int
 @Name("L_Sudoku") public static class L_SUDOKU extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_SUDOKU() { allocate(); }
+    public L_SUDOKU() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_SUDOKU(int size) { allocateArray(size); }
+    public L_SUDOKU(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_SUDOKU(Pointer p) { super(p); }
     private native void allocate();
@@ -4757,9 +4757,9 @@ public static final int
 @Name("L_WShed") public static class L_WSHED extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_WSHED() { allocate(); }
+    public L_WSHED() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_WSHED(int size) { allocateArray(size); }
+    public L_WSHED(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_WSHED(Pointer p) { super(p); }
     private native void allocate();
