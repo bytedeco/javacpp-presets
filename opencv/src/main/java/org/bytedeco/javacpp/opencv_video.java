@@ -681,7 +681,7 @@ an extended Kalman filter functionality. See the OpenCV sample kalman.cpp.
     }
 
     /** \brief The constructors.
-<p>
+    <p>
     \note In C API when CvKalman\* kalmanFilter structure is not needed anymore, it should be released
     with cvReleaseKalman(&kalmanFilter)
      */
@@ -699,7 +699,7 @@ an extended Kalman filter functionality. See the OpenCV sample kalman.cpp.
     private native void allocate( int dynamParams, int measureParams );
 
     /** \brief Re-initializes Kalman filter. The previous content is destroyed.
-<p>
+    <p>
     @param dynamParams Dimensionality of the state.
     @param measureParams Dimensionality of the measurement.
     @param controlParams Dimensionality of the control vector.
@@ -709,14 +709,14 @@ an extended Kalman filter functionality. See the OpenCV sample kalman.cpp.
     public native void init( int dynamParams, int measureParams );
 
     /** \brief Computes a predicted state.
-<p>
+    <p>
     @param control The optional input control
      */
     public native @Const @ByRef Mat predict( @Const @ByRef(nullValue = "cv::Mat()") Mat control/*=cv::Mat()*/ );
     public native @Const @ByRef Mat predict( );
 
     /** \brief Updates the predicted state from the measurement.
-<p>
+    <p>
     @param measurement The measured system parameters
      */
     public native @Const @ByRef Mat correct( @Const @ByRef Mat measurement );
@@ -753,13 +753,11 @@ an extended Kalman filter functionality. See the OpenCV sample kalman.cpp.
 
 @Namespace("cv") public static class DenseOpticalFlow extends Algorithm {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DenseOpticalFlow() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DenseOpticalFlow(Pointer p) { super(p); }
 
     /** \brief Calculates an optical flow.
-<p>
+    <p>
     @param I0 first 8-bit single-channel input image.
     @param I1 second input image of the same size and the same type as prev.
     @param flow computed flow image that has the same size as prev and type CV_32FC2.
@@ -814,8 +812,6 @@ Javier Sanchez, Enric Meinhardt-Llopis and Gabriele Facciolo. "TV-L1 Optical Flo
 */
 @Namespace("cv") public static class DualTVL1OpticalFlow extends DenseOpticalFlow {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DualTVL1OpticalFlow() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DualTVL1OpticalFlow(Pointer p) { super(p); }
 
@@ -952,13 +948,11 @@ segmentation algorithms.
  */
 @Namespace("cv") public static class BackgroundSubtractor extends Algorithm {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public BackgroundSubtractor() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BackgroundSubtractor(Pointer p) { super(p); }
 
     /** \brief Computes a foreground mask.
-<p>
+    <p>
     @param image Next video frame.
     @param fgmask The output foreground mask as an 8-bit binary image.
     @param learningRate The value between 0 and 1 that indicates how fast the background model is
@@ -970,9 +964,9 @@ segmentation algorithms.
     public native void apply(@ByVal Mat image, @ByVal Mat fgmask);
 
     /** \brief Computes a background image.
-<p>
+    <p>
     @param backgroundImage The output background image.
-<p>
+    <p>
     \note Sometimes the background image can be very blurry, as it contain the average background
     statistics.
      */
@@ -987,8 +981,6 @@ and \cite Zivkovic2006 .
  */
 @Namespace("cv") public static class BackgroundSubtractorMOG2 extends BackgroundSubtractor {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public BackgroundSubtractorMOG2() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BackgroundSubtractorMOG2(Pointer p) { super(p); }
 
@@ -1003,13 +995,13 @@ and \cite Zivkovic2006 .
     */
     public native int getNMixtures();
     /** \brief Sets the number of gaussian components in the background model.
-<p>
+    <p>
     The model needs to be reinitalized to reserve memory.
     */
     public native void setNMixtures(int nmixtures);//needs reinitialization!
 
     /** \brief Returns the "background ratio" parameter of the algorithm
-<p>
+    <p>
     If a foreground pixel keeps semi-constant value for about backgroundRatio\*history frames, it's
     considered background and added to the model as a center of a new component. It corresponds to TB
     parameter in the paper.
@@ -1020,7 +1012,7 @@ and \cite Zivkovic2006 .
     public native void setBackgroundRatio(double ratio);
 
     /** \brief Returns the variance threshold for the pixel-model match
-<p>
+    <p>
     The main threshold on the squared Mahalanobis distance to decide if the sample is well described by
     the background model or not. Related to Cthr from the paper.
      */
@@ -1030,7 +1022,7 @@ and \cite Zivkovic2006 .
     public native void setVarThreshold(double varThreshold);
 
     /** \brief Returns the variance threshold for the pixel-model match used for new mixture component generation
-<p>
+    <p>
     Threshold for the squared Mahalanobis distance that helps decide when a sample is close to the
     existing components (corresponds to Tg in the paper). If a pixel is not close to any component, it
     is considered foreground or added as a new component. 3 sigma =\> Tg=3\*3=9 is default. A smaller Tg
@@ -1056,7 +1048,7 @@ and \cite Zivkovic2006 .
     public native void setVarMax(double varMax);
 
     /** \brief Returns the complexity reduction threshold
-<p>
+    <p>
     This parameter defines the number of samples needed to accept to prove the component exists. CT=0.05
     is a default value for all the samples. By setting CT=0 you get an algorithm very similar to the
     standard Stauffer&Grimson algorithm.
@@ -1067,7 +1059,7 @@ and \cite Zivkovic2006 .
     public native void setComplexityReductionThreshold(double ct);
 
     /** \brief Returns the shadow detection flag
-<p>
+    <p>
     If true, the algorithm detects shadows and marks them. See createBackgroundSubtractorMOG2 for
     details.
      */
@@ -1077,7 +1069,7 @@ and \cite Zivkovic2006 .
     public native void setDetectShadows(@Cast("bool") boolean detectShadows);
 
     /** \brief Returns the shadow value
-<p>
+    <p>
     Shadow value is the value used to mark shadows in the foreground mask. Default value is 127. Value 0
     in the mask always means background, 255 means foreground.
      */
@@ -1087,7 +1079,7 @@ and \cite Zivkovic2006 .
     public native void setShadowValue(int value);
 
     /** \brief Returns the shadow threshold
-<p>
+    <p>
     A shadow is detected if pixel is a darker version of the background. The shadow threshold (Tau in
     the paper) is a threshold defining how much darker the shadow can be. Tau= 0.5 means that if a pixel
     is more than twice darker then it is not shadow. See Prati, Mikic, Trivedi and Cucchiarra,
@@ -1119,8 +1111,6 @@ Very efficient if number of foreground pixels is low.
  */
 @Namespace("cv") public static class BackgroundSubtractorKNN extends BackgroundSubtractor {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public BackgroundSubtractorKNN() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BackgroundSubtractorKNN(Pointer p) { super(p); }
 
@@ -1135,13 +1125,13 @@ Very efficient if number of foreground pixels is low.
     */
     public native int getNSamples();
     /** \brief Sets the number of data samples in the background model.
-<p>
+    <p>
     The model needs to be reinitalized to reserve memory.
     */
     public native void setNSamples(int _nN);//needs reinitialization!
 
     /** \brief Returns the threshold on the squared distance between the pixel and the sample
-<p>
+    <p>
     The threshold on the squared distance between the pixel and the sample to decide whether a pixel is
     close to a data sample.
      */
@@ -1151,7 +1141,7 @@ Very efficient if number of foreground pixels is low.
     public native void setDist2Threshold(double _dist2Threshold);
 
     /** \brief Returns the number of neighbours, the k in the kNN.
-<p>
+    <p>
     K is the number of samples that need to be within dist2Threshold in order to decide that that
     pixel is matching the kNN background model.
      */
@@ -1161,7 +1151,7 @@ Very efficient if number of foreground pixels is low.
     public native void setkNNSamples(int _nkNN);
 
     /** \brief Returns the shadow detection flag
-<p>
+    <p>
     If true, the algorithm detects shadows and marks them. See createBackgroundSubtractorKNN for
     details.
      */
@@ -1171,7 +1161,7 @@ Very efficient if number of foreground pixels is low.
     public native void setDetectShadows(@Cast("bool") boolean detectShadows);
 
     /** \brief Returns the shadow value
-<p>
+    <p>
     Shadow value is the value used to mark shadows in the foreground mask. Default value is 127. Value 0
     in the mask always means background, 255 means foreground.
      */
@@ -1181,7 +1171,7 @@ Very efficient if number of foreground pixels is low.
     public native void setShadowValue(int value);
 
     /** \brief Returns the shadow threshold
-<p>
+    <p>
     A shadow is detected if pixel is a darker version of the background. The shadow threshold (Tau in
     the paper) is a threshold defining how much darker the shadow can be. Tau= 0.5 means that if a pixel
     is more than twice darker then it is not shadow. See Prati, Mikic, Trivedi and Cucchiarra,

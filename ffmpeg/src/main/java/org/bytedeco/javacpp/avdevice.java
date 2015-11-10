@@ -442,7 +442,7 @@ public static native int avdevice_dev_to_app_control_message(AVFormatContext s,
  *
  * Example of the usage basing on opengl output device:
  *
- * <pre><code>
+ * <pre>{@code
  *  AVFormatContext *oc = NULL;
  *  AVDeviceCapabilitiesQuery *caps = NULL;
  *  AVOptionRanges *ranges;
@@ -471,7 +471,7 @@ public static native int avdevice_dev_to_app_control_message(AVFormatContext s,
  *  //clean up code
  *  avdevice_capabilities_free(&query, oc);
  *  avformat_free_context(oc);
- * </code></pre>
+ * }</pre>
  */
 
 /**
@@ -520,7 +520,7 @@ public static class AVDeviceCapabilitiesQuery extends Pointer {
  * avdevice_capabilities_free() must be called when query capabilities API is
  * not used anymore.
  *
- * @param[out] caps      Device capabilities data. Pointer to a NULL pointer must be passed.
+ * @param [out] caps      Device capabilities data. Pointer to a NULL pointer must be passed.
  * @param s              Context of the device.
  * @param device_options An AVDictionary filled with device-private options.
  *                       On return this parameter will be destroyed and replaced with a dict
@@ -604,7 +604,7 @@ public static class AVDeviceInfoList extends Pointer {
  *        be always completed.
  *
  * @param s                device context.
- * @param[out] device_list list of autodetected devices.
+ * @param [out] device_list list of autodetected devices.
  * @return count of autodetected devices, negative on error.
  */
 public static native int avdevice_list_devices(AVFormatContext s, @Cast("AVDeviceInfoList**") PointerPointer device_list);
@@ -631,7 +631,7 @@ public static native void avdevice_free_list_devices(@ByPtrPtr AVDeviceInfoList 
  *                         The same options must be passed later to avformat_write_header() for output
  *                         devices or avformat_open_input() for input devices, or at any other place
  *                         that affects device-private options.
- * @param[out] device_list list of autodetected devices
+ * @param [out] device_list list of autodetected devices
  * @return count of autodetected devices, negative on error.
  * \note device argument takes precedence over device_name when both are set.
  */

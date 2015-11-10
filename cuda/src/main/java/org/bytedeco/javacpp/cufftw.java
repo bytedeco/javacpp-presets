@@ -113,15 +113,15 @@ public static final int FFTW_UNALIGNED =          0x10;
 // #endif
 
 @Namespace @Name("void") @Opaque public static class fftw_plan extends Pointer {
-    /** Empty constructor. */
-    public fftw_plan() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public fftw_plan() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftw_plan(Pointer p) { super(p); }
 }
 
 @Namespace @Name("void") @Opaque public static class fftwf_plan extends Pointer {
-    /** Empty constructor. */
-    public fftwf_plan() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public fftwf_plan() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftwf_plan(Pointer p) { super(p); }
 }

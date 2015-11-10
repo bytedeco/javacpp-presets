@@ -243,8 +243,6 @@ public static final int
   //   }
   @NoOffset public static class const_iterator extends Pointer {
       static { Loader.load(); }
-      /** Empty constructor. */
-      public const_iterator() { }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public const_iterator(Pointer p) { super(p); }
   
@@ -484,8 +482,6 @@ public static class TessCallbackUtils_ extends Pointer {
 
 public static class TessClosure extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public TessClosure() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TessClosure(Pointer p) { super(p); }
 
@@ -1346,7 +1342,7 @@ public static native @Cast("bool") boolean PTIsPulloutType(@Cast("PolyBlockType"
  *  | < #######  .   c |  Upright Chinese characters are represented C and c.
  *  | 3 #######      c |
  *  +------------------+  NOTA BENE: enum values here should match goodoc.proto
-<p>
+ <p>
  * If you orient your head so that "up" aligns with Orientation,
  * then the characters will appear "right side up" and readable.
  *
@@ -1557,8 +1553,6 @@ public static final int
  *  desired. */
 @Namespace("tesseract") @NoOffset public static class ImageThresholder extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public ImageThresholder() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ImageThresholder(Pointer p) { super(p); }
 
@@ -1688,39 +1682,39 @@ public static final int
 // #include "platform.h"
 
 @Opaque public static class BlamerBundle extends Pointer {
-    /** Empty constructor. */
-    public BlamerBundle() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public BlamerBundle() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BlamerBundle(Pointer p) { super(p); }
 }
 @Opaque public static class C_BLOB_IT extends Pointer {
-    /** Empty constructor. */
-    public C_BLOB_IT() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public C_BLOB_IT() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public C_BLOB_IT(Pointer p) { super(p); }
 }
 @Opaque public static class PAGE_RES extends Pointer {
-    /** Empty constructor. */
-    public PAGE_RES() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public PAGE_RES() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PAGE_RES(Pointer p) { super(p); }
 }
 @Opaque public static class PAGE_RES_IT extends Pointer {
-    /** Empty constructor. */
-    public PAGE_RES_IT() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public PAGE_RES_IT() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PAGE_RES_IT(Pointer p) { super(p); }
 }
 @Opaque public static class WERD extends Pointer {
-    /** Empty constructor. */
-    public WERD() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public WERD() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public WERD(Pointer p) { super(p); }
 }
 
 @Namespace("tesseract") @Opaque public static class Tesseract extends Pointer {
-    /** Empty constructor. */
-    public Tesseract() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Tesseract() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Tesseract(Pointer p) { super(p); }
 }
@@ -1740,8 +1734,6 @@ public static final int
 
 @Namespace("tesseract") @NoOffset public static class PageIterator extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public PageIterator() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PageIterator(Pointer p) { super(p); }
 
@@ -2083,14 +2075,14 @@ public static final int
 // #include "unichar.h"
 
 @Opaque public static class BLOB_CHOICE_IT extends Pointer {
-    /** Empty constructor. */
-    public BLOB_CHOICE_IT() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public BLOB_CHOICE_IT() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BLOB_CHOICE_IT(Pointer p) { super(p); }
 }
 @Opaque public static class WERD_RES extends Pointer {
-    /** Empty constructor. */
-    public WERD_RES() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public WERD_RES() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public WERD_RES(Pointer p) { super(p); }
 }
@@ -2108,8 +2100,6 @@ public static final int
 
 @Namespace("tesseract") @NoOffset public static class LTRResultIterator extends PageIterator {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public LTRResultIterator() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LTRResultIterator(Pointer p) { super(p); }
 
@@ -2267,8 +2257,6 @@ public static final int
 // Class to iterate over the classifier choices for a single RIL_SYMBOL.
 @Namespace("tesseract") @NoOffset public static class ChoiceIterator extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public ChoiceIterator() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ChoiceIterator(Pointer p) { super(p); }
 
@@ -2331,8 +2319,6 @@ public static final int
 
 @Namespace("tesseract") @NoOffset public static class ResultIterator extends LTRResultIterator {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public ResultIterator() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ResultIterator(Pointer p) { super(p); }
 
@@ -2462,8 +2448,8 @@ public static final int
 // #include          "platform.h"
 // #include          "memry.h"
 @Namespace("tesseract") @Opaque public static class TFile extends Pointer {
-    /** Empty constructor. */
-    public TFile() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public TFile() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TFile(Pointer p) { super(p); }
 }
@@ -3446,124 +3432,124 @@ public static final int TESSERACT_VERSION = 0x030400;
 // #include "pageiterator.h"
 // #include "resultiterator.h"
 @Opaque public static class ParagraphModel extends Pointer {
-    /** Empty constructor. */
-    public ParagraphModel() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ParagraphModel() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ParagraphModel(Pointer p) { super(p); }
 }
 @Opaque public static class BLOCK_LIST extends Pointer {
-    /** Empty constructor. */
-    public BLOCK_LIST() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public BLOCK_LIST() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BLOCK_LIST(Pointer p) { super(p); }
 }
 @Opaque public static class DENORM extends Pointer {
-    /** Empty constructor. */
-    public DENORM() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public DENORM() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DENORM(Pointer p) { super(p); }
 }
 @Opaque public static class MATRIX extends Pointer {
-    /** Empty constructor. */
-    public MATRIX() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public MATRIX() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MATRIX(Pointer p) { super(p); }
 }
 @Opaque public static class ROW extends Pointer {
-    /** Empty constructor. */
-    public ROW() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ROW() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ROW(Pointer p) { super(p); }
 }
 @Opaque public static class ETEXT_DESC extends Pointer {
-    /** Empty constructor. */
-    public ETEXT_DESC() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ETEXT_DESC() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ETEXT_DESC(Pointer p) { super(p); }
 }
 @Opaque public static class OSResults extends Pointer {
-    /** Empty constructor. */
-    public OSResults() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public OSResults() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OSResults(Pointer p) { super(p); }
 }
 @Opaque public static class TBOX extends Pointer {
-    /** Empty constructor. */
-    public TBOX() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public TBOX() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TBOX(Pointer p) { super(p); }
 }
 @Opaque public static class UNICHARSET extends Pointer {
-    /** Empty constructor. */
-    public UNICHARSET() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public UNICHARSET() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UNICHARSET(Pointer p) { super(p); }
 }
 @Opaque public static class WERD_CHOICE_LIST extends Pointer {
-    /** Empty constructor. */
-    public WERD_CHOICE_LIST() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public WERD_CHOICE_LIST() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public WERD_CHOICE_LIST(Pointer p) { super(p); }
 }
 
 @Opaque public static class INT_FEATURE_STRUCT extends Pointer {
-    /** Empty constructor. */
-    public INT_FEATURE_STRUCT() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public INT_FEATURE_STRUCT() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public INT_FEATURE_STRUCT(Pointer p) { super(p); }
 }
 @Opaque public static class TBLOB extends Pointer {
-    /** Empty constructor. */
-    public TBLOB() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public TBLOB() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TBLOB(Pointer p) { super(p); }
 }
 
 @Namespace("tesseract") @Opaque public static class CubeRecoContext extends Pointer {
-    /** Empty constructor. */
-    public CubeRecoContext() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CubeRecoContext() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CubeRecoContext(Pointer p) { super(p); }
 }
 @Namespace("tesseract") @Opaque public static class Dawg extends Pointer {
-    /** Empty constructor. */
-    public Dawg() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Dawg() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Dawg(Pointer p) { super(p); }
 }
 @Namespace("tesseract") @Opaque public static class Dict extends Pointer {
-    /** Empty constructor. */
-    public Dict() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Dict() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Dict(Pointer p) { super(p); }
 }
 @Namespace("tesseract") @Opaque public static class EquationDetect extends Pointer {
-    /** Empty constructor. */
-    public EquationDetect() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public EquationDetect() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EquationDetect(Pointer p) { super(p); }
 }
 @Namespace("tesseract") @Opaque public static class MutableIterator extends Pointer {
-    /** Empty constructor. */
-    public MutableIterator() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public MutableIterator() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MutableIterator(Pointer p) { super(p); }
 }
 @Namespace("tesseract") @Opaque public static class TessResultRenderer extends Pointer {
-    /** Empty constructor. */
-    public TessResultRenderer() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public TessResultRenderer() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TessResultRenderer(Pointer p) { super(p); }
 }
 @Namespace("tesseract") @Opaque public static class Trie extends Pointer {
-    /** Empty constructor. */
-    public Trie() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Trie() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Trie(Pointer p) { super(p); }
 }
 @Namespace("tesseract") @Opaque public static class Wordrec extends Pointer {
-    /** Empty constructor. */
-    public Wordrec() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public Wordrec() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Wordrec(Pointer p) { super(p); }
 }

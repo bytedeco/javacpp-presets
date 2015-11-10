@@ -403,21 +403,21 @@ public static class fftw_read_char_func_do_not_use_me extends FunctionPointer {
 /* end of FFTW_DEFINE_API macro */
 
 @Name("fftw_plan_s") @Opaque public static class fftw_plan extends Pointer {
-    /** Empty constructor. */
-    public fftw_plan() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public fftw_plan() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftw_plan(Pointer p) { super(p); }
 }
 
 @Opaque public static class fftw_iodim extends Pointer {
-    /** Empty constructor. */
-    public fftw_iodim() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public fftw_iodim() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftw_iodim(Pointer p) { super(p); }
 }
 @Opaque public static class fftw_iodim64 extends Pointer {
-    /** Empty constructor. */
-    public fftw_iodim64() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public fftw_iodim64() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftw_iodim64(Pointer p) { super(p); }
 }
@@ -841,21 +841,21 @@ public static native int fftw_alignment_of( double[] p);
 @MemberGetter public static native @Platform(not="windows") @Cast("const char*") BytePointer fftw_codelet_optim();
 
 @Name("fftwf_plan_s") @Opaque public static class fftwf_plan extends Pointer {
-    /** Empty constructor. */
-    public fftwf_plan() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public fftwf_plan() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftwf_plan(Pointer p) { super(p); }
 }
 
 @Opaque public static class fftwf_iodim extends Pointer {
-    /** Empty constructor. */
-    public fftwf_iodim() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public fftwf_iodim() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftwf_iodim(Pointer p) { super(p); }
 }
 @Opaque public static class fftwf_iodim64 extends Pointer {
-    /** Empty constructor. */
-    public fftwf_iodim64() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public fftwf_iodim64() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftwf_iodim64(Pointer p) { super(p); }
 }

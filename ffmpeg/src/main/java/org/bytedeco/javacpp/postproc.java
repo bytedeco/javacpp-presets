@@ -73,14 +73,14 @@ public static final int PP_QUALITY_MAX = 6;
 // #include <inttypes.h>
 
 @Opaque public static class pp_context extends Pointer {
-    /** Empty constructor. */
-    public pp_context() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public pp_context() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public pp_context(Pointer p) { super(p); }
 }
 @Opaque public static class pp_mode extends Pointer {
-    /** Empty constructor. */
-    public pp_mode() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public pp_mode() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public pp_mode(Pointer p) { super(p); }
 }

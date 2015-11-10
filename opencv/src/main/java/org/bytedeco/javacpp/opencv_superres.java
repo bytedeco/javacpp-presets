@@ -71,7 +71,7 @@ public class opencv_superres extends org.bytedeco.javacpp.presets.opencv_superre
 The Super Resolution module contains a set of functions and classes that can be used to solve the
 problem of resolution enhancement. There are a few methods implemented, most of them are descibed in
 the papers \cite Farsiu03 and \cite Mitzel09 .
-<p>
+ <p>
  */
 
 /** \addtogroup superres
@@ -79,8 +79,6 @@ the papers \cite Farsiu03 and \cite Mitzel09 .
 
         @Namespace("cv::superres") public static class FrameSource extends Pointer {
             static { Loader.load(); }
-            /** Empty constructor. */
-            public FrameSource() { }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public FrameSource(Pointer p) { super(p); }
         
@@ -100,27 +98,25 @@ the papers \cite Farsiu03 and \cite Mitzel09 .
         @Namespace("cv::superres") public static native @Ptr FrameSource createFrameSource_Camera();
 
         /** \brief Base class for Super Resolution algorithms.
-<p>
+        <p>
         The class is only used to define the common interface for the whole family of Super Resolution
         algorithms.
          */
         @Namespace("cv::superres") @NoOffset public static class SuperResolution extends Algorithm {
             static { Loader.load(); }
-            /** Empty constructor. */
-            public SuperResolution() { }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public SuperResolution(Pointer p) { super(p); }
             public FrameSource asFrameSource() { return asFrameSource(this); }
             @Namespace public static native @Name("static_cast<cv::superres::FrameSource*>") FrameSource asFrameSource(SuperResolution pointer);
         
             /** \brief Set input frame source for Super Resolution algorithm.
-<p>
+            <p>
             @param frameSource Input frame source
              */
             public native void setInput(@Ptr FrameSource frameSource);
 
             /** \brief Process next frame from input and return output result.
-<p>
+            <p>
             @param frame Output result
              */
             public native void nextFrame(@ByVal Mat frame);
@@ -192,13 +188,13 @@ the papers \cite Farsiu03 and \cite Mitzel09 .
         }
 
         /** \brief Create Bilateral TV-L1 Super Resolution.
-<p>
+        <p>
         This class implements Super Resolution algorithm described in the papers \cite Farsiu03 and
         \cite Mitzel09 .
-<p>
+        <p>
         Here are important members of the class that control the algorithm, which you can set after
         constructing the class instance:
-<p>
+        <p>
         -   **int scale** Scale factor.
         -   **int iterations** Iteration count.
         -   **double tau** Asymptotic value of steepest descent method.
@@ -275,8 +271,6 @@ the papers \cite Farsiu03 and \cite Mitzel09 .
 
         @Namespace("cv::superres") public static class DenseOpticalFlowExt extends Algorithm {
             static { Loader.load(); }
-            /** Empty constructor. */
-            public DenseOpticalFlowExt() { }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public DenseOpticalFlowExt(Pointer p) { super(p); }
         
@@ -288,8 +282,6 @@ the papers \cite Farsiu03 and \cite Mitzel09 .
 
         @Namespace("cv::superres") public static class FarnebackOpticalFlow extends DenseOpticalFlowExt {
             static { Loader.load(); }
-            /** Empty constructor. */
-            public FarnebackOpticalFlow() { }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public FarnebackOpticalFlow(Pointer p) { super(p); }
         
@@ -331,8 +323,6 @@ the papers \cite Farsiu03 and \cite Mitzel09 .
 
         @Name("cv::superres::DualTVL1OpticalFlow") public static class SuperResDualTVL1OpticalFlow extends DenseOpticalFlowExt {
             static { Loader.load(); }
-            /** Empty constructor. */
-            public SuperResDualTVL1OpticalFlow() { }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public SuperResDualTVL1OpticalFlow(Pointer p) { super(p); }
         
@@ -375,8 +365,6 @@ the papers \cite Farsiu03 and \cite Mitzel09 .
 
         @Namespace("cv::superres") public static class BroxOpticalFlow extends DenseOpticalFlowExt {
             static { Loader.load(); }
-            /** Empty constructor. */
-            public BroxOpticalFlow() { }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public BroxOpticalFlow(Pointer p) { super(p); }
         
@@ -416,8 +404,6 @@ the papers \cite Farsiu03 and \cite Mitzel09 .
 
         @Namespace("cv::superres") public static class PyrLKOpticalFlow extends DenseOpticalFlowExt {
             static { Loader.load(); }
-            /** Empty constructor. */
-            public PyrLKOpticalFlow() { }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public PyrLKOpticalFlow(Pointer p) { super(p); }
         

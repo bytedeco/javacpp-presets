@@ -153,8 +153,8 @@ public static class CvHaarStageClassifier extends Pointer {
 }
 
 @Opaque public static class CvHidHaarClassifierCascade extends Pointer {
-    /** Empty constructor. */
-    public CvHidHaarClassifierCascade() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CvHidHaarClassifierCascade() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvHidHaarClassifierCascade(Pointer p) { super(p); }
 }
@@ -401,8 +401,6 @@ using a Boosted Cascade of Simple Features. IEEE CVPR, 2001. The paper is availa
  *  instance of the class is to be passed to cv::partition (see cxoperations.hpp) */
 @Namespace("cv") @NoOffset public static class SimilarRects extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public SimilarRects() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SimilarRects(Pointer p) { super(p); }
 
@@ -489,8 +487,6 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
 
 @Namespace("cv") public static class BaseCascadeClassifier extends Algorithm {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public BaseCascadeClassifier() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BaseCascadeClassifier(Pointer p) { super(p); }
 
@@ -554,8 +550,6 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
 
     public static class MaskGenerator extends Pointer {
         static { Loader.load(); }
-        /** Empty constructor. */
-        public MaskGenerator() { }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public MaskGenerator(Pointer p) { super(p); }
     
@@ -582,7 +576,7 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
     public CascadeClassifier() { super((Pointer)null); allocate(); }
     private native void allocate();
     /** \brief Loads a classifier from a file.
-<p>
+    <p>
     @param filename Name of the file from which the classifier is loaded.
      */
     public CascadeClassifier(@Str BytePointer filename) { super((Pointer)null); allocate(filename); }
@@ -593,7 +587,7 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
     */
     public native @Cast("bool") boolean empty();
     /** \brief Loads a classifier from a file.
-<p>
+    <p>
     @param filename Name of the file from which the classifier is loaded. The file may contain an old
     HAAR classifier trained by the haartraining application or a new cascade classifier trained by the
     traincascade application.
@@ -601,14 +595,14 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
     public native @Cast("bool") boolean load( @Str BytePointer filename );
     public native @Cast("bool") boolean load( @Str String filename );
     /** \brief Reads a classifier from a FileStorage node.
-<p>
+    <p>
     \note The file may contain a new cascade classifier (trained traincascade application) only.
      */
     public native @Cast("bool") boolean read( @Const @ByRef FileNode node );
 
     /** \brief Detects objects of different sizes in the input image. The detected objects are returned as a list
     of rectangles.
-<p>
+    <p>
     @param image Matrix of the type CV_8U containing an image where objects are detected.
     @param objects Vector of rectangles where each rectangle contains the detected object, the
     rectangles may be partially outside the original image.
@@ -619,9 +613,9 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
     cvHaarDetectObjects. It is not used for a new cascade.
     @param minSize Minimum possible object size. Objects smaller than that are ignored.
     @param maxSize Maximum possible object size. Objects larger than that are ignored.
-<p>
+    <p>
     The function is parallelized with the TBB library.
-<p>
+    <p>
     \note
        -   (Python) A face detection example using cascade classifiers can be found at
             opencv_source_code/samples/python2/facedetect.py
@@ -1034,8 +1028,6 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
 
 @Namespace("cv") @NoOffset public static class DetectionBasedTracker extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DetectionBasedTracker() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetectionBasedTracker(Pointer p) { super(p); }
 
@@ -1059,8 +1051,6 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
 
         @NoOffset public static class IDetector extends Pointer {
             static { Loader.load(); }
-            /** Empty constructor. */
-            public IDetector() { }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public IDetector(Pointer p) { super(p); }
         
@@ -1099,8 +1089,6 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
             WRONG_OBJECT = 3;
         @NoOffset public static class ExtObject extends Pointer {
             static { Loader.load(); }
-            /** Empty constructor. */
-            public ExtObject() { }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public ExtObject(Pointer p) { super(p); }
         

@@ -32,8 +32,6 @@ public static final int MAX_PATTERNS = 256;
 
 @Namespace("ARToolKitPlus") public static class SingleTracker extends TrackerSingleMarker {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public SingleTracker() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SingleTracker(Pointer p) { super(p); }
 
@@ -43,8 +41,6 @@ public static final int MAX_PATTERNS = 256;
 
 @Namespace("ARToolKitPlus") public static class MultiTracker extends TrackerMultiMarker {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public MultiTracker() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MultiTracker(Pointer p) { super(p); }
 
@@ -968,8 +964,6 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
  */
 @Namespace("ARToolKitPlus") @NoOffset public static class Tracker extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public Tracker() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Tracker(Pointer p) { super(p); }
 
@@ -1270,8 +1264,6 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
  */
 @Namespace("ARToolKitPlus") @NoOffset public static class TrackerMultiMarker extends Tracker {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public TrackerMultiMarker() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TrackerMultiMarker(Pointer p) { super(p); }
 
@@ -1404,8 +1396,6 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
  */
 @Namespace("ARToolKitPlus") @NoOffset public static class TrackerSingleMarker extends Tracker {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public TrackerSingleMarker() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TrackerSingleMarker(Pointer p) { super(p); }
 

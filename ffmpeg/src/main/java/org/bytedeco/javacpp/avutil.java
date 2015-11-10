@@ -302,7 +302,7 @@ public static final int
  * Return a single letter to describe the given picture type
  * pict_type.
  *
- * @param[in] pict_type the picture type @return a single character
+ * @param [in] pict_type the picture type @return a single character
  * representing the picture type, '?' if pict_type is unknown
  */
 public static native @Cast("char") byte av_get_picture_type_char(@Cast("AVPictureType") int pict_type);
@@ -1555,9 +1555,9 @@ public static final int AV_LOG_MAX_OFFSET = (AV_LOG_TRACE - AV_LOG_QUIET);
 
 /**
  * Sets additional colors for extended debugging sessions.
- * <pre><code>
+ * <pre>{@code
    av_log(ctx, AV_LOG_DEBUG|AV_LOG_C(134), "Message in purple\n");
-   </code></pre>
+   }</pre>
  * Requires 256color terminal support. Uses outside debugging is not
  * recommended.
  */
@@ -1811,8 +1811,8 @@ public static native int av_log_get_flags();
  * references (AVBufferRef).
  */
 @Opaque public static class AVBuffer extends Pointer {
-    /** Empty constructor. */
-    public AVBuffer() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AVBuffer() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVBuffer(Pointer p) { super(p); }
 }
@@ -2029,8 +2029,8 @@ public static native int av_buffer_realloc(@ByPtrPtr AVBufferRef buf, int size);
  * av_buffer_pool_uninit().
  */
 @Opaque public static class AVBufferPool extends Pointer {
-    /** Empty constructor. */
-    public AVBufferPool() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AVBufferPool() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVBufferPool(Pointer p) { super(p); }
 }
@@ -3012,12 +3012,12 @@ public static final int
      * Recommmends skipping the specified number of samples. This is exported
      * only if the "skip_manual" AVOption is set in libavcodec.
      * This has the same format as AV_PKT_DATA_SKIP_SAMPLES.
-     * <pre><code>
+     * <pre>{@code
      * u32le number of samples to skip from start of this packet
      * u32le number of samples to skip from end of this packet
      * u8    reason for start skip
      * u8    reason for end   skip (0=padding silence, 1=convergence)
-     * </code></pre>
+     * }</pre>
      */
     AV_FRAME_DATA_SKIP_SAMPLES = 9,
 
@@ -3247,13 +3247,13 @@ public static final int AV_NUM_DATA_POINTERS = 8;
 
     /**
      * motion vector table
-     * <pre><code>
+     * <pre>{@code
      * example:
      * int mv_sample_log2= 4 - motion_subsample_log2;
      * int mb_width= (width+15)>>4;
      * int mv_stride= (mb_width << mv_sample_log2) + 1;
      * motion_val[direction][x + y*mv_stride][0->mv_x, 1->mv_y];
-     * </code></pre>
+     * }</pre>
      */
     public native short motion_val(int i, int j, int k); public native AVFrame motion_val(int i, int j, int k, short motion_val);
     @MemberGetter public native @Cast("int16_t(*)[2]") ShortPointer motion_val();
@@ -3893,7 +3893,7 @@ public static native int av_sample_fmt_is_planar(@Cast("AVSampleFormat") int sam
 /**
  * Get the required buffer size for the given audio parameters.
  *
- * @param[out] linesize calculated linesize, may be NULL
+ * @param [out] linesize calculated linesize, may be NULL
  * @param nb_channels   the number of channels
  * @param nb_samples    the number of samples in a single channel
  * @param sample_fmt    the sample format
@@ -3935,8 +3935,8 @@ public static native int av_samples_get_buffer_size(int[] linesize, int nb_chann
  * @see enum AVSampleFormat
  * The documentation for AVSampleFormat describes the data layout.
  *
- * @param[out] audio_data  array to be filled with the pointer for each channel
- * @param[out] linesize    calculated linesize, may be NULL
+ * @param [out] audio_data  array to be filled with the pointer for each channel
+ * @param [out] linesize    calculated linesize, may be NULL
  * @param buf              the pointer to a buffer containing the samples
  * @param nb_channels      the number of channels
  * @param nb_samples       the number of samples in a single channel
@@ -3972,8 +3972,8 @@ public static native int av_samples_fill_arrays(@Cast("uint8_t**") @ByPtrPtr byt
  * @see enum AVSampleFormat
  * The documentation for AVSampleFormat describes the data layout.
  *
- * @param[out] audio_data  array to be filled with the pointer for each channel
- * @param[out] linesize    aligned size for audio buffer(s), may be NULL
+ * @param [out] audio_data  array to be filled with the pointer for each channel
+ * @param [out] linesize    aligned size for audio buffer(s), may be NULL
  * @param nb_channels      number of audio channels
  * @param nb_samples       number of samples per channel
  * @param align            buffer size alignment (0 = default, 1 = no alignment)
@@ -4221,8 +4221,8 @@ public static native void av_get_channel_layout_string(@Cast("char*") ByteBuffer
 public static native void av_get_channel_layout_string(@Cast("char*") byte[] buf, int buf_size, int nb_channels, @Cast("uint64_t") long channel_layout);
 
 @Opaque public static class AVBPrint extends Pointer {
-    /** Empty constructor. */
-    public AVBPrint() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AVBPrint() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVBPrint(Pointer p) { super(p); }
 }
@@ -4276,9 +4276,9 @@ public static native @Cast("const char*") BytePointer av_get_channel_description
 /**
  * Get the value and name of a standard channel layout.
  *
- * @param[in]  index   index in an internal list, starting at 0
- * @param[out] layout  channel layout mask
- * @param[out] name    name of the layout
+ * @param [in]  index   index in an internal list, starting at 0
+ * @param [out] layout  channel layout mask
+ * @param [out] name    name of the layout
  * @return  0  if the layout exists,
  *          <0 if index is beyond the limits
  */
@@ -4507,7 +4507,7 @@ public static native int av_cpu_count();
  * entries and finally av_dict_free() to free the dictionary
  * and all its contents.
  *
- <pre><code>
+ <pre>{@code
    AVDictionary *d = NULL;           // "create" an empty dictionary
    AVDictionaryEntry *t = NULL;
 
@@ -4521,7 +4521,7 @@ public static native int av_cpu_count();
        <....>                             // iterate over all entries in d
    }
    av_dict_free(&d);
- </code></pre>
+ }</pre>
  *
  */
 
@@ -4561,8 +4561,8 @@ public static class AVDictionaryEntry extends Pointer {
 }
 
 @Opaque public static class AVDictionary extends Pointer {
-    /** Empty constructor. */
-    public AVDictionary() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AVDictionary() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDictionary(Pointer p) { super(p); }
 }
@@ -4673,11 +4673,11 @@ public static native void av_dict_free(@ByPtrPtr AVDictionary m);
  * Such string may be passed back to av_dict_parse_string().
  * \note String is escaped with backslashes ('\').
  *
- * @param[in]  m             dictionary
- * @param[out] buffer        Pointer to buffer that will be allocated with string containg entries.
+ * @param [in]  m             dictionary
+ * @param [out] buffer        Pointer to buffer that will be allocated with string containg entries.
  *                           Buffer must be freed by the caller when is no longer needed.
- * @param[in]  key_val_sep   character used to separate key from value
- * @param[in]  pairs_sep     character used to separate two pairs from each other
+ * @param [in]  key_val_sep   character used to separate key from value
+ * @param [in]  pairs_sep     character used to separate two pairs from each other
  * @return                   >= 0 on success, negative on error
  * \warning Separators cannot be neither '\\' nor '\0'. They also cannot be the same.
  */
@@ -4757,7 +4757,7 @@ public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**
  * should also be set when applicable, but are not required.
  *
  * The following example illustrates an AVOptions-enabled struct:
- * <pre><code>
+ * <pre>{@code
  * typedef struct test_struct {
  *     AVClass *class;
  *     int      int_opt;
@@ -4782,7 +4782,7 @@ public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**
  *     .option     = test_options,
  *     .version    = LIBAVUTIL_VERSION_INT,
  * };
- * </code></pre>
+ * }</pre>
  *
  * Next, when allocating your struct, you must ensure that the AVClass pointer
  * is set to the correct value. Then, av_opt_set_defaults() can be called to
@@ -4794,7 +4794,7 @@ public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**
  *
  * Continuing with the above example:
  *
- * <pre><code>
+ * <pre>{@code
  * test_struct *alloc_test_struct(void)
  * {
  *     test_struct *ret = av_malloc(sizeof(*ret));
@@ -4807,7 +4807,7 @@ public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**
  *     av_opt_free(*foo);
  *     av_freep(foo);
  * }
- * </code></pre>
+ * }</pre>
  *
  * \subsection avoptions_implement_nesting Nesting
  *      It may happen that an AVOptions-enabled struct contains another
@@ -4820,7 +4820,7 @@ public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**
  *      Assuming that the test_struct from above now also contains a
  *      child_struct field:
  *
- *      <pre><code>
+ *      <pre>{@code
  *      typedef struct child_struct {
  *          AVClass *class;
  *          int flags_opt;
@@ -4848,7 +4848,7 @@ public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**
  *      {
  *          return prev ? NULL : &child_class;
  *      }
- *      </code></pre>
+ *      }</pre>
  *      Putting child_next() and child_class_next() as defined above into
  *      test_class will now make child_struct's options accessible through
  *      test_struct (again, proper setup as described above needs to be done on
@@ -4872,11 +4872,11 @@ public static native int av_dict_get_string(@Const AVDictionary m, @Cast("char**
  *      constant.
  *      For example, to add some named constants for the test_flags option
  *      above, put the following into the child_opts array:
- *      <pre><code>
+ *      <pre>{@code
  *      { "test_flags", "This is a test option of flags type.",
  *        offsetof(child_struct, flags_opt), AV_OPT_TYPE_FLAGS, { .i64 = 0 }, INT_MIN, INT_MAX, "test_unit" },
  *      { "flag1", "This is a flag with value 16", 0, AV_OPT_TYPE_CONST, { .i64 = 16 }, 0, 0, "test_unit" },
- *      </code></pre>
+ *      }</pre>
  *
  * \section avoptions_use Using AVOptions
  * This section deals with accessing options in an AVOptions-enabled struct.
@@ -5118,7 +5118,7 @@ public static class AVOptionRanges extends Pointer {
      *
      * Multi-component range can be read as in following example:
      *
-     * <pre><code>
+     * <pre>{@code
      * int range_index, component_index;
      * AVOptionRanges *ranges;
      * AVOptionRange *range[3]; //may require more than 3 in the future.
@@ -5129,7 +5129,7 @@ public static class AVOptionRanges extends Pointer {
      *     //do something with range here.
      * }
      * av_opt_freep_ranges(&ranges);
-     * </code></pre>
+     * }</pre>
      */
     public native AVOptionRange range(int i); public native AVOptionRanges range(int i, AVOptionRange range);
     @MemberGetter public native @Cast("AVOptionRange**") PointerPointer range();
@@ -5148,10 +5148,10 @@ public static class AVOptionRanges extends Pointer {
 /**
  * Set the field of obj with the given name to value.
  *
- * @param[in] obj A struct whose first element is a pointer to an
+ * @param [in] obj A struct whose first element is a pointer to an
  * AVClass.
- * @param[in] name the name of the field to set
- * @param[in] val The value to set. If the field is not of a string
+ * @param [in] name the name of the field to set
+ * @param [in] val The value to set. If the field is not of a string
  * type, then the given string is parsed.
  * SI postfixes and some named scalars are supported.
  * If the field is of a numeric type, it has to be a numeric or named
@@ -5161,7 +5161,7 @@ public static class AVOptionRanges extends Pointer {
  * scalars or named flags separated by '+' or '-'. Prefixing a flag
  * with '+' causes it to be set without affecting the other flags;
  * similarly, '-' unsets a flag.
- * @param[out] o_out if non-NULL put here a pointer to the AVOption
+ * @param [out] o_out if non-NULL put here a pointer to the AVOption
  * found
  * @param alloc this parameter is currently ignored
  * @return 0 if the value has been set, or an AVERROR code in case of
@@ -5481,12 +5481,12 @@ public static final int AV_OPT_MULTI_COMPONENT_RANGE = 0x1000;
  * Look for an option in an object. Consider only options which
  * have all the specified flags set.
  *
- * @param[in] obj A pointer to a struct whose first element is a
+ * @param [in] obj A pointer to a struct whose first element is a
  *                pointer to an AVClass.
  *                Alternatively a double pointer to an AVClass, if
  *                AV_OPT_SEARCH_FAKE_OBJ search flag is set.
- * @param[in] name The name of the option to look for.
- * @param[in] unit When searching for named constants, name of the unit
+ * @param [in] name The name of the option to look for.
+ * @param [in] unit When searching for named constants, name of the unit
  *                 it belongs to.
  * @param opt_flags Find only options with all the specified flags set (AV_OPT_FLAG).
  * @param search_flags A combination of AV_OPT_SEARCH_*.
@@ -5508,16 +5508,16 @@ public static native @Const AVOption av_opt_find(Pointer obj, String name, Strin
  * Look for an option in an object. Consider only options which
  * have all the specified flags set.
  *
- * @param[in] obj A pointer to a struct whose first element is a
+ * @param [in] obj A pointer to a struct whose first element is a
  *                pointer to an AVClass.
  *                Alternatively a double pointer to an AVClass, if
  *                AV_OPT_SEARCH_FAKE_OBJ search flag is set.
- * @param[in] name The name of the option to look for.
- * @param[in] unit When searching for named constants, name of the unit
+ * @param [in] name The name of the option to look for.
+ * @param [in] unit When searching for named constants, name of the unit
  *                 it belongs to.
  * @param opt_flags Find only options with all the specified flags set (AV_OPT_FLAG).
  * @param search_flags A combination of AV_OPT_SEARCH_*.
- * @param[out] target_obj if non-NULL, an object to which the option belongs will be
+ * @param [out] target_obj if non-NULL, an object to which the option belongs will be
  * written here. It may be different from obj if AV_OPT_SEARCH_CHILDREN is present
  * in search_flags. This parameter is ignored if search_flags contain
  * AV_OPT_SEARCH_FAKE_OBJ.
@@ -5564,9 +5564,9 @@ public static native @Const AVClass av_opt_child_class_next(@Const AVClass paren
  * \{
  * Those functions set the field of obj with the given name to value.
  *
- * @param[in] obj A struct whose first element is a pointer to an AVClass.
- * @param[in] name the name of the field to set
- * @param[in] val The value to set. In case of av_opt_set() if the field is not
+ * @param [in] obj A struct whose first element is a pointer to an AVClass.
+ * @param [in] name the name of the field to set
+ * @param [in] val The value to set. In case of av_opt_set() if the field is not
  * of a string type, then the given string is parsed.
  * SI postfixes and some named scalars are supported.
  * If the field is of a numeric type, it has to be a numeric or named
@@ -5641,11 +5641,11 @@ public static native int av_opt_set_dict_val(Pointer obj, String name, @Const AV
  * \{
  * Those functions get a value of the option with the given name from an object.
  *
- * @param[in] obj a struct whose first element is a pointer to an AVClass.
- * @param[in] name name of the option to get.
- * @param[in] search_flags flags passed to av_opt_find2. I.e. if AV_OPT_SEARCH_CHILDREN
+ * @param [in] obj a struct whose first element is a pointer to an AVClass.
+ * @param [in] name name of the option to get.
+ * @param [in] search_flags flags passed to av_opt_find2. I.e. if AV_OPT_SEARCH_CHILDREN
  * is passed here, then the option may be found in a child of obj.
- * @param[out] out_val value of the option will be written here
+ * @param [out] out_val value of the option will be written here
  * @return >=0 on success, a negative error code otherwise
  */
 /**
@@ -5699,7 +5699,7 @@ public static native int av_opt_get_channel_layout(Pointer obj, String name, int
 public static native int av_opt_get_channel_layout(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, LongBuffer ch_layout);
 public static native int av_opt_get_channel_layout(Pointer obj, String name, int search_flags, long[] ch_layout);
 /**
- * @param[out] out_val The returned dictionary is a copy of the actual value and must
+ * @param [out] out_val The returned dictionary is a copy of the actual value and must
  * be freed with av_dict_free() by the caller
  */
 public static native int av_opt_get_dict_val(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, @Cast("AVDictionary**") PointerPointer out_val);
@@ -5813,13 +5813,13 @@ public static final int AV_OPT_SERIALIZE_OPT_FLAGS_EXACT =            0x00000002
  * A key/value or pairs separator occurring in the serialized value or
  * name string are escaped through the av_escape() function.
  *
- * @param[in]  obj           AVClass object to serialize
- * @param[in]  opt_flags     serialize options with all the specified flags set (AV_OPT_FLAG)
- * @param[in]  flags         combination of AV_OPT_SERIALIZE_* flags
- * @param[out] buffer        Pointer to buffer that will be allocated with string containg serialized options.
+ * @param [in]  obj           AVClass object to serialize
+ * @param [in]  opt_flags     serialize options with all the specified flags set (AV_OPT_FLAG)
+ * @param [in]  flags         combination of AV_OPT_SERIALIZE_* flags
+ * @param [out] buffer        Pointer to buffer that will be allocated with string containg serialized options.
  *                           Buffer must be freed by the caller when is no longer needed.
- * @param[in]  key_val_sep   character used to separate key from value
- * @param[in]  pairs_sep     character used to separate two pairs from each other
+ * @param [in]  key_val_sep   character used to separate key from value
+ * @param [in]  pairs_sep     character used to separate two pairs from each other
  * @return                   >= 0 on success, negative on error
  * \warning Separators cannot be neither '\\' nor '\0'. They also cannot be the same.
  */
@@ -6200,9 +6200,9 @@ public static native @Cast("AVPixelFormat") int av_pix_fmt_desc_get_id(@Const AV
  * Its recommended that you use avcodec_get_chroma_sub_sample unless
  * you do check the return code!
  *
- * @param[in]  pix_fmt the pixel format
- * @param[out] h_shift store log2_chroma_w
- * @param[out] v_shift store log2_chroma_h
+ * @param [in]  pix_fmt the pixel format
+ * @param [out] h_shift store log2_chroma_w
+ * @param [out] v_shift store log2_chroma_h
  *
  * @return 0 on success, AVERROR(ENOSYS) on invalid or unknown pixel format
  */
@@ -6222,7 +6222,7 @@ public static native int av_pix_fmt_count_planes(@Cast("AVPixelFormat") int pix_
 /**
  * Utility function to swap the endianness of a pixel format.
  *
- * @param[in]  pix_fmt the pixel format
+ * @param [in]  pix_fmt the pixel format
  *
  * @return pixel format with swapped endianness if it exists,
  * otherwise AV_PIX_FMT_NONE
@@ -6254,9 +6254,9 @@ public static final int FF_LOSS_CHROMA =      0x0020;
  * av_get_fix_fmt_loss() informs you about the various types of losses
  * which will occur when converting from one pixel format to another.
  *
- * @param[in] dst_pix_fmt destination pixel format
- * @param[in] src_pix_fmt source pixel format
- * @param[in] has_alpha Whether the source pixel format alpha channel is used.
+ * @param [in] dst_pix_fmt destination pixel format
+ * @param [in] src_pix_fmt source pixel format
+ * @param [in] has_alpha Whether the source pixel format alpha channel is used.
  * @return Combination of flags informing you what kind of losses will occur
  * (maximum loss for an invalid dst_pix_fmt).
  */
@@ -6276,9 +6276,9 @@ public static native int av_get_pix_fmt_loss(@Cast("AVPixelFormat") int dst_pix_
  * av_get_fix_fmt_loss() informs you about the various types of losses
  * which will occur when converting from one pixel format to another.
  *
- * @param[in] dst_pix_fmt destination pixel format
- * @param[in] src_pix_fmt source pixel format
- * @param[in] has_alpha Whether the source pixel format alpha channel is used.
+ * @param [in] dst_pix_fmt destination pixel format
+ * @param [in] src_pix_fmt source pixel format
+ * @param [in] has_alpha Whether the source pixel format alpha channel is used.
  * @return Combination of flags informing you what kind of losses will occur
  * (maximum loss for an invalid dst_pix_fmt).
  */
@@ -6517,7 +6517,7 @@ public static native int av_image_fill_arrays(@Cast("uint8_t**") @ByPtrPtr byte[
  * Return the size in bytes of the amount of data required to store an
  * image with the given parameters.
  *
- * @param[in] align the assumed linesize alignment
+ * @param [in] align the assumed linesize alignment
  */
 public static native int av_image_get_buffer_size(@Cast("AVPixelFormat") int pix_fmt, int width, int height, int align);
 
@@ -7217,8 +7217,8 @@ public static native @Cast("uint8_t*") BytePointer av_fifo_peek2(@Const AVFifoBu
  * - Automatic reallocation when writing to a full buffer.
  */
 @Opaque public static class AVAudioFifo extends Pointer {
-    /** Empty constructor. */
-    public AVAudioFifo() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AVAudioFifo() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVAudioFifo(Pointer p) { super(p); }
 }

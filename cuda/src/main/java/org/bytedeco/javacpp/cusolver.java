@@ -167,8 +167,8 @@ public static final int
 // #endif // CUSOLVER_COMMON
 
 @Opaque public static class cusolverDnContext extends Pointer {
-    /** Empty constructor. */
-    public cusolverDnContext() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cusolverDnContext() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cusolverDnContext(Pointer p) { super(p); }
 }
@@ -2253,8 +2253,8 @@ public static final int
 
 /* Opaque structure holding CUSOLVERRF library common */
 @Opaque public static class cusolverRfCommon extends Pointer {
-    /** Empty constructor. */
-    public cusolverRfCommon() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cusolverRfCommon() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cusolverRfCommon(Pointer p) { super(p); }
 }
@@ -2841,15 +2841,15 @@ public static native @Cast("cusolverStatus_t") int cusolverRfBatchZeroPivot(
 // #include "cusolver_common.h"
 
 @Opaque public static class cusolverSpContext extends Pointer {
-    /** Empty constructor. */
-    public cusolverSpContext() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cusolverSpContext() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cusolverSpContext(Pointer p) { super(p); }
 }
 
 @Opaque public static class csrqrInfo extends Pointer {
-    /** Empty constructor. */
-    public csrqrInfo() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public csrqrInfo() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public csrqrInfo(Pointer p) { super(p); }
 }

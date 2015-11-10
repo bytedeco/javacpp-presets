@@ -90,8 +90,8 @@ public static final int CUDNN_VERSION =    (CUDNN_MAJOR * 1000 + CUDNN_MINOR * 1
 // #endif
 
 @Opaque public static class cudnnContext extends Pointer {
-    /** Empty constructor. */
-    public cudnnContext() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cudnnContext() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudnnContext(Pointer p) { super(p); }
 }
@@ -126,32 +126,32 @@ public static native @Cast("cudnnStatus_t") int cudnnGetStream(cudnnContext hand
 
 /* Data structures to represent Image/Filter and the Neural Network Layer */
 @Opaque public static class cudnnTensorStruct extends Pointer {
-    /** Empty constructor. */
-    public cudnnTensorStruct() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cudnnTensorStruct() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudnnTensorStruct(Pointer p) { super(p); }
 }
 @Opaque public static class cudnnConvolutionStruct extends Pointer {
-    /** Empty constructor. */
-    public cudnnConvolutionStruct() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cudnnConvolutionStruct() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudnnConvolutionStruct(Pointer p) { super(p); }
 }
 @Opaque public static class cudnnPoolingStruct extends Pointer {
-    /** Empty constructor. */
-    public cudnnPoolingStruct() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cudnnPoolingStruct() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudnnPoolingStruct(Pointer p) { super(p); }
 }
 @Opaque public static class cudnnFilterStruct extends Pointer {
-    /** Empty constructor. */
-    public cudnnFilterStruct() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cudnnFilterStruct() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudnnFilterStruct(Pointer p) { super(p); }
 }
 @Opaque public static class cudnnLRNStruct extends Pointer {
-    /** Empty constructor. */
-    public cudnnLRNStruct() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cudnnLRNStruct() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudnnLRNStruct(Pointer p) { super(p); }
 }

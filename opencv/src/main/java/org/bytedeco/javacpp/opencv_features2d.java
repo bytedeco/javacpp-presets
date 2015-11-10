@@ -85,7 +85,7 @@ implement vector descriptor matchers inherit the DescriptorMatcher interface.
         opencv_source_code/samples/cpp/detector_descriptor_matcher_evaluation.cpp
     -   An example on one to many image matching can be found at
         opencv_source_code/samples/cpp/matching_to_many_images.cpp
-<p>
+    <p>
     \defgroup features2d_draw Drawing Function of Keypoints and Matches
     \defgroup features2d_category Object Categorization
 <p>
@@ -96,7 +96,7 @@ This section describes approaches based on local 2D features and used to categor
         opencv_source_code/samples/cpp/bagofwords_classification.cpp
     -   (Python) An example using the features2D framework to perform object categorization can be
         found at opencv_source_code/samples/python2/find_obj.py
-<p>
+  <p>
   \}
  */
 
@@ -109,7 +109,7 @@ This section describes approaches based on local 2D features and used to categor
 // CV_EXPORTS void read(const FileNode& node, CV_OUT std::vector<KeyPoint>& keypoints);
 
 /** \brief A class filters a vector of keypoints.
-<p>
+ <p>
  Because now it is difficult to provide a convenient interface for all usage scenarios of the
  keypoints filter class, it has only several needed by now static methods.
  */
@@ -173,7 +173,7 @@ This section describes approaches based on local 2D features and used to categor
 
 
     /** \brief Detects keypoints in an image (first variant) or image set (second variant).
-<p>
+    <p>
     @param image Image.
     @param keypoints The detected keypoints. In the second variant of the method keypoints[i] is a set
     of keypoints detected in images[i] .
@@ -201,7 +201,7 @@ This section describes approaches based on local 2D features and used to categor
 
     /** \brief Computes the descriptors for a set of keypoints detected in an image (first variant) or image set
     (second variant).
-<p>
+    <p>
     @param image Image.
     @param keypoints Input collection of keypoints. Keypoints for which a descriptor cannot be
     computed are removed. Sometimes new keypoints can be added, for example: SIFT duplicates keypoint
@@ -215,7 +215,7 @@ This section describes approaches based on local 2D features and used to categor
                                       @ByVal Mat descriptors );
 
     /** \overload
-<p>
+    <p>
     @param images Image set.
     @param keypoints Input collection of keypoints. Keypoints for which a descriptor cannot be
     computed are removed. Sometimes new keypoints can be added, for example: SIFT duplicates keypoint
@@ -275,7 +275,7 @@ the vector descriptor extractors inherit the DescriptorExtractor interface.
     }
 
     /** \brief The BRISK constructor
-<p>
+    <p>
     @param thresh AGAST detection threshold score.
     @param octaves detection octaves. Use 0 to do single scale.
     @param patternScale apply this scale to the pattern used for sampling the neighbourhood of a
@@ -285,7 +285,7 @@ the vector descriptor extractors inherit the DescriptorExtractor interface.
     public static native @Ptr BRISK create();
 
     /** \brief The BRISK constructor for a custom pattern
-<p>
+    <p>
     @param radiusList defines the radii (in pixels) where the samples around a keypoint are taken (for
     keypoint scale 1).
     @param numberList defines the number of sampling points on the sampling circle. Must be the same
@@ -315,8 +315,6 @@ k-tuples) are rotated according to the measured orientation).
  */
 @Namespace("cv") public static class ORB extends Feature2D {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public ORB() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ORB(Pointer p) { super(p); }
 
@@ -324,7 +322,7 @@ k-tuples) are rotated according to the measured orientation).
     public static final int kBytes = 32, HARRIS_SCORE= 0, FAST_SCORE= 1;
 
     /** \brief The ORB constructor
-<p>
+    <p>
     @param nfeatures The maximum number of features to retain.
     @param scaleFactor Pyramid decimation ratio, greater than 1. scaleFactor==2 means the classical
     pyramid, where each next level has 4x less pixels than the previous, but such a big scale factor
@@ -397,8 +395,6 @@ The class encapsulates all the parameters of the MSER extraction algorithm (see
  */
 @Namespace("cv") public static class MSER extends Feature2D {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public MSER() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MSER(Pointer p) { super(p); }
 
@@ -462,8 +458,6 @@ detection, use cv2.FAST.detect() method.
  */
 @Namespace("cv") public static class FastFeatureDetector extends Feature2D {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FastFeatureDetector() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FastFeatureDetector(Pointer p) { super(p); }
 
@@ -506,7 +500,7 @@ AgastFeatureDetector::AGAST_5_8, AgastFeatureDetector::AGAST_7_12d,
 AgastFeatureDetector::AGAST_7_12s, AgastFeatureDetector::OAST_9_16
 <p>
 Detects corners using the AGAST algorithm by \cite mair2010_agast .
-<p>
+ <p>
  */
 @Namespace("cv") public static native void AGAST( @ByVal Mat image, @ByRef KeyPointVector keypoints,
                       int threshold, @Cast("bool") boolean nonmaxSuppression, int type );
@@ -519,8 +513,6 @@ Detects corners using the AGAST algorithm by \cite mair2010_agast .
  */
 @Namespace("cv") public static class AgastFeatureDetector extends Feature2D {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public AgastFeatureDetector() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AgastFeatureDetector(Pointer p) { super(p); }
 
@@ -548,8 +540,6 @@ Detects corners using the AGAST algorithm by \cite mair2010_agast .
  */
 @Namespace("cv") public static class GFTTDetector extends Feature2D {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public GFTTDetector() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GFTTDetector(Pointer p) { super(p); }
 
@@ -679,8 +669,6 @@ F. Alcantarilla, Adrien Bartoli and Andrew J. Davison. In European Conference on
 */
 @Namespace("cv") public static class KAZE extends Feature2D {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public KAZE() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KAZE(Pointer p) { super(p); }
 
@@ -692,7 +680,7 @@ F. Alcantarilla, Adrien Bartoli and Andrew J. Davison. In European Conference on
         DIFF_CHARBONNIER = 3;
 
     /** \brief The KAZE constructor
-<p>
+    <p>
     @param extended Set to enable extraction of extended (128-byte) descriptor.
     @param upright Set to enable use of upright descriptors (non rotation-invariant).
     @param threshold Detector response threshold to accept point
@@ -735,8 +723,6 @@ Bartoli. In British Machine Vision Conference (BMVC), Bristol, UK, September 201
  */
 @Namespace("cv") public static class AKAZE extends Feature2D {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public AKAZE() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AKAZE(Pointer p) { super(p); }
 
@@ -751,7 +737,7 @@ Bartoli. In British Machine Vision Conference (BMVC), Bristol, UK, September 201
         DESCRIPTOR_MLDB = 5;
 
     /** \brief The AKAZE constructor
-<p>
+    <p>
     @param descriptor_type Type of the extracted descriptor: DESCRIPTOR_KAZE,
     DESCRIPTOR_KAZE_UPRIGHT, DESCRIPTOR_MLDB or DESCRIPTOR_MLDB_UPRIGHT.
     @param descriptor_size Size of the descriptor in bits. 0 -\> Full size
@@ -837,17 +823,15 @@ an image set.
  */
 @Namespace("cv") @NoOffset public static class DescriptorMatcher extends Algorithm {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DescriptorMatcher() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DescriptorMatcher(Pointer p) { super(p); }
 
 
     /** \brief Adds descriptors to train a CPU(trainDescCollectionis) or GPU(utrainDescCollectionis) descriptor
     collection.
-<p>
+    <p>
     If the collection is not empty, the new descriptors are added to existing train descriptors.
-<p>
+    <p>
     @param descriptors Descriptors to add. Each descriptors[i] is a set of descriptors from the same
     train image.
      */
@@ -870,7 +854,7 @@ an image set.
     public native @Cast("bool") boolean isMaskSupported();
 
     /** \brief Trains a descriptor matcher
-<p>
+    <p>
     Trains a descriptor matcher (for example, the flann index). In all methods to match, the method
     train() is run every time before matching. Some descriptor matchers (for example, BruteForceMatcher)
     have an empty implementation of this method. Other matchers really train their inner structures (for
@@ -879,7 +863,7 @@ an image set.
     public native void train();
 
     /** \brief Finds the best match for each descriptor from a query set.
-<p>
+    <p>
     @param queryDescriptors Query set of descriptors.
     @param trainDescriptors Train set of descriptors. This set is not added to the train descriptors
     collection stored in the class object.
@@ -887,7 +871,7 @@ an image set.
     descriptor. So, matches size may be smaller than the query descriptors count.
     @param mask Mask specifying permissible matches between an input query and train matrices of
     descriptors.
-<p>
+    <p>
     In the first variant of this method, the train descriptors are passed as an input argument. In the
     second variant of the method, train descriptors collection that was set by DescriptorMatcher::add is
     used. Optional mask (or masks) can be passed to specify which query and training descriptors can be
@@ -900,7 +884,7 @@ an image set.
                     @ByRef DMatchVector matches );
 
     /** \brief Finds the k best matches for each descriptor from a query set.
-<p>
+    <p>
     @param queryDescriptors Query set of descriptors.
     @param trainDescriptors Train set of descriptors. This set is not added to the train descriptors
     collection stored in the class object.
@@ -912,7 +896,7 @@ an image set.
     @param compactResult Parameter used when the mask (or masks) is not empty. If compactResult is
     false, the matches vector has the same size as queryDescriptors rows. If compactResult is true,
     the matches vector does not contain matches for fully masked-out query descriptors.
-<p>
+    <p>
     These extended variants of DescriptorMatcher::match methods find several best matches for each query
     descriptor. The matches are returned in the distance increasing order. See DescriptorMatcher::match
     for the details about query and train descriptors.
@@ -924,7 +908,7 @@ an image set.
                        @ByRef DMatchVectorVector matches, int k );
 
     /** \brief For each query descriptor, finds the training descriptors not farther than the specified distance.
-<p>
+    <p>
     @param queryDescriptors Query set of descriptors.
     @param trainDescriptors Train set of descriptors. This set is not added to the train descriptors
     collection stored in the class object.
@@ -937,7 +921,7 @@ an image set.
     in Pixels)!
     @param mask Mask specifying permissible matches between an input query and train matrices of
     descriptors.
-<p>
+    <p>
     For each query descriptor, the methods find such training descriptors that the distance between the
     query descriptor and the training descriptor is equal or smaller than maxDistance. Found matches are
     returned in the distance increasing order.
@@ -994,7 +978,7 @@ an image set.
     public native void write( @ByRef FileStorage arg0 );
 
     /** \brief Clones the matcher.
-<p>
+    <p>
     @param emptyTrainData If emptyTrainData is false, the method creates a deep copy of the object,
     that is, copies both parameters and train data. If emptyTrainData is true, the method creates an
     object copy with the current parameters but with empty train data.
@@ -1004,7 +988,7 @@ an image set.
 
     /** \brief Creates a descriptor matcher of a given type with the default parameters (using default
     constructor).
-<p>
+    <p>
     @param descriptorMatcherType Descriptor matcher type. Now the following matcher types are
     supported:
     -   {@code BruteForce} (it uses L2 )
@@ -1035,7 +1019,7 @@ sets.
     }
 
     /** \brief Brute-force matcher constructor.
-<p>
+    <p>
     @param normType One of NORM_L1, NORM_L2, NORM_HAMMING, NORM_HAMMING2. L1 and L2 norms are
     preferable choices for SIFT and SURF descriptors, NORM_HAMMING should be used with ORB, BRISK and
     BRIEF, NORM_HAMMING2 should be used with ORB when WTA_K==3 or 4 (see ORB::ORB constructor
@@ -1258,17 +1242,15 @@ Christopher R. Dance, Lixin Fan, Jutta Willamowski, Cedric Bray, 2004. :
  */
 @Namespace("cv") @NoOffset public static class BOWTrainer extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public BOWTrainer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BOWTrainer(Pointer p) { super(p); }
 
 
     /** \brief Adds descriptors to a training set.
-<p>
+    <p>
     @param descriptors Descriptors to add to a training set. Each row of the descriptors matrix is a
     descriptor.
-<p>
+    <p>
     The training set is clustered using clustermethod to construct the vocabulary.
      */
     public native void add( @Const @ByRef Mat descriptors );
@@ -1287,10 +1269,10 @@ Christopher R. Dance, Lixin Fan, Jutta Willamowski, Cedric Bray, 2004. :
     public native @ByVal Mat cluster();
 
     /** \brief Clusters train descriptors.
-<p>
+    <p>
     @param descriptors Descriptors to cluster. Each row of the descriptors matrix is a descriptor.
     Descriptors are not added to the inner train descriptor set.
-<p>
+    <p>
     The vocabulary consists of cluster centers. So, this method returns the vocabulary. In the first
     variant of the method, train descriptors stored in the object are clustered. In the second variant,
     input descriptors are clustered.
@@ -1302,13 +1284,11 @@ Christopher R. Dance, Lixin Fan, Jutta Willamowski, Cedric Bray, 2004. :
  */
 @Namespace("cv") @NoOffset public static class BOWKMeansTrainer extends BOWTrainer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public BOWKMeansTrainer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BOWKMeansTrainer(Pointer p) { super(p); }
 
     /** \brief The constructor.
-<p>
+    <p>
     @see cv::kmeans
     */
     public BOWKMeansTrainer( int clusterCount, @Const @ByRef(nullValue = "cv::TermCriteria()") TermCriteria termcrit/*=cv::TermCriteria()*/,
@@ -1335,13 +1315,11 @@ vocabulary in the given image.
  */
 @Namespace("cv") @NoOffset public static class BOWImgDescriptorExtractor extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public BOWImgDescriptorExtractor() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BOWImgDescriptorExtractor(Pointer p) { super(p); }
 
     /** \brief The constructor.
-<p>
+    <p>
     @param dextractor Descriptor extractor that is used to compute descriptors for an input image and
     its keypoints.
     @param dmatcher Descriptor matcher that is used to find the nearest word of the trained vocabulary
@@ -1356,7 +1334,7 @@ vocabulary in the given image.
     private native void allocate( @Ptr DescriptorMatcher dmatcher );
 
     /** \brief Sets a visual vocabulary.
-<p>
+    <p>
     @param vocabulary Vocabulary (can be trained using the inheritor of BOWTrainer ). Each row of the
     vocabulary is a visual word (cluster center).
      */
@@ -1367,7 +1345,7 @@ vocabulary in the given image.
     public native @Const @ByRef Mat getVocabulary();
 
     /** \brief Computes an image descriptor using the set visual vocabulary.
-<p>
+    <p>
     @param image Image, for which the descriptor is computed.
     @param keypoints Keypoints detected in the input image.
     @param imgDescriptor Computed output image descriptor.

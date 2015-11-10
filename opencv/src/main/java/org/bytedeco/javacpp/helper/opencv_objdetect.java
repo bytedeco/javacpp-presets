@@ -33,7 +33,6 @@ import static org.bytedeco.javacpp.opencv_objdetect.cvReleaseHaarClassifierCasca
 public class opencv_objdetect extends org.bytedeco.javacpp.presets.opencv_objdetect {
 
     public static abstract class AbstractCvHaarClassifierCascade extends Pointer {
-        public AbstractCvHaarClassifierCascade() { }
         public AbstractCvHaarClassifierCascade(Pointer p) { super(p); }
 
         /**

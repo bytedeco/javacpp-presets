@@ -210,7 +210,7 @@ public static final int
  *
  * Given the path to the file containing the model in binary form, this function will return a pointer to this model. It returns null pointer in the case of failure
  *
- * @param[in] filename
+ * @param [in] filename
  * @return Pointer to the FLANDMARK_Model data structure
  */
 public static native FLANDMARK_Model flandmark_init(@Cast("const char*") BytePointer filename);
@@ -221,8 +221,8 @@ public static native FLANDMARK_Model flandmark_init(String filename);
  *
  * This function writes given FLANDMARK_model data structure to a file specified by its path.
  *
- * @param[in] filename
- * @param[in] model
+ * @param [in] filename
+ * @param [in] model
  */
 public static native void flandmark_write_model(@Cast("const char*") BytePointer filename, FLANDMARK_Model model);
 public static native void flandmark_write_model(String filename, FLANDMARK_Model model);
@@ -232,8 +232,8 @@ public static native void flandmark_write_model(String filename, FLANDMARK_Model
  *
  * This function checks if both given FLANDMARK_Model data structres are equal
  *
- * @param[in] model
- * @param[in] tst
+ * @param [in] model
+ * @param [in] tst
  * @return
  */
 public static native @Cast("EError_T") int flandmark_check_model(FLANDMARK_Model model, FLANDMARK_Model tst);
@@ -243,25 +243,25 @@ public static native @Cast("EError_T") int flandmark_check_model(FLANDMARK_Model
  *
  * This function dealocates the FLANDMARK_Model data structure
  *
- * @param[in] model
+ * @param [in] model
  */
 public static native void flandmark_free(FLANDMARK_Model model);
 
 // getPsiMat (calls LBP features computation - liblbpfeatures from LIBOCAS)
 /**
  *
- * @param[out] Psi
- * @param[in] model
- * @param[in] lbpidx
+ * @param [out] Psi
+ * @param [in] model
+ * @param [in] lbpidx
  */
 public static native void flandmark_get_psi_mat(FLANDMARK_PSI Psi, FLANDMARK_Model model, int lbpidx);
 
 /**
  * Computes LBP features representing it as sparse matrix (i.e. only inices with ones are stored in connected list)
  *
- * @param[out] Psi
- * @param[in] model
- * @param[in] lbpidx
+ * @param [out] Psi
+ * @param [in] model
+ * @param [in] lbpidx
  */
 public static native void flandmark_get_psi_mat_sparse(FLANDMARK_PSI_SPARSE Psi, FLANDMARK_Model model, int lbpidx);
 
@@ -269,9 +269,9 @@ public static native void flandmark_get_psi_mat_sparse(FLANDMARK_PSI_SPARSE Psi,
 /**
  * Function maximizedotprod
  *
- * @param[in]
- * @param[in]
- * @param[out]
+ * @param [in]
+ * @param [in]
+ * @param [out]
  */
 public static native void flandmark_maximize_gdotprod(DoublePointer maximum, DoublePointer idx, @Const DoublePointer first, @Const DoublePointer second, @Const IntPointer third, int cols, int tsize);
 public static native void flandmark_maximize_gdotprod(DoubleBuffer maximum, DoubleBuffer idx, @Const DoubleBuffer first, @Const DoubleBuffer second, @Const IntBuffer third, int cols, int tsize);
@@ -306,9 +306,9 @@ public static native void flandmark_argmax(double[] smax, FLANDMARK_Options opti
  *
  * Estimates positions of facial landmarks in the normalized image frame.
  *
- * @param[in] face_image pointer to 1D uint8 array with normalized image frame of face
- * @param[in] model Data structure holding info about model
- * @param[in, out] int array representing 2D array of size [2 x options.M] with estimated positions of landmarks
+ * @param [in] face_image pointer to 1D uint8 array with normalized image frame of face
+ * @param [in] model Data structure holding info about model
+ * @param [in, out] int array representing 2D array of size [2 x options.M] with estimated positions of landmarks
  * @return int indicator of success or fail of the detection
  */
 public static native int flandmark_detect_base(@Cast("uint8_t*") BytePointer face_image, FLANDMARK_Model model, DoublePointer landmarks);

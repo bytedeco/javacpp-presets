@@ -1464,7 +1464,7 @@ public static final int
 
     /**
      * An AV_PKT_DATA_PARAM_CHANGE side data packet is laid out as follows:
-     * <pre><code>
+     * <pre>{@code
      * u32le param_flags
      * if (param_flags & AV_SIDE_DATA_PARAM_CHANGE_CHANNEL_COUNT)
      *     s32le channel_count
@@ -1475,7 +1475,7 @@ public static final int
      * if (param_flags & AV_SIDE_DATA_PARAM_CHANGE_DIMENSIONS)
      *     s32le width
      *     s32le height
-     * </code></pre>
+     * }</pre>
      */
     AV_PKT_DATA_PARAM_CHANGE = 2,
 
@@ -1487,7 +1487,7 @@ public static final int
      * as long as the distance between macroblocks in the info is smaller
      * than the target payload size.
      * Each MB info structure is 12 bytes, and is laid out as follows:
-     * <pre><code>
+     * <pre>{@code
      * u32le bit offset from the start of the packet
      * u8    current quantizer at the start of the macroblock
      * u8    GOB number
@@ -1496,7 +1496,7 @@ public static final int
      * u8    vertical MV predictor
      * u8    horizontal MV predictor for block number 3
      * u8    vertical MV predictor for block number 3
-     * </code></pre>
+     * }</pre>
      */
     AV_PKT_DATA_H263_MB_INFO = 3,
 
@@ -1529,24 +1529,24 @@ public static final int
 
     /**
      * This side data contains quality related information from the encoder.
-     * <pre><code>
+     * <pre>{@code
      * u32le quality factor of the compressed frame. Allowed range is between 1 (good) and FF_LAMBDA_MAX (bad).
      * u8    picture type
      * u8    error count
      * u16   reserved
      * u64le[error count] sum of squared differences between encoder in and output
-     * </code></pre>
+     * }</pre>
      */
     AV_PKT_DATA_QUALITY_STATS = 8,
 
     /**
      * Recommmends skipping the specified number of samples
-     * <pre><code>
+     * <pre>{@code
      * u32le number of samples to skip from start of this packet
      * u32le number of samples to skip from end of this packet
      * u8    reason for start skip
      * u8    reason for end   skip (0=padding silence, 1=convergence)
-     * </code></pre>
+     * }</pre>
      */
     AV_PKT_DATA_SKIP_SAMPLES= 70,
 
@@ -1554,9 +1554,9 @@ public static final int
      * An AV_PKT_DATA_JP_DUALMONO side data packet indicates that
      * the packet may contain "dual mono" audio specific to Japanese DTV
      * and if it is true, recommends only the selected channel to be used.
-     * <pre><code>
+     * <pre>{@code
      * u8    selected channels (0=mail/left, 1=sub/right, 2=both)
-     * </code></pre>
+     * }</pre>
      */
     AV_PKT_DATA_JP_DUALMONO = 71,
 
@@ -1568,12 +1568,12 @@ public static final int
 
     /**
      * Subtitle event position
-     * <pre><code>
+     * <pre>{@code
      * u32le x1
      * u32le y1
      * u32le x2
      * u32le y2
-     * </code></pre>
+     * }</pre>
      */
     AV_PKT_DATA_SUBTITLE_POSITION = 73,
 
@@ -1751,8 +1751,8 @@ public static final int
  */
 
 @Opaque public static class AVCodecInternal extends Pointer {
-    /** Empty constructor. */
-    public AVCodecInternal() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AVCodecInternal() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVCodecInternal(Pointer p) { super(p); }
 }
@@ -3855,8 +3855,8 @@ public static class AVProfile extends Pointer {
 }
 
 @Opaque public static class AVCodecDefault extends Pointer {
-    /** Empty constructor. */
-    public AVCodecDefault() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AVCodecDefault() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVCodecDefault(Pointer p) { super(p); }
 }
@@ -4001,8 +4001,8 @@ public static class AVCodec extends Pointer {
      *
      * @param      avctx          codec context
      * @param      avpkt          output AVPacket (may contain a user-provided buffer)
-     * @param[in]  frame          AVFrame containing the raw data to be encoded
-     * @param[out] got_packet_ptr encoder sets to 0 or 1 to indicate that a
+     * @param [in]  frame          AVFrame containing the raw data to be encoded
+     * @param [out] got_packet_ptr encoder sets to 0 or 1 to indicate that a
      *                            non-empty packet was returned in avpkt.
      * @return 0 on success, negative error code on failure
      */
@@ -4057,8 +4057,8 @@ public static class AVCodec extends Pointer {
 public static native int av_codec_get_max_lowres(@Const AVCodec codec);
 
 @Opaque public static class MpegEncContext extends Pointer {
-    /** Empty constructor. */
-    public MpegEncContext() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public MpegEncContext() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MpegEncContext(Pointer p) { super(p); }
 }
@@ -4578,7 +4578,7 @@ public static native @Deprecated void avcodec_free_frame(@ByPtrPtr AVFrame frame
  * \note Always call this function before using decoding routines (such as
  * \ref avcodec_decode_video2()).
  *
- * <pre><code>
+ * <pre>{@code
  * avcodec_register_all();
  * av_dict_set(&opts, "b", "2.5M", 0);
  * codec = avcodec_find_decoder(AV_CODEC_ID_H264);
@@ -4589,7 +4589,7 @@ public static native @Deprecated void avcodec_free_frame(@ByPtrPtr AVFrame frame
  *
  * if (avcodec_open2(context, codec, opts) < 0)
  *     exit(1);
- * </code></pre>
+ * }</pre>
  *
  * @param avctx The context to initialize.
  * @param codec The codec to open this context for. If a non-NULL codec has been
@@ -5008,11 +5008,11 @@ public static native @Cast("AVChromaLocation") int avcodec_chroma_pos_to_enum(in
  * avpkt->size=0 at the end to return the remaining frames.
  *
  * @param avctx the codec context
- * @param[out] samples the output buffer, sample type in avctx->sample_fmt
+ * @param [out] samples the output buffer, sample type in avctx->sample_fmt
  *                     If the sample format is planar, each channel plane will
  *                     be the same size, with no padding between channels.
- * @param[in,out] frame_size_ptr the output buffer size in bytes
- * @param[in] avpkt The input AVPacket containing the input buffer.
+ * @param [in,out] frame_size_ptr the output buffer size in bytes
+ * @param [in] avpkt The input AVPacket containing the input buffer.
  *            You can create such packet with av_init_packet() and by then setting
  *            data and size, some decoders might in addition need other fields.
  *            All decoders are designed to use the least fields possible though.
@@ -5057,7 +5057,7 @@ public static native @Deprecated int avcodec_decode_audio3(AVCodecContext avctx,
  * before packets may be fed to the decoder.
  *
  * @param      avctx the codec context
- * @param[out] frame The AVFrame in which to store decoded audio samples.
+ * @param [out] frame The AVFrame in which to store decoded audio samples.
  *                   The decoder will allocate a buffer for the decoded frame by
  *                   calling the AVCodecContext.get_buffer2() callback.
  *                   When AVCodecContext.refcounted_frames is set to 1, the frame is
@@ -5069,12 +5069,12 @@ public static native @Deprecated int avcodec_decode_audio3(AVCodecContext avctx,
  *                   reference belongs to the decoder and is valid only until the
  *                   next call to this function or until closing or flushing the
  *                   decoder. The caller may not write to it.
- * @param[out] got_frame_ptr Zero if no frame could be decoded, otherwise it is
+ * @param [out] got_frame_ptr Zero if no frame could be decoded, otherwise it is
  *                           non-zero. Note that this field being set to zero
  *                           does not mean that an error has occurred. For
  *                           decoders with AV_CODEC_CAP_DELAY set, no given decode
  *                           call is guaranteed to produce a frame.
- * @param[in]  avpkt The input AVPacket containing the input buffer.
+ * @param [in]  avpkt The input AVPacket containing the input buffer.
  *                   At least avpkt->data and avpkt->size should be set. Some
  *                   decoders might also require additional fields to be set.
  * @return A negative error code is returned if an error occurred during
@@ -5108,7 +5108,7 @@ public static native int avcodec_decode_audio4(AVCodecContext avctx, AVFrame fra
  * before packets may be fed to the decoder.
  *
  * @param avctx the codec context
- * @param[out] picture The AVFrame in which the decoded video frame will be stored.
+ * @param [out] picture The AVFrame in which the decoded video frame will be stored.
  *             Use av_frame_alloc() to get an AVFrame. The codec will
  *             allocate memory for the actual bitmap by calling the
  *             AVCodecContext.get_buffer2() callback.
@@ -5122,12 +5122,12 @@ public static native int avcodec_decode_audio4(AVCodecContext avctx, AVFrame fra
  *             next call to this function or until closing or flushing the
  *             decoder. The caller may not write to it.
  *
- * @param[in] avpkt The input AVPacket containing the input buffer.
+ * @param [in] avpkt The input AVPacket containing the input buffer.
  *            You can create such packet with av_init_packet() and by then setting
  *            data and size, some decoders might in addition need other fields like
  *            flags&AV_PKT_FLAG_KEY. All decoders are designed to use the least
  *            fields possible.
- * @param[in,out] got_picture_ptr Zero if no frame could be decompressed, otherwise, it is nonzero.
+ * @param [in,out] got_picture_ptr Zero if no frame could be decompressed, otherwise, it is nonzero.
  * @return On error a negative value is returned, otherwise the number of bytes
  * used or zero if no frame could be decompressed.
  */
@@ -5163,10 +5163,10 @@ public static native int avcodec_decode_video2(AVCodecContext avctx, AVFrame pic
  * before packets may be fed to the decoder.
  *
  * @param avctx the codec context
- * @param[out] sub The Preallocated AVSubtitle in which the decoded subtitle will be stored,
+ * @param [out] sub The Preallocated AVSubtitle in which the decoded subtitle will be stored,
  *                 must be freed with avsubtitle_free if *got_sub_ptr is set.
- * @param[in,out] got_sub_ptr Zero if no subtitle could be decompressed, otherwise, it is nonzero.
- * @param[in] avpkt The input AVPacket containing the input buffer.
+ * @param [in,out] got_sub_ptr Zero if no subtitle could be decompressed, otherwise, it is nonzero.
+ * @param [in] avpkt The input AVPacket containing the input buffer.
  */
 public static native int avcodec_decode_subtitle2(AVCodecContext avctx, AVSubtitle sub,
                             IntPointer got_sub_ptr,
@@ -5468,7 +5468,7 @@ public static native AVCodecParserContext av_parser_init(int codec_id);
  * @return the number of bytes of the input bitstream used.
  *
  * Example:
- * <pre><code>
+ * <pre>{@code
  *   while(in_len){
  *       len = av_parser_parse2(myparser, AVCodecContext, &data, &size,
  *                                        in_data, in_len,
@@ -5479,7 +5479,7 @@ public static native AVCodecParserContext av_parser_init(int codec_id);
  *       if(size)
  *          decode_frame(data, size);
  *   }
- * </code></pre>
+ * }</pre>
  */
 public static native int av_parser_parse2(AVCodecParserContext s,
                      AVCodecContext avctx,
@@ -5567,9 +5567,9 @@ public static native AVCodec avcodec_find_encoder_by_name(String name);
  * in buf_size as described below. In that case a lower value can be used.
  *
  * @param avctx the codec context
- * @param[out] buf the output buffer
- * @param[in] buf_size the output buffer size
- * @param[in] samples the input buffer containing the samples
+ * @param [out] buf the output buffer
+ * @param [in] buf_size the output buffer size
+ * @param [in] samples the input buffer containing the samples
  * The number of samples read from this buffer is frame_size*channels,
  * both of which are defined in avctx.
  * For codecs which have avctx->frame_size equal to 0 (e.g. PCM) the number of
@@ -5614,7 +5614,7 @@ public static native @Deprecated int avcodec_encode_audio(AVCodecContext avctx,
  *                  If this function fails or produces no output, avpkt will be
  *                  freed using av_free_packet() (i.e. avpkt->destruct will be
  *                  called to free the user supplied buffer).
- * @param[in] frame AVFrame containing the raw audio data to be encoded.
+ * @param [in] frame AVFrame containing the raw audio data to be encoded.
  *                  May be NULL when flushing an encoder that has the
  *                  AV_CODEC_CAP_DELAY capability set.
  *                  If AV_CODEC_CAP_VARIABLE_FRAME_SIZE is set, then each frame
@@ -5622,7 +5622,7 @@ public static native @Deprecated int avcodec_encode_audio(AVCodecContext avctx,
  *                  If it is not set, frame->nb_samples must be equal to
  *                  avctx->frame_size for all frames except the last.
  *                  The final frame may be smaller than avctx->frame_size.
- * @param[out] got_packet_ptr This field is set to 1 by libavcodec if the
+ * @param [out] got_packet_ptr This field is set to 1 by libavcodec if the
  *                            output packet is non-empty, and to 0 if it is
  *                            empty. If the function returns an error, the
  *                            packet can be assumed to be invalid, and the
@@ -5646,9 +5646,9 @@ public static native int avcodec_encode_audio2(AVCodecContext avctx, AVPacket av
  * stored using a specific format, namely avctx.pix_fmt.
  *
  * @param avctx the codec context
- * @param[out] buf the output buffer for the bitstream of encoded frame
- * @param[in] buf_size the size of the output buffer in bytes
- * @param[in] pict the input picture to encode
+ * @param [out] buf the output buffer for the bitstream of encoded frame
+ * @param [in] buf_size the size of the output buffer in bytes
+ * @param [in] pict the input picture to encode
  * @return On error a negative value is returned, on success zero or the number
  * of bytes used from the output buffer.
  */
@@ -5683,10 +5683,10 @@ public static native @Deprecated int avcodec_encode_video(AVCodecContext avctx, 
  *                  If this function fails or produces no output, avpkt will be
  *                  freed using av_free_packet() (i.e. avpkt->destruct will be
  *                  called to free the user supplied buffer).
- * @param[in] frame AVFrame containing the raw video data to be encoded.
+ * @param [in] frame AVFrame containing the raw video data to be encoded.
  *                  May be NULL when flushing an encoder that has the
  *                  AV_CODEC_CAP_DELAY capability set.
- * @param[out] got_packet_ptr This field is set to 1 by libavcodec if the
+ * @param [out] got_packet_ptr This field is set to 1 by libavcodec if the
  *                            output packet is non-empty, and to 0 if it is
  *                            empty. If the function returns an error, the
  *                            packet can be assumed to be invalid, and the
@@ -5722,14 +5722,14 @@ public static native int avcodec_encode_subtitle(AVCodecContext avctx, @Cast("ui
  * \{
  */
 @Opaque public static class ReSampleContext extends Pointer {
-    /** Empty constructor. */
-    public ReSampleContext() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ReSampleContext() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ReSampleContext(Pointer p) { super(p); }
 }
 @Opaque public static class AVResampleContext extends Pointer {
-    /** Empty constructor. */
-    public AVResampleContext() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AVResampleContext() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVResampleContext(Pointer p) { super(p); }
 }
@@ -5976,9 +5976,9 @@ public static native int av_picture_pad(AVPicture dst, @Const AVPicture src, int
  * for one that returns a failure code and continues in case of invalid
  * pix_fmts.
  *
- * @param[in]  pix_fmt the pixel format
- * @param[out] h_shift store log2_chroma_w
- * @param[out] v_shift store log2_chroma_h
+ * @param [in]  pix_fmt the pixel format
+ * @param [out] h_shift store log2_chroma_w
+ * @param [out] v_shift store log2_chroma_h
  *
  * @see av_pix_fmt_get_chroma_sub_sample
  */
@@ -6011,10 +6011,10 @@ public static native int avcodec_get_pix_fmt_loss(@Cast("AVPixelFormat") int dst
  * pix_fmt_list parameter.
  *
  *
- * @param[in] pix_fmt_list AV_PIX_FMT_NONE terminated array of pixel formats to choose from
- * @param[in] src_pix_fmt source pixel format
- * @param[in] has_alpha Whether the source pixel format alpha channel is used.
- * @param[out] loss_ptr Combination of flags informing you what kind of losses will occur.
+ * @param [in] pix_fmt_list AV_PIX_FMT_NONE terminated array of pixel formats to choose from
+ * @param [in] src_pix_fmt source pixel format
+ * @param [in] has_alpha Whether the source pixel format alpha channel is used.
+ * @param [out] loss_ptr Combination of flags informing you what kind of losses will occur.
  * @return The best pixel format to convert to or -1 if none was found.
  */
 public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt_of_list(@Cast("const AVPixelFormat*") IntPointer pix_fmt_list,
@@ -6158,7 +6158,7 @@ public static native void avcodec_flush_buffers(AVCodecContext avctx);
 /**
  * Return codec bits per sample.
  *
- * @param[in] codec_id the codec
+ * @param [in] codec_id the codec
  * @return Number of bits per sample or zero if unknown for the given codec.
  */
 public static native int av_get_bits_per_sample(@Cast("AVCodecID") int codec_id);
@@ -6176,7 +6176,7 @@ public static native @Cast("AVCodecID") int av_get_pcm_codec(@Cast("AVSampleForm
  * Only return non-zero if the bits per sample is exactly correct, not an
  * approximation.
  *
- * @param[in] codec_id the codec
+ * @param [in] codec_id the codec
  * @return Number of bits per sample or zero if unknown for the given codec.
  */
 public static native int av_get_exact_bits_per_sample(@Cast("AVCodecID") int codec_id);
@@ -6389,10 +6389,10 @@ public static native @Cast("unsigned int") int av_xiphlacing(@Cast("unsigned cha
  * Log a generic warning message about a missing feature. This function is
  * intended to be used internally by FFmpeg (libavcodec, libavformat, etc.)
  * only, and would normally not be used by applications.
- * @param[in] avc a pointer to an arbitrary struct of which the first field is
+ * @param [in] avc a pointer to an arbitrary struct of which the first field is
  * a pointer to an AVClass struct
- * @param[in] feature string containing the name of the missing feature
- * @param[in] want_sample indicates if samples are wanted which exhibit this feature.
+ * @param [in] feature string containing the name of the missing feature
+ * @param [in] want_sample indicates if samples are wanted which exhibit this feature.
  * If want_sample is non-zero, additional verbage will be added to the log
  * message which tells the user how to report samples to the development
  * mailing list.
@@ -6405,9 +6405,9 @@ public static native @Deprecated void av_log_missing_feature(Pointer avc, String
  * Log a generic warning message asking for a sample. This function is
  * intended to be used internally by FFmpeg (libavcodec, libavformat, etc.)
  * only, and would normally not be used by applications.
- * @param[in] avc a pointer to an arbitrary struct of which the first field is
+ * @param [in] avc a pointer to an arbitrary struct of which the first field is
  * a pointer to an AVClass struct
- * @param[in] msg string containing an optional message, or NULL if no message
+ * @param [in] msg string containing an optional message, or NULL if no message
  * @deprecated Use avpriv_request_sample() instead.
  */
 public static native @Deprecated void av_log_ask_for_sample(Pointer avc, @Cast("const char*") BytePointer msg);

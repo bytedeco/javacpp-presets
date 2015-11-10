@@ -507,23 +507,23 @@ It provides easy interface to:
 \{
     \defgroup highgui_opengl OpenGL support
     \defgroup highgui_qt Qt New Functions
-<p>
+    <p>
     ![image](pics/qtgui.png)
-<p>
+    <p>
     This figure explains new functionality implemented with Qt\* GUI. The new GUI provides a statusbar,
     a toolbar, and a control panel. The control panel can have trackbars and buttonbars attached to it.
     If you cannot see the control panel, press Ctrl+P or right-click any Qt window and select **Display
     properties window**.
-<p>
+    <p>
     -   To attach a trackbar, the window name parameter must be NULL.
-<p>
+    <p>
     -   To attach a buttonbar, a button must be created. If the last bar attached to the control panel
         is a buttonbar, the new button is added to the right of the last button. If the last bar
         attached to the control panel is a trackbar, or the control panel is empty, a new buttonbar is
         created. Then, a new button is attached to it.
-<p>
+    <p>
     See below the example used to generate the figure: :
-    <pre><code>
+    <pre>{@code
         int main(int argc, char *argv[])
             int value = 50;
             int value2 = 0;
@@ -563,8 +563,8 @@ It provides easy interface to:
             cvReleaseCapture(&video);
             return 0;
         }
-    </code></pre>
-<p>
+    }</pre>
+    <p>
     \defgroup highgui_c C API
 \}
 */
@@ -774,7 +774,7 @@ videos, it will display the video frame-by-frame)
 \note
 <p>
 [Windows Backend Only] Pressing Ctrl+C will copy the image to the clipboard.
-<p>
+ <p>
  */
 @Namespace("cv") public static native void imshow(@Str BytePointer winname, @ByVal Mat mat);
 @Namespace("cv") public static native void imshow(@Str String winname, @ByVal Mat mat);
@@ -963,7 +963,7 @@ The function returns the current position of the specified trackbar.
 <p>
 **[Qt Backend Only]** winname can be empty (or NULL) if the trackbar is attached to the control
 panel.
-<p>
+ <p>
  */
 @Namespace("cv") public static native int getTrackbarPos(@Str BytePointer trackbarname, @Str BytePointer winname);
 @Namespace("cv") public static native int getTrackbarPos(@Str String trackbarname, @Str String winname);
@@ -1015,7 +1015,7 @@ prototyped as void Foo(void\*) .
 <p>
 The function setOpenGlDrawCallback can be used to draw 3D data on the window. See the example of
 callback function below: :
-<pre><code>
+<pre>{@code
     void on_opengl(void* param)
     {
         glLoadIdentity();
@@ -1044,7 +1044,7 @@ callback function below: :
                     glEnd();
         }
     }
-</code></pre>
+}</pre>
  */
 @Namespace("cv") public static native void setOpenGlDrawCallback(@Str BytePointer winname, OpenGlDrawCallback onOpenGlDraw, Pointer userdata/*=0*/);
 @Namespace("cv") public static native void setOpenGlDrawCallback(@Str BytePointer winname, OpenGlDrawCallback onOpenGlDraw);
@@ -1113,7 +1113,7 @@ for simplicity.
  -   **CV_FONT_DEMIBOLD** Weight of 63
  -   **CV_FONT_BOLD** Weight of 75
  -   **CV_FONT_BLACK** Weight of 87
-<p>
+ <p>
  You can also specify a positive integer for better control.
 @param style Font style. The following operation flags are available:
  -   **CV_STYLE_NORMAL** Normal font
@@ -1124,10 +1124,10 @@ for simplicity.
 The function fontQt creates a CvFont object. This CvFont is not compatible with putText .
 <p>
 A basic usage of this function is the following: :
-<pre><code>
+<pre>{@code
     CvFont font = fontQt(''Times'');
     addText( img1, ``Hello World !'', Point(50,50), font);
-</code></pre>
+}</pre>
  */
 @Namespace("cv") public static native @ByVal QtFont fontQt(@Str BytePointer nameFont, int pointSize/*=-1*/,
                          @ByVal(nullValue = "cv::Scalar::all(0)") Scalar color/*=cv::Scalar::all(0)*/, int weight/*=cv::QT_FONT_NORMAL*/,
@@ -1233,13 +1233,13 @@ buttonbar to the right of the last button. A new buttonbar is created if nothing
 control panel before, or if the last element attached to the control panel was a trackbar.
 <p>
 See below various examples of the createButton function call: :
-<pre><code>
+<pre>{@code
     createButton(NULL,callbackButton);//create a push button "button 0", that will call callbackButton.
     createButton("button2",callbackButton,NULL,CV_CHECKBOX,0);
     createButton("button3",callbackButton,&value);
     createButton("button5",callbackButton1,NULL,CV_RADIOBOX);
     createButton("button6",callbackButton2,NULL,CV_PUSH_BUTTON,1);
-</code></pre>
+}</pre>
 */
 @Namespace("cv") public static native int createButton( @Str BytePointer bar_name, ButtonCallback on_change,
                              Pointer userdata/*=0*/, int type/*=cv::QT_PUSH_BUTTON*/,

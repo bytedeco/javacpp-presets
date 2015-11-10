@@ -145,7 +145,7 @@ public static native void cvInpaint( @Const CvArr src, @Const CvArr inpaint_mask
 <p>
 This section describes high dynamic range imaging algorithms namely tonemapping, exposure alignment,
 camera calibration with multiple exposures and exposure fusion.
-<p>
+    <p>
     \defgroup photo_clone Seamless Cloning
     \defgroup photo_render Non-Photorealistic Rendering
     \defgroup photo_c C API
@@ -451,13 +451,11 @@ public static final int LDR_SIZE = 256;
  */
 @Namespace("cv") public static class Tonemap extends Algorithm {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public Tonemap() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Tonemap(Pointer p) { super(p); }
 
     /** \brief Tonemaps image
-<p>
+    <p>
     @param src source image - 32-bit 3-channel Mat
     @param dst destination image - 32-bit 3-channel Mat with values in [0, 1] range
      */
@@ -488,8 +486,6 @@ For more information see \cite DM03 .
  */
 @Namespace("cv") public static class TonemapDrago extends Tonemap {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public TonemapDrago() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TonemapDrago(Pointer p) { super(p); }
 
@@ -523,8 +519,6 @@ For more information see \cite DD02 .
  */
 @Namespace("cv") public static class TonemapDurand extends Tonemap {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public TonemapDurand() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TonemapDurand(Pointer p) { super(p); }
 
@@ -563,8 +557,6 @@ For more information see \cite RD05 .
  */
 @Namespace("cv") public static class TonemapReinhard extends Tonemap {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public TonemapReinhard() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TonemapReinhard(Pointer p) { super(p); }
 
@@ -598,8 +590,6 @@ For more information see \cite MM06 .
  */
 @Namespace("cv") public static class TonemapMantiuk extends Tonemap {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public TonemapMantiuk() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TonemapMantiuk(Pointer p) { super(p); }
 
@@ -624,13 +614,11 @@ dynamic range. Values from 0.6 to 0.9 produce best results.
  */
 @Namespace("cv") public static class AlignExposures extends Algorithm {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public AlignExposures() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AlignExposures(Pointer p) { super(p); }
 
     /** \brief Aligns images
-<p>
+    <p>
     @param src vector of input images
     @param dst vector of aligned images
     @param times vector of exposure time values for each image
@@ -652,8 +640,6 @@ For more information see \cite GW03 .
  */
 @Namespace("cv") public static class AlignMTB extends AlignExposures {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public AlignMTB() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AlignMTB(Pointer p) { super(p); }
 
@@ -661,7 +647,7 @@ For more information see \cite GW03 .
                                      @ByVal Mat times, @ByVal Mat response);
 
     /** \brief Short version of process, that doesn't take extra arguments.
-<p>
+    <p>
     @param src vector of input images
     @param dst vector of aligned images
      */
@@ -669,20 +655,20 @@ For more information see \cite GW03 .
 
     /** \brief Calculates shift between two images, i. e. how to shift the second image to correspond it with the
     first.
-<p>
+    <p>
     @param img0 first image
     @param img1 second image
      */
     public native @ByVal Point calculateShift(@ByVal Mat img0, @ByVal Mat img1);
     /** \brief Helper function, that shift Mat filling new regions with zeros.
-<p>
+    <p>
     @param src input image
     @param dst result image
     @param shift shift value
      */
     public native void shiftMat(@ByVal Mat src, @ByVal Mat dst, @Const @ByVal Point shift);
     /** \brief Computes median threshold and exclude bitmaps of given image.
-<p>
+    <p>
     @param img input image
     @param tb median threshold bitmap
     @param eb exclude bitmap
@@ -714,13 +700,11 @@ median value.
  */
 @Namespace("cv") public static class CalibrateCRF extends Algorithm {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public CalibrateCRF() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CalibrateCRF(Pointer p) { super(p); }
 
     /** \brief Recovers inverse camera response.
-<p>
+    <p>
     @param src vector of input images
     @param dst 256x1 matrix with inverse camera response function
     @param times vector of exposure time values for each image
@@ -736,8 +720,6 @@ For more information see \cite DM97 .
  */
 @Namespace("cv") public static class CalibrateDebevec extends CalibrateCRF {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public CalibrateDebevec() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CalibrateDebevec(Pointer p) { super(p); }
 
@@ -769,8 +751,6 @@ For more information see \cite RB99 .
  */
 @Namespace("cv") public static class CalibrateRobertson extends CalibrateCRF {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public CalibrateRobertson() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CalibrateRobertson(Pointer p) { super(p); }
 
@@ -795,13 +775,11 @@ For more information see \cite RB99 .
  */
 @Namespace("cv") public static class MergeExposures extends Algorithm {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public MergeExposures() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MergeExposures(Pointer p) { super(p); }
 
     /** \brief Merges images.
-<p>
+    <p>
     @param src vector of input images
     @param dst result image
     @param times vector of exposure time values for each image
@@ -819,8 +797,6 @@ For more information see \cite DM97 .
  */
 @Namespace("cv") public static class MergeDebevec extends MergeExposures {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public MergeDebevec() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MergeDebevec(Pointer p) { super(p); }
 
@@ -846,15 +822,13 @@ For more information see \cite MK07 .
  */
 @Namespace("cv") public static class MergeMertens extends MergeExposures {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public MergeMertens() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MergeMertens(Pointer p) { super(p); }
 
     public native void process(@ByVal MatVector src, @ByVal Mat dst,
                                      @ByVal Mat times, @ByVal Mat response);
     /** \brief Short version of process, that doesn't take extra arguments.
-<p>
+    <p>
     @param src vector of input images
     @param dst result image
      */
@@ -886,8 +860,6 @@ For more information see \cite RB99 .
  */
 @Namespace("cv") public static class MergeRobertson extends MergeExposures {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public MergeRobertson() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MergeRobertson(Pointer p) { super(p); }
 

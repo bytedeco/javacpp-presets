@@ -76,8 +76,6 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 
 @Namespace("cv::videostab") public static class IFrameSource extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public IFrameSource() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IFrameSource(Pointer p) { super(p); }
 
@@ -105,8 +103,6 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 
 @Namespace("cv::videostab") @NoOffset public static class VideoFileSource extends IFrameSource {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public VideoFileSource() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VideoFileSource(Pointer p) { super(p); }
 
@@ -190,8 +186,6 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 
 @Namespace("cv::videostab") public static class ILog extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public ILog() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ILog(Pointer p) { super(p); }
 
@@ -299,7 +293,7 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
  *  \{
 
 /** \brief Describes the Fast Marching Method implementation.
-<p>
+  <p>
   See http://iwi.eldoc.ub.rug.nl/FILES/root/2004/JGraphToolsTelea/2004JGraphToolsTelea.pdf
  */
 @Namespace("cv::videostab") @NoOffset public static class FastMarchingMethod extends Pointer {
@@ -317,7 +311,7 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
     private native void allocate();
 
     /** \brief Template method that runs the Fast Marching Method.
-<p>
+    <p>
     @param mask Image mask. 0 value indicates that the pixel value must be inpainted, 255 indicates
     that the pixel value is known, other values aren't acceptable.
     @param inpaint Inpainting functor that overloads void operator ()(int x, int y).
@@ -398,8 +392,6 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 
 @Namespace("cv::videostab") public static class ISparseOptFlowEstimator extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public ISparseOptFlowEstimator() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ISparseOptFlowEstimator(Pointer p) { super(p); }
 
@@ -410,8 +402,6 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 
 @Namespace("cv::videostab") public static class IDenseOptFlowEstimator extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public IDenseOptFlowEstimator() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IDenseOptFlowEstimator(Pointer p) { super(p); }
 
@@ -651,8 +641,6 @@ public static final int
 
 @Namespace("cv::videostab") public static class IOutlierRejector extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public IOutlierRejector() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IOutlierRejector(Pointer p) { super(p); }
 
@@ -823,14 +811,12 @@ public static final int
  */
 @Namespace("cv::videostab") @NoOffset public static class MotionEstimatorBase extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public MotionEstimatorBase() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MotionEstimatorBase(Pointer p) { super(p); }
 
 
     /** \brief Sets motion model.
-<p>
+    <p>
     @param val Motion model. See cv::videostab::MotionModel.
      */
     public native void setMotionModel(@Cast("cv::videostab::MotionModel") int val);
@@ -841,7 +827,7 @@ public static final int
     public native @Cast("cv::videostab::MotionModel") int motionModel();
 
     /** \brief Estimates global motion between two 2D point clouds.
-<p>
+    <p>
     @param points0 Source set of 2D points (32F).
     @param points1 Destination set of 2D points (32F).
     @param ok Indicates whether motion was estimated successfully.
@@ -895,8 +881,6 @@ public static final int
  */
 @Namespace("cv::videostab") @NoOffset public static class ImageMotionEstimatorBase extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public ImageMotionEstimatorBase() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ImageMotionEstimatorBase(Pointer p) { super(p); }
 
@@ -910,8 +894,6 @@ public static final int
 
 @Namespace("cv::videostab") @NoOffset public static class FromFileMotionReader extends ImageMotionEstimatorBase {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FromFileMotionReader() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FromFileMotionReader(Pointer p) { super(p); }
 
@@ -926,8 +908,6 @@ public static final int
 
 @Namespace("cv::videostab") @NoOffset public static class ToFileMotionWriter extends ImageMotionEstimatorBase {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public ToFileMotionWriter() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ToFileMotionWriter(Pointer p) { super(p); }
 
@@ -948,8 +928,6 @@ matching.
  */
 @Namespace("cv::videostab") @NoOffset public static class KeypointBasedMotionEstimator extends ImageMotionEstimatorBase {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public KeypointBasedMotionEstimator() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KeypointBasedMotionEstimator(Pointer p) { super(p); }
 
@@ -1050,8 +1028,6 @@ matching.
 
 @Namespace("cv::videostab") public static class IMotionStabilizer extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public IMotionStabilizer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IMotionStabilizer(Pointer p) { super(p); }
 
@@ -1086,8 +1062,6 @@ matching.
 
 @Namespace("cv::videostab") public static class MotionFilterBase extends IMotionStabilizer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public MotionFilterBase() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MotionFilterBase(Pointer p) { super(p); }
 
@@ -1234,8 +1208,6 @@ matching.
 
 @Namespace("cv::videostab") @NoOffset public static class InpainterBase extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public InpainterBase() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public InpainterBase(Pointer p) { super(p); }
 
@@ -1468,8 +1440,6 @@ matching.
 
 @Namespace("cv::videostab") @NoOffset public static class DeblurerBase extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DeblurerBase() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DeblurerBase(Pointer p) { super(p); }
 
@@ -1597,8 +1567,6 @@ matching.
 
 @Namespace("cv::videostab") @NoOffset public static class WobbleSuppressorBase extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public WobbleSuppressorBase() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public WobbleSuppressorBase(Pointer p) { super(p); }
 
@@ -1643,8 +1611,6 @@ matching.
 
 @Namespace("cv::videostab") @NoOffset public static class MoreAccurateMotionWobbleSuppressorBase extends WobbleSuppressorBase {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public MoreAccurateMotionWobbleSuppressorBase() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MoreAccurateMotionWobbleSuppressorBase(Pointer p) { super(p); }
 
@@ -1744,8 +1710,6 @@ matching.
 
 @Namespace("cv::videostab") @NoOffset public static class StabilizerBase extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public StabilizerBase() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StabilizerBase(Pointer p) { super(p); }
 
@@ -1955,12 +1919,12 @@ the papers \cite OF06 and \cite G11 . However, there are some extensions and dev
 paper methods.
 <p>
 ### References
-<p>
+ <p>
  1. "Full-Frame Video Stabilization with Motion Inpainting"
      Yasuyuki Matsushita, Eyal Ofek, Weina Ge, Xiaoou Tang, Senior Member, and Heung-Yeung Shum
  2. "Auto-Directed Video Stabilization with Robust L1 Optimal Camera Paths"
      Matthias Grundmann, Vivek Kwatra, Irfan Essa
-<p>
+     <p>
      \{
          \defgroup videostab_motion Global Motion Estimation
 <p>
@@ -1968,12 +1932,12 @@ The video stabilization module contains a set of functions and classes for globa
 between point clouds or between images. In the last case features are extracted and matched
 internally. For the sake of convenience the motion estimation functions are wrapped into classes.
 Both the functions and the classes are available.
-<p>
+         <p>
          \defgroup videostab_marching Fast Marching Method
 <p>
 The Fast Marching Method \cite Telea04 is used in of the video stabilization routines to do motion and
 color inpainting. The method is implemented is a flexible way and it's made public for other users.
-<p>
+     <p>
      \}
 <p>
 */

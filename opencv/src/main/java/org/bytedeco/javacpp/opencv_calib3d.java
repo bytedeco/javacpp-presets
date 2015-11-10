@@ -80,8 +80,8 @@ public class opencv_calib3d extends org.bytedeco.javacpp.helper.opencv_calib3d {
 \****************************************************************************************/
 
 @Opaque public static class CvPOSITObject extends AbstractCvPOSITObject {
-    /** Empty constructor. */
-    public CvPOSITObject() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CvPOSITObject() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvPOSITObject(Pointer p) { super(p); }
 }
@@ -744,39 +744,39 @@ pattern (every view is described by several 3D-2D point correspondences).
         opencv_source_code/samples/cpp/stereo_match.cpp
     -   (Python) A camera calibration sample can be found at
         opencv_source_code/samples/python2/calibrate.py
-<p>
+  <p>
   \{
     \defgroup calib3d_fisheye Fisheye camera model
-<p>
+    <p>
     Definitions: Let P be a point in 3D of coordinates X in the world reference frame (stored in the
     matrix X) The coordinate vector of P in the camera reference frame is:
-<p>
+    <p>
     \f[Xc = R X + T\f]
-<p>
+    <p>
     where R is the rotation matrix corresponding to the rotation vector om: R = rodrigues(om); call x, y
     and z the 3 coordinates of Xc:
-<p>
+    <p>
     \f[x = Xc_1 \\ y = Xc_2 \\ z = Xc_3\f]
-<p>
+    <p>
     The pinehole projection coordinates of P is [a; b] where
-<p>
+    <p>
     \f[a = x / z \ and \ b = y / z \\ r^2 = a^2 + b^2 \\ \theta = atan(r)\f]
-<p>
+    <p>
     Fisheye distortion:
-<p>
+    <p>
     \f[\theta_d = \theta (1 + k_1 \theta^2 + k_2 \theta^4 + k_3 \theta^6 + k_4 \theta^8)\f]
-<p>
+    <p>
     The distorted point coordinates are [x'; y'] where
-<p>
+    <p>
     \f[x' = (\theta_d / r) x \\ y' = (\theta_d / r) y \f]
-<p>
+    <p>
     Finally, conversion into pixel coordinates: The final pixel coordinates vector [u; v] where:
-<p>
+    <p>
     \f[u = f_x (x' + \alpha y') + c_x \\
     v = f_y yy + c_y\f]
-<p>
+    <p>
     \defgroup calib3d_c C API
-<p>
+  <p>
   \}
  */
 
@@ -926,7 +926,7 @@ cannot be estimated, an empty one will be returned.
 \note
    -   A example on calculating a homography for image matching can be found at
         opencv_source_code/samples/cpp/video_homography.cpp
-<p>
+ <p>
  */
 @Namespace("cv") public static native @ByVal Mat findHomography( @ByVal Mat srcPoints, @ByVal Mat dstPoints,
                                  int method/*=0*/, double ransacReprojThreshold/*=3*/,
@@ -1247,7 +1247,7 @@ more accurately, the function calls cornerSubPix. You also may use the function 
 different parameters if returned coordinates are not accurate enough.
 <p>
 Sample usage of detecting and drawing chessboard corners: :
-<pre><code>
+<pre>{@code
     Size patternsize(8,6); //interior number of corners
     Mat gray = ....; //source image
     vector<Point2f> corners; //this will be filled by the detected corners
@@ -1263,7 +1263,7 @@ Sample usage of detecting and drawing chessboard corners: :
         TermCriteria(CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 30, 0.1));
 
     drawChessboardCorners(img, patternsize, Mat(corners), patternfound);
-</code></pre>
+}</pre>
 \note The function requires white space (like a square-thick border, the wider the better) around
 the board to make the detection more robust in various environments. Otherwise, if there is no
 border and the background is dark, the outer black squares cannot be segmented properly and so the
@@ -1310,7 +1310,7 @@ have been found and they have been placed in a certain order (row by row, left t
 row). Otherwise, if the function fails to find all the corners or reorder them, it returns 0.
 <p>
 Sample usage of detecting and drawing the centers of circles: :
-<pre><code>
+<pre>{@code
     Size patternsize(7,7); //number of centers
     Mat gray = ....; //source image
     vector<Point2f> centers; //this will be filled by the detected centers
@@ -1318,7 +1318,7 @@ Sample usage of detecting and drawing the centers of circles: :
     bool patternfound = findCirclesGrid(gray, patternsize, centers);
 
     drawChessboardCorners(img, patternsize, Mat(centers), patternfound);
-</code></pre>
+}</pre>
 \note The function requires white space (like a square-thick border, the wider the better) around
 the board to make the detection more robust in various environments.
  */
@@ -1621,22 +1621,22 @@ coordinates. The function distinguishes the following two cases:
     mainly along the x axis (with possible small vertical shift). In the rectified images, the
     corresponding epipolar lines in the left and right cameras are horizontal and have the same
     y-coordinate. P1 and P2 look like:
-<p>
+    <p>
     \f[\texttt{P1} = \begin{bmatrix} f & 0 & cx_1 & 0 \\ 0 & f & cy & 0 \\ 0 & 0 & 1 & 0 \end{bmatrix}\f]
-<p>
+    <p>
     \f[\texttt{P2} = \begin{bmatrix} f & 0 & cx_2 & T_x*f \\ 0 & f & cy & 0 \\ 0 & 0 & 1 & 0 \end{bmatrix} ,\f]
-<p>
+    <p>
     where \f$T_x\f$ is a horizontal shift between the cameras and \f$cx_1=cx_2\f$ if
     CV_CALIB_ZERO_DISPARITY is set.
 <p>
 -   **Vertical stereo**: the first and the second camera views are shifted relative to each other
     mainly in vertical direction (and probably a bit in the horizontal direction too). The epipolar
     lines in the rectified images are vertical and have the same x-coordinate. P1 and P2 look like:
-<p>
+    <p>
     \f[\texttt{P1} = \begin{bmatrix} f & 0 & cx & 0 \\ 0 & f & cy_1 & 0 \\ 0 & 0 & 1 & 0 \end{bmatrix}\f]
-<p>
+    <p>
     \f[\texttt{P2} = \begin{bmatrix} f & 0 & cx & 0 \\ 0 & f & cy_2 & T_y*f \\ 0 & 0 & 1 & 0 \end{bmatrix} ,\f]
-<p>
+    <p>
     where \f$T_y\f$ is a vertical shift between the cameras and \f$cy_1=cy_2\f$ if CALIB_ZERO_DISPARITY is
     set.
 <p>
@@ -1814,7 +1814,7 @@ matrices sequentially).
 The calculated fundamental matrix may be passed further to computeCorrespondEpilines that finds the
 epipolar lines corresponding to the specified points. It can also be passed to
 stereoRectifyUncalibrated to compute the rectification transformation. :
-<pre><code>
+<pre>{@code
     // Example. Estimation of fundamental matrix using the RANSAC algorithm
     int point_count = 100;
     vector<Point2f> points1(point_count);
@@ -1829,7 +1829,7 @@ stereoRectifyUncalibrated to compute the rectification transformation. :
 
     Mat fundamental_matrix =
      findFundamentalMat(points1, points2, FM_RANSAC, 3, 0.99);
-</code></pre>
+}</pre>
  */
 @Namespace("cv") public static native @ByVal Mat findFundamentalMat( @ByVal Mat points1, @ByVal Mat points2,
                                      int method/*=cv::FM_RANSAC*/,
@@ -1920,7 +1920,7 @@ triangulated 3D points should have positive depth. Some details can be found in 
 <p>
 This function can be used to process output E and mask from findEssentialMat. In this scenario,
 points1 and points2 are the same input for findEssentialMat. :
-<pre><code>
+<pre>{@code
     // Example. Estimation of fundamental matrix using the RANSAC algorithm
     int point_count = 100;
     vector<Point2f> points1(point_count);
@@ -1939,7 +1939,7 @@ points1 and points2 are the same input for findEssentialMat. :
 
     E = findEssentialMat(points1, points2, focal, pp, RANSAC, 0.999, 1.0, mask);
     recoverPose(E, points1, points2, R, t, focal, pp, mask);
-</code></pre>
+}</pre>
  */
 @Namespace("cv") public static native int recoverPose( @ByVal Mat E, @ByVal Mat points1, @ByVal Mat points2,
                             @ByVal Mat R, @ByVal Mat t,
@@ -2123,8 +2123,6 @@ must be in front of the camera). The decomposition method is described in detail
  */
 @Namespace("cv") public static class StereoMatcher extends Algorithm {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public StereoMatcher() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StereoMatcher(Pointer p) { super(p); }
 
@@ -2133,7 +2131,7 @@ must be in front of the camera). The decomposition method is described in detail
            DISP_SCALE =  (1 << DISP_SHIFT);
 
     /** \brief Computes disparity map for the specified stereo pair
-<p>
+    <p>
     @param left Left 8-bit single-channel image.
     @param right Right image of the same size and the same type as the left one.
     @param disparity Output disparity map. It has the same size as the input images. Some algorithms,
@@ -2168,8 +2166,6 @@ contributed to OpenCV by K. Konolige.
  */
 @Namespace("cv") public static class StereoBM extends StereoMatcher {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public StereoBM() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StereoBM(Pointer p) { super(p); }
 
@@ -2202,7 +2198,7 @@ contributed to OpenCV by K. Konolige.
     public native void setROI2(@ByVal Rect roi2);
 
     /** \brief Creates StereoBM object
-<p>
+    <p>
     @param numDisparities the disparity search range. For each pixel algorithm will find the best
     disparity from 0 (default minimum disparity) to numDisparities. The search range can then be
     shifted by changing the minimum disparity.
@@ -2210,7 +2206,7 @@ contributed to OpenCV by K. Konolige.
     (as the block is centered at the current pixel). Larger block size implies smoother, though less
     accurate disparity map. Smaller block size gives more detailed disparity map, but there is higher
     chance for algorithm to find a wrong correspondence.
-<p>
+    <p>
     The function create StereoBM object. You can then call StereoBM::compute() to compute disparity for
     a specific stereo pair.
      */
@@ -2238,8 +2234,6 @@ check, quadratic interpolation and speckle filtering).
  */
 @Namespace("cv") public static class StereoSGBM extends StereoMatcher {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public StereoSGBM() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StereoSGBM(Pointer p) { super(p); }
 
@@ -2264,7 +2258,7 @@ check, quadratic interpolation and speckle filtering).
     public native void setMode(int mode);
 
     /** \brief Creates StereoSGBM object
-<p>
+    <p>
     @param minDisparity Minimum possible disparity value. Normally, it is zero but sometimes
     rectification algorithms can shift images, so this parameter needs to be adjusted accordingly.
     @param numDisparities Maximum disparity minus minimum disparity. The value is always greater than
@@ -2295,7 +2289,7 @@ check, quadratic interpolation and speckle filtering).
     @param mode Set it to StereoSGBM::MODE_HH to run the full-scale two-pass dynamic programming
     algorithm. It will consume O(W\*H\*numDisparities) bytes, which is large for 640x480 stereo and
     huge for HD-size pictures. By default, it is set to false .
-<p>
+    <p>
     The first constructor initializes StereoSGBM with all the default parameters. So, you only have to
     set StereoSGBM::numDisparities at minimum. The second constructor enables you to set each parameter
     to a custom value.
@@ -2329,7 +2323,7 @@ check, quadratic interpolation and speckle filtering).
         FISHEYE_CALIB_FIX_INTRINSIC         = 256;
 
     /** \brief Projects points using fisheye model
-<p>
+    <p>
     @param objectPoints Array of object points, 1xN/Nx1 3-channel (or vector\<Point3f\> ), where N is
     the number of points in the view.
     @param imagePoints Output array of image points, 2xN/Nx2 1-channel or 1xN/Nx1 2-channel, or
@@ -2342,7 +2336,7 @@ check, quadratic interpolation and speckle filtering).
     to components of the focal lengths, coordinates of the principal point, distortion coefficients,
     rotation vector, translation vector, and the skew. In the old interface different components of
     the jacobian are returned via different output parameters.
-<p>
+    <p>
     The function computes projections of 3D points to the image plane given intrinsic and extrinsic
     camera parameters. Optionally, the function computes Jacobians - matrices of partial derivatives of
     image points coordinates (as functions of all the input parameters) with respect to the particular
@@ -2358,7 +2352,7 @@ check, quadratic interpolation and speckle filtering).
             @ByVal Mat K, @ByVal Mat D, double alpha/*=0*/, @ByVal(nullValue = "cv::noArray()") Mat jacobian/*=cv::noArray()*/);
 
     /** \brief Distorts 2D points using fisheye model.
-<p>
+    <p>
     @param undistorted Array of object points, 1xN/Nx1 2-channel (or vector\<Point2f\> ), where N is
     the number of points in the view.
     @param K Camera matrix \f$K = \vecthreethree{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{_1}\f$.
@@ -2370,7 +2364,7 @@ check, quadratic interpolation and speckle filtering).
     @Namespace("cv::fisheye") public static native void distortPoints(@ByVal Mat undistorted, @ByVal Mat distorted, @ByVal Mat K, @ByVal Mat D);
 
     /** \brief Undistorts 2D points using fisheye model
-<p>
+    <p>
     @param distorted Array of object points, 1xN/Nx1 2-channel (or vector\<Point2f\> ), where N is the
     number of points in the view.
     @param K Camera matrix \f$K = \vecthreethree{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{_1}\f$.
@@ -2387,7 +2381,7 @@ check, quadratic interpolation and speckle filtering).
 
     /** \brief Computes undistortion and rectification maps for image transform by cv::remap(). If D is empty zero
     distortion is used, if R or P is empty identity matrixes are used.
-<p>
+    <p>
     @param K Camera matrix \f$K = \vecthreethree{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{_1}\f$.
     @param D Input vector of distortion coefficients \f$(k_1, k_2, k_3, k_4)\f$.
     @param R Rectification transformation in the object space: 3x3 1-channel, or vector: 3x1/1x3
@@ -2403,7 +2397,7 @@ check, quadratic interpolation and speckle filtering).
             @Const @ByRef Size size, int m1type, @ByVal Mat map1, @ByVal Mat map2);
 
     /** \brief Transforms an image to compensate for fisheye lens distortion.
-<p>
+    <p>
     @param distorted image with fisheye lens distortion.
     @param undistorted Output image with compensated fisheye lens distortion.
     @param K Camera matrix \f$K = \vecthreethree{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{_1}\f$.
@@ -2411,23 +2405,23 @@ check, quadratic interpolation and speckle filtering).
     @param Knew Camera matrix of the distorted image. By default, it is the identity matrix but you
     may additionally scale and shift the result by using a different matrix.
     @param new_size
-<p>
+    <p>
     The function transforms an image to compensate radial and tangential lens distortion.
-<p>
+    <p>
     The function is simply a combination of fisheye::initUndistortRectifyMap (with unity R ) and remap
     (with bilinear interpolation). See the former function for details of the transformation being
     performed.
-<p>
+    <p>
     See below the results of undistortImage.
        -   a\) result of undistort of perspective camera model (all possible coefficients (k_1, k_2, k_3,
             k_4, k_5, k_6) of distortion were optimized under calibration)
         -   b\) result of fisheye::undistortImage of fisheye camera model (all possible coefficients (k_1, k_2,
             k_3, k_4) of fisheye distortion were optimized under calibration)
         -   c\) original image was captured with fisheye lens
-<p>
+    <p>
     Pictures a) and b) almost the same. But if we consider points of image located far from the center
     of image, we can notice that on image a) these points are distorted.
-<p>
+    <p>
     ![image](pics/fisheye_undistorted.jpg)
      */
     @Namespace("cv::fisheye") public static native void undistortImage(@ByVal Mat distorted, @ByVal Mat undistorted,
@@ -2436,7 +2430,7 @@ check, quadratic interpolation and speckle filtering).
             @ByVal Mat K, @ByVal Mat D);
 
     /** \brief Estimates new camera matrix for undistortion or rectification.
-<p>
+    <p>
     @param K Camera matrix \f$K = \vecthreethree{f_x}{0}{c_x}{0}{f_y}{c_y}{0}{0}{_1}\f$.
     @param image_size
     @param D Input vector of distortion coefficients \f$(k_1, k_2, k_3, k_4)\f$.
@@ -2454,7 +2448,7 @@ check, quadratic interpolation and speckle filtering).
             @ByVal Mat P);
 
     /** \brief Performs camera calibaration
-<p>
+    <p>
     @param objectPoints vector of vectors of calibration pattern points in the calibration pattern
     coordinate space.
     @param imagePoints vector of vectors of the projections of calibration pattern points.
@@ -2491,7 +2485,7 @@ check, quadratic interpolation and speckle filtering).
             @ByVal Mat K, @ByVal Mat D, @ByVal MatVector rvecs, @ByVal MatVector tvecs);
 
     /** \brief Stereo rectification for fisheye camera model
-<p>
+    <p>
     @param K1 First camera matrix.
     @param D1 First camera distortion parameters.
     @param K2 Second camera matrix.
@@ -2527,7 +2521,7 @@ check, quadratic interpolation and speckle filtering).
             @ByVal Mat R1, @ByVal Mat R2, @ByVal Mat P1, @ByVal Mat P2, @ByVal Mat Q, int flags);
 
     /** \brief Performs stereo calibration
-<p>
+    <p>
     @param objectPoints Vector of vectors of the calibration pattern points.
     @param imagePoints1 Vector of vectors of the projections of the calibration pattern points,
     observed by the first camera.

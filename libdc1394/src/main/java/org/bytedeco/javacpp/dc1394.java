@@ -50,7 +50,7 @@ public class dc1394 extends org.bytedeco.javacpp.presets.dc1394 {
 
 /** \file dc1394/dc1394.h
     \brief Main include file, which include all others.
-<p>
+    <p>
     More details soon
 */
 
@@ -99,7 +99,7 @@ public class dc1394 extends org.bytedeco.javacpp.presets.dc1394 {
 
 /** \file dc1394/types.h
     \brief Various types that must be defined here
-<p>
+    <p>
     More details soon
 */
 
@@ -322,7 +322,7 @@ public static final int
     @author Damien Douxchamps: coding
     @author Rudolf Leitgeb: coding
     @author Peter Antoniac: documentation maintainer
-<p>
+    <p>
     More details soon
 */
 
@@ -576,7 +576,7 @@ public static native void dc1394_log_debug(String format);
     \brief Basic system and camera functions
     @author Damien Douxchamps: coding
     @author Peter Antoniac: documentation maintainer
-<p>
+    <p>
     More details soon
 */
 
@@ -740,8 +740,8 @@ public static class dc1394camera_list_t extends Pointer {
 }
 
 @Opaque public static class dc1394_t extends Pointer {
-    /** Empty constructor. */
-    public dc1394_t() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public dc1394_t() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394_t(Pointer p) { super(p); }
 }
@@ -880,7 +880,7 @@ public static native @Cast("dc1394error_t") int dc1394_camera_print_info(dc1394c
     @author Damien Douxchamps: some additions
     @author Peter Antoniac: documentation maintainer
     @author Rudolf Leitgeb: documentation writer
-<p>
+    <p>
     This is the main include file of the library. It lists most of the library
     functions, enumerations and data structures.
 */
@@ -1443,7 +1443,7 @@ public static native @Cast("dc1394error_t") int dc1394_memory_load(dc1394camera_
     \brief Capture functions
     @author Damien Douxchamps: coding
     @author Peter Antoniac: documentation maintainer
-<p>
+    <p>
     More details soon
 */
 
@@ -1574,7 +1574,7 @@ public static native void dc1394_capture_set_callback(dc1394camera_t camera,
     @author Damien Douxchamps: coding
     @author Frederic Devernay: coding
     @author Peter Antoniac: documentation maintainer
-<p>
+    <p>
     More details soon
 */
 
@@ -1797,7 +1797,7 @@ public static native @Cast("dc1394error_t") int dc1394_deinterlace_stereo_frames
 
 /** \file dc1394/format7.h
     \brief Functions to control Format_7 (aka scalable format, ROI)
-<p>
+    <p>
     More details soon
 */
 
@@ -2088,7 +2088,7 @@ public static native @Cast("dc1394error_t") int dc1394_format7_get_roi(dc1394cam
     \brief Functions to manually manage the ISO resources (channels and bandwidth)
     @author Damien Douxchamps: coding
     @author Peter Antoniac: documentation maintainer
-<p>
+    <p>
     More details soon
 */
 
@@ -2261,7 +2261,7 @@ public static native @Cast("dc1394error_t") int dc1394_iso_release_all(dc1394cam
     \brief Functions to directly access camera registers.
     @author Damien Douxchamps: coding
     @author Peter Antoniac: documentation maintainer
-<p>
+    <p>
     More details soon
 */
 
@@ -2499,7 +2499,7 @@ public static native @Cast("dc1394error_t") int dc1394_set_strobe_register(dc139
 
 /** \file dc1394/video.h
     \brief Functions related to video modes, formats, framerate and video flow.
-<p>
+    <p>
     More details soon
 */
 
@@ -2808,7 +2808,7 @@ public static native @Cast("dc1394error_t") int dc1394_video_get_bandwidth_usage
     \brief Utility functions
     @author Damien Douxchamps: coding
     @author Peter Antoniac: documentation maintainer
-<p>
+    <p>
     More details soon
 */
 

@@ -373,7 +373,7 @@ It is possible to store PNG images with an alpha channel using this function. To
 should have alpha set to 0, fully opaque pixels should have alpha set to 255/65535. The sample below
 shows how to create such a BGRA image and store to PNG file. It also demonstrates how to set custom
 compression parameters :
-<pre><code>
+<pre>{@code
     #include <vector>
     #include <stdio.h>
     #include <opencv2/opencv.hpp>
@@ -416,7 +416,7 @@ compression parameters :
         fprintf(stdout, "Saved PNG file with alpha data.\n");
         return 0;
     }
-</code></pre>
+}</pre>
  */
 @Namespace("cv") public static native @Cast("bool") boolean imwrite( @Str BytePointer filename, @ByVal Mat img,
               @StdVector IntPointer params/*=std::vector<int>()*/);

@@ -8,7 +8,7 @@ import org.bytedeco.javacpp.annotation.*;
 
 import static org.bytedeco.javacpp.opencv_core.*;
 
-public class opencv_ml extends org.bytedeco.javacpp.presets.opencv_ml {
+public class opencv_ml extends org.bytedeco.javacpp.helper.opencv_ml {
     static { Loader.load(); }
 
 // Parsed from <opencv2/ml.hpp>
@@ -71,15 +71,15 @@ public class opencv_ml extends org.bytedeco.javacpp.presets.opencv_ml {
 
 /**
   \defgroup ml Machine Learning
-<p>
+  <p>
   The Machine Learning Library (MLL) is a set of classes and functions for statistical
   classification, regression, and clustering of data.
-<p>
+  <p>
   Most of the classification and regression algorithms are implemented as C++ classes. As the
   algorithms have different sets of features (like an ability to handle missing measurements or
   categorical input variables), there is a little common ground between the classes. This common
   ground is defined by the class cv::ml::StatModel that all the other ML classes are derived from.
-<p>
+  <p>
   See detailed overview here: \ref ml_intro.
  */
 
@@ -138,7 +138,7 @@ being computed by cross-validation.
     /** Maximum value of the statmodel parameter. Default value is 0. */
     public native double maxVal(); public native ParamGrid maxVal(double maxVal);
     /** \brief Logarithmic step for iterating the statmodel parameter.
-<p>
+    <p>
     The grid determines the following iteration sequence of the statmodel parameter values:
     \f[(minVal, minVal*step, minVal*{step}^2, \dots,  minVal*{logStep}^n),\f]
     where \f$n\f$ is the maximal index satisfying
@@ -159,8 +159,6 @@ of this class into StatModel::train.
  */
 @Namespace("cv::ml") public static class TrainData extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public TrainData() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TrainData(Pointer p) { super(p); }
 
@@ -180,14 +178,14 @@ of this class into StatModel::train.
     public native @ByVal Mat getMissing();
 
     /** \brief Returns matrix of train samples
-<p>
+    <p>
     @param layout The requested layout. If it's different from the initial one, the matrix is
         transposed. See ml::SampleTypes.
     @param compressSamples if true, the function returns only the training samples (specified by
         sampleIdx)
     @param compressVars if true, the function returns the shorter training samples, containing only
         the active variables.
-<p>
+    <p>
     In current implementation the function tries to avoid physical data copying and returns the
     matrix stored inside TrainData (unless the transposition or compression is needed).
      */
@@ -197,14 +195,14 @@ of this class into StatModel::train.
     public native @ByVal Mat getTrainSamples();
 
     /** \brief Returns the vector of responses
-<p>
+    <p>
     The function returns ordered or the original categorical responses. Usually it's used in
     regression algorithms.
      */
     public native @ByVal Mat getTrainResponses();
 
     /** \brief Returns the vector of normalized categorical responses
-<p>
+    <p>
     The function returns vector of responses. Each response is integer from {@code 0} to {@code <number of
     classes>-1}. The actual label value can be retrieved then from the class label vector, see
     TrainData::getClassLabels.
@@ -233,7 +231,7 @@ of this class into StatModel::train.
     public native int getCatCount(int vi);
 
     /** \brief Returns the vector of class labels
-<p>
+    <p>
     The function returns vector of unique labels occurred in the responses.
      */
     public native @ByVal Mat getClassLabels();
@@ -248,7 +246,7 @@ of this class into StatModel::train.
     public native void setTrainTestSplit(int count);
 
     /** \brief Splits the training data into the training and test parts
-<p>
+    <p>
     The function selects a subset of specified relative size and then returns it as the training
     set. If the function is not called, all the data is used for training. Please, note that for
     each of TrainData::getTrain\* there is corresponding TrainData::getTest\*, so that the test
@@ -262,7 +260,7 @@ of this class into StatModel::train.
     public static native @ByVal Mat getSubVector(@Const @ByRef Mat vec, @Const @ByRef Mat idx);
 
     /** \brief Reads the dataset from a .csv file and returns the ready-to-use training data.
-<p>
+    <p>
     @param filename The input file name
     @param headerLineCount The number of lines in the beginning to skip; besides the header, the
         function also skips empty lines and lines staring with {@code #}
@@ -308,7 +306,7 @@ of this class into StatModel::train.
                                           int headerLineCount);
 
     /** \brief Creates training data from in-memory arrays.
-<p>
+    <p>
     @param samples matrix of samples. It should have CV_32F type.
     @param layout see ml::SampleTypes.
     @param responses matrix of responses. If the responses are scalar, they should be stored as a
@@ -334,10 +332,8 @@ of this class into StatModel::train.
 
 /** \brief Base class for statistical models in OpenCV ML.
  */
-@Namespace("cv::ml") public static class StatModel extends Algorithm {
+@Namespace("cv::ml") public static class StatModel extends AbstractStatModel {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public StatModel() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StatModel(Pointer p) { super(p); }
 
@@ -361,7 +357,7 @@ of this class into StatModel::train.
     public native @Cast("bool") boolean isClassifier();
 
     /** \brief Trains the statistical model
-<p>
+    <p>
     @param trainData training data that can be loaded from file using TrainData::loadFromCSV or
         created with TrainData::create.
     @param flags optional flags, depending on the model. Some of the models can be updated with the
@@ -371,7 +367,7 @@ of this class into StatModel::train.
     public native @Cast("bool") boolean train( @Ptr TrainData trainData );
 
     /** \brief Trains the statistical model
-<p>
+    <p>
     @param samples training samples
     @param layout See ml::SampleTypes.
     @param responses vector of responses associated with the training samples.
@@ -379,7 +375,7 @@ of this class into StatModel::train.
     public native @Cast("bool") boolean train( @ByVal Mat samples, int layout, @ByVal Mat responses );
 
     /** \brief Computes error on the training or test dataset
-<p>
+    <p>
     @param data the training data
     @param test if true, the error is computed over the test subset of the data, otherwise it's
         computed over the training subset of the data. Please note that if you loaded a completely
@@ -387,14 +383,14 @@ of this class into StatModel::train.
         the test subset at all with TrainData::setTrainTestSplitRatio and specify test=false, so
         that the error is computed for the whole new set. Yes, this sounds a bit confusing.
     @param resp the optional output responses.
-<p>
+    <p>
     The method uses StatModel::predict to compute the error. For regression models the error is
     computed as RMS, for classifiers - as a percent of missclassified samples (0%-100%).
      */
     public native float calcError( @Ptr TrainData data, @Cast("bool") boolean test, @ByVal Mat resp );
 
     /** \brief Predicts response(s) for the provided sample(s)
-<p>
+    <p>
     @param samples The input samples, floating-point matrix
     @param results The optional output matrix of results.
     @param flags The optional flags, model-dependent. See cv::ml::StatModel::Flags.
@@ -403,7 +399,7 @@ of this class into StatModel::train.
     public native float predict( @ByVal Mat samples );
 
     /** \brief Create and train model with default parameters
-<p>
+    <p>
     The class must implement static {@code create()} method with no parameters or with all default parameter values
     */
 }
@@ -418,13 +414,11 @@ of this class into StatModel::train.
  */
 @Namespace("cv::ml") public static class NormalBayesClassifier extends StatModel {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public NormalBayesClassifier() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NormalBayesClassifier(Pointer p) { super(p); }
 
     /** \brief Predicts the response for sample(s).
-<p>
+    <p>
     The method estimates the most probable classes for input vectors. Input vectors (one or more)
     are stored as rows of the matrix inputs. In case of multiple input vectors, there should be one
     output vector outputs. The predicted class for a single input vector is returned by the method.
@@ -451,8 +445,6 @@ of this class into StatModel::train.
  */
 @Namespace("cv::ml") public static class KNearest extends StatModel {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public KNearest() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KNearest(Pointer p) { super(p); }
 
@@ -482,7 +474,7 @@ of this class into StatModel::train.
     public native void setAlgorithmType(int val);
 
     /** \brief Finds the neighbors and predicts responses for input vectors.
-<p>
+    <p>
     @param samples Input samples stored by rows. It is a single-precision floating-point matrix of
         {@code <number_of_samples> * k} size.
     @param k Number of used nearest neighbors. Should be greater than 1.
@@ -492,19 +484,19 @@ of this class into StatModel::train.
         precision floating-point matrix of {@code <number_of_samples> * k} size.
     @param dist Optional output distances from the input vectors to the corresponding neighbors. It
         is a single-precision floating-point matrix of {@code <number_of_samples> * k} size.
-<p>
+    <p>
     For each input vector (a row of the matrix samples), the method finds the k nearest neighbors.
     In case of regression, the predicted result is a mean value of the particular vector's neighbor
     responses. In case of classification, the class is determined by voting.
-<p>
+    <p>
     For each input vector, the neighbors are sorted by their distances to the vector.
-<p>
+    <p>
     In case of C++ interface you can use output pointers to empty matrices and the function will
     allocate memory itself.
-<p>
+    <p>
     If only a single input vector is passed, all output matrices are optional and the predicted
     value is returned by the method.
-<p>
+    <p>
     The function is parallelized with the TBB library.
      */
     public native float findNearest( @ByVal Mat samples, int k,
@@ -522,7 +514,7 @@ of this class into StatModel::train.
         KDTREE= 2;
 
     /** \brief Creates the empty model
-<p>
+    <p>
     The static method creates empty %KNearest classifier. It should be then trained using StatModel::train method.
      */
     public static native @Ptr KNearest create();
@@ -538,16 +530,12 @@ of this class into StatModel::train.
  */
 @Namespace("cv::ml") public static class SVM extends StatModel {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public SVM() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SVM(Pointer p) { super(p); }
 
 
     public static class Kernel extends Algorithm {
         static { Loader.load(); }
-        /** Empty constructor. */
-        public Kernel() { }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Kernel(Pointer p) { super(p); }
     
@@ -660,7 +648,7 @@ of this class into StatModel::train.
         NU_SVR= 104;
 
     /** \brief %SVM kernel type
-<p>
+    <p>
     A comparison of different kernels on the following 2D test case with four classes. Four
     SVM::C_SVC SVMs have been trained (one against rest) with auto_train. Evaluation on three
     different kernels (SVM::CHI2, SVM::INTER, SVM::RBF). The color depicts the class with max score.
@@ -699,7 +687,7 @@ of this class into StatModel::train.
         DEGREE= 5;
 
     /** \brief Trains an %SVM with optimal parameters.
-<p>
+    <p>
     @param data the training data that can be constructed using TrainData::create or
         TrainData::loadFromCSV.
     @param kFold Cross-validation parameter. The training set is divided into kFold subsets. One
@@ -714,20 +702,20 @@ of this class into StatModel::train.
     @param balanced If true and the problem is 2-class classification then the method creates more
         balanced cross-validation subsets that is proportions between classes in subsets are close
         to such proportion in the whole train dataset.
-<p>
+    <p>
     The method trains the %SVM model automatically by choosing the optimal parameters C, gamma, p,
     nu, coef0, degree. Parameters are considered optimal when the cross-validation
     estimate of the test set error is minimal.
-<p>
+    <p>
     If there is no need to optimize a parameter, the corresponding grid step should be set to any
     value less than or equal to 1. For example, to avoid optimization in gamma, set {@code gammaGrid.step
     = 0}, {@code gammaGrid.minVal}, {@code gamma_grid.maxVal} as arbitrary numbers. In this case, the value
     {@code Gamma} is taken for gamma.
-<p>
+    <p>
     And, finally, if the optimization in a parameter is required but the corresponding grid is
     unknown, you may call the function SVM::getDefaultGrid. To generate a grid, for example, for
     gamma, call {@code SVM::getDefaultGrid(SVM::GAMMA)}.
-<p>
+    <p>
     This function works for the classification (SVM::C_SVC or SVM::NU_SVC) as well as for the
     regression (SVM::EPS_SVR or SVM::NU_SVR). If it is SVM::ONE_CLASS, no optimization is made and
     the usual %SVM with parameters specified in params is executed.
@@ -743,14 +731,14 @@ of this class into StatModel::train.
     public native @Cast("bool") boolean trainAuto( @Ptr TrainData data);
 
     /** \brief Retrieves all the support vectors
-<p>
+    <p>
     The method returns all the support vector as floating-point matrix, where support vectors are
     stored as matrix rows.
      */
     public native @ByVal Mat getSupportVectors();
 
     /** \brief Retrieves the decision function
-<p>
+    <p>
     @param i the index of the decision function. If the problem solved is regression, 1-class or
         2-class classification, then there will be just one decision function and the index should
         always be 0. Otherwise, in the case of N-class classification, there will be \f$N(N-1)/2\f$
@@ -760,17 +748,17 @@ of this class into StatModel::train.
     @param svidx the optional output vector of indices of support vectors within the matrix of
         support vectors (which can be retrieved by SVM::getSupportVectors). In the case of linear
         %SVM each decision function consists of a single "compressed" support vector.
-<p>
+    <p>
     The method returns rho parameter of the decision function, a scalar subtracted from the weighted
     sum of kernel responses.
      */
     public native double getDecisionFunction(int i, @ByVal Mat alpha, @ByVal Mat svidx);
 
     /** \brief Generates a grid for %SVM parameters.
-<p>
+    <p>
     @param param_id %SVM parameters IDs that must be one of the SVM::ParamTypes. The grid is
     generated for the parameter with this ID.
-<p>
+    <p>
     The function generates a grid for the specified parameter of the %SVM algorithm. The grid may be
     passed to the function SVM::trainAuto.
      */
@@ -792,8 +780,6 @@ of this class into StatModel::train.
  */
 @Namespace("cv::ml") public static class EM extends StatModel {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public EM() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EM(Pointer p) { super(p); }
 
@@ -852,18 +838,18 @@ of this class into StatModel::train.
     public native void setTermCriteria(@Const @ByRef TermCriteria val);
 
     /** \brief Returns weights of the mixtures
-<p>
+    <p>
     Returns vector with the number of elements equal to the number of mixtures.
      */
     public native @ByVal Mat getWeights();
     /** \brief Returns the cluster centers (means of the Gaussian mixture)
-<p>
+    <p>
     Returns matrix with the number of rows equal to the number of mixtures and number of columns
     equal to the space dimensionality.
      */
     public native @ByVal Mat getMeans();
     /** \brief Returns covariation matrices
-<p>
+    <p>
     Returns vector of covariation matrices. Number of matrices is the number of gaussian mixtures,
     each matrix is a square floating-point matrix NxN, where N is the space dimensionality.
      */
@@ -871,12 +857,12 @@ of this class into StatModel::train.
 
     /** \brief Returns a likelihood logarithm value and an index of the most probable mixture component
     for the given sample.
-<p>
+    <p>
     @param sample A sample for classification. It should be a one-channel matrix of
         \f$1 \times dims\f$ or \f$dims \times 1\f$ size.
     @param probs Optional output matrix that contains posterior probabilities of each component
         given the sample. It has \f$1 \times nclusters\f$ size and CV_64FC1 type.
-<p>
+    <p>
     The method returns a two-element double vector. Zero element is a likelihood logarithm value for
     the sample. First element is an index of the most probable mixture component for the given
     sample.
@@ -884,10 +870,10 @@ of this class into StatModel::train.
     public native @ByVal Point2d predict2(@ByVal Mat sample, @ByVal Mat probs);
 
     /** \brief Estimate the Gaussian mixture parameters from a samples set.
-<p>
+    <p>
     This variation starts with Expectation step. Initial values of the model parameters will be
     estimated by the k-means algorithm.
-<p>
+    <p>
     Unlike many of the ML models, %EM is an unsupervised learning algorithm and it does not take
     responses (class labels or function values) as input. Instead, it computes the *Maximum
     Likelihood Estimate* of the Gaussian mixture parameters from an input sample set, stores all the
@@ -895,10 +881,10 @@ of this class into StatModel::train.
     covs[k], \f$\pi_k\f$ in weights , and optionally computes the output "class label" for each
     sample: \f$\texttt{labels}_i=\texttt{arg max}_k(p_{i,k}), i=1..N\f$ (indices of the most
     probable mixture component for each sample).
-<p>
+    <p>
     The trained model can be used further for prediction, just like any other classifier. The
     trained model is similar to the NormalBayesClassifier.
-<p>
+    <p>
     @param samples Samples from which the Gaussian mixture model will be estimated. It should be a
         one-channel matrix, each row of which is a sample. If the matrix does not have CV_64F type
         it will be converted to the inner matrix of such type for the further computing.
@@ -918,11 +904,11 @@ of this class into StatModel::train.
     public native @Cast("bool") boolean trainEM(@ByVal Mat samples);
 
     /** \brief Estimate the Gaussian mixture parameters from a samples set.
-<p>
+    <p>
     This variation starts with Expectation step. You need to provide initial means \f$a_k\f$ of
     mixture components. Optionally you can pass initial weights \f$\pi_k\f$ and covariance matrices
     \f$S_k\f$ of mixture components.
-<p>
+    <p>
     @param samples Samples from which the Gaussian mixture model will be estimated. It should be a
         one-channel matrix, each row of which is a sample. If the matrix does not have CV_64F type
         it will be converted to the inner matrix of such type for the further computing.
@@ -953,10 +939,10 @@ of this class into StatModel::train.
     public native @Cast("bool") boolean trainE(@ByVal Mat samples, @ByVal Mat means0);
 
     /** \brief Estimate the Gaussian mixture parameters from a samples set.
-<p>
+    <p>
     This variation starts with Maximization step. You need to provide initial probabilities
     \f$p_{i,k}\f$ to use this option.
-<p>
+    <p>
     @param samples Samples from which the Gaussian mixture model will be estimated. It should be a
         one-channel matrix, each row of which is a sample. If the matrix does not have CV_64F type
         it will be converted to the inner matrix of such type for the further computing.
@@ -998,8 +984,6 @@ use this capability to implement decision tree ensembles.
 */
 @Namespace("cv::ml") public static class DTrees extends StatModel {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DTrees() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DTrees(Pointer p) { super(p); }
 
@@ -1034,7 +1018,7 @@ use this capability to implement decision tree ensembles.
     public native void setMaxDepth(int val);
 
     /** If the number of samples in a node is less than this parameter then the node will not be split.
-<p>
+    <p>
     Default value is 10.*/
     /** @see setMinSampleCount */
     public native int getMinSampleCount();
@@ -1084,7 +1068,7 @@ use this capability to implement decision tree ensembles.
     public native void setRegressionAccuracy(float val);
 
     /** \brief The array of a priori class probabilities, sorted by the class label value.
-<p>
+    <p>
     The parameter can be used to tune the decision tree preferences toward a certain class. For
     example, if you want to detect some rare anomaly occurrence, the training base will likely
     contain much more normal cases than anomalies, so a very good classification performance
@@ -1092,7 +1076,7 @@ use this capability to implement decision tree ensembles.
     specified, where the anomaly probability is artificially increased (up to 0.5 or even
     greater), so the weight of the misclassified anomalies becomes much bigger, and the tree is
     adjusted properly.
-<p>
+    <p>
     You can also think about this parameter as weights of prediction categories which determine
     relative weights that you give to misclassification. That is, if the weight of the first
     category is 1 and the weight of the second category is 10, then each mistake in predicting
@@ -1163,19 +1147,19 @@ use this capability to implement decision tree ensembles.
         public native int next(); public native Split next(int next);
         /** The threshold value in case of split on an ordered variable.
                               The rule is:
-                              <pre><code>{.none}
+                              <pre>{@code {.none}
                               if var_value < c
                                 then next_node <- left
                                 else next_node <- right
-                              </code></pre> */
+                              }</pre> */
         public native float c(); public native Split c(float c);
         /** Offset of the bitset used by the split on a categorical variable.
                                     The rule is:
-                                    <pre><code>{.none}
+                                    <pre>{@code {.none}
                                     if bitset[var_value] == 1
                                         then next_node <- left
                                         else next_node <- right
-                                    </code></pre> */
+                                    }</pre> */
         public native int subsetOfs(); public native Split subsetOfs(int subsetOfs);
     }
 
@@ -1183,23 +1167,23 @@ use this capability to implement decision tree ensembles.
     */
     public native @StdVector IntPointer getRoots();
     /** \brief Returns all the nodes
-<p>
+    <p>
     all the node indices are indices in the returned vector
      */
     public native @StdVector Node getNodes();
     /** \brief Returns all the splits
-<p>
+    <p>
     all the split indices are indices in the returned vector
      */
     public native @StdVector Split getSplits();
     /** \brief Returns all the bitsets for categorical splits
-<p>
+    <p>
     Split::subsetOfs is an offset in the returned vector
      */
     public native @StdVector IntPointer getSubsets();
 
     /** \brief Creates the empty model
-<p>
+    <p>
     The static method creates empty decision tree with the specified parameters. It should be then
     trained using train method (see StatModel::train). Alternatively, you can load the model from
     file using Algorithm::load\<DTrees\>(filename).
@@ -1217,8 +1201,6 @@ use this capability to implement decision tree ensembles.
  */
 @Namespace("cv::ml") public static class RTrees extends DTrees {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public RTrees() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RTrees(Pointer p) { super(p); }
 
@@ -1275,8 +1257,6 @@ use this capability to implement decision tree ensembles.
  */
 @Namespace("cv::ml") public static class Boost extends DTrees {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public Boost() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Boost(Pointer p) { super(p); }
 
@@ -1371,8 +1351,6 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
  */
 @Namespace("cv::ml") public static class ANN_MLP extends StatModel {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public ANN_MLP() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ANN_MLP(Pointer p) { super(p); }
 
@@ -1510,7 +1488,7 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
     public native @ByVal Mat getWeights(int layerIdx);
 
     /** \brief Creates empty model
-<p>
+    <p>
     Use StatModel::train to train the model, Algorithm::load\<ANN_MLP\>(filename) to load the pre-trained model.
     Note that the train method has optional flags: ANN_MLP::TrainFlags.
      */
@@ -1527,8 +1505,6 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
  */
 @Namespace("cv::ml") public static class LogisticRegression extends StatModel {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public LogisticRegression() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LogisticRegression(Pointer p) { super(p); }
 
@@ -1589,7 +1565,7 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
         MINI_BATCH = 1;
 
     /** \brief Predicts responses for input samples and returns a float type.
-<p>
+    <p>
     @param samples The input data for the prediction algorithm. Matrix [m x n], where each row
         contains variables (features) of one object being classified. Should have data type CV_32F.
     @param results Predicted labels as a column matrix of type CV_32S.
@@ -1599,14 +1575,14 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
     public native float predict( @ByVal Mat samples );
 
     /** \brief This function returns the trained paramters arranged across rows.
-<p>
+    <p>
     For a two class classifcation problem, it returns a row matrix. It returns learnt paramters of
     the Logistic Regression as a matrix of type CV_32F.
      */
     public native @ByVal Mat get_learnt_thetas();
 
     /** \brief Creates empty model.
-<p>
+    <p>
     Creates Logistic Regression model with parameters given.
      */
     public static native @Ptr LogisticRegression create();

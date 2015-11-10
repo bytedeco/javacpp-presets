@@ -83,7 +83,7 @@ Functions reading and writing .flo files in "Middlebury" format, see: <http://vi
 <p>
 - cv::optflow::readOpticalFlow
 - cv::optflow::writeOpticalFlow
-<p>
+ <p>
  */
     
 /** \addtogroup optflow

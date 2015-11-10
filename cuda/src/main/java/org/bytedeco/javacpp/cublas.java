@@ -149,8 +149,8 @@ public static final int
 
 /* Opaque structure holding CUBLAS library context */
 @Opaque public static class cublasContext extends Pointer {
-    /** Empty constructor. */
-    public cublasContext() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cublasContext() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cublasContext(Pointer p) { super(p); }
 }
@@ -6307,8 +6307,8 @@ public static native void cublasZtrmm(@Cast("char") byte side, @Cast("char") byt
 // #endif /* __cplusplus */
 
 @Opaque public static class cublasXtContext extends Pointer {
-    /** Empty constructor. */
-    public cublasXtContext() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cublasXtContext() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cublasXtContext(Pointer p) { super(p); }
 }

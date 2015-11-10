@@ -142,71 +142,71 @@ public static final int CUDA_VERSION = 7050;
 /** CUDA device */
 /** CUDA context */
 @Opaque public static class CUctx_st extends Pointer {
-    /** Empty constructor. */
-    public CUctx_st() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CUctx_st() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUctx_st(Pointer p) { super(p); }
 }
 /** CUDA module */
 @Opaque public static class CUmod_st extends Pointer {
-    /** Empty constructor. */
-    public CUmod_st() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CUmod_st() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUmod_st(Pointer p) { super(p); }
 }
 /** CUDA function */
 @Opaque public static class CUfunc_st extends Pointer {
-    /** Empty constructor. */
-    public CUfunc_st() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CUfunc_st() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUfunc_st(Pointer p) { super(p); }
 }
 /** CUDA array */
 @Opaque public static class CUarray_st extends Pointer {
-    /** Empty constructor. */
-    public CUarray_st() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CUarray_st() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUarray_st(Pointer p) { super(p); }
 }
 /** CUDA mipmapped array */
 @Opaque public static class CUmipmappedArray_st extends Pointer {
-    /** Empty constructor. */
-    public CUmipmappedArray_st() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CUmipmappedArray_st() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUmipmappedArray_st(Pointer p) { super(p); }
 }
 /** CUDA texture reference */
 @Opaque public static class CUtexref_st extends Pointer {
-    /** Empty constructor. */
-    public CUtexref_st() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CUtexref_st() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUtexref_st(Pointer p) { super(p); }
 }
 /** CUDA surface reference */
 @Opaque public static class CUsurfref_st extends Pointer {
-    /** Empty constructor. */
-    public CUsurfref_st() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CUsurfref_st() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUsurfref_st(Pointer p) { super(p); }
 }
 /** CUDA event */
 @Opaque public static class CUevent_st extends Pointer {
-    /** Empty constructor. */
-    public CUevent_st() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CUevent_st() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUevent_st(Pointer p) { super(p); }
 }
 /** CUDA stream */
 @Opaque public static class CUstream_st extends Pointer {
-    /** Empty constructor. */
-    public CUstream_st() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CUstream_st() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUstream_st(Pointer p) { super(p); }
 }
 /** CUDA graphics interop resource */
 @Opaque public static class CUgraphicsResource_st extends Pointer {
-    /** Empty constructor. */
-    public CUgraphicsResource_st() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CUgraphicsResource_st() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUgraphicsResource_st(Pointer p) { super(p); }
 }
@@ -1022,8 +1022,8 @@ public static final int
 
 // #if __CUDA_API_VERSION >= 5050
 @Opaque public static class CUlinkState_st extends Pointer {
-    /** Empty constructor. */
-    public CUlinkState_st() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CUlinkState_st() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUlinkState_st(Pointer p) { super(p); }
 }
@@ -2631,7 +2631,7 @@ public static native @Cast("CUresult") int cuDeviceGetAttribute(int[] pi, @Cast(
  * Returns in \p *prop the properties of device \p dev. The ::CUdevprop
  * structure is defined as:
  *
- * <pre><code>
+ * <pre>{@code
      typedef struct CUdevprop_st {
      int maxThreadsPerBlock;
      int maxThreadsDim[3];
@@ -2644,7 +2644,7 @@ public static native @Cast("CUresult") int cuDeviceGetAttribute(int[] pi, @Cast(
      int clockRate;
      int textureAlign
   } CUdevprop;
- * </code></pre>
+ * }</pre>
  * where:
  *
  * - ::maxThreadsPerBlock is the maximum number of threads per block;
@@ -4423,9 +4423,9 @@ public static native @Cast("CUresult") int cuMemAlloc(@Cast("CUdeviceptr*") long
  * allocation. The intended usage of pitch is as a separate parameter of the
  * allocation, used to compute addresses within the 2D array. Given the row
  * and column of an array element of type \b T, the address is computed as:
- * <pre><code>
+ * <pre>{@code
    T* pElement = (T*)((char*)BaseAddress + Row * Pitch) + Column;
- * </code></pre>
+ * }</pre>
  *
  * The pitch returned by ::cuMemAllocPitch() is guaranteed to work with
  * ::cuMemcpy2D() under all circumstances. For allocations of 2D arrays, it is
@@ -5554,7 +5554,7 @@ public static native @Cast("CUresult") int cuMemcpyAtoA(CUarray_st dstArray, @Ca
  * Perform a 2D memory copy according to the parameters specified in \p pCopy.
  * The ::CUDA_MEMCPY2D structure is defined as:
  *
- * <pre><code>
+ * <pre>{@code
    typedef struct CUDA_MEMCPY2D_st {
       unsigned int srcXInBytes, srcY;
       CUmemorytype srcMemoryType;
@@ -5573,19 +5573,19 @@ public static native @Cast("CUresult") int cuMemcpyAtoA(CUarray_st dstArray, @Ca
       unsigned int WidthInBytes;
       unsigned int Height;
    } CUDA_MEMCPY2D;
- * </code></pre>
+ * }</pre>
  * where:
  * - ::srcMemoryType and ::dstMemoryType specify the type of memory of the
  *   source and destination, respectively; ::CUmemorytype_enum is defined as:
  *
- * <pre><code>
+ * <pre>{@code
    typedef enum CUmemorytype_enum {
       CU_MEMORYTYPE_HOST = 0x01,
       CU_MEMORYTYPE_DEVICE = 0x02,
       CU_MEMORYTYPE_ARRAY = 0x03,
       CU_MEMORYTYPE_UNIFIED = 0x04
    } CUmemorytype;
- * </code></pre>
+ * }</pre>
  *
  * \par
  * If ::srcMemoryType is ::CU_MEMORYTYPE_UNIFIED, ::srcDevice and ::srcPitch
@@ -5636,15 +5636,15 @@ public static native @Cast("CUresult") int cuMemcpyAtoA(CUarray_st dstArray, @Ca
  *
  * \par
  * For host pointers, the starting address is
- * <pre><code>
+ * <pre>{@code
   void* Start = (void*)((char*)srcHost+srcY*srcPitch + srcXInBytes);
- * </code></pre>
+ * }</pre>
  *
  * \par
  * For device pointers, the starting address is
- * <pre><code>
+ * <pre>{@code
   CUdeviceptr Start = srcDevice+srcY*srcPitch+srcXInBytes;
- * </code></pre>
+ * }</pre>
  *
  * \par
  * For CUDA arrays, ::srcXInBytes must be evenly divisible by the array
@@ -5655,15 +5655,15 @@ public static native @Cast("CUresult") int cuMemcpyAtoA(CUarray_st dstArray, @Ca
  *
  * \par
  * For host pointers, the base address is
- * <pre><code>
+ * <pre>{@code
   void* dstStart = (void*)((char*)dstHost+dstY*dstPitch + dstXInBytes);
- * </code></pre>
+ * }</pre>
  *
  * \par
  * For device pointers, the starting address is
- * <pre><code>
+ * <pre>{@code
   CUdeviceptr dstStart = dstDevice+dstY*dstPitch+dstXInBytes;
- * </code></pre>
+ * }</pre>
  *
  * \par
  * For CUDA arrays, ::dstXInBytes must be evenly divisible by the array
@@ -5715,7 +5715,7 @@ public static native @Cast("CUresult") int cuMemcpy2D(@Const CUDA_MEMCPY2D pCopy
  * Perform a 2D memory copy according to the parameters specified in \p pCopy.
  * The ::CUDA_MEMCPY2D structure is defined as:
  *
- * <pre><code>
+ * <pre>{@code
    typedef struct CUDA_MEMCPY2D_st {
       unsigned int srcXInBytes, srcY;
       CUmemorytype srcMemoryType;
@@ -5732,19 +5732,19 @@ public static native @Cast("CUresult") int cuMemcpy2D(@Const CUDA_MEMCPY2D pCopy
       unsigned int WidthInBytes;
       unsigned int Height;
    } CUDA_MEMCPY2D;
- * </code></pre>
+ * }</pre>
  * where:
  * - ::srcMemoryType and ::dstMemoryType specify the type of memory of the
  *   source and destination, respectively; ::CUmemorytype_enum is defined as:
  *
- * <pre><code>
+ * <pre>{@code
    typedef enum CUmemorytype_enum {
       CU_MEMORYTYPE_HOST = 0x01,
       CU_MEMORYTYPE_DEVICE = 0x02,
       CU_MEMORYTYPE_ARRAY = 0x03,
       CU_MEMORYTYPE_UNIFIED = 0x04
    } CUmemorytype;
- * </code></pre>
+ * }</pre>
  *
  * \par
  * If ::srcMemoryType is ::CU_MEMORYTYPE_UNIFIED, ::srcDevice and ::srcPitch
@@ -5795,15 +5795,15 @@ public static native @Cast("CUresult") int cuMemcpy2D(@Const CUDA_MEMCPY2D pCopy
  *
  * \par
  * For host pointers, the starting address is
- * <pre><code>
+ * <pre>{@code
   void* Start = (void*)((char*)srcHost+srcY*srcPitch + srcXInBytes);
- * </code></pre>
+ * }</pre>
  *
  * \par
  * For device pointers, the starting address is
- * <pre><code>
+ * <pre>{@code
   CUdeviceptr Start = srcDevice+srcY*srcPitch+srcXInBytes;
- * </code></pre>
+ * }</pre>
  *
  * \par
  * For CUDA arrays, ::srcXInBytes must be evenly divisible by the array
@@ -5814,15 +5814,15 @@ public static native @Cast("CUresult") int cuMemcpy2D(@Const CUDA_MEMCPY2D pCopy
  *
  * \par
  * For host pointers, the base address is
- * <pre><code>
+ * <pre>{@code
   void* dstStart = (void*)((char*)dstHost+dstY*dstPitch + dstXInBytes);
- * </code></pre>
+ * }</pre>
  *
  * \par
  * For device pointers, the starting address is
- * <pre><code>
+ * <pre>{@code
   CUdeviceptr dstStart = dstDevice+dstY*dstPitch+dstXInBytes;
- * </code></pre>
+ * }</pre>
  *
  * \par
  * For CUDA arrays, ::dstXInBytes must be evenly divisible by the array
@@ -5874,7 +5874,7 @@ public static native @Cast("CUresult") int cuMemcpy2DUnaligned(@Const CUDA_MEMCP
  * Perform a 3D memory copy according to the parameters specified in
  * \p pCopy. The ::CUDA_MEMCPY3D structure is defined as:
  *
- * <pre><code>
+ * <pre>{@code
         typedef struct CUDA_MEMCPY3D_st {
 
             unsigned int srcXInBytes, srcY, srcZ;
@@ -5899,19 +5899,19 @@ public static native @Cast("CUresult") int cuMemcpy2DUnaligned(@Const CUDA_MEMCP
             unsigned int Height;
             unsigned int Depth;
         } CUDA_MEMCPY3D;
- * </code></pre>
+ * }</pre>
  * where:
  * - ::srcMemoryType and ::dstMemoryType specify the type of memory of the
  *   source and destination, respectively; ::CUmemorytype_enum is defined as:
  *
- * <pre><code>
+ * <pre>{@code
    typedef enum CUmemorytype_enum {
       CU_MEMORYTYPE_HOST = 0x01,
       CU_MEMORYTYPE_DEVICE = 0x02,
       CU_MEMORYTYPE_ARRAY = 0x03,
       CU_MEMORYTYPE_UNIFIED = 0x04
    } CUmemorytype;
- * </code></pre>
+ * }</pre>
  *
  * \par
  * If ::srcMemoryType is ::CU_MEMORYTYPE_UNIFIED, ::srcDevice and ::srcPitch
@@ -5964,15 +5964,15 @@ public static native @Cast("CUresult") int cuMemcpy2DUnaligned(@Const CUDA_MEMCP
  *
  * \par
  * For host pointers, the starting address is
- * <pre><code>
+ * <pre>{@code
   void* Start = (void*)((char*)srcHost+(srcZ*srcHeight+srcY)*srcPitch + srcXInBytes);
- * </code></pre>
+ * }</pre>
  *
  * \par
  * For device pointers, the starting address is
- * <pre><code>
+ * <pre>{@code
   CUdeviceptr Start = srcDevice+(srcZ*srcHeight+srcY)*srcPitch+srcXInBytes;
- * </code></pre>
+ * }</pre>
  *
  * \par
  * For CUDA arrays, ::srcXInBytes must be evenly divisible by the array
@@ -5983,15 +5983,15 @@ public static native @Cast("CUresult") int cuMemcpy2DUnaligned(@Const CUDA_MEMCP
  *
  * \par
  * For host pointers, the base address is
- * <pre><code>
+ * <pre>{@code
   void* dstStart = (void*)((char*)dstHost+(dstZ*dstHeight+dstY)*dstPitch + dstXInBytes);
- * </code></pre>
+ * }</pre>
  *
  * \par
  * For device pointers, the starting address is
- * <pre><code>
+ * <pre>{@code
   CUdeviceptr dstStart = dstDevice+(dstZ*dstHeight+dstY)*dstPitch+dstXInBytes;
- * </code></pre>
+ * }</pre>
  *
  * \par
  * For CUDA arrays, ::dstXInBytes must be evenly divisible by the array
@@ -6329,7 +6329,7 @@ public static native @Cast("CUresult") int cuMemcpyAtoHAsync(Pointer dstHost, CU
  * Perform a 2D memory copy according to the parameters specified in \p pCopy.
  * The ::CUDA_MEMCPY2D structure is defined as:
  *
- * <pre><code>
+ * <pre>{@code
    typedef struct CUDA_MEMCPY2D_st {
       unsigned int srcXInBytes, srcY;
       CUmemorytype srcMemoryType;
@@ -6346,19 +6346,19 @@ public static native @Cast("CUresult") int cuMemcpyAtoHAsync(Pointer dstHost, CU
       unsigned int WidthInBytes;
       unsigned int Height;
    } CUDA_MEMCPY2D;
- * </code></pre>
+ * }</pre>
  * where:
  * - ::srcMemoryType and ::dstMemoryType specify the type of memory of the
  *   source and destination, respectively; ::CUmemorytype_enum is defined as:
  *
- * <pre><code>
+ * <pre>{@code
    typedef enum CUmemorytype_enum {
       CU_MEMORYTYPE_HOST = 0x01,
       CU_MEMORYTYPE_DEVICE = 0x02,
       CU_MEMORYTYPE_ARRAY = 0x03,
       CU_MEMORYTYPE_UNIFIED = 0x04
    } CUmemorytype;
- * </code></pre>
+ * }</pre>
  *
  * \par
  * If ::srcMemoryType is ::CU_MEMORYTYPE_HOST, ::srcHost and ::srcPitch
@@ -6409,15 +6409,15 @@ public static native @Cast("CUresult") int cuMemcpyAtoHAsync(Pointer dstHost, CU
  *
  * \par
  * For host pointers, the starting address is
- * <pre><code>
+ * <pre>{@code
   void* Start = (void*)((char*)srcHost+srcY*srcPitch + srcXInBytes);
- * </code></pre>
+ * }</pre>
  *
  * \par
  * For device pointers, the starting address is
- * <pre><code>
+ * <pre>{@code
   CUdeviceptr Start = srcDevice+srcY*srcPitch+srcXInBytes;
- * </code></pre>
+ * }</pre>
  *
  * \par
  * For CUDA arrays, ::srcXInBytes must be evenly divisible by the array
@@ -6428,15 +6428,15 @@ public static native @Cast("CUresult") int cuMemcpyAtoHAsync(Pointer dstHost, CU
  *
  * \par
  * For host pointers, the base address is
- * <pre><code>
+ * <pre>{@code
   void* dstStart = (void*)((char*)dstHost+dstY*dstPitch + dstXInBytes);
- * </code></pre>
+ * }</pre>
  *
  * \par
  * For device pointers, the starting address is
- * <pre><code>
+ * <pre>{@code
   CUdeviceptr dstStart = dstDevice+dstY*dstPitch+dstXInBytes;
- * </code></pre>
+ * }</pre>
  *
  * \par
  * For CUDA arrays, ::dstXInBytes must be evenly divisible by the array
@@ -6494,7 +6494,7 @@ public static native @Cast("CUresult") int cuMemcpy2DAsync(@Const CUDA_MEMCPY2D 
  * Perform a 3D memory copy according to the parameters specified in
  * \p pCopy. The ::CUDA_MEMCPY3D structure is defined as:
  *
- * <pre><code>
+ * <pre>{@code
         typedef struct CUDA_MEMCPY3D_st {
 
             unsigned int srcXInBytes, srcY, srcZ;
@@ -6519,19 +6519,19 @@ public static native @Cast("CUresult") int cuMemcpy2DAsync(@Const CUDA_MEMCPY2D 
             unsigned int Height;
             unsigned int Depth;
         } CUDA_MEMCPY3D;
- * </code></pre>
+ * }</pre>
  * where:
  * - ::srcMemoryType and ::dstMemoryType specify the type of memory of the
  *   source and destination, respectively; ::CUmemorytype_enum is defined as:
  *
- * <pre><code>
+ * <pre>{@code
    typedef enum CUmemorytype_enum {
       CU_MEMORYTYPE_HOST = 0x01,
       CU_MEMORYTYPE_DEVICE = 0x02,
       CU_MEMORYTYPE_ARRAY = 0x03,
       CU_MEMORYTYPE_UNIFIED = 0x04
    } CUmemorytype;
- * </code></pre>
+ * }</pre>
  *
  * \par
  * If ::srcMemoryType is ::CU_MEMORYTYPE_UNIFIED, ::srcDevice and ::srcPitch
@@ -6584,15 +6584,15 @@ public static native @Cast("CUresult") int cuMemcpy2DAsync(@Const CUDA_MEMCPY2D 
  *
  * \par
  * For host pointers, the starting address is
- * <pre><code>
+ * <pre>{@code
   void* Start = (void*)((char*)srcHost+(srcZ*srcHeight+srcY)*srcPitch + srcXInBytes);
- * </code></pre>
+ * }</pre>
  *
  * \par
  * For device pointers, the starting address is
- * <pre><code>
+ * <pre>{@code
   CUdeviceptr Start = srcDevice+(srcZ*srcHeight+srcY)*srcPitch+srcXInBytes;
- * </code></pre>
+ * }</pre>
  *
  * \par
  * For CUDA arrays, ::srcXInBytes must be evenly divisible by the array
@@ -6603,15 +6603,15 @@ public static native @Cast("CUresult") int cuMemcpy2DAsync(@Const CUDA_MEMCPY2D 
  *
  * \par
  * For host pointers, the base address is
- * <pre><code>
+ * <pre>{@code
   void* dstStart = (void*)((char*)dstHost+(dstZ*dstHeight+dstY)*dstPitch + dstXInBytes);
- * </code></pre>
+ * }</pre>
  *
  * \par
  * For device pointers, the starting address is
- * <pre><code>
+ * <pre>{@code
   CUdeviceptr dstStart = dstDevice+(dstZ*dstHeight+dstY)*dstPitch+dstXInBytes;
- * </code></pre>
+ * }</pre>
  *
  * \par
  * For CUDA arrays, ::dstXInBytes must be evenly divisible by the array
@@ -7149,14 +7149,14 @@ public static native @Cast("CUresult") int cuMemsetD2D32Async(@Cast("CUdeviceptr
  * \p pAllocateArray and returns a handle to the new CUDA array in \p *pHandle.
  * The ::CUDA_ARRAY_DESCRIPTOR is defined as:
  *
- * <pre><code>
+ * <pre>{@code
     typedef struct {
         unsigned int Width;
         unsigned int Height;
         CUarray_format Format;
         unsigned int NumChannels;
     } CUDA_ARRAY_DESCRIPTOR;
- * </code></pre>
+ * }</pre>
  * where:
  *
  * - \p Width, and \p Height are the width, and height of the CUDA array (in
@@ -7164,7 +7164,7 @@ public static native @Cast("CUresult") int cuMemsetD2D32Async(@Cast("CUdeviceptr
  * otherwise;
  * - ::Format specifies the format of the elements; ::CUarray_format is
  * defined as:
- * <pre><code>
+ * <pre>{@code
     typedef enum CUarray_format_enum {
         CU_AD_FORMAT_UNSIGNED_INT8 = 0x01,
         CU_AD_FORMAT_UNSIGNED_INT16 = 0x02,
@@ -7175,49 +7175,49 @@ public static native @Cast("CUresult") int cuMemsetD2D32Async(@Cast("CUdeviceptr
         CU_AD_FORMAT_HALF = 0x10,
         CU_AD_FORMAT_FLOAT = 0x20
     } CUarray_format;
- *  </code></pre>
+ *  }</pre>
  * - \p NumChannels specifies the number of packed components per CUDA array
  * element; it may be 1, 2, or 4;
  *
  * Here are examples of CUDA array descriptions:
  *
  * Description for a CUDA array of 2048 floats:
- * <pre><code>
+ * <pre>{@code
     CUDA_ARRAY_DESCRIPTOR desc;
     desc.Format = CU_AD_FORMAT_FLOAT;
     desc.NumChannels = 1;
     desc.Width = 2048;
     desc.Height = 1;
- * </code></pre>
+ * }</pre>
  *
  * Description for a 64 x 64 CUDA array of floats:
- * <pre><code>
+ * <pre>{@code
     CUDA_ARRAY_DESCRIPTOR desc;
     desc.Format = CU_AD_FORMAT_FLOAT;
     desc.NumChannels = 1;
     desc.Width = 64;
     desc.Height = 64;
- * </code></pre>
+ * }</pre>
  *
  * Description for a \p width x \p height CUDA array of 64-bit, 4x16-bit
  * float16's:
- * <pre><code>
+ * <pre>{@code
     CUDA_ARRAY_DESCRIPTOR desc;
     desc.FormatFlags = CU_AD_FORMAT_HALF;
     desc.NumChannels = 4;
     desc.Width = width;
     desc.Height = height;
- * </code></pre>
+ * }</pre>
  *
  * Description for a \p width x \p height CUDA array of 16-bit elements, each
  * of which is two 8-bit unsigned chars:
- * <pre><code>
+ * <pre>{@code
     CUDA_ARRAY_DESCRIPTOR arrayDesc;
     desc.FormatFlags = CU_AD_FORMAT_UNSIGNED_INT8;
     desc.NumChannels = 2;
     desc.Width = width;
     desc.Height = height;
- * </code></pre>
+ * }</pre>
  *
  * @param pHandle        - Returned array
  * @param pAllocateArray - Array descriptor
@@ -7317,7 +7317,7 @@ public static native @Cast("CUresult") int cuArrayDestroy(CUarray_st hArray);
  * \p pAllocateArray and returns a handle to the new CUDA array in \p *pHandle.
  * The ::CUDA_ARRAY3D_DESCRIPTOR is defined as:
  *
- * <pre><code>
+ * <pre>{@code
     typedef struct {
         unsigned int Width;
         unsigned int Height;
@@ -7326,7 +7326,7 @@ public static native @Cast("CUresult") int cuArrayDestroy(CUarray_st hArray);
         unsigned int NumChannels;
         unsigned int Flags;
     } CUDA_ARRAY3D_DESCRIPTOR;
- * </code></pre>
+ * }</pre>
  * where:
  *
  * - \p Width, \p Height, and \p Depth are the width, height, and depth of the
@@ -7354,7 +7354,7 @@ public static native @Cast("CUresult") int cuArrayDestroy(CUarray_st hArray);
  *
  * - ::Format specifies the format of the elements; ::CUarray_format is
  * defined as:
- * <pre><code>
+ * <pre>{@code
     typedef enum CUarray_format_enum {
         CU_AD_FORMAT_UNSIGNED_INT8 = 0x01,
         CU_AD_FORMAT_UNSIGNED_INT16 = 0x02,
@@ -7365,7 +7365,7 @@ public static native @Cast("CUresult") int cuArrayDestroy(CUarray_st hArray);
         CU_AD_FORMAT_HALF = 0x10,
         CU_AD_FORMAT_FLOAT = 0x20
     } CUarray_format;
- *  </code></pre>
+ *  }</pre>
  *
  * - \p NumChannels specifies the number of packed components per CUDA array
  * element; it may be 1, 2, or 4;
@@ -7433,35 +7433,35 @@ public static native @Cast("CUresult") int cuArrayDestroy(CUarray_st hArray);
  * Here are examples of CUDA array descriptions:
  *
  * Description for a CUDA array of 2048 floats:
- * <pre><code>
+ * <pre>{@code
     CUDA_ARRAY3D_DESCRIPTOR desc;
     desc.Format = CU_AD_FORMAT_FLOAT;
     desc.NumChannels = 1;
     desc.Width = 2048;
     desc.Height = 0;
     desc.Depth = 0;
- * </code></pre>
+ * }</pre>
  *
  * Description for a 64 x 64 CUDA array of floats:
- * <pre><code>
+ * <pre>{@code
     CUDA_ARRAY3D_DESCRIPTOR desc;
     desc.Format = CU_AD_FORMAT_FLOAT;
     desc.NumChannels = 1;
     desc.Width = 64;
     desc.Height = 64;
     desc.Depth = 0;
- * </code></pre>
+ * }</pre>
  *
  * Description for a \p width x \p height x \p depth CUDA array of 64-bit,
  * 4x16-bit float16's:
- * <pre><code>
+ * <pre>{@code
     CUDA_ARRAY3D_DESCRIPTOR desc;
     desc.FormatFlags = CU_AD_FORMAT_HALF;
     desc.NumChannels = 4;
     desc.Width = width;
     desc.Height = height;
     desc.Depth = depth;
- * </code></pre>
+ * }</pre>
  *
  * @param pHandle        - Returned array
  * @param pAllocateArray - 3D array descriptor
@@ -7538,7 +7538,7 @@ public static native @Cast("CUresult") int cuArray3DGetDescriptor(CUDA_ARRAY3D_D
  *
  * The ::CUDA_ARRAY3D_DESCRIPTOR is defined as:
  *
- * <pre><code>
+ * <pre>{@code
     typedef struct {
         unsigned int Width;
         unsigned int Height;
@@ -7547,7 +7547,7 @@ public static native @Cast("CUresult") int cuArray3DGetDescriptor(CUDA_ARRAY3D_D
         unsigned int NumChannels;
         unsigned int Flags;
     } CUDA_ARRAY3D_DESCRIPTOR;
- * </code></pre>
+ * }</pre>
  * where:
  *
  * - \p Width, \p Height, and \p Depth are the width, height, and depth of the
@@ -7575,7 +7575,7 @@ public static native @Cast("CUresult") int cuArray3DGetDescriptor(CUDA_ARRAY3D_D
  *
  * - ::Format specifies the format of the elements; ::CUarray_format is
  * defined as:
- * <pre><code>
+ * <pre>{@code
     typedef enum CUarray_format_enum {
         CU_AD_FORMAT_UNSIGNED_INT8 = 0x01,
         CU_AD_FORMAT_UNSIGNED_INT16 = 0x02,
@@ -7586,7 +7586,7 @@ public static native @Cast("CUresult") int cuArray3DGetDescriptor(CUDA_ARRAY3D_D
         CU_AD_FORMAT_HALF = 0x10,
         CU_AD_FORMAT_FLOAT = 0x20
     } CUarray_format;
- *  </code></pre>
+ *  }</pre>
  *
  * - \p NumChannels specifies the number of packed components per CUDA array
  * element; it may be 1, 2, or 4;
@@ -8890,7 +8890,7 @@ public static native @Cast("CUresult") int cuFuncSetSharedMemConfig(CUfunc_st hf
  * This places the burden on the application of knowing each kernel
  * parameter's size and alignment/padding within the buffer.  Here is
  * an example of using the \p extra parameter in this manner:
- * <pre><code>
+ * <pre>{@code
     size_t argBufferSize;
     char argBuffer[256];
 
@@ -8902,7 +8902,7 @@ public static native @Cast("CUresult") int cuFuncSetSharedMemConfig(CUfunc_st hf
         CU_LAUNCH_PARAM_END
     };
     status = cuLaunchKernel(f, gx, gy, gz, bx, by, bz, sh, s, NULL, config);
- * </code></pre>
+ * }</pre>
  *
  * The \p extra parameter exists to allow ::cuLaunchKernel to take
  * additional less commonly used arguments.  \p extra specifies a list of
@@ -9472,10 +9472,10 @@ public static native @Cast("CUresult") int cuOccupancyMaxActiveBlocksPerMultipro
  * shared memory needed by \p func for any given block size. \p
  * dynamicSMemSize is ignored. An example signature is:
  *
- * <pre><code>
+ * <pre>{@code
  *    // Take block size, returns dynamic shared memory needed
  *    size_t blockToSmem(int blockSize);
- * </code></pre>
+ * }</pre>
  *
  * @param minGridSize - Returned minimum grid size needed to achieve the maximum occupancy
  * @param blockSize   - Returned maximum block size that can achieve the maximum occupancy
@@ -9747,14 +9747,14 @@ public static native @Cast("CUresult") int cuTexRefSetFormat(CUtexref_st hTexRef
  * applied to the first parameter of the functions used to fetch from the
  * texture; if \p dim is 1, the second, and so on. ::CUaddress_mode is defined
  * as:
- * <pre><code>
+ * <pre>{@code
    typedef enum CUaddress_mode_enum {
       CU_TR_ADDRESS_MODE_WRAP = 0,
       CU_TR_ADDRESS_MODE_CLAMP = 1,
       CU_TR_ADDRESS_MODE_MIRROR = 2,
       CU_TR_ADDRESS_MODE_BORDER = 3
    } CUaddress_mode;
- * </code></pre>
+ * }</pre>
  *
  * Note that this call has no effect if \p hTexRef is bound to linear memory.
  * Also, if the flag, ::CU_TRSF_NORMALIZED_COORDINATES, is not set, the only 
@@ -9785,12 +9785,12 @@ public static native @Cast("CUresult") int cuTexRefSetAddressMode(CUtexref_st hT
  * Specifies the filtering mode \p fm to be used when reading memory through
  * the texture reference \p hTexRef. ::CUfilter_mode_enum is defined as:
  *
- * <pre><code>
+ * <pre>{@code
    typedef enum CUfilter_mode_enum {
       CU_TR_FILTER_MODE_POINT = 0,
       CU_TR_FILTER_MODE_LINEAR = 1
    } CUfilter_mode;
- * </code></pre>
+ * }</pre>
  *
  * Note that this call has no effect if \p hTexRef is bound to linear memory.
  *
@@ -9818,12 +9818,12 @@ public static native @Cast("CUresult") int cuTexRefSetFilterMode(CUtexref_st hTe
  * Specifies the mipmap filtering mode \p fm to be used when reading memory through
  * the texture reference \p hTexRef. ::CUfilter_mode_enum is defined as:
  *
- * <pre><code>
+ * <pre>{@code
    typedef enum CUfilter_mode_enum {
       CU_TR_FILTER_MODE_POINT = 0,
       CU_TR_FILTER_MODE_LINEAR = 1
    } CUfilter_mode;
- * </code></pre>
+ * }</pre>
  *
  * Note that this call has no effect if \p hTexRef is not bound to a mipmapped array.
  *
@@ -10333,7 +10333,7 @@ public static native @Cast("CUresult") int cuTexRefDestroy(CUtexref_st hTexRef);
  * reference is superseded by this function.  \p Flags must be set to 0.
  * The ::CUDA_ARRAY3D_SURFACE_LDST flag must have been set for the CUDA array.
  * Any CUDA array previously bound to \p hSurfRef is unbound.
-<p>
+ <p>
  * @param hSurfRef - Surface reference handle
  * @param hArray - CUDA array handle
  * @param Flags - set to 0
@@ -10355,7 +10355,7 @@ public static native @Cast("CUresult") int cuSurfRefSetArray(CUsurfref_st hSurfR
  * Returns in \p *phArray the CUDA array bound to the surface reference
  * \p hSurfRef, or returns ::CUDA_ERROR_INVALID_VALUE if the surface reference
  * is not bound to any CUDA array.
-<p>
+ <p>
  * @param phArray - Surface reference handle
  * @param hSurfRef - Surface reference handle
  *
@@ -10401,7 +10401,7 @@ public static native @Cast("CUresult") int cuSurfRefGetArray(@ByPtrPtr CUarray_s
  * accessed through CUDA API calls.
  *
  * The ::CUDA_RESOURCE_DESC structure is defined as:
- * <pre><code>
+ * <pre>{@code
         typedef struct CUDA_RESOURCE_DESC_st
         {
             CUresourcetype resType;
@@ -10432,18 +10432,18 @@ public static native @Cast("CUresult") int cuSurfRefGetArray(@ByPtrPtr CUarray_s
             unsigned int flags;
         } CUDA_RESOURCE_DESC;
 
- * </code></pre>
+ * }</pre>
  * where:
  * - ::CUDA_RESOURCE_DESC::resType specifies the type of resource to texture from.
  * CUresourceType is defined as:
- * <pre><code>
+ * <pre>{@code
         typedef enum CUresourcetype_enum {
             CU_RESOURCE_TYPE_ARRAY           = 0x00,
             CU_RESOURCE_TYPE_MIPMAPPED_ARRAY = 0x01,
             CU_RESOURCE_TYPE_LINEAR          = 0x02,
             CU_RESOURCE_TYPE_PITCH2D         = 0x03
         } CUresourcetype;
- * </code></pre>
+ * }</pre>
  *
  * \par
  * If ::CUDA_RESOURCE_DESC::resType is set to ::CU_RESOURCE_TYPE_ARRAY, ::CUDA_RESOURCE_DESC::res::array::hArray
@@ -10475,7 +10475,7 @@ public static native @Cast("CUresult") int cuSurfRefGetArray(@ByPtrPtr CUarray_s
  *
  *
  * The ::CUDA_TEXTURE_DESC struct is defined as
- * <pre><code>
+ * <pre>{@code
         typedef struct CUDA_TEXTURE_DESC_st {
             CUaddress_mode addressMode[3];
             CUfilter_mode filterMode;
@@ -10486,27 +10486,27 @@ public static native @Cast("CUresult") int cuSurfRefGetArray(@ByPtrPtr CUarray_s
             float minMipmapLevelClamp;
             float maxMipmapLevelClamp;
         } CUDA_TEXTURE_DESC;
- * </code></pre>
+ * }</pre>
  * where
  * - ::CUDA_TEXTURE_DESC::addressMode specifies the addressing mode for each dimension of the texture data. ::CUaddress_mode is defined as:
- *   <pre><code>
+ *   <pre>{@code
         typedef enum CUaddress_mode_enum {
             CU_TR_ADDRESS_MODE_WRAP = 0,
             CU_TR_ADDRESS_MODE_CLAMP = 1,
             CU_TR_ADDRESS_MODE_MIRROR = 2,
             CU_TR_ADDRESS_MODE_BORDER = 3
         } CUaddress_mode;
- *   </code></pre>
+ *   }</pre>
  *   This is ignored if ::CUDA_RESOURCE_DESC::resType is ::CU_RESOURCE_TYPE_LINEAR. Also, if the flag, ::CU_TRSF_NORMALIZED_COORDINATES 
  *   is not set, the only supported address mode is ::CU_TR_ADDRESS_MODE_CLAMP.
  *
  * - ::CUDA_TEXTURE_DESC::filterMode specifies the filtering mode to be used when fetching from the texture. CUfilter_mode is defined as:
- *   <pre><code>
+ *   <pre>{@code
         typedef enum CUfilter_mode_enum {
             CU_TR_FILTER_MODE_POINT = 0,
             CU_TR_FILTER_MODE_LINEAR = 1
         } CUfilter_mode;
- *   </code></pre>
+ *   }</pre>
  *   This is ignored if ::CUDA_RESOURCE_DESC::resType is ::CU_RESOURCE_TYPE_LINEAR.
  *
  * - ::CUDA_TEXTURE_DESC::flags can be any combination of the following:
@@ -10529,7 +10529,7 @@ public static native @Cast("CUresult") int cuSurfRefGetArray(@ByPtrPtr CUarray_s
  *
  *
  * The ::CUDA_RESOURCE_VIEW_DESC struct is defined as
- * <pre><code>
+ * <pre>{@code
         typedef struct CUDA_RESOURCE_VIEW_DESC_st
         {
             CUresourceViewFormat format;
@@ -10541,7 +10541,7 @@ public static native @Cast("CUresult") int cuSurfRefGetArray(@ByPtrPtr CUarray_s
             unsigned int firstLayer;
             unsigned int lastLayer;
         } CUDA_RESOURCE_VIEW_DESC;
- * </code></pre>
+ * }</pre>
  * where:
  * - ::CUDA_RESOURCE_VIEW_DESC::format specifies how the data contained in the CUDA array or CUDA mipmapped array should
  *   be interpreted. Note that this can incur a change in size of the texture data. If the resource view format is a block
@@ -11027,7 +11027,7 @@ public static native @Cast("CUresult") int cuGraphicsResourceGetMappedPointer(@C
  *
  * Changes to \p flags will take effect the next time \p resource is mapped.
  * The \p flags argument may be any of the following:
-<p>
+ <p>
  * - ::CU_GRAPHICS_MAP_RESOURCE_FLAGS_NONE: Specifies no hints about how this
  *   resource will be used. It is therefore assumed that this resource will be
  *   read from and written to by CUDA kernels.  This is the default value.
@@ -12317,8 +12317,8 @@ public static class cudaChannelFormatDesc extends Pointer {
  * CUDA array
  */
 @Opaque public static class cudaArray extends Pointer {
-    /** Empty constructor. */
-    public cudaArray() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cudaArray() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudaArray(Pointer p) { super(p); }
 }
@@ -12331,8 +12331,8 @@ public static class cudaChannelFormatDesc extends Pointer {
  * CUDA mipmapped array
  */
 @Opaque public static class cudaMipmappedArray extends Pointer {
-    /** Empty constructor. */
-    public cudaMipmappedArray() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cudaMipmappedArray() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudaMipmappedArray(Pointer p) { super(p); }
 }
@@ -12530,8 +12530,8 @@ public static class cudaMemcpy3DPeerParms extends Pointer {
  * CUDA graphics interop resource
  */
 @Opaque public static class cudaGraphicsResource extends Pointer {
-    /** Empty constructor. */
-    public cudaGraphicsResource() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cudaGraphicsResource() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudaGraphicsResource(Pointer p) { super(p); }
 }
@@ -13407,8 +13407,8 @@ public static class cudaIpcMemHandle_t extends Pointer {
  * CUDA UUID types
  */
 @Opaque public static class cudaUUID_t extends Pointer {
-    /** Empty constructor. */
-    public cudaUUID_t() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cudaUUID_t() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudaUUID_t(Pointer p) { super(p); }
 }
@@ -15462,7 +15462,7 @@ public static native @Cast("cudaError_t") int cudaDeviceGetByPCIBusId(int[] devi
  * \notefnerr
  *
  * \sa ::cudaDeviceGetByPCIBusId
-<p>
+ <p>
  */
 public static native @Cast("cudaError_t") int cudaDeviceGetPCIBusId(@Cast("char*") BytePointer pciBusId, int len, int device);
 public static native @Cast("cudaError_t") int cudaDeviceGetPCIBusId(@Cast("char*") ByteBuffer pciBusId, int len, int device);
@@ -16051,7 +16051,7 @@ public static native @Cast("cudaError_t") int cudaGetDeviceCount(int[] count);
  *
  * Returns in \p *prop the properties of device \p dev. The ::cudaDeviceProp
  * structure is defined as:
- * <pre><code>
+ * <pre>{@code
     struct cudaDeviceProp {
         char name[256];
         size_t totalGlobalMem;
@@ -16116,7 +16116,7 @@ public static native @Cast("cudaError_t") int cudaGetDeviceCount(int[] count);
         int isMultiGpuBoard;
         int multiGpuBoardGroupID;
     }
- </code></pre>
+ }</pre>
  * where:
  * - \ref ::cudaDeviceProp::name "name[256]" is an ASCII string identifying
  *   the device;
@@ -17914,9 +17914,9 @@ public static native @Cast("cudaError_t") int cudaMallocHost(@Cast("void**") @By
  * The intended usage of \p pitch is as a separate parameter of the allocation,
  * used to compute addresses within the 2D array. Given the row and column of
  * an array element of type \p T, the address is computed as:
- * <pre><code>
+ * <pre>{@code
     T* pElement = (T*)((char*)BaseAddress + Row * pitch) + Column;
-   </code></pre>
+   }</pre>
  *
  * For allocations of 2D arrays, it is recommended that programmers consider
  * performing pitch allocations using ::cudaMallocPitch(). Due to pitch
@@ -17949,12 +17949,12 @@ public static native @Cast("cudaError_t") int cudaMallocPitch(@Cast("void**") @B
  * \p desc and returns a handle to the new CUDA array in \p *array.
  *
  * The ::cudaChannelFormatDesc is defined as:
- * <pre><code>
+ * <pre>{@code
     struct cudaChannelFormatDesc {
         int x, y, z, w;
     enum cudaChannelFormatKind f;
     };
-    </code></pre>
+    }</pre>
  * where ::cudaChannelFormatKind is one of ::cudaChannelFormatKindSigned,
  * ::cudaChannelFormatKindUnsigned, or ::cudaChannelFormatKindFloat.
  *
@@ -18308,12 +18308,12 @@ public static native @Cast("cudaError_t") int cudaMalloc3D(cudaPitchedPtr pitche
  * \p desc and returns a handle to the new CUDA array in \p *array.
  *
  * The ::cudaChannelFormatDesc is defined as:
- * <pre><code>
+ * <pre>{@code
     struct cudaChannelFormatDesc {
         int x, y, z, w;
         enum cudaChannelFormatKind f;
     };
-    </code></pre>
+    }</pre>
  * where ::cudaChannelFormatKind is one of ::cudaChannelFormatKindSigned,
  * ::cudaChannelFormatKindUnsigned, or ::cudaChannelFormatKindFloat.
  *
@@ -18446,12 +18446,12 @@ public static native @Cast("cudaError_t") int cudaMalloc3DArray(@ByPtrPtr cudaAr
  * clamped to the range [1, 1 + floor(log2(max(width, height, depth)))].
  *
  * The ::cudaChannelFormatDesc is defined as:
- * <pre><code>
+ * <pre>{@code
     struct cudaChannelFormatDesc {
         int x, y, z, w;
         enum cudaChannelFormatKind f;
     };
-    </code></pre>
+    }</pre>
  * where ::cudaChannelFormatKind is one of ::cudaChannelFormatKindSigned,
  * ::cudaChannelFormatKindUnsigned, or ::cudaChannelFormatKindFloat.
  *
@@ -18588,7 +18588,7 @@ public static native @Cast("cudaError_t") int cudaGetMipmappedArrayLevel(@ByPtrP
 /**
  * \brief Copies data between 3D objects
  *
-<pre><code>
+<pre>{@code
 struct cudaExtent {
   size_t width;
   size_t height;
@@ -18613,16 +18613,16 @@ struct cudaMemcpy3DParms {
   struct cudaExtent     extent;
   enum cudaMemcpyKind   kind;
 };
-</code></pre>
+}</pre>
  *
  * ::cudaMemcpy3D() copies data betwen two 3D objects. The source and
  * destination objects may be in either host memory, device memory, or a CUDA
  * array. The source, destination, extent, and kind of copy performed is
  * specified by the ::cudaMemcpy3DParms struct which should be initialized to
  * zero before use:
-<pre><code>
+<pre>{@code
 cudaMemcpy3DParms myParms = {0};
-</code></pre>
+}</pre>
  *
  * The struct passed to ::cudaMemcpy3D() must specify one of \p srcArray or
  * \p srcPtr and one of \p dstArray or \p dstPtr. Passing more than one
@@ -18713,7 +18713,7 @@ public static native @Cast("cudaError_t") int cudaMemcpy3DPeer(@Const cudaMemcpy
 /**
  * \brief Copies data between 3D objects
  *
-<pre><code>
+<pre>{@code
 struct cudaExtent {
   size_t width;
   size_t height;
@@ -18738,16 +18738,16 @@ struct cudaMemcpy3DParms {
   struct cudaExtent     extent;
   enum cudaMemcpyKind   kind;
 };
-</code></pre>
+}</pre>
  *
  * ::cudaMemcpy3DAsync() copies data betwen two 3D objects. The source and
  * destination objects may be in either host memory, device memory, or a CUDA
  * array. The source, destination, extent, and kind of copy performed is
  * specified by the ::cudaMemcpy3DParms struct which should be initialized to
  * zero before use:
-<pre><code>
+<pre>{@code
 cudaMemcpy3DParms myParms = {0};
-</code></pre>
+}</pre>
  *
  * The struct passed to ::cudaMemcpy3DAsync() must specify one of \p srcArray
  * or \p srcPtr and one of \p dstArray or \p dstPtr. Passing more than one
@@ -20076,7 +20076,7 @@ public static native @Cast("cudaError_t") int cudaGetSymbolSize(@Cast("size_t*")
  * supporting unified addressing ::cudaErrorInvalidValue is returned.
  *
  * The ::cudaPointerAttributes structure is defined as:
- * <pre><code>
+ * <pre>{@code
     struct cudaPointerAttributes {
         enum cudaMemoryType memoryType;
         int device;
@@ -20084,7 +20084,7 @@ public static native @Cast("cudaError_t") int cudaGetSymbolSize(@Cast("size_t*")
         void *hostPointer;
         int isManaged;
     }
-    </code></pre>
+    }</pre>
  * In this structure, the individual fields mean
  *
  * - \ref ::cudaPointerAttributes::memoryType "memoryType" identifies the physical 
@@ -20521,12 +20521,12 @@ public static native @Cast("cudaError_t") int cudaGetChannelDesc(cudaChannelForm
  * Returns a channel descriptor with format \p f and number of bits of each
  * component \p x, \p y, \p z, and \p w.  The ::cudaChannelFormatDesc is
  * defined as:
- * <pre><code>
+ * <pre>{@code
   struct cudaChannelFormatDesc {
     int x, y, z, w;
     enum cudaChannelFormatKind f;
   };
- * </code></pre>
+ * }</pre>
  *
  * where ::cudaChannelFormatKind is one of ::cudaChannelFormatKindSigned,
  * ::cudaChannelFormatKindUnsigned, or ::cudaChannelFormatKindFloat.
@@ -20867,7 +20867,7 @@ public static native @Cast("cudaError_t") int cudaGetSurfaceReference(@Const @By
  * accessed through CUDA API calls.
  *
  * The ::cudaResourceDesc structure is defined as:
- * <pre><code>
+ * <pre>{@code
         struct cudaResourceDesc {
 	        enum cudaResourceType resType;
         	
@@ -20892,18 +20892,18 @@ public static native @Cast("cudaError_t") int cudaGetSurfaceReference(@Const @By
 		        } pitch2D;
 	        } res;
         };
- * </code></pre>
+ * }</pre>
  * where:
  * - ::cudaResourceDesc::resType specifies the type of resource to texture from.
  * CUresourceType is defined as:
- * <pre><code>
+ * <pre>{@code
         enum cudaResourceType {
             cudaResourceTypeArray          = 0x00,
             cudaResourceTypeMipmappedArray = 0x01,
             cudaResourceTypeLinear         = 0x02,
             cudaResourceTypePitch2D        = 0x03
         };
- * </code></pre>
+ * }</pre>
  *
  * \par
  * If ::cudaResourceDesc::resType is set to ::cudaResourceTypeArray, ::cudaResourceDesc::res::array::array
@@ -20931,7 +20931,7 @@ public static native @Cast("cudaError_t") int cudaGetSurfaceReference(@Const @By
  *
  *
  * The ::cudaTextureDesc struct is defined as
- * <pre><code>
+ * <pre>{@code
         struct cudaTextureDesc {
             enum cudaTextureAddressMode addressMode[3];
             enum cudaTextureFilterMode  filterMode;
@@ -20944,36 +20944,36 @@ public static native @Cast("cudaError_t") int cudaGetSurfaceReference(@Const @By
             float                       minMipmapLevelClamp;
             float                       maxMipmapLevelClamp;
         };
- * </code></pre>
+ * }</pre>
  * where
  * - ::cudaTextureDesc::addressMode specifies the addressing mode for each dimension of the texture data. ::cudaTextureAddressMode is defined as:
- *   <pre><code>
+ *   <pre>{@code
         enum cudaTextureAddressMode {
             cudaAddressModeWrap   = 0,
             cudaAddressModeClamp  = 1,
             cudaAddressModeMirror = 2,
             cudaAddressModeBorder = 3
         };
- *   </code></pre>
+ *   }</pre>
  *   This is ignored if ::cudaResourceDesc::resType is ::cudaResourceTypeLinear. Also, if ::cudaTextureDesc::normalizedCoords
  *   is set to zero, ::cudaAddressModeWrap and ::cudaAddressModeMirror won't be supported and will be switched to ::cudaAddressModeClamp.
  *
  * - ::cudaTextureDesc::filterMode specifies the filtering mode to be used when fetching from the texture. ::cudaTextureFilterMode is defined as:
- *   <pre><code>
+ *   <pre>{@code
         enum cudaTextureFilterMode {
             cudaFilterModePoint  = 0,
             cudaFilterModeLinear = 1
         };
- *   </code></pre>
+ *   }</pre>
  *   This is ignored if ::cudaResourceDesc::resType is ::cudaResourceTypeLinear.
  *
  * - ::cudaTextureDesc::readMode specifies whether integer data should be converted to floating point or not. ::cudaTextureReadMode is defined as:
- *   <pre><code>
+ *   <pre>{@code
         enum cudaTextureReadMode {
             cudaReadModeElementType     = 0,
             cudaReadModeNormalizedFloat = 1
         };
- *   </code></pre>
+ *   }</pre>
  *   Note that this applies only to 8-bit and 16-bit integer formats. 32-bit integer format would not be promoted, regardless of 
  *   whether or not this ::cudaTextureDesc::readMode is set ::cudaReadModeNormalizedFloat is specified.
  *
@@ -20994,7 +20994,7 @@ public static native @Cast("cudaError_t") int cudaGetSurfaceReference(@Const @By
  *
  *
  * The ::cudaResourceViewDesc struct is defined as
- * <pre><code>
+ * <pre>{@code
         struct cudaResourceViewDesc {
             enum cudaResourceViewFormat format;
             size_t                      width;
@@ -21005,7 +21005,7 @@ public static native @Cast("cudaError_t") int cudaGetSurfaceReference(@Const @By
             unsigned int                firstLayer;
             unsigned int                lastLayer;
         };
- * </code></pre>
+ * }</pre>
  * where:
  * - ::cudaResourceViewDesc::format specifies how the data contained in the CUDA array or CUDA mipmapped array should
  *   be interpreted. Note that this can incur a change in size of the texture data. If the resource view format is a block

@@ -164,7 +164,7 @@ public class opencv_core implements InfoMapper {
                .put(new Info("cv::Mat").base("AbstractMat"))
                .put(new Info("cv::noArray()").javaText("public static Mat noArray() { return null; }"))
                .put(new Info("cv::Mat(int, int, int, void*, size_t)").javaText(
-                       "public Mat(int rows, int cols, int type, Pointer data, @Cast(\"size_t\") long step/*=AUTO_STEP*/) { allocate(rows, cols, type, data, step); this.data = data; }\n"
+                       "public Mat(int rows, int cols, int type, Pointer data, @Cast(\"size_t\") long step/*=AUTO_STEP*/) { super((Pointer)null); allocate(rows, cols, type, data, step); this.data = data; }\n"
                      + "private native void allocate(int rows, int cols, int type, Pointer data, @Cast(\"size_t\") long step/*=AUTO_STEP*/);\n"
                      + "private Pointer data; // a reference to prevent deallocation\n"
                      + "public Mat(int rows, int cols, int type, Pointer data) { this(rows, cols, type, data, AUTO_STEP); }\n"

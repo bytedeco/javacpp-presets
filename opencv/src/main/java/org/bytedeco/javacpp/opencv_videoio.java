@@ -75,8 +75,8 @@ public class opencv_videoio extends org.bytedeco.javacpp.presets.opencv_videoio 
 
 /* "black box" capture structure */
 @Opaque public static class CvCapture extends Pointer {
-    /** Empty constructor. */
-    public CvCapture() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CvCapture() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvCapture(Pointer p) { super(p); }
 }
@@ -381,8 +381,8 @@ public static native int cvGetCaptureDomain( CvCapture capture);
 
 /* "black box" video file writer structure */
 @Opaque public static class CvVideoWriter extends Pointer {
-    /** Empty constructor. */
-    public CvVideoWriter() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CvVideoWriter() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvVideoWriter(Pointer p) { super(p); }
 }
@@ -768,8 +768,8 @@ public static final int CAP_PROP_GPHOTO2_PREVIEW           = 17001, // Capture o
 //enum {
 
 @Namespace("cv") @Opaque public static class IVideoCapture extends Pointer {
-    /** Empty constructor. */
-    public IVideoCapture() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public IVideoCapture() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IVideoCapture(Pointer p) { super(p); }
 }
@@ -777,7 +777,7 @@ public static final int CAP_PROP_GPHOTO2_PREVIEW           = 17001, // Capture o
 /** \brief Class for video capturing from video files, image sequences or cameras. The class provides C++ API
 for capturing video from cameras or for reading video files and image sequences. Here is how the
 class can be used: :
-<pre><code>
+<pre>{@code
     #include "opencv2/opencv.hpp"
 
     using namespace cv;
@@ -803,7 +803,7 @@ class can be used: :
         // the camera will be deinitialized automatically in VideoCapture destructor
         return 0;
     }
-</code></pre>
+}</pre>
 \note In C API the black-box structure CvCapture is used instead of VideoCapture.
 <p>
 \note
@@ -848,10 +848,10 @@ class can be used: :
     private native void allocate(int device);
 
     /** \brief Open video file or a capturing device for video capturing
-<p>
+    <p>
     @param filename name of the opened video file (eg. video.avi) or image sequence (eg.
     img_%02d.jpg, which will read samples like img_00.jpg, img_01.jpg, img_02.jpg, ...)
-<p>
+    <p>
     The methods first call VideoCapture::release to close the already opened file or camera.
      */
     public native @Cast("bool") boolean open(@Str BytePointer filename);
@@ -863,32 +863,32 @@ class can be used: :
     public native @Cast("bool") boolean open(int device);
 
     /** \brief Returns true if video capturing has been initialized already.
-<p>
+    <p>
     If the previous call to VideoCapture constructor or VideoCapture::open succeeded, the method returns
     true.
      */
     public native @Cast("bool") boolean isOpened();
 
     /** \brief Closes video file or capturing device.
-<p>
+    <p>
     The methods are automatically called by subsequent VideoCapture::open and by VideoCapture
     destructor.
-<p>
+    <p>
     The C function also deallocates memory and clears \*capture pointer.
      */
     public native void release();
 
     /** \brief Grabs the next frame from video file or capturing device.
-<p>
+    <p>
     The methods/functions grab the next frame from video file or camera and return true (non-zero) in
     the case of success.
-<p>
+    <p>
     The primary use of the function is in multi-camera environments, especially when the cameras do not
     have hardware synchronization. That is, you call VideoCapture::grab() for each camera and after that
     call the slower method VideoCapture::retrieve() to decode and get frame from each camera. This way
     the overhead on demosaicing or motion jpeg decompression etc. is eliminated and the retrieved frames
     from different cameras will be closer in time.
-<p>
+    <p>
     Also, when a connected camera is multi-head (for example, a stereo camera or a Kinect device), the
     correct way of retrieving data from it is to call VideoCapture::grab first and then call
     VideoCapture::retrieve one or more times with different values of the channel parameter. See
@@ -897,11 +897,11 @@ class can be used: :
     public native @Cast("bool") boolean grab();
 
     /** \brief Decodes and returns the grabbed video frame.
-<p>
+    <p>
     The methods/functions decode and return the just grabbed frame. If no frames has been grabbed
     (camera has been disconnected, or there are no more frames in video file), the methods return false
     and the functions return NULL pointer.
-<p>
+    <p>
     \note OpenCV 1.x functions cvRetrieveFrame and cv.RetrieveFrame return image stored inside the video
     capturing structure. It is not allowed to modify or release the image! You can copy the frame using
     :ocvcvCloneImage and then do whatever you want with the copy.
@@ -912,12 +912,12 @@ class can be used: :
     public native @ByRef @Name("operator >>") VideoCapture shiftRight(@ByRef UMat image);
 
     /** \brief Grabs, decodes and returns the next video frame.
-<p>
+    <p>
     The methods/functions combine VideoCapture::grab and VideoCapture::retrieve in one call. This is the
     most convenient method for reading video files or capturing data from decode and return the just
     grabbed frame. If no frames has been grabbed (camera has been disconnected, or there are no more
     frames in video file), the methods return false and the functions return NULL pointer.
-<p>
+    <p>
     \note OpenCV 1.x functions cvRetrieveFrame and cv.RetrieveFrame return image stored inside the video
     capturing structure. It is not allowed to modify or release the image! You can copy the frame using
     :ocvcvCloneImage and then do whatever you want with the copy.
@@ -925,7 +925,7 @@ class can be used: :
     public native @Cast("bool") boolean read(@ByVal Mat image);
 
     /** \brief Sets a property in the VideoCapture.
-<p>
+    <p>
     @param propId Property identifier. It can be one of the following:
      -   **CAP_PROP_POS_MSEC** Current position of the video file in milliseconds.
      -   **CAP_PROP_POS_FRAMES** 0-based index of the frame to be decoded/captured next.
@@ -954,7 +954,7 @@ class can be used: :
     public native @Cast("bool") boolean set(int propId, double value);
 
     /** \brief Returns the specified VideoCapture property
-<p>
+    <p>
     @param propId Property identifier. It can be one of the following:
      -   **CAP_PROP_POS_MSEC** Current position of the video file in milliseconds or video
          capture timestamp.
@@ -979,7 +979,7 @@ class can be used: :
      -   **CAP_PROP_WHITE_BALANCE** Currently not supported
      -   **CAP_PROP_RECTIFICATION** Rectification flag for stereo cameras (note: only supported
          by DC1394 v 2.x backend currently)
-<p>
+    <p>
     \note When querying a property that is not supported by the backend used by the VideoCapture
     class, value 0 is returned.
      */
@@ -987,8 +987,8 @@ class can be used: :
 }
 
 @Namespace("cv") @Opaque public static class IVideoWriter extends Pointer {
-    /** Empty constructor. */
-    public IVideoWriter() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public IVideoWriter() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IVideoWriter(Pointer p) { super(p); }
 }
@@ -1007,7 +1007,7 @@ class can be used: :
     }
 
     /** \brief VideoWriter constructors
-<p>
+    <p>
     The constructors/functions initialize video writers. On Linux FFMPEG is used to write videos; on
     Windows FFMPEG or VFW is used; on MacOSX QTKit is used.
      */
@@ -1043,7 +1043,7 @@ class can be used: :
                     @ByVal Size frameSize);
 
     /** \brief Initializes or reinitializes video writer.
-<p>
+    <p>
     The method opens video writer. Parameters are the same as in the constructor
     VideoWriter::VideoWriter.
      */
@@ -1061,7 +1061,7 @@ class can be used: :
     public native @Cast("bool") boolean isOpened();
 
     /** \brief Closes the video writer.
-<p>
+    <p>
     The methods are automatically called by subsequent VideoWriter::open and by the VideoWriter
     destructor.
      */
@@ -1069,16 +1069,16 @@ class can be used: :
     public native @ByRef @Name("operator <<") VideoWriter shiftLeft(@Const @ByRef Mat image);
 
     /** \brief Writes the next video frame
-<p>
+    <p>
     @param image The written frame
-<p>
+    <p>
     The functions/methods write the specified image to video file. It must have the same size as has
     been specified when opening the video writer.
      */
     public native void write(@Const @ByRef Mat image);
 
     /** \brief Sets a property in the VideoWriter.
-<p>
+     <p>
      @param propId Property identifier. It can be one of the following:
      -   **VIDEOWRITER_PROP_QUALITY** Quality (0..100%) of the videostream encoded. Can be adjusted dynamically in some codecs.
      @param value Value of the property.
@@ -1086,18 +1086,18 @@ class can be used: :
     public native @Cast("bool") boolean set(int propId, double value);
 
     /** \brief Returns the specified VideoWriter property
-<p>
+     <p>
      @param propId Property identifier. It can be one of the following:
      -   **VIDEOWRITER_PROP_QUALITY** Current quality of the encoded videostream.
      -   **VIDEOWRITER_PROP_FRAMEBYTES** (Read-only) Size of just encoded video frame; note that the encoding order may be different from representation order.
-<p>
+     <p>
      \note When querying a property that is not supported by the backend used by the VideoWriter
      class, value 0 is returned.
      */
     public native double get(int propId);
 
     /** \brief Concatenates 4 chars to a fourcc code
-<p>
+    <p>
     This static method constructs the fourcc code of the codec to be used in the constructor
     VideoWriter::VideoWriter or VideoWriter::open.
      */

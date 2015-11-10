@@ -327,8 +327,8 @@ public static final int
  *                          Timing structs                                *
  *------------------------------------------------------------------------*/
 @Namespace @Name("void") @Opaque public static class L_TIMER extends Pointer {
-    /** Empty constructor. */
-    public L_TIMER() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public L_TIMER() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_TIMER(Pointer p) { super(p); }
 }

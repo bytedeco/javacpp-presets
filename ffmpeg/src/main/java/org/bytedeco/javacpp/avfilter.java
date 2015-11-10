@@ -81,8 +81,8 @@ public static native @Cast("const char*") BytePointer avfilter_configuration();
  */
 public static native @Cast("const char*") BytePointer avfilter_license();
 @Opaque public static class AVFilterFormats extends Pointer {
-    /** Empty constructor. */
-    public AVFilterFormats() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AVFilterFormats() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilterFormats(Pointer p) { super(p); }
 }
@@ -895,8 +895,8 @@ public static class AVFilter extends Pointer {
 public static final int AVFILTER_THREAD_SLICE = (1 << 0);
 
 @Opaque public static class AVFilterInternal extends Pointer {
-    /** Empty constructor. */
-    public AVFilterInternal() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AVFilterInternal() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilterInternal(Pointer p) { super(p); }
 }
@@ -1517,8 +1517,8 @@ public static native @Deprecated int avfilter_copy_buf_props(AVFrame dst, @Const
 public static native @Const AVClass avfilter_get_class();
 
 @Opaque public static class AVFilterGraphInternal extends Pointer {
-    /** Empty constructor. */
-    public AVFilterGraphInternal() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AVFilterGraphInternal() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilterGraphInternal(Pointer p) { super(p); }
 }
@@ -1877,12 +1877,12 @@ public static native int avfilter_graph_parse_ptr(AVFilterGraph graph, String fi
 /**
  * Add a graph described by a string to a graph.
  *
- * @param[in]  graph   the filter graph where to link the parsed graph context
- * @param[in]  filters string to be parsed
- * @param[out] inputs  a linked list of all free (unlinked) inputs of the
+ * @param [in]  graph   the filter graph where to link the parsed graph context
+ * @param [in]  filters string to be parsed
+ * @param [out] inputs  a linked list of all free (unlinked) inputs of the
  *                     parsed graph will be returned here. It is to be freed
  *                     by the caller using avfilter_inout_free().
- * @param[out] outputs a linked list of all free (unlinked) outputs of the
+ * @param [out] outputs a linked list of all free (unlinked) outputs of the
  *                     parsed graph will be returned here. It is to be freed by the
  *                     caller using avfilter_inout_free().
  * @return zero on success, a negative AVERROR code on error

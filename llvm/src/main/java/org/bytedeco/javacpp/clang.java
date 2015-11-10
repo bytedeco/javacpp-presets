@@ -239,8 +239,8 @@ public static native void clang_disposeString(@ByVal CXString string);
  * Must be freed by \c clang_CompilationDatabase_dispose
  */
 @Namespace @Name("void") @Opaque public static class CXCompilationDatabase extends Pointer {
-    /** Empty constructor. */
-    public CXCompilationDatabase() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXCompilationDatabase() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXCompilationDatabase(Pointer p) { super(p); }
 }
@@ -255,8 +255,8 @@ public static native void clang_disposeString(@ByVal CXString string);
  * \c clang_CompileCommands_dispose.
  */
 @Namespace @Name("void") @Opaque public static class CXCompileCommands extends Pointer {
-    /** Empty constructor. */
-    public CXCompileCommands() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXCompileCommands() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXCompileCommands(Pointer p) { super(p); }
 }
@@ -265,8 +265,8 @@ public static native void clang_disposeString(@ByVal CXString string);
  * \brief Represents the command line invocation to compile a specific file.
  */
 @Namespace @Name("void") @Opaque public static class CXCompileCommand extends Pointer {
-    /** Empty constructor. */
-    public CXCompileCommand() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXCompileCommand() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXCompileCommand(Pointer p) { super(p); }
 }
@@ -427,8 +427,8 @@ public static native @Cast("unsigned long long") long clang_getBuildSessionTimes
  * file/directories over the real file system.
  */
 @Name("CXVirtualFileOverlayImpl") @Opaque public static class CXVirtualFileOverlay extends Pointer {
-    /** Empty constructor. */
-    public CXVirtualFileOverlay() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXVirtualFileOverlay() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXVirtualFileOverlay(Pointer p) { super(p); }
 }
@@ -501,8 +501,8 @@ public static native void clang_VirtualFileOverlay_dispose(CXVirtualFileOverlay 
  * \brief Object encapsulating information about a module.map file.
  */
 @Name("CXModuleMapDescriptorImpl") @Opaque public static class CXModuleMapDescriptor extends Pointer {
-    /** Empty constructor. */
-    public CXModuleMapDescriptor() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXModuleMapDescriptor() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXModuleMapDescriptor(Pointer p) { super(p); }
 }
@@ -652,8 +652,8 @@ public static final int CINDEX_VERSION = CINDEX_VERSION();
  * typically be linked together into an executable or library.
  */
 @Namespace @Name("void") @Opaque public static class CXIndex extends Pointer {
-    /** Empty constructor. */
-    public CXIndex() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXIndex() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIndex(Pointer p) { super(p); }
 }
@@ -662,8 +662,8 @@ public static final int CINDEX_VERSION = CINDEX_VERSION();
  * \brief A single translation unit, which resides in an index.
  */
 @Name("CXTranslationUnitImpl") @Opaque public static class CXTranslationUnit extends Pointer {
-    /** Empty constructor. */
-    public CXTranslationUnit() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXTranslationUnit() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXTranslationUnit(Pointer p) { super(p); }
 }
@@ -673,8 +673,8 @@ public static final int CINDEX_VERSION = CINDEX_VERSION();
  * to various callbacks and visitors.
  */
 @Namespace @Name("void") @Opaque public static class CXClientData extends Pointer {
-    /** Empty constructor. */
-    public CXClientData() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXClientData() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXClientData(Pointer p) { super(p); }
 }
@@ -793,7 +793,7 @@ public static class CXVersion extends Pointer {
  *
  * Here is an example:
  *
- * <pre><code>
+ * <pre>{@code
  *   // excludeDeclsFromPCH = 1, displayDiagnostics=1
  *   Idx = clang_createIndex(1, 1);
  *
@@ -814,7 +814,7 @@ public static class CXVersion extends Pointer {
  *   clang_visitChildren(clang_getTranslationUnitCursor(TU),
  *                       TranslationUnitVisitor, 0);
  *   clang_disposeTranslationUnit(TU);
- * </code></pre>
+ * }</pre>
  *
  * This process of creating the 'pch', loading it separately, and using it (via
  * -include-pch) allows 'excludeDeclsFromPCH' to remove redundant callbacks
@@ -868,12 +868,12 @@ public static final int
  * \brief Sets general options associated with a CXIndex.
  *
  * For example:
- * <pre><code>
+ * <pre>{@code
  * CXIndex idx = ...;
  * clang_CXIndex_setGlobalOptions(idx,
  *     clang_CXIndex_getGlobalOptions(idx) |
  *     CXGlobalOpt_ThreadBackgroundPriorityForIndexing);
- * </code></pre>
+ * }</pre>
  *
  * @param options A bitmask of options, a bitwise OR of CXGlobalOpt_XXX flags.
  */
@@ -897,8 +897,8 @@ public static native @Cast("unsigned") int clang_CXIndex_getGlobalOptions(CXInde
  * \brief A particular source file that is part of a translation unit.
  */
 @Namespace @Name("void") @Opaque public static class CXFile extends Pointer {
-    /** Empty constructor. */
-    public CXFile() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXFile() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXFile(Pointer p) { super(p); }
 }
@@ -1155,14 +1155,14 @@ public static native void clang_getExpansionLocation(@ByVal CXSourceLocation loc
  *
  * Example: given the following source code in a file somefile.c
  *
- * <pre><code>
+ * <pre>{@code
  * #123 "dummy.c" 1
  *
  * static int func(void)
  * {
  *     return 0;
  * }
- * </code></pre>
+ * }</pre>
  *
  * the location information returned by this function would be
  *
@@ -1404,8 +1404,8 @@ public static final int
  * location, text, source ranges, and fix-it hints.
  */
 @Namespace @Name("void") @Opaque public static class CXDiagnostic extends Pointer {
-    /** Empty constructor. */
-    public CXDiagnostic() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXDiagnostic() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXDiagnostic(Pointer p) { super(p); }
 }
@@ -1414,8 +1414,8 @@ public static final int
  * \brief A group of CXDiagnostics.
  */
 @Namespace @Name("void") @Opaque public static class CXDiagnosticSet extends Pointer {
-    /** Empty constructor. */
-    public CXDiagnosticSet() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXDiagnosticSet() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXDiagnosticSet(Pointer p) { super(p); }
 }
@@ -1558,9 +1558,9 @@ public static final int
    * When set, diagnostics will be prefixed by the file, line, and
    * (optionally) column to which the diagnostic refers. For example,
    *
-   * <pre><code>
+   * <pre>{@code
    * test.c:28: warning: extra tokens at end of #endif directive
-   * </code></pre>
+   * }</pre>
    *
    * This option corresponds to the clang flag \c -fshow-source-location.
    */
@@ -1884,7 +1884,7 @@ public static native CXTranslationUnit clang_createTranslationUnit(
 /**
  * \brief Create a translation unit from an AST file (\c -emit-ast).
  *
- * @param[out] out_TU A non-NULL pointer to store the created
+ * @param [out] out_TU A non-NULL pointer to store the created
  * \c CXTranslationUnit.
  *
  * @return Zero on success, otherwise returns an error code.
@@ -2105,7 +2105,7 @@ public static native CXTranslationUnit clang_parseTranslationUnit(CXIndex CIdx,
  * is managed but not its compilation. This should be a bitwise OR of the
  * CXTranslationUnit_XXX flags.
  *
- * @param[out] out_TU A non-NULL pointer to store the created
+ * @param [out] out_TU A non-NULL pointer to store the created
  * \c CXTranslationUnit, describing the parsed code and containing any
  * diagnostics produced by the compiler.
  *
@@ -2537,10 +2537,10 @@ public static final int
    * A type reference occurs anywhere where a type is named but not
    * declared. For example, given:
    *
-   * <pre><code>
+   * <pre>{@code
    * typedef unsigned size_type;
    * size_type size;
-   * </code></pre>
+   * }</pre>
    *
    * The typedef is a declaration of size_type (CXCursor_TypedefDecl),
    * while the type of the variable "size" is referenced. The cursor
@@ -2568,12 +2568,12 @@ public static final int
    * This cursor kind is used to describe the jump to "start_over" in the 
    * goto statement in the following example:
    *
-   * <pre><code>
+   * <pre>{@code
    *   start_over:
    *     ++counter;
    *
    *     goto start_over;
-   * </code></pre>
+   * }</pre>
    *
    * A label reference cursor refers to a label statement.
    */
@@ -2586,7 +2586,7 @@ public static final int
    * An overloaded declaration reference cursor occurs in C++ templates where
    * a dependent name refers to a function. For example:
    *
-   * <pre><code>
+   * <pre>{@code
    * template<typename T> void swap(T&, T&);
    *
    * struct X { ... };
@@ -2602,7 +2602,7 @@ public static final int
    *
    * struct Y { };
    * void swap(Y&, Y&);
-   * </code></pre>
+   * }</pre>
    *
    * Here, the identifier "swap" is associated with an overloaded declaration
    * reference. In the template definition, "swap" refers to either of the two
@@ -2774,9 +2774,9 @@ public static final int
    * notion (C++ [expr.type.conv]).
    *
    * Example:
-   * <pre><code>
+   * <pre>{@code
    *   x = int(0.5);
-   * </code></pre>
+   * }</pre>
    */
   CXCursor_CXXFunctionalCastExpr         = 128,
 
@@ -2836,9 +2836,9 @@ public static final int
   /** \brief An Objective-C "bridged" cast expression, which casts between
    * Objective-C pointers and C pointers, transferring ownership in the process.
    *
-   * <pre><code>
+   * <pre>{@code
    *   NSString *str = (__bridge_transfer NSString *)CFCreateString();
-   * </code></pre>
+   * }</pre>
    */
   CXCursor_ObjCBridgedCastExpr           = 141,
 
@@ -2848,24 +2848,24 @@ public static final int
    * A pack expansion expression contains a pattern (which itself is an
    * expression) followed by an ellipsis. For example:
    *
-   * <pre><code>
+   * <pre>{@code
    * template<typename F, typename ...Types>
    * void forward(F f, Types &&...args) {
    *  f(static_cast<Types&&>(args)...);
    * }
-   * </code></pre>
+   * }</pre>
    */
   CXCursor_PackExpansionExpr             = 142,
 
   /** \brief Represents an expression that computes the length of a parameter
    * pack.
    *
-   * <pre><code>
+   * <pre>{@code
    * template<typename ...Types>
    * struct count {
    *   static const unsigned value = sizeof...(Types);
    * };
-   * </code></pre>
+   * }</pre>
    */
   CXCursor_SizeOfPackExpr                = 143,
 
@@ -2911,10 +2911,10 @@ public static final int
    * This cursor kind is used to describe the "start_over:" label statement in 
    * the following example:
    *
-   * <pre><code>
+   * <pre>{@code
    *   start_over:
    *     ++counter;
-   * </code></pre>
+   * }</pre>
    *
    */
   CXCursor_LabelStmt                     = 201,
@@ -3509,8 +3509,8 @@ public static native CXTranslationUnit clang_Cursor_getTranslationUnit(@ByVal CX
  * \brief A fast container representing a set of CXCursors.
  */
 @Name("CXCursorSetImpl") @Opaque public static class CXCursorSet extends Pointer {
-    /** Empty constructor. */
-    public CXCursorSet() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXCursorSet() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXCursorSet(Pointer p) { super(p); }
 }
@@ -3550,13 +3550,13 @@ public static native @Cast("unsigned") int clang_CXCursorSet_insert(CXCursorSet 
  * \c clang_getCursorLexicalParent()). They diverge when declarations or
  * definitions are provided out-of-line. For example:
  *
- * <pre><code>
+ * <pre>{@code
  * class C {
  *  void f();
  * };
  *
  * void C::f() { }
- * </code></pre>
+ * }</pre>
  *
  * In the out-of-line definition of \c C::f, the semantic parent is
  * the class \c C, of which this function is a member. The lexical parent is
@@ -3585,13 +3585,13 @@ public static native @ByVal CXCursor clang_getCursorSemanticParent(@ByVal CXCurs
  * \c clang_getCursorSemanticParent()). They diverge when declarations or
  * definitions are provided out-of-line. For example:
  *
- * <pre><code>
+ * <pre>{@code
  * class C {
  *  void f();
  * };
  *
  * void C::f() { }
- * </code></pre>
+ * }</pre>
  *
  * In the out-of-line definition of \c C::f, the semantic parent is
  * the class \c C, of which this function is a member. The lexical parent is
@@ -4642,12 +4642,12 @@ public static native @ByVal CXCursor clang_getCursorReferenced(@ByVal CXCursor a
  *  unit, but only one of those declarations can also be a
  *  definition. For example, given:
  *
- *  <pre><code>
+ *  <pre>{@code
  *  int f(int, int);
  *  int g(int x, int y) { return f(x, y); }
  *  int f(int a, int b) { return a + b; }
  *  int f(int, int);
- *  </code></pre>
+ *  }</pre>
  *
  *  there are three declarations of the function "f", but only the
  *  second one is a definition. The clang_getCursorDefinition()
@@ -4676,13 +4676,13 @@ public static native @Cast("unsigned") int clang_isCursorDefinition(@ByVal CXCur
  * times within a single translation unit. For example, a structure type can
  * be forward-declared (possibly multiple times) and later defined:
  *
- * <pre><code>
+ * <pre>{@code
  * struct X;
  * struct X;
  * struct X {
  *   int member;
  * };
- * </code></pre>
+ * }</pre>
  *
  * The declarations and the definition of \c X are represented by three 
  * different cursors, all of which are declarations of the same underlying 
@@ -4838,8 +4838,8 @@ public static native @ByVal CXString clang_Cursor_getMangling(@ByVal CXCursor ar
  */
 
 @Namespace @Name("void") @Opaque public static class CXModule extends Pointer {
-    /** Empty constructor. */
-    public CXModule() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXModule() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXModule(Pointer p) { super(p); }
 }
@@ -5038,10 +5038,10 @@ public static final int
    *
    * Non-contiguous names occur in Objective-C when a selector with two or more
    * parameters is used, or in C++ when using an operator:
-   * <pre><code>
+   * <pre>{@code
    * [object doSomething:here withValue:there]; // Objective-C
    * return some_vector[1]; // C++
-   * </code></pre>
+   * }</pre>
    */
   CXNameRange_WantSinglePiece =  0x4;
   
@@ -5286,8 +5286,8 @@ public static native void clang_executeOnThread(Fn_Pointer fn, Pointer user_data
  * description of the different kinds of chunks.
  */
 @Namespace @Name("void") @Opaque public static class CXCompletionString extends Pointer {
-    /** Empty constructor. */
-    public CXCompletionString() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXCompletionString() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXCompletionString(Pointer p) { super(p); }
 }
@@ -5348,9 +5348,9 @@ public static final int
    * For example, optional chunks can be used to describe the placeholders for
    * arguments that match up with defaulted function parameters, e.g. given:
    *
-   * <pre><code>
+   * <pre>{@code
    * void f(int x, float y = 3.14, double z = 2.71828);
-   * </code></pre>
+   * }</pre>
    *
    * The code-completion string for this function would contain:
    *   - a TypedText chunk for "f".
@@ -5419,9 +5419,9 @@ public static final int
    * information about a parameter corresponding to the argument at the
    * code-completion point. For example, given a function
    *
-   * <pre><code>
+   * <pre>{@code
    * int add(int x, int y);
-   * </code></pre>
+   * }</pre>
    *
    * and the source code \c add(, where the code-completion point is after the
    * "(", the code-completion string will contain a "current parameter" chunk
@@ -6080,8 +6080,8 @@ public static native void clang_getInclusions(CXTranslationUnit tu,
  * \brief A remapping of original source files and their translated files.
  */
 @Namespace @Name("void") @Opaque public static class CXRemapping extends Pointer {
-    /** Empty constructor. */
-    public CXRemapping() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXRemapping() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXRemapping(Pointer p) { super(p); }
 }
@@ -6236,8 +6236,8 @@ public static native @Cast("CXResult") int clang_findIncludesInFile(CXTranslatio
  * \brief The client's data object that is associated with a CXFile.
  */
 @Namespace @Name("void") @Opaque public static class CXIdxClientFile extends Pointer {
-    /** Empty constructor. */
-    public CXIdxClientFile() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXIdxClientFile() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxClientFile(Pointer p) { super(p); }
 }
@@ -6246,8 +6246,8 @@ public static native @Cast("CXResult") int clang_findIncludesInFile(CXTranslatio
  * \brief The client's data object that is associated with a semantic entity.
  */
 @Namespace @Name("void") @Opaque public static class CXIdxClientEntity extends Pointer {
-    /** Empty constructor. */
-    public CXIdxClientEntity() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXIdxClientEntity() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxClientEntity(Pointer p) { super(p); }
 }
@@ -6257,8 +6257,8 @@ public static native @Cast("CXResult") int clang_findIncludesInFile(CXTranslatio
  * of entities.
  */
 @Namespace @Name("void") @Opaque public static class CXIdxClientContainer extends Pointer {
-    /** Empty constructor. */
-    public CXIdxClientContainer() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXIdxClientContainer() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxClientContainer(Pointer p) { super(p); }
 }
@@ -6268,8 +6268,8 @@ public static native @Cast("CXResult") int clang_findIncludesInFile(CXTranslatio
  * or module).
  */
 @Namespace @Name("void") @Opaque public static class CXIdxClientASTFile extends Pointer {
-    /** Empty constructor. */
-    public CXIdxClientASTFile() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXIdxClientASTFile() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxClientASTFile(Pointer p) { super(p); }
 }
@@ -6766,9 +6766,9 @@ public static class CXIdxEntityRefInfo extends Pointer {
   /**
    * \brief Immediate "parent" of the reference. For example:
    * 
-   * <pre><code>
+   * <pre>{@code
    * Foo *var;
-   * </code></pre>
+   * }</pre>
    * 
    * The parent of reference of type 'Foo' is the variable 'var'.
    * For references inside statement bodies of functions/methods,
@@ -6954,8 +6954,8 @@ public static native void clang_index_setClientEntity(@Const CXIdxEntityInfo arg
  * translation units.
  */
 @Namespace @Name("void") @Opaque public static class CXIndexAction extends Pointer {
-    /** Empty constructor. */
-    public CXIndexAction() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CXIndexAction() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIndexAction(Pointer p) { super(p); }
 }
@@ -7030,7 +7030,7 @@ public static final int
  * @param index_options A bitmask of options that affects how indexing is
  * performed. This should be a bitwise OR of the CXIndexOpt_XXX flags.
  *
- * @param[out] out_TU pointer to store a \c CXTranslationUnit that can be
+ * @param [out] out_TU pointer to store a \c CXTranslationUnit that can be
  * reused after indexing is finished. Set to \c NULL if you do not require it.
  *
  * @return 0 on success or if there were errors from which the compiler could
@@ -7330,9 +7330,9 @@ public static final int
    * inline content.
    *
    * For example:
-   * <pre>
+   * <pre>{@literal
    * <br> <br /> <a href="http://example.org/">
-   * </pre>
+   * }</pre>
    */
   CXComment_HTMLStartTag = 3,
 
@@ -7340,9 +7340,9 @@ public static final int
    * \brief HTML end tag.  Considered inline content.
    *
    * For example:
-   * <pre>
+   * <pre>{@literal
    * </a>
-   * </pre>
+   * }</pre>
    */
   CXComment_HTMLEndTag = 4,
 
@@ -7388,9 +7388,9 @@ public static final int
    * text (\c CXComment_VerbatimBlockLine child nodes).
    *
    * For example:
-   * \<pre>
+   * \<pre>{@literal
    * aaa
-   * \</pre>
+   * \}</pre>
    */
   CXComment_VerbatimBlockCommand = 9,
 
@@ -7674,10 +7674,10 @@ public static native @Cast("unsigned") int clang_TParamCommandComment_isParamPos
  * @return zero-based nesting depth of this parameter in the template parameter list.
  *
  * For example,
- * <pre>
+ * <pre>{@literal
  *     template<typename C, template<typename T> class TT>
  *     void test(TT<int> aaa);
- * </pre>
+ * }</pre>
  * for C and TT nesting depth is 0,
  * for T nesting depth is 1.
  */
@@ -7690,10 +7690,10 @@ public static native @Cast("unsigned") int clang_TParamCommandComment_getDepth(@
  * given nesting depth.
  *
  * For example,
- * <pre>
+ * <pre>{@literal
  *     template<typename C, template<typename T> class TT>
  *     void test(TT<int> aaa);
- * </pre>
+ * }</pre>
  * for C and TT nesting depth is 0, so we can ask for index at depth 0:
  * at depth 0 C's index is 0, TT's index is 1.
  *

@@ -205,13 +205,11 @@ the histogram in each bin.
  */
 @Namespace("cv") public static class ShapeTransformer extends Algorithm {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public ShapeTransformer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ShapeTransformer(Pointer p) { super(p); }
 
     /** \brief Estimate the transformation parameters of the current transformer algorithm, based on point matches.
-<p>
+    <p>
     @param transformingShape Contour defining first shape.
     @param targetShape Contour defining second shape (Target).
     @param matches Standard vector of Matches between points.
@@ -220,7 +218,7 @@ the histogram in each bin.
                                                      @ByRef DMatchVector matches);
 
     /** \brief Apply a transformation, given a pre-estimated transformation parameters.
-<p>
+    <p>
     @param input Contour (set of points) to apply the transformation.
     @param output Output contour.
      */
@@ -228,7 +226,7 @@ the histogram in each bin.
     public native float applyTransformation(@ByVal Mat input);
 
     /** \brief Apply a transformation, given a pre-estimated transformation parameters, to an Image.
-<p>
+    <p>
     @param transformingImage Input image.
     @param output Output image.
     @param flags Image interpolation method.
@@ -251,14 +249,12 @@ F.L. Bookstein (PAMI 1989). :
  */
 @Namespace("cv") public static class ThinPlateSplineShapeTransformer extends ShapeTransformer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public ThinPlateSplineShapeTransformer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ThinPlateSplineShapeTransformer(Pointer p) { super(p); }
 
     /** \brief Set the regularization parameter for relaxing the exact interpolation requirements of the TPS
     algorithm.
-<p>
+    <p>
     @param beta value of the regularization parameter.
      */
     public native void setRegularizationParameter(double beta);
@@ -276,8 +272,6 @@ F.L. Bookstein (PAMI 1989). :
  */
 @Namespace("cv") public static class AffineTransformer extends ShapeTransformer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public AffineTransformer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AffineTransformer(Pointer p) { super(p); }
 
@@ -351,8 +345,6 @@ F.L. Bookstein (PAMI 1989). :
  */
 @Namespace("cv") public static class HistogramCostExtractor extends Algorithm {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public HistogramCostExtractor() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HistogramCostExtractor(Pointer p) { super(p); }
 
@@ -369,8 +361,6 @@ F.L. Bookstein (PAMI 1989). :
  */
 @Namespace("cv") public static class NormHistogramCostExtractor extends HistogramCostExtractor {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public NormHistogramCostExtractor() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NormHistogramCostExtractor(Pointer p) { super(p); }
 
@@ -385,8 +375,6 @@ F.L. Bookstein (PAMI 1989). :
  */
 @Namespace("cv") public static class EMDHistogramCostExtractor extends HistogramCostExtractor {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public EMDHistogramCostExtractor() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EMDHistogramCostExtractor(Pointer p) { super(p); }
 
@@ -401,8 +389,6 @@ F.L. Bookstein (PAMI 1989). :
  */
 @Namespace("cv") public static class ChiHistogramCostExtractor extends HistogramCostExtractor {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public ChiHistogramCostExtractor() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ChiHistogramCostExtractor(Pointer p) { super(p); }
 }
@@ -414,8 +400,6 @@ F.L. Bookstein (PAMI 1989). :
  */
 @Namespace("cv") public static class EMDL1HistogramCostExtractor extends HistogramCostExtractor {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public EMDL1HistogramCostExtractor() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EMDL1HistogramCostExtractor(Pointer p) { super(p); }
 }
@@ -487,13 +471,11 @@ F.L. Bookstein (PAMI 1989). :
  */
 @Namespace("cv") public static class ShapeDistanceExtractor extends Algorithm {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public ShapeDistanceExtractor() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ShapeDistanceExtractor(Pointer p) { super(p); }
 
     /** \brief Compute the shape distance between two shapes defined by its contours.
-<p>
+    <p>
     @param contour1 Contour defining first shape.
     @param contour2 Contour defining second shape.
      */
@@ -511,14 +493,12 @@ implementation of the common variations of the original pipeline.
 */
 @Namespace("cv") public static class ShapeContextDistanceExtractor extends ShapeDistanceExtractor {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public ShapeContextDistanceExtractor() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ShapeContextDistanceExtractor(Pointer p) { super(p); }
 
     /** \brief Establish the number of angular bins for the Shape Context Descriptor used in the shape matching
     pipeline.
-<p>
+    <p>
     @param nAngularBins The number of angular bins in the shape context descriptor.
      */
     public native void setAngularBins(int nAngularBins);
@@ -526,21 +506,21 @@ implementation of the common variations of the original pipeline.
 
     /** \brief Establish the number of radial bins for the Shape Context Descriptor used in the shape matching
     pipeline.
-<p>
+    <p>
     @param nRadialBins The number of radial bins in the shape context descriptor.
      */
     public native void setRadialBins(int nRadialBins);
     public native int getRadialBins();
 
     /** \brief Set the inner radius of the shape context descriptor.
-<p>
+    <p>
     @param innerRadius The value of the inner radius.
      */
     public native void setInnerRadius(float innerRadius);
     public native float getInnerRadius();
 
     /** \brief Set the outer radius of the shape context descriptor.
-<p>
+    <p>
     @param outerRadius The value of the outer radius.
      */
     public native void setOuterRadius(float outerRadius);
@@ -553,7 +533,7 @@ implementation of the common variations of the original pipeline.
     context distance between two shapes is defined as the symmetric sum of shape context matching costs
     over best matching points. The final value of the shape distance is a user-defined linear
     combination of the shape context distance, an image appearance distance, and a bending energy.
-<p>
+    <p>
     @param shapeContextWeight The weight of the shape context distance in the final distance value.
      */
     public native void setShapeContextWeight(float shapeContextWeight);
@@ -565,7 +545,7 @@ implementation of the common variations of the original pipeline.
     combination of the shape context distance, an image appearance distance, and a bending energy. If
     this value is set to a number different from 0, is mandatory to set the images that correspond to
     each shape.
-<p>
+    <p>
     @param imageAppearanceWeight The weight of the appearance cost in the final distance value.
      */
     public native void setImageAppearanceWeight(float imageAppearanceWeight);
@@ -575,7 +555,7 @@ implementation of the common variations of the original pipeline.
     definition depends on what transformation is being used to align the shapes. The final value of the
     shape distance is a user-defined linear combination of the shape context distance, an image
     appearance distance, and a bending energy.
-<p>
+    <p>
     @param bendingEnergyWeight The weight of the Bending Energy in the final distance value.
      */
     public native void setBendingEnergyWeight(float bendingEnergyWeight);
@@ -583,7 +563,7 @@ implementation of the common variations of the original pipeline.
 
     /** \brief Set the images that correspond to each shape. This images are used in the calculation of the Image
     Appearance cost.
-<p>
+    <p>
     @param image1 Image corresponding to the shape defined by contours1.
     @param image2 Image corresponding to the shape defined by contours2.
      */
@@ -594,7 +574,7 @@ implementation of the common variations of the original pipeline.
     public native int getIterations();
 
     /** \brief Set the algorithm used for building the shape context descriptor cost matrix.
-<p>
+    <p>
     @param comparer Smart pointer to a HistogramCostExtractor, an algorithm that defines the cost
     matrix between descriptors.
      */
@@ -602,14 +582,14 @@ implementation of the common variations of the original pipeline.
     public native @Ptr HistogramCostExtractor getCostExtractor();
 
     /** \brief Set the value of the standard deviation for the Gaussian window for the image appearance cost.
-<p>
+    <p>
     @param sigma Standard Deviation.
      */
     public native void setStdDev(float sigma);
     public native float getStdDev();
 
     /** \brief Set the algorithm used for aligning the shapes.
-<p>
+    <p>
     @param transformer Smart pointer to a ShapeTransformer, an algorithm that defines the aligning
     transformation.
      */
@@ -634,13 +614,11 @@ Klanderman, and W.J. Rucklidge. (PAMI 1993). :
  */
 @Namespace("cv") public static class HausdorffDistanceExtractor extends ShapeDistanceExtractor {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public HausdorffDistanceExtractor() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HausdorffDistanceExtractor(Pointer p) { super(p); }
 
     /** \brief Set the norm used to compute the Hausdorff value between two shapes. It can be L1 or L2 norm.
-<p>
+    <p>
     @param distanceFlag Flag indicating which norm is used to compute the Hausdorff distance
     (NORM_L1, NORM_L2).
      */
@@ -650,7 +628,7 @@ Klanderman, and W.J. Rucklidge. (PAMI 1993). :
     /** \brief This method sets the rank proportion (or fractional value) that establish the Kth ranked value of
     the partial Hausdorff distance. Experimentally had been shown that 0.6 is a good value to compare
     shapes.
-<p>
+    <p>
     @param rankProportion fractional value (between 0 and 1).
      */
     public native void setRankProportion(float rankProportion);

@@ -38,7 +38,6 @@ import static org.bytedeco.javacpp.opencv_imgproc.cvReleaseStructuringElement;
 public class opencv_imgproc extends org.bytedeco.javacpp.presets.opencv_imgproc {
 
     public static abstract class AbstractCvMoments extends Pointer {
-        public AbstractCvMoments() { }
         public AbstractCvMoments(Pointer p) { super(p); }
 
         public static ThreadLocal<CvMoments> createThreadLocal() {
@@ -60,7 +59,6 @@ public class opencv_imgproc extends org.bytedeco.javacpp.presets.opencv_imgproc 
     }
 
     public static abstract class AbstractIplConvKernel extends Pointer {
-        public AbstractIplConvKernel() { }
         public AbstractIplConvKernel(Pointer p) { super(p); }
 
         /**
@@ -90,7 +88,6 @@ public class opencv_imgproc extends org.bytedeco.javacpp.presets.opencv_imgproc 
     }
 
     public static abstract class AbstractCvHistogram extends Pointer {
-        public AbstractCvHistogram() { }
         public AbstractCvHistogram(Pointer p) { super(p); }
 
         /**

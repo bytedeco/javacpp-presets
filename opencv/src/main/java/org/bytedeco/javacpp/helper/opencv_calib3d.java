@@ -35,7 +35,6 @@ import static org.bytedeco.javacpp.opencv_calib3d.cvReleaseStereoBMState;
 public class opencv_calib3d extends org.bytedeco.javacpp.presets.opencv_calib3d {
 
     public static abstract class AbstractCvPOSITObject extends Pointer {
-        public AbstractCvPOSITObject() { }
         public AbstractCvPOSITObject(Pointer p) { super(p); }
 
         /**
@@ -63,7 +62,6 @@ public class opencv_calib3d extends org.bytedeco.javacpp.presets.opencv_calib3d 
     }
 
     public static abstract class AbstractCvStereoBMState extends Pointer {
-        public AbstractCvStereoBMState() { }
         public AbstractCvStereoBMState(Pointer p) { super(p); }
 
         @Override public CvStereoBMState position(int position) {

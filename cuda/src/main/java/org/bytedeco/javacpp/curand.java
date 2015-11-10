@@ -219,8 +219,8 @@ public static final int
  * CURAND generator (opaque)
  */
 @Opaque public static class curandGenerator_st extends Pointer {
-    /** Empty constructor. */
-    public curandGenerator_st() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public curandGenerator_st() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public curandGenerator_st(Pointer p) { super(p); }
 }
@@ -236,8 +236,8 @@ public static final int
  */
 /** \cond UNHIDE_TYPEDEFS */
 @Opaque public static class curandDistributionShift_st extends Pointer {
-    /** Empty constructor. */
-    public curandDistributionShift_st() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public curandDistributionShift_st() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public curandDistributionShift_st(Pointer p) { super(p); }
 }
@@ -247,21 +247,21 @@ public static final int
  */
 /** \cond UNHIDE_TYPEDEFS */
 @Opaque public static class curandDistributionM2Shift_st extends Pointer {
-    /** Empty constructor. */
-    public curandDistributionM2Shift_st() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public curandDistributionM2Shift_st() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public curandDistributionM2Shift_st(Pointer p) { super(p); }
 }
 @Opaque public static class curandHistogramM2_st extends Pointer {
-    /** Empty constructor. */
-    public curandHistogramM2_st() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public curandHistogramM2_st() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public curandHistogramM2_st(Pointer p) { super(p); }
 }
 
 @Opaque public static class curandDiscreteDistribution_st extends Pointer {
-    /** Empty constructor. */
-    public curandDiscreteDistribution_st() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public curandDiscreteDistribution_st() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public curandDiscreteDistribution_st(Pointer p) { super(p); }
 }

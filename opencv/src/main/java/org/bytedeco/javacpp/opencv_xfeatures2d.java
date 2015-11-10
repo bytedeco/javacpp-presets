@@ -69,7 +69,7 @@ the use of this software, even if advised of the possibility of such damage.
     \defgroup xfeatures2d_experiment Experimental 2D Features Algorithms
 <p>
 This section describes experimental algorithms for 2d feature detection.
-<p>
+    <p>
     \defgroup xfeatures2d_nonfree Non-free 2D Features Algorithms
 <p>
 This section describes two popular algorithms for 2d feature detection, SIFT and SURF, that are
@@ -170,7 +170,7 @@ They are competitive alternatives to existing keypoints in particular for embedd
 <p>
 @param bytes legth of the descriptor in bytes, valid values are: 16, 32 (default) or 64 .
 @param use_orientation sample patterns using keypoints orientation, disabled by default.
-<p>
+ <p>
  */
 @Namespace("cv::xfeatures2d") public static class BriefDescriptorExtractor extends Feature2D {
     static { Loader.load(); }
@@ -270,12 +270,10 @@ DAISY::NRM_SIFT mean that descriptors are normalized for L2 norm equal to 1.0 bu
 @param H optional 3x3 homography matrix used to warp the grid of daisy but sampling keypoints remains unwarped on image
 @param interpolation switch to disable interpolation for speed improvement at minor quality loss
 @param use_orientation sample patterns using keypoints orientation, disabled by default.
-<p>
+ <p>
  */
 @Namespace("cv::xfeatures2d") public static class DAISY extends Feature2D {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DAISY() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DAISY(Pointer p) { super(p); }
 
@@ -436,17 +434,17 @@ DAISY::NRM_SIFT mean that descriptors are normalized for L2 norm equal to 1.0 bu
     /**
     @param nfeatures The number of best features to retain. The features are ranked by their scores
     (measured in SIFT algorithm as the local contrast)
-<p>
+    <p>
     @param nOctaveLayers The number of layers in each octave. 3 is the value used in D. Lowe paper. The
     number of octaves is computed automatically from the image resolution.
-<p>
+    <p>
     @param contrastThreshold The contrast threshold used to filter out weak features in semi-uniform
     (low-contrast) regions. The larger the threshold, the less features are produced by the detector.
-<p>
+    <p>
     @param edgeThreshold The threshold used to filter out edge-like features. Note that the its meaning
     is different from the contrastThreshold, i.e. the larger the edgeThreshold, the less features are
     filtered out (more features are retained).
-<p>
+    <p>
     @param sigma The sigma of the Gaussian applied to the input image at the octave \#0. If your image
     is captured with a weak camera with soft lenses, you might want to reduce the number.
      */
@@ -487,8 +485,6 @@ The number of images within each octave of a gaussian pyramid. It is set to 2 by
  */
 @Namespace("cv::xfeatures2d") public static class SURF extends Feature2D {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public SURF() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SURF(Pointer p) { super(p); }
 

@@ -390,8 +390,6 @@ public static final int
 
 @Namespace("cv::flann") public static class LshIndexParams extends IndexParams {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public LshIndexParams() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LshIndexParams(Pointer p) { super(p); }
 
@@ -401,8 +399,6 @@ public static final int
 
 @Namespace("cv::flann") public static class SavedIndexParams extends IndexParams {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public SavedIndexParams() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SavedIndexParams(Pointer p) { super(p); }
 

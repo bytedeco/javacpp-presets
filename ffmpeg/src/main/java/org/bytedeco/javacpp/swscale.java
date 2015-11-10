@@ -176,8 +176,8 @@ public static class SwsFilter extends Pointer {
 }
 
 @Opaque public static class SwsContext extends Pointer {
-    /** Empty constructor. */
-    public SwsContext() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public SwsContext() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SwsContext(Pointer p) { super(p); }
 }
@@ -195,7 +195,7 @@ public static native int sws_isSupportedInput(@Cast("AVPixelFormat") int pix_fmt
 public static native int sws_isSupportedOutput(@Cast("AVPixelFormat") int pix_fmt);
 
 /**
- * @param[in]  pix_fmt the pixel format
+ * @param [in]  pix_fmt the pixel format
  * @return a positive value if an endianness conversion for pix_fmt is
  * supported, 0 otherwise.
  */

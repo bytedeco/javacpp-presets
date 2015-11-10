@@ -120,29 +120,29 @@ thresholds at runtime!
 <p>
 Here is an example of setting a threshold for the Eigenfaces method, when creating the model:
 <p>
-<pre><code>
+<pre>{@code
 // Let's say we want to keep 10 Eigenfaces and have a threshold value of 10.0
 int num_components = 10;
 double threshold = 10.0;
 // Then if you want to have a cv::FaceRecognizer with a confidence threshold,
 // create the concrete implementation with the appropiate parameters:
 Ptr<FaceRecognizer> model = createEigenFaceRecognizer(num_components, threshold);
-</code></pre>
+}</pre>
 <p>
 Sometimes it's impossible to train the model, just to experiment with threshold values. Thanks to
 Algorithm it's possible to set internal model thresholds during runtime. Let's see how we would
 set/get the prediction for the Eigenface model, we've created above:
 <p>
-<pre><code>
+<pre>{@code
 // The following line reads the threshold from the Eigenfaces model:
 double current_threshold = model->getDouble("threshold");
 // And this line sets the threshold to 0.0:
 model->set("threshold", 0.0);
-</code></pre>
+}</pre>
 <p>
 If you've set the threshold to 0.0 as we did above, then:
 <p>
-<pre><code>
+<pre>{@code
 //
 Mat img = imread("person1/3.jpg", CV_LOAD_IMAGE_GRAYSCALE);
 // Get a prediction from the model. Note: We've set a threshold of 0.0 above,
@@ -150,7 +150,7 @@ Mat img = imread("person1/3.jpg", CV_LOAD_IMAGE_GRAYSCALE);
 // label, which indicates, this face is unknown
 int predicted_label = model->predict(img);
 // ...
-</code></pre>
+}</pre>
 <p>
 is going to yield -1 as predicted label, which states this face is unknown.
 <p>
@@ -159,36 +159,34 @@ is going to yield -1 as predicted label, which states this face is unknown.
 Since every FaceRecognizer is a Algorithm, you can use Algorithm::name to get the name of a
 FaceRecognizer:
 <p>
-<pre><code>
+<pre>{@code
 // Create a FaceRecognizer:
 Ptr<FaceRecognizer> model = createEigenFaceRecognizer();
 // And here's how to get its name:
 String name = model->name();
-</code></pre>
-<p>
+}</pre>
+ <p>
  */
 @Namespace("cv::face") @NoOffset public static class FaceRecognizer extends Algorithm {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FaceRecognizer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FaceRecognizer(Pointer p) { super(p); }
 
     /** \brief Trains a FaceRecognizer with given data and associated labels.
-<p>
+    <p>
     @param src The training images, that means the faces you want to learn. The data has to be
     given as a vector\<Mat\>.
     @param labels The labels corresponding to the images have to be given either as a vector\<int\>
     or a
-<p>
+    <p>
     The following source code snippet shows you how to learn a Fisherfaces model on a given set of
     images. The images are read with imread and pushed into a std::vector\<Mat\>. The labels of each
     image are stored within a std::vector\<int\> (you could also use a Mat of type CV_32SC1). Think of
     the label as the subject (the person) this image belongs to, so same subjects (persons) should have
     the same label. For the available FaceRecognizer you don't have to pay any attention to the order of
     the labels, just make sure same persons have the same label:
-<p>
-    <pre><code>
+    <p>
+    <pre>{@code
     // holds images and labels
     vector<Mat> images;
     vector<int> labels;
@@ -200,43 +198,43 @@ String name = model->name();
     images.push_back(imread("person1/0.jpg", CV_LOAD_IMAGE_GRAYSCALE)); labels.push_back(1);
     images.push_back(imread("person1/1.jpg", CV_LOAD_IMAGE_GRAYSCALE)); labels.push_back(1);
     images.push_back(imread("person1/2.jpg", CV_LOAD_IMAGE_GRAYSCALE)); labels.push_back(1);
-    </code></pre>
-<p>
+    }</pre>
+    <p>
     Now that you have read some images, we can create a new FaceRecognizer. In this example I'll create
     a Fisherfaces model and decide to keep all of the possible Fisherfaces:
-<p>
-    <pre><code>
+    <p>
+    <pre>{@code
     // Create a new Fisherfaces model and retain all available Fisherfaces,
     // this is the most common usage of this specific FaceRecognizer:
     //
     Ptr<FaceRecognizer> model =  createFisherFaceRecognizer();
-    </code></pre>
-<p>
+    }</pre>
+    <p>
     And finally train it on the given dataset (the face images and labels):
-<p>
-    <pre><code>
+    <p>
+    <pre>{@code
     // This is the common interface to train all of the available cv::FaceRecognizer
     // implementations:
     //
     model->train(images, labels);
-    </code></pre>
+    }</pre>
      */
     public native void train(@ByVal MatVector src, @ByVal Mat labels);
 
     /** \brief Updates a FaceRecognizer with given data and associated labels.
-<p>
+    <p>
     @param src The training images, that means the faces you want to learn. The data has to be given
     as a vector\<Mat\>.
     @param labels The labels corresponding to the images have to be given either as a vector\<int\> or
     a
-<p>
+    <p>
     This method updates a (probably trained) FaceRecognizer, but only if the algorithm supports it. The
     Local Binary Patterns Histograms (LBPH) recognizer (see createLBPHFaceRecognizer) can be updated.
     For the Eigenfaces and Fisherfaces method, this is algorithmically not possible and you have to
     re-estimate the model with FaceRecognizer::train. In any case, a call to train empties the existing
     model and learns a new model, while update does not delete any model data.
-<p>
-    <pre><code>
+    <p>
+    <pre>{@code
     // Create a new LBPH model (it can be updated) and use the default parameters,
     // this is the most common usage of this specific FaceRecognizer:
     //
@@ -256,16 +254,16 @@ String name = model->name();
     model->update(newImages,newLabels);
     // This will preserve the old model data and extend the existing model
     // with the new features extracted from newImages!
-    </code></pre>
-<p>
+    }</pre>
+    <p>
     Calling update on an Eigenfaces model (see createEigenFaceRecognizer), which doesn't support
     updating, will throw an error similar to:
-<p>
-    <pre><code>
+    <p>
+    <pre>{@code
     OpenCV Error: The function/feature is not implemented (This FaceRecognizer (FaceRecognizer.Eigenfaces) does not support updating, you have to use FaceRecognizer::train to update it.) in update, file /home/philipp/git/opencv/modules/contrib/src/facerec.cpp, line 305
     terminate called after throwing an instance of 'cv::Exception'
-    </code></pre>
-<p>
+    }</pre>
+    <p>
     \note The FaceRecognizer does not store your training images, because this would be very
     memory intense and it's not the responsibility of te FaceRecognizer to do so. The caller is
     responsible for maintaining the dataset, he want to work with.
@@ -276,17 +274,17 @@ String name = model->name();
     public native int predict(@ByVal Mat src);
 
     /** \brief Predicts a label and associated confidence (e.g. distance) for a given input image.
-<p>
+    <p>
     @param src Sample image to get a prediction from.
     @param label The predicted label for the given image.
     @param confidence Associated confidence (e.g. distance) for the predicted label.
-<p>
+    <p>
     The suffix const means that prediction does not affect the internal model state, so the method can
     be safely called from within different threads.
-<p>
+    <p>
     The following example shows how to get a prediction from a trained model:
-<p>
-    <pre><code>
+    <p>
+    <pre>{@code
     using namespace cv;
     // Do your initialization here (create the cv::FaceRecognizer model) ...
     // ...
@@ -294,11 +292,11 @@ String name = model->name();
     Mat img = imread("person1/3.jpg", CV_LOAD_IMAGE_GRAYSCALE);
     // And get a prediction from the cv::FaceRecognizer:
     int predicted = model->predict(img);
-    </code></pre>
-<p>
+    }</pre>
+    <p>
     Or to get a prediction and the associated confidence (e.g. distance):
-<p>
-    <pre><code>
+    <p>
+    <pre>{@code
     using namespace cv;
     // Do your initialization here (create the cv::FaceRecognizer model) ...
     // ...
@@ -308,21 +306,21 @@ String name = model->name();
     double predicted_confidence = 0.0;
     // Get the prediction and associated confidence from the model
     model->predict(img, predicted_label, predicted_confidence);
-    </code></pre>
+    }</pre>
      */
     public native void predict(@ByVal Mat src, @ByRef IntPointer label, @ByRef DoublePointer confidence);
     public native void predict(@ByVal Mat src, @ByRef IntBuffer label, @ByRef DoubleBuffer confidence);
     public native void predict(@ByVal Mat src, @ByRef int[] label, @ByRef double[] confidence);
 
     /** \brief Saves a FaceRecognizer and its model state.
-<p>
+    <p>
     Saves this model to a given filename, either as XML or YAML.
     @param filename The filename to store this FaceRecognizer to (either XML/YAML).
-<p>
+    <p>
     Every FaceRecognizer overwrites FaceRecognizer::save(FileStorage& fs) to save the internal model
     state. FaceRecognizer::save(const String& filename) saves the state of a model to the given
     filename.
-<p>
+    <p>
     The suffix const means that prediction does not affect the internal model state, so the method can
     be safely called from within different threads.
      */
@@ -330,7 +328,7 @@ String name = model->name();
     public native void save(@Str String filename);
 
     /** \brief Loads a FaceRecognizer and its model state.
-<p>
+    <p>
     Loads a persisted model and state from a given XML or YAML file . Every FaceRecognizer has to
     overwrite FaceRecognizer::load(FileStorage& fs) to enable loading the model state.
     FaceRecognizer::load(FileStorage& fs) in turn gets called by
@@ -349,21 +347,21 @@ String name = model->name();
     public native void load(@Const @ByRef FileStorage fs);
 
     /** \brief Sets string info for the specified model's label.
-<p>
+    <p>
     The string info is replaced by the provided value if it was set before for the specified label.
      */
     public native void setLabelInfo(int label, @Str BytePointer strInfo);
     public native void setLabelInfo(int label, @Str String strInfo);
 
     /** \brief Gets string information by label.
-<p>
+    <p>
     If an unknown label id is provided or there is no label information associated with the specified
     label id the method returns an empty string.
      */
     public native @Str BytePointer getLabelInfo(int label);
 
     /** \brief Gets vector of labels by string.
-<p>
+    <p>
     The function searches for the labels containing the specified sub-string in the associated string
     info.
      */
@@ -401,8 +399,6 @@ String name = model->name();
 // base for two classes
 @Namespace("cv::face") public static class BasicFaceRecognizer extends FaceRecognizer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public BasicFaceRecognizer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BasicFaceRecognizer(Pointer p) { super(p); }
 
@@ -488,8 +484,6 @@ is larger than the threshold, this method returns -1.
 
 @Namespace("cv::face") public static class LBPHFaceRecognizer extends FaceRecognizer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public LBPHFaceRecognizer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LBPHFaceRecognizer(Pointer p) { super(p); }
 

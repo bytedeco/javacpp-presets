@@ -96,108 +96,108 @@ public static final int
 
 /* Opaque structure holding CUSPARSE library context */
 @Opaque public static class cusparseContext extends Pointer {
-    /** Empty constructor. */
-    public cusparseContext() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cusparseContext() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cusparseContext(Pointer p) { super(p); }
 }
 
 /* Opaque structure holding the matrix descriptor */
 @Opaque public static class cusparseMatDescr extends Pointer {
-    /** Empty constructor. */
-    public cusparseMatDescr() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cusparseMatDescr() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cusparseMatDescr(Pointer p) { super(p); }
 }
 
 /* Opaque structure holding the sparse triangular solve information */
 @Opaque public static class cusparseSolveAnalysisInfo extends Pointer {
-    /** Empty constructor. */
-    public cusparseSolveAnalysisInfo() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cusparseSolveAnalysisInfo() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cusparseSolveAnalysisInfo(Pointer p) { super(p); }
 }
 
 /* Opaque structures holding the sparse triangular solve information */
 @Opaque public static class csrsv2Info extends Pointer {
-    /** Empty constructor. */
-    public csrsv2Info() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public csrsv2Info() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public csrsv2Info(Pointer p) { super(p); }
 }
 
 @Opaque public static class bsrsv2Info extends Pointer {
-    /** Empty constructor. */
-    public bsrsv2Info() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public bsrsv2Info() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public bsrsv2Info(Pointer p) { super(p); }
 }
 
 @Opaque public static class bsrsm2Info extends Pointer {
-    /** Empty constructor. */
-    public bsrsm2Info() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public bsrsm2Info() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public bsrsm2Info(Pointer p) { super(p); }
 }
 
 /* Opaque structures holding incomplete Cholesky information */
 @Opaque public static class csric02Info extends Pointer {
-    /** Empty constructor. */
-    public csric02Info() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public csric02Info() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public csric02Info(Pointer p) { super(p); }
 }
 
 @Opaque public static class bsric02Info extends Pointer {
-    /** Empty constructor. */
-    public bsric02Info() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public bsric02Info() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public bsric02Info(Pointer p) { super(p); }
 }
 
 /* Opaque structures holding incomplete LU information */
 @Opaque public static class csrilu02Info extends Pointer {
-    /** Empty constructor. */
-    public csrilu02Info() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public csrilu02Info() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public csrilu02Info(Pointer p) { super(p); }
 }
 
 @Opaque public static class bsrilu02Info extends Pointer {
-    /** Empty constructor. */
-    public bsrilu02Info() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public bsrilu02Info() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public bsrilu02Info(Pointer p) { super(p); }
 }
 
 /* Opaque structures holding the hybrid (HYB) storage information */
 @Opaque public static class cusparseHybMat extends Pointer {
-    /** Empty constructor. */
-    public cusparseHybMat() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cusparseHybMat() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cusparseHybMat(Pointer p) { super(p); }
 }
 
 /* Opaque structures holding sparse gemm information */
 @Opaque public static class csrgemm2Info extends Pointer {
-    /** Empty constructor. */
-    public csrgemm2Info() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public csrgemm2Info() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public csrgemm2Info(Pointer p) { super(p); }
 }
 
 /* Opaque structure holding the sorting information */
 @Opaque public static class csru2csrInfo extends Pointer {
-    /** Empty constructor. */
-    public csru2csrInfo() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public csru2csrInfo() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public csru2csrInfo(Pointer p) { super(p); }
 }
 
 /* Opaque structure holding the coloring information */
 @Opaque public static class cusparseColorInfo extends Pointer {
-    /** Empty constructor. */
-    public cusparseColorInfo() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public cusparseColorInfo() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cusparseColorInfo(Pointer p) { super(p); }
 }

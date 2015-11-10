@@ -265,29 +265,29 @@ public static class freenect_raw_tilt_state extends Pointer {
 }
 
 @Opaque public static class _freenect_context extends Pointer {
-    /** Empty constructor. */
-    public _freenect_context() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public _freenect_context() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _freenect_context(Pointer p) { super(p); }
 }
 /** Holds information about the usb context. */
 @Opaque public static class freenect_context extends Pointer {
-    /** Empty constructor. */
-    public freenect_context() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public freenect_context() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_context(Pointer p) { super(p); }
 }
 
 @Opaque public static class _freenect_device extends Pointer {
-    /** Empty constructor. */
-    public _freenect_device() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public _freenect_device() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _freenect_device(Pointer p) { super(p); }
 }
 /** Holds device information. */
 @Opaque public static class freenect_device extends Pointer {
-    /** Empty constructor. */
-    public freenect_device() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public freenect_device() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_device(Pointer p) { super(p); }
 }
@@ -295,8 +295,8 @@ public static class freenect_raw_tilt_state extends Pointer {
 // usb backend specific section
 /** Holds libusb-1.0 context */
 @Opaque public static class freenect_usb_context extends Pointer {
-    /** Empty constructor. */
-    public freenect_usb_context() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public freenect_usb_context() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_usb_context(Pointer p) { super(p); }
 }

@@ -32,7 +32,6 @@ import static org.bytedeco.javacpp.opencv_video.cvReleaseKalman;
 public class opencv_video extends org.bytedeco.javacpp.presets.opencv_video {
 
     public static abstract class AbstractCvKalman extends Pointer {
-        public AbstractCvKalman() { }
         public AbstractCvKalman(Pointer p) { super(p); }
 
         /**

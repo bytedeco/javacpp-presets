@@ -526,8 +526,8 @@ Internal structure that is used for sequential retrieving contours from the imag
 It supports both hierarchical and plane variants of Suzuki algorithm.
 */
 @Name("_CvContourScanner") @Opaque public static class CvContourScanner extends Pointer {
-    /** Empty constructor. */
-    public CvContourScanner() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CvContourScanner() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvContourScanner(Pointer p) { super(p); }
 }
@@ -727,20 +727,20 @@ public static final int
 
 /* Fast search data structures  */
 @Opaque public static class CvFeatureTree extends Pointer {
-    /** Empty constructor. */
-    public CvFeatureTree() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CvFeatureTree() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvFeatureTree(Pointer p) { super(p); }
 }
 @Opaque public static class CvLSH extends Pointer {
-    /** Empty constructor. */
-    public CvLSH() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CvLSH() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvLSH(Pointer p) { super(p); }
 }
 @Opaque public static class CvLSHOperations extends Pointer {
-    /** Empty constructor. */
-    public CvLSHOperations() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public CvLSHOperations() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvLSHOperations(Pointer p) { super(p); }
 }
@@ -916,7 +916,7 @@ public static native void cvIntegral( @Const CvArr image, CvArr sum,
 public static native void cvIntegral( @Const CvArr image, CvArr sum);
 
 /** \brief Smoothes the input image with gaussian kernel and then down-samples it.
-<p>
+   <p>
    dst_width = floor(src_width/2)[+1],
    dst_height = floor(src_height/2)[+1]
    @see cv::pyrDown
@@ -926,7 +926,7 @@ public static native void cvPyrDown( @Const CvArr src, CvArr dst,
 public static native void cvPyrDown( @Const CvArr src, CvArr dst );
 
 /** \brief Up-samples image and smoothes the result with gaussian kernel.
-<p>
+   <p>
    dst_width = src_width*2,
    dst_height = src_height*2
    @see cv::pyrUp
@@ -964,7 +964,7 @@ public static native void cvPyrMeanShiftFiltering( @Const CvArr src, CvArr dst,
 public static native void cvWatershed( @Const CvArr image, CvArr markers );
 
 /** \brief Calculates an image derivative using generalized Sobel
-<p>
+   <p>
    (aperture_size = 1,3,5,7) or Scharr (aperture_size = -1) operator.
    Scharr can be used only for the first dx or dy derivative
 @see cv::Sobel
@@ -1186,7 +1186,7 @@ public static native void cvErode( @Const CvArr src, CvArr dst,
 public static native void cvErode( @Const CvArr src, CvArr dst );
 
 /** \brief dilates input image (applies maximum filter) one or more times.
-<p>
+   <p>
    If element pointer is NULL, 3x3 rectangular element is used
 @see cv::dilate
 */
@@ -1227,7 +1227,7 @@ public static native void cvGetHuMoments( CvMoments moments, CvHuMoments hu_mome
 /*********************************** data sampling **************************************/
 
 /** \brief Fetches pixels that belong to the specified line segment and stores them to the buffer.
-<p>
+   <p>
    Returns the number of retrieved points.
 @see cv::LineSegmentDetector
 */
@@ -1242,7 +1242,7 @@ public static native int cvSampleLine( @Const CvArr image, @ByVal @Cast("CvPoint
 public static native int cvSampleLine( @Const CvArr image, @ByVal @Cast("CvPoint*") int[] pt1, @ByVal @Cast("CvPoint*") int[] pt2, Pointer buffer);
 
 /** \brief Retrieves the rectangular image region with specified center from the input array.
-<p>
+ <p>
  dst(x,y) <- src(x + center.x - dst_width/2, y + center.y - dst_height/2).
  Values of pixels with fractional coordinates are retrieved using bilinear interpolation
 @see cv::getRectSubPix
@@ -1253,7 +1253,7 @@ public static native void cvGetRectSubPix( @Const CvArr src, CvArr dst, @ByVal @
 
 
 /** \brief Retrieves quadrangle from the input array.
-<p>
+    <p>
     matrixarr = ( a11  a12 | b1 )   dst(x,y) <- src(A[x y]' + b)
                 ( a21  a22 | b2 )   (bilinear interpolation is used to retrieve pixels
                                      with fractional coordinates)
@@ -1332,7 +1332,7 @@ public static native int cvFindContours( CvArr image, CvMemStorage storage, @ByP
                             @ByVal(nullValue = "cvPoint(0,0)") @Cast("CvPoint*") int[] offset/*=cvPoint(0,0)*/);
 
 /** \brief Initializes contour retrieving process.
-<p>
+   <p>
    Calls cvStartFindContours.
    Calls cvFindNextContour until null pointer is returned
    or some other condition becomes true.
@@ -1363,7 +1363,7 @@ public static native CvSeq cvFindNextContour( CvContourScanner scanner );
 
 
 /** \brief Substitutes the last retrieved contour with the new one
-<p>
+   <p>
    (if the substitutor is null, the last retrieved contour is removed from the tree)
 @see cvFindContours
 */
@@ -1400,7 +1400,7 @@ public static native CvSeq cvApproxChains( CvSeq src_seq, CvMemStorage storage,
 public static native CvSeq cvApproxChains( CvSeq src_seq, CvMemStorage storage);
 
 /** \brief Initializes Freeman chain reader.
-<p>
+   <p>
    The reader is used to iteratively get coordinates of all the chain points.
    If the Freeman codes should be read as is, a simple sequence reader should be used
 @see cvApproxChains
@@ -1518,14 +1518,14 @@ public static native void cvBoxPoints( @ByVal CvBox2D box, @Cast("CvPoint2D32f*"
 public static native void cvBoxPoints( @ByVal CvBox2D box, @Cast("CvPoint2D32f*") float[] pt );
 
 /** \brief Initializes sequence header for a matrix (column or row vector) of points
-<p>
+   <p>
    a wrapper for cvMakeSeqHeaderForArray (it does not initialize bounding rectangle!!!) */
 public static native CvSeq cvPointSeqFromMat( int seq_kind, @Const CvArr mat,
                                  CvContour contour_header,
                                  CvSeqBlock block );
 
 /** \brief Checks whether the point is inside polygon, outside, on an edge (at a vertex).
-<p>
+   <p>
    Returns positive, negative or zero value, correspondingly.
    Optionally, measures a signed distance between
    the point and the nearest polygon edge (measure_dist=1)
@@ -1855,7 +1855,7 @@ public static native void cvDistTransform( @Const CvArr src, CvArr dst,
 
 
 /** \brief Applies fixed-level threshold to grayscale image.
-<p>
+   <p>
    This is a basic operation applied before retrieving contours
 @see cv::threshold
 */
@@ -1864,7 +1864,7 @@ public static native double cvThreshold( @Const CvArr src, CvArr dst,
                             int threshold_type );
 
 /** \brief Applies adaptive threshold to grayscale image.
-<p>
+   <p>
    The two parameters for methods CV_ADAPTIVE_THRESH_MEAN_C and
    CV_ADAPTIVE_THRESH_GAUSSIAN_C are:
    neighborhood size (3, 5, 7 etc.),
@@ -1919,7 +1919,7 @@ public static native void cvCanny( @Const CvArr image, CvArr edges, double thres
                       double threshold2 );
 
 /** \brief Calculates constraint image for corner detection
-<p>
+   <p>
    Dx^2 * Dyy + Dxx * Dy^2 - 2 * Dx * Dy * Dxy.
    Applying threshold to the result gives coordinates of corners
 @see cv::preCornerDetect
@@ -1947,7 +1947,7 @@ public static native void cvCornerMinEigenVal( @Const CvArr image, CvArr eigenva
                                   int block_size );
 
 /** \brief Harris corner detector:
-<p>
+   <p>
    Calculates det(M) - k*(trace(M)^2), where M is 2x2 gradient covariation matrix for each pixel
 @see cv::cornerHarris
 */
@@ -2012,7 +2012,7 @@ public static native void cvGoodFeaturesToTrack( @Const CvArr image, CvArr eig_i
                                     double min_distance );
 
 /** \brief Finds lines on binary image using one of several methods.
-<p>
+   <p>
    line_storage is either memory storage or 1 x _max number of lines_ CvMat, its
    number of columns is changed by the function.
    method is one of CV_HOUGH_*;
@@ -2089,7 +2089,7 @@ public static native void cvLine( CvArr img, @ByVal @Cast("CvPoint*") int[] pt1,
                      @ByVal CvScalar color );
 
 /** \brief Draws a rectangle given two opposite corners of the rectangle (pt1 & pt2)
-<p>
+   <p>
    if thickness<0 (e.g. thickness == CV_FILLED), the filled box is drawn
 @see cv::rectangle
 */
@@ -2124,7 +2124,7 @@ public static native void cvRectangleR( CvArr img, @ByVal CvRect r,
 
 
 /** \brief Draws a circle with specified center and radius.
-<p>
+   <p>
    Thickness works in the same way as with cvRectangle
 @see cv::circle
 */
@@ -2145,7 +2145,7 @@ public static native void cvCircle( CvArr img, @ByVal @Cast("CvPoint*") int[] ce
                        @ByVal CvScalar color);
 
 /** \brief Draws ellipse outline, filled ellipse, elliptic arc or filled elliptic sector
-<p>
+   <p>
    depending on _thickness_, _start_angle_ and _end_angle_ parameters. The resultant figure
    is rotated by _angle_. All the angles are in degrees
 @see cv::ellipse
@@ -2253,7 +2253,7 @@ public static native void cvDrawPolyLine(CvArr arg1, @Cast("CvPoint**") @ByPtrPt
 
 /** \brief Clips the line segment connecting *pt1 and *pt2
    by the rectangular window
-<p>
+   <p>
    (0<=x<img_size.width, 0<=y<img_size.height).
 @see cv::clipLine
 */
@@ -2540,7 +2540,7 @@ CV_32F                    | -1/CV_32F/CV_64F
 CV_64F                    | -1/CV_64F
 <p>
 \note when ddepth=-1, the output image will have the same depth as the source.
-<p>
+    <p>
     \defgroup imgproc_transform Geometric Image Transformations
 <p>
 The functions in this section perform various geometrical transformations of 2D images. They do not
@@ -2577,7 +2577,7 @@ where a polynomial function is fit into some neighborhood of the computed pixel 
 f_y(x,y))\f$, and then the value of the polynomial at \f$(f_x(x,y), f_y(x,y))\f$ is taken as the
 interpolated pixel value. In OpenCV, you can choose between several interpolation methods. See
 resize for details.
-<p>
+    <p>
     \defgroup imgproc_misc Miscellaneous Image Transformations
     \defgroup imgproc_draw Drawing Functions
 <p>
@@ -2606,7 +2606,7 @@ especially effective when rendering antialiased shapes.
 case, the color[3] is simply copied to the repainted pixels. Thus, if you want to paint
 semi-transparent shapes, you can paint them in a separate buffer and then blend it with the main
 image.
-<p>
+    <p>
     \defgroup imgproc_colormap ColorMaps in OpenCV
 <p>
 The human perception isn't built for observing fine changes in grayscale images. Human eyes are more
@@ -2618,7 +2618,7 @@ In OpenCV you only need applyColorMap to apply a colormap on a given image. The 
 code reads the path to an image from command line, applies a Jet colormap on it and shows the
 result:
 <p>
-<pre><code>
+<pre>{@code
 #include <opencv2/core.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/imgcodecs.hpp>
@@ -2651,10 +2651,10 @@ int main(int argc, const char *argv[])
     waitKey(0);
     return 0;
 }
-</code></pre>
+}</pre>
 <p>
 @see cv::ColormapTypes
-<p>
+    <p>
     \defgroup imgproc_hist Histograms
     \defgroup imgproc_shape Structural Analysis and Shape Descriptors
     \defgroup imgproc_motion Motion Analysis and Object Tracking
@@ -2732,7 +2732,7 @@ public static final int
     source image, they are set to zero */
     WARP_FILL_OUTLIERS   = 8,
     /** flag, inverse transformation
-<p>
+    <p>
     For example, polar transforms:
     - flag is __not__ set: \f$dst( \phi , \rho ) = src(x,y)\f$
     - flag is set: \f$dst(x,y) = src( \phi , \rho )\f$
@@ -3279,8 +3279,6 @@ public static final int
 /** finds arbitrary template in the grayscale image using Generalized Hough Transform */
 @Namespace("cv") public static class GeneralizedHough extends Algorithm {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public GeneralizedHough() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GeneralizedHough(Pointer p) { super(p); }
 
@@ -3321,8 +3319,6 @@ public static final int
  *  Detects position only without traslation and rotation */
 @Namespace("cv") public static class GeneralizedHoughBallard extends GeneralizedHough {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public GeneralizedHoughBallard() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GeneralizedHoughBallard(Pointer p) { super(p); }
 
@@ -3339,8 +3335,6 @@ public static final int
  *  Detects position, traslation and rotation */
 @Namespace("cv") public static class GeneralizedHoughGuil extends GeneralizedHough {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public GeneralizedHoughGuil() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GeneralizedHoughGuil(Pointer p) { super(p); }
 
@@ -3396,8 +3390,6 @@ public static final int
 
 @Namespace("cv") public static class CLAHE extends Algorithm {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public CLAHE() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CLAHE(Pointer p) { super(p); }
 
@@ -3492,18 +3484,16 @@ following the algorithm described at \cite Rafael12 .
 */
 @Namespace("cv") public static class LineSegmentDetector extends Algorithm {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public LineSegmentDetector() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LineSegmentDetector(Pointer p) { super(p); }
 
 
     /** \brief Finds lines in the input image.
-<p>
+    <p>
     This is the output of the default parameters of the algorithm on the above shown image.
-<p>
+    <p>
     ![image](pics/building_lsd.png)
-<p>
+    <p>
     @param _image A grayscale (CV_8UC1) input image. If only a roi needs to be selected, use:
     {@code lsd_ptr-\>detect(image(roi), lines, ...); lines += Scalar(roi.x, roi.y, roi.x, roi.y);}
     @param _lines A vector of Vec4i or Vec4f elements specifying the beginning and ending point of a line. Where
@@ -3531,7 +3521,7 @@ following the algorithm described at \cite Rafael12 .
     public native void drawSegments(@ByVal Mat _image, @ByVal Mat lines);
 
     /** \brief Draws two groups of lines in blue and red, counting the non overlapping (mismatching) pixels.
-<p>
+    <p>
     @param size The size of the image, where lines1 and lines2 were found.
     @param lines1 The first group of lines that needs to be drawn. It is visualized in blue color.
     @param lines2 The second group of lines. They visualized in red color.
@@ -4091,13 +4081,13 @@ where \f$D_x\f$,\f$D_y\f$ are the first image derivatives, \f$D_{xx}\f$,\f$D_{yy
 derivatives, and \f$D_{xy}\f$ is the mixed derivative.
 <p>
 The corners can be found as local maximums of the functions, as shown below:
-<pre><code>
+<pre>{@code
     Mat corners, dilated_corners;
     preCornerDetect(image, corners, 3);
     // dilation with 3x3 rectangular structuring element
     dilate(corners, dilated_corners, Mat(), 1);
     Mat corner_mask = corners == dilated_corners;
-</code></pre>
+}</pre>
 <p>
 @param src Source single-channel 8-bit of floating-point image.
 @param dst Output image that has the type CV_32F and the same size as src .
@@ -4244,7 +4234,7 @@ in \cite Matas00
 <p>
 See the line detection example below:
 <p>
-<pre><code>
+<pre>{@code
     #include <opencv2/imgproc.hpp>
     #include <opencv2/highgui.hpp>
 
@@ -4293,7 +4283,7 @@ See the line detection example below:
         waitKey(0);
         return 0;
     }
-</code></pre>
+}</pre>
 This is a sample picture the function parameters have been tuned for:
 <p>
 ![image](pics/building.jpg)
@@ -4330,7 +4320,7 @@ An example using the Hough circle detector
 The function finds circles in a grayscale image using a modification of the Hough transform.
 <p>
 Example: :
-<pre><code>
+<pre>{@code
     #include <opencv2/imgproc.hpp>
     #include <opencv2/highgui.hpp>
     #include <math.h>
@@ -4361,7 +4351,7 @@ Example: :
         imshow( "circles", img );
         return 0;
     }
-</code></pre>
+}</pre>
 <p>
 \note Usually the function detects the centers of circles well. However, it may fail to find correct
 radii. You can assist to the function by specifying the radius range ( minRadius and maxRadius ) if
@@ -4500,16 +4490,16 @@ The function resize resizes the image src down to or up to the specified size. N
 initial dst type or size are not taken into account. Instead, the size and type are derived from
 the {@code src},{@code dsize},{@code fx}, and {@code fy}. If you want to resize src so that it fits the pre-created dst,
 you may call the function as follows:
-<pre><code>
+<pre>{@code
     // explicitly specify dsize=dst.size(); fx and fy will be computed from that.
     resize(src, dst, dst.size(), 0, 0, interpolation);
-</code></pre>
+}</pre>
 If you want to decimate the image by factor of 2 in each direction, you can call the function this
 way:
-<pre><code>
+<pre>{@code
     // specify fx and fy and let the function compute the destination image size.
     resize(src, dst, Size(), 0.5, 0.5, interpolation);
-</code></pre>
+}</pre>
 To shrink an image, it will generally look best with CV_INTER_AREA interpolation, whereas to
 enlarge an image, it will generally look best with CV_INTER_CUBIC (slow) or CV_INTER_LINEAR
 (faster but still looks OK).
@@ -5007,11 +4997,11 @@ See (http://en.wikipedia.org/wiki/Hann_function) and (http://en.wikipedia.org/wi
 for more information.
 <p>
 An example is shown below:
-<pre><code>
+<pre>{@code
     // create hanning window of size 100x100 and type CV_32F
     Mat hann;
     createHanningWindow(hann, Size(100, 100), CV_32F);
-</code></pre>
+}</pre>
 @param dst Destination array to place Hann coefficients in
 @param winSize The window size specifications
 @param type Created array type
@@ -5272,7 +5262,7 @@ The function is similar to cv::undistort and cv::initUndistortRectifyMap but it 
 sparse set of points instead of a raster image. Also the function performs a reverse transformation
 to projectPoints. In case of a 3D object, it does not reconstruct its 3D coordinates, but for a
 planar object, it does, up to a translation vector, if the proper R is specified.
-<pre><code>
+<pre>{@code
     // (u,v) is the input point, (u', v') is the output point
     // camera_matrix=[fx 0 cx; 0 fy cy; 0 0 1]
     // P=[fx' 0 cx' tx; 0 fy' cy' ty; 0 0 1 tz]
@@ -5284,7 +5274,7 @@ planar object, it does, up to a translation vector, if the proper R is specified
     // only performed if P=[fx' 0 cx' [tx]; 0 fy' cy' [ty]; 0 0 1 [tz]] is specified
     u' = x*fx' + cx'
     v' = y*fy' + cy',
-</code></pre>
+}</pre>
 where cv::undistort is an approximate iterative algorithm that estimates the normalized original
 point coordinates out of the normalized distorted point coordinates ("normalized" means that the
 coordinates do not depend on the camera matrix).
@@ -5323,7 +5313,7 @@ An example for creating histograms of an image
 The functions calcHist calculate the histogram of one or more arrays. The elements of a tuple used
 to increment a histogram bin are taken from the corresponding input arrays at the same location. The
 sample below shows how to compute a 2D Hue-Saturation histogram for a color image. :
-<pre><code>
+<pre>{@code
     #include <opencv2/imgproc.hpp>
     #include <opencv2/highgui.hpp>
 
@@ -5379,7 +5369,7 @@ sample below shows how to compute a 2D Hue-Saturation histogram for a color imag
         imshow( "H-S Histogram", histImg );
         waitKey();
     }
-</code></pre>
+}</pre>
 <p>
 @param images Source arrays. They all should have the same depth, CV_8U or CV_32F , and the same
 size. Each of them can have an arbitrary number of channels.
@@ -6000,10 +5990,10 @@ results, for example, for RGB \f$\rightarrow\f$ L\*u\*v\* transformation. For ex
 32-bit floating-point image directly converted from an 8-bit image without any scaling, then it will
 have the 0..255 value range instead of 0..1 assumed by the function. So, before calling cvtColor ,
 you need first to scale the image down:
-<pre><code>
+<pre>{@code
     img *= 1./255;
     cvtColor(img, img, COLOR_BGR2Luv);
-</code></pre>
+}</pre>
 If you use cvtColor with 8-bit images, the conversion will have some information lost. For many
 applications, this will not be noticeable but it is recommended to use 32-bit images in applications
 that need the full range of colors or that convert an image before an operation and then convert
@@ -6247,7 +6237,7 @@ drawContours or fillPoly , can be different. Also, the function will most certai
 results for contours with self-intersections.
 <p>
 Example:
-<pre><code>
+<pre>{@code
     vector<Point> contour;
     contour.push_back(Point2f(0, 0));
     contour.push_back(Point2f(10, 0));
@@ -6262,7 +6252,7 @@ Example:
     cout << "area0 =" << area0 << endl <<
             "area1 =" << area1 << endl <<
             "approx poly vertices" << approx.size() << endl;
-</code></pre>
+}</pre>
 @param contour Input vector of 2D points (contour vertices), stored in std::vector or Mat.
 @param oriented Oriented area flag. If it is true, the function returns a signed area value,
 depending on the contour orientation (clockwise or counter-clockwise). Using this feature you can
@@ -6813,7 +6803,7 @@ An example using drawContours to clean up a background segmentation result
 The function draws contour outlines in the image if \f$\texttt{thickness} \ge 0\f$ or fills the area
 bounded by the contours if \f$\texttt{thickness}<0\f$ . The example below shows how to retrieve
 connected components from the binary image and label them: :
-<pre><code>
+<pre>{@code
     #include "opencv2/imgproc.hpp"
     #include "opencv2/highgui.hpp"
 
@@ -6853,7 +6843,7 @@ connected components from the binary image and label them: :
         imshow( "Components", dst );
         waitKey(0);
     }
-</code></pre>
+}</pre>
 <p>
 @param image Destination image.
 @param contours All the input contours. Each contour is stored as a point vector.
@@ -6949,7 +6939,7 @@ it is at the top-left corner.
 <p>
 The function getTextSize calculates and returns the size of a box that contains the specified text.
 That is, the following code renders some text, the tight box surrounding it, and the baseline: :
-<pre><code>
+<pre>{@code
     String text = "Funny text inside the box";
     int fontFace = FONT_HERSHEY_SCRIPT_SIMPLEX;
     double fontScale = 2;
@@ -6978,13 +6968,13 @@ That is, the following code renders some text, the tight box surrounding it, and
     // then put the text itself
     putText(img, text, textOrg, fontFace, fontScale,
             Scalar::all(255), thickness, 8);
-</code></pre>
+}</pre>
 <p>
 @param text Input text string.
 @param fontFace Font to use, see cv::HersheyFonts.
 @param fontScale Font scale factor that is multiplied by the font-specific base size.
 @param thickness Thickness of lines used to render the text. See putText for details.
-@param[out] baseLine y-coordinate of the baseline relative to the bottom-most text
+@param [out] baseLine y-coordinate of the baseline relative to the bottom-most text
 point.
 @return The size of a box that contains the specified text.
 <p>
@@ -7023,7 +7013,7 @@ example, grab pixel values along the line or draw a line with an effect
 The number of pixels along the line is stored in LineIterator::count.
 The method LineIterator::pos returns the current position in the image:
 <p>
-<pre><code>{.cpp}
+<pre>{@code {.cpp}
 // grabs pixels along the line (pt1, pt2)
 // from 8-bit 3-channel image to the buffer
 LineIterator it(img, pt1, pt2, 8);
@@ -7039,17 +7029,15 @@ for(int i = 0; i < it2.count; i++, ++it2)
     Vec3b val = img.at<Vec3b>(it2.pos());
     CV_Assert(buf[i] == val);
 }
-</code></pre>
+}</pre>
 */
 @Namespace("cv") @NoOffset public static class LineIterator extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public LineIterator() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LineIterator(Pointer p) { super(p); }
 
     /** \brief intializes the iterator
-<p>
+    <p>
     creates iterators for the line connecting pt1 and pt2
     the line will be clipped on the image boundaries
     the line is 8-connected or 4-connected

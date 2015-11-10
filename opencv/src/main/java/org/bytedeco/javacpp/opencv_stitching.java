@@ -80,14 +80,12 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
  */
 @Namespace("cv::detail") public static class RotationWarper extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public RotationWarper() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RotationWarper(Pointer p) { super(p); }
 
 
     /** \brief Projects the image point.
-<p>
+    <p>
     @param pt Source point
     @param K Camera intrinsic parameters
     @param R Camera rotation matrix
@@ -96,7 +94,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     public native @ByVal Point2f warpPoint(@Const @ByRef Point2f pt, @ByVal Mat K, @ByVal Mat R);
 
     /** \brief Builds the projection maps according to the given camera data.
-<p>
+    <p>
     @param src_size Source image size
     @param K Camera intrinsic parameters
     @param R Camera rotation matrix
@@ -107,7 +105,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     public native @ByVal Rect buildMaps(@ByVal Size src_size, @ByVal Mat K, @ByVal Mat R, @ByVal Mat xmap, @ByVal Mat ymap);
 
     /** \brief Projects the image.
-<p>
+    <p>
     @param src Source image
     @param K Camera intrinsic parameters
     @param R Camera rotation matrix
@@ -120,7 +118,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
                            @ByVal Mat dst);
 
     /** \brief Projects the image backward.
-<p>
+    <p>
     @param src Projected image
     @param K Camera intrinsic parameters
     @param R Camera rotation matrix
@@ -218,7 +216,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     }
 
     /** \brief Construct an instance of the plane warper class.
-<p>
+    <p>
     @param scale Projected image scale multiplier
      */
     public DetailPlaneWarper(float scale/*=1.f*/) { super((Pointer)null); allocate(scale); }
@@ -266,19 +264,17 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
 
 /** \brief Warper that maps an image onto the unit sphere located at the origin.
-<p>
+ <p>
  Projects image onto unit sphere with origin at (0, 0, 0).
  Poles are located at (0, -1, 0) and (0, 1, 0) points.
 */
 @Name("cv::detail::SphericalWarper") public static class DetailSphericalWarper extends RotationWarper {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DetailSphericalWarper() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetailSphericalWarper(Pointer p) { super(p); }
 
     /** \brief Construct an instance of the spherical warper class.
-<p>
+    <p>
     @param scale Projected image scale multiplier
      */
     public DetailSphericalWarper(float scale) { super((Pointer)null); allocate(scale); }
@@ -316,13 +312,11 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
  */
 @Name("cv::detail::CylindricalWarper") public static class DetailCylindricalWarper extends RotationWarper {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DetailCylindricalWarper() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetailCylindricalWarper(Pointer p) { super(p); }
 
     /** \brief Construct an instance of the cylindrical warper class.
-<p>
+    <p>
     @param scale Projected image scale multiplier
      */
     public DetailCylindricalWarper(float scale) { super((Pointer)null); allocate(scale); }
@@ -358,8 +352,6 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
 @Name("cv::detail::FisheyeWarper") public static class DetailFisheyeWarper extends RotationWarper {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DetailFisheyeWarper() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetailFisheyeWarper(Pointer p) { super(p); }
 
@@ -393,8 +385,6 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
 @Name("cv::detail::StereographicWarper") public static class DetailStereographicWarper extends RotationWarper {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DetailStereographicWarper() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetailStereographicWarper(Pointer p) { super(p); }
 
@@ -431,8 +421,6 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
 @Name("cv::detail::CompressedRectilinearWarper") public static class DetailCompressedRectilinearWarper extends RotationWarper {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DetailCompressedRectilinearWarper() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetailCompressedRectilinearWarper(Pointer p) { super(p); }
 
@@ -471,8 +459,6 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
 @Name("cv::detail::CompressedRectilinearPortraitWarper") public static class DetailCompressedRectilinearPortraitWarper extends RotationWarper {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DetailCompressedRectilinearPortraitWarper() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetailCompressedRectilinearPortraitWarper(Pointer p) { super(p); }
 
@@ -511,8 +497,6 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
 @Name("cv::detail::PaniniWarper") public static class DetailPaniniWarper extends RotationWarper {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DetailPaniniWarper() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetailPaniniWarper(Pointer p) { super(p); }
 
@@ -551,8 +535,6 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
 @Name("cv::detail::PaniniPortraitWarper") public static class DetailPaniniPortraitWarper extends RotationWarper {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DetailPaniniPortraitWarper() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetailPaniniPortraitWarper(Pointer p) { super(p); }
 
@@ -589,8 +571,6 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
 @Name("cv::detail::MercatorWarper") public static class DetailMercatorWarper extends RotationWarper {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DetailMercatorWarper() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetailMercatorWarper(Pointer p) { super(p); }
 
@@ -624,8 +604,6 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
 @Name("cv::detail::TransverseMercatorWarper") public static class DetailTransverseMercatorWarper extends RotationWarper {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DetailTransverseMercatorWarper() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetailTransverseMercatorWarper(Pointer p) { super(p); }
 
@@ -664,8 +642,6 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
 @Name("cv::detail::SphericalWarperGpu") public static class DetailSphericalWarperGpu extends RotationWarper {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DetailSphericalWarperGpu() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetailSphericalWarperGpu(Pointer p) { super(p); }
 
@@ -681,8 +657,6 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
 @Name("cv::detail::CylindricalWarperGpu") public static class DetailCylindricalWarperGpu extends RotationWarper {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DetailCylindricalWarperGpu() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetailCylindricalWarperGpu(Pointer p) { super(p); }
 
@@ -723,8 +697,6 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 // Poles are located NOT at (0, -1, 0) and (0, 1, 0) points, BUT at (1, 0, 0) and (-1, 0, 0) points.
 @Namespace("cv::detail") public static class SphericalPortraitWarper extends RotationWarper {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public SphericalPortraitWarper() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SphericalPortraitWarper(Pointer p) { super(p); }
 
@@ -757,8 +729,6 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
 @Namespace("cv::detail") public static class CylindricalPortraitWarper extends RotationWarper {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public CylindricalPortraitWarper() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CylindricalPortraitWarper(Pointer p) { super(p); }
 
@@ -791,8 +761,6 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
 @Namespace("cv::detail") public static class PlanePortraitWarper extends RotationWarper {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public PlanePortraitWarper() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PlanePortraitWarper(Pointer p) { super(p); }
 
@@ -892,19 +860,17 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 /** \brief Feature finders base class */
 @Namespace("cv::detail") public static class FeaturesFinder extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FeaturesFinder() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FeaturesFinder(Pointer p) { super(p); }
 
     /** \overload */
     public native @Name("operator ()") void apply(@ByVal Mat image, @ByRef ImageFeatures features);
     /** \brief Finds features in the given image.
-<p>
+    <p>
     @param image Source image
     @param features Found features
     @param rois Regions of interest
-<p>
+    <p>
     \sa detail::ImageFeatures, Rect_
     */
     public native @Name("operator ()") void apply(@ByVal Mat image, @ByRef ImageFeatures features, @Const @ByRef RectVector rois);
@@ -998,8 +964,6 @@ It's assumed that there is a homography between those images.
 /** \brief Feature matchers base class. */
 @Namespace("cv::detail") @NoOffset public static class FeaturesMatcher extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FeaturesMatcher() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FeaturesMatcher(Pointer p) { super(p); }
 
@@ -1013,13 +977,13 @@ It's assumed that there is a homography between those images.
                          @ByRef MatchesInfo matches_info);
 
     /** \brief Performs images matching.
-<p>
+    <p>
     @param features Features of the source images
     @param pairwise_matches Found pairwise matches
     @param mask Mask indicating which image pairs must be matched
-<p>
+    <p>
     The function is parallelized with the TBB library.
-<p>
+    <p>
     \sa detail::MatchesInfo
     */
     public native @Name("operator ()") void apply(@StdVector ImageFeatures features, @StdVector MatchesInfo pairwise_matches,
@@ -1052,7 +1016,7 @@ ratio between descriptor distances is greater than the threshold match_conf
     }
 
     /** \brief Constructs a "best of 2 nearest" matcher.
-<p>
+    <p>
     @param try_use_gpu Should try to use GPU or not
     @param match_conf Match distances ration threshold
     @param num_matches_thresh1 Minimum number of matches required for the 2D projective transform
@@ -1225,8 +1189,6 @@ public static final int ENABLE_LOG = 0;
 
 @Namespace("cv::detail") @NoOffset public static class GraphEdge extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public GraphEdge() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GraphEdge(Pointer p) { super(p); }
 
@@ -1439,14 +1401,12 @@ rotations in respect to the first camera, for instance. :
  */
 @Namespace("cv::detail") public static class Estimator extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public Estimator() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Estimator(Pointer p) { super(p); }
 
 
     /** \brief Estimates camera parameters.
-<p>
+    <p>
     @param features Features of images
     @param pairwise_matches Pairwise matches of images
     @param cameras Estimated camera parameters
@@ -1480,8 +1440,6 @@ rotations in respect to the first camera, for instance. :
  */
 @Namespace("cv::detail") @NoOffset public static class BundleAdjusterBase extends Estimator {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public BundleAdjusterBase() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BundleAdjusterBase(Pointer p) { super(p); }
 
@@ -1638,8 +1596,6 @@ public static final int
  */
 @Namespace("cv::detail") public static class ExposureCompensator extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public ExposureCompensator() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ExposureCompensator(Pointer p) { super(p); }
 
@@ -1660,7 +1616,7 @@ public static final int
     public native void feed(@Const @ByRef PointVector corners, @Const @ByRef UMatVector images,
                           @Const @ByRef UMatBytePairVector masks);
     /** \brief Compensate exposure in the specified image.
-<p>
+    <p>
     @param index Image index
     @param corner Image top-left corner
     @param image Image to process
@@ -1802,13 +1758,11 @@ intensities, see \cite UES01 for details.
  */
 @Namespace("cv::detail") public static class SeamFinder extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public SeamFinder() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SeamFinder(Pointer p) { super(p); }
 
     /** \brief Estimates seams.
-<p>
+    <p>
     @param src Source images
     @param corners Source image top-left corners
     @param masks Source image masks to update
@@ -1840,8 +1794,6 @@ intensities, see \cite UES01 for details.
  */
 @Namespace("cv::detail") @NoOffset public static class PairwiseSeamFinder extends SeamFinder {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public PairwiseSeamFinder() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PairwiseSeamFinder(Pointer p) { super(p); }
 
@@ -2027,7 +1979,7 @@ Simple blender which puts one image over another
     public static native @Ptr Blender createDefault(int type);
 
     /** \brief Prepares the blender for blending.
-<p>
+    <p>
     @param corners Source images top-left corners
     @param sizes Source image sizes
      */
@@ -2035,14 +1987,14 @@ Simple blender which puts one image over another
     /** \overload */
     public native void prepare(@ByVal Rect dst_roi);
     /** \brief Processes the image.
-<p>
+    <p>
     @param img Source image
     @param mask Source image mask
     @param tl Source image top-left corners
      */
     public native void feed(@ByVal Mat img, @ByVal Mat mask, @ByVal Point tl);
     /** \brief Blends and returns the final pano.
-<p>
+    <p>
     @param dst Final pano
     @param dst_mask Final pano mask
      */
@@ -2388,8 +2340,6 @@ by Heung-Yeung Shum and Richard Szeliski.
  */
 @Namespace("cv") public static class WarperCreator extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public WarperCreator() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public WarperCreator(Pointer p) { super(p); }
 
@@ -2726,7 +2676,7 @@ familiar with the theory is recommended.
 
    // Stitcher() {}
     /** \brief Creates a stitcher with the default parameters.
-<p>
+    <p>
     @param try_use_gpu Flag indicating whether GPU should be used whenever it's possible.
     @return Stitcher class instance.
      */
@@ -2778,10 +2728,10 @@ familiar with the theory is recommended.
     /** \overload */
     public native @Cast("cv::Stitcher::Status") int estimateTransform(@ByVal MatVector images);
     /** \brief These functions try to match the given images and to estimate rotations of each camera.
-<p>
+    <p>
     \note Use the functions only if you're aware of the stitching pipeline, otherwise use
     Stitcher::stitch.
-<p>
+    <p>
     @param images Input images.
     @param rois Region of interest rectangles.
     @return Status code.
@@ -2793,10 +2743,10 @@ familiar with the theory is recommended.
     /** \brief These functions try to compose the given images (or images stored internally from the other function
     calls) into the final pano under the assumption that the image transformations were estimated
     before.
-<p>
+    <p>
     \note Use the functions only if you're aware of the stitching pipeline, otherwise use
     Stitcher::stitch.
-<p>
+    <p>
     @param images Input images.
     @param pano Final pano.
     @return Status code.
@@ -2806,7 +2756,7 @@ familiar with the theory is recommended.
     /** \overload */
     public native @Cast("cv::Stitcher::Status") int stitch(@ByVal MatVector images, @ByVal Mat pano);
     /** \brief These functions try to stitch the given images.
-<p>
+    <p>
     @param images Input images.
     @param rois Region of interest rectangles.
     @param pano Final pano.

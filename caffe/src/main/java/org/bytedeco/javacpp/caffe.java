@@ -660,8 +660,6 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 // caffe is going to use for cublas, curand, etc.
 @Namespace("caffe") @NoOffset public static class Caffe extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public Caffe() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Caffe(Pointer p) { super(p); }
 
@@ -11928,8 +11926,6 @@ public static final int
  */
 @Namespace("caffe") @NoOffset public static class DataReader extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DataReader() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DataReader(Pointer p) { super(p); }
 
@@ -12747,8 +12743,6 @@ public static final int
  */
 @Name("caffe::DataTransformer<float>") @NoOffset public static class FloatDataTransformer extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatDataTransformer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatDataTransformer(Pointer p) { super(p); }
 
@@ -12864,8 +12858,6 @@ public static final int
 }
 @Name("caffe::DataTransformer<double>") @NoOffset public static class DoubleDataTransformer extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleDataTransformer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleDataTransformer(Pointer p) { super(p); }
 
@@ -13004,8 +12996,6 @@ public static final int
 /** \brief Fills a Blob with constant or randomly-generated data. */
 @Name("caffe::Filler<float>") @NoOffset public static class FloatFiller extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatFiller() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatFiller(Pointer p) { super(p); }
 
@@ -13013,8 +13003,6 @@ public static final int
 }
 @Name("caffe::Filler<double>") @NoOffset public static class DoubleFiller extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleFiller() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleFiller(Pointer p) { super(p); }
 
@@ -13025,8 +13013,6 @@ public static final int
 /** \brief Fills a Blob with constant values \f$ x = 0 \f$. */
 @Name("caffe::ConstantFiller<float>") public static class FloatConstantFiller extends FloatFiller {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatConstantFiller() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatConstantFiller(Pointer p) { super(p); }
 
@@ -13036,8 +13022,6 @@ public static final int
 }
 @Name("caffe::ConstantFiller<double>") public static class DoubleConstantFiller extends DoubleFiller {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleConstantFiller() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleConstantFiller(Pointer p) { super(p); }
 
@@ -13049,8 +13033,6 @@ public static final int
 /** \brief Fills a Blob with uniformly distributed values \f$ x\sim U(a, b) \f$. */
 @Name("caffe::UniformFiller<float>") public static class FloatUniformFiller extends FloatFiller {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatUniformFiller() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatUniformFiller(Pointer p) { super(p); }
 
@@ -13060,8 +13042,6 @@ public static final int
 }
 @Name("caffe::UniformFiller<double>") public static class DoubleUniformFiller extends DoubleFiller {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleUniformFiller() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleUniformFiller(Pointer p) { super(p); }
 
@@ -13073,8 +13053,6 @@ public static final int
 /** \brief Fills a Blob with Gaussian-distributed values \f$ x = a \f$. */
 @Name("caffe::GaussianFiller<float>") @NoOffset public static class FloatGaussianFiller extends FloatFiller {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatGaussianFiller() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatGaussianFiller(Pointer p) { super(p); }
 
@@ -13084,8 +13062,6 @@ public static final int
 }
 @Name("caffe::GaussianFiller<double>") @NoOffset public static class DoubleGaussianFiller extends DoubleFiller {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleGaussianFiller() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleGaussianFiller(Pointer p) { super(p); }
 
@@ -13099,8 +13075,6 @@ public static final int
  */
 @Name("caffe::PositiveUnitballFiller<float>") public static class FloatPositiveUnitballFiller extends FloatFiller {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatPositiveUnitballFiller() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatPositiveUnitballFiller(Pointer p) { super(p); }
 
@@ -13110,8 +13084,6 @@ public static final int
 }
 @Name("caffe::PositiveUnitballFiller<double>") public static class DoublePositiveUnitballFiller extends DoubleFiller {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoublePositiveUnitballFiller() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoublePositiveUnitballFiller(Pointer p) { super(p); }
 
@@ -13138,8 +13110,6 @@ public static final int
  */
 @Name("caffe::XavierFiller<float>") public static class FloatXavierFiller extends FloatFiller {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatXavierFiller() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatXavierFiller(Pointer p) { super(p); }
 
@@ -13149,8 +13119,6 @@ public static final int
 }
 @Name("caffe::XavierFiller<double>") public static class DoubleXavierFiller extends DoubleFiller {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleXavierFiller() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleXavierFiller(Pointer p) { super(p); }
 
@@ -13178,8 +13146,6 @@ public static final int
  */
 @Name("caffe::MSRAFiller<float>") public static class FloatMSRAFiller extends FloatFiller {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatMSRAFiller() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatMSRAFiller(Pointer p) { super(p); }
 
@@ -13189,8 +13155,6 @@ public static final int
 }
 @Name("caffe::MSRAFiller<double>") public static class DoubleMSRAFiller extends DoubleFiller {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleMSRAFiller() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleMSRAFiller(Pointer p) { super(p); }
 
@@ -13205,7 +13169,7 @@ public static final int
 A common use case is with the DeconvolutionLayer acting as upsampling.
 You can upsample a feature map with shape of (B, C, H, W) by any integer factor
 using the following proto.
-<pre><code>
+<pre>{@code
 layer {
   name: "upsample", type: "Deconvolution"
   bottom: "{{bottom_name}}" top: "{{top_name}}"
@@ -13217,7 +13181,7 @@ layer {
   }
   param { lr_mult: 0 decay_mult: 0 }
 }
-</code></pre>
+}</pre>
 Please use this by replacing {@code {{}}} with your values. By specifying
 {@code num_output: {{C}} group: {{C}}}, it behaves as
 channel-wise convolution. The filter shape of this deconvolution layer will be
@@ -13228,14 +13192,12 @@ Note that the learning rate and the
 weight decay are set to 0 in order to keep coefficient values of bilinear
 interpolation unchanged during training. If you apply this to an image, this
 operation is equivalent to the following call in Python with Scikit.Image.
-<pre><code>{.py}
+<pre>{@code {.py}
 out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
-</code></pre>
+}</pre>
  */
 @Name("caffe::BilinearFiller<float>") public static class FloatBilinearFiller extends FloatFiller {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatBilinearFiller() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBilinearFiller(Pointer p) { super(p); }
 
@@ -13245,8 +13207,6 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
 }
 @Name("caffe::BilinearFiller<double>") public static class DoubleBilinearFiller extends DoubleFiller {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleBilinearFiller() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBilinearFiller(Pointer p) { super(p); }
 
@@ -13281,8 +13241,8 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
  to avoid a boost/NVCC issues (#1009, #1010) on OSX.
  */
 @Namespace("boost") @Opaque public static class thread extends Pointer {
-    /** Empty constructor. */
-    public thread() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public thread() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public thread(Pointer p) { super(p); }
 } 
@@ -13436,8 +13396,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::BaseDataLayer<float>") @NoOffset public static class FloatBaseDataLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatBaseDataLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBaseDataLayer(Pointer p) { super(p); }
 
@@ -13463,8 +13421,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::BaseDataLayer<double>") @NoOffset public static class DoubleBaseDataLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleBaseDataLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBaseDataLayer(Pointer p) { super(p); }
 
@@ -13527,8 +13483,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::BasePrefetchingDataLayer<float>") @NoOffset public static class FloatBasePrefetchingDataLayer extends FloatBaseDataLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatBasePrefetchingDataLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBasePrefetchingDataLayer(Pointer p) { super(p); }
     public InternalThread asInternalThread() { return asInternalThread(this); }
@@ -13552,8 +13506,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::BasePrefetchingDataLayer<double>") @NoOffset public static class DoubleBasePrefetchingDataLayer extends DoubleBaseDataLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleBasePrefetchingDataLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBasePrefetchingDataLayer(Pointer p) { super(p); }
     public InternalThread asInternalThread() { return asInternalThread(this); }
@@ -13577,8 +13529,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::DataLayer<float>") @NoOffset public static class FloatDataLayer extends FloatBasePrefetchingDataLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatDataLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatDataLayer(Pointer p) { super(p); }
 
@@ -13597,8 +13547,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::DataLayer<double>") @NoOffset public static class DoubleDataLayer extends DoubleBasePrefetchingDataLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleDataLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleDataLayer(Pointer p) { super(p); }
 
@@ -13622,8 +13570,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::DummyDataLayer<float>") @NoOffset public static class FloatDummyDataLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatDummyDataLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatDummyDataLayer(Pointer p) { super(p); }
 
@@ -13649,8 +13595,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::DummyDataLayer<double>") @NoOffset public static class DoubleDummyDataLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleDummyDataLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleDummyDataLayer(Pointer p) { super(p); }
 
@@ -13682,8 +13626,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::HDF5DataLayer<float>") @NoOffset public static class FloatHDF5DataLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatHDF5DataLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatHDF5DataLayer(Pointer p) { super(p); }
 
@@ -13712,8 +13654,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::HDF5DataLayer<double>") @NoOffset public static class DoubleHDF5DataLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleHDF5DataLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleHDF5DataLayer(Pointer p) { super(p); }
 
@@ -13748,8 +13688,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::HDF5OutputLayer<float>") @NoOffset public static class FloatHDF5OutputLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatHDF5OutputLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatHDF5OutputLayer(Pointer p) { super(p); }
 
@@ -13781,8 +13719,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::HDF5OutputLayer<double>") @NoOffset public static class DoubleHDF5OutputLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleHDF5OutputLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleHDF5OutputLayer(Pointer p) { super(p); }
 
@@ -13820,8 +13756,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::ImageDataLayer<float>") @NoOffset public static class FloatImageDataLayer extends FloatBasePrefetchingDataLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatImageDataLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatImageDataLayer(Pointer p) { super(p); }
 
@@ -13838,8 +13772,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::ImageDataLayer<double>") @NoOffset public static class DoubleImageDataLayer extends DoubleBasePrefetchingDataLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleImageDataLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleImageDataLayer(Pointer p) { super(p); }
 
@@ -13862,8 +13794,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::MemoryDataLayer<float>") @NoOffset public static class FloatMemoryDataLayer extends FloatBaseDataLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatMemoryDataLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatMemoryDataLayer(Pointer p) { super(p); }
 
@@ -13898,8 +13828,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::MemoryDataLayer<double>") @NoOffset public static class DoubleMemoryDataLayer extends DoubleBaseDataLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleMemoryDataLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleMemoryDataLayer(Pointer p) { super(p); }
 
@@ -13941,8 +13869,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::WindowDataLayer<float>") @NoOffset public static class FloatWindowDataLayer extends FloatBasePrefetchingDataLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatWindowDataLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatWindowDataLayer(Pointer p) { super(p); }
 
@@ -13959,8 +13885,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::WindowDataLayer<double>") @NoOffset public static class DoubleWindowDataLayer extends DoubleBasePrefetchingDataLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleWindowDataLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleWindowDataLayer(Pointer p) { super(p); }
 
@@ -14033,8 +13957,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::LayerRegistry<float>") public static class FloatLayerRegistry extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatLayerRegistry() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatLayerRegistry(Pointer p) { super(p); }
 
@@ -14061,8 +13983,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::LayerRegistry<double>") public static class DoubleLayerRegistry extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleLayerRegistry() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleLayerRegistry(Pointer p) { super(p); }
 
@@ -14090,8 +14010,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::LayerRegisterer<float>") public static class FloatLayerRegisterer extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatLayerRegisterer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatLayerRegisterer(Pointer p) { super(p); }
 
@@ -14116,8 +14034,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::LayerRegisterer<double>") public static class DoubleLayerRegisterer extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleLayerRegisterer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleLayerRegisterer(Pointer p) { super(p); }
 
@@ -14177,8 +14093,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  to avoid a boost/NVCC issues (#1009, #1010) on OSX.
  */
 @Namespace("boost") @Opaque public static class mutex extends Pointer {
-    /** Empty constructor. */
-    public mutex() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public mutex() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public mutex(Pointer p) { super(p); }
 } 
@@ -14195,8 +14111,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::Layer<float>") @NoOffset public static class FloatLayer extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatLayer(Pointer p) { super(p); }
 
@@ -14456,8 +14370,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::Layer<double>") @NoOffset public static class DoubleLayer extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleLayer(Pointer p) { super(p); }
 
@@ -14753,8 +14665,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::AccuracyLayer<float>") @NoOffset public static class FloatAccuracyLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatAccuracyLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatAccuracyLayer(Pointer p) { super(p); }
 
@@ -14787,8 +14697,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::AccuracyLayer<double>") @NoOffset public static class DoubleAccuracyLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleAccuracyLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleAccuracyLayer(Pointer p) { super(p); }
 
@@ -14830,8 +14738,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::LossLayer<float>") public static class FloatLossLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatLossLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatLossLayer(Pointer p) { super(p); }
 
@@ -14860,8 +14766,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::LossLayer<double>") public static class DoubleLossLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleLossLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleLossLayer(Pointer p) { super(p); }
 
@@ -14915,8 +14819,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::ContrastiveLossLayer<float>") @NoOffset public static class FloatContrastiveLossLayer extends FloatLossLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatContrastiveLossLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatContrastiveLossLayer(Pointer p) { super(p); }
 
@@ -14943,8 +14845,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::ContrastiveLossLayer<double>") @NoOffset public static class DoubleContrastiveLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleContrastiveLossLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleContrastiveLossLayer(Pointer p) { super(p); }
 
@@ -14998,8 +14898,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::EuclideanLossLayer<float>") @NoOffset public static class FloatEuclideanLossLayer extends FloatLossLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatEuclideanLossLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatEuclideanLossLayer(Pointer p) { super(p); }
 
@@ -15025,8 +14923,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::EuclideanLossLayer<double>") @NoOffset public static class DoubleEuclideanLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleEuclideanLossLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleEuclideanLossLayer(Pointer p) { super(p); }
 
@@ -15096,8 +14992,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::HingeLossLayer<float>") public static class FloatHingeLossLayer extends FloatLossLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatHingeLossLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatHingeLossLayer(Pointer p) { super(p); }
 
@@ -15112,8 +15006,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::HingeLossLayer<double>") public static class DoubleHingeLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleHingeLossLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleHingeLossLayer(Pointer p) { super(p); }
 
@@ -15161,8 +15053,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::InfogainLossLayer<float>") @NoOffset public static class FloatInfogainLossLayer extends FloatLossLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatInfogainLossLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatInfogainLossLayer(Pointer p) { super(p); }
 
@@ -15188,8 +15078,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::InfogainLossLayer<double>") @NoOffset public static class DoubleInfogainLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleInfogainLossLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleInfogainLossLayer(Pointer p) { super(p); }
 
@@ -15245,8 +15133,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::MultinomialLogisticLossLayer<float>") public static class FloatMultinomialLogisticLossLayer extends FloatLossLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatMultinomialLogisticLossLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatMultinomialLogisticLossLayer(Pointer p) { super(p); }
 
@@ -15263,8 +15149,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::MultinomialLogisticLossLayer<double>") public static class DoubleMultinomialLogisticLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleMultinomialLogisticLossLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleMultinomialLogisticLossLayer(Pointer p) { super(p); }
 
@@ -15311,8 +15195,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::SigmoidCrossEntropyLossLayer<float>") @NoOffset public static class FloatSigmoidCrossEntropyLossLayer extends FloatLossLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatSigmoidCrossEntropyLossLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSigmoidCrossEntropyLossLayer(Pointer p) { super(p); }
 
@@ -15333,8 +15215,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::SigmoidCrossEntropyLossLayer<double>") @NoOffset public static class DoubleSigmoidCrossEntropyLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleSigmoidCrossEntropyLossLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSigmoidCrossEntropyLossLayer(Pointer p) { super(p); }
 
@@ -15386,8 +15266,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::SoftmaxWithLossLayer<float>") @NoOffset public static class FloatSoftmaxWithLossLayer extends FloatLossLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatSoftmaxWithLossLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSoftmaxWithLossLayer(Pointer p) { super(p); }
 
@@ -15421,8 +15299,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::SoftmaxWithLossLayer<double>") @NoOffset public static class DoubleSoftmaxWithLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleSoftmaxWithLossLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSoftmaxWithLossLayer(Pointer p) { super(p); }
 
@@ -15482,8 +15358,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::NeuronLayer<float>") public static class FloatNeuronLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatNeuronLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatNeuronLayer(Pointer p) { super(p); }
 
@@ -15497,8 +15371,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::NeuronLayer<double>") public static class DoubleNeuronLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleNeuronLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleNeuronLayer(Pointer p) { super(p); }
 
@@ -15523,8 +15395,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::AbsValLayer<float>") public static class FloatAbsValLayer extends FloatNeuronLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatAbsValLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatAbsValLayer(Pointer p) { super(p); }
 
@@ -15547,8 +15417,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::AbsValLayer<double>") public static class DoubleAbsValLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleAbsValLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleAbsValLayer(Pointer p) { super(p); }
 
@@ -15589,8 +15457,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::BNLLLayer<float>") public static class FloatBNLLLayer extends FloatNeuronLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatBNLLLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBNLLLayer(Pointer p) { super(p); }
 
@@ -15609,8 +15475,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::BNLLLayer<double>") public static class DoubleBNLLLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleBNLLLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBNLLLayer(Pointer p) { super(p); }
 
@@ -15641,8 +15505,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::DropoutLayer<float>") @NoOffset public static class FloatDropoutLayer extends FloatNeuronLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatDropoutLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatDropoutLayer(Pointer p) { super(p); }
 
@@ -15671,8 +15533,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::DropoutLayer<double>") @NoOffset public static class DoubleDropoutLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleDropoutLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleDropoutLayer(Pointer p) { super(p); }
 
@@ -15707,8 +15567,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::ExpLayer<float>") @NoOffset public static class FloatExpLayer extends FloatNeuronLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatExpLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatExpLayer(Pointer p) { super(p); }
 
@@ -15737,8 +15595,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::ExpLayer<double>") @NoOffset public static class DoubleExpLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleExpLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleExpLayer(Pointer p) { super(p); }
 
@@ -15779,8 +15635,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::PowerLayer<float>") @NoOffset public static class FloatPowerLayer extends FloatNeuronLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatPowerLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatPowerLayer(Pointer p) { super(p); }
 
@@ -15808,8 +15662,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::PowerLayer<double>") @NoOffset public static class DoublePowerLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoublePowerLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoublePowerLayer(Pointer p) { super(p); }
 
@@ -15842,8 +15694,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::ReLULayer<float>") public static class FloatReLULayer extends FloatNeuronLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatReLULayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatReLULayer(Pointer p) { super(p); }
 
@@ -15868,8 +15718,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::ReLULayer<double>") public static class DoubleReLULayer extends DoubleNeuronLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleReLULayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleReLULayer(Pointer p) { super(p); }
 
@@ -15909,8 +15757,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::SigmoidLayer<float>") public static class FloatSigmoidLayer extends FloatNeuronLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatSigmoidLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSigmoidLayer(Pointer p) { super(p); }
 
@@ -15929,8 +15775,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::SigmoidLayer<double>") public static class DoubleSigmoidLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleSigmoidLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSigmoidLayer(Pointer p) { super(p); }
 
@@ -15964,8 +15808,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::TanHLayer<float>") public static class FloatTanHLayer extends FloatNeuronLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatTanHLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatTanHLayer(Pointer p) { super(p); }
 
@@ -15984,8 +15826,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::TanHLayer<double>") public static class DoubleTanHLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleTanHLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleTanHLayer(Pointer p) { super(p); }
 
@@ -16015,8 +15855,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::ThresholdLayer<float>") @NoOffset public static class FloatThresholdLayer extends FloatNeuronLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatThresholdLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatThresholdLayer(Pointer p) { super(p); }
 
@@ -16041,8 +15879,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::ThresholdLayer<double>") @NoOffset public static class DoubleThresholdLayer extends DoubleNeuronLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleThresholdLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleThresholdLayer(Pointer p) { super(p); }
 
@@ -16076,8 +15912,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::PReLULayer<float>") @NoOffset public static class FloatPReLULayer extends FloatNeuronLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatPReLULayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatPReLULayer(Pointer p) { super(p); }
 
@@ -16110,8 +15944,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::PReLULayer<double>") @NoOffset public static class DoublePReLULayer extends DoubleNeuronLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoublePReLULayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoublePReLULayer(Pointer p) { super(p); }
 
@@ -16173,8 +16005,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::ArgMaxLayer<float>") @NoOffset public static class FloatArgMaxLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatArgMaxLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatArgMaxLayer(Pointer p) { super(p); }
 
@@ -16207,8 +16037,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::ArgMaxLayer<double>") @NoOffset public static class DoubleArgMaxLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleArgMaxLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleArgMaxLayer(Pointer p) { super(p); }
 
@@ -16272,8 +16100,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::BatchNormLayer<float>") @NoOffset public static class FloatBatchNormLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatBatchNormLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBatchNormLayer(Pointer p) { super(p); }
 
@@ -16298,8 +16124,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::BatchNormLayer<double>") @NoOffset public static class DoubleBatchNormLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleBatchNormLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBatchNormLayer(Pointer p) { super(p); }
 
@@ -16332,8 +16156,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::BatchReindexLayer<float>") public static class FloatBatchReindexLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatBatchReindexLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBatchReindexLayer(Pointer p) { super(p); }
 
@@ -16356,8 +16178,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::BatchReindexLayer<double>") public static class DoubleBatchReindexLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleBatchReindexLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBatchReindexLayer(Pointer p) { super(p); }
 
@@ -16385,8 +16205,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::ConcatLayer<float>") @NoOffset public static class FloatConcatLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatConcatLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatConcatLayer(Pointer p) { super(p); }
 
@@ -16411,8 +16229,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::ConcatLayer<double>") @NoOffset public static class DoubleConcatLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleConcatLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleConcatLayer(Pointer p) { super(p); }
 
@@ -16444,8 +16260,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::EltwiseLayer<float>") @NoOffset public static class FloatEltwiseLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatEltwiseLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatEltwiseLayer(Pointer p) { super(p); }
 
@@ -16470,8 +16284,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::EltwiseLayer<double>") @NoOffset public static class DoubleEltwiseLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleEltwiseLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleEltwiseLayer(Pointer p) { super(p); }
 
@@ -16504,8 +16316,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::EmbedLayer<float>") @NoOffset public static class FloatEmbedLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatEmbedLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatEmbedLayer(Pointer p) { super(p); }
 
@@ -16530,8 +16340,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::EmbedLayer<double>") @NoOffset public static class DoubleEmbedLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleEmbedLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleEmbedLayer(Pointer p) { super(p); }
 
@@ -16563,8 +16371,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::FilterLayer<float>") @NoOffset public static class FloatFilterLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatFilterLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatFilterLayer(Pointer p) { super(p); }
 
@@ -16589,8 +16395,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::FilterLayer<double>") @NoOffset public static class DoubleFilterLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleFilterLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleFilterLayer(Pointer p) { super(p); }
 
@@ -16626,8 +16430,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::FlattenLayer<float>") public static class FloatFlattenLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatFlattenLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatFlattenLayer(Pointer p) { super(p); }
 
@@ -16646,8 +16448,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::FlattenLayer<double>") public static class DoubleFlattenLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleFlattenLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleFlattenLayer(Pointer p) { super(p); }
 
@@ -16673,8 +16473,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::InnerProductLayer<float>") @NoOffset public static class FloatInnerProductLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatInnerProductLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatInnerProductLayer(Pointer p) { super(p); }
 
@@ -16699,8 +16497,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::InnerProductLayer<double>") @NoOffset public static class DoubleInnerProductLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleInnerProductLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleInnerProductLayer(Pointer p) { super(p); }
 
@@ -16731,8 +16527,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::MVNLayer<float>") @NoOffset public static class FloatMVNLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatMVNLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatMVNLayer(Pointer p) { super(p); }
 
@@ -16755,8 +16549,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::MVNLayer<double>") @NoOffset public static class DoubleMVNLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleMVNLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleMVNLayer(Pointer p) { super(p); }
 
@@ -16786,8 +16578,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::ReshapeLayer<float>") @NoOffset public static class FloatReshapeLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatReshapeLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatReshapeLayer(Pointer p) { super(p); }
 
@@ -16812,8 +16602,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::ReshapeLayer<double>") @NoOffset public static class DoubleReshapeLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleReshapeLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleReshapeLayer(Pointer p) { super(p); }
 
@@ -16846,8 +16634,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::ReductionLayer<float>") @NoOffset public static class FloatReductionLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatReductionLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatReductionLayer(Pointer p) { super(p); }
 
@@ -16872,8 +16658,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::ReductionLayer<double>") @NoOffset public static class DoubleReductionLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleReductionLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleReductionLayer(Pointer p) { super(p); }
 
@@ -16903,8 +16687,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::SilenceLayer<float>") public static class FloatSilenceLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatSilenceLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSilenceLayer(Pointer p) { super(p); }
 
@@ -16927,8 +16709,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::SilenceLayer<double>") public static class DoubleSilenceLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleSilenceLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSilenceLayer(Pointer p) { super(p); }
 
@@ -16957,8 +16737,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::SoftmaxLayer<float>") @NoOffset public static class FloatSoftmaxLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatSoftmaxLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSoftmaxLayer(Pointer p) { super(p); }
 
@@ -16981,8 +16759,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::SoftmaxLayer<double>") @NoOffset public static class DoubleSoftmaxLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleSoftmaxLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSoftmaxLayer(Pointer p) { super(p); }
 
@@ -17019,8 +16795,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::SplitLayer<float>") @NoOffset public static class FloatSplitLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatSplitLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSplitLayer(Pointer p) { super(p); }
 
@@ -17043,8 +16817,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::SplitLayer<double>") @NoOffset public static class DoubleSplitLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleSplitLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSplitLayer(Pointer p) { super(p); }
 
@@ -17074,8 +16846,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::SliceLayer<float>") @NoOffset public static class FloatSliceLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatSliceLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSliceLayer(Pointer p) { super(p); }
 
@@ -17100,8 +16870,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::SliceLayer<double>") @NoOffset public static class DoubleSliceLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleSliceLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSliceLayer(Pointer p) { super(p); }
 
@@ -17130,8 +16898,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::TileLayer<float>") @NoOffset public static class FloatTileLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatTileLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatTileLayer(Pointer p) { super(p); }
 
@@ -17155,8 +16921,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::TileLayer<double>") @NoOffset public static class DoubleTileLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleTileLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleTileLayer(Pointer p) { super(p); }
 
@@ -17208,8 +16972,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::Net<float>") @NoOffset public static class FloatNet extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatNet() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatNet(Pointer p) { super(p); }
 
@@ -17409,8 +17171,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::Net<double>") @NoOffset public static class DoubleNet extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleNet() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleNet(Pointer p) { super(p); }
 
@@ -17641,8 +17401,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Namespace("caffe") @NoOffset public static class DevicePair extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DevicePair() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DevicePair(Pointer p) { super(p); }
 
@@ -17703,8 +17461,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::Solver<float>") @NoOffset public static class FloatSolver extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatSolver() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSolver(Pointer p) { super(p); }
 
@@ -17736,8 +17492,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   // Invoked at specific points during an iteration
   public static class Callback extends Pointer {
       static { Loader.load(); }
-      /** Empty constructor. */
-      public Callback() { }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public Callback(Pointer p) { super(p); }
   
@@ -17753,8 +17507,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::Solver<double>") @NoOffset public static class DoubleSolver extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleSolver() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSolver(Pointer p) { super(p); }
 
@@ -17786,8 +17538,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   // Invoked at specific points during an iteration
   public static class Callback extends Pointer {
       static { Loader.load(); }
-      /** Empty constructor. */
-      public Callback() { }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public Callback(Pointer p) { super(p); }
   
@@ -17808,8 +17558,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::WorkerSolver<float>") public static class FloatWorkerSolver extends FloatSolver {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatWorkerSolver() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatWorkerSolver(Pointer p) { super(p); }
 
@@ -17822,8 +17570,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::WorkerSolver<double>") public static class DoubleWorkerSolver extends DoubleSolver {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleWorkerSolver() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleWorkerSolver(Pointer p) { super(p); }
 
@@ -17891,8 +17637,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::SolverRegistry<float>") public static class FloatSolverRegistry extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatSolverRegistry() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSolverRegistry(Pointer p) { super(p); }
 
@@ -17919,8 +17663,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::SolverRegistry<double>") public static class DoubleSolverRegistry extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleSolverRegistry() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSolverRegistry(Pointer p) { super(p); }
 
@@ -17948,8 +17690,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::SolverRegisterer<float>") public static class FloatSolverRegisterer extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatSolverRegisterer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSolverRegisterer(Pointer p) { super(p); }
 
@@ -17974,8 +17714,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::SolverRegisterer<double>") public static class DoubleSolverRegisterer extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleSolverRegisterer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSolverRegisterer(Pointer p) { super(p); }
 
@@ -18032,8 +17770,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::SGDSolver<float>") @NoOffset public static class FloatSGDSolver extends FloatSolver {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatSGDSolver() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatSGDSolver(Pointer p) { super(p); }
 
@@ -18049,8 +17785,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::SGDSolver<double>") @NoOffset public static class DoubleSGDSolver extends DoubleSolver {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleSGDSolver() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleSGDSolver(Pointer p) { super(p); }
 
@@ -18067,8 +17801,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::NesterovSolver<float>") public static class FloatNesterovSolver extends FloatSGDSolver {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatNesterovSolver() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatNesterovSolver(Pointer p) { super(p); }
 
@@ -18083,8 +17815,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::NesterovSolver<double>") public static class DoubleNesterovSolver extends DoubleSGDSolver {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleNesterovSolver() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleNesterovSolver(Pointer p) { super(p); }
 
@@ -18099,8 +17829,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::AdaGradSolver<float>") public static class FloatAdaGradSolver extends FloatSGDSolver {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatAdaGradSolver() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatAdaGradSolver(Pointer p) { super(p); }
 
@@ -18115,8 +17843,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::AdaGradSolver<double>") public static class DoubleAdaGradSolver extends DoubleSGDSolver {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleAdaGradSolver() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleAdaGradSolver(Pointer p) { super(p); }
 
@@ -18132,8 +17858,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::RMSPropSolver<float>") public static class FloatRMSPropSolver extends FloatSGDSolver {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatRMSPropSolver() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatRMSPropSolver(Pointer p) { super(p); }
 
@@ -18149,8 +17873,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::RMSPropSolver<double>") public static class DoubleRMSPropSolver extends DoubleSGDSolver {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleRMSPropSolver() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleRMSPropSolver(Pointer p) { super(p); }
 
@@ -18165,8 +17887,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::AdaDeltaSolver<float>") public static class FloatAdaDeltaSolver extends FloatSGDSolver {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatAdaDeltaSolver() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatAdaDeltaSolver(Pointer p) { super(p); }
 
@@ -18181,8 +17901,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
 @Name("caffe::AdaDeltaSolver<double>") public static class DoubleAdaDeltaSolver extends DoubleSGDSolver {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleAdaDeltaSolver() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleAdaDeltaSolver(Pointer p) { super(p); }
 
@@ -18205,8 +17923,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::AdamSolver<float>") public static class FloatAdamSolver extends FloatSGDSolver {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatAdamSolver() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatAdamSolver(Pointer p) { super(p); }
 
@@ -18220,8 +17936,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::AdamSolver<double>") public static class DoubleAdamSolver extends DoubleSGDSolver {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleAdamSolver() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleAdamSolver(Pointer p) { super(p); }
 
@@ -18263,8 +17977,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::BaseConvolutionLayer<float>") @NoOffset public static class FloatBaseConvolutionLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatBaseConvolutionLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatBaseConvolutionLayer(Pointer p) { super(p); }
 
@@ -18281,8 +17993,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::BaseConvolutionLayer<double>") @NoOffset public static class DoubleBaseConvolutionLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleBaseConvolutionLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleBaseConvolutionLayer(Pointer p) { super(p); }
 
@@ -18316,8 +18026,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::ConvolutionLayer<float>") public static class FloatConvolutionLayer extends FloatBaseConvolutionLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatConvolutionLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatConvolutionLayer(Pointer p) { super(p); }
 
@@ -18366,8 +18074,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::ConvolutionLayer<double>") public static class DoubleConvolutionLayer extends DoubleBaseConvolutionLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleConvolutionLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleConvolutionLayer(Pointer p) { super(p); }
 
@@ -18431,8 +18137,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::DeconvolutionLayer<float>") public static class FloatDeconvolutionLayer extends FloatBaseConvolutionLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatDeconvolutionLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatDeconvolutionLayer(Pointer p) { super(p); }
 
@@ -18453,8 +18157,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::DeconvolutionLayer<double>") public static class DoubleDeconvolutionLayer extends DoubleBaseConvolutionLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleDeconvolutionLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleDeconvolutionLayer(Pointer p) { super(p); }
 
@@ -18500,8 +18202,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::Im2colLayer<float>") @NoOffset public static class FloatIm2colLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatIm2colLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatIm2colLayer(Pointer p) { super(p); }
 
@@ -18526,8 +18226,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::Im2colLayer<double>") @NoOffset public static class DoubleIm2colLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleIm2colLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleIm2colLayer(Pointer p) { super(p); }
 
@@ -18560,8 +18258,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::LRNLayer<float>") @NoOffset public static class FloatLRNLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatLRNLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatLRNLayer(Pointer p) { super(p); }
 
@@ -18599,8 +18295,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::LRNLayer<double>") @NoOffset public static class DoubleLRNLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoubleLRNLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoubleLRNLayer(Pointer p) { super(p); }
 
@@ -18648,8 +18342,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  */
 @Name("caffe::PoolingLayer<float>") @NoOffset public static class FloatPoolingLayer extends FloatLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public FloatPoolingLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FloatPoolingLayer(Pointer p) { super(p); }
 
@@ -18677,8 +18369,6 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 }
 @Name("caffe::PoolingLayer<double>") @NoOffset public static class DoublePoolingLayer extends DoubleLayer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DoublePoolingLayer() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DoublePoolingLayer(Pointer p) { super(p); }
 
@@ -18796,8 +18486,6 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
 
 @Namespace("caffe::db") public static class Cursor extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public Cursor() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Cursor(Pointer p) { super(p); }
 
@@ -18810,8 +18498,6 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
 
 @Namespace("caffe::db") public static class Transaction extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public Transaction() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Transaction(Pointer p) { super(p); }
 
@@ -18822,8 +18508,6 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
 
 @Namespace("caffe::db") public static class DB extends Pointer {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public DB() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DB(Pointer p) { super(p); }
 
@@ -18859,8 +18543,6 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
 
 @Namespace("caffe::db") @NoOffset public static class LevelDBCursor extends Cursor {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public LevelDBCursor() { }
 
   public LevelDBCursor(@Cast("leveldb::Iterator*") Pointer iter) { super((Pointer)null); allocate(iter); }
   private native void allocate(@Cast("leveldb::Iterator*") Pointer iter);
@@ -18873,8 +18555,6 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
 
 @Namespace("caffe::db") @NoOffset public static class LevelDBTransaction extends Transaction {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public LevelDBTransaction() { }
 
   public LevelDBTransaction(@Cast("leveldb::DB*") Pointer db) { super((Pointer)null); allocate(db); }
   private native void allocate(@Cast("leveldb::DB*") Pointer db);
@@ -18927,8 +18607,6 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
 
 @Namespace("caffe::db") @NoOffset public static class LMDBCursor extends Cursor {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public LMDBCursor() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LMDBCursor(Pointer p) { super(p); }
 
@@ -18943,8 +18621,6 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
 
 @Namespace("caffe::db") @NoOffset public static class LMDBTransaction extends Transaction {
     static { Loader.load(); }
-    /** Empty constructor. */
-    public LMDBTransaction() { }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LMDBTransaction(Pointer p) { super(p); }
 

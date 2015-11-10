@@ -135,20 +135,20 @@ public class chilitags extends org.bytedeco.javacpp.presets.chilitags {
     corresponding to the outside corners of its black border. The rows
     correspond to the 2D coordinates of the corners. The corners are
     consistenly stored clockwise, starting from top-left, i.e.
-    <pre>
+    <pre>{@literal
     {    top-left.x  ,    top-left.y  ,
          top-right.x ,    top-right.y ,
       bottom-right.x , bottom-left.y  ,
       bottom-left.x  , bottom-left.y  }
-    </pre>
+    }</pre>
  */
 
 /**
     This class is the core of detection of chilitags.
-<p>
+    <p>
     Its main function is to find tags in an image, i.e. return the id and the
     position in the image of the corners of each detected chilitag.
-<p>
+    <p>
     It also provides some utilities, like encoding and decoding id's to/from
     bit matrices, or drawing a given tag.
  */
@@ -177,11 +177,11 @@ private native void allocate();
 
 /**
     Parameters to paliate with the imperfections of the detection.
-<p>
+    <p>
     @param persistence the number of frames in which a tag should be absent
     before being removed from the output of find(). 0 means that tags disappear
     directly if they are not detected.
-<p>
+    <p>
     @param gain a value between 0 and 1 corresponding to the weight of the
     previous (filtered) position in the new filtered position. 0 means that the
     latest position of the tag is returned.
@@ -191,7 +191,7 @@ public native void setFilter(int persistence, float gain);
 /**
     Values of the parameter to tell find() how to combine tracking and full
     detection.
-<p>
+    <p>
     find() relies on two different techniques to localize 2D tags in an image:
     \li The *detection* searches for edges in the full input image, keeps those
     wich looke like a quadrilateral, and check whether there is a valid
@@ -207,7 +207,7 @@ public static final int
     detection on the same input image. The detected position overrides the
     position resulting from tracking if the same tag is both tracked and
     detected. 
-<p>
+    <p>
     This improves the robustness of the detection, e.g. in the case where the
     tag has already been detected previously, but moves too fast to be detected
     again.
@@ -219,7 +219,7 @@ public static final int
     {@code TRACK_AND_DETECT}, {@code DETECT_ONLY} leads to a marginally faster processing,
     but may result in decreased detection performances when the tags move (due
     to motion blur).
-<p>
+     <p>
      {@code DETECT_ONLY} is however useful when Chilitags processes sequence of
      unrelated images, e.g.  in the batch processing of still images. In this
      case, tracking is useless and most likely generates false positives.
@@ -230,14 +230,14 @@ public static final int
     Perform tracking only. Tracking is drastically faster than full detection,
     but it can only report tags that have been already detected once: full
     detection must be run at least once to have some tags to track
-<p>
+    <p>
     Likewise, tracking can not detect new tags. A full detection needs to be
     run explicitely to detect (and then track) those. {@code TRACK_ONLY} is hence
     most useful when full control of when full detections occur is required
     (typically when precise control the time spend on processing one frame is
     needed). Use {@code DETECT_PERIODICALLY} to have automatic re-detection of tags
     every few frames.
-<p>
+    <p>
     Another interesting use case is to call {@code find()} with {@code TRACK_ONLY} as long
     as an expected (set of) tag(s) is found, and with {@code DETECT_ONLY} otherwise.
 */
@@ -245,10 +245,10 @@ public static final int
 
 /**
     Periodically run a full detection.
-<p>
+    <p>
     {@code DETECT_PERIODICALLY} lets Chilitags use tracking most of the time, and
     eventually run a full detection.
-<p>
+    <p>
     {@code setDetectionPeriod()} allows to specify the number of frames between two
     full detection. It defaults to 15, i.e. out of 15 consecutive calls to
     {@code find()}, 1 will use a full detection, and the 14 others will only track
@@ -290,12 +290,12 @@ public static final int
 
 /**
     This is the main method of Chilitags.
-<p>
+    <p>
     @return the detected tags, in the form of a mapping between their id's and
     the position of their four corners.
-<p>
+    <p>
     @param inputImage an OpenCV image (gray or BGR)
-<p>
+    <p>
     @param detectionTrigger specifies how to combine tracking and full
     detection. Tracking is drastically faster, but it can at best return tags
     previously found; it won't find new ones, but can lose some. See
@@ -357,7 +357,7 @@ public native void setCornerRefinement(@Cast("bool") boolean refineCorners);
     Ensures that the image used as input for the detection is at most
     {@code maxWidth} wide. The smaller, the faster, but tags smaller than 20 pixels
     won't be detected.
-<p>
+    <p>
     @param maxWidth the width to which input images should be reduced to, or 0
     if no resizing should occur (default).
  */
@@ -369,11 +369,11 @@ public native void setMaxInputWidth(int maxWidth);
     long as they are at least {@code minWidth} wide. This value can be changed to
     adjust the lower limit of subsampling. For example, the Chilitags::ROBUST
     performance preset calls {@code setMinInputWidth(160)}.
-<p>
+    <p>
     If {@code minWidth} is set to 0, subsampling is completely disabled, i.e. tags
     are searched only on the original input image. This is the behaviour set by
     Chilitags::FAST, i.e. the default behaviour.
-<p>
+    <p>
     Disabling the subsampling reduces the processing time by ~40%, but large
     tags (having sides larger than hundreds of pixels) are likely to be missed.
  */
@@ -384,37 +384,37 @@ public native void setMinInputWidth(int minWidth);
 //@{
 /**
     Finds the black and white, 6x6 matrix corresponding to the given id.
-<p>
+    <p>
     @param id the id of the tag to encode, between  0 (included) and 1024
     (excluded).
-<p>
+    <p>
     @return the 36-element bit matrix coding the given id (black is 0,
     white is 1)
  */
 
 /**
     Finds the tag id corresponding given the black and white, 6x6 matrix.
-<p>
+    <p>
     @return the id decoded from the bit matrix, between  0 (included) and 1024
     (excluded). If the bit matrix did not code a valid id, -1 is returned.
-<p>
+    <p>
     @param bits the 36-element bit matrix coding the given id (black is 0,
     white is 1)
  */
 
 /**
     @return an OpenCV image of a given tag.
-<p>
+    <p>
     @param id the id of the tag to draw, between [0,1024)
-<p>
+    <p>
     @param cellSize the (integer) scale factor with which to draw the tag. In
     other words, every bit of the data matrix of the tag will be {@code cellSize}
     large.
-<p>
+    <p>
     @param withMargin a boolean coding whether the returned image of the tag
     should be surrounded by a white frame, ensuring that the edges of the tag
     will contrast with the background.
-<p>
+    <p>
     @param color the RGB color with which to draw the tag. Values are integers
     within [0,255]. The darker, the better. Black is default and optimal.
  */
@@ -449,26 +449,26 @@ public native @ByVal Mat draw(
 
 /**
     Creates an object ready to find the 3D pose of chilitags.
-<p>
+    <p>
     By default, Chilitags3D assumes an arbitrary, but reasonnable focal length
     (700), and expects the dimensions of the captured images. In this
     configuration, the depth estimation makes sense, but it is not accurate. In
     order to correctly estimate the 3D pose, the intrinsic calibration
     parameters of your camera needs to be provided. To do so, use the
     readCalibration() or setCalibration() methods.
-<p>
+    <p>
     Chilitags3D also assumes by default that the 3D pose of every detected tag
     is expected, and that every tag is independent from the others, and that
     they are 20 millimetres wide. The method read3DConfiguration() can be used
     to specify which tags are of interest, and how they are arranged on a rigid
     object, and how big they are.
-<p>
+    <p>
     To first detect th tags in the image, Chilitags3D creates a Chilitags
     instance, which can be accessed through the getChilitags() accessors. This
     Chilitags instance is set to have a persistence of 0, because Chilitags3D
     uses a more advanced Kalman filter. See enableFilter() and setPersistence()
     for more details.
-<p>
+    <p>
     You can also create yourself a separate instance of Chilitagsfor the 2D
     detection of tags and use it by calling
     Chilitags3D::estimate(const TagCornerMap &tags)
@@ -476,7 +476,7 @@ public native @ByVal Mat draw(
     Chilitags::find(const cv::Mat &inputImage)
     instead of calling directly
     Chilitags3D::estimate(const cv::Mat &inputImage).
-<p>
+    <p>
     @param cameraResolution Resolution of the camera used as input (640x480 by
     default). This parameter is only used to provide meaningful pose
     estimation. Input images of different resolution can be provided to the
@@ -498,18 +498,18 @@ public native @ByRef Chilitags getChilitags();
     matrices. Transformation matrices are row-major and follow the standard
     convention to code the rotation and translation parameters in homogeneous
     coordinates:
-    <pre>
+    <pre>{@literal
     { r11 , r12 , r13 , tx 
       r21 , r22 , r23 , ty 
       r31 , r32 , r33 , tz 
         0 ,   0 ,   0 ,  1 }
-    </pre>
+    }</pre>
     @param tags a list of tags, as returned by Chilitags::find().
-<p>
+    <p>
     @param camDeltaR Rotation from the previous camera frame to
     the current camera frame, i.e rotation of the current camera frame in the
     last camera frame. Quaternion format (scalar, vx, vy, vz).
-<p>
+    <p>
     @param camDeltaX Translation from the previous camera frame
     to the current camera frame, i.e position of the current camera frame in
     the last camera frame.
@@ -519,30 +519,30 @@ public native @ByVal TagPoseMap estimate(@Const @ByRef TagCornerMap tags);
 /**
     This is a convenience variant of estimate() which also takes care of the
     detection.
-<p>
+    <p>
     @return a mapping of the detected objects to their transformation
     matrices. Transformation matrices are row-major and follow the standard
     convention to code the rotation and translation parameters in homogeneous
     coordinates:
-    <pre>
+    <pre>{@literal
     { r11 , r12 , r13 , tx 
       r21 , r22 , r23 , ty 
       r31 , r32 , r33 , tz 
         0 ,   0 ,   0 ,  1 }
-    </pre>
-<p>
+    }</pre>
+    <p>
     @param inputImage the image to feed to Chilitags::find().
-<p>
+    <p>
     @param detectionTrigger specifies how to combine tracking and
     full detection. Tracking is drastically faster, but it can at
     best return tags previously found; it won't find new ones, but
     can lose some. See Chilitags::DetectionTrigger for a description of the
     possible values.
-<p>
+    <p>
     @param camDeltaR Rotation from the previous camera frame to
     the current camera frame, i.e rotation of the current camera frame in the
     last camera frame. Quaternion format (scalar, vx, vy, vz).
-<p>
+    <p>
     @param camDeltaX Translation from the previous camera frame
     to the current camera frame, i.e position of the current camera frame in
     the last camera frame.
@@ -555,21 +555,21 @@ public native @ByVal TagPoseMap estimate(
     more precise estimation of the object holding the tag, and for a graceful
     degradation of the estimation, should some of the tag be misdetected or
     occluded.
-<p>
+    <p>
     @param filenameOrString The name of the YAML configuration file (or the whole
     file itself as a string) describing rigid clusters of tags. The library is
     distributed with a sample configuration file documenting the expected format.
-<p>
+    <p>
     @param omitOtherTags If true, ignore the tags that are not explicitly
     listed in the configuration file. If false (default),
     Chilitags3D::estimate() estimates the 3D pose of all the detected tags. You
     can set the size of tags not described in the configuration file with
     setDefaultTagSize().
-<p>
+    <p>
     @param readFromString If true, will read tag configuration directly from the
     given string. If false (default) will open the file with the given name and
     try to read the configuration from there.
-<p>
+    <p>
     @return Whether reading the configuration was successful
  */
 public native @Cast("bool") boolean readTagConfiguration(
@@ -589,11 +589,11 @@ public native @Cast("bool") boolean readTagConfiguration(
     Sets the default size of tags (used to compute their 3D pose) when not
     explicitly specified with read3DConfiguration(). To be accurate, the unit
     must match the unit used for the camera calibration (usually, millimetres).
-<p>
+    <p>
     Note that is assumes all the tags have the same size. If tags have
     different size, you may want to list them in the configuration file (see
     read3DConfiguration()).
-<p>
+    <p>
     The default value of the default tag size is 20 millimetres.
  */
 public native void setDefaultTagSize(float defaultSize);
@@ -655,10 +655,10 @@ public native void setFilterObservationNoiseCovariance(@Const({false, true}) @By
     the camera detecting the chilitags.  See
     https://docs.opencv.org/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html
     for background on this topic.
-<p>
+    <p>
     Note that this method can be called as often as needed with a new calibration
     configuration (for instance if the user switched to another camera).
-<p>
+    <p>
     @param newCameraMatrix the 3x3 matrix of the camera intrinsics (see
     https://en.wikipedia.org/wiki/Camera_resectioning#Intrinsic_parameters).
     @param newDistCoeffs a vector containing the distortion coefficients.
@@ -671,14 +671,14 @@ public native void setCalibration(@ByVal Mat newCameraMatrix,
     the camera detecting the chilitags.  See
     http://docs.opencv.org/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html
     for background on this topic.
-<p>
+    <p>
     Note that this method can be called as often as needed with a new calibration
     configuration (for instance if the user switched to another camera).
-<p>
+    <p>
     This method is similar to setCalibration, but reads the camera calibration
     information directly from a file, as generated by OpenCV's 'calibration'
     sample.
-<p>
+    <p>
     @param filename the path to a file containing the calibration data
     @return the size of the images used to generate the calibration data.
  */
@@ -710,26 +710,26 @@ public native @Const @ByRef Mat getDistortionCoeffs();
 
 /**
     Creates an object ready to find the 3D pose of chilitags.
-<p>
+    <p>
     By default, Chilitags3D assumes an arbitrary, but reasonnable focal length
     (700), and expects the dimensions of the captured images. In this
     configuration, the depth estimation makes sense, but it is not accurate. In
     order to correctly estimate the 3D pose, the intrinsic calibration
     parameters of your camera needs to be provided. To do so, use the
     readCalibration() or setCalibration() methods.
-<p>
+    <p>
     Chilitags3D also assumes by default that the 3D pose of every detected tag
     is expected, and that every tag is independent from the others, and that
     they are 20 millimetres wide. The method read3DConfiguration() can be used
     to specify which tags are of interest, and how they are arranged on a rigid
     object, and how big they are.
-<p>
+    <p>
     To first detect th tags in the image, Chilitags3D creates a Chilitags
     instance, which can be accessed through the getChilitags() accessors. This
     Chilitags instance is set to have a persistence of 0, because Chilitags3D
     uses a more advanced Kalman filter. See enableFilter() and setPersistence()
     for more details.
-<p>
+    <p>
     You can also create yourself a separate instance of Chilitagsfor the 2D
     detection of tags and use it by calling
     Chilitags3D::estimate(const TagCornerMap &tags)
@@ -737,7 +737,7 @@ public native @Const @ByRef Mat getDistortionCoeffs();
     Chilitags::find(const cv::Mat &inputImage)
     instead of calling directly
     Chilitags3D::estimate(const cv::Mat &inputImage).
-<p>
+    <p>
     @param cameraResolution Resolution of the camera used as input (640x480 by
     default). This parameter is only used to provide meaningful pose
     estimation. Input images of different resolution can be provided to the
@@ -759,18 +759,18 @@ public native @ByRef Chilitags getChilitags();
     matrices. Transformation matrices are row-major and follow the standard
     convention to code the rotation and translation parameters in homogeneous
     coordinates:
-    <pre>
+    <pre>{@literal
     { r11 , r12 , r13 , tx 
       r21 , r22 , r23 , ty 
       r31 , r32 , r33 , tz 
         0 ,   0 ,   0 ,  1 }
-    </pre>
+    }</pre>
     @param tags a list of tags, as returned by Chilitags::find().
-<p>
+    <p>
     @param camDeltaR Rotation from the previous camera frame to
     the current camera frame, i.e rotation of the current camera frame in the
     last camera frame. Quaternion format (scalar, vx, vy, vz).
-<p>
+    <p>
     @param camDeltaX Translation from the previous camera frame
     to the current camera frame, i.e position of the current camera frame in
     the last camera frame.
@@ -780,30 +780,30 @@ public native @ByVal @Cast("chilitags::Chilitags3D_<double>::TagPoseMap*") TagPo
 /**
     This is a convenience variant of estimate() which also takes care of the
     detection.
-<p>
+    <p>
     @return a mapping of the detected objects to their transformation
     matrices. Transformation matrices are row-major and follow the standard
     convention to code the rotation and translation parameters in homogeneous
     coordinates:
-    <pre>
+    <pre>{@literal
     { r11 , r12 , r13 , tx 
       r21 , r22 , r23 , ty 
       r31 , r32 , r33 , tz 
         0 ,   0 ,   0 ,  1 }
-    </pre>
-<p>
+    }</pre>
+    <p>
     @param inputImage the image to feed to Chilitags::find().
-<p>
+    <p>
     @param detectionTrigger specifies how to combine tracking and
     full detection. Tracking is drastically faster, but it can at
     best return tags previously found; it won't find new ones, but
     can lose some. See Chilitags::DetectionTrigger for a description of the
     possible values.
-<p>
+    <p>
     @param camDeltaR Rotation from the previous camera frame to
     the current camera frame, i.e rotation of the current camera frame in the
     last camera frame. Quaternion format (scalar, vx, vy, vz).
-<p>
+    <p>
     @param camDeltaX Translation from the previous camera frame
     to the current camera frame, i.e position of the current camera frame in
     the last camera frame.
@@ -816,21 +816,21 @@ public native @ByVal @Cast("chilitags::Chilitags3D_<double>::TagPoseMap*") TagPo
     more precise estimation of the object holding the tag, and for a graceful
     degradation of the estimation, should some of the tag be misdetected or
     occluded.
-<p>
+    <p>
     @param filenameOrString The name of the YAML configuration file (or the whole
     file itself as a string) describing rigid clusters of tags. The library is
     distributed with a sample configuration file documenting the expected format.
-<p>
+    <p>
     @param omitOtherTags If true, ignore the tags that are not explicitly
     listed in the configuration file. If false (default),
     Chilitags3D::estimate() estimates the 3D pose of all the detected tags. You
     can set the size of tags not described in the configuration file with
     setDefaultTagSize().
-<p>
+    <p>
     @param readFromString If true, will read tag configuration directly from the
     given string. If false (default) will open the file with the given name and
     try to read the configuration from there.
-<p>
+    <p>
     @return Whether reading the configuration was successful
  */
 public native @Cast("bool") boolean readTagConfiguration(
@@ -850,11 +850,11 @@ public native @Cast("bool") boolean readTagConfiguration(
     Sets the default size of tags (used to compute their 3D pose) when not
     explicitly specified with read3DConfiguration(). To be accurate, the unit
     must match the unit used for the camera calibration (usually, millimetres).
-<p>
+    <p>
     Note that is assumes all the tags have the same size. If tags have
     different size, you may want to list them in the configuration file (see
     read3DConfiguration()).
-<p>
+    <p>
     The default value of the default tag size is 20 millimetres.
  */
 public native void setDefaultTagSize(double defaultSize);
@@ -916,10 +916,10 @@ public native void setFilterObservationNoiseCovariance(@Const({false, true}) @By
     the camera detecting the chilitags.  See
     https://docs.opencv.org/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html
     for background on this topic.
-<p>
+    <p>
     Note that this method can be called as often as needed with a new calibration
     configuration (for instance if the user switched to another camera).
-<p>
+    <p>
     @param newCameraMatrix the 3x3 matrix of the camera intrinsics (see
     https://en.wikipedia.org/wiki/Camera_resectioning#Intrinsic_parameters).
     @param newDistCoeffs a vector containing the distortion coefficients.
@@ -932,14 +932,14 @@ public native void setCalibration(@ByVal Mat newCameraMatrix,
     the camera detecting the chilitags.  See
     http://docs.opencv.org/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html
     for background on this topic.
-<p>
+    <p>
     Note that this method can be called as often as needed with a new calibration
     configuration (for instance if the user switched to another camera).
-<p>
+    <p>
     This method is similar to setCalibration, but reads the camera calibration
     information directly from a file, as generated by OpenCV's 'calibration'
     sample.
-<p>
+    <p>
     @param filename the path to a file containing the calibration data
     @return the size of the images used to generate the calibration data.
  */

@@ -63,7 +63,7 @@ public class swresample extends org.bytedeco.javacpp.presets.swresample {
  * format to interleaved signed 16-bit integer, downsampling from 48kHz to
  * 44.1kHz and downmixing from 5.1 channels to stereo (using the default mixing
  * matrix). This is using the swr_alloc() function.
- * <pre><code>
+ * <pre>{@code
  * SwrContext *swr = swr_alloc();
  * av_opt_set_channel_layout(swr, "in_channel_layout",  AV_CH_LAYOUT_5POINT1, 0);
  * av_opt_set_channel_layout(swr, "out_channel_layout", AV_CH_LAYOUT_STEREO,  0);
@@ -71,10 +71,10 @@ public class swresample extends org.bytedeco.javacpp.presets.swresample {
  * av_opt_set_int(swr, "out_sample_rate",    44100,                0);
  * av_opt_set_sample_fmt(swr, "in_sample_fmt",  AV_SAMPLE_FMT_FLTP, 0);
  * av_opt_set_sample_fmt(swr, "out_sample_fmt", AV_SAMPLE_FMT_S16,  0);
- * </code></pre>
+ * }</pre>
  *
  * The same job can be done using swr_alloc_set_opts() as well:
- * <pre><code>
+ * <pre>{@code
  * SwrContext *swr = swr_alloc_set_opts(NULL,  // we're allocating a new context
  *                       AV_CH_LAYOUT_STEREO,  // out_ch_layout
  *                       AV_SAMPLE_FMT_S16,    // out_sample_fmt
@@ -84,7 +84,7 @@ public class swresample extends org.bytedeco.javacpp.presets.swresample {
  *                       48000,                // in_sample_rate
  *                       0,                    // log_offset
  *                       NULL);                // log_ctx
- * </code></pre>
+ * }</pre>
  *
  * Once all values have been set, it must be initialized with swr_init(). If
  * you need to change the conversion parameters, you can change the parameters
@@ -109,7 +109,7 @@ public class swresample extends org.bytedeco.javacpp.presets.swresample {
  *
  * The following code demonstrates the conversion loop assuming the parameters
  * from above and caller-defined functions get_input() and handle_output():
- * <pre><code>
+ * <pre>{@code
  * uint8_t **input;
  * int in_samples;
  *
@@ -124,7 +124,7 @@ public class swresample extends org.bytedeco.javacpp.presets.swresample {
  *     handle_output(output, out_samples);
  *     av_freep(&output);
  * }
- * </code></pre>
+ * }</pre>
  *
  * When the conversion is finished, the conversion
  * context and everything associated with it must be freed with swr_free().
@@ -209,8 +209,8 @@ public static final int
  * structure.
  */
 @Opaque public static class SwrContext extends Pointer {
-    /** Empty constructor. */
-    public SwrContext() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public SwrContext() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SwrContext(Pointer p) { super(p); }
 }
@@ -247,7 +247,7 @@ public static native SwrContext swr_alloc();
  * @see av_opt_set_int()
  * @see av_opt_set_dict()
  *
- * @param[in,out]   s Swr context to initialize
+ * @param [in,out]   s Swr context to initialize
  * @return AVERROR error code in case of failure.
  */
 public static native int swr_init(SwrContext s);
@@ -255,7 +255,7 @@ public static native int swr_init(SwrContext s);
 /**
  * Check whether an swr context has been initialized or not.
  *
- * @param[in]       s Swr context to check
+ * @param [in]       s Swr context to check
  * @see swr_init()
  * @return positive if it has been initialized, 0 if not initialized
  */
@@ -296,7 +296,7 @@ public static native SwrContext swr_alloc_set_opts(SwrContext s,
 /**
  * Free the given SwrContext and set the pointer to NULL.
  *
- * @param[in] s a pointer to a pointer to Swr context
+ * @param [in] s a pointer to a pointer to Swr context
  */
 public static native void swr_free(@Cast("SwrContext**") PointerPointer s);
 public static native void swr_free(@ByPtrPtr SwrContext s);
@@ -309,7 +309,7 @@ public static native void swr_free(@ByPtrPtr SwrContext s);
  * This function is mainly provided for simplifying the usecase
  * where one tries to support libavresample and libswresample.
  *
- * @param[in,out] s Swr context to be closed
+ * @param [in,out] s Swr context to be closed
  */
 public static native void swr_close(SwrContext s);
 
@@ -379,11 +379,11 @@ public static native long swr_next_pts(SwrContext s, long pts);
  * Activate resampling compensation ("soft" compensation). This function is
  * internally called when needed in swr_next_pts().
  *
- * @param[in,out] s             allocated Swr context. If it is not initialized,
+ * @param [in,out] s             allocated Swr context. If it is not initialized,
  *                              or SWR_FLAG_RESAMPLE is not set, swr_init() is
  *                              called with the flag set.
- * @param[in]     sample_delta  delta in PTS per sample
- * @param[in]     compensation_distance number of samples to compensate for
+ * @param [in]     sample_delta  delta in PTS per sample
+ * @param [in]     compensation_distance number of samples to compensate for
  * @return    >= 0 on success, AVERROR error codes if:
  *            \li \c s is NULL,
  *            \li \c compensation_distance is less than 0,
@@ -396,8 +396,8 @@ public static native int swr_set_compensation(SwrContext s, int sample_delta, in
 /**
  * Set a customized input channel mapping.
  *
- * @param[in,out] s           allocated Swr context, not yet initialized
- * @param[in]     channel_map customized input channel mapping (array of channel
+ * @param [in,out] s           allocated Swr context, not yet initialized
+ * @param [in]     channel_map customized input channel mapping (array of channel
  *                            indexes, -1 for a muted channel)
  * @return >= 0 on success, or AVERROR error code in case of failure.
  */

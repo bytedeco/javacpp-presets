@@ -419,7 +419,7 @@ public static native int avio_open_dir(@ByPtrPtr AVIODirContext s, String url, @
  * it may outlive AVIODirContext.
  *
  * @param s         directory read context.
- * @param[out] next next entry or NULL when no more entries.
+ * @param [out] next next entry or NULL when no more entries.
  * @return >=0 on success or negative on error. End of list is not considered an
  *             error.
  */
@@ -891,8 +891,8 @@ public static native long avio_seek_time(AVIOContext h, int stream_index,
 
 /* Avoid a warning. The header can not be included because it breaks c++. */
 @Opaque public static class AVBPrint extends Pointer {
-    /** Empty constructor. */
-    public AVBPrint() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AVBPrint() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVBPrint(Pointer p) { super(p); }
 }
@@ -1032,13 +1032,13 @@ public static native int avio_handshake(AVIOContext c);
  * \section lavf_decoding_open Opening a media file
  * The minimum information required to open a file is its URL or filename, which
  * is passed to avformat_open_input(), as in the following code:
- * <pre><code>
+ * <pre>{@code
  * const char    *url = "in.mp3";
  * AVFormatContext *s = NULL;
  * int ret = avformat_open_input(&s, url, NULL, NULL);
  * if (ret < 0)
  *     abort();
- * </code></pre>
+ * }</pre>
  * The above code attempts to allocate an AVFormatContext, open the
  * specified file (autodetecting the format) and read the header, exporting the
  * information stored there into s. Some formats do not have a header or do not
@@ -1058,7 +1058,7 @@ public static native int avio_handshake(AVIOContext c);
  * avformat_open_input() has returned, it is not possible to set demuxer private
  * options on a preallocated context. Instead, the options should be passed to
  * avformat_open_input() wrapped in an AVDictionary:
- * <pre><code>
+ * <pre>{@code
  * AVDictionary *options = NULL;
  * av_dict_set(&options, "video_size", "640x480", 0);
  * av_dict_set(&options, "pixel_format", "rgb24", 0);
@@ -1066,7 +1066,7 @@ public static native int avio_handshake(AVIOContext c);
  * if (avformat_open_input(&s, url, NULL, &options) < 0)
  *     abort();
  * av_dict_free(&options);
- * </code></pre>
+ * }</pre>
  * This code passes the private options 'video_size' and 'pixel_format' to the
  * demuxer. They would be necessary for e.g. the rawvideo demuxer, since it
  * cannot know how to interpret raw video data otherwise. If the format turns
@@ -1075,13 +1075,13 @@ public static native int avio_handshake(AVIOContext c);
  * options are then returned in the options dictionary (recognized options are
  * consumed). The calling program can handle such unrecognized options as it
  * wishes, e.g.
- * <pre><code>
+ * <pre>{@code
  * AVDictionaryEntry *e;
  * if (e = av_dict_get(options, "", NULL, AV_DICT_IGNORE_SUFFIX)) {
  *     fprintf(stderr, "Option %s not recognized by the demuxer.\n", e->key);
  *     abort();
  * }
- * </code></pre>
+ * }</pre>
  *
  * After you have finished reading the file, you must close it with
  * avformat_close_input(). It will free everything associated with the file.
@@ -1189,13 +1189,13 @@ public static native int avio_handshake(AVIOContext c);
  * protocol-specific parameters. The function returns zero or positive
  * integer and allocates AVIODirContext on success.
  *
- * <pre><code>
+ * <pre>{@code
  * AVIODirContext *ctx = NULL;
  * if (avio_open_dir(&ctx, "smb://example.com/some_dir", NULL) < 0) {
  *     fprintf(stderr, "Cannot open directory.\n");
  *     abort();
  * }
- * </code></pre>
+ * }</pre>
  *
  * This code tries to open a sample directory using smb protocol without
  * any additional parameters.
@@ -1209,7 +1209,7 @@ public static native int avio_handshake(AVIOContext c);
  * NULL entry has been read -- it means there are no entries left to be
  * read. The following code reads all entries from a directory associated
  * with ctx and prints their names to standard output.
- * <pre><code>
+ * <pre>{@code
  * AVIODirEntry *entry = NULL;
  * for (;;) {
  *     if (avio_read_dir(ctx, &entry) < 0) {
@@ -1221,7 +1221,7 @@ public static native int avio_handshake(AVIOContext c);
  *     printf("%s\n", entry->name);
  *     avio_free_directory_entry(&entry);
  * }
- * </code></pre>
+ * }</pre>
  * \}
  *
  * \defgroup lavf_codec Demuxers
@@ -1253,14 +1253,14 @@ public static native int avio_handshake(AVIOContext c);
 // #include "libavformat/version.h"
 
 @Opaque public static class AVDeviceInfoList extends Pointer {
-    /** Empty constructor. */
-    public AVDeviceInfoList() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AVDeviceInfoList() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDeviceInfoList(Pointer p) { super(p); }
 }
 @Opaque public static class AVDeviceCapabilitiesQuery extends Pointer {
-    /** Empty constructor. */
-    public AVDeviceCapabilitiesQuery() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AVDeviceCapabilitiesQuery() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDeviceCapabilitiesQuery(Pointer p) { super(p); }
 }
@@ -1309,7 +1309,7 @@ public static native int avio_handshake(AVIOContext c);
  *    with no generic equivalents are left as they are stored in the container.
  *    Follows a list of generic tag names:
  *
- <pre>
+ <pre>{@literal
  album        -- name of the set this work belongs to
  album_artist -- main creator of the set/album, if different from artist.
                  e.g. "Various Artists" for compilation albums.
@@ -1336,7 +1336,7 @@ public static native int avio_handshake(AVIOContext c);
  title        -- name of the work.
  track        -- number of this work in the set, can be in form current/total.
  variant_bitrate -- the total bitrate of the bitrate variant that the current stream is part of
- </pre>
+ }</pre>
  *
  * Look in the examples section for an application example how to use the Metadata API.
  *
@@ -1406,8 +1406,8 @@ public static class AVFrac extends Pointer {
 /* input/output formats */
 
 @Opaque public static class AVCodecTag extends Pointer {
-    /** Empty constructor. */
-    public AVCodecTag() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AVCodecTag() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVCodecTag(Pointer p) { super(p); }
 }
@@ -2579,8 +2579,8 @@ public static final int
     AVFMT_DURATION_FROM_BITRATE = 2;
 
 @Opaque public static class AVFormatInternal extends Pointer {
-    /** Empty constructor. */
-    public AVFormatInternal() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AVFormatInternal() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFormatInternal(Pointer p) { super(p); }
 }
@@ -3868,9 +3868,9 @@ public static native @Cast("AVCodecID") int av_guess_codec(AVOutputFormat fmt, S
  * work in real time.
  * @param s          media file handle
  * @param stream     stream in the media file
- * @param[out] dts   DTS of the last packet output for the stream, in stream
+ * @param [out] dts   DTS of the last packet output for the stream, in stream
  *                   time_base units
- * @param[out] wall  absolute time when that packet whas output,
+ * @param [out] wall  absolute time when that packet whas output,
  *                   in microsecond
  * @return  0 if OK, AVERROR(ENOSYS) if the format does not support it
  * Note: some formats or devices may not allow to measure dts and wall
@@ -4178,11 +4178,11 @@ public static native int avformat_query_codec(@Const AVOutputFormat ofmt, @Cast(
  * Get the tables mapping RIFF FourCCs to libavcodec AVCodecIDs. The tables are
  * meant to be passed to av_codec_get_id()/av_codec_get_tag() as in the
  * following code:
- * <pre><code>
+ * <pre>{@code
  * uint32_t tag = MKTAG('H', '2', '6', '4');
  * const struct AVCodecTag *table[] = { avformat_get_riff_video_tags(), 0 };
  * enum AVCodecID id = av_codec_get_id(table, tag);
- * </code></pre>
+ * }</pre>
  */
 /**
  * @return the table mapping RIFF FourCCs for video to libavcodec AVCodecID.
