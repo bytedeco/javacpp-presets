@@ -299,6 +299,7 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=x86-win32-gcc
         make -j $MAKEJ
         make install
+        patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-windows.patch
         cd ../ffmpeg-$FFMPEG_VERSION
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
         make -j $MAKEJ
@@ -345,6 +346,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
+        patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-windows.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
