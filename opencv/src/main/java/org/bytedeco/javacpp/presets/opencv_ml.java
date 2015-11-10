@@ -35,9 +35,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(inherit = opencv_core.class, value = {
     @Platform(include = "<opencv2/ml.hpp>", link = "opencv_ml@.3.0"),
     @Platform(value = "windows", link = "opencv_ml300")},
-        target = "org.bytedeco.javacpp.opencv_ml")
+        target = "org.bytedeco.javacpp.opencv_ml", helper = "org.bytedeco.javacpp.helper.opencv_ml")
 public class opencv_ml implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("cv::ml::randGaussMixture").skip());
+        infoMap.put(new Info("cv::ml::StatModel").base("AbstractStatModel"))
+               .put(new Info("cv::ml::randGaussMixture").skip());
     }
 }
