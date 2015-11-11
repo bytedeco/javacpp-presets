@@ -1,4 +1,5 @@
 
+ * Fix MinGW-w64 builds with recent versions of GCC 5.x
  * Add missing `StatModel.loadXXX()` methods ([issue #109](https://github.com/bytedeco/javacpp-presets/issues/109))
  * Define commonly used Caffe `std::vector` types (`DatumVector`, `FloatCallbackVector`, and `DoubleCallbackVector`) for ease of use and performance reasons
  * Fix the `cppbuild.sh` script for FFmpeg, failing to build x264 and OpenH264 properly on Windows
