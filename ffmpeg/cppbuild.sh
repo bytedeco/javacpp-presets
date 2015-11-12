@@ -7,12 +7,22 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-DISABLE="--disable-iconv --disable-libxcb --disable-opencl --disable-sdl"
-ENABLE="--enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx264 --enable-libx265 --enable-libvpx"
+#DISABLE="--disable-iconv --disable-libxcb --disable-opencl --disable-sdl"
+#ENABLE="--enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx264 --enable-libx265 --enable-libvpx"
+
+#DISABLE="--disable-iconv --disable-libxcb --disable-opencl --disable-sdl"
+#DISABLE="--disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
+#ENABLE="--enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-libx264"
 
 # minimal configuration to support MPEG-4 streams with H.264 and AAC
-# DISABLE="--disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
-# ENABLE="--enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=aac --enable-decoder=h264 --enable-decoder=aac --enable-parser=h264 --enable-parser=aac --enable-muxer=mp4 --enable-muxer=rtsp --enable-demuxer=mov --enable-demuxer=rtsp --enable-protocol=file --enable-protocol=http --enable-protocol=rtp --enable-protocol=rtmp"
+#DISABLE="--disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
+#ENABLE="--enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=aac --enable-decoder=h264 --enable-decoder=aac --enable-parser=h264 --enable-parser=aac --enable-muxer=mp4 --enable-muxer=rtsp --enable-demuxer=mov --enable-demuxer=rtsp --enable-protocol=file --enable-protocol=http --enable-protocol=rtp --enable-protocol=rtmp"
+
+DISABLE="--disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
+ENABLE="--enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-protocol=file --enable-protocol=rtmp"
+
+#DISABLE="--disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
+#ENABLE="--enable-shared --enable-runtime-cpudetect --enable-gpl --enable-nonfree --enable-libx264 --enable-protocol=file --enable-protocol=rtmp"
 
 if [[ $PLATFORM == windows* && !($DISABLE =~ "--disable-everything") ]]; then
     FFMPEG_VERSION=2.8.1
@@ -270,17 +280,17 @@ case $PLATFORM in
         fi
 
         cd $LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32 -msse2"
-        make -j $MAKEJ
-        make install
-        cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32"
-        make -j $MAKEJ
-        make install
-        cd ../$OPENCORE_AMR
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32" CXXFLAGS="-m32"
-        make -j $MAKEJ
-        make install
+#        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32 -msse2"
+#        make -j $MAKEJ
+#        make install
+#        cd ../$SPEEX
+#        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32"
+#        make -j $MAKEJ
+#        make install
+#        cd ../$OPENCORE_AMR
+#        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32" CXXFLAGS="-m32"
+#        make -j $MAKEJ
+#        make install
         cd ../$OPENSSL
         ./Configure mingw -fPIC no-shared --prefix=$INSTALL_PATH
         make # fails with -j > 1
@@ -291,17 +301,17 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=i686-w64-mingw32
         make -j $MAKEJ
         make install
-        cd ../$X265
-        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-        make -j $MAKEJ
-        make install
-        cd ../libvpx-$VPX_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=x86-win32-gcc
-        make -j $MAKEJ
-        make install
-        patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-windows.patch
+#        cd ../$X265
+#        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+#        make -j $MAKEJ
+#        make install
+#        cd ../libvpx-$VPX_VERSION
+#        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=x86-win32-gcc
+#        make -j $MAKEJ
+#        make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
+        patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-windows.patch
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --enable-pthreads --disable-w32threads --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
         ;;
@@ -316,17 +326,17 @@ case $PLATFORM in
         fi
 
         cd $LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
-        make -j $MAKEJ
-        make install
-        cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
-        make -j $MAKEJ
-        make install
-        cd ../$OPENCORE_AMR
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64" CXXFLAGS="-m64"
-        make -j $MAKEJ
-        make install
+#        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
+#        make -j $MAKEJ
+#        make install
+#        cd ../$SPEEX
+#        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
+#        make -j $MAKEJ
+#        make install
+#        cd ../$OPENCORE_AMR
+#        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64" CXXFLAGS="-m64"
+#        make -j $MAKEJ
+#        make install
         cd ../$OPENSSL
         ./Configure mingw64 -fPIC no-shared --prefix=$INSTALL_PATH
         make # fails with -j > 1
@@ -337,17 +347,17 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=x86_64-w64-mingw32
         make -j $MAKEJ
         make install
-        cd ../$X265
-        CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-        make -j $MAKEJ
-        make install
-        cd ../libvpx-$VPX_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=x86_64-win64-gcc
-        make -j $MAKEJ
-        make install
+#        cd ../$X265
+#        CC="gcc -m64" CXX="g++ -m64" $CMAKE -G "MSYS Makefiles" -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+#        make -j $MAKEJ
+#        make install
+#        cd ../libvpx-$VPX_VERSION
+#        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=x86_64-win64-gcc
+#        make -j $MAKEJ
+#        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-windows.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --enable-pthreads --disable-w32threads --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
         ;;
