@@ -76,11 +76,20 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 
 @Namespace("cv::videostab") public static class IFrameSource extends Pointer {
     static { Loader.load(); }
+    /** Default native constructor. */
+    public IFrameSource() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public IFrameSource(int size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IFrameSource(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public IFrameSource position(int position) {
+        return (IFrameSource)super.position(position);
+    }
 
-    public native void reset();
-    public native @ByVal Mat nextFrame();
+    @Virtual(true) public native void reset();
+    @Virtual(true) public native @ByVal Mat nextFrame();
 }
 
 @Namespace("cv::videostab") public static class NullFrameSource extends IFrameSource {

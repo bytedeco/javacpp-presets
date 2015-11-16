@@ -44,6 +44,6 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         target = "org.bytedeco.javacpp.opencv_videostab")
 public class opencv_videostab implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("cv::videostab::DensePyrLkOptFlowEstimatorGpu").pointerTypes("DensePyrLkOptFlowEstimatorGpu"));
+        infoMap.put(new Info("cv::videostab::IFrameSource").virtualize());
     }
 }

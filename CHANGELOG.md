@@ -1,6 +1,7 @@
 
+ * Virtualize `opencv_videostab.IFrameSource` to let us implement it in Java ([issue bytedeco/javacv#277](https://github.com/bytedeco/javacv/issues/277))
  * Fix MinGW-w64 builds with recent versions of GCC 5.x and potential issue with using "w32threads" for FFmpeg
- * Add missing `StatModel.loadXXX()` methods ([issue #109](https://github.com/bytedeco/javacpp-presets/issues/109))
+ * Add missing `StatModel.loadXXX()` methods in the `opencv_ml` module ([issue #109](https://github.com/bytedeco/javacpp-presets/issues/109))
  * Define commonly used Caffe `std::vector` types (`DatumVector`, `FloatCallbackVector`, and `DoubleCallbackVector`) for ease of use and performance reasons
  * Fix the `cppbuild.sh` script for FFmpeg, failing to build x264 and OpenH264 properly on Windows
 
