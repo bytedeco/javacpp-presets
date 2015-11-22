@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.bytedeco</groupId>
+    <artifactId>javacpp-presets</artifactId>
+    <version>1.2-SNAPSHOT</version>
+  </parent>
+
+  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <artifactId>tensorflow</artifactId>
+  <version>master-${project.parent.version}</version>
+  <packaging>jar</packaging>
+  <name>JavaCPP Presets for TensorFlow</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>javacpp</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.bytedeco</groupId>
+        <artifactId>javacpp</artifactId>
+        <configuration>
+          <includePaths>
+            <includePath>${basedir}/cppbuild/${platform}/tensorflow/</includePath>
+            <includePath>${basedir}/cppbuild/${platform}/tensorflow/bazel-genfiles/</includePath>
+            <includePath>${basedir}/cppbuild/${platform}/tensorflow/google/protobuf/src/</includePath>
+            <includePath>${basedir}/cppbuild/${platform}/tensorflow/third_party/eigen3/</includePath>
+          </includePaths>
+          <linkPaths>
+             <linkPath>${basedir}/cppbuild/${platform}/tensorflow/bazel-bin/tensorflow/cc/</linkPath>
+          </linkPaths>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

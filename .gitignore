@@ -32,6 +32,8 @@
 /caffe/target/
 /cuda/cppbuild/
 /cuda/target/
+/tensorflow/cppbuild/
+/tensorflow/target/
 
 # Mac
 .DS_Store

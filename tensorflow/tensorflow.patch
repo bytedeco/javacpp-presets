@@ -1,0 +1,21 @@
+diff -ruN tensorflow/tensorflow/cc/BUILD tensorflow-patch/tensorflow/cc/BUILD
+--- tensorflow/tensorflow/cc/BUILD	2015-11-22 00:00:02.441829192 +0900
++++ tensorflow-patch/tensorflow/cc/BUILD	2015-11-14 11:15:12.689330351 +0900
+@@ -75,6 +75,17 @@
+     ],
+ )
+ 
++cc_binary(
++    name = "libtensorflow.so",
++    copts = tf_copts(),
++    linkshared = 1,
++    deps = [
++        ":cc_ops",
++        "//tensorflow/core:kernels",
++        "//tensorflow/core:tensorflow",
++    ],
++)
++
+ filegroup(
+     name = "all_files",
+     srcs = glob(

@@ -53,6 +53,7 @@
     <module>tesseract</module>
     <module>caffe</module>
     <module>cuda</module>
+    <module>tensorflow</module>
   </modules>
 
   <prerequisites>
