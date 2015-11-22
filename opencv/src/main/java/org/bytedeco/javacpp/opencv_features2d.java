@@ -257,7 +257,7 @@ the vector descriptor extractors inherit the DescriptorExtractor interface.
 
 /** \addtogroup features2d_main
  *  \{
-
+<p>
 /** \brief Class implementing the BRISK keypoint detector and descriptor extractor, described in \cite LCS11 .
  */
 @Namespace("cv") public static class BRISK extends Feature2D {
@@ -450,10 +450,10 @@ detection, use cv2.FAST.detect() method.
                       int threshold, @Cast("bool") boolean nonmaxSuppression, int type );
 
 /** \} features2d_main
-
+ <p>
  *  \addtogroup features2d_main
  *  \{
-
+<p>
 /** \brief Wrapping class for feature detection using the FAST method. :
  */
 @Namespace("cv") public static class FastFeatureDetector extends Feature2D {
@@ -505,10 +505,10 @@ Detects corners using the AGAST algorithm by \cite mair2010_agast .
 @Namespace("cv") public static native void AGAST( @ByVal Mat image, @ByRef KeyPointVector keypoints,
                       int threshold, @Cast("bool") boolean nonmaxSuppression, int type );
 /** \} features2d_main
-
+ <p>
  *  \addtogroup features2d_main
  *  \{
-
+<p>
 /** \brief Wrapping class for feature detection using the AGAST method. :
  */
 @Namespace("cv") public static class AgastFeatureDetector extends Feature2D {
@@ -657,10 +657,10 @@ Default values of parameters are tuned to extract dark circular blobs.
 }
 
 /** \} features2d_main
-
+ <p>
  *  \addtogroup features2d_main
  *  \{
-
+<p>
 /** \brief Class implementing the KAZE keypoint detector and descriptor extractor, described in \cite ABD12 .
 <p>
 \note AKAZE descriptor can only be used with KAZE or AKAZE keypoints .. [ABD12] KAZE Features. Pablo
@@ -777,7 +777,7 @@ Bartoli. In British Machine Vision Conference (BMVC), Bristol, UK, September 201
 }
 
 /** \} features2d_main
-
+<p>
 /****************************************************************************************\
 *                                      Distance                                          *
 \****************************************************************************************/
@@ -815,7 +815,7 @@ Bartoli. In British Machine Vision Conference (BMVC), Bristol, UK, September 201
 
 /** \addtogroup features2d_match
 /** \{
-
+<p>
 /** \brief Abstract base class for matching keypoint descriptors.
 <p>
 It has two groups of match methods: for matching descriptors of an image with another image or with
@@ -1084,7 +1084,7 @@ matches of descriptor sets because flann::Index does not support this. :
 }
 
 /** \} features2d_match
-
+<p>
 /****************************************************************************************\
 *                                   Drawing functions                                    *
 \****************************************************************************************/
@@ -1194,7 +1194,7 @@ connecting two keypoints (circles). See cv::DrawMatchesFlags.
                              @Const @ByRef DMatchVectorVector matches1to2, @ByVal Mat outImg );
 
 /** \} features2d_draw
-
+<p>
 /****************************************************************************************\
 *   Functions to evaluate the feature detectors and [generic] descriptor extractors      *
 \****************************************************************************************/
@@ -1234,7 +1234,7 @@ connecting two keypoints (circles). See cv::DrawMatchesFlags.
 
 /** \addtogroup features2d_category
 /** \{
-
+<p>
 /** \brief Abstract base class for training the *bag of visual words* vocabulary from a set of descriptors.
 <p>
 For details, see, for example, *Visual Categorization with Bags of Keypoints* by Gabriella Csurka,
@@ -1379,7 +1379,7 @@ vocabulary in the given image.
 }
 
 /** \} features2d_category
-
+ <p>
  *  \} features2d */
 
  /* namespace cv */

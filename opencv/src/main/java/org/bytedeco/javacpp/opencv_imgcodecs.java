@@ -250,7 +250,7 @@ public static native void cvvConvertImage(CvArr arg1, CvArr arg2, int arg3);
 
 /** \addtogroup imgcodecs
  *  \{
-
+ <p>
  *  Imread flags */
 /** enum cv::ImreadModes */
 public static final int

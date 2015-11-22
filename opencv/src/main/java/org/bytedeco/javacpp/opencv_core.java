@@ -25,7 +25,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     public native @Index long size(@Cast("size_t") long i);
     public native @Index void resize(@Cast("size_t") long i, @Cast("size_t") long n);
 
-    @Index public native byte get(@Cast("size_t") long i, @Cast("size_t") long j);
+    @Index public native @Cast("char") byte get(@Cast("size_t") long i, @Cast("size_t") long j);
     public native ByteVectorVector put(@Cast("size_t") long i, @Cast("size_t") long j, byte value);
 
     public ByteVectorVector put(byte[] ... array) {
@@ -76,6 +76,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringVector(Pointer p) { super(p); }
     public StringVector(BytePointer ... array) { this(array.length); put(array); }
+    public StringVector(String ... array) { this(array.length); put(array); }
     public StringVector()       { allocate();  }
     public StringVector(long n) { allocate(n); }
     private native void allocate();
@@ -87,8 +88,17 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
     @Index public native @Str BytePointer get(@Cast("size_t") long i);
     public native StringVector put(@Cast("size_t") long i, BytePointer value);
+    @ValueSetter @Index public native StringVector put(@Cast("size_t") long i, @Str String value);
 
     public StringVector put(BytePointer ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+
+    public StringVector put(String ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
             put(i, array[i]);
@@ -1524,10 +1534,10 @@ public static final int
  //Error
 
 /** \} core_utils
-
+ <p>
  *  \addtogroup core_array
  *  \{
-
+ <p>
  *  matrix decomposition types */
 /** enum cv::DecompTypes */
 public static final int
@@ -1665,12 +1675,12 @@ public static final int
     BORDER_ISOLATED    = 16;
 
 /** \} core_array
-
+ <p>
  *  \addtogroup core_utils
  *  \{
-
+ <p>
  *  \cond IGNORED
-
+<p>
 //////////////// static assert ///////////////// */
 // #define CVAUX_CONCAT_EXP(a, b) a##b
 // #define CVAUX_CONCAT(a, b) CVAUX_CONCAT_EXP(a,b)
@@ -1704,7 +1714,7 @@ public static final int
 // #define CV_SUPPRESS_DEPRECATED_END
 // #endif
 /** \endcond
-
+<p>
 /** \brief Signals an error and raises the exception.
 <p>
 By default the function prints information about the error to stderr,
@@ -1926,9 +1936,9 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
  // ipp
 
 /** \endcond
-
+ <p>
  *  \} core_utils
-
+ <p>
  *  \addtogroup core_utils_neon
  *  \{ */
 
@@ -2023,9 +2033,9 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
 
 /** \addtogroup core_utils
  *  \{
-
+<p>
 //////////////////////////// memory management functions ////////////////////////////
-
+<p>
 /** \brief Allocates an aligned memory buffer.
 <p>
 The function allocates the buffer of the specified size and returns it. When the buffer size is 16
@@ -2048,7 +2058,7 @@ double memory deallocation.
 */
 
 /** \} core_utils
-
+ <p>
  *  \cond IGNORED */
 
 // Metafunction to avoid taking a reference to void.
@@ -2084,10 +2094,10 @@ double memory deallocation.
 
 
 /** \endcond
-
+ <p>
  *  \addtogroup core_basic
  *  \{
-
+<p>
 /** \brief Template class for smart pointers with shared ownership
 <p>
 A Ptr\<T\> pretends to be a pointer to an object of type T. Unlike an ordinary pointer, however, the
@@ -2195,9 +2205,9 @@ to constructors of T that have up to 10 arguments, none of which are non-const r
 //////////////////////////////// string class //////////////////////////////// //for string constructor from FileNode
 
 /** \} core_basic
-
+<p>
 ////////////////////////// cv::String implementation /////////////////////////
-
+ <p>
  *  \cond IGNORED */
 
 
@@ -2396,7 +2406,7 @@ to constructors of T that have up to 10 arguments, none of which are non-const r
 
 /** \addtogroup core_utils
  *  \{
-
+<p>
 /** \brief  Automatically Allocated Buffer Class
  <p>
  The class is used for temporary buffers in functions and methods.
@@ -2796,9 +2806,9 @@ For the described keys:
  */
 
 /** \} core_utils
-
+ <p>
  *  \cond IGNORED
-
+<p>
 /////////////////////////////// AutoBuffer implementation //////////////////////////////////////// */
 
 
@@ -8337,7 +8347,7 @@ public static final String cvFuncName = "";
 
 /** \addtogroup core_c_glue
  *  \{
-
+ <p>
  *  class for automatic module/RTTI data registration/unregistration */
 @NoOffset public static class CvType extends Pointer {
     static { Loader.load(); }
@@ -8376,9 +8386,9 @@ public static final String cvFuncName = "";
 
 /** \addtogroup core_c_glue
  *  \{
-
+<p>
 /////////////////////////////////////////// glue ///////////////////////////////////////////
-
+ <p>
  *  converts array (CvMat or IplImage) to cv::Mat */
 @Namespace("cv") public static native @ByVal Mat cvarrToMat(@Const CvArr arr, @Cast("bool") boolean copyData/*=false*/,
                           @Cast("bool") boolean allowND/*=true*/, int coiMode/*=0*/,
@@ -8601,9 +8611,9 @@ public static final String cvFuncName = "";
 
 /** \addtogroup core_basic
  *  \{
-
+<p>
 //////////////////////////////// Complex //////////////////////////////
-
+<p>
 /** \brief  A complex number class.
   <p>
   The template class is similar and compatible with std::complex, however it provides slightly
@@ -9564,12 +9574,12 @@ be fully initialized using the advanced variant of the constructor.
 
 
 /** \} core_basic
-
+<p>
 ///////////////////////// raster image moments //////////////////////////
-
+ <p>
  *  \addtogroup imgproc_shape
  *  \{
-
+<p>
 /** \brief struct returned by cv::moments
 <p>
 The spatial moments \f$\texttt{Moments::m}_{ji}\f$ are computed as:
@@ -9639,7 +9649,7 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
     public native double m12(); public native Moments m12(double m12);
     public native double m03(); public native Moments m03(double m03);
     /** \}
-
+     <p>
      *  \name central moments
      *  \{ */
     public native double mu20(); public native Moments mu20(double mu20);
@@ -9650,7 +9660,7 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
     public native double mu12(); public native Moments mu12(double mu12);
     public native double mu03(); public native Moments mu03(double mu03);
     /** \}
-
+     <p>
      *  \name central normalized moments
      *  \{ */
     public native double nu20(); public native Moments nu20(double nu20);
@@ -9664,13 +9674,13 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
 }
 
 /** \} imgproc_shape
-
+ <p>
  *  \cond IGNORED
-
+<p>
 /////////////////////////////////////////////////////////////////////////
 ///////////////////////////// Implementation ////////////////////////////
 /////////////////////////////////////////////////////////////////////////
-
+<p>
 //////////////////////////////// Complex //////////////////////////////// */
 
 
@@ -9969,7 +9979,7 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
 
 /** \addtogroup core_utils
  *  \{
-
+<p>
 /** \brief Class passed to an error.
 <p>
 This class encapsulates all or almost all necessary
@@ -10003,10 +10013,10 @@ public static final int /** each matrix row is sorted independently */
                  SORT_DESCENDING   = 16;
 
 /** \} core_utils
-
+ <p>
  *  \addtogroup core
  *  \{
-
+ <p>
  *  Covariation flags */
 /** enum cv::CovarFlags */
 public static final int
@@ -10108,10 +10118,10 @@ public static final int /** the output is the sum of all rows/columns of the mat
 @Namespace("cv") public static native void swap( @ByRef UMat a, @ByRef UMat b );
 
 /** \} core
-
+ <p>
  *  \addtogroup core_array
  *  \{
-
+<p>
 /** \brief Computes the source location of an extrapolated pixel.
 <p>
 The function computes and returns the coordinate of a donor pixel corresponding to the specified
@@ -12216,7 +12226,7 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
                  /** indicates that the input samples are stored as matrix columns */
                  DATA_AS_COL = 1,
                  //!
-                 USE_AVG     = 2;  //!
+                 USE_AVG     = 2;  /** */
 
     /** \brief default constructor
     <p>
@@ -12791,10 +12801,10 @@ Inspired by http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/MT2002/CODES/mt19937
 }
 
 /** \} core_array
-
+ <p>
  *  \addtogroup core_cluster
  *   \{
-
+<p>
 /** \example kmeans.cpp
   An example on K-means clustering
 */
@@ -12840,12 +12850,12 @@ pass them with the ( flags = KMEANS_USE_INITIAL_LABELS ) flag, and then choose t
                             int flags );
 
 /** \} core_cluster
-
+ <p>
  *  \addtogroup core_basic
  *  \{
-
+<p>
 /////////////////////////////// Formatted output of cv::Mat ///////////////////////////
-
+<p>
 /** \todo document */
 @Namespace("cv") public static class Formatted extends Pointer {
     static { Loader.load(); }
@@ -13195,7 +13205,7 @@ Here is example of SIFT use in your application via Algorithm interface:
 @Namespace("cv") public static native int print(@Const @ByRef UMat mtx);
 
 /** \endcond
-
+<p>
 /****************************************************************************************\
 *                                  Auxiliary algorithms                                  *
 \****************************************************************************************/
@@ -15573,7 +15583,7 @@ Elements can be accessed using the following methods:
     public native @Cast("uchar*") byte[] ptr(@Const int[] idx, @Cast("bool") boolean createMissing, @Cast("size_t*") SizeTPointer hashval/*=0*/);
     public native @Cast("uchar*") byte[] ptr(@Const int[] idx, @Cast("bool") boolean createMissing);
     /**\}
-
+     <p>
      * \{
     /**
      return read-write reference to the specified sparse matrix element.
@@ -15587,7 +15597,7 @@ Elements can be accessed using the following methods:
     /** returns reference to the specified element (3D case) */
     /** returns reference to the specified element (nD case) */
     /**\}
-
+     <p>
      * \{
     /**
      return value of the specified sparse matrix element.
@@ -15604,7 +15614,7 @@ Elements can be accessed using the following methods:
     /** returns value of the specified element (3D case) */
     /** returns value of the specified element (nD case) */
     /**\}
-
+     <p>
      * \{
     /**
      Return pointer to the specified sparse matrix element if it exists
@@ -15618,7 +15628,7 @@ Elements can be accessed using the following methods:
     /** returns pointer to the specified element (3D case) */
     /** returns pointer to the specified element (nD case) */
     /**\}
-
+     <p>
      *  erases the specified element (2D case) */
     public native void erase(int i0, int i1, @Cast("size_t*") SizeTPointer hashval/*=0*/);
     public native void erase(int i0, int i1);
@@ -16179,7 +16189,7 @@ Here are examples of matrix expressions:
 }
 
 /** \} core_basic
-
+ <p>
  *  \relates cv::MatExpr
  *  \{ */
 @Namespace("cv") public static native @ByVal @Name("operator +") MatExpr add(@Const @ByRef Mat a, @Const @ByRef Mat b);
@@ -16347,7 +16357,7 @@ where C is depth=CV_8U .
 
 /** \addtogroup core_c
  *  \{
-
+<p>
 /** \brief "black box" representation of the file storage associated with a file on disk.
 <p>
 Several functions that are described below take CvFileStorage\* as inputs and allow the user to
@@ -16575,7 +16585,7 @@ means that the array consists of bytes, and {@code 2d} means the array consists 
 */
 
 /** \{
-
+<p>
 /** \example filestorage.cpp
 A complete example using the FileStorage interface
 */
@@ -17042,9 +17052,9 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 }
 
 /** \} core_xml
-
+<p>
 /////////////////// XML & YAML I/O implementation //////////////////
-
+ <p>
  *  \relates cv::FileStorage
  *  \{ */
 
@@ -17072,7 +17082,7 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native void writeScalar( @ByRef FileStorage fs, @Str String value );
 
 /** \}
-
+ <p>
  *  \relates cv::FileNode
  *  \{ */
 
@@ -17097,7 +17107,7 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @ByRef Range value, @Const @ByRef Range default_value);
 
 /** \}
-
+<p>
 /** \brief Writes string to a file storage.
 \relates cv::FileStorage
  */
@@ -17123,7 +17133,7 @@ sequence, stored in node. See the data reading sample in the beginning of the se
  // internal
 
 /** \endcond
-
+ <p>
  *  \relates cv::FileStorage
  *  \{ */
 
@@ -17142,7 +17152,7 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native void write(@ByRef FileStorage fs, @Str String name, @Const @ByRef Range r );
 
 /** \} FileStorage
-
+ <p>
  *  \relates cv::FileNode
  *  \{ */
 
@@ -17157,10 +17167,10 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("ushort*") @ByRef short[] value, @Cast("ushort") short default_value);
 
 /** \} FileNode
-
+ <p>
  *  \relates cv::FileStorage
  *  \{
-
+<p>
 /** \brief Writes data to a file storage.
  */
 
@@ -17173,10 +17183,10 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native @ByRef @Name("operator <<") FileStorage shiftLeft(@ByRef FileStorage fs, @Cast("char*") byte[] value);
 
 /** \} FileStorage
-
+ <p>
  *  \relates cv::FileNodeIterator
  *  \{
-
+<p>
 /** \brief Reads data from a file storage.
  */
 
@@ -17184,10 +17194,10 @@ sequence, stored in node. See the data reading sample in the beginning of the se
  */
 
 /** \} FileNodeIterator
-
+ <p>
  *  \relates cv::FileNode
  *  \{
-
+<p>
 /** \brief Reads data from a file storage.
  */
 
@@ -17195,7 +17205,7 @@ sequence, stored in node. See the data reading sample in the beginning of the se
  */
 
 /** \} FileNode
-
+ <p>
  *  \relates cv::FileNodeIterator
  *  \{ */
 
@@ -17208,7 +17218,7 @@ sequence, stored in node. See the data reading sample in the beginning of the se
 @Namespace("cv") public static native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef FileNodeIterator it1, @Const @ByRef FileNodeIterator it2);
 
 /** \} FileNodeIterator
-
+ <p>
  *  \cond IGNORED */
 
 

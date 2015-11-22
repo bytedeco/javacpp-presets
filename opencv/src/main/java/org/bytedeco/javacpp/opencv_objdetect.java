@@ -394,9 +394,9 @@ using a Boosted Cascade of Simple Features. IEEE CVPR, 2001. The paper is availa
 
 /** \addtogroup objdetect
  *  \{
-
+<p>
 ///////////////////////////// Object Detection ////////////////////////////
-
+ <p>
  *  class for grouping object candidates, detected by Cascade Classifier, HOG etc.
  *  instance of the class is to be passed to cv::partition (see cxoperations.hpp) */
 @Namespace("cv") @NoOffset public static class SimilarRects extends Pointer {

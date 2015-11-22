@@ -85,7 +85,7 @@ public class opencv_ml extends org.bytedeco.javacpp.helper.opencv_ml {
 
 /** \addtogroup ml
  *  \{
-
+<p>
 /** \brief Variable types */
 /** enum cv::ml::VariableTypes */
 public static final int

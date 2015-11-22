@@ -61,7 +61,7 @@ download https://github.com/LMDB/lmdb/archive/LMDB_$LMDB.tar.gz lmdb-LMDB_$LMDB.
 download http://iweb.dl.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
 download http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-$HDF5.tar.bz2 hdf5-$HDF5.tar.bz2
 download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS.tar.gz OpenBLAS-$OPENBLAS.tar.gz
-download https://github.com/BVLC/caffe/archive/master.tar.gz caffe-$CAFFE_VERSION.tar.gz
+download https://github.com/BVLC/caffe/archive/$CAFFE_VERSION.tar.gz caffe-$CAFFE_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM

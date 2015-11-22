@@ -68,7 +68,7 @@ the use of this software, even if advised of the possibility of such damage.
 
 /** \addtogroup face
  *  \{
-
+<p>
 /** \brief Abstract base class for all face recognition models
 <p>
 All face recognition models in OpenCV are derived from the abstract base class FaceRecognizer, which

@@ -2767,7 +2767,8 @@ public static final int
 /*-------------------------------------------------------------------------*
  *    Standard size of border added around images for special processing   *
  *-------------------------------------------------------------------------*/
-@MemberGetter public static native @Cast("const l_int32") int ADDED_BORDER();   /* pixels, not bits */
+@MemberGetter public static native @Cast("const l_int32") int ADDED_BORDER();
+public static final int ADDED_BORDER = ADDED_BORDER();   /* pixels, not bits */
 
 
 // #endif  /* LEPTONICA_MORPH_H */
@@ -2997,10 +2998,14 @@ public static final int
     COLOR_BLUE = 2,
     L_ALPHA_CHANNEL = 3;
 
-@MemberGetter public static native @Cast("const l_int32") int L_RED_SHIFT();           /* 24 */
-@MemberGetter public static native @Cast("const l_int32") int L_GREEN_SHIFT();         /* 16 */
-@MemberGetter public static native @Cast("const l_int32") int L_BLUE_SHIFT();          /*  8 */
-@MemberGetter public static native @Cast("const l_int32") int L_ALPHA_SHIFT();     /*  0 */
+@MemberGetter public static native @Cast("const l_int32") int L_RED_SHIFT();
+public static final int L_RED_SHIFT = L_RED_SHIFT();           /* 24 */
+@MemberGetter public static native @Cast("const l_int32") int L_GREEN_SHIFT();
+public static final int L_GREEN_SHIFT = L_GREEN_SHIFT();         /* 16 */
+@MemberGetter public static native @Cast("const l_int32") int L_BLUE_SHIFT();
+public static final int L_BLUE_SHIFT = L_BLUE_SHIFT();          /*  8 */
+@MemberGetter public static native @Cast("const l_int32") int L_ALPHA_SHIFT();
+public static final int L_ALPHA_SHIFT = L_ALPHA_SHIFT();     /*  0 */
 
 
 /*-------------------------------------------------------------------------*
@@ -3014,8 +3019,11 @@ public static final int
  *          International Telecommunications Union, via ITU-R.
  */
 @MemberGetter public static native @Cast("const l_float32") float L_RED_WEIGHT();
+public static final float L_RED_WEIGHT = L_RED_WEIGHT();
 @MemberGetter public static native @Cast("const l_float32") float L_GREEN_WEIGHT();
+public static final float L_GREEN_WEIGHT = L_GREEN_WEIGHT();
 @MemberGetter public static native @Cast("const l_float32") float L_BLUE_WEIGHT();
+public static final float L_BLUE_WEIGHT = L_BLUE_WEIGHT();
 
 
 /*-------------------------------------------------------------------------*
@@ -3616,7 +3624,8 @@ public static final int
     L_CLONE = 2,      /* make/use clone (ref count) of the object     */
     L_COPY_CLONE = 3;  /* make a new object and fill with with clones  */
                       /* of each object in the array(s)               */
-@MemberGetter public static native @Cast("const l_int32") int L_NOCOPY();  /* copyflag value in sarrayGetString() */
+@MemberGetter public static native @Cast("const l_int32") int L_NOCOPY();
+public static final int L_NOCOPY = L_NOCOPY();  /* copyflag value in sarrayGetString() */
 
 
 /*--------------------------------------------------------------------------*

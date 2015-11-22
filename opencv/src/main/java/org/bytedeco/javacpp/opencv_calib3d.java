@@ -782,7 +782,7 @@ pattern (every view is described by several 3D-2D point correspondences).
 
 /** \addtogroup calib3d
  *  \{
-
+ <p>
  *  type of the robust estimation algorithm */
 /** enum cv:: */
 public static final int /** least-median algorithm */
@@ -2303,7 +2303,7 @@ check, quadratic interpolation and speckle filtering).
 }
 
 /** \} calib3d
-
+<p>
 /** \brief The methods in this namespace use a so-called fisheye camera model.
   \ingroup calib3d_fisheye
 */

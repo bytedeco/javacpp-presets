@@ -80,7 +80,7 @@ known to be patented. Use them at your own risk.
 
 /** \addtogroup xfeatures2d_experiment
  *  \{
-
+<p>
 /** \brief Class implementing the FREAK (*Fast Retina Keypoint*) keypoint descriptor, described in \cite AOV12 .
 <p>
 The algorithm propose a novel keypoint descriptor inspired by the human visual system and more
@@ -413,7 +413,7 @@ DAISY::NRM_SIFT mean that descriptors are normalized for L2 norm equal to 1.0 bu
 
 /** \addtogroup xfeatures2d_nonfree
  *  \{
-
+<p>
 /** \brief Class for extracting keypoints and computing descriptors using the Scale Invariant Feature Transform
 (SIFT) algorithm by D. Lowe \cite Lowe04 .
  */

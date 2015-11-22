@@ -940,7 +940,7 @@ Javier Sanchez, Enric Meinhardt-Llopis and Gabriele Facciolo. "TV-L1 Optical Flo
 
 /** \addtogroup video_motion
  *  \{
-
+<p>
 /** \brief Base class for background/foreground segmentation. :
 <p>
 The class is only used to define the common interface for the whole family of background/foreground

@@ -75,7 +75,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
 /** \addtogroup stitching_warp
  *  \{
-
+<p>
 /** \brief Rotation-only model image warper interface.
  */
 @Namespace("cv::detail") public static class RotationWarper extends Pointer {
@@ -835,7 +835,7 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
 
 /** \addtogroup stitching_match
  *  \{
-
+<p>
 /** \brief Structure containing image keypoints and descriptors. */
 @Namespace("cv::detail") public static class ImageFeatures extends Pointer {
     static { Loader.load(); }
@@ -1297,7 +1297,7 @@ public static final int ENABLE_LOG = 0;
 
 /** \addtogroup stitching
  *  \{
-
+<p>
 /** \brief Describes camera parameters.
 <p>
 \note Translation is assumed to be zero during the whole stitching pipeline. :
@@ -1390,7 +1390,7 @@ public static final int ENABLE_LOG = 0;
 
 /** \addtogroup stitching_rotation
  *  \{
-
+<p>
 /** \brief Rotation estimator base class.
 <p>
 It takes features of all images, pairwise matches between all images and estimates rotations of all
@@ -1591,7 +1591,7 @@ public static final int
 
 /** \addtogroup stitching_exposure
  *  \{
-
+<p>
 /** \brief Base class for all exposure compensators.
  */
 @Namespace("cv::detail") public static class ExposureCompensator extends Pointer {
@@ -1753,7 +1753,7 @@ intensities, see \cite UES01 for details.
 
 /** \addtogroup stitching_seam
  *  \{
-
+<p>
 /** \brief Base class for a seam estimator.
  */
 @Namespace("cv::detail") public static class SeamFinder extends Pointer {
@@ -1953,7 +1953,7 @@ intensities, see \cite UES01 for details.
 
 /** \addtogroup stitching_blend
  *  \{
-
+<p>
 /** \brief Base class for all blenders.
 <p>
 Simple blender which puts one image over another
@@ -2135,7 +2135,7 @@ Simple blender which puts one image over another
 
 /** \addtogroup stitching_autocalib
  *  \{
-
+<p>
 /** \brief Tries to estimate focal lengths from the given homography under the assumption that the camera
 undergoes rotations around its centre only.
 <p>
@@ -2335,7 +2335,7 @@ by Heung-Yeung Shum and Richard Szeliski.
 
 /** \addtogroup stitching_warp
  *  \{
-
+<p>
 /** \brief Image warper factories base class.
  */
 @Namespace("cv") public static class WarperCreator extends Pointer {
@@ -2638,7 +2638,7 @@ The implemented stitching pipeline is very similar to the one proposed in \cite 
 
 /** \addtogroup stitching
  *  \{
-
+<p>
 /** \brief High level image stitcher.
 <p>
 It's possible to use this class without being aware of the entire stitching pipeline. However, to

@@ -300,7 +300,7 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 
 /** \addtogroup videostab_marching
  *  \{
-
+<p>
 /** \brief Describes the Fast Marching Method implementation.
   <p>
   See http://iwi.eldoc.ub.rug.nl/FILES/root/2004/JGraphToolsTelea/2004JGraphToolsTelea.pdf
@@ -525,7 +525,7 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
 
 /** \addtogroup videostab_motion
  *  \{
-
+<p>
 /** \brief Describes motion model between two point clouds.
  */
 /** enum cv::videostab::MotionModel */
@@ -769,7 +769,7 @@ public static final int
 
 /** \addtogroup videostab_motion
  *  \{
-
+<p>
 /** \brief Estimates best global motion between two 2D point clouds in the least-squares sense.
 <p>
 \note Works in-place and changes input point arrays.

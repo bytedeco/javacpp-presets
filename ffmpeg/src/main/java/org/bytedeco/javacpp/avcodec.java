@@ -3729,7 +3729,7 @@ public static final int FF_LEVEL_UNKNOWN = -99;
     public native long pts_correction_num_faulty_dts(); public native AVCodecContext pts_correction_num_faulty_dts(long pts_correction_num_faulty_dts); /** Number of incorrect DTS values so far */
     public native long pts_correction_last_pts(); public native AVCodecContext pts_correction_last_pts(long pts_correction_last_pts);       /** PTS of the last frame */
     public native long pts_correction_last_dts(); public native AVCodecContext pts_correction_last_dts(long pts_correction_last_dts);       /** DTS of the last frame
-
+    <p>
     /**
      * Character encoding of the input subtitles file.
      * - decoding: set by user

@@ -2670,7 +2670,7 @@ int main(int argc, const char *argv[])
 
 /** \addtogroup imgproc_filter
 /** \{
-
+<p>
 /** type of morphological operation */
 /** enum cv::MorphTypes */
 public static final int
@@ -2707,10 +2707,10 @@ public static final int
     MORPH_ELLIPSE = 2;
 
 /** \} imgproc_filter
-
+ <p>
  *  \addtogroup imgproc_transform
  *  \{
-
+ <p>
  *  interpolation algorithm */
 /** enum cv::InterpolationFlags */
 public static final int
@@ -2747,10 +2747,10 @@ public static final int
        INTER_TAB_SIZE2 =  INTER_TAB_SIZE * INTER_TAB_SIZE;
 
 /** \} imgproc_transform
-
+ <p>
  *  \addtogroup imgproc_misc
  *  \{
-
+ <p>
  *  Distance types for Distance Transform and M-estimators
  *  @see cv::distanceTransform, cv::fitLine */
 /** enum cv::DistanceTypes */
@@ -2867,10 +2867,10 @@ public static final int
     FLOODFILL_MASK_ONLY   =  1 << 17;
 
 /** \} imgproc_misc
-
+ <p>
  *  \addtogroup imgproc_shape
  *  \{
-
+ <p>
  *  connected components algorithm output formats */
 /** enum cv::ConnectedComponentsTypes */
 public static final int
@@ -2922,7 +2922,7 @@ public static final int
     CHAIN_APPROX_TC89_KCOS = 4;
 
 /** \} imgproc_shape
-
+ <p>
  *  Variants of a Hough transform */
 /** enum cv::HoughModes */
 public static final int
@@ -3473,7 +3473,7 @@ public static final int
 
 /** \addtogroup imgproc_feature
  *  \{
-
+<p>
 /** \example lsd_lines.cpp
 An example using the LineSegmentDetector
 */
@@ -3554,10 +3554,10 @@ is chosen.
 @Namespace("cv") public static native @Ptr LineSegmentDetector createLineSegmentDetector();
 
 /** \} imgproc_feature
-
+ <p>
  *  \addtogroup imgproc_filter
  *  \{
-
+<p>
 /** \brief Returns Gaussian filter coefficients.
 <p>
 The function computes and returns the \f$\texttt{ksize} \times 1\f$ matrix of Gaussian filter
@@ -3964,10 +3964,10 @@ applied. See getDerivKernels for details.
 @Namespace("cv") public static native void Laplacian( @ByVal Mat src, @ByVal Mat dst, int ddepth );
 
 /** \} imgproc_filter
-
+ <p>
  *  \addtogroup imgproc_feature
  *  \{
-
+<p>
 /** \example edge.cpp
   An example on using the canny edge detector
 */
@@ -4387,10 +4387,10 @@ returned first.
                                int method, double dp, double minDist );
 
 /** \} imgproc_feature
-
+ <p>
  *  \addtogroup imgproc_filter
  *  \{
-
+<p>
 /** \example morphology2.cpp
   An example using the morphological operations
 */
@@ -4480,10 +4480,10 @@ meaning.
                                 int op, @ByVal Mat kernel );
 
 /** \} imgproc_filter
-
+ <p>
  *  \addtogroup imgproc_transform
  *  \{
-
+<p>
 /** \brief Resizes an image.
 <p>
 The function resize resizes the image src down to or up to the specified size. Note that the
@@ -4803,10 +4803,10 @@ The function can not operate in-place.
                                @ByVal Point2f center, double maxRadius, int flags );
 
 /** \} imgproc_transform
-
+ <p>
  *  \addtogroup imgproc_misc
  *  \{
-
+<p>
 /** \overload */
 @Namespace("cv") public static native void integral( @ByVal Mat src, @ByVal Mat sum, int sdepth/*=-1*/ );
 @Namespace("cv") public static native void integral( @ByVal Mat src, @ByVal Mat sum );
@@ -4858,10 +4858,10 @@ CV_64F.
                                         @ByVal Mat sqsum, @ByVal Mat tilted );
 
 /** \} imgproc_misc
-
+ <p>
  *  \addtogroup imgproc_motion
  *  \{
-
+<p>
 /** \brief Adds an image to the accumulator.
 <p>
 The function adds src or some of its elements to dst :
@@ -5009,10 +5009,10 @@ An example is shown below:
 @Namespace("cv") public static native void createHanningWindow(@ByVal Mat dst, @ByVal Size winSize, int type);
 
 /** \} imgproc_motion
-
+ <p>
  *  \addtogroup imgproc_misc
  *  \{
-
+<p>
 /** \brief Applies a fixed-level threshold to each array element.
 <p>
 The function applies fixed-level thresholding to a single-channel array. The function is typically
@@ -5069,10 +5069,10 @@ is positive but may be zero or negative as well.
                                      int thresholdType, int blockSize, double C );
 
 /** \} imgproc_misc
-
+ <p>
  *  \addtogroup imgproc_filter
  *  \{
-
+<p>
 /** \brief Blurs an image and downsamples it.
 <p>
 By default, size of the output image is computed as {@code Size((src.cols+1)/2, (src.rows+1)/2)}, but in
@@ -5134,10 +5134,10 @@ same as src. dst[1] is the next pyramid layer, a smoothed and down-sized src, an
                               int maxlevel );
 
 /** \} imgproc_filter
-
+ <p>
  *  \addtogroup imgproc_transform
  *  \{
-
+<p>
 /** \brief Transforms an image to compensate for lens distortion.
 <p>
 The function transforms an image to compensate radial and tangential lens distortion.
@@ -5300,10 +5300,10 @@ cv::stereoRectify can be passed here. If the matrix is empty, the identity new c
                                    @ByVal Mat cameraMatrix, @ByVal Mat distCoeffs);
 
 /** \} imgproc_transform
-
+ <p>
  *  \addtogroup imgproc_hist
  *  \{
-
+<p>
 /** \example demhist.cpp
 An example for creating histograms of an image
 */
@@ -5686,7 +5686,7 @@ a flow from \f$i\f$ -th point of signature1 to \f$j\f$ -th point of signature2 .
                       float[] lowerBound/*=0*/, @ByVal(nullValue = "cv::noArray()") Mat flow/*=cv::noArray()*/ );
 
 /** \} imgproc_hist
-
+<p>
 /** \example watershed.cpp
 An example using the watershed algorithm
  */
@@ -5721,7 +5721,7 @@ size as image .
 
 /** \addtogroup imgproc_filter
  *  \{
-
+<p>
 /** \brief Performs initial step of meanshift segmentation of an image.
 <p>
 The function implements the filtering stage of meanshift segmentation, that is, the output of the
@@ -5765,10 +5765,10 @@ whole original image (i.e. when maxLevel==0).
                                          double sp, double sr );
 
 /** \}
-
+ <p>
  *  \addtogroup imgproc_misc
  *  \{
-
+<p>
 /** \example grabcut.cpp
 An example using the GrabCut algorithm
  */
@@ -6022,7 +6022,7 @@ channels is derived automatically from src and code.
 
 /** \addtogroup imgproc_shape
  *  \{
-
+<p>
 /** \brief Calculates all of the moments up to the third order of a polygon or rasterized shape.
 <p>
 The function computes moments, up to the 3rd order, of a vector shape or a rasterized shape. The
@@ -6066,10 +6066,10 @@ transformed images are a bit different.
 @Namespace("cv") public static native void HuMoments( @Const @ByRef Moments m, @ByVal Mat hu );
 
 /** \} imgproc_shape
-
+ <p>
  *  \addtogroup imgproc_object
  *  \{
-
+ <p>
  *  type of the template matching operation */
 /** enum cv::TemplateMatchModes */
 public static final int
@@ -6117,10 +6117,10 @@ not set by default.
                                  @ByVal Mat result, int method );
 
 /** \}
-
+ <p>
  *  \addtogroup imgproc_shape
  *  \{
-
+<p>
 /** \brief computes the connected components labeled image of boolean image
 <p>
 image with 4 or 8 way connectivity - returns N, the total number of labels [0, N-1] where 0
@@ -6506,7 +6506,7 @@ at most 8 vertices. Stored as std::vector\<cv::Point2f\> or cv::Mat as Mx1 of ty
 
 /** \addtogroup imgproc_colormap
  *  \{
-
+ <p>
  *  GNU Octave/MATLAB equivalent colormaps */
 /** enum cv::ColormapTypes */
 public static final int
@@ -6546,10 +6546,10 @@ public static final int
 @Namespace("cv") public static native void applyColorMap(@ByVal Mat src, @ByVal Mat dst, int colormap);
 
 /** \} imgproc_colormap
-
+ <p>
  *  \addtogroup imgproc_draw
  *  \{
-
+<p>
 /** \brief Draws a line segment connecting two points.
 <p>
 The function line draws the line segment between pt1 and pt2 points in the image. The line is
@@ -7089,9 +7089,9 @@ for(int i = 0; i < it2.count; i++, ++it2)
 
 
 /** \endcond
-
+ <p>
  *  \} imgproc_draw
-
+ <p>
  *  \} imgproc */
 
  // cv

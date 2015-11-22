@@ -128,7 +128,7 @@ public class opencv_shape extends org.bytedeco.javacpp.presets.opencv_shape {
 
 /** \addtogroup shape
 /** \{
-
+<p>
 /** \brief Computes the "minimal work" distance between two weighted point configurations base on the papers
 "EMD-L1: An efficient and Robust Algorithm for comparing histogram-based descriptors", by Haibin
 Ling and Kazunori Okuda; and "The Earth Mover's Distance is the Mallows Distance: Some Insights from
@@ -200,7 +200,7 @@ the histogram in each bin.
 
 /** \addtogroup shape
  *  \{
-
+<p>
 /** \brief Abstract base class for shape transformation algorithms.
  */
 @Namespace("cv") public static class ShapeTransformer extends Algorithm {
@@ -340,7 +340,7 @@ F.L. Bookstein (PAMI 1989). :
 
 /** \addtogroup shape
  *  \{
-
+<p>
 /** \brief Abstract base class for histogram cost algorithms.
  */
 @Namespace("cv") public static class HistogramCostExtractor extends Algorithm {
@@ -466,7 +466,7 @@ F.L. Bookstein (PAMI 1989). :
 
 /** \addtogroup shape
  *  \{
-
+<p>
 /** \brief Abstract base class for shape distance algorithms.
  */
 @Namespace("cv") public static class ShapeDistanceExtractor extends Algorithm {

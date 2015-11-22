@@ -154,7 +154,7 @@ camera calibration with multiple exposures and exposure fusion.
 
 /** \addtogroup photo
  *  \{
-
+ <p>
  *  the inpainting algorithm */
 /** enum cv:: */
 public static final int
@@ -199,7 +199,7 @@ objects from still images or video. See <http://en.wikipedia.org/wiki/Inpainting
 
 /** \addtogroup photo_denoise
  *  \{
-
+<p>
 /** \brief Perform image denoising using Non-local Means Denoising algorithm
 <http://www.ipol.im/pub/algo/bcm_non_local_means_denoising/> with several computational
 optimizations. Noise expected to be a gaussian white noise
@@ -440,7 +440,7 @@ increase it if the results are poor.
 @Namespace("cv") public static native void denoise_TVL1(@Const @ByRef MatVector observations,@ByRef Mat result);
 
 /** \} photo_denoise
-
+ <p>
  *  \addtogroup photo_hdr
  *  \{ */
 
@@ -873,7 +873,7 @@ For more information see \cite RB99 .
 @Namespace("cv") public static native @Ptr MergeRobertson createMergeRobertson();
 
 /** \} photo_hdr
-
+<p>
 /** \brief Transforms a color image to a grayscale image. It is a basic tool in digital printing, stylized
 black-and-white photograph rendering, and in many single channel image processing applications
 \cite CL12 .
@@ -888,7 +888,7 @@ This function is to be applied on color images.
 
 /** \addtogroup photo_clone
  *  \{
-
+<p>
 /** \brief Image editing tasks concern either global changes (color/intensity corrections, filters,
 deformations) or local changes concerned to a selection. Here we are interested in achieving local
 changes, ones that are restricted to a region manually selected (ROI), in a seamless and effortless
@@ -967,10 +967,10 @@ color of the destination image.
 @Namespace("cv") public static native void textureFlattening(@ByVal Mat src, @ByVal Mat mask, @ByVal Mat dst);
 
 /** \} photo_clone
-
+ <p>
  *  \addtogroup photo_render
  *  \{
-
+<p>
 /** \brief Filtering is the fundamental operation in image and video processing. Edge-preserving smoothing
 filters are used in many different applications \cite EM11 .
 <p>
@@ -1024,7 +1024,7 @@ contrast while preserving, or enhancing, high-contrast features.
 @Namespace("cv") public static native void stylization(@ByVal Mat src, @ByVal Mat dst);
 
 /** \} photo_render
-
+ <p>
  *  \} photo */
 
  // cv
@@ -1087,7 +1087,7 @@ contrast while preserving, or enhancing, high-contrast features.
 
 /** \addtogroup photo_denoise
  *  \{
-
+<p>
 /** \brief Performs pure non local means denoising without any simplification, and thus it is not fast.
 <p>
 @param src Source image. Supports only CV_8UC1, CV_8UC2 and CV_8UC3.

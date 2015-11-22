@@ -1066,7 +1066,7 @@ callback function below: :
 @Namespace("cv") public static native void updateWindow(@Str String winname);
 
 /** \} highgui_opengl
-
+ <p>
  *  \addtogroup highgui_qt
  *  \{ */
 // Only for Qt
@@ -1251,7 +1251,7 @@ See below various examples of the createButton function call: :
 @Namespace("cv") public static native int createButton( @Str String bar_name, ButtonCallback on_change);
 
 /** \} highgui_qt
-
+ <p>
  *  \} highgui */
 
  // cv

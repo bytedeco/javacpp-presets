@@ -88,7 +88,7 @@ Functions reading and writing .flo files in "Middlebury" format, see: <http://vi
     
 /** \addtogroup optflow
  *  \{
-
+<p>
 /** \overload */
 @Namespace("cv::optflow") public static native void calcOpticalFlowSF( @ByVal Mat from, @ByVal Mat to, @ByVal Mat flow,
                                      int layers, int averaging_block_size, int max_flow);
@@ -240,7 +240,7 @@ the use of this software, even if advised of the possibility of such damage.
 
 /** \addtogroup optflow
  *  \{
-
+<p>
 /** \brief Updates the motion history image by a moving silhouette.
 <p>
 @param silhouette Silhouette mask that has non-zero pixels where the motion occurs.

@@ -172,6 +172,7 @@ public static final int UNICHAR_LEN = 30;
 
 // A variable to indicate an invalid or uninitialized unichar id.
 @MemberGetter public static native int INVALID_UNICHAR_ID();
+public static final int INVALID_UNICHAR_ID = INVALID_UNICHAR_ID();
 // A special unichar that corresponds to INVALID_UNICHAR_ID.
 @MemberGetter public static native byte INVALID_UNICHAR(int i);
 @MemberGetter public static native @Cast("const char*") BytePointer INVALID_UNICHAR();
