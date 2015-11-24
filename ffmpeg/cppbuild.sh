@@ -19,10 +19,10 @@ fi
 #ENABLE="--enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=aac --enable-decoder=h264 --enable-decoder=aac --enable-parser=h264 --enable-parser=aac --enable-muxer=mp4 --enable-muxer=rtsp --enable-demuxer=mov --enable-demuxer=rtsp --enable-protocol=file --enable-protocol=http --enable-protocol=rtp --enable-protocol=rtmp"
 
 DISABLE="--disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
-ENABLE="--enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libopenh264 --enable-encoder=libopenh264 --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp"
+ENABLE="--enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libopenh264 --enable-encoder=libopenh264 --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl"
 
 #DISABLE="--disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
-#ENABLE="--enable-shared --enable-runtime-cpudetect --enable-gpl --enable-nonfree --enable-libx264 --enable-protocol=file --enable-protocol=rtmp"
+#ENABLE="--enable-shared --enable-runtime-cpudetect --enable-gpl --enable-nonfree --enable-libx264 --enable-protocol=file --enable-protocol=rtmp --enable-librtmp"
 
 if [[ $PLATFORM == windows* && !($DISABLE =~ "--disable-everything") ]]; then
     FFMPEG_VERSION=2.8.1
@@ -52,7 +52,8 @@ else
     download https://ftp.videolan.org/pub/videolan/x265/$X265.tar.gz $X265.tar.gz
     download https://chromium.googlesource.com/webm/libvpx/+archive/$VPX_VERSION.tar.gz libvpx-$VPX_VERSION.tar.gz
     download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
-
+    download http://rtmpdump.mplayerhq.hu/download/rtmpdump-2.3.tgz rtmpdump-2.3.tgz
+ 
     mkdir -p $PLATFORM
     cd $PLATFORM
     INSTALL_PATH=`pwd`
@@ -63,6 +64,8 @@ else
     tar -xzvf ../openh264-$OPENH264_VERSION.tar.gz
     tar -xjvf ../last_stable_x264.tar.bz2
     tar -xzvf ../$X265.tar.gz
+    tar -xzvf ../rtmpdump-2.3.tgz
+
     mkdir -p libvpx-$VPX_VERSION
     tar -xzvf ../libvpx-$VPX_VERSION.tar.gz -C libvpx-$VPX_VERSION
     tar -xjvf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
@@ -301,6 +304,9 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=i686-w64-mingw32
         make -j $MAKEJ
         make install
+#        cd ../rtmpdump-2.3/librtmp
+#        make SYS=mingw
+#        make install
 #        cd ../$X265
 #        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
 #        make -j $MAKEJ
