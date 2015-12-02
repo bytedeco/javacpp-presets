@@ -59,7 +59,7 @@ download https://github.com/google/leveldb/archive/v$LEVELDB.tar.gz leveldb-$LEV
 download https://github.com/google/snappy/releases/download/$SNAPPY/snappy-$SNAPPY.tar.gz snappy-$SNAPPY.tar.gz
 download https://github.com/LMDB/lmdb/archive/LMDB_$LMDB.tar.gz lmdb-LMDB_$LMDB.tar.gz
 download http://iweb.dl.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
-download http://www.hdfgroup.org/ftp/HDF5/current/src/hdf5-$HDF5.tar.bz2 hdf5-$HDF5.tar.bz2
+download http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-$HDF5/src/hdf5-$HDF5.tar.bz2 hdf5-$HDF5.tar.bz2
 download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS.tar.gz OpenBLAS-$OPENBLAS.tar.gz
 download https://github.com/BVLC/caffe/archive/$CAFFE_VERSION.tar.gz caffe-$CAFFE_VERSION.tar.gz
 
