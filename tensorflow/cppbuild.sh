@@ -35,19 +35,17 @@ download https://github.com/tensorflow/tensorflow/archive/$TENSORFLOW_VERSION.ta
 
 mkdir -p $PLATFORM
 cd $PLATFORM
-INSTALL_PATH=`pwd`
-mkdir -p include lib bin
 
 echo "Decompressing archives"
 tar --totals -xzf ../protobuf-$PROTOBUF_VERSION.tar.gz
 tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz
 
-ln -snf tensorflow-$TENSORFLOW_VERSION tensorflow
+# Assumes Bazel is available in the path: http://bazel.io/docs/install.html
 cd tensorflow-$TENSORFLOW_VERSION/google
-rmdir protobuf
+rmdir protobuf || true
 ln -snf ../../protobuf-$PROTOBUF_VERSION protobuf
 cd ..
-patch -Np1 < ../../../tensorflow.patch
+patch -Np1 < ../../../tensorflow-$TENSORFLOW_VERSION.patch
 ./configure
 bazel build -c opt //tensorflow/cc:libtensorflow.so
 

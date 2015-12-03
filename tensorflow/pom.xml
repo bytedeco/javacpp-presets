@@ -11,9 +11,13 @@
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>tensorflow</artifactId>
-  <version>master-${project.parent.version}</version>
+  <version>${tensorflow.version}-${project.parent.version}</version>
   <packaging>jar</packaging>
   <name>JavaCPP Presets for TensorFlow</name>
+
+  <properties>
+    <tensorflow.version>master</tensorflow.version>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -35,13 +39,13 @@
         <artifactId>javacpp</artifactId>
         <configuration>
           <includePaths>
-            <includePath>${basedir}/cppbuild/${platform}/tensorflow/</includePath>
-            <includePath>${basedir}/cppbuild/${platform}/tensorflow/bazel-genfiles/</includePath>
-            <includePath>${basedir}/cppbuild/${platform}/tensorflow/google/protobuf/src/</includePath>
-            <includePath>${basedir}/cppbuild/${platform}/tensorflow/third_party/eigen3/</includePath>
+            <includePath>${basedir}/cppbuild/${platform}/tensorflow-${tensorflow.version}/</includePath>
+            <includePath>${basedir}/cppbuild/${platform}/tensorflow-${tensorflow.version}/bazel-genfiles/</includePath>
+            <includePath>${basedir}/cppbuild/${platform}/tensorflow-${tensorflow.version}/google/protobuf/src/</includePath>
+            <includePath>${basedir}/cppbuild/${platform}/tensorflow-${tensorflow.version}/third_party/eigen3/</includePath>
           </includePaths>
           <linkPaths>
-             <linkPath>${basedir}/cppbuild/${platform}/tensorflow/bazel-bin/tensorflow/cc/</linkPath>
+             <linkPath>${basedir}/cppbuild/${platform}/tensorflow-${tensorflow.version}/bazel-bin/tensorflow/cc/</linkPath>
           </linkPaths>
         </configuration>
       </plugin>

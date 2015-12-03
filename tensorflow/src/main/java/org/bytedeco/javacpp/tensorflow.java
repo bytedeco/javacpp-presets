@@ -6,7 +6,7 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
-public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
+public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     static { Loader.load(); }
 
 @Name("tensorflow::gtl::InlinedVector<tensorflow::DataType,4>") public static class DataTypeVector extends Pointer {
@@ -167,6 +167,8 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringTensorPairVector(Pointer p) { super(p); }
+    public StringTensorPairVector(BytePointer[] firstValue, Tensor[] secondValue) { this(Math.min(firstValue.length, secondValue.length)); put(firstValue, secondValue); }
+    public StringTensorPairVector(String[] firstValue, Tensor[] secondValue) { this(Math.min(firstValue.length, secondValue.length)); put(firstValue, secondValue); }
     public StringTensorPairVector()       { allocate();  }
     public StringTensorPairVector(long n) { allocate(n); }
     private native void allocate();
@@ -178,12 +180,30 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
 
     @Index public native @StdString BytePointer first(@Cast("size_t") long i); public native StringTensorPairVector first(@Cast("size_t") long i, BytePointer first);
     @Index public native @ByRef Tensor second(@Cast("size_t") long i);  public native StringTensorPairVector second(@Cast("size_t") long i, Tensor second);
+    @MemberSetter @Index public native StringTensorPairVector first(@Cast("size_t") long i, @StdString String first);
+
+    public StringTensorPairVector put(BytePointer[] firstValue, Tensor[] secondValue) {
+        for (int i = 0; i < firstValue.length && i < secondValue.length; i++) {
+            first(i, firstValue[i]);
+            second(i, secondValue[i]);
+        }
+        return this;
+    }
+
+    public StringTensorPairVector put(String[] firstValue, Tensor[] secondValue) {
+        for (int i = 0; i < firstValue.length && i < secondValue.length; i++) {
+            first(i, firstValue[i]);
+            second(i, secondValue[i]);
+        }
+        return this;
+    }
 }
 
 @NoOffset @Name("std::pair<tensorflow::EdgeSet::const_iterator,bool>") public static class EdgeSetBoolPair extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EdgeSetBoolPair(Pointer p) { super(p); }
+    public EdgeSetBoolPair(EdgeSetIterator firstValue, boolean secondValue) { this(); put(firstValue, secondValue); }
     public EdgeSetBoolPair()       { allocate();  }
     private native void allocate();
     public native @Name("operator=") @ByRef EdgeSetBoolPair put(@ByRef EdgeSetBoolPair x);
@@ -191,6 +211,12 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
 
     @MemberGetter public native @ByRef EdgeSetIterator first(); public native EdgeSetBoolPair first(EdgeSetIterator first);
     @MemberGetter public native @Cast("bool") boolean second();  public native EdgeSetBoolPair second(boolean second);
+
+    public EdgeSetBoolPair put(EdgeSetIterator firstValue, boolean secondValue) {
+        first(firstValue);
+        second(secondValue);
+        return this;
+    }
 }
 
 // Parsed from tensorflow/core/platform/default/integral_types.h
@@ -218,7 +244,7 @@ limitations under the License.
 // #endif  // TENSORFLOW_PLATFORM_DEFAULT_INTEGRAL_TYPES_H_
 
 
-// Parsed from tensorflow/core/platform/default/dynamic_annotations.h
+// Parsed from tensorflow/core/framework/numeric_types.h
 
 /* Copyright 2015 Google Inc. All Rights Reserved.
 
@@ -235,15 +261,55 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef THIRD_PARTY_TENSORFLOW_CORE_PLATFORM_DEFAULT_DYNAMIC_ANNOTATIONS_H_
-// #define THIRD_PARTY_TENSORFLOW_CORE_PLATFORM_DEFAULT_DYNAMIC_ANNOTATIONS_H_
+// #ifndef TENSORFLOW_FRAMEWORK_NUMERIC_TYPES_H_
+// #define TENSORFLOW_FRAMEWORK_NUMERIC_TYPES_H_
 
-// Do nothing for this platform
-// #define TF_ANNOTATE_MEMORY_IS_INITIALIZED(ptr, bytes)
-//   do {
-//   } while (0)
+// #include <complex>
 
-// #endif  // THIRD_PARTY_TENSORFLOW_CORE_PLATFORM_DEFAULT_DYNAMIC_ANNOTATIONS_H_
+// #include "tensorflow/core/platform/port.h"
+
+// Single precision complex.
+
+  // end namespace tensorflow
+
+// #endif  // TENSORFLOW_FRAMEWORK_NUMERIC_TYPES_H_
+
+
+// Parsed from tensorflow/core/platform/init_main.h
+
+/* Copyright 2015 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_PLATFORM_INIT_MAIN_H_
+// #define TENSORFLOW_PLATFORM_INIT_MAIN_H_
+
+// Platform-specific initialization routine that may be invoked by a
+// main() program that uses TensorFlow.
+//
+// Default implementation does nothing.
+@Namespace("tensorflow::port") public static native void InitMain(@Cast("const char*") BytePointer usage, IntPointer argc, @Cast("char***") PointerPointer argv);
+@Namespace("tensorflow::port") public static native void InitMain(String usage, IntBuffer argc, @Cast("char***") PointerPointer argv);
+@Namespace("tensorflow::port") public static native void InitMain(@Cast("const char*") BytePointer usage, int[] argc, @Cast("char***") PointerPointer argv);
+@Namespace("tensorflow::port") public static native void InitMain(String usage, IntPointer argc, @Cast("char***") PointerPointer argv);
+@Namespace("tensorflow::port") public static native void InitMain(@Cast("const char*") BytePointer usage, IntBuffer argc, @Cast("char***") PointerPointer argv);
+@Namespace("tensorflow::port") public static native void InitMain(String usage, int[] argc, @Cast("char***") PointerPointer argv);
+
+  // namespace port
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_PLATFORM_INIT_MAIN_H_
 
 
 // Parsed from tensorflow/core/platform/port.h
@@ -494,166 +560,6 @@ public static final int LANG_CXX11 = 1;
 // #endif  // TENSORFLOW_PLATFORM_PORT_H_
 
 
-// Parsed from tensorflow/core/lib/core/stringpiece.h
-
-/* Copyright 2015 Google Inc. All Rights Reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-==============================================================================*/
-
-// StringPiece is a simple structure containing a pointer into some external
-// storage and a size.  The user of a StringPiece must ensure that the slice
-// is not used after the corresponding external storage has been
-// deallocated.
-//
-// Multiple threads can invoke const methods on a StringPiece without
-// external synchronization, but if any of the threads may call a
-// non-const method, all threads accessing the same StringPiece must use
-// external synchronization.
-
-// #ifndef TENSORFLOW_LIB_CORE_STRINGPIECE_H_
-// #define TENSORFLOW_LIB_CORE_STRINGPIECE_H_
-
-// #include <assert.h>
-// #include <stddef.h>
-// #include <string.h>
-// #include <iosfwd>
-// #include <string>
-// #include "tensorflow/core/platform/port.h"
-
-@Namespace("tensorflow") @NoOffset public static class StringPiece extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public StringPiece(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public StringPiece(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public StringPiece position(int position) {
-        return (StringPiece)super.position(position);
-    }
-
-
-  // Create an empty slice.
-  public StringPiece() { super((Pointer)null); allocate(); }
-  private native void allocate();
-
-  // Create a slice that refers to d[0,n-1].
-  public StringPiece(@Cast("const char*") BytePointer d, @Cast("size_t") long n) { super((Pointer)null); allocate(d, n); }
-  private native void allocate(@Cast("const char*") BytePointer d, @Cast("size_t") long n);
-  public StringPiece(String d, @Cast("size_t") long n) { super((Pointer)null); allocate(d, n); }
-  private native void allocate(String d, @Cast("size_t") long n);
-
-  // Create a slice that refers to the contents of "s"
-  public StringPiece(@StdString BytePointer s) { super((Pointer)null); allocate(s); }
-  private native void allocate(@StdString BytePointer s);
-  public StringPiece(@StdString String s) { super((Pointer)null); allocate(s); }
-  private native void allocate(@StdString String s);
-
-  // Create a slice that refers to s[0,strlen(s)-1]
-
-  public native void set(@Const Pointer data, @Cast("size_t") long len);
-
-  // Return a pointer to the beginning of the referenced data
-  public native @Cast("const char*") BytePointer data();
-
-  // Return the length (in bytes) of the referenced data
-  public native @Cast("size_t") long size();
-
-  // Return true iff the length of the referenced data is zero
-  public native @Cast("bool") boolean empty();
-  public native @Cast("tensorflow::StringPiece::iterator") BytePointer begin();
-  public native @Cast("tensorflow::StringPiece::iterator") BytePointer end();
-
-  @MemberGetter public static native @Cast("const size_t") long npos();
-  public static final long npos = npos();
-
-  // Return the ith byte in the referenced data.
-  // REQUIRES: n < size()
-  public native @Cast("char") @Name("operator []") byte get(@Cast("size_t") long n);
-
-  // Change this slice to refer to an empty array
-  public native void clear();
-
-  // Drop the first "n" bytes from this slice.
-  public native void remove_prefix(@Cast("size_t") long n);
-
-  public native void remove_suffix(@Cast("size_t") long n);
-
-  public native @Cast("size_t") long find(@Cast("char") byte c, @Cast("size_t") long pos/*=0*/);
-  public native @Cast("size_t") long find(@Cast("char") byte c);
-  public native @Cast("size_t") long rfind(@Cast("char") byte c, @Cast("size_t") long pos/*=tensorflow::StringPiece::npos*/);
-  public native @Cast("size_t") long rfind(@Cast("char") byte c);
-  public native @Cast("bool") boolean contains(@ByVal StringPiece s);
-
-  // Checks whether StringPiece starts with x and if so advances the beginning
-  // of it to past the match.  It's basically a shortcut for starts_with
-  // followed by remove_prefix.
-  public native @Cast("bool") boolean Consume(@ByVal StringPiece x);
-
-  public native @ByVal StringPiece substr(@Cast("size_t") long pos, @Cast("size_t") long n/*=tensorflow::StringPiece::npos*/);
-  public native @ByVal StringPiece substr(@Cast("size_t") long pos);
-
-  public static class Hasher extends Pointer {
-      static { Loader.load(); }
-      /** Default native constructor. */
-      public Hasher() { super((Pointer)null); allocate(); }
-      /** Native array allocator. Access with {@link Pointer#position(int)}. */
-      public Hasher(int size) { super((Pointer)null); allocateArray(size); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public Hasher(Pointer p) { super(p); }
-      private native void allocate();
-      private native void allocateArray(int size);
-      @Override public Hasher position(int position) {
-          return (Hasher)super.position(position);
-      }
-  
-    public native @Cast("size_t") @Name("operator ()") long apply(@ByVal StringPiece arg);
-  }
-
-  // Return a string that contains the copy of the referenced data.
-  public native @StdString BytePointer ToString();
-
-  // Three-way comparison.  Returns value:
-  //   <  0 iff "*this" <  "b",
-  //   == 0 iff "*this" == "b",
-  //   >  0 iff "*this" >  "b"
-  public native int compare(@ByVal StringPiece b);
-
-  // Return true iff "x" is a prefix of "*this"
-  public native @Cast("bool") boolean starts_with(@ByVal StringPiece x);
-  // Return true iff "x" is a suffix of "*this"
-  public native @Cast("bool") boolean ends_with(@ByVal StringPiece x);
-}
-
-@Namespace("tensorflow") public static native @Cast("bool") @Name("operator ==") boolean equals(@ByVal StringPiece x, @ByVal StringPiece y);
-
-@Namespace("tensorflow") public static native @Cast("bool") @Name("operator !=") boolean notEquals(@ByVal StringPiece x, @ByVal StringPiece y);
-
-@Namespace("tensorflow") public static native @Cast("bool") @Name("operator <") boolean lessThan(@ByVal StringPiece x, @ByVal StringPiece y);
-@Namespace("tensorflow") public static native @Cast("bool") @Name("operator >") boolean greaterThan(@ByVal StringPiece x, @ByVal StringPiece y);
-@Namespace("tensorflow") public static native @Cast("bool") @Name("operator <=") boolean lessThanEquals(@ByVal StringPiece x, @ByVal StringPiece y);
-@Namespace("tensorflow") public static native @Cast("bool") @Name("operator >=") boolean greaterThanEquals(@ByVal StringPiece x, @ByVal StringPiece y);
-
-
-
-// allow StringPiece to be logged
-@Namespace("tensorflow") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer o, @ByVal StringPiece piece);
-
-  // namespace tensorflow
-
-// #endif  // TENSORFLOW_LIB_CORE_STRINGPIECE_H_
-
-
 // Parsed from tensorflow/core/lib/core/error_codes.pb.h
 
 // Generated by the protocol buffer compiler.  DO NOT EDIT!
@@ -831,8 +737,10 @@ limitations under the License.
 
   /** \brief Create a status with the specified error code and msg as a
    *  human-readable string containing more detailed information. */
-  public Status(@Cast("tensorflow::error::Code") int code, @ByVal StringPiece msg) { super((Pointer)null); allocate(code, msg); }
-  private native void allocate(@Cast("tensorflow::error::Code") int code, @ByVal StringPiece msg);
+  public Status(@Cast("tensorflow::error::Code") int code, @StringPiece BytePointer msg) { super((Pointer)null); allocate(code, msg); }
+  private native void allocate(@Cast("tensorflow::error::Code") int code, @StringPiece BytePointer msg);
+  public Status(@Cast("tensorflow::error::Code") int code, @StringPiece String msg) { super((Pointer)null); allocate(code, msg); }
+  private native void allocate(@Cast("tensorflow::error::Code") int code, @StringPiece String msg);
 
   /** Copy the specified status. */
   public Status(@Const @ByRef Status s) { super((Pointer)null); allocate(s); }
@@ -879,8 +787,8 @@ limitations under the License.
 
 @Namespace("tensorflow") public static native @Cast("std::ostream*") @ByRef @Name("operator <<") Pointer shiftLeft(@Cast("std::ostream*") @ByRef Pointer os, @Const @ByRef Status x);
 
-// #define TF_CHECK_OK(val) CHECK_EQ(::tensorflow::Status::OK(), (val))
-// #define TF_QCHECK_OK(val) QCHECK_EQ(::tensorflow::Status::OK(), (val))
+public static native void TF_CHECK_OK(@ByVal Status val);
+public static native void TF_QCHECK_OK(@ByVal Status val);
 
   // namespace tensorflow
 
@@ -1067,7 +975,7 @@ limitations under the License.
   public native @ByVal Status DeleteDir(@StdString BytePointer dirname);
   public native @ByVal Status DeleteDir(@StdString String dirname);
 
-  /** Stores the size of fname in *file_size. */
+  /** Stores the size of {@code fname} in {@code *file_size}. */
   public native @ByVal Status GetFileSize(@StdString BytePointer fname, @Cast("tensorflow::uint64*") LongPointer file_size);
   public native @ByVal Status GetFileSize(@StdString String fname, @Cast("tensorflow::uint64*") LongBuffer file_size);
   public native @ByVal Status GetFileSize(@StdString BytePointer fname, @Cast("tensorflow::uint64*") long[] file_size);
@@ -1113,26 +1021,26 @@ limitations under the License.
     public RandomAccessFile(Pointer p) { super(p); }
 
 
-  /** \brief Reads up to "n" bytes from the file starting at "offset".
+  /** \brief Reads up to {@code n} bytes from the file starting at {@code offset}.
    * 
-   *  "scratch[0..n-1]" may be written by this routine.  Sets "*result"
-   *  to the data that was read (including if fewer than "n" bytes were
-   *  successfully read).  May set "*result" to point at data in
-   *  "scratch[0..n-1]", so "scratch[0..n-1]" must be live when
-   *  "*result" is used.
+   *  {@code scratch[0..n-1]} may be written by this routine.  Sets {@code *result}
+   *  to the data that was read (including if fewer than {@code n} bytes were
+   *  successfully read).  May set {@code *result} to point at data in
+   *  {@code scratch[0..n-1]}, so {@code scratch[0..n-1]} must be live when
+   *  {@code *result} is used.
    * 
-   *  On OK returned status: "n" bytes have been stored in "*result".
-   *  On non-OK returned status: [0..n] bytes have been stored in "*result".
+   *  On OK returned status: {@code n} bytes have been stored in {@code *result}.
+   *  On non-OK returned status: {@code [0..n]} bytes have been stored in {@code *result}.
    * 
-   *  Returns {@code OUT_OF_RANGE} if fewer than n bytes were stored in "*result"
+   *  Returns {@code OUT_OF_RANGE} if fewer than n bytes were stored in {@code *result}
    *  because of EOF.
    * 
    *  Safe for concurrent use by multiple threads. */
-  public native @ByVal Status Read(@Cast("tensorflow::uint64") long offset, @Cast("size_t") long n, StringPiece result,
+  public native @ByVal Status Read(@Cast("tensorflow::uint64") long offset, @Cast("size_t") long n, @StringPiece BytePointer result,
                         @Cast("char*") BytePointer scratch);
-  public native @ByVal Status Read(@Cast("tensorflow::uint64") long offset, @Cast("size_t") long n, StringPiece result,
+  public native @ByVal Status Read(@Cast("tensorflow::uint64") long offset, @Cast("size_t") long n, @StringPiece BytePointer result,
                         @Cast("char*") ByteBuffer scratch);
-  public native @ByVal Status Read(@Cast("tensorflow::uint64") long offset, @Cast("size_t") long n, StringPiece result,
+  public native @ByVal Status Read(@Cast("tensorflow::uint64") long offset, @Cast("size_t") long n, @StringPiece BytePointer result,
                         @Cast("char*") byte[] scratch);
 }
 
@@ -1146,7 +1054,8 @@ limitations under the License.
     public WritableFile(Pointer p) { super(p); }
 
 
-  public native @ByVal Status Append(@Const @ByRef StringPiece data);
+  public native @ByVal Status Append(@StringPiece BytePointer data);
+  public native @ByVal Status Append(@StringPiece String data);
   public native @ByVal Status Close();
   public native @ByVal Status Flush();
   public native @ByVal Status Sync();
@@ -1245,19 +1154,19 @@ limitations under the License.
   public native @Cast("size_t") long guard_size(); public native ThreadOptions guard_size(long guard_size);  // 0: use system default value
 }
 
-/** A utility routine: reads contents of named file into *data */
+/** A utility routine: reads contents of named file into {@code *data} */
 @Namespace("tensorflow") public static native @ByVal Status ReadFileToString(Env env, @StdString BytePointer fname, @StdString @Cast({"char*", "std::string*"}) BytePointer data);
 @Namespace("tensorflow") public static native @ByVal Status ReadFileToString(Env env, @StdString String fname, @StdString @Cast({"char*", "std::string*"}) BytePointer data);
 
-/** A utility routine: write contents of "data" to file named "fname"
+/** A utility routine: write contents of {@code data} to file named {@code fname}
  *  (overwriting existing contents, if any). */
 @Namespace("tensorflow") public static native @ByVal Status WriteStringToFile(Env env, @StdString BytePointer fname,
-                         @Const @ByRef StringPiece data);
+                         @StringPiece BytePointer data);
 @Namespace("tensorflow") public static native @ByVal Status WriteStringToFile(Env env, @StdString String fname,
-                         @Const @ByRef StringPiece data);
+                         @StringPiece String data);
 
 /** Reads contents of named file and parse as binary encoded proto data
- *  and store into *proto. */
+ *  and store into {@code *proto}. */
 @Namespace("tensorflow") public static native @ByVal Status ReadBinaryProto(Env env, @StdString BytePointer fname,
                        @Cast("tensorflow::protobuf::MessageLite*") Pointer proto);
 @Namespace("tensorflow") public static native @ByVal Status ReadBinaryProto(Env env, @StdString String fname,
@@ -1679,6 +1588,75 @@ limitations under the License.
   // end namespace tensorflow
 
 // #endif  // TENSORFLOW_PUBLIC_SESSION_OPTIONS_H_
+
+
+// Parsed from tensorflow/core/lib/core/threadpool.h
+
+/* Copyright 2015 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_LIB_CORE_THREADPOOL_H_
+// #define TENSORFLOW_LIB_CORE_THREADPOOL_H_
+
+// #include <deque>
+// #include <functional>
+// #include <thread>
+// #include <vector>
+// #include "tensorflow/core/platform/port.h"
+// #include "tensorflow/core/public/env.h"
+
+@Namespace("tensorflow::thread") @NoOffset public static class ThreadPool extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ThreadPool(Pointer p) { super(p); }
+
+  // Construct a pool that contains "num_threads" threads with specified "name".
+  // env->StartThread() is used to create individual threads.
+  //
+  // REQUIRES: num_threads > 0
+  public ThreadPool(Env env, @StdString BytePointer name, int num_threads) { super((Pointer)null); allocate(env, name, num_threads); }
+  private native void allocate(Env env, @StdString BytePointer name, int num_threads);
+  public ThreadPool(Env env, @StdString String name, int num_threads) { super((Pointer)null); allocate(env, name, num_threads); }
+  private native void allocate(Env env, @StdString String name, int num_threads);
+
+  // Construct a pool that contains "num_threads" threads with specified "name".
+  // env->StartThread() is used to create individual threads.
+  //
+  // REQUIRES: num_threads > 0
+  public ThreadPool(Env env, @Const @ByRef ThreadOptions thread_options, @StdString BytePointer name,
+               int num_threads) { super((Pointer)null); allocate(env, thread_options, name, num_threads); }
+  private native void allocate(Env env, @Const @ByRef ThreadOptions thread_options, @StdString BytePointer name,
+               int num_threads);
+  public ThreadPool(Env env, @Const @ByRef ThreadOptions thread_options, @StdString String name,
+               int num_threads) { super((Pointer)null); allocate(env, thread_options, name, num_threads); }
+  private native void allocate(Env env, @Const @ByRef ThreadOptions thread_options, @StdString String name,
+               int num_threads);
+
+  // Wait until all scheduled work has finished and then destroy the
+  // set of threads.
+
+  // Schedule fn() for execution in the pool of threads.
+  public native void Schedule(@ByVal Fn fn);
+
+  public native @Cast("bool") boolean HasPendingClosures();
+}
+
+  // namespace thread
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_LIB_CORE_THREADPOOL_H_
 
 
 // Parsed from tensorflow/core/framework/allocation_description.pb.h
@@ -2861,12 +2839,12 @@ limitations under the License.
 
   /** \brief Construct a {@code TensorShape} from the provided sizes.
    *  REQUIRES: {@code dim_sizes[i] >= 0} */
-  public TensorShape(@Cast({"", "const std::vector<long long>&"}) @StdVector @ByVal LongPointer dim_sizes) { super((Pointer)null); allocate(dim_sizes); }
-  private native void allocate(@Cast({"", "const std::vector<long long>&"}) @StdVector @ByVal LongPointer dim_sizes);
-  public TensorShape(@Cast({"", "const std::vector<long long>&"}) @StdVector @ByVal LongBuffer dim_sizes) { super((Pointer)null); allocate(dim_sizes); }
-  private native void allocate(@Cast({"", "const std::vector<long long>&"}) @StdVector @ByVal LongBuffer dim_sizes);
-  public TensorShape(@Cast({"", "const std::vector<long long>&"}) @StdVector @ByVal long[] dim_sizes) { super((Pointer)null); allocate(dim_sizes); }
-  private native void allocate(@Cast({"", "const std::vector<long long>&"}) @StdVector @ByVal long[] dim_sizes);
+  public TensorShape(@Cast("tensorflow::int64*") @ArraySlice LongPointer dim_sizes) { super((Pointer)null); allocate(dim_sizes); }
+  private native void allocate(@Cast("tensorflow::int64*") @ArraySlice LongPointer dim_sizes);
+  public TensorShape(@Cast("tensorflow::int64*") @ArraySlice LongBuffer dim_sizes) { super((Pointer)null); allocate(dim_sizes); }
+  private native void allocate(@Cast("tensorflow::int64*") @ArraySlice LongBuffer dim_sizes);
+  public TensorShape(@Cast("tensorflow::int64*") @ArraySlice long... dim_sizes) { super((Pointer)null); allocate(dim_sizes); }
+  private native void allocate(@Cast("tensorflow::int64*") @ArraySlice long... dim_sizes);
 
   /** REQUIRES: {@code IsValid(proto)} */
   public TensorShape(@Const @ByRef TensorShapeProto proto) { super((Pointer)null); allocate(proto); }
@@ -2915,6 +2893,8 @@ limitations under the License.
 
   /** Returns sizes of all dimensions. */
   
+  ///
+  public native @Cast("tensorflow::int64*") @ArraySlice LongPointer dim_sizes();
 
   /** \brief Returns the number of elements in the tensor.
    * 
@@ -3074,7 +3054,7 @@ limitations under the License.
 }
 
 /** Represents an n-dimensional array of values. */
-@Namespace("tensorflow") @NoOffset public static class Tensor extends Pointer {
+@Namespace("tensorflow") @NoOffset public static class Tensor extends AbstractTensor {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Tensor(Pointer p) { super(p); }
@@ -3281,7 +3261,7 @@ limitations under the License.
    *  not get destroyed while the {@code StringPiece} is still used.
    * 
    *  REQUIRES: {@code DataTypeCanUseMemcpy(dtype())}. */
-  public native @ByVal StringPiece tensor_data();
+  public native @StringPiece BytePointer tensor_data();
 }
 
 // Implementation details
@@ -5930,8 +5910,10 @@ limitations under the License.
     public OpDefBuilder(Pointer p) { super(p); }
 
   // Constructs an OpDef with just the name field set.
-  public OpDefBuilder(@ByVal StringPiece op_name) { super((Pointer)null); allocate(op_name); }
-  private native void allocate(@ByVal StringPiece op_name);
+  public OpDefBuilder(@StringPiece BytePointer op_name) { super((Pointer)null); allocate(op_name); }
+  private native void allocate(@StringPiece BytePointer op_name);
+  public OpDefBuilder(@StringPiece String op_name) { super((Pointer)null); allocate(op_name); }
+  private native void allocate(@StringPiece String op_name);
 
   // Adds an attr to this OpDefBuilder (and returns *this). The spec has
   // format "<name>:<type>" or "<name>:<type>=<default>"
@@ -5962,7 +5944,8 @@ limitations under the License.
   // * Ability to restrict the type of the tensor like the existing
   //   restrictions for type attrs.
   // Perhaps by linking the type of the tensor to a type attr?
-  public native @ByRef OpDefBuilder Attr(@ByVal StringPiece spec);
+  public native @ByRef OpDefBuilder Attr(@StringPiece BytePointer spec);
+  public native @ByRef OpDefBuilder Attr(@StringPiece String spec);
 
   // Adds an input or ouput to this OpDefBuilder (and returns *this).
   // The spec has form "<name>:<type-expr>" or "<name>:Ref(<type-expr>)"
@@ -5979,8 +5962,10 @@ limitations under the License.
   // in the spec?
   // TODO(josh11b): SparseInput() and SparseOutput() matching the Python
   // handling?
-  public native @ByRef OpDefBuilder Input(@ByVal StringPiece spec);
-  public native @ByRef OpDefBuilder Output(@ByVal StringPiece spec);
+  public native @ByRef OpDefBuilder Input(@StringPiece BytePointer spec);
+  public native @ByRef OpDefBuilder Input(@StringPiece String spec);
+  public native @ByRef OpDefBuilder Output(@StringPiece BytePointer spec);
+  public native @ByRef OpDefBuilder Output(@StringPiece String spec);
 
   // Turns on the indicated boolean flag in this OpDefBuilder (and
   // returns *this).
@@ -6002,7 +5987,8 @@ limitations under the License.
   // may start the description with an "=" (like name:= <description>)
   // to suppress the automatically-generated type documentation in
   // generated output.
-  public native @ByRef OpDefBuilder Doc(@ByVal StringPiece text);
+  public native @ByRef OpDefBuilder Doc(@StringPiece BytePointer text);
+  public native @ByRef OpDefBuilder Doc(@StringPiece String text);
 
   // Sets *op_def to the requested OpDef, or returns an error.
   // Must be called after all of the above methods.
@@ -6053,8 +6039,10 @@ limitations under the License.
 
 // The following search through op_def for an attr with the indicated name.
 // Returns nullptr if no such attr is found.
-@Namespace("tensorflow") public static native @Cast("const tensorflow::OpDef::AttrDef*") OpDef_AttrDef FindAttr(@ByVal StringPiece name, @Const @ByRef OpDef op_def);
-@Namespace("tensorflow") public static native @Cast("tensorflow::OpDef::AttrDef*") OpDef_AttrDef FindAttrMutable(@ByVal StringPiece name, OpDef op_def);
+@Namespace("tensorflow") public static native @Cast("const tensorflow::OpDef::AttrDef*") OpDef_AttrDef FindAttr(@StringPiece BytePointer name, @Const @ByRef OpDef op_def);
+@Namespace("tensorflow") public static native @Cast("const tensorflow::OpDef::AttrDef*") OpDef_AttrDef FindAttr(@StringPiece String name, @Const @ByRef OpDef op_def);
+@Namespace("tensorflow") public static native @Cast("tensorflow::OpDef::AttrDef*") OpDef_AttrDef FindAttrMutable(@StringPiece BytePointer name, OpDef op_def);
+@Namespace("tensorflow") public static native @Cast("tensorflow::OpDef::AttrDef*") OpDef_AttrDef FindAttrMutable(@StringPiece String name, OpDef op_def);
 
 // Produce a human-readable version of an op_def that is more concise
 // than a text-format proto.  Excludes descriptions.
@@ -6198,7 +6186,8 @@ limitations under the License.
 // For details, see the OpDefBuilder class in op_def_builder.h.
 // To call OpRegistry::Global()->Register(...), used by the
 // REGISTER_OP macro below.
-@Namespace("tensorflow::register_op") public static native @ByRef OpDefBuilder RegisterOp(@ByVal StringPiece name);
+@Namespace("tensorflow::register_op") public static native @ByRef OpDefBuilder RegisterOp(@StringPiece BytePointer name);
+@Namespace("tensorflow::register_op") public static native @ByRef OpDefBuilder RegisterOp(@StringPiece String name);
   // namespace register_op
 
 // #define REGISTER_OP(name) REGISTER_OP_UNIQ_HELPER(__COUNTER__, name)
@@ -6272,9 +6261,6 @@ public static final int
   public DeviceType(String type) { super((Pointer)null); allocate(type); }
   private native void allocate(String type);
 
-  public DeviceType(@ByVal StringPiece type) { super((Pointer)null); allocate(type); }
-  private native void allocate(@ByVal StringPiece type);
-
   public native @Cast("const char*") BytePointer type();
 
   public native @Cast("bool") @Name("operator <") boolean lessThan(@Const @ByRef DeviceType other);
@@ -6295,7 +6281,8 @@ public static final int
 
 // If "sp" names a valid type, store it in "*dt" and return true.  Otherwise,
 // return false.
-@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeFromString(@ByVal StringPiece sp, @Cast("tensorflow::DataType*") IntPointer dt);
+@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeFromString(@StringPiece BytePointer sp, @Cast("tensorflow::DataType*") IntPointer dt);
+@Namespace("tensorflow") public static native @Cast("bool") boolean DataTypeFromString(@StringPiece String sp, @Cast("tensorflow::DataType*") IntPointer dt);
 
 // DT_FLOAT + kDataTypeRefOffset == DT_FLOAT_REF, etc.
 /** enum tensorflow:: */
@@ -6779,7 +6766,8 @@ limitations under the License.
 
   // Generate new node name with the specified prefix that is unique
   // across this graph.
-  public native @StdString BytePointer NewName(@ByVal StringPiece prefix);
+  public native @StdString BytePointer NewName(@StringPiece BytePointer prefix);
+  public native @StdString String NewName(@StringPiece String prefix);
 
   // Access to the list of all nodes.  Example usage:
   //   for (Node* node : graph.nodes()) { ... }
@@ -7035,7 +7023,6 @@ limitations under the License.
   public native @ByRef NodeBuilder Input(@ByVal NodeOut src);
 
   // For inputs that take a list of tensors.
-  public native @ByRef NodeBuilder Input(@ByVal NodeOutVector src_list);
 
   // Require that this node run after src_node(s).
   public native @ByRef NodeBuilder ControlInput(Node src_node);
@@ -7154,8 +7141,10 @@ limitations under the License.
 
     // Methods for setting options.  These are const methods: they
     // return a copy of *this with the option set.
-    public native @ByVal Options WithName(@ByVal StringPiece name);
-    public native @ByVal Options WithDevice(@ByVal StringPiece device);
+    public native @ByVal Options WithName(@StringPiece BytePointer name);
+    public native @ByVal Options WithName(@StringPiece String name);
+    public native @ByVal Options WithDevice(@StringPiece BytePointer device);
+    public native @ByVal Options WithDevice(@StringPiece String device);
     public native @ByVal Options WithControlInput(Node control_input);
     public native @ByVal Options WithControlInputs(@ByVal NodeVector control_inputs);
 
@@ -7171,7 +7160,8 @@ limitations under the License.
     // Given the Op type name, return a name for a node of that type.
     // Uses the value set in WithName() if that has been called.  Otherwise,
     // returns a name built out of the Op type name.
-    public native @StdString BytePointer GetNameForOp(@ByVal StringPiece op);
+    public native @StdString BytePointer GetNameForOp(@StringPiece BytePointer op);
+    public native @StdString String GetNameForOp(@StringPiece String op);
 
     // Sets the device, adds control inputs, adds attrs, and calls Finalize().
     // If Finalize returns an error, it is saved and this function returns
@@ -7234,21 +7224,6141 @@ limitations under the License.
 @Namespace("tensorflow::ops") public static native Node SourceOp(@StdString String op_name, @Const @ByRef GraphDefBuilder.Options opts);
 
 // For adding an Op with one input to a GraphDefBuilder.
-@Namespace("tensorflow::ops") public static native Node UnaryOp(@StdString BytePointer op_name, @ByVal @Cast("tensorflow::ops::NodeOut*") NodeBuilder.NodeOut input,
+@Namespace("tensorflow::ops") public static native Node UnaryOp(@StdString BytePointer op_name, @ByVal NodeBuilder.NodeOut input,
               @Const @ByRef GraphDefBuilder.Options opts);
-@Namespace("tensorflow::ops") public static native Node UnaryOp(@StdString String op_name, @ByVal @Cast("tensorflow::ops::NodeOut*") NodeBuilder.NodeOut input,
+@Namespace("tensorflow::ops") public static native Node UnaryOp(@StdString String op_name, Node input,
               @Const @ByRef GraphDefBuilder.Options opts);
 
 // For adding an Op with two inputs to a GraphDefBuilder.
-@Namespace("tensorflow::ops") public static native Node BinaryOp(@StdString BytePointer op_name, @ByVal @Cast("tensorflow::ops::NodeOut*") NodeBuilder.NodeOut a, @ByVal @Cast("tensorflow::ops::NodeOut*") NodeBuilder.NodeOut b,
+@Namespace("tensorflow::ops") public static native Node BinaryOp(@StdString BytePointer op_name, @ByVal NodeBuilder.NodeOut a, @ByVal NodeBuilder.NodeOut b,
                @Const @ByRef GraphDefBuilder.Options opts);
-@Namespace("tensorflow::ops") public static native Node BinaryOp(@StdString String op_name, @ByVal @Cast("tensorflow::ops::NodeOut*") NodeBuilder.NodeOut a, @ByVal @Cast("tensorflow::ops::NodeOut*") NodeBuilder.NodeOut b,
+@Namespace("tensorflow::ops") public static native Node BinaryOp(@StdString String op_name, Node a, Node b,
                @Const @ByRef GraphDefBuilder.Options opts);
 
   // namespace ops
   // namespace tensorflow
 
 // #endif  // TENSORFLOW_GRAPH_GRAPH_DEF_BUILDER_H_
+
+
+// Parsed from tensorflow/core/graph/default_device.h
+
+/* Copyright 2015 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_GRAPH_DEFAULT_DEVICE_H_
+// #define TENSORFLOW_GRAPH_DEFAULT_DEVICE_H_
+
+// #include <string>
+
+// #include "tensorflow/core/framework/graph.pb.h"
+
+// Sets the default device for all nodes in graph_def to "device",
+// only if not already set.
+@Namespace("tensorflow::graph") public static native void SetDefaultDevice(@StdString BytePointer device, GraphDef graph_def);
+@Namespace("tensorflow::graph") public static native void SetDefaultDevice(@StdString String device, GraphDef graph_def);
+
+  // namespace graph
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_GRAPH_DEFAULT_DEVICE_H_
+
+
+// Parsed from tensorflow/cc/ops/standard_ops.h
+
+/* Copyright 2015 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include this file to get access to the standard set of C++ graph
+// definition libraries.
+
+// #ifndef TENSORFLOW_CC_OPS_STANDARD_OPS_H_
+// #define TENSORFLOW_CC_OPS_STANDARD_OPS_H_
+
+// #include "tensorflow/cc/ops/array_ops.h"
+// #include "tensorflow/cc/ops/attention_ops.h"
+// #include "tensorflow/cc/ops/const_op.h"
+// #include "tensorflow/cc/ops/data_flow_ops.h"
+// #include "tensorflow/cc/ops/image_ops.h"
+// #include "tensorflow/cc/ops/io_ops.h"
+// #include "tensorflow/cc/ops/linalg_ops.h"
+// #include "tensorflow/cc/ops/logging_ops.h"
+// #include "tensorflow/cc/ops/math_ops.h"
+// #include "tensorflow/cc/ops/nn_ops.h"
+// #include "tensorflow/cc/ops/parsing_ops.h"
+// #include "tensorflow/cc/ops/random_ops.h"
+// #include "tensorflow/cc/ops/sparse_ops.h"
+// #include "tensorflow/cc/ops/state_ops.h"
+// #include "tensorflow/cc/ops/string_ops.h"
+// #include "tensorflow/cc/ops/summary_ops.h"
+// #include "tensorflow/cc/ops/training_ops.h"
+// #include "tensorflow/cc/ops/user_ops.h"
+
+// #endif  // TENSORFLOW_CC_OPS_STANDARD_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/const_op.h
+
+/* Copyright 2015 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_CC_OPS_CONST_OP_H_
+// #define TENSORFLOW_CC_OPS_CONST_OP_H_
+
+// #include "tensorflow/core/framework/tensor.pb.h"
+// #include "tensorflow/core/graph/graph_def_builder.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/public/tensor.h"
+
+// If a shape is specified, you may either provide the same number of values,
+// or a single value and that value will be duplicated to fill out the Tensor.
+// #define DECLARE_CONST(TYPE)
+//   Node* Const(TYPE s, const GraphDefBuilder::Options& options); /* Scalar */
+//   Node* Const(gtl::ArraySlice<TYPE> v,
+//               const GraphDefBuilder::Options& options); /* Vector */
+//   Node* Const(gtl::ArraySlice<TYPE> t, const TensorShape& shape,
+//               const GraphDefBuilder::Options& options); /* Tensor */
+//   inline Node* Const(std::initializer_list<TYPE> v, /* Vector using {...} */
+//                      const GraphDefBuilder::Options& options) {
+//     return Const(gtl::ArraySlice<TYPE>(v), options);
+//   }
+//   inline Node* Const(std::initializer_list<TYPE> t, /* Tensor using {...} */
+//                      const TensorShape& shape,
+//                      const GraphDefBuilder::Options& options) {
+//     return Const(gtl::ArraySlice<TYPE>(t), shape, options);
+//   }
+
+@Namespace("tensorflow::ops") public static native Node Const(float s, @Const @ByRef GraphDefBuilder.Options options); /* Scalar */
+  @Namespace("tensorflow::ops") public static native Node Const(@ArraySlice FloatPointer v,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@ArraySlice FloatBuffer v,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@ArraySlice float[] v,
+                @Const @ByRef GraphDefBuilder.Options options); /* Vector */
+  @Namespace("tensorflow::ops") public static native Node Const(@ArraySlice FloatPointer t, @Const @ByRef TensorShape shape,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@ArraySlice FloatBuffer t, @Const @ByRef TensorShape shape,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@ArraySlice float[] t, @Const @ByRef TensorShape shape,
+                @Const @ByRef GraphDefBuilder.Options options); /* Tensor */
+@Namespace("tensorflow::ops") public static native Node Const(double s, @Const @ByRef GraphDefBuilder.Options options); /* Scalar */
+  @Namespace("tensorflow::ops") public static native Node Const(@ArraySlice DoublePointer v,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@ArraySlice DoubleBuffer v,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@ArraySlice double[] v,
+                @Const @ByRef GraphDefBuilder.Options options); /* Vector */
+  @Namespace("tensorflow::ops") public static native Node Const(@ArraySlice DoublePointer t, @Const @ByRef TensorShape shape,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@ArraySlice DoubleBuffer t, @Const @ByRef TensorShape shape,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@ArraySlice double[] t, @Const @ByRef TensorShape shape,
+                @Const @ByRef GraphDefBuilder.Options options); /* Tensor */
+@Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int32") int s, @Const @ByRef GraphDefBuilder.Options options); /* Scalar */
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int32*") @ArraySlice IntPointer v,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int32*") @ArraySlice IntBuffer v,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int32*") @ArraySlice int[] v,
+                @Const @ByRef GraphDefBuilder.Options options); /* Vector */
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int32*") @ArraySlice IntPointer t, @Const @ByRef TensorShape shape,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int32*") @ArraySlice IntBuffer t, @Const @ByRef TensorShape shape,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int32*") @ArraySlice int[] t, @Const @ByRef TensorShape shape,
+                @Const @ByRef GraphDefBuilder.Options options); /* Tensor */
+@Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::uint8") byte s, @Const @ByRef GraphDefBuilder.Options options); /* Scalar */
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::uint8*") @ArraySlice BytePointer v,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::uint8*") @ArraySlice ByteBuffer v,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::uint8*") @ArraySlice byte[] v,
+                @Const @ByRef GraphDefBuilder.Options options); /* Vector */
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::uint8*") @ArraySlice BytePointer t, @Const @ByRef TensorShape shape,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::uint8*") @ArraySlice ByteBuffer t, @Const @ByRef TensorShape shape,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::uint8*") @ArraySlice byte[] t, @Const @ByRef TensorShape shape,
+                @Const @ByRef GraphDefBuilder.Options options); /* Tensor */
+@Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int16") short s, @Const @ByRef GraphDefBuilder.Options options); /* Scalar */
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int16*") @ArraySlice ShortPointer v,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int16*") @ArraySlice ShortBuffer v,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int16*") @ArraySlice short[] v,
+                @Const @ByRef GraphDefBuilder.Options options); /* Vector */
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int16*") @ArraySlice ShortPointer t, @Const @ByRef TensorShape shape,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int16*") @ArraySlice ShortBuffer t, @Const @ByRef TensorShape shape,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int16*") @ArraySlice short[] t, @Const @ByRef TensorShape shape,
+                @Const @ByRef GraphDefBuilder.Options options); /* Tensor */ /* Scalar */ /* Vector */ /* Tensor */ /* Scalar */ /* Vector */ /* Tensor */
+@Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int64") long s, @Const @ByRef GraphDefBuilder.Options options); /* Scalar */
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int64*") @ArraySlice LongPointer v,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int64*") @ArraySlice LongBuffer v,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int64*") @ArraySlice long[] v,
+                @Const @ByRef GraphDefBuilder.Options options); /* Vector */
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int64*") @ArraySlice LongPointer t, @Const @ByRef TensorShape shape,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int64*") @ArraySlice LongBuffer t, @Const @ByRef TensorShape shape,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int64*") @ArraySlice long[] t, @Const @ByRef TensorShape shape,
+                @Const @ByRef GraphDefBuilder.Options options); /* Tensor */
+@Namespace("tensorflow::ops") public static native Node Const(@Cast("bool") boolean s, @Const @ByRef GraphDefBuilder.Options options); /* Scalar */
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("bool*") @ArraySlice BoolPointer v,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("bool*") @ArraySlice boolean[] v,
+                @Const @ByRef GraphDefBuilder.Options options); /* Vector */
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("bool*") @ArraySlice BoolPointer t, @Const @ByRef TensorShape shape,
+                @Const @ByRef GraphDefBuilder.Options options);
+  @Namespace("tensorflow::ops") public static native Node Const(@Cast("bool*") @ArraySlice boolean[] t, @Const @ByRef TensorShape shape,
+                @Const @ByRef GraphDefBuilder.Options options); /* Tensor */
+
+// #undef DECLARE_CONST
+
+// String
+@Namespace("tensorflow::ops") public static native Node Const(@Cast({"", "tensorflow::StringPiece&"}) @StringPiece String s, @Const @ByRef GraphDefBuilder.Options options);
+
+// A Tensor of any type.
+@Namespace("tensorflow::ops") public static native Node Const(@Const @ByRef Tensor t, @Const @ByRef GraphDefBuilder.Options options);
+@Namespace("tensorflow::ops") public static native Node Const(@Const @ByRef TensorProto proto, @Const @ByRef GraphDefBuilder.Options options);
+
+// TODO(josh11b): Support other types (e.g. quantized ints, float16).
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_CONST_OP_H_
+
+
+// Parsed from tensorflow/cc/ops/cc_op_gen.h
+
+/* Copyright 2015 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_CC_OPS_CC_OP_GEN_H_
+// #define TENSORFLOW_CC_OPS_CC_OP_GEN_H_
+
+// #include "tensorflow/core/framework/op_def.pb.h"
+
+// Result is written to files dot_h and dot_cc.
+@Namespace("tensorflow") public static native void WriteCCOps(@Const @ByRef OpList ops, @StdString BytePointer dot_h_fname,
+                @StdString BytePointer dot_cc_fname);
+@Namespace("tensorflow") public static native void WriteCCOps(@Const @ByRef OpList ops, @StdString String dot_h_fname,
+                @StdString String dot_cc_fname);
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_CC_OP_GEN_H_
+
+
+// Parsed from tensorflow/cc/ops/array_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_ARRAY_OPS_H_
+// #define TENSORFLOW_CC_OPS_ARRAY_OPS_H_
+
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/graph/graph_def_builder.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/public/tensor.h"
+// #include "tensorflow/core/public/tensor_shape.h"
+
+// These add a node to the graph from opts.
+//
+// Note for "NodeOut" inputs, you will typically either pass
+// * a {Node*, int index} (to pass the index-th output of that node), or
+// * a Node* (to pass the first output of that node).
+
+
+// Return the reduction indices for computing gradients of s0 op s1 with broadcast.
+//
+// This is typically used by gradient computations for a broadcasting operation.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with outputs:
+// * r0
+// * r1
+@Namespace("tensorflow::ops") public static native Node BroadcastGradientArgs(@ByVal NodeBuilder.NodeOut s0, @ByVal NodeBuilder.NodeOut s1, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node BroadcastGradientArgs(Node s0, Node s1, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Checks a tensor for NaN and Inf values.
+//
+// When run, reports an `InvalidArgument` error if `tensor` has any values
+// that are not a number (NaN) or infinity (Inf). Otherwise, passes `tensor` as-is.
+//
+// Arguments:
+// * message: Prefix of the error message.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node CheckNumerics(@ByVal NodeBuilder.NodeOut tensor, @StringPiece BytePointer message, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node CheckNumerics(Node tensor, @StringPiece String message, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Concatenates tensors along one dimension.
+//
+// Arguments:
+// * concat_dim: 0-D.  The dimension along which to concatenate.  Must be in the
+// range [0, rank(values)).
+// * values: The `N` Tensors to concatenate. Their ranks and types must match,
+// and their sizes must match in all dimensions except `concat_dim`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// A `Tensor` with the concatenation of values stacked along the
+// `concat_dim` dimension.  This tensor's shape matches that of `values` except
+// in `concat_dim` where it has the sum of the sizes.
+@Namespace("tensorflow::ops") public static native Node Concat(@ByVal NodeBuilder.NodeOut concat_dim, @ByVal NodeOutVector values, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Concat(Node concat_dim, @ByVal NodeOutVector values, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns a constant tensor.
+//
+// Arguments:
+// * value: Attr `value` is the tensor to return.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Const(@Const @ByRef Tensor value, @Cast("tensorflow::DataType") int dtype, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns a diagonal tensor with a given diagonal values.
+//
+// Given a `diagonal`, this operation returns a tensor with the `diagonal` and
+// everything else padded with zeros. The diagonal is computed as follows:
+//
+// Assume `diagonal` has dimensions [D1,..., Dk], then the output is a tensor of
+// rank 2k with dimensions [D1,..., Dk, D1,..., Dk] where:
+//
+// `output[i1,..., ik, i1,..., ik] = diagonal[i1, ..., ik]` and 0 everywhere else.
+//
+// For example:
+//
+// ```prettyprint
+// # 'diagonal' is [1, 2, 3, 4]
+// tf.diag(diagonal) ==> [[1, 0, 0, 0]
+//                        [0, 2, 0, 0]
+//                        [0, 0, 3, 0]
+//                        [0, 0, 0, 4]]
+// ```
+//
+// Arguments:
+// * diagonal: Rank k tensor where k is at most 3.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Diag(@ByVal NodeBuilder.NodeOut diagonal, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Diag(Node diagonal, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the (possibly normalized) Levenshtein Edit Distance.
+//
+// The inputs are variable-length sequences provided by SparseTensors
+//   (hypothesis_indices, hypothesis_values, hypothesis_shape)
+// and
+//   (truth_indices, truth_values, truth_shape).
+//
+// The inputs are:
+//
+// Arguments:
+// * hypothesis_indices: The indices of the hypothesis list SparseTensor.
+// This is an N x R int64 matrix.
+// * hypothesis_values: The values of the hypothesis list SparseTensor.
+// This is an N-length vector.
+// * hypothesis_shape: The shape of the hypothesis list SparseTensor.
+// This is an R-length vector.
+// * truth_indices: The indices of the truth list SparseTensor.
+// This is an M x R int64 matrix.
+// * truth_values: The values of the truth list SparseTensor.
+// This is an M-length vector.
+// * truth_shape: truth indices, vector.
+// * opts:
+//   .WithAttr("normalize", bool): Defaults to true.
+//     boolean (if true, edit distances are normalized by length of truth).
+//
+// The output is:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// A dense float tensor with rank R - 1.
+//
+// For the example input:
+//
+//     // hypothesis represents a 2x1 matrix with variable-length values:
+//     //   (0,0) = ["a"]
+//     //   (1,0) = ["b"]
+//     hypothesis_indices = [[0, 0, 0],
+//                           [1, 0, 0]]
+//     hypothesis_values = ["a", "b"]
+//     hypothesis_shape = [2, 1, 1]
+//
+//     // truth represents a 2x2 matrix with variable-length values:
+//     //   (0,0) = []
+//     //   (0,1) = ["a"]
+//     //   (1,0) = ["b", "c"]
+//     //   (1,1) = ["a"]
+//     truth_indices = [[0, 1, 0],
+//                      [1, 0, 0],
+//                      [1, 0, 1],
+//                      [1, 1, 0]]
+//     truth_values = ["a", "b", "c", "a"]
+//     truth_shape = [2, 2, 2]
+//     normalize = true
+//
+// The output will be:
+//
+//     // output is a 2x2 matrix with edit distances normalized by truth lengths.
+//     output = [[inf, 1.0],  // (0,0): no truth, (0,1): no hypothesis
+//               [0.5, 1.0]]  // (1,0): addition, (1,1): no hypothesis
+@Namespace("tensorflow::ops") public static native Node EditDistance(@ByVal NodeBuilder.NodeOut hypothesis_indices, @ByVal NodeBuilder.NodeOut hypothesis_values,
+                   @ByVal NodeBuilder.NodeOut hypothesis_shape, @ByVal NodeBuilder.NodeOut truth_indices, @ByVal NodeBuilder.NodeOut truth_values, @ByVal NodeBuilder.NodeOut truth_shape, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node EditDistance(Node hypothesis_indices, Node hypothesis_values,
+                   Node hypothesis_shape, Node truth_indices, Node truth_values, Node truth_shape, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Inserts a dimension of 1 into a tensor's shape.
+//
+// Given a tensor `input`, this operation inserts a dimension of 1 at the
+// dimension index `dim` of `input`'s shape. The dimension index `dim` starts at
+// zero; if you specify a negative number for `dim` it is counted backward from
+// the end.
+//
+// This operation is useful if you want to add a batch dimension to a single
+// element. For example, if you have a single image of shape `[height, width,
+// channels]`, you can make it a batch of 1 image with `expand_dims(image, 0)`,
+// which will make the shape `[1, height, width, channels]`.
+//
+// Other examples:
+//
+// ```prettyprint
+// # 't' is a tensor of shape [2]
+// shape(expand_dims(t, 0)) ==> [1, 2]
+// shape(expand_dims(t, 1)) ==> [2, 1]
+// shape(expand_dims(t, -1)) ==> [2, 1]
+//
+// # 't2' is a tensor of shape [2, 3, 5]
+// shape(expand_dims(t2, 0)) ==> [1, 2, 3, 5]
+// shape(expand_dims(t2, 2)) ==> [2, 3, 1, 5]
+// shape(expand_dims(t2, 3)) ==> [2, 3, 5, 1]
+// ```
+//
+// This operation requires that:
+//
+// `-1-input.dims() <= dim <= input.dims()`
+//
+// This operation is related to `squeeze()`, which removes dimensions of
+// size 1.
+//
+// Arguments:
+// * dim: 0-D (scalar). Specifies the dimension index at which to
+// expand the shape of `input`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Contains the same data as `input`, but its shape has an additional
+// dimension of size 1 added.
+@Namespace("tensorflow::ops") public static native Node ExpandDims(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut dim, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ExpandDims(Node input, Node dim, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Creates a tensor filled with a scalar value.
+//
+// This operation creates a tensor of shape `dims` and fills it with `value`.
+//
+// For example:
+//
+// ```prettyprint
+// # output tensor shape needs to be [2, 3]
+// # so 'dims' is [2, 3]
+// fill(dims, 9) ==> [[9, 9, 9]
+//                    [9, 9, 9]]
+// ```
+//
+// Arguments:
+// * dims: 1-D. Represents the shape of the output tensor.
+// * value: 0-D (scalar). Value to fill the returned tensor.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Fill(@ByVal NodeBuilder.NodeOut dims, @ByVal NodeBuilder.NodeOut value, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Fill(Node dims, Node value, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Gather slices from `params` according to `indices`.
+//
+// `indices` must be an integer tensor of any dimension (usually 0-D or 1-D).
+// Produces an output tensor with shape `indices.shape + params.shape[1:]` where:
+//
+//     # Scalar indices
+//     output[:, ..., :] = params[indices, :, ... :]
+//
+//     # Vector indices
+//     output[i, :, ..., :] = params[indices[i], :, ... :]
+//
+//     # Higher rank indices
+//     output[i, ..., j, :, ... :] = params[indices[i, ..., j], :, ..., :]
+//
+// If `indices` is a permutation and `len(indices) == params.shape[0]` then
+// this operation will permute `params` accordingly.
+//
+// <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+// <img style="width:100%" src="../images/Gather.png" alt>
+// </div>
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Gather(@ByVal NodeBuilder.NodeOut params, @ByVal NodeBuilder.NodeOut indices, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Gather(Node params, Node indices, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Return a tensor with the same shape and contents as the input tensor or value.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Identity(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Identity(Node input, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the inverse permutation of a tensor.
+//
+// This operation computes the inverse of an index permutation. It takes a 1-D
+// integer tensor `x`, which represents the indices of a zero-based array, and
+// swaps each value with its index position. In other words, for an ouput tensor
+// `y` and an input tensor `x`, this operation computes the following:
+//
+// `y[x[i]] = i for i in [0, 1, ..., len(x) - 1]`
+//
+// The values must include 0. There can be no duplicate values or negative values.
+//
+// For example:
+//
+// ```prettyprint
+// # tensor `x` is [3, 4, 0, 2, 1]
+// invert_permutation(x) ==> [2, 4, 3, 0, 1]
+// ```
+//
+// Arguments:
+// * x: 1-D.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// 1-D.
+@Namespace("tensorflow::ops") public static native Node InvertPermutation(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node InvertPermutation(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the difference between two lists of numbers or strings.
+//
+// Given a list `x` and a list `y`, this operation returns a list `out` that
+// represents all values that are in `x` but not in `y`. The returned list `out`
+// is sorted in the same order that the numbers appear in `x` (duplicates are
+// preserved). This operation also returns a list `idx` that represents the
+// position of each `out` element in `x`. In other words:
+//
+// `out[i] = x[idx[i]] for i in [0, 1, ..., len(out) - 1]`
+//
+// For example, given this input:
+//
+// ```prettyprint
+// x = [1, 2, 3, 4, 5, 6]
+// y = [1, 3, 5]
+// ```
+//
+// This operation would return:
+//
+// ```prettyprint
+// out ==> [2, 4, 6]
+// idx ==> [1, 3, 5]
+// ```
+//
+// Arguments:
+// * x: 1-D. Values to keep.
+// * y: 1-D. Values to remove.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with outputs:
+// * out: 1-D. Values present in `x` but not in `y`.
+// * idx: 1-D. Positions of `x` values preserved in `out`.
+@Namespace("tensorflow::ops") public static native Node ListDiff(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ListDiff(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Packs a list of `N` rank-`R` tensors into one rank-`(R+1)` tensor.
+//
+// Packs the `N` tensors in `values` into a tensor with rank one higher than each
+// tensor in `values` and shape `[N] + values[0].shape`. The output satisfies
+// `output[i, ...] = values[i][...]`.
+//
+// This is the opposite of `unpack`.
+//
+// Arguments:
+// * values: Must be of same shape and type.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The packed tensor.
+@Namespace("tensorflow::ops") public static native Node Pack(@ByVal NodeOutVector values, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Pads a tensor with zeros.
+//
+// This operation pads a `input` with zeros according to the `paddings` you
+// specify. `paddings` is an integer tensor with shape `[Dn, 2]`, where n is the
+// rank of `input`. For each dimension D of `input`, `paddings[D, 0]` indicates
+// how many zeros to add before the contents of `input` in that dimension, and
+// `paddings[D, 1]` indicates how many zeros to add after the contents of `input`
+// in that dimension.
+//
+// The padded size of each dimension D of the output is:
+//
+// `paddings(D, 0) + input.dim_size(D) + paddings(D, 1)`
+//
+// For example:
+//
+// ```prettyprint
+// # 't' is [[1, 1], [2, 2]]
+// # 'paddings' is [[1, 1]], [2, 2]]
+// # rank of 't' is 2
+// pad(t, paddings) ==> [[0, 0, 0, 0, 0]
+//                       [0, 0, 0, 0, 0]
+//                       [0, 1, 1, 0, 0]
+//                      [[0, 2, 2, 0, 0]
+//                       [0, 0, 0, 0, 0]]
+// ```
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Pad(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut paddings, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Pad(Node input, Node paddings, @Const @ByRef GraphDefBuilder.Options opts);
+
+// A placeholder op for a value that will be fed into the computation.
+//
+// N.B. This operation will fail with an error if it is executed. It is
+// intended as a way to represent a value that will always be fed, and to
+// provide attrs that enable the fed value to be checked at runtime.
+//
+// Arguments:
+// * dtype: The type of elements in the tensor.
+// * shape: (Optional) The shape of the tensor. If the shape has 0 dimensions, the
+// shape is unconstrained.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// A placeholder tensor that must be replaced using the feed mechanism.
+@Namespace("tensorflow::ops") public static native Node Placeholder(@Cast("tensorflow::DataType") int dtype, @ByVal TensorShape shape, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the rank of a tensor.
+//
+// This operation returns an integer representing the rank of `input`.
+//
+// For example:
+//
+// ```prettyprint
+// # 't' is [[[1, 1, 1], [2, 2, 2]], [[3, 3, 3], [4, 4, 4]]]
+// # shape of tensor 't' is [2, 2, 3]
+// rank(t) ==> 3
+// ```
+//
+// **Note**: The rank of a tensor is not the same as the rank of a matrix. The rank
+// of a tensor is the number of indices required to uniquely select each element
+// of the tensor. Rank is also known as "order", "degree", or "ndims."
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Rank(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Rank(Node input, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Return the same ref tensor as the input ref tensor.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node RefIdentity(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node RefIdentity(Node input, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Reshapes a tensor.
+//
+// Given `tensor`, this operation returns a tensor that has the same values
+// as `tensor` with shape `shape`.
+//
+// If one component of `shape` is the special value -1, the size of that dimension
+// is computed so that the total size remains constant.  In particular, a `shape`
+// of `[-1]` flattens into 1-D.  At most one component of `shape` can be -1.
+//
+// If `shape` is 1-D or higher, then the operation returns a tensor with shape
+// `shape` filled with the values of `tensor`. In this case, the number of elements
+// implied by `shape` must be the same as the number of elements in `tensor`.
+//
+// For example:
+//
+// ```prettyprint
+// # tensor 't' is [1, 2, 3, 4, 5, 6, 7, 8, 9]
+// # tensor 't' has shape [9]
+// reshape(t, [3, 3]) ==> [[1, 2, 3]
+//                         [4, 5, 6]
+//                         [7, 8, 9]]
+//
+// # tensor 't' is [[[1, 1], [2, 2]]
+// #                [[3, 3], [4, 4]]]
+// # tensor 't' has shape [2, 2, 2]
+// reshape(t, [2, 4]) ==> [[1, 1, 2, 2]
+//                         [3, 3, 4, 4]]
+//
+// # tensor 't' is [[[1, 1, 1],
+// #                 [2, 2, 2]],
+// #                [[3, 3, 3],
+// #                 [4, 4, 4]],
+// #                [[5, 5, 5],
+// #                 [6, 6, 6]]]
+// # tensor 't' has shape [3, 2, 3]
+// # pass '[-1]' to flatten 't'
+// reshape(t, [-1]) ==> [1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5, 6, 6, 6]
+// # -1 can also be used with higher dimensional shapes
+// reshape(t, [2, -1]) ==> [[1, 1, 1, 2, 2, 2, 3, 3, 3],
+//                          [4, 4, 4, 5, 5, 5, 6, 6, 6]]
+//
+// # tensor 't' is [7]
+// # shape `[]` reshapes to a scalar
+// reshape(t, []) ==> 7
+// ```
+//
+// Arguments:
+// * shape: Defines the shape of the output tensor.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Reshape(@ByVal NodeBuilder.NodeOut tensor, @ByVal NodeBuilder.NodeOut shape, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Reshape(Node tensor, Node shape, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Reverses specific dimensions of a tensor.
+//
+// Given a `tensor`, and a `bool` tensor `dims` representing the dimensions
+// of `tensor`, this operation reverses each dimension i of `tensor` where
+// `dims[i]` is `True`.
+//
+// `tensor` can have up to 8 dimensions. The number of dimensions
+// of `tensor` must equal the number of elements in `dims`. In other words:
+//
+// `rank(tensor) = size(dims)`
+//
+// For example:
+//
+// ```prettyprint
+// # tensor 't' is [[[[ 0,  1,  2,  3],
+// #                  [ 4,  5,  6,  7],
+// #                  [ 8,  9, 10, 11]],
+// #                 [[12, 13, 14, 15],
+// #                  [16, 17, 18, 19],
+// #                  [20, 21, 22, 23]]]]
+// # tensor 't' shape is [1, 2, 3, 4]
+//
+// # 'dims' is [False, False, False, True]
+// reverse(t, dims) ==> [[[[ 3,  2,  1,  0],
+//                         [ 7,  6,  5,  4],
+//                         [ 11, 10, 9, 8]],
+//                        [[15, 14, 13, 12],
+//                         [19, 18, 17, 16],
+//                         [23, 22, 21, 20]]]]
+//
+// # 'dims' is [False, True, False, False]
+// reverse(t, dims) ==> [[[[12, 13, 14, 15],
+//                         [16, 17, 18, 19],
+//                         [20, 21, 22, 23]
+//                        [[ 0,  1,  2,  3],
+//                         [ 4,  5,  6,  7],
+//                         [ 8,  9, 10, 11]]]]
+//
+// # 'dims' is [False, False, True, False]
+// reverse(t, dims) ==> [[[[8, 9, 10, 11],
+//                         [4, 5, 6, 7],
+//                         [0, 1, 2, 3]]
+//                        [[20, 21, 22, 23],
+//                         [16, 17, 18, 19],
+//                         [12, 13, 14, 15]]]]
+// ```
+//
+// Arguments:
+// * tensor: Up to 8-D.
+// * dims: 1-D. The dimensions to reverse.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The same shape as `tensor`.
+@Namespace("tensorflow::ops") public static native Node Reverse(@ByVal NodeBuilder.NodeOut tensor, @ByVal NodeBuilder.NodeOut dims, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Reverse(Node tensor, Node dims, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Reverses variable length slices.
+//
+// This op first slices `input` along the dimension `batch_dim`, and for each
+// slice `i`, reverses the first `seq_lengths[i]` elements along
+// the dimension `seq_dim`.
+//
+// The elements of `seq_lengths` must obey `seq_lengths[i] < input.dims[seq_dim]`,
+// and `seq_lengths` must be a vector of length `input.dims[batch_dim]`.
+//
+// The output slice `i` along dimension `batch_dim` is then given by input
+// slice `i`, with the first `seq_lengths[i]` slices along dimension
+// `seq_dim` reversed.
+//
+// For example:
+//
+// ```prettyprint
+// # Given this:
+// batch_dim = 0
+// seq_dim = 1
+// input.dims = (4, 8, ...)
+// seq_lengths = [7, 2, 3, 5]
+//
+// # then slices of input are reversed on seq_dim, but only up to seq_lengths:
+// output[0, 0:7, :, ...] = input[0, 7:0:-1, :, ...]
+// output[1, 0:2, :, ...] = input[1, 2:0:-1, :, ...]
+// output[2, 0:3, :, ...] = input[2, 3:0:-1, :, ...]
+// output[3, 0:5, :, ...] = input[3, 5:0:-1, :, ...]
+//
+// # while entries past seq_lens are copied through:
+// output[0, 7:, :, ...] = input[0, 7:, :, ...]
+// output[1, 2:, :, ...] = input[1, 2:, :, ...]
+// output[2, 3:, :, ...] = input[2, 3:, :, ...]
+// output[3, 2:, :, ...] = input[3, 2:, :, ...]
+// ```
+//
+// In contrast, if:
+// ```prettyprint
+// # Given this:
+// batch_dim = 2
+// seq_dim = 0
+// input.dims = (8, ?, 4, ...)
+// seq_lengths = [7, 2, 3, 5]
+//
+// # then slices of input are reversed on seq_dim, but only up to seq_lengths:
+// output[0:7, :, 0, :, ...] = input[7:0:-1, :, 0, :, ...]
+// output[0:2, :, 1, :, ...] = input[2:0:-1, :, 1, :, ...]
+// output[0:3, :, 2, :, ...] = input[3:0:-1, :, 2, :, ...]
+// output[0:5, :, 3, :, ...] = input[5:0:-1, :, 3, :, ...]
+//
+// # while entries past seq_lens are copied through:
+// output[7:, :, 0, :, ...] = input[7:, :, 0, :, ...]
+// output[2:, :, 1, :, ...] = input[2:, :, 1, :, ...]
+// output[3:, :, 2, :, ...] = input[3:, :, 2, :, ...]
+// output[2:, :, 3, :, ...] = input[2:, :, 3, :, ...]
+// ```
+//
+// Arguments:
+// * input: The input to reverse.
+// * seq_lengths: 1-D with length `input.dims(0)` and
+// `max(seq_lengths) < input.dims(seq_dim)`
+// * seq_dim: The dimension which is partially reversed.
+// * opts:
+//   .WithAttr("batch_dim", int64): Defaults to 0.
+//     The dimension along which reversal is performed.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The partially reversed input. It has the same shape as `input`.
+@Namespace("tensorflow::ops") public static native Node ReverseSequence(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut seq_lengths, @Cast("tensorflow::int64") long seq_dim, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ReverseSequence(Node input, Node seq_lengths, @Cast("tensorflow::int64") long seq_dim, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the shape of a tensor.
+//
+// This operation returns a 1-D integer tensor representing the shape of `input`.
+//
+// For example:
+//
+// ```prettyprint
+// # 't' is [[[1, 1, 1], [2, 2, 2]], [[3, 3, 3], [4, 4, 4]]]
+// shape(t) ==> [2, 2, 3]
+// ```
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Shape(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Shape(Node input, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the size of a tensor.
+//
+// This operation returns an integer representing the number of elements in
+// `input`.
+//
+// For example:
+//
+// ```prettyprint
+// # 't' is [[[1, 1,, 1], [2, 2, 2]], [[3, 3, 3], [4, 4, 4]]]]
+// size(t) ==> 12
+// ```
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Size(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Size(Node input, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Return a slice from 'input'.
+//
+// The output tensor is a tensor with dimensions described by 'size'
+// whose values are extracted from 'input' starting at the offsets in
+// 'begin'.
+//
+// *Requirements*:
+//   0 <= begin[i] <= begin[i] + size[i] <= Di  for i in [0, n)
+//
+// Arguments:
+// * begin: begin[i] specifies the offset into the 'i'th dimension of
+// 'input' to slice from.
+// * size: size[i] specifies the number of elements of the 'i'th dimension
+// of 'input' to slice. If size[i] is -1, all remaining elements in dimension
+// i are included in the slice (i.e. this is equivalent to setting
+// size[i] = input.dim_size(i) - begin[i]).
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Slice(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut begin, @ByVal NodeBuilder.NodeOut size, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Slice(Node input, Node begin, Node size, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Splits a tensor into `num_split` tensors along one dimension.
+//
+// Arguments:
+// * split_dim: 0-D.  The dimension along which to split.  Must be in the range
+// `[0, rank(value))`.
+// * value: The tensor to split.
+// * num_split: The number of ways to split.  Must evenly divide
+// `value.shape[split_dim]`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// They are identically shaped tensors, whose shape matches that of `value`
+// except along `split_dim`, where their sizes are
+// `values.shape[split_dim] / num_split`.
+@Namespace("tensorflow::ops") public static native Node Split(@ByVal NodeBuilder.NodeOut split_dim, @ByVal NodeBuilder.NodeOut value, @Cast("tensorflow::int64") long num_split, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Split(Node split_dim, Node value, @Cast("tensorflow::int64") long num_split, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Removes dimensions of size 1 from the shape of a tensor.
+//
+// Given a tensor `input`, this operation returns a tensor of the same type with
+// all dimensions of size 1 removed. If you don't want to remove all size 1
+// dimensions, you can remove specific size 1 dimensions by specifying
+// `squeeze_dims`.
+//
+// For example:
+//
+// ```prettyprint
+// # 't' is a tensor of shape [1, 2, 1, 3, 1, 1]
+// shape(squeeze(t)) ==> [2, 3]
+// ```
+//
+// Or, to remove specific size 1 dimensions:
+//
+// ```prettyprint
+// # 't' is a tensor of shape [1, 2, 1, 3, 1, 1]
+// shape(squeeze(t, [2, 4])) ==> [1, 2, 3, 1]
+// ```
+//
+// Arguments:
+// * input: The `input` to squeeze.
+// * opts:
+//   .WithAttr("squeeze_dims", gtl::ArraySlice<int>): Defaults to [].
+//     If specified, only squeezes the dimensions listed. The dimension
+// index starts at 0. It is an error to squeeze a dimension that is not 1.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Contains the same data as `input`, but has one or more dimensions of
+// size 1 removed.
+@Namespace("tensorflow::ops") public static native Node Squeeze(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Squeeze(Node input, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Stops gradient computation.
+//
+// When executed in a graph, this op outputs its input tensor as-is.
+//
+// When building ops to compute gradients, this op prevents the contribution of
+// its inputs to be taken into account.  Normally, the gradient generator adds ops
+// to a graph to compute the derivatives of a specified 'loss' by recursively
+// finding out inputs that contributed to its computation.  If you insert this op
+// in the graph it inputs are masked from the gradient generator.  They are not
+// taken into account for computing gradients.
+//
+// This is useful any time you want to compute a value with TensorFlow but need
+// to pretend that the value was a constant. Some examples include:
+//
+// *  The *EM* algorithm where the *M-step* should not involve backpropagation
+//    through the output of the *E-step*.
+// *  Contrastive divergence training of Boltzmann machines where, when
+//    differentiating the energy function, the training must not backpropagate
+//    through the graph that generated the samples from the model.
+// *  Adversarial training, where no backprop should happen through the adversarial
+//    example generation process.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node StopGradient(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node StopGradient(Node input, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Constructs a tensor by tiling a given tensor.
+//
+// This operation creates a new tensor by replicating `input` `multiples` times.
+// The output tensor's i'th dimension has `input.dims(i) * multiples[i]` elements,
+// and the values of `input` are replicated `multiples[i]` times along the 'i'th
+// dimension. For example, tiling `[a b c d]` by `[2]` produces
+// `[a b c d a b c d]`.
+//
+// Arguments:
+// * input: 1-D or higher.
+// * multiples: 1-D. Length must be the same as the number of dimensions in `input`
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Tile(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut multiples, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Tile(Node input, Node multiples, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the gradient of `Tile`.
+//
+// Since `Tile` takes an input and repeats the input `multiples` times
+// along each dimension, `TileGrad` takes in `multiples` and aggregates
+// each repeated tile of `input` into `output`.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node TileGrad(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut multiples, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node TileGrad(Node input, Node multiples, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Shuffle dimensions of x according to a permutation.
+//
+// The output `y` has the same rank as `x`. The shapes of `x` and `y` satisfy:
+//   `y.shape[i] == x.shape[perm[i]] for i in [0, 1, ..., rank(x) - 1]`
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Transpose(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut perm, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Transpose(Node x, Node perm, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Finds unique elements in a 1-D tensor.
+//
+// This operation returns a tensor `y` containing all of the unique elements of `x`
+// sorted in the same order that they occur in `x`. This operation also returns a
+// tensor `idx` the same size as `x` that contains the index of each value of `x`
+// in the unique output `y`. In other words:
+//
+// `y[idx[i]] = x[i] for i in [0, 1,...,rank(x) - 1]`
+//
+// For example:
+//
+// ```prettyprint
+// # tensor 'x' is [1, 1, 2, 4, 4, 4, 7, 8, 8]
+// y, idx = unique(x)
+// y ==> [1, 2, 4, 7, 8]
+// idx ==> [0, 0, 1, 2, 2, 2, 3, 4, 4]
+// ```
+//
+// Arguments:
+// * x: 1-D.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with outputs:
+// * y: 1-D.
+// * idx: 1-D.
+@Namespace("tensorflow::ops") public static native Node Unique(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Unique(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Unpacks the outer dimension of a rank-`R` tensor into `num` rank-`(R-1)` tensors.
+//
+// Unpacks `num` tensors from `value` by chipping it along the first dimension.
+// The i'th tensor in `output` is the slice `value[i, ...]`. Each tensor in
+// `output` has shape `value.shape[1:]`.
+//
+// This is the opposite of `pack`.
+//
+// Arguments:
+// * value: 1-D or higher, with first dimension `num`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The list of tensors unpacked from `value`.
+@Namespace("tensorflow::ops") public static native Node Unpack(@ByVal NodeBuilder.NodeOut value, @Cast("tensorflow::int64") long num, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Unpack(Node value, @Cast("tensorflow::int64") long num, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns locations of true values in a boolean tensor.
+//
+// This operation returns the coordinates of true elements in `input`. The
+// coordinates are returned in a 2-D tensor where the first dimension (rows)
+// represents the number of true elements, and the second dimension (columns)
+// represents the coordinates of the true elements. Keep in mind, the shape of
+// the output tensor can vary depending on how many true values there are in
+// `input`. Indices are output in row-major order.
+//
+// For example:
+//
+// ```prettyprint
+// # 'input' tensor is [[True, False]
+// #                    [True, False]]
+// # 'input' has two true values, so output has two coordinates.
+// # 'input' has rank of 2, so coordinates have two indices.
+// where(input) ==> [[0, 0],
+//                   [1, 0]]
+//
+// # `input` tensor is [[[True, False]
+// #                     [True, False]]
+// #                    [[False, True]
+// #                     [False, True]]
+// #                    [[False, False]
+// #                     [False, True]]]
+// # 'input' has 5 true values, so output has 5 coordinates.
+// # 'input' has rank of 3, so coordinates have three indices.
+// where(input) ==> [[0, 0, 0],
+//                   [0, 1, 0],
+//                   [1, 0, 1],
+//                   [1, 1, 1],
+//                   [2, 1, 1]]
+// ```
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Where(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Where(Node input, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns a tensor of zeros with the same shape and type as x.
+//
+// Arguments:
+// * x: a tensor of type T.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// a tensor of the same shape and type as x but filled with zeros.
+@Namespace("tensorflow::ops") public static native Node ZerosLike(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ZerosLike(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_ARRAY_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/attention_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_ATTENTION_OPS_H_
+// #define TENSORFLOW_CC_OPS_ATTENTION_OPS_H_
+
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/graph/graph_def_builder.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/public/tensor.h"
+// #include "tensorflow/core/public/tensor_shape.h"
+
+// These add a node to the graph from opts.
+//
+// Note for "NodeOut" inputs, you will typically either pass
+// * a {Node*, int index} (to pass the index-th output of that node), or
+// * a Node* (to pass the first output of that node).
+
+
+// Extracts a glimpse from the input tensor.
+//
+// Returns a set of windows called glimpses extracted at location `offsets`
+// from the input tensor. If the windows only partially overlaps the inputs, the
+// non overlapping areas will be filled with random noise.
+//
+// The result is a 4-D tensor of shape `[batch_size, glimpse_height,
+// glimpse_width, channels]`. The channels and batch dimensions are the same as that
+// of the input tensor. The height and width of the output windows are
+// specified in the `size` parameter.
+//
+// The argument `normalized` and `centered` controls how the windows are built:
+// * If the coordinates are normalized but not centered, 0.0 and 1.0
+//   correspond to the minimum and maximum of each height and width dimension.
+// * If the coordinates are both normalized and centered, they range from -1.0 to
+//   1.0. The coordinates (-1.0, -1.0) correspond to the upper left corner, the
+//   lower right corner is located at  (1.0, 1.0) and the center is at (0, 0).
+// * If the coordinates are not normalized they are interpreted as numbers of pixels.
+//
+// Arguments:
+// * input: A 4-D float tensor of shape `[batch_size, height, width, channels]`.
+// * size: A 1-D tensor of 2 elements containing the size of the glimpses to extract.
+// The glimpse height must be specified first, following by the glimpse width.
+// * offsets: A 2-D integer tensor of shape `[batch_size, 2]` containing the x, y
+// locations of the center of each window.
+// * opts:
+//   .WithAttr("centered", bool): Defaults to true.
+//     indicates if the offset coordinates are centered relative to
+// the image, in which case the (0, 0) offset is relative to the center of the
+// input images. If false, the (0,0) offset corresponds to the upper left corner
+// of the input images.
+//   .WithAttr("normalized", bool): Defaults to true.
+//     indicates if the offset coordinates are normalized.
+//   .WithAttr("uniform_noise", bool): Defaults to true.
+//     indicates if the noise should be generated using a
+// uniform distribution or a gaussian distribution.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// A tensor representing the glimpses `[batch_size, glimpse_height,
+// glimpse_width, channels]`.
+@Namespace("tensorflow::ops") public static native Node ExtractGlimpse(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut size, @ByVal NodeBuilder.NodeOut offsets, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ExtractGlimpse(Node input, Node size, Node offsets, @Const @ByRef GraphDefBuilder.Options opts);
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_ATTENTION_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/data_flow_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_DATA_FLOW_OPS_H_
+// #define TENSORFLOW_CC_OPS_DATA_FLOW_OPS_H_
+
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/graph/graph_def_builder.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/public/tensor.h"
+// #include "tensorflow/core/public/tensor_shape.h"
+
+// These add a node to the graph from opts.
+//
+// Note for "NodeOut" inputs, you will typically either pass
+// * a {Node*, int index} (to pass the index-th output of that node), or
+// * a Node* (to pass the first output of that node).
+
+
+// Partitions `data` into `num_partitions` tensors using indices from `partitions`.
+//
+// For each index tuple `js` of size `partitions.ndim`, the slice `data[js, ...]`
+// becomes part of `outputs[partitions[js]]`.  The slices with `partitions[js] = i`
+// are placed in `outputs[i]` in lexicographic order of `js`, and the first
+// dimension of `outputs[i]` is the number of entries in `partitions` equal to `i`.
+// In detail,
+//
+//     outputs[i].shape = [sum(partitions == i)] + data.shape[partitions.ndim:]
+//
+//     outputs[i] = pack([data[js, ...] for js if partitions[js] == i])
+//
+// `data.shape` must start with `partitions.shape`.
+//
+// For example:
+//
+//     # Scalar partitions
+//     partitions = 1
+//     num_partitions = 2
+//     data = [10, 20]
+//     outputs[0] = []  # Empty with shape [0, 2]
+//     outputs[1] = [[10, 20]]
+//
+//     # Vector partitions
+//     partitions = [0, 0, 1, 1, 0]
+//     num_partitions = 2
+//     data = [10, 20, 30, 40, 50]
+//     outputs[0] = [10, 20, 50]
+//     outputs[1] = [30, 40]
+//
+// <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+// <img style="width:100%" src="../images/DynamicPartition.png" alt>
+// </div>
+//
+// Arguments:
+// * partitions: Any shape.  Indices in the range `[0, num_partitions)`.
+// * num_partitions: The number of partitions to output.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node DynamicPartition(@ByVal NodeBuilder.NodeOut data, @ByVal NodeBuilder.NodeOut partitions, @Cast("tensorflow::int64") long num_partitions,
+                       @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node DynamicPartition(Node data, Node partitions, @Cast("tensorflow::int64") long num_partitions,
+                       @Const @ByRef GraphDefBuilder.Options opts);
+
+// Interleave the values from the `data` tensors into a single tensor.
+//
+// Builds a merged tensor such that
+//
+//     merged[indices[m][i, ..., j], ...] = data[m][i, ..., j, ...]
+//
+// For example, if each `indices[m]` is scalar or vector, we have
+//
+//     # Scalar indices
+//     merged[indices[m], ...] = data[m][...]
+//
+//     # Vector indices
+//     merged[indices[m][i], ...] = data[m][i, ...]
+//
+// Each `data[i].shape` must start with the corresponding `indices[i].shape`,
+// and the rest of `data[i].shape` must be constant w.r.t. `i`.  That is, we
+// must have `data[i].shape = indices[i].shape + constant`.  In terms of this
+// `constant`, the output shape is
+//
+//     merged.shape = [max(indices)] + constant
+//
+// Values are merged in order, so if an index appears in both `indices[m][i]` and
+// `indices[n][j]` for `(m,i) < (n,j)` the slice `data[n][j]` will appear in the
+// merged result.
+//
+// For example:
+//
+//     indices[0] = 6
+//     indices[1] = [4, 1]
+//     indices[2] = [[5, 2], [0, 3]]
+//     data[0] = [61, 62]
+//     data[1] = [[41, 42], [11, 12]]
+//     data[2] = [[[51, 52], [21, 22]], [[1, 2], [31, 32]]]
+//     merged = [[1, 2], [11, 12], [21, 22], [31, 32], [41, 42],
+//               [51, 52], [61, 62]]
+//
+// <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+// <img style="width:100%" src="../images/DynamicStitch.png" alt>
+// </div>
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node DynamicStitch(@ByVal NodeOutVector indices, @ByVal NodeOutVector data, @Const @ByRef GraphDefBuilder.Options opts);
+
+// A queue that produces elements in first-in first-out order.
+//
+// Arguments:
+// * component_types: The type of each component in a value.
+// * opts:
+//   .WithAttr("shapes", gtl::ArraySlice<TensorShape>): Defaults to [].
+//     The shape of each component in a value. The length of this attr must
+// be either 0 or the same as the length of component_types. If the length of
+// this attr is 0, the shapes of queue elements are not constrained, and
+// only one element may be dequeued at a time.
+//   .WithAttr("capacity", int64): Defaults to -1.
+//     The upper bound on the number of elements in this queue.
+// Negative numbers mean no limit.
+//   .WithAttr("container", StringPiece): Defaults to "".
+//     If non-empty, this queue is placed in the given container.
+// Otherwise, a default container is used.
+//   .WithAttr("shared_name", StringPiece): Defaults to "".
+//     If non-empty, this queue will be shared under the given name
+// across multiple sessions.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The handle to the queue.
+@Namespace("tensorflow::ops") public static native Node FIFOQueue(@ByVal DataTypeVector component_types, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Creates a non-initialized hash table.
+//
+// This op creates a hash table, specifying the type of its keys and values.
+// Before using the table you will have to initialize it.  After initialization the
+// table will be immutable.
+//
+// Arguments:
+// * key_dtype: Type of the table keys.
+// * value_dtype: Type of the table values.
+// * opts:
+//   .WithAttr("container", StringPiece): Defaults to "".
+//     If non-empty, this table is placed in the given container.
+// Otherwise, a default container is used.
+//   .WithAttr("shared_name", StringPiece): Defaults to "".
+//     If non-empty, this table is shared under the given name across
+// multiple sessions.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Handle to a table.
+@Namespace("tensorflow::ops") public static native Node HashTable(@Cast("tensorflow::DataType") int key_dtype, @Cast("tensorflow::DataType") int value_dtype, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Table initializer that takes two tensors for keys and values respectively.
+//
+// Arguments:
+// * table_handle: Handle to a table which will be initialized.
+// * keys: Keys of type Tkey.
+// * values: Values of type Tval. Same shape as `keys`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node InitializeTable(@ByVal NodeBuilder.NodeOut table_handle, @ByVal NodeBuilder.NodeOut keys, @ByVal NodeBuilder.NodeOut values, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node InitializeTable(Node table_handle, Node keys, Node values, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Looks up keys in a table, outputs the corresponding values.
+//
+// The tensor `keys` must of the same type as the keys of the table.
+// The output `values` is of the type of the table values.
+//
+// The scalar `default_value` is the value output for keys not present in the
+// table. It must also be of the same type as the table values.
+//
+// Arguments:
+// * table_handle: Handle to the table.
+// * keys: Any shape.  Keys to look up.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Same shape as `keys`.  Values found in the table, or `default_values`
+// for missing keys.
+@Namespace("tensorflow::ops") public static native Node LookupTableFind(@ByVal NodeBuilder.NodeOut table_handle, @ByVal NodeBuilder.NodeOut keys, @ByVal NodeBuilder.NodeOut default_value, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node LookupTableFind(Node table_handle, Node keys, Node default_value, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the number of elements in the given table.
+//
+// Arguments:
+// * table_handle: Handle to the table.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Scalar that contains number of elements in the table.
+@Namespace("tensorflow::ops") public static native Node LookupTableSize(@ByVal NodeBuilder.NodeOut table_handle, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node LookupTableSize(Node table_handle, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Closes the given queue.
+//
+// This operation signals that no more elements will be enqueued in the
+// given queue. Subsequent Enqueue(Many) operations will fail.
+// Subsequent Dequeue(Many) operations will continue to succeed if
+// sufficient elements remain in the queue. Subsequent Dequeue(Many)
+// operations that would block will fail immediately.
+//
+// Arguments:
+// * handle: The handle to a queue.
+// * opts:
+//   .WithAttr("cancel_pending_enqueues", bool): Defaults to false.
+//     If true, all pending enqueue requests that are
+// blocked on the given queue will be cancelled.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node QueueClose(@ByVal NodeBuilder.NodeOut handle, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node QueueClose(Node handle, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Dequeues a tuple of one or more tensors from the given queue.
+//
+// This operation has k outputs, where k is the number of components
+// in the tuples stored in the given queue, and output i is the ith
+// component of the dequeued tuple.
+//
+// N.B. If the queue is empty, this operation will block until an element
+// has been dequeued (or 'timeout_ms' elapses, if specified).
+//
+// Arguments:
+// * handle: The handle to a queue.
+// * component_types: The type of each component in a tuple.
+// * opts:
+//   .WithAttr("timeout_ms", int64): Defaults to -1.
+//     If the queue is empty, this operation will block for up to
+// timeout_ms milliseconds.
+// Note: This option is not supported yet.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// One or more tensors that were dequeued as a tuple.
+@Namespace("tensorflow::ops") public static native Node QueueDequeue(@ByVal NodeBuilder.NodeOut handle, @ByVal DataTypeVector component_types, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node QueueDequeue(Node handle, @ByVal DataTypeVector component_types, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Dequeues n tuples of one or more tensors from the given queue.
+//
+// This operation concatenates queue-element component tensors along the
+// 0th dimension to make a single component tensor.  All of the components
+// in the dequeued tuple will have size n in the 0th dimension.
+//
+// This operation has k outputs, where k is the number of components in
+// the tuples stored in the given queue, and output i is the ith
+// component of the dequeued tuple.
+//
+// N.B. If the queue is empty, this operation will block until n elements
+// have been dequeued (or 'timeout_ms' elapses, if specified).
+//
+// Arguments:
+// * handle: The handle to a queue.
+// * n: The number of tuples to dequeue.
+// * component_types: The type of each component in a tuple.
+// * opts:
+//   .WithAttr("timeout_ms", int64): Defaults to -1.
+//     If the queue has fewer than n elements, this operation
+// will block for up to timeout_ms milliseconds.
+// Note: This option is not supported yet.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// One or more tensors that were dequeued as a tuple.
+@Namespace("tensorflow::ops") public static native Node QueueDequeueMany(@ByVal NodeBuilder.NodeOut handle, @ByVal NodeBuilder.NodeOut n, @ByVal DataTypeVector component_types, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node QueueDequeueMany(Node handle, Node n, @ByVal DataTypeVector component_types, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Enqueues a tuple of one or more tensors in the given queue.
+//
+// The components input has k elements, which correspond to the components of
+// tuples stored in the given queue.
+//
+// N.B. If the queue is full, this operation will block until the given
+// element has been enqueued (or 'timeout_ms' elapses, if specified).
+//
+// Arguments:
+// * handle: The handle to a queue.
+// * components: One or more tensors from which the enqueued tensors should be taken.
+// * opts:
+//   .WithAttr("timeout_ms", int64): Defaults to -1.
+//     If the queue is full, this operation will block for up to
+// timeout_ms milliseconds.
+// Note: This option is not supported yet.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node QueueEnqueue(@ByVal NodeBuilder.NodeOut handle, @ByVal NodeOutVector components, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node QueueEnqueue(Node handle, @ByVal NodeOutVector components, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Enqueues zero or more tuples of one or more tensors in the given queue.
+//
+// This operation slices each component tensor along the 0th dimension to
+// make multiple queue elements. All of the tuple components must have the
+// same size in the 0th dimension.
+//
+// The components input has k elements, which correspond to the components of
+// tuples stored in the given queue.
+//
+// N.B. If the queue is full, this operation will block until the given
+// elements have been enqueued (or 'timeout_ms' elapses, if specified).
+//
+// Arguments:
+// * handle: The handle to a queue.
+// * components: One or more tensors from which the enqueued tensors should
+// be taken.
+// * opts:
+//   .WithAttr("timeout_ms", int64): Defaults to -1.
+//     If the queue is too full, this operation will block for up
+// to timeout_ms milliseconds.
+// Note: This option is not supported yet.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node QueueEnqueueMany(@ByVal NodeBuilder.NodeOut handle, @ByVal NodeOutVector components,
+                       @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node QueueEnqueueMany(Node handle, @ByVal NodeOutVector components,
+                       @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the number of elements in the given queue.
+//
+// Arguments:
+// * handle: The handle to a queue.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The number of elements in the given queue.
+@Namespace("tensorflow::ops") public static native Node QueueSize(@ByVal NodeBuilder.NodeOut handle, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node QueueSize(Node handle, @Const @ByRef GraphDefBuilder.Options opts);
+
+// A queue that randomizes the order of elements.
+//
+// Arguments:
+// * component_types: The type of each component in a value.
+// * opts:
+//   .WithAttr("shapes", gtl::ArraySlice<TensorShape>): Defaults to [].
+//     The shape of each component in a value. The length of this attr must
+// be either 0 or the same as the length of component_types. If the length of
+// this attr is 0, the shapes of queue elements are not constrained, and
+// only one element may be dequeued at a time.
+//   .WithAttr("capacity", int64): Defaults to -1.
+//     The upper bound on the number of elements in this queue.
+// Negative numbers mean no limit.
+//   .WithAttr("min_after_dequeue", int64): Defaults to 0.
+//     Dequeue will block unless there would be this
+// many elements after the dequeue or the queue is closed. This
+// ensures a minimum level of mixing of elements.
+//   .WithAttr("seed", int64): Defaults to 0.
+//     If either seed or seed2 is set to be non-zero, the random number
+// generator is seeded by the given seed.  Otherwise, a random seed is used.
+//   .WithAttr("seed2", int64): Defaults to 0.
+//     A second seed to avoid seed collision.
+//   .WithAttr("container", StringPiece): Defaults to "".
+//     If non-empty, this queue is placed in the given container.
+// Otherwise, a default container is used.
+//   .WithAttr("shared_name", StringPiece): Defaults to "".
+//     If non-empty, this queue will be shared under the given name
+// across multiple sessions.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The handle to the queue.
+@Namespace("tensorflow::ops") public static native Node RandomShuffleQueue(@ByVal DataTypeVector component_types, @Const @ByRef GraphDefBuilder.Options opts);
+
+// A stack that produces elements in first-in last-out order.
+//
+// Arguments:
+// * elem_type: The type of the elements on the stack.
+// * opts:
+//   .WithAttr("stack_name", StringPiece): Defaults to "".
+//     Overrides the name used for the temporary stack resource. Default
+// value is the name of the 'Stack' op (which is guaranteed unique).
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The handle to the stack.
+@Namespace("tensorflow::ops") public static native Node Stack(@Cast("tensorflow::DataType") int elem_type, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Delete the stack from its resource container.
+//
+// Arguments:
+// * handle: The handle to a stack.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node StackClose(@ByVal NodeBuilder.NodeOut handle, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node StackClose(Node handle, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Pop the element at the top of the stack.
+//
+// Arguments:
+// * handle: The handle to a stack.
+// * elem_type: The type of the elem that is popped.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The tensor that is popped from the top of the stack.
+@Namespace("tensorflow::ops") public static native Node StackPop(@ByVal NodeBuilder.NodeOut handle, @Cast("tensorflow::DataType") int elem_type, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node StackPop(Node handle, @Cast("tensorflow::DataType") int elem_type, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Push an element onto the stack.
+//
+// Arguments:
+// * handle: The handle to a stack.
+// * elem: The tensor to be pushed onto the stack.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The same tensor as the input 'elem'.
+@Namespace("tensorflow::ops") public static native Node StackPush(@ByVal NodeBuilder.NodeOut handle, @ByVal NodeBuilder.NodeOut elem, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node StackPush(Node handle, Node elem, @Const @ByRef GraphDefBuilder.Options opts);
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_DATA_FLOW_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/image_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_IMAGE_OPS_H_
+// #define TENSORFLOW_CC_OPS_IMAGE_OPS_H_
+
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/graph/graph_def_builder.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/public/tensor.h"
+// #include "tensorflow/core/public/tensor_shape.h"
+
+// These add a node to the graph from opts.
+//
+// Note for "NodeOut" inputs, you will typically either pass
+// * a {Node*, int index} (to pass the index-th output of that node), or
+// * a Node* (to pass the first output of that node).
+
+
+// Adjust the contrast of one or more images.
+//
+// `images` is a tensor of at least 3 dimensions.  The last 3 dimensions are
+// interpreted as `[height, width, channels]`.  The other dimensions only
+// represent a collection of images, such as `[batch, height, width, channels].`
+//
+// Contrast is adjusted independently for each channel of each image.
+//
+// For each channel, the Op first computes the mean of the image pixels in the
+// channel and then adjusts each component of each pixel to
+// `(x - mean) * contrast_factor + mean`.
+//
+// These adjusted values are then clipped to fit in the `[min_value, max_value]`
+// interval.
+//
+// `images: Images to adjust.  At least 3-D.
+//
+// Arguments:
+// * contrast_factor: A float multiplier for adjusting contrast.
+// * min_value: Minimum value for clipping the adjusted pixels.
+// * max_value: Maximum value for clipping the adjusted pixels.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The constrast-adjusted image or images.
+@Namespace("tensorflow::ops") public static native Node AdjustContrast(@ByVal NodeBuilder.NodeOut images, @ByVal NodeBuilder.NodeOut contrast_factor, @ByVal NodeBuilder.NodeOut min_value, @ByVal NodeBuilder.NodeOut max_value, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node AdjustContrast(Node images, Node contrast_factor, Node min_value, Node max_value, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Decode a JPEG-encoded image to a uint8 tensor.
+//
+// The attr `channels` indicates the desired number of color channels for the
+// decoded image.
+//
+// Accepted values are:
+//
+// *   0: Use the number of channels in the JPEG-encoded image.
+// *   1: output a grayscale image.
+// *   3: output an RGB image.
+//
+// If needed, the JPEG-encoded image is transformed to match the requested number
+// of color channels.
+//
+// The attr `ratio` allows downscaling the image by an integer factor during
+// decoding.  Allowed values are: 1, 2, 4, and 8.  This is much faster than
+// downscaling the image later.
+//
+// Arguments:
+// * contents: 0-D.  The JPEG-encoded image.
+// * opts:
+//   .WithAttr("channels", int64): Defaults to 0.
+//     Number of color channels for the decoded image.
+//   .WithAttr("ratio", int64): Defaults to 1.
+//     Downscaling ratio.
+//   .WithAttr("fancy_upscaling", bool): Defaults to true.
+//     If true use a slower but nicer upscaling of the
+// chroma planes (yuv420/422 only).
+//   .WithAttr("try_recover_truncated", bool): Defaults to false.
+//     If true try to recover an image from truncated input.
+//   .WithAttr("acceptable_fraction", float): Defaults to 1.
+//     The minimum required fraction of lines before a truncated
+// input is accepted.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// 3-D with shape `[height, width, channels]`..
+@Namespace("tensorflow::ops") public static native Node DecodeJpeg(@ByVal NodeBuilder.NodeOut contents, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node DecodeJpeg(Node contents, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Decode a PNG-encoded image to a uint8 tensor.
+//
+// The attr `channels` indicates the desired number of color channels for the
+// decoded image.
+//
+// Accepted values are:
+//
+// *   0: Use the number of channels in the PNG-encoded image.
+// *   1: output a grayscale image.
+// *   3: output an RGB image.
+// *   4: output an RGBA image.
+//
+// If needed, the PNG-encoded image is transformed to match the requested number
+// of color channels.
+//
+// Arguments:
+// * contents: 0-D.  The PNG-encoded image.
+// * opts:
+//   .WithAttr("channels", int64): Defaults to 0.
+//     Number of color channels for the decoded image.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// 3-D with shape `[height, width, channels]`.
+@Namespace("tensorflow::ops") public static native Node DecodePng(@ByVal NodeBuilder.NodeOut contents, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node DecodePng(Node contents, @Const @ByRef GraphDefBuilder.Options opts);
+
+// JPEG-encode an image.
+//
+// `image` is a 3-D uint8 Tensor of shape `[height, width, channels]`.
+//
+// The attr `format` can be used to override the color format of the encoded
+// output.  Values can be:
+//
+// *   `''`: Use a default format based on the number of channels in the image.
+// *   `grayscale`: Output a grayscale JPEG image.  The `channels` dimension
+//     of `image` must be 1.
+// *   `rgb`: Output an RGB JPEG image. The `channels` dimension
+//     of `image` must be 3.
+//
+// If `format` is not specified or is the empty string, a default format is picked
+// in function of the number of channels in `image`:
+//
+// *   1: Output a grayscale image.
+// *   3: Output an RGB image.
+//
+// Arguments:
+// * image: 3-D with shape `[height, width, channels]`.
+// * opts:
+//   .WithAttr("format", StringPiece): Defaults to "".
+//     Per pixel image format.
+//   .WithAttr("quality", int64): Defaults to 95.
+//     Quality of the compression from 0 to 100 (higher is better and slower).
+//   .WithAttr("progressive", bool): Defaults to false.
+//     If True, create a JPEG that loads progressively (coarse to fine).
+//   .WithAttr("optimize_size", bool): Defaults to false.
+//     If True, spend CPU/RAM to reduce size with no quality change.
+//   .WithAttr("chroma_downsampling", bool): Defaults to true.
+//     See http://en.wikipedia.org/wiki/Chroma_subsampling.
+//   .WithAttr("density_unit", StringPiece): Defaults to "in".
+//     Unit used to specify `x_density` and `y_density`:
+// pixels per inch (`'in'`) or centimeter (`'cm'`).
+//   .WithAttr("x_density", int64): Defaults to 300.
+//     Horizontal pixels per density unit.
+//   .WithAttr("y_density", int64): Defaults to 300.
+//     Vertical pixels per density unit.
+//   .WithAttr("xmp_metadata", StringPiece): Defaults to "".
+//     If not empty, embed this XMP metadata in the image header.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// 0-D. JPEG-encoded image.
+@Namespace("tensorflow::ops") public static native Node EncodeJpeg(@ByVal NodeBuilder.NodeOut image, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node EncodeJpeg(Node image, @Const @ByRef GraphDefBuilder.Options opts);
+
+// PNG-encode an image.
+//
+// `image` is a 3-D uint8 Tensor of shape `[height, width, channels]` where
+// `channels` is:
+//
+// *   1: for grayscale.
+// *   3: for RGB.
+// *   4: for RGBA.
+//
+// The ZLIB compression level, `compression`, can be -1 for the PNG-encoder
+// default or a value from 0 to 9.  9 is the highest compression level, generating
+// the smallest output, but is slower.
+//
+// Arguments:
+// * image: 3-D with shape `[height, width, channels]`.
+// * opts:
+//   .WithAttr("compression", int64): Defaults to -1.
+//     Compression level.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// 0-D. PNG-encoded image.
+@Namespace("tensorflow::ops") public static native Node EncodePng(@ByVal NodeBuilder.NodeOut image, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node EncodePng(Node image, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Randomly crop `image`.
+//
+// `size` is a 1-D int64 tensor with 2 elements representing the crop height and
+// width.  The values must be non negative.
+//
+// This Op picks a random location in `image` and crops a `height` by `width`
+// rectangle from that location.  The random location is picked so the cropped
+// area will fit inside the original image.
+//
+// Arguments:
+// * image: 3-D of shape `[height, width, channels]`.
+// * size: 1-D of length 2 containing: `crop_height`, `crop_width`..
+// * opts:
+//   .WithAttr("seed", int64): Defaults to 0.
+//     If either seed or seed2 are set to be non-zero, the random number
+// generator is seeded by the given seed.  Otherwise, it is seeded by a
+// random seed.
+//   .WithAttr("seed2", int64): Defaults to 0.
+//     An second seed to avoid seed collision.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// 3-D of shape `[crop_height, crop_width, channels].`
+@Namespace("tensorflow::ops") public static native Node RandomCrop(@ByVal NodeBuilder.NodeOut image, @ByVal NodeBuilder.NodeOut size, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node RandomCrop(Node image, Node size, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Resize `images` to `size` using area interpolation.
+//
+// Input images can be of different types but output images are always float.
+//
+// Arguments:
+// * images: 4-D with shape `[batch, height, width, channels]`.
+// * size: = A 1-D int32 Tensor of 2 elements: `new_height, new_width`.  The
+// new size for the images.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// 4-D with shape
+// `[batch, new_height, new_width, channels]`.
+@Namespace("tensorflow::ops") public static native Node ResizeArea(@ByVal NodeBuilder.NodeOut images, @ByVal NodeBuilder.NodeOut size, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ResizeArea(Node images, Node size, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Resize `images` to `size` using bicubic interpolation.
+//
+// Input images can be of different types but output images are always float.
+//
+// Arguments:
+// * images: 4-D with shape `[batch, height, width, channels]`.
+// * size: = A 1-D int32 Tensor of 2 elements: `new_height, new_width`.  The
+// new size for the images.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// 4-D with shape
+// `[batch, new_height, new_width, channels]`.
+@Namespace("tensorflow::ops") public static native Node ResizeBicubic(@ByVal NodeBuilder.NodeOut images, @ByVal NodeBuilder.NodeOut size, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ResizeBicubic(Node images, Node size, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Resize `images` to `size` using bilinear interpolation.
+//
+// Input images can be of different types but output images are always float.
+//
+// Arguments:
+// * images: 4-D with shape `[batch, height, width, channels]`.
+// * size: = A 1-D int32 Tensor of 2 elements: `new_height, new_width`.  The
+// new size for the images.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// 4-D with shape
+// `[batch, new_height, new_width, channels]`.
+@Namespace("tensorflow::ops") public static native Node ResizeBilinear(@ByVal NodeBuilder.NodeOut images, @ByVal NodeBuilder.NodeOut size, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ResizeBilinear(Node images, Node size, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Resize `images` to `size` using nearest neighbor interpolation.
+//
+// Input images can be of different types but output images are always float.
+//
+// Arguments:
+// * images: 4-D with shape `[batch, height, width, channels]`.
+// * size: = A 1-D int32 Tensor of 2 elements: `new_height, new_width`.  The
+// new size for the images.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// 4-D with shape
+// `[batch, new_height, new_width, channels]`.
+@Namespace("tensorflow::ops") public static native Node ResizeNearestNeighbor(@ByVal NodeBuilder.NodeOut images, @ByVal NodeBuilder.NodeOut size, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ResizeNearestNeighbor(Node images, Node size, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the gradient of nearest neighbor interpolation.
+//
+// Arguments:
+// * grads: 4-D with shape `[batch, height, width, channels]`.
+// * size: = A 1-D int32 Tensor of 2 elements: `orig_height, orig_width`. The
+// original input size.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// 4-D with shape `[batch, orig_height, orig_width, channels]`. Gradients
+// with respect to the input image.
+@Namespace("tensorflow::ops") public static native Node ResizeNearestNeighborGrad(@ByVal NodeBuilder.NodeOut grads, @ByVal NodeBuilder.NodeOut size, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ResizeNearestNeighborGrad(Node grads, Node size, @Const @ByRef GraphDefBuilder.Options opts);
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_IMAGE_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/io_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_IO_OPS_H_
+// #define TENSORFLOW_CC_OPS_IO_OPS_H_
+
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/graph/graph_def_builder.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/public/tensor.h"
+// #include "tensorflow/core/public/tensor_shape.h"
+
+// These add a node to the graph from opts.
+//
+// Note for "NodeOut" inputs, you will typically either pass
+// * a {Node*, int index} (to pass the index-th output of that node), or
+// * a Node* (to pass the first output of that node).
+
+
+// A Reader that outputs fixed-length records from a file.
+//
+// Arguments:
+// * opts:
+//   .WithAttr("header_bytes", int64): Defaults to 0.
+//   .WithAttr("footer_bytes", int64): Defaults to 0.
+//   .WithAttr("container", StringPiece): Defaults to "".
+//     If non-empty, this reader is placed in the given container.
+// Otherwise, a default container is used.
+//   .WithAttr("shared_name", StringPiece): Defaults to "".
+//     If non-empty, this reader is named in the given bucket
+// with this shared_name. Otherwise, the node name is used instead.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The handle to reference the Reader.
+@Namespace("tensorflow::ops") public static native Node FixedLengthRecordReader(@Cast("tensorflow::int64") long record_bytes, @Const @ByRef GraphDefBuilder.Options opts);
+
+// A Reader that outputs the queued work as both the key and value.
+//
+// To use, enqueue strings in a Queue.  ReaderRead will take the front
+// work string and output (work, work).
+//
+// Arguments:
+// * opts:
+//   .WithAttr("container", StringPiece): Defaults to "".
+//     If non-empty, this reader is placed in the given container.
+// Otherwise, a default container is used.
+//   .WithAttr("shared_name", StringPiece): Defaults to "".
+//     If non-empty, this reader is named in the given bucket
+// with this shared_name. Otherwise, the node name is used instead.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The handle to reference the Reader.
+@Namespace("tensorflow::ops") public static native Node IdentityReader(@Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the set of files matching a pattern.
+//
+// Note that this routine only supports wildcard characters in the
+// basename portion of the pattern, not in the directory portion.
+//
+// Arguments:
+// * pattern: A (scalar) shell wildcard pattern.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// A vector of matching filenames.
+@Namespace("tensorflow::ops") public static native Node MatchingFiles(@ByVal NodeBuilder.NodeOut pattern, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MatchingFiles(Node pattern, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Reads and outputs the entire contents of the input filename.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node ReadFile(@ByVal NodeBuilder.NodeOut filename, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ReadFile(Node filename, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the number of records this Reader has produced.
+//
+// This is the same as the number of ReaderRead executions that have
+// succeeded.
+//
+// Arguments:
+// * reader_handle: Handle to a Reader.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node ReaderNumRecordsProduced(@ByVal NodeBuilder.NodeOut reader_handle, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ReaderNumRecordsProduced(Node reader_handle, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the number of work units this Reader has finished processing.
+//
+// Arguments:
+// * reader_handle: Handle to a Reader.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node ReaderNumWorkUnitsCompleted(@ByVal NodeBuilder.NodeOut reader_handle, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ReaderNumWorkUnitsCompleted(Node reader_handle, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the next record (key, value pair) produced by a Reader.
+//
+// Will dequeue from the input queue if necessary (e.g. when the
+// Reader needs to start reading from a new file since it has finished
+// with the previous file).
+//
+// Arguments:
+// * reader_handle: Handle to a Reader.
+// * queue_handle: Handle to a Queue, with string work items.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with outputs:
+// * key: A scalar.
+// * value: A scalar.
+@Namespace("tensorflow::ops") public static native Node ReaderRead(@ByVal NodeBuilder.NodeOut reader_handle, @ByVal NodeBuilder.NodeOut queue_handle, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ReaderRead(Node reader_handle, Node queue_handle, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Restore a Reader to its initial clean state.
+//
+// Arguments:
+// * reader_handle: Handle to a Reader.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node ReaderReset(@ByVal NodeBuilder.NodeOut reader_handle, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ReaderReset(Node reader_handle, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Restore a reader to a previously saved state.
+//
+// Not all Readers support being restored, so this can produce an
+// Unimplemented error.
+//
+// Arguments:
+// * reader_handle: Handle to a Reader.
+// * state: Result of a ReaderSerializeState of a Reader with type
+// matching reader_handle.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node ReaderRestoreState(@ByVal NodeBuilder.NodeOut reader_handle, @ByVal NodeBuilder.NodeOut state, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ReaderRestoreState(Node reader_handle, Node state, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Produce a string tensor that encodes the state of a Reader.
+//
+// Not all Readers support being serialized, so this can produce an
+// Unimplemented error.
+//
+// Arguments:
+// * reader_handle: Handle to a Reader.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node ReaderSerializeState(@ByVal NodeBuilder.NodeOut reader_handle, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ReaderSerializeState(Node reader_handle, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Restores a tensor from checkpoint files.
+//
+// Reads a tensor stored in one or several files. If there are several files (for
+// instance because a tensor was saved as slices), `file_pattern` may contain
+// wildcard symbols (`*` and `?`) in the filename portion only, not in the
+// directory portion.
+//
+// If a `file_pattern` matches several files, `preferred_shard` can be used to hint
+// in which file the requested tensor is likely to be found. This op will first
+// open the file at index `preferred_shard` in the list of matching files and try
+// to restore tensors from that file.  Only if some tensors or tensor slices are
+// not found in that first file, then the Op opens all the files. Setting
+// `preferred_shard` to match the value passed as the `shard` input
+// of a matching `Save` Op may speed up Restore.  This attribute only affects
+// performance, not correctness.  The default value -1 means files are processed in
+// order.
+//
+// See also `RestoreSlice`.
+//
+// Arguments:
+// * file_pattern: Must have a single element. The pattern of the files from
+// which we read the tensor.
+// * tensor_name: Must have a single element. The name of the tensor to be
+// restored.
+// * dt: The type of the tensor to be restored.
+// * opts:
+//   .WithAttr("preferred_shard", int64): Defaults to -1.
+//     Index of file to open first if multiple files match
+// `file_pattern`.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The restored tensor.
+@Namespace("tensorflow::ops") public static native Node Restore(@ByVal NodeBuilder.NodeOut file_pattern, @ByVal NodeBuilder.NodeOut tensor_name, @Cast("tensorflow::DataType") int dt, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Restore(Node file_pattern, Node tensor_name, @Cast("tensorflow::DataType") int dt, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Restores a tensor from checkpoint files.
+//
+// This is like `Restore` except that restored tensor can be listed as filling
+// only a slice of a larger tensor.  `shape_and_slice` specifies the shape of the
+// larger tensor and the slice that the restored tensor covers.
+//
+// The `shape_and_slice` input has the same format as the
+// elements of the `shapes_and_slices` input of the `SaveSlices` op.
+//
+// Arguments:
+// * file_pattern: Must have a single element. The pattern of the files from
+// which we read the tensor.
+// * tensor_name: Must have a single element. The name of the tensor to be
+// restored.
+// * shape_and_slice: Scalar. The shapes and slice specifications to use when
+// restoring a tensors.
+// * dt: The type of the tensor to be restored.
+// * opts:
+//   .WithAttr("preferred_shard", int64): Defaults to -1.
+//     Index of file to open first if multiple files match
+// `file_pattern`. See the documentation for `Restore`.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The restored tensor.
+@Namespace("tensorflow::ops") public static native Node RestoreSlice(@ByVal NodeBuilder.NodeOut file_pattern, @ByVal NodeBuilder.NodeOut tensor_name, @ByVal NodeBuilder.NodeOut shape_and_slice, @Cast("tensorflow::DataType") int dt, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node RestoreSlice(Node file_pattern, Node tensor_name, Node shape_and_slice, @Cast("tensorflow::DataType") int dt, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Saves the input tensors to disk.
+//
+// The size of `tensor_names` must match the number of tensors in `data`. `data[i]`
+// is written to `filename` with name `tensor_names[i]`.
+//
+// See also `SaveSlices`.
+//
+// Arguments:
+// * filename: Must have a single element. The name of the file to which we write
+// the tensor.
+// * tensor_names: Shape `[N]`. The names of the tensors to be saved.
+// * data: `N` tensors to save.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Save(@ByVal NodeBuilder.NodeOut filename, @ByVal NodeBuilder.NodeOut tensor_names, @ByVal NodeOutVector data, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Save(Node filename, Node tensor_names, @ByVal NodeOutVector data, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Saves input tensors slices to disk.
+//
+// This is like `Save` except that tensors can be listed in the saved file as being
+// a slice of a larger tensor.  `shapes_and_slices` specifies the shape of the
+// larger tensor and the slice that this tensor covers. `shapes_and_slices` must
+// have as many elements as `tensor_names`.
+//
+// Elements of the `shapes_and_slices` input must either be:
+//
+// *  The empty string, in which case the corresponding tensor is
+//    saved normally.
+// *  A string of the form `dim0 dim1 ... dimN-1 slice-spec` where the
+//    `dimI` are the dimensions of the larger tensor and `slice-spec`
+//    specifies what part is covered by the tensor to save.
+//
+// `slice-spec` itself is a `:`-separated list: `slice0:slice1:...:sliceN-1`
+// where each `sliceI` is either:
+//
+// *  The string `-` meaning that the slice covers all indices of this dimension
+// *  `start,length` where `start` and `length` are integers.  In that
+//    case the slice covers `length` indices starting at `start`.
+//
+// See also `Save`.
+//
+// Arguments:
+// * filename: Must have a single element. The name of the file to which we write the
+// tensor.
+// * tensor_names: Shape `[N]`. The names of the tensors to be saved.
+// * shapes_and_slices: Shape `[N]`.  The shapes and slice specifications to use when
+// saving the tensors.
+// * data: `N` tensors to save.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node SaveSlices(@ByVal NodeBuilder.NodeOut filename, @ByVal NodeBuilder.NodeOut tensor_names, @ByVal NodeBuilder.NodeOut shapes_and_slices, @ByVal NodeOutVector data, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SaveSlices(Node filename, Node tensor_names, Node shapes_and_slices, @ByVal NodeOutVector data, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Generate a sharded filename. The filename is printf formated as
+//
+//    %s-%05d-of-%05d, basename, shard, num_shards.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node ShardedFilename(@ByVal NodeBuilder.NodeOut basename, @ByVal NodeBuilder.NodeOut shard, @ByVal NodeBuilder.NodeOut num_shards,
+                      @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ShardedFilename(Node basename, Node shard, Node num_shards,
+                      @Const @ByRef GraphDefBuilder.Options opts);
+
+// Generate a glob pattern matching all sharded file names.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node ShardedFilespec(@ByVal NodeBuilder.NodeOut basename, @ByVal NodeBuilder.NodeOut num_shards, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ShardedFilespec(Node basename, Node num_shards, @Const @ByRef GraphDefBuilder.Options opts);
+
+// A Reader that outputs the records from a TensorFlow Records file.
+//
+// Arguments:
+// * opts:
+//   .WithAttr("container", StringPiece): Defaults to "".
+//     If non-empty, this reader is placed in the given container.
+// Otherwise, a default container is used.
+//   .WithAttr("shared_name", StringPiece): Defaults to "".
+//     If non-empty, this reader is named in the given bucket
+// with this shared_name. Otherwise, the node name is used instead.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The handle to reference the Reader.
+@Namespace("tensorflow::ops") public static native Node TFRecordReader(@Const @ByRef GraphDefBuilder.Options opts);
+
+// A Reader that outputs the lines of a file delimited by '\n'.
+//
+// Arguments:
+// * opts:
+//   .WithAttr("skip_header_lines", int64): Defaults to 0.
+//     Number of lines to skip from the beginning of every file.
+//   .WithAttr("container", StringPiece): Defaults to "".
+//     If non-empty, this reader is placed in the given container.
+// Otherwise, a default container is used.
+//   .WithAttr("shared_name", StringPiece): Defaults to "".
+//     If non-empty, this reader is named in the given bucket
+// with this shared_name. Otherwise, the node name is used instead.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The handle to reference the Reader.
+@Namespace("tensorflow::ops") public static native Node TextLineReader(@Const @ByRef GraphDefBuilder.Options opts);
+
+// A Reader that outputs the entire contents of a file as a value.
+//
+// To use, enqueue filenames in a Queue.  The output of ReaderRead will
+// be a filename (key) and the contents of that file (value).
+//
+// Arguments:
+// * opts:
+//   .WithAttr("container", StringPiece): Defaults to "".
+//     If non-empty, this reader is placed in the given container.
+// Otherwise, a default container is used.
+//   .WithAttr("shared_name", StringPiece): Defaults to "".
+//     If non-empty, this reader is named in the given bucket
+// with this shared_name. Otherwise, the node name is used instead.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The handle to reference the Reader.
+@Namespace("tensorflow::ops") public static native Node WholeFileReader(@Const @ByRef GraphDefBuilder.Options opts);
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_IO_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/linalg_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_LINALG_OPS_H_
+// #define TENSORFLOW_CC_OPS_LINALG_OPS_H_
+
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/graph/graph_def_builder.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/public/tensor.h"
+// #include "tensorflow/core/public/tensor_shape.h"
+
+// These add a node to the graph from opts.
+//
+// Note for "NodeOut" inputs, you will typically either pass
+// * a {Node*, int index} (to pass the index-th output of that node), or
+// * a Node* (to pass the first output of that node).
+
+
+// Calculates the Cholesky decomposition of a batch of square matrices.
+//
+// The input is a tensor of shape `[..., M, M]` whose inner-most 2 dimensions
+// form square matrices, with the same constraints as the single matrix Cholesky
+// decomposition above. The output is a tensor of the same shape as the input
+// containing the Cholesky decompositions for all input submatrices `[..., :, :]`.
+//
+// Arguments:
+// * input: Shape is `[..., M, M]`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Shape is `[..., M, M]`.
+@Namespace("tensorflow::ops") public static native Node BatchCholesky(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node BatchCholesky(Node input, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Calculates the determinants for a batch of square matrices.
+//
+// The input is a tensor of shape `[..., M, M]` whose inner-most 2 dimensions
+// form square matrices. The output is a 1-D tensor containing the determinants
+// for all input submatrices `[..., :, :]`.
+//
+// Arguments:
+// * input: Shape is `[..., M, M]`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Shape is `[...]`.
+@Namespace("tensorflow::ops") public static native Node BatchMatrixDeterminant(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node BatchMatrixDeterminant(Node input, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Calculates the inverse of square invertible matrices.
+//
+// The input is a tensor of shape `[..., M, M]` whose inner-most 2 dimensions
+// form square matrices. The output is a tensor of the same shape as the input
+// containing the inverse for all input submatrices `[..., :, :]`.
+//
+// The op uses the Cholesky decomposition if the matrices are symmetric positive
+// definite and LU decomposition with partial pivoting otherwise.
+//
+// If a matrix is not invertible there is no guarantee what the op does. It
+// may detect the condition and raise an exception or it may simply return a
+// garbage result.
+//
+// Arguments:
+// * input: Shape is `[..., M, M]`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Shape is `[..., M, M]`.
+@Namespace("tensorflow::ops") public static native Node BatchMatrixInverse(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node BatchMatrixInverse(Node input, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Calculates the Cholesky decomposition of a square matrix.
+//
+// The input has to be symmetric and positive definite. Only the lower-triangular
+// part of the input will be used for this operation. The upper-triangular part
+// will not be read.
+//
+// The result is the lower-triangular matrix of the Cholesky decomposition of the
+// input.
+//
+// Arguments:
+// * input: Shape is `[M, M]`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Shape is `[M, M]`.
+@Namespace("tensorflow::ops") public static native Node Cholesky(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Cholesky(Node input, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Calculates the determinant of a square matrix.
+//
+// Arguments:
+// * input: A tensor of shape `[M, M]`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// A scalar, equal to the determinant of the input.
+@Namespace("tensorflow::ops") public static native Node MatrixDeterminant(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MatrixDeterminant(Node input, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Calculates the inverse of a square invertible matrix.
+//
+// The op uses the Cholesky decomposition if the matrix is symmetric positive
+// definite and LU decomposition with partial pivoting otherwise.
+//
+// If the matrix is not invertible there is no guarantee what the op does. It
+// may detect the condition and raise an exception or it may simply return a
+// garbage result.
+//
+// Arguments:
+// * input: Shape is `[M, M]`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Shape is `[M, M]` containing the matrix inverse of the input.
+@Namespace("tensorflow::ops") public static native Node MatrixInverse(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MatrixInverse(Node input, @Const @ByRef GraphDefBuilder.Options opts);
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_LINALG_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/logging_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_LOGGING_OPS_H_
+// #define TENSORFLOW_CC_OPS_LOGGING_OPS_H_
+
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/graph/graph_def_builder.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/public/tensor.h"
+// #include "tensorflow/core/public/tensor_shape.h"
+
+// These add a node to the graph from opts.
+//
+// Note for "NodeOut" inputs, you will typically either pass
+// * a {Node*, int index} (to pass the index-th output of that node), or
+// * a Node* (to pass the first output of that node).
+
+
+// Asserts that the given condition is true.
+//
+// If `condition` evaluates to false, print the list of tensors in `data`.
+// `summarize` determines how many entries of the tensors to print.
+//
+// Arguments:
+// * condition: The condition to evaluate.
+// * data: The tensors to print out when condition is false.
+// * opts:
+//   .WithAttr("summarize", int64): Defaults to 3.
+//     Print this many entries of each tensor.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Assert(@ByVal NodeBuilder.NodeOut condition, @ByVal NodeOutVector data, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Assert(Node condition, @ByVal NodeOutVector data, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Prints a list of tensors.
+//
+// Passes `input` through to `output` and prints `data` when evaluating.
+//
+// Arguments:
+// * input: The tensor passed to `output`
+// * data: A list of tensors to print out when op is evaluated.
+// * opts:
+//   .WithAttr("message", StringPiece): Defaults to "".
+//     A string, prefix of the error message.
+//   .WithAttr("first_n", int64): Defaults to -1.
+//     Only log `first_n` number of times. -1 disables logging.
+//   .WithAttr("summarize", int64): Defaults to 3.
+//     Only print this many entries of each tensor.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The unmodified `input` tensor
+@Namespace("tensorflow::ops") public static native Node Print(@ByVal NodeBuilder.NodeOut input, @ByVal NodeOutVector data, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Print(Node input, @ByVal NodeOutVector data, @Const @ByRef GraphDefBuilder.Options opts);
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_LOGGING_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/math_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_MATH_OPS_H_
+// #define TENSORFLOW_CC_OPS_MATH_OPS_H_
+
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/graph/graph_def_builder.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/public/tensor.h"
+// #include "tensorflow/core/public/tensor_shape.h"
+
+// These add a node to the graph from opts.
+//
+// Note for "NodeOut" inputs, you will typically either pass
+// * a {Node*, int index} (to pass the index-th output of that node), or
+// * a Node* (to pass the first output of that node).
+
+
+// Computes the absolute value of a tensor.
+//
+// Given a tensor `x`, this operation returns a tensor containing the absolute
+// value of each element in `x`. For example, if x is an input element and y is
+// an output element, this operation computes \\(y = |x|\\).
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Abs(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Abs(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns x + y element-wise.
+//
+// *NOTE*: Add supports broadcasting. AddN does not.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Add(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Add(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Add all input tensors element wise.
+//
+// Arguments:
+// * inputs: Must all be the same size and shape.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node AddN(@ByVal NodeOutVector inputs, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the "logical and" of elements across dimensions of a tensor.
+//
+// Reduces `input` along the dimensions given in `reduction_indices`. Unless
+// `keep_dims` is true, the rank of the tensor is reduced by 1 for each entry in
+// `reduction_indices`. If `keep_dims` is true, the reduced dimensions are
+// retained with length 1.
+//
+// Arguments:
+// * input: The tensor to reduce.
+// * reduction_indices: The dimensions to reduce.
+// * opts:
+//   .WithAttr("keep_dims", bool): Defaults to false.
+//     If true, retain reduced dimensions with length 1.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The reduced tensor.
+@Namespace("tensorflow::ops") public static native Node All(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut reduction_indices, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node All(Node input, Node reduction_indices, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the "logical or" of elements across dimensions of a tensor.
+//
+// Reduces `input` along the dimensions given in `reduction_indices`. Unless
+// `keep_dims` is true, the rank of the tensor is reduced by 1 for each entry in
+// `reduction_indices`. If `keep_dims` is true, the reduced dimensions are
+// retained with length 1.
+//
+// Arguments:
+// * input: The tensor to reduce.
+// * reduction_indices: The dimensions to reduce.
+// * opts:
+//   .WithAttr("keep_dims", bool): Defaults to false.
+//     If true, retain reduced dimensions with length 1.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The reduced tensor.
+@Namespace("tensorflow::ops") public static native Node Any(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut reduction_indices, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Any(Node input, Node reduction_indices, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the index with the largest value across dimensions of a tensor.
+//
+// Arguments:
+// * dimension: int32, 0 <= dimension < rank(input).  Describes which dimension
+// of the input Tensor to reduce across. For vectors, use dimension = 0.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node ArgMax(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut dimension, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ArgMax(Node input, Node dimension, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the index with the smallest value across dimensions of a tensor.
+//
+// Arguments:
+// * dimension: int32, 0 <= dimension < rank(input).  Describes which dimension
+// of the input Tensor to reduce across. For vectors, use dimension = 0.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node ArgMin(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut dimension, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ArgMin(Node input, Node dimension, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Multiplies slices of two tensors in batches.
+//
+// Multiplies all slices of `Tensor` `x` and `y` (each slice can be
+// viewed as an element of a batch), and arranges the individual results
+// in a single output tensor of the same batch size. Each of the
+// individual slices can optionally be adjointed (to adjoint a matrix
+// means to transpose and conjugate it) before multiplication by setting
+// the `adj_x` or `adj_y` flag to `True`, which are by default `False`.
+//
+// The input tensors `x` and `y` are 3-D or higher with shape `[..., r_x, c_x]`
+// and `[..., r_y, c_y]`.
+//
+// The output tensor is 3-D or higher with shape `[..., r_o, c_o]`, where:
+//
+//     r_o = c_x if adj_x else r_x
+//     c_o = r_y if adj_y else c_y
+//
+// It is computed as:
+//
+//     out[..., :, :] = matrix(x[..., :, :]) * matrix(y[..., :, :])
+//
+// Arguments:
+// * x: 3-D or higher with shape `[..., r_x, c_x]`.
+// * y: 3-D or higher with shape `[..., r_y, c_y]`.
+// * opts:
+//   .WithAttr("adj_x", bool): Defaults to false.
+//     If `True`, adjoint the slices of `x`. Defaults to `False`.
+//   .WithAttr("adj_y", bool): Defaults to false.
+//     If `True`, adjoint the slices of `y`. Defaults to `False`.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// 3-D or higher with shape `[..., r_o, c_o]`
+@Namespace("tensorflow::ops") public static native Node BatchMatMul(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node BatchMatMul(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Cast x of type SrcT to y of DstT.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Cast(@ByVal NodeBuilder.NodeOut x, @Cast("tensorflow::DataType") int DstT, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Cast(Node x, @Cast("tensorflow::DataType") int DstT, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns element-wise smallest integer in not less than x.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Ceil(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Ceil(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Converts two real numbers to a complex number.
+//
+// Given a tensor `real` representing the real part of a complex number, and a
+// tensor `imag` representing the imaginary part of a complex number, this
+// operation returns complex numbers elementwise of the form \\(a + bj\\), where
+// *a* represents the `real` part and *b* represents the `imag` part.
+//
+// The input tensors `real` and `imag` must have the same shape.
+//
+// For example:
+//
+// ```
+// # tensor 'real' is [2.25, 3.25]
+// # tensor `imag` is [4.75, 5.75]
+// tf.complex(real, imag) ==> [[2.25 + 4.75j], [3.25 + 5.75j]]
+// ```
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Complex(@ByVal NodeBuilder.NodeOut real, @ByVal NodeBuilder.NodeOut imag, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Complex(Node real, Node imag, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the complex absolute value of a tensor.
+//
+// Given a tensor `x` of complex numbers, this operation returns a tensor of type
+// `float` that is the absolute value of each element in `x`. All elements in `x`
+// must be complex numbers of the form \\(a + bj\\). The absolute value is
+// computed as \\( \sqrt{a^2 + b^2}\\).
+//
+// For example:
+//
+// ```
+// # tensor 'x' is [[-2.25 + 4.75j], [-3.25 + 5.75j]]
+// tf.complex_abs(x) ==> [5.25594902, 6.60492229]
+// ```
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node ComplexAbs(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ComplexAbs(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the complex conjugate of a complex number.
+//
+// Given a tensor `in` of complex numbers, this operation returns a tensor of
+// complex numbers that are the complex conjugate of each element in `in`. The
+// complex numbers in `in` must be of the form \\(a + bj\\), where *a* is the real
+// part and *b* is the imaginary part.
+//
+// The complex conjugate returned by this operation is of the form \\(a - bj\\).
+//
+// For example:
+//
+// ```
+// # tensor 'in' is [-2.25 + 4.75j, 3.25 + 5.75j]
+// tf.conj(in) ==> [-2.25 - 4.75j, 3.25 - 5.75j]
+// ```
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Conj(@ByVal NodeBuilder.NodeOut in, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Conj(Node in, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes cos of x element-wise.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Cos(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Cos(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns x / y element-wise.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Div(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Div(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the truth value of (x == y) element-wise.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Equal(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Equal(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes exponential of x element-wise.  \\(y = e^x\\).
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Exp(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Exp(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns element-wise largest integer not greater than x.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Floor(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Floor(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the truth value of (x > y) element-wise.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Greater(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Greater(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the truth value of (x >= y) element-wise.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node GreaterEqual(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node GreaterEqual(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the imaginary part of a complex number.
+//
+// Given a tensor `in` of complex numbers, this operation returns a tensor of type
+// `float` that is the imaginary part of each element in `in`. All elements in `in`
+// must be complex numbers of the form \\(a + bj\\), where *a* is the real part
+// and *b* is the imaginary part returned by this operation.
+//
+// For example:
+//
+// ```
+// # tensor 'in' is [-2.25 + 4.75j, 3.25 + 5.75j]
+// tf.imag(in) ==> [4.75, 5.75]
+// ```
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Imag(@ByVal NodeBuilder.NodeOut in, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Imag(Node in, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the reciprocal of x element-wise.
+//
+// I.e., \\(y = 1 / x\\).
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Inv(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Inv(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns which elements of x are finite.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node IsFinite(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node IsFinite(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns which elements of x are Inf.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node IsInf(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node IsInf(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns which elements of x are NaN.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node IsNan(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node IsNan(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the truth value of (x < y) element-wise.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Less(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Less(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the truth value of (x <= y) element-wise.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node LessEqual(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node LessEqual(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Generates values in an interval.
+//
+// A sequence of `num` evenly-spaced values are generated beginning at `start`.
+// If `num > 1`, the values in the sequence increase by `stop - start / num - 1`,
+// so that the last one is exactly `stop`.
+//
+// For example:
+//
+// ```
+// tf.linspace(10.0, 12.0, 3, name="linspace") => [ 10.0  11.0  12.0]
+// ```
+//
+// Arguments:
+// * start: First entry in the range.
+// * stop: Last entry in the range.
+// * num: Number of values to generate.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// 1-D. The generated values.
+@Namespace("tensorflow::ops") public static native Node LinSpace(@ByVal NodeBuilder.NodeOut start, @ByVal NodeBuilder.NodeOut stop, @ByVal NodeBuilder.NodeOut num, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node LinSpace(Node start, Node stop, Node num, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes natural logrithm of x element-wise.
+//
+// I.e., \\(y = \log_e x\\).
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Log(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Log(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the truth value of x AND y element-wise.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node LogicalAnd(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node LogicalAnd(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the truth value of NOT x element-wise.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node LogicalNot(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node LogicalNot(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the truth value of x OR y element-wise.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node LogicalOr(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node LogicalOr(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Multiply the matrix "a" by the matrix "b".
+//
+// The inputs must be two-dimensional matrices and the inner dimension of
+// "a" (after being transposed if transpose_a is true) must match the
+// outer dimension of "b" (after being transposed if transposed_b is
+// true).
+//
+// *Note*: The default kernel implementation for MatMul on GPUs uses
+// cublas.
+//
+// Arguments:
+// * opts:
+//   .WithAttr("transpose_a", bool): Defaults to false.
+//     If true, "a" is transposed before multiplication.
+//   .WithAttr("transpose_b", bool): Defaults to false.
+//     If true, "b" is transposed before multiplication.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node MatMul(@ByVal NodeBuilder.NodeOut a, @ByVal NodeBuilder.NodeOut b, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MatMul(Node a, Node b, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the maximum of elements across dimensions of a tensor.
+//
+// Reduces `input` along the dimensions given in `reduction_indices`. Unless
+// `keep_dims` is true, the rank of the tensor is reduced by 1 for each entry in
+// `reduction_indices`. If `keep_dims` is true, the reduced dimensions are
+// retained with length 1.
+//
+// Arguments:
+// * input: The tensor to reduce.
+// * reduction_indices: The dimensions to reduce.
+// * opts:
+//   .WithAttr("keep_dims", bool): Defaults to false.
+//     If true, retain reduced dimensions with length 1.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The reduced tensor.
+@Namespace("tensorflow::ops") public static native Node Max(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut reduction_indices, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Max(Node input, Node reduction_indices, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the max of x and y (i.e. x > y ? x : y) element-wise, broadcasts.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Maximum(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Maximum(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the mean of elements across dimensions of a tensor.
+//
+// Reduces `input` along the dimensions given in `reduction_indices`. Unless
+// `keep_dims` is true, the rank of the tensor is reduced by 1 for each entry in
+// `reduction_indices`. If `keep_dims` is true, the reduced dimensions are
+// retained with length 1.
+//
+// Arguments:
+// * input: The tensor to reduce.
+// * reduction_indices: The dimensions to reduce.
+// * opts:
+//   .WithAttr("keep_dims", bool): Defaults to false.
+//     If true, retain reduced dimensions with length 1.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The reduced tensor.
+@Namespace("tensorflow::ops") public static native Node Mean(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut reduction_indices, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Mean(Node input, Node reduction_indices, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the minimum of elements across dimensions of a tensor.
+//
+// Reduces `input` along the dimensions given in `reduction_indices`. Unless
+// `keep_dims` is true, the rank of the tensor is reduced by 1 for each entry in
+// `reduction_indices`. If `keep_dims` is true, the reduced dimensions are
+// retained with length 1.
+//
+// Arguments:
+// * input: The tensor to reduce.
+// * reduction_indices: The dimensions to reduce.
+// * opts:
+//   .WithAttr("keep_dims", bool): Defaults to false.
+//     If true, retain reduced dimensions with length 1.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The reduced tensor.
+@Namespace("tensorflow::ops") public static native Node Min(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut reduction_indices, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Min(Node input, Node reduction_indices, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the min of x and y (i.e. x < y ? x : y) element-wise, broadcasts.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Minimum(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Minimum(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns element-wise remainder of division.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Mod(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Mod(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns x * y element-wise.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Mul(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Mul(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes numerical negative value element-wise.
+//
+// I.e., \\(y = -x\\).
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Neg(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Neg(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the truth value of (x != y) element-wise.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node NotEqual(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node NotEqual(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the power of one value to another.
+//
+// Given a tensor `x` and a tensor `y`, this operation computes \\(x^y\\) for
+// corresponding elements in `x` and `y`. For example:
+//
+// ```
+// # tensor 'x' is [[2, 2]], [3, 3]]
+// # tensor 'y' is [[8, 16], [2, 3]]
+// tf.pow(x, y) ==> [[256, 65536], [9, 27]]
+// ```
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Pow(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Pow(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the product of elements across dimensions of a tensor.
+//
+// Reduces `input` along the dimensions given in `reduction_indices`. Unless
+// `keep_dims` is true, the rank of the tensor is reduced by 1 for each entry in
+// `reduction_indices`. If `keep_dims` is true, the reduced dimensions are
+// retained with length 1.
+//
+// Arguments:
+// * input: The tensor to reduce.
+// * reduction_indices: The dimensions to reduce.
+// * opts:
+//   .WithAttr("keep_dims", bool): Defaults to false.
+//     If true, retain reduced dimensions with length 1.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The reduced tensor.
+@Namespace("tensorflow::ops") public static native Node Prod(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut reduction_indices, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Prod(Node input, Node reduction_indices, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Creates a sequence of integers.
+//
+// This operation creates a sequence of integers that begins at `start` and
+// extends by increments of `delta` up to but not including `limit`.
+//
+// For example:
+//
+// ```
+// # 'start' is 3
+// # 'limit' is 18
+// # 'delta' is 3
+// tf.range(start, limit, delta) ==> [3, 6, 9, 12, 15]
+// ```
+//
+// Arguments:
+// * start: 0-D (scalar). First entry in the sequence.
+// * limit: 0-D (scalar). Upper limit of sequence, exclusive.
+// * delta: 0-D (scalar). Optional. Default is 1. Number that increments `start`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// 1-D.
+@Namespace("tensorflow::ops") public static native Node Range(@ByVal NodeBuilder.NodeOut start, @ByVal NodeBuilder.NodeOut limit, @ByVal NodeBuilder.NodeOut delta, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Range(Node start, Node limit, Node delta, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the real part of a complex number.
+//
+// Given a tensor `in` of complex numbers, this operation returns a tensor of type
+// `float` that is the real part of each element in `in`. All elements in `in`
+// must be complex numbers of the form \\(a + bj\\), where *a* is the real part
+// returned by this operation and *b* is the imaginary part.
+//
+// For example:
+//
+// ```
+// # tensor 'in' is [-2.25 + 4.75j, 3.25 + 5.75j]
+// tf.real(in) ==> [-2.25, 3.25]
+// ```
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Real(@ByVal NodeBuilder.NodeOut in, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Real(Node in, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes reciprocal of square root of x element-wise.
+//
+// I.e., \\(y = 1 / \sqrt{x}\\).
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Rsqrt(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Rsqrt(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the maximum along segments of a tensor.
+//
+// Read [the section on Segmentation](../../api_docs/python/math_ops.md#segmentation)
+// for an explanation of segments.
+//
+// Computes a tensor such that
+// \\(output_i = \max_j(data_j)\\) where `max` is over `j` such
+// that `segment_ids[j] == i`.
+//
+// <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+// <img style="width:100%" src="../images/SegmentMax.png" alt>
+// </div>
+//
+// Arguments:
+// * segment_ids: A 1-D tensor whose rank is equal to the rank of `data`'s
+// first dimension.  Values should be sorted and can be repeated.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Has same shape as data, except for dimension 0 which
+// has size `k`, the number of segments.
+@Namespace("tensorflow::ops") public static native Node SegmentMax(@ByVal NodeBuilder.NodeOut data, @ByVal NodeBuilder.NodeOut segment_ids, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SegmentMax(Node data, Node segment_ids, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the mean along segments of a tensor.
+//
+// Read [the section on
+// Segmentation](../../api_docs/python/math_ops.md#segmentation) for an explanation
+// of segments.
+//
+// Computes a tensor such that
+// \\(output_i = \frac{\sum_j data_j}{N}\\) where `mean` is
+// over `j` such that `segment_ids[j] == i` and `N` is the total number of
+// values summed.
+//
+// <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+// <img style="width:100%" src="../images/SegmentMean.png" alt>
+// </div>
+//
+// Arguments:
+// * segment_ids: A 1-D tensor whose rank is equal to the rank of `data`'s
+// first dimension.  Values should be sorted and can be repeated.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Has same shape as data, except for dimension 0 which
+// has size `k`, the number of segments.
+@Namespace("tensorflow::ops") public static native Node SegmentMean(@ByVal NodeBuilder.NodeOut data, @ByVal NodeBuilder.NodeOut segment_ids, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SegmentMean(Node data, Node segment_ids, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the minimum along segments of a tensor.
+//
+// Read [the section on
+// Segmentation](../../api_docs/python/math_ops.md#segmentation) for an explanation
+// of segments.
+//
+// Computes a tensor such that
+// \\(output_i = \min_j(data_j)\\) where `min` is over `j` such
+// that `segment_ids[j] == i`.
+//
+// <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+// <img style="width:100%" src="../images/SegmentMin.png" alt>
+// </div>
+//
+// Arguments:
+// * segment_ids: A 1-D tensor whose rank is equal to the rank of `data`'s
+// first dimension.  Values should be sorted and can be repeated.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Has same shape as data, except for dimension 0 which
+// has size `k`, the number of segments.
+@Namespace("tensorflow::ops") public static native Node SegmentMin(@ByVal NodeBuilder.NodeOut data, @ByVal NodeBuilder.NodeOut segment_ids, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SegmentMin(Node data, Node segment_ids, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the product along segments of a tensor.
+//
+// Read [the section on
+// Segmentation](../../api_docs/python/math_ops.md#segmentation) for an explanation
+// of segments.
+//
+// Computes a tensor such that
+// \\(output_i = \prod_j data_j\\) where the product is over `j` such
+// that `segment_ids[j] == i`.
+//
+// <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+// <img style="width:100%" src="../images/SegmentProd.png" alt>
+// </div>
+//
+// Arguments:
+// * segment_ids: A 1-D tensor whose rank is equal to the rank of `data`'s
+// first dimension.  Values should be sorted and can be repeated.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Has same shape as data, except for dimension 0 which
+// has size `k`, the number of segments.
+@Namespace("tensorflow::ops") public static native Node SegmentProd(@ByVal NodeBuilder.NodeOut data, @ByVal NodeBuilder.NodeOut segment_ids, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SegmentProd(Node data, Node segment_ids, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the sum along segments of a tensor.
+//
+// Read [the section on Segmentation](../../api_docs/python/math_ops.md#segmentation)
+// for an explanation of segments.
+//
+// Computes a tensor such that
+// \\(output_i = \sum_j data_j\\) where sum is over `j` such
+// that `segment_ids[j] == i`.
+//
+// <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+// <img style="width:100%" src="../images/SegmentSum.png" alt>
+// </div>
+//
+// Arguments:
+// * segment_ids: A 1-D tensor whose rank is equal to the rank of `data`'s
+// first dimension.  Values should be sorted and can be repeated.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Has same shape as data, except for dimension 0 which
+// has size `k`, the number of segments.
+@Namespace("tensorflow::ops") public static native Node SegmentSum(@ByVal NodeBuilder.NodeOut data, @ByVal NodeBuilder.NodeOut segment_ids, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SegmentSum(Node data, Node segment_ids, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Selects elements from `t` or `e`, depending on `condition`.
+//
+// The `condition`, `t`, and `e` tensors must all have the same shape,
+// and the output will also have that shape. The `condition` tensor acts
+// as an element-wise mask that chooses, based on the value at each
+// element, whether the corresponding element in the output should be
+// taken from `t` (if true) or `e` (if false). For example:
+//
+// For example:
+//
+// ```prettyprint
+// # 'condition' tensor is [[True, False]
+// #                        [True, False]]
+// # 't' is [[1, 1],
+// #         [1, 1]]
+// # 'e' is [[2, 2],
+// #         [2, 2]]
+// select(condition, t, e) ==> [[1, 2],
+//                              [1, 2]]
+// ```
+//
+// Arguments:
+// * t: = A `Tensor` with the same shape as `condition`.
+// * e: = A `Tensor` with the same type and shape as `t`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// A `Tensor` with the same type and shape as `t` and `e`.
+@Namespace("tensorflow::ops") public static native Node Select(@ByVal NodeBuilder.NodeOut condition, @ByVal NodeBuilder.NodeOut t, @ByVal NodeBuilder.NodeOut e, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Select(Node condition, Node t, Node e, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes sigmoid of `x` element-wise.
+//
+// Specifically, `y = 1 / (1 + exp(-x))`.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Sigmoid(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Sigmoid(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns an element-wise indication of the sign of a number.
+//
+// y = sign(x) = -1 if x < 0; 0 if x == 0; 1 if x > 0.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Sign(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Sign(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes sin of x element-wise.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Sin(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Sin(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Multiply matrix "a" by matrix "b".
+//
+// The inputs must be two-dimensional matrices and the inner dimension of "a" must
+// match the outer dimension of "b". This op is optimized for the case where at
+// least one of "a" or "b" is sparse. The breakeven for using this versus a dense
+// matrix multiply on one platform was 30% zero values in the sparse matrix.
+//
+// Arguments:
+// * opts:
+//   .WithAttr("transpose_a", bool): Defaults to false.
+//   .WithAttr("transpose_b", bool): Defaults to false.
+//   .WithAttr("a_is_sparse", bool): Defaults to false.
+//   .WithAttr("b_is_sparse", bool): Defaults to false.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node SparseMatMul(@ByVal NodeBuilder.NodeOut a, @ByVal NodeBuilder.NodeOut b, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SparseMatMul(Node a, Node b, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the mean along sparse segments of a tensor.
+//
+// Read [the section on
+// Segmentation](../../api_docs/python/math_ops.md#segmentation) for an explanation
+// of segments.
+//
+// Like `SegmentMean`, but `segment_ids` can have rank less than `data`'s first
+// dimension, selecting a subset of dimension 0, specified by `indices`.
+//
+// Arguments:
+// * indices: A 1-D tensor. Has same rank as `segment_ids`.
+// * segment_ids: A 1-D tensor. Values should be sorted and can be repeated.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Has same shape as data, except for dimension 0 which
+// has size `k`, the number of segments.
+@Namespace("tensorflow::ops") public static native Node SparseSegmentMean(@ByVal NodeBuilder.NodeOut data, @ByVal NodeBuilder.NodeOut indices, @ByVal NodeBuilder.NodeOut segment_ids,
+                        @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SparseSegmentMean(Node data, Node indices, Node segment_ids,
+                        @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes gradients for SparseSegmentMean.
+//
+// Returns tensor "output" with same shape as grad, except for dimension 0 whose
+// value is output_dim0.
+//
+// Arguments:
+// * grad: gradient propagated to the SparseSegmentMean op.
+// * indices: indices passed to the corresponding SparseSegmentMean op.
+// * segment_ids: segment_ids passed to the corresponding SparseSegmentMean op.
+// * output_dim0: dimension 0 of "data" passed to SparseSegmentMean op.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node SparseSegmentMeanGrad(@ByVal NodeBuilder.NodeOut grad, @ByVal NodeBuilder.NodeOut indices, @ByVal NodeBuilder.NodeOut segment_ids,
+                            @ByVal NodeBuilder.NodeOut output_dim0, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SparseSegmentMeanGrad(Node grad, Node indices, Node segment_ids,
+                            Node output_dim0, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the sum along sparse segments of a tensor.
+//
+// Read [the section on
+// Segmentation](../../api_docs/python/math_ops.md#segmentation) for an explanation
+// of segments.
+//
+// Like `SegmentSum`, but `segment_ids` can have rank less than `data`'s first
+// dimension, selecting a subset of dimension 0, specified by `indices`.
+//
+// For example:
+//
+// ```prettyprint
+// c = tf.constant([[1,2,3,4], [-1,-2,-3,-4], [5,6,7,8]])
+//
+// # Select two rows, one segment.
+// tf.sparse_segment_sum(c, tf.constant([0, 1]), tf.constant([0, 0]))
+//   ==> [[0 0 0 0]]
+//
+// # Select two rows, two segment.
+// tf.sparse_segment_sum(c, tf.constant([0, 1]), tf.constant([0, 1]))
+//   ==> [[ 1  2  3  4]
+//        [-1 -2 -3 -4]]
+//
+// # Select all rows, two segments.
+// tf.sparse_segment_sum(c, tf.constant([0, 1, 2]), tf.constant([0, 0, 1]))
+//   ==> [[0 0 0 0]
+//        [5 6 7 8]]
+//
+// # Which is equivalent to:
+// tf.segment_sum(c, tf.constant([0, 0, 1]))
+// ```
+//
+// Arguments:
+// * indices: A 1-D tensor. Has same rank as `segment_ids`.
+// * segment_ids: A 1-D tensor. Values should be sorted and can be repeated.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Has same shape as data, except for dimension 0 which
+// has size `k`, the number of segments.
+@Namespace("tensorflow::ops") public static native Node SparseSegmentSum(@ByVal NodeBuilder.NodeOut data, @ByVal NodeBuilder.NodeOut indices, @ByVal NodeBuilder.NodeOut segment_ids,
+                       @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SparseSegmentSum(Node data, Node indices, Node segment_ids,
+                       @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes square root of x element-wise.
+//
+// I.e., \\(y = \sqrt{x} = x^{1/2}\\).
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Sqrt(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Sqrt(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes square of x element-wise.
+//
+// I.e., \\(y = x * x = x^2\\).
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Square(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Square(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns x - y element-wise.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Sub(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Sub(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the sum of elements across dimensions of a tensor.
+//
+// Reduces `input` along the dimensions given in `reduction_indices`. Unless
+// `keep_dims` is true, the rank of the tensor is reduced by 1 for each entry in
+// `reduction_indices`. If `keep_dims` is true, the reduced dimensions are
+// retained with length 1.
+//
+// Arguments:
+// * input: The tensor to reduce.
+// * reduction_indices: The dimensions to reduce.
+// * opts:
+//   .WithAttr("keep_dims", bool): Defaults to false.
+//     If true, retain reduced dimensions with length 1.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The reduced tensor.
+@Namespace("tensorflow::ops") public static native Node Sum(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut reduction_indices, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Sum(Node input, Node reduction_indices, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes hyperbolic tangent of `x` element-wise.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Tanh(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Tanh(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the sum along segments of a tensor.
+//
+// Read [the section on
+// Segmentation](../../api_docs/python/math_ops.md#segmentation) for an explanation
+// of segments.
+//
+// Computes a tensor such that
+// \\(output_i = \sum_j data_j\\) where sum is over `j` such
+// that `segment_ids[j] == i`. Unlike `SegmentSum`, `segment_ids`
+// need not be sorted and need not cover all values in the full
+//   range of valid values.
+//
+// If the sum is empty for a given segment ID `i`, `output[i] = 0`.
+//
+// `num_segments` should equal the number of distinct segment IDs.
+//
+// <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+// <img style="width:100%" src="../images/UnsortedSegmentSum.png" alt>
+// </div>
+//
+// Arguments:
+// * segment_ids: A 1-D tensor whose rank is equal to the rank of `data`'s
+// first dimension.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Has same shape as data, except for dimension 0 which
+// has size `num_segments`.
+@Namespace("tensorflow::ops") public static native Node UnsortedSegmentSum(@ByVal NodeBuilder.NodeOut data, @ByVal NodeBuilder.NodeOut segment_ids, @ByVal NodeBuilder.NodeOut num_segments, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node UnsortedSegmentSum(Node data, Node segment_ids, Node num_segments, @Const @ByRef GraphDefBuilder.Options opts);
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_MATH_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/nn_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_NN_OPS_H_
+// #define TENSORFLOW_CC_OPS_NN_OPS_H_
+
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/graph/graph_def_builder.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/public/tensor.h"
+// #include "tensorflow/core/public/tensor_shape.h"
+
+// These add a node to the graph from opts.
+//
+// Note for "NodeOut" inputs, you will typically either pass
+// * a {Node*, int index} (to pass the index-th output of that node), or
+// * a Node* (to pass the first output of that node).
+
+
+// Performs average pooling on the input.
+//
+// Each entry in `output` is the mean of the corresponding size `ksize`
+// window in `value`.
+//
+// Arguments:
+// * value: 4-D with shape `[batch, height, width, channels]`.
+// * ksize: The size of the sliding window for each dimension of `value`.
+// * strides: The stride of the sliding window for each dimension of `value`.
+// * padding: The type of padding algorithm to use.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The average pooled output tensor.
+@Namespace("tensorflow::ops") public static native Node AvgPool(@ByVal NodeBuilder.NodeOut value, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides, @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node AvgPool(Node value, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides, @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node AvgPool(@ByVal NodeBuilder.NodeOut value, @ArraySlice int[] ksize, @ArraySlice int[] strides, @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node AvgPool(Node value, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides, @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node AvgPool(@ByVal NodeBuilder.NodeOut value, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides, @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node AvgPool(Node value, @ArraySlice int[] ksize, @ArraySlice int[] strides, @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes gradients of the average pooling function.
+//
+// Arguments:
+// * orig_input_shape: 1-D.  Shape of the original input to `avg_pool`.
+// * grad: 4-D with shape `[batch, height, width, channels]`.  Gradients w.r.t.
+// the output of `avg_pool`.
+// * ksize: The size of the sliding window for each dimension of the input.
+// * strides: The stride of the sliding window for each dimension of the input.
+// * padding: The type of padding algorithm to use.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// 4-D.  Gradients w.r.t. the input of `avg_pool`.
+@Namespace("tensorflow::ops") public static native Node AvgPoolGrad(@ByVal NodeBuilder.NodeOut orig_input_shape, @ByVal NodeBuilder.NodeOut grad, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides, @StringPiece BytePointer padding,
+                  @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node AvgPoolGrad(Node orig_input_shape, Node grad, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides, @StringPiece String padding,
+                  @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node AvgPoolGrad(@ByVal NodeBuilder.NodeOut orig_input_shape, @ByVal NodeBuilder.NodeOut grad, @ArraySlice int[] ksize, @ArraySlice int[] strides, @StringPiece BytePointer padding,
+                  @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node AvgPoolGrad(Node orig_input_shape, Node grad, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides, @StringPiece String padding,
+                  @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node AvgPoolGrad(@ByVal NodeBuilder.NodeOut orig_input_shape, @ByVal NodeBuilder.NodeOut grad, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides, @StringPiece BytePointer padding,
+                  @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node AvgPoolGrad(Node orig_input_shape, Node grad, @ArraySlice int[] ksize, @ArraySlice int[] strides, @StringPiece String padding,
+                  @Const @ByRef GraphDefBuilder.Options opts);
+
+// Batch normalization.
+//
+// Arguments:
+// * t: A 4D input Tensor.
+// * m: A 1D mean Tensor with size matching the last dimension of t.
+// This is the first output from tf.nn.moments,
+// or a saved moving average thereof.
+// * v: A 1D variance Tensor with size matching the last dimension of t.
+// This is the second output from tf.nn.moments,
+// or a saved moving average thereof.
+// * beta: A 1D beta Tensor with size matching the last dimension of t.
+// An offset to be added to the normalized tensor.
+// * gamma: A 1D gamma Tensor with size matching the last dimension of t.
+// If "scale_after_normalization" is true, this tensor will be multiplied
+// with the normalized tensor.
+// * variance_epsilon: A small float number to avoid dividing by 0.
+// * scale_after_normalization: A bool indicating whether the resulted tensor
+// needs to be multiplied with gamma.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node BatchNormWithGlobalNormalization(@ByVal NodeBuilder.NodeOut t, @ByVal NodeBuilder.NodeOut m, @ByVal NodeBuilder.NodeOut v, @ByVal NodeBuilder.NodeOut beta, @ByVal NodeBuilder.NodeOut gamma, float variance_epsilon, @Cast("bool") boolean scale_after_normalization, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node BatchNormWithGlobalNormalization(Node t, Node m, Node v, Node beta, Node gamma, float variance_epsilon, @Cast("bool") boolean scale_after_normalization, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Gradients for batch normalization.
+//
+// Arguments:
+// * t: A 4D input Tensor.
+// * m: A 1D mean Tensor with size matching the last dimension of t.
+// This is the first output from tf.nn.moments,
+// or a saved moving average thereof.
+// * v: A 1D variance Tensor with size matching the last dimension of t.
+// This is the second output from tf.nn.moments,
+// or a saved moving average thereof.
+// * gamma: A 1D gamma Tensor with size matching the last dimension of t.
+// If "scale_after_normalization" is true, this Tensor will be multiplied
+// with the normalized Tensor.
+// * backprop: 4D backprop Tensor.
+// * variance_epsilon: A small float number to avoid dividing by 0.
+// * scale_after_normalization: A bool indicating whether the resulted tensor
+// needs to be multiplied with gamma.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with outputs:
+// * dx: 4D backprop tensor for input.
+// * dm: 1D backprop tensor for mean.
+// * dv: 1D backprop tensor for variance.
+// * db: 1D backprop tensor for beta.
+// * dg: 1D backprop tensor for gamma.
+@Namespace("tensorflow::ops") public static native Node BatchNormWithGlobalNormalizationGrad(@ByVal NodeBuilder.NodeOut t, @ByVal NodeBuilder.NodeOut m, @ByVal NodeBuilder.NodeOut v,
+                                           @ByVal NodeBuilder.NodeOut gamma, @ByVal NodeBuilder.NodeOut backprop,
+                                           float variance_epsilon, @Cast("bool") boolean scale_after_normalization, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node BatchNormWithGlobalNormalizationGrad(Node t, Node m, Node v,
+                                           Node gamma, Node backprop,
+                                           float variance_epsilon, @Cast("bool") boolean scale_after_normalization, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Adds `bias` to `value`.
+//
+// This is a special case of `tf.add` where `bias` is restricted to be 1-D.
+// Broadcasting is supported, so `value` may have any number of dimensions.
+//
+// Arguments:
+// * value: Any number of dimensions.
+// * bias: 1-D with size the last dimension of `value`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Broadcasted sum of `value` and `bias`.
+@Namespace("tensorflow::ops") public static native Node BiasAdd(@ByVal NodeBuilder.NodeOut value, @ByVal NodeBuilder.NodeOut bias, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node BiasAdd(Node value, Node bias, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes a 2-D convolution given 4-D `input` and `filter` tensors.
+//
+// Given an input tensor of shape `[batch, in_height, in_width, in_channels]`
+// and a filter / kernel tensor of shape
+// `[filter_height, filter_width, in_channels, out_channels]`, this op
+// performs the following:
+//
+// 1. Flattens the filter to a 2-D matrix with shape
+//    `[filter_height * filter_width * in_channels, output_channels]`.
+// 2. Extracts image patches from the the input tensor to form a *virtual*
+//    tensor of shape `[batch, out_height, out_width,
+//    filter_height * filter_width * in_channels]`.
+// 3. For each patch, right-multiplies the filter matrix and the image patch
+//    vector.
+//
+// In detail,
+//
+//     output[b, i, j, k] =
+//         sum_{di, dj, q} input[b, strides[1] * i + di, strides[2] * j + dj, q] *
+//                         filter[di, dj, q, k]
+//
+// Must have `strides[0] = strides[3] = 1`.  For the most common case of the same
+// horizontal and vertices strides, `strides = [1, stride, stride, 1]`.
+//
+// Arguments:
+// * strides: 1-D of length 4.  The stride of the sliding window for each dimension
+// of `input`.
+// * padding: The type of padding algorithm to use.
+// * opts:
+//   .WithAttr("use_cudnn_on_gpu", bool): Defaults to true.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Conv2D(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut filter, @ArraySlice IntPointer strides,
+             @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Conv2D(Node input, Node filter, @ArraySlice IntBuffer strides,
+             @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Conv2D(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut filter, @ArraySlice int[] strides,
+             @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Conv2D(Node input, Node filter, @ArraySlice IntPointer strides,
+             @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Conv2D(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut filter, @ArraySlice IntBuffer strides,
+             @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Conv2D(Node input, Node filter, @ArraySlice int[] strides,
+             @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the gradients of convolution with respect to the filter.
+//
+// Arguments:
+// * input: 4-D with shape `[batch, in_height, in_width, in_channels]`.
+// * filter_sizes: An integer vector representing the tensor shape of `filter`,
+// where `filter` is a 4-D
+// `[filter_height, filter_width, in_channels, out_channels]` tensor.
+// * out_backprop: 4-D with shape `[batch, out_height, out_width, out_channels]`.
+// Gradients w.r.t. the output of the convolution.
+// * strides: The stride of the sliding window for each dimension of the input
+// of the convolution.
+// * padding: The type of padding algorithm to use.
+// * opts:
+//   .WithAttr("use_cudnn_on_gpu", bool): Defaults to true.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// 4-D with shape
+// `[filter_height, filter_width, in_channels, out_channels]`.  Gradient w.r.t.
+// the `filter` input of the convolution.
+@Namespace("tensorflow::ops") public static native Node Conv2DBackpropFilter(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut filter_sizes, @ByVal NodeBuilder.NodeOut out_backprop, @ArraySlice IntPointer strides,
+                           @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Conv2DBackpropFilter(Node input, Node filter_sizes, Node out_backprop, @ArraySlice IntBuffer strides,
+                           @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Conv2DBackpropFilter(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut filter_sizes, @ByVal NodeBuilder.NodeOut out_backprop, @ArraySlice int[] strides,
+                           @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Conv2DBackpropFilter(Node input, Node filter_sizes, Node out_backprop, @ArraySlice IntPointer strides,
+                           @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Conv2DBackpropFilter(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut filter_sizes, @ByVal NodeBuilder.NodeOut out_backprop, @ArraySlice IntBuffer strides,
+                           @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Conv2DBackpropFilter(Node input, Node filter_sizes, Node out_backprop, @ArraySlice int[] strides,
+                           @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the gradients of convolution with respect to the input.
+//
+// Arguments:
+// * input_sizes: An integer vector representing the shape of `input`,
+// where `input` is a 4-D `[batch, height, width, channels]` tensor.
+// * filter: 4-D with shape
+// `[filter_height, filter_width, in_channels, out_channels]`.
+// * out_backprop: 4-D with shape `[batch, out_height, out_width, out_channels]`.
+// Gradients w.r.t. the output of the convolution.
+// * strides: The stride of the sliding window for each dimension of the input
+// of the convolution.
+// * padding: The type of padding algorithm to use.
+// * opts:
+//   .WithAttr("use_cudnn_on_gpu", bool): Defaults to true.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// 4-D with shape `[batch, in_height, in_width, in_channels]`.  Gradient
+// w.r.t. the input of the convolution.
+@Namespace("tensorflow::ops") public static native Node Conv2DBackpropInput(@ByVal NodeBuilder.NodeOut input_sizes, @ByVal NodeBuilder.NodeOut filter, @ByVal NodeBuilder.NodeOut out_backprop, @ArraySlice IntPointer strides,
+                          @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Conv2DBackpropInput(Node input_sizes, Node filter, Node out_backprop, @ArraySlice IntBuffer strides,
+                          @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Conv2DBackpropInput(@ByVal NodeBuilder.NodeOut input_sizes, @ByVal NodeBuilder.NodeOut filter, @ByVal NodeBuilder.NodeOut out_backprop, @ArraySlice int[] strides,
+                          @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Conv2DBackpropInput(Node input_sizes, Node filter, Node out_backprop, @ArraySlice IntPointer strides,
+                          @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Conv2DBackpropInput(@ByVal NodeBuilder.NodeOut input_sizes, @ByVal NodeBuilder.NodeOut filter, @ByVal NodeBuilder.NodeOut out_backprop, @ArraySlice IntBuffer strides,
+                          @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Conv2DBackpropInput(Node input_sizes, Node filter, Node out_backprop, @ArraySlice int[] strides,
+                          @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes exponential linear: `exp(features) - 1` if < 0, `features` otherwise.
+//
+// See [Fast and Accurate Deep Network Learning by Exponential Linear Units (ELUs)
+// ](http://arxiv.org/abs/1511.07289)
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Elu(@ByVal NodeBuilder.NodeOut features, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Elu(Node features, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes gradients for the exponential linear (Elu) operation.
+//
+// Arguments:
+// * gradients: The backpropagated gradients to the corresponding Elu operation.
+// * outputs: The outputs of the corresponding Elu operation.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The gradients: `gradients * (outputs + 1)` if outputs < 0,
+// `gradients` otherwise.
+@Namespace("tensorflow::ops") public static native Node EluGrad(@ByVal NodeBuilder.NodeOut gradients, @ByVal NodeBuilder.NodeOut outputs, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node EluGrad(Node gradients, Node outputs, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Says whether the targets are in the top `K` predictions.
+//
+// This outputs a `batch_size` bool array, an entry `out[i]` is `true` if the
+// prediction for the target class is among the top `k` predictions among
+// all predictions for example `i`. Note that the behavior of `InTopK` differs
+// from the `TopK` op in its handling of ties; if multiple classes have the
+// same prediction value and straddle the top-`k` boundary, all of those
+// classes are considered to be in the top `k`.
+//
+// More formally, let
+//
+//   \\(predictions_i\\) be the predictions for all classes for example `i`,
+//   \\(targets_i\\) be the target class for example `i`,
+//   \\(out_i\\) be the output for example `i`,
+//
+// $$out_i = predictions_{i, targets_i} \in TopKIncludingTies(predictions_i)$$
+//
+// Arguments:
+// * predictions: A `batch_size` x `classes` tensor.
+// * targets: A `batch_size` vector of class ids.
+// * k: Number of top elements to look at for computing precision.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Computed Precision at `k` as a `bool Tensor`.
+@Namespace("tensorflow::ops") public static native Node InTopK(@ByVal NodeBuilder.NodeOut predictions, @ByVal NodeBuilder.NodeOut targets, @Cast("tensorflow::int64") long k, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node InTopK(Node predictions, Node targets, @Cast("tensorflow::int64") long k, @Const @ByRef GraphDefBuilder.Options opts);
+
+// L2 Loss.
+//
+// Computes half the L2 norm of a tensor without the `sqrt`:
+//
+//     output = sum(t ** 2) / 2
+//
+// Arguments:
+// * t: Typically 2-D, but may have any dimensions.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// 0-D.
+@Namespace("tensorflow::ops") public static native Node L2Loss(@ByVal NodeBuilder.NodeOut t, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node L2Loss(Node t, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Local Response Normalization.
+//
+// The 4-D `input` tensor is treated as a 3-D array of 1-D vectors (along the last
+// dimension), and each vector is normalized independently.  Within a given vector,
+// each component is divided by the weighted, squared sum of inputs within
+// `depth_radius`.  In detail,
+//
+//     sqr_sum[a, b, c, d] =
+//         sum(input[a, b, c, d - depth_radius : d + depth_radius + 1] ** 2)
+//     output = input / (bias + alpha * sqr_sum ** beta)
+//
+// For details, see [Krizhevsky et al., ImageNet classification with deep
+// convolutional neural networks (NIPS 2012)]
+// (http://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks).
+//
+// Arguments:
+// * input: 4-D.
+// * opts:
+//   .WithAttr("depth_radius", int64): Defaults to 5.
+//     0-D.  Half-width of the 1-D normalization window.
+//   .WithAttr("bias", float): Defaults to 1.
+//     An offset (usually positive to avoid dividing by 0).
+//   .WithAttr("alpha", float): Defaults to 1.
+//     A scale factor, usually positive.
+//   .WithAttr("beta", float): Defaults to 0.5.
+//     An exponent.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node LRN(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node LRN(Node input, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Gradients for Local Response Normalization.
+//
+// Arguments:
+// * input_grads: 4-D with shape `[batch, height, width, channels]`.
+// * input_image: 4-D with shape `[batch, height, width, channels]`.
+// * output_image: 4-D with shape `[batch, height, width, channels]`.
+// * opts:
+//   .WithAttr("depth_radius", int64): Defaults to 5.
+//     A depth radius.
+//   .WithAttr("bias", float): Defaults to 1.
+//     An offset (usually > 0 to avoid dividing by 0).
+//   .WithAttr("alpha", float): Defaults to 1.
+//     A scale factor, usually positive.
+//   .WithAttr("beta", float): Defaults to 0.5.
+//     An exponent.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The gradients for LRN.
+@Namespace("tensorflow::ops") public static native Node LRNGrad(@ByVal NodeBuilder.NodeOut input_grads, @ByVal NodeBuilder.NodeOut input_image, @ByVal NodeBuilder.NodeOut output_image,
+              @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node LRNGrad(Node input_grads, Node input_image, Node output_image,
+              @Const @ByRef GraphDefBuilder.Options opts);
+
+// Performs max pooling on the input.
+//
+// Arguments:
+// * input: 4-D input to pool over.
+// * ksize: The size of the window for each dimension of the input tensor.
+// * strides: The stride of the sliding window for each dimension of the
+// input tensor.
+// * padding: The type of padding algorithm to use.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The max pooled output tensor.
+@Namespace("tensorflow::ops") public static native Node MaxPool(@ByVal NodeBuilder.NodeOut input, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides, @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MaxPool(Node input, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides, @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MaxPool(@ByVal NodeBuilder.NodeOut input, @ArraySlice int[] ksize, @ArraySlice int[] strides, @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MaxPool(Node input, @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides, @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MaxPool(@ByVal NodeBuilder.NodeOut input, @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides, @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MaxPool(Node input, @ArraySlice int[] ksize, @ArraySlice int[] strides, @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes gradients of the maxpooling function.
+//
+// Arguments:
+// * orig_input: The original input tensor.
+// * orig_output: The original output tensor.
+// * grad: 4-D.  Gradients w.r.t. the output of `max_pool`.
+// * ksize: The size of the window for each dimension of the input tensor.
+// * strides: The stride of the sliding window for each dimension of the
+// input tensor.
+// * padding: The type of padding algorithm to use.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Gradients w.r.t. the input to `max_pool`.
+@Namespace("tensorflow::ops") public static native Node MaxPoolGrad(@ByVal NodeBuilder.NodeOut orig_input, @ByVal NodeBuilder.NodeOut orig_output, @ByVal NodeBuilder.NodeOut grad,
+                  @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
+                  @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MaxPoolGrad(Node orig_input, Node orig_output, Node grad,
+                  @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides,
+                  @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MaxPoolGrad(@ByVal NodeBuilder.NodeOut orig_input, @ByVal NodeBuilder.NodeOut orig_output, @ByVal NodeBuilder.NodeOut grad,
+                  @ArraySlice int[] ksize, @ArraySlice int[] strides,
+                  @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MaxPoolGrad(Node orig_input, Node orig_output, Node grad,
+                  @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides,
+                  @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MaxPoolGrad(@ByVal NodeBuilder.NodeOut orig_input, @ByVal NodeBuilder.NodeOut orig_output, @ByVal NodeBuilder.NodeOut grad,
+                  @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides,
+                  @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MaxPoolGrad(Node orig_input, Node orig_output, Node grad,
+                  @ArraySlice int[] ksize, @ArraySlice int[] strides,
+                  @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes gradients of the maxpooling function.
+//
+// Arguments:
+// * input: The original input.
+// * grad: 4-D with shape `[batch, height, width, channels]`.  Gradients w.r.t. the
+// output of `max_pool`.
+// * argmax: The indices of the maximum values chosen for each output of `max_pool`.
+// * ksize: The size of the window for each dimension of the input tensor.
+// * strides: The stride of the sliding window for each dimension of the
+// input tensor.
+// * padding: The type of padding algorithm to use.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Gradients w.r.t. the input of `max_pool`.
+@Namespace("tensorflow::ops") public static native Node MaxPoolGradWithArgmax(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut grad, @ByVal NodeBuilder.NodeOut argmax,
+                            @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides, @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MaxPoolGradWithArgmax(Node input, Node grad, Node argmax,
+                            @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides, @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MaxPoolGradWithArgmax(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut grad, @ByVal NodeBuilder.NodeOut argmax,
+                            @ArraySlice int[] ksize, @ArraySlice int[] strides, @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MaxPoolGradWithArgmax(Node input, Node grad, Node argmax,
+                            @ArraySlice IntPointer ksize, @ArraySlice IntPointer strides, @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MaxPoolGradWithArgmax(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut grad, @ByVal NodeBuilder.NodeOut argmax,
+                            @ArraySlice IntBuffer ksize, @ArraySlice IntBuffer strides, @StringPiece BytePointer padding, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MaxPoolGradWithArgmax(Node input, Node grad, Node argmax,
+                            @ArraySlice int[] ksize, @ArraySlice int[] strides, @StringPiece String padding, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Performs max pooling on the input and outputs both max values and indices.
+//
+// The indices in `argmax` are flattened, so that a maximum value at position
+// `[b, y, x, c]` becomes flattened index
+// `((b * height + y) * width + x) * channels + c`.
+//
+// Arguments:
+// * input: 4-D with shape `[batch, height, width, channels]`.  Input to pool over.
+// * ksize: The size of the window for each dimension of the input tensor.
+// * strides: The stride of the sliding window for each dimension of the
+// input tensor.
+// * padding: The type of padding algorithm to use.
+// * opts:
+//   .WithAttr("Targmax", DataType): Defaults to DT_INT64.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with outputs:
+// * output: The max pooled output tensor.
+// * argmax: 4-D.  The flattened indices of the max values chosen for each output.
+@Namespace("tensorflow::ops") public static native Node MaxPoolWithArgmax(@ByVal NodeBuilder.NodeOut input, @ArraySlice IntPointer ksize,
+                        @ArraySlice IntPointer strides, @StringPiece BytePointer padding,
+                        @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MaxPoolWithArgmax(Node input, @ArraySlice IntBuffer ksize,
+                        @ArraySlice IntBuffer strides, @StringPiece String padding,
+                        @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MaxPoolWithArgmax(@ByVal NodeBuilder.NodeOut input, @ArraySlice int[] ksize,
+                        @ArraySlice int[] strides, @StringPiece BytePointer padding,
+                        @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MaxPoolWithArgmax(Node input, @ArraySlice IntPointer ksize,
+                        @ArraySlice IntPointer strides, @StringPiece String padding,
+                        @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MaxPoolWithArgmax(@ByVal NodeBuilder.NodeOut input, @ArraySlice IntBuffer ksize,
+                        @ArraySlice IntBuffer strides, @StringPiece BytePointer padding,
+                        @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MaxPoolWithArgmax(Node input, @ArraySlice int[] ksize,
+                        @ArraySlice int[] strides, @StringPiece String padding,
+                        @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes rectified linear: `max(features, 0)`.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Relu(@ByVal NodeBuilder.NodeOut features, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Relu(Node features, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes rectified linear 6: `min(max(features, 0), 6)`.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Relu6(@ByVal NodeBuilder.NodeOut features, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Relu6(Node features, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes rectified linear 6 gradients for a Relu6 operation.
+//
+// Arguments:
+// * gradients: The backpropagated gradients to the corresponding Relu6 operation.
+// * features: The features passed as input to the corresponding Relu6 operation.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The gradients:
+// `gradients * features * (features > 0) * (features < 6)`.
+@Namespace("tensorflow::ops") public static native Node Relu6Grad(@ByVal NodeBuilder.NodeOut gradients, @ByVal NodeBuilder.NodeOut features, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Relu6Grad(Node gradients, Node features, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes rectified linear gradients for a Relu operation.
+//
+// Arguments:
+// * gradients: The backpropagated gradients to the corresponding Relu operation.
+// * features: The features passed as input to the corresponding Relu operation.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The gradients: `gradients * features * (features > 0)`.
+@Namespace("tensorflow::ops") public static native Node ReluGrad(@ByVal NodeBuilder.NodeOut gradients, @ByVal NodeBuilder.NodeOut features, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ReluGrad(Node gradients, Node features, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes softmax activations.
+//
+// For each batch `i` and class `j` we have
+//
+//     softmax[i, j] = exp(logits[i, j]) / sum(exp(logits[i]))
+//
+// Arguments:
+// * logits: 2-D with shape `[batch_size, num_classes]`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Same shape as `logits`.
+@Namespace("tensorflow::ops") public static native Node Softmax(@ByVal NodeBuilder.NodeOut logits, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Softmax(Node logits, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes softmax cross entropy cost and gradients to backpropagate.
+//
+// Inputs are the logits, not probabilities.
+//
+// Arguments:
+// * features: batch_size x num_classes matrix
+// * labels: batch_size x num_classes matrix
+// The caller must ensure that each batch of labels represents a valid
+// probability distribution.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with outputs:
+// * loss: Per example loss (batch_size vector).
+// * backprop: backpropagated gradients (batch_size x num_classes matrix).
+@Namespace("tensorflow::ops") public static native Node SoftmaxCrossEntropyWithLogits(@ByVal NodeBuilder.NodeOut features, @ByVal NodeBuilder.NodeOut labels, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SoftmaxCrossEntropyWithLogits(Node features, Node labels, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes softplus: `log(exp(features) + 1)`.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Softplus(@ByVal NodeBuilder.NodeOut features, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Softplus(Node features, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes softplus gradients for a softplus operation.
+//
+// Arguments:
+// * gradients: The backpropagated gradients to the corresponding softplus operation.
+// * features: The features passed as input to the corresponding softplus operation.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The gradients: `gradients / (1 + exp(-features))`.
+@Namespace("tensorflow::ops") public static native Node SoftplusGrad(@ByVal NodeBuilder.NodeOut gradients, @ByVal NodeBuilder.NodeOut features, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SoftplusGrad(Node gradients, Node features, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes softsign: `features / (abs(features) + 1)`.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Softsign(@ByVal NodeBuilder.NodeOut features, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Softsign(Node features, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes softsign gradients for a softsign operation.
+//
+// Arguments:
+// * gradients: The backpropagated gradients to the corresponding softsign operation.
+// * features: The features passed as input to the corresponding softsign operation.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The gradients: `gradients / (1 + abs(-features)) ** 2`.
+@Namespace("tensorflow::ops") public static native Node SoftsignGrad(@ByVal NodeBuilder.NodeOut gradients, @ByVal NodeBuilder.NodeOut features, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SoftsignGrad(Node gradients, Node features, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns the values and indices of the `k` largest elements for each row.
+//
+// \\(values_{i, j}\\) represents the j-th largest element in \\(input_i\\).
+//
+// \\(indices_{i, j}\\) gives the column index of the corresponding element,
+// such that \\(input_{i, indices_{i, j}} = values_{i, j}\\). If two
+// elements are equal, the lower-index element appears first.
+//
+// Arguments:
+// * input: A `batch_size` x `classes` tensor.
+// * k: Number of top elements to look for within each row.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with outputs:
+// * values: A `batch_size` x `k` tensor with the `k` largest elements for
+// each row, sorted in descending order.
+// * indices: A `batch_size` x `k` tensor with the index of each value within
+// each row.
+@Namespace("tensorflow::ops") public static native Node TopK(@ByVal NodeBuilder.NodeOut input, @Cast("tensorflow::int64") long k, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node TopK(Node input, @Cast("tensorflow::int64") long k, @Const @ByRef GraphDefBuilder.Options opts);
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_NN_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/parsing_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_PARSING_OPS_H_
+// #define TENSORFLOW_CC_OPS_PARSING_OPS_H_
+
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/graph/graph_def_builder.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/public/tensor.h"
+// #include "tensorflow/core/public/tensor_shape.h"
+
+// These add a node to the graph from opts.
+//
+// Note for "NodeOut" inputs, you will typically either pass
+// * a {Node*, int index} (to pass the index-th output of that node), or
+// * a Node* (to pass the first output of that node).
+
+
+// Convert CSV records to tensors. Each column maps to one tensor.
+//
+// RFC 4180 format is expected for the CSV records.
+// (https://tools.ietf.org/html/rfc4180)
+// Note that we allow leading and trailing spaces with int or float field.
+//
+// Arguments:
+// * records: Each string is a record/row in the csv and all records should have
+// the same format.
+// * record_defaults: One tensor per column of the input record, with either a
+// scalar default value for that column or empty if the column is required.
+// * opts:
+//   .WithAttr("field_delim", StringPiece): Defaults to ",".
+//     delimiter to separate fields in a record.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Each tensor will have the same shape as records.
+@Namespace("tensorflow::ops") public static native Node DecodeCSV(@ByVal NodeBuilder.NodeOut records, @ByVal NodeOutVector record_defaults,
+                @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node DecodeCSV(Node records, @ByVal NodeOutVector record_defaults,
+                @Const @ByRef GraphDefBuilder.Options opts);
+
+// Reinterpret the bytes of a string as a vector of numbers.
+//
+// Arguments:
+// * bytes: All the elements must have the same length.
+// * opts:
+//   .WithAttr("little_endian", bool): Defaults to true.
+//     Whether the input `bytes` are in little-endian order.
+// Ignored for `out_type` values that are stored in a single byte like
+// `uint8`.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// A Tensor with one more dimension than the input `bytes`.  The
+// added dimension will have size equal to the length of the elements
+// of `bytes` divided by the number of bytes to represent `out_type`.
+@Namespace("tensorflow::ops") public static native Node DecodeRaw(@ByVal NodeBuilder.NodeOut bytes, @Cast("tensorflow::DataType") int out_type, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node DecodeRaw(Node bytes, @Cast("tensorflow::DataType") int out_type, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Transforms a vector of brain.Example protos (as strings) into typed tensors.
+//
+// Arguments:
+// * serialized: A vector containing a batch of binary serialized Example protos.
+// * names: A vector containing the names of the serialized protos.
+// May contain, for example, table key (descriptive) names for the
+// corresponding serialized protos.  These are purely useful for debugging
+// purposes, and the presence of values here has no effect on the output.
+// May also be an empty vector if no names are available.
+// If non-empty, this vector must be the same length as "serialized".
+// * sparse_keys: A list of Nsparse string Tensors (scalars).
+// The keys expected in the Examples' features associated with sparse values.
+// * dense_keys: A list of Ndense string Tensors (scalars).
+// The keys expected in the Examples' features associated with dense values.
+// * dense_defaults: A list of Ndense Tensors (some may be empty).
+// dense_defaults[j] provides default values
+// when the example's feature_map lacks dense_key[j].  If an empty Tensor is
+// provided for dense_defaults[j], then the Feature dense_keys[j] is required.
+// The input type is inferred from dense_defaults[j], even when it's empty.
+// If dense_defaults[j] is not empty, its shape must match dense_shapes[j].
+// * sparse_types: A list of Nsparse types; the data types of data in each Feature
+// given in sparse_keys.
+// Currently the ParseExample supports DT_FLOAT (FloatList),
+// DT_INT64 (Int64List), and DT_STRING (BytesList).
+// * dense_shapes: A list of Ndense shapes; the shapes of data in each Feature
+// given in dense_keys.
+// The number of elements in the Feature corresponding to dense_key[j]
+// must always equal dense_shapes[j].NumEntries().
+// If dense_shapes[j] == (D0, D1, ..., DN) then the the shape of output
+// Tensor dense_values[j] will be (|serialized|, D0, D1, ..., DN):
+// The dense outputs are just the inputs row-stacked by batch.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with outputs:
+// * sparse_indices
+// * sparse_values
+// * sparse_shapes
+// * dense_values
+@Namespace("tensorflow::ops") public static native Node ParseExample(@ByVal NodeBuilder.NodeOut serialized, @ByVal NodeBuilder.NodeOut names, @ByVal NodeOutVector sparse_keys, @ByVal NodeOutVector dense_keys,
+                   @ByVal NodeOutVector dense_defaults, @ByVal DataTypeVector sparse_types, @ByVal TensorShapeVector dense_shapes,
+                   @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ParseExample(Node serialized, Node names, @ByVal NodeOutVector sparse_keys, @ByVal NodeOutVector dense_keys,
+                   @ByVal NodeOutVector dense_defaults, @ByVal DataTypeVector sparse_types, @ByVal TensorShapeVector dense_shapes,
+                   @Const @ByRef GraphDefBuilder.Options opts);
+
+// Converts each string in the input Tensor to the specified numeric type.
+//
+// (Note that int32 overflow results in an error while float overflow
+// results in a rounded value.)
+//
+// Arguments:
+// * opts:
+//   .WithAttr("out_type", DataType): Defaults to DT_FLOAT.
+//     The numeric type to interpret each string in string_tensor as.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// A Tensor of the same shape as the input `string_tensor`.
+@Namespace("tensorflow::ops") public static native Node StringToNumber(@ByVal NodeBuilder.NodeOut string_tensor, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node StringToNumber(Node string_tensor, @Const @ByRef GraphDefBuilder.Options opts);
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_PARSING_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/random_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_RANDOM_OPS_H_
+// #define TENSORFLOW_CC_OPS_RANDOM_OPS_H_
+
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/graph/graph_def_builder.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/public/tensor.h"
+// #include "tensorflow/core/public/tensor_shape.h"
+
+// These add a node to the graph from opts.
+//
+// Note for "NodeOut" inputs, you will typically either pass
+// * a {Node*, int index} (to pass the index-th output of that node), or
+// * a Node* (to pass the first output of that node).
+
+
+// Randomly shuffles a tensor along its first dimension.
+//
+//   The tensor is shuffled along dimension 0, such that each `value[j]` is mapped
+//   to one and only one `output[i]`. For example, a mapping that might occur for a
+//   3x2 tensor is:
+//
+// ```prettyprint
+// [[1, 2],       [[5, 6],
+//  [3, 4],  ==>   [1, 2],
+//  [5, 6]]        [3, 4]]
+// ```
+//
+// Arguments:
+// * value: The tensor to be shuffled.
+// * opts:
+//   .WithAttr("seed", int64): Defaults to 0.
+//     If either `seed` or `seed2` are set to be non-zero, the random number
+// generator is seeded by the given seed.  Otherwise, it is seeded by a
+// random seed.
+//   .WithAttr("seed2", int64): Defaults to 0.
+//     A second seed to avoid seed collision.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// A tensor of same shape and type as `value`, shuffled along its first
+// dimension.
+@Namespace("tensorflow::ops") public static native Node RandomShuffle(@ByVal NodeBuilder.NodeOut value, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node RandomShuffle(Node value, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Outputs random values from a normal distribution.
+//
+// The generated values will have mean 0 and standard deviation 1.
+//
+// Arguments:
+// * shape: The shape of the output tensor.
+// * dtype: The type of the output.
+// * opts:
+//   .WithAttr("seed", int64): Defaults to 0.
+//     If either `seed` or `seed2` are set to be non-zero, the random number
+// generator is seeded by the given seed.  Otherwise, it is seeded by a
+// random seed.
+//   .WithAttr("seed2", int64): Defaults to 0.
+//     A second seed to avoid seed collision.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// A tensor of the specified shape filled with random normal values.
+@Namespace("tensorflow::ops") public static native Node RandomStandardNormal(@ByVal NodeBuilder.NodeOut shape, @Cast("tensorflow::DataType") int dtype, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node RandomStandardNormal(Node shape, @Cast("tensorflow::DataType") int dtype, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Outputs random values from a uniform distribution.
+//
+// The generated values follow a uniform distribution in the range `[0, 1)`. The
+// lower bound 0 is included in the range, while the upper bound 1 is excluded.
+//
+// Arguments:
+// * shape: The shape of the output tensor.
+// * dtype: The type of the output.
+// * opts:
+//   .WithAttr("seed", int64): Defaults to 0.
+//     If either `seed` or `seed2` are set to be non-zero, the random number
+// generator is seeded by the given seed.  Otherwise, it is seeded by a
+// random seed.
+//   .WithAttr("seed2", int64): Defaults to 0.
+//     A second seed to avoid seed collision.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// A tensor of the specified shape filled with uniform random values.
+@Namespace("tensorflow::ops") public static native Node RandomUniform(@ByVal NodeBuilder.NodeOut shape, @Cast("tensorflow::DataType") int dtype, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node RandomUniform(Node shape, @Cast("tensorflow::DataType") int dtype, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Outputs random integers from a uniform distribution.
+//
+// The generated values are uniform integers in the range `[minval, maxval)`.
+// The lower bound `minval` is included in the range, while the upper bound
+// `maxval` is excluded.
+//
+// The random integers are slightly biased unless `maxval - minval` is an exact
+// power of two.  The bias is small for values of `maxval - minval` significantly
+// smaller than the range of the output (either `2^32` or `2^64`).
+//
+// Arguments:
+// * shape: The shape of the output tensor.
+// * minval: 0-D.  Inclusive lower bound on the generated integers.
+// * maxval: 0-D.  Exclusive upper bound on the generated integers.
+// * opts:
+//   .WithAttr("seed", int64): Defaults to 0.
+//     If either `seed` or `seed2` are set to be non-zero, the random number
+// generator is seeded by the given seed.  Otherwise, it is seeded by a
+// random seed.
+//   .WithAttr("seed2", int64): Defaults to 0.
+//     A second seed to avoid seed collision.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// A tensor of the specified shape filled with uniform random integers.
+@Namespace("tensorflow::ops") public static native Node RandomUniformInt(@ByVal NodeBuilder.NodeOut shape, @ByVal NodeBuilder.NodeOut minval, @ByVal NodeBuilder.NodeOut maxval, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node RandomUniformInt(Node shape, Node minval, Node maxval, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Outputs random values from a truncated normal distribution.
+//
+// The generated values follow a normal distribution with mean 0 and standard
+// deviation 1, except that values whose magnitude is more than 2 standard
+// deviations from the mean are dropped and re-picked.
+//
+// Arguments:
+// * shape: The shape of the output tensor.
+// * dtype: The type of the output.
+// * opts:
+//   .WithAttr("seed", int64): Defaults to 0.
+//     If either `seed` or `seed2` are set to be non-zero, the random number
+// generator is seeded by the given seed.  Otherwise, it is seeded by a
+// random seed.
+//   .WithAttr("seed2", int64): Defaults to 0.
+//     A second seed to avoid seed collision.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// A tensor of the specified shape filled with random truncated normal
+// values.
+@Namespace("tensorflow::ops") public static native Node TruncatedNormal(@ByVal NodeBuilder.NodeOut shape, @Cast("tensorflow::DataType") int dtype, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node TruncatedNormal(Node shape, @Cast("tensorflow::DataType") int dtype, @Const @ByRef GraphDefBuilder.Options opts);
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_RANDOM_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/sparse_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_SPARSE_OPS_H_
+// #define TENSORFLOW_CC_OPS_SPARSE_OPS_H_
+
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/graph/graph_def_builder.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/public/tensor.h"
+// #include "tensorflow/core/public/tensor_shape.h"
+
+// These add a node to the graph from opts.
+//
+// Note for "NodeOut" inputs, you will typically either pass
+// * a {Node*, int index} (to pass the index-th output of that node), or
+// * a Node* (to pass the first output of that node).
+
+
+// Concatenates a list of `SparseTensor` along the specified dimension.
+//
+// Concatenation is with respect to the dense versions of these sparse tensors.
+// It is assumed that each input is a `SparseTensor` whose elements are ordered
+// along increasing dimension number.
+//
+// All inputs' shapes must match, except for the concat dimension.  The
+// `indices`, `values`, and `shapes` lists must have the same length.
+//
+// The output shape is identical to the inputs', except along the concat
+// dimension, where it is the sum of the inputs' sizes along that dimension.
+//
+// The output elements will be resorted to preserve the sort order along
+// increasing dimension number.
+//
+// This op runs in `O(M log M)` time, where `M` is the total number of non-empty
+// values across all inputs. This is due to the need for an internal sort in
+// order to concatenate efficiently across an arbitrary dimension.
+//
+// For example, if `concat_dim = 1` and the inputs are
+//
+//     sp_inputs[0]: shape = [2, 3]
+//     [0, 2]: "a"
+//     [1, 0]: "b"
+//     [1, 1]: "c"
+//
+//     sp_inputs[1]: shape = [2, 4]
+//     [0, 1]: "d"
+//     [0, 2]: "e"
+//
+// then the output will be
+//
+//     shape = [2, 7]
+//     [0, 2]: "a"
+//     [0, 4]: "d"
+//     [0, 5]: "e"
+//     [1, 0]: "b"
+//     [1, 1]: "c"
+//
+// Graphically this is equivalent to doing
+//
+//     [    a] concat [  d e  ] = [    a   d e  ]
+//     [b c  ]        [       ]   [b c          ]
+//
+// Arguments:
+// * indices: 2-D.  Indices of each input `SparseTensor`.
+// * values: 1-D.  Non-empty values of each `SparseTensor`.
+// * shapes: 1-D.  Shapes of each `SparseTensor`.
+// * concat_dim: Dimension to concatenate along.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with outputs:
+// * output_indices: 2-D.  Indices of the concatenated `SparseTensor`.
+// * output_values: 1-D.  Non-empty values of the concatenated `SparseTensor`.
+// * output_shape: 1-D.  Shape of the concatenated `SparseTensor`.
+@Namespace("tensorflow::ops") public static native Node SparseConcat(@ByVal NodeOutVector indices, @ByVal NodeOutVector values, @ByVal NodeOutVector shapes, @Cast("tensorflow::int64") long concat_dim,
+                   @Const @ByRef GraphDefBuilder.Options opts);
+
+// Reorders a SparseTensor into the canonical, row-major ordering.
+//
+// Note that by convention, all sparse ops preserve the canonical ordering along
+// increasing dimension number. The only time ordering can be violated is during
+// manual manipulation of the indices and values vectors to add entries.
+//
+// Reordering does not affect the shape of the SparseTensor.
+//
+// If the tensor has rank `R` and `N` non-empty values, `input_indices` has
+// shape `[N, R]`, input_values has length `N`, and input_shape has length `R`.
+//
+// Arguments:
+// * input_indices: 2-D.  `N x R` matrix with the indices of non-empty values in a
+// SparseTensor, possibly not in canonical ordering.
+// * input_values: 1-D.  `N` non-empty values corresponding to `input_indices`.
+// * input_shape: 1-D.  Shape of the input SparseTensor.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with outputs:
+// * output_indices: 2-D.  `N x R` matrix with the same indices as input_indices, but
+// in canonical row-major ordering.
+// * output_values: 1-D.  `N` non-empty values corresponding to `output_indices`.
+@Namespace("tensorflow::ops") public static native Node SparseReorder(@ByVal NodeBuilder.NodeOut input_indices, @ByVal NodeBuilder.NodeOut input_values, @ByVal NodeBuilder.NodeOut input_shape, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SparseReorder(Node input_indices, Node input_values, Node input_shape, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Converts a sparse representation into a dense tensor.
+//
+// Builds an array `dense` with shape `output_shape` such that
+//
+// ```prettyprint
+// # If sparse_indices is scalar
+// dense[i] = (i == sparse_indices ? sparse_values : default_value)
+//
+// # If sparse_indices is a vector, then for each i
+// dense[sparse_indices[i]] = sparse_values[i]
+//
+// # If sparse_indices is an n by d matrix, then for each i in [0, n)
+// dense[sparse_indices[i][0], ..., sparse_indices[i][d-1]] = sparse_values[i]
+// ```
+//
+// All other values in `dense` are set to `default_value`.  If `sparse_values` is a
+// scalar, all sparse indices are set to this single value.
+//
+// Arguments:
+// * sparse_indices: 0-D, 1-D, or 2-D.  `sparse_indices[i]` contains the complete
+// index where `sparse_values[i]` will be placed.
+// * output_shape: 1-D.  Shape of the dense output tensor.
+// * sparse_values: 1-D.  Values corresponding to each row of `sparse_indices`,
+// or a scalar value to be used for all sparse indices.
+// * default_value: Scalar value to set for indices not specified in
+// `sparse_indices`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Dense output tensor of shape `output_shape`.
+@Namespace("tensorflow::ops") public static native Node SparseToDense(@ByVal NodeBuilder.NodeOut sparse_indices, @ByVal NodeBuilder.NodeOut output_shape, @ByVal NodeBuilder.NodeOut sparse_values, @ByVal NodeBuilder.NodeOut default_value, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SparseToDense(Node sparse_indices, Node output_shape, Node sparse_values, Node default_value, @Const @ByRef GraphDefBuilder.Options opts);
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_SPARSE_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/state_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_STATE_OPS_H_
+// #define TENSORFLOW_CC_OPS_STATE_OPS_H_
+
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/graph/graph_def_builder.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/public/tensor.h"
+// #include "tensorflow/core/public/tensor_shape.h"
+
+// These add a node to the graph from opts.
+//
+// Note for "NodeOut" inputs, you will typically either pass
+// * a {Node*, int index} (to pass the index-th output of that node), or
+// * a Node* (to pass the first output of that node).
+
+
+// Update 'ref' by assigning 'value' to it.
+//
+// This operation outputs "ref" after the assignment is done.
+// This makes it easier to chain operations that need to use the reset value.
+//
+// Arguments:
+// * ref: Should be from a `Variable` node. May be uninitialized.
+// * value: The value to be assigned to the variable.
+// * opts:
+//   .WithAttr("validate_shape", bool): Defaults to true.
+//     If true, the operation will validate that the shape
+// of 'value' matches the shape of the Tensor being assigned to.  If false,
+// 'ref' will take on the shape of 'value'.
+//   .WithAttr("use_locking", bool): Defaults to true.
+//     If True, the assignment will be protected by a lock;
+// otherwise the behavior is undefined, but may exhibit less contention.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Same as "ref".  Returned as a convenience for operations that want
+// to use the new value after the variable has been reset.
+@Namespace("tensorflow::ops") public static native Node Assign(@ByVal NodeBuilder.NodeOut ref, @ByVal NodeBuilder.NodeOut value, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Assign(Node ref, Node value, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Update 'ref' by adding 'value' to it.
+//
+// This operation outputs "ref" after the update is done.
+// This makes it easier to chain operations that need to use the reset value.
+//
+// Arguments:
+// * ref: Should be from a `Variable` node.
+// * value: The value to be added to the variable.
+// * opts:
+//   .WithAttr("use_locking", bool): Defaults to false.
+//     If True, the addition will be protected by a lock;
+// otherwise the behavior is undefined, but may exhibit less contention.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Same as "ref".  Returned as a convenience for operations that want
+// to use the new value after the variable has been updated.
+@Namespace("tensorflow::ops") public static native Node AssignAdd(@ByVal NodeBuilder.NodeOut ref, @ByVal NodeBuilder.NodeOut value, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node AssignAdd(Node ref, Node value, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Update 'ref' by subtracting 'value' from it.
+//
+// This operation outputs "ref" after the update is done.
+// This makes it easier to chain operations that need to use the reset value.
+//
+// Arguments:
+// * ref: Should be from a `Variable` node.
+// * value: The value to be subtracted to the variable.
+// * opts:
+//   .WithAttr("use_locking", bool): Defaults to false.
+//     If True, the subtraction will be protected by a lock;
+// otherwise the behavior is undefined, but may exhibit less contention.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Same as "ref".  Returned as a convenience for operations that want
+// to use the new value after the variable has been updated.
+@Namespace("tensorflow::ops") public static native Node AssignSub(@ByVal NodeBuilder.NodeOut ref, @ByVal NodeBuilder.NodeOut value, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node AssignSub(Node ref, Node value, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Increments 'ref' until it reaches 'limit'.
+//
+// This operation outputs "ref" after the update is done.  This makes it
+// easier to chain operations that need to use the updated value.
+//
+// Arguments:
+// * ref: Should be from a scalar `Variable` node.
+// * limit: If incrementing ref would bring it above limit, instead generates an
+// 'OutOfRange' error.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// A copy of the input before increment. If nothing else modifies the
+// input, the values produced will all be distinct.
+@Namespace("tensorflow::ops") public static native Node CountUpTo(@ByVal NodeBuilder.NodeOut ref, @Cast("tensorflow::int64") long limit, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node CountUpTo(Node ref, @Cast("tensorflow::int64") long limit, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Destroys the temporary variable and returns its final value.
+//
+// Sets output to the value of the Tensor pointed to by 'ref', then destroys
+// the temporary variable called 'var_name'.
+// All other uses of 'ref' *must* have executed before this op.
+// This is typically achieved by chaining the ref through each assign op, or by
+// using control dependencies.
+//
+// Outputs the final value of the tensor pointed to by 'ref'.
+//
+// Arguments:
+// * ref: A reference to the temporary variable tensor.
+// * var_name: Name of the temporary variable, usually the name of the matching
+// 'TemporaryVariable' op.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node DestroyTemporaryVariable(@ByVal NodeBuilder.NodeOut ref, @StringPiece BytePointer var_name, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node DestroyTemporaryVariable(Node ref, @StringPiece String var_name, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Adds sparse updates to a variable reference.
+//
+// This operation computes
+//
+//     # Scalar indices
+//     ref[indices, ...] += updates[...]
+//
+//     # Vector indices (for each i)
+//     ref[indices[i], ...] += updates[i, ...]
+//
+//     # High rank indices (for each i, ..., j)
+//     ref[indices[i, ..., j], ...] += updates[i, ..., j, ...]
+//
+// This operation outputs `ref` after the update is done.
+// This makes it easier to chain operations that need to use the reset value.
+//
+// Duplicate entries are handled correctly: if multiple `indices` reference
+// the same location, their contributions add.
+//
+// Requires `updates.shape = indices.shape + ref.shape[1:]`.
+//
+// <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+// <img style="width:100%" src="../images/ScatterAdd.png" alt>
+// </div>
+//
+// Arguments:
+// * ref: Should be from a `Variable` node.
+// * indices: A tensor of indices into the first dimension of `ref`.
+// * updates: A tensor of updated values to add to `ref`.
+// * opts:
+//   .WithAttr("use_locking", bool): Defaults to false.
+//     If True, the addition will be protected by a lock;
+// otherwise the behavior is undefined, but may exhibit less contention.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Same as `ref`.  Returned as a convenience for operations that want
+// to use the updated values after the update is done.
+@Namespace("tensorflow::ops") public static native Node ScatterAdd(@ByVal NodeBuilder.NodeOut ref, @ByVal NodeBuilder.NodeOut indices, @ByVal NodeBuilder.NodeOut updates, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ScatterAdd(Node ref, Node indices, Node updates, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Subtracts sparse updates to a variable reference.
+//
+//     # Scalar indices
+//     ref[indices, ...] -= updates[...]
+//
+//     # Vector indices (for each i)
+//     ref[indices[i], ...] -= updates[i, ...]
+//
+//     # High rank indices (for each i, ..., j)
+//     ref[indices[i, ..., j], ...] -= updates[i, ..., j, ...]
+//
+// This operation outputs `ref` after the update is done.
+// This makes it easier to chain operations that need to use the reset value.
+//
+// Duplicate entries are handled correctly: if multiple `indices` reference
+// the same location, their (negated) contributions add.
+//
+// Requires `updates.shape = indices.shape + ref.shape[1:]`.
+//
+// <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+// <img style="width:100%" src="../images/ScatterSub.png" alt>
+// </div>
+//
+// Arguments:
+// * ref: Should be from a `Variable` node.
+// * indices: A tensor of indices into the first dimension of `ref`.
+// * updates: A tensor of updated values to subtract from `ref`.
+// * opts:
+//   .WithAttr("use_locking", bool): Defaults to false.
+//     If True, the subtraction will be protected by a lock;
+// otherwise the behavior is undefined, but may exhibit less contention.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Same as `ref`.  Returned as a convenience for operations that want
+// to use the updated values after the update is done.
+@Namespace("tensorflow::ops") public static native Node ScatterSub(@ByVal NodeBuilder.NodeOut ref, @ByVal NodeBuilder.NodeOut indices, @ByVal NodeBuilder.NodeOut updates, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ScatterSub(Node ref, Node indices, Node updates, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Applies sparse updates to a variable reference.
+//
+// This operation computes
+//
+//     # Scalar indices
+//     ref[indices, ...] = updates[...]
+//
+//     # Vector indices (for each i)
+//     ref[indices[i], ...] = updates[i, ...]
+//
+//     # High rank indices (for each i, ..., j)
+//     ref[indices[i, ..., j], ...] = updates[i, ..., j, ...]
+//
+// This operation outputs `ref` after the update is done.
+// This makes it easier to chain operations that need to use the reset value.
+//
+// If `indices` contains duplicate entries, lexicographically later entries
+// override earlier entries.
+//
+// Requires `updates.shape = indices.shape + ref.shape[1:]`.
+//
+// <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
+// <img style="width:100%" src="../images/ScatterUpdate.png" alt>
+// </div>
+//
+// Arguments:
+// * ref: Should be from a `Variable` node.
+// * indices: A tensor of indices into the first dimension of `ref`.
+// * updates: A tensor of updated values to store in `ref`.
+// * opts:
+//   .WithAttr("use_locking", bool): Defaults to true.
+//     If True, the assignment will be protected by a lock;
+// otherwise the behavior is undefined, but may exhibit less contention.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Same as `ref`.  Returned as a convenience for operations that want
+// to use the updated values after the update is done.
+@Namespace("tensorflow::ops") public static native Node ScatterUpdate(@ByVal NodeBuilder.NodeOut ref, @ByVal NodeBuilder.NodeOut indices, @ByVal NodeBuilder.NodeOut updates, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ScatterUpdate(Node ref, Node indices, Node updates, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns a tensor that may be mutated, but only persists within a single step.
+//
+// This is an experimental op for internal use only and it is possible to use this
+// op in unsafe ways.  DO NOT USE unless you fully understand the risks.
+//
+// It is the caller's responsibility to ensure that 'ref' is eventually passed to a
+// matching 'DestroyTemporaryVariable' op after all other uses have completed.
+//
+// Outputs a ref to the tensor state so it may be read or modified.
+//
+//   E.g.
+//       var = state_ops._temporary_variable([1, 2], types.float_)
+//       var_name = var.op.name
+//       var = state_ops.assign(var, [[4.0, 5.0]])
+//       var = state_ops.assign_add(var, [[6.0, 7.0]])
+//       final = state_ops._destroy_temporary_variable(var, var_name=var_name)
+//
+// Arguments:
+// * shape: The shape of the variable tensor.
+// * dtype: The type of elements in the variable tensor.
+// * opts:
+//   .WithAttr("var_name", StringPiece): Defaults to "".
+//     Overrides the name used for the temporary variable resource. Default
+// value is the name of the 'TemporaryVariable' op (which is guaranteed unique).
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// A reference to the variable tensor.
+@Namespace("tensorflow::ops") public static native Node TemporaryVariable(@ByVal TensorShape shape, @Cast("tensorflow::DataType") int dtype, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Holds state in the form of a tensor that persists across steps.
+//
+// Outputs a ref to the tensor state so it may be read or modified.
+// TODO(zhifengc/mrry): Adds a pointer to a more detail document
+// about sharing states in tensorflow.
+//
+// Arguments:
+// * shape: The shape of the variable tensor.
+// * dtype: The type of elements in the variable tensor.
+// * opts:
+//   .WithAttr("container", StringPiece): Defaults to "".
+//     If non-empty, this variable is placed in the given container.
+// Otherwise, a default container is used.
+//   .WithAttr("shared_name", StringPiece): Defaults to "".
+//     If non-empty, this variable is named in the given bucket
+// with this shared_name. Otherwise, the node name is used instead.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// A reference to the variable tensor.
+@Namespace("tensorflow::ops") public static native Node Variable(@ByVal TensorShape shape, @Cast("tensorflow::DataType") int dtype, @Const @ByRef GraphDefBuilder.Options opts);
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_STATE_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/string_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_STRING_OPS_H_
+// #define TENSORFLOW_CC_OPS_STRING_OPS_H_
+
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/graph/graph_def_builder.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/public/tensor.h"
+// #include "tensorflow/core/public/tensor_shape.h"
+
+// These add a node to the graph from opts.
+//
+// Note for "NodeOut" inputs, you will typically either pass
+// * a {Node*, int index} (to pass the index-th output of that node), or
+// * a Node* (to pass the first output of that node).
+
+
+// Converts each string in the input Tensor to its hash mod by a number of buckets.
+//
+// The hash function is deterministic on the content of the string within the
+// process.
+//
+// Note that the hash function may change from time to time.
+//
+// Arguments:
+// * num_buckets: The number of buckets.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// A Tensor of the same shape as the input `string_tensor`.
+@Namespace("tensorflow::ops") public static native Node StringToHashBucket(@ByVal NodeBuilder.NodeOut string_tensor, @Cast("tensorflow::int64") long num_buckets, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node StringToHashBucket(Node string_tensor, @Cast("tensorflow::int64") long num_buckets, @Const @ByRef GraphDefBuilder.Options opts);
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_STRING_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/summary_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_SUMMARY_OPS_H_
+// #define TENSORFLOW_CC_OPS_SUMMARY_OPS_H_
+
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/graph/graph_def_builder.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/public/tensor.h"
+// #include "tensorflow/core/public/tensor_shape.h"
+
+// These add a node to the graph from opts.
+//
+// Note for "NodeOut" inputs, you will typically either pass
+// * a {Node*, int index} (to pass the index-th output of that node), or
+// * a Node* (to pass the first output of that node).
+
+
+// Outputs a `Summary` protocol buffer with a histogram.
+//
+// The generated
+// [`Summary`](https://tensorflow.googlesource.com/tensorflow/+/master/tensorflow/core/framework/summary.proto)
+// has one summary value containing a histogram for `values`.
+//
+// This op reports an `OutOfRange` error if any value is not finite.
+//
+// Arguments:
+// * tag: Scalar.  Tag to use for the `Summary.Value`.
+// * values: Any shape. Values to use to build the histogram.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Scalar. Serialized `Summary` protocol buffer.
+@Namespace("tensorflow::ops") public static native Node HistogramSummary(@ByVal NodeBuilder.NodeOut tag, @ByVal NodeBuilder.NodeOut values, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node HistogramSummary(Node tag, Node values, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Outputs a `Summary` protocol buffer with images.
+//
+// The summary has up to `max_images` summary values containing images. The
+// images are built from `tensor` which must be 4-D with shape `[batch_size,
+// height, width, channels]` and where `channels` can be:
+//
+// *  1: `tensor` is interpreted as Grayscale.
+// *  3: `tensor` is interpreted as RGB.
+// *  4: `tensor` is interpreted as RGBA.
+//
+// The images have the same number of channels as the input tensor. Their values
+// are normalized, one image at a time, to fit in the range `[0, 255]`.  The
+// op uses two different normalization algorithms:
+//
+// *  If the input values are all positive, they are rescaled so the largest one
+//    is 255.
+//
+// *  If any input value is negative, the values are shifted so input value 0.0
+//    is at 127.  They are then rescaled so that either the smallest value is 0,
+//    or the largest one is 255.
+//
+// The `tag` argument is a scalar `Tensor` of type `string`.  It is used to
+// build the `tag` of the summary values:
+//
+// *  If `max_images` is 1, the summary value tag is '*tag*/image'.
+// *  If `max_images` is greater than 1, the summary value tags are
+//    generated sequentially as '*tag*/image/0', '*tag*/image/1', etc.
+//
+// The `bad_color` argument is the color to use in the generated images for
+// non-finite input values.  It is a `unit8` 1-D tensor of length `channels`.
+// Each element must be in the range `[0, 255]` (It represents the value of a
+// pixel in the output image).  Non-finite values in the input tensor are
+// replaced by this tensor in the output image.  The default value is the color
+// red.
+//
+// Arguments:
+// * tag: Scalar. Used to build the `tag` attribute of the summary values.
+// * tensor: 4-D of shape `[batch_size, height, width, channels]` where
+// `channels` is 1, 3, or 4.
+// * opts:
+//   .WithAttr("max_images", int64): Defaults to 3.
+//     Max number of batch elements to generate images for.
+//   .WithAttr("bad_color", const Tensor&): Defaults to Tensor<type: uint8 shape: [4] values: 255 0 0...>.
+//     Color to use for pixels with non-finite values.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Scalar. Serialized `Summary` protocol buffer.
+@Namespace("tensorflow::ops") public static native Node ImageSummary(@ByVal NodeBuilder.NodeOut tag, @ByVal NodeBuilder.NodeOut tensor, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ImageSummary(Node tag, Node tensor, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Merges summaries.
+//
+// This op creates a
+// [`Summary`](https://tensorflow.googlesource.com/tensorflow/+/master/tensorflow/core/framework/summary.proto)
+// protocol buffer that contains the union of all the values in the input
+// summaries.
+//
+// When the Op is run, it reports an `InvalidArgument` error if multiple values
+// in the summaries to merge use the same tag.
+//
+// Arguments:
+// * inputs: Can be of any shape.  Each must contain serialized `Summary` protocol
+// buffers.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Scalar. Serialized `Summary` protocol buffer.
+@Namespace("tensorflow::ops") public static native Node MergeSummary(@ByVal NodeOutVector inputs, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Outputs a `Summary` protocol buffer with scalar values.
+//
+// The input `tags` and `values` must have the same shape.  The generated summary
+// has a summary value for each tag-value pair in `tags` and `values`.
+//
+// Arguments:
+// * tags: 1-D. Tags for the summary.
+// * values: 1-D, same size as `tags.  Values for the summary.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Scalar.  Serialized `Summary` protocol buffer.
+@Namespace("tensorflow::ops") public static native Node ScalarSummary(@ByVal NodeBuilder.NodeOut tags, @ByVal NodeBuilder.NodeOut values, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ScalarSummary(Node tags, Node values, @Const @ByRef GraphDefBuilder.Options opts);
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_SUMMARY_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/training_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_TRAINING_OPS_H_
+// #define TENSORFLOW_CC_OPS_TRAINING_OPS_H_
+
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/graph/graph_def_builder.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/public/tensor.h"
+// #include "tensorflow/core/public/tensor_shape.h"
+
+// These add a node to the graph from opts.
+//
+// Note for "NodeOut" inputs, you will typically either pass
+// * a {Node*, int index} (to pass the index-th output of that node), or
+// * a Node* (to pass the first output of that node).
+
+
+// Update '*var' according to the adagrad scheme.
+//
+// accum += grad * grad
+// var -= lr * grad * (1 / sqrt(accum))
+//
+// Arguments:
+// * var: Should be from a Variable().
+// * accum: Should be from a Variable().
+// * lr: Scaling factor. Must be a scalar.
+// * grad: The gradient.
+// * opts:
+//   .WithAttr("use_locking", bool): Defaults to false.
+//     If True, updating of the var and accum tensors will be protected by
+// a lock; otherwise the behavior is undefined, but may exhibit less contention.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Same as "var".
+@Namespace("tensorflow::ops") public static native Node ApplyAdagrad(@ByVal NodeBuilder.NodeOut var, @ByVal NodeBuilder.NodeOut accum, @ByVal NodeBuilder.NodeOut lr, @ByVal NodeBuilder.NodeOut grad, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ApplyAdagrad(Node var, Node accum, Node lr, Node grad, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Update '*var' according to the Adam algorithm.
+//
+// lr_t <- learning_rate * sqrt(1 - beta2^t) / (1 - beta1^t)
+// m_t <- beta1 * m_{t-1} + (1 - beta1) * g_t
+// v_t <- beta2 * v_{t-1} + (1 - beta2) * g_t * g_t
+// variable <- variable - lr_t * m_t / (sqrt(v_t) + epsilon)
+//
+// Arguments:
+// * var: Should be from a Variable().
+// * m: Should be from a Variable().
+// * v: Should be from a Variable().
+// * beta1_power: Must be a scalar.
+// * beta2_power: Must be a scalar.
+// * lr: Scaling factor. Must be a scalar.
+// * beta1: Momentum factor. Must be a scalar.
+// * beta2: Momentum factor. Must be a scalar.
+// * epsilon: Ridge term. Must be a scalar.
+// * grad: The gradient.
+// * opts:
+//   .WithAttr("use_locking", bool): Defaults to false.
+//     If True, updating of the var, m, and v tensors will be protected by
+// a lock; otherwise the behavior is undefined, but may exhibit less contention.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Same as "var".
+@Namespace("tensorflow::ops") public static native Node ApplyAdam(@ByVal NodeBuilder.NodeOut var, @ByVal NodeBuilder.NodeOut m, @ByVal NodeBuilder.NodeOut v, @ByVal NodeBuilder.NodeOut beta1_power, @ByVal NodeBuilder.NodeOut beta2_power, @ByVal NodeBuilder.NodeOut lr, @ByVal NodeBuilder.NodeOut beta1, @ByVal NodeBuilder.NodeOut beta2, @ByVal NodeBuilder.NodeOut epsilon, @ByVal NodeBuilder.NodeOut grad, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ApplyAdam(Node var, Node m, Node v, Node beta1_power, Node beta2_power, Node lr, Node beta1, Node beta2, Node epsilon, Node grad, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Update '*var' by subtracting 'alpha' * 'delta' from it.
+//
+// Arguments:
+// * var: Should be from a Variable().
+// * alpha: Scaling factor. Must be a scalar.
+// * delta: The change.
+// * opts:
+//   .WithAttr("use_locking", bool): Defaults to false.
+//     If True, the subtraction will be protected by a lock;
+// otherwise the behavior is undefined, but may exhibit less contention.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Same as "var".
+@Namespace("tensorflow::ops") public static native Node ApplyGradientDescent(@ByVal NodeBuilder.NodeOut var, @ByVal NodeBuilder.NodeOut alpha, @ByVal NodeBuilder.NodeOut delta, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ApplyGradientDescent(Node var, Node alpha, Node delta, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Update '*var' according to the momentum scheme.
+//
+// accum = accum * momentum + grad
+// var -= lr * accum
+//
+// Arguments:
+// * var: Should be from a Variable().
+// * accum: Should be from a Variable().
+// * lr: Scaling factor. Must be a scalar.
+// * grad: The gradient.
+// * momentum: Momentum. Must be a scalar.
+// * opts:
+//   .WithAttr("use_locking", bool): Defaults to false.
+//     If True, updating of the var and accum tensors will be protected by
+// a lock; otherwise the behavior is undefined, but may exhibit less contention.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Same as "var".
+@Namespace("tensorflow::ops") public static native Node ApplyMomentum(@ByVal NodeBuilder.NodeOut var, @ByVal NodeBuilder.NodeOut accum, @ByVal NodeBuilder.NodeOut lr, @ByVal NodeBuilder.NodeOut grad,
+                    @ByVal NodeBuilder.NodeOut momentum, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ApplyMomentum(Node var, Node accum, Node lr, Node grad,
+                    Node momentum, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Update '*var' according to the RMSProp algorithm.
+//
+// mean_square = decay * mean_square + (1-decay) * gradient ** 2
+// Delta = learning_rate * gradient / sqrt(mean_square + epsilon)
+//
+// ms <- rho * ms_{t-1} + (1-rho) * grad * grad
+// mom <- momentum * mom_{t-1} + lr * grad / sqrt(ms + epsilon)
+// var <- var - mom
+//
+// Arguments:
+// * var: Should be from a Variable().
+// * ms: Should be from a Variable().
+// * mom: Should be from a Variable().
+// * lr: Scaling factor. Must be a scalar.
+// * rho: Decay rate. Must be a scalar.
+// * epsilon: Ridge term. Must be a scalar.
+// * grad: The gradient.
+// * opts:
+//   .WithAttr("use_locking", bool): Defaults to false.
+//     If True, updating of the var, m, and v tensors will be protected by
+// a lock; otherwise the behavior is undefined, but may exhibit less contention.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Same as "var".
+@Namespace("tensorflow::ops") public static native Node ApplyRMSProp(@ByVal NodeBuilder.NodeOut var, @ByVal NodeBuilder.NodeOut ms, @ByVal NodeBuilder.NodeOut mom, @ByVal NodeBuilder.NodeOut lr, @ByVal NodeBuilder.NodeOut rho, @ByVal NodeBuilder.NodeOut momentum, @ByVal NodeBuilder.NodeOut epsilon, @ByVal NodeBuilder.NodeOut grad, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ApplyRMSProp(Node var, Node ms, Node mom, Node lr, Node rho, Node momentum, Node epsilon, Node grad, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Update relevant entries in '*var' and '*accum' according to the adagrad scheme.
+//
+// That is for rows we have grad for, we update var and accum as follows:
+// accum += grad * grad
+// var -= lr * grad * (1 / sqrt(accum))
+//
+// Arguments:
+// * var: Should be from a Variable().
+// * accum: Should be from a Variable().
+// * lr: Learning rate. Must be a scalar.
+// * grad: The gradient.
+// * indices: A vector of indices into the first dimension of var and accum.
+// * opts:
+//   .WithAttr("use_locking", bool): Defaults to false.
+//     If True, updating of the var and accum tensors will be protected by
+// a lock; otherwise the behavior is undefined, but may exhibit less contention.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Same as "var".
+@Namespace("tensorflow::ops") public static native Node SparseApplyAdagrad(@ByVal NodeBuilder.NodeOut var, @ByVal NodeBuilder.NodeOut accum, @ByVal NodeBuilder.NodeOut lr, @ByVal NodeBuilder.NodeOut grad,
+                         @ByVal NodeBuilder.NodeOut indices, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SparseApplyAdagrad(Node var, Node accum, Node lr, Node grad,
+                         Node indices, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Update relevant entries in '*var' and '*accum' according to the momentum scheme.
+//
+// That is for rows we have grad for, we update var and accum as follows:
+//
+// accum = accum * momentum + grad
+// var -= lr * accum
+//
+// Arguments:
+// * var: Should be from a Variable().
+// * accum: Should be from a Variable().
+// * lr: Learning rate. Must be a scalar.
+// * grad: The gradient.
+// * indices: A vector of indices into the first dimension of var and accum.
+// * momentum: Momentum. Must be a scalar.
+// * opts:
+//   .WithAttr("use_locking", bool): Defaults to false.
+//     If True, updating of the var and accum tensors will be protected by
+// a lock; otherwise the behavior is undefined, but may exhibit less contention.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Same as "var".
+@Namespace("tensorflow::ops") public static native Node SparseApplyMomentum(@ByVal NodeBuilder.NodeOut var, @ByVal NodeBuilder.NodeOut accum, @ByVal NodeBuilder.NodeOut lr, @ByVal NodeBuilder.NodeOut grad,
+                          @ByVal NodeBuilder.NodeOut indices, @ByVal NodeBuilder.NodeOut momentum, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SparseApplyMomentum(Node var, Node accum, Node lr, Node grad,
+                          Node indices, Node momentum, @Const @ByRef GraphDefBuilder.Options opts);
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_TRAINING_OPS_H_
+
+
+// Parsed from tensorflow/cc/ops/user_ops.h
+
+// This file is MACHINE GENERATED! Do not edit.
+
+// #ifndef TENSORFLOW_CC_OPS_USER_OPS_H_
+// #define TENSORFLOW_CC_OPS_USER_OPS_H_
+
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/graph/graph_def_builder.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/public/tensor.h"
+// #include "tensorflow/core/public/tensor_shape.h"
+
+// These add a node to the graph from opts.
+//
+// Note for "NodeOut" inputs, you will typically either pass
+// * a {Node*, int index} (to pass the index-th output of that node), or
+// * a Node* (to pass the first output of that node).
+
+
+// Output a fact about factorials.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Fact(@Const @ByRef GraphDefBuilder.Options opts);
+
+  // namespace ops
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CC_OPS_USER_OPS_H_
 
 
 }
