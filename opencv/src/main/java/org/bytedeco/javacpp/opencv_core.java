@@ -501,6 +501,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IntIntPairVector(Pointer p) { super(p); }
+    public IntIntPairVector(int[] firstValue, int[] secondValue) { this(Math.min(firstValue.length, secondValue.length)); put(firstValue, secondValue); }
     public IntIntPairVector()       { allocate();  }
     public IntIntPairVector(long n) { allocate(n); }
     private native void allocate();
@@ -512,12 +513,21 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
     @Index public native int first(@Cast("size_t") long i); public native IntIntPairVector first(@Cast("size_t") long i, int first);
     @Index public native int second(@Cast("size_t") long i);  public native IntIntPairVector second(@Cast("size_t") long i, int second);
+
+    public IntIntPairVector put(int[] firstValue, int[] secondValue) {
+        for (int i = 0; i < firstValue.length && i < secondValue.length; i++) {
+            first(i, firstValue[i]);
+            second(i, secondValue[i]);
+        }
+        return this;
+    }
 }
 
 @Name("std::vector<std::pair<cv::Mat,unsigned char> >") public static class MatBytePairVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MatBytePairVector(Pointer p) { super(p); }
+    public MatBytePairVector(Mat[] firstValue, byte[] secondValue) { this(Math.min(firstValue.length, secondValue.length)); put(firstValue, secondValue); }
     public MatBytePairVector()       { allocate();  }
     public MatBytePairVector(long n) { allocate(n); }
     private native void allocate();
@@ -529,12 +539,21 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
     @Index public native @ByRef Mat first(@Cast("size_t") long i); public native MatBytePairVector first(@Cast("size_t") long i, Mat first);
     @Index public native byte second(@Cast("size_t") long i);  public native MatBytePairVector second(@Cast("size_t") long i, byte second);
+
+    public MatBytePairVector put(Mat[] firstValue, byte[] secondValue) {
+        for (int i = 0; i < firstValue.length && i < secondValue.length; i++) {
+            first(i, firstValue[i]);
+            second(i, secondValue[i]);
+        }
+        return this;
+    }
 }
 
 @Name("std::vector<std::pair<cv::UMat,unsigned char> >") public static class UMatBytePairVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UMatBytePairVector(Pointer p) { super(p); }
+    public UMatBytePairVector(UMat[] firstValue, byte[] secondValue) { this(Math.min(firstValue.length, secondValue.length)); put(firstValue, secondValue); }
     public UMatBytePairVector()       { allocate();  }
     public UMatBytePairVector(long n) { allocate(n); }
     private native void allocate();
@@ -546,12 +565,21 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
     @Index public native @ByRef UMat first(@Cast("size_t") long i); public native UMatBytePairVector first(@Cast("size_t") long i, UMat first);
     @Index public native byte second(@Cast("size_t") long i);  public native UMatBytePairVector second(@Cast("size_t") long i, byte second);
+
+    public UMatBytePairVector put(UMat[] firstValue, byte[] secondValue) {
+        for (int i = 0; i < firstValue.length && i < secondValue.length; i++) {
+            first(i, firstValue[i]);
+            second(i, secondValue[i]);
+        }
+        return this;
+    }
 }
 
 @NoOffset @Name("std::pair<int,int>") public static class IntIntPair extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IntIntPair(Pointer p) { super(p); }
+    public IntIntPair(int firstValue, int secondValue) { this(); put(firstValue, secondValue); }
     public IntIntPair()       { allocate();  }
     private native void allocate();
     public native @Name("operator=") @ByRef IntIntPair put(@ByRef IntIntPair x);
@@ -559,6 +587,12 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 
     @MemberGetter public native int first(); public native IntIntPair first(int first);
     @MemberGetter public native int second();  public native IntIntPair second(int second);
+
+    public IntIntPair put(int firstValue, int secondValue) {
+        first(firstValue);
+        second(secondValue);
+        return this;
+    }
 }
 
 // Parsed from <opencv2/hal/defs.h>
@@ -17157,6 +17191,7 @@ sequence, stored in node. See the data reading sample in the beginning of the se
  *  \{ */
 
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("bool*") @ByRef BoolPointer value, @Cast("bool") boolean default_value);
+@Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("bool*") @ByRef boolean[] value, @Cast("bool") boolean default_value);
 
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("uchar*") @ByRef BytePointer value, @Cast("uchar") byte default_value);
 @Namespace("cv") public static native void read(@Const @ByRef FileNode node, @Cast("uchar*") @ByRef ByteBuffer value, @Cast("uchar") byte default_value);

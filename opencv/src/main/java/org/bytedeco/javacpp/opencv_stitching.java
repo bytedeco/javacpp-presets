@@ -2149,8 +2149,11 @@ See "Construction of Panoramic Image Mosaics with Global and Local Alignment"
 by Heung-Yeung Shum and Richard Szeliski.
  */
 @Namespace("cv::detail") public static native void focalsFromHomography(@Const @ByRef Mat H, @ByRef DoublePointer f0, @ByRef DoublePointer f1, @Cast("bool*") @ByRef BoolPointer f0_ok, @Cast("bool*") @ByRef BoolPointer f1_ok);
-@Namespace("cv::detail") public static native void focalsFromHomography(@Const @ByRef Mat H, @ByRef DoubleBuffer f0, @ByRef DoubleBuffer f1, @Cast("bool*") @ByRef BoolPointer f0_ok, @Cast("bool*") @ByRef BoolPointer f1_ok);
+@Namespace("cv::detail") public static native void focalsFromHomography(@Const @ByRef Mat H, @ByRef DoubleBuffer f0, @ByRef DoubleBuffer f1, @Cast("bool*") @ByRef boolean[] f0_ok, @Cast("bool*") @ByRef boolean[] f1_ok);
 @Namespace("cv::detail") public static native void focalsFromHomography(@Const @ByRef Mat H, @ByRef double[] f0, @ByRef double[] f1, @Cast("bool*") @ByRef BoolPointer f0_ok, @Cast("bool*") @ByRef BoolPointer f1_ok);
+@Namespace("cv::detail") public static native void focalsFromHomography(@Const @ByRef Mat H, @ByRef DoublePointer f0, @ByRef DoublePointer f1, @Cast("bool*") @ByRef boolean[] f0_ok, @Cast("bool*") @ByRef boolean[] f1_ok);
+@Namespace("cv::detail") public static native void focalsFromHomography(@Const @ByRef Mat H, @ByRef DoubleBuffer f0, @ByRef DoubleBuffer f1, @Cast("bool*") @ByRef BoolPointer f0_ok, @Cast("bool*") @ByRef BoolPointer f1_ok);
+@Namespace("cv::detail") public static native void focalsFromHomography(@Const @ByRef Mat H, @ByRef double[] f0, @ByRef double[] f1, @Cast("bool*") @ByRef boolean[] f0_ok, @Cast("bool*") @ByRef boolean[] f1_ok);
 
 /** \brief Estimates focal lengths for each given camera.
 <p>

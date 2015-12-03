@@ -12838,6 +12838,7 @@ public static final int
 // it improved stability for large models on many GPUs.
 @Namespace("caffe") public static native void CaffeMallocHost(@Cast("void**") PointerPointer ptr, @Cast("size_t") long size, @Cast("bool*") BoolPointer use_cuda);
 @Namespace("caffe") public static native void CaffeMallocHost(@Cast("void**") @ByPtrPtr Pointer ptr, @Cast("size_t") long size, @Cast("bool*") BoolPointer use_cuda);
+@Namespace("caffe") public static native void CaffeMallocHost(@Cast("void**") @ByPtrPtr Pointer ptr, @Cast("size_t") long size, @Cast("bool*") boolean[] use_cuda);
 
 @Namespace("caffe") public static native void CaffeFreeHost(Pointer ptr, @Cast("bool") boolean use_cuda);
 
