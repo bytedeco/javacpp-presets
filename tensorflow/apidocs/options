@@ -1,0 +1,27 @@
+-classpath
+'/home/saudet/.m2/repository/org/bytedeco/javacpp/1.2-SNAPSHOT/javacpp-1.2-SNAPSHOT.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/home/saudet/projects/bytedeco/javacpp-presets/tensorflow/src/main/java:/home/saudet/projects/bytedeco/javacpp-presets/tensorflow/target/generated-sources/annotations'
+-Xdoclint:none
+-author
+-bottom
+'Copyright &#169; 2015. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/home/saudet/projects/bytedeco/javacpp-presets/tensorflow/target/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'JavaCPP Presets for TensorFlow master-1.2-SNAPSHOT API'
+-link
+'http://bytedeco.org/javacpp/apidocs'
+-linkoffline
+'http://docs.oracle.com/javase/7/docs/api' '/home/saudet/projects/bytedeco/javacpp-presets/tensorflow/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'JavaCPP Presets for TensorFlow master-1.2-SNAPSHOT API'
