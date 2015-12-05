@@ -31,6 +31,8 @@ import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.LongPointer;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.ShortPointer;
+import org.bytedeco.javacpp.annotation.Name;
+import org.bytedeco.javacpp.annotation.Namespace;
 import org.bytedeco.javacpp.indexer.ByteIndexer;
 import org.bytedeco.javacpp.indexer.DoubleIndexer;
 import org.bytedeco.javacpp.indexer.FloatIndexer;
@@ -43,6 +45,7 @@ import org.bytedeco.javacpp.indexer.UByteIndexer;
 import org.bytedeco.javacpp.indexer.UShortIndexer;
 
 // required by javac to resolve circular dependencies
+import org.bytedeco.javacpp.tensorflow.*;
 import static org.bytedeco.javacpp.tensorflow.DT_BFLOAT16;
 import static org.bytedeco.javacpp.tensorflow.DT_BOOL;
 import static org.bytedeco.javacpp.tensorflow.DT_COMPLEX64;
@@ -57,6 +60,7 @@ import static org.bytedeco.javacpp.tensorflow.DT_QINT8;
 import static org.bytedeco.javacpp.tensorflow.DT_QUINT8;
 import static org.bytedeco.javacpp.tensorflow.DT_STRING;
 import static org.bytedeco.javacpp.tensorflow.DT_UINT8;
+import static org.bytedeco.javacpp.tensorflow.NewSession;
 
 /**
  *
@@ -141,4 +145,21 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
         }
     }
 
+    public static abstract class AbstractSession extends Pointer {
+        static { Loader.load(); }
+        public AbstractSession(Pointer p) { super(p); }
+        /** Calls {@link org.bytedeco.javacpp.tensorflow#NewSession(SessionOptions)} and registers a deallocator. */
+        public AbstractSession(SessionOptions options) {
+            if (NewSession(options, (Session)this).ok() && !isNull()) {
+                deallocator(new DeleteDeallocator((Session)this));
+            }
+        }
+
+        @Namespace public static native void delete(Session session);
+
+        protected static class DeleteDeallocator extends Session implements Pointer.Deallocator {
+            DeleteDeallocator(Session p) { super(p); }
+            @Override public void deallocate() { Session.delete(this); setNull(); }
+        }
+    }
 }

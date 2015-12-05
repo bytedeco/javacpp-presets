@@ -9,17 +9,13 @@ fi
 
 case $PLATFORM in
     linux-x86)
-        export CC="gcc -m32"
-        export CXX="g++ -m32"
+        export BUILDFLAGS="--copt=-m32 --linkopt=-m32"
         ;;
     linux-x86_64)
-        export CC="gcc -m64"
-        export CXX="g++ -m64"
+        export BUILDFLAGS="--copt=-m64 --linkopt=-m64"
         ;;
     macosx-*)
-        export CC="clang"
-        export CXX="clang++"
-        export LDFLAGS="-undefined dynamic_lookup"
+        export BUILDFLAGS="--linkopt=-install_name --linkopt=@rpath/libtensorflow.so"
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
@@ -47,6 +43,6 @@ ln -snf ../../protobuf-$PROTOBUF_VERSION protobuf
 cd ..
 patch -Np1 < ../../../tensorflow-$TENSORFLOW_VERSION.patch
 ./configure
-bazel build -c opt //tensorflow/cc:libtensorflow.so
+bazel build -c opt //tensorflow/cc:libtensorflow.so $BUILDFLAGS
 
 cd ../..

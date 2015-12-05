@@ -99,6 +99,9 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::DataTypeSlice")/*.cast()*/.pointerTypes("DataTypeVector"))
 
                .put(new Info("tensorflow::Tensor").base("AbstractTensor"))
+               .put(new Info("tensorflow::Session").base("AbstractSession"))
+               .put(new Info("tensorflow::Session::~Session()").javaText("/** Calls {@link tensorflow#NewSession(SessionOptions)} and registers a deallocator. */\n"
+                                                                       + "public Session(SessionOptions options) { super(options); }"))
                .put(new Info("std::vector<tensorflow::Tensor>").pointerTypes("TensorVector").define())
                .put(new Info("std::vector<tensorflow::TensorShape>").pointerTypes("TensorShapeVector").define())
                .put(new Info("std::vector<tensorflow::NodeBuilder::NodeOut>").pointerTypes("NodeOutVector").define())

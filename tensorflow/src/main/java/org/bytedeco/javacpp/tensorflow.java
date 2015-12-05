@@ -5483,7 +5483,7 @@ limitations under the License.
  * 
  *  Only one thread must call Close(), and Close() must only be called
  *  after all other calls to Run() have returned. */
-@Namespace("tensorflow") public static class Session extends Pointer {
+@Namespace("tensorflow") public static class Session extends AbstractSession {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Session(Pointer p) { super(p); }
@@ -5538,6 +5538,9 @@ limitations under the License.
    *  on the TensorFlow runtime (specified during session creation by
    *  the {@code SessionOptions::target} field). */
   public native @ByVal Status Close();
+
+  /** Calls {@link tensorflow#NewSession(SessionOptions)} and registers a deallocator. */
+  public Session(SessionOptions options) { super(options); }
 }
 
 /** \brief Create a new session with the given options.
