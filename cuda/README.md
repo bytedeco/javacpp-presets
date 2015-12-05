@@ -26,7 +26,7 @@ Here is a simple example of cuDNN ported to Java from the `mnistCUDNN.cpp` sampl
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/MNISTCUDNN.java` source files below, simply execute on the command line:
 ```bash
- $ mvn package exec:java -Dexec.mainClass=MNISTCUDNN
+ $ mvn compile exec:java
 ```
 
 ### The `pom.xml` build file
@@ -36,6 +36,9 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <groupId>org.bytedeco.javacpp-presets.cuda</groupId>
     <artifactId>mnistcudnn</artifactId>
     <version>1.1</version>
+    <properties>
+        <exec.mainClass>MNISTCUDNN</exec.mainClass>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>

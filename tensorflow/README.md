@@ -25,7 +25,7 @@ Here is a simple example of TensorFlow ported to Java from this C++ source file:
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/ExampleTrainer.java` source files below, simply execute on the command line:
 ```bash
- $ mvn package exec:java -Dexec.mainClass=ExampleTrainer
+ $ mvn compile exec:java
 ```
 
 ### The `pom.xml` build file
@@ -35,6 +35,9 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <groupId>org.bytedeco.javacpp-presets.tensorflow</groupId>
     <artifactId>exampletrainer</artifactId>
     <version>1.2-SNAPSHOT</version>
+    <properties>
+        <exec.mainClass>ExampleTrainer</exec.mainClass>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -166,7 +169,7 @@ public class ExampleTrainer {
     static void ConcurrentSteps(final Options opts, final int session_index) throws Exception {
         // Creates a session.
         SessionOptions options = new SessionOptions();
-        final Session session = NewSession(options);
+        final Session session = new Session(options);
         GraphDef def = CreateGraphDef();
         if (options.target() == null) {
             SetDefaultDevice(opts.use_gpu ? "/gpu:0" : "/cpu:0", def);

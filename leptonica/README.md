@@ -25,7 +25,7 @@ Here is a simple example of Leptonica ported to Java from this C source file:
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/SudokuTest.java` source files below, simply execute on the command line:
 ```bash
- $ mvn package exec:java -Dexec.mainClass=SudokuTest -Dexec.args="[filein]"
+ $ mvn compile exec:java -Dexec.args="[filein]"
 ```
 
 ### The `pom.xml` build file
@@ -35,6 +35,9 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <groupId>org.bytedeco.javacpp-presets.leptonica</groupId>
     <artifactId>sudokutest</artifactId>
     <version>1.1</version>
+    <properties>
+        <exec.mainClass>SudokuTest</exec.mainClass>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>

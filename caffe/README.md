@@ -25,7 +25,7 @@ Here is the main tool for training of Caffe ported to Java from this C++ source 
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, instead of the original `caffe` executable tool, after creating the `pom.xml` and `src/main/java/caffe.java` source files below, simply execute on the command line:
 ```bash
- $ mvn package exec:java -Dexec.mainClass=caffe -Dexec.args="..."
+ $ mvn compile exec:java -Dexec.args="..."
 ```
 
 ### The `pom.xml` build file
@@ -35,6 +35,9 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <groupId>org.bytedeco.javacpp-presets.caffe</groupId>
     <artifactId>caffe</artifactId>
     <version>1.1</version>
+    <properties>
+        <exec.mainClass>caffe</exec.mainClass>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>

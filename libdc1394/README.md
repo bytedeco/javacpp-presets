@@ -25,7 +25,7 @@ Here is a simple example of libdc1394 ported to Java from this C source file:
 
 We can use [Maven 3](http://maven.apache.org/) to download and install automatically all the class files as well as the native binaries. To run this sample code, after creating the `pom.xml` and `src/main/java/GrabColorImage.java` source files below, simply execute on the command line:
 ```bash
- $ mvn package exec:java -Dexec.mainClass=GrabColorImage
+ $ mvn compile exec:java
 ```
 
 ### The `pom.xml` build file
@@ -35,6 +35,9 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <groupId>org.bytedeco.javacpp-presets.libdc1394</groupId>
     <artifactId>grabcolorimage</artifactId>
     <version>1.1</version>
+    <properties>
+        <exec.mainClass>GrabColorImage</exec.mainClass>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
