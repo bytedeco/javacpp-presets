@@ -13,8 +13,8 @@ download https://github.com/Itseez/opencv_contrib/archive/$OPENCV_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
-tar -xzvf ../opencv-$OPENCV_VERSION.tar.gz
-tar -xzvf ../opencv_contrib-$OPENCV_VERSION.tar.gz
+tar -xzf ../opencv-$OPENCV_VERSION.tar.gz
+tar -xzf ../opencv_contrib-$OPENCV_VERSION.tar.gz
 cd opencv-$OPENCV_VERSION
 
 BUILD_CONTRIB_X="-DBUILD_opencv_adas=OFF -DBUILD_opencv_bgsegm=OFF -DBUILD_opencv_bioinspired=OFF -DBUILD_opencv_ccalib=OFF -DBUILD_opencv_datasets=OFF -DBUILD_opencv_face=ON -DBUILD_opencv_latentsvm=OFF -DBUILD_opencv_line_descriptor=OFF -DBUILD_opencv_matlab=OFF -DBUILD_opencv_optflow=ON -DBUILD_opencv_reg=OFF -DBUILD_opencv_rgbd=OFF -DBUILD_opencv_saliency=OFF -DBUILD_opencv_surface_matching=OFF -DBUILD_opencv_text=OFF -DBUILD_opencv_tracking=OFF -DBUILD_opencv_xfeatures2d=ON -DBUILD_opencv_ximgproc=OFF -DBUILD_opencv_xobjdetect=OFF -DBUILD_opencv_xphoto=OFF"
