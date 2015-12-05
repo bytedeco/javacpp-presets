@@ -1,20 +1,31 @@
 language: cpp
-dist: trusty
+
 compiler:
 - gcc
 - clang
+
 addons:
   apt:
     packages:
     - maven
     - nasm
     - yasm
+
 before_install:
-- echo $LANG
-- echo $LC_ALL
+- if [ "$CXX" == "g++" ]; then sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test; fi
+- if [ "$CXX" == "clang++" ]; then sudo add-apt-repository -y ppa:h-rayflood/llvm; fi
+- sudo apt-get update -qq
+
+install:
+- if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
+- if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
+- if [ "$CXX" == "clang++" ]; then sudo apt-get install --allow-unauthenticated -qq clang-3.4; fi
+- if [ "$CXX" == "clang++" ]; then export CXX="clang++-3.4"; fi
+
 before_script:
 - git clone https://github.com/bytedeco/javacpp
 - pushd javacpp; mvn install; popd
+
 script:
 - ./cppbuild.sh install opencv ffmpeg
 - mvn package --projects .,opencv,ffmpeg
