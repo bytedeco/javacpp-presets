@@ -36,19 +36,31 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit=opencv_highgui.class, target="org.bytedeco.javacpp.caffe", value={
-    @Platform(value={"linux", "macosx"}, define={"CPU_ONLY", "SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV"}, include={"caffe/caffe.hpp", "caffe/util/device_alternate.hpp",
+@Properties(inherit = opencv_highgui.class, target = "org.bytedeco.javacpp.caffe", value = {
+    @Platform(value = {"linux", "macosx"}, define = {"CPU_ONLY", "SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV"}, include = {"caffe/caffe.hpp", "caffe/util/device_alternate.hpp",
         "caffe/common.hpp", "caffe/proto/caffe.pb.h", "caffe/util/blocking_queue.hpp", "caffe/data_reader.hpp", "caffe/util/math_functions.hpp", "caffe/syncedmem.hpp",
-        "caffe/blob.hpp", "caffe/data_transformer.hpp", "caffe/filler.hpp", "caffe/internal_thread.hpp", "caffe/util/hdf5.hpp", "caffe/data_layers.hpp", "caffe/layer_factory.hpp",
-        "caffe/layer.hpp", "caffe/loss_layers.hpp", "caffe/neuron_layers.hpp", "caffe/common_layers.hpp", "caffe/net.hpp", "caffe/parallel.hpp", "caffe/solver.hpp", "caffe/solver_factory.hpp",
-        "caffe/sgd_solvers.hpp", "caffe/vision_layers.hpp", "caffe/util/benchmark.hpp", "caffe/util/db.hpp", "caffe/util/db_leveldb.hpp", "caffe/util/db_lmdb.hpp",
-        "caffe/util/io.hpp", "caffe/util/rng.hpp", "caffe/util/im2col.hpp", "caffe/util/insert_splits.hpp", "caffe/util/mkl_alternate.hpp",
-        "caffe/util/upgrade_proto.hpp", /* "caffe/util/cudnn.hpp" */}, link="caffe", includepath={"/usr/local/cuda/include/",
-        "/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}, linkpath="/usr/local/cuda/lib/") })
+        "caffe/blob.hpp", "caffe/data_transformer.hpp", "caffe/filler.hpp", "caffe/internal_thread.hpp", "caffe/util/hdf5.hpp", "caffe/layers/base_data_layer.hpp", "caffe/layers/data_layer.hpp",
+        "caffe/layers/dummy_data_layer.hpp", "caffe/layers/hdf5_data_layer.hpp", "caffe/layers/hdf5_output_layer.hpp", "caffe/layers/image_data_layer.hpp", "caffe/layers/memory_data_layer.hpp",
+        "caffe/layers/window_data_layer.hpp", "caffe/layer_factory.hpp", "caffe/layer.hpp", "caffe/layers/accuracy_layer.hpp", "caffe/layers/loss_layer.hpp", "caffe/layers/contrastive_loss_layer.hpp",
+        "caffe/layers/euclidean_loss_layer.hpp", "caffe/layers/hinge_loss_layer.hpp", "caffe/layers/infogain_loss_layer.hpp", "caffe/layers/multinomial_logistic_loss_layer.hpp",
+        "caffe/layers/sigmoid_cross_entropy_loss_layer.hpp", "caffe/layers/softmax_loss_layer.hpp", "caffe/layers/neuron_layer.hpp", "caffe/layers/absval_layer.hpp", "caffe/layers/bnll_layer.hpp",
+        "caffe/layers/dropout_layer.hpp", "caffe/layers/exp_layer.hpp", "caffe/layers/log_layer.hpp", "caffe/layers/power_layer.hpp", "caffe/layers/relu_layer.hpp", "caffe/layers/cudnn_relu_layer.hpp",
+        "caffe/layers/sigmoid_layer.hpp", "caffe/layers/cudnn_sigmoid_layer.hpp", "caffe/layers/tanh_layer.hpp", "caffe/layers/cudnn_tanh_layer.hpp", "caffe/layers/threshold_layer.hpp",
+        "caffe/layers/prelu_layer.hpp", "caffe/layers/argmax_layer.hpp", "caffe/layers/batch_norm_layer.hpp", "caffe/layers/batch_reindex_layer.hpp", "caffe/layers/concat_layer.hpp",
+        "caffe/layers/eltwise_layer.hpp", "caffe/layers/embed_layer.hpp", "caffe/layers/filter_layer.hpp", "caffe/layers/flatten_layer.hpp", "caffe/layers/inner_product_layer.hpp",
+        "caffe/layers/mvn_layer.hpp", "caffe/layers/reshape_layer.hpp", "caffe/layers/reduction_layer.hpp", "caffe/layers/silence_layer.hpp", "caffe/layers/softmax_layer.hpp",
+        "caffe/layers/cudnn_softmax_layer.hpp", "caffe/layers/split_layer.hpp", "caffe/layers/slice_layer.hpp", "caffe/layers/tile_layer.hpp", "caffe/net.hpp", "caffe/parallel.hpp",
+        "caffe/solver.hpp", "caffe/solver_factory.hpp", "caffe/sgd_solvers.hpp", "caffe/layers/base_conv_layer.hpp", "caffe/layers/conv_layer.hpp", "caffe/layers/deconv_layer.hpp",
+        "caffe/layers/cudnn_conv_layer.hpp", "caffe/layers/im2col_layer.hpp", "caffe/layers/lrn_layer.hpp", "caffe/layers/cudnn_lrn_layer.hpp", "caffe/layers/cudnn_lcn_layer.hpp",
+        "caffe/layers/pooling_layer.hpp", "caffe/layers/cudnn_pooling_layer.hpp", "caffe/layers/spp_layer.hpp", "caffe/util/benchmark.hpp", "caffe/util/db.hpp", "caffe/util/db_leveldb.hpp",
+        "caffe/util/db_lmdb.hpp", "caffe/util/io.hpp", "caffe/util/rng.hpp", "caffe/util/im2col.hpp", "caffe/util/insert_splits.hpp", "caffe/util/mkl_alternate.hpp",
+        "caffe/util/upgrade_proto.hpp", "caffe/util/cudnn.hpp"}, link = "caffe", includepath = {"/usr/local/cuda/include/",
+        "/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}, linkpath = "/usr/local/cuda/lib/") })
 public class caffe implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("NOT_IMPLEMENTED", "NO_GPU", "CUDA_POST_KERNEL_CHECK").cppTypes().annotations())
                .put(new Info("CPU_ONLY", "GFLAGS_GFLAGS_H_", "SWIG").define())
+               .put(new Info("USE_CUDNN").define(false))
                .put(new Info("cublasHandle_t", "curandGenerator_t").cast().valueTypes("Pointer"))
                .put(new Info("CBLAS_TRANSPOSE", "cublasStatus_t", "curandStatus_t", "hid_t").cast().valueTypes("int"))
                .put(new Info("std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))

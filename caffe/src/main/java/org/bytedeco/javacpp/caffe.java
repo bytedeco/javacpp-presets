@@ -540,7 +540,6 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 // #include "caffe/util/benchmark.hpp"
 // #include "caffe/util/io.hpp"
 // #include "caffe/util/upgrade_proto.hpp"
-// #include "caffe/vision_layers.hpp"
 
 // #endif  // CAFFE_CAFFE_HPP_
 
@@ -887,6 +886,31 @@ public static final int
     @StdString BytePointer name, @Cast("caffe::ParamSpec_DimCheckMode*") IntBuffer value);
 @Namespace("caffe") public static native @Cast("bool") boolean ParamSpec_DimCheckMode_Parse(
     @StdString String name, @Cast("caffe::ParamSpec_DimCheckMode*") int[] value);
+/** enum caffe::LossParameter_NormalizationMode */
+public static final int
+  LossParameter_NormalizationMode_FULL = 0,
+  LossParameter_NormalizationMode_VALID = 1,
+  LossParameter_NormalizationMode_BATCH_SIZE = 2,
+  LossParameter_NormalizationMode_NONE = 3;
+@Namespace("caffe") public static native @Cast("bool") boolean LossParameter_NormalizationMode_IsValid(int value);
+@Namespace("caffe") @MemberGetter public static native @Cast("const caffe::LossParameter_NormalizationMode") int LossParameter_NormalizationMode_NormalizationMode_MIN();
+@Namespace("caffe") @MemberGetter public static native @Cast("const caffe::LossParameter_NormalizationMode") int LossParameter_NormalizationMode_NormalizationMode_MAX();
+@Namespace("caffe") @MemberGetter public static native int LossParameter_NormalizationMode_NormalizationMode_ARRAYSIZE();
+
+@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer LossParameter_NormalizationMode_descriptor();
+@Namespace("caffe") public static native @StdString BytePointer LossParameter_NormalizationMode_Name(@Cast("caffe::LossParameter_NormalizationMode") int value);
+@Namespace("caffe") public static native @Cast("bool") boolean LossParameter_NormalizationMode_Parse(
+    @StdString BytePointer name, @Cast("caffe::LossParameter_NormalizationMode*") IntPointer value);
+@Namespace("caffe") public static native @Cast("bool") boolean LossParameter_NormalizationMode_Parse(
+    @StdString String name, @Cast("caffe::LossParameter_NormalizationMode*") IntBuffer value);
+@Namespace("caffe") public static native @Cast("bool") boolean LossParameter_NormalizationMode_Parse(
+    @StdString BytePointer name, @Cast("caffe::LossParameter_NormalizationMode*") int[] value);
+@Namespace("caffe") public static native @Cast("bool") boolean LossParameter_NormalizationMode_Parse(
+    @StdString String name, @Cast("caffe::LossParameter_NormalizationMode*") IntPointer value);
+@Namespace("caffe") public static native @Cast("bool") boolean LossParameter_NormalizationMode_Parse(
+    @StdString BytePointer name, @Cast("caffe::LossParameter_NormalizationMode*") IntBuffer value);
+@Namespace("caffe") public static native @Cast("bool") boolean LossParameter_NormalizationMode_Parse(
+    @StdString String name, @Cast("caffe::LossParameter_NormalizationMode*") int[] value);
 /** enum caffe::ConvolutionParameter_Engine */
 public static final int
   ConvolutionParameter_Engine_DEFAULT = 0,
@@ -3729,6 +3753,35 @@ public static final int
   public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
 
   // nested types ----------------------------------------------------
+  @MemberGetter public static native @Cast("const caffe::LossParameter::NormalizationMode") int FULL();
+  public static final int FULL = FULL();
+  @MemberGetter public static native @Cast("const caffe::LossParameter::NormalizationMode") int VALID();
+  public static final int VALID = VALID();
+  @MemberGetter public static native @Cast("const caffe::LossParameter::NormalizationMode") int BATCH_SIZE();
+  public static final int BATCH_SIZE = BATCH_SIZE();
+  @MemberGetter public static native @Cast("const caffe::LossParameter::NormalizationMode") int NONE();
+  public static final int NONE = NONE();
+  public static native @Cast("bool") boolean NormalizationMode_IsValid(int value);
+  @MemberGetter public static native @Cast("const caffe::LossParameter::NormalizationMode") int NormalizationMode_MIN();
+  public static final int NormalizationMode_MIN = NormalizationMode_MIN();
+  @MemberGetter public static native @Cast("const caffe::LossParameter::NormalizationMode") int NormalizationMode_MAX();
+  public static final int NormalizationMode_MAX = NormalizationMode_MAX();
+  @MemberGetter public static native int NormalizationMode_ARRAYSIZE();
+  public static final int NormalizationMode_ARRAYSIZE = NormalizationMode_ARRAYSIZE();
+  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer NormalizationMode_descriptor();
+  public static native @StdString BytePointer NormalizationMode_Name(@Cast("caffe::LossParameter::NormalizationMode") int value);
+  public static native @Cast("bool") boolean NormalizationMode_Parse(@StdString BytePointer name,
+        @Cast("caffe::LossParameter::NormalizationMode*") IntPointer value);
+  public static native @Cast("bool") boolean NormalizationMode_Parse(@StdString String name,
+        @Cast("caffe::LossParameter::NormalizationMode*") IntBuffer value);
+  public static native @Cast("bool") boolean NormalizationMode_Parse(@StdString BytePointer name,
+        @Cast("caffe::LossParameter::NormalizationMode*") int[] value);
+  public static native @Cast("bool") boolean NormalizationMode_Parse(@StdString String name,
+        @Cast("caffe::LossParameter::NormalizationMode*") IntPointer value);
+  public static native @Cast("bool") boolean NormalizationMode_Parse(@StdString BytePointer name,
+        @Cast("caffe::LossParameter::NormalizationMode*") IntBuffer value);
+  public static native @Cast("bool") boolean NormalizationMode_Parse(@StdString String name,
+        @Cast("caffe::LossParameter::NormalizationMode*") int[] value);
 
   // accessors -------------------------------------------------------
 
@@ -3740,7 +3793,15 @@ public static final int
   public native @Cast("google::protobuf::int32") int ignore_label();
   public native void set_ignore_label(@Cast("google::protobuf::int32") int value);
 
-  // optional bool normalize = 2 [default = true];
+  // optional .caffe.LossParameter.NormalizationMode normalization = 3 [default = VALID];
+  public native @Cast("bool") boolean has_normalization();
+  public native void clear_normalization();
+  @MemberGetter public static native int kNormalizationFieldNumber();
+  public static final int kNormalizationFieldNumber = kNormalizationFieldNumber();
+  public native @Cast("caffe::LossParameter_NormalizationMode") int normalization();
+  public native void set_normalization(@Cast("caffe::LossParameter_NormalizationMode") int value);
+
+  // optional bool normalize = 2;
   public native @Cast("bool") boolean has_normalize();
   public native void clear_normalize();
   @MemberGetter public static native int kNormalizeFieldNumber();
@@ -10131,7 +10192,15 @@ public static final int
 
 
 
-// optional bool normalize = 2 [default = true];
+// optional .caffe.LossParameter.NormalizationMode normalization = 3 [default = VALID];
+
+
+
+
+
+
+
+// optional bool normalize = 2;
 
 
 
@@ -12762,14 +12831,6 @@ public static final int
 @Namespace("caffe") public static native @Name("caffe_cpu_strided_dot<double>") double caffe_cpu_strided_dot_double(int n, @Const double[] x, int incx,
     @Const double[] y, int incy);
 
-@Namespace("caffe") public static native @Name("caffe_cpu_hamming_distance<float>") int caffe_cpu_hamming_distance_float(int n, @Const FloatPointer x, @Const FloatPointer y);
-@Namespace("caffe") public static native @Name("caffe_cpu_hamming_distance<float>") int caffe_cpu_hamming_distance_float(int n, @Const FloatBuffer x, @Const FloatBuffer y);
-@Namespace("caffe") public static native @Name("caffe_cpu_hamming_distance<float>") int caffe_cpu_hamming_distance_float(int n, @Const float[] x, @Const float[] y);
-
-@Namespace("caffe") public static native @Name("caffe_cpu_hamming_distance<double>") int caffe_cpu_hamming_distance_double(int n, @Const DoublePointer x, @Const DoublePointer y);
-@Namespace("caffe") public static native @Name("caffe_cpu_hamming_distance<double>") int caffe_cpu_hamming_distance_double(int n, @Const DoubleBuffer x, @Const DoubleBuffer y);
-@Namespace("caffe") public static native @Name("caffe_cpu_hamming_distance<double>") int caffe_cpu_hamming_distance_double(int n, @Const double[] x, @Const double[] y);
-
 // Returns the sum of the absolute values of the elements of vector x
 @Namespace("caffe") public static native @Name("caffe_cpu_asum<float>") float caffe_cpu_asum_float(int n, @Const FloatPointer x);
 @Namespace("caffe") public static native @Name("caffe_cpu_asum<float>") float caffe_cpu_asum_float(int n, @Const FloatBuffer x);
@@ -13934,29 +13995,19 @@ out = skimage.transform.rescale(img, factor, mode='constant', cval=0)
 // #endif   // CAFFE_UTIL_HDF5_H_
 
 
-// Parsed from caffe/data_layers.hpp
+// Parsed from caffe/layers/base_data_layer.hpp
 
 // #ifndef CAFFE_DATA_LAYERS_HPP_
 // #define CAFFE_DATA_LAYERS_HPP_
 
-// #include <string>
-// #include <utility>
 // #include <vector>
-// #include "hdf5.h"
 
 // #include "caffe/blob.hpp"
-// #include "caffe/common.hpp"
-// #include "caffe/data_reader.hpp"
 // #include "caffe/data_transformer.hpp"
-// #include "caffe/filler.hpp"
 // #include "caffe/internal_thread.hpp"
 // #include "caffe/layer.hpp"
 // #include "caffe/proto/caffe.pb.h"
 // #include "caffe/util/blocking_queue.hpp"
-// #include "caffe/util/db.hpp"
-
-public static final String HDF5_DATA_DATASET_NAME = "data";
-public static final String HDF5_DATA_LABEL_NAME = "label";
 
 /**
  * \brief Provides base for data layers that feed blobs to the Net.
@@ -14098,6 +14149,27 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual(true) protected native void load_batch(DoubleBatch batch);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_DATA_LAYERS_HPP_
+
+
+// Parsed from caffe/layers/data_layer.hpp
+
+// #ifndef CAFFE_DATA_LAYER_HPP_
+// #define CAFFE_DATA_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/data_reader.hpp"
+// #include "caffe/data_transformer.hpp"
+// #include "caffe/internal_thread.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/layers/base_data_layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+// #include "caffe/util/db.hpp"
+
 @Name("caffe::DataLayer<float>") @NoOffset public static class FloatDataLayer extends FloatBasePrefetchingDataLayer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -14133,6 +14205,23 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual public native int MaxTopBlobs();
   @Virtual protected native void load_batch(DoubleBatch batch);
 }
+
+  // namespace caffe
+
+// #endif  // CAFFE_DATA_LAYER_HPP_
+
+
+// Parsed from caffe/layers/dummy_data_layer.hpp
+
+// #ifndef CAFFE_DUMMY_DATA_LAYER_HPP_
+// #define CAFFE_DUMMY_DATA_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/filler.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
 
 /**
  * \brief Provides data to the Net generated by a Filler.
@@ -14189,6 +14278,27 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
+
+  // namespace caffe
+
+// #endif  // CAFFE_DUMMY_DATA_LAYER_HPP_
+
+
+// Parsed from caffe/layers/hdf5_data_layer.hpp
+
+// #ifndef CAFFE_HDF5_DATA_LAYER_HPP_
+// #define CAFFE_HDF5_DATA_LAYER_HPP_
+
+// #include "hdf5.h"
+
+// #include <string>
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/base_data_layer.hpp"
 
 /**
  * \brief Provides data to the Net from HDF5 files.
@@ -14251,6 +14361,28 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
   @Virtual protected native void LoadHDF5FileData(@Cast("const char*") BytePointer filename);
 }
+
+  // namespace caffe
+
+// #endif  // CAFFE_HDF5_DATA_LAYER_HPP_
+
+
+// Parsed from caffe/layers/hdf5_output_layer.hpp
+
+// #ifndef CAFFE_HDF5_OUTPUT_LAYER_HPP_
+// #define CAFFE_HDF5_OUTPUT_LAYER_HPP_
+
+// #include "hdf5.h"
+
+// #include <string>
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+public static final String HDF5_DATA_DATASET_NAME = "data";
+public static final String HDF5_DATA_LABEL_NAME = "label";
 
 /**
  * \brief Write blobs to disk as HDF5 files.
@@ -14320,6 +14452,27 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void SaveBlobs();
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_HDF5_OUTPUT_LAYER_HPP_
+
+
+// Parsed from caffe/layers/image_data_layer.hpp
+
+// #ifndef CAFFE_IMAGE_DATA_LAYER_HPP_
+// #define CAFFE_IMAGE_DATA_LAYER_HPP_
+
+// #include <string>
+// #include <utility>
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/data_transformer.hpp"
+// #include "caffe/internal_thread.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/layers/base_data_layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
 /**
  * \brief Provides data to the Net from image files.
  *
@@ -14357,6 +14510,25 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void ShuffleImages();
   @Virtual protected native void load_batch(DoubleBatch batch);
 }
+
+
+  // namespace caffe
+
+// #endif  // CAFFE_IMAGE_DATA_LAYER_HPP_
+
+
+// Parsed from caffe/layers/memory_data_layer.hpp
+
+// #ifndef CAFFE_MEMORY_DATA_LAYER_HPP_
+// #define CAFFE_MEMORY_DATA_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/base_data_layer.hpp"
 
 /**
  * \brief Provides data to the Net from memory.
@@ -14432,6 +14604,27 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef DoubleBlobVector top);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_MEMORY_DATA_LAYER_HPP_
+
+
+// Parsed from caffe/layers/window_data_layer.hpp
+
+// #ifndef CAFFE_WINDOW_DATA_LAYER_HPP_
+// #define CAFFE_WINDOW_DATA_LAYER_HPP_
+
+// #include <string>
+// #include <utility>
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/data_transformer.hpp"
+// #include "caffe/internal_thread.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/layers/base_data_layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
 /**
  * \brief Provides data to the Net from windows of images files, specified
  *        by a window data file.
@@ -14473,7 +14666,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   // namespace caffe
 
-// #endif  // CAFFE_DATA_LAYERS_HPP_
+// #endif  // CAFFE_WINDOW_DATA_LAYER_HPP_
 
 
 // Parsed from caffe/layer_factory.hpp
@@ -14524,6 +14717,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 // #include <vector>
 
 // #include "caffe/common.hpp"
+// #include "caffe/layer.hpp"
 // #include "caffe/proto/caffe.pb.h"
 
 @Name("caffe::LayerRegistry<float>") public static class FloatLayerRegistry extends Pointer {
@@ -15214,21 +15408,18 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 // #endif  // CAFFE_LAYER_H_
 
 
-// Parsed from caffe/loss_layers.hpp
+// Parsed from caffe/layers/accuracy_layer.hpp
 
-// #ifndef CAFFE_LOSS_LAYERS_HPP_
-// #define CAFFE_LOSS_LAYERS_HPP_
+// #ifndef CAFFE_ACCURACY_LAYER_HPP_
+// #define CAFFE_ACCURACY_LAYER_HPP_
 
-// #include <string>
-// #include <utility>
 // #include <vector>
 
 // #include "caffe/blob.hpp"
 // #include "caffe/layer.hpp"
-// #include "caffe/neuron_layers.hpp"
 // #include "caffe/proto/caffe.pb.h"
 
-@Namespace("caffe") @MemberGetter public static native float kLOG_THRESHOLD();
+// #include "caffe/layers/loss_layer.hpp"
 
 /**
  * \brief Computes the classification accuracy for a one-of-many
@@ -15299,6 +15490,24 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_ACCURACY_LAYER_HPP_
+
+
+// Parsed from caffe/layers/loss_layer.hpp
+
+// #ifndef CAFFE_LOSS_LAYER_HPP_
+// #define CAFFE_LOSS_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+@Namespace("caffe") @MemberGetter public static native float kLOG_THRESHOLD();
+
 /**
  * \brief An interface for Layer%s that take two Blob%s as input -- usually
  *        (1) predictions and (2) ground-truth labels -- and output a
@@ -15364,9 +15573,27 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual public native @Cast("bool") boolean AllowForceBackward(int bottom_index);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_LOSS_LAYER_HPP_
+
+
+// Parsed from caffe/layers/contrastive_loss_layer.hpp
+
+// #ifndef CAFFE_CONTRASTIVE_LOSS_LAYER_HPP_
+// #define CAFFE_CONTRASTIVE_LOSS_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/loss_layer.hpp"
+
 /**
  * \brief Computes the contrastive loss \f$
- *          E = \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d +
+ *          E = \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
  *              \left(1-y\right) \max \left(margin-d, 0\right)^2
  *          \f$ where \f$
  *          d = \left| \left| a_n - b_n \right| \right|_2 \f$. This can be
@@ -15382,7 +15609,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  * @param top output Blob vector (length 1)
  *   -# \f$ (1 \times 1 \times 1 \times 1) \f$
  *      the computed contrastive loss: \f$ E =
- *          \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d +
+ *          \frac{1}{2N} \sum\limits_{n=1}^N \left(y\right) d^2 +
  *          \left(1-y\right) \max \left(margin-d, 0\right)^2
  *          \f$ where \f$
  *          d = \left| \left| a_n - b_n \right| \right|_2 \f$.
@@ -15440,6 +15667,24 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
+
+  // namespace caffe
+
+// #endif  // CAFFE_CONTRASTIVE_LOSS_LAYER_HPP_
+
+
+// Parsed from caffe/layers/euclidean_loss_layer.hpp
+
+// #ifndef CAFFE_EUCLIDEAN_LOSS_LAYER_HPP_
+// #define CAFFE_EUCLIDEAN_LOSS_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/loss_layer.hpp"
 
 /**
  * \brief Computes the Euclidean (L2) loss \f$
@@ -15518,6 +15763,24 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_EUCLIDEAN_LOSS_LAYER_HPP_
+
+
+// Parsed from caffe/layers/hinge_loss_layer.hpp
+
+// #ifndef CAFFE_HINGE_LOSS_LAYER_HPP_
+// #define CAFFE_HINGE_LOSS_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/loss_layer.hpp"
+
 /**
  * \brief Computes the hinge loss for a one-of-many classification task.
  *
@@ -15589,6 +15852,25 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
+
+
+  // namespace caffe
+
+// #endif  // CAFFE_HINGE_LOSS_LAYER_HPP_
+
+
+// Parsed from caffe/layers/infogain_loss_layer.hpp
+
+// #ifndef CAFFE_INFOGAIN_LOSS_LAYER_HPP_
+// #define CAFFE_INFOGAIN_LOSS_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/loss_layer.hpp"
 
 /**
  * \brief A generalization of MultinomialLogisticLossLayer that takes an
@@ -15673,6 +15955,24 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_INFOGAIN_LOSS_LAYER_HPP_
+
+
+// Parsed from caffe/layers/multinomial_logistic_loss_layer.hpp
+
+// #ifndef CAFFE_MULTINOMIAL_LOGISTIC_LOSS_LAYER_HPP_
+// #define CAFFE_MULTINOMIAL_LOGISTIC_LOSS_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/loss_layer.hpp"
+
 /**
  * \brief Computes the multinomial logistic loss for a one-of-many
  *        classification task, directly taking a predicted probability
@@ -15734,6 +16034,25 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
+
+  // namespace caffe
+
+// #endif  // CAFFE_MULTINOMIAL_LOGISTIC_LOSS_LAYER_HPP_
+
+
+// Parsed from caffe/layers/sigmoid_cross_entropy_loss_layer.hpp
+
+// #ifndef CAFFE_SIGMOID_CROSS_ENTROPY_LOSS_LAYER_HPP_
+// #define CAFFE_SIGMOID_CROSS_ENTROPY_LOSS_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/loss_layer.hpp"
+// #include "caffe/layers/sigmoid_layer.hpp"
 
 /**
  * \brief Computes the cross-entropy (logistic) loss \f$
@@ -15805,7 +16124,24 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
-// Forward declare SoftmaxLayer for use in SoftmaxWithLossLayer.
+  // namespace caffe
+
+// #endif  // CAFFE_SIGMOID_CROSS_ENTROPY_LOSS_LAYER_HPP_
+
+
+// Parsed from caffe/layers/softmax_loss_layer.hpp
+
+// #ifndef CAFFE_SOFTMAX_WITH_LOSS_LAYER_HPP_
+// #define CAFFE_SOFTMAX_WITH_LOSS_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/loss_layer.hpp"
+// #include "caffe/layers/softmax_layer.hpp"
 
 /**
  * \brief Computes the multinomial logistic loss for a one-of-many
@@ -15867,6 +16203,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
   @Virtual protected native void Backward_gpu(@Const @ByRef FloatBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef FloatBlobVector bottom);
+  @Virtual protected native float get_normalizer(
+        @Cast("caffe::LossParameter_NormalizationMode") int normalization_mode, int valid_count);
 }
 @Name("caffe::SoftmaxWithLossLayer<double>") @NoOffset public static class DoubleSoftmaxWithLossLayer extends DoubleLossLayer {
     static { Loader.load(); }
@@ -15900,24 +16238,23 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
   @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
+  @Virtual protected native double get_normalizer(
+        @Cast("caffe::LossParameter_NormalizationMode") int normalization_mode, int valid_count);
 }
 
   // namespace caffe
 
-// #endif  // CAFFE_LOSS_LAYERS_HPP_
+// #endif  // CAFFE_SOFTMAX_WITH_LOSS_LAYER_HPP_
 
 
-// Parsed from caffe/neuron_layers.hpp
+// Parsed from caffe/layers/neuron_layer.hpp
 
-// #ifndef CAFFE_NEURON_LAYERS_HPP_
-// #define CAFFE_NEURON_LAYERS_HPP_
+// #ifndef CAFFE_NEURON_LAYER_HPP_
+// #define CAFFE_NEURON_LAYER_HPP_
 
-// #include <string>
-// #include <utility>
 // #include <vector>
 
 // #include "caffe/blob.hpp"
-// #include "caffe/common.hpp"
 // #include "caffe/layer.hpp"
 // #include "caffe/proto/caffe.pb.h"
 
@@ -15953,6 +16290,24 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual public native int ExactNumBottomBlobs();
   @Virtual public native int ExactNumTopBlobs();
 }
+
+  // namespace caffe
+
+// #endif  // CAFFE_NEURON_LAYER_HPP_
+
+
+// Parsed from caffe/layers/absval_layer.hpp
+
+// #ifndef CAFFE_ABSVAL_LAYER_HPP_
+// #define CAFFE_ABSVAL_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/neuron_layer.hpp"
 
 /**
  * \brief Computes \f$ y = |x| \f$
@@ -16009,6 +16364,24 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_ABSVAL_LAYER_HPP_
+
+
+// Parsed from caffe/layers/bnll_layer.hpp
+
+// #ifndef CAFFE_BNLL_LAYER_HPP_
+// #define CAFFE_BNLL_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/neuron_layer.hpp"
+
 /**
  * \brief Computes \f$ y = x + \log(1 + \exp(-x)) \f$ if \f$ x > 0 \f$;
  *        \f$ y = \log(1 + \exp(x)) \f$ otherwise.
@@ -16062,6 +16435,24 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
+
+  // namespace caffe
+
+// #endif  // CAFFE_BNLL_LAYER_HPP_
+
+
+// Parsed from caffe/layers/dropout_layer.hpp
+
+// #ifndef CAFFE_DROPOUT_LAYER_HPP_
+// #define CAFFE_DROPOUT_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/neuron_layer.hpp"
 
 /**
  * \brief During training only, sets a random portion of \f$x\f$ to 0, adjusting
@@ -16131,6 +16522,24 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_DROPOUT_LAYER_HPP_
+
+
+// Parsed from caffe/layers/exp_layer.hpp
+
+// #ifndef CAFFE_EXP_LAYER_HPP_
+// #define CAFFE_EXP_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/neuron_layer.hpp"
+
 /**
  * \brief Computes \f$ y = \gamma ^ {\alpha x + \beta} \f$,
  *        as specified by the scale \f$ \alpha \f$, shift \f$ \beta \f$,
@@ -16193,11 +16602,47 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_EXP_LAYER_HPP_
+
+
+// Parsed from caffe/layers/log_layer.hpp
+
+// #ifndef CAFFE_LOG_LAYER_HPP_
+// #define CAFFE_LOG_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/neuron_layer.hpp"
+
 /**
  * \brief Computes \f$ y = log_{\gamma}(\alpha x + \beta) \f$,
  *        as specified by the scale \f$ \alpha \f$, shift \f$ \beta \f$,
  *        and base \f$ \gamma \f$.
  */
+
+  // namespace caffe
+
+// #endif  // CAFFE_LOG_LAYER_HPP_
+
+
+// Parsed from caffe/layers/power_layer.hpp
+
+// #ifndef CAFFE_POWER_LAYER_HPP_
+// #define CAFFE_POWER_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/neuron_layer.hpp"
 
 /**
  * \brief Computes \f$ y = (\alpha x + \beta) ^ \gamma \f$,
@@ -16259,6 +16704,24 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_POWER_LAYER_HPP_
+
+
+// Parsed from caffe/layers/relu_layer.hpp
+
+// #ifndef CAFFE_RELU_LAYER_HPP_
+// #define CAFFE_RELU_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/neuron_layer.hpp"
+
 /**
  * \brief Rectified Linear Unit non-linearity \f$ y = \max(0, x) \f$.
  *        The simple max is fast to compute, and the function does not saturate.
@@ -16312,11 +16775,45 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_RELU_LAYER_HPP_
+
+
+// Parsed from caffe/layers/cudnn_relu_layer.hpp
+
+// #ifndef CAFFE_CUDNN_RELU_LAYER_HPP_
+// #define CAFFE_CUDNN_RELU_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/neuron_layer.hpp"
+// #include "caffe/layers/relu_layer.hpp"
+
 // #ifdef USE_CUDNN
-/**
- * \brief CuDNN acceleration of ReLULayer.
- */
 // #endif
+
+  // namespace caffe
+
+// #endif  // CAFFE_CUDNN_RELU_LAYER_HPP_
+
+
+// Parsed from caffe/layers/sigmoid_layer.hpp
+
+// #ifndef CAFFE_SIGMOID_LAYER_HPP_
+// #define CAFFE_SIGMOID_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/neuron_layer.hpp"
 
 /**
  * \brief Sigmoid function non-linearity \f$
@@ -16363,11 +16860,45 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_SIGMOID_LAYER_HPP_
+
+
+// Parsed from caffe/layers/cudnn_sigmoid_layer.hpp
+
+// #ifndef CAFFE_CUDNN_SIGMOID_LAYER_HPP_
+// #define CAFFE_CUDNN_SIGMOID_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/neuron_layer.hpp"
+// #include "caffe/layers/sigmoid_layer.hpp"
+
 // #ifdef USE_CUDNN
-/**
- * \brief CuDNN acceleration of SigmoidLayer.
- */
 // #endif
+
+  // namespace caffe
+
+// #endif  // CAFFE_CUDNN_SIGMOID_LAYER_HPP_
+
+
+// Parsed from caffe/layers/tanh_layer.hpp
+
+// #ifndef CAFFE_TANH_LAYER_HPP_
+// #define CAFFE_TANH_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/neuron_layer.hpp"
 
 /**
  * \brief TanH hyperbolic tangent non-linearity \f$
@@ -16414,11 +16945,45 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_TANH_LAYER_HPP_
+
+
+// Parsed from caffe/layers/cudnn_tanh_layer.hpp
+
+// #ifndef CAFFE_CUDNN_TANH_LAYER_HPP_
+// #define CAFFE_CUDNN_TANH_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/neuron_layer.hpp"
+// #include "caffe/layers/tanh_layer.hpp"
+
 // #ifdef USE_CUDNN
-/**
- * \brief CuDNN acceleration of TanHLayer.
- */
 // #endif
+
+  // namespace caffe
+
+// #endif  // CAFFE_CUDNN_TANH_LAYER_HPP_
+
+
+// Parsed from caffe/layers/threshold_layer.hpp
+
+// #ifndef CAFFE_THRESHOLD_LAYER_HPP_
+// #define CAFFE_THRESHOLD_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/neuron_layer.hpp"
 
 /**
  * \brief Tests whether the input exceeds a threshold: outputs 1 for inputs
@@ -16472,6 +17037,24 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
+
+  // namespace caffe
+
+// #endif  // CAFFE_THRESHOLD_LAYER_HPP_
+
+
+// Parsed from caffe/layers/prelu_layer.hpp
+
+// #ifndef CAFFE_PRELU_LAYER_HPP_
+// #define CAFFE_PRELU_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/neuron_layer.hpp"
 
 /**
  * \brief Parameterized Rectified Linear Unit non-linearity \f$
@@ -16548,15 +17131,14 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   // namespace caffe
 
-// #endif  // CAFFE_NEURON_LAYERS_HPP_
+// #endif  // CAFFE_PRELU_LAYER_HPP_
 
 
-// Parsed from caffe/common_layers.hpp
+// Parsed from caffe/layers/argmax_layer.hpp
 
-// #ifndef CAFFE_COMMON_LAYERS_HPP_
-// #define CAFFE_COMMON_LAYERS_HPP_
+// #ifndef CAFFE_ARGMAX_LAYER_HPP_
+// #define CAFFE_ARGMAX_LAYER_HPP_
 
-// #include <utility>
 // #include <vector>
 
 // #include "caffe/blob.hpp"
@@ -16639,6 +17221,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_ARGMAX_LAYER_HPP_
+
+
+// Parsed from caffe/layers/batch_norm_layer.hpp
+
+// #ifndef CAFFE_BATCHNORM_LAYER_HPP_
+// #define CAFFE_BATCHNORM_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
 /**
  * \brief Normalizes the input to have 0-mean and/or unit (1) variance across
  *        the batch.
@@ -16647,13 +17245,13 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  * each channel in the data (i.e. axis 1), it subtracts the mean and divides
  * by the variance, where both statistics are computed across both spatial
  * dimensions and across the different examples in the batch.
- * 
+ *
  * By default, during training time, the network is computing global mean/
  * variance statistics via a running average, which is then used at test
  * time to allow deterministic outputs for each input.  You can manually
  * toggle whether the network is accumulating or using the statistics via the
  * use_global_stats option.  IMPORTANT: for this feature to work, you MUST
- * set the learning rate to zero for all three parameter blobs, i.e., 
+ * set the learning rate to zero for all three parameter blobs, i.e.,
  * param {lr_mult: 0} three times in the layer definition.
  *
  * Note that the original paper also included a per-channel learned bias and
@@ -16662,10 +17260,10 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
  * followed by a Convolution layer with output the same size as the current.
  * This produces a channel-specific value that can be added or multiplied by
  * the BatchNorm layer's output.
- * 
+ *
  * [1] S. Ioffe and C. Szegedy, "Batch Normalization: Accelerating Deep Network
- *     Training by Reducing Internal Covariate Shift." arXiv preprint 
- *     arXiv:1502.03167 (2015).  
+ *     Training by Reducing Internal Covariate Shift." arXiv preprint
+ *     arXiv:1502.03167 (2015).
  *
  * TODO(dox): thorough documentation for Forward, Backward, and proto params.
  */
@@ -16717,6 +17315,23 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
+
+  // namespace caffe
+
+// #endif  // CAFFE_BATCHNORM_LAYER_HPP_
+
+
+// Parsed from caffe/layers/batch_reindex_layer.hpp
+
+// #ifndef CAFFE_BATCHREINDEX_LAYER_HPP_
+// #define CAFFE_BATCHREINDEX_LAYER_HPP_
+
+// #include <utility>
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
 
 /**
  * \brief Index into the input blob along its first axis.
@@ -16770,6 +17385,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_BATCHREINDEX_LAYER_HPP_
+
+
+// Parsed from caffe/layers/concat_layer.hpp
+
+// #ifndef CAFFE_CONCAT_LAYER_HPP_
+// #define CAFFE_CONCAT_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
 /**
  * \brief Takes at least two Blob%s and concatenates them along either the num
  *        or channel dimension, outputting the result.
@@ -16822,6 +17453,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
+
+  // namespace caffe
+
+// #endif  // CAFFE_CONCAT_LAYER_HPP_
+
+
+// Parsed from caffe/layers/eltwise_layer.hpp
+
+// #ifndef CAFFE_ELTWISE_LAYER_HPP_
+// #define CAFFE_ELTWISE_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
 
 /**
  * \brief Compute elementwise operations, such as product and sum,
@@ -16877,6 +17524,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
+
+  // namespace caffe
+
+// #endif  // CAFFE_ELTWISE_LAYER_HPP_
+
+
+// Parsed from caffe/layers/embed_layer.hpp
+
+// #ifndef CAFFE_EMBED_LAYER_HPP_
+// #define CAFFE_EMBED_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
 
 /**
  * \brief A layer for learning "embeddings" of one-hot vector input.
@@ -16934,6 +17597,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_EMBED_LAYER_HPP_
+
+
+// Parsed from caffe/layers/filter_layer.hpp
+
+// #ifndef CAFFE_FILTER_LAYER_HPP_
+// #define CAFFE_FILTER_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
 /**
  * \brief Takes two+ Blobs, interprets last Blob as a selector and
  *  filter remaining Blobs accordingly with selector data (0 means that
@@ -16989,6 +17668,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
       @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_FILTER_LAYER_HPP_
+
+
+// Parsed from caffe/layers/flatten_layer.hpp
+
+// #ifndef CAFFE_FLATTEN_LAYER_HPP_
+// #define CAFFE_FLATTEN_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
 /**
  * \brief Reshapes the input Blob into flat vectors.
  *
@@ -17035,6 +17730,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void Backward_cpu(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
+
+  // namespace caffe
+
+// #endif  // CAFFE_FLATTEN_LAYER_HPP_
+
+
+// Parsed from caffe/layers/inner_product_layer.hpp
+
+// #ifndef CAFFE_INNER_PRODUCT_LAYER_HPP_
+// #define CAFFE_INNER_PRODUCT_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
 
 /**
  * \brief Also known as a "fully-connected" layer, computes an inner product
@@ -17091,6 +17802,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_INNER_PRODUCT_LAYER_HPP_
+
+
+// Parsed from caffe/layers/mvn_layer.hpp
+
+// #ifndef CAFFE_MVN_LAYER_HPP_
+// #define CAFFE_MVN_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
 /**
  * \brief Normalizes the input to have 0-mean and/or unit (1) variance.
  *
@@ -17140,6 +17867,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
+
+  // namespace caffe
+
+// #endif  // CAFFE_MVN_LAYER_HPP_
+
+
+// Parsed from caffe/layers/reshape_layer.hpp
+
+// #ifndef CAFFE_XXX_LAYER_HPP_
+// #define CAFFE_XXX_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
 
 /*
  * @brief Reshapes the input Blob into an arbitrary-sized output Blob.
@@ -17195,6 +17938,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
+
+  // namespace caffe
+
+// #endif  // CAFFE_XXX_LAYER_HPP_
+
+
+// Parsed from caffe/layers/reduction_layer.hpp
+
+// #ifndef CAFFE_REDUCTION_LAYER_HPP_
+// #define CAFFE_REDUCTION_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
 
 /**
  * \brief Compute "reductions" -- operations that return a scalar output Blob
@@ -17252,6 +18011,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_REDUCTION_LAYER_HPP_
+
+
+// Parsed from caffe/layers/silence_layer.hpp
+
+// #ifndef CAFFE_SILENCE_LAYER_HPP_
+// #define CAFFE_SILENCE_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
 /**
  * \brief Ignores bottom blobs while producing no top blobs. (This is useful
  *        to suppress outputs during testing.)
@@ -17300,6 +18075,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
+
+  // namespace caffe
+
+// #endif  // CAFFE_SILENCE_LAYER_HPP_
+
+
+// Parsed from caffe/layers/softmax_layer.hpp
+
+// #ifndef CAFFE_SOFTMAX_LAYER_HPP_
+// #define CAFFE_SOFTMAX_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
 
 /**
  * \brief Computes the softmax function.
@@ -17351,12 +18142,42 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
        @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_SOFTMAX_LAYER_HPP_
+
+
+// Parsed from caffe/layers/cudnn_softmax_layer.hpp
+
+// #ifndef CAFFE_CUDNN_SOFTMAX_LAYER_HPP_
+// #define CAFFE_CUDNN_SOFTMAX_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/softmax_layer.hpp"
+
 // #ifdef USE_CUDNN
-/**
- * \brief cuDNN implementation of SoftmaxLayer.
- *        Fallback to SoftmaxLayer for CPU mode.
- */
 // #endif
+
+  // namespace caffe
+
+// #endif  // CAFFE_CUDNN_SOFTMAX_LAYER_HPP_
+
+
+// Parsed from caffe/layers/split_layer.hpp
+
+// #ifndef CAFFE_SPLIT_LAYER_HPP_
+// #define CAFFE_SPLIT_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
 
 /**
  * \brief Creates a "split" path in the network by copying the bottom Blob
@@ -17408,6 +18229,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void Backward_gpu(@Const @ByRef DoubleBlobVector top,
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
+
+  // namespace caffe
+
+// #endif  // CAFFE_SPLIT_LAYER_HPP_
+
+
+// Parsed from caffe/layers/slice_layer.hpp
+
+// #ifndef CAFFE_SLICE_LAYER_HPP_
+// #define CAFFE_SLICE_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
 
 /**
  * \brief Takes a Blob and slices it along either the num or channel dimension,
@@ -17464,6 +18301,22 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_SLICE_LAYER_HPP_
+
+
+// Parsed from caffe/layers/tile_layer.hpp
+
+// #ifndef CAFFE_TILE_LAYER_HPP_
+// #define CAFFE_TILE_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
 /**
  * \brief Copy a Blob along specified dimensions.
  */
@@ -17516,7 +18369,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   // namespace caffe
 
-// #endif  // CAFFE_COMMON_LAYERS_HPP_
+// #endif  // CAFFE_TILE_LAYER_HPP_
 
 
 // Parsed from caffe/net.hpp
@@ -18055,6 +18908,11 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   // methods to restore the state from the appropriate snapshot type.
   public native void Restore(@Cast("const char*") BytePointer resume_file);
   public native void Restore(String resume_file);
+  // The Solver::Snapshot function implements the basic snapshotting utility
+  // that stores the learned net. You should implement the SnapshotSolverState()
+  // function that produces a SolverState protocol buffer that needs to be
+  // written to disk together with the learned net.
+  public native void Snapshot();
   public native @Const @ByRef SolverParameter param();
   public native @SharedPtr @ByVal FloatNet net();
   public native @Const @ByRef FloatNetSharedVector test_nets();
@@ -18101,6 +18959,11 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   // methods to restore the state from the appropriate snapshot type.
   public native void Restore(@Cast("const char*") BytePointer resume_file);
   public native void Restore(String resume_file);
+  // The Solver::Snapshot function implements the basic snapshotting utility
+  // that stores the learned net. You should implement the SnapshotSolverState()
+  // function that produces a SolverState protocol buffer that needs to be
+  // written to disk together with the learned net.
+  public native void Snapshot();
   public native @Const @ByRef SolverParameter param();
   public native @SharedPtr @ByVal DoubleNet net();
   public native @Const @ByRef DoubleNetSharedVector test_nets();
@@ -18524,23 +19387,17 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 // #endif  // CAFFE_SGD_SOLVERS_HPP_
 
 
-// Parsed from caffe/vision_layers.hpp
+// Parsed from caffe/layers/base_conv_layer.hpp
 
-// #ifndef CAFFE_VISION_LAYERS_HPP_
-// #define CAFFE_VISION_LAYERS_HPP_
+// #ifndef CAFFE_BASE_CONVOLUTION_LAYER_HPP_
+// #define CAFFE_BASE_CONVOLUTION_LAYER_HPP_
 
-// #include <string>
-// #include <utility>
 // #include <vector>
 
 // #include "caffe/blob.hpp"
-// #include "caffe/common.hpp"
-// #include "caffe/common_layers.hpp"
-// #include "caffe/data_layers.hpp"
 // #include "caffe/layer.hpp"
-// #include "caffe/loss_layers.hpp"
-// #include "caffe/neuron_layers.hpp"
 // #include "caffe/proto/caffe.pb.h"
+// #include "caffe/util/im2col.hpp"
 
 /**
  * \brief Abstract base class that factors out the BLAS code common to
@@ -18578,6 +19435,24 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual(true) protected native @Cast("bool") boolean reverse_dimensions();
   @Virtual(true) protected native void compute_output_shape();
 }
+
+  // namespace caffe
+
+// #endif  // CAFFE_BASE_CONVOLUTION_LAYER_HPP_
+
+
+// Parsed from caffe/layers/conv_layer.hpp
+
+// #ifndef CAFFE_CONV_LAYER_HPP_
+// #define CAFFE_CONV_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/base_conv_layer.hpp"
 
 /**
  * \brief Convolves the input image with a bank of learned filters,
@@ -18692,6 +19567,24 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void compute_output_shape();
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_CONV_LAYER_HPP_
+
+
+// Parsed from caffe/layers/deconv_layer.hpp
+
+// #ifndef CAFFE_DECONV_LAYER_HPP_
+// #define CAFFE_DECONV_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/base_conv_layer.hpp"
+
 /**
  * \brief Convolve the input with a bank of learned filters, and (optionally)
  *        add biases, treating filters and convolution parameters in the
@@ -18747,22 +19640,42 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   @Virtual protected native void compute_output_shape();
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_DECONV_LAYER_HPP_
+
+
+// Parsed from caffe/layers/cudnn_conv_layer.hpp
+
+// #ifndef CAFFE_CUDNN_CONV_LAYER_HPP_
+// #define CAFFE_CUDNN_CONV_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/conv_layer.hpp"
+
 // #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of ConvolutionLayer.
- *        Fallback to ConvolutionLayer for CPU mode.
- *
- * cuDNN accelerates convolution through forward kernels for filtering and bias
- * plus backward kernels for the gradient w.r.t. the filters, biases, and
- * inputs. Caffe + cuDNN further speeds up the computation through forward
- * parallelism across groups and backward parallelism across gradients.
- *
- * The CUDNN engine does not have memory overhead for matrix buffers. For many
- * input and filter regimes the CUDNN engine is faster than the CAFFE engine,
- * but for fully-convolutional models and large inputs the CAFFE engine can be
- * faster as long as it fits in memory.
-*/
 // #endif
+
+  // namespace caffe
+
+// #endif  // CAFFE_CUDNN_CONV_LAYER_HPP_
+
+
+// Parsed from caffe/layers/im2col_layer.hpp
+
+// #ifndef CAFFE_IM2COL_LAYER_HPP_
+// #define CAFFE_IM2COL_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
 
 /**
  * \brief A helper for image operations that rearranges image regions into
@@ -18820,7 +19733,26 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
-// Forward declare PoolingLayer and SplitLayer for use in LRNLayer.
+  // namespace caffe
+
+// #endif  // CAFFE_IM2COL_LAYER_HPP_
+
+
+// Parsed from caffe/layers/lrn_layer.hpp
+
+// #ifndef CAFFE_LRN_LAYER_HPP_
+// #define CAFFE_LRN_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/eltwise_layer.hpp"
+// #include "caffe/layers/pooling_layer.hpp"
+// #include "caffe/layers/power_layer.hpp"
+// #include "caffe/layers/split_layer.hpp"
 
 /**
  * \brief Normalize the input in a local region across or within feature maps.
@@ -18902,9 +19834,64 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
-// #ifdef USE_CUDNN
+  // namespace caffe
 
+// #endif  // CAFFE_LRN_LAYER_HPP_
+
+
+// Parsed from caffe/layers/cudnn_lrn_layer.hpp
+
+// #ifndef CAFFE_CUDNN_LRN_LAYER_HPP_
+// #define CAFFE_CUDNN_LRN_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/lrn_layer.hpp"
+
+// #ifdef USE_CUDNN
 // #endif
+
+  // namespace caffe
+
+// #endif  // CAFFE_CUDNN_LRN_LAYER_HPP_
+
+
+// Parsed from caffe/layers/cudnn_lcn_layer.hpp
+
+// #ifndef CAFFE_CUDNN_LCN_LAYER_HPP_
+// #define CAFFE_CUDNN_LCN_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/lrn_layer.hpp"
+// #include "caffe/layers/power_layer.hpp"
+
+// #ifdef USE_CUDNN
+// #endif
+
+  // namespace caffe
+
+// #endif  // CAFFE_CUDNN_LCN_LAYER_HPP_
+
+
+// Parsed from caffe/layers/pooling_layer.hpp
+
+// #ifndef CAFFE_POOLING_LAYER_HPP_
+// #define CAFFE_POOLING_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
 
 /**
  * \brief Pools the input image by taking the max, average, etc. within regions.
@@ -18966,12 +19953,42 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
         @Const @ByRef BoolVector propagate_down, @Const @ByRef DoubleBlobVector bottom);
 }
 
+  // namespace caffe
+
+// #endif  // CAFFE_POOLING_LAYER_HPP_
+
+
+// Parsed from caffe/layers/cudnn_pooling_layer.hpp
+
+// #ifndef CAFFE_CUDNN_POOLING_LAYER_HPP_
+// #define CAFFE_CUDNN_POOLING_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
+
+// #include "caffe/layers/pooling_layer.hpp"
+
 // #ifdef USE_CUDNN
-/*
- * @brief cuDNN implementation of PoolingLayer.
- *        Fallback to PoolingLayer for CPU mode.
-*/
 // #endif
+
+  // namespace caffe
+
+// #endif  // CAFFE_CUDNN_POOLING_LAYER_HPP_
+
+
+// Parsed from caffe/layers/spp_layer.hpp
+
+// #ifndef CAFFE_SPP_LAYER_HPP_
+// #define CAFFE_SPP_LAYER_HPP_
+
+// #include <vector>
+
+// #include "caffe/blob.hpp"
+// #include "caffe/layer.hpp"
+// #include "caffe/proto/caffe.pb.h"
 
 /**
  * \brief Does spatial pyramid pooling on the input image
@@ -18982,7 +19999,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 
   // namespace caffe
 
-// #endif  // CAFFE_VISION_LAYERS_HPP_
+// #endif  // CAFFE_SPP_LAYER_HPP_
 
 
 // Parsed from caffe/util/benchmark.hpp
@@ -19234,17 +20251,24 @@ public static final int READ = 0, WRITE = 1, NEW = 2;
 // #ifndef CAFFE_UTIL_IO_H_
 // #define CAFFE_UTIL_IO_H_
 
-// #include <unistd.h>
+// #include <boost/filesystem.hpp>
+// #include <iomanip>
+// #include <iostream>  // NOLINT(readability/streams)
 // #include <string>
 
 // #include "google/protobuf/message.h"
 
 // #include "caffe/common.hpp"
 // #include "caffe/proto/caffe.pb.h"
+// #include "caffe/util/format.hpp"
 
-@Namespace("caffe") public static native void MakeTempFilename(@StdString @Cast({"char*", "std::string*"}) BytePointer temp_filename);
+// #ifndef CAFFE_TMP_DIR_RETRIES
+public static final int CAFFE_TMP_DIR_RETRIES = 100;
+// #endif
 
 @Namespace("caffe") public static native void MakeTempDir(@StdString @Cast({"char*", "std::string*"}) BytePointer temp_dirname);
+
+@Namespace("caffe") public static native void MakeTempFilename(@StdString @Cast({"char*", "std::string*"}) BytePointer temp_filename);
 
 @Namespace("caffe") public static native @Cast("bool") boolean ReadProtoFromTextFile(@Cast("const char*") BytePointer filename, @Cast("google::protobuf::Message*") Pointer proto);
 @Namespace("caffe") public static native @Cast("bool") boolean ReadProtoFromTextFile(String filename, @Cast("google::protobuf::Message*") Pointer proto);
@@ -19895,6 +20919,16 @@ public static native void cblas_daxpby(int N, double alpha, @Const double[] X,
   // namespace caffe
 
 // #endif   // CAFFE_UTIL_UPGRADE_PROTO_H_
+
+
+// Parsed from caffe/util/cudnn.hpp
+
+// #ifndef CAFFE_UTIL_CUDNN_H_
+// #define CAFFE_UTIL_CUDNN_H_
+// #ifdef USE_CUDNN
+
+// #endif  // USE_CUDNN
+// #endif  // CAFFE_UTIL_CUDNN_H_
 
 
 }

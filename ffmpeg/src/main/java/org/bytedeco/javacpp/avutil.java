@@ -6895,7 +6895,7 @@ public static native AVStereo3D av_stereo3d_create_side_data(AVFrame frame);
 
 // #ifndef AVUTIL_FFVERSION_H
 // #define AVUTIL_FFVERSION_H
-public static final String FFMPEG_VERSION = "2.8.1";
+public static final String FFMPEG_VERSION = "2.8.3";
 // #endif /* AVUTIL_FFVERSION_H */
 
 

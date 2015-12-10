@@ -46,10 +46,10 @@ GFLAGS=2.1.2
 PROTO=2.6.1
 LEVELDB=1.18
 SNAPPY=1.1.3
-LMDB=0.9.15
-BOOST=1_57_0 # 1.58 incompatible with OSX
-HDF5=1.8.15-patch1
-OPENBLAS=0.2.14
+LMDB=0.9.17
+BOOST=1_59_0
+HDF5=1.8.16
+OPENBLAS=0.2.15
 CAFFE_VERSION=master
 
 download https://github.com/google/glog/archive/v$GLOG.tar.gz glog-$GLOG.tar.gz
@@ -58,7 +58,7 @@ download https://github.com/google/protobuf/releases/download/v$PROTO/protobuf-$
 download https://github.com/google/leveldb/archive/v$LEVELDB.tar.gz leveldb-$LEVELDB.tar.gz
 download https://github.com/google/snappy/releases/download/$SNAPPY/snappy-$SNAPPY.tar.gz snappy-$SNAPPY.tar.gz
 download https://github.com/LMDB/lmdb/archive/LMDB_$LMDB.tar.gz lmdb-LMDB_$LMDB.tar.gz
-download http://iweb.dl.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
+download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
 download http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-$HDF5/src/hdf5-$HDF5.tar.bz2 hdf5-$HDF5.tar.bz2
 download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS.tar.gz OpenBLAS-$OPENBLAS.tar.gz
 download https://github.com/BVLC/caffe/archive/$CAFFE_VERSION.tar.gz caffe-$CAFFE_VERSION.tar.gz
@@ -124,7 +124,7 @@ cp -a liblmdb.a ../../../lib/
 cd ../../..
 
 cd boost_$BOOST
-./bootstrap.sh --with-libraries=system,thread
+./bootstrap.sh --with-libraries=filesystem,system,thread
 ./b2 install "--prefix=$INSTALL_PATH" "address-model=$BINARY" link=static "toolset=$TOOLSET" "cxxflags=$CXXFLAGS"
 cd ..
 ln -sf libboost_thread.a lib/libboost_thread-mt.a
