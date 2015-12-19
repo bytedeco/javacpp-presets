@@ -1,4 +1,5 @@
 
+ * Avoid versioning of FFTW and GSL libraries, preventing them from working on Android ([issue #127](https://github.com/bytedeco/javacpp-presets/issues/127))
  * Upgrade presets for FFmpeg 2.8.3 and Caffe, including the latest versions of their dependencies
  * Add presets for TensorFlow ([issue #111](https://github.com/bytedeco/javacpp-presets/issues/111))
  * Virtualize `opencv_videostab.IFrameSource` to let us implement it in Java ([issue bytedeco/javacv#277](https://github.com/bytedeco/javacv/issues/277))
