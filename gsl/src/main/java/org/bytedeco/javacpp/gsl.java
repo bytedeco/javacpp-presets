@@ -1778,9 +1778,9 @@ public static native int gsl_test_summary();
 // #endif
 
 
-public static final String GSL_VERSION = "1.16";
-public static final int GSL_MAJOR_VERSION = 1;
-public static final int GSL_MINOR_VERSION = 16;
+public static final String GSL_VERSION = "2.1";
+public static final int GSL_MAJOR_VERSION = 2;
+public static final int GSL_MINOR_VERSION = 1;
 
 @MemberGetter public static native @Cast("const char*") BytePointer gsl_version();
 
@@ -10843,17 +10843,23 @@ public static class gsl_bspline_workspace extends Pointer {
         return (gsl_bspline_workspace)super.position(position);
     }
 
-    public native @Cast("size_t") long k(); public native gsl_bspline_workspace k(long k); /* spline order */
-    public native @Cast("size_t") long km1(); public native gsl_bspline_workspace km1(long km1); /* k - 1 (polynomial order) */
-    public native @Cast("size_t") long l(); public native gsl_bspline_workspace l(long l); /* number of polynomial pieces on interval */
+    public native @Cast("size_t") long k(); public native gsl_bspline_workspace k(long k);      /* spline order */
+    public native @Cast("size_t") long km1(); public native gsl_bspline_workspace km1(long km1);    /* k - 1 (polynomial order) */
+    public native @Cast("size_t") long l(); public native gsl_bspline_workspace l(long l);      /* number of polynomial pieces on interval */
     public native @Cast("size_t") long nbreak(); public native gsl_bspline_workspace nbreak(long nbreak); /* number of breakpoints (l + 1) */
-    public native @Cast("size_t") long n(); public native gsl_bspline_workspace n(long n); /* number of bspline basis functions (l + k - 1) */
+    public native @Cast("size_t") long n(); public native gsl_bspline_workspace n(long n);      /* number of bspline basis functions (l + k - 1) */
 
-    public native gsl_vector knots(); public native gsl_bspline_workspace knots(gsl_vector knots); /* knots vector */
+    public native gsl_vector knots(); public native gsl_bspline_workspace knots(gsl_vector knots);  /* knots vector */
     public native gsl_vector deltal(); public native gsl_bspline_workspace deltal(gsl_vector deltal); /* left delta */
     public native gsl_vector deltar(); public native gsl_bspline_workspace deltar(gsl_vector deltar); /* right delta */
-    public native gsl_vector B(); public native gsl_bspline_workspace B(gsl_vector B); /* temporary spline results */
+    public native gsl_vector B(); public native gsl_bspline_workspace B(gsl_vector B);      /* temporary spline results */
+
+    /* bspline derivative parameters */
+    public native gsl_matrix A(); public native gsl_bspline_workspace A(gsl_matrix A);      /* work matrix */
+    public native gsl_matrix dB(); public native gsl_bspline_workspace dB(gsl_matrix dB);     /* temporary derivative results */
 }
+
+// #ifndef GSL_DISABLE_DEPRECATED
 
 public static class gsl_bspline_deriv_workspace extends Pointer {
     static { Loader.load(); }
@@ -10873,6 +10879,11 @@ public static class gsl_bspline_deriv_workspace extends Pointer {
     public native gsl_matrix A(); public native gsl_bspline_deriv_workspace A(gsl_matrix A); /* work matrix */
     public native gsl_matrix dB(); public native gsl_bspline_deriv_workspace dB(gsl_matrix dB); /* temporary derivative results */
 }
+
+
+
+
+// #endif /* !GSL_DISABLE_DEPRECATED */
 
 public static native gsl_bspline_workspace gsl_bspline_alloc(@Cast("const size_t") long k, @Cast("const size_t") long nbreak);
 
@@ -10908,23 +10919,17 @@ public static native int gsl_bspline_eval_nonzero(double x,
                          @Cast("size_t*") SizeTPointer iend,
                          gsl_bspline_workspace w);
 
-public static native gsl_bspline_deriv_workspace gsl_bspline_deriv_alloc(@Cast("const size_t") long k);
-
-public static native void gsl_bspline_deriv_free(gsl_bspline_deriv_workspace w);
-
 public static native int gsl_bspline_deriv_eval(double x,
                        @Cast("const size_t") long nderiv,
                        gsl_matrix dB,
-                       gsl_bspline_workspace w,
-                       gsl_bspline_deriv_workspace dw);
+                       gsl_bspline_workspace w);
 
 public static native int gsl_bspline_deriv_eval_nonzero(double x,
                                @Cast("const size_t") long nderiv,
                                gsl_matrix dB,
                                @Cast("size_t*") SizeTPointer istart,
                                @Cast("size_t*") SizeTPointer iend,
-                               gsl_bspline_workspace w,
-                               gsl_bspline_deriv_workspace dw);
+                               gsl_bspline_workspace w);
 
 // #endif /* __GSL_BSPLINE_H__ */
 
@@ -13520,6 +13525,7 @@ public static class gsl_interp extends Pointer {
 @MemberGetter public static native @Const gsl_interp_type gsl_interp_cspline_periodic();
 @MemberGetter public static native @Const gsl_interp_type gsl_interp_akima();
 @MemberGetter public static native @Const gsl_interp_type gsl_interp_akima_periodic();
+@MemberGetter public static native @Const gsl_interp_type gsl_interp_steffen();
 
 public static native gsl_interp_accel gsl_interp_accel_alloc();
 
@@ -13701,10 +13707,13 @@ public static native @Cast("size_t") long gsl_interp_accel_find(gsl_interp_accel
 // #ifndef __GSL_LINALG_H__
 // #define __GSL_LINALG_H__
 
+// #include <stdlib.h>
 // #include <gsl/gsl_mode.h>
 // #include <gsl/gsl_permutation.h>
 // #include <gsl/gsl_vector.h>
 // #include <gsl/gsl_matrix.h>
+// #include <gsl/gsl_math.h>
+// #include <gsl/gsl_inline.h>
 
 // #undef __BEGIN_DECLS
 // #undef __END_DECLS
@@ -13962,6 +13971,10 @@ public static native int gsl_linalg_QR_Qvec(@Const gsl_matrix QR,
 public static native int gsl_linalg_QR_QTmat(@Const gsl_matrix QR,
                          @Const gsl_vector tau,
                          gsl_matrix A);
+
+public static native int gsl_linalg_QR_matQ(@Const gsl_matrix QR,
+                        @Const gsl_vector tau,
+                        gsl_matrix A);
 
 public static native int gsl_linalg_QR_unpack(@Const gsl_matrix QR,
                           @Const gsl_vector tau,
@@ -14303,6 +14316,23 @@ public static native int gsl_linalg_bidiag_unpack_B(@Const gsl_matrix A,
 public static native int gsl_linalg_balance_matrix(gsl_matrix A, gsl_vector D);
 public static native int gsl_linalg_balance_accum(gsl_matrix A, gsl_vector D);
 public static native int gsl_linalg_balance_columns(gsl_matrix A, gsl_vector D);
+
+/* */ public static native void gsl_linalg_givens(double a, double b,
+                                    DoublePointer c, DoublePointer s);
+public static native void gsl_linalg_givens(double a, double b,
+                                    DoubleBuffer c, DoubleBuffer s);
+public static native void gsl_linalg_givens(double a, double b,
+                                    double[] c, double[] s);
+/* */ public static native void gsl_linalg_givens_gv(gsl_vector v, @Cast("const size_t") long i,
+                                       @Cast("const size_t") long j, double c,
+                                       double s);
+
+// #ifdef HAVE_INLINE
+
+/* Generate a Givens rotation (cos,sin) which takes v=(x,y) to (|v|,0) 
+   From Golub and Van Loan, "Matrix Computations", Section 5.1.8 */ /* gsl_linalg_givens() */
+
+// #endif /* HAVE_INLINE */
 
 // #endif /* __GSL_LINALG_H__ */
 
@@ -16083,6 +16113,1269 @@ public static native int gsl_wavelet2d_nstransform_matrix_inverse(@Const gsl_wav
                                           gsl_wavelet_workspace work);
 
 // #endif /* __GSL_WAVELET2D_H__ */
+
+
+// Parsed from gsl/gsl_multilarge.h
+
+/* gsl_multilarge.h
+ * 
+ * Copyright (C) 2015 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_MULTILARGE_H__
+// #define __GSL_MULTILARGE_H__
+
+// #include <gsl/gsl_math.h>
+// #include <gsl/gsl_vector.h>
+// #include <gsl/gsl_matrix.h>
+// #include <gsl/gsl_types.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+
+/* iteration solver type */
+public static class gsl_multilarge_linear_type extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public gsl_multilarge_linear_type() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public gsl_multilarge_linear_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public gsl_multilarge_linear_type(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public gsl_multilarge_linear_type position(int position) {
+        return (gsl_multilarge_linear_type)super.position(position);
+    }
+
+  @MemberGetter public native @Cast("const char*") BytePointer name();
+  public static class Alloc_long extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Alloc_long(Pointer p) { super(p); }
+      protected Alloc_long() { allocate(); }
+      private native void allocate();
+      public native Pointer call(@Cast("const size_t") long p);
+  }
+  public native Alloc_long alloc(); public native gsl_multilarge_linear_type alloc(Alloc_long alloc);
+  public static class Reset_Pointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Reset_Pointer(Pointer p) { super(p); }
+      protected Reset_Pointer() { allocate(); }
+      private native void allocate();
+      public native int call(Pointer arg0);
+  }
+  public native Reset_Pointer reset(); public native gsl_multilarge_linear_type reset(Reset_Pointer reset);
+  public static class Accumulate_gsl_matrix_gsl_vector_Pointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Accumulate_gsl_matrix_gsl_vector_Pointer(Pointer p) { super(p); }
+      protected Accumulate_gsl_matrix_gsl_vector_Pointer() { allocate(); }
+      private native void allocate();
+      public native int call(gsl_matrix X, gsl_vector y,
+                       Pointer arg2);
+  }
+  public native Accumulate_gsl_matrix_gsl_vector_Pointer accumulate(); public native gsl_multilarge_linear_type accumulate(Accumulate_gsl_matrix_gsl_vector_Pointer accumulate);
+  public static class Solve_double_gsl_vector_DoublePointer_DoublePointer_Pointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Solve_double_gsl_vector_DoublePointer_DoublePointer_Pointer(Pointer p) { super(p); }
+      protected Solve_double_gsl_vector_DoublePointer_DoublePointer_Pointer() { allocate(); }
+      private native void allocate();
+      public native int call(double lambda, gsl_vector c,
+                  DoublePointer rnorm, DoublePointer snorm, Pointer arg4);
+  }
+  public native Solve_double_gsl_vector_DoublePointer_DoublePointer_Pointer solve(); public native gsl_multilarge_linear_type solve(Solve_double_gsl_vector_DoublePointer_DoublePointer_Pointer solve);
+  public static class Rcond_DoublePointer_Pointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Rcond_DoublePointer_Pointer(Pointer p) { super(p); }
+      protected Rcond_DoublePointer_Pointer() { allocate(); }
+      private native void allocate();
+      public native int call(DoublePointer rcond, Pointer arg1);
+  }
+  public native Rcond_DoublePointer_Pointer rcond(); public native gsl_multilarge_linear_type rcond(Rcond_DoublePointer_Pointer rcond);
+  public static class Lcurve_gsl_vector_gsl_vector_gsl_vector_Pointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Lcurve_gsl_vector_gsl_vector_gsl_vector_Pointer(Pointer p) { super(p); }
+      protected Lcurve_gsl_vector_gsl_vector_gsl_vector_Pointer() { allocate(); }
+      private native void allocate();
+      public native int call(gsl_vector reg_param, gsl_vector rho,
+                   gsl_vector eta, Pointer arg3);
+  }
+  public native Lcurve_gsl_vector_gsl_vector_gsl_vector_Pointer lcurve(); public native gsl_multilarge_linear_type lcurve(Lcurve_gsl_vector_gsl_vector_gsl_vector_Pointer lcurve);
+  public static class Free_Pointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Free_Pointer(Pointer p) { super(p); }
+      protected Free_Pointer() { allocate(); }
+      private native void allocate();
+      public native void call(Pointer arg0);
+  }
+  public native Free_Pointer free(); public native gsl_multilarge_linear_type free(Free_Pointer free);
+}
+
+public static class gsl_multilarge_linear_workspace extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public gsl_multilarge_linear_workspace() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public gsl_multilarge_linear_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public gsl_multilarge_linear_workspace(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public gsl_multilarge_linear_workspace position(int position) {
+        return (gsl_multilarge_linear_workspace)super.position(position);
+    }
+
+  @MemberGetter public native @Const gsl_multilarge_linear_type type();
+  public native Pointer state(); public native gsl_multilarge_linear_workspace state(Pointer state);
+  public native @Cast("size_t") long p(); public native gsl_multilarge_linear_workspace p(long p);
+}
+
+/* available types */
+@MemberGetter public static native @Const gsl_multilarge_linear_type gsl_multilarge_linear_normal();
+@MemberGetter public static native @Const gsl_multilarge_linear_type gsl_multilarge_linear_tsqr();
+
+/*
+ * Prototypes
+ */
+public static native gsl_multilarge_linear_workspace gsl_multilarge_linear_alloc(@Const gsl_multilarge_linear_type T,
+                            @Cast("const size_t") long p);
+
+public static native void gsl_multilarge_linear_free(gsl_multilarge_linear_workspace w);
+
+public static native @Cast("const char*") BytePointer gsl_multilarge_linear_name(@Const gsl_multilarge_linear_workspace w);
+
+public static native int gsl_multilarge_linear_reset(gsl_multilarge_linear_workspace w);
+
+public static native int gsl_multilarge_linear_accumulate(gsl_matrix X,
+                                     gsl_vector y,
+                                     gsl_multilarge_linear_workspace w);
+
+public static native int gsl_multilarge_linear_solve(double lambda, gsl_vector c,
+                                DoublePointer rnorm, DoublePointer snorm,
+                                gsl_multilarge_linear_workspace w);
+public static native int gsl_multilarge_linear_solve(double lambda, gsl_vector c,
+                                DoubleBuffer rnorm, DoubleBuffer snorm,
+                                gsl_multilarge_linear_workspace w);
+public static native int gsl_multilarge_linear_solve(double lambda, gsl_vector c,
+                                double[] rnorm, double[] snorm,
+                                gsl_multilarge_linear_workspace w);
+
+public static native int gsl_multilarge_linear_rcond(DoublePointer rcond, gsl_multilarge_linear_workspace w);
+public static native int gsl_multilarge_linear_rcond(DoubleBuffer rcond, gsl_multilarge_linear_workspace w);
+public static native int gsl_multilarge_linear_rcond(double[] rcond, gsl_multilarge_linear_workspace w);
+
+public static native int gsl_multilarge_linear_lcurve(gsl_vector reg_param, gsl_vector rho,
+                                 gsl_vector eta,
+                                 gsl_multilarge_linear_workspace w);
+
+public static native int gsl_multilarge_linear_wstdform1(@Const gsl_vector L,
+                                     @Const gsl_matrix X,
+                                     @Const gsl_vector w,
+                                     @Const gsl_vector y,
+                                     gsl_matrix Xs,
+                                     gsl_vector ys,
+                                     gsl_multilarge_linear_workspace work);
+
+public static native int gsl_multilarge_linear_stdform1(@Const gsl_vector L,
+                                    @Const gsl_matrix X,
+                                    @Const gsl_vector y,
+                                    gsl_matrix Xs,
+                                    gsl_vector ys,
+                                    gsl_multilarge_linear_workspace work);
+
+public static native int gsl_multilarge_linear_L_decomp(gsl_matrix L, gsl_vector tau);
+
+public static native int gsl_multilarge_linear_wstdform2(@Const gsl_matrix LQR,
+                                     @Const gsl_vector Ltau,
+                                     @Const gsl_matrix X,
+                                     @Const gsl_vector w,
+                                     @Const gsl_vector y,
+                                     gsl_matrix Xs,
+                                     gsl_vector ys,
+                                     gsl_multilarge_linear_workspace work);
+
+public static native int gsl_multilarge_linear_stdform2(@Const gsl_matrix LQR,
+                                    @Const gsl_vector Ltau,
+                                    @Const gsl_matrix X,
+                                    @Const gsl_vector y,
+                                    gsl_matrix Xs,
+                                    gsl_vector ys,
+                                    gsl_multilarge_linear_workspace work);
+
+public static native int gsl_multilarge_linear_genform1(@Const gsl_vector L,
+                                    @Const gsl_vector cs,
+                                    gsl_vector c,
+                                    gsl_multilarge_linear_workspace work);
+
+public static native int gsl_multilarge_linear_genform2(@Const gsl_matrix LQR,
+                                    @Const gsl_vector Ltau,
+                                    @Const gsl_vector cs,
+                                    gsl_vector c,
+                                    gsl_multilarge_linear_workspace work);
+
+// #endif /* __GSL_MULTILARGE_H__ */
+
+
+// Parsed from gsl/gsl_rstat.h
+
+/* rstat/gsl_rstat.h
+ * 
+ * Copyright (C) 2015 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_RSTAT_H__
+// #define __GSL_RSTAT_H__
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+
+public static class gsl_rstat_quantile_workspace extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public gsl_rstat_quantile_workspace() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public gsl_rstat_quantile_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public gsl_rstat_quantile_workspace(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public gsl_rstat_quantile_workspace position(int position) {
+        return (gsl_rstat_quantile_workspace)super.position(position);
+    }
+
+  public native double p(); public native gsl_rstat_quantile_workspace p(double p);        /* p-quantile */
+  public native double q(int i); public native gsl_rstat_quantile_workspace q(int i, double q);
+  @MemberGetter public native DoublePointer q();     /* heights q_i */
+  public native int npos(int i); public native gsl_rstat_quantile_workspace npos(int i, int npos);
+  @MemberGetter public native IntPointer npos();     /* positions n_i */
+  public native double np(int i); public native gsl_rstat_quantile_workspace np(int i, double np);
+  @MemberGetter public native DoublePointer np();    /* desired positions n_i' */
+  public native double dnp(int i); public native gsl_rstat_quantile_workspace dnp(int i, double dnp);
+  @MemberGetter public native DoublePointer dnp();   /* increments dn_i' */
+  public native @Cast("size_t") long n(); public native gsl_rstat_quantile_workspace n(long n);        /* number of data added */
+}
+
+public static native gsl_rstat_quantile_workspace gsl_rstat_quantile_alloc(double p);
+public static native void gsl_rstat_quantile_free(gsl_rstat_quantile_workspace w);
+public static native int gsl_rstat_quantile_add(double x, gsl_rstat_quantile_workspace w);
+public static native double gsl_rstat_quantile_get(gsl_rstat_quantile_workspace w);
+
+public static class gsl_rstat_workspace extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public gsl_rstat_workspace() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public gsl_rstat_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public gsl_rstat_workspace(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public gsl_rstat_workspace position(int position) {
+        return (gsl_rstat_workspace)super.position(position);
+    }
+
+  public native double min(); public native gsl_rstat_workspace min(double min);      /* minimum value added */
+  public native double max(); public native gsl_rstat_workspace max(double max);      /* maximum value added */
+  public native double mean(); public native gsl_rstat_workspace mean(double mean);     /* current mean */
+  public native double M2(); public native gsl_rstat_workspace M2(double M2);       /* M_k = sum_{i=1..n} [ x_i - mean_n ]^k */
+  public native double M3(); public native gsl_rstat_workspace M3(double M3);
+  public native double M4(); public native gsl_rstat_workspace M4(double M4);
+  public native @Cast("size_t") long n(); public native gsl_rstat_workspace n(long n);        /* number of data points added */
+  public native gsl_rstat_quantile_workspace median_workspace_p(); public native gsl_rstat_workspace median_workspace_p(gsl_rstat_quantile_workspace median_workspace_p); /* median workspace */
+}
+
+public static native gsl_rstat_workspace gsl_rstat_alloc();
+public static native void gsl_rstat_free(gsl_rstat_workspace w);
+public static native @Cast("size_t") long gsl_rstat_n(gsl_rstat_workspace w);
+public static native int gsl_rstat_add(double x, gsl_rstat_workspace w);
+public static native double gsl_rstat_min(gsl_rstat_workspace w);
+public static native double gsl_rstat_max(gsl_rstat_workspace w);
+public static native double gsl_rstat_mean(gsl_rstat_workspace w);
+public static native double gsl_rstat_variance(gsl_rstat_workspace w);
+public static native double gsl_rstat_sd(gsl_rstat_workspace w);
+public static native double gsl_rstat_sd_mean(gsl_rstat_workspace w);
+public static native double gsl_rstat_median(gsl_rstat_workspace w);
+public static native double gsl_rstat_skew(gsl_rstat_workspace w);
+public static native double gsl_rstat_kurtosis(gsl_rstat_workspace w);
+public static native int gsl_rstat_reset(gsl_rstat_workspace w);
+
+// #endif /* __GSL_RSTAT_H__ */
+
+
+// Parsed from gsl/gsl_spmatrix.h
+
+/* gsl_spmatrix.h
+ * 
+ * Copyright (C) 2012-2014 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_SPMATRIX_H__
+// #define __GSL_SPMATRIX_H__
+
+// #include <stdlib.h>
+
+// #include <gsl/gsl_math.h>
+// #include <gsl/gsl_vector.h>
+// #include <gsl/gsl_matrix.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+
+/*
+ * Binary tree data structure for storing sparse matrix elements
+ * in triplet format. This is used for efficiently detecting
+ * duplicates and element retrieval via gsl_spmatrix_get
+ */
+public static class gsl_spmatrix_tree extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public gsl_spmatrix_tree() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public gsl_spmatrix_tree(int size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public gsl_spmatrix_tree(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public gsl_spmatrix_tree position(int position) {
+        return (gsl_spmatrix_tree)super.position(position);
+    }
+
+  public native Pointer tree(); public native gsl_spmatrix_tree tree(Pointer tree);       /* tree structure */
+  public native Pointer node_array(); public native gsl_spmatrix_tree node_array(Pointer node_array); /* preallocated array of tree nodes */
+  public native @Cast("size_t") long n(); public native gsl_spmatrix_tree n(long n);         /* number of tree nodes in use (<= nzmax) */
+}
+
+/*
+ * Triplet format:
+ *
+ * If data[n] = A_{ij}, then:
+ *   i = A->i[n]
+ *   j = A->p[n]
+ *
+ * Compressed column format:
+ *
+ * If data[n] = A_{ij}, then:
+ *   i = A->i[n]
+ *   A->p[j] <= n < A->p[j+1]
+ * so that column j is stored in
+ * [ data[p[j]], data[p[j] + 1], ..., data[p[j+1] - 1] ]
+ */
+
+public static class gsl_spmatrix extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public gsl_spmatrix() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public gsl_spmatrix(int size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public gsl_spmatrix(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public gsl_spmatrix position(int position) {
+        return (gsl_spmatrix)super.position(position);
+    }
+
+  public native @Cast("size_t") long size1(); public native gsl_spmatrix size1(long size1);  /* number of rows */
+  public native @Cast("size_t") long size2(); public native gsl_spmatrix size2(long size2);  /* number of columns */
+
+  public native @Cast("size_t*") SizeTPointer i(); public native gsl_spmatrix i(SizeTPointer i);     /* row indices of size nzmax */
+  public native DoublePointer data(); public native gsl_spmatrix data(DoublePointer data);  /* matrix elements of size nzmax */
+
+  /*
+   * p contains the column indices (triplet) or column pointers (compcol)
+   *
+   * triplet:   p[n] = column number of element data[n]
+   * comp. col: p[j] = index in data of first non-zero element in column j
+   * comp. row: p[i] = index in data of first non-zero element in row i
+   */
+  public native @Cast("size_t*") SizeTPointer p(); public native gsl_spmatrix p(SizeTPointer p);
+
+  public native @Cast("size_t") long nzmax(); public native gsl_spmatrix nzmax(long nzmax);  /* maximum number of matrix elements */
+  public native @Cast("size_t") long nz(); public native gsl_spmatrix nz(long nz);     /* number of non-zero values in matrix */
+
+  public native gsl_spmatrix_tree tree_data(); public native gsl_spmatrix tree_data(gsl_spmatrix_tree tree_data); /* binary tree for sorting triplet data */
+
+  /*
+   * workspace of size MAX(size1,size2)*MAX(sizeof(double),sizeof(size_t))
+   * used in various routines
+   */
+  public native Pointer work(); public native gsl_spmatrix work(Pointer work);
+
+  public native @Cast("size_t") long sptype(); public native gsl_spmatrix sptype(long sptype); /* sparse storage type */
+}
+
+public static final int GSL_SPMATRIX_TRIPLET =      (0);
+public static final int GSL_SPMATRIX_CCS =          (1);
+
+// #define GSL_SPMATRIX_ISTRIPLET(m) ((m)->sptype == GSL_SPMATRIX_TRIPLET)
+// #define GSL_SPMATRIX_ISCCS(m)     ((m)->sptype == GSL_SPMATRIX_CCS)
+
+/*
+ * Prototypes
+ */
+
+public static native gsl_spmatrix gsl_spmatrix_alloc(@Cast("const size_t") long n1, @Cast("const size_t") long n2);
+public static native gsl_spmatrix gsl_spmatrix_alloc_nzmax(@Cast("const size_t") long n1, @Cast("const size_t") long n2,
+                                       @Cast("const size_t") long nzmax, @Cast("const size_t") long flags);
+public static native void gsl_spmatrix_free(gsl_spmatrix m);
+public static native int gsl_spmatrix_realloc(@Cast("const size_t") long nzmax, gsl_spmatrix m);
+public static native int gsl_spmatrix_set_zero(gsl_spmatrix m);
+public static native @Cast("size_t") long gsl_spmatrix_nnz(@Const gsl_spmatrix m);
+public static native int gsl_spmatrix_compare_idx(@Cast("const size_t") long ia, @Cast("const size_t") long ja,
+                             @Cast("const size_t") long ib, @Cast("const size_t") long jb);
+
+/* spcopy.c */
+public static native int gsl_spmatrix_memcpy(gsl_spmatrix dest, @Const gsl_spmatrix src);
+
+/* spgetset.c */
+public static native double gsl_spmatrix_get(@Const gsl_spmatrix m, @Cast("const size_t") long i,
+                        @Cast("const size_t") long j);
+public static native int gsl_spmatrix_set(gsl_spmatrix m, @Cast("const size_t") long i, @Cast("const size_t") long j,
+                     double x);
+
+/* spcompress.c */
+public static native gsl_spmatrix gsl_spmatrix_compcol(@Const gsl_spmatrix T);
+public static native void gsl_spmatrix_cumsum(@Cast("const size_t") long n, @Cast("size_t*") SizeTPointer c);
+
+/* spoper.c */
+public static native int gsl_spmatrix_scale(gsl_spmatrix m, double x);
+public static native int gsl_spmatrix_minmax(@Const gsl_spmatrix m, DoublePointer min_out,
+                        DoublePointer max_out);
+public static native int gsl_spmatrix_minmax(@Const gsl_spmatrix m, DoubleBuffer min_out,
+                        DoubleBuffer max_out);
+public static native int gsl_spmatrix_minmax(@Const gsl_spmatrix m, double[] min_out,
+                        double[] max_out);
+public static native int gsl_spmatrix_add(gsl_spmatrix c, @Const gsl_spmatrix a,
+                     @Const gsl_spmatrix b);
+public static native int gsl_spmatrix_d2sp(gsl_spmatrix S, @Const gsl_matrix A);
+public static native int gsl_spmatrix_sp2d(gsl_matrix A, @Const gsl_spmatrix S);
+
+/* spprop.c */
+public static native int gsl_spmatrix_equal(@Const gsl_spmatrix a, @Const gsl_spmatrix b);
+
+/* spswap.c */
+public static native int gsl_spmatrix_transpose_memcpy(gsl_spmatrix dest, @Const gsl_spmatrix src);
+
+// #endif /* __GSL_SPMATRIX_H__ */
+
+
+// Parsed from gsl/gsl_spblas.h
+
+/* gsl_spblas.h
+ * 
+ * Copyright (C) 2012-2014 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_SPBLAS_H__
+// #define __GSL_SPBLAS_H__
+
+// #include <stdlib.h>
+
+// #include <gsl/gsl_math.h>
+// #include <gsl/gsl_vector.h>
+// #include <gsl/gsl_matrix.h>
+// #include <gsl/gsl_spmatrix.h>
+// #include <gsl/gsl_blas.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+
+/*
+ * Prototypes
+ */
+
+public static native int gsl_spblas_dgemv(@Cast("const CBLAS_TRANSPOSE_t") int TransA, double alpha,
+                     @Const gsl_spmatrix A, @Const gsl_vector x,
+                     double beta, gsl_vector y);
+public static native int gsl_spblas_dgemm(double alpha, @Const gsl_spmatrix A,
+                     @Const gsl_spmatrix B, gsl_spmatrix C);
+public static native @Cast("size_t") long gsl_spblas_scatter(@Const gsl_spmatrix A, @Cast("const size_t") long j,
+                          double alpha, @Cast("size_t*") SizeTPointer w, DoublePointer x,
+                          @Cast("const size_t") long mark, gsl_spmatrix C, @Cast("size_t") long nz);
+public static native @Cast("size_t") long gsl_spblas_scatter(@Const gsl_spmatrix A, @Cast("const size_t") long j,
+                          double alpha, @Cast("size_t*") SizeTPointer w, DoubleBuffer x,
+                          @Cast("const size_t") long mark, gsl_spmatrix C, @Cast("size_t") long nz);
+public static native @Cast("size_t") long gsl_spblas_scatter(@Const gsl_spmatrix A, @Cast("const size_t") long j,
+                          double alpha, @Cast("size_t*") SizeTPointer w, double[] x,
+                          @Cast("const size_t") long mark, gsl_spmatrix C, @Cast("size_t") long nz);
+
+// #endif /* __GSL_SPBLAS_H__ */
+
+
+// Parsed from gsl/gsl_splinalg.h
+
+/* gsl_splinalg.h
+ * 
+ * Copyright (C) 2012-2014 Patrick Alken
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_SPLINALG_H__
+// #define __GSL_SPLINALG_H__
+
+// #include <gsl/gsl_math.h>
+// #include <gsl/gsl_vector.h>
+// #include <gsl/gsl_matrix.h>
+// #include <gsl/gsl_spmatrix.h>
+// #include <gsl/gsl_linalg.h>
+// #include <gsl/gsl_types.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+
+/* iteration solver type */
+public static class gsl_splinalg_itersolve_type extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public gsl_splinalg_itersolve_type() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public gsl_splinalg_itersolve_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public gsl_splinalg_itersolve_type(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public gsl_splinalg_itersolve_type position(int position) {
+        return (gsl_splinalg_itersolve_type)super.position(position);
+    }
+
+  @MemberGetter public native @Cast("const char*") BytePointer name();
+  public static class Alloc_long_long extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Alloc_long_long(Pointer p) { super(p); }
+      protected Alloc_long_long() { allocate(); }
+      private native void allocate();
+      public native Pointer call(@Cast("const size_t") long n, @Cast("const size_t") long m);
+  }
+  public native Alloc_long_long alloc(); public native gsl_splinalg_itersolve_type alloc(Alloc_long_long alloc);
+  public static class Iterate_gsl_spmatrix_gsl_vector_double_gsl_vector_Pointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Iterate_gsl_spmatrix_gsl_vector_double_gsl_vector_Pointer(Pointer p) { super(p); }
+      protected Iterate_gsl_spmatrix_gsl_vector_double_gsl_vector_Pointer() { allocate(); }
+      private native void allocate();
+      public native int call(@Const gsl_spmatrix A, @Const gsl_vector b,
+                    double tol, gsl_vector x, Pointer arg4);
+  }
+  public native Iterate_gsl_spmatrix_gsl_vector_double_gsl_vector_Pointer iterate(); public native gsl_splinalg_itersolve_type iterate(Iterate_gsl_spmatrix_gsl_vector_double_gsl_vector_Pointer iterate);
+  public static class Normr_Pointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Normr_Pointer(Pointer p) { super(p); }
+      protected Normr_Pointer() { allocate(); }
+      private native void allocate();
+      public native double call(@Const Pointer arg0);
+  }
+  public native Normr_Pointer normr(); public native gsl_splinalg_itersolve_type normr(Normr_Pointer normr);
+  public static class Free_Pointer extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Free_Pointer(Pointer p) { super(p); }
+      protected Free_Pointer() { allocate(); }
+      private native void allocate();
+      public native void call(Pointer arg0);
+  }
+  public native Free_Pointer free(); public native gsl_splinalg_itersolve_type free(Free_Pointer free);
+}
+
+public static class gsl_splinalg_itersolve extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public gsl_splinalg_itersolve() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public gsl_splinalg_itersolve(int size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public gsl_splinalg_itersolve(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public gsl_splinalg_itersolve position(int position) {
+        return (gsl_splinalg_itersolve)super.position(position);
+    }
+
+  @MemberGetter public native @Const gsl_splinalg_itersolve_type type();
+  public native double normr(); public native gsl_splinalg_itersolve normr(double normr); /* current residual norm || b - A x || */
+  public native Pointer state(); public native gsl_splinalg_itersolve state(Pointer state);
+}
+
+/* available types */
+@MemberGetter public static native @Const gsl_splinalg_itersolve_type gsl_splinalg_itersolve_gmres();
+
+/*
+ * Prototypes
+ */
+public static native gsl_splinalg_itersolve gsl_splinalg_itersolve_alloc(@Const gsl_splinalg_itersolve_type T,
+                             @Cast("const size_t") long n, @Cast("const size_t") long m);
+public static native void gsl_splinalg_itersolve_free(gsl_splinalg_itersolve w);
+public static native @Cast("const char*") BytePointer gsl_splinalg_itersolve_name(@Const gsl_splinalg_itersolve w);
+public static native int gsl_splinalg_itersolve_iterate(@Const gsl_spmatrix A,
+                                   @Const gsl_vector b,
+                                   double tol, gsl_vector x,
+                                   gsl_splinalg_itersolve w);
+public static native double gsl_splinalg_itersolve_normr(@Const gsl_splinalg_itersolve w);
+
+// #endif /* __GSL_SPLINALG_H__ */
+
+
+// Parsed from gsl/gsl_interp2d.h
+
+/* interpolation/gsl_interp2d.h
+ * 
+ * Copyright 2012 David Zaslavsky
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_INTERP2D_H__
+// #define __GSL_INTERP2D_H__
+
+// #include <gsl/gsl_interp.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+
+public static class gsl_interp2d_type extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public gsl_interp2d_type() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public gsl_interp2d_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public gsl_interp2d_type(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public gsl_interp2d_type position(int position) {
+        return (gsl_interp2d_type)super.position(position);
+    }
+
+    @MemberGetter public native @Cast("const char*") BytePointer name();
+    public native @Cast("unsigned int") int min_size(); public native gsl_interp2d_type min_size(int min_size);
+    public static class Alloc_long_long extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Alloc_long_long(Pointer p) { super(p); }
+        protected Alloc_long_long() { allocate(); }
+        private native void allocate();
+        public native Pointer call(@Cast("size_t") long xsize, @Cast("size_t") long ysize);
+    }
+    public native Alloc_long_long alloc(); public native gsl_interp2d_type alloc(Alloc_long_long alloc);
+    public static class Init_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Init_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long(Pointer p) { super(p); }
+        protected Init_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long() { allocate(); }
+        private native void allocate();
+        public native int call(Pointer arg0, @Const DoublePointer xa, @Const DoublePointer ya, @Const DoublePointer za, @Cast("size_t") long xsize, @Cast("size_t") long ysize);
+    }
+    public native Init_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long init(); public native gsl_interp2d_type init(Init_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long init);
+    public static class Eval_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Eval_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer(Pointer p) { super(p); }
+        protected Eval_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer() { allocate(); }
+        private native void allocate();
+        public native int call(@Const Pointer arg0, @Const DoublePointer xa, @Const DoublePointer ya, @Const DoublePointer za, @Cast("size_t") long xsize, @Cast("size_t") long ysize, double x, double y, gsl_interp_accel arg8, gsl_interp_accel arg9, DoublePointer z);
+    }
+    public native Eval_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer eval(); public native gsl_interp2d_type eval(Eval_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer eval);
+    public static class Eval_deriv_x_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Eval_deriv_x_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer(Pointer p) { super(p); }
+        protected Eval_deriv_x_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer() { allocate(); }
+        private native void allocate();
+        public native int call(@Const Pointer arg0, @Const DoublePointer xa, @Const DoublePointer ya, @Const DoublePointer za, @Cast("size_t") long xsize, @Cast("size_t") long ysize, double x, double y, gsl_interp_accel arg8, gsl_interp_accel arg9, DoublePointer z_p);
+    }
+    public native Eval_deriv_x_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer eval_deriv_x(); public native gsl_interp2d_type eval_deriv_x(Eval_deriv_x_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer eval_deriv_x);
+    public static class Eval_deriv_y_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Eval_deriv_y_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer(Pointer p) { super(p); }
+        protected Eval_deriv_y_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer() { allocate(); }
+        private native void allocate();
+        public native int call(@Const Pointer arg0, @Const DoublePointer xa, @Const DoublePointer ya, @Const DoublePointer za, @Cast("size_t") long xsize, @Cast("size_t") long ysize, double x, double y, gsl_interp_accel arg8, gsl_interp_accel arg9, DoublePointer z_p);
+    }
+    public native Eval_deriv_y_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer eval_deriv_y(); public native gsl_interp2d_type eval_deriv_y(Eval_deriv_y_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer eval_deriv_y);
+    public static class Eval_deriv_xx_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Eval_deriv_xx_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer(Pointer p) { super(p); }
+        protected Eval_deriv_xx_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer() { allocate(); }
+        private native void allocate();
+        public native int call(@Const Pointer arg0, @Const DoublePointer xa, @Const DoublePointer ya, @Const DoublePointer za, @Cast("size_t") long xsize, @Cast("size_t") long ysize, double x, double y, gsl_interp_accel arg8, gsl_interp_accel arg9, DoublePointer z_pp);
+    }
+    public native Eval_deriv_xx_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer eval_deriv_xx(); public native gsl_interp2d_type eval_deriv_xx(Eval_deriv_xx_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer eval_deriv_xx);
+    public static class Eval_deriv_xy_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Eval_deriv_xy_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer(Pointer p) { super(p); }
+        protected Eval_deriv_xy_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer() { allocate(); }
+        private native void allocate();
+        public native int call(@Const Pointer arg0, @Const DoublePointer xa, @Const DoublePointer ya, @Const DoublePointer za, @Cast("size_t") long xsize, @Cast("size_t") long ysize, double x, double y, gsl_interp_accel arg8, gsl_interp_accel arg9, DoublePointer z_pp);
+    }
+    public native Eval_deriv_xy_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer eval_deriv_xy(); public native gsl_interp2d_type eval_deriv_xy(Eval_deriv_xy_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer eval_deriv_xy);
+    public static class Eval_deriv_yy_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Eval_deriv_yy_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer(Pointer p) { super(p); }
+        protected Eval_deriv_yy_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer() { allocate(); }
+        private native void allocate();
+        public native int call(@Const Pointer arg0, @Const DoublePointer xa, @Const DoublePointer ya, @Const DoublePointer za, @Cast("size_t") long xsize, @Cast("size_t") long ysize, double x, double y, gsl_interp_accel arg8, gsl_interp_accel arg9, DoublePointer z_pp);
+    }
+    public native Eval_deriv_yy_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer eval_deriv_yy(); public native gsl_interp2d_type eval_deriv_yy(Eval_deriv_yy_Pointer_DoublePointer_DoublePointer_DoublePointer_long_long_double_double_gsl_interp_accel_gsl_interp_accel_DoublePointer eval_deriv_yy);
+    public static class Free_Pointer extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Free_Pointer(Pointer p) { super(p); }
+        protected Free_Pointer() { allocate(); }
+        private native void allocate();
+        public native void call(Pointer arg0);
+    }
+    public native Free_Pointer free(); public native gsl_interp2d_type free(Free_Pointer free);
+}
+
+public static class gsl_interp2d extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public gsl_interp2d() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public gsl_interp2d(int size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public gsl_interp2d(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public gsl_interp2d position(int position) {
+        return (gsl_interp2d)super.position(position);
+    }
+
+    @MemberGetter public native @Const gsl_interp2d_type type(); /* interpolation type */
+    public native double xmin(); public native gsl_interp2d xmin(double xmin);                    /* minimum value of x for which data have been provided */
+    public native double xmax(); public native gsl_interp2d xmax(double xmax);                    /* maximum value of x for which data have been provided */
+    public native double ymin(); public native gsl_interp2d ymin(double ymin);                    /* minimum value of y for which data have been provided */
+    public native double ymax(); public native gsl_interp2d ymax(double ymax);                    /* maximum value of y for which data have been provided */
+    public native @Cast("size_t") long xsize(); public native gsl_interp2d xsize(long xsize);                   /* number of x values provided */
+    public native @Cast("size_t") long ysize(); public native gsl_interp2d ysize(long ysize);                   /* number of y values provided */
+    public native Pointer state(); public native gsl_interp2d state(Pointer state);                   /* internal state object specific to the interpolation type */
+}
+
+/* available types */
+@MemberGetter public static native @Const gsl_interp2d_type gsl_interp2d_bilinear();
+@MemberGetter public static native @Const gsl_interp2d_type gsl_interp2d_bicubic();
+
+public static native gsl_interp2d gsl_interp2d_alloc(@Const gsl_interp2d_type T, @Cast("const size_t") long xsize,
+                                  @Cast("const size_t") long ysize);
+
+public static native @Cast("const char*") BytePointer gsl_interp2d_name(@Const gsl_interp2d interp);
+public static native @Cast("size_t") long gsl_interp2d_min_size(@Const gsl_interp2d interp);
+public static native @Cast("size_t") long gsl_interp2d_type_min_size(@Const gsl_interp2d_type T);
+public static native int gsl_interp2d_set(@Const gsl_interp2d interp, DoublePointer zarr,
+                     @Cast("const size_t") long i, @Cast("const size_t") long j, double z);
+public static native int gsl_interp2d_set(@Const gsl_interp2d interp, DoubleBuffer zarr,
+                     @Cast("const size_t") long i, @Cast("const size_t") long j, double z);
+public static native int gsl_interp2d_set(@Const gsl_interp2d interp, double[] zarr,
+                     @Cast("const size_t") long i, @Cast("const size_t") long j, double z);
+public static native double gsl_interp2d_get(@Const gsl_interp2d interp, @Const DoublePointer zarr,
+                        @Cast("const size_t") long i, @Cast("const size_t") long j);
+public static native double gsl_interp2d_get(@Const gsl_interp2d interp, @Const DoubleBuffer zarr,
+                        @Cast("const size_t") long i, @Cast("const size_t") long j);
+public static native double gsl_interp2d_get(@Const gsl_interp2d interp, @Const double[] zarr,
+                        @Cast("const size_t") long i, @Cast("const size_t") long j);
+public static native @Cast("size_t") long gsl_interp2d_idx(@Const gsl_interp2d interp,
+                        @Cast("const size_t") long i, @Cast("const size_t") long j);
+public static native int gsl_interp2d_init(gsl_interp2d interp, @Const DoublePointer xa, @Const DoublePointer ya,
+                      @Const DoublePointer za, @Cast("const size_t") long xsize, @Cast("const size_t") long ysize);
+public static native int gsl_interp2d_init(gsl_interp2d interp, @Const DoubleBuffer xa, @Const DoubleBuffer ya,
+                      @Const DoubleBuffer za, @Cast("const size_t") long xsize, @Cast("const size_t") long ysize);
+public static native int gsl_interp2d_init(gsl_interp2d interp, @Const double[] xa, @Const double[] ya,
+                      @Const double[] za, @Cast("const size_t") long xsize, @Cast("const size_t") long ysize);
+public static native void gsl_interp2d_free(gsl_interp2d interp);
+
+public static native double gsl_interp2d_eval(@Const gsl_interp2d interp, @Const DoublePointer xarr,
+                         @Const DoublePointer yarr, @Const DoublePointer zarr, double x,
+                         double y, gsl_interp_accel xa, gsl_interp_accel ya);
+public static native double gsl_interp2d_eval(@Const gsl_interp2d interp, @Const DoubleBuffer xarr,
+                         @Const DoubleBuffer yarr, @Const DoubleBuffer zarr, double x,
+                         double y, gsl_interp_accel xa, gsl_interp_accel ya);
+public static native double gsl_interp2d_eval(@Const gsl_interp2d interp, @Const double[] xarr,
+                         @Const double[] yarr, @Const double[] zarr, double x,
+                         double y, gsl_interp_accel xa, gsl_interp_accel ya);
+
+public static native double gsl_interp2d_eval_extrap(@Const gsl_interp2d interp,
+                                @Const DoublePointer xarr, @Const DoublePointer yarr,
+                                @Const DoublePointer zarr, double x,
+                                double y, gsl_interp_accel xa,
+                                gsl_interp_accel ya);
+public static native double gsl_interp2d_eval_extrap(@Const gsl_interp2d interp,
+                                @Const DoubleBuffer xarr, @Const DoubleBuffer yarr,
+                                @Const DoubleBuffer zarr, double x,
+                                double y, gsl_interp_accel xa,
+                                gsl_interp_accel ya);
+public static native double gsl_interp2d_eval_extrap(@Const gsl_interp2d interp,
+                                @Const double[] xarr, @Const double[] yarr,
+                                @Const double[] zarr, double x,
+                                double y, gsl_interp_accel xa,
+                                gsl_interp_accel ya);
+
+public static native int gsl_interp2d_eval_e(@Const gsl_interp2d interp, @Const DoublePointer xarr,
+                        @Const DoublePointer yarr, @Const DoublePointer zarr,
+                        double x, double y, gsl_interp_accel xa,
+                        gsl_interp_accel ya, DoublePointer z);
+public static native int gsl_interp2d_eval_e(@Const gsl_interp2d interp, @Const DoubleBuffer xarr,
+                        @Const DoubleBuffer yarr, @Const DoubleBuffer zarr,
+                        double x, double y, gsl_interp_accel xa,
+                        gsl_interp_accel ya, DoubleBuffer z);
+public static native int gsl_interp2d_eval_e(@Const gsl_interp2d interp, @Const double[] xarr,
+                        @Const double[] yarr, @Const double[] zarr,
+                        double x, double y, gsl_interp_accel xa,
+                        gsl_interp_accel ya, double[] z);
+
+public static native int gsl_interp2d_eval_e_extrap(@Const gsl_interp2d interp,
+                               @Const DoublePointer xarr,
+                               @Const DoublePointer yarr,
+                               @Const DoublePointer zarr,
+                               double x,
+                               double y,
+                               gsl_interp_accel xa,
+                               gsl_interp_accel ya,
+                               DoublePointer z);
+public static native int gsl_interp2d_eval_e_extrap(@Const gsl_interp2d interp,
+                               @Const DoubleBuffer xarr,
+                               @Const DoubleBuffer yarr,
+                               @Const DoubleBuffer zarr,
+                               double x,
+                               double y,
+                               gsl_interp_accel xa,
+                               gsl_interp_accel ya,
+                               DoubleBuffer z);
+public static native int gsl_interp2d_eval_e_extrap(@Const gsl_interp2d interp,
+                               @Const double[] xarr,
+                               @Const double[] yarr,
+                               @Const double[] zarr,
+                               double x,
+                               double y,
+                               gsl_interp_accel xa,
+                               gsl_interp_accel ya,
+                               double[] z);
+
+public static native double gsl_interp2d_eval_deriv_x(@Const gsl_interp2d interp, @Const DoublePointer xarr,
+                                 @Const DoublePointer yarr, @Const DoublePointer zarr,
+                                 double x, double y, gsl_interp_accel xa,
+                                 gsl_interp_accel ya);
+public static native double gsl_interp2d_eval_deriv_x(@Const gsl_interp2d interp, @Const DoubleBuffer xarr,
+                                 @Const DoubleBuffer yarr, @Const DoubleBuffer zarr,
+                                 double x, double y, gsl_interp_accel xa,
+                                 gsl_interp_accel ya);
+public static native double gsl_interp2d_eval_deriv_x(@Const gsl_interp2d interp, @Const double[] xarr,
+                                 @Const double[] yarr, @Const double[] zarr,
+                                 double x, double y, gsl_interp_accel xa,
+                                 gsl_interp_accel ya);
+
+public static native int gsl_interp2d_eval_deriv_x_e(@Const gsl_interp2d interp, @Const DoublePointer xarr,
+                                @Const DoublePointer yarr, @Const DoublePointer zarr,
+                                double x, double y,
+                                gsl_interp_accel xa, gsl_interp_accel ya, DoublePointer z);
+public static native int gsl_interp2d_eval_deriv_x_e(@Const gsl_interp2d interp, @Const DoubleBuffer xarr,
+                                @Const DoubleBuffer yarr, @Const DoubleBuffer zarr,
+                                double x, double y,
+                                gsl_interp_accel xa, gsl_interp_accel ya, DoubleBuffer z);
+public static native int gsl_interp2d_eval_deriv_x_e(@Const gsl_interp2d interp, @Const double[] xarr,
+                                @Const double[] yarr, @Const double[] zarr,
+                                double x, double y,
+                                gsl_interp_accel xa, gsl_interp_accel ya, double[] z);
+
+public static native double gsl_interp2d_eval_deriv_y(@Const gsl_interp2d interp, @Const DoublePointer xarr,
+                                 @Const DoublePointer yarr, @Const DoublePointer zarr,
+                                 double x, double y,
+                                 gsl_interp_accel xa, gsl_interp_accel ya);
+public static native double gsl_interp2d_eval_deriv_y(@Const gsl_interp2d interp, @Const DoubleBuffer xarr,
+                                 @Const DoubleBuffer yarr, @Const DoubleBuffer zarr,
+                                 double x, double y,
+                                 gsl_interp_accel xa, gsl_interp_accel ya);
+public static native double gsl_interp2d_eval_deriv_y(@Const gsl_interp2d interp, @Const double[] xarr,
+                                 @Const double[] yarr, @Const double[] zarr,
+                                 double x, double y,
+                                 gsl_interp_accel xa, gsl_interp_accel ya);
+
+public static native int gsl_interp2d_eval_deriv_y_e(@Const gsl_interp2d interp, @Const DoublePointer xarr,
+                                @Const DoublePointer yarr, @Const DoublePointer zarr,
+                                double x, double y,
+                                gsl_interp_accel xa, gsl_interp_accel ya, DoublePointer z);
+public static native int gsl_interp2d_eval_deriv_y_e(@Const gsl_interp2d interp, @Const DoubleBuffer xarr,
+                                @Const DoubleBuffer yarr, @Const DoubleBuffer zarr,
+                                double x, double y,
+                                gsl_interp_accel xa, gsl_interp_accel ya, DoubleBuffer z);
+public static native int gsl_interp2d_eval_deriv_y_e(@Const gsl_interp2d interp, @Const double[] xarr,
+                                @Const double[] yarr, @Const double[] zarr,
+                                double x, double y,
+                                gsl_interp_accel xa, gsl_interp_accel ya, double[] z);
+
+public static native double gsl_interp2d_eval_deriv_xx(@Const gsl_interp2d interp, @Const DoublePointer xarr,
+                                  @Const DoublePointer yarr, @Const DoublePointer zarr,
+                                  double x, double y,
+                                  gsl_interp_accel xa, gsl_interp_accel ya);
+public static native double gsl_interp2d_eval_deriv_xx(@Const gsl_interp2d interp, @Const DoubleBuffer xarr,
+                                  @Const DoubleBuffer yarr, @Const DoubleBuffer zarr,
+                                  double x, double y,
+                                  gsl_interp_accel xa, gsl_interp_accel ya);
+public static native double gsl_interp2d_eval_deriv_xx(@Const gsl_interp2d interp, @Const double[] xarr,
+                                  @Const double[] yarr, @Const double[] zarr,
+                                  double x, double y,
+                                  gsl_interp_accel xa, gsl_interp_accel ya);
+
+public static native int gsl_interp2d_eval_deriv_xx_e(@Const gsl_interp2d interp, @Const DoublePointer xarr,
+                                 @Const DoublePointer yarr, @Const DoublePointer zarr,
+                                 double x, double y,
+                                 gsl_interp_accel xa, gsl_interp_accel ya, DoublePointer z);
+public static native int gsl_interp2d_eval_deriv_xx_e(@Const gsl_interp2d interp, @Const DoubleBuffer xarr,
+                                 @Const DoubleBuffer yarr, @Const DoubleBuffer zarr,
+                                 double x, double y,
+                                 gsl_interp_accel xa, gsl_interp_accel ya, DoubleBuffer z);
+public static native int gsl_interp2d_eval_deriv_xx_e(@Const gsl_interp2d interp, @Const double[] xarr,
+                                 @Const double[] yarr, @Const double[] zarr,
+                                 double x, double y,
+                                 gsl_interp_accel xa, gsl_interp_accel ya, double[] z);
+
+public static native double gsl_interp2d_eval_deriv_yy(@Const gsl_interp2d interp, @Const DoublePointer xarr,
+                                  @Const DoublePointer yarr, @Const DoublePointer zarr,
+                                  double x, double y,
+                                  gsl_interp_accel xa, gsl_interp_accel ya);
+public static native double gsl_interp2d_eval_deriv_yy(@Const gsl_interp2d interp, @Const DoubleBuffer xarr,
+                                  @Const DoubleBuffer yarr, @Const DoubleBuffer zarr,
+                                  double x, double y,
+                                  gsl_interp_accel xa, gsl_interp_accel ya);
+public static native double gsl_interp2d_eval_deriv_yy(@Const gsl_interp2d interp, @Const double[] xarr,
+                                  @Const double[] yarr, @Const double[] zarr,
+                                  double x, double y,
+                                  gsl_interp_accel xa, gsl_interp_accel ya);
+
+public static native int gsl_interp2d_eval_deriv_yy_e(@Const gsl_interp2d interp, @Const DoublePointer xarr,
+                                 @Const DoublePointer yarr, @Const DoublePointer zarr,
+                                 double x, double y,
+                                 gsl_interp_accel xa, gsl_interp_accel ya, DoublePointer z);
+public static native int gsl_interp2d_eval_deriv_yy_e(@Const gsl_interp2d interp, @Const DoubleBuffer xarr,
+                                 @Const DoubleBuffer yarr, @Const DoubleBuffer zarr,
+                                 double x, double y,
+                                 gsl_interp_accel xa, gsl_interp_accel ya, DoubleBuffer z);
+public static native int gsl_interp2d_eval_deriv_yy_e(@Const gsl_interp2d interp, @Const double[] xarr,
+                                 @Const double[] yarr, @Const double[] zarr,
+                                 double x, double y,
+                                 gsl_interp_accel xa, gsl_interp_accel ya, double[] z);
+
+public static native double gsl_interp2d_eval_deriv_xy(@Const gsl_interp2d interp, @Const DoublePointer xarr,
+                                  @Const DoublePointer yarr, @Const DoublePointer zarr,
+                                  double x, double y,
+                                  gsl_interp_accel xa, gsl_interp_accel ya);
+public static native double gsl_interp2d_eval_deriv_xy(@Const gsl_interp2d interp, @Const DoubleBuffer xarr,
+                                  @Const DoubleBuffer yarr, @Const DoubleBuffer zarr,
+                                  double x, double y,
+                                  gsl_interp_accel xa, gsl_interp_accel ya);
+public static native double gsl_interp2d_eval_deriv_xy(@Const gsl_interp2d interp, @Const double[] xarr,
+                                  @Const double[] yarr, @Const double[] zarr,
+                                  double x, double y,
+                                  gsl_interp_accel xa, gsl_interp_accel ya);
+
+public static native int gsl_interp2d_eval_deriv_xy_e(@Const gsl_interp2d interp, @Const DoublePointer xarr,
+                                 @Const DoublePointer yarr, @Const DoublePointer zarr,
+                                 double x, double y,
+                                 gsl_interp_accel xa, gsl_interp_accel ya, DoublePointer z);
+public static native int gsl_interp2d_eval_deriv_xy_e(@Const gsl_interp2d interp, @Const DoubleBuffer xarr,
+                                 @Const DoubleBuffer yarr, @Const DoubleBuffer zarr,
+                                 double x, double y,
+                                 gsl_interp_accel xa, gsl_interp_accel ya, DoubleBuffer z);
+public static native int gsl_interp2d_eval_deriv_xy_e(@Const gsl_interp2d interp, @Const double[] xarr,
+                                 @Const double[] yarr, @Const double[] zarr,
+                                 double x, double y,
+                                 gsl_interp_accel xa, gsl_interp_accel ya, double[] z);
+
+// #endif /* __GSL_INTERP2D_H__ */
+
+
+// Parsed from gsl/gsl_spline2d.h
+
+/* interpolation/gsl_spline2d.h
+ * 
+ * Copyright 2012 David Zaslavsky
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or (at
+ * your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+// #ifndef __GSL_SPLINE2D_H__
+// #define __GSL_SPLINE2D_H__
+
+// #include <gsl/gsl_interp.h>
+// #include <gsl/gsl_interp2d.h>
+
+// #undef __BEGIN_DECLS
+// #undef __END_DECLS
+// #ifdef __cplusplus
+// # define __BEGIN_DECLS extern "C" {
+// # define __END_DECLS }
+// #else
+// #endif
+
+
+/*
+ * A 2D interpolation object which stores the arrays defining the function.
+ * In all other respects, this is just like a gsl_interp2d object.
+ */
+public static class gsl_spline2d extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public gsl_spline2d() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public gsl_spline2d(int size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public gsl_spline2d(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public gsl_spline2d position(int position) {
+        return (gsl_spline2d)super.position(position);
+    }
+
+  public native @ByRef gsl_interp2d interp_object(); public native gsl_spline2d interp_object(gsl_interp2d interp_object); /* low-level interpolation object */
+  public native DoublePointer xarr(); public native gsl_spline2d xarr(DoublePointer xarr);              /* x data array */
+  public native DoublePointer yarr(); public native gsl_spline2d yarr(DoublePointer yarr);              /* y data array */
+  public native DoublePointer zarr(); public native gsl_spline2d zarr(DoublePointer zarr);              /* z data array */
+}
+
+public static native gsl_spline2d gsl_spline2d_alloc(@Const gsl_interp2d_type T, @Cast("size_t") long xsize, @Cast("size_t") long ysize);
+
+public static native int gsl_spline2d_init(gsl_spline2d interp, @Const DoublePointer xa,
+                      @Const DoublePointer ya, @Const DoublePointer za,
+                      @Cast("size_t") long xsize, @Cast("size_t") long ysize);
+public static native int gsl_spline2d_init(gsl_spline2d interp, @Const DoubleBuffer xa,
+                      @Const DoubleBuffer ya, @Const DoubleBuffer za,
+                      @Cast("size_t") long xsize, @Cast("size_t") long ysize);
+public static native int gsl_spline2d_init(gsl_spline2d interp, @Const double[] xa,
+                      @Const double[] ya, @Const double[] za,
+                      @Cast("size_t") long xsize, @Cast("size_t") long ysize);
+
+public static native void gsl_spline2d_free(gsl_spline2d interp);
+
+public static native double gsl_spline2d_eval(@Const gsl_spline2d interp, double x,
+                         double y, gsl_interp_accel xa, gsl_interp_accel ya);
+
+public static native int gsl_spline2d_eval_e(@Const gsl_spline2d interp, double x,
+                        double y, gsl_interp_accel xa, gsl_interp_accel ya,
+                        DoublePointer z);
+public static native int gsl_spline2d_eval_e(@Const gsl_spline2d interp, double x,
+                        double y, gsl_interp_accel xa, gsl_interp_accel ya,
+                        DoubleBuffer z);
+public static native int gsl_spline2d_eval_e(@Const gsl_spline2d interp, double x,
+                        double y, gsl_interp_accel xa, gsl_interp_accel ya,
+                        double[] z);
+
+public static native double gsl_spline2d_eval_deriv_x(@Const gsl_spline2d interp, double x,
+                                 double y, gsl_interp_accel xa, gsl_interp_accel ya);
+
+public static native int gsl_spline2d_eval_deriv_x_e(@Const gsl_spline2d interp, double x,
+                                double y, gsl_interp_accel xa,
+                                gsl_interp_accel ya, DoublePointer z);
+public static native int gsl_spline2d_eval_deriv_x_e(@Const gsl_spline2d interp, double x,
+                                double y, gsl_interp_accel xa,
+                                gsl_interp_accel ya, DoubleBuffer z);
+public static native int gsl_spline2d_eval_deriv_x_e(@Const gsl_spline2d interp, double x,
+                                double y, gsl_interp_accel xa,
+                                gsl_interp_accel ya, double[] z);
+
+public static native double gsl_spline2d_eval_deriv_y(@Const gsl_spline2d interp, double x,
+                                 double y, gsl_interp_accel xa,
+                                 gsl_interp_accel ya);
+
+public static native int gsl_spline2d_eval_deriv_y_e(@Const gsl_spline2d interp, double x,
+                                double y, gsl_interp_accel xa,
+                                gsl_interp_accel ya, DoublePointer z);
+public static native int gsl_spline2d_eval_deriv_y_e(@Const gsl_spline2d interp, double x,
+                                double y, gsl_interp_accel xa,
+                                gsl_interp_accel ya, DoubleBuffer z);
+public static native int gsl_spline2d_eval_deriv_y_e(@Const gsl_spline2d interp, double x,
+                                double y, gsl_interp_accel xa,
+                                gsl_interp_accel ya, double[] z);
+
+public static native double gsl_spline2d_eval_deriv_xx(@Const gsl_spline2d interp, double x,
+                                  double y, gsl_interp_accel xa, gsl_interp_accel ya);
+
+public static native int gsl_spline2d_eval_deriv_xx_e(@Const gsl_spline2d interp, double x,
+                                 double y, gsl_interp_accel xa,
+                                 gsl_interp_accel ya, DoublePointer z);
+public static native int gsl_spline2d_eval_deriv_xx_e(@Const gsl_spline2d interp, double x,
+                                 double y, gsl_interp_accel xa,
+                                 gsl_interp_accel ya, DoubleBuffer z);
+public static native int gsl_spline2d_eval_deriv_xx_e(@Const gsl_spline2d interp, double x,
+                                 double y, gsl_interp_accel xa,
+                                 gsl_interp_accel ya, double[] z);
+
+public static native double gsl_spline2d_eval_deriv_yy(@Const gsl_spline2d interp, double x,
+                                  double y, gsl_interp_accel xa, gsl_interp_accel ya);
+
+public static native int gsl_spline2d_eval_deriv_yy_e(@Const gsl_spline2d interp, double x,
+                                 double y, gsl_interp_accel xa,
+                                 gsl_interp_accel ya, DoublePointer z);
+public static native int gsl_spline2d_eval_deriv_yy_e(@Const gsl_spline2d interp, double x,
+                                 double y, gsl_interp_accel xa,
+                                 gsl_interp_accel ya, DoubleBuffer z);
+public static native int gsl_spline2d_eval_deriv_yy_e(@Const gsl_spline2d interp, double x,
+                                 double y, gsl_interp_accel xa,
+                                 gsl_interp_accel ya, double[] z);
+
+public static native double gsl_spline2d_eval_deriv_xy(@Const gsl_spline2d interp, double x,
+                                  double y, gsl_interp_accel xa, gsl_interp_accel ya);
+
+public static native int gsl_spline2d_eval_deriv_xy_e(@Const gsl_spline2d interp, double x,
+                                 double y, gsl_interp_accel xa,
+                                 gsl_interp_accel ya, DoublePointer z);
+public static native int gsl_spline2d_eval_deriv_xy_e(@Const gsl_spline2d interp, double x,
+                                 double y, gsl_interp_accel xa,
+                                 gsl_interp_accel ya, DoubleBuffer z);
+public static native int gsl_spline2d_eval_deriv_xy_e(@Const gsl_spline2d interp, double x,
+                                 double y, gsl_interp_accel xa,
+                                 gsl_interp_accel ya, double[] z);
+
+public static native @Cast("size_t") long gsl_spline2d_min_size(@Const gsl_spline2d interp);
+
+public static native @Cast("const char*") BytePointer gsl_spline2d_name(@Const gsl_spline2d interp);
+
+public static native int gsl_spline2d_set(@Const gsl_spline2d interp, DoublePointer zarr,
+                     @Cast("const size_t") long i, @Cast("const size_t") long j, double z);
+public static native int gsl_spline2d_set(@Const gsl_spline2d interp, DoubleBuffer zarr,
+                     @Cast("const size_t") long i, @Cast("const size_t") long j, double z);
+public static native int gsl_spline2d_set(@Const gsl_spline2d interp, double[] zarr,
+                     @Cast("const size_t") long i, @Cast("const size_t") long j, double z);
+public static native double gsl_spline2d_get(@Const gsl_spline2d interp, @Const DoublePointer zarr,
+                        @Cast("const size_t") long i, @Cast("const size_t") long j);
+public static native double gsl_spline2d_get(@Const gsl_spline2d interp, @Const DoubleBuffer zarr,
+                        @Cast("const size_t") long i, @Cast("const size_t") long j);
+public static native double gsl_spline2d_get(@Const gsl_spline2d interp, @Const double[] zarr,
+                        @Cast("const size_t") long i, @Cast("const size_t") long j);
+
+// #endif /* __GSL_SPLINE2D_H__ */
 
 
 // Parsed from gsl/gsl_const.h
@@ -18362,20 +19655,23 @@ public static class gsl_multifit_linear_workspace extends Pointer {
         return (gsl_multifit_linear_workspace)super.position(position);
     }
 
-  public native @Cast("size_t") long n(); public native gsl_multifit_linear_workspace n(long n); /* number of observations */
-  public native @Cast("size_t") long p(); public native gsl_multifit_linear_workspace p(long p); /* number of parameters */
-  public native gsl_matrix A(); public native gsl_multifit_linear_workspace A(gsl_matrix A);
+  public native @Cast("size_t") long nmax(); public native gsl_multifit_linear_workspace nmax(long nmax);         /* maximum number of observations */
+  public native @Cast("size_t") long pmax(); public native gsl_multifit_linear_workspace pmax(long pmax);         /* maximum number of parameters */
+  public native @Cast("size_t") long n(); public native gsl_multifit_linear_workspace n(long n);            /* number of observations in current SVD decomposition */
+  public native @Cast("size_t") long p(); public native gsl_multifit_linear_workspace p(long p);            /* number of parameters in current SVD decomposition */
+  public native gsl_matrix A(); public native gsl_multifit_linear_workspace A(gsl_matrix A);      /* least squares matrix for SVD, n-by-p */
   public native gsl_matrix Q(); public native gsl_multifit_linear_workspace Q(gsl_matrix Q);
   public native gsl_matrix QSI(); public native gsl_multifit_linear_workspace QSI(gsl_matrix QSI);
   public native gsl_vector S(); public native gsl_multifit_linear_workspace S(gsl_vector S);
   public native gsl_vector t(); public native gsl_multifit_linear_workspace t(gsl_vector t);
   public native gsl_vector xt(); public native gsl_multifit_linear_workspace xt(gsl_vector xt);
   public native gsl_vector D(); public native gsl_multifit_linear_workspace D(gsl_vector D);
+  public native double rcond(); public native gsl_multifit_linear_workspace rcond(double rcond);        /* reciprocal condition number */
 }
 
-public static native gsl_multifit_linear_workspace gsl_multifit_linear_alloc(@Cast("size_t") long n, @Cast("size_t") long p);
+public static native gsl_multifit_linear_workspace gsl_multifit_linear_alloc(@Cast("const size_t") long n, @Cast("const size_t") long p);
 
-public static native void gsl_multifit_linear_free(gsl_multifit_linear_workspace work);
+public static native void gsl_multifit_linear_free(gsl_multifit_linear_workspace w);
 
 public static native int gsl_multifit_linear(@Const gsl_matrix X,
                      @Const gsl_vector y,
@@ -18397,54 +19693,120 @@ public static native int gsl_multifit_linear(@Const gsl_matrix X,
                      gsl_multifit_linear_workspace work);
 
 public static native int gsl_multifit_linear_svd(@Const gsl_matrix X,
-                         @Const gsl_vector y,
-                         double tol,
-                         @Cast("size_t*") SizeTPointer rank,
-                         gsl_vector c,
-                         gsl_matrix cov,
-                         DoublePointer chisq, 
-                         gsl_multifit_linear_workspace work);
-public static native int gsl_multifit_linear_svd(@Const gsl_matrix X,
-                         @Const gsl_vector y,
-                         double tol,
-                         @Cast("size_t*") SizeTPointer rank,
-                         gsl_vector c,
-                         gsl_matrix cov,
-                         DoubleBuffer chisq, 
-                         gsl_multifit_linear_workspace work);
-public static native int gsl_multifit_linear_svd(@Const gsl_matrix X,
-                         @Const gsl_vector y,
-                         double tol,
-                         @Cast("size_t*") SizeTPointer rank,
-                         gsl_vector c,
-                         gsl_matrix cov,
-                         double[] chisq, 
                          gsl_multifit_linear_workspace work);
 
-public static native int gsl_multifit_linear_usvd(@Const gsl_matrix X,
-                          @Const gsl_vector y,
-                          double tol,
-                          @Cast("size_t*") SizeTPointer rank,
-                          gsl_vector c,
-                          gsl_matrix cov,
-                          DoublePointer chisq, 
+public static native int gsl_multifit_linear_bsvd(@Const gsl_matrix X,
                           gsl_multifit_linear_workspace work);
-public static native int gsl_multifit_linear_usvd(@Const gsl_matrix X,
-                          @Const gsl_vector y,
-                          double tol,
-                          @Cast("size_t*") SizeTPointer rank,
-                          gsl_vector c,
-                          gsl_matrix cov,
-                          DoubleBuffer chisq, 
-                          gsl_multifit_linear_workspace work);
-public static native int gsl_multifit_linear_usvd(@Const gsl_matrix X,
-                          @Const gsl_vector y,
-                          double tol,
-                          @Cast("size_t*") SizeTPointer rank,
-                          gsl_vector c,
-                          gsl_matrix cov,
-                          double[] chisq, 
-                          gsl_multifit_linear_workspace work);
+
+public static native int gsl_multifit_linear_solve(double lambda,
+                           @Const gsl_matrix X,
+                           @Const gsl_vector y,
+                           gsl_vector c,
+                           DoublePointer rnorm,
+                           DoublePointer snorm,
+                           gsl_multifit_linear_workspace work);
+public static native int gsl_multifit_linear_solve(double lambda,
+                           @Const gsl_matrix X,
+                           @Const gsl_vector y,
+                           gsl_vector c,
+                           DoubleBuffer rnorm,
+                           DoubleBuffer snorm,
+                           gsl_multifit_linear_workspace work);
+public static native int gsl_multifit_linear_solve(double lambda,
+                           @Const gsl_matrix X,
+                           @Const gsl_vector y,
+                           gsl_vector c,
+                           double[] rnorm,
+                           double[] snorm,
+                           gsl_multifit_linear_workspace work);
+
+public static native int gsl_multifit_linear_applyW(@Const gsl_matrix X,
+                           @Const gsl_vector w,
+                           @Const gsl_vector y,
+                           gsl_matrix WX,
+                           gsl_vector Wy);
+
+public static native int gsl_multifit_linear_stdform1(@Const gsl_vector L,
+                              @Const gsl_matrix X,
+                              @Const gsl_vector y,
+                              gsl_matrix Xs,
+                              gsl_vector ys,
+                              gsl_multifit_linear_workspace work);
+
+public static native int gsl_multifit_linear_wstdform1(@Const gsl_vector L,
+                               @Const gsl_matrix X,
+                               @Const gsl_vector w,
+                               @Const gsl_vector y,
+                               gsl_matrix Xs,
+                               gsl_vector ys,
+                               gsl_multifit_linear_workspace work);
+
+public static native int gsl_multifit_linear_L_decomp(gsl_matrix L, gsl_vector tau);
+
+public static native int gsl_multifit_linear_stdform2(@Const gsl_matrix LQR,
+                              @Const gsl_vector Ltau,
+                              @Const gsl_matrix X,
+                              @Const gsl_vector y,
+                              gsl_matrix Xs,
+                              gsl_vector ys,
+                              gsl_matrix M,
+                              gsl_multifit_linear_workspace work);
+
+public static native int gsl_multifit_linear_wstdform2(@Const gsl_matrix LQR,
+                               @Const gsl_vector Ltau,
+                               @Const gsl_matrix X,
+                               @Const gsl_vector w,
+                               @Const gsl_vector y,
+                               gsl_matrix Xs,
+                               gsl_vector ys,
+                               gsl_matrix M,
+                               gsl_multifit_linear_workspace work);
+
+public static native int gsl_multifit_linear_genform1(@Const gsl_vector L,
+                              @Const gsl_vector cs,
+                              gsl_vector c,
+                              gsl_multifit_linear_workspace work);
+
+public static native int gsl_multifit_linear_genform2(@Const gsl_matrix LQR,
+                              @Const gsl_vector Ltau,
+                              @Const gsl_matrix X,
+                              @Const gsl_vector y,
+                              @Const gsl_vector cs,
+                              @Const gsl_matrix M,
+                              gsl_vector c,
+                              gsl_multifit_linear_workspace work);
+
+public static native int gsl_multifit_linear_wgenform2(@Const gsl_matrix LQR,
+                               @Const gsl_vector Ltau,
+                               @Const gsl_matrix X,
+                               @Const gsl_vector w,
+                               @Const gsl_vector y,
+                               @Const gsl_vector cs,
+                               @Const gsl_matrix M,
+                               gsl_vector c,
+                               gsl_multifit_linear_workspace work);
+
+public static native int gsl_multifit_linear_lreg(double smin, double smax,
+                          gsl_vector reg_param);
+
+public static native int gsl_multifit_linear_lcurve(@Const gsl_vector y,
+                            gsl_vector reg_param,
+                            gsl_vector rho, gsl_vector eta,
+                            gsl_multifit_linear_workspace work);
+
+public static native int gsl_multifit_linear_lcorner(@Const gsl_vector rho,
+                            @Const gsl_vector eta,
+                            @Cast("size_t*") SizeTPointer idx);
+
+public static native int gsl_multifit_linear_lcorner2(@Const gsl_vector reg_param,
+                             @Const gsl_vector eta,
+                             @Cast("size_t*") SizeTPointer idx);
+
+public static native int gsl_multifit_linear_Lk(@Cast("const size_t") long p, @Cast("const size_t") long k, gsl_matrix L);
+
+public static native int gsl_multifit_linear_Lsobolev(@Cast("const size_t") long p, @Cast("const size_t") long kmax,
+                             @Const gsl_vector alpha, gsl_matrix L,
+                             gsl_multifit_linear_workspace work);
 
 public static native int gsl_multifit_wlinear(@Const gsl_matrix X,
                       @Const gsl_vector w,
@@ -18533,6 +19895,8 @@ public static native int gsl_multifit_linear_est(@Const gsl_vector x,
 public static native int gsl_multifit_linear_est(@Const gsl_vector x,
                          @Const gsl_vector c,
                          @Const gsl_matrix cov, double[] y, double[] y_err);
+
+public static native double gsl_multifit_linear_rcond(@Const gsl_multifit_linear_workspace w);
 
 public static native int gsl_multifit_linear_residuals(@Const gsl_matrix X, @Const gsl_vector y,
                                @Const gsl_vector c, gsl_vector r);
@@ -18652,9 +20016,14 @@ public static class gsl_multifit_robust_workspace extends Pointer {
 public static native gsl_multifit_robust_workspace gsl_multifit_robust_alloc(@Const gsl_multifit_robust_type T,
                                                          @Cast("const size_t") long n, @Cast("const size_t") long p);
 public static native void gsl_multifit_robust_free(gsl_multifit_robust_workspace w);
-public static native int gsl_multifit_robust_tune(double tune, gsl_multifit_robust_workspace w);
+public static native int gsl_multifit_robust_tune(double tune,
+                             gsl_multifit_robust_workspace w);
+public static native int gsl_multifit_robust_maxiter(@Cast("const size_t") long maxiter,
+                                gsl_multifit_robust_workspace w);
 public static native @Cast("const char*") BytePointer gsl_multifit_robust_name(@Const gsl_multifit_robust_workspace w);
 public static native @ByVal gsl_multifit_robust_stats gsl_multifit_robust_statistics(@Const gsl_multifit_robust_workspace w);
+public static native int gsl_multifit_robust_weights(@Const gsl_vector r, gsl_vector wts,
+                                gsl_multifit_robust_workspace w);
 public static native int gsl_multifit_robust(@Const gsl_matrix X, @Const gsl_vector y,
                         gsl_vector c, gsl_matrix cov,
                         gsl_multifit_robust_workspace w);
@@ -18664,6 +20033,10 @@ public static native int gsl_multifit_robust_est(@Const gsl_vector x, @Const gsl
                             @Const gsl_matrix cov, DoubleBuffer y, DoubleBuffer y_err);
 public static native int gsl_multifit_robust_est(@Const gsl_vector x, @Const gsl_vector c,
                             @Const gsl_matrix cov, double[] y, double[] y_err);
+public static native int gsl_multifit_robust_residuals(@Const gsl_matrix X,
+                                  @Const gsl_vector y,
+                                  @Const gsl_vector c, gsl_vector r,
+                                  gsl_multifit_robust_workspace w);
 
 // #endif /* __GSL_MULTIFIT_H__ */
 
@@ -18697,6 +20070,7 @@ public static native int gsl_multifit_robust_est(@Const gsl_vector x, @Const gsl
 // #include <gsl/gsl_math.h>
 // #include <gsl/gsl_vector.h>
 // #include <gsl/gsl_matrix.h>
+// #include <gsl/gsl_permutation.h>
 
 // #undef __BEGIN_DECLS
 // #undef __END_DECLS
@@ -18710,6 +20084,8 @@ public static native int gsl_multifit_gradient(@Const gsl_matrix J, @Const gsl_v
                            gsl_vector g);
 
 public static native int gsl_multifit_covar(@Const gsl_matrix J, double epsrel, gsl_matrix covar);
+public static native int gsl_multifit_covar_QRPT(gsl_matrix r, gsl_permutation perm,
+                             double epsrel, gsl_matrix covar);
 
 
 /* Definition of vector-valued functions with parameters based on gsl_vector */
@@ -18826,8 +20202,8 @@ public static native gsl_multifit_fsolver gsl_multifit_fsolver_alloc(@Const gsl_
 public static native void gsl_multifit_fsolver_free(gsl_multifit_fsolver s);
 
 public static native int gsl_multifit_fsolver_set(gsl_multifit_fsolver s, 
-                                   gsl_multifit_function f, 
-                                   @Const gsl_vector x);
+                              gsl_multifit_function f, 
+                              @Const gsl_vector x);
 
 public static native int gsl_multifit_fsolver_iterate(gsl_multifit_fsolver s);
 
@@ -18882,14 +20258,12 @@ public static native gsl_vector gsl_multifit_fsolver_position(@Const gsl_multifi
       public native int call(@Const gsl_vector x, Pointer params, gsl_vector f, gsl_matrix df);
   }
   public native Fdf_gsl_vector_Pointer_gsl_vector_gsl_matrix fdf(); public native gsl_multifit_function_fdf fdf(Fdf_gsl_vector_Pointer_gsl_vector_gsl_matrix fdf);
-  public native @Cast("size_t") long n(); public native gsl_multifit_function_fdf n(long n);   /* number of functions */
-  public native @Cast("size_t") long p(); public native gsl_multifit_function_fdf p(long p);   /* number of independent variables */
-  public native Pointer params(); public native gsl_multifit_function_fdf params(Pointer params);
+  public native @Cast("size_t") long n(); public native gsl_multifit_function_fdf n(long n);       /* number of functions */
+  public native @Cast("size_t") long p(); public native gsl_multifit_function_fdf p(long p);       /* number of independent variables */
+  public native Pointer params(); public native gsl_multifit_function_fdf params(Pointer params);  /* user parameters */
+  public native @Cast("size_t") long nevalf(); public native gsl_multifit_function_fdf nevalf(long nevalf);  /* number of function evaluations */
+  public native @Cast("size_t") long nevaldf(); public native gsl_multifit_function_fdf nevaldf(long nevaldf); /* number of Jacobian evaluations */
 }
-
-// #define GSL_MULTIFIT_FN_EVAL_F(F,x,y) ((*((F)->f))(x,(F)->params,(y)))
-// #define GSL_MULTIFIT_FN_EVAL_DF(F,x,dy) ((*((F)->df))(x,(F)->params,(dy)))
-// #define GSL_MULTIFIT_FN_EVAL_F_DF(F,x,y,dy) ((*((F)->fdf))(x,(F)->params,(y),(dy)))
 
 public static class gsl_multifit_fdfsolver_type extends Pointer {
     static { Loader.load(); }
@@ -18916,24 +20290,46 @@ public static class gsl_multifit_fdfsolver_type extends Pointer {
         public native int call(Pointer state, @Cast("size_t") long n, @Cast("size_t") long p);
     }
     public native Alloc_Pointer_long_long alloc(); public native gsl_multifit_fdfsolver_type alloc(Alloc_Pointer_long_long alloc);
-    public static class Set_Pointer_gsl_multifit_function_fdf_gsl_vector_gsl_vector_gsl_matrix_gsl_vector extends FunctionPointer {
+    public static class Set_Pointer_gsl_vector_gsl_multifit_function_fdf_gsl_vector_gsl_vector_gsl_vector extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Set_Pointer_gsl_multifit_function_fdf_gsl_vector_gsl_vector_gsl_matrix_gsl_vector(Pointer p) { super(p); }
-        protected Set_Pointer_gsl_multifit_function_fdf_gsl_vector_gsl_vector_gsl_matrix_gsl_vector() { allocate(); }
+        public    Set_Pointer_gsl_vector_gsl_multifit_function_fdf_gsl_vector_gsl_vector_gsl_vector(Pointer p) { super(p); }
+        protected Set_Pointer_gsl_vector_gsl_multifit_function_fdf_gsl_vector_gsl_vector_gsl_vector() { allocate(); }
         private native void allocate();
-        public native int call(Pointer state, gsl_multifit_function_fdf fdf, gsl_vector x, gsl_vector f, gsl_matrix J, gsl_vector dx);
+        public native int call(Pointer state, @Const gsl_vector wts,
+                    gsl_multifit_function_fdf fdf, gsl_vector x,
+                    gsl_vector f, gsl_vector dx);
     }
-    public native Set_Pointer_gsl_multifit_function_fdf_gsl_vector_gsl_vector_gsl_matrix_gsl_vector set(); public native gsl_multifit_fdfsolver_type set(Set_Pointer_gsl_multifit_function_fdf_gsl_vector_gsl_vector_gsl_matrix_gsl_vector set);
-    public static class Iterate_Pointer_gsl_multifit_function_fdf_gsl_vector_gsl_vector_gsl_matrix_gsl_vector extends FunctionPointer {
+    public native Set_Pointer_gsl_vector_gsl_multifit_function_fdf_gsl_vector_gsl_vector_gsl_vector set(); public native gsl_multifit_fdfsolver_type set(Set_Pointer_gsl_vector_gsl_multifit_function_fdf_gsl_vector_gsl_vector_gsl_vector set);
+    public static class Iterate_Pointer_gsl_vector_gsl_multifit_function_fdf_gsl_vector_gsl_vector_gsl_vector extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Iterate_Pointer_gsl_multifit_function_fdf_gsl_vector_gsl_vector_gsl_matrix_gsl_vector(Pointer p) { super(p); }
-        protected Iterate_Pointer_gsl_multifit_function_fdf_gsl_vector_gsl_vector_gsl_matrix_gsl_vector() { allocate(); }
+        public    Iterate_Pointer_gsl_vector_gsl_multifit_function_fdf_gsl_vector_gsl_vector_gsl_vector(Pointer p) { super(p); }
+        protected Iterate_Pointer_gsl_vector_gsl_multifit_function_fdf_gsl_vector_gsl_vector_gsl_vector() { allocate(); }
         private native void allocate();
-        public native int call(Pointer state, gsl_multifit_function_fdf fdf, gsl_vector x, gsl_vector f, gsl_matrix J, gsl_vector dx);
+        public native int call(Pointer state, @Const gsl_vector wts,
+                        gsl_multifit_function_fdf fdf, gsl_vector x,
+                        gsl_vector f, gsl_vector dx);
     }
-    public native Iterate_Pointer_gsl_multifit_function_fdf_gsl_vector_gsl_vector_gsl_matrix_gsl_vector iterate(); public native gsl_multifit_fdfsolver_type iterate(Iterate_Pointer_gsl_multifit_function_fdf_gsl_vector_gsl_vector_gsl_matrix_gsl_vector iterate);
+    public native Iterate_Pointer_gsl_vector_gsl_multifit_function_fdf_gsl_vector_gsl_vector_gsl_vector iterate(); public native gsl_multifit_fdfsolver_type iterate(Iterate_Pointer_gsl_vector_gsl_multifit_function_fdf_gsl_vector_gsl_vector_gsl_vector iterate);
+    public static class Gradient_Pointer_gsl_vector extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Gradient_Pointer_gsl_vector(Pointer p) { super(p); }
+        protected Gradient_Pointer_gsl_vector() { allocate(); }
+        private native void allocate();
+        public native int call(Pointer state, gsl_vector g);
+    }
+    public native Gradient_Pointer_gsl_vector gradient(); public native gsl_multifit_fdfsolver_type gradient(Gradient_Pointer_gsl_vector gradient);
+    public static class Jac_Pointer_gsl_matrix extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Jac_Pointer_gsl_matrix(Pointer p) { super(p); }
+        protected Jac_Pointer_gsl_matrix() { allocate(); }
+        private native void allocate();
+        public native int call(Pointer state, gsl_matrix J);
+    }
+    public native Jac_Pointer_gsl_matrix jac(); public native gsl_multifit_fdfsolver_type jac(Jac_Pointer_gsl_matrix jac);
     public static class Free_Pointer extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -18961,10 +20357,12 @@ public static class gsl_multifit_fdfsolver extends Pointer {
 
     @MemberGetter public native @Const gsl_multifit_fdfsolver_type type();
     public native gsl_multifit_function_fdf fdf(); public native gsl_multifit_fdfsolver fdf(gsl_multifit_function_fdf fdf);
-    public native gsl_vector x(); public native gsl_multifit_fdfsolver x(gsl_vector x);
-    public native gsl_vector f(); public native gsl_multifit_fdfsolver f(gsl_vector f);
-    public native gsl_matrix J(); public native gsl_multifit_fdfsolver J(gsl_matrix J);
-    public native gsl_vector dx(); public native gsl_multifit_fdfsolver dx(gsl_vector dx);
+    public native gsl_vector x(); public native gsl_multifit_fdfsolver x(gsl_vector x);        /* parameter values x */
+    public native gsl_vector f(); public native gsl_multifit_fdfsolver f(gsl_vector f);        /* residual vector f(x) */
+    public native gsl_vector dx(); public native gsl_multifit_fdfsolver dx(gsl_vector dx);       /* step dx */
+    public native gsl_vector g(); public native gsl_multifit_fdfsolver g(gsl_vector g);        /* gradient J^T f */
+    public native gsl_vector sqrt_wts(); public native gsl_multifit_fdfsolver sqrt_wts(gsl_vector sqrt_wts); /* sqrt(wts) */
+    public native @Cast("size_t") long niter(); public native gsl_multifit_fdfsolver niter(long niter);          /* number of iterations performed */
     public native Pointer state(); public native gsl_multifit_fdfsolver state(Pointer state);
   }
 
@@ -18973,34 +20371,158 @@ public static native gsl_multifit_fdfsolver gsl_multifit_fdfsolver_alloc(@Const 
                               @Cast("size_t") long n, @Cast("size_t") long p);
 
 public static native int gsl_multifit_fdfsolver_set(gsl_multifit_fdfsolver s, 
-                                 gsl_multifit_function_fdf fdf,
-                                 @Const gsl_vector x);
+                            gsl_multifit_function_fdf fdf,
+                            @Const gsl_vector x);
+public static native int gsl_multifit_fdfsolver_wset(gsl_multifit_fdfsolver s, 
+                                 gsl_multifit_function_fdf f, 
+                                 @Const gsl_vector x,
+                                 @Const gsl_vector wts);
 
 public static native int gsl_multifit_fdfsolver_iterate(gsl_multifit_fdfsolver s);
 
 public static native int gsl_multifit_fdfsolver_driver(gsl_multifit_fdfsolver s,
-                               @Cast("const size_t") long maxiter,
-                               double epsabs, double epsrel);
+                                   @Cast("const size_t") long maxiter,
+                                   double xtol,
+                                   double gtol,
+                                   double ftol,
+                                   IntPointer info);
+public static native int gsl_multifit_fdfsolver_driver(gsl_multifit_fdfsolver s,
+                                   @Cast("const size_t") long maxiter,
+                                   double xtol,
+                                   double gtol,
+                                   double ftol,
+                                   IntBuffer info);
+public static native int gsl_multifit_fdfsolver_driver(gsl_multifit_fdfsolver s,
+                                   @Cast("const size_t") long maxiter,
+                                   double xtol,
+                                   double gtol,
+                                   double ftol,
+                                   int[] info);
+
+public static native int gsl_multifit_fdfsolver_jac(gsl_multifit_fdfsolver s,
+                                gsl_matrix J);
 
 public static native void gsl_multifit_fdfsolver_free(gsl_multifit_fdfsolver s);
 
 public static native @Cast("const char*") BytePointer gsl_multifit_fdfsolver_name(@Const gsl_multifit_fdfsolver s);
 public static native gsl_vector gsl_multifit_fdfsolver_position(@Const gsl_multifit_fdfsolver s);
+public static native gsl_vector gsl_multifit_fdfsolver_residual(@Const gsl_multifit_fdfsolver s);
+public static native @Cast("size_t") long gsl_multifit_fdfsolver_niter(@Const gsl_multifit_fdfsolver s);
+public static native int gsl_multifit_eval_wf(gsl_multifit_function_fdf fdf,
+                         @Const gsl_vector x, @Const gsl_vector wts,
+                         gsl_vector y);
+public static native int gsl_multifit_eval_wdf(gsl_multifit_function_fdf fdf,
+                          @Const gsl_vector x, @Const gsl_vector wts,
+                          gsl_matrix dy);
 
+public static native int gsl_multifit_fdfsolver_test(@Const gsl_multifit_fdfsolver s,
+                                 double xtol,
+                                 double gtol,
+                                 double ftol, IntPointer info);
+public static native int gsl_multifit_fdfsolver_test(@Const gsl_multifit_fdfsolver s,
+                                 double xtol,
+                                 double gtol,
+                                 double ftol, IntBuffer info);
+public static native int gsl_multifit_fdfsolver_test(@Const gsl_multifit_fdfsolver s,
+                                 double xtol,
+                                 double gtol,
+                                 double ftol, int[] info);
 public static native int gsl_multifit_test_delta(@Const gsl_vector dx, @Const gsl_vector x, 
                              double epsabs, double epsrel);
 
 public static native int gsl_multifit_test_gradient(@Const gsl_vector g, double epsabs);
 
-public static native int gsl_multifit_fdfsolver_dif_df(@Const gsl_vector x, gsl_multifit_function_fdf fdf,
+public static native int gsl_multifit_fdfsolver_dif_df(@Const gsl_vector x,
+                                  @Const gsl_vector wts,
+                                  gsl_multifit_function_fdf fdf,
                                   @Const gsl_vector f, gsl_matrix J);
-public static native int gsl_multifit_fdfsolver_dif_fdf(@Const gsl_vector x, gsl_multifit_function_fdf fdf,
-                                   gsl_vector f, gsl_matrix J);
+
+
+public static class gsl_multifit_fdfridge extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public gsl_multifit_fdfridge() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public gsl_multifit_fdfridge(int size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public gsl_multifit_fdfridge(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public gsl_multifit_fdfridge position(int position) {
+        return (gsl_multifit_fdfridge)super.position(position);
+    }
+
+  public native @Cast("size_t") long n(); public native gsl_multifit_fdfridge n(long n);                         /* number of (original) residuals */
+  public native @Cast("size_t") long p(); public native gsl_multifit_fdfridge p(long p);                         /* number of model parameters */
+  public native double lambda(); public native gsl_multifit_fdfridge lambda(double lambda);                    /* damping parameter */
+  @MemberGetter public native @Const gsl_vector L_diag();         /* diagonal damping matrix or NULL */
+  @MemberGetter public native @Const gsl_matrix L();              /* general damping matrix or NULL */
+  public native gsl_vector f(); public native gsl_multifit_fdfridge f(gsl_vector f);                    /* function values for finite diff J */
+  public native gsl_vector wts(); public native gsl_multifit_fdfridge wts(gsl_vector wts);                  /* weight vector for augmented system */
+  public native gsl_multifit_fdfsolver s(); public native gsl_multifit_fdfridge s(gsl_multifit_fdfsolver s);
+  public native gsl_multifit_function_fdf fdf(); public native gsl_multifit_fdfridge fdf(gsl_multifit_function_fdf fdf);   /* user defined fdf */
+  public native @ByRef gsl_multifit_function_fdf fdftik(); public native gsl_multifit_fdfridge fdftik(gsl_multifit_function_fdf fdftik); /* Tikhonov modified fdf */
+}
+
+public static native gsl_multifit_fdfridge gsl_multifit_fdfridge_alloc(@Const gsl_multifit_fdfsolver_type T,
+                             @Cast("const size_t") long n, @Cast("const size_t") long p);
+public static native void gsl_multifit_fdfridge_free(gsl_multifit_fdfridge work);
+public static native @Cast("const char*") BytePointer gsl_multifit_fdfridge_name(@Const gsl_multifit_fdfridge w);
+public static native gsl_vector gsl_multifit_fdfridge_position(@Const gsl_multifit_fdfridge w);
+public static native gsl_vector gsl_multifit_fdfridge_residual(@Const gsl_multifit_fdfridge w);
+public static native @Cast("size_t") long gsl_multifit_fdfridge_niter(@Const gsl_multifit_fdfridge w);
+public static native int gsl_multifit_fdfridge_set(gsl_multifit_fdfridge w,
+                               gsl_multifit_function_fdf f,
+                               @Const gsl_vector x,
+                               double lambda);
+public static native int gsl_multifit_fdfridge_wset(gsl_multifit_fdfridge w,
+                                gsl_multifit_function_fdf f,
+                                @Const gsl_vector x,
+                                double lambda,
+                                @Const gsl_vector wts);
+public static native int gsl_multifit_fdfridge_set2(gsl_multifit_fdfridge w,
+                                gsl_multifit_function_fdf f,
+                                @Const gsl_vector x,
+                                @Const gsl_vector lambda);
+public static native int gsl_multifit_fdfridge_wset2(gsl_multifit_fdfridge w,
+                                 gsl_multifit_function_fdf f,
+                                 @Const gsl_vector x,
+                                 @Const gsl_vector lambda,
+                                 @Const gsl_vector wts);
+public static native int gsl_multifit_fdfridge_set3(gsl_multifit_fdfridge w,
+                                gsl_multifit_function_fdf f,
+                                @Const gsl_vector x,
+                                @Const gsl_matrix L);
+public static native int gsl_multifit_fdfridge_wset3(gsl_multifit_fdfridge w,
+                                 gsl_multifit_function_fdf f,
+                                 @Const gsl_vector x,
+                                 @Const gsl_matrix L,
+                                 @Const gsl_vector wts);
+public static native int gsl_multifit_fdfridge_iterate(gsl_multifit_fdfridge w);
+public static native int gsl_multifit_fdfridge_driver(gsl_multifit_fdfridge w,
+                                  @Cast("const size_t") long maxiter,
+                                  double xtol,
+                                  double gtol,
+                                  double ftol,
+                                  IntPointer info);
+public static native int gsl_multifit_fdfridge_driver(gsl_multifit_fdfridge w,
+                                  @Cast("const size_t") long maxiter,
+                                  double xtol,
+                                  double gtol,
+                                  double ftol,
+                                  IntBuffer info);
+public static native int gsl_multifit_fdfridge_driver(gsl_multifit_fdfridge w,
+                                  @Cast("const size_t") long maxiter,
+                                  double xtol,
+                                  double gtol,
+                                  double ftol,
+                                  int[] info);
 
 /* extern const gsl_multifit_fsolver_type * gsl_multifit_fsolver_gradient; */
 
-@MemberGetter public static native @Const gsl_multifit_fdfsolver_type gsl_multifit_fdfsolver_lmder();
 @MemberGetter public static native @Const gsl_multifit_fdfsolver_type gsl_multifit_fdfsolver_lmsder();
+@MemberGetter public static native @Const gsl_multifit_fdfsolver_type gsl_multifit_fdfsolver_lmder();
+@MemberGetter public static native @Const gsl_multifit_fdfsolver_type gsl_multifit_fdfsolver_lmniel();
 
 // #endif /* __GSL_MULTIFIT_NLIN_H__ */
 
@@ -23614,8 +25136,8 @@ public static native double gsl_sf_ellint_E(double phi, double k, @Cast("gsl_mod
 public static native int gsl_sf_ellint_P_e(double phi, double k, double n, @Cast("gsl_mode_t") int mode, gsl_sf_result result);
 public static native double gsl_sf_ellint_P(double phi, double k, double n, @Cast("gsl_mode_t") int mode);
 
-public static native int gsl_sf_ellint_D_e(double phi, double k, double n, @Cast("gsl_mode_t") int mode, gsl_sf_result result);
-public static native double gsl_sf_ellint_D(double phi, double k, double n, @Cast("gsl_mode_t") int mode);
+public static native int gsl_sf_ellint_D_e(double phi, double k, @Cast("gsl_mode_t") int mode, gsl_sf_result result);
+public static native double gsl_sf_ellint_D(double phi, double k, @Cast("gsl_mode_t") int mode);
 
 
 /* Carlson's symmetric basis of functions
@@ -24993,18 +26515,7 @@ public static native double gsl_sf_legendre_Plm(int l, int m, double x);
  *
  * exceptions: GSL_EDOM, GSL_EOVRFLW
  */
-public static native int gsl_sf_legendre_Plm_array(
-  int lmax, int m, double x,
-  DoublePointer result_array
-  );
-public static native int gsl_sf_legendre_Plm_array(
-  int lmax, int m, double x,
-  DoubleBuffer result_array
-  );
-public static native int gsl_sf_legendre_Plm_array(
-  int lmax, int m, double x,
-  double[] result_array
-  );
+
 
 
 /* P_l^m(x)  and d(P_l^m(x))/dx;  m >= 0; lmax >= m; |x| <= 1.0
@@ -25012,21 +26523,7 @@ public static native int gsl_sf_legendre_Plm_array(
  *
  * exceptions: GSL_EDOM, GSL_EOVRFLW
  */
-public static native int gsl_sf_legendre_Plm_deriv_array(
-  int lmax, int m, double x,
-  DoublePointer result_array,
-  DoublePointer result_deriv_array
-  );
-public static native int gsl_sf_legendre_Plm_deriv_array(
-  int lmax, int m, double x,
-  DoubleBuffer result_array,
-  DoubleBuffer result_deriv_array
-  );
-public static native int gsl_sf_legendre_Plm_deriv_array(
-  int lmax, int m, double x,
-  double[] result_array,
-  double[] result_deriv_array
-  );
+
 
 
 /* P_l^m(x), normalized properly for use in spherical harmonics
@@ -25051,18 +26548,7 @@ public static native double gsl_sf_legendre_sphPlm(int l, int m, double x);
  *
  * exceptions: GSL_EDOM
  */
-public static native int gsl_sf_legendre_sphPlm_array(
-  int lmax, int m, double x,
-  DoublePointer result_array
-  );
-public static native int gsl_sf_legendre_sphPlm_array(
-  int lmax, int m, double x,
-  DoubleBuffer result_array
-  );
-public static native int gsl_sf_legendre_sphPlm_array(
-  int lmax, int m, double x,
-  double[] result_array
-  );
+
 
 
 /* sphPlm(l,m,x) and d(sphPlm(l,m,x))/dx values
@@ -25071,28 +26557,14 @@ public static native int gsl_sf_legendre_sphPlm_array(
  *
  * exceptions: GSL_EDOM
  */
-public static native int gsl_sf_legendre_sphPlm_deriv_array(
-  int lmax, int m, double x,
-  DoublePointer result_array,
-  DoublePointer result_deriv_array
-  );
-public static native int gsl_sf_legendre_sphPlm_deriv_array(
-  int lmax, int m, double x,
-  DoubleBuffer result_array,
-  DoubleBuffer result_deriv_array
-  );
-public static native int gsl_sf_legendre_sphPlm_deriv_array(
-  int lmax, int m, double x,
-  double[] result_array,
-  double[] result_deriv_array
-  );
+
 
 
 
 /* size of result_array[] needed for the array versions of Plm
  * (lmax - m + 1)
  */
-public static native int gsl_sf_legendre_array_size(int lmax, int m);
+
 
 /* Irregular Spherical Conical Function
  * P^{1/2}_{-1/2 + I lambda}(x)
@@ -25211,6 +26683,160 @@ public static native double gsl_sf_legendre_H3d(int l, double lambda, double eta
 public static native int gsl_sf_legendre_H3d_array(int lmax, double lambda, double eta, DoublePointer result_array);
 public static native int gsl_sf_legendre_H3d_array(int lmax, double lambda, double eta, DoubleBuffer result_array);
 public static native int gsl_sf_legendre_H3d_array(int lmax, double lambda, double eta, double[] result_array);
+
+/* associated legendre P_{lm} routines */
+
+/** enum gsl_sf_legendre_t */
+public static final int
+  GSL_SF_LEGENDRE_SCHMIDT = 0,
+  GSL_SF_LEGENDRE_SPHARM = 1,
+  GSL_SF_LEGENDRE_FULL = 2,
+  GSL_SF_LEGENDRE_NONE = 3;
+
+public static native int gsl_sf_legendre_array(@Cast("const gsl_sf_legendre_t") int norm,
+                          @Cast("const size_t") long lmax, double x,
+                          DoublePointer result_array);
+public static native int gsl_sf_legendre_array(@Cast("const gsl_sf_legendre_t") int norm,
+                          @Cast("const size_t") long lmax, double x,
+                          DoubleBuffer result_array);
+public static native int gsl_sf_legendre_array(@Cast("const gsl_sf_legendre_t") int norm,
+                          @Cast("const size_t") long lmax, double x,
+                          double[] result_array);
+public static native int gsl_sf_legendre_array_e(@Cast("const gsl_sf_legendre_t") int norm,
+                            @Cast("const size_t") long lmax, double x,
+                            double csphase,
+                            DoublePointer result_array);
+public static native int gsl_sf_legendre_array_e(@Cast("const gsl_sf_legendre_t") int norm,
+                            @Cast("const size_t") long lmax, double x,
+                            double csphase,
+                            DoubleBuffer result_array);
+public static native int gsl_sf_legendre_array_e(@Cast("const gsl_sf_legendre_t") int norm,
+                            @Cast("const size_t") long lmax, double x,
+                            double csphase,
+                            double[] result_array);
+public static native int gsl_sf_legendre_deriv_array(@Cast("const gsl_sf_legendre_t") int norm,
+                                @Cast("const size_t") long lmax, double x,
+                                DoublePointer result_array,
+                                DoublePointer result_deriv_array);
+public static native int gsl_sf_legendre_deriv_array(@Cast("const gsl_sf_legendre_t") int norm,
+                                @Cast("const size_t") long lmax, double x,
+                                DoubleBuffer result_array,
+                                DoubleBuffer result_deriv_array);
+public static native int gsl_sf_legendre_deriv_array(@Cast("const gsl_sf_legendre_t") int norm,
+                                @Cast("const size_t") long lmax, double x,
+                                double[] result_array,
+                                double[] result_deriv_array);
+public static native int gsl_sf_legendre_deriv_array_e(@Cast("const gsl_sf_legendre_t") int norm,
+                                  @Cast("const size_t") long lmax, double x,
+                                  double csphase,
+                                  DoublePointer result_array,
+                                  DoublePointer result_deriv_array);
+public static native int gsl_sf_legendre_deriv_array_e(@Cast("const gsl_sf_legendre_t") int norm,
+                                  @Cast("const size_t") long lmax, double x,
+                                  double csphase,
+                                  DoubleBuffer result_array,
+                                  DoubleBuffer result_deriv_array);
+public static native int gsl_sf_legendre_deriv_array_e(@Cast("const gsl_sf_legendre_t") int norm,
+                                  @Cast("const size_t") long lmax, double x,
+                                  double csphase,
+                                  double[] result_array,
+                                  double[] result_deriv_array);
+public static native int gsl_sf_legendre_deriv_alt_array(@Cast("const gsl_sf_legendre_t") int norm,
+                                    @Cast("const size_t") long lmax, double x,
+                                    DoublePointer result_array,
+                                    DoublePointer result_deriv_array);
+public static native int gsl_sf_legendre_deriv_alt_array(@Cast("const gsl_sf_legendre_t") int norm,
+                                    @Cast("const size_t") long lmax, double x,
+                                    DoubleBuffer result_array,
+                                    DoubleBuffer result_deriv_array);
+public static native int gsl_sf_legendre_deriv_alt_array(@Cast("const gsl_sf_legendre_t") int norm,
+                                    @Cast("const size_t") long lmax, double x,
+                                    double[] result_array,
+                                    double[] result_deriv_array);
+public static native int gsl_sf_legendre_deriv_alt_array_e(@Cast("const gsl_sf_legendre_t") int norm,
+                                      @Cast("const size_t") long lmax, double x,
+                                      double csphase,
+                                      DoublePointer result_array,
+                                      DoublePointer result_deriv_array);
+public static native int gsl_sf_legendre_deriv_alt_array_e(@Cast("const gsl_sf_legendre_t") int norm,
+                                      @Cast("const size_t") long lmax, double x,
+                                      double csphase,
+                                      DoubleBuffer result_array,
+                                      DoubleBuffer result_deriv_array);
+public static native int gsl_sf_legendre_deriv_alt_array_e(@Cast("const gsl_sf_legendre_t") int norm,
+                                      @Cast("const size_t") long lmax, double x,
+                                      double csphase,
+                                      double[] result_array,
+                                      double[] result_deriv_array);
+public static native int gsl_sf_legendre_deriv2_array(@Cast("const gsl_sf_legendre_t") int norm,
+                                 @Cast("const size_t") long lmax, double x,
+                                 DoublePointer result_array,
+                                 DoublePointer result_deriv_array,
+                                 DoublePointer result_deriv2_array);
+public static native int gsl_sf_legendre_deriv2_array(@Cast("const gsl_sf_legendre_t") int norm,
+                                 @Cast("const size_t") long lmax, double x,
+                                 DoubleBuffer result_array,
+                                 DoubleBuffer result_deriv_array,
+                                 DoubleBuffer result_deriv2_array);
+public static native int gsl_sf_legendre_deriv2_array(@Cast("const gsl_sf_legendre_t") int norm,
+                                 @Cast("const size_t") long lmax, double x,
+                                 double[] result_array,
+                                 double[] result_deriv_array,
+                                 double[] result_deriv2_array);
+public static native int gsl_sf_legendre_deriv2_array_e(@Cast("const gsl_sf_legendre_t") int norm,
+                                   @Cast("const size_t") long lmax, double x,
+                                   double csphase,
+                                   DoublePointer result_array,
+                                   DoublePointer result_deriv_array,
+                                   DoublePointer result_deriv2_array);
+public static native int gsl_sf_legendre_deriv2_array_e(@Cast("const gsl_sf_legendre_t") int norm,
+                                   @Cast("const size_t") long lmax, double x,
+                                   double csphase,
+                                   DoubleBuffer result_array,
+                                   DoubleBuffer result_deriv_array,
+                                   DoubleBuffer result_deriv2_array);
+public static native int gsl_sf_legendre_deriv2_array_e(@Cast("const gsl_sf_legendre_t") int norm,
+                                   @Cast("const size_t") long lmax, double x,
+                                   double csphase,
+                                   double[] result_array,
+                                   double[] result_deriv_array,
+                                   double[] result_deriv2_array);
+public static native int gsl_sf_legendre_deriv2_alt_array(@Cast("const gsl_sf_legendre_t") int norm,
+                                     @Cast("const size_t") long lmax, double x,
+                                     DoublePointer result_array,
+                                     DoublePointer result_deriv_array,
+                                     DoublePointer result_deriv2_array);
+public static native int gsl_sf_legendre_deriv2_alt_array(@Cast("const gsl_sf_legendre_t") int norm,
+                                     @Cast("const size_t") long lmax, double x,
+                                     DoubleBuffer result_array,
+                                     DoubleBuffer result_deriv_array,
+                                     DoubleBuffer result_deriv2_array);
+public static native int gsl_sf_legendre_deriv2_alt_array(@Cast("const gsl_sf_legendre_t") int norm,
+                                     @Cast("const size_t") long lmax, double x,
+                                     double[] result_array,
+                                     double[] result_deriv_array,
+                                     double[] result_deriv2_array);
+public static native int gsl_sf_legendre_deriv2_alt_array_e(@Cast("const gsl_sf_legendre_t") int norm,
+                                       @Cast("const size_t") long lmax, double x,
+                                       double csphase,
+                                       DoublePointer result_array,
+                                       DoublePointer result_deriv_array,
+                                       DoublePointer result_deriv2_array);
+public static native int gsl_sf_legendre_deriv2_alt_array_e(@Cast("const gsl_sf_legendre_t") int norm,
+                                       @Cast("const size_t") long lmax, double x,
+                                       double csphase,
+                                       DoubleBuffer result_array,
+                                       DoubleBuffer result_deriv_array,
+                                       DoubleBuffer result_deriv2_array);
+public static native int gsl_sf_legendre_deriv2_alt_array_e(@Cast("const gsl_sf_legendre_t") int norm,
+                                       @Cast("const size_t") long lmax, double x,
+                                       double csphase,
+                                       double[] result_array,
+                                       double[] result_deriv_array,
+                                       double[] result_deriv2_array);
+public static native @Cast("size_t") long gsl_sf_legendre_array_n(@Cast("const size_t") long lmax);
+public static native @Cast("size_t") long gsl_sf_legendre_array_index(@Cast("const size_t") long l, @Cast("const size_t") long m);
+public static native @Cast("size_t") long gsl_sf_legendre_nlm(@Cast("const size_t") long lmax);
 
 // #endif /* __GSL_SF_LEGENDRE_H__ */
 
@@ -25378,8 +27004,10 @@ public static native int gsl_sf_mathieu_b_array(int order_min, int order_max, do
 
 /* Compute the characteristic value for a Mathieu function of order n and
    type ntype. */
-public static native int gsl_sf_mathieu_a(int order, double qq, gsl_sf_result result);
-public static native int gsl_sf_mathieu_b(int order, double qq, gsl_sf_result result);
+public static native int gsl_sf_mathieu_a_e(int order, double qq, gsl_sf_result result);
+public static native double gsl_sf_mathieu_a(int order, double qq);
+public static native int gsl_sf_mathieu_b_e(int order, double qq, gsl_sf_result result);
+public static native double gsl_sf_mathieu_b(int order, double qq);
 
 /* Compute the Fourier coefficients for a Mathieu function. */
 public static native int gsl_sf_mathieu_a_coeff(int order, double qq, double aa, DoublePointer coeff);
@@ -25395,8 +27023,10 @@ public static native gsl_sf_mathieu_workspace gsl_sf_mathieu_alloc(@Cast("const 
 public static native void gsl_sf_mathieu_free(gsl_sf_mathieu_workspace workspace);
 
 /* Compute an angular Mathieu function. */
-public static native int gsl_sf_mathieu_ce(int order, double qq, double zz, gsl_sf_result result);
-public static native int gsl_sf_mathieu_se(int order, double qq, double zz, gsl_sf_result result);
+public static native int gsl_sf_mathieu_ce_e(int order, double qq, double zz, gsl_sf_result result);
+public static native double gsl_sf_mathieu_ce(int order, double qq, double zz);
+public static native int gsl_sf_mathieu_se_e(int order, double qq, double zz, gsl_sf_result result);
+public static native double gsl_sf_mathieu_se(int order, double qq, double zz);
 public static native int gsl_sf_mathieu_ce_array(int nmin, int nmax, double qq, double zz,
                             gsl_sf_mathieu_workspace work,
                             DoublePointer result_array);
@@ -25417,10 +27047,12 @@ public static native int gsl_sf_mathieu_se_array(int nmin, int nmax, double qq, 
                             double[] result_array);
 
 /* Compute a radial Mathieu function. */
-public static native int gsl_sf_mathieu_Mc(int kind, int order, double qq, double zz,
+public static native int gsl_sf_mathieu_Mc_e(int kind, int order, double qq, double zz,
                       gsl_sf_result result);
-public static native int gsl_sf_mathieu_Ms(int kind, int order, double qq, double zz,
+public static native double gsl_sf_mathieu_Mc(int kind, int order, double qq, double zz);
+public static native int gsl_sf_mathieu_Ms_e(int kind, int order, double qq, double zz,
                       gsl_sf_result result);
+public static native double gsl_sf_mathieu_Ms(int kind, int order, double qq, double zz);
 public static native int gsl_sf_mathieu_Mc_array(int kind, int nmin, int nmax, double qq,
                             double zz, gsl_sf_mathieu_workspace work,
                             DoublePointer result_array);

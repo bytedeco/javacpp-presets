@@ -56,6 +56,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "gsl/gsl_qrng.h", "gsl/gsl_randist.h", "gsl/gsl_roots.h",  "gsl/gsl_siman.h", "gsl/gsl_spline.h", "gsl/gsl_sum.h", "gsl/gsl_wavelet.h",
         "gsl/gsl_wavelet2d.h",
 
+        "gsl/gsl_multilarge.h", "gsl/gsl_rstat.h", "gsl/gsl_spmatrix.h", "gsl/gsl_spblas.h", "gsl/gsl_splinalg.h", "gsl/gsl_interp2d.h", "gsl/gsl_spline2d.h",
+
         "gsl/gsl_const.h", "gsl/gsl_const_num.h", "gsl/gsl_const_cgs.h", "gsl/gsl_const_mks.h", "gsl/gsl_const_cgsm.h", "gsl/gsl_const_mksa.h",
 
         "gsl/gsl_fft.h", "gsl/gsl_fft_complex_float.h", "gsl/gsl_fft_complex.h", "gsl/gsl_fft_halfcomplex_float.h", "gsl/gsl_fft_halfcomplex.h",
@@ -140,6 +142,8 @@ public class gsl implements InfoMapper {
                .put(new Info("gsl_odeiv2_evolve_struct").pointerTypes("gsl_odeiv2_evolve"))
                .put(new Info("gsl_odeiv2_driver_struct").pointerTypes("gsl_odeiv2_driver"))
                .put(new Info("gsl_sf_result_struct").pointerTypes("gsl_sf_result"))
-               .put(new Info("gsl_sf_result_e10_struct").pointerTypes("gsl_sf_result_e10"));
+               .put(new Info("gsl_sf_result_e10_struct").pointerTypes("gsl_sf_result_e10"))
+               .put(new Info("gsl_sf_legendre_Plm_array", "gsl_sf_legendre_Plm_deriv_array", "gsl_sf_legendre_sphPlm_array", "gsl_sf_legendre_sphPlm_deriv_array",
+                             "gsl_sf_legendre_array_size", "gsl_bspline_deriv_alloc", "gsl_bspline_deriv_free", "gsl_multifit_fdfsolver_dif_fdf").skip());
     }
 }
