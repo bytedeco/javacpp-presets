@@ -618,7 +618,7 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
     <p>
     \note
        -   (Python) A face detection example using cascade classifiers can be found at
-            opencv_source_code/samples/python2/facedetect.py
+            opencv_source_code/samples/python/facedetect.py
     */
     public native void detectMultiScale( @ByVal Mat image,
                               @ByRef RectVector objects,
@@ -1018,6 +1018,7 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
 // #ifndef __OPENCV_OBJDETECT_DBT_HPP__
 // #define __OPENCV_OBJDETECT_DBT_HPP__
 
+// After this condition removal update blacklist for bindings: modules/python/common.cmake
 // #if defined(__linux__) || defined(LINUX) || defined(__APPLE__) || defined(__ANDROID__) ||
 //   (defined(__cplusplus) &&  __cplusplus > 201103L) || (defined(_MSC_VER) && _MSC_VER >= 1700)
 

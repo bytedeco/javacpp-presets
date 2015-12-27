@@ -285,6 +285,8 @@ of this class into StatModel::train.
     @param missch The character used to specify missing measurements. It should not be a digit.
         Although it's a non-numerical value, it surely does not affect the decision of whether the
         variable ordered or categorical.
+    \note If the dataset only contains input variables and no responses, use responseStartIdx = -2
+        and responseEndIdx = 0. The output variables vector will just contain zeros.
      */
     public static native @Ptr TrainData loadFromCSV(@Str BytePointer filename,
                                           int headerLineCount,
@@ -732,10 +734,18 @@ of this class into StatModel::train.
 
     /** \brief Retrieves all the support vectors
     <p>
-    The method returns all the support vector as floating-point matrix, where support vectors are
+    The method returns all the support vectors as a floating-point matrix, where support vectors are
     stored as matrix rows.
      */
     public native @ByVal Mat getSupportVectors();
+
+    /** \brief Retrieves all the uncompressed support vectors of a linear %SVM
+    <p>
+    The method returns all the uncompressed support vectors of a linear %SVM that the compressed
+    support vector, used for prediction, was derived from. They are returned in a floating-point
+    matrix, where the support vectors are stored as matrix rows.
+     */
+    public native @ByVal Mat getUncompressedSupportVectors();
 
     /** \brief Retrieves the decision function
     <p>
@@ -1600,9 +1610,6 @@ Additional flags for StatModel::train are available: ANN_MLP::TrainFlags.
 @param samples returned samples array
 */
 @Namespace("cv::ml") public static native void randMVNormal( @ByVal Mat mean, @ByVal Mat cov, int nsamples, @ByVal Mat samples);
-
-/** \brief Generates sample from gaussian mixture distribution */
-
 
 /** \brief Creates test set */
 @Namespace("cv::ml") public static native void createConcentricSpheresTestSet( int nsamples, int nfeatures, int nclasses,

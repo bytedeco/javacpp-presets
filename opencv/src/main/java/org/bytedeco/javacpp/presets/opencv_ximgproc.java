@@ -24,7 +24,6 @@ package org.bytedeco.javacpp.presets;
 
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
-import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
@@ -32,14 +31,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit = opencv_video.class, value = {
-    @Platform(include = {
-        "<opencv2/shape.hpp>", "<opencv2/shape/emdL1.hpp>", "<opencv2/shape/shape_transformer.hpp>",
-        "<opencv2/shape/hist_cost.hpp>", "<opencv2/shape/shape_distance.hpp>"}, link = "opencv_shape@.3.1"),
-    @Platform(value = "windows", link = "opencv_shape310")},
-        target = "org.bytedeco.javacpp.opencv_shape")
-public class opencv_shape implements InfoMapper {
+@Properties(inherit = opencv_calib3d.class, value = {
+    @Platform(include = {"<opencv2/ximgproc.hpp>", "opencv2/ximgproc/edge_filter.hpp", "opencv2/ximgproc/disparity_filter.hpp",
+        "opencv2/ximgproc/sparse_match_interpolator.hpp", "opencv2/ximgproc/structured_edge_detection.hpp", "opencv2/ximgproc/seeds.hpp",
+        "opencv2/ximgproc/segmentation.hpp", "opencv2/ximgproc/fast_hough_transform.hpp", "opencv2/ximgproc/estimated_covariance.hpp",
+        "opencv2/ximgproc/slic.hpp", "opencv2/ximgproc/lsc.hpp"}, link = "opencv_ximgproc@.3.1"),
+    @Platform(value = "windows", link = "opencv_ximgproc310")},
+        target = "org.bytedeco.javacpp.opencv_ximgproc")
+public class opencv_ximgproc implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("cv::ChiHistogramCostExtractor", "cv::EMDL1HistogramCostExtractor").purify());
     }
 }

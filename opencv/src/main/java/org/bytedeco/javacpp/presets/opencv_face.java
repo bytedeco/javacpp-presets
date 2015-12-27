@@ -32,8 +32,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = opencv_imgproc.class, value = {
-    @Platform(include = {"<opencv2/face.hpp>", "<opencv2/face/facerec.hpp>"}, link = "opencv_face@.3.0"),
-    @Platform(value = "windows", link = "opencv_face300")},
+    @Platform(include = {"<opencv2/face/predict_collector.hpp>", "<opencv2/face.hpp>", "<opencv2/face/facerec.hpp>"}, link = "opencv_face@.3.1"),
+    @Platform(value = "windows", link = "opencv_face310")},
         target = "org.bytedeco.javacpp.opencv_face")
 public class opencv_face implements InfoMapper {
     public void map(InfoMap infoMap) {

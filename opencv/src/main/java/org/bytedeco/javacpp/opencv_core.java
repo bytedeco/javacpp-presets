@@ -595,7 +595,68 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     }
 }
 
-// Parsed from <opencv2/hal/defs.h>
+// Parsed from <opencv2/core/hal/interface.h>
+
+// #ifndef _HAL_INTERFACE_HPP_INCLUDED_
+// #define _HAL_INTERFACE_HPP_INCLUDED_
+
+/** \addtogroup core_hal_interface
+ *  \{ */
+
+public static final int CV_HAL_ERROR_OK = 0;
+public static final int CV_HAL_ERROR_NOT_IMPLEMENTED = 1;
+public static final int CV_HAL_ERROR_UNKNOWN = -1;
+
+public static final int CV_HAL_CMP_EQ = 0;
+public static final int CV_HAL_CMP_GT = 1;
+public static final int CV_HAL_CMP_GE = 2;
+public static final int CV_HAL_CMP_LT = 3;
+public static final int CV_HAL_CMP_LE = 4;
+public static final int CV_HAL_CMP_NE = 5;
+
+// #ifdef __cplusplus
+// #include <cstddef>
+// #else
+// #endif
+
+/* primitive types */
+/*
+  schar  - signed 1 byte integer
+  uchar  - unsigned 1 byte integer
+  short  - signed 2 byte integer
+  ushort - unsigned 2 byte integer
+  int    - signed 4 byte integer
+  uint   - unsigned 4 byte integer
+  int64  - signed 8 byte integer
+  uint64 - unsigned 8 byte integer
+*/
+
+// #if !defined _MSC_VER && !defined __BORLANDC__
+// #  if defined __cplusplus && __cplusplus >= 201103L && !defined __APPLE__
+// #    include <cstdint>
+// #  else
+// #    include <stdint.h>
+// #  endif
+// #else
+// #endif
+
+// #ifndef __IPL_H__
+// #endif
+
+// #if defined _MSC_VER || defined __BORLANDC__
+// #  define CV_BIG_INT(n)   n##I64
+// #  define CV_BIG_UINT(n)  n##UI64
+// #else
+// #  define CV_BIG_INT(n)   n##LL
+// #  define CV_BIG_UINT(n)  n##ULL
+// #endif
+
+/** \} */
+
+// #endif
+
+
+// Parsed from <opencv2/core/cvdef.h>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
 //
@@ -641,14 +702,28 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
 //
 //M*/
 
-// #ifndef __OPENCV_DEF_H__
-// #define __OPENCV_DEF_H__
+// #ifndef __OPENCV_CORE_CVDEF_H__
+// #define __OPENCV_CORE_CVDEF_H__
+
+/** \addtogroup core_utils
+ *  \{ */
 
 // #if !defined _CRT_SECURE_NO_DEPRECATE && defined _MSC_VER && _MSC_VER > 1300
 // #  define _CRT_SECURE_NO_DEPRECATE /* to avoid multiple Visual Studio warnings */
 // #endif
 
+// undef problematic defines sometimes defined by system headers (windows.h in particular)
+// #undef small
+// #undef min
+// #undef max
+// #undef abs
+// #undef Complex
+
+// #if !defined _CRT_SECURE_NO_DEPRECATE && defined _MSC_VER && _MSC_VER > 1300 /* to avoid multiple Visual Studio warnings */
+// #endif
+
 // #include <limits.h>
+// #include "opencv2/core/hal/interface.h"
 
 // #if defined __ICL
 // #elif defined __ICC
@@ -708,8 +783,37 @@ public static final int CV_CPU_AVX_512VL =        21;
 
 public static final int CV_CPU_NEON =   100;
 
-// when adding to this list remember to update the enum in core/utility.cpp
+// when adding to this list remember to update the following enum
 public static final int CV_HARDWARE_MAX_FEATURE = 255;
+
+/** \brief Available CPU features.
+*/
+/** enum CpuFeatures */
+public static final int
+    CPU_MMX             = 1,
+    CPU_SSE             = 2,
+    CPU_SSE2            = 3,
+    CPU_SSE3            = 4,
+    CPU_SSSE3           = 5,
+    CPU_SSE4_1          = 6,
+    CPU_SSE4_2          = 7,
+    CPU_POPCNT          = 8,
+
+    CPU_AVX             = 10,
+    CPU_AVX2            = 11,
+    CPU_FMA3            = 12,
+
+    CPU_AVX_512F        = 13,
+    CPU_AVX_512BW       = 14,
+    CPU_AVX_512CD       = 15,
+    CPU_AVX_512DQ       = 16,
+    CPU_AVX_512ER       = 17,
+    CPU_AVX_512IFMA512  = 18,
+    CPU_AVX_512PF       = 19,
+    CPU_AVX_512VBMI     = 20,
+    CPU_AVX_512VL       = 21,
+
+    CPU_NEON            = 100;
 
 // do not include SSE/AVX/NEON headers for NVCC compiler
 // #ifndef __CUDACC__
@@ -773,7 +877,7 @@ public static final int CV_FMA3 = 1;
 // #  define CV_NEON 1
 // #endif
 
-// #if defined __GNUC__ && defined __arm__ && (defined __ARM_PCS_VFP || defined __ARM_VFPV3__)
+// #if defined __GNUC__ && defined __arm__ && (defined __ARM_PCS_VFP || defined __ARM_VFPV3__ || defined __ARM_NEON__) && !defined __SOFTFP__
 public static final int CV_VFP = 1;
 // #endif
 
@@ -836,38 +940,6 @@ public static final int CV_AVX_512VL = 0;
 // #ifndef CV_VFP
 // #endif
 
-/* primitive types */
-/*
-  schar  - signed 1 byte integer
-  uchar  - unsigned 1 byte integer
-  short  - signed 2 byte integer
-  ushort - unsigned 2 byte integer
-  int    - signed 4 byte integer
-  uint   - unsigned 4 byte integer
-  int64  - signed 8 byte integer
-  uint64 - unsigned 8 byte integer
-*/
-
-// #if !defined _MSC_VER && !defined __BORLANDC__
-// #  if defined __cplusplus && __cplusplus >= 201103L
-// #    include <cstdint>
-// #  else
-// #    include <stdint.h>
-// #  endif
-// #else
-// #endif
-
-// #ifndef __IPL_H__
-// #endif
-
-// #if defined _MSC_VER || defined __BORLANDC__
-// #  define CV_BIG_INT(n)   n##I64
-// #  define CV_BIG_UINT(n)  n##UI64
-// #else
-// #  define CV_BIG_INT(n)   n##LL
-// #  define CV_BIG_UINT(n)  n##ULL
-// #endif
-
 /* fundamental constants */
 public static final double CV_PI =   3.1415926535897932384626433832795;
 public static final double CV_2PI = 6.283185307179586476925286766559;
@@ -911,263 +983,7 @@ public static class Cv64suf extends Pointer {
     public native double f(); public native Cv64suf f(double f);
 }
 
-
-/****************************************************************************************\
-*                                      fast math                                         *
-\****************************************************************************************/
-
-// #if defined __BORLANDC__
-// #  include <fastmath.h>
-// #elif defined __cplusplus
-// #  include <cmath>
-// #else
-// #  include <math.h>
-// #endif
-
-// #ifdef HAVE_TEGRA_OPTIMIZATION
-// #  include "tegra_round.hpp"
-// #endif
-
-/** \addtogroup core_utils
- *  \{ */
-
-// #if CV_VFP
-    // 1. general scheme
-//     #define ARM_ROUND(_value, _asm_string)
-//         int res;
-//         float temp;
-//         asm(_asm_string : [res] "=r" (res), [temp] "=w" (temp) : [value] "w" (_value));
-//         return res
-    // 2. version for double
-//     #ifdef __clang__
-//         #define ARM_ROUND_DBL(value) ARM_ROUND(value, "vcvtr.s32.f64 %[temp], %[value] \n vmov %[res], %[temp]")
-//     #else
-//         #define ARM_ROUND_DBL(value) ARM_ROUND(value, "vcvtr.s32.f64 %[temp], %P[value] \n vmov %[res], %[temp]")
-//     #endif
-    // 3. version for float
-//     #define ARM_ROUND_FLT(value) ARM_ROUND(value, "vcvtr.s32.f32 %[temp], %[value]\n vmov %[res], %[temp]")
-// #endif // CV_VFP
-
-/** \brief Rounds floating-point number to the nearest integer
- <p>
- @param value floating-point number. If the value is outside of INT_MIN ... INT_MAX range, the
- result is not defined.
- */
-public static native int cvRound( double value );
-
-
-/** \brief Rounds floating-point number to the nearest integer not larger than the original.
- <p>
- The function computes an integer i such that:
- \f[i \le \texttt{value} < i+1\f]
- @param value floating-point number. If the value is outside of INT_MIN ... INT_MAX range, the
- result is not defined.
- */
-public static native int cvFloor( double value );
-
-/** \brief Rounds floating-point number to the nearest integer not larger than the original.
- <p>
- The function computes an integer i such that:
- \f[i \le \texttt{value} < i+1\f]
- @param value floating-point number. If the value is outside of INT_MIN ... INT_MAX range, the
- result is not defined.
- */
-public static native int cvCeil( double value );
-
-/** \brief Determines if the argument is Not A Number.
- <p>
- @param value The input floating-point value
- <p>
- The function returns 1 if the argument is Not A Number (as defined by IEEE754 standard), 0
- otherwise. */
-public static native int cvIsNaN( double value );
-
-/** \brief Determines if the argument is Infinity.
- <p>
- @param value The input floating-point value
- <p>
- The function returns 1 if the argument is a plus or minus infinity (as defined by IEEE754 standard)
- and 0 otherwise. */
-public static native int cvIsInf( double value );
-
-// #ifdef __cplusplus
-
-/** \overload */
-public static native int cvRound(float value);
-
-/** \overload */
-public static native int cvRound( int value );
-
-/** \overload */
-public static native int cvFloor( float value );
-
-/** \overload */
-public static native int cvFloor( int value );
-
-/** \overload */
-public static native int cvCeil( float value );
-
-/** \overload */
-public static native int cvCeil( int value );
-
-/** \overload */
-public static native int cvIsNaN( float value );
-
-/** \overload */
-public static native int cvIsInf( float value );
-
-// #include <algorithm>
-
-/////////////// saturate_cast (used in image & signal processing) ///////////////////
-
-/**
- Template function for accurate conversion from one primitive type to another.
- <p>
- The functions saturate_cast resemble the standard C++ cast operations, such as static_cast\<T\>()
- and others. They perform an efficient and accurate conversion from one primitive type to another
- (see the introduction chapter). saturate in the name means that when the input value v is out of the
- range of the target type, the result is not formed just by taking low bits of the input, but instead
- the value is clipped. For example:
- <pre>{@code
- uchar a = saturate_cast<uchar>(-100); // a = 0 (UCHAR_MIN)
- short b = saturate_cast<short>(33333.33333); // b = 32767 (SHRT_MAX)
- }</pre>
- Such clipping is done when the target type is unsigned char , signed char , unsigned short or
- signed short . For 32-bit integers, no clipping is done.
- <p>
- When the parameter is a floating-point value and the target type is an integer (8-, 16- or 32-bit),
- the floating-point value is first rounded to the nearest integer and then clipped if needed (when
- the target type is 8- or 16-bit).
- <p>
- This operation is used in the simplest or most complex image processing functions in OpenCV.
- <p>
- @param v Function parameter.
- \sa add, subtract, multiply, divide, Mat::convertTo
- */
-
-/** \overload */
-@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(@Cast("schar") byte v);
-@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(@Cast("schar") byte v);
-@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(@Cast("schar") byte v);
-@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(@Cast("schar") byte v);
-@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(@Cast("schar") byte v);
-@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(@Cast("schar") byte v);
-/** \overload */
-
-/** \overload */
-@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(short v);
-@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(short v);
-@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(short v);
-@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(short v);
-@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(short v);
-@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(short v);
-/** \overload */
-
-/** \overload */
-@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(int v);
-@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(int v);
-@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(int v);
-@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(int v);
-@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(int v);
-@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(int v);
-/** \overload */
-@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(float v);
-@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(float v);
-@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(float v);
-@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(float v);
-@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(float v);
-@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(float v);
-/** \overload */
-@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(double v);
-@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(double v);
-@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(double v);
-@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(double v);
-@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(double v);
-@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(double v);
-/** \overload */
-@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(@Cast("int64") long v);
-@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(@Cast("int64") long v);
-@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(@Cast("int64") long v);
-@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(@Cast("int64") long v);
-@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(@Cast("int64") long v);
-@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(@Cast("int64") long v);
-/** \overload */
-
-/** \cond IGNORED */
-
-// we intentionally do not clip negative numbers, to make -1 become 0xffffffff etc.
-
-/** \endcond */
-
-
-
-// #endif // __cplusplus
-
-/** \} core_utils */
-
-// #endif //__OPENCV_HAL_H__
-
-
-// Parsed from <opencv2/core/cvdef.h>
-
-/*M///////////////////////////////////////////////////////////////////////////////////////
-//
-//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-//
-//  By downloading, copying, installing or using the software you agree to this license.
-//  If you do not agree to this license, do not download, install,
-//  copy or use the software.
-//
-//
-//                          License Agreement
-//                For Open Source Computer Vision Library
-//
-// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
-// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
-// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
-// Copyright (C) 2015, Itseez Inc., all rights reserved.
-// Third party copyrights are property of their respective owners.
-//
-// Redistribution and use in source and binary forms, with or without modification,
-// are permitted provided that the following conditions are met:
-//
-//   * Redistribution's of source code must retain the above copyright notice,
-//     this list of conditions and the following disclaimer.
-//
-//   * Redistribution's in binary form must reproduce the above copyright notice,
-//     this list of conditions and the following disclaimer in the documentation
-//     and/or other materials provided with the distribution.
-//
-//   * The name of the copyright holders may not be used to endorse or promote products
-//     derived from this software without specific prior written permission.
-//
-// This software is provided by the copyright holders and contributors "as is" and
-// any express or implied warranties, including, but not limited to, the implied
-// warranties of merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the Intel Corporation or contributors be liable for any direct,
-// indirect, incidental, special, exemplary, or consequential damages
-// (including, but not limited to, procurement of substitute goods or services;
-// loss of use, data, or profits; or business interruption) however caused
-// and on any theory of liability, whether in contract, strict liability,
-// or tort (including negligence or otherwise) arising in any way out of
-// the use of this software, even if advised of the possibility of such damage.
-//
-//M*/
-
-// #ifndef __OPENCV_CORE_CVDEF_H__
-// #define __OPENCV_CORE_CVDEF_H__
-
-// #if !defined _CRT_SECURE_NO_DEPRECATE && defined _MSC_VER && _MSC_VER > 1300 /* to avoid multiple Visual Studio warnings */
-// #endif
-
-// undef problematic defines sometimes defined by system headers (windows.h in particular)
-// #undef small
-// #undef min
-// #undef max
-// #undef abs
-// #undef Complex
-
-// #include "opencv2/hal/defs.h"
+public static final int OPENCV_ABI_COMPATIBILITY = 300;
 
 // #ifdef __OPENCV_BUILD
 // #  define DISABLE_OPENCV_24_COMPATIBILITY
@@ -1277,12 +1093,12 @@ public static final int CV_SUBMAT_FLAG_SHIFT =    15;
 public static final int CV_SUBMAT_FLAG =          (1 << CV_SUBMAT_FLAG_SHIFT);
 // #define CV_IS_SUBMAT(flags)     ((flags) & CV_MAT_SUBMAT_FLAG)
 
-/* Size of each channel item,
+/** Size of each channel item,
    0x124489 = 1000 0100 0100 0010 0010 0001 0001 ~ array of sizeof(arr_type_elem) */
 // #define CV_ELEM_SIZE1(type)
 //     ((((sizeof(size_t)<<28)|0x8442211) >> CV_MAT_DEPTH(type)*4) & 15)
 
-/* 0x3a50 = 11 10 10 01 01 00 00 ~ array of log2(sizeof(arr_type_elem)) */
+/** 0x3a50 = 11 10 10 01 01 00 00 ~ array of log2(sizeof(arr_type_elem)) */
 // #define CV_ELEM_SIZE(type)
 //     (CV_MAT_CN(type) << ((((sizeof(size_t)/4+1)*16384|0x3a50) >> CV_MAT_DEPTH(type)*2) & 3))
 
@@ -1321,7 +1137,790 @@ public static final int CV_SUBMAT_FLAG =          (1 << CV_SUBMAT_FLAG_SHIFT);
 // #  endif
 // #endif
 
+
+/****************************************************************************************\
+*                                    C++ Move semantics                                  *
+\****************************************************************************************/
+
+// #ifndef CV_CXX_MOVE_SEMANTICS
+// #  if __cplusplus >= 201103L || defined(__GXX_EXPERIMENTAL_CXX0X__) || defined(_MSC_VER) && _MSC_VER >= 1600
+public static final int CV_CXX_MOVE_SEMANTICS = 1;
+// #  elif defined(__clang)
+// #    if __has_feature(cxx_rvalue_references)
+// #    endif
+// #  endif
+// #else
+// #  if CV_CXX_MOVE_SEMANTICS == 0
+// #    undef CV_CXX_MOVE_SEMANTICS
+// #  endif
+// #endif
+
+/** \} */
+
 // #endif // __OPENCV_CORE_CVDEF_H__
+
+
+// Parsed from <opencv2/core/hal/hal.hpp>
+
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+//
+//  By downloading, copying, installing or using the software you agree to this license.
+//  If you do not agree to this license, do not download, install,
+//  copy or use the software.
+//
+//
+//                          License Agreement
+//                For Open Source Computer Vision Library
+//
+// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
+// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
+// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
+// Copyright (C) 2015, Itseez Inc., all rights reserved.
+// Third party copyrights are property of their respective owners.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+//   * Redistribution's of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//
+//   * Redistribution's in binary form must reproduce the above copyright notice,
+//     this list of conditions and the following disclaimer in the documentation
+//     and/or other materials provided with the distribution.
+//
+//   * The name of the copyright holders may not be used to endorse or promote products
+//     derived from this software without specific prior written permission.
+//
+// This software is provided by the copyright holders and contributors "as is" and
+// any express or implied warranties, including, but not limited to, the implied
+// warranties of merchantability and fitness for a particular purpose are disclaimed.
+// In no event shall the Intel Corporation or contributors be liable for any direct,
+// indirect, incidental, special, exemplary, or consequential damages
+// (including, but not limited to, procurement of substitute goods or services;
+// loss of use, data, or profits; or business interruption) however caused
+// and on any theory of liability, whether in contract, strict liability,
+// or tort (including negligence or otherwise) arising in any way out of
+// the use of this software, even if advised of the possibility of such damage.
+//
+//M*/
+
+// #ifndef __OPENCV_HAL_HPP__
+// #define __OPENCV_HAL_HPP__
+
+// #include "opencv2/core/cvdef.h"
+// #include "opencv2/core/hal/interface.h"
+
+/** \cond IGNORED */
+// #define CALL_HAL(name, fun, ...)
+//     int res = fun(__VA_ARGS__);
+//     if (res == CV_HAL_ERROR_OK)
+//         return;
+//     else if (res != CV_HAL_ERROR_NOT_IMPLEMENTED)
+//         CV_Error_(cv::Error::StsInternal,
+//             ("HAL implementation " CVAUX_STR(name) " ==> " CVAUX_STR(fun) " returned %d (0x%08x)", res, res));
+/** \endcond */
+
+/** \addtogroup core_hal_functions
+ *  \{ */
+
+@Namespace("cv::hal") public static native int normHamming(@Cast("const uchar*") BytePointer a, int n);
+@Namespace("cv::hal") public static native int normHamming(@Cast("const uchar*") ByteBuffer a, int n);
+@Namespace("cv::hal") public static native int normHamming(@Cast("const uchar*") byte[] a, int n);
+@Namespace("cv::hal") public static native int normHamming(@Cast("const uchar*") BytePointer a, @Cast("const uchar*") BytePointer b, int n);
+@Namespace("cv::hal") public static native int normHamming(@Cast("const uchar*") ByteBuffer a, @Cast("const uchar*") ByteBuffer b, int n);
+@Namespace("cv::hal") public static native int normHamming(@Cast("const uchar*") byte[] a, @Cast("const uchar*") byte[] b, int n);
+
+@Namespace("cv::hal") public static native int normHamming(@Cast("const uchar*") BytePointer a, int n, int cellSize);
+@Namespace("cv::hal") public static native int normHamming(@Cast("const uchar*") ByteBuffer a, int n, int cellSize);
+@Namespace("cv::hal") public static native int normHamming(@Cast("const uchar*") byte[] a, int n, int cellSize);
+@Namespace("cv::hal") public static native int normHamming(@Cast("const uchar*") BytePointer a, @Cast("const uchar*") BytePointer b, int n, int cellSize);
+@Namespace("cv::hal") public static native int normHamming(@Cast("const uchar*") ByteBuffer a, @Cast("const uchar*") ByteBuffer b, int n, int cellSize);
+@Namespace("cv::hal") public static native int normHamming(@Cast("const uchar*") byte[] a, @Cast("const uchar*") byte[] b, int n, int cellSize);
+
+@Namespace("cv::hal") public static native int LU32f(FloatPointer A, @Cast("size_t") long astep, int m, FloatPointer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native int LU32f(FloatBuffer A, @Cast("size_t") long astep, int m, FloatBuffer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native int LU32f(float[] A, @Cast("size_t") long astep, int m, float[] b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native int LU64f(DoublePointer A, @Cast("size_t") long astep, int m, DoublePointer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native int LU64f(DoubleBuffer A, @Cast("size_t") long astep, int m, DoubleBuffer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native int LU64f(double[] A, @Cast("size_t") long astep, int m, double[] b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native @Cast("bool") boolean Cholesky32f(FloatPointer A, @Cast("size_t") long astep, int m, FloatPointer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native @Cast("bool") boolean Cholesky32f(FloatBuffer A, @Cast("size_t") long astep, int m, FloatBuffer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native @Cast("bool") boolean Cholesky32f(float[] A, @Cast("size_t") long astep, int m, float[] b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native @Cast("bool") boolean Cholesky64f(DoublePointer A, @Cast("size_t") long astep, int m, DoublePointer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native @Cast("bool") boolean Cholesky64f(DoubleBuffer A, @Cast("size_t") long astep, int m, DoubleBuffer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native @Cast("bool") boolean Cholesky64f(double[] A, @Cast("size_t") long astep, int m, double[] b, @Cast("size_t") long bstep, int n);
+
+@Namespace("cv::hal") public static native int normL1_(@Cast("const uchar*") BytePointer a, @Cast("const uchar*") BytePointer b, int n);
+@Namespace("cv::hal") public static native int normL1_(@Cast("const uchar*") ByteBuffer a, @Cast("const uchar*") ByteBuffer b, int n);
+@Namespace("cv::hal") public static native int normL1_(@Cast("const uchar*") byte[] a, @Cast("const uchar*") byte[] b, int n);
+@Namespace("cv::hal") public static native float normL1_(@Const FloatPointer a, @Const FloatPointer b, int n);
+@Namespace("cv::hal") public static native float normL1_(@Const FloatBuffer a, @Const FloatBuffer b, int n);
+@Namespace("cv::hal") public static native float normL1_(@Const float[] a, @Const float[] b, int n);
+@Namespace("cv::hal") public static native float normL2Sqr_(@Const FloatPointer a, @Const FloatPointer b, int n);
+@Namespace("cv::hal") public static native float normL2Sqr_(@Const FloatBuffer a, @Const FloatBuffer b, int n);
+@Namespace("cv::hal") public static native float normL2Sqr_(@Const float[] a, @Const float[] b, int n);
+
+@Namespace("cv::hal") public static native void exp32f(@Const FloatPointer src, FloatPointer dst, int n);
+@Namespace("cv::hal") public static native void exp32f(@Const FloatBuffer src, FloatBuffer dst, int n);
+@Namespace("cv::hal") public static native void exp32f(@Const float[] src, float[] dst, int n);
+@Namespace("cv::hal") public static native void exp64f(@Const DoublePointer src, DoublePointer dst, int n);
+@Namespace("cv::hal") public static native void exp64f(@Const DoubleBuffer src, DoubleBuffer dst, int n);
+@Namespace("cv::hal") public static native void exp64f(@Const double[] src, double[] dst, int n);
+@Namespace("cv::hal") public static native void log32f(@Const FloatPointer src, FloatPointer dst, int n);
+@Namespace("cv::hal") public static native void log32f(@Const FloatBuffer src, FloatBuffer dst, int n);
+@Namespace("cv::hal") public static native void log32f(@Const float[] src, float[] dst, int n);
+@Namespace("cv::hal") public static native void log64f(@Const DoublePointer src, DoublePointer dst, int n);
+@Namespace("cv::hal") public static native void log64f(@Const DoubleBuffer src, DoubleBuffer dst, int n);
+@Namespace("cv::hal") public static native void log64f(@Const double[] src, double[] dst, int n);
+
+@Namespace("cv::hal") public static native void fastAtan2(@Const FloatPointer y, @Const FloatPointer x, FloatPointer dst, int n, @Cast("bool") boolean angleInDegrees);
+@Namespace("cv::hal") public static native void fastAtan2(@Const FloatBuffer y, @Const FloatBuffer x, FloatBuffer dst, int n, @Cast("bool") boolean angleInDegrees);
+@Namespace("cv::hal") public static native void fastAtan2(@Const float[] y, @Const float[] x, float[] dst, int n, @Cast("bool") boolean angleInDegrees);
+@Namespace("cv::hal") public static native void magnitude32f(@Const FloatPointer x, @Const FloatPointer y, FloatPointer dst, int n);
+@Namespace("cv::hal") public static native void magnitude32f(@Const FloatBuffer x, @Const FloatBuffer y, FloatBuffer dst, int n);
+@Namespace("cv::hal") public static native void magnitude32f(@Const float[] x, @Const float[] y, float[] dst, int n);
+@Namespace("cv::hal") public static native void magnitude64f(@Const DoublePointer x, @Const DoublePointer y, DoublePointer dst, int n);
+@Namespace("cv::hal") public static native void magnitude64f(@Const DoubleBuffer x, @Const DoubleBuffer y, DoubleBuffer dst, int n);
+@Namespace("cv::hal") public static native void magnitude64f(@Const double[] x, @Const double[] y, double[] dst, int n);
+@Namespace("cv::hal") public static native void sqrt32f(@Const FloatPointer src, FloatPointer dst, int len);
+@Namespace("cv::hal") public static native void sqrt32f(@Const FloatBuffer src, FloatBuffer dst, int len);
+@Namespace("cv::hal") public static native void sqrt32f(@Const float[] src, float[] dst, int len);
+@Namespace("cv::hal") public static native void sqrt64f(@Const DoublePointer src, DoublePointer dst, int len);
+@Namespace("cv::hal") public static native void sqrt64f(@Const DoubleBuffer src, DoubleBuffer dst, int len);
+@Namespace("cv::hal") public static native void sqrt64f(@Const double[] src, double[] dst, int len);
+@Namespace("cv::hal") public static native void invSqrt32f(@Const FloatPointer src, FloatPointer dst, int len);
+@Namespace("cv::hal") public static native void invSqrt32f(@Const FloatBuffer src, FloatBuffer dst, int len);
+@Namespace("cv::hal") public static native void invSqrt32f(@Const float[] src, float[] dst, int len);
+@Namespace("cv::hal") public static native void invSqrt64f(@Const DoublePointer src, DoublePointer dst, int len);
+@Namespace("cv::hal") public static native void invSqrt64f(@Const DoubleBuffer src, DoubleBuffer dst, int len);
+@Namespace("cv::hal") public static native void invSqrt64f(@Const double[] src, double[] dst, int len);
+
+@Namespace("cv::hal") public static native void split8u(@Cast("const uchar*") BytePointer src, @Cast("uchar**") PointerPointer dst, int len, int cn );
+@Namespace("cv::hal") public static native void split8u(@Cast("const uchar*") BytePointer src, @Cast("uchar**") @ByPtrPtr BytePointer dst, int len, int cn );
+@Namespace("cv::hal") public static native void split8u(@Cast("const uchar*") ByteBuffer src, @Cast("uchar**") @ByPtrPtr ByteBuffer dst, int len, int cn );
+@Namespace("cv::hal") public static native void split8u(@Cast("const uchar*") byte[] src, @Cast("uchar**") @ByPtrPtr byte[] dst, int len, int cn );
+@Namespace("cv::hal") public static native void split16u(@Cast("const ushort*") ShortPointer src, @Cast("ushort**") PointerPointer dst, int len, int cn );
+@Namespace("cv::hal") public static native void split16u(@Cast("const ushort*") ShortPointer src, @Cast("ushort**") @ByPtrPtr ShortPointer dst, int len, int cn );
+@Namespace("cv::hal") public static native void split16u(@Cast("const ushort*") ShortBuffer src, @Cast("ushort**") @ByPtrPtr ShortBuffer dst, int len, int cn );
+@Namespace("cv::hal") public static native void split16u(@Cast("const ushort*") short[] src, @Cast("ushort**") @ByPtrPtr short[] dst, int len, int cn );
+@Namespace("cv::hal") public static native void split32s(@Const IntPointer src, @Cast("int**") PointerPointer dst, int len, int cn );
+@Namespace("cv::hal") public static native void split32s(@Const IntPointer src, @ByPtrPtr IntPointer dst, int len, int cn );
+@Namespace("cv::hal") public static native void split32s(@Const IntBuffer src, @ByPtrPtr IntBuffer dst, int len, int cn );
+@Namespace("cv::hal") public static native void split32s(@Const int[] src, @ByPtrPtr int[] dst, int len, int cn );
+@Namespace("cv::hal") public static native void split64s(@Cast("const int64*") LongPointer src, @Cast("int64**") PointerPointer dst, int len, int cn );
+@Namespace("cv::hal") public static native void split64s(@Cast("const int64*") LongPointer src, @Cast("int64**") @ByPtrPtr LongPointer dst, int len, int cn );
+@Namespace("cv::hal") public static native void split64s(@Cast("const int64*") LongBuffer src, @Cast("int64**") @ByPtrPtr LongBuffer dst, int len, int cn );
+@Namespace("cv::hal") public static native void split64s(@Cast("const int64*") long[] src, @Cast("int64**") @ByPtrPtr long[] dst, int len, int cn );
+
+@Namespace("cv::hal") public static native void merge8u(@Cast("const uchar**") PointerPointer src, @Cast("uchar*") BytePointer dst, int len, int cn );
+@Namespace("cv::hal") public static native void merge8u(@Cast("const uchar**") @ByPtrPtr BytePointer src, @Cast("uchar*") BytePointer dst, int len, int cn );
+@Namespace("cv::hal") public static native void merge8u(@Cast("const uchar**") @ByPtrPtr ByteBuffer src, @Cast("uchar*") ByteBuffer dst, int len, int cn );
+@Namespace("cv::hal") public static native void merge8u(@Cast("const uchar**") @ByPtrPtr byte[] src, @Cast("uchar*") byte[] dst, int len, int cn );
+@Namespace("cv::hal") public static native void merge16u(@Cast("const ushort**") PointerPointer src, @Cast("ushort*") ShortPointer dst, int len, int cn );
+@Namespace("cv::hal") public static native void merge16u(@Cast("const ushort**") @ByPtrPtr ShortPointer src, @Cast("ushort*") ShortPointer dst, int len, int cn );
+@Namespace("cv::hal") public static native void merge16u(@Cast("const ushort**") @ByPtrPtr ShortBuffer src, @Cast("ushort*") ShortBuffer dst, int len, int cn );
+@Namespace("cv::hal") public static native void merge16u(@Cast("const ushort**") @ByPtrPtr short[] src, @Cast("ushort*") short[] dst, int len, int cn );
+@Namespace("cv::hal") public static native void merge32s(@Cast("const int**") PointerPointer src, IntPointer dst, int len, int cn );
+@Namespace("cv::hal") public static native void merge32s(@Const @ByPtrPtr IntPointer src, IntPointer dst, int len, int cn );
+@Namespace("cv::hal") public static native void merge32s(@Const @ByPtrPtr IntBuffer src, IntBuffer dst, int len, int cn );
+@Namespace("cv::hal") public static native void merge32s(@Const @ByPtrPtr int[] src, int[] dst, int len, int cn );
+@Namespace("cv::hal") public static native void merge64s(@Cast("const int64**") PointerPointer src, @Cast("int64*") LongPointer dst, int len, int cn );
+@Namespace("cv::hal") public static native void merge64s(@Cast("const int64**") @ByPtrPtr LongPointer src, @Cast("int64*") LongPointer dst, int len, int cn );
+@Namespace("cv::hal") public static native void merge64s(@Cast("const int64**") @ByPtrPtr LongBuffer src, @Cast("int64*") LongBuffer dst, int len, int cn );
+@Namespace("cv::hal") public static native void merge64s(@Cast("const int64**") @ByPtrPtr long[] src, @Cast("int64*") long[] dst, int len, int cn );
+
+@Namespace("cv::hal") public static native void add8u( @Cast("const uchar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const uchar*") BytePointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void add8u( @Cast("const uchar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const uchar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void add8u( @Cast("const uchar*") byte[] src1, @Cast("size_t") long step1, @Cast("const uchar*") byte[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void add8s( @Cast("const schar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const schar*") BytePointer src2, @Cast("size_t") long step2, @Cast("schar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void add8s( @Cast("const schar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const schar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("schar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void add8s( @Cast("const schar*") byte[] src1, @Cast("size_t") long step1, @Cast("const schar*") byte[] src2, @Cast("size_t") long step2, @Cast("schar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void add16u( @Cast("const ushort*") ShortPointer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortPointer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void add16u( @Cast("const ushort*") ShortBuffer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortBuffer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void add16u( @Cast("const ushort*") short[] src1, @Cast("size_t") long step1, @Cast("const ushort*") short[] src2, @Cast("size_t") long step2, @Cast("ushort*") short[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void add16s( @Const ShortPointer src1, @Cast("size_t") long step1, @Const ShortPointer src2, @Cast("size_t") long step2, ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void add16s( @Const ShortBuffer src1, @Cast("size_t") long step1, @Const ShortBuffer src2, @Cast("size_t") long step2, ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void add16s( @Const short[] src1, @Cast("size_t") long step1, @Const short[] src2, @Cast("size_t") long step2, short[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void add32s( @Const IntPointer src1, @Cast("size_t") long step1, @Const IntPointer src2, @Cast("size_t") long step2, IntPointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void add32s( @Const IntBuffer src1, @Cast("size_t") long step1, @Const IntBuffer src2, @Cast("size_t") long step2, IntBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void add32s( @Const int[] src1, @Cast("size_t") long step1, @Const int[] src2, @Cast("size_t") long step2, int[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void add32f( @Const FloatPointer src1, @Cast("size_t") long step1, @Const FloatPointer src2, @Cast("size_t") long step2, FloatPointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void add32f( @Const FloatBuffer src1, @Cast("size_t") long step1, @Const FloatBuffer src2, @Cast("size_t") long step2, FloatBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void add32f( @Const float[] src1, @Cast("size_t") long step1, @Const float[] src2, @Cast("size_t") long step2, float[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void add64f( @Const DoublePointer src1, @Cast("size_t") long step1, @Const DoublePointer src2, @Cast("size_t") long step2, DoublePointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void add64f( @Const DoubleBuffer src1, @Cast("size_t") long step1, @Const DoubleBuffer src2, @Cast("size_t") long step2, DoubleBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void add64f( @Const double[] src1, @Cast("size_t") long step1, @Const double[] src2, @Cast("size_t") long step2, double[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+
+@Namespace("cv::hal") public static native void sub8u( @Cast("const uchar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const uchar*") BytePointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void sub8u( @Cast("const uchar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const uchar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void sub8u( @Cast("const uchar*") byte[] src1, @Cast("size_t") long step1, @Cast("const uchar*") byte[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void sub8s( @Cast("const schar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const schar*") BytePointer src2, @Cast("size_t") long step2, @Cast("schar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void sub8s( @Cast("const schar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const schar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("schar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void sub8s( @Cast("const schar*") byte[] src1, @Cast("size_t") long step1, @Cast("const schar*") byte[] src2, @Cast("size_t") long step2, @Cast("schar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void sub16u( @Cast("const ushort*") ShortPointer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortPointer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void sub16u( @Cast("const ushort*") ShortBuffer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortBuffer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void sub16u( @Cast("const ushort*") short[] src1, @Cast("size_t") long step1, @Cast("const ushort*") short[] src2, @Cast("size_t") long step2, @Cast("ushort*") short[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void sub16s( @Const ShortPointer src1, @Cast("size_t") long step1, @Const ShortPointer src2, @Cast("size_t") long step2, ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void sub16s( @Const ShortBuffer src1, @Cast("size_t") long step1, @Const ShortBuffer src2, @Cast("size_t") long step2, ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void sub16s( @Const short[] src1, @Cast("size_t") long step1, @Const short[] src2, @Cast("size_t") long step2, short[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void sub32s( @Const IntPointer src1, @Cast("size_t") long step1, @Const IntPointer src2, @Cast("size_t") long step2, IntPointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void sub32s( @Const IntBuffer src1, @Cast("size_t") long step1, @Const IntBuffer src2, @Cast("size_t") long step2, IntBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void sub32s( @Const int[] src1, @Cast("size_t") long step1, @Const int[] src2, @Cast("size_t") long step2, int[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void sub32f( @Const FloatPointer src1, @Cast("size_t") long step1, @Const FloatPointer src2, @Cast("size_t") long step2, FloatPointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void sub32f( @Const FloatBuffer src1, @Cast("size_t") long step1, @Const FloatBuffer src2, @Cast("size_t") long step2, FloatBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void sub32f( @Const float[] src1, @Cast("size_t") long step1, @Const float[] src2, @Cast("size_t") long step2, float[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void sub64f( @Const DoublePointer src1, @Cast("size_t") long step1, @Const DoublePointer src2, @Cast("size_t") long step2, DoublePointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void sub64f( @Const DoubleBuffer src1, @Cast("size_t") long step1, @Const DoubleBuffer src2, @Cast("size_t") long step2, DoubleBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void sub64f( @Const double[] src1, @Cast("size_t") long step1, @Const double[] src2, @Cast("size_t") long step2, double[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+
+@Namespace("cv::hal") public static native void max8u( @Cast("const uchar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const uchar*") BytePointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void max8u( @Cast("const uchar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const uchar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void max8u( @Cast("const uchar*") byte[] src1, @Cast("size_t") long step1, @Cast("const uchar*") byte[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void max8s( @Cast("const schar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const schar*") BytePointer src2, @Cast("size_t") long step2, @Cast("schar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void max8s( @Cast("const schar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const schar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("schar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void max8s( @Cast("const schar*") byte[] src1, @Cast("size_t") long step1, @Cast("const schar*") byte[] src2, @Cast("size_t") long step2, @Cast("schar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void max16u( @Cast("const ushort*") ShortPointer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortPointer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void max16u( @Cast("const ushort*") ShortBuffer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortBuffer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void max16u( @Cast("const ushort*") short[] src1, @Cast("size_t") long step1, @Cast("const ushort*") short[] src2, @Cast("size_t") long step2, @Cast("ushort*") short[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void max16s( @Const ShortPointer src1, @Cast("size_t") long step1, @Const ShortPointer src2, @Cast("size_t") long step2, ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void max16s( @Const ShortBuffer src1, @Cast("size_t") long step1, @Const ShortBuffer src2, @Cast("size_t") long step2, ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void max16s( @Const short[] src1, @Cast("size_t") long step1, @Const short[] src2, @Cast("size_t") long step2, short[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void max32s( @Const IntPointer src1, @Cast("size_t") long step1, @Const IntPointer src2, @Cast("size_t") long step2, IntPointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void max32s( @Const IntBuffer src1, @Cast("size_t") long step1, @Const IntBuffer src2, @Cast("size_t") long step2, IntBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void max32s( @Const int[] src1, @Cast("size_t") long step1, @Const int[] src2, @Cast("size_t") long step2, int[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void max32f( @Const FloatPointer src1, @Cast("size_t") long step1, @Const FloatPointer src2, @Cast("size_t") long step2, FloatPointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void max32f( @Const FloatBuffer src1, @Cast("size_t") long step1, @Const FloatBuffer src2, @Cast("size_t") long step2, FloatBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void max32f( @Const float[] src1, @Cast("size_t") long step1, @Const float[] src2, @Cast("size_t") long step2, float[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void max64f( @Const DoublePointer src1, @Cast("size_t") long step1, @Const DoublePointer src2, @Cast("size_t") long step2, DoublePointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void max64f( @Const DoubleBuffer src1, @Cast("size_t") long step1, @Const DoubleBuffer src2, @Cast("size_t") long step2, DoubleBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void max64f( @Const double[] src1, @Cast("size_t") long step1, @Const double[] src2, @Cast("size_t") long step2, double[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+
+@Namespace("cv::hal") public static native void min8u( @Cast("const uchar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const uchar*") BytePointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void min8u( @Cast("const uchar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const uchar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void min8u( @Cast("const uchar*") byte[] src1, @Cast("size_t") long step1, @Cast("const uchar*") byte[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void min8s( @Cast("const schar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const schar*") BytePointer src2, @Cast("size_t") long step2, @Cast("schar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void min8s( @Cast("const schar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const schar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("schar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void min8s( @Cast("const schar*") byte[] src1, @Cast("size_t") long step1, @Cast("const schar*") byte[] src2, @Cast("size_t") long step2, @Cast("schar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void min16u( @Cast("const ushort*") ShortPointer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortPointer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void min16u( @Cast("const ushort*") ShortBuffer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortBuffer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void min16u( @Cast("const ushort*") short[] src1, @Cast("size_t") long step1, @Cast("const ushort*") short[] src2, @Cast("size_t") long step2, @Cast("ushort*") short[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void min16s( @Const ShortPointer src1, @Cast("size_t") long step1, @Const ShortPointer src2, @Cast("size_t") long step2, ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void min16s( @Const ShortBuffer src1, @Cast("size_t") long step1, @Const ShortBuffer src2, @Cast("size_t") long step2, ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void min16s( @Const short[] src1, @Cast("size_t") long step1, @Const short[] src2, @Cast("size_t") long step2, short[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void min32s( @Const IntPointer src1, @Cast("size_t") long step1, @Const IntPointer src2, @Cast("size_t") long step2, IntPointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void min32s( @Const IntBuffer src1, @Cast("size_t") long step1, @Const IntBuffer src2, @Cast("size_t") long step2, IntBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void min32s( @Const int[] src1, @Cast("size_t") long step1, @Const int[] src2, @Cast("size_t") long step2, int[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void min32f( @Const FloatPointer src1, @Cast("size_t") long step1, @Const FloatPointer src2, @Cast("size_t") long step2, FloatPointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void min32f( @Const FloatBuffer src1, @Cast("size_t") long step1, @Const FloatBuffer src2, @Cast("size_t") long step2, FloatBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void min32f( @Const float[] src1, @Cast("size_t") long step1, @Const float[] src2, @Cast("size_t") long step2, float[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void min64f( @Const DoublePointer src1, @Cast("size_t") long step1, @Const DoublePointer src2, @Cast("size_t") long step2, DoublePointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void min64f( @Const DoubleBuffer src1, @Cast("size_t") long step1, @Const DoubleBuffer src2, @Cast("size_t") long step2, DoubleBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void min64f( @Const double[] src1, @Cast("size_t") long step1, @Const double[] src2, @Cast("size_t") long step2, double[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+
+@Namespace("cv::hal") public static native void absdiff8u( @Cast("const uchar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const uchar*") BytePointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void absdiff8u( @Cast("const uchar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const uchar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void absdiff8u( @Cast("const uchar*") byte[] src1, @Cast("size_t") long step1, @Cast("const uchar*") byte[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void absdiff8s( @Cast("const schar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const schar*") BytePointer src2, @Cast("size_t") long step2, @Cast("schar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void absdiff8s( @Cast("const schar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const schar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("schar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void absdiff8s( @Cast("const schar*") byte[] src1, @Cast("size_t") long step1, @Cast("const schar*") byte[] src2, @Cast("size_t") long step2, @Cast("schar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void absdiff16u( @Cast("const ushort*") ShortPointer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortPointer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void absdiff16u( @Cast("const ushort*") ShortBuffer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortBuffer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void absdiff16u( @Cast("const ushort*") short[] src1, @Cast("size_t") long step1, @Cast("const ushort*") short[] src2, @Cast("size_t") long step2, @Cast("ushort*") short[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void absdiff16s( @Const ShortPointer src1, @Cast("size_t") long step1, @Const ShortPointer src2, @Cast("size_t") long step2, ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void absdiff16s( @Const ShortBuffer src1, @Cast("size_t") long step1, @Const ShortBuffer src2, @Cast("size_t") long step2, ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void absdiff16s( @Const short[] src1, @Cast("size_t") long step1, @Const short[] src2, @Cast("size_t") long step2, short[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void absdiff32s( @Const IntPointer src1, @Cast("size_t") long step1, @Const IntPointer src2, @Cast("size_t") long step2, IntPointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void absdiff32s( @Const IntBuffer src1, @Cast("size_t") long step1, @Const IntBuffer src2, @Cast("size_t") long step2, IntBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void absdiff32s( @Const int[] src1, @Cast("size_t") long step1, @Const int[] src2, @Cast("size_t") long step2, int[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void absdiff32f( @Const FloatPointer src1, @Cast("size_t") long step1, @Const FloatPointer src2, @Cast("size_t") long step2, FloatPointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void absdiff32f( @Const FloatBuffer src1, @Cast("size_t") long step1, @Const FloatBuffer src2, @Cast("size_t") long step2, FloatBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void absdiff32f( @Const float[] src1, @Cast("size_t") long step1, @Const float[] src2, @Cast("size_t") long step2, float[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void absdiff64f( @Const DoublePointer src1, @Cast("size_t") long step1, @Const DoublePointer src2, @Cast("size_t") long step2, DoublePointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void absdiff64f( @Const DoubleBuffer src1, @Cast("size_t") long step1, @Const DoubleBuffer src2, @Cast("size_t") long step2, DoubleBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void absdiff64f( @Const double[] src1, @Cast("size_t") long step1, @Const double[] src2, @Cast("size_t") long step2, double[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+
+@Namespace("cv::hal") public static native void and8u( @Cast("const uchar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const uchar*") BytePointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void and8u( @Cast("const uchar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const uchar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void and8u( @Cast("const uchar*") byte[] src1, @Cast("size_t") long step1, @Cast("const uchar*") byte[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void or8u( @Cast("const uchar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const uchar*") BytePointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void or8u( @Cast("const uchar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const uchar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void or8u( @Cast("const uchar*") byte[] src1, @Cast("size_t") long step1, @Cast("const uchar*") byte[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void xor8u( @Cast("const uchar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const uchar*") BytePointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void xor8u( @Cast("const uchar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const uchar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void xor8u( @Cast("const uchar*") byte[] src1, @Cast("size_t") long step1, @Cast("const uchar*") byte[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void not8u( @Cast("const uchar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const uchar*") BytePointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void not8u( @Cast("const uchar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const uchar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+@Namespace("cv::hal") public static native void not8u( @Cast("const uchar*") byte[] src1, @Cast("size_t") long step1, @Cast("const uchar*") byte[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer arg8 );
+
+@Namespace("cv::hal") public static native void cmp8u(@Cast("const uchar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const uchar*") BytePointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+@Namespace("cv::hal") public static native void cmp8u(@Cast("const uchar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const uchar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+@Namespace("cv::hal") public static native void cmp8u(@Cast("const uchar*") byte[] src1, @Cast("size_t") long step1, @Cast("const uchar*") byte[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+@Namespace("cv::hal") public static native void cmp8s(@Cast("const schar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const schar*") BytePointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+@Namespace("cv::hal") public static native void cmp8s(@Cast("const schar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const schar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+@Namespace("cv::hal") public static native void cmp8s(@Cast("const schar*") byte[] src1, @Cast("size_t") long step1, @Cast("const schar*") byte[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+@Namespace("cv::hal") public static native void cmp16u(@Cast("const ushort*") ShortPointer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortPointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+@Namespace("cv::hal") public static native void cmp16u(@Cast("const ushort*") ShortBuffer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+@Namespace("cv::hal") public static native void cmp16u(@Cast("const ushort*") short[] src1, @Cast("size_t") long step1, @Cast("const ushort*") short[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+@Namespace("cv::hal") public static native void cmp16s(@Const ShortPointer src1, @Cast("size_t") long step1, @Const ShortPointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+@Namespace("cv::hal") public static native void cmp16s(@Const ShortBuffer src1, @Cast("size_t") long step1, @Const ShortBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+@Namespace("cv::hal") public static native void cmp16s(@Const short[] src1, @Cast("size_t") long step1, @Const short[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+@Namespace("cv::hal") public static native void cmp32s(@Const IntPointer src1, @Cast("size_t") long step1, @Const IntPointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+@Namespace("cv::hal") public static native void cmp32s(@Const IntBuffer src1, @Cast("size_t") long step1, @Const IntBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+@Namespace("cv::hal") public static native void cmp32s(@Const int[] src1, @Cast("size_t") long step1, @Const int[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+@Namespace("cv::hal") public static native void cmp32f(@Const FloatPointer src1, @Cast("size_t") long step1, @Const FloatPointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+@Namespace("cv::hal") public static native void cmp32f(@Const FloatBuffer src1, @Cast("size_t") long step1, @Const FloatBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+@Namespace("cv::hal") public static native void cmp32f(@Const float[] src1, @Cast("size_t") long step1, @Const float[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+@Namespace("cv::hal") public static native void cmp64f(@Const DoublePointer src1, @Cast("size_t") long step1, @Const DoublePointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+@Namespace("cv::hal") public static native void cmp64f(@Const DoubleBuffer src1, @Cast("size_t") long step1, @Const DoubleBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+@Namespace("cv::hal") public static native void cmp64f(@Const double[] src1, @Cast("size_t") long step1, @Const double[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer _cmpop);
+
+@Namespace("cv::hal") public static native void mul8u( @Cast("const uchar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const uchar*") BytePointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void mul8u( @Cast("const uchar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const uchar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void mul8u( @Cast("const uchar*") byte[] src1, @Cast("size_t") long step1, @Cast("const uchar*") byte[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void mul8s( @Cast("const schar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const schar*") BytePointer src2, @Cast("size_t") long step2, @Cast("schar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void mul8s( @Cast("const schar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const schar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("schar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void mul8s( @Cast("const schar*") byte[] src1, @Cast("size_t") long step1, @Cast("const schar*") byte[] src2, @Cast("size_t") long step2, @Cast("schar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void mul16u( @Cast("const ushort*") ShortPointer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortPointer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void mul16u( @Cast("const ushort*") ShortBuffer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortBuffer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void mul16u( @Cast("const ushort*") short[] src1, @Cast("size_t") long step1, @Cast("const ushort*") short[] src2, @Cast("size_t") long step2, @Cast("ushort*") short[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void mul16s( @Const ShortPointer src1, @Cast("size_t") long step1, @Const ShortPointer src2, @Cast("size_t") long step2, ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void mul16s( @Const ShortBuffer src1, @Cast("size_t") long step1, @Const ShortBuffer src2, @Cast("size_t") long step2, ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void mul16s( @Const short[] src1, @Cast("size_t") long step1, @Const short[] src2, @Cast("size_t") long step2, short[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void mul32s( @Const IntPointer src1, @Cast("size_t") long step1, @Const IntPointer src2, @Cast("size_t") long step2, IntPointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void mul32s( @Const IntBuffer src1, @Cast("size_t") long step1, @Const IntBuffer src2, @Cast("size_t") long step2, IntBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void mul32s( @Const int[] src1, @Cast("size_t") long step1, @Const int[] src2, @Cast("size_t") long step2, int[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void mul32f( @Const FloatPointer src1, @Cast("size_t") long step1, @Const FloatPointer src2, @Cast("size_t") long step2, FloatPointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void mul32f( @Const FloatBuffer src1, @Cast("size_t") long step1, @Const FloatBuffer src2, @Cast("size_t") long step2, FloatBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void mul32f( @Const float[] src1, @Cast("size_t") long step1, @Const float[] src2, @Cast("size_t") long step2, float[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void mul64f( @Const DoublePointer src1, @Cast("size_t") long step1, @Const DoublePointer src2, @Cast("size_t") long step2, DoublePointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void mul64f( @Const DoubleBuffer src1, @Cast("size_t") long step1, @Const DoubleBuffer src2, @Cast("size_t") long step2, DoubleBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void mul64f( @Const double[] src1, @Cast("size_t") long step1, @Const double[] src2, @Cast("size_t") long step2, double[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+
+@Namespace("cv::hal") public static native void div8u( @Cast("const uchar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const uchar*") BytePointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void div8u( @Cast("const uchar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const uchar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void div8u( @Cast("const uchar*") byte[] src1, @Cast("size_t") long step1, @Cast("const uchar*") byte[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void div8s( @Cast("const schar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const schar*") BytePointer src2, @Cast("size_t") long step2, @Cast("schar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void div8s( @Cast("const schar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const schar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("schar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void div8s( @Cast("const schar*") byte[] src1, @Cast("size_t") long step1, @Cast("const schar*") byte[] src2, @Cast("size_t") long step2, @Cast("schar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void div16u( @Cast("const ushort*") ShortPointer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortPointer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void div16u( @Cast("const ushort*") ShortBuffer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortBuffer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void div16u( @Cast("const ushort*") short[] src1, @Cast("size_t") long step1, @Cast("const ushort*") short[] src2, @Cast("size_t") long step2, @Cast("ushort*") short[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void div16s( @Const ShortPointer src1, @Cast("size_t") long step1, @Const ShortPointer src2, @Cast("size_t") long step2, ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void div16s( @Const ShortBuffer src1, @Cast("size_t") long step1, @Const ShortBuffer src2, @Cast("size_t") long step2, ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void div16s( @Const short[] src1, @Cast("size_t") long step1, @Const short[] src2, @Cast("size_t") long step2, short[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void div32s( @Const IntPointer src1, @Cast("size_t") long step1, @Const IntPointer src2, @Cast("size_t") long step2, IntPointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void div32s( @Const IntBuffer src1, @Cast("size_t") long step1, @Const IntBuffer src2, @Cast("size_t") long step2, IntBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void div32s( @Const int[] src1, @Cast("size_t") long step1, @Const int[] src2, @Cast("size_t") long step2, int[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void div32f( @Const FloatPointer src1, @Cast("size_t") long step1, @Const FloatPointer src2, @Cast("size_t") long step2, FloatPointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void div32f( @Const FloatBuffer src1, @Cast("size_t") long step1, @Const FloatBuffer src2, @Cast("size_t") long step2, FloatBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void div32f( @Const float[] src1, @Cast("size_t") long step1, @Const float[] src2, @Cast("size_t") long step2, float[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void div64f( @Const DoublePointer src1, @Cast("size_t") long step1, @Const DoublePointer src2, @Cast("size_t") long step2, DoublePointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void div64f( @Const DoubleBuffer src1, @Cast("size_t") long step1, @Const DoubleBuffer src2, @Cast("size_t") long step2, DoubleBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void div64f( @Const double[] src1, @Cast("size_t") long step1, @Const double[] src2, @Cast("size_t") long step2, double[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+
+@Namespace("cv::hal") public static native void recip8u( @Cast("const uchar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const uchar*") BytePointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip8u( @Cast("const uchar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const uchar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip8u( @Cast("const uchar*") byte[] src1, @Cast("size_t") long step1, @Cast("const uchar*") byte[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip8s( @Cast("const schar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const schar*") BytePointer src2, @Cast("size_t") long step2, @Cast("schar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip8s( @Cast("const schar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const schar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("schar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip8s( @Cast("const schar*") byte[] src1, @Cast("size_t") long step1, @Cast("const schar*") byte[] src2, @Cast("size_t") long step2, @Cast("schar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip16u( @Cast("const ushort*") ShortPointer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortPointer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip16u( @Cast("const ushort*") ShortBuffer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortBuffer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip16u( @Cast("const ushort*") short[] src1, @Cast("size_t") long step1, @Cast("const ushort*") short[] src2, @Cast("size_t") long step2, @Cast("ushort*") short[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip16s( @Const ShortPointer src1, @Cast("size_t") long step1, @Const ShortPointer src2, @Cast("size_t") long step2, ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip16s( @Const ShortBuffer src1, @Cast("size_t") long step1, @Const ShortBuffer src2, @Cast("size_t") long step2, ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip16s( @Const short[] src1, @Cast("size_t") long step1, @Const short[] src2, @Cast("size_t") long step2, short[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip32s( @Const IntPointer src1, @Cast("size_t") long step1, @Const IntPointer src2, @Cast("size_t") long step2, IntPointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip32s( @Const IntBuffer src1, @Cast("size_t") long step1, @Const IntBuffer src2, @Cast("size_t") long step2, IntBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip32s( @Const int[] src1, @Cast("size_t") long step1, @Const int[] src2, @Cast("size_t") long step2, int[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip32f( @Const FloatPointer src1, @Cast("size_t") long step1, @Const FloatPointer src2, @Cast("size_t") long step2, FloatPointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip32f( @Const FloatBuffer src1, @Cast("size_t") long step1, @Const FloatBuffer src2, @Cast("size_t") long step2, FloatBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip32f( @Const float[] src1, @Cast("size_t") long step1, @Const float[] src2, @Cast("size_t") long step2, float[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip64f( @Const DoublePointer src1, @Cast("size_t") long step1, @Const DoublePointer src2, @Cast("size_t") long step2, DoublePointer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip64f( @Const DoubleBuffer src1, @Cast("size_t") long step1, @Const DoubleBuffer src2, @Cast("size_t") long step2, DoubleBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+@Namespace("cv::hal") public static native void recip64f( @Const double[] src1, @Cast("size_t") long step1, @Const double[] src2, @Cast("size_t") long step2, double[] dst, @Cast("size_t") long step, int width, int height, Pointer scale);
+
+@Namespace("cv::hal") public static native void addWeighted8u( @Cast("const uchar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const uchar*") BytePointer src2, @Cast("size_t") long step2, @Cast("uchar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer _scalars );
+@Namespace("cv::hal") public static native void addWeighted8u( @Cast("const uchar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const uchar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("uchar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer _scalars );
+@Namespace("cv::hal") public static native void addWeighted8u( @Cast("const uchar*") byte[] src1, @Cast("size_t") long step1, @Cast("const uchar*") byte[] src2, @Cast("size_t") long step2, @Cast("uchar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer _scalars );
+@Namespace("cv::hal") public static native void addWeighted8s( @Cast("const schar*") BytePointer src1, @Cast("size_t") long step1, @Cast("const schar*") BytePointer src2, @Cast("size_t") long step2, @Cast("schar*") BytePointer dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
+@Namespace("cv::hal") public static native void addWeighted8s( @Cast("const schar*") ByteBuffer src1, @Cast("size_t") long step1, @Cast("const schar*") ByteBuffer src2, @Cast("size_t") long step2, @Cast("schar*") ByteBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
+@Namespace("cv::hal") public static native void addWeighted8s( @Cast("const schar*") byte[] src1, @Cast("size_t") long step1, @Cast("const schar*") byte[] src2, @Cast("size_t") long step2, @Cast("schar*") byte[] dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
+@Namespace("cv::hal") public static native void addWeighted16u( @Cast("const ushort*") ShortPointer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortPointer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
+@Namespace("cv::hal") public static native void addWeighted16u( @Cast("const ushort*") ShortBuffer src1, @Cast("size_t") long step1, @Cast("const ushort*") ShortBuffer src2, @Cast("size_t") long step2, @Cast("ushort*") ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
+@Namespace("cv::hal") public static native void addWeighted16u( @Cast("const ushort*") short[] src1, @Cast("size_t") long step1, @Cast("const ushort*") short[] src2, @Cast("size_t") long step2, @Cast("ushort*") short[] dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
+@Namespace("cv::hal") public static native void addWeighted16s( @Const ShortPointer src1, @Cast("size_t") long step1, @Const ShortPointer src2, @Cast("size_t") long step2, ShortPointer dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
+@Namespace("cv::hal") public static native void addWeighted16s( @Const ShortBuffer src1, @Cast("size_t") long step1, @Const ShortBuffer src2, @Cast("size_t") long step2, ShortBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
+@Namespace("cv::hal") public static native void addWeighted16s( @Const short[] src1, @Cast("size_t") long step1, @Const short[] src2, @Cast("size_t") long step2, short[] dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
+@Namespace("cv::hal") public static native void addWeighted32s( @Const IntPointer src1, @Cast("size_t") long step1, @Const IntPointer src2, @Cast("size_t") long step2, IntPointer dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
+@Namespace("cv::hal") public static native void addWeighted32s( @Const IntBuffer src1, @Cast("size_t") long step1, @Const IntBuffer src2, @Cast("size_t") long step2, IntBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
+@Namespace("cv::hal") public static native void addWeighted32s( @Const int[] src1, @Cast("size_t") long step1, @Const int[] src2, @Cast("size_t") long step2, int[] dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
+@Namespace("cv::hal") public static native void addWeighted32f( @Const FloatPointer src1, @Cast("size_t") long step1, @Const FloatPointer src2, @Cast("size_t") long step2, FloatPointer dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
+@Namespace("cv::hal") public static native void addWeighted32f( @Const FloatBuffer src1, @Cast("size_t") long step1, @Const FloatBuffer src2, @Cast("size_t") long step2, FloatBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
+@Namespace("cv::hal") public static native void addWeighted32f( @Const float[] src1, @Cast("size_t") long step1, @Const float[] src2, @Cast("size_t") long step2, float[] dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
+@Namespace("cv::hal") public static native void addWeighted64f( @Const DoublePointer src1, @Cast("size_t") long step1, @Const DoublePointer src2, @Cast("size_t") long step2, DoublePointer dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
+@Namespace("cv::hal") public static native void addWeighted64f( @Const DoubleBuffer src1, @Cast("size_t") long step1, @Const DoubleBuffer src2, @Cast("size_t") long step2, DoubleBuffer dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
+@Namespace("cv::hal") public static native void addWeighted64f( @Const double[] src1, @Cast("size_t") long step1, @Const double[] src2, @Cast("size_t") long step2, double[] dst, @Cast("size_t") long step, int width, int height, Pointer scalars );
+
+/** \} core_hal */
+
+//=============================================================================
+// for binary compatibility with 3.0
+
+/** \cond IGNORED */
+
+@Namespace("cv::hal") public static native int LU(FloatPointer A, @Cast("size_t") long astep, int m, FloatPointer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native int LU(FloatBuffer A, @Cast("size_t") long astep, int m, FloatBuffer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native int LU(float[] A, @Cast("size_t") long astep, int m, float[] b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native int LU(DoublePointer A, @Cast("size_t") long astep, int m, DoublePointer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native int LU(DoubleBuffer A, @Cast("size_t") long astep, int m, DoubleBuffer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native int LU(double[] A, @Cast("size_t") long astep, int m, double[] b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native @Cast("bool") boolean Cholesky(FloatPointer A, @Cast("size_t") long astep, int m, FloatPointer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native @Cast("bool") boolean Cholesky(FloatBuffer A, @Cast("size_t") long astep, int m, FloatBuffer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native @Cast("bool") boolean Cholesky(float[] A, @Cast("size_t") long astep, int m, float[] b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native @Cast("bool") boolean Cholesky(DoublePointer A, @Cast("size_t") long astep, int m, DoublePointer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native @Cast("bool") boolean Cholesky(DoubleBuffer A, @Cast("size_t") long astep, int m, DoubleBuffer b, @Cast("size_t") long bstep, int n);
+@Namespace("cv::hal") public static native @Cast("bool") boolean Cholesky(double[] A, @Cast("size_t") long astep, int m, double[] b, @Cast("size_t") long bstep, int n);
+
+@Namespace("cv::hal") public static native void exp(@Const FloatPointer src, FloatPointer dst, int n);
+@Namespace("cv::hal") public static native void exp(@Const FloatBuffer src, FloatBuffer dst, int n);
+@Namespace("cv::hal") public static native void exp(@Const float[] src, float[] dst, int n);
+@Namespace("cv::hal") public static native void exp(@Const DoublePointer src, DoublePointer dst, int n);
+@Namespace("cv::hal") public static native void exp(@Const DoubleBuffer src, DoubleBuffer dst, int n);
+@Namespace("cv::hal") public static native void exp(@Const double[] src, double[] dst, int n);
+@Namespace("cv::hal") public static native void log(@Const FloatPointer src, FloatPointer dst, int n);
+@Namespace("cv::hal") public static native void log(@Const FloatBuffer src, FloatBuffer dst, int n);
+@Namespace("cv::hal") public static native void log(@Const float[] src, float[] dst, int n);
+@Namespace("cv::hal") public static native void log(@Const DoublePointer src, DoublePointer dst, int n);
+@Namespace("cv::hal") public static native void log(@Const DoubleBuffer src, DoubleBuffer dst, int n);
+@Namespace("cv::hal") public static native void log(@Const double[] src, double[] dst, int n);
+
+@Namespace("cv::hal") public static native void magnitude(@Const FloatPointer x, @Const FloatPointer y, FloatPointer dst, int n);
+@Namespace("cv::hal") public static native void magnitude(@Const FloatBuffer x, @Const FloatBuffer y, FloatBuffer dst, int n);
+@Namespace("cv::hal") public static native void magnitude(@Const float[] x, @Const float[] y, float[] dst, int n);
+@Namespace("cv::hal") public static native void magnitude(@Const DoublePointer x, @Const DoublePointer y, DoublePointer dst, int n);
+@Namespace("cv::hal") public static native void magnitude(@Const DoubleBuffer x, @Const DoubleBuffer y, DoubleBuffer dst, int n);
+@Namespace("cv::hal") public static native void magnitude(@Const double[] x, @Const double[] y, double[] dst, int n);
+@Namespace("cv::hal") public static native void sqrt(@Const FloatPointer src, FloatPointer dst, int len);
+@Namespace("cv::hal") public static native void sqrt(@Const FloatBuffer src, FloatBuffer dst, int len);
+@Namespace("cv::hal") public static native void sqrt(@Const float[] src, float[] dst, int len);
+@Namespace("cv::hal") public static native void sqrt(@Const DoublePointer src, DoublePointer dst, int len);
+@Namespace("cv::hal") public static native void sqrt(@Const DoubleBuffer src, DoubleBuffer dst, int len);
+@Namespace("cv::hal") public static native void sqrt(@Const double[] src, double[] dst, int len);
+@Namespace("cv::hal") public static native void invSqrt(@Const FloatPointer src, FloatPointer dst, int len);
+@Namespace("cv::hal") public static native void invSqrt(@Const FloatBuffer src, FloatBuffer dst, int len);
+@Namespace("cv::hal") public static native void invSqrt(@Const float[] src, float[] dst, int len);
+@Namespace("cv::hal") public static native void invSqrt(@Const DoublePointer src, DoublePointer dst, int len);
+@Namespace("cv::hal") public static native void invSqrt(@Const DoubleBuffer src, DoubleBuffer dst, int len);
+@Namespace("cv::hal") public static native void invSqrt(@Const double[] src, double[] dst, int len);
+
+/** \endcond */
+
+ //cv::hal
+
+// #endif //__OPENCV_HAL_HPP__
+
+
+// Parsed from <opencv2/core/fast_math.hpp>
+
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+//
+//  By downloading, copying, installing or using the software you agree to this license.
+//  If you do not agree to this license, do not download, install,
+//  copy or use the software.
+//
+//
+//                          License Agreement
+//                For Open Source Computer Vision Library
+//
+// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
+// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
+// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
+// Copyright (C) 2015, Itseez Inc., all rights reserved.
+// Third party copyrights are property of their respective owners.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+//   * Redistribution's of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//
+//   * Redistribution's in binary form must reproduce the above copyright notice,
+//     this list of conditions and the following disclaimer in the documentation
+//     and/or other materials provided with the distribution.
+//
+//   * The name of the copyright holders may not be used to endorse or promote products
+//     derived from this software without specific prior written permission.
+//
+// This software is provided by the copyright holders and contributors "as is" and
+// any express or implied warranties, including, but not limited to, the implied
+// warranties of merchantability and fitness for a particular purpose are disclaimed.
+// In no event shall the Intel Corporation or contributors be liable for any direct,
+// indirect, incidental, special, exemplary, or consequential damages
+// (including, but not limited to, procurement of substitute goods or services;
+// loss of use, data, or profits; or business interruption) however caused
+// and on any theory of liability, whether in contract, strict liability,
+// or tort (including negligence or otherwise) arising in any way out of
+// the use of this software, even if advised of the possibility of such damage.
+//
+//M*/
+
+// #ifndef __OPENCV_CORE_FAST_MATH_HPP__
+// #define __OPENCV_CORE_FAST_MATH_HPP__
+
+// #include "opencv2/core/cvdef.h"
+
+/** \addtogroup core_utils
+ *  \{
+<p>
+/****************************************************************************************\
+*                                      fast math                                         *
+\****************************************************************************************/
+
+// #if defined __BORLANDC__ */
+// #  include <fastmath.h>
+// #elif defined __cplusplus
+// #  include <cmath>
+// #else
+// #  include <math.h>
+// #endif
+
+// #ifdef HAVE_TEGRA_OPTIMIZATION
+// #  include "tegra_round.hpp"
+// #endif
+
+// #if CV_VFP
+    // 1. general scheme
+//     #define ARM_ROUND(_value, _asm_string)
+//         int res;
+//         float temp;
+//         asm(_asm_string : [res] "=r" (res), [temp] "=w" (temp) : [value] "w" (_value));
+//         return res
+    // 2. version for double
+//     #ifdef __clang__
+//         #define ARM_ROUND_DBL(value) ARM_ROUND(value, "vcvtr.s32.f64 %[temp], %[value] \n vmov %[res], %[temp]")
+//     #else
+//         #define ARM_ROUND_DBL(value) ARM_ROUND(value, "vcvtr.s32.f64 %[temp], %P[value] \n vmov %[res], %[temp]")
+//     #endif
+    // 3. version for float
+//     #define ARM_ROUND_FLT(value) ARM_ROUND(value, "vcvtr.s32.f32 %[temp], %[value]\n vmov %[res], %[temp]")
+// #endif // CV_VFP
+
+/** \brief Rounds floating-point number to the nearest integer
+ <p>
+ @param value floating-point number. If the value is outside of INT_MIN ... INT_MAX range, the
+ result is not defined.
+ */
+public static native int cvRound( double value );
+
+
+/** \brief Rounds floating-point number to the nearest integer not larger than the original.
+ <p>
+ The function computes an integer i such that:
+ \f[i \le \texttt{value} < i+1\f]
+ @param value floating-point number. If the value is outside of INT_MIN ... INT_MAX range, the
+ result is not defined.
+ */
+public static native int cvFloor( double value );
+
+/** \brief Rounds floating-point number to the nearest integer not smaller than the original.
+ <p>
+ The function computes an integer i such that:
+ \f[i \le \texttt{value} < i+1\f]
+ @param value floating-point number. If the value is outside of INT_MIN ... INT_MAX range, the
+ result is not defined.
+ */
+public static native int cvCeil( double value );
+
+/** \brief Determines if the argument is Not A Number.
+ <p>
+ @param value The input floating-point value
+ <p>
+ The function returns 1 if the argument is Not A Number (as defined by IEEE754 standard), 0
+ otherwise. */
+public static native int cvIsNaN( double value );
+
+/** \brief Determines if the argument is Infinity.
+ <p>
+ @param value The input floating-point value
+ <p>
+ The function returns 1 if the argument is a plus or minus infinity (as defined by IEEE754 standard)
+ and 0 otherwise. */
+public static native int cvIsInf( double value );
+
+// #ifdef __cplusplus
+
+/** \overload */
+public static native int cvRound(float value);
+
+/** \overload */
+public static native int cvRound( int value );
+
+/** \overload */
+public static native int cvFloor( float value );
+
+/** \overload */
+public static native int cvFloor( int value );
+
+/** \overload */
+public static native int cvCeil( float value );
+
+/** \overload */
+public static native int cvCeil( int value );
+
+/** \overload */
+public static native int cvIsNaN( float value );
+
+/** \overload */
+public static native int cvIsInf( float value );
+
+// #endif // __cplusplus
+
+/** \} core_utils */
+
+// #endif
+
+
+// Parsed from <opencv2/core/saturate.hpp>
+
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+//
+//  By downloading, copying, installing or using the software you agree to this license.
+//  If you do not agree to this license, do not download, install,
+//  copy or use the software.
+//
+//
+//                          License Agreement
+//                For Open Source Computer Vision Library
+//
+// Copyright (C) 2000-2008, Intel Corporation, all rights reserved.
+// Copyright (C) 2009, Willow Garage Inc., all rights reserved.
+// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
+// Copyright (C) 2014, Itseez Inc., all rights reserved.
+// Third party copyrights are property of their respective owners.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+//   * Redistribution's of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//
+//   * Redistribution's in binary form must reproduce the above copyright notice,
+//     this list of conditions and the following disclaimer in the documentation
+//     and/or other materials provided with the distribution.
+//
+//   * The name of the copyright holders may not be used to endorse or promote products
+//     derived from this software without specific prior written permission.
+//
+// This software is provided by the copyright holders and contributors "as is" and
+// any express or implied warranties, including, but not limited to, the implied
+// warranties of merchantability and fitness for a particular purpose are disclaimed.
+// In no event shall the Intel Corporation or contributors be liable for any direct,
+// indirect, incidental, special, exemplary, or consequential damages
+// (including, but not limited to, procurement of substitute goods or services;
+// loss of use, data, or profits; or business interruption) however caused
+// and on any theory of liability, whether in contract, strict liability,
+// or tort (including negligence or otherwise) arising in any way out of
+// the use of this software, even if advised of the possibility of such damage.
+//
+//M*/
+
+// #ifndef __OPENCV_CORE_SATURATE_HPP__
+// #define __OPENCV_CORE_SATURATE_HPP__
+
+// #include "opencv2/core/cvdef.h"
+// #include "opencv2/core/fast_math.hpp"
+
+/** \addtogroup core_utils
+ *  \{
+<p>
+/////////////// saturate_cast (used in image & signal processing) ///////////////////
+<p>
+/** \brief Template function for accurate conversion from one primitive type to another.
+ <p>
+ The functions saturate_cast resemble the standard C++ cast operations, such as static_cast\<T\>()
+ and others. They perform an efficient and accurate conversion from one primitive type to another
+ (see the introduction chapter). saturate in the name means that when the input value v is out of the
+ range of the target type, the result is not formed just by taking low bits of the input, but instead
+ the value is clipped. For example:
+ <pre>{@code
+ uchar a = saturate_cast<uchar>(-100); // a = 0 (UCHAR_MIN)
+ short b = saturate_cast<short>(33333.33333); // b = 32767 (SHRT_MAX)
+ }</pre>
+ Such clipping is done when the target type is unsigned char , signed char , unsigned short or
+ signed short . For 32-bit integers, no clipping is done.
+ <p>
+ When the parameter is a floating-point value and the target type is an integer (8-, 16- or 32-bit),
+ the floating-point value is first rounded to the nearest integer and then clipped if needed (when
+ the target type is 8- or 16-bit).
+ <p>
+ This operation is used in the simplest or most complex image processing functions in OpenCV.
+ <p>
+ @param v Function parameter.
+ \sa add, subtract, multiply, divide, Mat::convertTo
+ */
+
+/** \overload */
+@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(@Cast("schar") byte v);
+@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(@Cast("schar") byte v);
+@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(@Cast("schar") byte v);
+@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(@Cast("schar") byte v);
+@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(@Cast("schar") byte v);
+@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(@Cast("schar") byte v);
+/** \overload */
+
+/** \overload */
+@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(short v);
+@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(short v);
+@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(short v);
+@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(short v);
+@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(short v);
+@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(short v);
+/** \overload */
+
+/** \overload */
+@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(int v);
+@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(int v);
+@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(int v);
+@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(int v);
+@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(int v);
+@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(int v);
+/** \overload */
+@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(float v);
+@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(float v);
+@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(float v);
+@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(float v);
+@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(float v);
+@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(float v);
+/** \overload */
+@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(double v);
+@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(double v);
+@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(double v);
+@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(double v);
+@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(double v);
+@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(double v);
+/** \overload */
+@Namespace("cv") public static native @Cast("uchar") @Name("saturate_cast<uchar>") byte ucharSaturateCast(@Cast("int64") long v);
+@Namespace("cv") public static native @Cast("schar") @Name("saturate_cast<schar>") byte scharSaturateCast(@Cast("int64") long v);
+@Namespace("cv") public static native @Cast("ushort") @Name("saturate_cast<ushort>") short ushortSaturateCast(@Cast("int64") long v);
+@Namespace("cv") public static native @Name("saturate_cast<short>") short shortSaturateCast(@Cast("int64") long v);
+@Namespace("cv") public static native @Name("saturate_cast<int>") int intSaturate(@Cast("int64") long v);
+@Namespace("cv") public static native @Cast("unsigned") @Name("saturate_cast<unsigned>") int unsignedSaturateCast(@Cast("int64") long v);
+/** \overload */
+
+// we intentionally do not clip negative numbers, to make -1 become 0xffffffff etc.
+
+/** \} */
+
+ // cv
+
+// #endif // __OPENCV_CORE_SATURATE_HPP__
 
 
 // Parsed from <opencv2/core/version.hpp>
@@ -1379,7 +1978,7 @@ public static final int CV_SUBMAT_FLAG =          (1 << CV_SUBMAT_FLAG_SHIFT);
 // #define __OPENCV_VERSION_HPP__
 
 public static final int CV_VERSION_MAJOR =    3;
-public static final int CV_VERSION_MINOR =    0;
+public static final int CV_VERSION_MINOR =    1;
 public static final int CV_VERSION_REVISION = 0;
 public static final String CV_VERSION_STATUS =   "";
 
@@ -1453,10 +2052,10 @@ public static final int CV_SUBMINOR_VERSION = CV_VERSION_REVISION;
 // #endif
 
 // #include <climits>
+// #include <algorithm>
 
 // #include "opencv2/core/cvdef.h"
 // #include "opencv2/core/cvstd.hpp"
-// #include "opencv2/hal.hpp"
 
 /** \addtogroup core_utils
  *  \{ */
@@ -1596,20 +2195,38 @@ public static final int
 
 /** norm types
 - For one array:
-\f[norm =  \forkthree{\|\texttt{src1}\|_{L_{\infty}} =  \max _I | \texttt{src1} (I)|}{if  \(\texttt{normType} = \texttt{NORM\_INF}\) }
-{ \| \texttt{src1} \| _{L_1} =  \sum _I | \texttt{src1} (I)|}{if  \(\texttt{normType} = \texttt{NORM\_L1}\) }
-{ \| \texttt{src1} \| _{L_2} =  \sqrt{\sum_I \texttt{src1}(I)^2} }{if  \(\texttt{normType} = \texttt{NORM\_L2}\) }\f]
+\f[norm =  \forkthree{\|\texttt{src1}\|_{L_{\infty}} =  \max _I | \texttt{src1} (I)|}{if  \(\texttt{normType} = \texttt{NORM_INF}\) }
+{ \| \texttt{src1} \| _{L_1} =  \sum _I | \texttt{src1} (I)|}{if  \(\texttt{normType} = \texttt{NORM_L1}\) }
+{ \| \texttt{src1} \| _{L_2} =  \sqrt{\sum_I \texttt{src1}(I)^2} }{if  \(\texttt{normType} = \texttt{NORM_L2}\) }\f]
 <p>
 - Absolute norm for two arrays
-\f[norm =  \forkthree{\|\texttt{src1}-\texttt{src2}\|_{L_{\infty}} =  \max _I | \texttt{src1} (I) -  \texttt{src2} (I)|}{if  \(\texttt{normType} = \texttt{NORM\_INF}\) }
-{ \| \texttt{src1} - \texttt{src2} \| _{L_1} =  \sum _I | \texttt{src1} (I) -  \texttt{src2} (I)|}{if  \(\texttt{normType} = \texttt{NORM\_L1}\) }
-{ \| \texttt{src1} - \texttt{src2} \| _{L_2} =  \sqrt{\sum_I (\texttt{src1}(I) - \texttt{src2}(I))^2} }{if  \(\texttt{normType} = \texttt{NORM\_L2}\) }\f]
+\f[norm =  \forkthree{\|\texttt{src1}-\texttt{src2}\|_{L_{\infty}} =  \max _I | \texttt{src1} (I) -  \texttt{src2} (I)|}{if  \(\texttt{normType} = \texttt{NORM_INF}\) }
+{ \| \texttt{src1} - \texttt{src2} \| _{L_1} =  \sum _I | \texttt{src1} (I) -  \texttt{src2} (I)|}{if  \(\texttt{normType} = \texttt{NORM_L1}\) }
+{ \| \texttt{src1} - \texttt{src2} \| _{L_2} =  \sqrt{\sum_I (\texttt{src1}(I) - \texttt{src2}(I))^2} }{if  \(\texttt{normType} = \texttt{NORM_L2}\) }\f]
 <p>
 - Relative norm for two arrays
-\f[norm =  \forkthree{\frac{\|\texttt{src1}-\texttt{src2}\|_{L_{\infty}}    }{\|\texttt{src2}\|_{L_{\infty}} }}{if  \(\texttt{normType} = \texttt{NORM\_RELATIVE\_INF}\) }
-{ \frac{\|\texttt{src1}-\texttt{src2}\|_{L_1} }{\|\texttt{src2}\|_{L_1}} }{if  \(\texttt{normType} = \texttt{NORM\_RELATIVE\_L1}\) }
-{ \frac{\|\texttt{src1}-\texttt{src2}\|_{L_2} }{\|\texttt{src2}\|_{L_2}} }{if  \(\texttt{normType} = \texttt{NORM\_RELATIVE\_L2}\) }\f]
-  */
+\f[norm =  \forkthree{\frac{\|\texttt{src1}-\texttt{src2}\|_{L_{\infty}}    }{\|\texttt{src2}\|_{L_{\infty}} }}{if  \(\texttt{normType} = \texttt{NORM_RELATIVE_INF}\) }
+{ \frac{\|\texttt{src1}-\texttt{src2}\|_{L_1} }{\|\texttt{src2}\|_{L_1}} }{if  \(\texttt{normType} = \texttt{NORM_RELATIVE_L1}\) }
+{ \frac{\|\texttt{src1}-\texttt{src2}\|_{L_2} }{\|\texttt{src2}\|_{L_2}} }{if  \(\texttt{normType} = \texttt{NORM_RELATIVE_L2}\) }\f]
+<p>
+As example for one array consider the function \f$r(x)= \begin{pmatrix} x \\ 1-x \end{pmatrix}, x \in [-1;1]\f$.
+The \f$ L_{1}, L_{2} \f$ and \f$ L_{\infty} \f$ norm for the sample value \f$r(-1) = \begin{pmatrix} -1 \\ 2 \end{pmatrix}\f$
+is calculated as follows
+\f{align*}
+    \| r(-1) \|_{L_1} &= |-1| + |2| = 3 \\
+    \| r(-1) \|_{L_2} &= \sqrt{(-1)^{2} + (2)^{2}} = \sqrt{5} \\
+    \| r(-1) \|_{L_\infty} &= \max(|-1|,|2|) = 2
+\f}
+and for \f$r(0.5) = \begin{pmatrix} 0.5 \\ 0.5 \end{pmatrix}\f$ the calculation is
+\f{align*}
+    \| r(0.5) \|_{L_1} &= |0.5| + |0.5| = 1 \\
+    \| r(0.5) \|_{L_2} &= \sqrt{(0.5)^{2} + (0.5)^{2}} = \sqrt{0.5} \\
+    \| r(0.5) \|_{L_\infty} &= \max(|0.5|,|0.5|) = 0.5.
+\f}
+The following graphic shows all values for the three norm functions \f$\| r(x) \|_{L_1}, \| r(x) \|_{L_2}\f$ and \f$\| r(x) \|_{L_\infty}\f$.
+It is notable that the \f$ L_{1} \f$ norm forms the upper and the \f$ L_{\infty} \f$ norm forms the lower border for the example function \f$ r(x) \f$.
+![Graphs for the different norm functions from the above example](pics/NormTypes_OneArray_1-2-INF.png)
+ */
 /** enum cv::NormTypes */
 public static final int NORM_INF       = 1,
                  NORM_L1        = 2,
@@ -1738,7 +2355,7 @@ public static final int
 //     CV_DO_PRAGMA(warning(push))
 //     CV_DO_PRAGMA(warning(disable: 4996))
 // #define CV_SUPPRESS_DEPRECATED_END CV_DO_PRAGMA(warning(pop))
-// #elif defined (__clang__) || ((__GNUC__)  && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 5))))
+// #elif defined (__clang__) || ((__GNUC__)  && (__GNUC__*100 + __GNUC_MINOR__ > 405))
 // #define CV_SUPPRESS_DEPRECATED_START
 //     CV_DO_PRAGMA(GCC diagnostic push)
 //     CV_DO_PRAGMA(GCC diagnostic ignored "-Wdeprecated-declarations")
@@ -1747,6 +2364,7 @@ public static final int
 // #define CV_SUPPRESS_DEPRECATED_START
 // #define CV_SUPPRESS_DEPRECATED_END
 // #endif
+// #define CV_UNUSED(name) (void)name
 /** \endcond
 <p>
 /** \brief Signals an error and raises the exception.
@@ -1899,21 +2517,9 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
 @Namespace("cv") public static native float fastAtan2(float y, float x);
 
 /** proxy for hal::LU */
-@Namespace("cv") public static native int LU(FloatPointer A, @Cast("size_t") long astep, int m, FloatPointer b, @Cast("size_t") long bstep, int n);
-@Namespace("cv") public static native int LU(FloatBuffer A, @Cast("size_t") long astep, int m, FloatBuffer b, @Cast("size_t") long bstep, int n);
-@Namespace("cv") public static native int LU(float[] A, @Cast("size_t") long astep, int m, float[] b, @Cast("size_t") long bstep, int n);
 /** proxy for hal::LU */
-@Namespace("cv") public static native int LU(DoublePointer A, @Cast("size_t") long astep, int m, DoublePointer b, @Cast("size_t") long bstep, int n);
-@Namespace("cv") public static native int LU(DoubleBuffer A, @Cast("size_t") long astep, int m, DoubleBuffer b, @Cast("size_t") long bstep, int n);
-@Namespace("cv") public static native int LU(double[] A, @Cast("size_t") long astep, int m, double[] b, @Cast("size_t") long bstep, int n);
 /** proxy for hal::Cholesky */
-@Namespace("cv") public static native @Cast("bool") boolean Cholesky(FloatPointer A, @Cast("size_t") long astep, int m, FloatPointer b, @Cast("size_t") long bstep, int n);
-@Namespace("cv") public static native @Cast("bool") boolean Cholesky(FloatBuffer A, @Cast("size_t") long astep, int m, FloatBuffer b, @Cast("size_t") long bstep, int n);
-@Namespace("cv") public static native @Cast("bool") boolean Cholesky(float[] A, @Cast("size_t") long astep, int m, float[] b, @Cast("size_t") long bstep, int n);
 /** proxy for hal::Cholesky */
-@Namespace("cv") public static native @Cast("bool") boolean Cholesky(DoublePointer A, @Cast("size_t") long astep, int m, DoublePointer b, @Cast("size_t") long bstep, int n);
-@Namespace("cv") public static native @Cast("bool") boolean Cholesky(DoubleBuffer A, @Cast("size_t") long astep, int m, DoubleBuffer b, @Cast("size_t") long bstep, int n);
-@Namespace("cv") public static native @Cast("bool") boolean Cholesky(double[] A, @Cast("size_t") long astep, int m, double[] b, @Cast("size_t") long bstep, int n);
 
 ////////////////// forward declarations for important OpenCV types //////////////////
 
@@ -1957,6 +2563,7 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
     }
 
 
+@Namespace("cv::ipp") public static native int getIppFeatures();
 @Namespace("cv::ipp") public static native void setIppStatus(int status, @Cast("const char*") BytePointer funcname/*=NULL*/, @Cast("const char*") BytePointer filename/*=NULL*/,
                              int line/*=0*/);
 @Namespace("cv::ipp") public static native void setIppStatus(int status);
@@ -1971,20 +2578,14 @@ configurations while CV_DbgAssert is only retained in the Debug configuration.
 
 /** \endcond
  <p>
- *  \} core_utils
- <p>
- *  \addtogroup core_utils_neon
- *  \{ */
+ *  \} core_utils */
 
-// #if CV_NEON
 
-// #endif
 
-/** \} core_utils_neon */
 
  // cv
 
-// #include "sse_utils.hpp"
+// #include "opencv2/core/neon_utils.hpp"
 
 // #endif //__OPENCV_CORE_BASE_HPP__
 
@@ -2611,37 +3212,6 @@ execution time.
  */
 @Namespace("cv") public static native @Cast("int64") long getCPUTickCount();
 
-/** \brief Available CPU features.
-<p>
-remember to keep this list identical to the one in cvdef.h
-*/
-/** enum cv::CpuFeatures */
-public static final int
-    CPU_MMX             = 1,
-    CPU_SSE             = 2,
-    CPU_SSE2            = 3,
-    CPU_SSE3            = 4,
-    CPU_SSSE3           = 5,
-    CPU_SSE4_1          = 6,
-    CPU_SSE4_2          = 7,
-    CPU_POPCNT          = 8,
-
-    CPU_AVX             = 10,
-    CPU_AVX2            = 11,
-    CPU_FMA3            = 12,
-
-    CPU_AVX_512F        = 13,
-    CPU_AVX_512BW       = 14,
-    CPU_AVX_512CD       = 15,
-    CPU_AVX_512DQ       = 16,
-    CPU_AVX_512ER       = 17,
-    CPU_AVX_512IFMA512  = 18,
-    CPU_AVX_512PF       = 19,
-    CPU_AVX_512VBMI     = 20,
-    CPU_AVX_512VL       = 21,
-
-    CPU_NEON            = 100;
-
 /** \brief Returns true if the specified feature is supported by the host hardware.
 <p>
 The function returns true if the host hardware supports the specified feature. When user calls
@@ -2660,7 +3230,7 @@ in OpenCV.
 /** \brief Aligns a pointer to the specified number of bytes.
 <p>
 The function returns the aligned pointer of the same type as the input pointer:
-\f[\texttt{(\_Tp*)(((size\_t)ptr + n-1) \& -n)}\f]
+\f[\texttt{(_Tp*)(((size_t)ptr + n-1) & -n)}\f]
 @param ptr Aligned pointer.
 @param n Alignment size that must be a power of two.
  */
@@ -2668,7 +3238,7 @@ The function returns the aligned pointer of the same type as the input pointer:
 /** \brief Aligns a buffer size to the specified number of bytes.
 <p>
 The function returns the minimum number that is greater or equal to sz and is divisible by n :
-\f[\texttt{(sz + n-1) \& -n}\f]
+\f[\texttt{(sz + n-1) & -n}\f]
 @param sz Buffer size to align.
 @param n Alignment size that must be a power of two.
  */
@@ -2757,16 +3327,21 @@ The function returns true if the optimized code is enabled. Otherwise, it return
     private native void allocate(@ByRef Mutex m);
 }
 
+// TLS interface
 @Namespace("cv") @NoOffset public static class TLSDataContainer extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TLSDataContainer(Pointer p) { super(p); }
 
-    public native Pointer createDataInstance();
-    public native void deleteDataInstance(Pointer data);
-
     public native Pointer getData();
+// #endif
+    public native Pointer createDataInstance();
+    public native void deleteDataInstance(Pointer pData);
+
+    public native int key_(); public native TLSDataContainer key_(int key_);
 }
+
+// Main TLS data class
 
 /** \brief Designed for command line parsing
 <p>
@@ -2814,7 +3389,7 @@ For example:
     const String keys =
         "{help h usage ? |      | print this message   }"
         "{@image1        |      | image1 for compare   }"
-        "{@image2        |      | image2 for compare   }"
+        "{@image2        |<none>| image2 for compare   }"
         "{@repeat        |1     | number               }"
         "{path           |.     | path to file         }"
         "{fps            | -1.0 | fps for output video }"
@@ -2823,6 +3398,13 @@ For example:
         ;
 }
 }</pre>
+<p>
+Note that there are no default values for {@code help} and {@code timestamp} so we can check their presence using the {@code has()} method.
+Arguments with default values are considered to be always present. Use the {@code get()} method in these cases to check their
+actual value instead.
+<p>
+String keys like {@code get<String>("@image1")} return the empty string {@code ""} by default - even with an empty default value.
+Use the special {@code <none>} default value to enforce that the returned string must not be empty. (like in {@code get<String>("@image2")})
 <p>
 ### Usage
 <p>
@@ -2835,7 +3417,7 @@ For the described keys:
     # Bad call
     $ ./app -fps=aaa
     ERRORS:
-    Exception: can not convert: [aaa] to [double]
+    Parameter 'fps': can not convert: [aaa] to [double]
 }</pre>
  */
 
@@ -9402,6 +9984,36 @@ OpenCV to pass pixel values.
     // returns true iff v1 == v2 == v3 == 0
     public native @Cast("bool") boolean isReal();
 }
+@Name("cv::Scalar_<int>") public static class Scalar4i extends IntPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Scalar4i(Pointer p) { super(p); }
+
+    /** various constructors */
+    public Scalar4i() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public Scalar4i(int v0, int v1, int v2/*=0*/, int v3/*=0*/) { super((Pointer)null); allocate(v0, v1, v2, v3); }
+    private native void allocate(int v0, int v1, int v2/*=0*/, int v3/*=0*/);
+    public Scalar4i(int v0, int v1) { super((Pointer)null); allocate(v0, v1); }
+    private native void allocate(int v0, int v1);
+    public Scalar4i(int v0) { super((Pointer)null); allocate(v0); }
+    private native void allocate(int v0);
+
+    /** returns a scalar with all elements set to v0 */
+    public static native @ByVal Scalar4i all(int v0);
+
+    /** conversion to another data type */
+
+    /** per-element product */
+    public native @ByVal Scalar4i mul(@Const @ByRef Scalar4i a, double scale/*=1*/ );
+    public native @ByVal Scalar4i mul(@Const @ByRef Scalar4i a );
+
+    // returns (v0, -v1, -v2, -v3)
+    public native @ByVal Scalar4i conj();
+
+    // returns true iff v1 == v2 == v3 == 0
+    public native @Cast("bool") boolean isReal();
+}
 
 
 
@@ -10000,6 +10612,7 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
     \defgroup core_cluster Clustering
     \defgroup core_utils Utility and system functions and macros
     \{
+        \defgroup core_utils_sse SSE utilities
         \defgroup core_utils_neon NEON utilities
     \}
     \defgroup core_opengl OpenGL interoperability
@@ -10008,6 +10621,16 @@ contours with self-intersections, e.g. a zero area (m00) for butterfly-shaped co
     \defgroup core_directx DirectX interoperability
     \defgroup core_eigen Eigen support
     \defgroup core_opencl OpenCL support
+    \defgroup core_va_intel Intel VA-API/OpenCL (CL-VA) interoperability
+    \defgroup core_hal Hardware Acceleration Layer
+    \{
+        \defgroup core_hal_functions Functions
+        \defgroup core_hal_interface Interface
+        \defgroup core_hal_intrin Universal intrinsics
+        \{
+            \defgroup core_hal_intrin_impl Private implementation helpers
+        \}
+    \}
 \}
  */
 
@@ -10449,7 +11072,7 @@ The function LUT fills the output array with values from the look-up table. Indi
 are taken from the input array. That is, the function processes each element of src as follows:
 \f[\texttt{dst} (I)  \leftarrow \texttt{lut(src(I) + d)}\f]
 where
-\f[d =  \fork{0}{if \texttt{src} has depth \texttt{CV\_8U}}{128}{if \texttt{src} has depth \texttt{CV\_8S}}\f]
+\f[d =  \fork{0}{if \(\texttt{src}\) has depth \(\texttt{CV_8U}\)}{128}{if \(\texttt{src}\) has depth \(\texttt{CV_8S}\)}\f]
 @param src input array of 8-bit elements.
 @param lut look-up table of 256 elements; in case of multi-channel input array, the table should
 either have a single channel (in this case the same table is used for all channels) or the same
@@ -10549,21 +11172,21 @@ relative difference norm.
 The functions norm calculate an absolute norm of src1 (when there is no
 src2 ):
 <p>
-\f[norm =  \forkthree{\|\texttt{src1}\|_{L_{\infty}} =  \max _I | \texttt{src1} (I)|}{if  \(\texttt{normType} = \texttt{NORM\_INF}\) }
-{ \| \texttt{src1} \| _{L_1} =  \sum _I | \texttt{src1} (I)|}{if  \(\texttt{normType} = \texttt{NORM\_L1}\) }
-{ \| \texttt{src1} \| _{L_2} =  \sqrt{\sum_I \texttt{src1}(I)^2} }{if  \(\texttt{normType} = \texttt{NORM\_L2}\) }\f]
+\f[norm =  \forkthree{\|\texttt{src1}\|_{L_{\infty}} =  \max _I | \texttt{src1} (I)|}{if  \(\texttt{normType} = \texttt{NORM_INF}\) }
+{ \| \texttt{src1} \| _{L_1} =  \sum _I | \texttt{src1} (I)|}{if  \(\texttt{normType} = \texttt{NORM_L1}\) }
+{ \| \texttt{src1} \| _{L_2} =  \sqrt{\sum_I \texttt{src1}(I)^2} }{if  \(\texttt{normType} = \texttt{NORM_L2}\) }\f]
 <p>
 or an absolute or relative difference norm if src2 is there:
 <p>
-\f[norm =  \forkthree{\|\texttt{src1}-\texttt{src2}\|_{L_{\infty}} =  \max _I | \texttt{src1} (I) -  \texttt{src2} (I)|}{if  \(\texttt{normType} = \texttt{NORM\_INF}\) }
-{ \| \texttt{src1} - \texttt{src2} \| _{L_1} =  \sum _I | \texttt{src1} (I) -  \texttt{src2} (I)|}{if  \(\texttt{normType} = \texttt{NORM\_L1}\) }
-{ \| \texttt{src1} - \texttt{src2} \| _{L_2} =  \sqrt{\sum_I (\texttt{src1}(I) - \texttt{src2}(I))^2} }{if  \(\texttt{normType} = \texttt{NORM\_L2}\) }\f]
+\f[norm =  \forkthree{\|\texttt{src1}-\texttt{src2}\|_{L_{\infty}} =  \max _I | \texttt{src1} (I) -  \texttt{src2} (I)|}{if  \(\texttt{normType} = \texttt{NORM_INF}\) }
+{ \| \texttt{src1} - \texttt{src2} \| _{L_1} =  \sum _I | \texttt{src1} (I) -  \texttt{src2} (I)|}{if  \(\texttt{normType} = \texttt{NORM_L1}\) }
+{ \| \texttt{src1} - \texttt{src2} \| _{L_2} =  \sqrt{\sum_I (\texttt{src1}(I) - \texttt{src2}(I))^2} }{if  \(\texttt{normType} = \texttt{NORM_L2}\) }\f]
 <p>
 or
 <p>
-\f[norm =  \forkthree{\frac{\|\texttt{src1}-\texttt{src2}\|_{L_{\infty}}    }{\|\texttt{src2}\|_{L_{\infty}} }}{if  \(\texttt{normType} = \texttt{NORM\_RELATIVE\_INF}\) }
-{ \frac{\|\texttt{src1}-\texttt{src2}\|_{L_1} }{\|\texttt{src2}\|_{L_1}} }{if  \(\texttt{normType} = \texttt{NORM\_RELATIVE\_L1}\) }
-{ \frac{\|\texttt{src1}-\texttt{src2}\|_{L_2} }{\|\texttt{src2}\|_{L_2}} }{if  \(\texttt{normType} = \texttt{NORM\_RELATIVE\_L2}\) }\f]
+\f[norm =  \forkthree{\frac{\|\texttt{src1}-\texttt{src2}\|_{L_{\infty}}    }{\|\texttt{src2}\|_{L_{\infty}} }}{if  \(\texttt{normType} = \texttt{NORM_RELATIVE_INF}\) }
+{ \frac{\|\texttt{src1}-\texttt{src2}\|_{L_1} }{\|\texttt{src2}\|_{L_1}} }{if  \(\texttt{normType} = \texttt{NORM_RELATIVE_L1}\) }
+{ \frac{\|\texttt{src1}-\texttt{src2}\|_{L_2} }{\|\texttt{src2}\|_{L_2}} }{if  \(\texttt{normType} = \texttt{NORM_RELATIVE_L2}\) }\f]
 <p>
 The functions norm return the calculated norm.
 <p>
@@ -10629,6 +11252,37 @@ min-max but modify the whole array, you can use norm and Mat::convertTo.
 <p>
 In case of sparse matrices, only the non-zero values are analyzed and transformed. Because of this,
 the range transformation for sparse matrices is not allowed since it can shift the zero level.
+<p>
+Possible usage with some positive example data:
+<pre>{@code {.cpp}
+    vector<double> positiveData = { 2.0, 8.0, 10.0 };
+    vector<double> normalizedData_l1, normalizedData_l2, normalizedData_inf, normalizedData_minmax;
+
+    // Norm to probability (total count)
+    // sum(numbers) = 20.0
+    // 2.0      0.1     (2.0/20.0)
+    // 8.0      0.4     (8.0/20.0)
+    // 10.0     0.5     (10.0/20.0)
+    normalize(positiveData, normalizedData_l1, 1.0, 0.0, NORM_L1);
+
+    // Norm to unit vector: ||positiveData|| = 1.0
+    // 2.0      0.15
+    // 8.0      0.62
+    // 10.0     0.77
+    normalize(positiveData, normalizedData_l2, 1.0, 0.0, NORM_L2);
+
+    // Norm to max element
+    // 2.0      0.2     (2.0/10.0)
+    // 8.0      0.8     (8.0/10.0)
+    // 10.0     1.0     (10.0/10.0)
+    normalize(positiveData, normalizedData_inf, 1.0, 0.0, NORM_INF);
+
+    // Norm to range [0.0;1.0]
+    // 2.0      0.0     (shift to left border)
+    // 8.0      0.75    (6.0/8.0)
+    // 10.0     1.0     (shift to right border)
+    normalize(positiveData, normalizedData_minmax, 1.0, 0.0, NORM_MINMAX);
+}</pre>
 <p>
 @param src input array.
 @param dst output array of the same size as src .
@@ -10762,19 +11416,19 @@ otherwise, its type will be CV_MAKE_TYPE(CV_MAT_DEPTH(dtype), src.channels()).
 @Namespace("cv") public static native void reduce(@ByVal Mat src, @ByVal Mat dst, int dim, int rtype, int dtype/*=-1*/);
 @Namespace("cv") public static native void reduce(@ByVal Mat src, @ByVal Mat dst, int dim, int rtype);
 
-/** \brief Creates one multichannel array out of several single-channel ones.
+/** \brief Creates one multi-channel array out of several single-channel ones.
 <p>
-The functions merge merge several arrays to make a single multi-channel array. That is, each
+The function merge merges several arrays to make a single multi-channel array. That is, each
 element of the output array will be a concatenation of the elements of the input arrays, where
 elements of i-th input array are treated as mv[i].channels()-element vectors.
 <p>
-The function split does the reverse operation. If you need to shuffle channels in some other
-advanced way, use mixChannels .
+The function cv::split does the reverse operation. If you need to shuffle channels in some other
+advanced way, use cv::mixChannels.
 @param mv input array of matrices to be merged; all the matrices in mv must have the same
 size and the same depth.
 @param count number of input matrices when mv is a plain C array; it must be greater than zero.
 @param dst output array of the same size and the same depth as mv[0]; The number of channels will
-be the total number of channels in the matrix array.
+be equal to the parameter count.
 \sa  mixChannels, split, Mat::reshape
 */
 @Namespace("cv") public static native void merge(@Const Mat mv, @Cast("size_t") long count, @ByVal Mat dst);
@@ -10809,34 +11463,34 @@ reallocated, if needed.
 /** \brief Copies specified channels from input arrays to the specified channels of
 output arrays.
 <p>
-The functions mixChannels provide an advanced mechanism for shuffling image channels.
+The function cv::mixChannels provides an advanced mechanism for shuffling image channels.
 <p>
-split and merge and some forms of cvtColor are partial cases of mixChannels .
+cv::split and cv::merge and some forms of cv::cvtColor are partial cases of cv::mixChannels .
 <p>
-In the example below, the code splits a 4-channel RGBA image into a 3-channel BGR (with R and B
+In the example below, the code splits a 4-channel BGRA image into a 3-channel BGR (with B and R
 channels swapped) and a separate alpha-channel image:
 <pre>{@code {.cpp}
-    Mat rgba( 100, 100, CV_8UC4, Scalar(1,2,3,4) );
-    Mat bgr( rgba.rows, rgba.cols, CV_8UC3 );
-    Mat alpha( rgba.rows, rgba.cols, CV_8UC1 );
+    Mat bgra( 100, 100, CV_8UC4, Scalar(255,0,0,255) );
+    Mat bgr( bgra.rows, bgra.cols, CV_8UC3 );
+    Mat alpha( bgra.rows, bgra.cols, CV_8UC1 );
 
     // forming an array of matrices is a quite efficient operation,
     // because the matrix data is not copied, only the headers
     Mat out[] = { bgr, alpha };
-    // rgba[0] -> bgr[2], rgba[1] -> bgr[1],
-    // rgba[2] -> bgr[0], rgba[3] -> alpha[0]
+    // bgra[0] -> bgr[2], bgra[1] -> bgr[1],
+    // bgra[2] -> bgr[0], bgra[3] -> alpha[0]
     int from_to[] = { 0,2, 1,1, 2,0, 3,3 };
-    mixChannels( &rgba, 1, out, 2, from_to, 4 );
+    mixChannels( &bgra, 1, out, 2, from_to, 4 );
 }</pre>
 \note Unlike many other new-style C++ functions in OpenCV (see the introduction section and
-Mat::create ), mixChannels requires the output arrays to be pre-allocated before calling the
+Mat::create ), cv::mixChannels requires the output arrays to be pre-allocated before calling the
 function.
-@param src input array or vector of matricesl; all of the matrices must have the same size and the
+@param src input array or vector of matrices; all of the matrices must have the same size and the
 same depth.
-@param nsrcs number of matrices in src.
-@param dst output array or vector of matrices; all the matrices *must be allocated*; their size and
-depth must be the same as in src[0].
-@param ndsts number of matrices in dst.
+@param nsrcs number of matrices in {@code src}.
+@param dst output array or vector of matrices; all the matrices **must be allocated**; their size and
+depth must be the same as in {@code src[0]}.
+@param ndsts number of matrices in {@code dst}.
 @param fromTo array of index pairs specifying which channels are copied and where; fromTo[k\*2] is
 a 0-based index of the input channel in src, fromTo[k\*2+1] is an index of the output channel in
 dst; the continuous channel numbering is used: the first input image channels are indexed from 0 to
@@ -10844,8 +11498,8 @@ src[0].channels()-1, the second input image channels are indexed from src[0].cha
 src[0].channels() + src[1].channels()-1, and so on, the same scheme is used for the output image
 channels; as a special case, when fromTo[k\*2] is negative, the corresponding output channel is
 filled with zero .
-@param npairs number of index pairs in fromTo.
-\sa split, merge, cvtColor
+@param npairs number of index pairs in {@code fromTo}.
+\sa cv::split, cv::merge, cv::cvtColor
 */
 @Namespace("cv") public static native void mixChannels(@Const Mat src, @Cast("size_t") long nsrcs, Mat dst, @Cast("size_t") long ndsts,
                             @Const IntPointer fromTo, @Cast("size_t") long npairs);
@@ -10855,9 +11509,9 @@ filled with zero .
                             @Const int[] fromTo, @Cast("size_t") long npairs);
 
 /** \overload
-@param src input array or vector of matricesl; all of the matrices must have the same size and the
+@param src input array or vector of matrices; all of the matrices must have the same size and the
 same depth.
-@param dst output array or vector of matrices; all the matrices *must be allocated*; their size and
+@param dst output array or vector of matrices; all the matrices **must be allocated**; their size and
 depth must be the same as in src[0].
 @param fromTo array of index pairs specifying which channels are copied and where; fromTo[k\*2] is
 a 0-based index of the input channel in src, fromTo[k\*2+1] is an index of the output channel in
@@ -10876,9 +11530,9 @@ filled with zero .
                             @Const int[] fromTo, @Cast("size_t") long npairs);
 
 /** \overload
-@param src input array or vector of matricesl; all of the matrices must have the same size and the
+@param src input array or vector of matrices; all of the matrices must have the same size and the
 same depth.
-@param dst output array or vector of matrices; all the matrices *must be allocated*; their size and
+@param dst output array or vector of matrices; all the matrices **must be allocated**; their size and
 depth must be the same as in src[0].
 @param fromTo array of index pairs specifying which channels are copied and where; fromTo[k\*2] is
 a 0-based index of the input channel in src, fromTo[k\*2+1] is an index of the output channel in
@@ -11326,7 +11980,7 @@ std::sqrt .
 /** \brief Raises every array element to a power.
 <p>
 The function pow raises every element of the input array to power :
-\f[\texttt{dst} (I) =  \fork{\texttt{src}(I)^power}{if \texttt{power} is integer}{|\texttt{src}(I)|^power}{otherwise}\f]
+\f[\texttt{dst} (I) =  \fork{\texttt{src}(I)^{power}}{if \(\texttt{power}\) is integer}{|\texttt{src}(I)|^{power}}{otherwise}\f]
 <p>
 So, for a non-integer power exponent, the absolute values of input array
 elements are used. However, it is possible to get true values for
@@ -11464,7 +12118,7 @@ have the same size as x.
 
 /** \brief Checks every element of an input array for invalid values.
 <p>
-The functions checkRange check that every array element is neither NaN nor infinite. When minVal \<
+The functions checkRange check that every array element is neither NaN nor infinite. When minVal \>
 -DBL_MAX and maxVal \< DBL_MAX, the functions also check that each value is between minVal and
 maxVal. In case of multi-channel arrays, each channel is processed independently. If some values
 are out of range, position of the first outlier is stored in pos (when pos != NULL). Then, the
@@ -11998,9 +12652,9 @@ so you need to "flip" the second convolution operand B vertically and horizontal
 -   An example using the discrete fourier transform can be found at
     opencv_source_code/samples/cpp/dft.cpp
 -   (Python) An example using the dft functionality to perform Wiener deconvolution can be found
-    at opencv_source/samples/python2/deconvolution.py
+    at opencv_source/samples/python/deconvolution.py
 -   (Python) An example rearranging the quadrants of a Fourier image can be found at
-    opencv_source/samples/python2/dft.py
+    opencv_source/samples/python/dft.py
 @param src input array that could be real or complex.
 @param dst output array whose size and type depends on the flags .
 @param flags transformation flags, representing a combination of the cv::DftFlags
@@ -12415,8 +13069,7 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
     public LDA(Pointer p) { super(p); }
 
     /** \brief constructor
-    Initializes a LDA with num_components (default 0) and specifies how
-    samples are aligned (default dataAsRow=true).
+    Initializes a LDA with num_components (default 0).
     */
     public LDA(int num_components/*=0*/) { super((Pointer)null); allocate(num_components); }
     private native void allocate(int num_components/*=0*/);
@@ -12454,15 +13107,17 @@ PCA compressPCA(const Mat& pcaset, int maxComponents,
     /** destructor
       */
 
-    /** Compute the discriminants for data in src and labels.
+    /** Compute the discriminants for data in src (row aligned) and labels.
       */
     public native void compute(@ByVal MatVector src, @ByVal Mat labels);
 
     /** Projects samples into the LDA subspace.
+        src may be one or more row aligned samples.
       */
     public native @ByVal Mat project(@ByVal Mat src);
 
     /** Reconstructs projections from the LDA subspace.
+        src may be one or more row aligned projections.
       */
     public native @ByVal Mat reconstruct(@ByVal Mat src);
 
@@ -12851,7 +13506,7 @@ and groups the input samples around the clusters. As an output, \f$\texttt{label
 <p>
 \note
 -   (Python) An example on K-means clustering can be found at
-    opencv_source_code/samples/python2/kmeans.py
+    opencv_source_code/samples/python/kmeans.py
 @param data Data for clustering. An array of N-Dimensional points with float coordinates is needed.
 Examples of this array can be:
 -   Mat points(count, 2, CV_32F);
@@ -12927,6 +13582,12 @@ pass them with the ( flags = KMEANS_USE_INITIAL_LABELS ) flag, and then choose t
     public static native @Ptr Formatter get();
 
 }
+
+@Namespace("cv") public static native @Str @Name("operator <<") BytePointer shiftLeft(@Str BytePointer out, @Ptr Formatted fmtd);
+@Namespace("cv") public static native @Str @Name("operator <<") String shiftLeft(@Str String out, @Ptr Formatted fmtd);
+
+@Namespace("cv") public static native @Str @Name("operator <<") BytePointer shiftLeft(@Str BytePointer out, @Const @ByRef Mat mtx);
+@Namespace("cv") public static native @Str @Name("operator <<") String shiftLeft(@Str String out, @Const @ByRef Mat mtx);
 
 //////////////////////////////////////// Algorithm ////////////////////////////////////
 
@@ -13582,6 +14243,8 @@ public static final int
     public native Pointer handle(); public native UMatData handle(Pointer handle);
     public native Pointer userdata(); public native UMatData userdata(Pointer userdata);
     public native int allocatorFlags_(); public native UMatData allocatorFlags_(int allocatorFlags_);
+    public native int mapcount(); public native UMatData mapcount(int mapcount);
+    public native UMatData originalUMatData(); public native UMatData originalUMatData(UMatData originalUMatData);
 }
 
 
@@ -14226,6 +14889,7 @@ including std::sort().
     @param m Destination matrix. If it does not have a proper size or type before the operation, it is
     reallocated.
     @param mask Operation mask. Its non-zero elements indicate which matrix elements need to be copied.
+    The mask has to be of type CV_8U and can have 1 or multiple channels.
     */
     public native void copyTo( @ByVal Mat m, @ByVal Mat mask );
 
@@ -14930,7 +15594,7 @@ including std::sort().
 
     /** \brief Invoke with arguments functor, and runs the functor over all matrix element.
     <p>
-    The methos runs operation in parallel. Operation is passed by arguments. Operation have to be a
+    The methods runs operation in parallel. Operation is passed by arguments. Operation have to be a
     function pointer, a function object or a lambda(C++11).
     <p>
     All of below operation is equal. Put 0xFF to first channel of all matrix elements:
@@ -14985,6 +15649,9 @@ including std::sort().
      */
     /** \overload */
 
+// #ifdef CV_CXX_MOVE_SEMANTICS
+// #endif
+
     /** enum cv::Mat:: */
     public static final int MAGIC_VAL  =  0x42FF0000, AUTO_STEP = 0, CONTINUOUS_FLAG =  CV_MAT_CONT_FLAG, SUBMATRIX_FLAG =  CV_SUBMAT_FLAG;
     /** enum cv::Mat:: */
@@ -15014,6 +15681,8 @@ including std::sort().
     public native MatAllocator allocator(); public native Mat allocator(MatAllocator allocator);
     /** and the standard allocator */
     public static native MatAllocator getStdAllocator();
+    public static native MatAllocator getDefaultAllocator();
+    public static native void setDefaultAllocator(MatAllocator allocator);
 
     /** interaction with UMat */
     public native UMatData u(); public native Mat u(UMatData u);
@@ -15289,6 +15958,9 @@ To use Mat_ for multi-channel images/matrices, pass Vec as a Mat_ parameter:
     /** returns N if the matrix is 1-channel (N x ptdim) or ptdim-channel (1 x N) or (N x 1); negative number otherwise */
     public native int checkVector(int elemChannels, int depth/*=-1*/, @Cast("bool") boolean requireContinuous/*=true*/);
     public native int checkVector(int elemChannels);
+
+// #ifdef CV_CXX_MOVE_SEMANTICS
+// #endif
 
     public native Pointer handle(int accessFlags);
     public native void ndoffset(@Cast("size_t*") SizeTPointer ofs);
@@ -16160,7 +16832,7 @@ Here are examples of matrix expressions:
     // sharpen image using "unsharp mask" algorithm
     Mat blurred; double sigma = 1, threshold = 5, amount = 1;
     GaussianBlur(img, blurred, Size(), sigma, sigma);
-    Mat lowConstrastMask = abs(img - blurred) < threshold;
+    Mat lowContrastMask = abs(img - blurred) < threshold;
     Mat sharpened = img*(1+amount) + blurred*(-amount);
     img.copyTo(sharpened, lowContrastMask);
 }</pre>

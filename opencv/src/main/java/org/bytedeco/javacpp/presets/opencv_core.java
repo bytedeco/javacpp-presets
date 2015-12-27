@@ -40,12 +40,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(value = {
-    @Platform(include = {"<opencv2/hal/defs.h>",
-        "<opencv2/core/cvdef.h>", "<opencv2/core/version.hpp>", "<opencv2/core/base.hpp>", "<opencv2/core/cvstd.hpp>",
+    @Platform(include = {"<opencv2/core/hal/interface.h>", "<opencv2/core/cvdef.h>", "<opencv2/core/hal/hal.hpp>", "<opencv2/core/fast_math.hpp>",
+        "<opencv2/core/saturate.hpp>", "<opencv2/core/version.hpp>", "<opencv2/core/base.hpp>", "<opencv2/core/cvstd.hpp>",
         "<opencv2/core/utility.hpp>", "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>",
         "<opencv2/core.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
-        "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.3.0", "opencv_imgproc@.3.0"}),
-    @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link =  {"opencv_core300", "opencv_imgproc300"}, preload = {"msvcr120", "msvcp120"}),
+        "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.3.1", "opencv_imgproc@.3.1"}),
+    @Platform(value = "windows", define = "_WIN32_WINNT 0x0502", link =  {"opencv_core310", "opencv_imgproc310"}, preload = {"msvcr120", "msvcp120"}),
     @Platform(value = "windows-x86", preloadpath = "C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/redist/x86/Microsoft.VC120.CRT/"),
     @Platform(value = "windows-x86_64", preloadpath = "C:/Program Files (x86)/Microsoft Visual Studio 12.0/VC/redist/x64/Microsoft.VC120.CRT/")},
         target = "org.bytedeco.javacpp.opencv_core", helper = "org.bytedeco.javacpp.helper.opencv_core")
@@ -204,10 +204,12 @@ public class opencv_core implements InfoMapper {
                .put(new Info("cv::Rect_<double>").pointerTypes("Rectd").base("DoublePointer"))
                .put(new Info("cv::RotatedRect").pointerTypes("RotatedRect").base("FloatPointer"))
                .put(new Info("cv::Scalar_<double>").pointerTypes("Scalar").base("AbstractScalar"))
+               .put(new Info("cv::Scalar_<int>").pointerTypes("Scalar4i").base("IntPointer"))
 
                .put(new Info("cv::Vec2i").pointerTypes("Point"))
                .put(new Info("cv::Vec2d").pointerTypes("Point2d"))
                .put(new Info("cv::Vec3d").pointerTypes("Point3d"))
+               .put(new Info("cv::Vec4i").pointerTypes("Scalar4i"))
 
                .put(new Info("defined __INTEL_COMPILER && !(defined WIN32 || defined _WIN32)", "defined __GNUC__",
                              "defined WIN32 || defined _WIN32 || defined WINCE").define(false))

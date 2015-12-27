@@ -12,6 +12,126 @@ import static org.bytedeco.javacpp.opencv_imgproc.*;
 public class opencv_face extends org.bytedeco.javacpp.presets.opencv_face {
     static { Loader.load(); }
 
+// Parsed from <opencv2/face/predict_collector.hpp>
+
+/*
+By downloading, copying, installing or using the software you agree to this license.
+If you do not agree to this license, do not download, install,
+copy or use the software.
+
+
+                          License Agreement
+               For Open Source Computer Vision Library
+                       (3-clause BSD License)
+
+Copyright (C) 2000-2015, Intel Corporation, all rights reserved.
+Copyright (C) 2009-2011, Willow Garage Inc., all rights reserved.
+Copyright (C) 2009-2015, NVIDIA Corporation, all rights reserved.
+Copyright (C) 2010-2013, Advanced Micro Devices, Inc., all rights reserved.
+Copyright (C) 2015, OpenCV Foundation, all rights reserved.
+Copyright (C) 2015, Itseez Inc., all rights reserved.
+Third party copyrights are property of their respective owners.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+  * Redistributions of source code must retain the above copyright notice,
+    this list of conditions and the following disclaimer.
+
+  * Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+
+  * Neither the names of the copyright holders nor the names of the contributors
+    may be used to endorse or promote products derived from this software
+    without specific prior written permission.
+
+This software is provided by the copyright holders and contributors "as is" and
+any express or implied warranties, including, but not limited to, the implied
+warranties of merchantability and fitness for a particular purpose are disclaimed.
+In no event shall copyright holders or contributors be liable for any direct,
+indirect, incidental, special, exemplary, or consequential damages
+(including, but not limited to, procurement of substitute goods or services;
+loss of use, data, or profits; or business interruption) however caused
+and on any theory of liability, whether in contract, strict liability,
+or tort (including negligence or otherwise) arising in any way out of
+the use of this software, even if advised of the possibility of such damage.
+*/
+
+// #ifndef __OPENCV_PREDICT_COLLECTOR_HPP__
+// #define __OPENCV_PREDICT_COLLECTOR_HPP__
+// #include <cfloat>
+// #include "opencv2/core/cvdef.h"
+// #include "opencv2/core/cvstd.hpp"
+/** \addtogroup face
+ *  \{
+/** \brief Abstract base class for all strategies of prediction result handling
+*/
+@Namespace("cv::face") @NoOffset public static class PredictCollector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PredictCollector(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public PredictCollector(int size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public PredictCollector position(int position) {
+        return (PredictCollector)super.position(position);
+    }
+
+    /** \brief creates new predict collector with given threshhold */
+    public PredictCollector(double threshhold/*=DBL_MAX*/) { super((Pointer)null); allocate(threshhold); }
+    private native void allocate(double threshhold/*=DBL_MAX*/);
+    public PredictCollector() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    /** \brief called once at start of recognition
+    @param size total size of prediction evaluation that recognizer could perform
+    @param state user defined send-to-back optional value to allow multi-thread, multi-session or aggregation scenarios
+    */
+    public native void init(int size, int state/*=0*/);
+    public native void init(int size);
+    /** \brief called with every recognition result
+    @param label current prediction label
+    @param dist current prediction distance (confidence)
+    @param state user defined send-to-back optional value to allow multi-thread, multi-session or aggregation scenarios
+    @return true if recognizer should proceed prediction , false - if recognizer should terminate prediction
+    */
+    public native @Cast("bool") boolean emit(int label, double dist, int state/*=0*/);
+    public native @Cast("bool") boolean emit(int label, double dist); //not abstract while Python generation require non-abstract class
+}
+
+/** \brief default predict collector that trace minimal distance with treshhold checking (that is default behavior for most predict logic)
+*/
+@Namespace("cv::face") @NoOffset public static class MinDistancePredictCollector extends PredictCollector {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public MinDistancePredictCollector(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public MinDistancePredictCollector(int size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public MinDistancePredictCollector position(int position) {
+        return (MinDistancePredictCollector)super.position(position);
+    }
+
+    /** \brief creates new MinDistancePredictCollector with given threshhold */
+    public MinDistancePredictCollector(double threshhold/*=DBL_MAX*/) { super((Pointer)null); allocate(threshhold); }
+    private native void allocate(double threshhold/*=DBL_MAX*/);
+    public MinDistancePredictCollector() { super((Pointer)null); allocate(); }
+    private native void allocate();
+    public native @Cast("bool") boolean emit(int label, double dist, int state/*=0*/);
+    public native @Cast("bool") boolean emit(int label, double dist);
+    /** \brief result label, 0 if not found */
+    public native int getLabel();
+    /** \brief result distance (confidence) DBL_MAX if not found */
+    public native double getDist();
+    /** \brief factory method to create cv-pointers to MinDistancePredictCollector */
+    public static native @Ptr MinDistancePredictCollector create(double threshold/*=DBL_MAX*/);
+    public static native @Ptr MinDistancePredictCollector create();
+}
+/** \} */
+
+
+// #endif
+
 // Parsed from <opencv2/face.hpp>
 
 /*
@@ -64,6 +184,7 @@ the use of this software, even if advised of the possibility of such damage.
 */
 
 // #include "opencv2/core.hpp"
+// #include "face/predict_collector.hpp"
 // #include <map>
 
 /** \addtogroup face
@@ -273,6 +394,7 @@ String name = model->name();
     /** \overload */
     public native int predict(@ByVal Mat src);
 
+
     /** \brief Predicts a label and associated confidence (e.g. distance) for a given input image.
     <p>
     @param src Sample image to get a prediction from.
@@ -311,6 +433,18 @@ String name = model->name();
     public native void predict(@ByVal Mat src, @ByRef IntPointer label, @ByRef DoublePointer confidence);
     public native void predict(@ByVal Mat src, @ByRef IntBuffer label, @ByRef DoubleBuffer confidence);
     public native void predict(@ByVal Mat src, @ByRef int[] label, @ByRef double[] confidence);
+
+
+    /** \brief - if implemented - send all result of prediction to collector that can be used for somehow custom result handling
+    @param src Sample image to get a prediction from.
+    @param collector User-defined collector object that accepts all results
+    @param state - optional user-defined state token that should be passed back from FaceRecognizer implementation
+    <p>
+    To implement this method u just have to do same internal cycle as in predict(InputArray src, CV_OUT int &label, CV_OUT double &confidence) but
+    not try to get "best\ result, just resend it to caller side with given collector
+    */
+    public native void predict(@ByVal Mat src, @Ptr PredictCollector collector, int state/*=0*/);
+    public native void predict(@ByVal Mat src, @Ptr PredictCollector collector);
 
     /** \brief Saves a FaceRecognizer and its model state.
     <p>
@@ -367,6 +501,8 @@ String name = model->name();
      */
     public native @StdVector IntPointer getLabelsByString(@Str BytePointer str);
     public native @StdVector IntBuffer getLabelsByString(@Str String str);
+    /** \brief threshhold parameter accessor - required for default BestMinDist collector */
+    public native double getThreshold();
 }
 
 /** \} */

@@ -34,8 +34,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(inherit = opencv_imgproc.class, value = {
     @Platform(include = {"<opencv2/video.hpp>", "<opencv2/video/tracking_c.h>", "<opencv2/video/tracking.hpp>",
-                         "<opencv2/video/background_segm.hpp>"}, link = "opencv_video@.3.0"),
-    @Platform(value = "windows", link = "opencv_video300")},
+                         "<opencv2/video/background_segm.hpp>"}, link = "opencv_video@.3.1"),
+    @Platform(value = "windows", link = "opencv_video310")},
         target = "org.bytedeco.javacpp.opencv_video", helper = "org.bytedeco.javacpp.helper.opencv_video")
 public class opencv_video implements InfoMapper {
     public void map(InfoMap infoMap) {

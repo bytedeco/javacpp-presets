@@ -38,8 +38,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "<opencv2/stitching/detail/camera.hpp>", "<opencv2/stitching/detail/motion_estimators.hpp>", "<opencv2/stitching/detail/exposure_compensate.hpp>",
         "<opencv2/stitching/detail/seam_finders.hpp>", "<opencv2/stitching/detail/blenders.hpp>", "<opencv2/stitching/detail/autocalib.hpp>",
         "<opencv2/stitching/detail/timelapsers.hpp>", "<opencv2/stitching/warpers.hpp>", "<opencv2/stitching.hpp>"},
-              link = "opencv_stitching@.3.0", preload = "opencv_cuda@.3.0"),
-    @Platform(value = "windows", link = "opencv_stitching300", preload = "opencv_cuda300")},
+              link = "opencv_stitching@.3.1", preload = "opencv_cuda@.3.1"),
+    @Platform(value = "windows", link = "opencv_stitching310", preload = "opencv_cuda310")},
         target = "org.bytedeco.javacpp.opencv_stitching")
 public class opencv_stitching implements InfoMapper {
     public void map(InfoMap infoMap) {

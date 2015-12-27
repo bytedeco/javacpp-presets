@@ -413,7 +413,7 @@ See the OpenCV sample camshiftdemo.c that tracks colored objects.
 <p>
 \note
 -   (Python) A sample explaining the camshift tracking algorithm can be found at
-    opencv_source_code/samples/python2/camshift.py
+    opencv_source_code/samples/python/camshift.py
  */
 @Namespace("cv") public static native @ByVal RotatedRect CamShift( @ByVal Mat probImage, @ByRef Rect window,
                                    @ByVal TermCriteria criteria );
@@ -507,9 +507,9 @@ The function implements a sparse iterative version of the Lucas-Kanade optical f
 -   An example using the Lucas-Kanade optical flow algorithm can be found at
     opencv_source_code/samples/cpp/lkdemo.cpp
 -   (Python) An example using the Lucas-Kanade optical flow algorithm can be found at
-    opencv_source_code/samples/python2/lk_track.py
+    opencv_source_code/samples/python/lk_track.py
 -   (Python) An example using the Lucas-Kanade tracker for homography matching can be found at
-    opencv_source_code/samples/python2/lk_homography.py
+    opencv_source_code/samples/python/lk_homography.py
  */
 @Namespace("cv") public static native void calcOpticalFlowPyrLK( @ByVal Mat prevImg, @ByVal Mat nextImg,
                                         @ByVal Mat prevPts, @ByVal Mat nextPts,
@@ -557,7 +557,7 @@ The function finds an optical flow for each prev pixel using the \cite Farneback
 -   An example using the optical flow algorithm described by Gunnar Farneback can be found at
     opencv_source_code/samples/cpp/fback.cpp
 -   (Python) An example using the optical flow algorithm described by Gunnar Farneback can be
-    found at opencv_source_code/samples/python2/opt_flow.py
+    found at opencv_source_code/samples/python/opt_flow.py
  */
 @Namespace("cv") public static native void calcOpticalFlowFarneback( @ByVal Mat prev, @ByVal Mat next, @ByVal Mat flow,
                                             double pyr_scale, int levels, int winsize,
