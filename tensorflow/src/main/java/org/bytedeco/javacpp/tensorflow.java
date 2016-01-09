@@ -239,6 +239,9 @@ limitations under the License.
 // #ifndef TENSORFLOW_PLATFORM_DEFAULT_INTEGRAL_TYPES_H_
 // #define TENSORFLOW_PLATFORM_DEFAULT_INTEGRAL_TYPES_H_
 
+// IWYU pragma: private, include "third_party/tensorflow/core/platform/types.h"
+// IWYU pragma: friend third_party/tensorflow/core/platform/types.h
+
   // namespace tensorflow
 
 // #endif  // TENSORFLOW_PLATFORM_DEFAULT_INTEGRAL_TYPES_H_
@@ -312,7 +315,7 @@ limitations under the License.
 // #endif  // TENSORFLOW_PLATFORM_INIT_MAIN_H_
 
 
-// Parsed from tensorflow/core/platform/port.h
+// Parsed from tensorflow/core/platform/types.h
 
 /* Copyright 2015 Google Inc. All Rights Reserved.
 
@@ -329,48 +332,25 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_PLATFORM_PORT_H_
-// #define TENSORFLOW_PLATFORM_PORT_H_
+// #ifndef TENSORFLOW_PLATFORM_TYPES_H_
+// #define TENSORFLOW_PLATFORM_TYPES_H_
 
 // #include <string>
-// #include <vector>
+// #include "tensorflow/core/platform/platform.h"
 
-// #if !defined(PLATFORM_POSIX) && !defined(PLATFORM_GOOGLE) &&
-//     !defined(PLATFORM_POSIX_ANDROID) && !defined(PLATFORM_GOOGLE_ANDROID)
-
-// Choose which platform we are on.
-// #if defined(ANDROID) || defined(__ANDROID__)
-// #define PLATFORM_POSIX_ANDROID
-// #elif defined(__APPLE__)
-// #define PLATFORM_POSIX
+// Include appropriate platform-dependent implementations
+// #if defined(PLATFORM_GOOGLE)
+// #include "tensorflow/core/platform/google/integral_types.h"
+// #elif defined(PLATFORM_POSIX) || defined(PLATFORM_POSIX_ANDROID) ||
+//     defined(PLATFORM_GOOGLE_ANDROID)
+// #include "tensorflow/core/platform/default/integral_types.h"
 // #else
-// If no platform specified, use:
-// #define PLATFORM_POSIX
-// #endif
-
+// #error Define the appropriate PLATFORM_<foo> macro for this platform
 // #endif
 
 // Define tensorflow::string to refer to appropriate platform specific type.
 // #if defined(PLATFORM_GOOGLE)
 // #else
-// #endif
-  // namespace tensorflow
-/** enum tensorflow::ConditionResult */
-public static final int kCond_Timeout = 0, kCond_MaybeNotified = 1;
-  // namespace tensorflow
-
-// Include appropriate platform-dependent implementations of mutex etc.
-// #if defined(PLATFORM_GOOGLE)
-// #include "tensorflow/core/platform/google/dynamic_annotations.h"
-// #include "tensorflow/core/platform/google/integral_types.h"
-// #include "tensorflow/core/platform/google/mutex.h"
-// #elif defined(PLATFORM_POSIX) || defined(PLATFORM_POSIX_ANDROID) ||
-//     defined(PLATFORM_GOOGLE_ANDROID)
-// #include "tensorflow/core/platform/default/dynamic_annotations.h"
-// #include "tensorflow/core/platform/default/integral_types.h"
-// #include "tensorflow/core/platform/default/mutex.h"
-// #else
-// #error Define the appropriate PLATFORM_<foo> macro for this platform
 // #endif
 
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::uint8") byte kuint8max();
@@ -400,6 +380,47 @@ public static final long kint64max = kint64max();
 
 // A typedef for a uint64 used as a short fingerprint.
 
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_PLATFORM_TYPES_H_
+
+
+// Parsed from tensorflow/core/platform/mutex.h
+
+/* Copyright 2015 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_PLATFORM_MUTEX_H_
+// #define TENSORFLOW_PLATFORM_MUTEX_H_
+
+// #include "tensorflow/core/platform/platform.h"
+// #include "tensorflow/core/platform/types.h"
+/** enum tensorflow::ConditionResult */
+public static final int kCond_Timeout = 0, kCond_MaybeNotified = 1;
+  // namespace tensorflow
+
+// Include appropriate platform-dependent implementations of mutex etc.
+// #if defined(PLATFORM_GOOGLE)
+// #include "tensorflow/core/platform/google/mutex.h"
+// #elif defined(PLATFORM_POSIX) || defined(PLATFORM_POSIX_ANDROID) ||
+//     defined(PLATFORM_GOOGLE_ANDROID)
+// #include "tensorflow/core/platform/default/mutex.h"
+// #else
+// #error Define the appropriate PLATFORM_<foo> macro for this platform
+// #endif
+
 // The mutex library included above defines:
 //   class mutex;
 //   class mutex_lock;
@@ -415,75 +436,28 @@ public static final long kint64max = kint64max();
                                     @Cast("tensorflow::int64") long ms);
   // namespace tensorflow
 
-// TODO(jeff,sanjay): Make portable
-@Namespace("tensorflow::port") @MemberGetter public static native @Cast("const bool") boolean kLittleEndian();
-public static final boolean kLittleEndian = kLittleEndian();
+// #endif  // TENSORFLOW_PLATFORM_MUTEX_H_
 
-// TODO(jeff,sanjay): Find appropriate places for all the code below.
-// Possible places for any particular item below:
-//  (a) Here, so it gets reimplemented on every platform
-//  (b) Env
-//  (c) config.h (auto-generated by autotools?)
-//  (d) macros.h
-//  ...
 
-// Return the hostname of the machine on which this process is running
-@Namespace("tensorflow::port") public static native @StdString BytePointer Hostname();
+// Parsed from tensorflow/core/platform/macros.h
 
-// Returns an estimate of the number of schedulable CPUs for this
-// process.  Usually, it's constant throughout the lifetime of a
-// process, but it might change if the underlying cluster management
-// software can change it dynamically.
-@Namespace("tensorflow::port") public static native int NumSchedulableCPUs();
+/* Copyright 2015 Google Inc. All Rights Reserved.
 
-// Some platforms require that filenames be of a certain form when
-// used for logging.  This function is invoked to allow platforms to
-// adjust the filename used for logging appropriately, if necessary
-// (most ports can just do nothing).  If any changes are necessary, the
-// implementation should mutate "*filename" appropriately.
-@Namespace("tensorflow::port") public static native void AdjustFilenameForLogging(@StdString @Cast({"char*", "std::string*"}) BytePointer filename);
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
 
-// Aligned allocation/deallocation
-@Namespace("tensorflow::port") public static native Pointer aligned_malloc(@Cast("size_t") long size, int minimum_alignment);
-@Namespace("tensorflow::port") public static native void aligned_free(Pointer aligned_memory);
+    http://www.apache.org/licenses/LICENSE-2.0
 
-// Prefetching support
-//
-// Defined behavior on some of the uarchs:
-// PREFETCH_HINT_T0:
-//   prefetch to all levels of the hierarchy (except on p4: prefetch to L2)
-// PREFETCH_HINT_NTA:
-//   p4: fetch to L2, but limit to 1 way (out of the 8 ways)
-//   core: skip L2, go directly to L1
-//   k8 rev E and later: skip L2, can go to either of the 2-ways in L1
-/** enum tensorflow::port::PrefetchHint */
-public static final int
-  PREFETCH_HINT_T0 = 3,  // More temporal locality
-  PREFETCH_HINT_T1 = 2,
-  PREFETCH_HINT_T2 = 1,  // Less temporal locality
-  PREFETCH_HINT_NTA = 0;  // No temporal locality
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
 
-// Snappy compression/decompression support
-@Namespace("tensorflow::port") public static native @Cast("bool") boolean Snappy_Compress(@Cast("const char*") BytePointer input, @Cast("size_t") long length, @StdString @Cast({"char*", "std::string*"}) BytePointer output);
-@Namespace("tensorflow::port") public static native @Cast("bool") boolean Snappy_Compress(String input, @Cast("size_t") long length, @StdString @Cast({"char*", "std::string*"}) BytePointer output);
-
-@Namespace("tensorflow::port") public static native @Cast("bool") boolean Snappy_GetUncompressedLength(@Cast("const char*") BytePointer input, @Cast("size_t") long length,
-                                  @Cast("size_t*") SizeTPointer result);
-@Namespace("tensorflow::port") public static native @Cast("bool") boolean Snappy_GetUncompressedLength(String input, @Cast("size_t") long length,
-                                  @Cast("size_t*") SizeTPointer result);
-@Namespace("tensorflow::port") public static native @Cast("bool") boolean Snappy_Uncompress(@Cast("const char*") BytePointer input, @Cast("size_t") long length, @Cast("char*") BytePointer output);
-@Namespace("tensorflow::port") public static native @Cast("bool") boolean Snappy_Uncompress(String input, @Cast("size_t") long length, @Cast("char*") ByteBuffer output);
-@Namespace("tensorflow::port") public static native @Cast("bool") boolean Snappy_Uncompress(@Cast("const char*") BytePointer input, @Cast("size_t") long length, @Cast("char*") byte[] output);
-@Namespace("tensorflow::port") public static native @Cast("bool") boolean Snappy_Uncompress(String input, @Cast("size_t") long length, @Cast("char*") BytePointer output);
-@Namespace("tensorflow::port") public static native @Cast("bool") boolean Snappy_Uncompress(@Cast("const char*") BytePointer input, @Cast("size_t") long length, @Cast("char*") ByteBuffer output);
-@Namespace("tensorflow::port") public static native @Cast("bool") boolean Snappy_Uncompress(String input, @Cast("size_t") long length, @Cast("char*") byte[] output);
-
-// #if defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L
-// Define this to 1 if the code is compiled in C++11 mode; leave it
-// undefined otherwise.  Do NOT define it to 0 -- that causes
-// '#ifdef LANG_CXX11' to behave differently from '#if LANG_CXX11'.
-public static final int LANG_CXX11 = 1;
-// #endif
+// #ifndef TENSORFLOW_PLATFORM_MACROS_H_
+// #define TENSORFLOW_PLATFORM_MACROS_H_
 
 // Compiler attributes
 // #if (defined(__GNUC__) || defined(__APPLE__)) && !defined(SWIG)
@@ -515,7 +489,6 @@ public static final int LANG_CXX11 = 1;
 // instance, a CHECK failure), and use that information in static analysis.
 // Giving it this information can help it optimize for the common case in
 // the absence of better information (ie. -fprofile-arcs).
-//
 // #if defined(COMPILER_GCC3)
 // #define TF_PREDICT_FALSE(x) (__builtin_expect(x, 0))
 // #define TF_PREDICT_TRUE(x) (__builtin_expect(!!(x), 1))
@@ -523,10 +496,6 @@ public static final int LANG_CXX11 = 1;
 // #define TF_PREDICT_FALSE(x) x
 // #define TF_PREDICT_TRUE(x) x
 // #endif
-
-// ---------------------------------------------------------------------------
-// Inline implementations of some performance-critical methods
-// ---------------------------------------------------------------------------
 
 // A macro to disallow the copy constructor and operator= functions
 // This is usually placed in the private: declarations for a class.
@@ -542,6 +511,13 @@ public static final int LANG_CXX11 = 1;
 //   ((sizeof(a) / sizeof(*(a))) /
 //    static_cast<size_t>(!(sizeof(a) % sizeof(*(a)))))
 
+// #if defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L
+// Define this to 1 if the code is compiled in C++11 mode; leave it
+// undefined otherwise.  Do NOT define it to 0 -- that causes
+// '#ifdef LANG_CXX11' to behave differently from '#if LANG_CXX11'.
+public static final int LANG_CXX11 = 1;
+// #endif
+
 // #if defined(__clang__) && defined(LANG_CXX11) && defined(__has_warning)
 // #if __has_feature(cxx_attributes) && __has_warning("-Wimplicit-fallthrough")
 // #define TF_FALLTHROUGH_INTENDED [[clang::fallthrough]]  // NOLINT
@@ -554,8 +530,34 @@ public static final int LANG_CXX11 = 1;
 //   } while (0)
 // #endif
 
-  // namespace port
-  // namespace tensorflow
+// #endif  // TENSORFLOW_PLATFORM_MACROS_H_
+
+
+// Parsed from tensorflow/core/platform/port.h
+
+/* Copyright 2015 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_PLATFORM_PORT_H_
+// #define TENSORFLOW_PLATFORM_PORT_H_
+
+// #include <vector>
+
+// #include "tensorflow/core/platform/macros.h"
+// #include "tensorflow/core/platform/mutex.h"
+// #include "tensorflow/core/platform/types.h"
 
 // #endif  // TENSORFLOW_PLATFORM_PORT_H_
 
@@ -683,13 +685,23 @@ limitations under the License.
 // #ifndef TENSORFLOW_PLATFORM_LOGGING_H_
 // #define TENSORFLOW_PLATFORM_LOGGING_H_
 
-// #include "tensorflow/core/platform/port.h"  // To pick up PLATFORM_define
+// #include "tensorflow/core/platform/platform.h"  // To pick up PLATFORM_define
 
 // #if defined(PLATFORM_GOOGLE) || defined(PLATFORM_GOOGLE_ANDROID)
 // #include "base/logging.h"
 // #else
 // #include "tensorflow/core/platform/default/logging.h"
 // #endif
+
+// Some platforms require that filenames be of a certain form when
+// used for logging.  This function is invoked to allow platforms to
+// adjust the filename used for logging appropriately, if necessary
+// (most ports can just do nothing).  If any changes are necessary, the
+// implementation should mutate "*filename" appropriately.
+@Namespace("tensorflow::port") public static native void AdjustFilenameForLogging(@StdString @Cast({"char*", "std::string*"}) BytePointer filename);
+
+  // namespace port
+  // namespace tensorflow
 
 // #endif  // TENSORFLOW_PLATFORM_LOGGING_H_
 
@@ -714,6 +726,7 @@ limitations under the License.
 // #ifndef TENSORFLOW_PUBLIC_STATUS_H_
 // #define TENSORFLOW_PUBLIC_STATUS_H_
 
+// #include <functional>
 // #include <iosfwd>
 // #include <string>
 // #include "tensorflow/core/lib/core/error_codes.pb.h"
@@ -866,6 +879,7 @@ limitations under the License.
 // #include <string>
 // #include <vector>
 // #include "tensorflow/core/lib/core/stringpiece.h"
+// #include "tensorflow/core/platform/macros.h"
 // #include "tensorflow/core/platform/port.h"
 // #include "tensorflow/core/platform/protobuf.h"
 // #include "tensorflow/core/public/status.h"
@@ -1012,6 +1026,44 @@ limitations under the License.
   public native Thread StartThread(@Const @ByRef ThreadOptions thread_options,
                                 @StdString String name,
                                 @ByVal Fn fn);
+
+  // \brief Schedules the given closure on a thread-pool.
+  //
+  // NOTE(mrry): This closure must not block.
+  public native void SchedClosure(@ByVal Fn closure);
+
+  // \brief Schedules the given closure on a thread-pool after the given number
+  // of microseconds.
+  //
+  // NOTE(mrry): This closure must not block.
+  public native void SchedClosureAfter(int micros, @ByVal Fn closure);
+
+  // \brief Load a dynamic library.
+  //
+  // Pass "library_filename" to a platform-specific mechanism for dynamically
+  // loading a library.  The rules for determining the exact location of the
+  // library are platform-specific and are not documented here.
+  //
+  // On success, returns a handle to the library in "*handle" and returns
+  // OK from the function.
+  // Otherwise returns nullptr in "*handle" and an error status from the
+  // function.
+  public native @ByVal Status LoadLibrary(@Cast("const char*") BytePointer library_filename, @Cast("void**") PointerPointer handle);
+  public native @ByVal Status LoadLibrary(@Cast("const char*") BytePointer library_filename, @Cast("void**") @ByPtrPtr Pointer handle);
+  public native @ByVal Status LoadLibrary(String library_filename, @Cast("void**") @ByPtrPtr Pointer handle);
+
+  // \brief Get a pointer to a symbol from a dynamic library.
+  //
+  // "handle" should be a pointer returned from a previous call to LoadLibrary.
+  // On success, store a pointer to the located symbol in "*symbol" and return
+  // OK from the function. Otherwise, returns nullptr in "*symbol" and an error
+  // status from the function.
+  public native @ByVal Status GetSymbolFromLibrary(Pointer handle, @Cast("const char*") BytePointer symbol_name,
+                                        @Cast("void**") PointerPointer symbol);
+  public native @ByVal Status GetSymbolFromLibrary(Pointer handle, @Cast("const char*") BytePointer symbol_name,
+                                        @Cast("void**") @ByPtrPtr Pointer symbol);
+  public native @ByVal Status GetSymbolFromLibrary(Pointer handle, String symbol_name,
+                                        @Cast("void**") @ByPtrPtr Pointer symbol);
 }
 
 /** A file abstraction for randomly reading the contents of a file. */
@@ -1111,6 +1163,17 @@ limitations under the License.
                         @ByVal Fn fn);
   public native Thread StartThread(@Const @ByRef ThreadOptions thread_options, @StdString String name,
                         @ByVal Fn fn);
+  public native void SchedClosure(@ByVal Fn closure);
+  public native void SchedClosureAfter(int micros, @ByVal Fn closure);
+  public native @ByVal Status LoadLibrary(@Cast("const char*") BytePointer library_filename, @Cast("void**") PointerPointer handle);
+  public native @ByVal Status LoadLibrary(@Cast("const char*") BytePointer library_filename, @Cast("void**") @ByPtrPtr Pointer handle);
+  public native @ByVal Status LoadLibrary(String library_filename, @Cast("void**") @ByPtrPtr Pointer handle);
+  public native @ByVal Status GetSymbolFromLibrary(Pointer handle, @Cast("const char*") BytePointer symbol_name,
+                                @Cast("void**") PointerPointer symbol);
+  public native @ByVal Status GetSymbolFromLibrary(Pointer handle, @Cast("const char*") BytePointer symbol_name,
+                                @Cast("void**") @ByPtrPtr Pointer symbol);
+  public native @ByVal Status GetSymbolFromLibrary(Pointer handle, String symbol_name,
+                                @Cast("void**") @ByPtrPtr Pointer symbol);
 }
 
 @Namespace("tensorflow") public static class Thread extends Pointer {
@@ -1290,6 +1353,81 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_allocator_type();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_allocator_type();
   public native void set_allocated_allocator_type(@StdString @Cast({"char*", "std::string*"}) BytePointer allocator_type);
+
+  // optional int64 deferred_deletion_bytes = 3;
+  public native void clear_deferred_deletion_bytes();
+  @MemberGetter public static native int kDeferredDeletionBytesFieldNumber();
+  public static final int kDeferredDeletionBytesFieldNumber = kDeferredDeletionBytesFieldNumber();
+  public native @Cast("google::protobuf::int64") long deferred_deletion_bytes();
+  public native void set_deferred_deletion_bytes(@Cast("google::protobuf::int64") long value);
+}
+// -------------------------------------------------------------------
+
+@Namespace("tensorflow") @NoOffset public static class GraphOptions extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public GraphOptions(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public GraphOptions(int size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public GraphOptions position(int position) {
+        return (GraphOptions)super.position(position);
+    }
+
+  public GraphOptions() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public GraphOptions(@Const @ByRef GraphOptions from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef GraphOptions from);
+
+  public native @ByRef @Name("operator =") GraphOptions put(@Const @ByRef GraphOptions from);
+
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef GraphOptions default_instance();
+
+  public native void Swap(GraphOptions other);
+
+  // implements Message ----------------------------------------------
+
+  public native GraphOptions New();
+
+  public native GraphOptions New(@Cast("google::protobuf::Arena*") Pointer arena);
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef GraphOptions from);
+  public native void MergeFrom(@Const @ByRef GraphOptions from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native int ByteSize();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+  public native void SerializeWithCachedSizes(
+        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+  public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
+  public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
+  public native int GetCachedSize();
+
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional bool skip_common_subexpression_elimination = 1;
+  public native void clear_skip_common_subexpression_elimination();
+  @MemberGetter public static native int kSkipCommonSubexpressionEliminationFieldNumber();
+  public static final int kSkipCommonSubexpressionEliminationFieldNumber = kSkipCommonSubexpressionEliminationFieldNumber();
+  public native @Cast("bool") boolean skip_common_subexpression_elimination();
+  public native void set_skip_common_subexpression_elimination(@Cast("bool") boolean value);
+
+  // optional bool enable_recv_scheduling = 2;
+  public native void clear_enable_recv_scheduling();
+  @MemberGetter public static native int kEnableRecvSchedulingFieldNumber();
+  public static final int kEnableRecvSchedulingFieldNumber = kEnableRecvSchedulingFieldNumber();
+  public native @Cast("bool") boolean enable_recv_scheduling();
+  public native void set_enable_recv_scheduling(@Cast("bool") boolean value);
 }
 // -------------------------------------------------------------------
 
@@ -1366,6 +1504,13 @@ limitations under the License.
   public native @Cast("google::protobuf::int32") int inter_op_parallelism_threads();
   public native void set_inter_op_parallelism_threads(@Cast("google::protobuf::int32") int value);
 
+  // optional bool use_per_session_threads = 9;
+  public native void clear_use_per_session_threads();
+  @MemberGetter public static native int kUsePerSessionThreadsFieldNumber();
+  public static final int kUsePerSessionThreadsFieldNumber = kUsePerSessionThreadsFieldNumber();
+  public native @Cast("bool") boolean use_per_session_threads();
+  public native void set_use_per_session_threads(@Cast("bool") boolean value);
+
   // optional int32 placement_period = 3;
   public native void clear_placement_period();
   @MemberGetter public static native int kPlacementPeriodFieldNumber();
@@ -1413,6 +1558,16 @@ limitations under the License.
   public static final int kLogDevicePlacementFieldNumber = kLogDevicePlacementFieldNumber();
   public native @Cast("bool") boolean log_device_placement();
   public native void set_log_device_placement(@Cast("bool") boolean value);
+
+  // optional .tensorflow.GraphOptions graph_options = 10;
+  public native @Cast("bool") boolean has_graph_options();
+  public native void clear_graph_options();
+  @MemberGetter public static native int kGraphOptionsFieldNumber();
+  public static final int kGraphOptionsFieldNumber = kGraphOptionsFieldNumber();
+  public native @Const @ByRef GraphOptions graph_options();
+  public native GraphOptions mutable_graph_options();
+  public native GraphOptions release_graph_options();
+  public native void set_allocated_graph_options(GraphOptions graph_options);
 }
 // ===================================================================
 
@@ -1437,6 +1592,25 @@ limitations under the License.
 
 
 
+// optional int64 deferred_deletion_bytes = 3;
+
+
+
+
+// -------------------------------------------------------------------
+
+// GraphOptions
+
+// optional bool skip_common_subexpression_elimination = 1;
+
+
+
+
+// optional bool enable_recv_scheduling = 2;
+
+
+
+
 // -------------------------------------------------------------------
 
 // ConfigProto
@@ -1453,6 +1627,11 @@ limitations under the License.
 
 
 // optional int32 inter_op_parallelism_threads = 5;
+
+
+
+
+// optional bool use_per_session_threads = 9;
 
 
 
@@ -1495,7 +1674,17 @@ limitations under the License.
 
 
 
+// optional .tensorflow.GraphOptions graph_options = 10;
+
+
+
+
+
+
+
 // #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 
@@ -1614,6 +1803,8 @@ limitations under the License.
 // #include <functional>
 // #include <thread>
 // #include <vector>
+// #include "tensorflow/core/platform/macros.h"
+// #include "tensorflow/core/platform/mutex.h"
 // #include "tensorflow/core/platform/port.h"
 // #include "tensorflow/core/public/env.h"
 
@@ -1845,6 +2036,29 @@ limitations under the License.
 // #include "tensorflow/core/platform/logging.h"
 // #include "tensorflow/core/platform/port.h"
 
+// Attributes for a single allocation call. Different calls to the same
+// allocator could potentially have different allocation attributes.
+@Namespace("tensorflow") public static class AllocationAttributes extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public AllocationAttributes() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public AllocationAttributes(int size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AllocationAttributes(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public AllocationAttributes position(int position) {
+        return (AllocationAttributes)super.position(position);
+    }
+
+  // If the first attempt to allocate the memory fails, the allocation
+  // should return immediately without retrying.
+  // An example use case is optional scratch spaces where a failure
+  // has only performance impact.
+  public native @Cast("bool") boolean no_retry_on_failure(); public native AllocationAttributes no_retry_on_failure(boolean no_retry_on_failure);
+}
+
 // Allocator is an abstract interface for allocating and deallocating
 // device memory.
 @Namespace("tensorflow") public static class Allocator extends Pointer {
@@ -1861,6 +2075,13 @@ limitations under the License.
   // multiple of "alignment" bytes.
   // REQUIRES: "alignment" is a power of 2.
   public native Pointer AllocateRaw(@Cast("size_t") long alignment, @Cast("size_t") long num_bytes);
+
+  // Return an uninitialized block of memory that is "num_bytes" bytes
+  // in size with specified allocation attributes.  The returned pointer is
+  // guaranteed to be aligned to a multiple of "alignment" bytes.
+  // REQUIRES: "alignment" is a power of 2.
+  public native Pointer AllocateRaw(@Cast("size_t") long alignment, @Cast("size_t") long num_bytes,
+                              @Const @ByRef AllocationAttributes allocation_attr);
 
   // Deallocate a block of memory pointer to by "ptr"
   // REQUIRES: "ptr" was previously returned by a call to AllocateRaw
@@ -2240,6 +2461,8 @@ public static final int
   DT_QUINT8 = 12,
   DT_QINT32 = 13,
   DT_BFLOAT16 = 14,
+  DT_QINT16 = 15,
+  DT_QUINT16 = 16,
   DT_FLOAT_REF = 101,
   DT_DOUBLE_REF = 102,
   DT_INT32_REF = 103,
@@ -2254,6 +2477,8 @@ public static final int
   DT_QUINT8_REF = 112,
   DT_QINT32_REF = 113,
   DT_BFLOAT16_REF = 114,
+  DT_QINT16_REF = 115,
+  DT_QUINT16_REF = 116,
   DataType_INT_MIN_SENTINEL_DO_NOT_USE_ =kint32min,
   DataType_INT_MAX_SENTINEL_DO_NOT_USE_ =kint32max;
 @Namespace("tensorflow") public static native @Cast("bool") boolean DataType_IsValid(int value);
@@ -2819,11 +3044,13 @@ limitations under the License.
 
 // #include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
 // #include "tensorflow/core/framework/tensor_shape.pb.h"
+// #include "tensorflow/core/lib/core/errors.h"
 // #include "tensorflow/core/lib/core/stringpiece.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 // #include "tensorflow/core/lib/gtl/inlined_vector.h"
 // #include "tensorflow/core/lib/strings/strcat.h"
-// #include "tensorflow/core/platform/logging.h"  // Declared below
+// #include "tensorflow/core/platform/logging.h"
+// #include "tensorflow/core/public/status.h"  // Declared below
 
 /** Manages the dimensions of a Tensor and their sizes. */
 @Namespace("tensorflow") @NoOffset public static class TensorShape extends Pointer {
@@ -2857,6 +3084,10 @@ limitations under the License.
 
   /** Returns {@code true} iff {@code proto} is a valid tensor shape. */
   public static native @Cast("bool") boolean IsValid(@Const @ByRef TensorShapeProto proto);
+
+  /** Returns {@code OK} iff {@code proto} is a valid tensor shape, and a descriptive error
+   *  status otherwise. */
+  public static native @ByVal Status IsValidShape(@Const @ByRef TensorShapeProto proto);
 
   /** Clear a tensor shape */
   public native void Clear();
@@ -2921,8 +3152,13 @@ limitations under the License.
 
   /** For error messages. */
   public native @StdString BytePointer DebugString();
-  // TODO(vrv): Remove this, this is the same as DebugString().
   public native @StdString BytePointer ShortDebugString();
+  // TODO(vrv): Consolidate DebugString() and ShortDebugString() into one
+  // function that is not verbose and works for scalars.
+
+  /** Same as {@code TensorShape(proto).ShortDebugString()} but doesn't crash for
+   *  invalid protos. */
+  public static native @StdString BytePointer ShortDebugString(@Const @ByRef TensorShapeProto proto);
 }
 
 @Namespace("tensorflow") @NoOffset public static class TensorShapeDim extends Pointer {
@@ -3043,6 +3279,7 @@ limitations under the License.
 // #include "tensorflow/core/lib/core/refcount.h"
 // #include "tensorflow/core/lib/core/stringpiece.h"
 // #include "tensorflow/core/platform/logging.h"
+// #include "tensorflow/core/platform/macros.h"
 // #include "tensorflow/core/platform/port.h"
 // #include "tensorflow/core/public/status.h"
 // #include "tensorflow/core/public/tensor_shape.h"  // Forward declaration.
@@ -3077,8 +3314,20 @@ limitations under the License.
    *  allocator {@code a} to allocate the underlying buffer.
    * 
    *  {@code a} must outlive the lifetime of this Tensor. */
+  
+  ///
   public Tensor(Allocator a, @Cast("tensorflow::DataType") int type, @Const @ByRef TensorShape shape) { super((Pointer)null); allocate(a, type, shape); }
   private native void allocate(Allocator a, @Cast("tensorflow::DataType") int type, @Const @ByRef TensorShape shape);
+
+  /** \brief Creates a tensor with the input {@code type} and {@code shape}, using the
+   *  allocator {@code a} and the specified "allocation_attr" to allocate the
+   *  underlying buffer.
+   * 
+   *  {@code a} must outlive the lifetime of this Tensor. */
+  public Tensor(Allocator a, @Cast("tensorflow::DataType") int type, @Const @ByRef TensorShape shape,
+           @Const @ByRef AllocationAttributes allocation_attr) { super((Pointer)null); allocate(a, type, shape, allocation_attr); }
+  private native void allocate(Allocator a, @Cast("tensorflow::DataType") int type, @Const @ByRef TensorShape shape,
+           @Const @ByRef AllocationAttributes allocation_attr);
 
   /** Creates an uninitialized Tensor of the given data type. */
   public Tensor(@Cast("tensorflow::DataType") int type) { super((Pointer)null); allocate(type); }
@@ -5183,6 +5432,13 @@ limitations under the License.
   public native NodeDef mutable_node(int index);
   public native NodeDef add_node();
 
+  // optional int32 version = 3;
+  public native void clear_version();
+  @MemberGetter public static native int kVersionFieldNumber();
+  public static final int kVersionFieldNumber = kVersionFieldNumber();
+  public native @Cast("google::protobuf::int32") int version();
+  public native void set_version(@Cast("google::protobuf::int32") int value);
+
   // optional .tensorflow.FunctionDefLibrary library = 2;
   public native @Cast("bool") boolean has_library();
   public native void clear_library();
@@ -5327,6 +5583,11 @@ limitations under the License.
 
 
 
+// optional int32 version = 3;
+
+
+
+
 // optional .tensorflow.FunctionDefLibrary library = 2;
 
 
@@ -5426,7 +5687,6 @@ limitations under the License.
 // #include <string>
 // #include <vector>
 
-// #include "tensorflow/core/framework/device_attributes.pb.h"
 // #include "tensorflow/core/framework/graph.pb.h"
 // #include "tensorflow/core/public/env.h"
 // #include "tensorflow/core/public/session_options.h"
@@ -5474,7 +5734,7 @@ limitations under the License.
  * 
  *      // Close the session to release the resources associated with
  *      // this session.
- *      session->Close()
+ *      session->Close();
  * 
  *  }</pre>
  * 
@@ -5653,7 +5913,9 @@ public static final int
   TF_QINT8 = 11,     // Quantized int8
   TF_QUINT8 = 12,    // Quantized uint8
   TF_QINT32 = 13,    // Quantized int32
-  TF_BFLOAT16 = 14;  // Float32 truncated to 16 bits.  Only for cast ops.
+  TF_BFLOAT16 = 14,  // Float32 truncated to 16 bits.  Only for cast ops.
+  TF_QINT16 = 15,    // Quantized int16
+  TF_QUINT16 = 16;   // Quantized uint16
 
 // --------------------------------------------------------------------------
 // TF_Code holds an error code.  The enum values here are identical to
@@ -5686,6 +5948,39 @@ public static final int
     public TF_Status() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TF_Status(Pointer p) { super(p); }
+}
+
+// --------------------------------------------------------------------------
+// TF_Buffer holds a pointer to a block of data and its associated length.
+// Typically, the data consists of a serialized protocol buffer, but other data
+// may also be held in a buffer.
+//
+// TF_Buffer itself does not do any memory management of the pointed-to block.
+public static class TF_Buffer extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public TF_Buffer() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public TF_Buffer(int size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TF_Buffer(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public TF_Buffer position(int position) {
+        return (TF_Buffer)super.position(position);
+    }
+
+  @MemberGetter public native @Const Pointer data();
+  public native @Cast("size_t") long length(); public native TF_Buffer length(long length);
+}
+
+// --------------------------------------------------------------------------
+// TF_Library holds information about dynamically loaded TensorFlow plugins.
+@Opaque public static class TF_Library extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public TF_Library() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TF_Library(Pointer p) { super(p); }
 }
 
 // Return a new status object.
@@ -5734,7 +6029,7 @@ public static native @Cast("const char*") BytePointer TF_Message(@Const TF_Statu
 //
 // The data will be deallocated by a subsequent call to TF_DeleteTensor via:
 //      (*deallocator_fn)(data, len, deallocator_arg)
-// Clients can provide a custom deallocator function so they can pass in
+// Clients must provide a custom deallocator function so they can pass in
 // memory managed by something like numpy.
 public static class Deallocator_Pointer_long_Pointer extends FunctionPointer {
     static { Loader.load(); }
@@ -5870,6 +6165,34 @@ public static native void TF_Run(TF_Session arg0,
                    int noutputs,
                    @Cast("const char**") @ByPtrPtr byte[] target_node_names, int ntargets,
                    TF_Status arg9);
+
+// --------------------------------------------------------------------------
+// Load plugins containing custom ops and kernels
+
+// Load the library specified by library_filename and register the ops and
+// kernels present in that library.
+//
+// Pass "library_filename" to a platform-specific mechanism for dynamically
+// loading a library. The rules for determining the exact location of the
+// library are platform-specific and are not documented here.
+// Expects the symbols "RegisterOps", "RegisterKernels", and "GetOpList", to be
+// defined in the library.
+//
+// On success, place OK in status and return the newly created library handle.
+// The caller owns the library handle.
+//
+// On failure, place an error status in status and return nullptr.
+public static native TF_Library TF_LoadLibrary(@Cast("const char*") BytePointer library_filename,
+                                  TF_Status status);
+public static native TF_Library TF_LoadLibrary(String library_filename,
+                                  TF_Status status);
+
+// Get the OpList of OpDefs defined in the library pointed by lib_handle.
+//
+// Returns a TF_Buffer. The memory pointed to by the result is owned by
+// lib_handle. The data in the buffer will be the serialized OpList proto for
+// ops defined in the library.
+public static native @ByVal TF_Buffer TF_GetOpList(TF_Library lib_handle);
 
 // #ifdef __cplusplus /* end extern "C" */
 // #endif
@@ -6088,7 +6411,6 @@ limitations under the License.
 // #ifndef TENSORFLOW_FRAMEWORK_OP_H_
 // #define TENSORFLOW_FRAMEWORK_OP_H_
 
-// #include <functional>
 // #include <unordered_map>
 
 // #include "tensorflow/core/framework/op_def.pb.h"
@@ -6097,6 +6419,8 @@ limitations under the License.
 // #include "tensorflow/core/lib/strings/str_util.h"
 // #include "tensorflow/core/lib/strings/strcat.h"
 // #include "tensorflow/core/platform/logging.h"
+// #include "tensorflow/core/platform/macros.h"
+// #include "tensorflow/core/platform/mutex.h"
 // #include "tensorflow/core/platform/port.h"
 // #include "tensorflow/core/platform/thread_annotations.h"
 // #include "tensorflow/core/public/status.h"
@@ -6148,7 +6472,7 @@ limitations under the License.
   // we defer calling func() until the first call to LookUp() or
   // Export() (if one of those has already been called, func() is
   // called immediately).
-  public native void Register(@ByVal OpDefFunc func);
+  public native void Register(@Const @ByRef OpDef op_def);
 
   public native @Const OpDef LookUp(@StdString BytePointer op_type_name,
                         Status status);
@@ -6165,7 +6489,15 @@ limitations under the License.
 
   // A singleton available at startup.
   public static native OpRegistry Global();
+
+  // Get all registered ops.
+  public native void GetRegisteredOps(@StdVector OpDef op_defs);
 }
+
+// Treats 'registry_ptr' as a pointer to OpRegistry, and calls
+// registry_ptr->Register(op_def) for each op_def that has been registered with
+// the current library's global op registry (obtained by calling
+// OpRegistry::Global(). @Namespace("tensorflow") public static native void RegisterOps(Pointer registry_ptr);
 
 // Support for defining the OpDef (specifying the semantics of the Op and how
 // it should be created) and registering it in the OpRegistry::Global()
@@ -6187,17 +6519,26 @@ limitations under the License.
 //
 // Note: .Doc() should be last.
 // For details, see the OpDefBuilder class in op_def_builder.h.
-// To call OpRegistry::Global()->Register(...), used by the
-// REGISTER_OP macro below.
-@Namespace("tensorflow::register_op") public static native @ByRef OpDefBuilder RegisterOp(@StringPiece BytePointer name);
-@Namespace("tensorflow::register_op") public static native @ByRef OpDefBuilder RegisterOp(@StringPiece String name);
+@Namespace("tensorflow::register_op") public static class OpDefBuilderReceiver extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OpDefBuilderReceiver(Pointer p) { super(p); }
+
+  // To call OpRegistry::Global()->Register(...), used by the
+  // REGISTER_OP macro below.
+  // Note: This is an implicitly converting constructor.
+  public OpDefBuilderReceiver(
+        @Const @ByRef OpDefBuilder builder) { super((Pointer)null); allocate(builder); }
+  private native void allocate(
+        @Const @ByRef OpDefBuilder builder);  // NOLINT(runtime/explicit)
+}
   // namespace register_op
 
 // #define REGISTER_OP(name) REGISTER_OP_UNIQ_HELPER(__COUNTER__, name)
 // #define REGISTER_OP_UNIQ_HELPER(ctr, name) REGISTER_OP_UNIQ(ctr, name)
 // #define REGISTER_OP_UNIQ(ctr, name)
-//   static ::tensorflow::OpDefBuilder& register_op##ctr TF_ATTRIBUTE_UNUSED =
-//       ::tensorflow::register_op::RegisterOp(name)
+//   static ::tensorflow::register_op::OpDefBuilderReceiver register_op##ctr
+//       TF_ATTRIBUTE_UNUSED = ::tensorflow::OpDefBuilder(name)
 
   // namespace tensorflow
 
@@ -6423,6 +6764,7 @@ limitations under the License.
 
 // #include <stddef.h>
 // #include <set>
+// #include "tensorflow/core/platform/macros.h"
 // #include "tensorflow/core/platform/port.h"
 
 // #include "tensorflow/core/platform/logging.h"
@@ -6640,6 +6982,7 @@ limitations under the License.
 // #include "tensorflow/core/lib/core/refcount.h"
 // #include "tensorflow/core/lib/gtl/iterator_range.h"
 // #include "tensorflow/core/platform/logging.h"
+// #include "tensorflow/core/platform/macros.h"
 // #include "tensorflow/core/platform/port.h"
 // #include "tensorflow/core/public/status.h"
 @Namespace("tensorflow") @Opaque public static class EdgeSetTest extends Pointer {
@@ -6692,6 +7035,21 @@ limitations under the License.
   public native @Cast("bool") boolean IsSink();
   // Anything other than the special Source & Sink nodes.
   public native @Cast("bool") boolean IsOp();
+
+  // Node class helpers
+  public native @Cast("bool") boolean IsSwitch();
+  public native @Cast("bool") boolean IsMerge();
+  public native @Cast("bool") boolean IsEnter();
+  public native @Cast("bool") boolean IsExit();
+  public native @Cast("bool") boolean IsNextIteration();
+  public native @Cast("bool") boolean IsLoopCond();
+  public native @Cast("bool") boolean IsControlTrigger();
+  public native @Cast("bool") boolean IsSend();
+  public native @Cast("bool") boolean IsRecv();
+  public native @Cast("bool") boolean IsConstant();
+  public native @Cast("bool") boolean IsVariable();
+  public native @Cast("bool") boolean IsIdentity();
+  public native @Cast("bool") boolean IsControlFlow();
 }
 
 @Namespace("tensorflow") @NoOffset public static class Edge extends Pointer {
@@ -6728,11 +7086,17 @@ limitations under the License.
   // single SINK (always id kSinkId) node, and an edge from SOURCE->SINK.
   //
   // The graph can hold ops found in registry.
+  //
+  // The version defaults to TF_GRAPH_DEF_VERSION.
   public Graph(@Const OpRegistryInterface registry) { super((Pointer)null); allocate(registry); }
   private native void allocate(@Const OpRegistryInterface registry);
 
   @MemberGetter public static native int kControlSlot();
   public static final int kControlSlot = kControlSlot();
+
+  // The GraphDef version of this graph (see graph.proto).
+  public native int version();
+  public native void set_version(int version);
 
   // Adds a new node to this graph, and returns it. Infers the Op and
   // input/output types for the node. *this owns the returned instance.
@@ -6810,30 +7174,20 @@ limitations under the License.
 // Helper routines
 
 @Namespace("tensorflow") public static native @Cast("bool") boolean IsSwitch(@Const Node node);
-
 @Namespace("tensorflow") public static native @Cast("bool") boolean IsMerge(@Const Node node);
-
 @Namespace("tensorflow") public static native @Cast("bool") boolean IsEnter(@Const Node node);
-
 @Namespace("tensorflow") public static native @Cast("bool") boolean IsExit(@Const Node node);
-
-@Namespace("tensorflow") public static native @Cast("bool") boolean IsNextIteration(@Const Node node);
-
+@Namespace("tensorflow") public static native @Cast("bool") boolean IsNextIteration(@Const Node n);
 @Namespace("tensorflow") public static native @Cast("bool") boolean IsLoopCond(@Const Node node);
-
-@Namespace("tensorflow") public static native @Cast("bool") boolean IsControlTrigger(@Const Node node);
-
+@Namespace("tensorflow") public static native @Cast("bool") boolean IsControlTrigger(@Const Node n);
 @Namespace("tensorflow") public static native @Cast("bool") boolean IsSend(@Const Node node);
-
 @Namespace("tensorflow") public static native @Cast("bool") boolean IsRecv(@Const Node node);
 
 // True for Nodes that mediate the transfer of values between processes.
 @Namespace("tensorflow") public static native @Cast("bool") boolean IsTransferNode(@Const Node n);
 
 @Namespace("tensorflow") public static native @Cast("bool") boolean IsConstant(@Const Node node);
-
 @Namespace("tensorflow") public static native @Cast("bool") boolean IsVariable(@Const Node node);
-
 @Namespace("tensorflow") public static native @Cast("bool") boolean IsIdentity(@Const Node node);
 
 // Returns true iff 'n' is a control flow node.
@@ -7746,10 +8100,9 @@ limitations under the License.
 // For example:
 //
 // ```prettyprint
-// # output tensor shape needs to be [2, 3]
-// # so 'dims' is [2, 3]
-// fill(dims, 9) ==> [[9, 9, 9]
-//                    [9, 9, 9]]
+// # Output tensor has shape [2, 3].
+// fill([2, 3], 9) ==> [[9, 9, 9]
+//                      [9, 9, 9]]
 // ```
 //
 // Arguments:
@@ -7783,7 +8136,7 @@ limitations under the License.
 // this operation will permute `params` accordingly.
 //
 // <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
-// <img style="width:100%" src="../images/Gather.png" alt>
+// <img style="width:100%" src="../../images/Gather.png" alt>
 // </div>
 //
 // Arguments:
@@ -7814,7 +8167,7 @@ limitations under the License.
 //
 // This operation computes the inverse of an index permutation. It takes a 1-D
 // integer tensor `x`, which represents the indices of a zero-based array, and
-// swaps each value with its index position. In other words, for an ouput tensor
+// swaps each value with its index position. In other words, for an output tensor
 // `y` and an input tensor `x`, this operation computes the following:
 //
 // `y[x[i]] = i for i in [0, 1, ..., len(x) - 1]`
@@ -7917,13 +8270,12 @@ limitations under the License.
 //
 // ```prettyprint
 // # 't' is [[1, 1], [2, 2]]
-// # 'paddings' is [[1, 1]], [2, 2]]
+// # 'paddings' is [[1, 1], [2, 2]]
 // # rank of 't' is 2
-// pad(t, paddings) ==> [[0, 0, 0, 0, 0]
-//                       [0, 0, 0, 0, 0]
-//                       [0, 1, 1, 0, 0]
-//                      [[0, 2, 2, 0, 0]
-//                       [0, 0, 0, 0, 0]]
+// pad(t, paddings) ==> [[0, 0, 0, 0, 0, 0]
+//                       [0, 0, 1, 1, 0, 0]
+//                       [0, 0, 2, 2, 0, 0]
+//                       [0, 0, 0, 0, 0, 0]]
 // ```
 //
 // Arguments:
@@ -7945,9 +8297,10 @@ limitations under the License.
 //
 // Arguments:
 // * dtype: The type of elements in the tensor.
-// * shape: (Optional) The shape of the tensor. If the shape has 0 dimensions, the
-// shape is unconstrained.
 // * opts:
+//   .WithAttr("shape", TensorShape): Defaults to [].
+//     (Optional) The shape of the tensor. If the shape has 0 dimensions, the
+// shape is unconstrained.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
@@ -7955,7 +8308,7 @@ limitations under the License.
 //
 // Returns a pointer to the created Node, with output:
 // A placeholder tensor that must be replaced using the feed mechanism.
-@Namespace("tensorflow::ops") public static native Node Placeholder(@Cast("tensorflow::DataType") int dtype, @ByVal TensorShape shape, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Placeholder(@Cast("tensorflow::DataType") int dtype, @Const @ByRef GraphDefBuilder.Options opts);
 
 // Returns the rank of a tensor.
 //
@@ -8152,6 +8505,7 @@ limitations under the License.
 // ```
 //
 // In contrast, if:
+//
 // ```prettyprint
 // # Given this:
 // batch_dim = 2
@@ -8650,7 +9004,7 @@ limitations under the License.
 //     outputs[1] = [30, 40]
 //
 // <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
-// <img style="width:100%" src="../images/DynamicPartition.png" alt>
+// <img style="width:100%" src="../../images/DynamicPartition.png" alt>
 // </div>
 //
 // Arguments:
@@ -8705,7 +9059,7 @@ limitations under the License.
 //               [51, 52], [61, 62]]
 //
 // <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
-// <img style="width:100%" src="../images/DynamicStitch.png" alt>
+// <img style="width:100%" src="../../images/DynamicStitch.png" alt>
 // </div>
 //
 // Arguments:
@@ -9105,6 +9459,19 @@ limitations under the License.
 // * a Node* (to pass the first output of that node).
 
 
+// Deprecated. Disallowed in GraphDef version >= 2.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node AdjustContrast(@ByVal NodeBuilder.NodeOut images, @ByVal NodeBuilder.NodeOut contrast_factor, @ByVal NodeBuilder.NodeOut min_value, @ByVal NodeBuilder.NodeOut max_value, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node AdjustContrast(Node images, Node contrast_factor, Node min_value, Node max_value, @Const @ByRef GraphDefBuilder.Options opts);
+
 // Adjust the contrast of one or more images.
 //
 // `images` is a tensor of at least 3 dimensions.  The last 3 dimensions are
@@ -9117,15 +9484,9 @@ limitations under the License.
 // channel and then adjusts each component of each pixel to
 // `(x - mean) * contrast_factor + mean`.
 //
-// These adjusted values are then clipped to fit in the `[min_value, max_value]`
-// interval.
-//
-// `images: Images to adjust.  At least 3-D.
-//
 // Arguments:
+// * images: Images to adjust.  At least 3-D.
 // * contrast_factor: A float multiplier for adjusting contrast.
-// * min_value: Minimum value for clipping the adjusted pixels.
-// * max_value: Maximum value for clipping the adjusted pixels.
 // * opts:
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
@@ -9133,9 +9494,9 @@ limitations under the License.
 //     Add control depencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
-// The constrast-adjusted image or images.
-@Namespace("tensorflow::ops") public static native Node AdjustContrast(@ByVal NodeBuilder.NodeOut images, @ByVal NodeBuilder.NodeOut contrast_factor, @ByVal NodeBuilder.NodeOut min_value, @ByVal NodeBuilder.NodeOut max_value, @Const @ByRef GraphDefBuilder.Options opts);
-@Namespace("tensorflow::ops") public static native Node AdjustContrast(Node images, Node contrast_factor, Node min_value, Node max_value, @Const @ByRef GraphDefBuilder.Options opts);
+// The contrast-adjusted image or images.
+@Namespace("tensorflow::ops") public static native Node AdjustContrastv2(@ByVal NodeBuilder.NodeOut images, @ByVal NodeBuilder.NodeOut contrast_factor, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node AdjustContrastv2(Node images, Node contrast_factor, @Const @ByRef GraphDefBuilder.Options opts);
 
 // Decode a JPEG-encoded image to a uint8 tensor.
 //
@@ -9289,6 +9650,50 @@ limitations under the License.
 @Namespace("tensorflow::ops") public static native Node EncodePng(@ByVal NodeBuilder.NodeOut image, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node EncodePng(Node image, @Const @ByRef GraphDefBuilder.Options opts);
 
+// Convert one or more images from HSV to RGB.
+//
+// Outputs a tensor of the same shape as the `images` tensor, containing the RGB
+// value of the pixels. The output is only well defined if the value in `images`
+// are in `[0,1]`.
+//
+// See `rgb_to_hsv` for a description of the HSV encoding.
+//
+// Arguments:
+// * images: 1-D or higher rank. HSV data to convert. Last dimension must be size 3.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// `images` converted to RGB.
+@Namespace("tensorflow::ops") public static native Node HSVToRGB(@ByVal NodeBuilder.NodeOut images, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node HSVToRGB(Node images, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Converts one or more images from RGB to HSV.
+//
+// Outputs a tensor of the same shape as the `images` tensor, containing the HSV
+// value of the pixels. The output is only well defined if the value in `images`
+// are in `[0,1]`.
+//
+// `output[..., 0]` contains hue, `output[..., 1]` contains saturation, and
+// `output[..., 2]` contains value. All HSV values are in `[0,1]`. A hue of 0
+// corresponds to pure red, hue 1/3 is pure green, and 2/3 is pure blue.
+//
+// Arguments:
+// * images: 1-D or higher rank. RGB data to convert. Last dimension must be size 3.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// `images` converted to HSV.
+@Namespace("tensorflow::ops") public static native Node RGBToHSV(@ByVal NodeBuilder.NodeOut images, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node RGBToHSV(Node images, @Const @ByRef GraphDefBuilder.Options opts);
+
 // Randomly crop `image`.
 //
 // `size` is a 1-D int64 tensor with 2 elements representing the crop height and
@@ -9367,6 +9772,10 @@ limitations under the License.
 // * size: = A 1-D int32 Tensor of 2 elements: `new_height, new_width`.  The
 // new size for the images.
 // * opts:
+//   .WithAttr("align_corners", bool): Defaults to false.
+//     If true, rescale input by (new_height - 1) / (height - 1), which
+// exactly aligns the 4 corners of images and resized images. If false, rescale
+// by new_height / height. Treat similarly the width dimension.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
@@ -9378,9 +9787,30 @@ limitations under the License.
 @Namespace("tensorflow::ops") public static native Node ResizeBilinear(@ByVal NodeBuilder.NodeOut images, @ByVal NodeBuilder.NodeOut size, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node ResizeBilinear(Node images, Node size, @Const @ByRef GraphDefBuilder.Options opts);
 
-// Resize `images` to `size` using nearest neighbor interpolation.
+// Computes the gradient of bilinear interpolation.
 //
-// Input images can be of different types but output images are always float.
+// Arguments:
+// * grads: 4-D with shape `[batch, height, width, channels]`.
+// * original_image: 4-D with shape `[batch, orig_height, orig_width, channels]`,
+// The image tensor that was resized.
+// * opts:
+//   .WithAttr("align_corners", bool): Defaults to false.
+//     If true, rescale grads by (orig_height - 1) / (height - 1), which
+// exactly aligns the 4 corners of grads and original_image. If false, rescale by
+// orig_height / height. Treat similarly the width dimension.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// 4-D with shape `[batch, orig_height, orig_width, channels]`.
+// Gradients with respect to the input image. Input image must have been
+// float or double.
+@Namespace("tensorflow::ops") public static native Node ResizeBilinearGrad(@ByVal NodeBuilder.NodeOut grads, @ByVal NodeBuilder.NodeOut original_image, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ResizeBilinearGrad(Node grads, Node original_image, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Resize `images` to `size` using nearest neighbor interpolation.
 //
 // Arguments:
 // * images: 4-D with shape `[batch, height, width, channels]`.
@@ -9934,6 +10364,28 @@ limitations under the License.
 @Namespace("tensorflow::ops") public static native Node BatchMatrixInverse(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node BatchMatrixInverse(Node input, @Const @ByRef GraphDefBuilder.Options opts);
 
+// Calculates the Eigen Decomposition of a batch of square self-adjoint matrices.
+//
+// The input is a tensor of shape `[..., M, M]` whose inner-most 2 dimensions
+// form square matrices, with the same constraints as the single matrix
+// SelfAdjointEig.
+//
+// The result is a '[..., M+1, M] matrix with [..., 0,:] containing the
+// eigenvalues, and subsequent [...,1:, :] containing the eigenvectors.
+//
+// Arguments:
+// * input: Shape is `[..., M, M]`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Shape is `[..., M+1, M]`.
+@Namespace("tensorflow::ops") public static native Node BatchSelfAdjointEig(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node BatchSelfAdjointEig(Node input, @Const @ByRef GraphDefBuilder.Options opts);
+
 // Calculates the Cholesky decomposition of a square matrix.
 //
 // The input has to be symmetric and positive definite. Only the lower-triangular
@@ -9992,6 +10444,27 @@ limitations under the License.
 // Shape is `[M, M]` containing the matrix inverse of the input.
 @Namespace("tensorflow::ops") public static native Node MatrixInverse(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node MatrixInverse(Node input, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Calculates the Eigen Decomposition of a square Self-Adjoint matrix.
+//
+// Only the lower-triangular part of the input will be used in this case. The
+// upper-triangular part will not be read.
+//
+// The result is a M+1 x M matrix whose first row is the eigenvalues, and
+// subsequent rows are eigenvectors.
+//
+// Arguments:
+// * input: Shape is `[M, M]`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Shape is `[M+1, M]`.
+@Namespace("tensorflow::ops") public static native Node SelfAdjointEig(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SelfAdjointEig(Node input, @Const @ByRef GraphDefBuilder.Options opts);
 
   // namespace ops
   // namespace tensorflow
@@ -10394,6 +10867,32 @@ limitations under the License.
 @Namespace("tensorflow::ops") public static native Node Equal(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node Equal(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
 
+// Computes the Gauss error function of `x` element-wise.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Erf(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Erf(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the complementary error function of `x` element-wise.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Erfc(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Erfc(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
 // Computes exponential of x element-wise.  \\(y = e^x\\).
 //
 // Arguments:
@@ -10406,6 +10905,21 @@ limitations under the License.
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Exp(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node Exp(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Compute the 2-dimensional discrete Fourier Transform.
+//
+// Arguments:
+// * in: A complex64 matrix.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The 2D Fourier Transform of `in`.
+@Namespace("tensorflow::ops") public static native Node FFT2D(@ByVal NodeBuilder.NodeOut in, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node FFT2D(Node in, @Const @ByRef GraphDefBuilder.Options opts);
 
 // Returns element-wise largest integer not greater than x.
 //
@@ -10445,6 +10959,21 @@ limitations under the License.
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node GreaterEqual(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node GreaterEqual(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Compute the inverse 2-dimensional discrete Fourier Transform.
+//
+// Arguments:
+// * in: A complex64 matrix.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The inverse 2D Fourier Transform of `in`.
+@Namespace("tensorflow::ops") public static native Node IFFT2D(@ByVal NodeBuilder.NodeOut in, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node IFFT2D(Node in, @Const @ByRef GraphDefBuilder.Options opts);
 
 // Returns the imaginary part of a complex number.
 //
@@ -10551,6 +11080,19 @@ limitations under the License.
 @Namespace("tensorflow::ops") public static native Node LessEqual(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node LessEqual(Node x, Node y, @Const @ByRef GraphDefBuilder.Options opts);
 
+// Computes the log of the absolute value of Gamma of `x` element-wise.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node Lgamma(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Lgamma(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
 // Generates values in an interval.
 //
 // A sequence of `num` evenly-spaced values are generated beginning at `start`.
@@ -10578,7 +11120,7 @@ limitations under the License.
 @Namespace("tensorflow::ops") public static native Node LinSpace(@ByVal NodeBuilder.NodeOut start, @ByVal NodeBuilder.NodeOut stop, @ByVal NodeBuilder.NodeOut num, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node LinSpace(Node start, Node stop, Node num, @Const @ByRef GraphDefBuilder.Options opts);
 
-// Computes natural logrithm of x element-wise.
+// Computes natural logarithm of x element-wise.
 //
 // I.e., \\(y = \log_e x\\).
 //
@@ -10930,7 +11472,7 @@ limitations under the License.
 // that `segment_ids[j] == i`.
 //
 // <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
-// <img style="width:100%" src="../images/SegmentMax.png" alt>
+// <img style="width:100%" src="../../images/SegmentMax.png" alt>
 // </div>
 //
 // Arguments:
@@ -10960,7 +11502,7 @@ limitations under the License.
 // values summed.
 //
 // <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
-// <img style="width:100%" src="../images/SegmentMean.png" alt>
+// <img style="width:100%" src="../../images/SegmentMean.png" alt>
 // </div>
 //
 // Arguments:
@@ -10989,7 +11531,7 @@ limitations under the License.
 // that `segment_ids[j] == i`.
 //
 // <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
-// <img style="width:100%" src="../images/SegmentMin.png" alt>
+// <img style="width:100%" src="../../images/SegmentMin.png" alt>
 // </div>
 //
 // Arguments:
@@ -11018,7 +11560,7 @@ limitations under the License.
 // that `segment_ids[j] == i`.
 //
 // <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
-// <img style="width:100%" src="../images/SegmentProd.png" alt>
+// <img style="width:100%" src="../../images/SegmentProd.png" alt>
 // </div>
 //
 // Arguments:
@@ -11046,7 +11588,7 @@ limitations under the License.
 // that `segment_ids[j] == i`.
 //
 // <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
-// <img style="width:100%" src="../images/SegmentSum.png" alt>
+// <img style="width:100%" src="../../images/SegmentSum.png" alt>
 // </div>
 //
 // Arguments:
@@ -11357,7 +11899,7 @@ limitations under the License.
 // `num_segments` should equal the number of distinct segment IDs.
 //
 // <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
-// <img style="width:100%" src="../images/UnsortedSegmentSum.png" alt>
+// <img style="width:100%" src="../../images/UnsortedSegmentSum.png" alt>
 // </div>
 //
 // Arguments:
@@ -11985,7 +12527,8 @@ limitations under the License.
 //
 // Arguments:
 // * gradients: The backpropagated gradients to the corresponding Relu operation.
-// * features: The features passed as input to the corresponding Relu operation.
+// * features: The features passed as input to the corresponding Relu operation, OR
+// the outputs of that operation (both work equivalently).
 // * opts:
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
@@ -11993,7 +12536,7 @@ limitations under the License.
 //     Add control depencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
-// The gradients: `gradients * features * (features > 0)`.
+// `gradients * (features > 0)`.
 @Namespace("tensorflow::ops") public static native Node ReluGrad(@ByVal NodeBuilder.NodeOut gradients, @ByVal NodeBuilder.NodeOut features, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node ReluGrad(Node gradients, Node features, @Const @ByRef GraphDefBuilder.Options opts);
 
@@ -12107,6 +12650,9 @@ limitations under the License.
 // * input: A `batch_size` x `classes` tensor.
 // * k: Number of top elements to look for within each row.
 // * opts:
+//   .WithAttr("sorted", bool): Defaults to true.
+//     If true the resulting `k` elements will be sorted by the values in
+// descending order.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
@@ -12114,7 +12660,7 @@ limitations under the License.
 //
 // Returns a pointer to the created Node, with outputs:
 // * values: A `batch_size` x `k` tensor with the `k` largest elements for
-// each row, sorted in descending order.
+// each row.
 // * indices: A `batch_size` x `k` tensor with the index of each value within
 // each row.
 @Namespace("tensorflow::ops") public static native Node TopK(@ByVal NodeBuilder.NodeOut input, @Cast("tensorflow::int64") long k, @Const @ByRef GraphDefBuilder.Options opts);
@@ -12241,6 +12787,92 @@ limitations under the License.
 @Namespace("tensorflow::ops") public static native Node ParseExample(Node serialized, Node names, @ByVal NodeOutVector sparse_keys, @ByVal NodeOutVector dense_keys,
                    @ByVal NodeOutVector dense_defaults, @ByVal DataTypeVector sparse_types, @ByVal TensorShapeVector dense_shapes,
                    @Const @ByRef GraphDefBuilder.Options opts);
+
+// Transforms a scalar brain.SequenceExample proto (as strings) into typed tensors.
+//
+// Arguments:
+// * serialized: A scalar containing a binary serialized SequenceExample proto.
+// * feature_list_dense_missing_assumed_empty: A vector listing the
+// FeatureList keys which may be missing from the SequenceExample.  If the
+// associated FeatureList is missing, it is treated as empty.  By default,
+// any FeatureList not listed in this vector must exist in the SequenceExample.
+// * context_sparse_keys: A list of Ncontext_sparse string Tensors (scalars).
+// The keys expected in the Examples' features associated with context_sparse
+// values.
+// * context_dense_keys: A list of Ncontext_dense string Tensors (scalars).
+// The keys expected in the SequenceExamples' context features associated with
+// dense values.
+// * feature_list_sparse_keys: A list of Nfeature_list_sparse string Tensors
+// (scalars).  The keys expected in the FeatureLists associated with sparse
+// values.
+// * feature_list_dense_keys: A list of Nfeature_list_dense string Tensors (scalars).
+// The keys expected in the SequenceExamples' feature_lists associated
+// with lists of dense values.
+// * context_dense_defaults: A list of Ncontext_dense Tensors (some may be empty).
+// context_dense_defaults[j] provides default values
+// when the SequenceExample's context map lacks context_dense_key[j].
+// If an empty Tensor is provided for context_dense_defaults[j],
+// then the Feature context_dense_keys[j] is required.
+// The input type is inferred from context_dense_defaults[j], even when it's
+// empty.  If context_dense_defaults[j] is not empty, its shape must match
+// context_dense_shapes[j].
+// * debug_name: A scalar containing the name of the serialized proto.
+// May contain, for example, table key (descriptive) name for the
+// corresponding serialized proto.  This is purely useful for debugging
+// purposes, and the presence of values here has no effect on the output.
+// May also be an empty scalar if no name is available.
+// * opts:
+//   .WithAttr("context_sparse_types", DataTypeSlice): Defaults to [].
+//     A list of Ncontext_sparse types; the data types of data in
+// each context Feature given in context_sparse_keys.
+// Currently the ParseSingleSequenceExample supports DT_FLOAT (FloatList),
+// DT_INT64 (Int64List), and DT_STRING (BytesList).
+//   .WithAttr("feature_list_dense_types", DataTypeSlice): Defaults to [].
+//   .WithAttr("context_dense_shapes", gtl::ArraySlice<TensorShape>): Defaults to [].
+//     A list of Ncontext_dense shapes; the shapes of data in
+// each context Feature given in context_dense_keys.
+// The number of elements in the Feature corresponding to context_dense_key[j]
+// must always equal context_dense_shapes[j].NumEntries().
+// The shape of context_dense_values[j] will match context_dense_shapes[j].
+//   .WithAttr("feature_list_sparse_types", DataTypeSlice): Defaults to [].
+//     A list of Nfeature_list_sparse types; the data types
+// of data in each FeatureList given in feature_list_sparse_keys.
+// Currently the ParseSingleSequenceExample supports DT_FLOAT (FloatList),
+// DT_INT64 (Int64List), and DT_STRING (BytesList).
+//   .WithAttr("feature_list_dense_shapes", gtl::ArraySlice<TensorShape>): Defaults to [].
+//     A list of Nfeature_list_dense shapes; the shapes of
+// data in each FeatureList given in feature_list_dense_keys.
+// The shape of each Feature in the FeatureList corresponding to
+// feature_list_dense_key[j] must always equal
+// feature_list_dense_shapes[j].NumEntries().
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with outputs:
+// * context_sparse_indices
+// * context_sparse_values
+// * context_sparse_shapes
+// * context_dense_values
+// * feature_list_sparse_indices
+// * feature_list_sparse_values
+// * feature_list_sparse_shapes
+// * feature_list_dense_values
+@Namespace("tensorflow::ops") public static native Node ParseSingleSequenceExample(@ByVal NodeBuilder.NodeOut serialized, @ByVal NodeBuilder.NodeOut feature_list_dense_missing_assumed_empty,
+                                 @ByVal NodeOutVector context_sparse_keys,
+                                 @ByVal NodeOutVector context_dense_keys,
+                                 @ByVal NodeOutVector feature_list_sparse_keys,
+                                 @ByVal NodeOutVector feature_list_dense_keys,
+                                 @ByVal NodeOutVector context_dense_defaults, @ByVal NodeBuilder.NodeOut debug_name,
+                                 @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ParseSingleSequenceExample(Node serialized, Node feature_list_dense_missing_assumed_empty,
+                                 @ByVal NodeOutVector context_sparse_keys,
+                                 @ByVal NodeOutVector context_dense_keys,
+                                 @ByVal NodeOutVector feature_list_sparse_keys,
+                                 @ByVal NodeOutVector feature_list_dense_keys,
+                                 @ByVal NodeOutVector context_dense_defaults, Node debug_name,
+                                 @Const @ByRef GraphDefBuilder.Options opts);
 
 // Converts each string in the input Tensor to the specified numeric type.
 //
@@ -12452,6 +13084,109 @@ limitations under the License.
 // * a Node* (to pass the first output of that node).
 
 
+// Deserialize and concatenate `SparseTensors` from a serialized minibatch.
+//
+// The input `serialized_sparse` must be a string matrix of shape `[N x 3]` where
+// `N` is the minibatch size and the rows correspond to packed outputs of
+// `SerializeSparse`.  The ranks of the original `SparseTensor` objects
+// must all match.  When the final `SparseTensor` is created, it has rank one
+// higher than the ranks of the incoming `SparseTensor` objects
+// (they have been concatenated along a new row dimension).
+//
+// The output `SparseTensor` object's shape values for all dimensions but the
+// first are the max across the input `SparseTensor` objects' shape values
+// for the corresponding dimensions.  Its first shape value is `N`, the minibatch
+// size.
+//
+// The input `SparseTensor` objects' indices are assumed ordered in
+// standard lexicographic order.  If this is not the case, after this
+// step run `SparseReorder` to restore index ordering.
+//
+// For example, if the serialized input is a `[2 x 3]` matrix representing two
+// original `SparseTensor` objects:
+//
+//     index = [ 0]
+//             [10]
+//             [20]
+//     values = [1, 2, 3]
+//     shape = [50]
+//
+// and
+//
+//     index = [ 2]
+//             [10]
+//     values = [4, 5]
+//     shape = [30]
+//
+// then the final deserialized `SparseTensor` will be:
+//
+//     index = [0  0]
+//             [0 10]
+//             [0 20]
+//             [1  2]
+//             [1 10]
+//     values = [1, 2, 3, 4, 5]
+//     shape = [2 50]
+//
+// Arguments:
+// * serialized_sparse: 2-D, The `N` serialized `SparseTensor` objects.
+// Must have 3 columns.
+// * dtype: The `dtype` of the serialized `SparseTensor` objects.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with outputs:
+// * sparse_indices
+// * sparse_values
+// * sparse_shape
+@Namespace("tensorflow::ops") public static native Node DeserializeManySparse(@ByVal NodeBuilder.NodeOut serialized_sparse, @Cast("tensorflow::DataType") int dtype, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node DeserializeManySparse(Node serialized_sparse, @Cast("tensorflow::DataType") int dtype, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Serialize an `N`-minibatch `SparseTensor` into an `[N, 3]` string `Tensor`.
+//
+// The `SparseTensor` must have rank `R` greater than 1, and the first dimension
+// is treated as the minibatch dimension.  Elements of the `SparseTensor`
+// must be sorted in increasing order of this first dimension.  The serialized
+// `SparseTensor` objects going into each row of `serialized_sparse` will have
+// rank `R-1`.
+//
+// The minibatch size `N` is extracted from `sparse_shape[0]`.
+//
+// Arguments:
+// * sparse_indices: 2-D.  The `indices` of the minibatch `SparseTensor`.
+// * sparse_values: 1-D.  The `values` of the minibatch `SparseTensor`.
+// * sparse_shape: 1-D.  The `shape` of the minibatch `SparseTensor`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node SerializeManySparse(@ByVal NodeBuilder.NodeOut sparse_indices, @ByVal NodeBuilder.NodeOut sparse_values,
+                          @ByVal NodeBuilder.NodeOut sparse_shape, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SerializeManySparse(Node sparse_indices, Node sparse_values,
+                          Node sparse_shape, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Serialize a `SparseTensor` into a string 3-vector (1-D `Tensor`) object.
+//
+// Arguments:
+// * sparse_indices: 2-D.  The `indices` of the `SparseTensor`.
+// * sparse_values: 1-D.  The `values` of the `SparseTensor`.
+// * sparse_shape: 1-D.  The `shape` of the `SparseTensor`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node SerializeSparse(@ByVal NodeBuilder.NodeOut sparse_indices, @ByVal NodeBuilder.NodeOut sparse_values, @ByVal NodeBuilder.NodeOut sparse_shape, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SerializeSparse(Node sparse_indices, Node sparse_values, Node sparse_shape, @Const @ByRef GraphDefBuilder.Options opts);
+
 // Concatenates a list of `SparseTensor` along the specified dimension.
 //
 // Concatenation is with respect to the dense versions of these sparse tensors.
@@ -12543,6 +13278,50 @@ limitations under the License.
 @Namespace("tensorflow::ops") public static native Node SparseReorder(@ByVal NodeBuilder.NodeOut input_indices, @ByVal NodeBuilder.NodeOut input_values, @ByVal NodeBuilder.NodeOut input_shape, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node SparseReorder(Node input_indices, Node input_values, Node input_shape, @Const @ByRef GraphDefBuilder.Options opts);
 
+// Split a `SparseTensor` into `num_split` tensors along one dimension.
+//
+// If the `shape[split_dim]` is not an integer multiple of `num_split`. Slices
+// `[0 : shape[split_dim] % num_split]` gets one extra dimension.
+// For example, if `split_dim = 1` and `num_split = 2` and the input is
+//
+//     input_tensor = shape = [2, 7]
+//     [    a   d e  ]
+//     [b c          ]
+//
+// Graphically the output tensors are:
+//
+//     output_tensor[0] = shape = [2, 4]
+//     [    a  ]
+//     [b c    ]
+//
+//     output_tensor[1] = shape = [2, 3]
+//     [ d e  ]
+//     [      ]
+//
+// Arguments:
+// * split_dim: 0-D.  The dimension along which to split.  Must be in the range
+// `[0, rank(shape))`.
+// * indices: 2-D tensor represents the indices of the sparse tensor.
+// * values: 1-D tensor represents the values of the sparse tensor.
+// * shape: 1-D. tensor represents the shape of the sparse tensor.
+// output indices: A list of 1-D tensors represents the indices of the output
+// sparse tensors.
+// * num_split: The number of ways to split.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control depencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with outputs:
+// * output_indices
+// * output_values: A list of 1-D tensors represents the values of the output sparse
+// tensors.
+// * output_shape: A list of 1-D tensors represents the shape of the output sparse
+// tensors.
+@Namespace("tensorflow::ops") public static native Node SparseSplit(@ByVal NodeBuilder.NodeOut split_dim, @ByVal NodeBuilder.NodeOut indices, @ByVal NodeBuilder.NodeOut values, @ByVal NodeBuilder.NodeOut shape, @Cast("tensorflow::int64") long num_split, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SparseSplit(Node split_dim, Node indices, Node values, Node shape, @Cast("tensorflow::int64") long num_split, @Const @ByRef GraphDefBuilder.Options opts);
+
 // Converts a sparse representation into a dense tensor.
 //
 // Builds an array `dense` with shape `output_shape` such that
@@ -12561,6 +13340,10 @@ limitations under the License.
 // All other values in `dense` are set to `default_value`.  If `sparse_values` is a
 // scalar, all sparse indices are set to this single value.
 //
+// Indices should be sorted in lexicographic order, and indices must not
+// contain any repeats. If `validate_indices` is true, these properties
+// are checked during execution.
+//
 // Arguments:
 // * sparse_indices: 0-D, 1-D, or 2-D.  `sparse_indices[i]` contains the complete
 // index where `sparse_values[i]` will be placed.
@@ -12570,6 +13353,9 @@ limitations under the License.
 // * default_value: Scalar value to set for indices not specified in
 // `sparse_indices`.
 // * opts:
+//   .WithAttr("validate_indices", bool): Defaults to true.
+//     If true, indices are checked to make sure they are sorted in
+// lexicographic order and that there are no repeats.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
@@ -12746,7 +13532,7 @@ limitations under the License.
 // Requires `updates.shape = indices.shape + ref.shape[1:]`.
 //
 // <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
-// <img style="width:100%" src="../images/ScatterAdd.png" alt>
+// <img style="width:100%" src="../../images/ScatterAdd.png" alt>
 // </div>
 //
 // Arguments:
@@ -12788,7 +13574,7 @@ limitations under the License.
 // Requires `updates.shape = indices.shape + ref.shape[1:]`.
 //
 // <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
-// <img style="width:100%" src="../images/ScatterSub.png" alt>
+// <img style="width:100%" src="../../images/ScatterSub.png" alt>
 // </div>
 //
 // Arguments:
@@ -12832,7 +13618,7 @@ limitations under the License.
 // Requires `updates.shape = indices.shape + ref.shape[1:]`.
 //
 // <div style="width:70%; margin:auto; margin-bottom:10px; margin-top:20px;">
-// <img style="width:100%" src="../images/ScatterUpdate.png" alt>
+// <img style="width:100%" src="../../images/ScatterUpdate.png" alt>
 // </div>
 //
 // Arguments:
@@ -13016,9 +13802,10 @@ limitations under the License.
 // *  3: `tensor` is interpreted as RGB.
 // *  4: `tensor` is interpreted as RGBA.
 //
-// The images have the same number of channels as the input tensor. Their values
-// are normalized, one image at a time, to fit in the range `[0, 255]`.  The
-// op uses two different normalization algorithms:
+// The images have the same number of channels as the input tensor. For float
+// input, the values are normalized one image at a time to fit in the range
+// `[0, 255]`.  `uint8` values are unchanged.  The op uses two different
+// normalization algorithms:
 //
 // *  If the input values are all positive, they are rescaled so the largest one
 //    is 255.
@@ -13089,8 +13876,8 @@ limitations under the License.
 // has a summary value for each tag-value pair in `tags` and `values`.
 //
 // Arguments:
-// * tags: 1-D. Tags for the summary.
-// * values: 1-D, same size as `tags.  Values for the summary.
+// * tags: Tags for the summary.
+// * values: Same shape as `tags.  Values for the summary.
 // * opts:
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device

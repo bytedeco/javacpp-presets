@@ -4313,6 +4313,15 @@ public static final int
   public native void set_stride(int index, @Cast("google::protobuf::uint32") int value);
   public native void add_stride(@Cast("google::protobuf::uint32") int value);
 
+  // repeated uint32 dilation = 18;
+  public native int dilation_size();
+  public native void clear_dilation();
+  @MemberGetter public static native int kDilationFieldNumber();
+  public static final int kDilationFieldNumber = kDilationFieldNumber();
+  public native @Cast("google::protobuf::uint32") int dilation(int index);
+  public native void set_dilation(int index, @Cast("google::protobuf::uint32") int value);
+  public native void add_dilation(@Cast("google::protobuf::uint32") int value);
+
   // optional uint32 pad_h = 9 [default = 0];
   public native @Cast("bool") boolean has_pad_h();
   public native void clear_pad_h();
@@ -10371,6 +10380,15 @@ public static final int
 
 
 // repeated uint32 stride = 6;
+
+
+
+
+
+
+
+
+// repeated uint32 dilation = 18;
 
 
 
@@ -18546,6 +18564,10 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    *        need this unless you do per-layer checks such as gradients.
    */
   public native @Const @ByRef FloatBlobVectorVector top_vecs();
+  /** \brief returns the ids of the top blobs of layer i */
+  public native @StdVector IntPointer top_ids(int i);
+  /** \brief returns the ids of the bottom blobs of layer i */
+  public native @StdVector IntPointer bottom_ids(int i);
   public native @Const @ByRef BoolVectorVector bottom_need_backward();
   public native @StdVector FloatPointer blob_loss_weights();
   public native @Const @ByRef BoolVector layer_need_backward();
@@ -18745,6 +18767,10 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    *        need this unless you do per-layer checks such as gradients.
    */
   public native @Const @ByRef DoubleBlobVectorVector top_vecs();
+  /** \brief returns the ids of the top blobs of layer i */
+  public native @StdVector IntPointer top_ids(int i);
+  /** \brief returns the ids of the bottom blobs of layer i */
+  public native @StdVector IntPointer bottom_ids(int i);
   public native @Const @ByRef BoolVectorVector bottom_need_backward();
   public native @StdVector DoublePointer blob_loss_weights();
   public native @Const @ByRef BoolVector layer_need_backward();
@@ -19489,6 +19515,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    *  convolution, given by pad for equal dimensions or pad_h and pad_w for
    *  different padding. Input padding is computed implicitly instead of
    *  actually padding.
+   *  - dilation (\b optional, default 1). The filter
+   *  dilation, given by dilation_size for equal dimensions for different
+   *  dilation. By default the convolution has dilation 1.
    *  - group (\b optional, default 1). The number of filter groups. Group
    *  convolution is a method for reducing parameterization by selectively
    *  connecting input and output channels. The input and output channel dimensions must be divisible
@@ -19537,6 +19566,9 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
    *  convolution, given by pad for equal dimensions or pad_h and pad_w for
    *  different padding. Input padding is computed implicitly instead of
    *  actually padding.
+   *  - dilation (\b optional, default 1). The filter
+   *  dilation, given by dilation_size for equal dimensions for different
+   *  dilation. By default the convolution has dilation 1.
    *  - group (\b optional, default 1). The number of filter groups. Group
    *  convolution is a method for reducing parameterization by selectively
    *  connecting input and output channels. The input and output channel dimensions must be divisible
@@ -20389,210 +20421,234 @@ public static final int CAFFE_TMP_DIR_RETRIES = 100;
 @Namespace("caffe") public static native @Name("im2col_nd_cpu<float>") void im2col_nd_cpu_float(@Const FloatPointer data_im, int num_spatial_axes,
     @Const IntPointer im_shape, @Const IntPointer col_shape,
     @Const IntPointer kernel_shape, @Const IntPointer pad, @Const IntPointer stride,
-    FloatPointer data_col);
+    @Const IntPointer dilation, FloatPointer data_col);
 @Namespace("caffe") public static native @Name("im2col_nd_cpu<float>") void im2col_nd_cpu_float(@Const FloatBuffer data_im, int num_spatial_axes,
     @Const IntBuffer im_shape, @Const IntBuffer col_shape,
     @Const IntBuffer kernel_shape, @Const IntBuffer pad, @Const IntBuffer stride,
-    FloatBuffer data_col);
+    @Const IntBuffer dilation, FloatBuffer data_col);
 @Namespace("caffe") public static native @Name("im2col_nd_cpu<float>") void im2col_nd_cpu_float(@Const float[] data_im, int num_spatial_axes,
     @Const int[] im_shape, @Const int[] col_shape,
     @Const int[] kernel_shape, @Const int[] pad, @Const int[] stride,
-    float[] data_col);
+    @Const int[] dilation, float[] data_col);
 
 @Namespace("caffe") public static native @Name("im2col_nd_cpu<double>") void im2col_nd_cpu_double(@Const DoublePointer data_im, int num_spatial_axes,
     @Const IntPointer im_shape, @Const IntPointer col_shape,
     @Const IntPointer kernel_shape, @Const IntPointer pad, @Const IntPointer stride,
-    DoublePointer data_col);
+    @Const IntPointer dilation, DoublePointer data_col);
 @Namespace("caffe") public static native @Name("im2col_nd_cpu<double>") void im2col_nd_cpu_double(@Const DoubleBuffer data_im, int num_spatial_axes,
     @Const IntBuffer im_shape, @Const IntBuffer col_shape,
     @Const IntBuffer kernel_shape, @Const IntBuffer pad, @Const IntBuffer stride,
-    DoubleBuffer data_col);
+    @Const IntBuffer dilation, DoubleBuffer data_col);
 @Namespace("caffe") public static native @Name("im2col_nd_cpu<double>") void im2col_nd_cpu_double(@Const double[] data_im, int num_spatial_axes,
     @Const int[] im_shape, @Const int[] col_shape,
     @Const int[] kernel_shape, @Const int[] pad, @Const int[] stride,
-    double[] data_col);
+    @Const int[] dilation, double[] data_col);
 
 @Namespace("caffe") public static native @Name("im2col_cpu<float>") void im2col_cpu_float(@Const FloatPointer data_im, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, FloatPointer data_col);
+    int stride_w, int dilation_h, int dilation_w,
+    FloatPointer data_col);
 @Namespace("caffe") public static native @Name("im2col_cpu<float>") void im2col_cpu_float(@Const FloatBuffer data_im, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, FloatBuffer data_col);
+    int stride_w, int dilation_h, int dilation_w,
+    FloatBuffer data_col);
 @Namespace("caffe") public static native @Name("im2col_cpu<float>") void im2col_cpu_float(@Const float[] data_im, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, float[] data_col);
+    int stride_w, int dilation_h, int dilation_w,
+    float[] data_col);
 
 @Namespace("caffe") public static native @Name("im2col_cpu<double>") void im2col_cpu_double(@Const DoublePointer data_im, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, DoublePointer data_col);
+    int stride_w, int dilation_h, int dilation_w,
+    DoublePointer data_col);
 @Namespace("caffe") public static native @Name("im2col_cpu<double>") void im2col_cpu_double(@Const DoubleBuffer data_im, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, DoubleBuffer data_col);
+    int stride_w, int dilation_h, int dilation_w,
+    DoubleBuffer data_col);
 @Namespace("caffe") public static native @Name("im2col_cpu<double>") void im2col_cpu_double(@Const double[] data_im, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, double[] data_col);
+    int stride_w, int dilation_h, int dilation_w,
+    double[] data_col);
 
 @Namespace("caffe") public static native @Name("col2im_nd_cpu<float>") void col2im_nd_cpu_float(@Const FloatPointer data_col, int num_spatial_axes,
     @Const IntPointer im_shape, @Const IntPointer col_shape,
     @Const IntPointer kernel_shape, @Const IntPointer pad, @Const IntPointer stride,
-    FloatPointer data_im);
+    @Const IntPointer dilation, FloatPointer data_im);
 @Namespace("caffe") public static native @Name("col2im_nd_cpu<float>") void col2im_nd_cpu_float(@Const FloatBuffer data_col, int num_spatial_axes,
     @Const IntBuffer im_shape, @Const IntBuffer col_shape,
     @Const IntBuffer kernel_shape, @Const IntBuffer pad, @Const IntBuffer stride,
-    FloatBuffer data_im);
+    @Const IntBuffer dilation, FloatBuffer data_im);
 @Namespace("caffe") public static native @Name("col2im_nd_cpu<float>") void col2im_nd_cpu_float(@Const float[] data_col, int num_spatial_axes,
     @Const int[] im_shape, @Const int[] col_shape,
     @Const int[] kernel_shape, @Const int[] pad, @Const int[] stride,
-    float[] data_im);
+    @Const int[] dilation, float[] data_im);
 
 @Namespace("caffe") public static native @Name("col2im_nd_cpu<double>") void col2im_nd_cpu_double(@Const DoublePointer data_col, int num_spatial_axes,
     @Const IntPointer im_shape, @Const IntPointer col_shape,
     @Const IntPointer kernel_shape, @Const IntPointer pad, @Const IntPointer stride,
-    DoublePointer data_im);
+    @Const IntPointer dilation, DoublePointer data_im);
 @Namespace("caffe") public static native @Name("col2im_nd_cpu<double>") void col2im_nd_cpu_double(@Const DoubleBuffer data_col, int num_spatial_axes,
     @Const IntBuffer im_shape, @Const IntBuffer col_shape,
     @Const IntBuffer kernel_shape, @Const IntBuffer pad, @Const IntBuffer stride,
-    DoubleBuffer data_im);
+    @Const IntBuffer dilation, DoubleBuffer data_im);
 @Namespace("caffe") public static native @Name("col2im_nd_cpu<double>") void col2im_nd_cpu_double(@Const double[] data_col, int num_spatial_axes,
     @Const int[] im_shape, @Const int[] col_shape,
     @Const int[] kernel_shape, @Const int[] pad, @Const int[] stride,
-    double[] data_im);
+    @Const int[] dilation, double[] data_im);
 
 @Namespace("caffe") public static native @Name("col2im_cpu<float>") void col2im_cpu_float(@Const FloatPointer data_col, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, FloatPointer data_im);
+    int stride_w, int dilation_h, int dilation_w,
+    FloatPointer data_im);
 @Namespace("caffe") public static native @Name("col2im_cpu<float>") void col2im_cpu_float(@Const FloatBuffer data_col, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, FloatBuffer data_im);
+    int stride_w, int dilation_h, int dilation_w,
+    FloatBuffer data_im);
 @Namespace("caffe") public static native @Name("col2im_cpu<float>") void col2im_cpu_float(@Const float[] data_col, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, float[] data_im);
+    int stride_w, int dilation_h, int dilation_w,
+    float[] data_im);
 
 @Namespace("caffe") public static native @Name("col2im_cpu<double>") void col2im_cpu_double(@Const DoublePointer data_col, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, DoublePointer data_im);
+    int stride_w, int dilation_h, int dilation_w,
+    DoublePointer data_im);
 @Namespace("caffe") public static native @Name("col2im_cpu<double>") void col2im_cpu_double(@Const DoubleBuffer data_col, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, DoubleBuffer data_im);
+    int stride_w, int dilation_h, int dilation_w,
+    DoubleBuffer data_im);
 @Namespace("caffe") public static native @Name("col2im_cpu<double>") void col2im_cpu_double(@Const double[] data_col, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, double[] data_im);
+    int stride_w, int dilation_h, int dilation_w,
+    double[] data_im);
 
 @Namespace("caffe") public static native @Name("im2col_nd_gpu<float>") void im2col_nd_gpu_float(@Const FloatPointer data_im, int num_spatial_axes,
     int col_size, @Const IntPointer im_shape, @Const IntPointer col_shape,
     @Const IntPointer kernel_shape, @Const IntPointer pad, @Const IntPointer stride,
-    FloatPointer data_col);
+    @Const IntPointer dilation, FloatPointer data_col);
 @Namespace("caffe") public static native @Name("im2col_nd_gpu<float>") void im2col_nd_gpu_float(@Const FloatBuffer data_im, int num_spatial_axes,
     int col_size, @Const IntBuffer im_shape, @Const IntBuffer col_shape,
     @Const IntBuffer kernel_shape, @Const IntBuffer pad, @Const IntBuffer stride,
-    FloatBuffer data_col);
+    @Const IntBuffer dilation, FloatBuffer data_col);
 @Namespace("caffe") public static native @Name("im2col_nd_gpu<float>") void im2col_nd_gpu_float(@Const float[] data_im, int num_spatial_axes,
     int col_size, @Const int[] im_shape, @Const int[] col_shape,
     @Const int[] kernel_shape, @Const int[] pad, @Const int[] stride,
-    float[] data_col);
+    @Const int[] dilation, float[] data_col);
 
 @Namespace("caffe") public static native @Name("im2col_nd_gpu<double>") void im2col_nd_gpu_double(@Const DoublePointer data_im, int num_spatial_axes,
     int col_size, @Const IntPointer im_shape, @Const IntPointer col_shape,
     @Const IntPointer kernel_shape, @Const IntPointer pad, @Const IntPointer stride,
-    DoublePointer data_col);
+    @Const IntPointer dilation, DoublePointer data_col);
 @Namespace("caffe") public static native @Name("im2col_nd_gpu<double>") void im2col_nd_gpu_double(@Const DoubleBuffer data_im, int num_spatial_axes,
     int col_size, @Const IntBuffer im_shape, @Const IntBuffer col_shape,
     @Const IntBuffer kernel_shape, @Const IntBuffer pad, @Const IntBuffer stride,
-    DoubleBuffer data_col);
+    @Const IntBuffer dilation, DoubleBuffer data_col);
 @Namespace("caffe") public static native @Name("im2col_nd_gpu<double>") void im2col_nd_gpu_double(@Const double[] data_im, int num_spatial_axes,
     int col_size, @Const int[] im_shape, @Const int[] col_shape,
     @Const int[] kernel_shape, @Const int[] pad, @Const int[] stride,
-    double[] data_col);
+    @Const int[] dilation, double[] data_col);
 
 @Namespace("caffe") public static native @Name("im2col_gpu<float>") void im2col_gpu_float(@Const FloatPointer data_im, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, FloatPointer data_col);
+    int stride_w, int dilation_h, int dilation_w,
+    FloatPointer data_col);
 @Namespace("caffe") public static native @Name("im2col_gpu<float>") void im2col_gpu_float(@Const FloatBuffer data_im, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, FloatBuffer data_col);
+    int stride_w, int dilation_h, int dilation_w,
+    FloatBuffer data_col);
 @Namespace("caffe") public static native @Name("im2col_gpu<float>") void im2col_gpu_float(@Const float[] data_im, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, float[] data_col);
+    int stride_w, int dilation_h, int dilation_w,
+    float[] data_col);
 
 @Namespace("caffe") public static native @Name("im2col_gpu<double>") void im2col_gpu_double(@Const DoublePointer data_im, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, DoublePointer data_col);
+    int stride_w, int dilation_h, int dilation_w,
+    DoublePointer data_col);
 @Namespace("caffe") public static native @Name("im2col_gpu<double>") void im2col_gpu_double(@Const DoubleBuffer data_im, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, DoubleBuffer data_col);
+    int stride_w, int dilation_h, int dilation_w,
+    DoubleBuffer data_col);
 @Namespace("caffe") public static native @Name("im2col_gpu<double>") void im2col_gpu_double(@Const double[] data_im, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, double[] data_col);
+    int stride_w, int dilation_h, int dilation_w,
+    double[] data_col);
 
 @Namespace("caffe") public static native @Name("col2im_nd_gpu<float>") void col2im_nd_gpu_float(@Const FloatPointer data_col, int num_spatial_axes,
     int im_size, @Const IntPointer im_shape, @Const IntPointer col_shape,
     @Const IntPointer kernel_shape, @Const IntPointer pad, @Const IntPointer stride,
-    FloatPointer data_im);
+    @Const IntPointer dilation, FloatPointer data_im);
 @Namespace("caffe") public static native @Name("col2im_nd_gpu<float>") void col2im_nd_gpu_float(@Const FloatBuffer data_col, int num_spatial_axes,
     int im_size, @Const IntBuffer im_shape, @Const IntBuffer col_shape,
     @Const IntBuffer kernel_shape, @Const IntBuffer pad, @Const IntBuffer stride,
-    FloatBuffer data_im);
+    @Const IntBuffer dilation, FloatBuffer data_im);
 @Namespace("caffe") public static native @Name("col2im_nd_gpu<float>") void col2im_nd_gpu_float(@Const float[] data_col, int num_spatial_axes,
     int im_size, @Const int[] im_shape, @Const int[] col_shape,
     @Const int[] kernel_shape, @Const int[] pad, @Const int[] stride,
-    float[] data_im);
+    @Const int[] dilation, float[] data_im);
 
 @Namespace("caffe") public static native @Name("col2im_nd_gpu<double>") void col2im_nd_gpu_double(@Const DoublePointer data_col, int num_spatial_axes,
     int im_size, @Const IntPointer im_shape, @Const IntPointer col_shape,
     @Const IntPointer kernel_shape, @Const IntPointer pad, @Const IntPointer stride,
-    DoublePointer data_im);
+    @Const IntPointer dilation, DoublePointer data_im);
 @Namespace("caffe") public static native @Name("col2im_nd_gpu<double>") void col2im_nd_gpu_double(@Const DoubleBuffer data_col, int num_spatial_axes,
     int im_size, @Const IntBuffer im_shape, @Const IntBuffer col_shape,
     @Const IntBuffer kernel_shape, @Const IntBuffer pad, @Const IntBuffer stride,
-    DoubleBuffer data_im);
+    @Const IntBuffer dilation, DoubleBuffer data_im);
 @Namespace("caffe") public static native @Name("col2im_nd_gpu<double>") void col2im_nd_gpu_double(@Const double[] data_col, int num_spatial_axes,
     int im_size, @Const int[] im_shape, @Const int[] col_shape,
     @Const int[] kernel_shape, @Const int[] pad, @Const int[] stride,
-    double[] data_im);
+    @Const int[] dilation, double[] data_im);
 
 @Namespace("caffe") public static native @Name("col2im_gpu<float>") void col2im_gpu_float(@Const FloatPointer data_col, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, FloatPointer data_im);
+    int stride_w, int dilation_h, int dilation_w,
+    FloatPointer data_im);
 @Namespace("caffe") public static native @Name("col2im_gpu<float>") void col2im_gpu_float(@Const FloatBuffer data_col, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, FloatBuffer data_im);
+    int stride_w, int dilation_h, int dilation_w,
+    FloatBuffer data_im);
 @Namespace("caffe") public static native @Name("col2im_gpu<float>") void col2im_gpu_float(@Const float[] data_col, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, float[] data_im);
+    int stride_w, int dilation_h, int dilation_w,
+    float[] data_im);
 
 @Namespace("caffe") public static native @Name("col2im_gpu<double>") void col2im_gpu_double(@Const DoublePointer data_col, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, DoublePointer data_im);
+    int stride_w, int dilation_h, int dilation_w,
+    DoublePointer data_im);
 @Namespace("caffe") public static native @Name("col2im_gpu<double>") void col2im_gpu_double(@Const DoubleBuffer data_col, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, DoubleBuffer data_im);
+    int stride_w, int dilation_h, int dilation_w,
+    DoubleBuffer data_im);
 @Namespace("caffe") public static native @Name("col2im_gpu<double>") void col2im_gpu_double(@Const double[] data_col, int channels,
     int height, int width, int kernel_h, int kernel_w,
     int pad_h, int pad_w, int stride_h,
-    int stride_w, double[] data_im);
+    int stride_w, int dilation_h, int dilation_w,
+    double[] data_im);
 
   // namespace caffe
 

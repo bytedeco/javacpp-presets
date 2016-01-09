@@ -41,6 +41,7 @@
           <includePaths>
             <includePath>${basedir}/cppbuild/${platform}/tensorflow-${tensorflow.version}/</includePath>
             <includePath>${basedir}/cppbuild/${platform}/tensorflow-${tensorflow.version}/bazel-genfiles/</includePath>
+            <includePath>${basedir}/cppbuild/${platform}/tensorflow-${tensorflow.version}/bazel-tensorflow-${tensorflow.version}/</includePath>
             <includePath>${basedir}/cppbuild/${platform}/tensorflow-${tensorflow.version}/google/protobuf/src/</includePath>
             <includePath>${basedir}/cppbuild/${platform}/tensorflow-${tensorflow.version}/third_party/eigen3/</includePath>
           </includePaths>

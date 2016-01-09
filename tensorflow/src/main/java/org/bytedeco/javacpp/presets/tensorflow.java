@@ -46,7 +46,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 @Properties(value = @Platform(value = {"linux", "macosx"}, compiler = "cpp11", define = "NDEBUG", include = {
         "tensorflow/core/platform/default/integral_types.h", "tensorflow/core/framework/numeric_types.h", "tensorflow/core/platform/init_main.h",
         /* "tensorflow/core/platform/default/mutex.h", "tensorflow/core/lib/core/refcount.h", "tensorflow/core/lib/gtl/array_slice.h",
-        "tensorflow/core/lib/core/stringpiece.h", */ "tensorflow/core/platform/port.h", "tensorflow/core/lib/core/error_codes.pb.h",
+        "tensorflow/core/lib/core/stringpiece.h", */ "tensorflow/core/platform/types.h", "tensorflow/core/platform/mutex.h",
+        "tensorflow/core/platform/macros.h", "tensorflow/core/platform/port.h", "tensorflow/core/lib/core/error_codes.pb.h",
         "tensorflow/core/platform/logging.h", "tensorflow/core/public/status.h", "tensorflow/core/platform/protobuf.h",
         "tensorflow/core/public/env.h", "tensorflow/core/framework/config.pb.h", "tensorflow/core/public/session_options.h",
         "tensorflow/core/lib/core/threadpool.h", "tensorflow/core/framework/allocation_description.pb.h", "tensorflow/core/framework/allocator.h",
