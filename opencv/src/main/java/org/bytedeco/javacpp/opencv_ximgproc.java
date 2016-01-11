@@ -1321,26 +1321,6 @@ the use of this software, even if advised of the possibility of such damage.
             }
 
             // An object to manage set of points, who can be fusionned
-            @Namespace("cv::ximgproc::segmentation") @NoOffset public static class PointSet extends Pointer {
-                static { Loader.load(); }
-                /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-                public PointSet(Pointer p) { super(p); }
-            
-                    public PointSet(int nb_elements_) { super((Pointer)null); allocate(nb_elements_); }
-                    private native void allocate(int nb_elements_);
-
-                    public native int nb_elements(); public native PointSet nb_elements(int nb_elements);
-
-                    // Return the main point of the point's set
-                    public native int getBasePoint(int p);
-
-                    // Join two sets of points, based on their main point
-                    public native void joinPoints(int p_a, int p_b);
-
-                    // Return the set size of a set (based on the main point)
-                    public native int size(@Cast("unsigned int") int p);
-
-            }
 
         
     

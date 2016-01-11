@@ -21,12 +21,12 @@ OPENCV_PATH=$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/
 
 case $PLATFORM in
     android-arm)
-        ANDROID_STANDALONE_TOOLCHAIN=$ANDROID_NDK ANDROID_NATIVE_API_LEVEL=14 ANDROID_ABI=armeabi-v7a ANDROID_TOOLCHAIN_NAME=arm-linux-androideabi-4.9 $CMAKE -DANDROID_ABI=armeabi-v7a -DCMAKE_TOOLCHAIN_FILE=$OPENCV_PATH/opencv-3.0.0/platforms/android/android.toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/
+        ANDROID_STANDALONE_TOOLCHAIN=$ANDROID_NDK ANDROID_NATIVE_API_LEVEL=14 ANDROID_ABI=armeabi-v7a ANDROID_TOOLCHAIN_NAME=arm-linux-androideabi-4.9 $CMAKE -DANDROID_ABI=armeabi-v7a -DCMAKE_TOOLCHAIN_FILE=$OPENCV_PATH/opencv-3.1.0/platforms/android/android.toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/
         make -j4
         make install
         ;;
     android-x86)
-        ANDROID_STANDALONE_TOOLCHAIN=$ANDROID_NDK ANDROID_NATIVE_API_LEVEL=14 ANDROID_ABI=x86 ANDROID_TOOLCHAIN_NAME=x86-4.9 $CMAKE -DANDROID_ABI=x86 -DCMAKE_TOOLCHAIN_FILE=$OPENCV_PATH/opencv-3.0.0/platforms/android/android.toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/
+        ANDROID_STANDALONE_TOOLCHAIN=$ANDROID_NDK ANDROID_NATIVE_API_LEVEL=14 ANDROID_ABI=x86 ANDROID_TOOLCHAIN_NAME=x86-4.9 $CMAKE -DANDROID_ABI=x86 -DCMAKE_TOOLCHAIN_FILE=$OPENCV_PATH/opencv-3.1.0/platforms/android/android.toolchain.cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$OPENCV_PATH/sdk/native/jni/
         make -j4
         make install
         ;;
