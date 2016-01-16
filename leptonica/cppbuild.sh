@@ -35,12 +35,16 @@ tar -xzvf ../leptonica-$LEPTONICA_VERSION.tar.gz
 
 case $PLATFORM in
     android-arm)
-        export CC="$ANDROID_BIN-gcc -DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -D__native_client__ -pthread -I$INSTALL_PATH/include/ -I$ANDROID_NDK/sources/android/cpufeatures/ --sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
+        FLAGS="-DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -D__native_client__ -pthread -I$INSTALL_PATH/include/ -I$ANDROID_NDK/sources/android/cpufeatures/ --sysroot=$ANDROID_ROOT -DANDROID"
+        export AR="$ANDROID_BIN-ar"
+        export RANLIB="$ANDROID_BIN-ranlib"
+        export CPP="$ANDROID_BIN-cpp $FLAGS"
+        export CC="$ANDROID_BIN-gcc $FLAGS -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
         export LDFLAGS="-L$INSTALL_PATH/lib/ -nostdlib -Wl,--fix-cortex-a8"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         export STRIP="$ANDROID_BIN-strip"
         cd $ZLIB
-        ./configure --prefix=$INSTALL_PATH --static
+        ./configure --prefix=$INSTALL_PATH --static --uname=arm-linux
         make -j4
         make install
         cd ../$GIFLIB
@@ -71,12 +75,16 @@ case $PLATFORM in
         make install-strip
         ;;
      android-x86)
-        export CC="$ANDROID_BIN-gcc -DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -pthread -I$INSTALL_PATH/include/ -I$ANDROID_NDK/sources/android/cpufeatures/ --sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
+        FLAGS="-DS_IREAD=S_IRUSR -DS_IWRITE=S_IWUSR -pthread -I$INSTALL_PATH/include/ -I$ANDROID_NDK/sources/android/cpufeatures/ --sysroot=$ANDROID_ROOT -DANDROID"
+        export AR="$ANDROID_BIN-ar"
+        export RANLIB="$ANDROID_BIN-ranlib"
+        export CPP="$ANDROID_BIN-cpp $FLAGS"
+        export CC="$ANDROID_BIN-gcc $FLAGS -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
         export LDFLAGS="-L$INSTALL_PATH/lib/ -nostdlib"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         export STRIP="$ANDROID_BIN-strip"
         cd $ZLIB
-        ./configure --prefix=$INSTALL_PATH --static
+        ./configure --prefix=$INSTALL_PATH --static --uname=arm-linux
         make -j4
         make install
         cd ../$GIFLIB
