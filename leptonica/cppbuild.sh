@@ -40,6 +40,10 @@ case $PLATFORM in
         export RANLIB="$ANDROID_BIN-ranlib"
         export CPP="$ANDROID_BIN-cpp $FLAGS"
         export CC="$ANDROID_BIN-gcc $FLAGS -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
+        export CXX=
+        export CPPFLAGS=
+        export CFLAGS=
+        export CXXFLAGS=
         export LDFLAGS="-L$INSTALL_PATH/lib/ -nostdlib -Wl,--fix-cortex-a8"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         export STRIP="$ANDROID_BIN-strip"
@@ -80,6 +84,10 @@ case $PLATFORM in
         export RANLIB="$ANDROID_BIN-ranlib"
         export CPP="$ANDROID_BIN-cpp $FLAGS"
         export CC="$ANDROID_BIN-gcc $FLAGS -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
+        export CXX=
+        export CPPFLAGS=
+        export CFLAGS=
+        export CXXFLAGS=
         export LDFLAGS="-L$INSTALL_PATH/lib/ -nostdlib"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         export STRIP="$ANDROID_BIN-strip"
