@@ -349,6 +349,8 @@ limitations under the License.
 // #endif
 
 // Define tensorflow::string to refer to appropriate platform specific type.
+// TODO(josh11b): Move this into the platform/*/integral_types.h files
+// above, and rename them platform/*/types.h.
 // #if defined(PLATFORM_GOOGLE)
 // #else
 // #endif
@@ -555,8 +557,6 @@ limitations under the License.
 
 // #include <vector>
 
-// #include "tensorflow/core/platform/macros.h"
-// #include "tensorflow/core/platform/mutex.h"
 // #include "tensorflow/core/platform/types.h"
 
 // #endif  // TENSORFLOW_PLATFORM_PORT_H_
@@ -688,7 +688,7 @@ limitations under the License.
 // #include "tensorflow/core/platform/platform.h"  // To pick up PLATFORM_define
 
 // #if defined(PLATFORM_GOOGLE) || defined(PLATFORM_GOOGLE_ANDROID)
-// #include "base/logging.h"
+// #include "tensorflow/core/platform/google/build_config/logging.h"
 // #else
 // #include "tensorflow/core/platform/default/logging.h"
 // #endif
@@ -706,7 +706,7 @@ limitations under the License.
 // #endif  // TENSORFLOW_PLATFORM_LOGGING_H_
 
 
-// Parsed from tensorflow/core/public/status.h
+// Parsed from tensorflow/core/lib/core/status.h
 
 /* Copyright 2015 Google Inc. All Rights Reserved.
 
@@ -723,8 +723,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_PUBLIC_STATUS_H_
-// #define TENSORFLOW_PUBLIC_STATUS_H_
+// #ifndef TENSORFLOW_CORE_LIB_CORE_STATUS_H_
+// #define TENSORFLOW_CORE_LIB_CORE_STATUS_H_
 
 // #include <functional>
 // #include <iosfwd>
@@ -805,7 +805,7 @@ public static native void TF_QCHECK_OK(@ByVal Status val);
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_PUBLIC_STATUS_H_
+// #endif  // TENSORFLOW_CORE_LIB_CORE_STATUS_H_
 
 
 // Parsed from tensorflow/core/platform/protobuf.h
@@ -828,17 +828,19 @@ limitations under the License.
 // #ifndef TENSORFLOW_PLATFORM_PROTOBUF_H_
 // #define TENSORFLOW_PLATFORM_PROTOBUF_H_
 
+// #include "tensorflow/core/platform/platform.h"
+// #include "tensorflow/core/platform/types.h"
+
 // Import whatever namespace protobuf comes from into the
 // ::tensorflow::protobuf namespace.
 //
 // TensorFlow code should use the ::tensorflow::protobuf namespace to
 // refer to all protobuf APIs.
 
-// #include "tensorflow/core/platform/port.h"
 // #if defined(PLATFORM_GOOGLE)
-// #include "tensorflow/core/platform/google/protobuf.h"
+// #include "tensorflow/core/platform/google/build_config/protobuf.h"
 // #elif defined(PLATFORM_GOOGLE_ANDROID)
-// #include "tensorflow/core/platform/google/protobuf_android.h"
+// #include "tensorflow/core/platform/google/build_config/protobuf_android.h"
 // #else
 // #include "tensorflow/core/platform/default/protobuf.h"
 // #endif
@@ -855,7 +857,7 @@ limitations under the License.
 // #endif  // TENSORFLOW_PLATFORM_PROTOBUF_H_
 
 
-// Parsed from tensorflow/core/public/env.h
+// Parsed from tensorflow/core/platform/env.h
 
 /* Copyright 2015 Google Inc. All Rights Reserved.
 
@@ -872,17 +874,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_PUBLIC_ENV_H_
-// #define TENSORFLOW_PUBLIC_ENV_H_
+// #ifndef TENSORFLOW_CORE_PLATFORM_ENV_H_
+// #define TENSORFLOW_CORE_PLATFORM_ENV_H_
 
 // #include <stdint.h>
 // #include <string>
 // #include <vector>
+// #include "tensorflow/core/lib/core/status.h"
 // #include "tensorflow/core/lib/core/stringpiece.h"
 // #include "tensorflow/core/platform/macros.h"
 // #include "tensorflow/core/platform/port.h"
 // #include "tensorflow/core/platform/protobuf.h"
-// #include "tensorflow/core/public/status.h"
 
 /** \brief An interface used by the tensorflow implementation to
  *  access operating system functionality like the filesystem etc.
@@ -1237,7 +1239,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_PUBLIC_ENV_H_
+// #endif  // TENSORFLOW_CORE_PLATFORM_ENV_H_
 
 
 // Parsed from tensorflow/core/framework/config.pb.h
@@ -1968,6 +1970,20 @@ limitations under the License.
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer mutable_allocator_name();
   public native @StdString @Cast({"char*", "std::string*"}) BytePointer release_allocator_name();
   public native void set_allocated_allocator_name(@StdString @Cast({"char*", "std::string*"}) BytePointer allocator_name);
+
+  // optional int64 allocation_id = 4;
+  public native void clear_allocation_id();
+  @MemberGetter public static native int kAllocationIdFieldNumber();
+  public static final int kAllocationIdFieldNumber = kAllocationIdFieldNumber();
+  public native @Cast("google::protobuf::int64") long allocation_id();
+  public native void set_allocation_id(@Cast("google::protobuf::int64") long value);
+
+  // optional bool has_single_reference = 5;
+  public native void clear_has_single_reference();
+  @MemberGetter public static native int kHasSingleReferenceFieldNumber();
+  public static final int kHasSingleReferenceFieldNumber = kHasSingleReferenceFieldNumber();
+  public native @Cast("bool") boolean has_single_reference();
+  public native void set_has_single_reference(@Cast("bool") boolean value);
 }
 // ===================================================================
 
@@ -1993,6 +2009,16 @@ limitations under the License.
 
 
 
+
+
+
+
+// optional int64 allocation_id = 4;
+
+
+
+
+// optional bool has_single_reference = 5;
 
 
 
@@ -2033,6 +2059,8 @@ limitations under the License.
 
 // #include <limits>
 
+// #include "tensorflow/core/framework/numeric_types.h"
+// #include "tensorflow/core/framework/type_traits.h"
 // #include "tensorflow/core/platform/logging.h"
 // #include "tensorflow/core/platform/port.h"
 
@@ -2087,9 +2115,11 @@ limitations under the License.
   // REQUIRES: "ptr" was previously returned by a call to AllocateRaw
   public native void DeallocateRaw(Pointer ptr);
 
-  // Convenience functions to do typed allocation.  Note that these functions
-  // do not invoke C++ constructors or destructors.  May return NULL if the
-  // tensor has too many elements to represent in a single allocation.
+  // Convenience functions to do typed allocation.  C++ constructors
+  // and destructors are invoked for complex types if necessary,
+  // depending on the concrete Allocator implementation. May return
+  // NULL if the tensor has too many elements to represent in a single
+  // allocation.
 
   // Returns true if this allocator tracks the sizes of allocations.
   // RequestedSize and AllocatedSize must be overridden if
@@ -2117,10 +2147,30 @@ limitations under the License.
   // allocated by this allocator.
   public native @Cast("size_t") long AllocatedSize(Pointer ptr);
 
-  // TODO(jeff): Maybe provide some interface to give info about
-  // current allocation state (total number of bytes available for
-  // allocation, number of bytes free on device, etc.)
+  // Returns either 0 or an identifier assigned to the buffer at 'ptr'
+  // when the buffer was returned by AllocateRaw. If non-zero, the
+  // identifier differs from every other ID assigned by this
+  // allocator.
+  //
+  // REQUIRES: TracksAllocationSizes() is true.
+  //
+  // REQUIRES: 'ptr!=nullptr' and points to a buffer previously
+  // allocated by this allocator.
+  public native @Cast("tensorflow::int64") long AllocationId(Pointer ptr);
+
+  // is_simple<T>::value if T[] can be safely constructed and destructed
+  // without running T() and ~T().  We do not use std::is_trivial<T>
+  // directly because std::complex<float> is not trival but its array
+  // can be constructed and destructed without running its default ctor
+  // and dtor.
+  // No constructors or destructors are run for simple types
 }
+
+// Allocator-specific constructors and destructors are used for
+// strings
+
+
+
 
 // A tensorflow Op may need access to different kinds of memory that
 // are not simply a function of the device to which the Op has been
@@ -3020,7 +3070,7 @@ limitations under the License.
 // #endif  // TENSORFLOW_FRAMEWORK_TENSOR_TYPES_H_
 
 
-// Parsed from tensorflow/core/public/tensor_shape.h
+// Parsed from tensorflow/core/framework/tensor_shape.h
 
 /* Copyright 2015 Google Inc. All Rights Reserved.
 
@@ -3037,20 +3087,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_PUBLIC_TENSOR_SHAPE_H_
-// #define TENSORFLOW_PUBLIC_TENSOR_SHAPE_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_TENSOR_SHAPE_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_TENSOR_SHAPE_H_
 
 // #include <string>
 
 // #include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
 // #include "tensorflow/core/framework/tensor_shape.pb.h"
 // #include "tensorflow/core/lib/core/errors.h"
+// #include "tensorflow/core/lib/core/status.h"
 // #include "tensorflow/core/lib/core/stringpiece.h"
 // #include "tensorflow/core/lib/gtl/array_slice.h"
 // #include "tensorflow/core/lib/gtl/inlined_vector.h"
 // #include "tensorflow/core/lib/strings/strcat.h"
-// #include "tensorflow/core/platform/logging.h"
-// #include "tensorflow/core/public/status.h"  // Declared below
+// #include "tensorflow/core/platform/logging.h"  // Declared below
 
 /** Manages the dimensions of a Tensor and their sizes. */
 @Namespace("tensorflow") @NoOffset public static class TensorShape extends Pointer {
@@ -3152,9 +3202,10 @@ limitations under the License.
 
   /** For error messages. */
   public native @StdString BytePointer DebugString();
+
+  /** Same as DebugString() */
   public native @StdString BytePointer ShortDebugString();
-  // TODO(vrv): Consolidate DebugString() and ShortDebugString() into one
-  // function that is not verbose and works for scalars.
+  // TODO(irving): Remove, used to be different but isn't now.
 
   /** Same as {@code TensorShape(proto).ShortDebugString()} but doesn't crash for
    *  invalid protos. */
@@ -3184,17 +3235,6 @@ limitations under the License.
   public native @ByVal @Name("operator *") TensorShapeDim multiply();
 }
 
-// In some places, allow shape (1,) to be treated as a scalar and shape () to be
-// treated as a vector.  This flag is for temporary backwards compatibility
-// only, and will be changed to strict within Google around November 15, 2015.
-// #if defined(PLATFORM_GOOGLE)
-// TODO(irving): Become strict on November 15, 2015.
-@Namespace("tensorflow") @MemberGetter public static native @Cast("const bool") boolean kAllowLegacyScalars();
-public static final boolean kAllowLegacyScalars = kAllowLegacyScalars();
-// #else
-// For open source (outside Google), we are strict.
-// #endif
-
 /** \brief Static helper routines for {@code TensorShape}. Includes a few common
  *  predicates on a tensor shape. */
 @Namespace("tensorflow") public static class TensorShapeUtils extends Pointer {
@@ -3214,12 +3254,6 @@ public static final boolean kAllowLegacyScalars = kAllowLegacyScalars();
   public static native @Cast("bool") boolean IsScalar(@Const @ByRef TensorShape shape);
 
   public static native @Cast("bool") boolean IsVector(@Const @ByRef TensorShape shape);
-
-  // Allow either scalars or (if allowing legacy scalars) shape (1,).
-  public static native @Cast("bool") boolean IsLegacyScalar(@Const @ByRef TensorShape shape);
-
-  // Allow rank 1 or (if allowing legacy scalars) rank 0.
-  public static native @Cast("bool") boolean IsLegacyVector(@Const @ByRef TensorShape shape);
 
   public static native @Cast("bool") boolean IsVectorOrHigher(@Const @ByRef TensorShape shape);
 
@@ -3245,10 +3279,10 @@ public static final boolean kAllowLegacyScalars = kAllowLegacyScalars();
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_PUBLIC_TENSOR_SHAPE_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_TENSOR_SHAPE_H_
 
 
-// Parsed from tensorflow/core/public/tensor.h
+// Parsed from tensorflow/core/framework/tensor.h
 
 /* Copyright 2015 Google Inc. All Rights Reserved.
 
@@ -3265,8 +3299,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==============================================================================*/
 
-// #ifndef TENSORFLOW_PUBLIC_TENSOR_H_
-// #define TENSORFLOW_PUBLIC_TENSOR_H_
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_TENSOR_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_TENSOR_H_
 
 // #include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
 // #include "tensorflow/core/framework/allocation_description.pb.h"
@@ -3357,6 +3391,13 @@ limitations under the License.
   public native @Cast("tensorflow::int64") long NumElements();
 
   public native @Cast("bool") boolean IsSameSize(@Const @ByRef Tensor b);
+
+  // True iff the two tensors use the same underlying refcounted storage
+  public native @Cast("bool") boolean SharesBufferWith(@Const @ByRef Tensor b);
+
+  // The BufferHash of two tensors are equal when they share the same
+  // underlying refcounted storage
+  public native @Cast("size_t") long BufferHash();
 
   /** Has this Tensor been initialized? */
   public native @Cast("bool") boolean IsInitialized();
@@ -3557,7 +3598,7 @@ limitations under the License.
 
   // namespace tensorflow
 
-// #endif  // TENSORFLOW_PUBLIC_TENSOR_H_
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_TENSOR_H_
 
 
 // Parsed from tensorflow/core/framework/attr_value.pb.h
@@ -5859,7 +5900,7 @@ limitations under the License.
 // * Objects are always passed around as pointers to opaque structs
 //   and these structs are allocated/deallocated via the API.
 // * TF_Status holds error information.  It is an object type
-//   and threfore is passed around as a pointer to an opaque
+//   and therefore is passed around as a pointer to an opaque
 //   struct as mentioned above.
 // * Every call that has a TF_Status* argument clears it on success
 //   and fills it with error info on failure.
@@ -6273,7 +6314,7 @@ limitations under the License.
   public native @ByRef OpDefBuilder Attr(@StringPiece BytePointer spec);
   public native @ByRef OpDefBuilder Attr(@StringPiece String spec);
 
-  // Adds an input or ouput to this OpDefBuilder (and returns *this).
+  // Adds an input or output to this OpDefBuilder (and returns *this).
   // The spec has form "<name>:<type-expr>" or "<name>:Ref(<type-expr>)"
   // where <name> matches regexp [a-z][a-z0-9_]* and <type-expr> can be:
   // * For a single tensor: <type>
@@ -6479,7 +6520,7 @@ limitations under the License.
   public native @Const OpDef LookUp(@StdString String op_type_name,
                         Status status);
 
-  // Fills *ops with all registered OpDefss (except those with names
+  // Fills *ops with all registered OpDefs (except those with names
   // starting with '_' if include_internal == false).
   public native void Export(@Cast("bool") boolean include_internal, OpList ops);
 
@@ -7888,7 +7929,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with outputs:
 // * r0
@@ -7907,7 +7948,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node CheckNumerics(@ByVal NodeBuilder.NodeOut tensor, @StringPiece BytePointer message, @Const @ByRef GraphDefBuilder.Options opts);
@@ -7924,7 +7965,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // A `Tensor` with the concatenation of values stacked along the
@@ -7932,6 +7973,30 @@ limitations under the License.
 // in `concat_dim` where it has the sum of the sizes.
 @Namespace("tensorflow::ops") public static native Node Concat(@ByVal NodeBuilder.NodeOut concat_dim, @ByVal NodeOutVector values, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node Concat(Node concat_dim, @ByVal NodeOutVector values, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes offsets of concat inputs within its output.
+//
+// For example:
+//
+// ```prettyprint
+// # 'x' is [2, 2, 7]
+// # 'y' is [2, 3, 7]
+// # 'z' is [2, 5, 7]
+// concat_offset(2, [x, y, z]) => [0, 0, 0], [0, 2, 0], [0, 5, 0]
+// ```
+//
+// Arguments:
+// * concat_dim: The dimension along which to concatenate.
+// * shape: The `N` int32 vetors representing shape of tensors being concatenated.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node ConcatOffset(@ByVal NodeBuilder.NodeOut concat_dim, @ByVal NodeOutVector shape, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node ConcatOffset(Node concat_dim, @ByVal NodeOutVector shape, @Const @ByRef GraphDefBuilder.Options opts);
 
 // Returns a constant tensor.
 //
@@ -7941,7 +8006,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Const(@Const @ByRef Tensor value, @Cast("tensorflow::DataType") int dtype, @Const @ByRef GraphDefBuilder.Options opts);
@@ -7972,7 +8037,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Diag(@ByVal NodeBuilder.NodeOut diagonal, @Const @ByRef GraphDefBuilder.Options opts);
@@ -8007,7 +8072,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // A dense float tensor with rank R - 1.
@@ -8085,7 +8150,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Contains the same data as `input`, but its shape has an additional
@@ -8112,7 +8177,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Fill(@ByVal NodeBuilder.NodeOut dims, @ByVal NodeBuilder.NodeOut value, @Const @ByRef GraphDefBuilder.Options opts);
@@ -8144,7 +8209,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Gather(@ByVal NodeBuilder.NodeOut params, @ByVal NodeBuilder.NodeOut indices, @Const @ByRef GraphDefBuilder.Options opts);
@@ -8157,7 +8222,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Identity(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
@@ -8187,7 +8252,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // 1-D.
@@ -8225,7 +8290,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with outputs:
 // * out: 1-D. Values present in `x` but not in `y`.
@@ -8247,7 +8312,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The packed tensor.
@@ -8283,7 +8348,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Pad(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut paddings, @Const @ByRef GraphDefBuilder.Options opts);
@@ -8304,7 +8369,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // A placeholder tensor that must be replaced using the feed mechanism.
@@ -8331,7 +8396,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Rank(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
@@ -8344,7 +8409,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node RefIdentity(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
@@ -8402,7 +8467,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Reshape(@ByVal NodeBuilder.NodeOut tensor, @ByVal NodeBuilder.NodeOut shape, @Const @ByRef GraphDefBuilder.Options opts);
@@ -8462,7 +8527,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The same shape as `tensor`.
@@ -8528,7 +8593,7 @@ limitations under the License.
 //
 // Arguments:
 // * input: The input to reverse.
-// * seq_lengths: 1-D with length `input.dims(0)` and
+// * seq_lengths: 1-D with length `input.dims(batch_dim)` and
 // `max(seq_lengths) < input.dims(seq_dim)`
 // * seq_dim: The dimension which is partially reversed.
 // * opts:
@@ -8537,7 +8602,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The partially reversed input. It has the same shape as `input`.
@@ -8560,11 +8625,25 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Shape(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node Shape(Node input, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Returns shape of tensors.
+//
+// This operation returns N 1-D integer tensors representing shape of `input[i]s`.
+//
+// Arguments:
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node ShapeN(@ByVal NodeOutVector input, @Const @ByRef GraphDefBuilder.Options opts);
 
 // Returns the size of a tensor.
 //
@@ -8583,7 +8662,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Size(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
@@ -8609,7 +8688,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Slice(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut begin, @ByVal NodeBuilder.NodeOut size, @Const @ByRef GraphDefBuilder.Options opts);
@@ -8627,7 +8706,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // They are identically shaped tensors, whose shape matches that of `value`
@@ -8666,7 +8745,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Contains the same data as `input`, but has one or more dimensions of
@@ -8701,7 +8780,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node StopGradient(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
@@ -8722,7 +8801,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Tile(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut multiples, @Const @ByRef GraphDefBuilder.Options opts);
@@ -8739,7 +8818,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node TileGrad(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut multiples, @Const @ByRef GraphDefBuilder.Options opts);
@@ -8755,7 +8834,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Transpose(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut perm, @Const @ByRef GraphDefBuilder.Options opts);
@@ -8785,13 +8864,48 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with outputs:
 // * y: 1-D.
 // * idx: 1-D.
 @Namespace("tensorflow::ops") public static native Node Unique(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node Unique(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Finds unique elements in a 1-D tensor.
+//
+// This operation returns a tensor `y` containing all of the unique elements of `x`
+// sorted in the same order that they occur in `x`. This operation also returns a
+// tensor `idx` the same size as `x` that contains the index of each value of `x`
+// in the unique output `y`. Finally, it returns a third tensor `count` that
+// contains the count of each element of `y` in `x`. In other words:
+//
+// `y[idx[i]] = x[i] for i in [0, 1,...,rank(x) - 1]`
+//
+// For example:
+//
+// ```prettyprint
+// # tensor 'x' is [1, 1, 2, 4, 4, 4, 7, 8, 8]
+// y, idx, count = unique(x)
+// y ==> [1, 2, 4, 7, 8]
+// idx ==> [0, 0, 1, 2, 2, 2, 3, 4, 4]
+// count ==> [2, 1, 3, 1, 2]
+// ```
+//
+// Arguments:
+// * x: 1-D.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with outputs:
+// * y: 1-D.
+// * idx: 1-D.
+// * count: 1-D.
+@Namespace("tensorflow::ops") public static native Node UniqueWithCounts(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node UniqueWithCounts(Node x, @Const @ByRef GraphDefBuilder.Options opts);
 
 // Unpacks the outer dimension of a rank-`R` tensor into `num` rank-`(R-1)` tensors.
 //
@@ -8807,7 +8921,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The list of tensors unpacked from `value`.
@@ -8853,7 +8967,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Where(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
@@ -8867,7 +8981,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // a tensor of the same shape and type as x but filled with zeros.
@@ -8939,7 +9053,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // A tensor representing the glimpses `[batch_size, glimpse_height,
@@ -9014,7 +9128,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node DynamicPartition(@ByVal NodeBuilder.NodeOut data, @ByVal NodeBuilder.NodeOut partitions, @Cast("tensorflow::int64") long num_partitions,
@@ -9067,7 +9181,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node DynamicStitch(@ByVal NodeOutVector indices, @ByVal NodeOutVector data, @Const @ByRef GraphDefBuilder.Options opts);
@@ -9094,7 +9208,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The handle to the queue.
@@ -9119,7 +9233,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Handle to a table.
@@ -9135,7 +9249,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node InitializeTable(@ByVal NodeBuilder.NodeOut table_handle, @ByVal NodeBuilder.NodeOut keys, @ByVal NodeBuilder.NodeOut values, @Const @ByRef GraphDefBuilder.Options opts);
@@ -9156,7 +9270,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Same shape as `keys`.  Values found in the table, or `default_values`
@@ -9172,12 +9286,48 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Scalar that contains number of elements in the table.
 @Namespace("tensorflow::ops") public static native Node LookupTableSize(@ByVal NodeBuilder.NodeOut table_handle, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node LookupTableSize(Node table_handle, @Const @ByRef GraphDefBuilder.Options opts);
+
+// A queue that produces elements in first-in first-out order.
+//
+// Variable-size shapes are allowed by setting the corresponding shape dimensions
+// to 0 in the shape attr.  In this case DequeueMany will pad up to the maximum
+// size of any given element in the minibatch.  See below for details.
+//
+// Arguments:
+// * component_types: The type of each component in a value.
+// * opts:
+//   .WithAttr("shapes", gtl::ArraySlice<TensorShape>): Defaults to [].
+//     The shape of each component in a value. The length of this attr must
+// be either 0 or the same as the length of component_types.
+// Shapes of fixed rank but variable size are allowed by setting
+// any shape dimension to -1.  In this case, the inputs' shape may vary along
+// the given dimension, and DequeueMany will pad the given dimension with
+// zeros up to the maximum shape of all elements in the given batch.
+// If the length of this attr is 0, different queue elements may have
+// different ranks and shapes, but only one element may be dequeued at a time.
+//   .WithAttr("capacity", int64): Defaults to -1.
+//     The upper bound on the number of elements in this queue.
+// Negative numbers mean no limit.
+//   .WithAttr("container", StringPiece): Defaults to "".
+//     If non-empty, this queue is placed in the given container.
+// Otherwise, a default container is used.
+//   .WithAttr("shared_name", StringPiece): Defaults to "".
+//     If non-empty, this queue will be shared under the given name
+// across multiple sessions.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The handle to the queue.
+@Namespace("tensorflow::ops") public static native Node PaddingFIFOQueue(@ByVal DataTypeVector component_types, @Const @ByRef GraphDefBuilder.Options opts);
 
 // Closes the given queue.
 //
@@ -9196,7 +9346,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node QueueClose(@ByVal NodeBuilder.NodeOut handle, @Const @ByRef GraphDefBuilder.Options opts);
@@ -9222,7 +9372,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // One or more tensors that were dequeued as a tuple.
@@ -9254,7 +9404,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // One or more tensors that were dequeued as a tuple.
@@ -9280,7 +9430,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node QueueEnqueue(@ByVal NodeBuilder.NodeOut handle, @ByVal NodeOutVector components, @Const @ByRef GraphDefBuilder.Options opts);
@@ -9310,7 +9460,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node QueueEnqueueMany(@ByVal NodeBuilder.NodeOut handle, @ByVal NodeOutVector components,
@@ -9326,7 +9476,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The number of elements in the given queue.
@@ -9364,7 +9514,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The handle to the queue.
@@ -9381,7 +9531,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The handle to the stack.
@@ -9395,7 +9545,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node StackClose(@ByVal NodeBuilder.NodeOut handle, @Const @ByRef GraphDefBuilder.Options opts);
@@ -9410,7 +9560,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The tensor that is popped from the top of the stack.
@@ -9426,12 +9576,137 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The same tensor as the input 'elem'.
 @Namespace("tensorflow::ops") public static native Node StackPush(@ByVal NodeBuilder.NodeOut handle, @ByVal NodeBuilder.NodeOut elem, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node StackPush(Node handle, Node elem, @Const @ByRef GraphDefBuilder.Options opts);
+
+// An array of Tensors of given size, with data written via Write and read
+//
+// via Read or Pack.
+//
+// Arguments:
+// * size: The size of the array.
+// * dtype: The type of the elements on the tensor_array.
+// * opts:
+//   .WithAttr("tensor_array_name", StringPiece): Defaults to "".
+//     Overrides the name used for the temporary tensor_array resource. Default
+// value is the name of the 'TensorArray' op (which is guaranteed unique).
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The handle to the TensorArray.
+@Namespace("tensorflow::ops") public static native Node TensorArray(@ByVal NodeBuilder.NodeOut size, @Cast("tensorflow::DataType") int dtype, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node TensorArray(Node size, @Cast("tensorflow::DataType") int dtype, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Delete the TensorArray from its resource container.  This enables
+//
+// the user to close and release the resource in the middle of a step/run.
+//
+// Arguments:
+// * handle: The handle to a TensorArray (output of TensorArray or TensorArrayGrad).
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node TensorArrayClose(@ByVal NodeBuilder.NodeOut handle, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node TensorArrayClose(Node handle, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Creates a TensorArray for storing the gradients of values in the given handle.
+//
+// If the given TensorArray gradient already exists, returns a reference to it.
+//
+// Arguments:
+// * handle: The handle to the forward TensorArray.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node TensorArrayGrad(@ByVal NodeBuilder.NodeOut handle, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node TensorArrayGrad(Node handle, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Pack the elements from the TensorArray.
+//
+// All elements must have the same shape.
+//
+// Arguments:
+// * handle: The handle to a TensorArray.
+// * dtype: The type of the elem that is returned.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// All of the elements in the TensorArray, concatenated along a new
+// axis (the new dimension 0).
+@Namespace("tensorflow::ops") public static native Node TensorArrayPack(@ByVal NodeBuilder.NodeOut handle, @Cast("tensorflow::DataType") int dtype, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node TensorArrayPack(Node handle, @Cast("tensorflow::DataType") int dtype, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Read an element from the TensorArray.
+//
+// Arguments:
+// * handle: The handle to a TensorArray.
+// * dtype: The type of the elem that is returned.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// The tensor that is read from the TensorArray.
+@Namespace("tensorflow::ops") public static native Node TensorArrayRead(@ByVal NodeBuilder.NodeOut handle, @ByVal NodeBuilder.NodeOut index, @Cast("tensorflow::DataType") int dtype, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node TensorArrayRead(Node handle, Node index, @Cast("tensorflow::DataType") int dtype, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Unpack the data from the input value into TensorArray elements.
+//
+// Arguments:
+// * handle: The handle to a TensorArray.
+// * value: The concatenated tensor to write to the TensorArray.
+// * opts:
+//   .WithAttr("gradient_add", bool): Defaults to false.
+//     Used for gradient back-propagation.  If values are already
+// written to the handle, validate shapes and add to them.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node TensorArrayUnpack(@ByVal NodeBuilder.NodeOut handle, @ByVal NodeBuilder.NodeOut value, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node TensorArrayUnpack(Node handle, Node value, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Push an element onto the tensor_array.
+//
+// Arguments:
+// * handle: The handle to a TensorArray.
+// * index: The position to write to inside the TensorArray.
+// * value: The tensor to write to the TensorArray.
+// * opts:
+//   .WithAttr("gradient_add", bool): Defaults to false.
+//     Used for gradient back-propagation.  If the value has already
+// been written to the handle, validate input shape and add to it.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node TensorArrayWrite(@ByVal NodeBuilder.NodeOut handle, @ByVal NodeBuilder.NodeOut index, @ByVal NodeBuilder.NodeOut value, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node TensorArrayWrite(Node handle, Node index, Node value, @Const @ByRef GraphDefBuilder.Options opts);
 
   // namespace ops
   // namespace tensorflow
@@ -9466,7 +9741,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node AdjustContrast(@ByVal NodeBuilder.NodeOut images, @ByVal NodeBuilder.NodeOut contrast_factor, @ByVal NodeBuilder.NodeOut min_value, @ByVal NodeBuilder.NodeOut max_value, @Const @ByRef GraphDefBuilder.Options opts);
@@ -9491,7 +9766,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The contrast-adjusted image or images.
@@ -9534,7 +9809,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // 3-D with shape `[height, width, channels]`..
@@ -9564,7 +9839,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // 3-D with shape `[height, width, channels]`.
@@ -9615,7 +9890,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // 0-D. JPEG-encoded image.
@@ -9643,7 +9918,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // 0-D. PNG-encoded image.
@@ -9664,7 +9939,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // `images` converted to RGB.
@@ -9687,7 +9962,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // `images` converted to HSV.
@@ -9716,7 +9991,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // 3-D of shape `[crop_height, crop_width, channels].`
@@ -9735,7 +10010,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // 4-D with shape
@@ -9755,7 +10030,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // 4-D with shape
@@ -9779,7 +10054,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // 4-D with shape
@@ -9801,7 +10076,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // 4-D with shape `[batch, orig_height, orig_width, channels]`.
@@ -9820,7 +10095,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // 4-D with shape
@@ -9838,7 +10113,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // 4-D with shape `[batch, orig_height, orig_width, channels]`. Gradients
@@ -9887,7 +10162,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The handle to reference the Reader.
@@ -9909,7 +10184,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The handle to reference the Reader.
@@ -9926,7 +10201,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // A vector of matching filenames.
@@ -9940,7 +10215,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node ReadFile(@ByVal NodeBuilder.NodeOut filename, @Const @ByRef GraphDefBuilder.Options opts);
@@ -9957,7 +10232,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node ReaderNumRecordsProduced(@ByVal NodeBuilder.NodeOut reader_handle, @Const @ByRef GraphDefBuilder.Options opts);
@@ -9971,7 +10246,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node ReaderNumWorkUnitsCompleted(@ByVal NodeBuilder.NodeOut reader_handle, @Const @ByRef GraphDefBuilder.Options opts);
@@ -9990,7 +10265,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with outputs:
 // * key: A scalar.
@@ -10006,7 +10281,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node ReaderReset(@ByVal NodeBuilder.NodeOut reader_handle, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10025,7 +10300,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node ReaderRestoreState(@ByVal NodeBuilder.NodeOut reader_handle, @ByVal NodeBuilder.NodeOut state, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10042,7 +10317,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node ReaderSerializeState(@ByVal NodeBuilder.NodeOut reader_handle, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10080,7 +10355,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The restored tensor.
@@ -10111,7 +10386,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The restored tensor.
@@ -10134,7 +10409,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Save(@ByVal NodeBuilder.NodeOut filename, @ByVal NodeBuilder.NodeOut tensor_names, @ByVal NodeOutVector data, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10175,13 +10450,13 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node SaveSlices(@ByVal NodeBuilder.NodeOut filename, @ByVal NodeBuilder.NodeOut tensor_names, @ByVal NodeBuilder.NodeOut shapes_and_slices, @ByVal NodeOutVector data, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node SaveSlices(Node filename, Node tensor_names, Node shapes_and_slices, @ByVal NodeOutVector data, @Const @ByRef GraphDefBuilder.Options opts);
 
-// Generate a sharded filename. The filename is printf formated as
+// Generate a sharded filename. The filename is printf formatted as
 //
 //    %s-%05d-of-%05d, basename, shard, num_shards.
 //
@@ -10190,7 +10465,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node ShardedFilename(@ByVal NodeBuilder.NodeOut basename, @ByVal NodeBuilder.NodeOut shard, @ByVal NodeBuilder.NodeOut num_shards,
@@ -10205,7 +10480,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node ShardedFilespec(@ByVal NodeBuilder.NodeOut basename, @ByVal NodeBuilder.NodeOut num_shards, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10224,7 +10499,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The handle to reference the Reader.
@@ -10245,7 +10520,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The handle to reference the Reader.
@@ -10267,7 +10542,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The handle to reference the Reader.
@@ -10312,7 +10587,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Shape is `[..., M, M]`.
@@ -10331,7 +10606,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Shape is `[...]`.
@@ -10357,12 +10632,65 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Shape is `[..., M, M]`.
 @Namespace("tensorflow::ops") public static native Node BatchMatrixInverse(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node BatchMatrixInverse(Node input, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Solves systems of linear equations. Checks for invertibility.
+//
+// Matrix is a tensor of shape `[..., M, M]` whose inner-most 2 dimensions
+// form square matrices. Rhs is a tensor of shape
+// `[..., M, K]`. The output is a tensor shape `[..., M, K]` where each output
+// matrix satisfies matrix[..., :, :] * output[..., :, :] = rhs[..., :, :].
+//
+// Arguments:
+// * matrix: Shape is `[..., M, M]`.
+// * rhs: Shape is `[..., M, K]`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Shape is `[..., M, K]`.
+@Namespace("tensorflow::ops") public static native Node BatchMatrixSolve(@ByVal NodeBuilder.NodeOut matrix, @ByVal NodeBuilder.NodeOut rhs, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node BatchMatrixSolve(Node matrix, Node rhs, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Solves systems of linear equations with upper or lower triangular matrices by
+//
+// backsubstitution.
+//
+// `matrix` is a tensor of shape `[..., M, M]` whose inner-most 2 dimensions form
+// square matrices. If `lower` is `True` then the strictly upper triangular part
+// of each inner-most matrix is ignored. If `lower` is False then the strictly
+// lower triangular part of each inner-most matrix is ignored. `rhs` is a tensor
+// of shape [..., M, K]`.
+//
+// The output is a tensor of shape `[..., M, K]`. If `lower` is `True` then the
+// output satisfies
+// \\(\sum_{k=0}^{i}\\) matrix[..., i, k] * output[..., k, j] = rhs[..., i, j].
+// If `lower` is false then the strictly then the output satisfies
+// \\(sum_{k=i}^{K-1}\\) matrix[..., i, k] * output[..., k, j] = rhs[..., i, j].
+//
+// Arguments:
+// * matrix: Shape is `[..., M, M]`.
+// * rhs: Shape is `[..., M, K]`.
+// * opts:
+//   .WithAttr("lower", bool): Defaults to true.
+//     Boolean indicating whether matrix is lower or upper triangular.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Shape is `[..., M, K]`.
+@Namespace("tensorflow::ops") public static native Node BatchMatrixTriangularSolve(@ByVal NodeBuilder.NodeOut matrix, @ByVal NodeBuilder.NodeOut rhs, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node BatchMatrixTriangularSolve(Node matrix, Node rhs, @Const @ByRef GraphDefBuilder.Options opts);
 
 // Calculates the Eigen Decomposition of a batch of square self-adjoint matrices.
 //
@@ -10379,7 +10707,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Shape is `[..., M+1, M]`.
@@ -10401,7 +10729,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Shape is `[M, M]`.
@@ -10416,7 +10744,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // A scalar, equal to the determinant of the input.
@@ -10438,12 +10766,59 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Shape is `[M, M]` containing the matrix inverse of the input.
 @Namespace("tensorflow::ops") public static native Node MatrixInverse(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node MatrixInverse(Node input, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Solves a system of linear equations. Checks for invertibility.
+//
+// Arguments:
+// * matrix: Shape is `[M, M]`.
+// * rhs: Shape is `[M, K]`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Shape is `[M, K]` containing the tensor that solves
+// matrix * output = rhs.
+@Namespace("tensorflow::ops") public static native Node MatrixSolve(@ByVal NodeBuilder.NodeOut matrix, @ByVal NodeBuilder.NodeOut rhs, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MatrixSolve(Node matrix, Node rhs, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Solves a system of linear equations with an upper or lower triangular matrix by
+//
+// backsubstitution.
+//
+// `matrix` is a matrix of shape `[M, M]`. If `lower` is `True` then the strictly
+// upper triangular part of `matrix` is ignored. If `lower` is False then the
+// strictly lower triangular part of `matrix` is ignored. `rhs` is a matrix of
+// shape [M, K]`.
+//
+// The output is a matrix of shape `[M, K]`. If `lower` is `True` then the output
+// satisfies \\(\sum_{k=0}^{i}\\) matrix[i, k] * output[k, j] = rhs[i, j].
+// If `lower` is false then output satisfies
+// \\(\sum_{k=i}^{K-1}\\) matrix[i, k] * output[k, j] = rhs[i, j].
+//
+// Arguments:
+// * matrix: Shape is `[M, M]`.
+// * rhs: Shape is `[M, K]`.
+// * opts:
+//   .WithAttr("lower", bool): Defaults to true.
+//     Boolean indicating whether matrix is lower or upper triangular.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Shape is `[M, K]`.
+@Namespace("tensorflow::ops") public static native Node MatrixTriangularSolve(@ByVal NodeBuilder.NodeOut matrix, @ByVal NodeBuilder.NodeOut rhs, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node MatrixTriangularSolve(Node matrix, Node rhs, @Const @ByRef GraphDefBuilder.Options opts);
 
 // Calculates the Eigen Decomposition of a square Self-Adjoint matrix.
 //
@@ -10459,7 +10834,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Shape is `[M+1, M]`.
@@ -10506,7 +10881,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Assert(@ByVal NodeBuilder.NodeOut condition, @ByVal NodeOutVector data, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10529,7 +10904,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The unmodified `input` tensor
@@ -10573,7 +10948,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Abs(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10588,7 +10963,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Add(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10602,7 +10977,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node AddN(@ByVal NodeOutVector inputs, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10623,7 +10998,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The reduced tensor.
@@ -10646,7 +11021,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The reduced tensor.
@@ -10662,7 +11037,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node ArgMax(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut dimension, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10677,7 +11052,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node ArgMin(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut dimension, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10715,7 +11090,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // 3-D or higher with shape `[..., r_o, c_o]`
@@ -10729,7 +11104,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Cast(@ByVal NodeBuilder.NodeOut x, @Cast("tensorflow::DataType") int DstT, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10742,7 +11117,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Ceil(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10770,7 +11145,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Complex(@ByVal NodeBuilder.NodeOut real, @ByVal NodeBuilder.NodeOut imag, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10795,7 +11170,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node ComplexAbs(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10822,7 +11197,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Conj(@ByVal NodeBuilder.NodeOut in, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10835,7 +11210,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Cos(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10848,7 +11223,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Div(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10861,7 +11236,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Equal(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10874,7 +11249,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Erf(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10887,7 +11262,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Erfc(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10900,7 +11275,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Exp(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10914,7 +11289,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The 2D Fourier Transform of `in`.
@@ -10928,7 +11303,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Floor(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10941,7 +11316,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Greater(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10954,7 +11329,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node GreaterEqual(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
@@ -10968,7 +11343,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The inverse 2D Fourier Transform of `in`.
@@ -10994,7 +11369,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Imag(@ByVal NodeBuilder.NodeOut in, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11009,7 +11384,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Inv(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11022,7 +11397,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node IsFinite(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11035,7 +11410,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node IsInf(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11048,7 +11423,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node IsNan(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11061,7 +11436,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Less(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11074,7 +11449,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node LessEqual(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11087,7 +11462,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Lgamma(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11113,7 +11488,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // 1-D. The generated values.
@@ -11129,7 +11504,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Log(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11142,7 +11517,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node LogicalAnd(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11155,7 +11530,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node LogicalNot(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11168,7 +11543,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node LogicalOr(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11193,7 +11568,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node MatMul(@ByVal NodeBuilder.NodeOut a, @ByVal NodeBuilder.NodeOut b, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11215,7 +11590,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The reduced tensor.
@@ -11229,7 +11604,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Maximum(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11251,7 +11626,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The reduced tensor.
@@ -11274,7 +11649,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The reduced tensor.
@@ -11288,7 +11663,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Minimum(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11301,7 +11676,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Mod(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11314,7 +11689,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Mul(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11329,7 +11704,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Neg(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11342,7 +11717,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node NotEqual(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11364,7 +11739,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Pow(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11386,7 +11761,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The reduced tensor.
@@ -11415,7 +11790,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // 1-D.
@@ -11441,7 +11816,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Real(@ByVal NodeBuilder.NodeOut in, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11456,7 +11831,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Rsqrt(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11482,7 +11857,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Has same shape as data, except for dimension 0 which
@@ -11512,7 +11887,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Has same shape as data, except for dimension 0 which
@@ -11541,7 +11916,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Has same shape as data, except for dimension 0 which
@@ -11570,7 +11945,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Has same shape as data, except for dimension 0 which
@@ -11598,7 +11973,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Has same shape as data, except for dimension 0 which
@@ -11634,7 +12009,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // A `Tensor` with the same type and shape as `t` and `e`.
@@ -11650,7 +12025,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Sigmoid(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11665,7 +12040,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Sign(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11678,7 +12053,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Sin(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11700,7 +12075,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node SparseMatMul(@ByVal NodeBuilder.NodeOut a, @ByVal NodeBuilder.NodeOut b, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11722,7 +12097,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Has same shape as data, except for dimension 0 which
@@ -11746,13 +12121,58 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node SparseSegmentMeanGrad(@ByVal NodeBuilder.NodeOut grad, @ByVal NodeBuilder.NodeOut indices, @ByVal NodeBuilder.NodeOut segment_ids,
                             @ByVal NodeBuilder.NodeOut output_dim0, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node SparseSegmentMeanGrad(Node grad, Node indices, Node segment_ids,
                             Node output_dim0, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes the sum along sparse segments of a tensor divided by the sqrt of N.
+//
+// N is the size of the segment being reduced.
+//
+// Read [the section on
+// Segmentation](../../api_docs/python/math_ops.md#segmentation) for an explanation
+// of segments.
+//
+// Arguments:
+// * indices: A 1-D tensor. Has same rank as `segment_ids`.
+// * segment_ids: A 1-D tensor. Values should be sorted and can be repeated.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Has same shape as data, except for dimension 0 which
+// has size `k`, the number of segments.
+@Namespace("tensorflow::ops") public static native Node SparseSegmentSqrtN(@ByVal NodeBuilder.NodeOut data, @ByVal NodeBuilder.NodeOut indices, @ByVal NodeBuilder.NodeOut segment_ids,
+                         @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SparseSegmentSqrtN(Node data, Node indices, Node segment_ids,
+                         @Const @ByRef GraphDefBuilder.Options opts);
+
+// Computes gradients for SparseSegmentSqrtN.
+//
+// Returns tensor "output" with same shape as grad, except for dimension 0 whose
+// value is output_dim0.
+//
+// Arguments:
+// * grad: gradient propagated to the SparseSegmentSqrtN op.
+// * indices: indices passed to the corresponding SparseSegmentSqrtN op.
+// * segment_ids: segment_ids passed to the corresponding SparseSegmentSqrtN op.
+// * output_dim0: dimension 0 of "data" passed to SparseSegmentSqrtN op.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node.
+@Namespace("tensorflow::ops") public static native Node SparseSegmentSqrtNGrad(@ByVal NodeBuilder.NodeOut grad, @ByVal NodeBuilder.NodeOut indices, @ByVal NodeBuilder.NodeOut segment_ids, @ByVal NodeBuilder.NodeOut output_dim0, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SparseSegmentSqrtNGrad(Node grad, Node indices, Node segment_ids, Node output_dim0, @Const @ByRef GraphDefBuilder.Options opts);
 
 // Computes the sum along sparse segments of a tensor.
 //
@@ -11793,7 +12213,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Has same shape as data, except for dimension 0 which
@@ -11812,7 +12232,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Sqrt(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11827,7 +12247,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Square(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11840,7 +12260,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Sub(@ByVal NodeBuilder.NodeOut x, @ByVal NodeBuilder.NodeOut y, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11862,7 +12282,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The reduced tensor.
@@ -11876,7 +12296,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Tanh(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
@@ -11909,7 +12329,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Has same shape as data, except for dimension 0 which
@@ -11957,7 +12377,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The average pooled output tensor.
@@ -11981,7 +12401,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // 4-D.  Gradients w.r.t. the input of `avg_pool`.
@@ -12020,7 +12440,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node BatchNormWithGlobalNormalization(@ByVal NodeBuilder.NodeOut t, @ByVal NodeBuilder.NodeOut m, @ByVal NodeBuilder.NodeOut v, @ByVal NodeBuilder.NodeOut beta, @ByVal NodeBuilder.NodeOut gamma, float variance_epsilon, @Cast("bool") boolean scale_after_normalization, @Const @ByRef GraphDefBuilder.Options opts);
@@ -12047,7 +12467,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with outputs:
 // * dx: 4D backprop tensor for input.
@@ -12074,7 +12494,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Broadcasted sum of `value` and `bias`.
@@ -12090,7 +12510,7 @@ limitations under the License.
 //
 // 1. Flattens the filter to a 2-D matrix with shape
 //    `[filter_height * filter_width * in_channels, output_channels]`.
-// 2. Extracts image patches from the the input tensor to form a *virtual*
+// 2. Extracts image patches from the input tensor to form a *virtual*
 //    tensor of shape `[batch, out_height, out_width,
 //    filter_height * filter_width * in_channels]`.
 // 3. For each patch, right-multiplies the filter matrix and the image patch
@@ -12114,7 +12534,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Conv2D(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut filter, @ArraySlice IntPointer strides,
@@ -12147,7 +12567,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // 4-D with shape
@@ -12183,7 +12603,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // 4-D with shape `[batch, in_height, in_width, in_channels]`.  Gradient
@@ -12211,7 +12631,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Elu(@ByVal NodeBuilder.NodeOut features, @Const @ByRef GraphDefBuilder.Options opts);
@@ -12226,7 +12646,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The gradients: `gradients * (outputs + 1)` if outputs < 0,
@@ -12259,7 +12679,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Computed Precision at `k` as a `bool Tensor`.
@@ -12278,7 +12698,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // 0-D.
@@ -12314,7 +12734,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node LRN(@ByVal NodeBuilder.NodeOut input, @Const @ByRef GraphDefBuilder.Options opts);
@@ -12338,7 +12758,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The gradients for LRN.
@@ -12359,7 +12779,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The max pooled output tensor.
@@ -12384,7 +12804,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Gradients w.r.t. the input to `max_pool`.
@@ -12422,7 +12842,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Gradients w.r.t. the input of `max_pool`.
@@ -12456,7 +12876,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with outputs:
 // * output: The max pooled output tensor.
@@ -12487,7 +12907,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Relu(@ByVal NodeBuilder.NodeOut features, @Const @ByRef GraphDefBuilder.Options opts);
@@ -12500,7 +12920,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Relu6(@ByVal NodeBuilder.NodeOut features, @Const @ByRef GraphDefBuilder.Options opts);
@@ -12515,7 +12935,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The gradients:
@@ -12533,7 +12953,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // `gradients * (features > 0)`.
@@ -12552,7 +12972,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Same shape as `logits`.
@@ -12572,7 +12992,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with outputs:
 // * loss: Per example loss (batch_size vector).
@@ -12587,7 +13007,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Softplus(@ByVal NodeBuilder.NodeOut features, @Const @ByRef GraphDefBuilder.Options opts);
@@ -12602,7 +13022,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The gradients: `gradients / (1 + exp(-features))`.
@@ -12616,7 +13036,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Softsign(@ByVal NodeBuilder.NodeOut features, @Const @ByRef GraphDefBuilder.Options opts);
@@ -12631,24 +13051,32 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // The gradients: `gradients / (1 + abs(-features)) ** 2`.
 @Namespace("tensorflow::ops") public static native Node SoftsignGrad(@ByVal NodeBuilder.NodeOut gradients, @ByVal NodeBuilder.NodeOut features, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node SoftsignGrad(Node gradients, Node features, @Const @ByRef GraphDefBuilder.Options opts);
 
-// Returns the values and indices of the `k` largest elements for each row.
+// Finds values and indices of the `k` largest elements for the last dimension.
 //
-// \\(values_{i, j}\\) represents the j-th largest element in \\(input_i\\).
+// If the input is a vector (rank-1), finds the `k` largest entries in the vector
+// and outputs their values and indices as vectors.  Thus `values[j]` is the
+// `j`-th largest entry in `input`, and its index is `indices[j]`.
 //
-// \\(indices_{i, j}\\) gives the column index of the corresponding element,
-// such that \\(input_{i, indices_{i, j}} = values_{i, j}\\). If two
-// elements are equal, the lower-index element appears first.
+// For matrices (resp. higher rank input), computes the top `k` entries in each
+// row (resp. vector along the last dimension).  Thus,
+//
+//     values.shape = indices.shape = input.shape[:-1] + [k]
+//
+// If two elements are equal, the lower-index element appears first.
+//
+// If `k` varies dynamically, use `TopKV2` below.
 //
 // Arguments:
-// * input: A `batch_size` x `classes` tensor.
-// * k: Number of top elements to look for within each row.
+// * input: 1-D or higher with last dimension at least `k`.
+// * k: Number of top elements to look for along the last dimension (along each
+// row for matrices).
 // * opts:
 //   .WithAttr("sorted", bool): Defaults to true.
 //     If true the resulting `k` elements will be sorted by the values in
@@ -12656,15 +13084,47 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with outputs:
-// * values: A `batch_size` x `k` tensor with the `k` largest elements for
-// each row.
-// * indices: A `batch_size` x `k` tensor with the index of each value within
-// each row.
+// * values: The `k` largest elements along each last dimensional slice.
+// * indices: The indices of `values` within the last dimension of `input`.
 @Namespace("tensorflow::ops") public static native Node TopK(@ByVal NodeBuilder.NodeOut input, @Cast("tensorflow::int64") long k, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node TopK(Node input, @Cast("tensorflow::int64") long k, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Finds values and indices of the `k` largest elements for the last dimension.
+//
+// If the input is a vector (rank-1), finds the `k` largest entries in the vector
+// and outputs their values and indices as vectors.  Thus `values[j]` is the
+// `j`-th largest entry in `input`, and its index is `indices[j]`.
+//
+// For matrices (resp. higher rank input), computes the top `k` entries in each
+// row (resp. vector along the last dimension).  Thus,
+//
+//     values.shape = indices.shape = input.shape[:-1] + [k]
+//
+// If two elements are equal, the lower-index element appears first.
+//
+// This is the same as `TopK`, but takes `k` as in input rather than an attr.
+//
+// Arguments:
+// * input: 1-D or higher with last dimension at least `k`.
+// * k: 0-D.  Number of top elements to look for along the last dimension (along each
+// row for matrices).
+// * opts:
+//   .WithAttr("sorted", bool): Defaults to true.
+//     If true the resulting `k` elements will be sorted by the values in
+// descending order.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with outputs:
+// * values: The `k` largest elements along each last dimensional slice.
+// * indices: The indices of `values` within the last dimension of `input`.
+@Namespace("tensorflow::ops") public static native Node TopKV2(@ByVal NodeBuilder.NodeOut input, @ByVal NodeBuilder.NodeOut k, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node TopKV2(Node input, Node k, @Const @ByRef GraphDefBuilder.Options opts);
 
   // namespace ops
   // namespace tensorflow
@@ -12709,7 +13169,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Each tensor will have the same shape as records.
@@ -12717,6 +13177,30 @@ limitations under the License.
                 @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node DecodeCSV(Node records, @ByVal NodeOutVector record_defaults,
                 @Const @ByRef GraphDefBuilder.Options opts);
+
+// Convert JSON-encoded Example records to binary protocol buffer strings.
+//
+// This op translates a tensor containing Example records, encoded using
+// the [standard JSON
+// mapping](https://developers.google.com/protocol-buffers/docs/proto3#json),
+// into a tensor containing the same records encoded as binary protocol
+// buffers. The resulting tensor can then be fed to any of the other
+// Example-parsing ops.
+//
+// Arguments:
+// * json_examples: Each string is a JSON object serialized according to the JSON
+// mapping of the Example proto.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Each string is a binary Example protocol buffer corresponding
+// to the respective element of `json_examples`.
+@Namespace("tensorflow::ops") public static native Node DecodeJSONExample(@ByVal NodeBuilder.NodeOut json_examples, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node DecodeJSONExample(Node json_examples, @Const @ByRef GraphDefBuilder.Options opts);
 
 // Reinterpret the bytes of a string as a vector of numbers.
 //
@@ -12730,7 +13214,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // A Tensor with one more dimension than the input `bytes`.  The
@@ -12767,14 +13251,14 @@ limitations under the License.
 // given in dense_keys.
 // The number of elements in the Feature corresponding to dense_key[j]
 // must always equal dense_shapes[j].NumEntries().
-// If dense_shapes[j] == (D0, D1, ..., DN) then the the shape of output
+// If dense_shapes[j] == (D0, D1, ..., DN) then the shape of output
 // Tensor dense_values[j] will be (|serialized|, D0, D1, ..., DN):
 // The dense outputs are just the inputs row-stacked by batch.
 // * opts:
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with outputs:
 // * sparse_indices
@@ -12848,7 +13332,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with outputs:
 // * context_sparse_indices
@@ -12886,7 +13370,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // A Tensor of the same shape as the input `string_tensor`.
@@ -12943,7 +13427,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // A tensor of same shape and type as `value`, shuffled along its first
@@ -12968,7 +13452,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // A tensor of the specified shape filled with random normal values.
@@ -12993,7 +13477,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // A tensor of the specified shape filled with uniform random values.
@@ -13024,7 +13508,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // A tensor of the specified shape filled with uniform random integers.
@@ -13050,7 +13534,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // A tensor of the specified shape filled with random truncated normal
@@ -13136,7 +13620,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with outputs:
 // * sparse_indices
@@ -13163,7 +13647,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node SerializeManySparse(@ByVal NodeBuilder.NodeOut sparse_indices, @ByVal NodeBuilder.NodeOut sparse_values,
@@ -13181,7 +13665,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node SerializeSparse(@ByVal NodeBuilder.NodeOut sparse_indices, @ByVal NodeBuilder.NodeOut sparse_values, @ByVal NodeBuilder.NodeOut sparse_shape, @Const @ByRef GraphDefBuilder.Options opts);
@@ -13240,7 +13724,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with outputs:
 // * output_indices: 2-D.  Indices of the concatenated `SparseTensor`.
@@ -13269,7 +13753,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with outputs:
 // * output_indices: 2-D.  `N x R` matrix with the same indices as input_indices, but
@@ -13311,7 +13795,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with outputs:
 // * output_indices
@@ -13359,7 +13843,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Dense output tensor of shape `output_shape`.
@@ -13411,7 +13895,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Same as "ref".  Returned as a convenience for operations that want
@@ -13434,7 +13918,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Same as "ref".  Returned as a convenience for operations that want
@@ -13457,7 +13941,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Same as "ref".  Returned as a convenience for operations that want
@@ -13478,7 +13962,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // A copy of the input before increment. If nothing else modifies the
@@ -13504,7 +13988,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node DestroyTemporaryVariable(@ByVal NodeBuilder.NodeOut ref, @StringPiece BytePointer var_name, @Const @ByRef GraphDefBuilder.Options opts);
@@ -13546,7 +14030,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Same as `ref`.  Returned as a convenience for operations that want
@@ -13588,7 +14072,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Same as `ref`.  Returned as a convenience for operations that want
@@ -13632,7 +14116,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Same as `ref`.  Returned as a convenience for operations that want
@@ -13667,7 +14151,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // A reference to the variable tensor.
@@ -13692,7 +14176,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // A reference to the variable tensor.
@@ -13737,7 +14221,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // A Tensor of the same shape as the input `string_tensor`.
@@ -13773,7 +14257,7 @@ limitations under the License.
 // Outputs a `Summary` protocol buffer with a histogram.
 //
 // The generated
-// [`Summary`](https://tensorflow.googlesource.com/tensorflow/+/master/tensorflow/core/framework/summary.proto)
+// [`Summary`](https://www.tensorflow.org/code/tensorflow/core/framework/summary.proto)
 // has one summary value containing a histogram for `values`.
 //
 // This op reports an `OutOfRange` error if any value is not finite.
@@ -13785,7 +14269,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Scalar. Serialized `Summary` protocol buffer.
@@ -13840,7 +14324,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Scalar. Serialized `Summary` protocol buffer.
@@ -13850,7 +14334,7 @@ limitations under the License.
 // Merges summaries.
 //
 // This op creates a
-// [`Summary`](https://tensorflow.googlesource.com/tensorflow/+/master/tensorflow/core/framework/summary.proto)
+// [`Summary`](https://www.tensorflow.org/code/tensorflow/core/framework/summary.proto)
 // protocol buffer that contains the union of all the values in the input
 // summaries.
 //
@@ -13864,7 +14348,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Scalar. Serialized `Summary` protocol buffer.
@@ -13882,7 +14366,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Scalar.  Serialized `Summary` protocol buffer.
@@ -13932,7 +14416,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Same as "var".
@@ -13964,7 +14448,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Same as "var".
@@ -13984,7 +14468,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Same as "var".
@@ -14009,7 +14493,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Same as "var".
@@ -14042,7 +14526,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Same as "var".
@@ -14068,7 +14552,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Same as "var".
@@ -14098,7 +14582,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node, with output:
 // Same as "var".
@@ -14140,7 +14624,7 @@ limitations under the License.
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
 //   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
-//     Add control depencies on the specified Node(s).
+//     Add control dependencies on the specified Node(s).
 //
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Fact(@Const @ByRef GraphDefBuilder.Options opts);

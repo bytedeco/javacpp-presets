@@ -48,12 +48,12 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         /* "tensorflow/core/platform/default/mutex.h", "tensorflow/core/lib/core/refcount.h", "tensorflow/core/lib/gtl/array_slice.h",
         "tensorflow/core/lib/core/stringpiece.h", */ "tensorflow/core/platform/types.h", "tensorflow/core/platform/mutex.h",
         "tensorflow/core/platform/macros.h", "tensorflow/core/platform/port.h", "tensorflow/core/lib/core/error_codes.pb.h",
-        "tensorflow/core/platform/logging.h", "tensorflow/core/public/status.h", "tensorflow/core/platform/protobuf.h",
-        "tensorflow/core/public/env.h", "tensorflow/core/framework/config.pb.h", "tensorflow/core/public/session_options.h",
+        "tensorflow/core/platform/logging.h", "tensorflow/core/lib/core/status.h", "tensorflow/core/platform/protobuf.h",
+        "tensorflow/core/platform/env.h", "tensorflow/core/framework/config.pb.h", "tensorflow/core/public/session_options.h",
         "tensorflow/core/lib/core/threadpool.h", "tensorflow/core/framework/allocation_description.pb.h", "tensorflow/core/framework/allocator.h",
         "tensorflow/core/framework/tensor_shape.pb.h", "tensorflow/core/framework/types.pb.h", "tensorflow/core/framework/tensor.pb.h",
-        "tensorflow/core/framework/tensor_description.pb.h", "tensorflow/core/framework/tensor_types.h", "tensorflow/core/public/tensor_shape.h",
-        "tensorflow/core/public/tensor.h", "tensorflow/core/framework/attr_value.pb.h", "tensorflow/core/framework/op_def.pb.h",
+        "tensorflow/core/framework/tensor_description.pb.h", "tensorflow/core/framework/tensor_types.h", "tensorflow/core/framework/tensor_shape.h",
+        "tensorflow/core/framework/tensor.h", "tensorflow/core/framework/attr_value.pb.h", "tensorflow/core/framework/op_def.pb.h",
         "tensorflow/core/framework/function.pb.h", "tensorflow/core/framework/graph.pb.h", "tensorflow/core/public/session.h",
         "tensorflow/core/public/tensor_c_api.h", "tensorflow/core/framework/op_def.pb.h", "tensorflow/core/framework/op_def_builder.h",
         "tensorflow/core/framework/op_def_util.h", "tensorflow/core/framework/op.h", "tensorflow/core/framework/types.h",
@@ -93,6 +93,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::core::RefCounted").cast().pointerTypes("Pointer"))
                .put(new Info("tensorflow::ConditionResult").cast().valueTypes("int"))
                .put(new Info("tensorflow::protobuf::Message", "tensorflow::protobuf::MessageLite").cast().pointerTypes("Pointer"))
+               .put(new Info("tensorflow::Allocator::is_simple<bfloat16>").skip())
 
                .put(new Info("basic/containers").cppTypes("tensorflow::gtl::InlinedVector"))
                .put(new Info("tensorflow::DataType").cast().valueTypes("int").pointerTypes("IntPointer"))
