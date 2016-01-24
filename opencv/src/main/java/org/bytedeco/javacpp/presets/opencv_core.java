@@ -41,7 +41,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(value = {
     @Platform(include = {"<opencv2/core/hal/interface.h>", "<opencv2/core/cvdef.h>", "<opencv2/core/hal/hal.hpp>", "<opencv2/core/fast_math.hpp>",
-        "<opencv2/core/saturate.hpp>", "<opencv2/core/version.hpp>", "<opencv2/core/base.hpp>", "<opencv2/core/cvstd.hpp>",
+        "<algorithm>", "<opencv2/core/saturate.hpp>", "<opencv2/core/version.hpp>", "<opencv2/core/base.hpp>", "<opencv2/core/cvstd.hpp>",
         "<opencv2/core/utility.hpp>", "<opencv2/core/types_c.h>", "<opencv2/core/core_c.h>", "<opencv2/core/types.hpp>",
         "<opencv2/core.hpp>", "<opencv2/core/operations.hpp>", "<opencv2/core/bufferpool.hpp>", "<opencv2/core/mat.hpp>",
         "<opencv2/core/persistence.hpp>", "<opencv2/core/optim.hpp>", "opencv_adapters.h"}, link = {"opencv_core@.3.1", "opencv_imgproc@.3.1"}),
@@ -51,7 +51,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         target = "org.bytedeco.javacpp.opencv_core", helper = "org.bytedeco.javacpp.helper.opencv_core")
 public class opencv_core implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("opencv_adapters.h").skip())
+        infoMap.put(new Info("algorithm", "opencv_adapters.h").skip())
                .put(new Info("__cplusplus", "CV_StaticAssert").define())
                .put(new Info("defined __ICL", "defined __ICC", "defined __ECL", "defined __ECC", "defined __INTEL_COMPILER",
                              "defined WIN32 || defined _WIN32", "defined(__clang__)", "defined(__GNUC__)", "defined(_MSC_VER)",
