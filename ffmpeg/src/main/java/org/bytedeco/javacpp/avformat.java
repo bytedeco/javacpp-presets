@@ -2240,7 +2240,7 @@ public static final int AVSTREAM_EVENT_FLAG_METADATA_UPDATED = 0x0001;
     /**
      * Stream information used internally by av_find_stream_info()
      */
-public static final int MAX_STD_TIMEBASES = (30*12+7+6);
+public static final int MAX_STD_TIMEBASES = (30*12+30+3+6);
         @Name({"info", ".last_dts"}) public native long info_last_dts(int i); public native AVStream info_last_dts(int i, long info_last_dts);
         @Name({"info", ".duration_gcd"}) public native long info_duration_gcd(int i); public native AVStream info_duration_gcd(int i, long info_duration_gcd);
         @Name({"info", ".duration_count"}) public native int info_duration_count(int i); public native AVStream info_duration_count(int i, int info_duration_count);
