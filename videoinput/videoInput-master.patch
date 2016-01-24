@@ -1,0 +1,12 @@
+diff -ruN videoInput-master/videoInputSrcAndDemos/libs/videoInput/videoInput.cpp videoInput-master_patch/videoInputSrcAndDemos/libs/videoInput/videoInput.cpp
+--- videoInput-master/videoInputSrcAndDemos/libs/videoInput/videoInput.cpp	2015-12-29 23:40:48.000000000 +0900
++++ videoInput-master_patch/videoInputSrcAndDemos/libs/videoInput/videoInput.cpp	2016-01-24 14:57:07.923635800 +0900
+@@ -818,7 +818,7 @@
+ 	int numDev = videoInput::listDevices(true);
+ 	std::vector <std::string> deviceList; 
+ 	for(int i = 0; i < numDev; i++){
+-		char * name =  videoInput::getDeviceName(i); 
++		const char * name =  videoInput::getDeviceName(i); 
+ 		if( name == NULL )break; 
+ 		deviceList.push_back(name); 
+ 	}

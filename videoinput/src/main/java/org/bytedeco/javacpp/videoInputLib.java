@@ -14,6 +14,7 @@ public class videoInputLib extends org.bytedeco.javacpp.presets.videoInputLib {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringVector(Pointer p) { super(p); }
     public StringVector(BytePointer ... array) { this(array.length); put(array); }
+    public StringVector(String ... array) { this(array.length); put(array); }
     public StringVector()       { allocate();  }
     public StringVector(long n) { allocate(n); }
     private native void allocate();
@@ -25,8 +26,17 @@ public class videoInputLib extends org.bytedeco.javacpp.presets.videoInputLib {
 
     @Index public native @StdString BytePointer get(@Cast("size_t") long i);
     public native StringVector put(@Cast("size_t") long i, BytePointer value);
+    @ValueSetter @Index public native StringVector put(@Cast("size_t") long i, @StdString String value);
 
     public StringVector put(BytePointer ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+
+    public StringVector put(String ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
             put(i, array[i]);
@@ -211,62 +221,62 @@ public static final int VI_MEDIASUBTYPE_MJPG =    18;
 
 //allows us to directShow classes here with the includes in the cpp
 @Opaque public static class ICaptureGraphBuilder2 extends Pointer {
-    /** Empty constructor. */
-    public ICaptureGraphBuilder2() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ICaptureGraphBuilder2() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ICaptureGraphBuilder2(Pointer p) { super(p); }
 }
 @Opaque public static class IGraphBuilder extends Pointer {
-    /** Empty constructor. */
-    public IGraphBuilder() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public IGraphBuilder() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IGraphBuilder(Pointer p) { super(p); }
 }
 @Opaque public static class IBaseFilter extends Pointer {
-    /** Empty constructor. */
-    public IBaseFilter() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public IBaseFilter() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IBaseFilter(Pointer p) { super(p); }
 }
 @Opaque public static class IAMCrossbar extends Pointer {
-    /** Empty constructor. */
-    public IAMCrossbar() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public IAMCrossbar() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IAMCrossbar(Pointer p) { super(p); }
 }
 @Opaque public static class IMediaControl extends Pointer {
-    /** Empty constructor. */
-    public IMediaControl() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public IMediaControl() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IMediaControl(Pointer p) { super(p); }
 }
 @Opaque public static class ISampleGrabber extends Pointer {
-    /** Empty constructor. */
-    public ISampleGrabber() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ISampleGrabber() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ISampleGrabber(Pointer p) { super(p); }
 }
 @Opaque public static class IMediaEventEx extends Pointer {
-    /** Empty constructor. */
-    public IMediaEventEx() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public IMediaEventEx() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IMediaEventEx(Pointer p) { super(p); }
 }
 @Opaque public static class IAMStreamConfig extends Pointer {
-    /** Empty constructor. */
-    public IAMStreamConfig() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public IAMStreamConfig() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IAMStreamConfig(Pointer p) { super(p); }
 }
 @Opaque public static class _AMMediaType extends Pointer {
-    /** Empty constructor. */
-    public _AMMediaType() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public _AMMediaType() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _AMMediaType(Pointer p) { super(p); }
 }
 @Opaque public static class SampleGrabberCallback extends Pointer {
-    /** Empty constructor. */
-    public SampleGrabberCallback() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public SampleGrabberCallback() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SampleGrabberCallback(Pointer p) { super(p); }
 }
@@ -378,10 +388,9 @@ public static native int comInitCount(); public static native void comInitCount(
 		public static native @ByVal StringVector getDeviceList(); 
 
 		//needs to be called after listDevices - otherwise returns NULL
-		public static native @Cast("char*") BytePointer getDeviceName(int deviceID);
-		public static native int getDeviceIDFromName(@Cast("char*") BytePointer name);
-		public static native int getDeviceIDFromName(@Cast("char*") ByteBuffer name);
-		public static native int getDeviceIDFromName(@Cast("char*") byte[] name);
+		public static native @Cast("const char*") BytePointer getDeviceName(int deviceID);
+		public static native int getDeviceIDFromName(@Cast("const char*") BytePointer name);
+		public static native int getDeviceIDFromName(String name);
 
 		//choose to use callback based capture - or single threaded
 		public native void setUseCallback(@Cast("bool") boolean useCallback);

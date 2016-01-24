@@ -10,6 +10,7 @@ fi
 VIDEOINPUT_VERSION=master
 download https://github.com/ofTheo/videoInput/archive/$VIDEOINPUT_VERSION.zip videoInput-$VIDEOINPUT_VERSION.zip
 unzip -o videoInput-$VIDEOINPUT_VERSION.zip
+patch -Np0 < ../videoInput-$VIDEOINPUT_VERSION.patch || true
 
 mkdir -p $PLATFORM
 cd $PLATFORM
