@@ -102,7 +102,7 @@ public class caffe implements InfoMapper {
                 /* "SPPLayer", "CuDNNReLULayer", "CuDNNSigmoidLayer", "CuDNNTanHLayer", "CuDNNSoftmaxLayer", "CuDNNConvolutionLayer", "CuDNNPoolingLayer" */ };
         for (String t : classTemplates) {
             boolean purify = t.equals("BaseDataLayer") || t.equals("LossLayer") || t.equals("NeuronLayer");
-            boolean virtualize = t.endsWith("Layer");
+            boolean virtualize = t.endsWith("Layer") || t.endsWith("Solver");
             infoMap.put(new Info("caffe::" + t + "<float>").pointerTypes("Float" + t).purify(purify).virtualize(virtualize))
                    .put(new Info("caffe::" + t + "<double>").pointerTypes("Double" + t).purify(purify).virtualize(virtualize));
         }

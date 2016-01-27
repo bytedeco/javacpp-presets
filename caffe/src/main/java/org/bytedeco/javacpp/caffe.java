@@ -18925,9 +18925,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public native @Cast("caffe::SolverAction::Enum") int GetRequestedAction();
   // The main entry of the solver function. In default, iter will be zero. Pass
   // in a non-zero iter number to resume training for a pre-trained net.
-  public native void Solve(@Cast("const char*") BytePointer resume_file/*=NULL*/);
-  public native void Solve();
-  public native void Solve(String resume_file/*=NULL*/);
+  @Virtual public native void Solve(@Cast("const char*") BytePointer resume_file/*=NULL*/);
+  public native void Solve(@StdString String resume_file);
   public native void Step(int iters);
   // The Restore method simply dispatches to one of the
   // RestoreSolverStateFrom___ protected methods. You should implement these
@@ -18958,7 +18957,11 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   /**
    * \brief Returns the solver type.
    */
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual(true) protected native void ApplyUpdate();
+  @Virtual(true) protected native void SnapshotSolverState(@StdString BytePointer model_filename);
+  @Virtual(true) protected native void RestoreSolverStateFromHDF5(@StdString BytePointer state_file);
+  @Virtual(true) protected native void RestoreSolverStateFromBinaryProto(@StdString BytePointer state_file);
 }
 @Name("caffe::Solver<double>") @NoOffset public static class DoubleSolver extends Pointer {
     static { Loader.load(); }
@@ -18976,9 +18979,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public native @Cast("caffe::SolverAction::Enum") int GetRequestedAction();
   // The main entry of the solver function. In default, iter will be zero. Pass
   // in a non-zero iter number to resume training for a pre-trained net.
-  public native void Solve(@Cast("const char*") BytePointer resume_file/*=NULL*/);
-  public native void Solve();
-  public native void Solve(String resume_file/*=NULL*/);
+  @Virtual public native void Solve(@Cast("const char*") BytePointer resume_file/*=NULL*/);
+  public native void Solve(@StdString String resume_file);
   public native void Step(int iters);
   // The Restore method simply dispatches to one of the
   // RestoreSolverStateFrom___ protected methods. You should implement these
@@ -19009,7 +19011,11 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   /**
    * \brief Returns the solver type.
    */
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual(true) protected native void ApplyUpdate();
+  @Virtual(true) protected native void SnapshotSolverState(@StdString BytePointer model_filename);
+  @Virtual(true) protected native void RestoreSolverStateFromHDF5(@StdString BytePointer state_file);
+  @Virtual(true) protected native void RestoreSolverStateFromBinaryProto(@StdString BytePointer state_file);
 }
 
 /**
@@ -19239,9 +19245,19 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   private native void allocate(@StdString BytePointer param_file);
   public FloatSGDSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
   private native void allocate(@StdString String param_file);
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
 
   public native @Const @ByRef FloatBlobSharedVector history();
+  @Virtual protected native void ApplyUpdate();
+  @Virtual protected native void Normalize(int param_id);
+  @Virtual protected native void Regularize(int param_id);
+  @Virtual protected native void ComputeUpdateValue(int param_id, float rate);
+  @Virtual protected native void ClipGradients();
+  @Virtual protected native void SnapshotSolverState(@StdString BytePointer model_filename);
+  @Virtual protected native void SnapshotSolverStateToBinaryProto(@StdString BytePointer model_filename);
+  @Virtual protected native void SnapshotSolverStateToHDF5(@StdString BytePointer model_filename);
+  @Virtual protected native void RestoreSolverStateFromHDF5(@StdString BytePointer state_file);
+  @Virtual protected native void RestoreSolverStateFromBinaryProto(@StdString BytePointer state_file);
 }
 @Name("caffe::SGDSolver<double>") @NoOffset public static class DoubleSGDSolver extends DoubleSolver {
     static { Loader.load(); }
@@ -19254,9 +19270,19 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   private native void allocate(@StdString BytePointer param_file);
   public DoubleSGDSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
   private native void allocate(@StdString String param_file);
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
 
   public native @Const @ByRef DoubleBlobSharedVector history();
+  @Virtual protected native void ApplyUpdate();
+  @Virtual protected native void Normalize(int param_id);
+  @Virtual protected native void Regularize(int param_id);
+  @Virtual protected native void ComputeUpdateValue(int param_id, double rate);
+  @Virtual protected native void ClipGradients();
+  @Virtual protected native void SnapshotSolverState(@StdString BytePointer model_filename);
+  @Virtual protected native void SnapshotSolverStateToBinaryProto(@StdString BytePointer model_filename);
+  @Virtual protected native void SnapshotSolverStateToHDF5(@StdString BytePointer model_filename);
+  @Virtual protected native void RestoreSolverStateFromHDF5(@StdString BytePointer state_file);
+  @Virtual protected native void RestoreSolverStateFromBinaryProto(@StdString BytePointer state_file);
 }
 
 @Name("caffe::NesterovSolver<float>") public static class FloatNesterovSolver extends FloatSGDSolver {
@@ -19270,7 +19296,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   private native void allocate(@StdString BytePointer param_file);
   public FloatNesterovSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
   private native void allocate(@StdString String param_file);
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void ComputeUpdateValue(int param_id, float rate);
 }
 
 @Name("caffe::NesterovSolver<double>") public static class DoubleNesterovSolver extends DoubleSGDSolver {
@@ -19284,7 +19311,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   private native void allocate(@StdString BytePointer param_file);
   public DoubleNesterovSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
   private native void allocate(@StdString String param_file);
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void ComputeUpdateValue(int param_id, double rate);
 }
 
 @Name("caffe::AdaGradSolver<float>") public static class FloatAdaGradSolver extends FloatSGDSolver {
@@ -19298,7 +19326,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   private native void allocate(@StdString BytePointer param_file);
   public FloatAdaGradSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
   private native void allocate(@StdString String param_file);
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void ComputeUpdateValue(int param_id, float rate);
 }
 
 @Name("caffe::AdaGradSolver<double>") public static class DoubleAdaGradSolver extends DoubleSGDSolver {
@@ -19312,7 +19341,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   private native void allocate(@StdString BytePointer param_file);
   public DoubleAdaGradSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
   private native void allocate(@StdString String param_file);
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void ComputeUpdateValue(int param_id, double rate);
 }
 
 
@@ -19327,7 +19357,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   private native void allocate(@StdString BytePointer param_file);
   public FloatRMSPropSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
   private native void allocate(@StdString String param_file);
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void ComputeUpdateValue(int param_id, float rate);
 }
 
 
@@ -19342,7 +19373,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   private native void allocate(@StdString BytePointer param_file);
   public DoubleRMSPropSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
   private native void allocate(@StdString String param_file);
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void ComputeUpdateValue(int param_id, double rate);
 }
 
 @Name("caffe::AdaDeltaSolver<float>") public static class FloatAdaDeltaSolver extends FloatSGDSolver {
@@ -19356,7 +19388,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   private native void allocate(@StdString BytePointer param_file);
   public FloatAdaDeltaSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
   private native void allocate(@StdString String param_file);
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void ComputeUpdateValue(int param_id, float rate);
 }
 
 @Name("caffe::AdaDeltaSolver<double>") public static class DoubleAdaDeltaSolver extends DoubleSGDSolver {
@@ -19370,7 +19403,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   private native void allocate(@StdString BytePointer param_file);
   public DoubleAdaDeltaSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
   private native void allocate(@StdString String param_file);
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void ComputeUpdateValue(int param_id, double rate);
 }
 
 /**
@@ -19392,7 +19426,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   private native void allocate(@StdString BytePointer param_file);
   public FloatAdamSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
   private native void allocate(@StdString String param_file);
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void ComputeUpdateValue(int param_id, float rate);
 }
 @Name("caffe::AdamSolver<double>") public static class DoubleAdamSolver extends DoubleSGDSolver {
     static { Loader.load(); }
@@ -19405,7 +19440,8 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   private native void allocate(@StdString BytePointer param_file);
   public DoubleAdamSolver(@StdString String param_file) { super((Pointer)null); allocate(param_file); }
   private native void allocate(@StdString String param_file);
-  public native @Cast("const char*") BytePointer type();
+  @Virtual public native @Cast("const char*") BytePointer type();
+  @Virtual protected native void ComputeUpdateValue(int param_id, double rate);
 }
 
   // namespace caffe
