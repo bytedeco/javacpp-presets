@@ -1,4 +1,5 @@
 
+ * Fix loading issue with `opencv_xfeatures2d` ([issue bytedeco/javacv#316](https://github.com/bytedeco/javacv/issues/316))
  * Virtualize all `Solver` classes from Caffe ([issue #143](https://github.com/bytedeco/javacpp-presets/issues/143))
  * Work around GSL not loading on Android ([issue bytedeco/javacpp#55](https://github.com/bytedeco/javacpp/issues/55))
  * Fix Android builds of FFmpeg, FFTW, GSL, Leptonica, and Tesseract causing errors under Mac OS X ([issue #45](https://github.com/bytedeco/javacpp-presets/issues/45))
