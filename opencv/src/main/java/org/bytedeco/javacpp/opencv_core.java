@@ -14615,6 +14615,7 @@ including std::sort().
     private native void allocate(int rows, int cols, int type, Pointer data, @Cast("size_t") long step/*=AUTO_STEP*/);
     private Pointer data; // a reference to prevent deallocation
     public Mat(int rows, int cols, int type, Pointer data) { this(rows, cols, type, data, AUTO_STEP); }
+    public Mat(CvArr arr) { super(cvarrToMat(arr)); this.data = arr; }
     public Mat(byte ... b) { this(b, false); }
     public Mat(byte[] b, boolean signed) { this(new BytePointer(b), signed); }
     public Mat(short ... s) { this(s, true); }
