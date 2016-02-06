@@ -44,7 +44,8 @@
             <includePath>${basedir}/cppbuild/${platform}/tensorflow-${tensorflow.version}/bazel-tensorflow-${tensorflow.version}/</includePath>
             <includePath>${basedir}/cppbuild/${platform}/tensorflow-${tensorflow.version}/google/protobuf/src/</includePath>
             <includePath>${basedir}/cppbuild/${platform}/tensorflow-${tensorflow.version}/third_party/eigen3/</includePath>
-            <includePath>${basedir}/cppbuild/${platform}/tensorflow-${tensorflow.version}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/eigen-eigen-d861b41b1996/</includePath>
+            <includePath>${basedir}/cppbuild/${platform}/tensorflow-${tensorflow.version}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/</includePath>
+            <includePath>${basedir}/cppbuild/${platform}/tensorflow-${tensorflow.version}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/eigen-eigen-8cd7c2c6e9e1/</includePath>
           </includePaths>
           <linkPaths>
              <linkPath>${basedir}/cppbuild/${platform}/tensorflow-${tensorflow.version}/bazel-bin/tensorflow/cc/</linkPath>
