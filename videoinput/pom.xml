@@ -17,8 +17,8 @@
 
   <properties>
     <!-- Skip on non-Windows system (see profile below) -->
-    <generate-sources.skip>true</generate-sources.skip>
-    <process-classes.skip>true</process-classes.skip>
+    <javacpp.parser.skip>true</javacpp.parser.skip>
+    <javacpp.compiler.skip>true</javacpp.compiler.skip>
   </properties>
 
   <dependencies>
@@ -68,8 +68,8 @@
         <os><family>windows</family></os>
       </activation>
       <properties>
-        <generate-sources.skip>false</generate-sources.skip>
-        <process-classes.skip>false</process-classes.skip>
+        <javacpp.parser.skip>false</javacpp.parser.skip>
+        <javacpp.compiler.skip>false</javacpp.compiler.skip>
       </properties>
     </profile>
   </profiles>

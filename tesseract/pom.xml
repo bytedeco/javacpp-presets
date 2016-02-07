@@ -16,7 +16,7 @@
   <name>JavaCPP Presets for Tesseract</name>
 
   <properties>
-    <platform.oldcompiler>${platform.compiler}</platform.oldcompiler>
+    <javacpp.platform.oldcompiler>${javacpp.platform.compiler}</javacpp.platform.oldcompiler>
   </properties>
 
   <dependencies>
@@ -46,11 +46,11 @@
           <propertyKeysAndValues>
             <property>
               <name>platform.root</name>
-              <value>${platform.root}</value>
+              <value>${javacpp.platform.root}</value>
             </property>
             <property>
               <name>platform.compiler</name>
-              <value>${platform.oldcompiler}</value>
+              <value>${javacpp.platform.oldcompiler}</value>
             </property>
           </propertyKeysAndValues>
           <classPaths>
@@ -58,16 +58,16 @@
             <classPath>${project.build.outputDirectory}</classPath>
           </classPaths>
           <includePaths>
-            <includePath>${basedir}/../leptonica/cppbuild/${platform}/include/</includePath>
-            <includePath>${basedir}/cppbuild/${platform}/include/</includePath>
+            <includePath>${basedir}/../leptonica/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
           </includePaths>
           <linkPaths>
-            <linkPath>${basedir}/../leptonica/cppbuild/${platform}/lib/</linkPath>
-            <linkPath>${basedir}/cppbuild/${platform}/lib/</linkPath>
+            <linkPath>${basedir}/../leptonica/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
           </linkPaths>
           <preloadPaths>
-            <preloadPath>${basedir}/../leptonica/cppbuild/${platform}/bin/</preloadPath>
-            <preloadPath>${basedir}/cppbuild/${platform}/bin/</preloadPath>
+            <preloadPath>${basedir}/../leptonica/cppbuild/${javacpp.platform}/bin/</preloadPath>
+            <preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin/</preloadPath>
           </preloadPaths>
         </configuration>
         <executions>
@@ -106,9 +106,17 @@
       <activation>
         <os><family>windows</family></os>
       </activation>
-      <properties>
-        <platform.properties>${platform}-mingw</platform.properties>
-      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacpp</artifactId>
+            <configuration>
+              <properties>${javacpp.platform}-mingw</properties>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 

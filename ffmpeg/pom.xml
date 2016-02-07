@@ -61,7 +61,7 @@
             <groupId>org.bytedeco</groupId>
             <artifactId>javacpp</artifactId>
             <configuration>
-              <properties>${platform.properties}-mingw</properties>
+              <properties>${javacpp.platform}-mingw</properties>
               <compilerOptions>
                 <compilerOption>-static-libgcc</compilerOption>
                 <compilerOption>-static-libstdc++</compilerOption>

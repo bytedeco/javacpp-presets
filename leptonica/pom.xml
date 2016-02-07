@@ -16,7 +16,7 @@
   <name>JavaCPP Presets for Leptonica</name>
 
   <properties>
-    <platform.oldcompiler>${platform.compiler}</platform.oldcompiler>
+    <javacpp.platform.oldcompiler>${javacpp.platform.compiler}</javacpp.platform.oldcompiler>
   </properties>
 
   <dependencies>
@@ -41,11 +41,11 @@
           <propertyKeysAndValues>
             <property>
               <name>platform.root</name>
-              <value>${platform.root}</value>
+              <value>${javacpp.platform.root}</value>
             </property>
             <property>
               <name>platform.compiler</name>
-              <value>${platform.oldcompiler}</value>
+              <value>${javacpp.platform.oldcompiler}</value>
             </property>
           </propertyKeysAndValues>
         </configuration>
@@ -71,9 +71,17 @@
       <activation>
         <os><family>windows</family></os>
       </activation>
-      <properties>
-        <platform.properties>${platform}-mingw</platform.properties>
-      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacpp</artifactId>
+            <configuration>
+              <properties>${javacpp.platform}-mingw</properties>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
     </profile>
   </profiles>
 

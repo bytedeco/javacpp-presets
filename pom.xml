@@ -81,12 +81,11 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <generate-sources.skip>false</generate-sources.skip> <!-- To skip header file parsing phase: -Dgenerate-sources.skip=true  -->
-    <process-classes.skip> false</process-classes.skip>  <!-- To skip native compilation phase: -Dprocess-classes.skip=true    -->
-    <platform>${os.name}-${os.arch}</platform> <!-- For Android: -Dplatform=android-arm                                        -->
-    <platform.root></platform.root>            <!--              -Dplatform.root=/path/to/android-ndk/                         -->
-    <platform.compiler></platform.compiler>    <!--              -Dplatform.compiler=/path/to/arm-linux-androideabi-g++        -->
-    <platform.properties>${platform}</platform.properties>
+    <javacpp.parser.skip>false</javacpp.parser.skip>           <!-- To skip header file parsing phase: -Djavacpp.parser.skip=true               -->
+    <javacpp.compiler.skip>false</javacpp.compiler.skip>       <!-- To skip native compilation phase: -Djavacpp.compiler.skip=true              -->
+    <javacpp.platform>${os.name}-${os.arch}</javacpp.platform> <!-- For Android: -Djavacpp.platform=android-arm                                 -->
+    <javacpp.platform.root></javacpp.platform.root>            <!--              -Djavacpp.platform.root=/path/to/android-ndk/                  -->
+    <javacpp.platform.compiler></javacpp.platform.compiler>    <!--              -Djavacpp.platform.compiler=/path/to/arm-linux-androideabi-g++ -->
   </properties>
 
   <dependencyManagement>
@@ -131,7 +130,7 @@
               <goal>compile</goal>
             </goals>
             <configuration>
-              <skipMain>${generate-sources.skip}</skipMain>
+              <skipMain>${javacpp.parser.skip}</skipMain>
               <includes>
                 <include>org/bytedeco/javacpp/presets/*.java</include>
               </includes>
@@ -144,21 +143,21 @@
         <artifactId>javacpp</artifactId>
         <version>${project.parent.version}</version>
         <configuration>
-          <properties>${platform.properties}</properties>
+          <properties>${javacpp.platform}</properties>
           <propertyKeysAndValues>
             <property>
               <name>platform.root</name>
-              <value>${platform.root}</value>
+              <value>${javacpp.platform.root}</value>
             </property>
             <property>
               <name>platform.compiler</name>
-              <value>${platform.compiler}</value>
+              <value>${javacpp.platform.compiler}</value>
             </property>
           </propertyKeysAndValues>
           <classPath>${project.build.outputDirectory}</classPath>
-          <includePath>${basedir}/cppbuild/${platform}/include/</includePath>
-          <linkPath>${basedir}/cppbuild/${platform}/lib/</linkPath>
-          <preloadPath>${basedir}/cppbuild/${platform}/bin/</preloadPath>
+          <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
+          <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
+          <preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin/</preloadPath>
         </configuration>
         <executions>
           <execution>
@@ -168,7 +167,7 @@
               <goal>build</goal>
             </goals>
             <configuration>
-              <skip>${generate-sources.skip}</skip>
+              <skip>${javacpp.parser.skip}</skip>
               <outputDirectory>${project.build.sourceDirectory}</outputDirectory>
               <classOrPackageName>org.bytedeco.javacpp.presets.*</classOrPackageName>
             </configuration>
@@ -180,7 +179,7 @@
               <goal>build</goal>
             </goals>
             <configuration>
-              <skip>${process-classes.skip}</skip>
+              <skip>${javacpp.compiler.skip}</skip>
               <classOrPackageName>org.bytedeco.javacpp.*</classOrPackageName>
               <copyLibs>true</copyLibs>
             </configuration>
@@ -224,22 +223,22 @@
                 <exclude>org/bytedeco/javacpp/linux-*/</exclude>
                 <exclude>org/bytedeco/javacpp/macosx-*/</exclude>
                 <exclude>org/bytedeco/javacpp/windows-*/</exclude>
-                <exclude>org/bytedeco/javacpp/${platform}/</exclude>
+                <exclude>org/bytedeco/javacpp/${javacpp.platform}/</exclude>
               </excludes>
             </configuration>
           </execution>
           <execution>
-            <id>${platform}</id>
+            <id>${javacpp.platform}</id>
             <phase>package</phase>
             <goals>
               <goal>jar</goal>
             </goals>
             <configuration>
-              <classifier>${platform}</classifier>
+              <classifier>${javacpp.platform}</classifier>
               <skipIfEmpty>true</skipIfEmpty>
               <includes>
-                <include>${platform.library.path}/</include>
-                <include>org/bytedeco/javacpp/${platform}/</include>
+                <include>${javacpp.platform.library.path}/</include>
+                <include>org/bytedeco/javacpp/${javacpp.platform}/</include>
               </includes>
             </configuration>
           </execution>
@@ -279,7 +278,7 @@
                   <groupId>${project.groupId}</groupId>
                   <artifactId>${project.artifactId}</artifactId>
                   <version>${project.version}</version>
-                  <classifier>${platform}</classifier>
+                  <classifier>${javacpp.platform}</classifier>
                   <type>jar</type>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.parent.build.directory}</outputDirectory>
@@ -436,28 +435,28 @@
       <id>android-arm</id>
       <activation>
         <property>
-          <name>platform</name>
+          <name>javacpp.platform</name>
           <value>android-arm</value>
         </property>
       </activation>
       <properties>
-        <platform>android-arm</platform>
-        <platform.root>${user.home}/Android/android-ndk/</platform.root>
-        <platform.compiler>toolchains/arm-linux-androideabi-4.9/prebuilt/${os.name}-${os.arch}/bin/arm-linux-androideabi-g++</platform.compiler>
+        <javacpp.platform>android-arm</javacpp.platform>
+        <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
+        <javacpp.platform.compiler>toolchains/arm-linux-androideabi-4.9/prebuilt/${os.name}-${os.arch}/bin/arm-linux-androideabi-g++</javacpp.platform.compiler>
       </properties>
     </profile>
     <profile>
       <id>android-x86</id>
       <activation>
         <property>
-          <name>platform</name>
+          <name>javacpp.platform</name>
           <value>android-x86</value>
         </property>
       </activation>
       <properties>
-        <platform>android-x86</platform>
-        <platform.root>${user.home}/Android/android-ndk/</platform.root>
-        <platform.compiler>toolchains/x86-4.9/prebuilt/${os.name}-${os.arch}/bin/i686-linux-android-g++</platform.compiler>
+        <javacpp.platform>android-x86</javacpp.platform>
+        <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
+        <javacpp.platform.compiler>toolchains/x86-4.9/prebuilt/${os.name}-${os.arch}/bin/i686-linux-android-g++</javacpp.platform.compiler>
       </properties>
     </profile>
 
@@ -474,7 +473,7 @@
           <groupId>${project.groupId}</groupId>
           <artifactId>${project.artifactId}</artifactId>
           <version>${project.version}</version>
-          <classifier>${platform}</classifier>
+          <classifier>${javacpp.platform}</classifier>
         </dependency>
       </dependencies>
     </profile>
@@ -491,7 +490,7 @@
           <groupId>${project.groupId}</groupId>
           <artifactId>${project.artifactId}</artifactId>
           <version>${project.version}</version>
-          <classifier>${platform}</classifier>
+          <classifier>${javacpp.platform}</classifier>
         </dependency>
       </dependencies>
     </profile>
@@ -508,7 +507,7 @@
           <groupId>${project.groupId}</groupId>
           <artifactId>${project.artifactId}</artifactId>
           <version>${project.version}</version>
-          <classifier>${platform}</classifier>
+          <classifier>${javacpp.platform}</classifier>
         </dependency>
         <dependency>
           <groupId>${project.groupId}</groupId>
