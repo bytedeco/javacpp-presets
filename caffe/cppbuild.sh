@@ -150,11 +150,11 @@ export PATH=../bin:$PATH
 export CXXFLAGS="-I../include -I$OPENCV_PATH/include"
 export NVCCFLAGS="-I../include -I$OPENCV_PATH/include"
 export LINKFLAGS="-L../lib -L$OPENCV_PATH/lib"
-make -j $MAKEJ BLAS=$BLAS DISTRIBUTE_DIR=.. lib
+make -j $MAKEJ BLAS=$BLAS OPENCV_VERSION=3 DISTRIBUTE_DIR=.. lib
 # Manual deploy to avoid Caffe's python build
 mkdir -p ../include/caffe/proto
 cp -a include/caffe/* ../include/caffe/
 cp -a build/src/caffe/proto/caffe.pb.h ../include/caffe/proto
-cp -a build/lib/libcaffe.so ../lib
+cp -a build/lib/libcaffe.so* ../lib
 
 cd ../..

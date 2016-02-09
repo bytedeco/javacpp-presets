@@ -606,6 +606,10 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 
 // #include "caffe/util/device_alternate.hpp"
 
+// Convert macro to string
+// #define STRINGIFY(m) #m
+// #define AS_STRING(m) STRINGIFY(m)
+
 // gflags 2.1 issue: namespace google was changed to gflags without warning.
 // Luckily we will be able to use GFLAGS_GFLAGS_H_ to detect if it is version
 // 2.1. If yes, we will add a temporary solution to redirect the namespace.
@@ -3233,6 +3237,16 @@ public static final int
   public native BatchNormParameter release_batch_norm_param();
   public native void set_allocated_batch_norm_param(BatchNormParameter batch_norm_param);
 
+  // optional .caffe.BiasParameter bias_param = 141;
+  public native @Cast("bool") boolean has_bias_param();
+  public native void clear_bias_param();
+  @MemberGetter public static native int kBiasParamFieldNumber();
+  public static final int kBiasParamFieldNumber = kBiasParamFieldNumber();
+  public native @Const @ByRef BiasParameter bias_param();
+  public native BiasParameter mutable_bias_param();
+  public native BiasParameter release_bias_param();
+  public native void set_allocated_bias_param(BiasParameter bias_param);
+
   // optional .caffe.ConcatParameter concat_param = 104;
   public native @Cast("bool") boolean has_concat_param();
   public native void clear_concat_param();
@@ -3302,6 +3316,16 @@ public static final int
   public native EltwiseParameter mutable_eltwise_param();
   public native EltwiseParameter release_eltwise_param();
   public native void set_allocated_eltwise_param(EltwiseParameter eltwise_param);
+
+  // optional .caffe.ELUParameter elu_param = 140;
+  public native @Cast("bool") boolean has_elu_param();
+  public native void clear_elu_param();
+  @MemberGetter public static native int kEluParamFieldNumber();
+  public static final int kEluParamFieldNumber = kEluParamFieldNumber();
+  public native @Const @ByRef ELUParameter elu_param();
+  public native ELUParameter mutable_elu_param();
+  public native ELUParameter release_elu_param();
+  public native void set_allocated_elu_param(ELUParameter elu_param);
 
   // optional .caffe.EmbedParameter embed_param = 137;
   public native @Cast("bool") boolean has_embed_param();
@@ -3502,6 +3526,16 @@ public static final int
   public native ReshapeParameter mutable_reshape_param();
   public native ReshapeParameter release_reshape_param();
   public native void set_allocated_reshape_param(ReshapeParameter reshape_param);
+
+  // optional .caffe.ScaleParameter scale_param = 142;
+  public native @Cast("bool") boolean has_scale_param();
+  public native void clear_scale_param();
+  @MemberGetter public static native int kScaleParamFieldNumber();
+  public static final int kScaleParamFieldNumber = kScaleParamFieldNumber();
+  public native @Const @ByRef ScaleParameter scale_param();
+  public native ScaleParameter mutable_scale_param();
+  public native ScaleParameter release_scale_param();
+  public native void set_allocated_scale_param(ScaleParameter scale_param);
 
   // optional .caffe.SigmoidParameter sigmoid_param = 124;
   public native @Cast("bool") boolean has_sigmoid_param();
@@ -4116,6 +4150,87 @@ public static final int
   public static final int kEpsFieldNumber = kEpsFieldNumber();
   public native float eps();
   public native void set_eps(float value);
+}
+// -------------------------------------------------------------------
+
+@Namespace("caffe") @NoOffset public static class BiasParameter extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public BiasParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public BiasParameter(int size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public BiasParameter position(int position) {
+        return (BiasParameter)super.position(position);
+    }
+
+  public BiasParameter() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public BiasParameter(@Const @ByRef BiasParameter from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef BiasParameter from);
+
+  public native @ByRef @Name("operator =") BiasParameter put(@Const @ByRef BiasParameter from);
+
+  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+
+  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef BiasParameter default_instance();
+
+  public native void Swap(BiasParameter other);
+
+  // implements Message ----------------------------------------------
+
+  public native BiasParameter New();
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef BiasParameter from);
+  public native void MergeFrom(@Const @ByRef BiasParameter from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native int ByteSize();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+  public native void SerializeWithCachedSizes(
+        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+  public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
+  public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
+  public native int GetCachedSize();
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 axis = 1 [default = 1];
+  public native @Cast("bool") boolean has_axis();
+  public native void clear_axis();
+  @MemberGetter public static native int kAxisFieldNumber();
+  public static final int kAxisFieldNumber = kAxisFieldNumber();
+  public native @Cast("google::protobuf::int32") int axis();
+  public native void set_axis(@Cast("google::protobuf::int32") int value);
+
+  // optional int32 num_axes = 2 [default = 1];
+  public native @Cast("bool") boolean has_num_axes();
+  public native void clear_num_axes();
+  @MemberGetter public static native int kNumAxesFieldNumber();
+  public static final int kNumAxesFieldNumber = kNumAxesFieldNumber();
+  public native @Cast("google::protobuf::int32") int num_axes();
+  public native void set_num_axes(@Cast("google::protobuf::int32") int value);
+
+  // optional .caffe.FillerParameter filler = 3;
+  public native @Cast("bool") boolean has_filler();
+  public native void clear_filler();
+  @MemberGetter public static native int kFillerFieldNumber();
+  public static final int kFillerFieldNumber = kFillerFieldNumber();
+  public native @Const @ByRef FillerParameter filler();
+  public native FillerParameter mutable_filler();
+  public native FillerParameter release_filler();
+  public native void set_allocated_filler(FillerParameter filler);
 }
 // -------------------------------------------------------------------
 
@@ -4872,6 +4987,69 @@ public static final int
   public static final int kStableProdGradFieldNumber = kStableProdGradFieldNumber();
   public native @Cast("bool") boolean stable_prod_grad();
   public native void set_stable_prod_grad(@Cast("bool") boolean value);
+}
+// -------------------------------------------------------------------
+
+@Namespace("caffe") @NoOffset public static class ELUParameter extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ELUParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public ELUParameter(int size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public ELUParameter position(int position) {
+        return (ELUParameter)super.position(position);
+    }
+
+  public ELUParameter() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public ELUParameter(@Const @ByRef ELUParameter from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef ELUParameter from);
+
+  public native @ByRef @Name("operator =") ELUParameter put(@Const @ByRef ELUParameter from);
+
+  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+
+  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef ELUParameter default_instance();
+
+  public native void Swap(ELUParameter other);
+
+  // implements Message ----------------------------------------------
+
+  public native ELUParameter New();
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef ELUParameter from);
+  public native void MergeFrom(@Const @ByRef ELUParameter from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native int ByteSize();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+  public native void SerializeWithCachedSizes(
+        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+  public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
+  public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
+  public native int GetCachedSize();
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional float alpha = 1 [default = 1];
+  public native @Cast("bool") boolean has_alpha();
+  public native void clear_alpha();
+  @MemberGetter public static native int kAlphaFieldNumber();
+  public static final int kAlphaFieldNumber = kAlphaFieldNumber();
+  public native float alpha();
+  public native void set_alpha(float value);
 }
 // -------------------------------------------------------------------
 
@@ -6776,6 +6954,105 @@ public static final int
   public static final int kNumAxesFieldNumber = kNumAxesFieldNumber();
   public native @Cast("google::protobuf::int32") int num_axes();
   public native void set_num_axes(@Cast("google::protobuf::int32") int value);
+}
+// -------------------------------------------------------------------
+
+@Namespace("caffe") @NoOffset public static class ScaleParameter extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ScaleParameter(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public ScaleParameter(int size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public ScaleParameter position(int position) {
+        return (ScaleParameter)super.position(position);
+    }
+
+  public ScaleParameter() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public ScaleParameter(@Const @ByRef ScaleParameter from) { super((Pointer)null); allocate(from); }
+  private native void allocate(@Const @ByRef ScaleParameter from);
+
+  public native @ByRef @Name("operator =") ScaleParameter put(@Const @ByRef ScaleParameter from);
+
+  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+
+  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+
+  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const @ByRef ScaleParameter default_instance();
+
+  public native void Swap(ScaleParameter other);
+
+  // implements Message ----------------------------------------------
+
+  public native ScaleParameter New();
+  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef ScaleParameter from);
+  public native void MergeFrom(@Const @ByRef ScaleParameter from);
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+
+  public native int ByteSize();
+  public native @Cast("bool") boolean MergePartialFromCodedStream(
+        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+  public native void SerializeWithCachedSizes(
+        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+  public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
+  public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
+  public native int GetCachedSize();
+  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional int32 axis = 1 [default = 1];
+  public native @Cast("bool") boolean has_axis();
+  public native void clear_axis();
+  @MemberGetter public static native int kAxisFieldNumber();
+  public static final int kAxisFieldNumber = kAxisFieldNumber();
+  public native @Cast("google::protobuf::int32") int axis();
+  public native void set_axis(@Cast("google::protobuf::int32") int value);
+
+  // optional int32 num_axes = 2 [default = 1];
+  public native @Cast("bool") boolean has_num_axes();
+  public native void clear_num_axes();
+  @MemberGetter public static native int kNumAxesFieldNumber();
+  public static final int kNumAxesFieldNumber = kNumAxesFieldNumber();
+  public native @Cast("google::protobuf::int32") int num_axes();
+  public native void set_num_axes(@Cast("google::protobuf::int32") int value);
+
+  // optional .caffe.FillerParameter filler = 3;
+  public native @Cast("bool") boolean has_filler();
+  public native void clear_filler();
+  @MemberGetter public static native int kFillerFieldNumber();
+  public static final int kFillerFieldNumber = kFillerFieldNumber();
+  public native @Const @ByRef FillerParameter filler();
+  public native FillerParameter mutable_filler();
+  public native FillerParameter release_filler();
+  public native void set_allocated_filler(FillerParameter filler);
+
+  // optional bool bias_term = 4 [default = false];
+  public native @Cast("bool") boolean has_bias_term();
+  public native void clear_bias_term();
+  @MemberGetter public static native int kBiasTermFieldNumber();
+  public static final int kBiasTermFieldNumber = kBiasTermFieldNumber();
+  public native @Cast("bool") boolean bias_term();
+  public native void set_bias_term(@Cast("bool") boolean value);
+
+  // optional .caffe.FillerParameter bias_filler = 5;
+  public native @Cast("bool") boolean has_bias_filler();
+  public native void clear_bias_filler();
+  @MemberGetter public static native int kBiasFillerFieldNumber();
+  public static final int kBiasFillerFieldNumber = kBiasFillerFieldNumber();
+  public native @Const @ByRef FillerParameter bias_filler();
+  public native FillerParameter mutable_bias_filler();
+  public native FillerParameter release_bias_filler();
+  public native void set_allocated_bias_filler(FillerParameter bias_filler);
 }
 // -------------------------------------------------------------------
 
@@ -9773,6 +10050,16 @@ public static final int
 
 
 
+// optional .caffe.BiasParameter bias_param = 141;
+
+
+
+
+
+
+
+
+
 // optional .caffe.ConcatParameter concat_param = 104;
 
 
@@ -9834,6 +10121,16 @@ public static final int
 
 
 // optional .caffe.EltwiseParameter eltwise_param = 110;
+
+
+
+
+
+
+
+
+
+// optional .caffe.ELUParameter elu_param = 140;
 
 
 
@@ -10034,6 +10331,16 @@ public static final int
 
 
 // optional .caffe.ReshapeParameter reshape_param = 133;
+
+
+
+
+
+
+
+
+
+// optional .caffe.ScaleParameter scale_param = 142;
 
 
 
@@ -10314,6 +10621,36 @@ public static final int
 
 
 // optional float eps = 3 [default = 1e-05];
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// BiasParameter
+
+// optional int32 axis = 1 [default = 1];
+
+
+
+
+
+
+
+// optional int32 num_axes = 2 [default = 1];
+
+
+
+
+
+
+
+// optional .caffe.FillerParameter filler = 3;
+
+
 
 
 
@@ -10683,6 +11020,18 @@ public static final int
 
 
 // optional bool stable_prod_grad = 3 [default = true];
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// ELUParameter
+
+// optional float alpha = 1 [default = 1];
 
 
 
@@ -11422,6 +11771,54 @@ public static final int
 
 
 // optional int32 num_axes = 3 [default = -1];
+
+
+
+
+
+
+
+// -------------------------------------------------------------------
+
+// ScaleParameter
+
+// optional int32 axis = 1 [default = 1];
+
+
+
+
+
+
+
+// optional int32 num_axes = 2 [default = 1];
+
+
+
+
+
+
+
+// optional .caffe.FillerParameter filler = 3;
+
+
+
+
+
+
+
+
+
+// optional bool bias_term = 4 [default = false];
+
+
+
+
+
+
+
+// optional .caffe.FillerParameter bias_filler = 5;
+
+
 
 
 
@@ -18582,6 +18979,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public native @Const @ByRef BoolVector has_params_decay();
   public native @Const @ByRef StringIntMap param_names_index();
   public native @StdVector IntPointer param_owners();
+  public native @Const @ByRef StringVector param_display_names();
   /** \brief Input and output blob numbers */
   public native int num_inputs();
   public native int num_outputs();
@@ -18785,6 +19183,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
   public native @Const @ByRef BoolVector has_params_decay();
   public native @Const @ByRef StringIntMap param_names_index();
   public native @StdVector IntPointer param_owners();
+  public native @Const @ByRef StringVector param_display_names();
   /** \brief Input and output blob numbers */
   public native int num_inputs();
   public native int num_outputs();

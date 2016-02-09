@@ -54,7 +54,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "caffe/layers/cudnn_conv_layer.hpp", "caffe/layers/im2col_layer.hpp", "caffe/layers/lrn_layer.hpp", "caffe/layers/cudnn_lrn_layer.hpp", "caffe/layers/cudnn_lcn_layer.hpp",
         "caffe/layers/pooling_layer.hpp", "caffe/layers/cudnn_pooling_layer.hpp", "caffe/layers/spp_layer.hpp", "caffe/util/benchmark.hpp", "caffe/util/db.hpp", "caffe/util/db_leveldb.hpp",
         "caffe/util/db_lmdb.hpp", "caffe/util/io.hpp", "caffe/util/rng.hpp", "caffe/util/im2col.hpp", "caffe/util/insert_splits.hpp", "caffe/util/mkl_alternate.hpp",
-        "caffe/util/upgrade_proto.hpp", "caffe/util/cudnn.hpp"}, link = "caffe", includepath = {"/usr/local/cuda/include/",
+        "caffe/util/upgrade_proto.hpp", "caffe/util/cudnn.hpp"}, link = "caffe@.1.0.0-rc3", includepath = {"/usr/local/cuda/include/",
         "/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}, linkpath = "/usr/local/cuda/lib/") })
 public class caffe implements InfoMapper {
     public void map(InfoMap infoMap) {
