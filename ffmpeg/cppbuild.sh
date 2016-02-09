@@ -28,7 +28,7 @@ else
     LAME=lame-3.99.5
     SPEEX=speex-1.2rc2
     OPENCORE_AMR=opencore-amr-0.1.3
-    OPENSSL=openssl-1.0.2e
+    OPENSSL=openssl-1.0.2f
     OPENH264_VERSION=1.5.0
     X265=x265_1.8
     VPX_VERSION=v1.5.0
