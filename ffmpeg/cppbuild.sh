@@ -32,7 +32,7 @@ else
     LAME=lame-3.99.5
     SPEEX=speex-1.2rc2
     OPENCORE_AMR=opencore-amr-0.1.3
-    OPENSSL=openssl-1.0.2e
+    OPENSSL=openssl-1.0.2f
     OPENH264_VERSION=1.5.0
     X265=x265_1.8
     VPX_VERSION=v1.5.0
@@ -316,17 +316,17 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=i686-w64-mingw32
         make -j $MAKEJ
         make install
-        cd ../$X265
-        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-        make -j $MAKEJ
-        make install
-        cd ../libvpx-$VPX_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=x86-win32-gcc
-        make -j $MAKEJ
-        make install
+#        cd ../$X265
+#        CC="gcc -m32" CXX="g++ -m32" $CMAKE -G "MSYS Makefiles" -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+#        make -j $MAKEJ
+#        make install
+#        cd ../libvpx-$VPX_VERSION
+#        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=x86-win32-gcc
+#        make -j $MAKEJ
+#        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-windows.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=gdigrab --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
 #       PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=dshow --target-os=mingw32 --cc="gcc -m32" --extra-cflags="-I../include/" --enable-pthreads --disable-w32threads --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
@@ -373,7 +373,7 @@ case $PLATFORM in
 #        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-windows.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=dshow --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --enable-pthreads --disable-w32threads --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=gdigrab --target-os=mingw32 --cc="gcc -m64" --extra-cflags="-I../include/" --enable-pthreads --disable-w32threads --extra-ldflags="-L../lib/" --extra-libs="-static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic"
         make -j $MAKEJ
         make install
         ;;
