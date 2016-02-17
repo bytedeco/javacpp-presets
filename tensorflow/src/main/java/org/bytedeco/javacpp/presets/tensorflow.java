@@ -97,6 +97,7 @@ public class tensorflow implements InfoMapper {
 
                .put(new Info("basic/containers").cppTypes("tensorflow::gtl::InlinedVector"))
                .put(new Info("tensorflow::DataType").cast().valueTypes("int").pointerTypes("IntPointer"))
+               .put(new Info("tensorflow::gtl::InlinedVector<long long,4>").pointerTypes("LongVector").define())
                .put(new Info("tensorflow::gtl::InlinedVector<tensorflow::DataType,4>").pointerTypes("DataTypeVector").define())
                .put(new Info("tensorflow::DataTypeSlice")/*.cast()*/.pointerTypes("DataTypeVector"))
 
