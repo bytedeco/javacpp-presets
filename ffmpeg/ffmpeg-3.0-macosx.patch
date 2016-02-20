@@ -1,7 +1,7 @@
-diff -ruN ffmpeg-2.8/configure ffmpeg-2.8-macosx/configure
---- ffmpeg-2.8/configure	2015-09-09 10:17:44.000000000 +0900
-+++ ffmpeg-2.8-macosx/configure	2015-10-09 23:34:36.115344008 +0900
-@@ -4323,7 +4323,7 @@
+diff -ruN ffmpeg-3.0/configure ffmpeg-3.0-macosx/configure
+--- ffmpeg-3.0/configure	2016-02-15 11:29:37.000000000 +0900
++++ ffmpeg-3.0-macosx/configure	2016-02-20 23:29:19.489556194 +0900
+@@ -4513,7 +4513,7 @@
          ;;
      darwin)
          enabled ppc && add_asflags -force_cpusubtype_ALL
@@ -10,30 +10,30 @@ diff -ruN ffmpeg-2.8/configure ffmpeg-2.8-macosx/configure
          enabled x86_32 && append SHFLAGS -Wl,-read_only_relocs,suppress
          strip="${strip} -x"
          add_ldflags -Wl,-dynamic,-search_paths_first
-@@ -5247,7 +5247,7 @@
- enabled libopencore_amrnb && require libopencore_amrnb opencore-amrnb/interf_dec.h Decoder_Interface_init -lopencore-amrnb
- enabled libopencore_amrwb && require libopencore_amrwb opencore-amrwb/dec_if.h D_IF_init -lopencore-amrwb
- enabled libopencv         && require_pkg_config opencv opencv/cxcore.h cvCreateImageHeader
+@@ -5490,7 +5490,7 @@
+ enabled libopencv         && { check_header opencv2/core/core_c.h &&
+                                require_pkg_config opencv opencv2/core/core_c.h cvCreateImageHeader ||
+                                require_pkg_config opencv opencv/cxcore.h cvCreateImageHeader; }
 -enabled libopenh264       && require_pkg_config openh264 wels/codec_api.h WelsGetCodecVersion
 +enabled libopenh264       && require openh264 wels/codec_api.h WelsGetCodecVersion -lopenh264
- enabled libopenjpeg       && { check_lib openjpeg.h opj_version -lopenmj2 -DOPJ_STATIC ||
+ enabled libopenjpeg       && { check_lib openjpeg-2.1/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC ||
+                                check_lib openjpeg-2.0/openjpeg.h opj_version -lopenjp2 -DOPJ_STATIC ||
                                 check_lib openjpeg-1.5/openjpeg.h opj_version -lopenjpeg -DOPJ_STATIC ||
-                                check_lib openjpeg.h opj_version -lopenjpeg -DOPJ_STATIC ||
-@@ -5263,7 +5263,7 @@
+@@ -5507,7 +5507,7 @@
  enabled libsnappy         && require snappy snappy-c.h snappy_compress -lsnappy
- enabled libsoxr           && require libsoxr soxr.h soxr_create -lsoxr
+ enabled libsoxr           && require libsoxr soxr.h soxr_create -lsoxr && LIBSOXR="-lsoxr"
  enabled libssh            && require_pkg_config libssh libssh/sftp.h sftp_init
 -enabled libspeex          && require_pkg_config speex speex/speex.h speex_decoder_init -lspeex
 +enabled libspeex          && require speex speex/speex.h speex_decoder_init -lspeex
- enabled libstagefright_h264 && require_cpp libstagefright_h264 "binder/ProcessState.h media/stagefright/MetaData.h
-     media/stagefright/MediaBufferGroup.h media/stagefright/MediaDebug.h media/stagefright/MediaDefs.h
-     media/stagefright/OMXClient.h media/stagefright/OMXCodec.h" android::OMXClient -lstagefright -lmedia -lutils -lbinder -lgnustl_static
-@@ -5315,7 +5315,7 @@
+ enabled libtesseract      && require_pkg_config tesseract tesseract/capi.h TessBaseAPICreate
+ enabled libtheora         && require libtheora theora/theoraenc.h th_info_init -ltheoraenc -ltheoradec -logg
+ enabled libtwolame        && require libtwolame twolame.h twolame_init -ltwolame &&
+@@ -5556,7 +5556,7 @@
                                 die "ERROR: libx264 must be installed and version must be >= 0.118."; } &&
                               { check_cpp_condition x264.h "X264_MPEG2" &&
                                 enable libx262; }
 -enabled libx265           && require_pkg_config x265 x265.h x265_api_get &&
 +enabled libx265           && require x265 x265.h x265_encoder_encode -lx265 &&
-                              { check_cpp_condition x265.h "X265_BUILD >= 57" ||
-                                die "ERROR: libx265 version must be >= 57."; }
+                              { check_cpp_condition x265.h "X265_BUILD >= 68" ||
+                                die "ERROR: libx265 version must be >= 68."; }
  enabled libxavs           && require libxavs xavs.h xavs_encoder_encode -lxavs

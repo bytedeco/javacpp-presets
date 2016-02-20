@@ -210,6 +210,53 @@ public static class AVIOContext extends Pointer {
      * to any av_opt_* functions in that case.
      */
     @MemberGetter public native @Const AVClass av_class();
+
+    /*
+     * The following shows the relationship between buffer, buf_ptr, buf_end, buf_size,
+     * and pos, when reading and when writing (since AVIOContext is used for both):
+     *
+     **********************************************************************************
+     *                                   READING
+     **********************************************************************************
+     *
+     *                            |              buffer_size              |
+     *                            |---------------------------------------|
+     *                            |                                       |
+     *
+     *                         buffer          buf_ptr       buf_end
+     *                            +---------------+-----------------------+
+     *                            |/ / / / / / / /|/ / / / / / /|         |
+     *  read buffer:              |/ / consumed / | to be read /|         |
+     *                            |/ / / / / / / /|/ / / / / / /|         |
+     *                            +---------------+-----------------------+
+     *
+     *                                                         pos
+     *              +-------------------------------------------+-----------------+
+     *  input file: |                                           |                 |
+     *              +-------------------------------------------+-----------------+
+     *
+     *
+     **********************************************************************************
+     *                                   WRITING
+     **********************************************************************************
+     *
+     *                                          |          buffer_size          |
+     *                                          |-------------------------------|
+     *                                          |                               |
+     *
+     *                                       buffer              buf_ptr     buf_end
+     *                                          +-------------------+-----------+
+     *                                          |/ / / / / / / / / /|           |
+     *  write buffer:                           | / to be flushed / |           |
+     *                                          |/ / / / / / / / / /|           |
+     *                                          +-------------------+-----------+
+     *
+     *                                         pos
+     *               +--------------------------+-----------------------------------+
+     *  output file: |                          |                                   |
+     *               +--------------------------+-----------------------------------+
+     *
+     */
     /** Start of the buffer. */
     public native @Cast("unsigned char*") BytePointer buffer(); public native AVIOContext buffer(BytePointer buffer);
     /** Maximum buffer size */
@@ -348,6 +395,11 @@ public static class AVIOContext extends Pointer {
      * This is current internal only, do not use from outside.
      */
     public native int short_seek_threshold(); public native AVIOContext short_seek_threshold(int short_seek_threshold);
+
+    /**
+     * ',' separated list of allowed protocols.
+     */
+    @MemberGetter public native @Cast("const char*") BytePointer protocol_whitelist();
 }
 
 /* unbuffered I/O */
@@ -639,7 +691,7 @@ public static native int avio_feof(AVIOContext s);
 public static native @Deprecated int url_feof(AVIOContext s);
 // #endif
 
-/** \warning currently size is limited */
+/** \warning Writes up to 4 KiB per call */
 public static native int avio_printf(AVIOContext s, @Cast("const char*") BytePointer fmt);
 public static native int avio_printf(AVIOContext s, String fmt);
 
@@ -1020,6 +1072,18 @@ public static native int avio_handshake(AVIOContext c);
  * if its AVClass is non-NULL, and the protocols layer. See the discussion on
  * nesting in \ref avoptions documentation to learn how to access those.
  *
+ * \section urls
+ * URL strings in libavformat are made of a scheme/protocol, a ':', and a
+ * scheme specific string. URLs without a scheme and ':' used for local files
+ * are supported but deprecated. "file:" should be used for local files.
+ *
+ * It is important that the scheme string is not taken from untrusted
+ * sources without checks.
+ *
+ * Note that some schemes/protocols are quite powerful, allowing access to
+ * both local and remote files, parts of them, concatenations of them, local
+ * audio and video devices and so on.
+ *
  * \defgroup lavf_decoding Demuxing
  * \{
  * Demuxers read a media file and split it into chunks of data (\em packets). A
@@ -1030,10 +1094,10 @@ public static native int avio_handshake(AVIOContext c);
  * cleanup.
  *
  * \section lavf_decoding_open Opening a media file
- * The minimum information required to open a file is its URL or filename, which
+ * The minimum information required to open a file is its URL, which
  * is passed to avformat_open_input(), as in the following code:
  * <pre>{@code
- * const char    *url = "in.mp3";
+ * const char    *url = "file:in.mp3";
  * AVFormatContext *s = NULL;
  * int ret = avformat_open_input(&s, url, NULL, NULL);
  * if (ret < 0)
@@ -1107,7 +1171,7 @@ public static native int avio_handshake(AVIOContext c);
  * until the next av_read_frame() call or closing the file. If the caller
  * requires a longer lifetime, av_dup_packet() will make an av_malloc()ed copy
  * of it.
- * In both cases, the packet must be freed with av_free_packet() when it is no
+ * In both cases, the packet must be freed with av_packet_unref() when it is no
  * longer needed.
  *
  * \section lavf_decoding_seek Seeking
@@ -1459,9 +1523,11 @@ public static final int AVFMT_NOFILE =        0x0001;
 public static final int AVFMT_NEEDNUMBER =    0x0002;
 /** Show format stream IDs numbers. */
 public static final int AVFMT_SHOW_IDS =      0x0008;
+// #if FF_API_LAVF_FMT_RAWPICTURE
 /** Format wants AVPicture structure for
-                                      raw picture data. */
+                                      raw picture data. @deprecated Not used anymore */
 public static final int AVFMT_RAWPICTURE =    0x0020;
+// #endif
 /** Format wants global header. */
 public static final int AVFMT_GLOBALHEADER =  0x0040;
 /** Format does not need / have any timestamps. */
@@ -1484,14 +1550,10 @@ public static final int AVFMT_NOGENSEARCH =   0x4000;
 public static final int AVFMT_NO_BYTE_SEEK =  0x8000;
 /** Format allows flushing. If not set, the muxer will not receive a NULL packet in the write_packet function. */
 public static final int AVFMT_ALLOW_FLUSH =  0x10000;
-// #if LIBAVFORMAT_VERSION_MAJOR <= 54
-// #else
-
 /** Format does not require strictly
                                         increasing timestamps, but they must
                                         still be monotonic */
 public static final int AVFMT_TS_NONSTRICT = 0x20000;
-// #endif
 /** Format allows muxing negative
                                         timestamps. If not set the timestamp
                                         will be shifted in av_write_frame and
@@ -1541,7 +1603,7 @@ public static class AVOutputFormat extends Pointer {
     /** default subtitle codec */
     public native @Cast("AVCodecID") int subtitle_codec(); public native AVOutputFormat subtitle_codec(int subtitle_codec);
     /**
-     * can use flags: AVFMT_NOFILE, AVFMT_NEEDNUMBER, AVFMT_RAWPICTURE,
+     * can use flags: AVFMT_NOFILE, AVFMT_NEEDNUMBER,
      * AVFMT_GLOBALHEADER, AVFMT_NOTIMESTAMPS, AVFMT_VARIABLE_FPS,
      * AVFMT_NODIMENSIONS, AVFMT_NOSTREAMS, AVFMT_ALLOW_FLUSH,
      * AVFMT_TS_NONSTRICT
@@ -1719,6 +1781,53 @@ public static class AVOutputFormat extends Pointer {
     public native Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery free_device_capabilities(); public native AVOutputFormat free_device_capabilities(Free_device_capabilities_AVFormatContext_AVDeviceCapabilitiesQuery free_device_capabilities);
     /** default data codec */
     public native @Cast("AVCodecID") int data_codec(); public native AVOutputFormat data_codec(int data_codec);
+    /**
+     * Initialize format. May allocate data here, and set any AVFormatContext or
+     * AVStream parameters that need to be set before packets are sent.
+     * This method must not write output.
+     *
+     * Any allocations made here must be freed in deinit().
+     */
+    public static class Init_AVFormatContext extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Init_AVFormatContext(Pointer p) { super(p); }
+        protected Init_AVFormatContext() { allocate(); }
+        private native void allocate();
+        public native int call(AVFormatContext arg0);
+    }
+    public native Init_AVFormatContext init(); public native AVOutputFormat init(Init_AVFormatContext init);
+    /**
+     * Deinitialize format. If present, this is called whenever the muxer is being
+     * destroyed, regardless of whether or not the header has been written.
+     *
+     * If a trailer is being written, this is called after write_trailer().
+     *
+     * This is called if init() fails as well.
+     */
+    public static class Deinit_AVFormatContext extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Deinit_AVFormatContext(Pointer p) { super(p); }
+        protected Deinit_AVFormatContext() { allocate(); }
+        private native void allocate();
+        public native void call(AVFormatContext arg0);
+    }
+    public native Deinit_AVFormatContext deinit(); public native AVOutputFormat deinit(Deinit_AVFormatContext deinit);
+    /**
+     * Set up any necessary bitstream filtering and extract any extra data needed
+     * for the global header.
+     * Return 0 if more packets from this stream must be checked; 1 if not.
+     */
+    public static class Check_bitstream_AVFormatContext_AVPacket extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Check_bitstream_AVFormatContext_AVPacket(Pointer p) { super(p); }
+        protected Check_bitstream_AVFormatContext_AVPacket() { allocate(); }
+        private native void allocate();
+        public native int call(AVFormatContext arg0, @Const AVPacket pkt);
+    }
+    public native Check_bitstream_AVFormatContext_AVPacket check_bitstream(); public native AVOutputFormat check_bitstream(Check_bitstream_AVFormatContext_AVPacket check_bitstream);
 }
 /**
  * \}
@@ -2061,6 +2170,13 @@ public static final int AV_DISPOSITION_CLEAN_EFFECTS =     0x0200;
  * It can also be accessed at any time in AVStream.attached_pic.
  */
 public static final int AV_DISPOSITION_ATTACHED_PIC =      0x0400;
+
+@Opaque public static class AVStreamInternal extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AVStreamInternal() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AVStreamInternal(Pointer p) { super(p); }
+}
 
 /**
  * To specify text track kind (different from subtitles default).
@@ -2446,6 +2562,12 @@ public static final int MAX_REORDER_DELAY = 16;
     public native @ByRef AVRational display_aspect_ratio(); public native AVStream display_aspect_ratio(AVRational display_aspect_ratio);
 
     public native @Cast("FFFrac*") Pointer priv_pts(); public native AVStream priv_pts(Pointer priv_pts);
+
+    /**
+     * An opaque field for libavformat internal usage.
+     * Must not be accessed in any way by callers.
+     */
+    public native AVStreamInternal internal(); public native AVStream internal(AVStreamInternal internal);
 }
 
 public static native @ByVal AVRational av_stream_get_r_frame_rate(@Const AVStream s);
@@ -2710,7 +2832,7 @@ public static class AVFormatContext extends Pointer {
      * available. Never set it directly if the file_size and the
      * duration are known as FFmpeg can compute it automatically.
      */
-    public native int bit_rate(); public native AVFormatContext bit_rate(int bit_rate);
+    public native long bit_rate(); public native AVFormatContext bit_rate(long bit_rate);
 
     public native @Cast("unsigned int") int packet_size(); public native AVFormatContext packet_size(int packet_size);
     public native int max_delay(); public native AVFormatContext max_delay(int max_delay);
@@ -2758,17 +2880,20 @@ public static final int AVFMT_FLAG_KEEP_SIDE_DATA = 0x40000;
 /** Enable fast, but inaccurate seeks for some formats */
 public static final int AVFMT_FLAG_FAST_SEEK =   0x80000;
 
-// #if FF_API_PROBESIZE_32
     /**
-     * @deprecated deprecated in favor of probesize2
+     * Maximum size of the data read from input for determining
+     * the input container format.
+     * Demuxing only, set by the caller before avformat_open_input().
      */
-    public native @Cast("unsigned int") int probesize(); public native AVFormatContext probesize(int probesize);
+    public native long probesize(); public native AVFormatContext probesize(long probesize);
 
     /**
-     * @deprecated deprecated in favor of max_analyze_duration2
+     * Maximum duration (in AV_TIME_BASE units) of the data read
+     * from input in avformat_find_stream_info().
+     * Demuxing only, set by the caller before avformat_find_stream_info().
+     * Can be set to 0 to let avformat choose using a heuristic.
      */
-    public native @Deprecated int max_analyze_duration(); public native AVFormatContext max_analyze_duration(int max_analyze_duration);
-// #endif
+    public native long max_analyze_duration(); public native AVFormatContext max_analyze_duration(long max_analyze_duration);
 
     @MemberGetter public native @Cast("const uint8_t*") BytePointer key();
     public native int keylen(); public native AVFormatContext keylen(int keylen);
@@ -3105,7 +3230,6 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
     /**
      * User data.
      * This is a place for some private data of the user.
-     * Mostly usable with control_message_cb or any future callbacks in device's context.
      */
     public native Pointer opaque(); public native AVFormatContext opaque(Pointer opaque);
 
@@ -3119,29 +3243,6 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
      * Muxing: set by user via AVOptions (NO direct access)
      */
     public native long output_ts_offset(); public native AVFormatContext output_ts_offset(long output_ts_offset);
-
-    /**
-     * Maximum duration (in AV_TIME_BASE units) of the data read
-     * from input in avformat_find_stream_info().
-     * Demuxing only, set by the caller before avformat_find_stream_info()
-     * via AVOptions (NO direct access).
-     * Can be set to 0 to let avformat choose using a heuristic.
-     */
-// #if FF_API_PROBESIZE_32
-    public native long max_analyze_duration2(); public native AVFormatContext max_analyze_duration2(long max_analyze_duration2);
-// #else
-// #endif
-
-    /**
-     * Maximum size of the data read from input for determining
-     * the input container format.
-     * Demuxing only, set by the caller before avformat_open_input()
-     * via AVOptions (NO direct access).
-     */
-// #if FF_API_PROBESIZE_32
-    public native long probesize2(); public native AVFormatContext probesize2(long probesize2);
-// #else
-// #endif
 
     /**
      * dump format separator.
@@ -3159,6 +3260,7 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
      */
     public native @Cast("AVCodecID") int data_codec_id(); public native AVFormatContext data_codec_id(int data_codec_id);
 
+// #if FF_API_OLD_OPEN_CALLBACKS
     /**
      * Called to open further IO contexts when needed for demuxing.
      *
@@ -3173,6 +3275,8 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
      * \See av_format_set_open_cb()
      *
      * Demuxing: Set by user.
+     *
+     * @deprecated Use io_open and io_close.
      */
     public static class Open_cb_AVFormatContext_PointerPointer_BytePointer_int_AVIOInterruptCB_PointerPointer extends FunctionPointer {
         static { Loader.load(); }
@@ -3180,9 +3284,61 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
         public    Open_cb_AVFormatContext_PointerPointer_BytePointer_int_AVIOInterruptCB_PointerPointer(Pointer p) { super(p); }
         protected Open_cb_AVFormatContext_PointerPointer_BytePointer_int_AVIOInterruptCB_PointerPointer() { allocate(); }
         private native void allocate();
-        public native int call(AVFormatContext s, @Cast("AVIOContext**") PointerPointer p, @Cast("const char*") BytePointer url, int flags, @Const AVIOInterruptCB int_cb, @Cast("AVDictionary**") PointerPointer options);
+        public native @Deprecated int call(AVFormatContext s, @Cast("AVIOContext**") PointerPointer p, @Cast("const char*") BytePointer url, int flags, @Const AVIOInterruptCB int_cb, @Cast("AVDictionary**") PointerPointer options);
     }
     public native Open_cb_AVFormatContext_PointerPointer_BytePointer_int_AVIOInterruptCB_PointerPointer open_cb(); public native AVFormatContext open_cb(Open_cb_AVFormatContext_PointerPointer_BytePointer_int_AVIOInterruptCB_PointerPointer open_cb);
+// #endif
+
+    /**
+     * ',' separated list of allowed protocols.
+     * - encoding: unused
+     * - decoding: set by user through AVOptions (NO direct access)
+     */
+    public native @Cast("char*") BytePointer protocol_whitelist(); public native AVFormatContext protocol_whitelist(BytePointer protocol_whitelist);
+
+    /*
+     * A callback for opening new IO streams.
+     *
+     * Certain muxers or demuxers (e.g. for various playlist-based formats) need
+     * to open additional files during muxing or demuxing. This callback allows
+     * the caller to provide custom IO in such cases.
+     *
+     * @param s the format context
+     * @param pb on success, the newly opened IO context should be returned here
+     * @param url the url to open
+     * @param flags a combination of AVIO_FLAG_*
+     * @param options a dictionary of additional options, with the same
+     *                semantics as in avio_open2()
+     * @return 0 on success, a negative AVERROR code on failure
+     *
+     * @note Certain muxers and demuxers do nesting, i.e. they open one or more
+     * additional internal format contexts. Thus the AVFormatContext pointer
+     * passed to this callback may be different from the one facing the caller.
+     * It will, however, have the same 'opaque' field.
+     */
+    public static class Io_open_AVFormatContext_PointerPointer_BytePointer_int_PointerPointer extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Io_open_AVFormatContext_PointerPointer_BytePointer_int_PointerPointer(Pointer p) { super(p); }
+        protected Io_open_AVFormatContext_PointerPointer_BytePointer_int_PointerPointer() { allocate(); }
+        private native void allocate();
+        public native int call(AVFormatContext s, @Cast("AVIOContext**") PointerPointer pb, @Cast("const char*") BytePointer url,
+                       int flags, @Cast("AVDictionary**") PointerPointer options);
+    }
+    public native Io_open_AVFormatContext_PointerPointer_BytePointer_int_PointerPointer io_open(); public native AVFormatContext io_open(Io_open_AVFormatContext_PointerPointer_BytePointer_int_PointerPointer io_open);
+
+    /**
+     * A callback for closing the streams opened with AVFormatContext.io_open().
+     */
+    public static class Io_close_AVFormatContext_AVIOContext extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Io_close_AVFormatContext_AVIOContext(Pointer p) { super(p); }
+        protected Io_close_AVFormatContext_AVIOContext() { allocate(); }
+        private native void allocate();
+        public native void call(AVFormatContext s, AVIOContext pb);
+    }
+    public native Io_close_AVFormatContext_AVIOContext io_close(); public native AVFormatContext io_close(Io_close_AVFormatContext_AVIOContext io_close);
 }
 
 public static native int av_format_get_probe_score(@Const AVFormatContext s);
@@ -3200,8 +3356,10 @@ public static native Pointer av_format_get_opaque(@Const AVFormatContext s);
 public static native void av_format_set_opaque(AVFormatContext s, Pointer opaque);
 public static native av_format_control_message av_format_get_control_message_cb(@Const AVFormatContext s);
 public static native void av_format_set_control_message_cb(AVFormatContext s, av_format_control_message callback);
-public static native AVOpenCallback av_format_get_open_cb(@Const AVFormatContext s);
-public static native void av_format_set_open_cb(AVFormatContext s, AVOpenCallback callback);
+// #if FF_API_OLD_OPEN_CALLBACKS
+public static native @Deprecated AVOpenCallback av_format_get_open_cb(@Const AVFormatContext s);
+public static native @Deprecated void av_format_set_open_cb(AVFormatContext s, AVOpenCallback callback);
+// #endif
 
 /**
  * This function will cause global side data to be injected in the next packet
@@ -3344,6 +3502,16 @@ public static native @Const AVClass avformat_get_class();
 public static native AVStream avformat_new_stream(AVFormatContext s, @Const AVCodec c);
 
 /**
+ * Allocate new information from stream.
+ *
+ * @param stream stream
+ * @param type desired side information type
+ * @param size side information size
+ * @return pointer to fresh allocated data or NULL otherwise
+ */
+public static native @Cast("uint8_t*") BytePointer av_stream_new_side_data(AVStream stream,
+                                 @Cast("AVPacketSideDataType") int type, int size);
+/**
  * Get side information from stream.
  *
  * @param stream stream
@@ -3443,7 +3611,7 @@ public static native AVInputFormat av_probe_input_format3(AVProbeData pd, int is
  *
  * @param pb the bytestream to probe
  * @param fmt the input format is put here
- * @param filename the filename of the stream
+ * @param url the url of the stream
  * @param logctx the log context
  * @param offset the offset within the bytestream to probe from
  * @param max_probe_size the maximum probe buffer size (zero for default)
@@ -3452,26 +3620,26 @@ public static native AVInputFormat av_probe_input_format3(AVProbeData pd, int is
  * AVERROR code otherwise
  */
 public static native int av_probe_input_buffer2(AVIOContext pb, @Cast("AVInputFormat**") PointerPointer fmt,
-                           @Cast("const char*") BytePointer filename, Pointer logctx,
+                           @Cast("const char*") BytePointer url, Pointer logctx,
                            @Cast("unsigned int") int offset, @Cast("unsigned int") int max_probe_size);
 public static native int av_probe_input_buffer2(AVIOContext pb, @ByPtrPtr AVInputFormat fmt,
-                           @Cast("const char*") BytePointer filename, Pointer logctx,
+                           @Cast("const char*") BytePointer url, Pointer logctx,
                            @Cast("unsigned int") int offset, @Cast("unsigned int") int max_probe_size);
 public static native int av_probe_input_buffer2(AVIOContext pb, @ByPtrPtr AVInputFormat fmt,
-                           String filename, Pointer logctx,
+                           String url, Pointer logctx,
                            @Cast("unsigned int") int offset, @Cast("unsigned int") int max_probe_size);
 
 /**
  * Like av_probe_input_buffer2() but returns 0 on success
  */
 public static native int av_probe_input_buffer(AVIOContext pb, @Cast("AVInputFormat**") PointerPointer fmt,
-                          @Cast("const char*") BytePointer filename, Pointer logctx,
+                          @Cast("const char*") BytePointer url, Pointer logctx,
                           @Cast("unsigned int") int offset, @Cast("unsigned int") int max_probe_size);
 public static native int av_probe_input_buffer(AVIOContext pb, @ByPtrPtr AVInputFormat fmt,
-                          @Cast("const char*") BytePointer filename, Pointer logctx,
+                          @Cast("const char*") BytePointer url, Pointer logctx,
                           @Cast("unsigned int") int offset, @Cast("unsigned int") int max_probe_size);
 public static native int av_probe_input_buffer(AVIOContext pb, @ByPtrPtr AVInputFormat fmt,
-                          String filename, Pointer logctx,
+                          String url, Pointer logctx,
                           @Cast("unsigned int") int offset, @Cast("unsigned int") int max_probe_size);
 
 /**
@@ -3482,7 +3650,7 @@ public static native int av_probe_input_buffer(AVIOContext pb, @ByPtrPtr AVInput
  *           May be a pointer to NULL, in which case an AVFormatContext is allocated by this
  *           function and written into ps.
  *           Note that a user-supplied AVFormatContext will be freed on failure.
- * @param filename Name of the stream to open.
+ * @param url URL of the stream to open.
  * @param fmt If non-NULL, this parameter forces a specific input format.
  *            Otherwise the format is autodetected.
  * @param options  A dictionary filled with AVFormatContext and demuxer-private options.
@@ -3493,9 +3661,9 @@ public static native int av_probe_input_buffer(AVIOContext pb, @ByPtrPtr AVInput
  *
  * \note If you want to use custom IO, preallocate the format context and set its pb field.
  */
-public static native int avformat_open_input(@Cast("AVFormatContext**") PointerPointer ps, @Cast("const char*") BytePointer filename, AVInputFormat fmt, @Cast("AVDictionary**") PointerPointer options);
-public static native int avformat_open_input(@ByPtrPtr AVFormatContext ps, @Cast("const char*") BytePointer filename, AVInputFormat fmt, @ByPtrPtr AVDictionary options);
-public static native int avformat_open_input(@ByPtrPtr AVFormatContext ps, String filename, AVInputFormat fmt, @ByPtrPtr AVDictionary options);
+public static native int avformat_open_input(@Cast("AVFormatContext**") PointerPointer ps, @Cast("const char*") BytePointer url, AVInputFormat fmt, @Cast("AVDictionary**") PointerPointer options);
+public static native int avformat_open_input(@ByPtrPtr AVFormatContext ps, @Cast("const char*") BytePointer url, AVInputFormat fmt, @ByPtrPtr AVDictionary options);
+public static native int avformat_open_input(@ByPtrPtr AVFormatContext ps, String url, AVInputFormat fmt, @ByPtrPtr AVDictionary options);
 
 public static native @Deprecated int av_demuxer_open(AVFormatContext ic);
 
@@ -3534,6 +3702,8 @@ public static native int avformat_find_stream_info(AVFormatContext ic, @ByPtrPtr
  *         the last program is not among the programs of ic.
  */
 public static native AVProgram av_find_program_from_stream(AVFormatContext ic, AVProgram last, int s);
+
+public static native void av_program_add_stream_index(AVFormatContext ac, int progid, @Cast("unsigned int") int idx);
 
 /**
  * Find the "best" stream in the file.
@@ -3583,7 +3753,7 @@ public static native int av_find_best_stream(AVFormatContext ic,
  * If pkt->buf is NULL, then the packet is valid until the next
  * av_read_frame() or until avformat_close_input(). Otherwise the packet
  * is valid indefinitely. In both cases the packet must be freed with
- * av_free_packet when it is no longer needed. For video, the packet contains
+ * av_packet_unref when it is no longer needed. For video, the packet contains
  * exactly one frame. For audio, it contains an integer number of frames if each
  * frame has a known fixed size (e.g. PCM or ADPCM data). If the audio frames
  * have a variable size (e.g. MPEG audio), then it contains one frame.
@@ -3738,10 +3908,17 @@ public static native int avformat_write_header(AVFormatContext s, @ByPtrPtr AVDi
  *            <br>
  *            Packet's \ref AVPacket.stream_index "stream_index" field must be
  *            set to the index of the corresponding stream in \ref
- *            AVFormatContext.streams "s->streams". It is very strongly
- *            recommended that timing information (\ref AVPacket.pts "pts", \ref
- *            AVPacket.dts "dts", \ref AVPacket.duration "duration") is set to
- *            correct values.
+ *            AVFormatContext.streams "s->streams".
+ *            <br>
+ *            The timestamps (\ref AVPacket.pts "pts", \ref AVPacket.dts "dts")
+ *            must be set to correct values in the stream's timebase (unless the
+ *            output format is flagged with the AVFMT_NOTIMESTAMPS flag, then
+ *            they can be set to AV_NOPTS_VALUE).
+ *            The dts for subsequent packets passed to this function must be strictly
+ *            increasing when compared in their respective timebases (unless the
+ *            output format is flagged with the AVFMT_TS_NONSTRICT, then they
+ *            merely have to be nondecreasing).  \ref AVPacket.duration
+ *            "duration") should also be set if known.
  * @return < 0 on error, = 0 if OK, 1 if flushed and there is no more data to flush
  *
  * @see av_interleaved_write_frame()
@@ -3771,10 +3948,16 @@ public static native int av_write_frame(AVFormatContext s, AVPacket pkt);
  *            <br>
  *            Packet's \ref AVPacket.stream_index "stream_index" field must be
  *            set to the index of the corresponding stream in \ref
- *            AVFormatContext.streams "s->streams". It is very strongly
- *            recommended that timing information (\ref AVPacket.pts "pts", \ref
- *            AVPacket.dts "dts", \ref AVPacket.duration "duration") is set to
- *            correct values.
+ *            AVFormatContext.streams "s->streams".
+ *            <br>
+ *            The timestamps (\ref AVPacket.pts "pts", \ref AVPacket.dts "dts")
+ *            must be set to correct values in the stream's timebase (unless the
+ *            output format is flagged with the AVFMT_NOTIMESTAMPS flag, then
+ *            they can be set to AV_NOPTS_VALUE).
+ *            The dts for subsequent packets in one stream must be strictly
+ *            increasing (unless the output format is flagged with the
+ *            AVFMT_TS_NONSTRICT, then they merely have to be nondecreasing).
+ *            \ref AVPacket.duration "duration") should also be set if known.
  *
  * @return 0 on success, a negative AVERROR on error. Libavformat will always
  *         take care of freeing the packet, even if this function fails.
@@ -4254,6 +4437,17 @@ public static native int avformat_match_stream_specifier(AVFormatContext s, AVSt
 
 public static native int avformat_queue_attached_pictures(AVFormatContext s);
 
+/**
+ * Apply a list of bitstream filters to a packet.
+ *
+ * @param codec AVCodecContext, usually from an AVStream
+ * @param pkt the packet to apply filters to
+ * @param bsfc a NULL-terminated list of filters to apply
+ * @return  >=0 on success;
+ *          AVERROR code on failure
+ */
+public static native int av_apply_bitstream_filters(AVCodecContext codec, AVPacket pkt,
+                               AVBitStreamFilterContext bsfc);
 
 /**
  * \}

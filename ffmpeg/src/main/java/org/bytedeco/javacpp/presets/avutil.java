@@ -36,19 +36,19 @@ import org.bytedeco.javacpp.tools.InfoMapper;
     @Platform(define="__STDC_CONSTANT_MACROS", cinclude={"<libavutil/avutil.h>", "<libavutil/error.h>", "<libavutil/mem.h>",
         "<libavutil/mathematics.h>", "<libavutil/rational.h>", "<libavutil/log.h>", "<libavutil/buffer.h>", "<libavutil/pixfmt.h>",
         "<libavutil/frame.h>", "<libavutil/samplefmt.h>", "<libavutil/channel_layout.h>", "<libavutil/cpu.h>", "<libavutil/dict.h>",
-        "<libavutil/opt.h>", "<libavutil/audioconvert.h>", "<libavutil/pixdesc.h>", "<libavutil/imgutils.h>",
-        "<libavutil/downmix_info.h>", "<libavutil/stereo3d.h>", "<libavutil/ffversion.h>", "<libavutil/motion_vector.h>",
-        "<libavutil/fifo.h>", "<libavutil/audio_fifo.h>", "log_callback.h"},
+        "<libavutil/opt.h>", "<libavutil/pixdesc.h>", "<libavutil/imgutils.h>", "<libavutil/downmix_info.h>", "<libavutil/stereo3d.h>",
+        "<libavutil/ffversion.h>", "<libavutil/motion_vector.h>", "<libavutil/fifo.h>", "<libavutil/audio_fifo.h>", "log_callback.h"},
         includepath={"/usr/local/include/ffmpeg/", "/opt/local/include/ffmpeg/", "/usr/include/ffmpeg/"},
-        link="avutil@.54", compiler={"default", "nodeprecated"}),
-    @Platform(value="windows", includepath={"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, preload="avutil-54") })
+        link="avutil@.55", compiler={"default", "nodeprecated"}),
+    @Platform(value="windows", includepath={"C:/MinGW/local/include/ffmpeg/", "C:/MinGW/include/ffmpeg/"}, preload="avutil-55") })
 public class avutil implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("AV_NOPTS_VALUE").cppTypes("int64_t").translate(false))
+               .put(new Info("NAN", "INFINITY").cppTypes("double"))
                .put(new Info("AV_TIME_BASE_Q", "PixelFormat", "CodecID").cppTypes())
                .put(new Info("av_const").annotations("@Const"))
                .put(new Info("FF_CONST_AVUTIL55").annotations())
-               .put(new Info("av_malloc_attrib", "av_alloc_size", "av_always_inline").cppTypes().annotations())
+               .put(new Info("av_malloc_attrib", "av_alloc_size", "av_always_inline", "av_warn_unused_result").cppTypes().annotations())
                .put(new Info("attribute_deprecated").annotations("@Deprecated"))
                .put(new Info("AVPanScan", "AVCodecContext").cast().pointerTypes("Pointer"))
                .put(new Info("FF_API_VAAPI").define())

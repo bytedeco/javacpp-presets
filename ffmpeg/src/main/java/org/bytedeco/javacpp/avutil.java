@@ -929,6 +929,23 @@ public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") Int
 public static native void av_fast_malloc(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
 
 /**
+ * Allocate a buffer, reusing the given one if large enough.
+ *
+ * All newly allocated space is initially cleared
+ * Contrary to av_fast_realloc the current buffer contents might not be
+ * preserved and on error the old buffer is freed, thus no special
+ * handling to avoid memleaks is necessary.
+ *
+ * @param ptr pointer to pointer to already allocated buffer, overwritten with pointer to new buffer
+ * @param size size of the buffer *ptr points to
+ * @param min_size minimum size of *ptr buffer after returning, *ptr will be NULL and
+ *                 *size 0 if an error occurred.
+ */
+public static native void av_fast_mallocz(Pointer ptr, @Cast("unsigned int*") IntPointer size, @Cast("size_t") long min_size);
+public static native void av_fast_mallocz(Pointer ptr, @Cast("unsigned int*") IntBuffer size, @Cast("size_t") long min_size);
+public static native void av_fast_mallocz(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
+
+/**
  * \}
  */
 
@@ -994,12 +1011,12 @@ public static final double M_SQRT1_2 =      0.70710678118654752440;  /* 1/sqrt(2
 public static final double M_SQRT2 =        1.41421356237309504880;  /* sqrt(2) */
 // #endif
 // #ifndef NAN
-public static native @MemberGetter int NAN();
-public static final int NAN = NAN();
+public static native @MemberGetter double NAN();
+public static final double NAN = NAN();
 // #endif
 // #ifndef INFINITY
-public static native @MemberGetter int INFINITY();
-public static final int INFINITY = INFINITY();
+public static native @MemberGetter double INFINITY();
+public static final double INFINITY = INFINITY();
 // #endif
 
 /**
@@ -1024,9 +1041,10 @@ public static final int
     AV_ROUND_PASS_MINMAX = 8192;
 
 /**
- * Return the greatest common divisor of a and b.
- * If both a and b are 0 or either or both are <0 then behavior is
- * undefined.
+ * Compute the greatest common divisor of a and b.
+ *
+ * @return gcd of a and b up to sign; if a >= 0 and b >= 0, return value is >= 0;
+ * if a == 0 and b == 0, returns 0.
  */
 public static native @Const long av_gcd(long a, long b);
 
@@ -2343,9 +2361,6 @@ public static final int
     AV_PIX_FMT_YUV422P9LE =  AV_PIX_FMT_YA8 + 14,
     /** hardware decoding through VDA */
     AV_PIX_FMT_VDA_VLD =  AV_PIX_FMT_YA8 + 15,
-
-// #ifdef AV_PIX_FMT_ABI_GIT_MASTER
-// #endif
     /** planar GBR 4:4:4 24bpp */
     AV_PIX_FMT_GBRP =  AV_PIX_FMT_YA8 + 16,
     /** planar GBR 4:4:4 27bpp, big-endian */
@@ -2360,17 +2375,10 @@ public static final int
     AV_PIX_FMT_GBRP16BE =  AV_PIX_FMT_YA8 + 21,
     /** planar GBR 4:4:4 48bpp, little-endian */
     AV_PIX_FMT_GBRP16LE =  AV_PIX_FMT_YA8 + 22,
-
-    /**
-     * duplicated pixel formats for compatibility with libav.
-     * FFmpeg supports these formats since May 8 2012 and Jan 28 2012 (commits f9ca1ac7 and 143a5c55)
-     * Libav added them Oct 12 2012 with incompatible values (commit 6d5600e85)
-     */
     /** planar YUV 4:2:2 24bpp, (1 Cr & Cb sample per 2x1 Y & A samples) */
-    AV_PIX_FMT_YUVA422P_LIBAV =  AV_PIX_FMT_YA8 + 23,
+    AV_PIX_FMT_YUVA422P =  AV_PIX_FMT_YA8 + 23,
     /** planar YUV 4:4:4 32bpp, (1 Cr & Cb sample per 1x1 Y & A samples) */
-    AV_PIX_FMT_YUVA444P_LIBAV =  AV_PIX_FMT_YA8 + 24,
-
+    AV_PIX_FMT_YUVA444P =  AV_PIX_FMT_YA8 + 24,
     /** planar YUV 4:2:0 22.5bpp, (1 Cr & Cb sample per 2x2 Y & A samples), big-endian */
     AV_PIX_FMT_YUVA420P9BE =  AV_PIX_FMT_YA8 + 25,
     /** planar YUV 4:2:0 22.5bpp, (1 Cr & Cb sample per 2x2 Y & A samples), little-endian */
@@ -2422,20 +2430,14 @@ public static final int
     /** interleaved chroma YUV 4:2:2, 20bpp, (1 Cr & Cb sample per 2x1 Y samples), big-endian */
     AV_PIX_FMT_NV20BE =  AV_PIX_FMT_YA8 + 48,
 
-    /**
-     * duplicated pixel formats for compatibility with libav.
-     * FFmpeg supports these formats since Sat Sep 24 06:01:45 2011 +0200 (commits 9569a3c9f41387a8c7d1ce97d8693520477a66c3)
-     * also see Fri Nov 25 01:38:21 2011 +0100 92afb431621c79155fcb7171d26f137eb1bee028
-     * Libav added them Sun Mar 16 23:05:47 2014 +0100 with incompatible values (commit 1481d24c3a0abf81e1d7a514547bd5305232be30)
-     */
     /** packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian */
-    AV_PIX_FMT_RGBA64BE_LIBAV =  AV_PIX_FMT_YA8 + 49,
+    AV_PIX_FMT_RGBA64BE =  AV_PIX_FMT_YA8 + 49,
     /** packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as little-endian */
-    AV_PIX_FMT_RGBA64LE_LIBAV =  AV_PIX_FMT_YA8 + 50,
+    AV_PIX_FMT_RGBA64LE =  AV_PIX_FMT_YA8 + 50,
     /** packed RGBA 16:16:16:16, 64bpp, 16B, 16G, 16R, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian */
-    AV_PIX_FMT_BGRA64BE_LIBAV =  AV_PIX_FMT_YA8 + 51,
+    AV_PIX_FMT_BGRA64BE =  AV_PIX_FMT_YA8 + 51,
     /** packed RGBA 16:16:16:16, 64bpp, 16B, 16G, 16R, 16A, the 2-byte value for each R/G/B/A component is stored as little-endian */
-    AV_PIX_FMT_BGRA64LE_LIBAV =  AV_PIX_FMT_YA8 + 52,
+    AV_PIX_FMT_BGRA64LE =  AV_PIX_FMT_YA8 + 52,
 
     /** packed YUV 4:2:2, 16bpp, Y0 Cr Y1 Cb */
     AV_PIX_FMT_YVYU422 =  AV_PIX_FMT_YA8 + 53,
@@ -2448,17 +2450,12 @@ public static final int
     /** 16bit gray, 16bit alpha (little-endian) */
     AV_PIX_FMT_YA16LE =  AV_PIX_FMT_YA8 + 56,
 
-    /**
-     * duplicated pixel formats for compatibility with libav.
-     * FFmpeg supports these formats since May 3 2013 (commit e6d4e687558d08187e7a415a7725e4b1a416f782)
-     * Libav added them Jan 14 2015 with incompatible values (commit 0e6c7dfa650e8b0497bfa7a06394b7a462ddc33a)
-     */
     /** planar GBRA 4:4:4:4 32bpp */
-    AV_PIX_FMT_GBRAP_LIBAV =  AV_PIX_FMT_YA8 + 57,
+    AV_PIX_FMT_GBRAP =  AV_PIX_FMT_YA8 + 57,
     /** planar GBRA 4:4:4:4 64bpp, big-endian */
-    AV_PIX_FMT_GBRAP16BE_LIBAV =  AV_PIX_FMT_YA8 + 58,
+    AV_PIX_FMT_GBRAP16BE =  AV_PIX_FMT_YA8 + 58,
     /** planar GBRA 4:4:4:4 64bpp, little-endian */
-    AV_PIX_FMT_GBRAP16LE_LIBAV =  AV_PIX_FMT_YA8 + 59,
+    AV_PIX_FMT_GBRAP16LE =  AV_PIX_FMT_YA8 + 59,
     /**
      *  HW acceleration through QSV, data[3] contains a pointer to the
      *  mfxFrameSurface1 structure.
@@ -2473,16 +2470,6 @@ public static final int
     /** HW decoding through Direct3D11, Picture.data[3] contains a ID3D11VideoDecoderOutputView pointer */
     AV_PIX_FMT_D3D11VA_VLD =  AV_PIX_FMT_YA8 + 62,
 
-// #ifndef AV_PIX_FMT_ABI_GIT_MASTER
-    /** packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian */
-    AV_PIX_FMT_RGBA64BE= 0x123,
-    /** packed RGBA 16:16:16:16, 64bpp, 16R, 16G, 16B, 16A, the 2-byte value for each R/G/B/A component is stored as little-endian */
-    AV_PIX_FMT_RGBA64LE = 0x123 + 1,
-    /** packed RGBA 16:16:16:16, 64bpp, 16B, 16G, 16R, 16A, the 2-byte value for each R/G/B/A component is stored as big-endian */
-    AV_PIX_FMT_BGRA64BE = 0x123 + 2,
-    /** packed RGBA 16:16:16:16, 64bpp, 16B, 16G, 16R, 16A, the 2-byte value for each R/G/B/A component is stored as little-endian */
-    AV_PIX_FMT_BGRA64LE = 0x123 + 3,
-// #endif
     /** packed RGB 8:8:8, 32bpp, XRGBXRGB...   X=unused/undefined */
     AV_PIX_FMT_0RGB= 0x123+4,
     /** packed RGB 8:8:8, 32bpp, RGBXRGBX...   X=unused/undefined */
@@ -2491,104 +2478,91 @@ public static final int
     AV_PIX_FMT_0BGR = 0x123+4 + 2,
     /** packed BGR 8:8:8, 32bpp, BGRXBGRX...   X=unused/undefined */
     AV_PIX_FMT_BGR0 = 0x123+4 + 3,
-    /** planar YUV 4:4:4 32bpp, (1 Cr & Cb sample per 1x1 Y & A samples) */
-    AV_PIX_FMT_YUVA444P = 0x123+4 + 4,
-    /** planar YUV 4:2:2 24bpp, (1 Cr & Cb sample per 2x1 Y & A samples) */
-    AV_PIX_FMT_YUVA422P = 0x123+4 + 5,
 
     /** planar YUV 4:2:0,18bpp, (1 Cr & Cb sample per 2x2 Y samples), big-endian */
-    AV_PIX_FMT_YUV420P12BE = 0x123+4 + 6,
+    AV_PIX_FMT_YUV420P12BE = 0x123+4 + 4,
     /** planar YUV 4:2:0,18bpp, (1 Cr & Cb sample per 2x2 Y samples), little-endian */
-    AV_PIX_FMT_YUV420P12LE = 0x123+4 + 7,
+    AV_PIX_FMT_YUV420P12LE = 0x123+4 + 5,
     /** planar YUV 4:2:0,21bpp, (1 Cr & Cb sample per 2x2 Y samples), big-endian */
-    AV_PIX_FMT_YUV420P14BE = 0x123+4 + 8,
+    AV_PIX_FMT_YUV420P14BE = 0x123+4 + 6,
     /** planar YUV 4:2:0,21bpp, (1 Cr & Cb sample per 2x2 Y samples), little-endian */
-    AV_PIX_FMT_YUV420P14LE = 0x123+4 + 9,
+    AV_PIX_FMT_YUV420P14LE = 0x123+4 + 7,
     /** planar YUV 4:2:2,24bpp, (1 Cr & Cb sample per 2x1 Y samples), big-endian */
-    AV_PIX_FMT_YUV422P12BE = 0x123+4 + 10,
+    AV_PIX_FMT_YUV422P12BE = 0x123+4 + 8,
     /** planar YUV 4:2:2,24bpp, (1 Cr & Cb sample per 2x1 Y samples), little-endian */
-    AV_PIX_FMT_YUV422P12LE = 0x123+4 + 11,
+    AV_PIX_FMT_YUV422P12LE = 0x123+4 + 9,
     /** planar YUV 4:2:2,28bpp, (1 Cr & Cb sample per 2x1 Y samples), big-endian */
-    AV_PIX_FMT_YUV422P14BE = 0x123+4 + 12,
+    AV_PIX_FMT_YUV422P14BE = 0x123+4 + 10,
     /** planar YUV 4:2:2,28bpp, (1 Cr & Cb sample per 2x1 Y samples), little-endian */
-    AV_PIX_FMT_YUV422P14LE = 0x123+4 + 13,
+    AV_PIX_FMT_YUV422P14LE = 0x123+4 + 11,
     /** planar YUV 4:4:4,36bpp, (1 Cr & Cb sample per 1x1 Y samples), big-endian */
-    AV_PIX_FMT_YUV444P12BE = 0x123+4 + 14,
+    AV_PIX_FMT_YUV444P12BE = 0x123+4 + 12,
     /** planar YUV 4:4:4,36bpp, (1 Cr & Cb sample per 1x1 Y samples), little-endian */
-    AV_PIX_FMT_YUV444P12LE = 0x123+4 + 15,
+    AV_PIX_FMT_YUV444P12LE = 0x123+4 + 13,
     /** planar YUV 4:4:4,42bpp, (1 Cr & Cb sample per 1x1 Y samples), big-endian */
-    AV_PIX_FMT_YUV444P14BE = 0x123+4 + 16,
+    AV_PIX_FMT_YUV444P14BE = 0x123+4 + 14,
     /** planar YUV 4:4:4,42bpp, (1 Cr & Cb sample per 1x1 Y samples), little-endian */
-    AV_PIX_FMT_YUV444P14LE = 0x123+4 + 17,
+    AV_PIX_FMT_YUV444P14LE = 0x123+4 + 15,
     /** planar GBR 4:4:4 36bpp, big-endian */
-    AV_PIX_FMT_GBRP12BE = 0x123+4 + 18,
+    AV_PIX_FMT_GBRP12BE = 0x123+4 + 16,
     /** planar GBR 4:4:4 36bpp, little-endian */
-    AV_PIX_FMT_GBRP12LE = 0x123+4 + 19,
+    AV_PIX_FMT_GBRP12LE = 0x123+4 + 17,
     /** planar GBR 4:4:4 42bpp, big-endian */
-    AV_PIX_FMT_GBRP14BE = 0x123+4 + 20,
+    AV_PIX_FMT_GBRP14BE = 0x123+4 + 18,
     /** planar GBR 4:4:4 42bpp, little-endian */
-    AV_PIX_FMT_GBRP14LE = 0x123+4 + 21,
-    /** planar GBRA 4:4:4:4 32bpp */
-    AV_PIX_FMT_GBRAP = 0x123+4 + 22,
-    /** planar GBRA 4:4:4:4 64bpp, big-endian */
-    AV_PIX_FMT_GBRAP16BE = 0x123+4 + 23,
-    /** planar GBRA 4:4:4:4 64bpp, little-endian */
-    AV_PIX_FMT_GBRAP16LE = 0x123+4 + 24,
+    AV_PIX_FMT_GBRP14LE = 0x123+4 + 19,
     /** planar YUV 4:1:1, 12bpp, (1 Cr & Cb sample per 4x1 Y samples) full scale (JPEG), deprecated in favor of AV_PIX_FMT_YUV411P and setting color_range */
-    AV_PIX_FMT_YUVJ411P = 0x123+4 + 25,
+    AV_PIX_FMT_YUVJ411P = 0x123+4 + 20,
 
     /** bayer, BGBG..(odd line), GRGR..(even line), 8-bit samples */
-    AV_PIX_FMT_BAYER_BGGR8 = 0x123+4 + 26,
+    AV_PIX_FMT_BAYER_BGGR8 = 0x123+4 + 21,
     /** bayer, RGRG..(odd line), GBGB..(even line), 8-bit samples */
-    AV_PIX_FMT_BAYER_RGGB8 = 0x123+4 + 27,
+    AV_PIX_FMT_BAYER_RGGB8 = 0x123+4 + 22,
     /** bayer, GBGB..(odd line), RGRG..(even line), 8-bit samples */
-    AV_PIX_FMT_BAYER_GBRG8 = 0x123+4 + 28,
+    AV_PIX_FMT_BAYER_GBRG8 = 0x123+4 + 23,
     /** bayer, GRGR..(odd line), BGBG..(even line), 8-bit samples */
-    AV_PIX_FMT_BAYER_GRBG8 = 0x123+4 + 29,
+    AV_PIX_FMT_BAYER_GRBG8 = 0x123+4 + 24,
     /** bayer, BGBG..(odd line), GRGR..(even line), 16-bit samples, little-endian */
-    AV_PIX_FMT_BAYER_BGGR16LE = 0x123+4 + 30,
+    AV_PIX_FMT_BAYER_BGGR16LE = 0x123+4 + 25,
     /** bayer, BGBG..(odd line), GRGR..(even line), 16-bit samples, big-endian */
-    AV_PIX_FMT_BAYER_BGGR16BE = 0x123+4 + 31,
+    AV_PIX_FMT_BAYER_BGGR16BE = 0x123+4 + 26,
     /** bayer, RGRG..(odd line), GBGB..(even line), 16-bit samples, little-endian */
-    AV_PIX_FMT_BAYER_RGGB16LE = 0x123+4 + 32,
+    AV_PIX_FMT_BAYER_RGGB16LE = 0x123+4 + 27,
     /** bayer, RGRG..(odd line), GBGB..(even line), 16-bit samples, big-endian */
-    AV_PIX_FMT_BAYER_RGGB16BE = 0x123+4 + 33,
+    AV_PIX_FMT_BAYER_RGGB16BE = 0x123+4 + 28,
     /** bayer, GBGB..(odd line), RGRG..(even line), 16-bit samples, little-endian */
-    AV_PIX_FMT_BAYER_GBRG16LE = 0x123+4 + 34,
+    AV_PIX_FMT_BAYER_GBRG16LE = 0x123+4 + 29,
     /** bayer, GBGB..(odd line), RGRG..(even line), 16-bit samples, big-endian */
-    AV_PIX_FMT_BAYER_GBRG16BE = 0x123+4 + 35,
+    AV_PIX_FMT_BAYER_GBRG16BE = 0x123+4 + 30,
     /** bayer, GRGR..(odd line), BGBG..(even line), 16-bit samples, little-endian */
-    AV_PIX_FMT_BAYER_GRBG16LE = 0x123+4 + 36,
+    AV_PIX_FMT_BAYER_GRBG16LE = 0x123+4 + 31,
     /** bayer, GRGR..(odd line), BGBG..(even line), 16-bit samples, big-endian */
-    AV_PIX_FMT_BAYER_GRBG16BE = 0x123+4 + 37,
+    AV_PIX_FMT_BAYER_GRBG16BE = 0x123+4 + 32,
 // #if !FF_API_XVMC
 // #endif /* !FF_API_XVMC */
     /** planar YUV 4:4:0,20bpp, (1 Cr & Cb sample per 1x2 Y samples), little-endian */
-    AV_PIX_FMT_YUV440P10LE = 0x123+4 + 38,
+    AV_PIX_FMT_YUV440P10LE = 0x123+4 + 33,
     /** planar YUV 4:4:0,20bpp, (1 Cr & Cb sample per 1x2 Y samples), big-endian */
-    AV_PIX_FMT_YUV440P10BE = 0x123+4 + 39,
+    AV_PIX_FMT_YUV440P10BE = 0x123+4 + 34,
     /** planar YUV 4:4:0,24bpp, (1 Cr & Cb sample per 1x2 Y samples), little-endian */
-    AV_PIX_FMT_YUV440P12LE = 0x123+4 + 40,
+    AV_PIX_FMT_YUV440P12LE = 0x123+4 + 35,
     /** planar YUV 4:4:0,24bpp, (1 Cr & Cb sample per 1x2 Y samples), big-endian */
-    AV_PIX_FMT_YUV440P12BE = 0x123+4 + 41,
+    AV_PIX_FMT_YUV440P12BE = 0x123+4 + 36,
     /** packed AYUV 4:4:4,64bpp (1 Cr & Cb sample per 1x1 Y & A samples), little-endian */
-    AV_PIX_FMT_AYUV64LE = 0x123+4 + 42,
+    AV_PIX_FMT_AYUV64LE = 0x123+4 + 37,
     /** packed AYUV 4:4:4,64bpp (1 Cr & Cb sample per 1x1 Y & A samples), big-endian */
-    AV_PIX_FMT_AYUV64BE = 0x123+4 + 43,
+    AV_PIX_FMT_AYUV64BE = 0x123+4 + 38,
 
     /** hardware decoding through Videotoolbox */
-    AV_PIX_FMT_VIDEOTOOLBOX = 0x123+4 + 44,
+    AV_PIX_FMT_VIDEOTOOLBOX = 0x123+4 + 39,
+
+    /** like NV12, with 10bpp per component, data in the high bits, zeros in the low bits, little-endian */
+    AV_PIX_FMT_P010LE = 0x123+4 + 40,
+    /** like NV12, with 10bpp per component, data in the high bits, zeros in the low bits, big-endian */
+    AV_PIX_FMT_P010BE = 0x123+4 + 41,
 
     /** number of pixel formats, DO NOT USE THIS if you want to link with shared libav* because the number of formats might differ between versions */
-    AV_PIX_FMT_NB = 0x123+4 + 45;
-
-// #if FF_API_PIX_FMT
-// #include "old_pix_fmts.h"
-// #endif
-
-// #if AV_HAVE_INCOMPATIBLE_LIBAV_ABI
-// #endif
-
+    AV_PIX_FMT_NB = 0x123+4 + 42;
 
 // #define AV_PIX_FMT_Y400A AV_PIX_FMT_GRAY8A
 public static final int AV_PIX_FMT_GBR24P = AV_PIX_FMT_GBRP;
@@ -2720,57 +2694,8 @@ public static native @MemberGetter int AV_PIX_FMT_NV20();
 public static final int AV_PIX_FMT_NV20 = AV_PIX_FMT_NV20();
 public static native @MemberGetter int AV_PIX_FMT_AYUV64();
 public static final int AV_PIX_FMT_AYUV64 = AV_PIX_FMT_AYUV64();
-
-
-// #if FF_API_PIX_FMT
-// #define PixelFormat AVPixelFormat
-
-public static final int PIX_FMT_Y400A = AV_PIX_FMT_Y400A;
-public static final int PIX_FMT_GBR24P = AV_PIX_FMT_GBR24P;
-
-// #define PIX_FMT_NE(be, le) AV_PIX_FMT_NE(be, le)
-
-public static final int PIX_FMT_RGB32 =   AV_PIX_FMT_RGB32;
-public static final int PIX_FMT_RGB32_1 = AV_PIX_FMT_RGB32_1;
-public static final int PIX_FMT_BGR32 =   AV_PIX_FMT_BGR32;
-public static final int PIX_FMT_BGR32_1 = AV_PIX_FMT_BGR32_1;
-public static final int PIX_FMT_0RGB32 =  AV_PIX_FMT_0RGB32;
-public static final int PIX_FMT_0BGR32 =  AV_PIX_FMT_0BGR32;
-
-public static final int PIX_FMT_GRAY16 = AV_PIX_FMT_GRAY16;
-public static final int PIX_FMT_RGB48 =  AV_PIX_FMT_RGB48;
-public static final int PIX_FMT_RGB565 = AV_PIX_FMT_RGB565;
-public static final int PIX_FMT_RGB555 = AV_PIX_FMT_RGB555;
-public static final int PIX_FMT_RGB444 = AV_PIX_FMT_RGB444;
-public static final int PIX_FMT_BGR48 =  AV_PIX_FMT_BGR48;
-public static final int PIX_FMT_BGR565 = AV_PIX_FMT_BGR565;
-public static final int PIX_FMT_BGR555 = AV_PIX_FMT_BGR555;
-public static final int PIX_FMT_BGR444 = AV_PIX_FMT_BGR444;
-
-public static final int PIX_FMT_YUV420P9 =  AV_PIX_FMT_YUV420P9;
-public static final int PIX_FMT_YUV422P9 =  AV_PIX_FMT_YUV422P9;
-public static final int PIX_FMT_YUV444P9 =  AV_PIX_FMT_YUV444P9;
-public static final int PIX_FMT_YUV420P10 = AV_PIX_FMT_YUV420P10;
-public static final int PIX_FMT_YUV422P10 = AV_PIX_FMT_YUV422P10;
-public static final int PIX_FMT_YUV444P10 = AV_PIX_FMT_YUV444P10;
-public static final int PIX_FMT_YUV420P12 = AV_PIX_FMT_YUV420P12;
-public static final int PIX_FMT_YUV422P12 = AV_PIX_FMT_YUV422P12;
-public static final int PIX_FMT_YUV444P12 = AV_PIX_FMT_YUV444P12;
-public static final int PIX_FMT_YUV420P14 = AV_PIX_FMT_YUV420P14;
-public static final int PIX_FMT_YUV422P14 = AV_PIX_FMT_YUV422P14;
-public static final int PIX_FMT_YUV444P14 = AV_PIX_FMT_YUV444P14;
-public static final int PIX_FMT_YUV420P16 = AV_PIX_FMT_YUV420P16;
-public static final int PIX_FMT_YUV422P16 = AV_PIX_FMT_YUV422P16;
-public static final int PIX_FMT_YUV444P16 = AV_PIX_FMT_YUV444P16;
-
-public static final int PIX_FMT_RGBA64 = AV_PIX_FMT_RGBA64;
-public static final int PIX_FMT_BGRA64 = AV_PIX_FMT_BGRA64;
-public static final int PIX_FMT_GBRP9 =  AV_PIX_FMT_GBRP9;
-public static final int PIX_FMT_GBRP10 = AV_PIX_FMT_GBRP10;
-public static final int PIX_FMT_GBRP12 = AV_PIX_FMT_GBRP12;
-public static final int PIX_FMT_GBRP14 = AV_PIX_FMT_GBRP14;
-public static final int PIX_FMT_GBRP16 = AV_PIX_FMT_GBRP16;
-// #endif
+public static native @MemberGetter int AV_PIX_FMT_P010();
+public static final int AV_PIX_FMT_P010 = AV_PIX_FMT_P010();
 
 /**
   * Chromaticity coordinates of the source primaries.
@@ -2795,8 +2720,10 @@ public static final int
     AVCOL_PRI_FILM        = 8,
     /** ITU-R BT2020 */
     AVCOL_PRI_BT2020      = 9,
+    /** SMPTE ST 428-1 (CIE 1931 XYZ) */
+    AVCOL_PRI_SMPTEST428_1= 10,
     /** Not part of ABI */
-    AVCOL_PRI_NB = 10;
+    AVCOL_PRI_NB = 11;
 
 /**
  * Color Transfer Characteristic.
@@ -2831,8 +2758,12 @@ public static final int
     AVCOL_TRC_BT2020_10    = 14,
     /** ITU-R BT2020 for 12 bit system */
     AVCOL_TRC_BT2020_12    = 15,
+    /** SMPTE ST 2084 for 10, 12, 14 and 16 bit systems */
+    AVCOL_TRC_SMPTEST2084  = 16,
+    /** SMPTE ST 428-1 */
+    AVCOL_TRC_SMPTEST428_1 = 17,
     /** Not part of ABI */
-    AVCOL_TRC_NB = 16;
+    AVCOL_TRC_NB = 18;
 
 /**
  * YUV colorspace type.
@@ -3020,12 +2951,22 @@ public static final int
      * }</pre>
      */
     AV_FRAME_DATA_SKIP_SAMPLES = 9,
-
     /**
      * This side data must be associated with an audio frame and corresponds to
      * enum AVAudioServiceType defined in avcodec.h.
      */
-    AV_FRAME_DATA_AUDIO_SERVICE_TYPE = 10;
+    AV_FRAME_DATA_AUDIO_SERVICE_TYPE = 10,
+    /**
+     * Mastering display metadata associated with a video frame. The payload is
+     * an AVMasteringDisplayMetadata type and contains information about the
+     * mastering display color volume.
+     */
+    AV_FRAME_DATA_MASTERING_DISPLAY_METADATA = 11,
+    /**
+     * The GOP timecode in 25 bit timecode format. Data format is 64-bit integer.
+     * This is set on the first frame of a GOP that has a temporal reference of 0.
+     */
+    AV_FRAME_DATA_GOP_TIMECODE = 12;
 
 /** enum AVActiveFormatDescription */
 public static final int
@@ -3184,11 +3125,6 @@ public static final int AV_NUM_DATA_POINTERS = 8;
      */
     public native @Cast("AVPictureType") int pict_type(); public native AVFrame pict_type(int pict_type);
 
-// #if FF_API_AVFRAME_LAVC
-    public native @Cast("uint8_t*") @Deprecated BytePointer base(int i); public native AVFrame base(int i, BytePointer base);
-    @MemberGetter public native @Cast("uint8_t**") @Deprecated PointerPointer base();
-// #endif
-
     /**
      * Sample aspect ratio for the video frame, 0/1 if unknown/unspecified.
      */
@@ -3225,71 +3161,17 @@ public static final int AV_NUM_DATA_POINTERS = 8;
      */
     public native int quality(); public native AVFrame quality(int quality);
 
-// #if FF_API_AVFRAME_LAVC
-    public native @Deprecated int reference(); public native AVFrame reference(int reference);
-
-    /**
-     * QP table
-     */
-    public native @Deprecated BytePointer qscale_table(); public native AVFrame qscale_table(BytePointer qscale_table);
-    /**
-     * QP store stride
-     */
-    public native @Deprecated int qstride(); public native AVFrame qstride(int qstride);
-
-    public native @Deprecated int qscale_type(); public native AVFrame qscale_type(int qscale_type);
-
-    /**
-     * mbskip_table[mb]>=1 if MB didn't change
-     * stride= mb_width = (width+15)>>4
-     */
-    public native @Cast("uint8_t*") @Deprecated BytePointer mbskip_table(); public native AVFrame mbskip_table(BytePointer mbskip_table);
-
-    /**
-     * motion vector table
-     * <pre>{@code
-     * example:
-     * int mv_sample_log2= 4 - motion_subsample_log2;
-     * int mb_width= (width+15)>>4;
-     * int mv_stride= (mb_width << mv_sample_log2) + 1;
-     * motion_val[direction][x + y*mv_stride][0->mv_x, 1->mv_y];
-     * }</pre>
-     */
-    public native short motion_val(int i, int j, int k); public native AVFrame motion_val(int i, int j, int k, short motion_val);
-    @MemberGetter public native @Cast("int16_t(*)[2]") ShortPointer motion_val();
-
-    /**
-     * macroblock type table
-     * mb_type_base + mb_width + 2
-     */
-    public native @Cast("uint32_t*") @Deprecated IntPointer mb_type(); public native AVFrame mb_type(IntPointer mb_type);
-
-    /**
-     * DCT coefficients
-     */
-    public native @Deprecated ShortPointer dct_coeff(); public native AVFrame dct_coeff(ShortPointer dct_coeff);
-
-    /**
-     * motion reference frame index
-     * the order in which these are stored can depend on the codec.
-     */
-    public native @Deprecated BytePointer ref_index(int i); public native AVFrame ref_index(int i, BytePointer ref_index);
-    @MemberGetter public native @Cast("int8_t**") @Deprecated PointerPointer ref_index();
-// #endif
-
     /**
      * for some private data of the user
      */
     public native Pointer opaque(); public native AVFrame opaque(Pointer opaque);
 
+// #if FF_API_ERROR_FRAME
     /**
-     * error
+     * @deprecated unused
      */
-    public native @Cast("uint64_t") long error(int i); public native AVFrame error(int i, long error);
-    @MemberGetter public native @Cast("uint64_t*") LongPointer error();
-
-// #if FF_API_AVFRAME_LAVC
-    public native @Deprecated int type(); public native AVFrame type(int type);
+    public native @Cast("uint64_t") @Deprecated long error(int i); public native AVFrame error(int i, long error);
+    @MemberGetter public native @Cast("uint64_t*") @Deprecated LongPointer error();
 // #endif
 
     /**
@@ -3313,15 +3195,6 @@ public static final int AV_NUM_DATA_POINTERS = 8;
      */
     public native int palette_has_changed(); public native AVFrame palette_has_changed(int palette_has_changed);
 
-// #if FF_API_AVFRAME_LAVC
-    public native @Deprecated int buffer_hints(); public native AVFrame buffer_hints(int buffer_hints);
-
-    /**
-     * Pan scan.
-     */
-    public native @Cast("AVPanScan*") @Deprecated Pointer pan_scan(); public native AVFrame pan_scan(Pointer pan_scan);
-// #endif
-
     /**
      * reordered opaque 64bit (generally an integer or a double precision float
      * PTS but can be anything).
@@ -3332,22 +3205,6 @@ public static final int AV_NUM_DATA_POINTERS = 8;
      * @deprecated in favor of pkt_pts
      */
     public native long reordered_opaque(); public native AVFrame reordered_opaque(long reordered_opaque);
-
-// #if FF_API_AVFRAME_LAVC
-    /**
-     * @deprecated this field is unused
-     */
-    public native @Deprecated Pointer hwaccel_picture_private(); public native AVFrame hwaccel_picture_private(Pointer hwaccel_picture_private);
-
-    public native @Cast("AVCodecContext*") @Deprecated Pointer owner(); public native AVFrame owner(Pointer owner);
-    public native @Deprecated Pointer thread_opaque(); public native AVFrame thread_opaque(Pointer thread_opaque);
-
-    /**
-     * log2 of the size of the block which a single vector in motion_val represents:
-     * (4->16x16, 3->8x8, 2-> 4x4, 1-> 2x2)
-     */
-    public native @Cast("uint8_t") byte motion_subsample_log2(); public native AVFrame motion_subsample_log2(byte motion_subsample_log2);
-// #endif
 
     /**
      * Sample rate of the audio data.
@@ -3510,10 +3367,25 @@ public static final int FF_DECODE_ERROR_MISSING_REFERENCE =   2;
      */
     public native int pkt_size(); public native AVFrame pkt_size(int pkt_size);
 
+// #if FF_API_FRAME_QP
+    /**
+     * QP table
+     * Not to be accessed directly from outside libavutil
+     */
+    public native @Deprecated BytePointer qscale_table(); public native AVFrame qscale_table(BytePointer qscale_table);
+    /**
+     * QP store stride
+     * Not to be accessed directly from outside libavutil
+     */
+    public native @Deprecated int qstride(); public native AVFrame qstride(int qstride);
+
+    public native @Deprecated int qscale_type(); public native AVFrame qscale_type(int qscale_type);
+
     /**
      * Not to be accessed directly from outside libavutil
      */
     public native AVBufferRef qp_table_buf(); public native AVFrame qp_table_buf(AVBufferRef qp_table_buf);
+// #endif
 }
 
 /**
@@ -3540,10 +3412,12 @@ public static native void av_frame_set_decode_error_flags(AVFrame frame, int val
 public static native int av_frame_get_pkt_size(@Const AVFrame frame);
 public static native void av_frame_set_pkt_size(AVFrame frame, int val);
 public static native @Cast("AVDictionary**") PointerPointer avpriv_frame_get_metadatap(AVFrame frame);
+// #if FF_API_FRAME_QP
 public static native BytePointer av_frame_get_qp_table(AVFrame f, IntPointer stride, IntPointer type);
 public static native ByteBuffer av_frame_get_qp_table(AVFrame f, IntBuffer stride, IntBuffer type);
 public static native byte[] av_frame_get_qp_table(AVFrame f, int[] stride, int[] type);
 public static native int av_frame_set_qp_table(AVFrame f, AVBufferRef buf, int stride, int type);
+// #endif
 public static native @Cast("AVColorSpace") int av_frame_get_colorspace(@Const AVFrame frame);
 public static native void av_frame_set_colorspace(AVFrame frame, @Cast("AVColorSpace") int val);
 public static native @Cast("AVColorRange") int av_frame_get_color_range(@Const AVFrame frame);
@@ -4359,6 +4233,8 @@ public static final int AV_CPU_FLAG_ATOM =     0x10000000;
 public static final int AV_CPU_FLAG_SSE4 =         0x0100;
 /** Nehalem SSE4.2 functions */
 public static final int AV_CPU_FLAG_SSE42 =        0x0200;
+/** Advanced Encryption Standard functions */
+public static final int AV_CPU_FLAG_AESNI =       0x80000;
 /** AVX functions: requires OS support even if YMM registers aren't used */
 public static final int AV_CPU_FLAG_AVX =          0x4000;
 /** AVX supported, but slow when using YMM registers (e.g. Bulldozer) */
@@ -4367,12 +4243,8 @@ public static final int AV_CPU_FLAG_AVXSLOW =   0x8000000;
 public static final int AV_CPU_FLAG_XOP =          0x0400;
 /** Bulldozer FMA4 functions */
 public static final int AV_CPU_FLAG_FMA4 =         0x0800;
-// #if LIBAVUTIL_VERSION_MAJOR <52
 /** supports cmov instruction */
-public static final int AV_CPU_FLAG_CMOV =      0x1001000;
-// #else
-// #define AV_CPU_FLAG_CMOV         0x1000 ///< supports cmov instruction
-// #endif
+public static final int AV_CPU_FLAG_CMOV =         0x1000;
 /** AVX2 functions: requires OS support even if YMM registers aren't used */
 public static final int AV_CPU_FLAG_AVX2 =         0x8000;
 /** Haswell FMA3 functions */
@@ -4396,6 +4268,8 @@ public static final int AV_CPU_FLAG_VFP =          (1 << 3);
 public static final int AV_CPU_FLAG_VFPV3 =        (1 << 4);
 public static final int AV_CPU_FLAG_NEON =         (1 << 5);
 public static final int AV_CPU_FLAG_ARMV8 =        (1 << 6);
+/** VFPv2 vector mode, deprecated in ARMv7-A and unavailable in various CPUs implementations */
+public static final int AV_CPU_FLAG_VFP_VM =       (1 << 7);
 public static final int AV_CPU_FLAG_SETEND =       (1 <<16);
 
 /**
@@ -4655,9 +4529,11 @@ public static native int av_dict_parse_string(@ByPtrPtr AVDictionary pm, String 
  * @param src pointer to source AVDictionary struct
  * @param flags flags to use when setting entries in *dst
  * \note metadata is read using the AV_DICT_IGNORE_SUFFIX flag
+ * @return 0 on success, negative AVERROR code on failure. If dst was allocated
+ *           by this function, callers should free the associated memory.
  */
-public static native void av_dict_copy(@Cast("AVDictionary**") PointerPointer dst, @Const AVDictionary src, int flags);
-public static native void av_dict_copy(@ByPtrPtr AVDictionary dst, @Const AVDictionary src, int flags);
+public static native int av_dict_copy(@Cast("AVDictionary**") PointerPointer dst, @Const AVDictionary src, int flags);
+public static native int av_dict_copy(@ByPtrPtr AVDictionary dst, @Const AVDictionary src, int flags);
 
 /**
  * Free all the memory allocated for an AVDictionary struct
@@ -4954,19 +4830,10 @@ public static final int
     AV_OPT_TYPE_COLOR      = AV_OPT_TYPE_COLOR();
 public static native @MemberGetter int AV_OPT_TYPE_CHANNEL_LAYOUT();
 public static final int
-    AV_OPT_TYPE_CHANNEL_LAYOUT = AV_OPT_TYPE_CHANNEL_LAYOUT(),
-// #if FF_API_OLD_AVOPTIONS
-    FF_OPT_TYPE_FLAGS = 0,
-    FF_OPT_TYPE_INT = 1,
-    FF_OPT_TYPE_INT64 = 2,
-    FF_OPT_TYPE_DOUBLE = 3,
-    FF_OPT_TYPE_FLOAT = 4,
-    FF_OPT_TYPE_STRING = 5,
-    FF_OPT_TYPE_RATIONAL = 6,
-    /** offset must point to a pointer immediately followed by an int for the length */
-    FF_OPT_TYPE_BINARY = 7,
-    FF_OPT_TYPE_CONST= 128;
-// #endif
+    AV_OPT_TYPE_CHANNEL_LAYOUT = AV_OPT_TYPE_CHANNEL_LAYOUT();
+public static native @MemberGetter int AV_OPT_TYPE_BOOL();
+public static final int
+    AV_OPT_TYPE_BOOL           = AV_OPT_TYPE_BOOL();
 
 /**
  * AVOption
@@ -5142,64 +5009,6 @@ public static class AVOptionRanges extends Pointer {
      */
     public native int nb_components(); public native AVOptionRanges nb_components(int nb_components);
 }
-
-
-// #if FF_API_OLD_AVOPTIONS
-/**
- * Set the field of obj with the given name to value.
- *
- * @param [in] obj A struct whose first element is a pointer to an
- * AVClass.
- * @param [in] name the name of the field to set
- * @param [in] val The value to set. If the field is not of a string
- * type, then the given string is parsed.
- * SI postfixes and some named scalars are supported.
- * If the field is of a numeric type, it has to be a numeric or named
- * scalar. Behavior with more than one scalar and +- infix operators
- * is undefined.
- * If the field is of a flags type, it has to be a sequence of numeric
- * scalars or named flags separated by '+' or '-'. Prefixing a flag
- * with '+' causes it to be set without affecting the other flags;
- * similarly, '-' unsets a flag.
- * @param [out] o_out if non-NULL put here a pointer to the AVOption
- * found
- * @param alloc this parameter is currently ignored
- * @return 0 if the value has been set, or an AVERROR code in case of
- * error:
- * AVERROR_OPTION_NOT_FOUND if no matching option exists
- * AVERROR(ERANGE) if the value is out of range
- * AVERROR(EINVAL) if the value is not valid
- * @deprecated use av_opt_set()
- */
-public static native @Deprecated int av_set_string3(Pointer obj, @Cast("const char*") BytePointer name, @Cast("const char*") BytePointer val, int alloc, @Cast("const AVOption**") PointerPointer o_out);
-public static native @Deprecated int av_set_string3(Pointer obj, @Cast("const char*") BytePointer name, @Cast("const char*") BytePointer val, int alloc, @Const @ByPtrPtr AVOption o_out);
-public static native @Deprecated int av_set_string3(Pointer obj, String name, String val, int alloc, @Const @ByPtrPtr AVOption o_out);
-
-public static native @Const @Deprecated AVOption av_set_double(Pointer obj, @Cast("const char*") BytePointer name, double n);
-public static native @Const @Deprecated AVOption av_set_double(Pointer obj, String name, double n);
-public static native @Const @Deprecated AVOption av_set_q(Pointer obj, @Cast("const char*") BytePointer name, @ByVal AVRational n);
-public static native @Const @Deprecated AVOption av_set_q(Pointer obj, String name, @ByVal AVRational n);
-public static native @Const @Deprecated AVOption av_set_int(Pointer obj, @Cast("const char*") BytePointer name, long n);
-public static native @Const @Deprecated AVOption av_set_int(Pointer obj, String name, long n);
-
-public static native @Deprecated double av_get_double(Pointer obj, @Cast("const char*") BytePointer name, @Cast("const AVOption**") PointerPointer o_out);
-public static native @Deprecated double av_get_double(Pointer obj, @Cast("const char*") BytePointer name, @Const @ByPtrPtr AVOption o_out);
-public static native @Deprecated double av_get_double(Pointer obj, String name, @Const @ByPtrPtr AVOption o_out);
-public static native @Deprecated @ByVal AVRational av_get_q(Pointer obj, @Cast("const char*") BytePointer name, @Cast("const AVOption**") PointerPointer o_out);
-public static native @Deprecated @ByVal AVRational av_get_q(Pointer obj, @Cast("const char*") BytePointer name, @Const @ByPtrPtr AVOption o_out);
-public static native @Deprecated @ByVal AVRational av_get_q(Pointer obj, String name, @Const @ByPtrPtr AVOption o_out);
-public static native @Deprecated long av_get_int(Pointer obj, @Cast("const char*") BytePointer name, @Cast("const AVOption**") PointerPointer o_out);
-public static native @Deprecated long av_get_int(Pointer obj, @Cast("const char*") BytePointer name, @Const @ByPtrPtr AVOption o_out);
-public static native @Deprecated long av_get_int(Pointer obj, String name, @Const @ByPtrPtr AVOption o_out);
-public static native @Deprecated @Cast("const char*") BytePointer av_get_string(Pointer obj, @Cast("const char*") BytePointer name, @Cast("const AVOption**") PointerPointer o_out, @Cast("char*") BytePointer buf, int buf_len);
-public static native @Deprecated @Cast("const char*") BytePointer av_get_string(Pointer obj, @Cast("const char*") BytePointer name, @Const @ByPtrPtr AVOption o_out, @Cast("char*") BytePointer buf, int buf_len);
-public static native @Deprecated String av_get_string(Pointer obj, String name, @Const @ByPtrPtr AVOption o_out, @Cast("char*") ByteBuffer buf, int buf_len);
-public static native @Deprecated @Cast("const char*") BytePointer av_get_string(Pointer obj, @Cast("const char*") BytePointer name, @Const @ByPtrPtr AVOption o_out, @Cast("char*") byte[] buf, int buf_len);
-public static native @Deprecated String av_get_string(Pointer obj, String name, @Const @ByPtrPtr AVOption o_out, @Cast("char*") BytePointer buf, int buf_len);
-public static native @Deprecated @Cast("const char*") BytePointer av_get_string(Pointer obj, @Cast("const char*") BytePointer name, @Const @ByPtrPtr AVOption o_out, @Cast("char*") ByteBuffer buf, int buf_len);
-public static native @Deprecated String av_get_string(Pointer obj, String name, @Const @ByPtrPtr AVOption o_out, @Cast("char*") byte[] buf, int buf_len);
-public static native @Const @Deprecated AVOption av_next_option(Pointer obj, @Const AVOption last);
-// #endif
 
 /**
  * Show the obj options.
@@ -5460,22 +5269,28 @@ public static native int av_opt_eval_q(Pointer obj, @Const AVOption o, String va
  */
 
 /** Search in possible children of the
-                                             given object first. */
-public static final int AV_OPT_SEARCH_CHILDREN =   0x0001;
+                                               given object first. */
+public static final int AV_OPT_SEARCH_CHILDREN =   (1 << 0);
 /**
  *  The obj passed to av_opt_find() is fake -- only a double pointer to AVClass
  *  instead of a required pointer to a struct containing AVClass. This is
  *  useful for searching for options without needing to allocate the corresponding
  *  object.
  */
-public static final int AV_OPT_SEARCH_FAKE_OBJ =   0x0002;
+public static final int AV_OPT_SEARCH_FAKE_OBJ =   (1 << 1);
+
+/**
+ *  In av_opt_get, return NULL if the option has a pointer type and is set to NULL,
+ *  rather than returning an empty string.
+ */
+public static final int AV_OPT_ALLOW_NULL = (1 << 2);
 
 /**
  *  Allows av_opt_query_ranges and av_opt_query_ranges_default to return more than
  *  one component for certain option types.
  *  @see AVOptionRanges for details.
  */
-public static final int AV_OPT_MULTI_COMPONENT_RANGE = 0x1000;
+public static final int AV_OPT_MULTI_COMPONENT_RANGE = (1 << 12);
 
 /**
  * Look for an option in an object. Consider only options which
@@ -5541,7 +5356,7 @@ public static native @Const AVOption av_opt_find2(Pointer obj, String name, Stri
  *             or NULL
  * @return next AVOption or NULL
  */
-public static native @Const AVOption av_opt_next(Pointer obj, @Const AVOption prev);
+public static native @Const AVOption av_opt_next(@Const Pointer obj, @Const AVOption prev);
 
 /**
  * Iterate over AVOptions-enabled children of obj.
@@ -5650,6 +5465,10 @@ public static native int av_opt_set_dict_val(Pointer obj, String name, @Const AV
  */
 /**
  * \note the returned string will be av_malloc()ed and must be av_free()ed by the caller
+ *
+ * \note if AV_OPT_ALLOW_NULL is set in search_flags in av_opt_get, and the option has
+ * AV_OPT_TYPE_STRING or AV_OPT_TYPE_BINARY and is set to NULL, *out_val will be set
+ * to NULL instead of an allocated empty string.
  */
 public static native int av_opt_get(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, @Cast("uint8_t**") PointerPointer out_val);
 public static native int av_opt_get(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, @Cast("uint8_t**") @ByPtrPtr BytePointer out_val);
@@ -5752,7 +5571,7 @@ public static native int av_opt_query_ranges(@ByPtrPtr AVOptionRanges arg0, Poin
  * @param src  Object to copy into
  * @return 0 on success, negative on error
  */
-public static native int av_opt_copy(Pointer dest, Pointer src);
+public static native int av_opt_copy(Pointer dest, @Const Pointer src);
 
 /**
  * Get a default list of allowed ranges for the given option.
@@ -5838,16 +5657,6 @@ public static native int av_opt_serialize(Pointer obj, int opt_flags, int flags,
 // #endif /* AVUTIL_OPT_H */
 
 
-// Parsed from <libavutil/audioconvert.h>
-
-
-// #include "version.h"
-
-// #if FF_API_AUDIOCONVERT
-// #include "channel_layout.h"
-// #endif
-
-
 // Parsed from <libavutil/pixdesc.h>
 
 /*
@@ -5878,6 +5687,7 @@ public static native int av_opt_serialize(Pointer obj, int opt_flags, int flags,
 
 // #include "attributes.h"
 // #include "pixfmt.h"
+// #include "version.h"
 
 public static class AVComponentDescriptor extends Pointer {
     static { Loader.load(); }
@@ -5896,30 +5706,41 @@ public static class AVComponentDescriptor extends Pointer {
     /**
      * Which of the 4 planes contains the component.
      */
-    public native @Cast("uint16_t") @NoOffset short plane(); public native AVComponentDescriptor plane(short plane);
+    public native int plane(); public native AVComponentDescriptor plane(int plane);
 
     /**
-     * Number of elements between 2 horizontally consecutive pixels minus 1.
+     * Number of elements between 2 horizontally consecutive pixels.
      * Elements are bits for bitstream formats, bytes otherwise.
      */
-    public native @Cast("uint16_t") @NoOffset short step_minus1(); public native AVComponentDescriptor step_minus1(short step_minus1);
+    public native int step(); public native AVComponentDescriptor step(int step);
 
     /**
-     * Number of elements before the component of the first pixel plus 1.
+     * Number of elements before the component of the first pixel.
      * Elements are bits for bitstream formats, bytes otherwise.
      */
-    public native @Cast("uint16_t") @NoOffset short offset_plus1(); public native AVComponentDescriptor offset_plus1(short offset_plus1);
+    public native int offset(); public native AVComponentDescriptor offset(int offset);
 
     /**
      * Number of least significant bits that must be shifted away
      * to get the value.
      */
-    public native @Cast("uint16_t") @NoOffset short shift(); public native AVComponentDescriptor shift(short shift);
+    public native int shift(); public native AVComponentDescriptor shift(int shift);
 
     /**
-     * Number of bits in the component minus 1.
+     * Number of bits in the component.
      */
-    public native @Cast("uint16_t") @NoOffset short depth_minus1(); public native AVComponentDescriptor depth_minus1(short depth_minus1);
+    public native int depth(); public native AVComponentDescriptor depth(int depth);
+
+// #if FF_API_PLUS1_MINUS1
+    /** deprecated, use step instead */
+    public native @Deprecated int step_minus1(); public native AVComponentDescriptor step_minus1(int step_minus1);
+
+    /** deprecated, use depth instead */
+    public native @Deprecated int depth_minus1(); public native AVComponentDescriptor depth_minus1(int depth_minus1);
+
+    /** deprecated, use offset instead */
+    public native @Deprecated int offset_plus1(); public native AVComponentDescriptor offset_plus1(int offset_plus1);
+// #endif
 }
 
 /**
@@ -5967,15 +5788,20 @@ public static class AVPixFmtDescriptor extends Pointer {
      * This value only refers to the chroma components.
      */
     public native @Cast("uint8_t") byte log2_chroma_h(); public native AVPixFmtDescriptor log2_chroma_h(byte log2_chroma_h);
-    public native @Cast("uint8_t") byte flags(); public native AVPixFmtDescriptor flags(byte flags);
+
+    /**
+     * Combination of AV_PIX_FMT_FLAG_... flags.
+     */
+    public native @Cast("uint64_t") long flags(); public native AVPixFmtDescriptor flags(long flags);
 
     /**
      * Parameters that describe how pixels are packed.
-     * If the format has 2 or 4 components, then alpha is last.
      * If the format has 1 or 2 components, then luma is 0.
      * If the format has 3 or 4 components:
      *   if the RGB flag is set then 0 is red, 1 is green and 2 is blue;
      *   otherwise 0 is luma, 1 is chroma-U and 2 is chroma-V.
+     *
+     * If present, the Alpha channel is always the last component.
      */
     public native @ByRef AVComponentDescriptor comp(int i); public native AVPixFmtDescriptor comp(int i, AVComponentDescriptor comp);
     @MemberGetter public native AVComponentDescriptor comp();
@@ -6035,28 +5861,6 @@ public static final int AV_PIX_FMT_FLAG_PSEUDOPAL =    (1 << 6);
  * AV_PIX_FMT_RGB0 (or AV_PIX_FMT_RGB24 etc.) instead of AV_PIX_FMT_RGBA.
  */
 public static final int AV_PIX_FMT_FLAG_ALPHA =        (1 << 7);
-
-// #if FF_API_PIX_FMT
-/**
- * @deprecated use the AV_PIX_FMT_FLAG_* flags
- */
-public static final int PIX_FMT_BE =        AV_PIX_FMT_FLAG_BE;
-public static final int PIX_FMT_PAL =       AV_PIX_FMT_FLAG_PAL;
-public static final int PIX_FMT_BITSTREAM = AV_PIX_FMT_FLAG_BITSTREAM;
-public static final int PIX_FMT_HWACCEL =   AV_PIX_FMT_FLAG_HWACCEL;
-public static final int PIX_FMT_PLANAR =    AV_PIX_FMT_FLAG_PLANAR;
-public static final int PIX_FMT_RGB =       AV_PIX_FMT_FLAG_RGB;
-public static final int PIX_FMT_PSEUDOPAL = AV_PIX_FMT_FLAG_PSEUDOPAL;
-public static final int PIX_FMT_ALPHA =     AV_PIX_FMT_FLAG_ALPHA;
-// #endif
-
-// #if FF_API_PIX_FMT_DESC
-/**
- * The array of all the pixel format descriptors.
- */
-@MemberGetter public static native @Const @Deprecated @ByRef AVPixFmtDescriptor av_pix_fmt_descriptors(int i);
-@MemberGetter public static native @Const @Deprecated AVPixFmtDescriptor av_pix_fmt_descriptors();
-// #endif
 
 /**
  * Read a line from an image, and write the values of the
@@ -6201,8 +6005,8 @@ public static native @Cast("AVPixelFormat") int av_pix_fmt_desc_get_id(@Const AV
  * you do check the return code!
  *
  * @param [in]  pix_fmt the pixel format
- * @param [out] h_shift store log2_chroma_w
- * @param [out] v_shift store log2_chroma_h
+ * @param [out] h_shift store log2_chroma_w (horizontal/width shift)
+ * @param [out] v_shift store log2_chroma_h (vertical/height shift)
  *
  * @return 0 on success, AVERROR(ENOSYS) on invalid or unknown pixel format
  */
@@ -6893,9 +6697,10 @@ public static native AVStereo3D av_stereo3d_create_side_data(AVFrame frame);
 
 // Parsed from <libavutil/ffversion.h>
 
+/* Automatically generated by version.sh, do not manually edit! */
 // #ifndef AVUTIL_FFVERSION_H
 // #define AVUTIL_FFVERSION_H
-public static final String FFMPEG_VERSION = "2.8.5";
+public static final String FFMPEG_VERSION = "3.0";
 // #endif /* AVUTIL_FFVERSION_H */
 
 
@@ -6964,6 +6769,14 @@ public static class AVMotionVector extends Pointer {
      * Currently unused.
      */
     public native @Cast("uint64_t") long flags(); public native AVMotionVector flags(long flags);
+    /**
+     * Motion vector
+     * src_x = dst_x + motion_x / motion_scale
+     * src_y = dst_y + motion_y / motion_scale
+     */
+    public native int motion_x(); public native AVMotionVector motion_x(int motion_x);
+    public native int motion_y(); public native AVMotionVector motion_y(int motion_y);
+    public native @Cast("uint16_t") short motion_scale(); public native AVMotionVector motion_scale(short motion_scale);
 }
 
 // #endif /* AVUTIL_MOTION_VECTOR_H */
@@ -7074,9 +6887,10 @@ public static native int av_fifo_size(@Const AVFifoBuffer f);
 public static native int av_fifo_space(@Const AVFifoBuffer f);
 
 /**
- * Feed data from an AVFifoBuffer to a user-supplied callback.
+ * Feed data at specific position from an AVFifoBuffer to a user-supplied callback.
  * Similar as av_fifo_gereric_read but without discarding data.
  * @param f AVFifoBuffer to read from
+ * @param offset offset from current read position
  * @param buf_size number of bytes to read
  * @param func generic read function
  * @param dest data destination
@@ -7089,6 +6903,16 @@ public static class Func_Pointer_Pointer_int extends FunctionPointer {
     private native void allocate();
     public native void call(Pointer arg0, Pointer arg1, int arg2);
 }
+public static native int av_fifo_generic_peek_at(AVFifoBuffer f, Pointer dest, int offset, int buf_size, Func_Pointer_Pointer_int func);
+
+/**
+ * Feed data from an AVFifoBuffer to a user-supplied callback.
+ * Similar as av_fifo_gereric_read but without discarding data.
+ * @param f AVFifoBuffer to read from
+ * @param buf_size number of bytes to read
+ * @param func generic read function
+ * @param dest data destination
+ */
 public static native int av_fifo_generic_peek(AVFifoBuffer f, Pointer dest, int buf_size, Func_Pointer_Pointer_int func);
 
 /**

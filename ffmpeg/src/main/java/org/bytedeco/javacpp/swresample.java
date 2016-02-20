@@ -193,9 +193,9 @@ public static final int
 public static final int
     /** Cubic */
     SWR_FILTER_TYPE_CUBIC = 0,
-    /** Blackman Nuttall Windowed Sinc */
+    /** Blackman Nuttall windowed sinc */
     SWR_FILTER_TYPE_BLACKMAN_NUTTALL = 1,
-    /** Kaiser Windowed Sinc */
+    /** Kaiser windowed sinc */
     SWR_FILTER_TYPE_KAISER = 2;
 
 /**
