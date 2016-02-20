@@ -14,11 +14,11 @@ download http://llvm.org/releases/$LLVM_VERSION/cfe-$LLVM_VERSION.src.tar.xz cfe
 mkdir -p $PLATFORM
 cd $PLATFORM
 INSTALL_PATH=`pwd`
-xz -dc ../llvm-$LLVM_VERSION.src.tar.xz | tar -xvf -
+tar xvf ../llvm-$LLVM_VERSION.src.tar.xz
 cd llvm-$LLVM_VERSION.src
 mkdir -p build tools
 cd tools
-xz -dc ../../../cfe-$LLVM_VERSION.src.tar.xz | tar -xvf -
+tar xvf ../../../cfe-$LLVM_VERSION.src.tar.xz
 rm -Rf clang
 mv cfe-$LLVM_VERSION.src clang
 cd ../build
