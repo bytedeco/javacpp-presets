@@ -81,11 +81,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <javacpp.parser.skip>false</javacpp.parser.skip>           <!-- To skip header file parsing phase: -Djavacpp.parser.skip=true               -->
-    <javacpp.compiler.skip>false</javacpp.compiler.skip>       <!-- To skip native compilation phase: -Djavacpp.compiler.skip=true              -->
-    <javacpp.platform>${os.name}-${os.arch}</javacpp.platform> <!-- For Android: -Djavacpp.platform=android-arm                                 -->
-    <javacpp.platform.root></javacpp.platform.root>            <!--              -Djavacpp.platform.root=/path/to/android-ndk/                  -->
-    <javacpp.platform.compiler></javacpp.platform.compiler>    <!--              -Djavacpp.platform.compiler=/path/to/arm-linux-androideabi-g++ -->
+    <javacpp.parser.skip>false</javacpp.parser.skip>     <!-- To skip header file parsing phase: -Djavacpp.parser.skip=true  -->
+    <javacpp.compiler.skip>false</javacpp.compiler.skip> <!-- To skip native compilation phase: -Djavacpp.compiler.skip=true -->
   </properties>
 
   <dependencyManagement>
@@ -430,9 +427,21 @@
       </build>
     </profile>
 
+    <profile>
+      <id>javacpp-platform-default</id>
+      <activation>
+        <property>
+          <name>!javacpp.platform</name>
+        </property>
+      </activation>
+      <properties>
+        <javacpp.platform>${os.name}-${os.arch}</javacpp.platform>
+      </properties>
+    </profile>
+
     <!-- Provide convenient profiles to set commonly used paths for Android -->
     <profile>
-      <id>android-arm</id>
+      <id>android-arm-default</id>
       <activation>
         <property>
           <name>javacpp.platform</name>
@@ -446,7 +455,7 @@
       </properties>
     </profile>
     <profile>
-      <id>android-x86</id>
+      <id>android-x86-default</id>
       <activation>
         <property>
           <name>javacpp.platform</name>
@@ -460,13 +469,16 @@
       </properties>
     </profile>
 
-    <!-- Include platform dependency by default for modules without a C++ build script file -->
+    <!-- Include platform dependency by default for modules without a C++ build script file, but can be disabled with -Djavacpp.platform.dependency=false -->
     <profile>
       <id>platform-dependency-default</id>
       <activation>
         <file>
           <missing>${user.dir}/cppbuild.sh</missing>
         </file>
+        <property>
+          <name>!javacpp.platform.dependency</name>
+        </property>
       </activation>
       <dependencies>
         <dependency>
@@ -482,7 +494,8 @@
       <id>platform-dependency</id>
       <activation>
         <property>
-          <name>platform.dependency</name>
+          <name>javacpp.platform.dependency</name>
+          <value>true</value>
         </property>
       </activation>
       <dependencies>
@@ -499,7 +512,8 @@
       <id>platform-dependencies</id>
       <activation>
         <property>
-          <name>platform.dependencies</name>
+          <name>javacpp.platform.dependencies</name>
+          <value>true</value>
         </property>
       </activation>
       <dependencies>

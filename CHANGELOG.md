@@ -1,4 +1,5 @@
 
+ * Make `mvn -Djavacpp.platform=...` and `mvn -Djavacpp.platform.dependency=...` commands work correctly
  * Add presets for the `dnn` module of OpenCV 3.1 ([issue #145](https://github.com/bytedeco/javacpp-presets/issues/145))
  * Prepend "javacpp." to all properties associated with Maven in the `pom.xml` files to avoid name clashes
  * Add a `Mat(CvArr arr)` constructor for convenience ([issue bytedeco/javacv#317](https://github.com/bytedeco/javacv/issues/317))
