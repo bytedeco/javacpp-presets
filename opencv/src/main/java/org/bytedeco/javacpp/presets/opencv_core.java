@@ -245,7 +245,7 @@ public class opencv_core implements InfoMapper {
 
     @Documented @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.METHOD, ElementType.PARAMETER})
-    @Cast({"cv::Ptr", "&"}) @Adapter("PtrAdapter") public @interface Ptr {
+    @Cast({"cv::Ptr"}) @Adapter("PtrAdapter") public @interface Ptr {
         /** @return template type */
         String value() default "";
     }
