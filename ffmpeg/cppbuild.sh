@@ -10,9 +10,9 @@ fi
 DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl"
 ENABLE="--enable-pthreads --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx264 --enable-libx265 --enable-libvpx"
 
-# minimal configuration to support MPEG-4 streams with H.264 and AAC
+# minimal configuration to support MPEG-4 streams with H.264 and AAC as well as Motion JPEG
 # DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
-# ENABLE="--enable-pthreads --enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=aac --enable-decoder=h264 --enable-decoder=aac --enable-parser=h264 --enable-parser=aac --enable-muxer=mp4 --enable-muxer=rtsp --enable-demuxer=mov --enable-demuxer=rtsp --enable-protocol=file --enable-protocol=http --enable-protocol=rtp --enable-protocol=rtmp"
+# ENABLE="--enable-pthreads --enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=aac --enable-encoder=mjpeg --enable-decoder=h264 --enable-decoder=aac --enable-decoder=mjpeg --enable-parser=h264 --enable-parser=aac --enable-parser=mjpeg --enable-muxer=mp4 --enable-muxer=rtsp --enable-muxer=mjpeg --enable-demuxer=mov --enable-demuxer=rtsp --enable-demuxer=mjpeg --enable-protocol=file --enable-protocol=http --enable-protocol=rtp --enable-protocol=rtmp"
 
 if [[ $PLATFORM == windows* && !($DISABLE =~ "--disable-everything") ]]; then
     FFMPEG_VERSION=3.0
