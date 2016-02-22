@@ -2,6 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.bytedeco</groupId>
+    <artifactId>javacpp-parent</artifactId>
+    <version>1.2-SNAPSHOT</version>
+    <relativePath>parent</relativePath>
+  </parent>
+
   <groupId>org.bytedeco</groupId>
   <artifactId>javacpp-presets</artifactId>
   <version>1.2-SNAPSHOT</version>
@@ -11,33 +19,9 @@
   <description>The missing bridge between Java and native C++ libraries</description>
   <url>http://bytedeco.org/javacpp-presets/</url>
 
-  <licenses>
-    <license>
-      <name>Apache License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
-      <distribution>repo</distribution>
-    </license>
-    <license>
-      <name>GNU General Public License (GPL) version 2, or any later version</name>
-      <url>http://www.gnu.org/licenses/</url>
-      <distribution>repo</distribution>
-    </license>
-    <license>
-      <name>GPLv2 with Classpath exception</name>
-      <url>http://www.gnu.org/software/classpath/license.html</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-
-  <developers>
-    <developer>
-      <name>Samuel Audet</name>
-      <email>samuel.audet@gmail.com</email>
-    </developer>
-  </developers>
-
   <modules>
     <module>opencv</module>
+    <module>opencv-it</module>
     <module>ffmpeg</module>
     <module>flycapture</module>
     <module>libdc1394</module>
@@ -55,45 +39,6 @@
     <module>cuda</module>
     <module>tensorflow</module>
   </modules>
-
-  <prerequisites>
-    <maven>3.0.4</maven>
-  </prerequisites>
-
-  <scm>
-    <url>https://github.com/bytedeco/javacpp-presets</url>
-    <connection>scm:git:git://github.com/bytedeco/javacpp-presets.git</connection>
-    <developerConnection>scm:git:ssh://git@github.com/bytedeco/javacpp-presets.git</developerConnection>
-  </scm>
-
-  <distributionManagement>
-    <snapshotRepository>
-      <id>sonatype-nexus-snapshots</id>
-      <name>Sonatype Nexus Snapshots</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-    </snapshotRepository>
-    <repository>
-      <id>sonatype-nexus-staging</id>
-      <name>Sonatype Nexus Staging</name>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-    </repository>
-  </distributionManagement>
-
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <javacpp.parser.skip>false</javacpp.parser.skip>     <!-- To skip header file parsing phase: -Djavacpp.parser.skip=true  -->
-    <javacpp.compiler.skip>false</javacpp.compiler.skip> <!-- To skip native compilation phase: -Djavacpp.compiler.skip=true -->
-  </properties>
-
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.bytedeco</groupId>
-        <artifactId>javacpp</artifactId>
-        <version>${project.parent.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
 
   <build>
     <finalName>${project.artifactId}</finalName>
@@ -256,6 +201,7 @@
             </configuration>
           </execution>
           <execution>
+            <id>copy</id>
             <phase>package</phase>
             <goals>
               <goal>copy</goal>

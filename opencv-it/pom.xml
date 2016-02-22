@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.bytedeco</groupId>
+    <artifactId>javacpp-parent</artifactId>
+    <version>1.2-SNAPSHOT</version>
+    <relativePath>../parent</relativePath>
+  </parent>
+
+  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <artifactId>opencv-it</artifactId>
+  <version>3.1.0-${project.parent.version}</version>
+  <packaging>jar</packaging>
+  <name>JavaCPP Presets for OpenCV - ITs</name>
+    
+    <properties>
+        <exec.mainClass>com.github.jjYBdx4IL.maven.examples.javacpp.Stitching</exec.mainClass>
+        <libPath>${project.build.directory}/unpackedLibs</libPath>
+    </properties>
+    
+    <build>
+        <testResources>
+            <testResource>
+                <directory>${project.basedir}/target/dependency</directory>
+            </testResource>
+        </testResources>
+        
+        <plugins>
+            <plugin>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.10</version>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.openimaj</groupId>
+                                    <artifactId>test-resources</artifactId>
+                                    <version>1.3.1</version>
+                                    <includes>**/aestheticode.jpg</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>unpack2</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>unpack-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <includeArtifactIds>opencv</includeArtifactIds>
+                            <outputDirectory>${libPath}</outputDirectory>
+                            <includes>**/*.so*,**/*.dll</includes>
+                            <actTransitively>true</actTransitively>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>test-compile</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <tasks>
+                        <move todir="${libPath}">
+                            <fileset dir="${libPath}"/>
+                            <mapper type="flatten"/>
+                        </move>
+                    </tasks>
+                </configuration>
+            </plugin>
+            
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19.1</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <org.bytedeco.javacpp.logger>slf4j</org.bytedeco.javacpp.logger>
+                        <org.bytedeco.javacpp.loadlibraries>false</org.bytedeco.javacpp.loadlibraries>
+                        <load.libs.from.dir>${libPath}</load.libs.from.dir>
+                    </systemPropertyVariables>
+                    <argLine>-Djava.library.path=${java.library.path}:${libPath}</argLine>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>opencv</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+            <version>1.3</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.16</version>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+    </dependencies>
+</project>
