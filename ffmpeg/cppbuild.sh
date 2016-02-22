@@ -242,6 +242,44 @@ case $PLATFORM in
         make install
         ;;
 
+    linux-armhf)
+        cd $LAME
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
+        make -j $MAKEJ
+        make install
+        cd ../$SPEEX
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
+        make -j $MAKEJ
+        make install
+        cd ../$OPENCORE_AMR
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
+        make -j $MAKEJ
+        make install
+        cd ../$OPENSSL
+        ./Configure linux-armv4:arm-linux-gnueabihf-gcc -fPIC no-shared --prefix=$INSTALL_PATH
+        make # fails with -j > 1
+        make install
+       	cd ../openh264-$OPENH264_VERSION
+        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=arm-linux-gnueabihf-ar ARCH=armhf libraries install-static CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++
+        cd ../$X264
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --disable-cli --host=arm-linux-gnueabihf --cross-prefix="arm-linux-gnueabihf-"
+        make -j $MAKEJ
+        make install
+        cd ../$X265
+	$CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=arm -DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc -DCMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++ -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_STRIP=/usr/bin/arm-linux-gnueabihf-strip -DCMAKE_FIND_ROOT_PATH=/usr/arm-linux-gnueabihf -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        make -j $MAKEJ
+        make install
+        cd ../libvpx-$VPX_VERSION
+	CROSS=arm-linux-gnueabihf- ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=armv7-linux-gcc
+        make -j $MAKEJ
+        make install
+        cd ../ffmpeg-$FFMPEG_VERSION
+        [[ $ENABLE =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
+	PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --cc="arm-linux-gnueabihf-gcc" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" --pkg-config-flags="--static" --pkg-config="pkg-config --static" 
+        make -j $MAKEJ
+        make install
+	;;
+
     macosx-*)
         cd $LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
