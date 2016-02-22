@@ -1,0 +1,3 @@
+script: ./it.sh
+notifications:
+    email: false
