@@ -1,4 +1,4 @@
-script: ./it.sh
+script: ./.travis.sh
 env:
   - PROJECTS=opencv
 dist: trusty
