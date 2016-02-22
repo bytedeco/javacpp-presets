@@ -1,5 +1,6 @@
 script: ./it.sh
 env:
   - PROJECTS=opencv
+dist: trusty
 notifications:
   email: false
