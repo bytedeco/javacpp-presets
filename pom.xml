@@ -375,7 +375,8 @@
     </profile>
 
     <!-- Include platform dependency by default for modules without a C++ build script file, but can be disabled with -Djavacpp.platform.dependency=false -->
-    <profile>
+    <!-- we reall need to move this out of the way, ie. into the corresponding sub-modules with runtime scope -->
+<!--    <profile>
       <id>platform-dependency-default</id>
       <activation>
         <file>
@@ -393,7 +394,7 @@
           <classifier>${javacpp.platform}</classifier>
         </dependency>
       </dependencies>
-    </profile>
+    </profile>-->
 
     <profile>
       <id>platform-dependency</id>

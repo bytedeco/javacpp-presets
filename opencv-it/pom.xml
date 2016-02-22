@@ -105,7 +105,6 @@
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>opencv</artifactId>
             <version>${project.version}</version>
-            <!--<classifier>${javacpp.platform}</classifier>-->
         </dependency>
         <dependency>
             <groupId>junit</groupId>
