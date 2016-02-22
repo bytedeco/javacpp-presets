@@ -4,9 +4,8 @@
 
   <parent>
     <groupId>org.bytedeco</groupId>
-    <artifactId>javacpp-parent</artifactId>
+    <artifactId>javacpp-presets</artifactId>
     <version>1.2-SNAPSHOT</version>
-    <relativePath>../parent</relativePath>
   </parent>
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
@@ -103,7 +102,7 @@
     <dependencies>
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
-            <artifactId>opencv</artifactId>
+            <artifactId>opencv-arch</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

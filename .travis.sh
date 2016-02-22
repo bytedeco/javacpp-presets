@@ -14,9 +14,10 @@ mvn clean install -f javacpp-master
 
 for project in $PROJECTS; do
   ./cppbuild.sh install $project
-  mvn install -pl $project -am
   if test -d $project-it; then
-    mvn install -pl $project-it
+    mvn install -pl $project-it -am
+  else
+    mvn install -pl $project -am
   fi
 done
 

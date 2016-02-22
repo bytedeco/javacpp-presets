@@ -2,14 +2,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-
-  <parent>
-    <groupId>org.bytedeco</groupId>
-    <artifactId>javacpp-parent</artifactId>
-    <version>1.2-SNAPSHOT</version>
-    <relativePath>parent</relativePath>
-  </parent>
-
   <groupId>org.bytedeco</groupId>
   <artifactId>javacpp-presets</artifactId>
   <version>1.2-SNAPSHOT</version>
@@ -19,9 +11,34 @@
   <description>The missing bridge between Java and native C++ libraries</description>
   <url>http://bytedeco.org/javacpp-presets/</url>
 
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+      <distribution>repo</distribution>
+    </license>
+    <license>
+      <name>GNU General Public License (GPL) version 2, or any later version</name>
+      <url>http://www.gnu.org/licenses/</url>
+      <distribution>repo</distribution>
+    </license>
+    <license>
+      <name>GPLv2 with Classpath exception</name>
+      <url>http://www.gnu.org/software/classpath/license.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <name>Samuel Audet</name>
+      <email>samuel.audet@gmail.com</email>
+    </developer>
+  </developers>
+
   <modules>
-    <module>parent</module>
     <module>opencv</module>
+    <module>opencv-arch</module>
     <module>opencv-it</module>
     <module>ffmpeg</module>
     <module>flycapture</module>
@@ -40,6 +57,45 @@
     <module>cuda</module>
     <module>tensorflow</module>
   </modules>
+
+  <prerequisites>
+    <maven>3.0.4</maven>
+  </prerequisites>
+
+  <scm>
+    <url>https://github.com/bytedeco/javacpp-presets</url>
+    <connection>scm:git:git://github.com/bytedeco/javacpp-presets.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/bytedeco/javacpp-presets.git</developerConnection>
+  </scm>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </snapshotRepository>
+    <repository>
+      <id>sonatype-nexus-staging</id>
+      <name>Sonatype Nexus Staging</name>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <javacpp.parser.skip>false</javacpp.parser.skip>     <!-- To skip header file parsing phase: -Djavacpp.parser.skip=true  -->
+    <javacpp.compiler.skip>false</javacpp.compiler.skip> <!-- To skip native compilation phase: -Djavacpp.compiler.skip=true -->
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.bytedeco</groupId>
+        <artifactId>javacpp</artifactId>
+        <version>${project.parent.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
     <finalName>${project.artifactId}</finalName>
@@ -187,7 +243,7 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
+<!--      <plugin>
         <artifactId>maven-dependency-plugin</artifactId>
         <version>2.10</version>
         <executions>
@@ -202,7 +258,6 @@
             </configuration>
           </execution>
           <execution>
-            <id>copy</id>
             <phase>package</phase>
             <goals>
               <goal>copy</goal>
@@ -231,7 +286,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
+      </plugin>-->
       <plugin>
         <artifactId>maven-install-plugin</artifactId>
         <version>2.5.2</version>
@@ -374,8 +429,50 @@
       </build>
     </profile>
 
+    <profile>
+      <id>javacpp-platform-default</id>
+      <activation>
+        <property>
+          <name>!javacpp.platform</name>
+        </property>
+      </activation>
+      <properties>
+        <javacpp.platform>${os.name}-${os.arch}</javacpp.platform>
+      </properties>
+    </profile>
+
+    <!-- Provide convenient profiles to set commonly used paths for Android -->
+    <profile>
+      <id>android-arm-default</id>
+      <activation>
+        <property>
+          <name>javacpp.platform</name>
+          <value>android-arm</value>
+        </property>
+      </activation>
+      <properties>
+        <javacpp.platform>android-arm</javacpp.platform>
+        <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
+        <javacpp.platform.compiler>toolchains/arm-linux-androideabi-4.9/prebuilt/${os.name}-${os.arch}/bin/arm-linux-androideabi-g++</javacpp.platform.compiler>
+      </properties>
+    </profile>
+    <profile>
+      <id>android-x86-default</id>
+      <activation>
+        <property>
+          <name>javacpp.platform</name>
+          <value>android-x86</value>
+        </property>
+      </activation>
+      <properties>
+        <javacpp.platform>android-x86</javacpp.platform>
+        <javacpp.platform.root>${user.home}/Android/android-ndk/</javacpp.platform.root>
+        <javacpp.platform.compiler>toolchains/x86-4.9/prebuilt/${os.name}-${os.arch}/bin/i686-linux-android-g++</javacpp.platform.compiler>
+      </properties>
+    </profile>
+
     <!-- Include platform dependency by default for modules without a C++ build script file, but can be disabled with -Djavacpp.platform.dependency=false -->
-    <!-- we reall need to move this out of the way, ie. into the corresponding sub-modules with runtime scope -->
+    <!-- this breaks stuff and needs to be moved into meta packages -->
 <!--    <profile>
       <id>platform-dependency-default</id>
       <activation>
@@ -396,7 +493,7 @@
       </dependencies>
     </profile>-->
 
-    <profile>
+<!--    <profile>
       <id>platform-dependency</id>
       <activation>
         <property>
@@ -412,7 +509,7 @@
           <classifier>${javacpp.platform}</classifier>
         </dependency>
       </dependencies>
-    </profile>
+    </profile>-->
 
     <profile>
       <id>platform-dependencies</id>
@@ -473,6 +570,89 @@
         </dependency>
       </dependencies>
     </profile>
+
+    <!-- If someone knows a better way to do this, please do let me know! -->
+    <profile>
+      <id>linux</id>
+      <activation>
+        <os><name>linux</name></os>
+      </activation>
+      <properties>
+        <os.name>linux</os.name>
+      </properties>
+    </profile>
+    <profile>
+      <id>macosx</id>
+      <activation>
+        <os><name>mac os x</name></os>
+      </activation>
+      <properties>
+        <os.name>macosx</os.name>
+      </properties>
+    </profile>
+    <profile>
+      <id>windows</id>
+      <activation>
+        <os><family>windows</family></os>
+      </activation>
+      <properties>
+        <os.name>windows</os.name>
+      </properties>
+    </profile>
+    <profile>
+      <id>i386</id>
+      <activation>
+        <os><arch>i386</arch></os>
+      </activation>
+      <properties>
+        <os.arch>x86</os.arch>
+      </properties>
+    </profile>
+    <profile>
+      <id>i486</id>
+      <activation>
+        <os><arch>i486</arch></os>
+      </activation>
+      <properties>
+        <os.arch>x86</os.arch>
+      </properties>
+    </profile>
+    <profile>
+      <id>i586</id>
+      <activation>
+        <os><arch>i586</arch></os>
+      </activation>
+      <properties>
+        <os.arch>x86</os.arch>
+      </properties>
+    </profile>
+    <profile>
+      <id>i686</id>
+      <activation>
+        <os><arch>i686</arch></os>
+      </activation>
+      <properties>
+        <os.arch>x86</os.arch>
+      </properties>
+    </profile>
+    <profile>
+      <id>amd64</id>
+      <activation>
+        <os><arch>amd64</arch></os>
+      </activation>
+      <properties>
+        <os.arch>x86_64</os.arch>
+      </properties>
+    </profile>
+    <profile>
+      <id>x86-64</id>
+      <activation>
+        <os><arch>x86-64</arch></os>
+      </activation>
+      <properties>
+        <os.arch>x86_64</os.arch>
+      </properties>
+    </profile>
   </profiles>
-  
+
 </project>

@@ -46,3 +46,4 @@
 # IntelliJ
 *.iml
 .idea
+/opencv-arch/target/
