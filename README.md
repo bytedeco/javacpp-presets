@@ -174,3 +174,6 @@ To contribute, please fork and create pull requests, or post your suggestions [a
 Project lead: Samuel Audet [samuel.audet `at` gmail.com](mailto:samuel.audet at gmail.com)  
 Developer site: https://github.com/bytedeco/javacpp-presets  
 Discussion group: http://groups.google.com/group/javacpp-project
+
+[![Build Status](https://travis-ci.org/jjYBdx4IL/javacpp-presets.png?branch=master)](https://travis-ci.org/jjYBdx4IL/javacpp-presets)
+
