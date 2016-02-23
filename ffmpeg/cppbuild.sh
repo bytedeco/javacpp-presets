@@ -7,15 +7,8 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
-#DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl"
-#ENABLE="--enable-pthreads --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx264 --enable-libx265 --enable-libvpx"
-
-# minimal configuration to support MPEG-4 streams with H.264 and AAC
-# DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
-# ENABLE="--enable-pthreads --enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=aac --enable-decoder=h264 --enable-decoder=aac --enable-parser=h264 --enable-parser=aac --enable-muxer=mp4 --enable-muxer=rtsp --enable-demuxer=mov --enable-demuxer=rtsp --enable-protocol=file --enable-protocol=http --enable-protocol=rtp --enable-protocol=rtmp"
-
-DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
-ENABLE="--enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libopenh264 --enable-encoder=libopenh264 --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl"
+DISABLE_MAC="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
+ENABLE_MAC="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libx264 --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-encoder=libx264  --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl"
 
 
 if [[ $PLATFORM == windows* && !($DISABLE =~ "--disable-everything") ]]; then
@@ -249,38 +242,38 @@ case $PLATFORM in
 
     macosx-*)
         cd $LAME
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
-        make -j $MAKEJ
-        make install
-        cd ../$SPEEX
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
-        make -j $MAKEJ
-        make install
-        cd ../$OPENCORE_AMR
-        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
-        make -j $MAKEJ
-        make install
+#        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
+#        make -j $MAKEJ
+#        make install
+#        cd ../$SPEEX
+#        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
+#        make -j $MAKEJ
+#        make install
+#        cd ../$OPENCORE_AMR
+#        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
+#        make -j $MAKEJ
+#        make install
         cd ../$OPENSSL
         ./Configure darwin64-x86_64-cc -fPIC no-shared --prefix=$INSTALL_PATH
         make # fails with -j > 1
         make install
-        cd ../openh264-$OPENH264_VERSION
-        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar libraries install-static
+#        cd ../openh264-$OPENH264_VERSION
+#        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar libraries install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl
         make -j $MAKEJ
         make install
-        cd ../$X265
-        CC="clang" CXX="clang++" $CMAKE -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
-        make -j $MAKEJ
-        make install
-        cd ../libvpx-$VPX_VERSION
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples
-        make -j $MAKEJ
-        make install
+#        cd ../$X265
+#        CC="clang" CXX="clang++" $CMAKE -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+#        make -j $MAKEJ
+#        make install
+#        cd ../libvpx-$VPX_VERSION
+#        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples
+#        make -j $MAKEJ
+#        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-macosx.patch
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE --enable-indev=avfoundation --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --disable-doc --disable-programs
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE_MAC $ENABLE_MAC --enable-indev=avfoundation  --pkg-config-flags="--static" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --disable-doc --disable-programs
         make -j $MAKEJ
         make install
         ;;
