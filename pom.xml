@@ -39,6 +39,7 @@
   <modules>
     <module>opencv</module>
     <module>opencv-arch</module>
+    <module>opencv-all</module>
     <module>opencv-it</module>
     <module>ffmpeg</module>
     <module>flycapture</module>
@@ -511,7 +512,7 @@
       </dependencies>
     </profile>-->
 
-    <profile>
+<!--    <profile>
       <id>platform-dependencies</id>
       <activation>
         <property>
@@ -569,7 +570,7 @@
           <classifier>windows-x86_64</classifier>
         </dependency>
       </dependencies>
-    </profile>
+    </profile>-->
 
     <!-- If someone knows a better way to do this, please do let me know! -->
     <profile>
