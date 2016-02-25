@@ -101,6 +101,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::Allocator::is_simple<bfloat16>").skip())
 
                .put(new Info("basic/containers").cppTypes("tensorflow::gtl::InlinedVector"))
+               .put(new Info("basic/containers").cppTypes("google::protobuf::Map"))
                .put(new Info("tensorflow::DataType").cast().valueTypes("int").pointerTypes("IntPointer"))
                .put(new Info("tensorflow::gtl::InlinedVector<long long,4>").pointerTypes("LongVector").define())
                .put(new Info("tensorflow::gtl::InlinedVector<tensorflow::DataType,4>").pointerTypes("DataTypeVector").define())
@@ -115,6 +116,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("std::vector<tensorflow::TensorShape>").pointerTypes("TensorShapeVector").define())
                .put(new Info("std::vector<tensorflow::NodeBuilder::NodeOut>").pointerTypes("NodeOutVector").define())
                .put(new Info("std::vector<tensorflow::Node*>").pointerTypes("NodeVector").define())
+               .put(new Info("google::protobuf::Map<std::string,tensorflow::AttrValue>").pointerTypes("StringAttrValueMap").define())
                .put(new Info("tensorflow::ops::NodeOut").valueTypes("@ByVal NodeBuilder.NodeOut", "Node"))
                .put(new Info("tensorflow::NodeBuilder::NodeOut").pointerTypes("NodeBuilder.NodeOut"))
                .put(new Info("tensorflow::gtl::ArraySlice<std::string>")/*.cast()*/.pointerTypes("StringVector"))
