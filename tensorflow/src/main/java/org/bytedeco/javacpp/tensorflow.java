@@ -99,6 +99,32 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     }
 }
 
+@Name("std::vector<tensorflow::TensorProto>") public static class TensorProtoVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TensorProtoVector(Pointer p) { super(p); }
+    public TensorProtoVector(TensorProto ... array) { this(array.length); put(array); }
+    public TensorProtoVector()       { allocate();  }
+    public TensorProtoVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef TensorProtoVector put(@ByRef TensorProtoVector x);
+
+    public native long size();
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native @ByRef TensorProto get(@Cast("size_t") long i);
+    public native TensorProtoVector put(@Cast("size_t") long i, TensorProto value);
+
+    public TensorProtoVector put(TensorProto ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
 @Name("std::vector<tensorflow::TensorShape>") public static class TensorShapeVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -8086,6 +8112,60 @@ limitations under the License.
     public native @ByVal Options WithControlInputs(@ByVal NodeVector control_inputs);
 
     // Override the default value for an optional attr.
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, int value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, int value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ArraySlice IntPointer value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ArraySlice IntBuffer value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ArraySlice int... value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ArraySlice IntPointer value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ArraySlice IntBuffer value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ArraySlice int... value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @Cast("long long") long value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @Cast("long long") long value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @Cast("long long*") @ArraySlice LongPointer value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @Cast("long long*") @ArraySlice LongBuffer value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @Cast("long long*") @ArraySlice long... value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @Cast("long long*") @ArraySlice LongPointer value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @Cast("long long*") @ArraySlice LongBuffer value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @Cast("long long*") @ArraySlice long... value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, float value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, float value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ArraySlice FloatPointer value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ArraySlice FloatBuffer value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ArraySlice float... value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ArraySlice FloatPointer value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ArraySlice FloatBuffer value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ArraySlice float... value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, double value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, double value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ArraySlice DoublePointer value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ArraySlice DoubleBuffer value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ArraySlice double... value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ArraySlice DoublePointer value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ArraySlice DoubleBuffer value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ArraySlice double... value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @Cast("bool") boolean value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @Cast("bool") boolean value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @Cast("bool*") @ArraySlice BoolPointer value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @Cast("bool*") @ArraySlice boolean... value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @StdString BytePointer value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @StdString String value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ByVal StringVector value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ByVal StringVector value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ByVal Tensor value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ByVal Tensor value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ByVal TensorVector value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ByVal TensorVector value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ByVal TensorProto value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ByVal TensorProto value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ByVal TensorProtoVector value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ByVal TensorProtoVector value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ByVal TensorShape value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ByVal TensorShape value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ByVal TensorShapeVector value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ByVal TensorShapeVector value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ByVal NameAttrList value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ByVal NameAttrList value);
     // Note: overload needed to allow {...} expressions for value.
 
     // Methods for using options from a function that creates a Node.
@@ -8393,6 +8473,9 @@ limitations under the License.
 
 // String
 @Namespace("tensorflow::ops") public static native Node Const(@Cast({"", "tensorflow::StringPiece&"}) @StringPiece String s, @Const @ByRef GraphDefBuilder.Options options);
+@Namespace("tensorflow::ops") public static native Node Const(@ByVal StringVector v, @Const @ByRef GraphDefBuilder.Options options);
+@Namespace("tensorflow::ops") public static native Node Const(@ByVal StringVector t, @Const @ByRef TensorShape shape,
+            @Const @ByRef GraphDefBuilder.Options options);
 
 // A Tensor of any type.
 @Namespace("tensorflow::ops") public static native Node Const(@Const @ByRef Tensor t, @Const @ByRef GraphDefBuilder.Options options);

@@ -1,4 +1,6 @@
 
+ * Add missing `GraphDefBuilder.Options.WithAttr()` methods from the `tensorflow` module ([issue #160](https://github.com/bytedeco/javacpp-presets/issues/160))
+ * Add `linux-armhf` platform to the `cppbuild.sh` scripts of OpenCV and FFmpeg
  * Add support for Motion JPEG to the minimal configuration proposed for FFmpeg in the `cppbuild.sh` file
  * Make `mvn -Djavacpp.platform=...` and `mvn -Djavacpp.platform.dependency=...` commands work correctly
  * Add presets for the `dnn` module of OpenCV 3.1 ([issue #145](https://github.com/bytedeco/javacpp-presets/issues/145))
