@@ -18,41 +18,61 @@ cd gsl-$GSL_VERSION
 
 case $PLATFORM in
     android-arm)
+        export AR="$ANDROID_BIN-ar"
+        export RANLIB="$ANDROID_BIN-ranlib"
+        export CPP="$ANDROID_BIN-cpp"
+        export CC="$ANDROID_BIN-gcc"
+        export STRIP="$ANDROID_BIN-strip"
+        export CPPFLAGS="--sysroot=$ANDROID_ROOT -DANDROID"
+        export CFLAGS="$CPPFLAGS -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
+        export LDFLAGS="-nostdlib -Wl,--fix-cortex-a8"
+        export LIBS="-lgcc -ldl -lz -lm -lc"
+        export GSL_LDFLAGS="-Lcblas/.libs/ -lgslcblas"
         patch -Np1 < ../../../gsl-$GSL_VERSION-android.patch
-        ./configure --prefix=$INSTALL_PATH --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT" AR="$ANDROID_BIN-ar" RANLIB="$ANDROID_BIN-ranlib" CPP="$ANDROID_BIN-cpp" CC="$ANDROID_BIN-gcc" STRIP="$ANDROID_BIN-strip" CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" LDFLAGS="-nostdlib -Wl,--fix-cortex-a8" LIBS="-lgcc -ldl -lz -lm -lc" GSL_LDFLAGS="-Lcblas/.libs/ -lgslcblas"
-        make -j4
+        ./configure --prefix=$INSTALL_PATH --host="arm-linux-androideabi" --with-sysroot="$ANDROID_ROOT"
+        make -j $MAKEJ
         make install-strip
         ;;
      android-x86)
+        export AR="$ANDROID_BIN-ar"
+        export RANLIB="$ANDROID_BIN-ranlib"
+        export CPP="$ANDROID_BIN-cpp"
+        export CC="$ANDROID_BIN-gcc"
+        export STRIP="$ANDROID_BIN-strip"
+        export CPPFLAGS="--sysroot=$ANDROID_ROOT -DANDROID"
+        export CFLAGS="$CPPFLAGS -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
+        export LDFLAGS="-nostdlib"
+        export LIBS="-lgcc -ldl -lz -lm -lc"
+        export GSL_LDFLAGS="-Lcblas/.libs/ -lgslcblas"
         patch -Np1 < ../../../gsl-$GSL_VERSION-android.patch
-        ./configure --prefix=$INSTALL_PATH --host="i686-linux-android" --with-sysroot="$ANDROID_ROOT" AR="$ANDROID_BIN-ar" RANLIB="$ANDROID_BIN-ranlib" CPP="$ANDROID_BIN-cpp" CC="$ANDROID_BIN-gcc" STRIP="$ANDROID_BIN-strip" CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300" LDFLAGS="-nostdlib" LIBS="-lgcc -ldl -lz -lm -lc" GSL_LDFLAGS="-Lcblas/.libs/ -lgslcblas"
-        make -j4
+        ./configure --prefix=$INSTALL_PATH --host="i686-linux-android" --with-sysroot="$ANDROID_ROOT"
+        make -j $MAKEJ
         make install-strip
         ;;
     linux-x86)
         ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m32"
-        make -j4
+        make -j $MAKEJ
         make install-strip
         ;;
     linux-x86_64)
         ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64"
-        make -j4
+        make -j $MAKEJ
         make install-strip
         ;;
     macosx-*)
         patch -Np1 < ../../../gsl-$GSL_VERSION-macosx.patch
         ./configure --prefix=$INSTALL_PATH
-        make -j4
+        make -j $MAKEJ
         make install-strip
         ;;
     windows-x86)
         ./configure --prefix=$INSTALL_PATH CC="gcc -m32 -static-libgcc"
-        make -j4
+        make -j $MAKEJ
         make install-strip
         ;;
     windows-x86_64)
         ./configure --prefix=$INSTALL_PATH CC="gcc -m64 -static-libgcc"
-        make -j4
+        make -j $MAKEJ
         make install-strip
         ;;
     *)
