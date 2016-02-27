@@ -37,6 +37,32 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public native DataTypeVector put(@Cast("size_t") long i, int value);
 }
 
+@Name("google::protobuf::Map<std::string,tensorflow::AttrValue>") public static class StringAttrValueMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringAttrValueMap(Pointer p) { super(p); }
+    public StringAttrValueMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef StringAttrValueMap put(@ByRef StringAttrValueMap x);
+
+    public native long size();
+
+    @Index public native @ByRef AttrValue get(@StdString BytePointer i);
+    public native StringAttrValueMap put(@StdString BytePointer i, AttrValue value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter @ByRef AttrValue second();
+    }
+}
+
 @Name("std::vector<std::string>") public static class StringVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -4394,6 +4420,8 @@ limitations under the License.
   public native void clear_attr();
   @MemberGetter public static native int kAttrFieldNumber();
   public static final int kAttrFieldNumber = kAttrFieldNumber();
+  public native @Const @ByRef StringAttrValueMap attr();
+  public native StringAttrValueMap mutable_attr();
 }
 // ===================================================================
 
@@ -5581,6 +5609,8 @@ limitations under the License.
   public native void clear_attr();
   @MemberGetter public static native int kAttrFieldNumber();
   public static final int kAttrFieldNumber = kAttrFieldNumber();
+  public native @Const @ByRef StringAttrValueMap attr();
+  public native StringAttrValueMap mutable_attr();
 }
 // -------------------------------------------------------------------
 
@@ -6022,6 +6052,8 @@ limitations under the License.
   public native void clear_attr();
   @MemberGetter public static native int kAttrFieldNumber();
   public static final int kAttrFieldNumber = kAttrFieldNumber();
+  public native @Const @ByRef StringAttrValueMap attr();
+  public native StringAttrValueMap mutable_attr();
 }
 // ===================================================================
 
@@ -8291,6 +8323,107 @@ limitations under the License.
   // namespace tensorflow
 
 // #endif  // TENSORFLOW_GRAPH_DEFAULT_DEVICE_H_
+
+
+// Parsed from tensorflow/core/graph/graph_constructor.h
+
+/* Copyright 2015 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_GRAPH_GRAPH_CONSTRUCTOR_H_
+// #define TENSORFLOW_GRAPH_GRAPH_CONSTRUCTOR_H_
+
+// #include "tensorflow/core/framework/config.pb.h"
+// #include "tensorflow/core/framework/graph.pb.h"
+// #include "tensorflow/core/graph/graph.h"
+// #include "tensorflow/core/lib/core/status.h"
+
+// Options specific to constant folding optimizations.
+@Namespace("tensorflow") public static class ConstantFoldingOptions extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public ConstantFoldingOptions() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public ConstantFoldingOptions(int size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ConstantFoldingOptions(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(int size);
+    @Override public ConstantFoldingOptions position(int position) {
+        return (ConstantFoldingOptions)super.position(position);
+    }
+
+  // If "consider" is not a nullptr, then only constant fold a node "n" if
+  // consider(n) returns true.
+  @MemberSetter public native ConstantFoldingOptions consider(@ByVal ConsiderFunction consider);
+}
+
+// Construct a graph *g out of a GraphDef gdef. Returns non-OK on
+// error, in which case *g is left in an incomplete state.
+@Namespace("tensorflow") @NoOffset public static class GraphConstructorOptions extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public GraphConstructorOptions(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(int)}. */
+    public GraphConstructorOptions(int size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(int size);
+    @Override public GraphConstructorOptions position(int position) {
+        return (GraphConstructorOptions)super.position(position);
+    }
+
+  public GraphConstructorOptions() { super((Pointer)null); allocate(); }
+  private native void allocate();
+  public GraphConstructorOptions(@Const @ByRef OptimizerOptions opts) { super((Pointer)null); allocate(opts); }
+  private native void allocate(@Const @ByRef OptimizerOptions opts);
+
+  // If true, allows internal ops in the GraphDef.
+  public native @Cast("bool") boolean allow_internal_ops(); public native GraphConstructorOptions allow_internal_ops(boolean allow_internal_ops);
+
+  // If true, the graph def is expected to have fully specified
+  // devices for all nodes. A node in the resulting graph "g" has the
+  // device name set accordingly.
+  //
+  // TODO(zhifengc): if possible, consider removing this option.
+  public native @Cast("bool") boolean expect_device_spec(); public native GraphConstructorOptions expect_device_spec(boolean expect_device_spec);
+
+  // If true, perform common subexpression elimination on the graph.
+  // TODO(jeff): Turn this default to true?
+  public native @Cast("bool") boolean optimizer_do_cse(); public native GraphConstructorOptions optimizer_do_cse(boolean optimizer_do_cse);
+
+  // If "optimizer_do_cse" is true and "cse_consider_function" is
+  // not nullptr, then only consider nodes for CSE for which
+  // "cse_consider_function(node)" returns true.
+  @MemberSetter public native GraphConstructorOptions cse_consider_function(@ByVal ConsiderFunction cse_consider_function);
+
+  // If true, perform constant folding on the graph.
+  public native @Cast("bool") boolean optimizer_do_constant_folding(); public native GraphConstructorOptions optimizer_do_constant_folding(boolean optimizer_do_constant_folding);
+
+  public native @ByRef ConstantFoldingOptions constant_folding_opts(); public native GraphConstructorOptions constant_folding_opts(ConstantFoldingOptions constant_folding_opts);
+}
+@Namespace("tensorflow") public static native @ByVal Status ConvertGraphDefToGraph(@Const @ByRef GraphConstructorOptions opts,
+                                     @Const @ByRef GraphDef gdef, Graph g);
+
+// Make a copy of "src" into "*dest".
+//
+// REQUIRES: "*dest" is a freshly allocated graph without any nodes or edges
+// other than the implicit Source/Sink nodes.
+@Namespace("tensorflow") public static native void CopyGraph(@Const @ByRef Graph src, Graph dest);
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_GRAPH_GRAPH_CONSTRUCTOR_H_
 
 
 // Parsed from tensorflow/cc/ops/standard_ops.h

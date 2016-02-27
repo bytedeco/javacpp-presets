@@ -58,7 +58,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "tensorflow/core/public/tensor_c_api.h", "tensorflow/core/framework/op_def.pb.h", "tensorflow/core/framework/op_def_builder.h",
         "tensorflow/core/framework/op_def_util.h", "tensorflow/core/framework/op.h", "tensorflow/core/framework/types.h",
         "tensorflow/core/graph/edgeset.h", "tensorflow/core/lib/gtl/iterator_range.h", "tensorflow/core/graph/graph.h",
-        "tensorflow/core/graph/node_builder.h", "tensorflow/core/graph/graph_def_builder.h", "tensorflow/core/graph/default_device.h",
+        "tensorflow/core/graph/node_builder.h", "tensorflow/core/graph/graph_def_builder.h", "tensorflow/core/graph/default_device.h", "tensorflow/core/graph/graph_constructor.h",
         "tensorflow/cc/ops/standard_ops.h", "tensorflow/cc/ops/const_op.h", "tensorflow/cc/ops/cc_op_gen.h",
         "tensorflow/cc/ops/array_ops.h", "tensorflow/cc/ops/attention_ops.h", "tensorflow/cc/ops/const_op.h",
         "tensorflow/cc/ops/data_flow_ops.h", "tensorflow/cc/ops/image_ops.h", "tensorflow/cc/ops/io_ops.h",
@@ -100,8 +100,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::protobuf::Message", "tensorflow::protobuf::MessageLite").cast().pointerTypes("Pointer"))
                .put(new Info("tensorflow::Allocator::is_simple<bfloat16>").skip())
 
-               .put(new Info("basic/containers").cppTypes("tensorflow::gtl::InlinedVector"))
-               .put(new Info("basic/containers").cppTypes("google::protobuf::Map"))
+               .put(new Info("basic/containers").cppTypes("tensorflow::gtl::InlinedVector", "google::protobuf::Map"))
                .put(new Info("tensorflow::DataType").cast().valueTypes("int").pointerTypes("IntPointer"))
                .put(new Info("tensorflow::gtl::InlinedVector<long long,4>").pointerTypes("LongVector").define())
                .put(new Info("tensorflow::gtl::InlinedVector<tensorflow::DataType,4>").pointerTypes("DataTypeVector").define())
@@ -135,7 +134,11 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::EdgeSet::const_iterator").pointerTypes("EdgeSetIterator"))
 
                .put(new Info("std::function<void()>").pointerTypes("Fn"))
-               .put(new Info("std::function<tensorflow::OpDef(void)>").pointerTypes("OpDefFunc"));
+               .put(new Info("std::function<tensorflow::OpDef(void)>").pointerTypes("OpDefFunc"))
+               .put(new Info("tensorflow::ConstantFoldingOptions::consider")
+                       .javaText("@MemberSetter public native ConstantFoldingOptions consider(@ByVal ConsiderFunction consider);"))
+               .put(new Info("tensorflow::GraphConstructorOptions::cse_consider_function")
+                       .javaText("@MemberSetter public native GraphConstructorOptions cse_consider_function(@ByVal ConsiderFunction cse_consider_function);"));
 
         String[] attrs = {"int", "long long", "float", "double", "bool", "std::string",
                           "tensorflow::Tensor", "tensorflow::TensorProto", "tensorflow::TensorShape",
@@ -170,6 +173,15 @@ public class tensorflow implements InfoMapper {
         protected OpDefFunc() { allocate(); }
         private native void allocate();
         public native @ByVal @Cast("tensorflow::OpDef*") Pointer call();
+    }
+
+    public static class ConsiderFunction extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    ConsiderFunction(Pointer p) { super(p); }
+        protected ConsiderFunction() { allocate(); }
+        private native void allocate();
+        public native @Cast("bool") boolean call(@Cast("const tensorflow::Node*") Pointer node);
     }
 
     @Documented @Retention(RetentionPolicy.RUNTIME)
