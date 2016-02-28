@@ -13,7 +13,7 @@
  * Fix Android builds of FFmpeg, FFTW, GSL, Leptonica, and Tesseract causing errors under Mac OS X ([issue #45](https://github.com/bytedeco/javacpp-presets/issues/45))
  * Avoid versioning of FFTW and GSL libraries, preventing them from working on Android ([issue #127](https://github.com/bytedeco/javacpp-presets/issues/127))
  * Upgrade presets for OpenCV 3.1.0, FFmpeg 3.0, libdc1394 2.2.4, videoInput, GSL 2.1, cuDNN 4, and Caffe, including the latest versions of their dependencies ([issue bytedeco/javacpp#55](https://github.com/bytedeco/javacpp/issues/55))
- * Add presets for TensorFlow ([issue #111](https://github.com/bytedeco/javacpp-presets/issues/111))
+ * Add presets for MXNet and TensorFlow ([issue #111](https://github.com/bytedeco/javacpp-presets/issues/111))
  * Virtualize `opencv_videostab.IFrameSource` to let us implement it in Java ([issue bytedeco/javacv#277](https://github.com/bytedeco/javacv/issues/277))
  * Fix MinGW-w64 builds with recent versions of GCC 5.x and potential issue with using "w32threads" for FFmpeg
  * Add missing `StatModel.loadXXX()` methods in the `opencv_ml` module ([issue #109](https://github.com/bytedeco/javacpp-presets/issues/109))

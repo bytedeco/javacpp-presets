@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.bytedeco</groupId>
+    <artifactId>javacpp-presets</artifactId>
+    <version>1.2-SNAPSHOT</version>
+  </parent>
+
+  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <artifactId>mxnet</artifactId>
+  <version>master-${project.parent.version}</version>
+  <packaging>jar</packaging>
+  <name>JavaCPP Presets for MXNet</name>
+
+  <properties>
+    <javacpp.platform.oldcompiler>${javacpp.platform.compiler}</javacpp.platform.oldcompiler>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.bytedeco.javacpp-presets</groupId>
+      <artifactId>opencv</artifactId>
+      <version>3.1.0-${project.parent.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>javacpp</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.bytedeco</groupId>
+        <artifactId>javacpp</artifactId>
+        <configuration>
+          <propertyKeysAndValues>
+            <property>
+              <name>platform.root</name>
+              <value>${javacpp.platform.root}</value>
+            </property>
+            <property>
+              <name>platform.compiler</name>
+              <value>${javacpp.platform.oldcompiler}</value>
+            </property>
+          </propertyKeysAndValues>
+          <classPaths>
+            <classPath>${basedir}/../opencv/target/classes/</classPath>
+            <classPath>${project.build.outputDirectory}</classPath>
+          </classPaths>
+          <includePaths>
+            <includePath>${basedir}/../opencv/target/classes/org/bytedeco/javacpp/</includePath>
+            <includePath>${basedir}/../opencv/cppbuild/${javacpp.platform}/include/opencv/</includePath>
+            <includePath>${basedir}/../opencv/cppbuild/${javacpp.platform}/include/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
+          </includePaths>
+          <linkPaths>
+            <linkPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/lib/</linkPath>
+            <linkPath>${basedir}/cppbuild/${javacpp.platform}/lib/</linkPath>
+          </linkPaths>
+          <preloadPaths>
+            <preloadPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/bin/</preloadPath>
+            <preloadPath>${basedir}/cppbuild/${javacpp.platform}/bin/</preloadPath>
+          </preloadPaths>
+        </configuration>
+        <executions>
+          <execution>
+            <id>generate-sources</id>
+            <configuration>
+              <classOrPackageName>org.bytedeco.javacpp.presets.mxnet</classOrPackageName>
+            </configuration>
+          </execution>
+          <execution>
+            <id>process-classes</id>
+            <configuration>
+              <classOrPackageName>org.bytedeco.javacpp.mxnet</classOrPackageName>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
