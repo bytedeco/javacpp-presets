@@ -23,11 +23,11 @@ case $PLATFORM in
         ;;
 esac
 
-PROTOBUF_VERSION=master
-TENSORFLOW_VERSION=master
+PROTOBUF_VERSION=3.0.0-beta-2
+TENSORFLOW_VERSION=0.7.1
 
-download https://github.com/google/protobuf/archive/$PROTOBUF_VERSION.tar.gz protobuf-$PROTOBUF_VERSION.tar.gz
-download https://github.com/tensorflow/tensorflow/archive/$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
+download https://github.com/google/protobuf/archive/v$PROTOBUF_VERSION.tar.gz protobuf-$PROTOBUF_VERSION.tar.gz
+download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
