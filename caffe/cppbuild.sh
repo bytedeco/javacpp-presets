@@ -50,7 +50,7 @@ LMDB=0.9.17
 BOOST=1_59_0
 HDF5=1.8.16
 OPENBLAS=0.2.15
-CAFFE_VERSION=master
+CAFFE_VERSION=rc3
 
 download https://github.com/google/glog/archive/v$GLOG.tar.gz glog-$GLOG.tar.gz
 download https://github.com/gflags/gflags/archive/v$GFLAGS.tar.gz gflags-$GFLAGS.tar.gz
