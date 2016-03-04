@@ -1,4 +1,6 @@
 
+ * Fix Caffe crashing in GPU mode: Do not define `CPU_ONLY` ([issue #147](https://github.com/bytedeco/javacpp-presets/issues/147))
+ * Make OpenBLAS build for Caffe more generic ([issue #154](https://github.com/bytedeco/javacpp-presets/issues/154))
  * Include missing `graph_constructor.h` header file from the `tensorflow` module ([issue #165](https://github.com/bytedeco/javacpp-presets/issues/165))
  * Add missing `GraphDefBuilder.Options.WithAttr()` methods from the `tensorflow` module ([issue #160](https://github.com/bytedeco/javacpp-presets/issues/160))
  * Add `linux-armhf` platform to the `cppbuild.sh` scripts of OpenCV and FFmpeg

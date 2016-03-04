@@ -136,10 +136,10 @@ make install
 cd ..
 
 # OSX has Accelerate
-if [[ $PLATFORM != macosx-* ]]; then
+if [[ $BLAS == "open" ]]; then
     # blas (requires fortran, e.g. sudo yum install gcc-gfortran)
     cd OpenBLAS-$OPENBLAS
-    make -j $MAKEJ "CC=$CC" "FC=$FC" BINARY=$BINARY NO_SHARED=1
+    make -j $MAKEJ "CC=$CC" "FC=$FC" BINARY=$BINARY NO_SHARED=1 TARGET=GENERIC
     make install "PREFIX=$INSTALL_PATH" NO_SHARED=1
     cd ..
 fi
