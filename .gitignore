@@ -48,3 +48,4 @@
 # IntelliJ
 *.iml
 .idea
+/opencv/sample/target/
