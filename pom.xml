@@ -38,6 +38,7 @@
 
   <modules>
     <module>opencv</module>
+    <module>opencv/sample</module>
     <module>ffmpeg</module>
     <module>flycapture</module>
     <module>libdc1394</module>
@@ -320,6 +321,10 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>2.19.1</version>
+      </plugin>
     </plugins>
     </pluginManagement>
 
@@ -350,6 +355,22 @@
           <nexusUrl>https://oss.sonatype.org/</nexusUrl>
           <skipStagingRepositoryClose>true</skipStagingRepositoryClose>
         </configuration>
+      </plugin>
+      <!-- trick: list installer plugin before failsafe plugin to have packages installed in local repo
+              before executing the tests -->
+      <plugin>
+        <artifactId>maven-install-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+            </goals>
+            <phase>install</phase>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

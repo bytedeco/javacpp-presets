@@ -1,0 +1,19 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.bytedeco.javacpp-presets.opencv</groupId>
+    <artifactId>stitching</artifactId>
+    <version>1.1</version>
+
+    <!-- run this sample with "mvn exec:java" -->
+    <properties>
+        <exec.mainClass>Stitching</exec.mainClass>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>opencv</artifactId>
+            <version>3.1.0-1.2-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+</project>
