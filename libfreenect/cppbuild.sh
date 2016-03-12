@@ -24,6 +24,17 @@ if [[ $PLATFORM == windows* ]]; then
     patch -Np1 -d libfreenect-$LIBFREENECT_VERSION < ../../libfreenect-$LIBFREENECT_VERSION-windows.patch
 fi
 
+if [[ $PLATFORM == linux-armhf ]]; then
+    INSTALL_PATH=`pwd`
+    download http://sourceforge.net/projects/libusb/files/libusb-1.0/libusb-1.0.19/libusb-1.0.19.tar.bz2/download libusb-1.0.19.tar.bz2
+    tar xvjf libusb-1.0.19.tar.bz2
+    cd libusb-1.0.19
+    CFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CXXFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CPPFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf --disable-udev
+    make
+    make install
+    cd .. 
+fi
+
 cd libfreenect-$LIBFREENECT_VERSION
 
 case $PLATFORM in
@@ -34,6 +45,11 @@ case $PLATFORM in
         ;;
     linux-x86_64)
         CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=..
+        make -j4
+        make install
+        ;;
+    linux-armhf)
+         CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ $CMAKE -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=..
         make -j4
         make install
         ;;
