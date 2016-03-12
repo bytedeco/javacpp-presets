@@ -27,6 +27,11 @@ case $PLATFORM in
         make -j4
         make install-strip
         ;;
+    linux-armhf)
+        CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ ./configure --prefix=$INSTALL_PATH --host=arm-linux-gnueabihf
+        make -j4
+        make install-strip
+        ;;
     macosx-*)
         patch -Np1 < ../../../libdc1394-$LIBDC1394_VERSION-macosx.patch
         LIBUSB_CFLAGS=-I/usr/local/include/libusb-1.0/ LIBUSB_LIBS=-L/usr/local/lib/ ./configure --prefix=$INSTALL_PATH
