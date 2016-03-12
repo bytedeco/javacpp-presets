@@ -82,6 +82,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <javacpp.cppbuild.skip>false</javacpp.cppbuild.skip> <!-- To skip execution of cppbuild.sh: -Djavacpp.cppbuild.skip=true -->
     <javacpp.parser.skip>false</javacpp.parser.skip>     <!-- To skip header file parsing phase: -Djavacpp.parser.skip=true  -->
     <javacpp.compiler.skip>false</javacpp.compiler.skip> <!-- To skip native compilation phase: -Djavacpp.compiler.skip=true -->
   </properties>
@@ -105,7 +106,7 @@
         <version>2.7</version>
         <executions>
           <execution>
-            <id>generate-sources</id>
+            <id>javacpp.parser</id>
             <phase>generate-sources</phase>
             <goals>
               <goal>resources</goal>
@@ -122,7 +123,7 @@
         </configuration>
         <executions>
           <execution>
-            <id>generate-sources</id>
+            <id>javacpp.parser</id>
             <phase>generate-sources</phase>
             <goals>
               <goal>compile</goal>
@@ -159,7 +160,7 @@
         </configuration>
         <executions>
           <execution>
-            <id>generate-sources</id>
+            <id>javacpp.parser</id>
             <phase>generate-sources</phase>
             <goals>
               <goal>build</goal>
@@ -171,7 +172,7 @@
             </configuration>
           </execution>
           <execution>
-            <id>process-classes</id>
+            <id>javacpp.compiler</id>
             <phase>process-classes</phase>
             <goals>
               <goal>build</goal>
@@ -236,7 +237,7 @@
               <skipIfEmpty>true</skipIfEmpty>
               <includes>
                 <include>${javacpp.platform.library.path}/</include>
-                <include>org/bytedeco/javacpp/${javacpp.platform}/</include>
+                <include>org/bytedeco/javacpp/${javacpp.platform}/${javacpp.platform.library.prefix}*${javacpp.platform.library.suffix}*</include>
               </includes>
             </configuration>
           </execution>
@@ -326,7 +327,7 @@
         <version>1.4.0</version>
         <executions>
           <execution>
-            <id>cppbuild</id>
+            <id>javacpp.cppbuild</id>
             <phase>generate-sources</phase>
             <goals>
               <goal>exec</goal>
@@ -334,9 +335,11 @@
           </execution>
         </executions>
         <configuration>
-          <executable>${project.basedir}/../cppbuild.sh</executable>
+          <skip>${javacpp.cppbuild.skip}</skip>
           <workingDirectory>${project.basedir}/..</workingDirectory>
+          <executable>bash</executable>
           <arguments>
+            <argument>${project.basedir}/../cppbuild.sh</argument>
             <argument>install</argument>
             <argument>${project.artifactId}</argument>
             <argument>-platform</argument>
