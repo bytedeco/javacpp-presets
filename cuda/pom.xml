@@ -55,7 +55,7 @@
         </configuration>
         <executions>
           <execution>
-            <id>process-classes</id>
+            <id>javacpp.compiler</id>
             <phase>process-classes</phase>
             <goals>
               <goal>build</goal>

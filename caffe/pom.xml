@@ -78,13 +78,13 @@
         </configuration>
         <executions>
           <execution>
-            <id>generate-sources</id>
+            <id>javacpp.parser</id>
             <configuration>
               <classOrPackageName>org.bytedeco.javacpp.presets.caffe</classOrPackageName>
             </configuration>
           </execution>
           <execution>
-            <id>process-classes</id>
+            <id>javacpp.compiler</id>
             <configuration>
               <classOrPackageName>org.bytedeco.javacpp.caffe</classOrPackageName>
             </configuration>
