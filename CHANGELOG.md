@@ -1,4 +1,5 @@
 
+ * Prevent creating text relocations for shared libraries on Android ([issue bytedeco/javacv#245](https://github.com/bytedeco/javacv/issues/245))
  * Make sure to include only native libraries in platform specific JAR files ([pull bytedeco/javacpp#89](https://github.com/bytedeco/javacpp/pull/89))
  * Execute the `cppbuild.sh` scripts within the Maven build lifecycle, can be skipped with `-Djavacpp.cppbuild.skip` ([pull #175](https://github.com/bytedeco/javacpp-presets/pull/175))
  * Fix Caffe crashing in GPU mode: Do not define `CPU_ONLY` ([issue #147](https://github.com/bytedeco/javacpp-presets/issues/147))

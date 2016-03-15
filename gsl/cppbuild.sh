@@ -25,7 +25,7 @@ case $PLATFORM in
         export STRIP="$ANDROID_BIN-strip"
         export CPPFLAGS="--sysroot=$ANDROID_ROOT -DANDROID"
         export CFLAGS="$CPPFLAGS -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
-        export LDFLAGS="-nostdlib -Wl,--fix-cortex-a8"
+        export LDFLAGS="-nostdlib -Wl,--fix-cortex-a8 -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         export GSL_LDFLAGS="-Lcblas/.libs/ -lgslcblas"
         patch -Np1 < ../../../gsl-$GSL_VERSION-android.patch
@@ -41,7 +41,7 @@ case $PLATFORM in
         export STRIP="$ANDROID_BIN-strip"
         export CPPFLAGS="--sysroot=$ANDROID_ROOT -DANDROID"
         export CFLAGS="$CPPFLAGS -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
-        export LDFLAGS="-nostdlib"
+        export LDFLAGS="-nostdlib -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         export GSL_LDFLAGS="-Lcblas/.libs/ -lgslcblas"
         patch -Np1 < ../../../gsl-$GSL_VERSION-android.patch
