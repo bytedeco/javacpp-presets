@@ -35,7 +35,8 @@ case $PLATFORM in
         export CPP="$ANDROID_BIN-cpp"
         export CC="$ANDROID_BIN-gcc"
         export STRIP="$ANDROID_BIN-strip"
-        export CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
+        export CPPFLAGS="--sysroot=$ANDROID_ROOT -DANDROID"
+        export CFLAGS="$CPPFLAGS -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
         export LDFLAGS="-nostdlib -Wl,--fix-cortex-a8 -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         patch -Np1 < ../../../fftw-$FFTW_VERSION-android.patch
@@ -52,7 +53,8 @@ case $PLATFORM in
         export CPP="$ANDROID_BIN-cpp"
         export CC="$ANDROID_BIN-gcc"
         export STRIP="$ANDROID_BIN-strip"
-        export CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
+        export CPPFLAGS="--sysroot=$ANDROID_ROOT -DANDROID"
+        export CFLAGS="$CPPFLAGS -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
         export LDFLAGS="-nostdlib -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         patch -Np1 < ../../../fftw-$FFTW_VERSION-android.patch

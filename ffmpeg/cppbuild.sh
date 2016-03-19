@@ -145,9 +145,9 @@ case $PLATFORM in
         ANDROID_DEV="$ANDROID_ROOT/usr" make # fails with -j > 1
         make install
         cd ../openh264-$OPENH264_VERSION
-        LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86 NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" libraries install-static
+        LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86 USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" libraries install-static
         cd ../$X264
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=i686-linux --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS $LIBS"
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=i686-linux --disable-asm --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS $LIBS"
         make -j $MAKEJ
         make install
         cd ../$X265
