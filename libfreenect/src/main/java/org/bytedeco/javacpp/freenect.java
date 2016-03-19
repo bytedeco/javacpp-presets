@@ -81,13 +81,13 @@ public static class freenect_device_attributes extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public freenect_device_attributes() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public freenect_device_attributes(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public freenect_device_attributes(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_device_attributes(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public freenect_device_attributes position(int position) {
+    private native void allocateArray(long size);
+    @Override public freenect_device_attributes position(long position) {
         return (freenect_device_attributes)super.position(position);
     }
 
@@ -175,13 +175,13 @@ public static class freenect_frame_mode extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public freenect_frame_mode() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public freenect_frame_mode(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public freenect_frame_mode(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_frame_mode(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public freenect_frame_mode position(int position) {
+    private native void allocateArray(long size);
+    @Override public freenect_frame_mode position(long position) {
         return (freenect_frame_mode)super.position(position);
     }
 
@@ -242,13 +242,13 @@ public static class freenect_raw_tilt_state extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public freenect_raw_tilt_state() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public freenect_raw_tilt_state(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public freenect_raw_tilt_state(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_raw_tilt_state(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public freenect_raw_tilt_state position(int position) {
+    private native void allocateArray(long size);
+    @Override public freenect_raw_tilt_state position(long position) {
         return (freenect_raw_tilt_state)super.position(position);
     }
 
@@ -922,13 +922,13 @@ public static class freenect_reg_info extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public freenect_reg_info() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public freenect_reg_info(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public freenect_reg_info(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_reg_info(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public freenect_reg_info position(int position) {
+    private native void allocateArray(long size);
+    @Override public freenect_reg_info position(long position) {
         return (freenect_reg_info)super.position(position);
     }
 
@@ -981,13 +981,13 @@ public static class freenect_reg_pad_info extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public freenect_reg_pad_info() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public freenect_reg_pad_info(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public freenect_reg_pad_info(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_reg_pad_info(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public freenect_reg_pad_info position(int position) {
+    private native void allocateArray(long size);
+    @Override public freenect_reg_pad_info position(long position) {
         return (freenect_reg_pad_info)super.position(position);
     }
 
@@ -1001,13 +1001,13 @@ public static class freenect_zero_plane_info extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public freenect_zero_plane_info() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public freenect_zero_plane_info(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public freenect_zero_plane_info(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_zero_plane_info(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public freenect_zero_plane_info position(int position) {
+    private native void allocateArray(long size);
+    @Override public freenect_zero_plane_info position(long position) {
         return (freenect_zero_plane_info)super.position(position);
     }
 
@@ -1022,13 +1022,13 @@ public static class freenect_registration extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public freenect_registration() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public freenect_registration(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public freenect_registration(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_registration(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public freenect_registration position(int position) {
+    private native void allocateArray(long size);
+    @Override public freenect_registration position(long position) {
         return (freenect_registration)super.position(position);
     }
 
@@ -1113,13 +1113,13 @@ public static class freenect_sample_51 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public freenect_sample_51() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public freenect_sample_51(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public freenect_sample_51(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public freenect_sample_51(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public freenect_sample_51 position(int position) {
+    private native void allocateArray(long size);
+    @Override public freenect_sample_51 position(long position) {
         return (freenect_sample_51)super.position(position);
     }
 

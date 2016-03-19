@@ -764,13 +764,13 @@ public static class cudnnConvolutionFwdAlgoPerf_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public cudnnConvolutionFwdAlgoPerf_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public cudnnConvolutionFwdAlgoPerf_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public cudnnConvolutionFwdAlgoPerf_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudnnConvolutionFwdAlgoPerf_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public cudnnConvolutionFwdAlgoPerf_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public cudnnConvolutionFwdAlgoPerf_t position(long position) {
         return (cudnnConvolutionFwdAlgoPerf_t)super.position(position);
     }
 
@@ -899,13 +899,13 @@ public static class cudnnConvolutionBwdFilterAlgoPerf_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public cudnnConvolutionBwdFilterAlgoPerf_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public cudnnConvolutionBwdFilterAlgoPerf_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public cudnnConvolutionBwdFilterAlgoPerf_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudnnConvolutionBwdFilterAlgoPerf_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public cudnnConvolutionBwdFilterAlgoPerf_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public cudnnConvolutionBwdFilterAlgoPerf_t position(long position) {
         return (cudnnConvolutionBwdFilterAlgoPerf_t)super.position(position);
     }
 
@@ -1037,13 +1037,13 @@ public static class cudnnConvolutionBwdDataAlgoPerf_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public cudnnConvolutionBwdDataAlgoPerf_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public cudnnConvolutionBwdDataAlgoPerf_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public cudnnConvolutionBwdDataAlgoPerf_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudnnConvolutionBwdDataAlgoPerf_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public cudnnConvolutionBwdDataAlgoPerf_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public cudnnConvolutionBwdDataAlgoPerf_t position(long position) {
         return (cudnnConvolutionBwdDataAlgoPerf_t)super.position(position);
     }
 

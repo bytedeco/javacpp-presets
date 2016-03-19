@@ -191,6 +191,12 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DictValue(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public DictValue(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public DictValue position(long position) {
+        return (DictValue)super.position(position);
+    }
 
     public DictValue(@Const @ByRef DictValue r) { super((Pointer)null); allocate(r); }
     private native void allocate(@Const @ByRef DictValue r);
@@ -224,13 +230,13 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
     static { Loader.load(); }
     /** Default native constructor. */
     public Dict() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Dict(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Dict(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Dict(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public Dict position(int position) {
+    private native void allocateArray(long size);
+    @Override public Dict position(long position) {
         return (Dict)super.position(position);
     }
 
@@ -319,10 +325,10 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public BlobShape(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public BlobShape(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public BlobShape position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public BlobShape(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public BlobShape position(long position) {
             return (BlobShape)super.position(position);
         }
     
@@ -395,10 +401,10 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Blob(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public Blob(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public Blob position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public Blob(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public Blob position(long position) {
             return (Blob)super.position(position);
         }
     
@@ -753,13 +759,13 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         static { Loader.load(); }
         /** Default native constructor. */
         public LayerParams() { super((Pointer)null); allocate(); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public LayerParams(int size) { super((Pointer)null); allocateArray(size); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public LayerParams(long size) { super((Pointer)null); allocateArray(size); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public LayerParams(Pointer p) { super(p); }
         private native void allocate();
-        private native void allocateArray(int size);
-        @Override public LayerParams position(int position) {
+        private native void allocateArray(long size);
+        @Override public LayerParams position(long position) {
             return (LayerParams)super.position(position);
         }
     
@@ -835,10 +841,10 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Net(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public Net(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public Net position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public Net(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public Net position(long position) {
             return (Net)super.position(position);
         }
     

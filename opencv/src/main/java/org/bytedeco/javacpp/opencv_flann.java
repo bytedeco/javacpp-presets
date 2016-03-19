@@ -235,10 +235,10 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IndexParams(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public IndexParams(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public IndexParams position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public IndexParams(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public IndexParams position(long position) {
         return (IndexParams)super.position(position);
     }
 
@@ -290,6 +290,12 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KDTreeIndexParams(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public KDTreeIndexParams(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public KDTreeIndexParams position(long position) {
+        return (KDTreeIndexParams)super.position(position);
+    }
 
     public KDTreeIndexParams(int trees/*=4*/) { super((Pointer)null); allocate(trees); }
     private native void allocate(int trees/*=4*/);
@@ -301,10 +307,10 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LinearIndexParams(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public LinearIndexParams(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public LinearIndexParams position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public LinearIndexParams(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public LinearIndexParams position(long position) {
         return (LinearIndexParams)super.position(position);
     }
 
@@ -316,10 +322,10 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CompositeIndexParams(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CompositeIndexParams(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CompositeIndexParams position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CompositeIndexParams(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public CompositeIndexParams position(long position) {
         return (CompositeIndexParams)super.position(position);
     }
 
@@ -335,10 +341,10 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AutotunedIndexParams(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AutotunedIndexParams(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public AutotunedIndexParams position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AutotunedIndexParams(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public AutotunedIndexParams position(long position) {
         return (AutotunedIndexParams)super.position(position);
     }
 
@@ -354,10 +360,10 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HierarchicalClusteringIndexParams(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public HierarchicalClusteringIndexParams(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public HierarchicalClusteringIndexParams position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public HierarchicalClusteringIndexParams(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public HierarchicalClusteringIndexParams position(long position) {
         return (HierarchicalClusteringIndexParams)super.position(position);
     }
 
@@ -373,10 +379,10 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KMeansIndexParams(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public KMeansIndexParams(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public KMeansIndexParams position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public KMeansIndexParams(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public KMeansIndexParams position(long position) {
         return (KMeansIndexParams)super.position(position);
     }
 
@@ -412,10 +418,10 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SearchParams(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SearchParams(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public SearchParams position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public SearchParams(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public SearchParams position(long position) {
         return (SearchParams)super.position(position);
     }
 
@@ -429,10 +435,10 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Index(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Index(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public Index position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Index(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Index position(long position) {
         return (Index)super.position(position);
     }
 

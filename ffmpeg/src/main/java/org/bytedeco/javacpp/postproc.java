@@ -52,17 +52,17 @@ public class postproc extends org.bytedeco.javacpp.presets.postproc {
 /**
  * Return the LIBPOSTPROC_VERSION_INT constant.
  */
-public static native @Cast("unsigned") int postproc_version();
+@NoException public static native @Cast("unsigned") int postproc_version();
 
 /**
  * Return the libpostproc build-time configuration.
  */
-public static native @Cast("const char*") BytePointer postproc_configuration();
+@NoException public static native @Cast("const char*") BytePointer postproc_configuration();
 
 /**
  * Return the libpostproc license.
  */
-public static native @Cast("const char*") BytePointer postproc_license();
+@NoException public static native @Cast("const char*") BytePointer postproc_license();
 
 public static final int PP_QUALITY_MAX = 6;
 
@@ -92,22 +92,22 @@ public static final int PP_QUALITY_MAX = 6;
 @MemberGetter public static native @Cast("const char*") BytePointer pp_help();
 // #endif
 
-public static native void pp_postprocess(@Cast("const uint8_t**") PointerPointer src, @Const IntPointer srcStride,
+@NoException public static native void pp_postprocess(@Cast("const uint8_t**") PointerPointer src, @Const IntPointer srcStride,
                      @Cast("uint8_t**") PointerPointer dst, @Const IntPointer dstStride,
                      int horizontalSize, int verticalSize,
                      @Const BytePointer QP_store,  int QP_stride,
                      pp_mode mode, pp_context ppContext, int pict_type);
-public static native void pp_postprocess(@Cast("const uint8_t**") @ByPtrPtr BytePointer src, @Const IntPointer srcStride,
+@NoException public static native void pp_postprocess(@Cast("const uint8_t**") @ByPtrPtr BytePointer src, @Const IntPointer srcStride,
                      @Cast("uint8_t**") @ByPtrPtr BytePointer dst, @Const IntPointer dstStride,
                      int horizontalSize, int verticalSize,
                      @Const BytePointer QP_store,  int QP_stride,
                      pp_mode mode, pp_context ppContext, int pict_type);
-public static native void pp_postprocess(@Cast("const uint8_t**") @ByPtrPtr ByteBuffer src, @Const IntBuffer srcStride,
+@NoException public static native void pp_postprocess(@Cast("const uint8_t**") @ByPtrPtr ByteBuffer src, @Const IntBuffer srcStride,
                      @Cast("uint8_t**") @ByPtrPtr ByteBuffer dst, @Const IntBuffer dstStride,
                      int horizontalSize, int verticalSize,
                      @Const ByteBuffer QP_store,  int QP_stride,
                      pp_mode mode, pp_context ppContext, int pict_type);
-public static native void pp_postprocess(@Cast("const uint8_t**") @ByPtrPtr byte[] src, @Const int[] srcStride,
+@NoException public static native void pp_postprocess(@Cast("const uint8_t**") @ByPtrPtr byte[] src, @Const int[] srcStride,
                      @Cast("uint8_t**") @ByPtrPtr byte[] dst, @Const int[] dstStride,
                      int horizontalSize, int verticalSize,
                      @Const byte[] QP_store,  int QP_stride,
@@ -120,12 +120,12 @@ public static native void pp_postprocess(@Cast("const uint8_t**") @ByPtrPtr byte
  * @param name    the string after "-pp" on the command line
  * @param quality a number from 0 to PP_QUALITY_MAX
  */
-public static native pp_mode pp_get_mode_by_name_and_quality(@Cast("const char*") BytePointer name, int quality);
-public static native pp_mode pp_get_mode_by_name_and_quality(String name, int quality);
-public static native void pp_free_mode(pp_mode mode);
+@NoException public static native pp_mode pp_get_mode_by_name_and_quality(@Cast("const char*") BytePointer name, int quality);
+@NoException public static native pp_mode pp_get_mode_by_name_and_quality(String name, int quality);
+@NoException public static native void pp_free_mode(pp_mode mode);
 
-public static native pp_context pp_get_context(int width, int height, int flags);
-public static native void pp_free_context(pp_context ppContext);
+@NoException public static native pp_context pp_get_context(int width, int height, int flags);
+@NoException public static native void pp_free_context(pp_context ppContext);
 
 public static final int PP_CPU_CAPS_MMX =   0x80000000;
 public static final int PP_CPU_CAPS_MMX2 =  0x20000000;

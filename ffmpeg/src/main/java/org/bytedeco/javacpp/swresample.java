@@ -222,7 +222,7 @@ public static final int
  * @see av_opt_find().
  * @return the AVClass of SwrContext
  */
-public static native @Const AVClass swr_get_class();
+@NoException public static native @Const AVClass swr_get_class();
 
 /**
  * \name SwrContext constructor functions
@@ -238,7 +238,7 @@ public static native @Const AVClass swr_get_class();
  * @see swr_alloc_set_opts(), swr_init(), swr_free()
  * @return NULL on error, allocated context otherwise
  */
-public static native SwrContext swr_alloc();
+@NoException public static native SwrContext swr_alloc();
 
 /**
  * Initialize context after user parameters have been set.
@@ -250,7 +250,7 @@ public static native SwrContext swr_alloc();
  * @param [in,out]   s Swr context to initialize
  * @return AVERROR error code in case of failure.
  */
-public static native int swr_init(SwrContext s);
+@NoException public static native int swr_init(SwrContext s);
 
 /**
  * Check whether an swr context has been initialized or not.
@@ -259,7 +259,7 @@ public static native int swr_init(SwrContext s);
  * @see swr_init()
  * @return positive if it has been initialized, 0 if not initialized
  */
-public static native int swr_is_initialized(SwrContext s);
+@NoException public static native int swr_is_initialized(SwrContext s);
 
 /**
  * Allocate SwrContext if needed and set/reset common parameters.
@@ -281,7 +281,7 @@ public static native int swr_is_initialized(SwrContext s);
  * @see swr_init(), swr_free()
  * @return NULL on error, allocated context otherwise
  */
-public static native SwrContext swr_alloc_set_opts(SwrContext s,
+@NoException public static native SwrContext swr_alloc_set_opts(SwrContext s,
                                       long out_ch_layout, @Cast("AVSampleFormat") int out_sample_fmt, int out_sample_rate,
                                       long in_ch_layout, @Cast("AVSampleFormat") int in_sample_fmt, int in_sample_rate,
                                       int log_offset, Pointer log_ctx);
@@ -298,8 +298,8 @@ public static native SwrContext swr_alloc_set_opts(SwrContext s,
  *
  * @param [in] s a pointer to a pointer to Swr context
  */
-public static native void swr_free(@Cast("SwrContext**") PointerPointer s);
-public static native void swr_free(@ByPtrPtr SwrContext s);
+@NoException public static native void swr_free(@Cast("SwrContext**") PointerPointer s);
+@NoException public static native void swr_free(@ByPtrPtr SwrContext s);
 
 /**
  * Closes the context so that swr_is_initialized() returns 0.
@@ -311,7 +311,7 @@ public static native void swr_free(@ByPtrPtr SwrContext s);
  *
  * @param [in,out] s Swr context to be closed
  */
-public static native void swr_close(SwrContext s);
+@NoException public static native void swr_close(SwrContext s);
 
 /**
  * \}
@@ -338,13 +338,13 @@ public static native void swr_close(SwrContext s);
  *
  * @return number of samples output per channel, negative value on error
  */
-public static native int swr_convert(SwrContext s, @Cast("uint8_t**") PointerPointer out, int out_count,
+@NoException public static native int swr_convert(SwrContext s, @Cast("uint8_t**") PointerPointer out, int out_count,
                                 @Cast("const uint8_t**") PointerPointer in, int in_count);
-public static native int swr_convert(SwrContext s, @Cast("uint8_t**") @ByPtrPtr BytePointer out, int out_count,
+@NoException public static native int swr_convert(SwrContext s, @Cast("uint8_t**") @ByPtrPtr BytePointer out, int out_count,
                                 @Cast("const uint8_t**") @ByPtrPtr BytePointer in, int in_count);
-public static native int swr_convert(SwrContext s, @Cast("uint8_t**") @ByPtrPtr ByteBuffer out, int out_count,
+@NoException public static native int swr_convert(SwrContext s, @Cast("uint8_t**") @ByPtrPtr ByteBuffer out, int out_count,
                                 @Cast("const uint8_t**") @ByPtrPtr ByteBuffer in, int in_count);
-public static native int swr_convert(SwrContext s, @Cast("uint8_t**") @ByPtrPtr byte[] out, int out_count,
+@NoException public static native int swr_convert(SwrContext s, @Cast("uint8_t**") @ByPtrPtr byte[] out, int out_count,
                                 @Cast("const uint8_t**") @ByPtrPtr byte[] in, int in_count);
 
 /**
@@ -364,7 +364,7 @@ public static native int swr_convert(SwrContext s, @Cast("uint8_t**") @ByPtrPtr 
  *      function used internally for timestamp compensation.
  * @return the output timestamp for the next output sample
  */
-public static native long swr_next_pts(SwrContext s, long pts);
+@NoException public static native long swr_next_pts(SwrContext s, long pts);
 
 /**
  * \}
@@ -391,7 +391,7 @@ public static native long swr_next_pts(SwrContext s, long pts);
  *            \li compensation unsupported by resampler, or
  *            \li swr_init() fails when called.
  */
-public static native int swr_set_compensation(SwrContext s, int sample_delta, int compensation_distance);
+@NoException public static native int swr_set_compensation(SwrContext s, int sample_delta, int compensation_distance);
 
 /**
  * Set a customized input channel mapping.
@@ -401,9 +401,9 @@ public static native int swr_set_compensation(SwrContext s, int sample_delta, in
  *                            indexes, -1 for a muted channel)
  * @return >= 0 on success, or AVERROR error code in case of failure.
  */
-public static native int swr_set_channel_mapping(SwrContext s, @Const IntPointer channel_map);
-public static native int swr_set_channel_mapping(SwrContext s, @Const IntBuffer channel_map);
-public static native int swr_set_channel_mapping(SwrContext s, @Const int[] channel_map);
+@NoException public static native int swr_set_channel_mapping(SwrContext s, @Const IntPointer channel_map);
+@NoException public static native int swr_set_channel_mapping(SwrContext s, @Const IntBuffer channel_map);
+@NoException public static native int swr_set_channel_mapping(SwrContext s, @Const int[] channel_map);
 
 /**
  * Set a customized remix matrix.
@@ -414,9 +414,9 @@ public static native int swr_set_channel_mapping(SwrContext s, @Const int[] chan
  * @param stride  offset between lines of the matrix
  * @return  >= 0 on success, or AVERROR error code in case of failure.
  */
-public static native int swr_set_matrix(SwrContext s, @Const DoublePointer matrix, int stride);
-public static native int swr_set_matrix(SwrContext s, @Const DoubleBuffer matrix, int stride);
-public static native int swr_set_matrix(SwrContext s, @Const double[] matrix, int stride);
+@NoException public static native int swr_set_matrix(SwrContext s, @Const DoublePointer matrix, int stride);
+@NoException public static native int swr_set_matrix(SwrContext s, @Const DoubleBuffer matrix, int stride);
+@NoException public static native int swr_set_matrix(SwrContext s, @Const double[] matrix, int stride);
 
 /**
  * \}
@@ -436,7 +436,7 @@ public static native int swr_set_matrix(SwrContext s, @Const double[] matrix, in
  *
  * @return >= 0 on success, or a negative AVERROR code on failure
  */
-public static native int swr_drop_output(SwrContext s, int count);
+@NoException public static native int swr_drop_output(SwrContext s, int count);
 
 /**
  * Injects the specified number of silence samples.
@@ -449,7 +449,7 @@ public static native int swr_drop_output(SwrContext s, int count);
  *
  * @return >= 0 on success, or a negative AVERROR code on failure
  */
-public static native int swr_inject_silence(SwrContext s, int count);
+@NoException public static native int swr_inject_silence(SwrContext s, int count);
 
 /**
  * Gets the delay the next input sample will experience relative to the next output sample.
@@ -475,7 +475,7 @@ public static native int swr_inject_silence(SwrContext s, int count);
  *                  returned
  * @return     the delay in 1 / \c base units.
  */
-public static native long swr_get_delay(SwrContext s, long base);
+@NoException public static native long swr_get_delay(SwrContext s, long base);
 
 /**
  * Find an upper bound on the number of samples that the next swr_convert
@@ -493,7 +493,7 @@ public static native long swr_get_delay(SwrContext s, long base);
  * @return an upper bound on the number of samples that the next swr_convert
  *          will output or a negative value to indicate an error
  */
-public static native int swr_get_out_samples(SwrContext s, int in_samples);
+@NoException public static native int swr_get_out_samples(SwrContext s, int in_samples);
 
 /**
  * \}
@@ -510,21 +510,21 @@ public static native int swr_get_out_samples(SwrContext s, int in_samples);
  *
  * @return     the unsigned int-typed version
  */
-public static native @Cast("unsigned") int swresample_version();
+@NoException public static native @Cast("unsigned") int swresample_version();
 
 /**
  * Return the swr build-time configuration.
  *
  * @return     the build-time \c ./configure flags
  */
-public static native @Cast("const char*") BytePointer swresample_configuration();
+@NoException public static native @Cast("const char*") BytePointer swresample_configuration();
 
 /**
  * Return the swr license.
  *
  * @return     the license of libswresample, determined at build-time
  */
-public static native @Cast("const char*") BytePointer swresample_license();
+@NoException public static native @Cast("const char*") BytePointer swresample_license();
 
 /**
  * \}
@@ -567,7 +567,7 @@ public static native @Cast("const char*") BytePointer swresample_license();
  * @return                0 on success, AVERROR on failure or nonmatching
  *                        configuration.
  */
-public static native int swr_convert_frame(SwrContext swr,
+@NoException public static native int swr_convert_frame(SwrContext swr,
                       AVFrame output, @Const AVFrame input);
 
 /**
@@ -584,7 +584,7 @@ public static native int swr_convert_frame(SwrContext swr,
  * @param input           input AVFrame
  * @return                0 on success, AVERROR on failure.
  */
-public static native int swr_config_frame(SwrContext swr, @Const AVFrame out, @Const AVFrame in);
+@NoException public static native int swr_config_frame(SwrContext swr, @Const AVFrame out, @Const AVFrame in);
 
 /**
  * \}

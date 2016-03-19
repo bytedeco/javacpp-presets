@@ -71,10 +71,10 @@ the use of this software, even if advised of the possibility of such damage.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PredictCollector(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PredictCollector(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public PredictCollector position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PredictCollector(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public PredictCollector position(long position) {
         return (PredictCollector)super.position(position);
     }
 
@@ -105,10 +105,10 @@ the use of this software, even if advised of the possibility of such damage.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MinDistancePredictCollector(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public MinDistancePredictCollector(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public MinDistancePredictCollector position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public MinDistancePredictCollector(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public MinDistancePredictCollector position(long position) {
         return (MinDistancePredictCollector)super.position(position);
     }
 

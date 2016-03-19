@@ -72,23 +72,23 @@ public class avdevice extends org.bytedeco.javacpp.presets.avdevice {
 /**
  * Return the LIBAVDEVICE_VERSION_INT constant.
  */
-public static native @Cast("unsigned") int avdevice_version();
+@NoException public static native @Cast("unsigned") int avdevice_version();
 
 /**
  * Return the libavdevice build-time configuration.
  */
-public static native @Cast("const char*") BytePointer avdevice_configuration();
+@NoException public static native @Cast("const char*") BytePointer avdevice_configuration();
 
 /**
  * Return the libavdevice license.
  */
-public static native @Cast("const char*") BytePointer avdevice_license();
+@NoException public static native @Cast("const char*") BytePointer avdevice_license();
 
 /**
  * Initialize libavdevice and register all the input and output devices.
  * \warning This function is not thread safe.
  */
-public static native void avdevice_register_all();
+@NoException public static native void avdevice_register_all();
 
 /**
  * Audio input devices iterator.
@@ -97,7 +97,7 @@ public static native void avdevice_register_all();
  * if d is non-NULL, returns the next registered input audio/video device after d
  * or NULL if d is the last one.
  */
-public static native AVInputFormat av_input_audio_device_next(AVInputFormat d);
+@NoException public static native AVInputFormat av_input_audio_device_next(AVInputFormat d);
 
 /**
  * Video input devices iterator.
@@ -106,7 +106,7 @@ public static native AVInputFormat av_input_audio_device_next(AVInputFormat d);
  * if d is non-NULL, returns the next registered input audio/video device after d
  * or NULL if d is the last one.
  */
-public static native AVInputFormat av_input_video_device_next(AVInputFormat d);
+@NoException public static native AVInputFormat av_input_video_device_next(AVInputFormat d);
 
 /**
  * Audio output devices iterator.
@@ -115,7 +115,7 @@ public static native AVInputFormat av_input_video_device_next(AVInputFormat d);
  * if d is non-NULL, returns the next registered output audio/video device after d
  * or NULL if d is the last one.
  */
-public static native AVOutputFormat av_output_audio_device_next(AVOutputFormat d);
+@NoException public static native AVOutputFormat av_output_audio_device_next(AVOutputFormat d);
 
 /**
  * Video output devices iterator.
@@ -124,19 +124,19 @@ public static native AVOutputFormat av_output_audio_device_next(AVOutputFormat d
  * if d is non-NULL, returns the next registered output audio/video device after d
  * or NULL if d is the last one.
  */
-public static native AVOutputFormat av_output_video_device_next(AVOutputFormat d);
+@NoException public static native AVOutputFormat av_output_video_device_next(AVOutputFormat d);
 
 public static class AVDeviceRect extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVDeviceRect() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVDeviceRect(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVDeviceRect(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDeviceRect(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVDeviceRect position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVDeviceRect position(long position) {
         return (AVDeviceRect)super.position(position);
     }
 
@@ -386,7 +386,7 @@ public static final int
  * @return >= 0 on success, negative on error.
  *         AVERROR(ENOSYS) when device doesn't implement handler of the message.
  */
-public static native int avdevice_app_to_dev_control_message(AVFormatContext s,
+@NoException public static native int avdevice_app_to_dev_control_message(AVFormatContext s,
                                         @Cast("AVAppToDevMessageType") int type,
                                         Pointer data, @Cast("size_t") long data_size);
 
@@ -400,7 +400,7 @@ public static native int avdevice_app_to_dev_control_message(AVFormatContext s,
  * @return >= 0 on success, negative on error.
  *         AVERROR(ENOSYS) when application doesn't implement handler of the message.
  */
-public static native int avdevice_dev_to_app_control_message(AVFormatContext s,
+@NoException public static native int avdevice_dev_to_app_control_message(AVFormatContext s,
                                         @Cast("AVDevToAppMessageType") int type,
                                         Pointer data, @Cast("size_t") long data_size);
 
@@ -484,13 +484,13 @@ public static class AVDeviceCapabilitiesQuery extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVDeviceCapabilitiesQuery() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVDeviceCapabilitiesQuery(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVDeviceCapabilitiesQuery(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDeviceCapabilitiesQuery(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVDeviceCapabilitiesQuery position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVDeviceCapabilitiesQuery position(long position) {
         return (AVDeviceCapabilitiesQuery)super.position(position);
     }
 
@@ -531,9 +531,9 @@ public static class AVDeviceCapabilitiesQuery extends Pointer {
  *
  * @return >= 0 on success, negative otherwise.
  */
-public static native int avdevice_capabilities_create(@Cast("AVDeviceCapabilitiesQuery**") PointerPointer caps, AVFormatContext s,
+@NoException public static native int avdevice_capabilities_create(@Cast("AVDeviceCapabilitiesQuery**") PointerPointer caps, AVFormatContext s,
                                  @Cast("AVDictionary**") PointerPointer device_options);
-public static native int avdevice_capabilities_create(@ByPtrPtr AVDeviceCapabilitiesQuery caps, AVFormatContext s,
+@NoException public static native int avdevice_capabilities_create(@ByPtrPtr AVDeviceCapabilitiesQuery caps, AVFormatContext s,
                                  @ByPtrPtr AVDictionary device_options);
 
 /**
@@ -542,8 +542,8 @@ public static native int avdevice_capabilities_create(@ByPtrPtr AVDeviceCapabili
  * @param caps Device capabilities data to be freed.
  * @param s    Context of the device.
  */
-public static native void avdevice_capabilities_free(@Cast("AVDeviceCapabilitiesQuery**") PointerPointer caps, AVFormatContext s);
-public static native void avdevice_capabilities_free(@ByPtrPtr AVDeviceCapabilitiesQuery caps, AVFormatContext s);
+@NoException public static native void avdevice_capabilities_free(@Cast("AVDeviceCapabilitiesQuery**") PointerPointer caps, AVFormatContext s);
+@NoException public static native void avdevice_capabilities_free(@ByPtrPtr AVDeviceCapabilitiesQuery caps, AVFormatContext s);
 
 /**
  * Structure describes basic parameters of the device.
@@ -552,13 +552,13 @@ public static class AVDeviceInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVDeviceInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVDeviceInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVDeviceInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDeviceInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVDeviceInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVDeviceInfo position(long position) {
         return (AVDeviceInfo)super.position(position);
     }
 
@@ -575,13 +575,13 @@ public static class AVDeviceInfoList extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVDeviceInfoList() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVDeviceInfoList(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVDeviceInfoList(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVDeviceInfoList(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVDeviceInfoList position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVDeviceInfoList position(long position) {
         return (AVDeviceInfoList)super.position(position);
     }
 
@@ -607,16 +607,16 @@ public static class AVDeviceInfoList extends Pointer {
  * @param [out] device_list list of autodetected devices.
  * @return count of autodetected devices, negative on error.
  */
-public static native int avdevice_list_devices(AVFormatContext s, @Cast("AVDeviceInfoList**") PointerPointer device_list);
-public static native int avdevice_list_devices(AVFormatContext s, @ByPtrPtr AVDeviceInfoList device_list);
+@NoException public static native int avdevice_list_devices(AVFormatContext s, @Cast("AVDeviceInfoList**") PointerPointer device_list);
+@NoException public static native int avdevice_list_devices(AVFormatContext s, @ByPtrPtr AVDeviceInfoList device_list);
 
 /**
  * Convenient function to free result of avdevice_list_devices().
  *
  * @param devices device list to be freed.
  */
-public static native void avdevice_free_list_devices(@Cast("AVDeviceInfoList**") PointerPointer device_list);
-public static native void avdevice_free_list_devices(@ByPtrPtr AVDeviceInfoList device_list);
+@NoException public static native void avdevice_free_list_devices(@Cast("AVDeviceInfoList**") PointerPointer device_list);
+@NoException public static native void avdevice_free_list_devices(@ByPtrPtr AVDeviceInfoList device_list);
 
 /**
  * List devices.
@@ -635,17 +635,17 @@ public static native void avdevice_free_list_devices(@ByPtrPtr AVDeviceInfoList 
  * @return count of autodetected devices, negative on error.
  * \note device argument takes precedence over device_name when both are set.
  */
-public static native int avdevice_list_input_sources(AVInputFormat device, @Cast("const char*") BytePointer device_name,
+@NoException public static native int avdevice_list_input_sources(AVInputFormat device, @Cast("const char*") BytePointer device_name,
                                 AVDictionary device_options, @Cast("AVDeviceInfoList**") PointerPointer device_list);
-public static native int avdevice_list_input_sources(AVInputFormat device, @Cast("const char*") BytePointer device_name,
+@NoException public static native int avdevice_list_input_sources(AVInputFormat device, @Cast("const char*") BytePointer device_name,
                                 AVDictionary device_options, @ByPtrPtr AVDeviceInfoList device_list);
-public static native int avdevice_list_input_sources(AVInputFormat device, String device_name,
+@NoException public static native int avdevice_list_input_sources(AVInputFormat device, String device_name,
                                 AVDictionary device_options, @ByPtrPtr AVDeviceInfoList device_list);
-public static native int avdevice_list_output_sinks(AVOutputFormat device, @Cast("const char*") BytePointer device_name,
+@NoException public static native int avdevice_list_output_sinks(AVOutputFormat device, @Cast("const char*") BytePointer device_name,
                                AVDictionary device_options, @Cast("AVDeviceInfoList**") PointerPointer device_list);
-public static native int avdevice_list_output_sinks(AVOutputFormat device, @Cast("const char*") BytePointer device_name,
+@NoException public static native int avdevice_list_output_sinks(AVOutputFormat device, @Cast("const char*") BytePointer device_name,
                                AVDictionary device_options, @ByPtrPtr AVDeviceInfoList device_list);
-public static native int avdevice_list_output_sinks(AVOutputFormat device, String device_name,
+@NoException public static native int avdevice_list_output_sinks(AVOutputFormat device, String device_name,
                                AVDictionary device_options, @ByPtrPtr AVDeviceInfoList device_list);
 
 // #endif /* AVDEVICE_AVDEVICE_H */

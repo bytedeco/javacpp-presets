@@ -70,8 +70,8 @@ public static final int PGRFLYCAPTURE_VERSION = 108107;
 //   Context pointer for the PGRFlyCapture library.
 //
 @Namespace @Name("void") @Opaque public static class FlyCaptureContext extends Pointer {
-    /** Empty constructor. */
-    public FlyCaptureContext() { }
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public FlyCaptureContext() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlyCaptureContext(Pointer p) { super(p); }
 }
@@ -417,13 +417,13 @@ public static class FlyCaptureInfoEx extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public FlyCaptureInfoEx() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FlyCaptureInfoEx(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FlyCaptureInfoEx(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlyCaptureInfoEx(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FlyCaptureInfoEx position(int position) {
+    private native void allocateArray(long size);
+    @Override public FlyCaptureInfoEx position(long position) {
         return (FlyCaptureInfoEx)super.position(position);
     }
 
@@ -467,13 +467,13 @@ public static class FlyCaptureDriverInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public FlyCaptureDriverInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FlyCaptureDriverInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FlyCaptureDriverInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlyCaptureDriverInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FlyCaptureDriverInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public FlyCaptureDriverInfo position(long position) {
         return (FlyCaptureDriverInfo)super.position(position);
     }
 
@@ -623,13 +623,13 @@ public static class FlyCaptureTimestamp extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public FlyCaptureTimestamp() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FlyCaptureTimestamp(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FlyCaptureTimestamp(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlyCaptureTimestamp(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FlyCaptureTimestamp position(int position) {
+    private native void allocateArray(long size);
+    @Override public FlyCaptureTimestamp position(long position) {
         return (FlyCaptureTimestamp)super.position(position);
     }
 
@@ -660,13 +660,13 @@ public static class FlyCaptureImage extends AbstractFlyCaptureImage {
     static { Loader.load(); }
     /** Default native constructor. */
     public FlyCaptureImage() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FlyCaptureImage(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FlyCaptureImage(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlyCaptureImage(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FlyCaptureImage position(int position) {
+    private native void allocateArray(long size);
+    @Override public FlyCaptureImage position(long position) {
         return (FlyCaptureImage)super.position(position);
     }
 
@@ -1076,6 +1076,11 @@ public static native @Cast("FlyCaptureError") int flycaptureCheckVideoMode(
 			 @Cast("FlyCaptureVideoMode") int videoMode,
 			 @Cast("FlyCaptureFrameRate") int frameRate,
 			 @Cast("bool*") BoolPointer pbSupported );
+public static native @Cast("FlyCaptureError") int flycaptureCheckVideoMode(
+			 FlyCaptureContext context,
+			 @Cast("FlyCaptureVideoMode") int videoMode,
+			 @Cast("FlyCaptureFrameRate") int frameRate,
+			 @Cast("bool*") boolean[] pbSupported );
 
 
 //-----------------------------------------------------------------------------
@@ -1360,7 +1365,7 @@ public static native @Cast("FlyCaptureError") int flycaptureQueryCustomImage(
 public static native @Cast("FlyCaptureError") int flycaptureQueryCustomImage(
 			   FlyCaptureContext context,
 			   @Cast("unsigned int") int uiMode,
-			   @Cast("bool*") BoolPointer pbAvailable,
+			   @Cast("bool*") boolean[] pbAvailable,
 			   @Cast("unsigned int*") IntBuffer puiMaxImagePixelsWidth,
 			   @Cast("unsigned int*") IntBuffer puiMaxImagePixelsHeight,
 			   @Cast("unsigned int*") IntBuffer puiPixelUnitHorz,
@@ -1370,6 +1375,33 @@ public static native @Cast("FlyCaptureError") int flycaptureQueryCustomImage(
 			   FlyCaptureContext context,
 			   @Cast("unsigned int") int uiMode,
 			   @Cast("bool*") BoolPointer pbAvailable,
+			   @Cast("unsigned int*") int[] puiMaxImagePixelsWidth,
+			   @Cast("unsigned int*") int[] puiMaxImagePixelsHeight,
+			   @Cast("unsigned int*") int[] puiPixelUnitHorz,
+			   @Cast("unsigned int*") int[] puiPixelUnitVert,
+                           @Cast("unsigned int*") int[] puiPixelFormats );
+public static native @Cast("FlyCaptureError") int flycaptureQueryCustomImage(
+			   FlyCaptureContext context,
+			   @Cast("unsigned int") int uiMode,
+			   @Cast("bool*") boolean[] pbAvailable,
+			   @Cast("unsigned int*") IntPointer puiMaxImagePixelsWidth,
+			   @Cast("unsigned int*") IntPointer puiMaxImagePixelsHeight,
+			   @Cast("unsigned int*") IntPointer puiPixelUnitHorz,
+			   @Cast("unsigned int*") IntPointer puiPixelUnitVert,
+                           @Cast("unsigned int*") IntPointer puiPixelFormats );
+public static native @Cast("FlyCaptureError") int flycaptureQueryCustomImage(
+			   FlyCaptureContext context,
+			   @Cast("unsigned int") int uiMode,
+			   @Cast("bool*") BoolPointer pbAvailable,
+			   @Cast("unsigned int*") IntBuffer puiMaxImagePixelsWidth,
+			   @Cast("unsigned int*") IntBuffer puiMaxImagePixelsHeight,
+			   @Cast("unsigned int*") IntBuffer puiPixelUnitHorz,
+			   @Cast("unsigned int*") IntBuffer puiPixelUnitVert,
+                           @Cast("unsigned int*") IntBuffer puiPixelFormats );
+public static native @Cast("FlyCaptureError") int flycaptureQueryCustomImage(
+			   FlyCaptureContext context,
+			   @Cast("unsigned int") int uiMode,
+			   @Cast("bool*") boolean[] pbAvailable,
 			   @Cast("unsigned int*") int[] puiMaxImagePixelsWidth,
 			   @Cast("unsigned int*") int[] puiMaxImagePixelsHeight,
 			   @Cast("unsigned int*") int[] puiPixelUnitHorz,
@@ -1425,7 +1457,7 @@ public static native @Cast("FlyCaptureError") int flycaptureQueryCustomImageEx(
 public static native @Cast("FlyCaptureError") int flycaptureQueryCustomImageEx(
 			   FlyCaptureContext context,
 			   @Cast("unsigned int") int uiMode,
-			   @Cast("bool*") BoolPointer pbAvailable,
+			   @Cast("bool*") boolean[] pbAvailable,
 			   @Cast("unsigned int*") IntBuffer puiMaxImagePixelsWidth,
 			   @Cast("unsigned int*") IntBuffer puiMaxImagePixelsHeight,
 			   @Cast("unsigned int*") IntBuffer puiPixelUnitHorz,
@@ -1437,6 +1469,39 @@ public static native @Cast("FlyCaptureError") int flycaptureQueryCustomImageEx(
 			   FlyCaptureContext context,
 			   @Cast("unsigned int") int uiMode,
 			   @Cast("bool*") BoolPointer pbAvailable,
+			   @Cast("unsigned int*") int[] puiMaxImagePixelsWidth,
+			   @Cast("unsigned int*") int[] puiMaxImagePixelsHeight,
+			   @Cast("unsigned int*") int[] puiPixelUnitHorz,
+			   @Cast("unsigned int*") int[] puiPixelUnitVert,
+                           @Cast("unsigned int*") int[] puiOffsetUnitHorz,
+                           @Cast("unsigned int*") int[] puiOffsetUnitVert,
+                           @Cast("unsigned int*") int[] puiPixelFormats );
+public static native @Cast("FlyCaptureError") int flycaptureQueryCustomImageEx(
+			   FlyCaptureContext context,
+			   @Cast("unsigned int") int uiMode,
+			   @Cast("bool*") boolean[] pbAvailable,
+			   @Cast("unsigned int*") IntPointer puiMaxImagePixelsWidth,
+			   @Cast("unsigned int*") IntPointer puiMaxImagePixelsHeight,
+			   @Cast("unsigned int*") IntPointer puiPixelUnitHorz,
+			   @Cast("unsigned int*") IntPointer puiPixelUnitVert,
+                           @Cast("unsigned int*") IntPointer puiOffsetUnitHorz,
+                           @Cast("unsigned int*") IntPointer puiOffsetUnitVert,
+                           @Cast("unsigned int*") IntPointer puiPixelFormats );
+public static native @Cast("FlyCaptureError") int flycaptureQueryCustomImageEx(
+			   FlyCaptureContext context,
+			   @Cast("unsigned int") int uiMode,
+			   @Cast("bool*") BoolPointer pbAvailable,
+			   @Cast("unsigned int*") IntBuffer puiMaxImagePixelsWidth,
+			   @Cast("unsigned int*") IntBuffer puiMaxImagePixelsHeight,
+			   @Cast("unsigned int*") IntBuffer puiPixelUnitHorz,
+			   @Cast("unsigned int*") IntBuffer puiPixelUnitVert,
+                           @Cast("unsigned int*") IntBuffer puiOffsetUnitHorz,
+                           @Cast("unsigned int*") IntBuffer puiOffsetUnitVert,
+                           @Cast("unsigned int*") IntBuffer puiPixelFormats );
+public static native @Cast("FlyCaptureError") int flycaptureQueryCustomImageEx(
+			   FlyCaptureContext context,
+			   @Cast("unsigned int") int uiMode,
+			   @Cast("bool*") boolean[] pbAvailable,
 			   @Cast("unsigned int*") int[] puiMaxImagePixelsWidth,
 			   @Cast("unsigned int*") int[] puiMaxImagePixelsHeight,
 			   @Cast("unsigned int*") int[] puiPixelUnitHorz,
@@ -1816,12 +1881,12 @@ public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyRan
 public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyRange(
 				 FlyCaptureContext context,
 				 @Cast("FlyCaptureProperty") int cameraProperty,
-				 @Cast("bool*") BoolPointer pbPresent,
+				 @Cast("bool*") boolean[] pbPresent,
 				 @Cast("long*") IntBuffer plMin,
 				 @Cast("long*") IntBuffer plMax,
 				 @Cast("long*") IntBuffer plDefault,
-				 @Cast("bool*") BoolPointer pbAuto,
-				 @Cast("bool*") BoolPointer pbManual );
+				 @Cast("bool*") boolean[] pbAuto,
+				 @Cast("bool*") boolean[] pbManual );
 public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyRange(
 				 FlyCaptureContext context,
 				 @Cast("FlyCaptureProperty") int cameraProperty,
@@ -1831,6 +1896,33 @@ public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyRan
 				 @Cast("long*") int[] plDefault,
 				 @Cast("bool*") BoolPointer pbAuto,
 				 @Cast("bool*") BoolPointer pbManual );
+public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyRange(
+				 FlyCaptureContext context,
+				 @Cast("FlyCaptureProperty") int cameraProperty,
+				 @Cast("bool*") boolean[] pbPresent,
+				 @Cast("long*") IntPointer plMin,
+				 @Cast("long*") IntPointer plMax,
+				 @Cast("long*") IntPointer plDefault,
+				 @Cast("bool*") boolean[] pbAuto,
+				 @Cast("bool*") boolean[] pbManual );
+public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyRange(
+				 FlyCaptureContext context,
+				 @Cast("FlyCaptureProperty") int cameraProperty,
+				 @Cast("bool*") BoolPointer pbPresent,
+				 @Cast("long*") IntBuffer plMin,
+				 @Cast("long*") IntBuffer plMax,
+				 @Cast("long*") IntBuffer plDefault,
+				 @Cast("bool*") BoolPointer pbAuto,
+				 @Cast("bool*") BoolPointer pbManual );
+public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyRange(
+				 FlyCaptureContext context,
+				 @Cast("FlyCaptureProperty") int cameraProperty,
+				 @Cast("bool*") boolean[] pbPresent,
+				 @Cast("long*") int[] plMin,
+				 @Cast("long*") int[] plMax,
+				 @Cast("long*") int[] plDefault,
+				 @Cast("bool*") boolean[] pbAuto,
+				 @Cast("bool*") boolean[] pbManual );
 
 
 //-----------------------------------------------------------------------------
@@ -1868,13 +1960,31 @@ public static native @Cast("FlyCaptureError") int flycaptureGetCameraProperty(
 			    @Cast("FlyCaptureProperty") int cameraProperty,
 			    @Cast("long*") IntBuffer plValueA,
 			    @Cast("long*") IntBuffer plValueB,
-			    @Cast("bool*") BoolPointer pbAuto );
+			    @Cast("bool*") boolean[] pbAuto );
 public static native @Cast("FlyCaptureError") int flycaptureGetCameraProperty(
 			    FlyCaptureContext context,
 			    @Cast("FlyCaptureProperty") int cameraProperty,
 			    @Cast("long*") int[] plValueA,
 			    @Cast("long*") int[] plValueB,
 			    @Cast("bool*") BoolPointer pbAuto );
+public static native @Cast("FlyCaptureError") int flycaptureGetCameraProperty(
+			    FlyCaptureContext context,
+			    @Cast("FlyCaptureProperty") int cameraProperty,
+			    @Cast("long*") IntPointer plValueA,
+			    @Cast("long*") IntPointer plValueB,
+			    @Cast("bool*") boolean[] pbAuto );
+public static native @Cast("FlyCaptureError") int flycaptureGetCameraProperty(
+			    FlyCaptureContext context,
+			    @Cast("FlyCaptureProperty") int cameraProperty,
+			    @Cast("long*") IntBuffer plValueA,
+			    @Cast("long*") IntBuffer plValueB,
+			    @Cast("bool*") BoolPointer pbAuto );
+public static native @Cast("FlyCaptureError") int flycaptureGetCameraProperty(
+			    FlyCaptureContext context,
+			    @Cast("FlyCaptureProperty") int cameraProperty,
+			    @Cast("long*") int[] plValueA,
+			    @Cast("long*") int[] plValueB,
+			    @Cast("bool*") boolean[] pbAuto );
 
 
 //-----------------------------------------------------------------------------
@@ -1990,12 +2100,12 @@ public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyRan
 public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyRangeEx(
                                    FlyCaptureContext context,
                                    @Cast("FlyCaptureProperty") int cameraProperty,
-                                   @Cast("bool*") BoolPointer pbPresent,
-                                   @Cast("bool*") BoolPointer pbOnePush,
-                                   @Cast("bool*") BoolPointer pbReadOut,
-                                   @Cast("bool*") BoolPointer pbOnOff,
-                                   @Cast("bool*") BoolPointer pbAuto,
-                                   @Cast("bool*") BoolPointer pbManual,
+                                   @Cast("bool*") boolean[] pbPresent,
+                                   @Cast("bool*") boolean[] pbOnePush,
+                                   @Cast("bool*") boolean[] pbReadOut,
+                                   @Cast("bool*") boolean[] pbOnOff,
+                                   @Cast("bool*") boolean[] pbAuto,
+                                   @Cast("bool*") boolean[] pbManual,
                                    IntBuffer piMin,
                                    IntBuffer piMax );
 public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyRangeEx(
@@ -2007,6 +2117,39 @@ public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyRan
                                    @Cast("bool*") BoolPointer pbOnOff,
                                    @Cast("bool*") BoolPointer pbAuto,
                                    @Cast("bool*") BoolPointer pbManual,
+                                   int[] piMin,
+                                   int[] piMax );
+public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyRangeEx(
+                                   FlyCaptureContext context,
+                                   @Cast("FlyCaptureProperty") int cameraProperty,
+                                   @Cast("bool*") boolean[] pbPresent,
+                                   @Cast("bool*") boolean[] pbOnePush,
+                                   @Cast("bool*") boolean[] pbReadOut,
+                                   @Cast("bool*") boolean[] pbOnOff,
+                                   @Cast("bool*") boolean[] pbAuto,
+                                   @Cast("bool*") boolean[] pbManual,
+                                   IntPointer piMin,
+                                   IntPointer piMax );
+public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyRangeEx(
+                                   FlyCaptureContext context,
+                                   @Cast("FlyCaptureProperty") int cameraProperty,
+                                   @Cast("bool*") BoolPointer pbPresent,
+                                   @Cast("bool*") BoolPointer pbOnePush,
+                                   @Cast("bool*") BoolPointer pbReadOut,
+                                   @Cast("bool*") BoolPointer pbOnOff,
+                                   @Cast("bool*") BoolPointer pbAuto,
+                                   @Cast("bool*") BoolPointer pbManual,
+                                   IntBuffer piMin,
+                                   IntBuffer piMax );
+public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyRangeEx(
+                                   FlyCaptureContext context,
+                                   @Cast("FlyCaptureProperty") int cameraProperty,
+                                   @Cast("bool*") boolean[] pbPresent,
+                                   @Cast("bool*") boolean[] pbOnePush,
+                                   @Cast("bool*") boolean[] pbReadOut,
+                                   @Cast("bool*") boolean[] pbOnOff,
+                                   @Cast("bool*") boolean[] pbAuto,
+                                   @Cast("bool*") boolean[] pbManual,
                                    int[] piMin,
                                    int[] piMax );
 
@@ -2047,9 +2190,9 @@ public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyEx(
 public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyEx(
                               FlyCaptureContext context,
                               @Cast("FlyCaptureProperty") int cameraProperty,
-                              @Cast("bool*") BoolPointer pbOnePush,
-                              @Cast("bool*") BoolPointer pbOnOff,
-                              @Cast("bool*") BoolPointer pbAuto,
+                              @Cast("bool*") boolean[] pbOnePush,
+                              @Cast("bool*") boolean[] pbOnOff,
+                              @Cast("bool*") boolean[] pbAuto,
                               IntBuffer piValueA,
                               IntBuffer piValueB );
 public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyEx(
@@ -2058,6 +2201,30 @@ public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyEx(
                               @Cast("bool*") BoolPointer pbOnePush,
                               @Cast("bool*") BoolPointer pbOnOff,
                               @Cast("bool*") BoolPointer pbAuto,
+                              int[] piValueA,
+                              int[] piValueB );
+public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyEx(
+                              FlyCaptureContext context,
+                              @Cast("FlyCaptureProperty") int cameraProperty,
+                              @Cast("bool*") boolean[] pbOnePush,
+                              @Cast("bool*") boolean[] pbOnOff,
+                              @Cast("bool*") boolean[] pbAuto,
+                              IntPointer piValueA,
+                              IntPointer piValueB );
+public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyEx(
+                              FlyCaptureContext context,
+                              @Cast("FlyCaptureProperty") int cameraProperty,
+                              @Cast("bool*") BoolPointer pbOnePush,
+                              @Cast("bool*") BoolPointer pbOnOff,
+                              @Cast("bool*") BoolPointer pbAuto,
+                              IntBuffer piValueA,
+                              IntBuffer piValueB );
+public static native @Cast("FlyCaptureError") int flycaptureGetCameraPropertyEx(
+                              FlyCaptureContext context,
+                              @Cast("FlyCaptureProperty") int cameraProperty,
+                              @Cast("bool*") boolean[] pbOnePush,
+                              @Cast("bool*") boolean[] pbOnOff,
+                              @Cast("bool*") boolean[] pbAuto,
                               int[] piValueA,
                               int[] piValueB );
 
@@ -2169,7 +2336,7 @@ public static native @Cast("FlyCaptureError") int flycaptureGetCameraAbsProperty
 public static native @Cast("FlyCaptureError") int flycaptureGetCameraAbsPropertyRange(
 				    FlyCaptureContext context,
 				    @Cast("FlyCaptureProperty") int cameraProperty,
-				    @Cast("bool*") BoolPointer pbPresent,
+				    @Cast("bool*") boolean[] pbPresent,
 				    FloatBuffer pfMin,
 				    FloatBuffer pfMax,
 				    @Cast("const char**") @ByPtrPtr ByteBuffer ppszUnits,
@@ -2178,6 +2345,30 @@ public static native @Cast("FlyCaptureError") int flycaptureGetCameraAbsProperty
 				    FlyCaptureContext context,
 				    @Cast("FlyCaptureProperty") int cameraProperty,
 				    @Cast("bool*") BoolPointer pbPresent,
+				    float[] pfMin,
+				    float[] pfMax,
+				    @Cast("const char**") @ByPtrPtr byte[] ppszUnits,
+				    @Cast("const char**") @ByPtrPtr byte[] ppszUnitAbbr );
+public static native @Cast("FlyCaptureError") int flycaptureGetCameraAbsPropertyRange(
+				    FlyCaptureContext context,
+				    @Cast("FlyCaptureProperty") int cameraProperty,
+				    @Cast("bool*") boolean[] pbPresent,
+				    FloatPointer pfMin,
+				    FloatPointer pfMax,
+				    @Cast("const char**") @ByPtrPtr BytePointer ppszUnits,
+				    @Cast("const char**") @ByPtrPtr BytePointer ppszUnitAbbr );
+public static native @Cast("FlyCaptureError") int flycaptureGetCameraAbsPropertyRange(
+				    FlyCaptureContext context,
+				    @Cast("FlyCaptureProperty") int cameraProperty,
+				    @Cast("bool*") BoolPointer pbPresent,
+				    FloatBuffer pfMin,
+				    FloatBuffer pfMax,
+				    @Cast("const char**") @ByPtrPtr ByteBuffer ppszUnits,
+				    @Cast("const char**") @ByPtrPtr ByteBuffer ppszUnitAbbr );
+public static native @Cast("FlyCaptureError") int flycaptureGetCameraAbsPropertyRange(
+				    FlyCaptureContext context,
+				    @Cast("FlyCaptureProperty") int cameraProperty,
+				    @Cast("bool*") boolean[] pbPresent,
 				    float[] pfMin,
 				    float[] pfMax,
 				    @Cast("const char**") @ByPtrPtr byte[] ppszUnits,
@@ -2250,9 +2441,9 @@ public static native @Cast("FlyCaptureError") int flycaptureGetCameraAbsProperty
 public static native @Cast("FlyCaptureError") int flycaptureGetCameraAbsPropertyEx(
                                FlyCaptureContext context,
                                @Cast("FlyCaptureProperty") int cameraProperty,
-                               @Cast("bool*") BoolPointer pbOnePush,
-                               @Cast("bool*") BoolPointer pbOnOff,
-                               @Cast("bool*") BoolPointer pbAuto,
+                               @Cast("bool*") boolean[] pbOnePush,
+                               @Cast("bool*") boolean[] pbOnOff,
+                               @Cast("bool*") boolean[] pbAuto,
                                FloatBuffer pfValue );
 public static native @Cast("FlyCaptureError") int flycaptureGetCameraAbsPropertyEx(
                                FlyCaptureContext context,
@@ -2260,6 +2451,27 @@ public static native @Cast("FlyCaptureError") int flycaptureGetCameraAbsProperty
                                @Cast("bool*") BoolPointer pbOnePush,
                                @Cast("bool*") BoolPointer pbOnOff,
                                @Cast("bool*") BoolPointer pbAuto,
+                               float[] pfValue );
+public static native @Cast("FlyCaptureError") int flycaptureGetCameraAbsPropertyEx(
+                               FlyCaptureContext context,
+                               @Cast("FlyCaptureProperty") int cameraProperty,
+                               @Cast("bool*") boolean[] pbOnePush,
+                               @Cast("bool*") boolean[] pbOnOff,
+                               @Cast("bool*") boolean[] pbAuto,
+                               FloatPointer pfValue );
+public static native @Cast("FlyCaptureError") int flycaptureGetCameraAbsPropertyEx(
+                               FlyCaptureContext context,
+                               @Cast("FlyCaptureProperty") int cameraProperty,
+                               @Cast("bool*") BoolPointer pbOnePush,
+                               @Cast("bool*") BoolPointer pbOnOff,
+                               @Cast("bool*") BoolPointer pbAuto,
+                               FloatBuffer pfValue );
+public static native @Cast("FlyCaptureError") int flycaptureGetCameraAbsPropertyEx(
+                               FlyCaptureContext context,
+                               @Cast("FlyCaptureProperty") int cameraProperty,
+                               @Cast("bool*") boolean[] pbOnePush,
+                               @Cast("bool*") boolean[] pbOnOff,
+                               @Cast("bool*") boolean[] pbAuto,
                                float[] pfValue );
 
 
@@ -2652,13 +2864,13 @@ public static native @Cast("FlyCaptureError") int flycaptureQueryTrigger(
                        @Cast("unsigned int*") IntPointer puiModeMask );
 public static native @Cast("FlyCaptureError") int flycaptureQueryTrigger(
                        FlyCaptureContext context,
-                       @Cast("bool*") BoolPointer pbPresent,
-                       @Cast("bool*") BoolPointer pbReadOut,
-                       @Cast("bool*") BoolPointer pbOnOff,
-                       @Cast("bool*") BoolPointer pbPolarity,
-                       @Cast("bool*") BoolPointer pbValueRead,
+                       @Cast("bool*") boolean[] pbPresent,
+                       @Cast("bool*") boolean[] pbReadOut,
+                       @Cast("bool*") boolean[] pbOnOff,
+                       @Cast("bool*") boolean[] pbPolarity,
+                       @Cast("bool*") boolean[] pbValueRead,
                        @Cast("unsigned int*") IntBuffer puiSourceMask,
-                       @Cast("bool*") BoolPointer pbSoftwareTrigger,
+                       @Cast("bool*") boolean[] pbSoftwareTrigger,
                        @Cast("unsigned int*") IntBuffer puiModeMask );
 public static native @Cast("FlyCaptureError") int flycaptureQueryTrigger(
                        FlyCaptureContext context,
@@ -2669,6 +2881,36 @@ public static native @Cast("FlyCaptureError") int flycaptureQueryTrigger(
                        @Cast("bool*") BoolPointer pbValueRead,
                        @Cast("unsigned int*") int[] puiSourceMask,
                        @Cast("bool*") BoolPointer pbSoftwareTrigger,
+                       @Cast("unsigned int*") int[] puiModeMask );
+public static native @Cast("FlyCaptureError") int flycaptureQueryTrigger(
+                       FlyCaptureContext context,
+                       @Cast("bool*") boolean[] pbPresent,
+                       @Cast("bool*") boolean[] pbReadOut,
+                       @Cast("bool*") boolean[] pbOnOff,
+                       @Cast("bool*") boolean[] pbPolarity,
+                       @Cast("bool*") boolean[] pbValueRead,
+                       @Cast("unsigned int*") IntPointer puiSourceMask,
+                       @Cast("bool*") boolean[] pbSoftwareTrigger,
+                       @Cast("unsigned int*") IntPointer puiModeMask );
+public static native @Cast("FlyCaptureError") int flycaptureQueryTrigger(
+                       FlyCaptureContext context,
+                       @Cast("bool*") BoolPointer pbPresent,
+                       @Cast("bool*") BoolPointer pbReadOut,
+                       @Cast("bool*") BoolPointer pbOnOff,
+                       @Cast("bool*") BoolPointer pbPolarity,
+                       @Cast("bool*") BoolPointer pbValueRead,
+                       @Cast("unsigned int*") IntBuffer puiSourceMask,
+                       @Cast("bool*") BoolPointer pbSoftwareTrigger,
+                       @Cast("unsigned int*") IntBuffer puiModeMask );
+public static native @Cast("FlyCaptureError") int flycaptureQueryTrigger(
+                       FlyCaptureContext context,
+                       @Cast("bool*") boolean[] pbPresent,
+                       @Cast("bool*") boolean[] pbReadOut,
+                       @Cast("bool*") boolean[] pbOnOff,
+                       @Cast("bool*") boolean[] pbPolarity,
+                       @Cast("bool*") boolean[] pbValueRead,
+                       @Cast("unsigned int*") int[] puiSourceMask,
+                       @Cast("bool*") boolean[] pbSoftwareTrigger,
                        @Cast("unsigned int*") int[] puiModeMask );
 
 
@@ -2703,7 +2945,7 @@ public static native @Cast("FlyCaptureError") int flycaptureGetTrigger(
                      IntPointer piParameter );
 public static native @Cast("FlyCaptureError") int flycaptureGetTrigger(
                      FlyCaptureContext context,
-                     @Cast("bool*") BoolPointer pbOnOff,
+                     @Cast("bool*") boolean[] pbOnOff,
                      IntBuffer piPolarity,
                      IntBuffer piSource,
                      IntBuffer piRawValue,
@@ -2712,6 +2954,30 @@ public static native @Cast("FlyCaptureError") int flycaptureGetTrigger(
 public static native @Cast("FlyCaptureError") int flycaptureGetTrigger(
                      FlyCaptureContext context,
                      @Cast("bool*") BoolPointer pbOnOff,
+                     int[] piPolarity,
+                     int[] piSource,
+                     int[] piRawValue,
+                     int[] piMode,
+                     int[] piParameter );
+public static native @Cast("FlyCaptureError") int flycaptureGetTrigger(
+                     FlyCaptureContext context,
+                     @Cast("bool*") boolean[] pbOnOff,
+                     IntPointer piPolarity,
+                     IntPointer piSource,
+                     IntPointer piRawValue,
+                     IntPointer piMode,
+                     IntPointer piParameter );
+public static native @Cast("FlyCaptureError") int flycaptureGetTrigger(
+                     FlyCaptureContext context,
+                     @Cast("bool*") BoolPointer pbOnOff,
+                     IntBuffer piPolarity,
+                     IntBuffer piSource,
+                     IntBuffer piRawValue,
+                     IntBuffer piMode,
+                     IntBuffer piParameter );
+public static native @Cast("FlyCaptureError") int flycaptureGetTrigger(
+                     FlyCaptureContext context,
+                     @Cast("bool*") boolean[] pbOnOff,
                      int[] piPolarity,
                      int[] piSource,
                      int[] piRawValue,
@@ -2808,8 +3074,8 @@ public static native @Cast("FlyCaptureError") int flycaptureGetStrobe(
 public static native @Cast("FlyCaptureError") int flycaptureGetStrobe(
                     FlyCaptureContext context,
                     int iSource,
-                    @Cast("bool*") BoolPointer pbOnOff,
-                    @Cast("bool*") BoolPointer pbPolarityActiveLow,
+                    @Cast("bool*") boolean[] pbOnOff,
+                    @Cast("bool*") boolean[] pbPolarityActiveLow,
                     IntBuffer piDelay,
                     IntBuffer piDuration );
 public static native @Cast("FlyCaptureError") int flycaptureGetStrobe(
@@ -2817,6 +3083,27 @@ public static native @Cast("FlyCaptureError") int flycaptureGetStrobe(
                     int iSource,
                     @Cast("bool*") BoolPointer pbOnOff,
                     @Cast("bool*") BoolPointer pbPolarityActiveLow,
+                    int[] piDelay,
+                    int[] piDuration );
+public static native @Cast("FlyCaptureError") int flycaptureGetStrobe(
+                    FlyCaptureContext context,
+                    int iSource,
+                    @Cast("bool*") boolean[] pbOnOff,
+                    @Cast("bool*") boolean[] pbPolarityActiveLow,
+                    IntPointer piDelay,
+                    IntPointer piDuration );
+public static native @Cast("FlyCaptureError") int flycaptureGetStrobe(
+                    FlyCaptureContext context,
+                    int iSource,
+                    @Cast("bool*") BoolPointer pbOnOff,
+                    @Cast("bool*") BoolPointer pbPolarityActiveLow,
+                    IntBuffer piDelay,
+                    IntBuffer piDuration );
+public static native @Cast("FlyCaptureError") int flycaptureGetStrobe(
+                    FlyCaptureContext context,
+                    int iSource,
+                    @Cast("bool*") boolean[] pbOnOff,
+                    @Cast("bool*") boolean[] pbPolarityActiveLow,
                     int[] piDelay,
                     int[] piDuration );
 
@@ -2907,10 +3194,10 @@ public static native @Cast("FlyCaptureError") int flycaptureQueryStrobe(
 public static native @Cast("FlyCaptureError") int flycaptureQueryStrobe(
                       FlyCaptureContext context,
                       int iSource,
-                      @Cast("bool*") BoolPointer pbAvailable,
-                      @Cast("bool*") BoolPointer pbReadOut,
-                      @Cast("bool*") BoolPointer pbOnOff,
-                      @Cast("bool*") BoolPointer pbPolarity,
+                      @Cast("bool*") boolean[] pbAvailable,
+                      @Cast("bool*") boolean[] pbReadOut,
+                      @Cast("bool*") boolean[] pbOnOff,
+                      @Cast("bool*") boolean[] pbPolarity,
                       IntBuffer piMinValue,
                       IntBuffer piMaxValue );
 public static native @Cast("FlyCaptureError") int flycaptureQueryStrobe(
@@ -2920,6 +3207,33 @@ public static native @Cast("FlyCaptureError") int flycaptureQueryStrobe(
                       @Cast("bool*") BoolPointer pbReadOut,
                       @Cast("bool*") BoolPointer pbOnOff,
                       @Cast("bool*") BoolPointer pbPolarity,
+                      int[] piMinValue,
+                      int[] piMaxValue );
+public static native @Cast("FlyCaptureError") int flycaptureQueryStrobe(
+                      FlyCaptureContext context,
+                      int iSource,
+                      @Cast("bool*") boolean[] pbAvailable,
+                      @Cast("bool*") boolean[] pbReadOut,
+                      @Cast("bool*") boolean[] pbOnOff,
+                      @Cast("bool*") boolean[] pbPolarity,
+                      IntPointer piMinValue,
+                      IntPointer piMaxValue );
+public static native @Cast("FlyCaptureError") int flycaptureQueryStrobe(
+                      FlyCaptureContext context,
+                      int iSource,
+                      @Cast("bool*") BoolPointer pbAvailable,
+                      @Cast("bool*") BoolPointer pbReadOut,
+                      @Cast("bool*") BoolPointer pbOnOff,
+                      @Cast("bool*") BoolPointer pbPolarity,
+                      IntBuffer piMinValue,
+                      IntBuffer piMaxValue );
+public static native @Cast("FlyCaptureError") int flycaptureQueryStrobe(
+                      FlyCaptureContext context,
+                      int iSource,
+                      @Cast("bool*") boolean[] pbAvailable,
+                      @Cast("bool*") boolean[] pbReadOut,
+                      @Cast("bool*") boolean[] pbOnOff,
+                      @Cast("bool*") boolean[] pbPolarity,
                       int[] piMinValue,
                       int[] piMaxValue );
 
@@ -2960,9 +3274,9 @@ public static native @Cast("FlyCaptureError") int flycaptureQueryLookUpTable(
                            @Cast("unsigned int*") IntPointer puiNumEntries );
 public static native @Cast("FlyCaptureError") int flycaptureQueryLookUpTable(
                            FlyCaptureContext context,
-                           @Cast("bool*") BoolPointer pbAvailable,
+                           @Cast("bool*") boolean[] pbAvailable,
                            @Cast("unsigned int*") IntBuffer puiNumChannels,
-                           @Cast("bool*") BoolPointer pbOn,
+                           @Cast("bool*") boolean[] pbOn,
                            @Cast("unsigned int*") IntBuffer puiBitDepth,
                            @Cast("unsigned int*") IntBuffer puiNumEntries );
 public static native @Cast("FlyCaptureError") int flycaptureQueryLookUpTable(
@@ -2970,6 +3284,27 @@ public static native @Cast("FlyCaptureError") int flycaptureQueryLookUpTable(
                            @Cast("bool*") BoolPointer pbAvailable,
                            @Cast("unsigned int*") int[] puiNumChannels,
                            @Cast("bool*") BoolPointer pbOn,
+                           @Cast("unsigned int*") int[] puiBitDepth,
+                           @Cast("unsigned int*") int[] puiNumEntries );
+public static native @Cast("FlyCaptureError") int flycaptureQueryLookUpTable(
+                           FlyCaptureContext context,
+                           @Cast("bool*") boolean[] pbAvailable,
+                           @Cast("unsigned int*") IntPointer puiNumChannels,
+                           @Cast("bool*") boolean[] pbOn,
+                           @Cast("unsigned int*") IntPointer puiBitDepth,
+                           @Cast("unsigned int*") IntPointer puiNumEntries );
+public static native @Cast("FlyCaptureError") int flycaptureQueryLookUpTable(
+                           FlyCaptureContext context,
+                           @Cast("bool*") BoolPointer pbAvailable,
+                           @Cast("unsigned int*") IntBuffer puiNumChannels,
+                           @Cast("bool*") BoolPointer pbOn,
+                           @Cast("unsigned int*") IntBuffer puiBitDepth,
+                           @Cast("unsigned int*") IntBuffer puiNumEntries );
+public static native @Cast("FlyCaptureError") int flycaptureQueryLookUpTable(
+                           FlyCaptureContext context,
+                           @Cast("bool*") boolean[] pbAvailable,
+                           @Cast("unsigned int*") int[] puiNumChannels,
+                           @Cast("bool*") boolean[] pbOn,
                            @Cast("unsigned int*") int[] puiBitDepth,
                            @Cast("unsigned int*") int[] puiNumEntries );
 
@@ -3114,13 +3449,13 @@ public static class FlyCaptureImagePlus extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public FlyCaptureImagePlus() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FlyCaptureImagePlus(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FlyCaptureImagePlus(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlyCaptureImagePlus(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FlyCaptureImagePlus position(int position) {
+    private native void allocateArray(long size);
+    @Override public FlyCaptureImagePlus position(long position) {
         return (FlyCaptureImagePlus)super.position(position);
     }
 
@@ -3178,13 +3513,13 @@ public static class FlyCaptureImageEvent extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public FlyCaptureImageEvent() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FlyCaptureImageEvent(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FlyCaptureImageEvent(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlyCaptureImageEvent(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FlyCaptureImageEvent position(int position) {
+    private native void allocateArray(long size);
+    @Override public FlyCaptureImageEvent position(long position) {
         return (FlyCaptureImageEvent)super.position(position);
     }
 
@@ -3243,13 +3578,13 @@ public static class FlyCapturePacketInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public FlyCapturePacketInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FlyCapturePacketInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FlyCapturePacketInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlyCapturePacketInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FlyCapturePacketInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public FlyCapturePacketInfo position(long position) {
         return (FlyCapturePacketInfo)super.position(position);
     }
 
@@ -3827,6 +4162,9 @@ public static native @Cast("FlyCaptureError") int flycaptureSetImageFilters(
 public static native @Cast("FlyCaptureError") int flycaptureGetImageTimestamping(
                                FlyCaptureContext context,
                                @Cast("bool*") BoolPointer pbOn );
+public static native @Cast("FlyCaptureError") int flycaptureGetImageTimestamping(
+                               FlyCaptureContext context,
+                               @Cast("bool*") boolean[] pbOn );
 
 
 //-----------------------------------------------------------------------------
@@ -4193,13 +4531,13 @@ public static class FlyCaptureSystemTime extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public FlyCaptureSystemTime() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FlyCaptureSystemTime(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FlyCaptureSystemTime(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlyCaptureSystemTime(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FlyCaptureSystemTime position(int position) {
+    private native void allocateArray(long size);
+    @Override public FlyCaptureSystemTime position(long position) {
         return (FlyCaptureSystemTime)super.position(position);
     }
 
@@ -4244,13 +4582,13 @@ public static class FlyCaptureMessage extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public FlyCaptureMessage() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FlyCaptureMessage(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FlyCaptureMessage(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlyCaptureMessage(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FlyCaptureMessage position(int position) {
+    private native void allocateArray(long size);
+    @Override public FlyCaptureMessage position(long position) {
         return (FlyCaptureMessage)super.position(position);
     }
 
@@ -4396,6 +4734,9 @@ public static native @Cast("FlyCaptureError") int flycaptureSetMessageLoggingSta
 public static native @Cast("FlyCaptureError") int flycaptureGetMessageLoggingStatus(
                                   FlyCaptureContext context, 
                                   @Cast("bool*") BoolPointer pbEnabled );
+public static native @Cast("FlyCaptureError") int flycaptureGetMessageLoggingStatus(
+                                  FlyCaptureContext context, 
+                                  @Cast("bool*") boolean[] pbEnabled );
 
 
 //-----------------------------------------------------------------------------

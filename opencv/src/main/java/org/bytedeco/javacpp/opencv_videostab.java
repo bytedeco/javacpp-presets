@@ -78,13 +78,13 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
     static { Loader.load(); }
     /** Default native constructor. */
     public IFrameSource() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public IFrameSource(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public IFrameSource(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IFrameSource(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public IFrameSource position(int position) {
+    private native void allocateArray(long size);
+    @Override public IFrameSource position(long position) {
         return (IFrameSource)super.position(position);
     }
 
@@ -96,13 +96,13 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
     static { Loader.load(); }
     /** Default native constructor. */
     public NullFrameSource() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NullFrameSource(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NullFrameSource(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NullFrameSource(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NullFrameSource position(int position) {
+    private native void allocateArray(long size);
+    @Override public NullFrameSource position(long position) {
         return (NullFrameSource)super.position(position);
     }
 
@@ -206,13 +206,13 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
     static { Loader.load(); }
     /** Default native constructor. */
     public NullLog() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NullLog(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NullLog(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NullLog(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NullLog position(int position) {
+    private native void allocateArray(long size);
+    @Override public NullLog position(long position) {
         return (NullLog)super.position(position);
     }
 
@@ -224,13 +224,13 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
     static { Loader.load(); }
     /** Default native constructor. */
     public LogToStdout() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public LogToStdout(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public LogToStdout(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LogToStdout(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public LogToStdout position(int position) {
+    private native void allocateArray(long size);
+    @Override public LogToStdout position(long position) {
         return (LogToStdout)super.position(position);
     }
 
@@ -309,10 +309,10 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FastMarchingMethod(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FastMarchingMethod(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public FastMarchingMethod position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FastMarchingMethod(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public FastMarchingMethod position(long position) {
         return (FastMarchingMethod)super.position(position);
     }
 
@@ -423,10 +423,10 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PyrLkOptFlowEstimatorBase(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PyrLkOptFlowEstimatorBase(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public PyrLkOptFlowEstimatorBase position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PyrLkOptFlowEstimatorBase(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public PyrLkOptFlowEstimatorBase position(long position) {
         return (PyrLkOptFlowEstimatorBase)super.position(position);
     }
 
@@ -444,13 +444,13 @@ public class opencv_videostab extends org.bytedeco.javacpp.presets.opencv_videos
     static { Loader.load(); }
     /** Default native constructor. */
     public SparsePyrLkOptFlowEstimator() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SparsePyrLkOptFlowEstimator(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public SparsePyrLkOptFlowEstimator(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SparsePyrLkOptFlowEstimator(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public SparsePyrLkOptFlowEstimator position(int position) {
+    private native void allocateArray(long size);
+    @Override public SparsePyrLkOptFlowEstimator position(long position) {
         return (SparsePyrLkOptFlowEstimator)super.position(position);
     }
     public ISparseOptFlowEstimator asISparseOptFlowEstimator() { return asISparseOptFlowEstimator(this); }
@@ -545,10 +545,10 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RansacParams(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public RansacParams(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public RansacParams position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public RansacParams(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public RansacParams position(long position) {
         return (RansacParams)super.position(position);
     }
 
@@ -662,13 +662,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public NullOutlierRejector() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NullOutlierRejector(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NullOutlierRejector(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NullOutlierRejector(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NullOutlierRejector position(int position) {
+    private native void allocateArray(long size);
+    @Override public NullOutlierRejector position(long position) {
         return (NullOutlierRejector)super.position(position);
     }
 
@@ -680,10 +680,10 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TranslationBasedLocalOutlierRejector(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public TranslationBasedLocalOutlierRejector(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public TranslationBasedLocalOutlierRejector position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TranslationBasedLocalOutlierRejector(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public TranslationBasedLocalOutlierRejector position(long position) {
         return (TranslationBasedLocalOutlierRejector)super.position(position);
     }
 
@@ -853,6 +853,12 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MotionEstimatorRansacL2(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public MotionEstimatorRansacL2(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public MotionEstimatorRansacL2 position(long position) {
+        return (MotionEstimatorRansacL2)super.position(position);
+    }
 
     public MotionEstimatorRansacL2(@Cast("cv::videostab::MotionModel") int model/*=cv::videostab::MM_AFFINE*/) { super((Pointer)null); allocate(model); }
     private native void allocate(@Cast("cv::videostab::MotionModel") int model/*=cv::videostab::MM_AFFINE*/);
@@ -878,6 +884,12 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MotionEstimatorL1(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public MotionEstimatorL1(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public MotionEstimatorL1 position(long position) {
+        return (MotionEstimatorL1)super.position(position);
+    }
 
     public MotionEstimatorL1(@Cast("cv::videostab::MotionModel") int model/*=cv::videostab::MM_AFFINE*/) { super((Pointer)null); allocate(model); }
     private native void allocate(@Cast("cv::videostab::MotionModel") int model/*=cv::videostab::MM_AFFINE*/);
@@ -1058,13 +1070,13 @@ matching.
     static { Loader.load(); }
     /** Default native constructor. */
     public MotionStabilizationPipeline() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public MotionStabilizationPipeline(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public MotionStabilizationPipeline(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MotionStabilizationPipeline(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public MotionStabilizationPipeline position(int position) {
+    private native void allocateArray(long size);
+    @Override public MotionStabilizationPipeline position(long position) {
         return (MotionStabilizationPipeline)super.position(position);
     }
 
@@ -1094,10 +1106,10 @@ matching.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GaussianMotionFilter(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public GaussianMotionFilter(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public GaussianMotionFilter position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public GaussianMotionFilter(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public GaussianMotionFilter position(long position) {
         return (GaussianMotionFilter)super.position(position);
     }
 
@@ -1121,6 +1133,12 @@ matching.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LpMotionStabilizer(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public LpMotionStabilizer(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public LpMotionStabilizer position(long position) {
+        return (LpMotionStabilizer)super.position(position);
+    }
 
     public LpMotionStabilizer(@Cast("cv::videostab::MotionModel") int model/*=cv::videostab::MM_SIMILARITY*/) { super((Pointer)null); allocate(model); }
     private native void allocate(@Cast("cv::videostab::MotionModel") int model/*=cv::videostab::MM_SIMILARITY*/);
@@ -1256,13 +1274,13 @@ matching.
     static { Loader.load(); }
     /** Default native constructor. */
     public NullInpainter() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NullInpainter(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NullInpainter(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NullInpainter(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NullInpainter position(int position) {
+    private native void allocateArray(long size);
+    @Override public NullInpainter position(long position) {
         return (NullInpainter)super.position(position);
     }
 
@@ -1273,13 +1291,13 @@ matching.
     static { Loader.load(); }
     /** Default native constructor. */
     public InpaintingPipeline() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public InpaintingPipeline(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public InpaintingPipeline(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public InpaintingPipeline(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public InpaintingPipeline position(int position) {
+    private native void allocateArray(long size);
+    @Override public InpaintingPipeline position(long position) {
         return (InpaintingPipeline)super.position(position);
     }
 
@@ -1300,10 +1318,10 @@ matching.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConsistentMosaicInpainter(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ConsistentMosaicInpainter(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public ConsistentMosaicInpainter position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ConsistentMosaicInpainter(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public ConsistentMosaicInpainter position(long position) {
         return (ConsistentMosaicInpainter)super.position(position);
     }
 
@@ -1320,10 +1338,10 @@ matching.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MotionInpainter(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public MotionInpainter(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public MotionInpainter position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public MotionInpainter(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public MotionInpainter position(long position) {
         return (MotionInpainter)super.position(position);
     }
 
@@ -1349,13 +1367,13 @@ matching.
     static { Loader.load(); }
     /** Default native constructor. */
     public ColorAverageInpainter() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ColorAverageInpainter(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ColorAverageInpainter(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ColorAverageInpainter(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ColorAverageInpainter position(int position) {
+    private native void allocateArray(long size);
+    @Override public ColorAverageInpainter position(long position) {
         return (ColorAverageInpainter)super.position(position);
     }
 
@@ -1366,10 +1384,10 @@ matching.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ColorInpainter(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ColorInpainter(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public ColorInpainter position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ColorInpainter(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public ColorInpainter position(long position) {
         return (ColorInpainter)super.position(position);
     }
 
@@ -1484,13 +1502,13 @@ matching.
     static { Loader.load(); }
     /** Default native constructor. */
     public NullDeblurer() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NullDeblurer(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NullDeblurer(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NullDeblurer(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NullDeblurer position(int position) {
+    private native void allocateArray(long size);
+    @Override public NullDeblurer position(long position) {
         return (NullDeblurer)super.position(position);
     }
 
@@ -1501,10 +1519,10 @@ matching.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public WeightingDeblurer(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public WeightingDeblurer(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public WeightingDeblurer position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public WeightingDeblurer(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public WeightingDeblurer position(long position) {
         return (WeightingDeblurer)super.position(position);
     }
 
@@ -1612,13 +1630,13 @@ matching.
     static { Loader.load(); }
     /** Default native constructor. */
     public NullWobbleSuppressor() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NullWobbleSuppressor(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NullWobbleSuppressor(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NullWobbleSuppressor(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NullWobbleSuppressor position(int position) {
+    private native void allocateArray(long size);
+    @Override public NullWobbleSuppressor position(long position) {
         return (NullWobbleSuppressor)super.position(position);
     }
 
@@ -1638,13 +1656,13 @@ matching.
     static { Loader.load(); }
     /** Default native constructor. */
     public MoreAccurateMotionWobbleSuppressor() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public MoreAccurateMotionWobbleSuppressor(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public MoreAccurateMotionWobbleSuppressor(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MoreAccurateMotionWobbleSuppressor(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public MoreAccurateMotionWobbleSuppressor position(int position) {
+    private native void allocateArray(long size);
+    @Override public MoreAccurateMotionWobbleSuppressor position(long position) {
         return (MoreAccurateMotionWobbleSuppressor)super.position(position);
     }
 
@@ -1762,10 +1780,10 @@ matching.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OnePassStabilizer(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public OnePassStabilizer(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public OnePassStabilizer position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public OnePassStabilizer(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public OnePassStabilizer position(long position) {
         return (OnePassStabilizer)super.position(position);
     }
     public IFrameSource asIFrameSource() { return asIFrameSource(this); }
@@ -1785,10 +1803,10 @@ matching.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TwoPassStabilizer(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public TwoPassStabilizer(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public TwoPassStabilizer position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TwoPassStabilizer(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public TwoPassStabilizer position(long position) {
         return (TwoPassStabilizer)super.position(position);
     }
     public IFrameSource asIFrameSource() { return asIFrameSource(this); }

@@ -592,13 +592,13 @@ public static class AVCodecDescriptor extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVCodecDescriptor() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVCodecDescriptor(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVCodecDescriptor(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVCodecDescriptor(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVCodecDescriptor position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVCodecDescriptor position(long position) {
         return (AVCodecDescriptor)super.position(position);
     }
 
@@ -767,13 +767,13 @@ public static class RcOverride extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public RcOverride() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public RcOverride(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public RcOverride(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RcOverride(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public RcOverride position(int position) {
+    private native void allocateArray(long size);
+    @Override public RcOverride position(long position) {
         return (RcOverride)super.position(position);
     }
 
@@ -1244,13 +1244,13 @@ public static class AVPanScan extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVPanScan() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVPanScan(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVPanScan(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVPanScan(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVPanScan position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVPanScan position(long position) {
         return (AVPanScan)super.position(position);
     }
 
@@ -1275,7 +1275,7 @@ public static class AVPanScan extends Pointer {
      * - decoding: Set by libavcodec.
      */
     public native @Name("position") short _position(int i, int j); public native AVPanScan _position(int i, int j, short _position);
-    @MemberGetter public native @Cast("int16_t(*)[2]") @Name("position") ShortPointer _position();
+    @MemberGetter public native @Cast("int16_t(* /*[3]*/ )[2]") @Name("position") ShortPointer _position();
 }
 
 /**
@@ -1287,13 +1287,13 @@ public static class AVCPBProperties extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVCPBProperties() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVCPBProperties(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVCPBProperties(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVCPBProperties(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVCPBProperties position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVCPBProperties position(long position) {
         return (AVCPBProperties)super.position(position);
     }
 
@@ -1512,13 +1512,13 @@ public static class AVPacketSideData extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVPacketSideData() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVPacketSideData(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVPacketSideData(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVPacketSideData(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVPacketSideData position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVPacketSideData position(long position) {
         return (AVPacketSideData)super.position(position);
     }
 
@@ -1559,13 +1559,13 @@ public static class AVPacket extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVPacket() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVPacket(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVPacket(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVPacket(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVPacket position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVPacket position(long position) {
         return (AVPacket)super.position(position);
     }
 
@@ -1667,13 +1667,13 @@ public static class AVCodecContext extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVCodecContext() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVCodecContext(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVCodecContext(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVCodecContext(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVCodecContext position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVCodecContext position(long position) {
         return (AVCodecContext)super.position(position);
     }
 
@@ -3540,24 +3540,24 @@ public static final int FF_CODEC_PROPERTY_CLOSED_CAPTIONS = 0x00000002;
 
 }
 
-public static native @ByVal AVRational av_codec_get_pkt_timebase(@Const AVCodecContext avctx);
-public static native void av_codec_set_pkt_timebase(AVCodecContext avctx, @ByVal AVRational val);
+@NoException public static native @ByVal AVRational av_codec_get_pkt_timebase(@Const AVCodecContext avctx);
+@NoException public static native void av_codec_set_pkt_timebase(AVCodecContext avctx, @ByVal AVRational val);
 
-public static native @Const AVCodecDescriptor av_codec_get_codec_descriptor(@Const AVCodecContext avctx);
-public static native void av_codec_set_codec_descriptor(AVCodecContext avctx, @Const AVCodecDescriptor desc);
+@NoException public static native @Const AVCodecDescriptor av_codec_get_codec_descriptor(@Const AVCodecContext avctx);
+@NoException public static native void av_codec_set_codec_descriptor(AVCodecContext avctx, @Const AVCodecDescriptor desc);
 
-public static native @Cast("unsigned") int av_codec_get_codec_properties(@Const AVCodecContext avctx);
+@NoException public static native @Cast("unsigned") int av_codec_get_codec_properties(@Const AVCodecContext avctx);
 
-public static native int av_codec_get_lowres(@Const AVCodecContext avctx);
-public static native void av_codec_set_lowres(AVCodecContext avctx, int val);
+@NoException public static native int av_codec_get_lowres(@Const AVCodecContext avctx);
+@NoException public static native void av_codec_set_lowres(AVCodecContext avctx, int val);
 
-public static native int av_codec_get_seek_preroll(@Const AVCodecContext avctx);
-public static native void av_codec_set_seek_preroll(AVCodecContext avctx, int val);
+@NoException public static native int av_codec_get_seek_preroll(@Const AVCodecContext avctx);
+@NoException public static native void av_codec_set_seek_preroll(AVCodecContext avctx, int val);
 
-public static native @Cast("uint16_t*") ShortPointer av_codec_get_chroma_intra_matrix(@Const AVCodecContext avctx);
-public static native void av_codec_set_chroma_intra_matrix(AVCodecContext avctx, @Cast("uint16_t*") ShortPointer val);
-public static native void av_codec_set_chroma_intra_matrix(AVCodecContext avctx, @Cast("uint16_t*") ShortBuffer val);
-public static native void av_codec_set_chroma_intra_matrix(AVCodecContext avctx, @Cast("uint16_t*") short[] val);
+@NoException public static native @Cast("uint16_t*") ShortPointer av_codec_get_chroma_intra_matrix(@Const AVCodecContext avctx);
+@NoException public static native void av_codec_set_chroma_intra_matrix(AVCodecContext avctx, @Cast("uint16_t*") ShortPointer val);
+@NoException public static native void av_codec_set_chroma_intra_matrix(AVCodecContext avctx, @Cast("uint16_t*") ShortBuffer val);
+@NoException public static native void av_codec_set_chroma_intra_matrix(AVCodecContext avctx, @Cast("uint16_t*") short[] val);
 
 /**
  * AVProfile.
@@ -3566,13 +3566,13 @@ public static class AVProfile extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVProfile() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVProfile(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVProfile(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVProfile(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVProfile position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVProfile position(long position) {
         return (AVProfile)super.position(position);
     }
 
@@ -3595,13 +3595,13 @@ public static class AVCodec extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVCodec() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVCodec(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVCodec(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVCodec(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVCodec position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVCodec position(long position) {
         return (AVCodec)super.position(position);
     }
 
@@ -3781,7 +3781,7 @@ public static class AVCodec extends Pointer {
     public native int caps_internal(); public native AVCodec caps_internal(int caps_internal);
 }
 
-public static native int av_codec_get_max_lowres(@Const AVCodec codec);
+@NoException public static native int av_codec_get_max_lowres(@Const AVCodec codec);
 
 @Opaque public static class MpegEncContext extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -3798,13 +3798,13 @@ public static class AVHWAccel extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVHWAccel() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVHWAccel(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVHWAccel(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVHWAccel(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVHWAccel position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVHWAccel position(long position) {
         return (AVHWAccel)super.position(position);
     }
 
@@ -4036,13 +4036,13 @@ public static class AVPicture extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVPicture() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVPicture(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVPicture(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVPicture(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVPicture position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVPicture position(long position) {
         return (AVPicture)super.position(position);
     }
 
@@ -4084,13 +4084,13 @@ public static class AVSubtitleRect extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVSubtitleRect() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVSubtitleRect(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVSubtitleRect(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVSubtitleRect(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVSubtitleRect position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVSubtitleRect position(long position) {
         return (AVSubtitleRect)super.position(position);
     }
 
@@ -4139,13 +4139,13 @@ public static class AVSubtitle extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVSubtitle() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVSubtitle(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVSubtitle(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVSubtitle(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVSubtitle position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVSubtitle position(long position) {
         return (AVSubtitle)super.position(position);
     }
 
@@ -4164,22 +4164,22 @@ public static class AVSubtitle extends Pointer {
  * if c is non-NULL, returns the next registered codec after c,
  * or NULL if c is the last one.
  */
-public static native AVCodec av_codec_next(@Const AVCodec c);
+@NoException public static native AVCodec av_codec_next(@Const AVCodec c);
 
 /**
  * Return the LIBAVCODEC_VERSION_INT constant.
  */
-public static native @Cast("unsigned") int avcodec_version();
+@NoException public static native @Cast("unsigned") int avcodec_version();
 
 /**
  * Return the libavcodec build-time configuration.
  */
-public static native @Cast("const char*") BytePointer avcodec_configuration();
+@NoException public static native @Cast("const char*") BytePointer avcodec_configuration();
 
 /**
  * Return the libavcodec license.
  */
-public static native @Cast("const char*") BytePointer avcodec_license();
+@NoException public static native @Cast("const char*") BytePointer avcodec_license();
 
 /**
  * Register the codec codec and initialize libavcodec.
@@ -4189,7 +4189,7 @@ public static native @Cast("const char*") BytePointer avcodec_license();
  *
  * @see avcodec_register_all()
  */
-public static native void avcodec_register(AVCodec codec);
+@NoException public static native void avcodec_register(AVCodec codec);
 
 /**
  * Register all the codecs, parsers and bitstream filters which were enabled at
@@ -4201,7 +4201,7 @@ public static native void avcodec_register(AVCodec codec);
  * @see av_register_codec_parser
  * @see av_register_bitstream_filter
  */
-public static native void avcodec_register_all();
+@NoException public static native void avcodec_register_all();
 
 /**
  * Allocate an AVCodecContext and set its fields to default values. The
@@ -4217,14 +4217,14 @@ public static native void avcodec_register_all();
  * @return An AVCodecContext filled with default values or NULL on failure.
  * @see avcodec_get_context_defaults
  */
-public static native AVCodecContext avcodec_alloc_context3(@Const AVCodec codec);
+@NoException public static native AVCodecContext avcodec_alloc_context3(@Const AVCodec codec);
 
 /**
  * Free the codec context and everything associated with it and write NULL to
  * the provided pointer.
  */
-public static native void avcodec_free_context(@Cast("AVCodecContext**") PointerPointer avctx);
-public static native void avcodec_free_context(@ByPtrPtr AVCodecContext avctx);
+@NoException public static native void avcodec_free_context(@Cast("AVCodecContext**") PointerPointer avctx);
+@NoException public static native void avcodec_free_context(@ByPtrPtr AVCodecContext avctx);
 
 /**
  * Set the fields of the given AVCodecContext to default values corresponding
@@ -4235,7 +4235,7 @@ public static native void avcodec_free_context(@ByPtrPtr AVCodecContext avctx);
  * If codec is non-NULL, it is illegal to call avcodec_open2() with a
  * different codec on this AVCodecContext.
  */
-public static native int avcodec_get_context_defaults3(AVCodecContext s, @Const AVCodec codec);
+@NoException public static native int avcodec_get_context_defaults3(AVCodecContext s, @Const AVCodec codec);
 
 /**
  * Get the AVClass for AVCodecContext. It can be used in combination with
@@ -4243,7 +4243,7 @@ public static native int avcodec_get_context_defaults3(AVCodecContext s, @Const 
  *
  * @see av_opt_find().
  */
-public static native @Const AVClass avcodec_get_class();
+@NoException public static native @Const AVClass avcodec_get_class();
 
 /**
  * Get the AVClass for AVFrame. It can be used in combination with
@@ -4251,7 +4251,7 @@ public static native @Const AVClass avcodec_get_class();
  *
  * @see av_opt_find().
  */
-public static native @Const AVClass avcodec_get_frame_class();
+@NoException public static native @Const AVClass avcodec_get_frame_class();
 
 /**
  * Get the AVClass for AVSubtitleRect. It can be used in combination with
@@ -4259,7 +4259,7 @@ public static native @Const AVClass avcodec_get_frame_class();
  *
  * @see av_opt_find().
  */
-public static native @Const AVClass avcodec_get_subtitle_rect_class();
+@NoException public static native @Const AVClass avcodec_get_subtitle_rect_class();
 
 /**
  * Copy the settings of the source AVCodecContext into the destination
@@ -4272,7 +4272,7 @@ public static native @Const AVClass avcodec_get_subtitle_rect_class();
  * @param src source codec context
  * @return AVERROR() on error (e.g. memory allocation error), 0 on success
  */
-public static native int avcodec_copy_context(AVCodecContext dest, @Const AVCodecContext src);
+@NoException public static native int avcodec_copy_context(AVCodecContext dest, @Const AVCodecContext src);
 
 /**
  * Initialize the AVCodecContext to use the given AVCodec. Prior to using this
@@ -4313,8 +4313,8 @@ public static native int avcodec_copy_context(AVCodecContext dest, @Const AVCode
  * @see avcodec_alloc_context3(), avcodec_find_decoder(), avcodec_find_encoder(),
  *      av_dict_set(), av_opt_find().
  */
-public static native int avcodec_open2(AVCodecContext avctx, @Const AVCodec codec, @Cast("AVDictionary**") PointerPointer options);
-public static native int avcodec_open2(AVCodecContext avctx, @Const AVCodec codec, @ByPtrPtr AVDictionary options);
+@NoException public static native int avcodec_open2(AVCodecContext avctx, @Const AVCodec codec, @Cast("AVDictionary**") PointerPointer options);
+@NoException public static native int avcodec_open2(AVCodecContext avctx, @Const AVCodec codec, @ByPtrPtr AVDictionary options);
 
 /**
  * Close a given AVCodecContext and free all the data associated with it
@@ -4325,14 +4325,14 @@ public static native int avcodec_open2(AVCodecContext avctx, @Const AVCodec code
  * avcodec_get_context_defaults3() with a non-NULL codec. Subsequent calls will
  * do nothing.
  */
-public static native int avcodec_close(AVCodecContext avctx);
+@NoException public static native int avcodec_close(AVCodecContext avctx);
 
 /**
  * Free all allocated data in the given subtitle struct.
  *
  * @param sub AVSubtitle to free.
  */
-public static native void avsubtitle_free(AVSubtitle sub);
+@NoException public static native void avsubtitle_free(AVSubtitle sub);
 
 /**
  * \}
@@ -4354,7 +4354,7 @@ public static native void avsubtitle_free(AVSubtitle sub);
  *
  * @see av_new_packet
  */
-public static native AVPacket av_packet_alloc();
+@NoException public static native AVPacket av_packet_alloc();
 
 /**
  * Create a new packet that references the same data as src.
@@ -4366,7 +4366,7 @@ public static native AVPacket av_packet_alloc();
  * @see av_packet_alloc
  * @see av_packet_ref
  */
-public static native AVPacket av_packet_clone(AVPacket src);
+@NoException public static native AVPacket av_packet_clone(AVPacket src);
 
 /**
  * Free the packet, if the packet is reference counted, it will be
@@ -4375,8 +4375,8 @@ public static native AVPacket av_packet_clone(AVPacket src);
  * @param packet packet to be freed. The pointer will be set to NULL.
  * \note passing NULL is a no-op.
  */
-public static native void av_packet_free(@Cast("AVPacket**") PointerPointer pkt);
-public static native void av_packet_free(@ByPtrPtr AVPacket pkt);
+@NoException public static native void av_packet_free(@Cast("AVPacket**") PointerPointer pkt);
+@NoException public static native void av_packet_free(@ByPtrPtr AVPacket pkt);
 
 /**
  * Initialize optional fields of a packet with default values.
@@ -4386,7 +4386,7 @@ public static native void av_packet_free(@ByPtrPtr AVPacket pkt);
  *
  * @param pkt packet
  */
-public static native void av_init_packet(AVPacket pkt);
+@NoException public static native void av_init_packet(AVPacket pkt);
 
 /**
  * Allocate the payload of a packet and initialize its fields with
@@ -4396,7 +4396,7 @@ public static native void av_init_packet(AVPacket pkt);
  * @param size wanted payload size
  * @return 0 if OK, AVERROR_xxx otherwise
  */
-public static native int av_new_packet(AVPacket pkt, int size);
+@NoException public static native int av_new_packet(AVPacket pkt, int size);
 
 /**
  * Reduce packet size, correctly zeroing padding
@@ -4404,7 +4404,7 @@ public static native int av_new_packet(AVPacket pkt, int size);
  * @param pkt packet
  * @param size new size
  */
-public static native void av_shrink_packet(AVPacket pkt, int size);
+@NoException public static native void av_shrink_packet(AVPacket pkt, int size);
 
 /**
  * Increase packet size, correctly zeroing padding
@@ -4412,7 +4412,7 @@ public static native void av_shrink_packet(AVPacket pkt, int size);
  * @param pkt packet
  * @param grow_by number of bytes by which to increase the size of the packet
  */
-public static native int av_grow_packet(AVPacket pkt, int grow_by);
+@NoException public static native int av_grow_packet(AVPacket pkt, int grow_by);
 
 /**
  * Initialize a reference-counted packet from av_malloc()ed data.
@@ -4427,9 +4427,9 @@ public static native int av_grow_packet(AVPacket pkt, int grow_by);
  *
  * @return 0 on success, a negative AVERROR on error
  */
-public static native int av_packet_from_data(AVPacket pkt, @Cast("uint8_t*") BytePointer data, int size);
-public static native int av_packet_from_data(AVPacket pkt, @Cast("uint8_t*") ByteBuffer data, int size);
-public static native int av_packet_from_data(AVPacket pkt, @Cast("uint8_t*") byte[] data, int size);
+@NoException public static native int av_packet_from_data(AVPacket pkt, @Cast("uint8_t*") BytePointer data, int size);
+@NoException public static native int av_packet_from_data(AVPacket pkt, @Cast("uint8_t*") ByteBuffer data, int size);
+@NoException public static native int av_packet_from_data(AVPacket pkt, @Cast("uint8_t*") byte[] data, int size);
 
 // #if FF_API_AVPACKET_OLD_API
 /**
@@ -4438,20 +4438,20 @@ public static native int av_packet_from_data(AVPacket pkt, @Cast("uint8_t*") byt
  *
  * @deprecated Use av_packet_ref
  */
-public static native @Deprecated int av_dup_packet(AVPacket pkt);
+@NoException public static native @Deprecated int av_dup_packet(AVPacket pkt);
 /**
  * Copy packet, including contents
  *
  * @return 0 on success, negative AVERROR on fail
  */
-public static native int av_copy_packet(AVPacket dst, @Const AVPacket src);
+@NoException public static native int av_copy_packet(AVPacket dst, @Const AVPacket src);
 
 /**
  * Copy packet side data
  *
  * @return 0 on success, negative AVERROR on fail
  */
-public static native int av_copy_packet_side_data(AVPacket dst, @Const AVPacket src);
+@NoException public static native int av_copy_packet_side_data(AVPacket dst, @Const AVPacket src);
 
 /**
  * Free a packet.
@@ -4460,7 +4460,7 @@ public static native int av_copy_packet_side_data(AVPacket dst, @Const AVPacket 
  *
  * @param pkt packet to free
  */
-public static native @Deprecated void av_free_packet(AVPacket pkt);
+@NoException public static native @Deprecated void av_free_packet(AVPacket pkt);
 // #endif
 /**
  * Allocate new information of a packet.
@@ -4470,7 +4470,7 @@ public static native @Deprecated void av_free_packet(AVPacket pkt);
  * @param size side information size
  * @return pointer to fresh allocated data or NULL otherwise
  */
-public static native @Cast("uint8_t*") BytePointer av_packet_new_side_data(AVPacket pkt, @Cast("AVPacketSideDataType") int type,
+@NoException public static native @Cast("uint8_t*") BytePointer av_packet_new_side_data(AVPacket pkt, @Cast("AVPacketSideDataType") int type,
                                  int size);
 
 /**
@@ -4486,11 +4486,11 @@ public static native @Cast("uint8_t*") BytePointer av_packet_new_side_data(AVPac
  *         failure. On failure, the packet is unchanged and the data remains
  *         owned by the caller.
  */
-public static native int av_packet_add_side_data(AVPacket pkt, @Cast("AVPacketSideDataType") int type,
+@NoException public static native int av_packet_add_side_data(AVPacket pkt, @Cast("AVPacketSideDataType") int type,
                             @Cast("uint8_t*") BytePointer data, @Cast("size_t") long size);
-public static native int av_packet_add_side_data(AVPacket pkt, @Cast("AVPacketSideDataType") int type,
+@NoException public static native int av_packet_add_side_data(AVPacket pkt, @Cast("AVPacketSideDataType") int type,
                             @Cast("uint8_t*") ByteBuffer data, @Cast("size_t") long size);
-public static native int av_packet_add_side_data(AVPacket pkt, @Cast("AVPacketSideDataType") int type,
+@NoException public static native int av_packet_add_side_data(AVPacket pkt, @Cast("AVPacketSideDataType") int type,
                             @Cast("uint8_t*") byte[] data, @Cast("size_t") long size);
 
 /**
@@ -4501,7 +4501,7 @@ public static native int av_packet_add_side_data(AVPacket pkt, @Cast("AVPacketSi
  * @param size new side information size
  * @return 0 on success, < 0 on failure
  */
-public static native int av_packet_shrink_side_data(AVPacket pkt, @Cast("AVPacketSideDataType") int type,
+@NoException public static native int av_packet_shrink_side_data(AVPacket pkt, @Cast("AVPacketSideDataType") int type,
                                int size);
 
 /**
@@ -4512,18 +4512,18 @@ public static native int av_packet_shrink_side_data(AVPacket pkt, @Cast("AVPacke
  * @param size pointer for side information size to store (optional)
  * @return pointer to data if present or NULL otherwise
  */
-public static native @Cast("uint8_t*") BytePointer av_packet_get_side_data(AVPacket pkt, @Cast("AVPacketSideDataType") int type,
+@NoException public static native @Cast("uint8_t*") BytePointer av_packet_get_side_data(AVPacket pkt, @Cast("AVPacketSideDataType") int type,
                                  IntPointer size);
-public static native @Cast("uint8_t*") ByteBuffer av_packet_get_side_data(AVPacket pkt, @Cast("AVPacketSideDataType") int type,
+@NoException public static native @Cast("uint8_t*") ByteBuffer av_packet_get_side_data(AVPacket pkt, @Cast("AVPacketSideDataType") int type,
                                  IntBuffer size);
-public static native @Cast("uint8_t*") byte[] av_packet_get_side_data(AVPacket pkt, @Cast("AVPacketSideDataType") int type,
+@NoException public static native @Cast("uint8_t*") byte[] av_packet_get_side_data(AVPacket pkt, @Cast("AVPacketSideDataType") int type,
                                  int[] size);
 
-public static native int av_packet_merge_side_data(AVPacket pkt);
+@NoException public static native int av_packet_merge_side_data(AVPacket pkt);
 
-public static native int av_packet_split_side_data(AVPacket pkt);
+@NoException public static native int av_packet_split_side_data(AVPacket pkt);
 
-public static native @Cast("const char*") BytePointer av_packet_side_data_name(@Cast("AVPacketSideDataType") int type);
+@NoException public static native @Cast("const char*") BytePointer av_packet_side_data_name(@Cast("AVPacketSideDataType") int type);
 
 /**
  * Pack a dictionary for use in side_data.
@@ -4532,9 +4532,9 @@ public static native @Cast("const char*") BytePointer av_packet_side_data_name(@
  * @param size pointer to store the size of the returned data
  * @return pointer to data if successful, NULL otherwise
  */
-public static native @Cast("uint8_t*") BytePointer av_packet_pack_dictionary(AVDictionary dict, IntPointer size);
-public static native @Cast("uint8_t*") ByteBuffer av_packet_pack_dictionary(AVDictionary dict, IntBuffer size);
-public static native @Cast("uint8_t*") byte[] av_packet_pack_dictionary(AVDictionary dict, int[] size);
+@NoException public static native @Cast("uint8_t*") BytePointer av_packet_pack_dictionary(AVDictionary dict, IntPointer size);
+@NoException public static native @Cast("uint8_t*") ByteBuffer av_packet_pack_dictionary(AVDictionary dict, IntBuffer size);
+@NoException public static native @Cast("uint8_t*") byte[] av_packet_pack_dictionary(AVDictionary dict, int[] size);
 /**
  * Unpack a dictionary from side_data.
  *
@@ -4543,10 +4543,10 @@ public static native @Cast("uint8_t*") byte[] av_packet_pack_dictionary(AVDictio
  * @param dict the metadata storage dictionary
  * @return 0 on success, < 0 on failure
  */
-public static native int av_packet_unpack_dictionary(@Cast("const uint8_t*") BytePointer data, int size, @Cast("AVDictionary**") PointerPointer dict);
-public static native int av_packet_unpack_dictionary(@Cast("const uint8_t*") BytePointer data, int size, @ByPtrPtr AVDictionary dict);
-public static native int av_packet_unpack_dictionary(@Cast("const uint8_t*") ByteBuffer data, int size, @ByPtrPtr AVDictionary dict);
-public static native int av_packet_unpack_dictionary(@Cast("const uint8_t*") byte[] data, int size, @ByPtrPtr AVDictionary dict);
+@NoException public static native int av_packet_unpack_dictionary(@Cast("const uint8_t*") BytePointer data, int size, @Cast("AVDictionary**") PointerPointer dict);
+@NoException public static native int av_packet_unpack_dictionary(@Cast("const uint8_t*") BytePointer data, int size, @ByPtrPtr AVDictionary dict);
+@NoException public static native int av_packet_unpack_dictionary(@Cast("const uint8_t*") ByteBuffer data, int size, @ByPtrPtr AVDictionary dict);
+@NoException public static native int av_packet_unpack_dictionary(@Cast("const uint8_t*") byte[] data, int size, @ByPtrPtr AVDictionary dict);
 
 
 /**
@@ -4555,7 +4555,7 @@ public static native int av_packet_unpack_dictionary(@Cast("const uint8_t*") byt
  *
  * @param pkt packet
  */
-public static native void av_packet_free_side_data(AVPacket pkt);
+@NoException public static native void av_packet_free_side_data(AVPacket pkt);
 
 /**
  * Setup a new reference to the data described by a given packet
@@ -4573,7 +4573,7 @@ public static native void av_packet_free_side_data(AVPacket pkt);
  *
  * @return 0 on success, a negative AVERROR on error.
  */
-public static native int av_packet_ref(AVPacket dst, @Const AVPacket src);
+@NoException public static native int av_packet_ref(AVPacket dst, @Const AVPacket src);
 
 /**
  * Wipe the packet.
@@ -4583,7 +4583,7 @@ public static native int av_packet_ref(AVPacket dst, @Const AVPacket src);
  *
  * @param pkt The packet to be unreferenced.
  */
-public static native void av_packet_unref(AVPacket pkt);
+@NoException public static native void av_packet_unref(AVPacket pkt);
 
 /**
  * Move every field in src to dst and reset src.
@@ -4593,7 +4593,7 @@ public static native void av_packet_unref(AVPacket pkt);
  * @param src Source packet, will be reset
  * @param dst Destination packet
  */
-public static native void av_packet_move_ref(AVPacket dst, AVPacket src);
+@NoException public static native void av_packet_move_ref(AVPacket dst, AVPacket src);
 
 /**
  * Copy only "properties" fields from src to dst.
@@ -4607,7 +4607,7 @@ public static native void av_packet_move_ref(AVPacket dst, AVPacket src);
  * @return 0 on success AVERROR on failure.
  *
  */
-public static native int av_packet_copy_props(AVPacket dst, @Const AVPacket src);
+@NoException public static native int av_packet_copy_props(AVPacket dst, @Const AVPacket src);
 
 /**
  * Convert valid timing fields (timestamps / durations) in a packet from one
@@ -4620,7 +4620,7 @@ public static native int av_packet_copy_props(AVPacket dst, @Const AVPacket src)
  * @param tb_dst destination timebase, to which the timing fields will be
  *               converted
  */
-public static native void av_packet_rescale_ts(AVPacket pkt, @ByVal AVRational tb_src, @ByVal AVRational tb_dst);
+@NoException public static native void av_packet_rescale_ts(AVPacket pkt, @ByVal AVRational tb_src, @ByVal AVRational tb_dst);
 
 /**
  * \}
@@ -4637,7 +4637,7 @@ public static native void av_packet_rescale_ts(AVPacket pkt, @ByVal AVRational t
  * @param id AVCodecID of the requested decoder
  * @return A decoder if one was found, NULL otherwise.
  */
-public static native AVCodec avcodec_find_decoder(@Cast("AVCodecID") int id);
+@NoException public static native AVCodec avcodec_find_decoder(@Cast("AVCodecID") int id);
 
 /**
  * Find a registered decoder with the specified name.
@@ -4645,15 +4645,15 @@ public static native AVCodec avcodec_find_decoder(@Cast("AVCodecID") int id);
  * @param name name of the requested decoder
  * @return A decoder if one was found, NULL otherwise.
  */
-public static native AVCodec avcodec_find_decoder_by_name(@Cast("const char*") BytePointer name);
-public static native AVCodec avcodec_find_decoder_by_name(String name);
+@NoException public static native AVCodec avcodec_find_decoder_by_name(@Cast("const char*") BytePointer name);
+@NoException public static native AVCodec avcodec_find_decoder_by_name(String name);
 
 /**
  * The default callback for AVCodecContext.get_buffer2(). It is made public so
  * it can be called by custom get_buffer2() implementations for decoders without
  * AV_CODEC_CAP_DR1 set.
  */
-public static native int avcodec_default_get_buffer2(AVCodecContext s, AVFrame frame, int flags);
+@NoException public static native int avcodec_default_get_buffer2(AVCodecContext s, AVFrame frame, int flags);
 
 // #if FF_API_EMU_EDGE
 /**
@@ -4666,7 +4666,7 @@ public static native int avcodec_default_get_buffer2(AVCodecContext s, AVFrame f
  * @deprecated CODEC_FLAG_EMU_EDGE is deprecated, so this function is no longer
  * needed
  */
-public static native @Cast("unsigned") @Deprecated int avcodec_get_edge_width();
+@NoException public static native @Cast("unsigned") @Deprecated int avcodec_get_edge_width();
 // #endif
 
 /**
@@ -4676,9 +4676,9 @@ public static native @Cast("unsigned") @Deprecated int avcodec_get_edge_width();
  *
  * May only be used if a codec with AV_CODEC_CAP_DR1 has been opened.
  */
-public static native void avcodec_align_dimensions(AVCodecContext s, IntPointer width, IntPointer height);
-public static native void avcodec_align_dimensions(AVCodecContext s, IntBuffer width, IntBuffer height);
-public static native void avcodec_align_dimensions(AVCodecContext s, int[] width, int[] height);
+@NoException public static native void avcodec_align_dimensions(AVCodecContext s, IntPointer width, IntPointer height);
+@NoException public static native void avcodec_align_dimensions(AVCodecContext s, IntBuffer width, IntBuffer height);
+@NoException public static native void avcodec_align_dimensions(AVCodecContext s, int[] width, int[] height);
 
 /**
  * Modify width and height values so that they will result in a memory
@@ -4687,11 +4687,11 @@ public static native void avcodec_align_dimensions(AVCodecContext s, int[] width
  *
  * May only be used if a codec with AV_CODEC_CAP_DR1 has been opened.
  */
-public static native void avcodec_align_dimensions2(AVCodecContext s, IntPointer width, IntPointer height,
+@NoException public static native void avcodec_align_dimensions2(AVCodecContext s, IntPointer width, IntPointer height,
                                IntPointer linesize_align);
-public static native void avcodec_align_dimensions2(AVCodecContext s, IntBuffer width, IntBuffer height,
+@NoException public static native void avcodec_align_dimensions2(AVCodecContext s, IntBuffer width, IntBuffer height,
                                IntBuffer linesize_align);
-public static native void avcodec_align_dimensions2(AVCodecContext s, int[] width, int[] height,
+@NoException public static native void avcodec_align_dimensions2(AVCodecContext s, int[] width, int[] height,
                                int[] linesize_align);
 
 /**
@@ -4703,9 +4703,9 @@ public static native void avcodec_align_dimensions2(AVCodecContext s, int[] widt
  * @param xpos  horizontal chroma sample position
  * @param ypos  vertical   chroma sample position
  */
-public static native int avcodec_enum_to_chroma_pos(IntPointer xpos, IntPointer ypos, @Cast("AVChromaLocation") int pos);
-public static native int avcodec_enum_to_chroma_pos(IntBuffer xpos, IntBuffer ypos, @Cast("AVChromaLocation") int pos);
-public static native int avcodec_enum_to_chroma_pos(int[] xpos, int[] ypos, @Cast("AVChromaLocation") int pos);
+@NoException public static native int avcodec_enum_to_chroma_pos(IntPointer xpos, IntPointer ypos, @Cast("AVChromaLocation") int pos);
+@NoException public static native int avcodec_enum_to_chroma_pos(IntBuffer xpos, IntBuffer ypos, @Cast("AVChromaLocation") int pos);
+@NoException public static native int avcodec_enum_to_chroma_pos(int[] xpos, int[] ypos, @Cast("AVChromaLocation") int pos);
 
 /**
  * Converts swscale x/y chroma position to AVChromaLocation.
@@ -4716,7 +4716,7 @@ public static native int avcodec_enum_to_chroma_pos(int[] xpos, int[] ypos, @Cas
  * @param xpos  horizontal chroma sample position
  * @param ypos  vertical   chroma sample position
  */
-public static native @Cast("AVChromaLocation") int avcodec_chroma_pos_to_enum(int xpos, int ypos);
+@NoException public static native @Cast("AVChromaLocation") int avcodec_chroma_pos_to_enum(int xpos, int ypos);
 
 /**
  * Decode the audio frame of size avpkt->size from avpkt->data into frame.
@@ -4769,11 +4769,11 @@ public static native @Cast("AVChromaLocation") int avcodec_chroma_pos_to_enum(in
  *         decoding, otherwise the number of bytes consumed from the input
  *         AVPacket is returned.
  */
-public static native int avcodec_decode_audio4(AVCodecContext avctx, AVFrame frame,
+@NoException public static native int avcodec_decode_audio4(AVCodecContext avctx, AVFrame frame,
                           IntPointer got_frame_ptr, @Const AVPacket avpkt);
-public static native int avcodec_decode_audio4(AVCodecContext avctx, AVFrame frame,
+@NoException public static native int avcodec_decode_audio4(AVCodecContext avctx, AVFrame frame,
                           IntBuffer got_frame_ptr, @Const AVPacket avpkt);
-public static native int avcodec_decode_audio4(AVCodecContext avctx, AVFrame frame,
+@NoException public static native int avcodec_decode_audio4(AVCodecContext avctx, AVFrame frame,
                           int[] got_frame_ptr, @Const AVPacket avpkt);
 
 /**
@@ -4819,13 +4819,13 @@ public static native int avcodec_decode_audio4(AVCodecContext avctx, AVFrame fra
  * @return On error a negative value is returned, otherwise the number of bytes
  * used or zero if no frame could be decompressed.
  */
-public static native int avcodec_decode_video2(AVCodecContext avctx, AVFrame picture,
+@NoException public static native int avcodec_decode_video2(AVCodecContext avctx, AVFrame picture,
                          IntPointer got_picture_ptr,
                          @Const AVPacket avpkt);
-public static native int avcodec_decode_video2(AVCodecContext avctx, AVFrame picture,
+@NoException public static native int avcodec_decode_video2(AVCodecContext avctx, AVFrame picture,
                          IntBuffer got_picture_ptr,
                          @Const AVPacket avpkt);
-public static native int avcodec_decode_video2(AVCodecContext avctx, AVFrame picture,
+@NoException public static native int avcodec_decode_video2(AVCodecContext avctx, AVFrame picture,
                          int[] got_picture_ptr,
                          @Const AVPacket avpkt);
 
@@ -4856,13 +4856,13 @@ public static native int avcodec_decode_video2(AVCodecContext avctx, AVFrame pic
  * @param [in,out] got_sub_ptr Zero if no subtitle could be decompressed, otherwise, it is nonzero.
  * @param [in] avpkt The input AVPacket containing the input buffer.
  */
-public static native int avcodec_decode_subtitle2(AVCodecContext avctx, AVSubtitle sub,
+@NoException public static native int avcodec_decode_subtitle2(AVCodecContext avctx, AVSubtitle sub,
                             IntPointer got_sub_ptr,
                             AVPacket avpkt);
-public static native int avcodec_decode_subtitle2(AVCodecContext avctx, AVSubtitle sub,
+@NoException public static native int avcodec_decode_subtitle2(AVCodecContext avctx, AVSubtitle sub,
                             IntBuffer got_sub_ptr,
                             AVPacket avpkt);
-public static native int avcodec_decode_subtitle2(AVCodecContext avctx, AVSubtitle sub,
+@NoException public static native int avcodec_decode_subtitle2(AVCodecContext avctx, AVSubtitle sub,
                             int[] got_sub_ptr,
                             AVPacket avpkt);
 
@@ -4882,13 +4882,13 @@ public static class AVCodecParserContext extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVCodecParserContext() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVCodecParserContext(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVCodecParserContext(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVCodecParserContext(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVCodecParserContext position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVCodecParserContext position(long position) {
         return (AVCodecParserContext)super.position(position);
     }
 
@@ -5067,13 +5067,13 @@ public static class AVCodecParser extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVCodecParser() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVCodecParser(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVCodecParser(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVCodecParser(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVCodecParser position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVCodecParser position(long position) {
         return (AVCodecParser)super.position(position);
     }
 
@@ -5124,10 +5124,10 @@ public static class AVCodecParser extends Pointer {
     public native AVCodecParser next(); public native AVCodecParser next(AVCodecParser next);
 }
 
-public static native AVCodecParser av_parser_next(@Const AVCodecParser c);
+@NoException public static native AVCodecParser av_parser_next(@Const AVCodecParser c);
 
-public static native void av_register_codec_parser(AVCodecParser parser);
-public static native AVCodecParserContext av_parser_init(int codec_id);
+@NoException public static native void av_register_codec_parser(AVCodecParser parser);
+@NoException public static native AVCodecParserContext av_parser_init(int codec_id);
 
 /**
  * Parse a packet.
@@ -5157,25 +5157,25 @@ public static native AVCodecParserContext av_parser_init(int codec_id);
  *   }
  * }</pre>
  */
-public static native int av_parser_parse2(AVCodecParserContext s,
+@NoException public static native int av_parser_parse2(AVCodecParserContext s,
                      AVCodecContext avctx,
                      @Cast("uint8_t**") PointerPointer poutbuf, IntPointer poutbuf_size,
                      @Cast("const uint8_t*") BytePointer buf, int buf_size,
                      long pts, long dts,
                      long pos);
-public static native int av_parser_parse2(AVCodecParserContext s,
+@NoException public static native int av_parser_parse2(AVCodecParserContext s,
                      AVCodecContext avctx,
                      @Cast("uint8_t**") @ByPtrPtr BytePointer poutbuf, IntPointer poutbuf_size,
                      @Cast("const uint8_t*") BytePointer buf, int buf_size,
                      long pts, long dts,
                      long pos);
-public static native int av_parser_parse2(AVCodecParserContext s,
+@NoException public static native int av_parser_parse2(AVCodecParserContext s,
                      AVCodecContext avctx,
                      @Cast("uint8_t**") @ByPtrPtr ByteBuffer poutbuf, IntBuffer poutbuf_size,
                      @Cast("const uint8_t*") ByteBuffer buf, int buf_size,
                      long pts, long dts,
                      long pos);
-public static native int av_parser_parse2(AVCodecParserContext s,
+@NoException public static native int av_parser_parse2(AVCodecParserContext s,
                      AVCodecContext avctx,
                      @Cast("uint8_t**") @ByPtrPtr byte[] poutbuf, int[] poutbuf_size,
                      @Cast("const uint8_t*") byte[] buf, int buf_size,
@@ -5186,23 +5186,23 @@ public static native int av_parser_parse2(AVCodecParserContext s,
  * @return 0 if the output buffer is a subset of the input, 1 if it is allocated and must be freed
  * @deprecated use AVBitStreamFilter
  */
-public static native int av_parser_change(AVCodecParserContext s,
+@NoException public static native int av_parser_change(AVCodecParserContext s,
                      AVCodecContext avctx,
                      @Cast("uint8_t**") PointerPointer poutbuf, IntPointer poutbuf_size,
                      @Cast("const uint8_t*") BytePointer buf, int buf_size, int keyframe);
-public static native int av_parser_change(AVCodecParserContext s,
+@NoException public static native int av_parser_change(AVCodecParserContext s,
                      AVCodecContext avctx,
                      @Cast("uint8_t**") @ByPtrPtr BytePointer poutbuf, IntPointer poutbuf_size,
                      @Cast("const uint8_t*") BytePointer buf, int buf_size, int keyframe);
-public static native int av_parser_change(AVCodecParserContext s,
+@NoException public static native int av_parser_change(AVCodecParserContext s,
                      AVCodecContext avctx,
                      @Cast("uint8_t**") @ByPtrPtr ByteBuffer poutbuf, IntBuffer poutbuf_size,
                      @Cast("const uint8_t*") ByteBuffer buf, int buf_size, int keyframe);
-public static native int av_parser_change(AVCodecParserContext s,
+@NoException public static native int av_parser_change(AVCodecParserContext s,
                      AVCodecContext avctx,
                      @Cast("uint8_t**") @ByPtrPtr byte[] poutbuf, int[] poutbuf_size,
                      @Cast("const uint8_t*") byte[] buf, int buf_size, int keyframe);
-public static native void av_parser_close(AVCodecParserContext s);
+@NoException public static native void av_parser_close(AVCodecParserContext s);
 
 /**
  * \}
@@ -5220,7 +5220,7 @@ public static native void av_parser_close(AVCodecParserContext s);
  * @param id AVCodecID of the requested encoder
  * @return An encoder if one was found, NULL otherwise.
  */
-public static native AVCodec avcodec_find_encoder(@Cast("AVCodecID") int id);
+@NoException public static native AVCodec avcodec_find_encoder(@Cast("AVCodecID") int id);
 
 /**
  * Find a registered encoder with the specified name.
@@ -5228,8 +5228,8 @@ public static native AVCodec avcodec_find_encoder(@Cast("AVCodecID") int id);
  * @param name name of the requested encoder
  * @return An encoder if one was found, NULL otherwise.
  */
-public static native AVCodec avcodec_find_encoder_by_name(@Cast("const char*") BytePointer name);
-public static native AVCodec avcodec_find_encoder_by_name(String name);
+@NoException public static native AVCodec avcodec_find_encoder_by_name(@Cast("const char*") BytePointer name);
+@NoException public static native AVCodec avcodec_find_encoder_by_name(String name);
 
 /**
  * Encode a frame of audio.
@@ -5269,11 +5269,11 @@ public static native AVCodec avcodec_find_encoder_by_name(String name);
  *                            not be used.
  * @return          0 on success, negative error code on failure
  */
-public static native int avcodec_encode_audio2(AVCodecContext avctx, AVPacket avpkt,
+@NoException public static native int avcodec_encode_audio2(AVCodecContext avctx, AVPacket avpkt,
                           @Const AVFrame frame, IntPointer got_packet_ptr);
-public static native int avcodec_encode_audio2(AVCodecContext avctx, AVPacket avpkt,
+@NoException public static native int avcodec_encode_audio2(AVCodecContext avctx, AVPacket avpkt,
                           @Const AVFrame frame, IntBuffer got_packet_ptr);
-public static native int avcodec_encode_audio2(AVCodecContext avctx, AVPacket avpkt,
+@NoException public static native int avcodec_encode_audio2(AVCodecContext avctx, AVPacket avpkt,
                           @Const AVFrame frame, int[] got_packet_ptr);
 
 /**
@@ -5309,18 +5309,18 @@ public static native int avcodec_encode_audio2(AVCodecContext avctx, AVPacket av
  *                            not be used.
  * @return          0 on success, negative error code on failure
  */
-public static native int avcodec_encode_video2(AVCodecContext avctx, AVPacket avpkt,
+@NoException public static native int avcodec_encode_video2(AVCodecContext avctx, AVPacket avpkt,
                           @Const AVFrame frame, IntPointer got_packet_ptr);
-public static native int avcodec_encode_video2(AVCodecContext avctx, AVPacket avpkt,
+@NoException public static native int avcodec_encode_video2(AVCodecContext avctx, AVPacket avpkt,
                           @Const AVFrame frame, IntBuffer got_packet_ptr);
-public static native int avcodec_encode_video2(AVCodecContext avctx, AVPacket avpkt,
+@NoException public static native int avcodec_encode_video2(AVCodecContext avctx, AVPacket avpkt,
                           @Const AVFrame frame, int[] got_packet_ptr);
 
-public static native int avcodec_encode_subtitle(AVCodecContext avctx, @Cast("uint8_t*") BytePointer buf, int buf_size,
+@NoException public static native int avcodec_encode_subtitle(AVCodecContext avctx, @Cast("uint8_t*") BytePointer buf, int buf_size,
                             @Const AVSubtitle sub);
-public static native int avcodec_encode_subtitle(AVCodecContext avctx, @Cast("uint8_t*") ByteBuffer buf, int buf_size,
+@NoException public static native int avcodec_encode_subtitle(AVCodecContext avctx, @Cast("uint8_t*") ByteBuffer buf, int buf_size,
                             @Const AVSubtitle sub);
-public static native int avcodec_encode_subtitle(AVCodecContext avctx, @Cast("uint8_t*") byte[] buf, int buf_size,
+@NoException public static native int avcodec_encode_subtitle(AVCodecContext avctx, @Cast("uint8_t*") byte[] buf, int buf_size,
                             @Const AVSubtitle sub);
 
 
@@ -5365,16 +5365,16 @@ public static native int avcodec_encode_subtitle(AVCodecContext avctx, @Cast("ui
  * @param cutoff           cutoff frequency, 1.0 corresponds to half the output sampling rate
  * @return allocated ReSampleContext, NULL if error occurred
  */
-public static native @Deprecated ReSampleContext av_audio_resample_init(int output_channels, int input_channels,
+@NoException public static native @Deprecated ReSampleContext av_audio_resample_init(int output_channels, int input_channels,
                                         int output_rate, int input_rate,
                                         @Cast("AVSampleFormat") int sample_fmt_out,
                                         @Cast("AVSampleFormat") int sample_fmt_in,
                                         int filter_length, int log2_phase_count,
                                         int linear, double cutoff);
 
-public static native @Deprecated int audio_resample(ReSampleContext s, ShortPointer output, ShortPointer input, int nb_samples);
-public static native @Deprecated int audio_resample(ReSampleContext s, ShortBuffer output, ShortBuffer input, int nb_samples);
-public static native @Deprecated int audio_resample(ReSampleContext s, short[] output, short[] input, int nb_samples);
+@NoException public static native @Deprecated int audio_resample(ReSampleContext s, ShortPointer output, ShortPointer input, int nb_samples);
+@NoException public static native @Deprecated int audio_resample(ReSampleContext s, ShortBuffer output, ShortBuffer input, int nb_samples);
+@NoException public static native @Deprecated int audio_resample(ReSampleContext s, short[] output, short[] input, int nb_samples);
 
 /**
  * Free resample context.
@@ -5382,7 +5382,7 @@ public static native @Deprecated int audio_resample(ReSampleContext s, short[] o
  * @param s a non-NULL pointer to a resample context previously
  *          created with av_audio_resample_init()
  */
-public static native @Deprecated void audio_resample_close(ReSampleContext s);
+@NoException public static native @Deprecated void audio_resample_close(ReSampleContext s);
 
 
 /**
@@ -5394,7 +5394,7 @@ public static native @Deprecated void audio_resample_close(ReSampleContext s);
                  between the 2 closest, if 0 the closest will be used
  * @param cutoff cutoff frequency, 1.0 corresponds to half the output sampling rate
  */
-public static native @Deprecated AVResampleContext av_resample_init(int out_rate, int in_rate, int filter_length, int log2_phase_count, int linear, double cutoff);
+@NoException public static native @Deprecated AVResampleContext av_resample_init(int out_rate, int in_rate, int filter_length, int log2_phase_count, int linear, double cutoff);
 
 /**
  * Resample an array of samples using a previously configured context.
@@ -5405,9 +5405,9 @@ public static native @Deprecated AVResampleContext av_resample_init(int out_rate
  * @param update_ctx If this is 0 then the context will not be modified, that way several channels can be resampled with the same context.
  * @return the number of samples written in dst or -1 if an error occurred
  */
-public static native @Deprecated int av_resample(AVResampleContext c, ShortPointer dst, ShortPointer src, IntPointer consumed, int src_size, int dst_size, int update_ctx);
-public static native @Deprecated int av_resample(AVResampleContext c, ShortBuffer dst, ShortBuffer src, IntBuffer consumed, int src_size, int dst_size, int update_ctx);
-public static native @Deprecated int av_resample(AVResampleContext c, short[] dst, short[] src, int[] consumed, int src_size, int dst_size, int update_ctx);
+@NoException public static native @Deprecated int av_resample(AVResampleContext c, ShortPointer dst, ShortPointer src, IntPointer consumed, int src_size, int dst_size, int update_ctx);
+@NoException public static native @Deprecated int av_resample(AVResampleContext c, ShortBuffer dst, ShortBuffer src, IntBuffer consumed, int src_size, int dst_size, int update_ctx);
+@NoException public static native @Deprecated int av_resample(AVResampleContext c, short[] dst, short[] src, int[] consumed, int src_size, int dst_size, int update_ctx);
 
 
 /**
@@ -5422,8 +5422,8 @@ public static native @Deprecated int av_resample(AVResampleContext c, short[] ds
  * note, due to rounding the actual compensation might be slightly different,
  * especially if the compensation_distance is large and the in_rate used during init is small
  */
-public static native @Deprecated void av_resample_compensate(AVResampleContext c, int sample_delta, int compensation_distance);
-public static native @Deprecated void av_resample_close(AVResampleContext c);
+@NoException public static native @Deprecated void av_resample_compensate(AVResampleContext c, int sample_delta, int compensation_distance);
+@NoException public static native @Deprecated void av_resample_close(AVResampleContext c);
 
 /**
  * \}
@@ -5439,61 +5439,61 @@ public static native @Deprecated void av_resample_close(AVResampleContext c);
 /**
  * @deprecated unused
  */
-public static native @Deprecated int avpicture_alloc(AVPicture picture, @Cast("AVPixelFormat") int pix_fmt, int width, int height);
+@NoException public static native @Deprecated int avpicture_alloc(AVPicture picture, @Cast("AVPixelFormat") int pix_fmt, int width, int height);
 
 /**
  * @deprecated unused
  */
-public static native @Deprecated void avpicture_free(AVPicture picture);
+@NoException public static native @Deprecated void avpicture_free(AVPicture picture);
 
 /**
  * @deprecated use av_image_fill_arrays() instead.
  */
-public static native @Deprecated int avpicture_fill(AVPicture picture, @Cast("const uint8_t*") BytePointer ptr,
+@NoException public static native @Deprecated int avpicture_fill(AVPicture picture, @Cast("const uint8_t*") BytePointer ptr,
                    @Cast("AVPixelFormat") int pix_fmt, int width, int height);
-public static native @Deprecated int avpicture_fill(AVPicture picture, @Cast("const uint8_t*") ByteBuffer ptr,
+@NoException public static native @Deprecated int avpicture_fill(AVPicture picture, @Cast("const uint8_t*") ByteBuffer ptr,
                    @Cast("AVPixelFormat") int pix_fmt, int width, int height);
-public static native @Deprecated int avpicture_fill(AVPicture picture, @Cast("const uint8_t*") byte[] ptr,
+@NoException public static native @Deprecated int avpicture_fill(AVPicture picture, @Cast("const uint8_t*") byte[] ptr,
                    @Cast("AVPixelFormat") int pix_fmt, int width, int height);
 
 /**
  * @deprecated use av_image_copy_to_buffer() instead.
  */
-public static native @Deprecated int avpicture_layout(@Const AVPicture src, @Cast("AVPixelFormat") int pix_fmt,
+@NoException public static native @Deprecated int avpicture_layout(@Const AVPicture src, @Cast("AVPixelFormat") int pix_fmt,
                      int width, int height,
                      @Cast("unsigned char*") BytePointer dest, int dest_size);
-public static native @Deprecated int avpicture_layout(@Const AVPicture src, @Cast("AVPixelFormat") int pix_fmt,
+@NoException public static native @Deprecated int avpicture_layout(@Const AVPicture src, @Cast("AVPixelFormat") int pix_fmt,
                      int width, int height,
                      @Cast("unsigned char*") ByteBuffer dest, int dest_size);
-public static native @Deprecated int avpicture_layout(@Const AVPicture src, @Cast("AVPixelFormat") int pix_fmt,
+@NoException public static native @Deprecated int avpicture_layout(@Const AVPicture src, @Cast("AVPixelFormat") int pix_fmt,
                      int width, int height,
                      @Cast("unsigned char*") byte[] dest, int dest_size);
 
 /**
  * @deprecated use av_image_get_buffer_size() instead.
  */
-public static native @Deprecated int avpicture_get_size(@Cast("AVPixelFormat") int pix_fmt, int width, int height);
+@NoException public static native @Deprecated int avpicture_get_size(@Cast("AVPixelFormat") int pix_fmt, int width, int height);
 
 /**
  * @deprecated av_image_copy() instead.
  */
-public static native @Deprecated void av_picture_copy(AVPicture dst, @Const AVPicture src,
+@NoException public static native @Deprecated void av_picture_copy(AVPicture dst, @Const AVPicture src,
                      @Cast("AVPixelFormat") int pix_fmt, int width, int height);
 
 /**
  * @deprecated unused
  */
-public static native @Deprecated int av_picture_crop(AVPicture dst, @Const AVPicture src,
+@NoException public static native @Deprecated int av_picture_crop(AVPicture dst, @Const AVPicture src,
                     @Cast("AVPixelFormat") int pix_fmt, int top_band, int left_band);
 
 /**
  * @deprecated unused
  */
-public static native @Deprecated int av_picture_pad(AVPicture dst, @Const AVPicture src, int height, int width, @Cast("AVPixelFormat") int pix_fmt,
+@NoException public static native @Deprecated int av_picture_pad(AVPicture dst, @Const AVPicture src, int height, int width, @Cast("AVPixelFormat") int pix_fmt,
             int padtop, int padbottom, int padleft, int padright, IntPointer color);
-public static native @Deprecated int av_picture_pad(AVPicture dst, @Const AVPicture src, int height, int width, @Cast("AVPixelFormat") int pix_fmt,
+@NoException public static native @Deprecated int av_picture_pad(AVPicture dst, @Const AVPicture src, int height, int width, @Cast("AVPixelFormat") int pix_fmt,
             int padtop, int padbottom, int padleft, int padright, IntBuffer color);
-public static native @Deprecated int av_picture_pad(AVPicture dst, @Const AVPicture src, int height, int width, @Cast("AVPixelFormat") int pix_fmt,
+@NoException public static native @Deprecated int av_picture_pad(AVPicture dst, @Const AVPicture src, int height, int width, @Cast("AVPixelFormat") int pix_fmt,
             int padtop, int padbottom, int padleft, int padright, int[] color);
 
 /**
@@ -5532,21 +5532,21 @@ public static native @Deprecated int av_picture_pad(AVPicture dst, @Const AVPict
  * @see av_pix_fmt_get_chroma_sub_sample
  */
 
-public static native void avcodec_get_chroma_sub_sample(@Cast("AVPixelFormat") int pix_fmt, IntPointer h_shift, IntPointer v_shift);
-public static native void avcodec_get_chroma_sub_sample(@Cast("AVPixelFormat") int pix_fmt, IntBuffer h_shift, IntBuffer v_shift);
-public static native void avcodec_get_chroma_sub_sample(@Cast("AVPixelFormat") int pix_fmt, int[] h_shift, int[] v_shift);
+@NoException public static native void avcodec_get_chroma_sub_sample(@Cast("AVPixelFormat") int pix_fmt, IntPointer h_shift, IntPointer v_shift);
+@NoException public static native void avcodec_get_chroma_sub_sample(@Cast("AVPixelFormat") int pix_fmt, IntBuffer h_shift, IntBuffer v_shift);
+@NoException public static native void avcodec_get_chroma_sub_sample(@Cast("AVPixelFormat") int pix_fmt, int[] h_shift, int[] v_shift);
 
 /**
  * Return a value representing the fourCC code associated to the
  * pixel format pix_fmt, or 0 if no associated fourCC code can be
  * found.
  */
-public static native @Cast("unsigned int") int avcodec_pix_fmt_to_codec_tag(@Cast("AVPixelFormat") int pix_fmt);
+@NoException public static native @Cast("unsigned int") int avcodec_pix_fmt_to_codec_tag(@Cast("AVPixelFormat") int pix_fmt);
 
 /**
  * @deprecated see av_get_pix_fmt_loss()
  */
-public static native int avcodec_get_pix_fmt_loss(@Cast("AVPixelFormat") int dst_pix_fmt, @Cast("AVPixelFormat") int src_pix_fmt,
+@NoException public static native int avcodec_get_pix_fmt_loss(@Cast("AVPixelFormat") int dst_pix_fmt, @Cast("AVPixelFormat") int src_pix_fmt,
                              int has_alpha);
 
 /**
@@ -5566,38 +5566,38 @@ public static native int avcodec_get_pix_fmt_loss(@Cast("AVPixelFormat") int dst
  * @param [out] loss_ptr Combination of flags informing you what kind of losses will occur.
  * @return The best pixel format to convert to or -1 if none was found.
  */
-public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt_of_list(@Cast("const AVPixelFormat*") IntPointer pix_fmt_list,
+@NoException public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt_of_list(@Cast("const AVPixelFormat*") IntPointer pix_fmt_list,
                                             @Cast("AVPixelFormat") int src_pix_fmt,
                                             int has_alpha, IntPointer loss_ptr);
-public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt_of_list(@Cast("const AVPixelFormat*") IntBuffer pix_fmt_list,
+@NoException public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt_of_list(@Cast("const AVPixelFormat*") IntBuffer pix_fmt_list,
                                             @Cast("AVPixelFormat") int src_pix_fmt,
                                             int has_alpha, IntBuffer loss_ptr);
-public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt_of_list(@Cast("const AVPixelFormat*") int[] pix_fmt_list,
+@NoException public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt_of_list(@Cast("const AVPixelFormat*") int[] pix_fmt_list,
                                             @Cast("AVPixelFormat") int src_pix_fmt,
                                             int has_alpha, int[] loss_ptr);
 
 /**
  * @deprecated see av_find_best_pix_fmt_of_2()
  */
-public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt_of_2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
+@NoException public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt_of_2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
                                             @Cast("AVPixelFormat") int src_pix_fmt, int has_alpha, IntPointer loss_ptr);
-public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt_of_2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
+@NoException public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt_of_2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
                                             @Cast("AVPixelFormat") int src_pix_fmt, int has_alpha, IntBuffer loss_ptr);
-public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt_of_2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
+@NoException public static native @Cast("AVPixelFormat") int avcodec_find_best_pix_fmt_of_2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
                                             @Cast("AVPixelFormat") int src_pix_fmt, int has_alpha, int[] loss_ptr);
 
-public static native @Cast("AVPixelFormat") @Deprecated int avcodec_find_best_pix_fmt2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
+@NoException public static native @Cast("AVPixelFormat") @Deprecated int avcodec_find_best_pix_fmt2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
                                             @Cast("AVPixelFormat") int src_pix_fmt, int has_alpha, IntPointer loss_ptr);
-public static native @Cast("AVPixelFormat") @Deprecated int avcodec_find_best_pix_fmt2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
+@NoException public static native @Cast("AVPixelFormat") @Deprecated int avcodec_find_best_pix_fmt2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
                                             @Cast("AVPixelFormat") int src_pix_fmt, int has_alpha, IntBuffer loss_ptr);
-public static native @Cast("AVPixelFormat") @Deprecated int avcodec_find_best_pix_fmt2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
+@NoException public static native @Cast("AVPixelFormat") @Deprecated int avcodec_find_best_pix_fmt2(@Cast("AVPixelFormat") int dst_pix_fmt1, @Cast("AVPixelFormat") int dst_pix_fmt2,
                                             @Cast("AVPixelFormat") int src_pix_fmt, int has_alpha, int[] loss_ptr);
 // #endif
 
 
-public static native @Cast("AVPixelFormat") int avcodec_default_get_format(AVCodecContext s, @Cast("const AVPixelFormat*") IntPointer fmt);
-public static native @Cast("AVPixelFormat") int avcodec_default_get_format(AVCodecContext s, @Cast("const AVPixelFormat*") IntBuffer fmt);
-public static native @Cast("AVPixelFormat") int avcodec_default_get_format(AVCodecContext s, @Cast("const AVPixelFormat*") int[] fmt);
+@NoException public static native @Cast("AVPixelFormat") int avcodec_default_get_format(AVCodecContext s, @Cast("const AVPixelFormat*") IntPointer fmt);
+@NoException public static native @Cast("AVPixelFormat") int avcodec_default_get_format(AVCodecContext s, @Cast("const AVPixelFormat*") IntBuffer fmt);
+@NoException public static native @Cast("AVPixelFormat") int avcodec_default_get_format(AVCodecContext s, @Cast("const AVPixelFormat*") int[] fmt);
 
 /**
  * \}
@@ -5607,7 +5607,7 @@ public static native @Cast("AVPixelFormat") int avcodec_default_get_format(AVCod
 /**
  * @deprecated this function is not supposed to be used from outside of lavc
  */
-public static native @Deprecated void avcodec_set_dimensions(AVCodecContext s, int width, int height);
+@NoException public static native @Deprecated void avcodec_set_dimensions(AVCodecContext s, int width, int height);
 // #endif
 
 /**
@@ -5619,13 +5619,13 @@ public static native @Deprecated void avcodec_set_dimensions(AVCodecContext s, i
  * @return the length of the string that would have been generated if
  * enough space had been available, excluding the trailing null
  */
-public static native @Cast("size_t") long av_get_codec_tag_string(@Cast("char*") BytePointer buf, @Cast("size_t") long buf_size, @Cast("unsigned int") int codec_tag);
-public static native @Cast("size_t") long av_get_codec_tag_string(@Cast("char*") ByteBuffer buf, @Cast("size_t") long buf_size, @Cast("unsigned int") int codec_tag);
-public static native @Cast("size_t") long av_get_codec_tag_string(@Cast("char*") byte[] buf, @Cast("size_t") long buf_size, @Cast("unsigned int") int codec_tag);
+@NoException public static native @Cast("size_t") long av_get_codec_tag_string(@Cast("char*") BytePointer buf, @Cast("size_t") long buf_size, @Cast("unsigned int") int codec_tag);
+@NoException public static native @Cast("size_t") long av_get_codec_tag_string(@Cast("char*") ByteBuffer buf, @Cast("size_t") long buf_size, @Cast("unsigned int") int codec_tag);
+@NoException public static native @Cast("size_t") long av_get_codec_tag_string(@Cast("char*") byte[] buf, @Cast("size_t") long buf_size, @Cast("unsigned int") int codec_tag);
 
-public static native void avcodec_string(@Cast("char*") BytePointer buf, int buf_size, AVCodecContext enc, int encode);
-public static native void avcodec_string(@Cast("char*") ByteBuffer buf, int buf_size, AVCodecContext enc, int encode);
-public static native void avcodec_string(@Cast("char*") byte[] buf, int buf_size, AVCodecContext enc, int encode);
+@NoException public static native void avcodec_string(@Cast("char*") BytePointer buf, int buf_size, AVCodecContext enc, int encode);
+@NoException public static native void avcodec_string(@Cast("char*") ByteBuffer buf, int buf_size, AVCodecContext enc, int encode);
+@NoException public static native void avcodec_string(@Cast("char*") byte[] buf, int buf_size, AVCodecContext enc, int encode);
 
 /**
  * Return a name for the specified profile, if available.
@@ -5634,7 +5634,7 @@ public static native void avcodec_string(@Cast("char*") byte[] buf, int buf_size
  * @param profile the profile value for which a name is requested
  * @return A name for the profile if found, NULL otherwise.
  */
-public static native @Cast("const char*") BytePointer av_get_profile_name(@Const AVCodec codec, int profile);
+@NoException public static native @Cast("const char*") BytePointer av_get_profile_name(@Const AVCodec codec, int profile);
 
 /**
  * Return a name for the specified profile, if available.
@@ -5647,7 +5647,7 @@ public static native @Cast("const char*") BytePointer av_get_profile_name(@Const
  *       supported by a specific decoder or encoder implementation, this
  *       function searches the list of profiles from the AVCodecDescriptor
  */
-public static native @Cast("const char*") BytePointer avcodec_profile_name(@Cast("AVCodecID") int codec_id, int profile);
+@NoException public static native @Cast("const char*") BytePointer avcodec_profile_name(@Cast("AVCodecID") int codec_id, int profile);
 
 public static class Func_AVCodecContext_Pointer extends FunctionPointer {
     static { Loader.load(); }
@@ -5657,9 +5657,9 @@ public static class Func_AVCodecContext_Pointer extends FunctionPointer {
     private native void allocate();
     public native int call(AVCodecContext c2, Pointer arg2);
 }
-public static native int avcodec_default_execute(AVCodecContext c, Func_AVCodecContext_Pointer func,Pointer arg, IntPointer ret, int count, int size);
-public static native int avcodec_default_execute(AVCodecContext c, Func_AVCodecContext_Pointer func,Pointer arg, IntBuffer ret, int count, int size);
-public static native int avcodec_default_execute(AVCodecContext c, Func_AVCodecContext_Pointer func,Pointer arg, int[] ret, int count, int size);
+@NoException public static native int avcodec_default_execute(AVCodecContext c, Func_AVCodecContext_Pointer func,Pointer arg, IntPointer ret, int count, int size);
+@NoException public static native int avcodec_default_execute(AVCodecContext c, Func_AVCodecContext_Pointer func,Pointer arg, IntBuffer ret, int count, int size);
+@NoException public static native int avcodec_default_execute(AVCodecContext c, Func_AVCodecContext_Pointer func,Pointer arg, int[] ret, int count, int size);
 public static class Func_AVCodecContext_Pointer_int_int extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -5668,9 +5668,9 @@ public static class Func_AVCodecContext_Pointer_int_int extends FunctionPointer 
     private native void allocate();
     public native int call(AVCodecContext c2, Pointer arg2, int arg3, int arg4);
 }
-public static native int avcodec_default_execute2(AVCodecContext c, Func_AVCodecContext_Pointer_int_int func,Pointer arg, IntPointer ret, int count);
-public static native int avcodec_default_execute2(AVCodecContext c, Func_AVCodecContext_Pointer_int_int func,Pointer arg, IntBuffer ret, int count);
-public static native int avcodec_default_execute2(AVCodecContext c, Func_AVCodecContext_Pointer_int_int func,Pointer arg, int[] ret, int count);
+@NoException public static native int avcodec_default_execute2(AVCodecContext c, Func_AVCodecContext_Pointer_int_int func,Pointer arg, IntPointer ret, int count);
+@NoException public static native int avcodec_default_execute2(AVCodecContext c, Func_AVCodecContext_Pointer_int_int func,Pointer arg, IntBuffer ret, int count);
+@NoException public static native int avcodec_default_execute2(AVCodecContext c, Func_AVCodecContext_Pointer_int_int func,Pointer arg, int[] ret, int count);
 //FIXME func typedef
 
 /**
@@ -5696,13 +5696,13 @@ public static native int avcodec_default_execute2(AVCodecContext c, Func_AVCodec
  * \todo return the size in bytes required to store the samples in
  * case of success, at the next libavutil bump
  */
-public static native int avcodec_fill_audio_frame(AVFrame frame, int nb_channels,
+@NoException public static native int avcodec_fill_audio_frame(AVFrame frame, int nb_channels,
                              @Cast("AVSampleFormat") int sample_fmt, @Cast("const uint8_t*") BytePointer buf,
                              int buf_size, int align);
-public static native int avcodec_fill_audio_frame(AVFrame frame, int nb_channels,
+@NoException public static native int avcodec_fill_audio_frame(AVFrame frame, int nb_channels,
                              @Cast("AVSampleFormat") int sample_fmt, @Cast("const uint8_t*") ByteBuffer buf,
                              int buf_size, int align);
-public static native int avcodec_fill_audio_frame(AVFrame frame, int nb_channels,
+@NoException public static native int avcodec_fill_audio_frame(AVFrame frame, int nb_channels,
                              @Cast("AVSampleFormat") int sample_fmt, @Cast("const uint8_t*") byte[] buf,
                              int buf_size, int align);
 
@@ -5715,7 +5715,7 @@ public static native int avcodec_fill_audio_frame(AVFrame frame, int nb_channels
  * refcounted frames are used, the decoder just releases any references it might
  * keep internally, but the caller's reference remains valid.
  */
-public static native void avcodec_flush_buffers(AVCodecContext avctx);
+@NoException public static native void avcodec_flush_buffers(AVCodecContext avctx);
 
 /**
  * Return codec bits per sample.
@@ -5723,7 +5723,7 @@ public static native void avcodec_flush_buffers(AVCodecContext avctx);
  * @param [in] codec_id the codec
  * @return Number of bits per sample or zero if unknown for the given codec.
  */
-public static native int av_get_bits_per_sample(@Cast("AVCodecID") int codec_id);
+@NoException public static native int av_get_bits_per_sample(@Cast("AVCodecID") int codec_id);
 
 /**
  * Return the PCM codec associated with a sample format.
@@ -5731,7 +5731,7 @@ public static native int av_get_bits_per_sample(@Cast("AVCodecID") int codec_id)
  *            -1 (or anything else) for native
  * @return  AV_CODEC_ID_PCM_* or AV_CODEC_ID_NONE
  */
-public static native @Cast("AVCodecID") int av_get_pcm_codec(@Cast("AVSampleFormat") int fmt, int be);
+@NoException public static native @Cast("AVCodecID") int av_get_pcm_codec(@Cast("AVSampleFormat") int fmt, int be);
 
 /**
  * Return codec bits per sample.
@@ -5741,7 +5741,7 @@ public static native @Cast("AVCodecID") int av_get_pcm_codec(@Cast("AVSampleForm
  * @param [in] codec_id the codec
  * @return Number of bits per sample or zero if unknown for the given codec.
  */
-public static native int av_get_exact_bits_per_sample(@Cast("AVCodecID") int codec_id);
+@NoException public static native int av_get_exact_bits_per_sample(@Cast("AVCodecID") int codec_id);
 
 /**
  * Return audio frame duration.
@@ -5751,20 +5751,20 @@ public static native int av_get_exact_bits_per_sample(@Cast("AVCodecID") int cod
  * @return             frame duration, in samples, if known. 0 if not able to
  *                     determine.
  */
-public static native int av_get_audio_frame_duration(AVCodecContext avctx, int frame_bytes);
+@NoException public static native int av_get_audio_frame_duration(AVCodecContext avctx, int frame_bytes);
 
 
 public static class AVBitStreamFilterContext extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVBitStreamFilterContext() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVBitStreamFilterContext(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVBitStreamFilterContext(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVBitStreamFilterContext(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVBitStreamFilterContext position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVBitStreamFilterContext position(long position) {
         return (AVBitStreamFilterContext)super.position(position);
     }
 
@@ -5784,13 +5784,13 @@ public static class AVBitStreamFilter extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVBitStreamFilter() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVBitStreamFilter(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVBitStreamFilter(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVBitStreamFilter(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVBitStreamFilter position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVBitStreamFilter position(long position) {
         return (AVBitStreamFilter)super.position(position);
     }
 
@@ -5829,7 +5829,7 @@ public static class AVBitStreamFilter extends Pointer {
  *
  * @see avcodec_register_all()
  */
-public static native void av_register_bitstream_filter(AVBitStreamFilter bsf);
+@NoException public static native void av_register_bitstream_filter(AVBitStreamFilter bsf);
 
 /**
  * Create and initialize a bitstream filter context given a bitstream
@@ -5841,8 +5841,8 @@ public static native void av_register_bitstream_filter(AVBitStreamFilter bsf);
  * @return a bitstream filter context if a matching filter was found
  * and successfully initialized, NULL otherwise
  */
-public static native AVBitStreamFilterContext av_bitstream_filter_init(@Cast("const char*") BytePointer name);
-public static native AVBitStreamFilterContext av_bitstream_filter_init(String name);
+@NoException public static native AVBitStreamFilterContext av_bitstream_filter_init(@Cast("const char*") BytePointer name);
+@NoException public static native AVBitStreamFilterContext av_bitstream_filter_init(String name);
 
 /**
  * Filter bitstream.
@@ -5872,31 +5872,31 @@ public static native AVBitStreamFilterContext av_bitstream_filter_init(String na
  * *poutbuf was set it points to the input buffer (not necessarily to
  * its starting address).
  */
-public static native int av_bitstream_filter_filter(AVBitStreamFilterContext bsfc,
+@NoException public static native int av_bitstream_filter_filter(AVBitStreamFilterContext bsfc,
                                AVCodecContext avctx, @Cast("const char*") BytePointer args,
                                @Cast("uint8_t**") PointerPointer poutbuf, IntPointer poutbuf_size,
                                @Cast("const uint8_t*") BytePointer buf, int buf_size, int keyframe);
-public static native int av_bitstream_filter_filter(AVBitStreamFilterContext bsfc,
+@NoException public static native int av_bitstream_filter_filter(AVBitStreamFilterContext bsfc,
                                AVCodecContext avctx, @Cast("const char*") BytePointer args,
                                @Cast("uint8_t**") @ByPtrPtr BytePointer poutbuf, IntPointer poutbuf_size,
                                @Cast("const uint8_t*") BytePointer buf, int buf_size, int keyframe);
-public static native int av_bitstream_filter_filter(AVBitStreamFilterContext bsfc,
+@NoException public static native int av_bitstream_filter_filter(AVBitStreamFilterContext bsfc,
                                AVCodecContext avctx, String args,
                                @Cast("uint8_t**") @ByPtrPtr ByteBuffer poutbuf, IntBuffer poutbuf_size,
                                @Cast("const uint8_t*") ByteBuffer buf, int buf_size, int keyframe);
-public static native int av_bitstream_filter_filter(AVBitStreamFilterContext bsfc,
+@NoException public static native int av_bitstream_filter_filter(AVBitStreamFilterContext bsfc,
                                AVCodecContext avctx, @Cast("const char*") BytePointer args,
                                @Cast("uint8_t**") @ByPtrPtr byte[] poutbuf, int[] poutbuf_size,
                                @Cast("const uint8_t*") byte[] buf, int buf_size, int keyframe);
-public static native int av_bitstream_filter_filter(AVBitStreamFilterContext bsfc,
+@NoException public static native int av_bitstream_filter_filter(AVBitStreamFilterContext bsfc,
                                AVCodecContext avctx, String args,
                                @Cast("uint8_t**") @ByPtrPtr BytePointer poutbuf, IntPointer poutbuf_size,
                                @Cast("const uint8_t*") BytePointer buf, int buf_size, int keyframe);
-public static native int av_bitstream_filter_filter(AVBitStreamFilterContext bsfc,
+@NoException public static native int av_bitstream_filter_filter(AVBitStreamFilterContext bsfc,
                                AVCodecContext avctx, @Cast("const char*") BytePointer args,
                                @Cast("uint8_t**") @ByPtrPtr ByteBuffer poutbuf, IntBuffer poutbuf_size,
                                @Cast("const uint8_t*") ByteBuffer buf, int buf_size, int keyframe);
-public static native int av_bitstream_filter_filter(AVBitStreamFilterContext bsfc,
+@NoException public static native int av_bitstream_filter_filter(AVBitStreamFilterContext bsfc,
                                AVCodecContext avctx, String args,
                                @Cast("uint8_t**") @ByPtrPtr byte[] poutbuf, int[] poutbuf_size,
                                @Cast("const uint8_t*") byte[] buf, int buf_size, int keyframe);
@@ -5907,7 +5907,7 @@ public static native int av_bitstream_filter_filter(AVBitStreamFilterContext bsf
  * @param bsf the bitstream filter context created with
  * av_bitstream_filter_init(), can be NULL
  */
-public static native void av_bitstream_filter_close(AVBitStreamFilterContext bsf);
+@NoException public static native void av_bitstream_filter_close(AVBitStreamFilterContext bsf);
 
 /**
  * If f is NULL, return the first registered bitstream filter,
@@ -5917,7 +5917,7 @@ public static native void av_bitstream_filter_close(AVBitStreamFilterContext bsf
  * This function can be used to iterate over all registered bitstream
  * filters.
  */
-public static native AVBitStreamFilter av_bitstream_filter_next(@Const AVBitStreamFilter f);
+@NoException public static native AVBitStreamFilter av_bitstream_filter_next(@Const AVBitStreamFilter f);
 
 /* memory */
 
@@ -5928,17 +5928,17 @@ public static native AVBitStreamFilter av_bitstream_filter_next(@Const AVBitStre
  * In addition the whole buffer will initially and after resizes
  * be 0-initialized so that no uninitialized data will ever appear.
  */
-public static native void av_fast_padded_malloc(Pointer ptr, @Cast("unsigned int*") IntPointer size, @Cast("size_t") long min_size);
-public static native void av_fast_padded_malloc(Pointer ptr, @Cast("unsigned int*") IntBuffer size, @Cast("size_t") long min_size);
-public static native void av_fast_padded_malloc(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
+@NoException public static native void av_fast_padded_malloc(Pointer ptr, @Cast("unsigned int*") IntPointer size, @Cast("size_t") long min_size);
+@NoException public static native void av_fast_padded_malloc(Pointer ptr, @Cast("unsigned int*") IntBuffer size, @Cast("size_t") long min_size);
+@NoException public static native void av_fast_padded_malloc(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
 
 /**
  * Same behaviour av_fast_padded_malloc except that buffer will always
  * be 0-initialized after call.
  */
-public static native void av_fast_padded_mallocz(Pointer ptr, @Cast("unsigned int*") IntPointer size, @Cast("size_t") long min_size);
-public static native void av_fast_padded_mallocz(Pointer ptr, @Cast("unsigned int*") IntBuffer size, @Cast("size_t") long min_size);
-public static native void av_fast_padded_mallocz(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
+@NoException public static native void av_fast_padded_mallocz(Pointer ptr, @Cast("unsigned int*") IntPointer size, @Cast("size_t") long min_size);
+@NoException public static native void av_fast_padded_mallocz(Pointer ptr, @Cast("unsigned int*") IntBuffer size, @Cast("size_t") long min_size);
+@NoException public static native void av_fast_padded_mallocz(Pointer ptr, @Cast("unsigned int*") int[] size, @Cast("size_t") long min_size);
 
 /**
  * Encode extradata length to a buffer. Used by xiph codecs.
@@ -5947,9 +5947,9 @@ public static native void av_fast_padded_mallocz(Pointer ptr, @Cast("unsigned in
  * @param v size of extradata in bytes
  * @return number of bytes written to the buffer.
  */
-public static native @Cast("unsigned int") int av_xiphlacing(@Cast("unsigned char*") BytePointer s, @Cast("unsigned int") int v);
-public static native @Cast("unsigned int") int av_xiphlacing(@Cast("unsigned char*") ByteBuffer s, @Cast("unsigned int") int v);
-public static native @Cast("unsigned int") int av_xiphlacing(@Cast("unsigned char*") byte[] s, @Cast("unsigned int") int v);
+@NoException public static native @Cast("unsigned int") int av_xiphlacing(@Cast("unsigned char*") BytePointer s, @Cast("unsigned int") int v);
+@NoException public static native @Cast("unsigned int") int av_xiphlacing(@Cast("unsigned char*") ByteBuffer s, @Cast("unsigned int") int v);
+@NoException public static native @Cast("unsigned int") int av_xiphlacing(@Cast("unsigned char*") byte[] s, @Cast("unsigned int") int v);
 
 // #if FF_API_MISSING_SAMPLE
 /**
@@ -5965,8 +5965,8 @@ public static native @Cast("unsigned int") int av_xiphlacing(@Cast("unsigned cha
  * mailing list.
  * @deprecated Use avpriv_report_missing_feature() instead.
  */
-public static native @Deprecated void av_log_missing_feature(Pointer avc, @Cast("const char*") BytePointer feature, int want_sample);
-public static native @Deprecated void av_log_missing_feature(Pointer avc, String feature, int want_sample);
+@NoException public static native @Deprecated void av_log_missing_feature(Pointer avc, @Cast("const char*") BytePointer feature, int want_sample);
+@NoException public static native @Deprecated void av_log_missing_feature(Pointer avc, String feature, int want_sample);
 
 /**
  * Log a generic warning message asking for a sample. This function is
@@ -5977,21 +5977,21 @@ public static native @Deprecated void av_log_missing_feature(Pointer avc, String
  * @param [in] msg string containing an optional message, or NULL if no message
  * @deprecated Use avpriv_request_sample() instead.
  */
-public static native @Deprecated void av_log_ask_for_sample(Pointer avc, @Cast("const char*") BytePointer msg);
-public static native @Deprecated void av_log_ask_for_sample(Pointer avc, String msg);
+@NoException public static native @Deprecated void av_log_ask_for_sample(Pointer avc, @Cast("const char*") BytePointer msg);
+@NoException public static native @Deprecated void av_log_ask_for_sample(Pointer avc, String msg);
 // #endif /* FF_API_MISSING_SAMPLE */
 
 /**
  * Register the hardware accelerator hwaccel.
  */
-public static native void av_register_hwaccel(AVHWAccel hwaccel);
+@NoException public static native void av_register_hwaccel(AVHWAccel hwaccel);
 
 /**
  * If hwaccel is NULL, returns the first registered hardware accelerator,
  * if hwaccel is non-NULL, returns the next registered hardware accelerator
  * after hwaccel, or NULL if hwaccel is the last one.
  */
-public static native AVHWAccel av_hwaccel_next(@Const AVHWAccel hwaccel);
+@NoException public static native AVHWAccel av_hwaccel_next(@Const AVHWAccel hwaccel);
 
 
 /**
@@ -6039,7 +6039,7 @@ public static class Cb_PointerPointer_int extends FunctionPointer {
     private native void allocate();
     public native int call(@Cast("void**") PointerPointer mutex, @Cast("AVLockOp") int op);
 }
-public static native int av_lockmgr_register(Cb_PointerPointer_int cb);
+@NoException public static native int av_lockmgr_register(Cb_PointerPointer_int cb);
 public static class Cb_Pointer_int extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -6048,39 +6048,39 @@ public static class Cb_Pointer_int extends FunctionPointer {
     private native void allocate();
     public native int call(@Cast("void**") @ByPtrPtr Pointer mutex, @Cast("AVLockOp") int op);
 }
-public static native int av_lockmgr_register(Cb_Pointer_int cb);
+@NoException public static native int av_lockmgr_register(Cb_Pointer_int cb);
 
 /**
  * Get the type of the given codec.
  */
-public static native @Cast("AVMediaType") int avcodec_get_type(@Cast("AVCodecID") int codec_id);
+@NoException public static native @Cast("AVMediaType") int avcodec_get_type(@Cast("AVCodecID") int codec_id);
 
 /**
  * Get the name of a codec.
  * @return  a static string identifying the codec; never NULL
  */
-public static native @Cast("const char*") BytePointer avcodec_get_name(@Cast("AVCodecID") int id);
+@NoException public static native @Cast("const char*") BytePointer avcodec_get_name(@Cast("AVCodecID") int id);
 
 /**
  * @return a positive value if s is open (i.e. avcodec_open2() was called on it
  * with no corresponding avcodec_close()), 0 otherwise.
  */
-public static native int avcodec_is_open(AVCodecContext s);
+@NoException public static native int avcodec_is_open(AVCodecContext s);
 
 /**
  * @return a non-zero number if codec is an encoder, zero otherwise
  */
-public static native int av_codec_is_encoder(@Const AVCodec codec);
+@NoException public static native int av_codec_is_encoder(@Const AVCodec codec);
 
 /**
  * @return a non-zero number if codec is a decoder, zero otherwise
  */
-public static native int av_codec_is_decoder(@Const AVCodec codec);
+@NoException public static native int av_codec_is_decoder(@Const AVCodec codec);
 
 /**
  * @return descriptor for given codec ID or NULL if no descriptor exists.
  */
-public static native @Const AVCodecDescriptor avcodec_descriptor_get(@Cast("AVCodecID") int id);
+@NoException public static native @Const AVCodecDescriptor avcodec_descriptor_get(@Cast("AVCodecID") int id);
 
 /**
  * Iterate over all codec descriptors known to libavcodec.
@@ -6089,14 +6089,14 @@ public static native @Const AVCodecDescriptor avcodec_descriptor_get(@Cast("AVCo
  *
  * @return next descriptor or NULL after the last descriptor
  */
-public static native @Const AVCodecDescriptor avcodec_descriptor_next(@Const AVCodecDescriptor prev);
+@NoException public static native @Const AVCodecDescriptor avcodec_descriptor_next(@Const AVCodecDescriptor prev);
 
 /**
  * @return codec descriptor with the given name or NULL if no such descriptor
  *         exists.
  */
-public static native @Const AVCodecDescriptor avcodec_descriptor_get_by_name(@Cast("const char*") BytePointer name);
-public static native @Const AVCodecDescriptor avcodec_descriptor_get_by_name(String name);
+@NoException public static native @Const AVCodecDescriptor avcodec_descriptor_get_by_name(@Cast("const char*") BytePointer name);
+@NoException public static native @Const AVCodecDescriptor avcodec_descriptor_get_by_name(String name);
 
 /**
  * Allocate a CPB properties structure and initialize its fields to default
@@ -6107,7 +6107,7 @@ public static native @Const AVCodecDescriptor avcodec_descriptor_get_by_name(Str
  *
  * @return the newly allocated struct or NULL on failure
  */
-public static native AVCPBProperties av_cpb_properties_alloc(@Cast("size_t*") SizeTPointer size);
+@NoException public static native AVCPBProperties av_cpb_properties_alloc(@Cast("size_t*") SizeTPointer size);
 
 /**
  * \}

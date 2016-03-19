@@ -292,10 +292,10 @@ public static native int comInitCount(); public static native void comInitCount(
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public videoDevice(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public videoDevice(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public videoDevice position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public videoDevice(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public videoDevice position(long position) {
         return (videoDevice)super.position(position);
     }
 
@@ -364,10 +364,10 @@ public static native int comInitCount(); public static native void comInitCount(
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public videoInput(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public videoInput(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public videoInput position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public videoInput(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public videoInput position(long position) {
         return (videoInput)super.position(position);
     }
 

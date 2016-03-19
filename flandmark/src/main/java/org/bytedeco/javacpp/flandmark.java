@@ -40,13 +40,13 @@ public static class FLANDMARK_PSIG extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public FLANDMARK_PSIG() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FLANDMARK_PSIG(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FLANDMARK_PSIG(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FLANDMARK_PSIG(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FLANDMARK_PSIG position(int position) {
+    private native void allocateArray(long size);
+    @Override public FLANDMARK_PSIG position(long position) {
         return (FLANDMARK_PSIG)super.position(position);
     }
 
@@ -59,13 +59,13 @@ public static class FLANDMARK_Options extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public FLANDMARK_Options() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FLANDMARK_Options(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FLANDMARK_Options(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FLANDMARK_Options(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FLANDMARK_Options position(int position) {
+    private native void allocateArray(long size);
+    @Override public FLANDMARK_Options position(long position) {
         return (FLANDMARK_Options)super.position(position);
     }
 
@@ -88,13 +88,13 @@ public static class FLANDMARK_LBP extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public FLANDMARK_LBP() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FLANDMARK_LBP(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FLANDMARK_LBP(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FLANDMARK_LBP(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FLANDMARK_LBP position(int position) {
+    private native void allocateArray(long size);
+    @Override public FLANDMARK_LBP position(long position) {
         return (FLANDMARK_LBP)super.position(position);
     }
 
@@ -110,13 +110,13 @@ public static class FLANDMARK_Data extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public FLANDMARK_Data() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FLANDMARK_Data(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FLANDMARK_Data(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FLANDMARK_Data(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FLANDMARK_Data position(int position) {
+    private native void allocateArray(long size);
+    @Override public FLANDMARK_Data position(long position) {
         return (FLANDMARK_Data)super.position(position);
     }
 
@@ -131,13 +131,13 @@ public static class FLANDMARK_Model extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public FLANDMARK_Model() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FLANDMARK_Model(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FLANDMARK_Model(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FLANDMARK_Model(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FLANDMARK_Model position(int position) {
+    private native void allocateArray(long size);
+    @Override public FLANDMARK_Model position(long position) {
         return (FLANDMARK_Model)super.position(position);
     }
 
@@ -154,13 +154,13 @@ public static class FLANDMARK_PSI extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public FLANDMARK_PSI() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FLANDMARK_PSI(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FLANDMARK_PSI(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FLANDMARK_PSI(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FLANDMARK_PSI position(int position) {
+    private native void allocateArray(long size);
+    @Override public FLANDMARK_PSI position(long position) {
         return (FLANDMARK_PSI)super.position(position);
     }
 
@@ -173,13 +173,13 @@ public static class FLANDMARK_PSI_SPARSE extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public FLANDMARK_PSI_SPARSE() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FLANDMARK_PSI_SPARSE(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FLANDMARK_PSI_SPARSE(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FLANDMARK_PSI_SPARSE(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FLANDMARK_PSI_SPARSE position(int position) {
+    private native void allocateArray(long size);
+    @Override public FLANDMARK_PSI_SPARSE position(long position) {
         return (FLANDMARK_PSI_SPARSE)super.position(position);
     }
 

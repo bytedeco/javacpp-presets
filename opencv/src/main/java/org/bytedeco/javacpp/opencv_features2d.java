@@ -117,10 +117,10 @@ This section describes approaches based on local 2D features and used to categor
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KeyPointsFilter(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public KeyPointsFilter(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public KeyPointsFilter position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public KeyPointsFilter(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public KeyPointsFilter position(long position) {
         return (KeyPointsFilter)super.position(position);
     }
 
@@ -161,13 +161,13 @@ This section describes approaches based on local 2D features and used to categor
     static { Loader.load(); }
     /** Default native constructor. */
     public Feature2D() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Feature2D(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Feature2D(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Feature2D(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public Feature2D position(int position) {
+    private native void allocateArray(long size);
+    @Override public Feature2D position(long position) {
         return (Feature2D)super.position(position);
     }
 
@@ -264,13 +264,13 @@ the vector descriptor extractors inherit the DescriptorExtractor interface.
     static { Loader.load(); }
     /** Default native constructor. */
     public BRISK() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public BRISK(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BRISK(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BRISK(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public BRISK position(int position) {
+    private native void allocateArray(long size);
+    @Override public BRISK position(long position) {
         return (BRISK)super.position(position);
     }
 
@@ -626,13 +626,13 @@ Default values of parameters are tuned to extract dark circular blobs.
     static { Loader.load(); }
     /** Default native constructor. */
     public SimpleBlobDetector() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SimpleBlobDetector(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public SimpleBlobDetector(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SimpleBlobDetector(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public SimpleBlobDetector position(int position) {
+    private native void allocateArray(long size);
+    @Override public SimpleBlobDetector position(long position) {
         return (SimpleBlobDetector)super.position(position);
     }
 
@@ -640,10 +640,10 @@ Default values of parameters are tuned to extract dark circular blobs.
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public Params(Pointer p) { super(p); }
-      /** Native array allocator. Access with {@link Pointer#position(int)}. */
-      public Params(int size) { super((Pointer)null); allocateArray(size); }
-      private native void allocateArray(int size);
-      @Override public Params position(int position) {
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public Params(long size) { super((Pointer)null); allocateArray(size); }
+      private native void allocateArray(long size);
+      @Override public Params position(long position) {
           return (Params)super.position(position);
       }
   
@@ -812,13 +812,13 @@ Bartoli. In British Machine Vision Conference (BMVC), Bristol, UK, September 201
     static { Loader.load(); }
     /** Default native constructor. */
     public Accumulator() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Accumulator(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Accumulator(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Accumulator(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public Accumulator position(int position) {
+    private native void allocateArray(long size);
+    @Override public Accumulator position(long position) {
         return (Accumulator)super.position(position);
     }
  }
@@ -1037,10 +1037,10 @@ sets.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BFMatcher(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public BFMatcher(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public BFMatcher position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BFMatcher(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public BFMatcher position(long position) {
         return (BFMatcher)super.position(position);
     }
 
@@ -1080,10 +1080,10 @@ matches of descriptor sets because flann::Index does not support this. :
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlannBasedMatcher(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FlannBasedMatcher(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public FlannBasedMatcher position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FlannBasedMatcher(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public FlannBasedMatcher position(long position) {
         return (FlannBasedMatcher)super.position(position);
     }
 
@@ -1122,13 +1122,13 @@ matches of descriptor sets because flann::Index does not support this. :
     static { Loader.load(); }
     /** Default native constructor. */
     public DrawMatchesFlags() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public DrawMatchesFlags(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public DrawMatchesFlags(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DrawMatchesFlags(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public DrawMatchesFlags position(int position) {
+    private native void allocateArray(long size);
+    @Override public DrawMatchesFlags position(long position) {
         return (DrawMatchesFlags)super.position(position);
     }
 

@@ -17,6 +17,8 @@ import static org.bytedeco.javacpp.opencv_features2d.*;
 import static org.bytedeco.javacpp.opencv_calib3d.*;
 import static org.bytedeco.javacpp.opencv_objdetect.*;
 import static org.bytedeco.javacpp.opencv_video.*;
+import static org.bytedeco.javacpp.opencv_shape.*;
+import static org.bytedeco.javacpp.opencv_xfeatures2d.*;
 
 public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitching {
     static { Loader.load(); }
@@ -148,13 +150,13 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     static { Loader.load(); }
     /** Default native constructor. */
     public ProjectorBase() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ProjectorBase(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ProjectorBase(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ProjectorBase(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ProjectorBase position(int position) {
+    private native void allocateArray(long size);
+    @Override public ProjectorBase position(long position) {
         return (ProjectorBase)super.position(position);
     }
 
@@ -184,13 +186,13 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     static { Loader.load(); }
     /** Default native constructor. */
     public PlaneProjector() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PlaneProjector(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PlaneProjector(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PlaneProjector(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public PlaneProjector position(int position) {
+    private native void allocateArray(long size);
+    @Override public PlaneProjector position(long position) {
         return (PlaneProjector)super.position(position);
     }
 
@@ -208,10 +210,10 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetailPlaneWarper(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public DetailPlaneWarper(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public DetailPlaneWarper position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public DetailPlaneWarper(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public DetailPlaneWarper position(long position) {
         return (DetailPlaneWarper)super.position(position);
     }
 
@@ -244,13 +246,13 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     static { Loader.load(); }
     /** Default native constructor. */
     public SphericalProjector() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SphericalProjector(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public SphericalProjector(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SphericalProjector(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public SphericalProjector position(int position) {
+    private native void allocateArray(long size);
+    @Override public SphericalProjector position(long position) {
         return (SphericalProjector)super.position(position);
     }
 
@@ -289,13 +291,13 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     static { Loader.load(); }
     /** Default native constructor. */
     public CylindricalProjector() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CylindricalProjector(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CylindricalProjector(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CylindricalProjector(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CylindricalProjector position(int position) {
+    private native void allocateArray(long size);
+    @Override public CylindricalProjector position(long position) {
         return (CylindricalProjector)super.position(position);
     }
 
@@ -331,13 +333,13 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     static { Loader.load(); }
     /** Default native constructor. */
     public FisheyeProjector() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FisheyeProjector(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FisheyeProjector(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FisheyeProjector(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FisheyeProjector position(int position) {
+    private native void allocateArray(long size);
+    @Override public FisheyeProjector position(long position) {
         return (FisheyeProjector)super.position(position);
     }
 
@@ -364,13 +366,13 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     static { Loader.load(); }
     /** Default native constructor. */
     public StereographicProjector() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public StereographicProjector(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public StereographicProjector(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StereographicProjector(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public StereographicProjector position(int position) {
+    private native void allocateArray(long size);
+    @Override public StereographicProjector position(long position) {
         return (StereographicProjector)super.position(position);
     }
 
@@ -397,13 +399,13 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     static { Loader.load(); }
     /** Default native constructor. */
     public CompressedRectilinearProjector() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CompressedRectilinearProjector(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CompressedRectilinearProjector(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CompressedRectilinearProjector(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CompressedRectilinearProjector position(int position) {
+    private native void allocateArray(long size);
+    @Override public CompressedRectilinearProjector position(long position) {
         return (CompressedRectilinearProjector)super.position(position);
     }
 
@@ -435,13 +437,13 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     static { Loader.load(); }
     /** Default native constructor. */
     public CompressedRectilinearPortraitProjector() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CompressedRectilinearPortraitProjector(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CompressedRectilinearPortraitProjector(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CompressedRectilinearPortraitProjector(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CompressedRectilinearPortraitProjector position(int position) {
+    private native void allocateArray(long size);
+    @Override public CompressedRectilinearPortraitProjector position(long position) {
         return (CompressedRectilinearPortraitProjector)super.position(position);
     }
 
@@ -473,13 +475,13 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     static { Loader.load(); }
     /** Default native constructor. */
     public PaniniProjector() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PaniniProjector(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PaniniProjector(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PaniniProjector(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public PaniniProjector position(int position) {
+    private native void allocateArray(long size);
+    @Override public PaniniProjector position(long position) {
         return (PaniniProjector)super.position(position);
     }
 
@@ -511,13 +513,13 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     static { Loader.load(); }
     /** Default native constructor. */
     public PaniniPortraitProjector() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PaniniPortraitProjector(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PaniniPortraitProjector(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PaniniPortraitProjector(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public PaniniPortraitProjector position(int position) {
+    private native void allocateArray(long size);
+    @Override public PaniniPortraitProjector position(long position) {
         return (PaniniPortraitProjector)super.position(position);
     }
 
@@ -550,13 +552,13 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     static { Loader.load(); }
     /** Default native constructor. */
     public MercatorProjector() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public MercatorProjector(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public MercatorProjector(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MercatorProjector(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public MercatorProjector position(int position) {
+    private native void allocateArray(long size);
+    @Override public MercatorProjector position(long position) {
         return (MercatorProjector)super.position(position);
     }
 
@@ -583,13 +585,13 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     static { Loader.load(); }
     /** Default native constructor. */
     public TransverseMercatorProjector() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public TransverseMercatorProjector(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TransverseMercatorProjector(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TransverseMercatorProjector(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public TransverseMercatorProjector position(int position) {
+    private native void allocateArray(long size);
+    @Override public TransverseMercatorProjector position(long position) {
         return (TransverseMercatorProjector)super.position(position);
     }
 
@@ -616,10 +618,10 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetailPlaneWarperGpu(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public DetailPlaneWarperGpu(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public DetailPlaneWarperGpu position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public DetailPlaneWarperGpu(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public DetailPlaneWarperGpu position(long position) {
         return (DetailPlaneWarperGpu)super.position(position);
     }
 
@@ -674,13 +676,13 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     static { Loader.load(); }
     /** Default native constructor. */
     public SphericalPortraitProjector() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SphericalPortraitProjector(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public SphericalPortraitProjector(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SphericalPortraitProjector(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public SphericalPortraitProjector position(int position) {
+    private native void allocateArray(long size);
+    @Override public SphericalPortraitProjector position(long position) {
         return (SphericalPortraitProjector)super.position(position);
     }
 
@@ -708,13 +710,13 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     static { Loader.load(); }
     /** Default native constructor. */
     public CylindricalPortraitProjector() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CylindricalPortraitProjector(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CylindricalPortraitProjector(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CylindricalPortraitProjector(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CylindricalPortraitProjector position(int position) {
+    private native void allocateArray(long size);
+    @Override public CylindricalPortraitProjector position(long position) {
         return (CylindricalPortraitProjector)super.position(position);
     }
 
@@ -740,13 +742,13 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     static { Loader.load(); }
     /** Default native constructor. */
     public PlanePortraitProjector() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PlanePortraitProjector(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PlanePortraitProjector(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PlanePortraitProjector(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public PlanePortraitProjector position(int position) {
+    private native void allocateArray(long size);
+    @Override public PlanePortraitProjector position(long position) {
         return (PlanePortraitProjector)super.position(position);
     }
 
@@ -841,13 +843,13 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     static { Loader.load(); }
     /** Default native constructor. */
     public ImageFeatures() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ImageFeatures(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ImageFeatures(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ImageFeatures(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ImageFeatures position(int position) {
+    private native void allocateArray(long size);
+    @Override public ImageFeatures position(long position) {
         return (ImageFeatures)super.position(position);
     }
 
@@ -886,10 +888,10 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SurfFeaturesFinder(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SurfFeaturesFinder(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public SurfFeaturesFinder position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public SurfFeaturesFinder(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public SurfFeaturesFinder position(long position) {
         return (SurfFeaturesFinder)super.position(position);
     }
 
@@ -909,10 +911,10 @@ public class opencv_stitching extends org.bytedeco.javacpp.presets.opencv_stitch
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OrbFeaturesFinder(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public OrbFeaturesFinder(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public OrbFeaturesFinder position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public OrbFeaturesFinder(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public OrbFeaturesFinder position(long position) {
         return (OrbFeaturesFinder)super.position(position);
     }
 
@@ -934,10 +936,10 @@ It's assumed that there is a homography between those images.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MatchesInfo(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public MatchesInfo(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public MatchesInfo position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public MatchesInfo(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public MatchesInfo position(long position) {
         return (MatchesInfo)super.position(position);
     }
 
@@ -1008,10 +1010,10 @@ ratio between descriptor distances is greater than the threshold match_conf
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BestOf2NearestMatcher(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public BestOf2NearestMatcher(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public BestOf2NearestMatcher position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BestOf2NearestMatcher(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public BestOf2NearestMatcher position(long position) {
         return (BestOf2NearestMatcher)super.position(position);
     }
 
@@ -1038,10 +1040,10 @@ ratio between descriptor distances is greater than the threshold match_conf
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BestOf2NearestRangeMatcher(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public BestOf2NearestRangeMatcher(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public BestOf2NearestRangeMatcher position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BestOf2NearestRangeMatcher(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public BestOf2NearestRangeMatcher position(long position) {
         return (BestOf2NearestRangeMatcher)super.position(position);
     }
 
@@ -1172,6 +1174,12 @@ public static final int ENABLE_LOG = 0;
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DisjointSets(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public DisjointSets(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public DisjointSets position(long position) {
+        return (DisjointSets)super.position(position);
+    }
 
     public DisjointSets(int elem_count/*=0*/) { super((Pointer)null); allocate(elem_count); }
     private native void allocate(int elem_count/*=0*/);
@@ -1209,6 +1217,12 @@ public static final int ENABLE_LOG = 0;
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Graph(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Graph(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Graph position(long position) {
+        return (Graph)super.position(position);
+    }
 
     public Graph(int num_vertices/*=0*/) { super((Pointer)null); allocate(num_vertices); }
     private native void allocate(int num_vertices/*=0*/);
@@ -1306,10 +1320,10 @@ public static final int ENABLE_LOG = 0;
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CameraParams(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CameraParams(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CameraParams position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CameraParams(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public CameraParams position(long position) {
         return (CameraParams)super.position(position);
     }
 
@@ -1423,10 +1437,10 @@ rotations in respect to the first camera, for instance. :
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HomographyBasedEstimator(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public HomographyBasedEstimator(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public HomographyBasedEstimator position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public HomographyBasedEstimator(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public HomographyBasedEstimator position(long position) {
         return (HomographyBasedEstimator)super.position(position);
     }
 
@@ -1464,10 +1478,10 @@ You can affect only on them via the refinement mask.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BundleAdjusterReproj(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public BundleAdjusterReproj(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public BundleAdjusterReproj position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BundleAdjusterReproj(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public BundleAdjusterReproj position(long position) {
         return (BundleAdjusterReproj)super.position(position);
     }
 
@@ -1485,10 +1499,10 @@ It can estimate focal length. It ignores the refinement mask for now.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BundleAdjusterRay(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public BundleAdjusterRay(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public BundleAdjusterRay position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BundleAdjusterRay(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public BundleAdjusterRay position(long position) {
         return (BundleAdjusterRay)super.position(position);
     }
 
@@ -1631,13 +1645,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public NoExposureCompensator() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NoExposureCompensator(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NoExposureCompensator(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NoExposureCompensator(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NoExposureCompensator position(int position) {
+    private native void allocateArray(long size);
+    @Override public NoExposureCompensator position(long position) {
         return (NoExposureCompensator)super.position(position);
     }
 
@@ -1653,13 +1667,13 @@ intensities, see \cite BL07 and \cite WJ10 for details.
     static { Loader.load(); }
     /** Default native constructor. */
     public GainCompensator() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public GainCompensator(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public GainCompensator(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GainCompensator(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public GainCompensator position(int position) {
+    private native void allocateArray(long size);
+    @Override public GainCompensator position(long position) {
         return (GainCompensator)super.position(position);
     }
 
@@ -1676,10 +1690,10 @@ intensities, see \cite UES01 for details.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BlocksGainCompensator(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public BlocksGainCompensator(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public BlocksGainCompensator position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BlocksGainCompensator(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public BlocksGainCompensator position(long position) {
         return (BlocksGainCompensator)super.position(position);
     }
 
@@ -1777,13 +1791,13 @@ intensities, see \cite UES01 for details.
     static { Loader.load(); }
     /** Default native constructor. */
     public NoSeamFinder() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NoSeamFinder(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NoSeamFinder(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NoSeamFinder(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NoSeamFinder position(int position) {
+    private native void allocateArray(long size);
+    @Override public NoSeamFinder position(long position) {
         return (NoSeamFinder)super.position(position);
     }
 
@@ -1807,13 +1821,13 @@ intensities, see \cite UES01 for details.
     static { Loader.load(); }
     /** Default native constructor. */
     public VoronoiSeamFinder() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public VoronoiSeamFinder(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public VoronoiSeamFinder(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VoronoiSeamFinder(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public VoronoiSeamFinder position(int position) {
+    private native void allocateArray(long size);
+    @Override public VoronoiSeamFinder position(long position) {
         return (VoronoiSeamFinder)super.position(position);
     }
 
@@ -1828,6 +1842,12 @@ intensities, see \cite UES01 for details.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DpSeamFinder(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public DpSeamFinder(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public DpSeamFinder position(long position) {
+        return (DpSeamFinder)super.position(position);
+    }
 
     /** enum cv::detail::DpSeamFinder::CostFunction */
     public static final int COLOR = 0, COLOR_GRAD = 1;
@@ -1850,13 +1870,13 @@ intensities, see \cite UES01 for details.
     static { Loader.load(); }
     /** Default native constructor. */
     public GraphCutSeamFinderBase() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public GraphCutSeamFinderBase(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public GraphCutSeamFinderBase(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GraphCutSeamFinderBase(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public GraphCutSeamFinderBase position(int position) {
+    private native void allocateArray(long size);
+    @Override public GraphCutSeamFinderBase position(long position) {
         return (GraphCutSeamFinderBase)super.position(position);
     }
 
@@ -1870,10 +1890,10 @@ intensities, see \cite UES01 for details.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GraphCutSeamFinder(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public GraphCutSeamFinder(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public GraphCutSeamFinder position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public GraphCutSeamFinder(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public GraphCutSeamFinder position(long position) {
         return (GraphCutSeamFinder)super.position(position);
     }
     public SeamFinder asSeamFinder() { return asSeamFinder(this); }
@@ -1962,13 +1982,13 @@ Simple blender which puts one image over another
     static { Loader.load(); }
     /** Default native constructor. */
     public Blender() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Blender(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Blender(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Blender(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public Blender position(int position) {
+    private native void allocateArray(long size);
+    @Override public Blender position(long position) {
         return (Blender)super.position(position);
     }
 
@@ -2007,10 +2027,10 @@ Simple blender which puts one image over another
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FeatherBlender(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FeatherBlender(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public FeatherBlender position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FeatherBlender(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public FeatherBlender position(long position) {
         return (FeatherBlender)super.position(position);
     }
 
@@ -2040,10 +2060,10 @@ Simple blender which puts one image over another
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MultiBandBlender(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public MultiBandBlender(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public MultiBandBlender position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public MultiBandBlender(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public MultiBandBlender position(long position) {
         return (MultiBandBlender)super.position(position);
     }
 
@@ -2240,13 +2260,13 @@ by Heung-Yeung Shum and Richard Szeliski.
     static { Loader.load(); }
     /** Default native constructor. */
     public Timelapser() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Timelapser(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Timelapser(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Timelapser(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public Timelapser position(int position) {
+    private native void allocateArray(long size);
+    @Override public Timelapser position(long position) {
         return (Timelapser)super.position(position);
     }
 
@@ -2266,13 +2286,13 @@ by Heung-Yeung Shum and Richard Szeliski.
     static { Loader.load(); }
     /** Default native constructor. */
     public TimelapserCrop() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public TimelapserCrop(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TimelapserCrop(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TimelapserCrop(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public TimelapserCrop position(int position) {
+    private native void allocateArray(long size);
+    @Override public TimelapserCrop position(long position) {
         return (TimelapserCrop)super.position(position);
     }
 
@@ -2356,13 +2376,13 @@ by Heung-Yeung Shum and Richard Szeliski.
     static { Loader.load(); }
     /** Default native constructor. */
     public PlaneWarper() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PlaneWarper(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PlaneWarper(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PlaneWarper(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public PlaneWarper position(int position) {
+    private native void allocateArray(long size);
+    @Override public PlaneWarper position(long position) {
         return (PlaneWarper)super.position(position);
     }
 
@@ -2376,13 +2396,13 @@ by Heung-Yeung Shum and Richard Szeliski.
     static { Loader.load(); }
     /** Default native constructor. */
     public CylindricalWarper() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CylindricalWarper(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CylindricalWarper(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CylindricalWarper(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CylindricalWarper position(int position) {
+    private native void allocateArray(long size);
+    @Override public CylindricalWarper position(long position) {
         return (CylindricalWarper)super.position(position);
     }
 
@@ -2394,13 +2414,13 @@ by Heung-Yeung Shum and Richard Szeliski.
     static { Loader.load(); }
     /** Default native constructor. */
     public SphericalWarper() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SphericalWarper(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public SphericalWarper(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SphericalWarper(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public SphericalWarper position(int position) {
+    private native void allocateArray(long size);
+    @Override public SphericalWarper position(long position) {
         return (SphericalWarper)super.position(position);
     }
 
@@ -2411,13 +2431,13 @@ by Heung-Yeung Shum and Richard Szeliski.
     static { Loader.load(); }
     /** Default native constructor. */
     public FisheyeWarper() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FisheyeWarper(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FisheyeWarper(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FisheyeWarper(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FisheyeWarper position(int position) {
+    private native void allocateArray(long size);
+    @Override public FisheyeWarper position(long position) {
         return (FisheyeWarper)super.position(position);
     }
 
@@ -2428,13 +2448,13 @@ by Heung-Yeung Shum and Richard Szeliski.
     static { Loader.load(); }
     /** Default native constructor. */
     public StereographicWarper() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public StereographicWarper(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public StereographicWarper(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StereographicWarper(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public StereographicWarper position(int position) {
+    private native void allocateArray(long size);
+    @Override public StereographicWarper position(long position) {
         return (StereographicWarper)super.position(position);
     }
 
@@ -2445,10 +2465,10 @@ by Heung-Yeung Shum and Richard Szeliski.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CompressedRectilinearWarper(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CompressedRectilinearWarper(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CompressedRectilinearWarper position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CompressedRectilinearWarper(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public CompressedRectilinearWarper position(long position) {
         return (CompressedRectilinearWarper)super.position(position);
     }
 
@@ -2463,10 +2483,10 @@ by Heung-Yeung Shum and Richard Szeliski.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CompressedRectilinearPortraitWarper(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CompressedRectilinearPortraitWarper(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CompressedRectilinearPortraitWarper position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CompressedRectilinearPortraitWarper(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public CompressedRectilinearPortraitWarper position(long position) {
         return (CompressedRectilinearPortraitWarper)super.position(position);
     }
 
@@ -2481,10 +2501,10 @@ by Heung-Yeung Shum and Richard Szeliski.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PaniniWarper(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PaniniWarper(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public PaniniWarper position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PaniniWarper(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public PaniniWarper position(long position) {
         return (PaniniWarper)super.position(position);
     }
 
@@ -2499,10 +2519,10 @@ by Heung-Yeung Shum and Richard Szeliski.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PaniniPortraitWarper(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PaniniPortraitWarper(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public PaniniPortraitWarper position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PaniniPortraitWarper(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public PaniniPortraitWarper position(long position) {
         return (PaniniPortraitWarper)super.position(position);
     }
 
@@ -2517,13 +2537,13 @@ by Heung-Yeung Shum and Richard Szeliski.
     static { Loader.load(); }
     /** Default native constructor. */
     public MercatorWarper() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public MercatorWarper(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public MercatorWarper(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MercatorWarper(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public MercatorWarper position(int position) {
+    private native void allocateArray(long size);
+    @Override public MercatorWarper position(long position) {
         return (MercatorWarper)super.position(position);
     }
 
@@ -2534,13 +2554,13 @@ by Heung-Yeung Shum and Richard Szeliski.
     static { Loader.load(); }
     /** Default native constructor. */
     public TransverseMercatorWarper() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public TransverseMercatorWarper(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TransverseMercatorWarper(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TransverseMercatorWarper(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public TransverseMercatorWarper position(int position) {
+    private native void allocateArray(long size);
+    @Override public TransverseMercatorWarper position(long position) {
         return (TransverseMercatorWarper)super.position(position);
     }
 
@@ -2658,13 +2678,13 @@ familiar with the theory is recommended.
     static { Loader.load(); }
     /** Default native constructor. */
     public Stitcher() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Stitcher(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Stitcher(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Stitcher(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public Stitcher position(int position) {
+    private native void allocateArray(long size);
+    @Override public Stitcher position(long position) {
         return (Stitcher)super.position(position);
     }
 

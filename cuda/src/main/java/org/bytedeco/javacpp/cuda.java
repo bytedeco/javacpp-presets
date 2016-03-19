@@ -217,13 +217,13 @@ public static class CUuuid extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CUuuid() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CUuuid(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CUuuid(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUuuid(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CUuuid position(int position) {
+    private native void allocateArray(long size);
+    @Override public CUuuid position(long position) {
         return (CUuuid)super.position(position);
     }
 
@@ -246,13 +246,13 @@ public static class CUipcEventHandle extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CUipcEventHandle() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CUipcEventHandle(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CUipcEventHandle(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUipcEventHandle(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CUipcEventHandle position(int position) {
+    private native void allocateArray(long size);
+    @Override public CUipcEventHandle position(long position) {
         return (CUipcEventHandle)super.position(position);
     }
 
@@ -267,13 +267,13 @@ public static class CUipcMemHandle extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CUipcMemHandle() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CUipcMemHandle(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CUipcMemHandle(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUipcMemHandle(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CUipcMemHandle position(int position) {
+    private native void allocateArray(long size);
+    @Override public CUipcMemHandle position(long position) {
         return (CUipcMemHandle)super.position(position);
     }
 
@@ -623,13 +623,13 @@ public static class CUdevprop extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CUdevprop() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CUdevprop(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CUdevprop(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUdevprop(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CUdevprop position(int position) {
+    private native void allocateArray(long size);
+    @Override public CUdevprop position(long position) {
         return (CUdevprop)super.position(position);
     }
 
@@ -1587,13 +1587,13 @@ public static class CUDA_MEMCPY2D extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CUDA_MEMCPY2D() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CUDA_MEMCPY2D(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CUDA_MEMCPY2D(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUDA_MEMCPY2D(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CUDA_MEMCPY2D position(int position) {
+    private native void allocateArray(long size);
+    @Override public CUDA_MEMCPY2D position(long position) {
         return (CUDA_MEMCPY2D)super.position(position);
     }
 
@@ -1642,13 +1642,13 @@ public static class CUDA_MEMCPY3D extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CUDA_MEMCPY3D() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CUDA_MEMCPY3D(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CUDA_MEMCPY3D(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUDA_MEMCPY3D(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CUDA_MEMCPY3D position(int position) {
+    private native void allocateArray(long size);
+    @Override public CUDA_MEMCPY3D position(long position) {
         return (CUDA_MEMCPY3D)super.position(position);
     }
 
@@ -1713,13 +1713,13 @@ public static class CUDA_MEMCPY3D_PEER extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CUDA_MEMCPY3D_PEER() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CUDA_MEMCPY3D_PEER(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CUDA_MEMCPY3D_PEER(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUDA_MEMCPY3D_PEER(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CUDA_MEMCPY3D_PEER position(int position) {
+    private native void allocateArray(long size);
+    @Override public CUDA_MEMCPY3D_PEER position(long position) {
         return (CUDA_MEMCPY3D_PEER)super.position(position);
     }
 
@@ -1784,13 +1784,13 @@ public static class CUDA_ARRAY_DESCRIPTOR extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CUDA_ARRAY_DESCRIPTOR() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CUDA_ARRAY_DESCRIPTOR(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CUDA_ARRAY_DESCRIPTOR(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUDA_ARRAY_DESCRIPTOR(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CUDA_ARRAY_DESCRIPTOR position(int position) {
+    private native void allocateArray(long size);
+    @Override public CUDA_ARRAY_DESCRIPTOR position(long position) {
         return (CUDA_ARRAY_DESCRIPTOR)super.position(position);
     }
 
@@ -1812,13 +1812,13 @@ public static class CUDA_ARRAY3D_DESCRIPTOR extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CUDA_ARRAY3D_DESCRIPTOR() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CUDA_ARRAY3D_DESCRIPTOR(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CUDA_ARRAY3D_DESCRIPTOR(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUDA_ARRAY3D_DESCRIPTOR(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CUDA_ARRAY3D_DESCRIPTOR position(int position) {
+    private native void allocateArray(long size);
+    @Override public CUDA_ARRAY3D_DESCRIPTOR position(long position) {
         return (CUDA_ARRAY3D_DESCRIPTOR)super.position(position);
     }
 
@@ -1848,13 +1848,13 @@ public static class CUDA_RESOURCE_DESC extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CUDA_RESOURCE_DESC() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CUDA_RESOURCE_DESC(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CUDA_RESOURCE_DESC(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUDA_RESOURCE_DESC(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CUDA_RESOURCE_DESC position(int position) {
+    private native void allocateArray(long size);
+    @Override public CUDA_RESOURCE_DESC position(long position) {
         return (CUDA_RESOURCE_DESC)super.position(position);
     }
 
@@ -1899,13 +1899,13 @@ public static class CUDA_TEXTURE_DESC extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CUDA_TEXTURE_DESC() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CUDA_TEXTURE_DESC(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CUDA_TEXTURE_DESC(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUDA_TEXTURE_DESC(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CUDA_TEXTURE_DESC position(int position) {
+    private native void allocateArray(long size);
+    @Override public CUDA_TEXTURE_DESC position(long position) {
         return (CUDA_TEXTURE_DESC)super.position(position);
     }
 
@@ -2013,13 +2013,13 @@ public static class CUDA_RESOURCE_VIEW_DESC extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CUDA_RESOURCE_VIEW_DESC() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CUDA_RESOURCE_VIEW_DESC(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CUDA_RESOURCE_VIEW_DESC(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUDA_RESOURCE_VIEW_DESC(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CUDA_RESOURCE_VIEW_DESC position(int position) {
+    private native void allocateArray(long size);
+    @Override public CUDA_RESOURCE_VIEW_DESC position(long position) {
         return (CUDA_RESOURCE_VIEW_DESC)super.position(position);
     }
 
@@ -2050,13 +2050,13 @@ public static class CUDA_POINTER_ATTRIBUTE_P2P_TOKENS extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CUDA_POINTER_ATTRIBUTE_P2P_TOKENS() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CUDA_POINTER_ATTRIBUTE_P2P_TOKENS(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CUDA_POINTER_ATTRIBUTE_P2P_TOKENS(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CUDA_POINTER_ATTRIBUTE_P2P_TOKENS(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CUDA_POINTER_ATTRIBUTE_P2P_TOKENS position(int position) {
+    private native void allocateArray(long size);
+    @Override public CUDA_POINTER_ATTRIBUTE_P2P_TOKENS position(long position) {
         return (CUDA_POINTER_ATTRIBUTE_P2P_TOKENS)super.position(position);
     }
 
@@ -12291,13 +12291,13 @@ public static class cudaChannelFormatDesc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public cudaChannelFormatDesc() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public cudaChannelFormatDesc(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public cudaChannelFormatDesc(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudaChannelFormatDesc(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public cudaChannelFormatDesc position(int position) {
+    private native void allocateArray(long size);
+    @Override public cudaChannelFormatDesc position(long position) {
         return (cudaChannelFormatDesc)super.position(position);
     }
 
@@ -12376,13 +12376,13 @@ public static class cudaPitchedPtr extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public cudaPitchedPtr() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public cudaPitchedPtr(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public cudaPitchedPtr(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudaPitchedPtr(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public cudaPitchedPtr position(int position) {
+    private native void allocateArray(long size);
+    @Override public cudaPitchedPtr position(long position) {
         return (cudaPitchedPtr)super.position(position);
     }
 
@@ -12405,13 +12405,13 @@ public static class cudaExtent extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public cudaExtent() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public cudaExtent(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public cudaExtent(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudaExtent(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public cudaExtent position(int position) {
+    private native void allocateArray(long size);
+    @Override public cudaExtent position(long position) {
         return (cudaExtent)super.position(position);
     }
 
@@ -12432,13 +12432,13 @@ public static class cudaPos extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public cudaPos() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public cudaPos(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public cudaPos(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudaPos(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public cudaPos position(int position) {
+    private native void allocateArray(long size);
+    @Override public cudaPos position(long position) {
         return (cudaPos)super.position(position);
     }
 
@@ -12457,13 +12457,13 @@ public static class cudaMemcpy3DParms extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public cudaMemcpy3DParms() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public cudaMemcpy3DParms(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public cudaMemcpy3DParms(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudaMemcpy3DParms(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public cudaMemcpy3DParms position(int position) {
+    private native void allocateArray(long size);
+    @Override public cudaMemcpy3DParms position(long position) {
         return (cudaMemcpy3DParms)super.position(position);
     }
 
@@ -12494,13 +12494,13 @@ public static class cudaMemcpy3DPeerParms extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public cudaMemcpy3DPeerParms() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public cudaMemcpy3DPeerParms(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public cudaMemcpy3DPeerParms(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudaMemcpy3DPeerParms(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public cudaMemcpy3DPeerParms position(int position) {
+    private native void allocateArray(long size);
+    @Override public cudaMemcpy3DPeerParms position(long position) {
         return (cudaMemcpy3DPeerParms)super.position(position);
     }
 
@@ -12679,13 +12679,13 @@ public static class cudaResourceDesc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public cudaResourceDesc() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public cudaResourceDesc(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public cudaResourceDesc(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudaResourceDesc(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public cudaResourceDesc position(int position) {
+    private native void allocateArray(long size);
+    @Override public cudaResourceDesc position(long position) {
         return (cudaResourceDesc)super.position(position);
     }
 
@@ -12721,13 +12721,13 @@ public static class cudaResourceViewDesc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public cudaResourceViewDesc() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public cudaResourceViewDesc(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public cudaResourceViewDesc(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudaResourceViewDesc(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public cudaResourceViewDesc position(int position) {
+    private native void allocateArray(long size);
+    @Override public cudaResourceViewDesc position(long position) {
         return (cudaResourceViewDesc)super.position(position);
     }
 
@@ -12756,13 +12756,13 @@ public static class cudaPointerAttributes extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public cudaPointerAttributes() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public cudaPointerAttributes(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public cudaPointerAttributes(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudaPointerAttributes(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public cudaPointerAttributes position(int position) {
+    private native void allocateArray(long size);
+    @Override public cudaPointerAttributes position(long position) {
         return (cudaPointerAttributes)super.position(position);
     }
 
@@ -12808,13 +12808,13 @@ public static class cudaFuncAttributes extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public cudaFuncAttributes() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public cudaFuncAttributes(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public cudaFuncAttributes(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudaFuncAttributes(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public cudaFuncAttributes position(int position) {
+    private native void allocateArray(long size);
+    @Override public cudaFuncAttributes position(long position) {
         return (cudaFuncAttributes)super.position(position);
     }
 
@@ -13114,13 +13114,13 @@ public static class cudaDeviceProp extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public cudaDeviceProp() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public cudaDeviceProp(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public cudaDeviceProp(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudaDeviceProp(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public cudaDeviceProp position(int position) {
+    private native void allocateArray(long size);
+    @Override public cudaDeviceProp position(long position) {
         return (cudaDeviceProp)super.position(position);
     }
 
@@ -13346,13 +13346,13 @@ public static class cudaIpcEventHandle_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public cudaIpcEventHandle_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public cudaIpcEventHandle_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public cudaIpcEventHandle_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudaIpcEventHandle_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public cudaIpcEventHandle_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public cudaIpcEventHandle_t position(long position) {
         return (cudaIpcEventHandle_t)super.position(position);
     }
 
@@ -13367,13 +13367,13 @@ public static class cudaIpcMemHandle_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public cudaIpcMemHandle_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public cudaIpcMemHandle_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public cudaIpcMemHandle_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudaIpcMemHandle_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public cudaIpcMemHandle_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public cudaIpcMemHandle_t position(long position) {
         return (cudaIpcMemHandle_t)super.position(position);
     }
 
@@ -13534,13 +13534,13 @@ public static class surfaceReference extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public surfaceReference() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public surfaceReference(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public surfaceReference(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public surfaceReference(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public surfaceReference position(int position) {
+    private native void allocateArray(long size);
+    @Override public surfaceReference position(long position) {
         return (surfaceReference)super.position(position);
     }
 
@@ -13683,13 +13683,13 @@ public static class textureReference extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public textureReference() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public textureReference(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public textureReference(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public textureReference(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public textureReference position(int position) {
+    private native void allocateArray(long size);
+    @Override public textureReference position(long position) {
         return (textureReference)super.position(position);
     }
 
@@ -13745,13 +13745,13 @@ public static class cudaTextureDesc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public cudaTextureDesc() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public cudaTextureDesc(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public cudaTextureDesc(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public cudaTextureDesc(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public cudaTextureDesc position(int position) {
+    private native void allocateArray(long size);
+    @Override public cudaTextureDesc position(long position) {
         return (cudaTextureDesc)super.position(position);
     }
 
@@ -13898,13 +13898,13 @@ public static class char1 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public char1() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public char1(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public char1(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public char1(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public char1 position(int position) {
+    private native void allocateArray(long size);
+    @Override public char1 position(long position) {
         return (char1)super.position(position);
     }
 
@@ -13915,13 +13915,13 @@ public static class uchar1 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public uchar1() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public uchar1(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public uchar1(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public uchar1(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public uchar1 position(int position) {
+    private native void allocateArray(long size);
+    @Override public uchar1 position(long position) {
         return (uchar1)super.position(position);
     }
 
@@ -13933,13 +13933,13 @@ public static class char2 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public char2() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public char2(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public char2(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public char2(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public char2 position(int position) {
+    private native void allocateArray(long size);
+    @Override public char2 position(long position) {
         return (char2)super.position(position);
     }
 
@@ -13951,13 +13951,13 @@ public static class uchar2 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public uchar2() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public uchar2(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public uchar2(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public uchar2(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public uchar2 position(int position) {
+    private native void allocateArray(long size);
+    @Override public uchar2 position(long position) {
         return (uchar2)super.position(position);
     }
 
@@ -13969,13 +13969,13 @@ public static class char3 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public char3() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public char3(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public char3(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public char3(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public char3 position(int position) {
+    private native void allocateArray(long size);
+    @Override public char3 position(long position) {
         return (char3)super.position(position);
     }
 
@@ -13988,13 +13988,13 @@ public static class uchar3 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public uchar3() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public uchar3(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public uchar3(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public uchar3(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public uchar3 position(int position) {
+    private native void allocateArray(long size);
+    @Override public uchar3 position(long position) {
         return (uchar3)super.position(position);
     }
 
@@ -14007,13 +14007,13 @@ public static class char4 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public char4() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public char4(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public char4(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public char4(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public char4 position(int position) {
+    private native void allocateArray(long size);
+    @Override public char4 position(long position) {
         return (char4)super.position(position);
     }
 
@@ -14027,13 +14027,13 @@ public static class uchar4 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public uchar4() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public uchar4(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public uchar4(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public uchar4(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public uchar4 position(int position) {
+    private native void allocateArray(long size);
+    @Override public uchar4 position(long position) {
         return (uchar4)super.position(position);
     }
 
@@ -14047,13 +14047,13 @@ public static class short1 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public short1() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public short1(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public short1(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public short1(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public short1 position(int position) {
+    private native void allocateArray(long size);
+    @Override public short1 position(long position) {
         return (short1)super.position(position);
     }
 
@@ -14064,13 +14064,13 @@ public static class ushort1 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public ushort1() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ushort1(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ushort1(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ushort1(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ushort1 position(int position) {
+    private native void allocateArray(long size);
+    @Override public ushort1 position(long position) {
         return (ushort1)super.position(position);
     }
 
@@ -14081,13 +14081,13 @@ public static class short2 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public short2() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public short2(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public short2(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public short2(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public short2 position(int position) {
+    private native void allocateArray(long size);
+    @Override public short2 position(long position) {
         return (short2)super.position(position);
     }
 
@@ -14099,13 +14099,13 @@ public static class ushort2 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public ushort2() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ushort2(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ushort2(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ushort2(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ushort2 position(int position) {
+    private native void allocateArray(long size);
+    @Override public ushort2 position(long position) {
         return (ushort2)super.position(position);
     }
 
@@ -14117,13 +14117,13 @@ public static class short3 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public short3() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public short3(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public short3(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public short3(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public short3 position(int position) {
+    private native void allocateArray(long size);
+    @Override public short3 position(long position) {
         return (short3)super.position(position);
     }
 
@@ -14136,13 +14136,13 @@ public static class ushort3 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public ushort3() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ushort3(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ushort3(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ushort3(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ushort3 position(int position) {
+    private native void allocateArray(long size);
+    @Override public ushort3 position(long position) {
         return (ushort3)super.position(position);
     }
 
@@ -14155,13 +14155,13 @@ public static class short4 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public short4() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public short4(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public short4(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public short4(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public short4 position(int position) {
+    private native void allocateArray(long size);
+    @Override public short4 position(long position) {
         return (short4)super.position(position);
     }
  public native short x(); public native short4 x(short x); public native short y(); public native short4 y(short y); public native short z(); public native short4 z(short z); public native short w(); public native short4 w(short w);
@@ -14170,13 +14170,13 @@ public static class ushort4 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public ushort4() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ushort4(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ushort4(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ushort4(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ushort4 position(int position) {
+    private native void allocateArray(long size);
+    @Override public ushort4 position(long position) {
         return (ushort4)super.position(position);
     }
  public native @Cast("unsigned short") short x(); public native ushort4 x(short x); public native @Cast("unsigned short") short y(); public native ushort4 y(short y); public native @Cast("unsigned short") short z(); public native ushort4 z(short z); public native @Cast("unsigned short") short w(); public native ushort4 w(short w);
@@ -14186,13 +14186,13 @@ public static class int1 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public int1() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public int1(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public int1(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public int1(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public int1 position(int position) {
+    private native void allocateArray(long size);
+    @Override public int1 position(long position) {
         return (int1)super.position(position);
     }
 
@@ -14203,13 +14203,13 @@ public static class uint1 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public uint1() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public uint1(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public uint1(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public uint1(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public uint1 position(int position) {
+    private native void allocateArray(long size);
+    @Override public uint1 position(long position) {
         return (uint1)super.position(position);
     }
 
@@ -14220,13 +14220,13 @@ public static class int2 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public int2() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public int2(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public int2(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public int2(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public int2 position(int position) {
+    private native void allocateArray(long size);
+    @Override public int2 position(long position) {
         return (int2)super.position(position);
     }
  public native int x(); public native int2 x(int x); public native int y(); public native int2 y(int y);
@@ -14235,13 +14235,13 @@ public static class uint2 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public uint2() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public uint2(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public uint2(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public uint2(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public uint2 position(int position) {
+    private native void allocateArray(long size);
+    @Override public uint2 position(long position) {
         return (uint2)super.position(position);
     }
  public native @Cast("unsigned int") int x(); public native uint2 x(int x); public native @Cast("unsigned int") int y(); public native uint2 y(int y);
@@ -14251,13 +14251,13 @@ public static class int3 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public int3() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public int3(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public int3(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public int3(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public int3 position(int position) {
+    private native void allocateArray(long size);
+    @Override public int3 position(long position) {
         return (int3)super.position(position);
     }
 
@@ -14270,13 +14270,13 @@ public static class uint3 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public uint3() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public uint3(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public uint3(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public uint3(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public uint3 position(int position) {
+    private native void allocateArray(long size);
+    @Override public uint3 position(long position) {
         return (uint3)super.position(position);
     }
 
@@ -14289,13 +14289,13 @@ public static class int4 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public int4() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public int4(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public int4(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public int4(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public int4 position(int position) {
+    private native void allocateArray(long size);
+    @Override public int4 position(long position) {
         return (int4)super.position(position);
     }
 
@@ -14309,13 +14309,13 @@ public static class uint4 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public uint4() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public uint4(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public uint4(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public uint4(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public uint4 position(int position) {
+    private native void allocateArray(long size);
+    @Override public uint4 position(long position) {
         return (uint4)super.position(position);
     }
 
@@ -14329,13 +14329,13 @@ public static class long1 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public long1() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public long1(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public long1(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public long1(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public long1 position(int position) {
+    private native void allocateArray(long size);
+    @Override public long1 position(long position) {
         return (long1)super.position(position);
     }
 
@@ -14346,13 +14346,13 @@ public static class ulong1 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public ulong1() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ulong1(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ulong1(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ulong1(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ulong1 position(int position) {
+    private native void allocateArray(long size);
+    @Override public ulong1 position(long position) {
         return (ulong1)super.position(position);
     }
 
@@ -14364,13 +14364,13 @@ public static class long2 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public long2() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public long2(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public long2(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public long2(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public long2 position(int position) {
+    private native void allocateArray(long size);
+    @Override public long2 position(long position) {
         return (long2)super.position(position);
     }
  public native long x(); public native long2 x(long x); public native long y(); public native long2 y(long y);
@@ -14379,13 +14379,13 @@ public static class ulong2 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public ulong2() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ulong2(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ulong2(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ulong2(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ulong2 position(int position) {
+    private native void allocateArray(long size);
+    @Override public ulong2 position(long position) {
         return (ulong2)super.position(position);
     }
  public native @Cast("unsigned long int") long x(); public native ulong2 x(long x); public native @Cast("unsigned long int") long y(); public native ulong2 y(long y);
@@ -14398,13 +14398,13 @@ public static class long3 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public long3() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public long3(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public long3(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public long3(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public long3 position(int position) {
+    private native void allocateArray(long size);
+    @Override public long3 position(long position) {
         return (long3)super.position(position);
     }
 
@@ -14417,13 +14417,13 @@ public static class ulong3 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public ulong3() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ulong3(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ulong3(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ulong3(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ulong3 position(int position) {
+    private native void allocateArray(long size);
+    @Override public ulong3 position(long position) {
         return (ulong3)super.position(position);
     }
 
@@ -14436,13 +14436,13 @@ public static class long4 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public long4() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public long4(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public long4(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public long4(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public long4 position(int position) {
+    private native void allocateArray(long size);
+    @Override public long4 position(long position) {
         return (long4)super.position(position);
     }
 
@@ -14456,13 +14456,13 @@ public static class ulong4 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public ulong4() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ulong4(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ulong4(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ulong4(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ulong4 position(int position) {
+    private native void allocateArray(long size);
+    @Override public ulong4 position(long position) {
         return (ulong4)super.position(position);
     }
 
@@ -14476,13 +14476,13 @@ public static class float1 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public float1() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public float1(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public float1(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public float1(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public float1 position(int position) {
+    private native void allocateArray(long size);
+    @Override public float1 position(long position) {
         return (float1)super.position(position);
     }
 
@@ -14499,13 +14499,13 @@ public static class float2 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public float2() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public float2(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public float2(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public float2(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public float2 position(int position) {
+    private native void allocateArray(long size);
+    @Override public float2 position(long position) {
         return (float2)super.position(position);
     }
  public native float x(); public native float2 x(float x); public native float y(); public native float2 y(float y);
@@ -14518,13 +14518,13 @@ public static class float3 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public float3() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public float3(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public float3(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public float3(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public float3 position(int position) {
+    private native void allocateArray(long size);
+    @Override public float3 position(long position) {
         return (float3)super.position(position);
     }
 
@@ -14537,13 +14537,13 @@ public static class float4 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public float4() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public float4(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public float4(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public float4(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public float4 position(int position) {
+    private native void allocateArray(long size);
+    @Override public float4 position(long position) {
         return (float4)super.position(position);
     }
 
@@ -14557,13 +14557,13 @@ public static class longlong1 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public longlong1() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public longlong1(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public longlong1(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public longlong1(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public longlong1 position(int position) {
+    private native void allocateArray(long size);
+    @Override public longlong1 position(long position) {
         return (longlong1)super.position(position);
     }
 
@@ -14574,13 +14574,13 @@ public static class ulonglong1 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public ulonglong1() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ulonglong1(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ulonglong1(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ulonglong1(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ulonglong1 position(int position) {
+    private native void allocateArray(long size);
+    @Override public ulonglong1 position(long position) {
         return (ulonglong1)super.position(position);
     }
 
@@ -14591,13 +14591,13 @@ public static class longlong2 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public longlong2() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public longlong2(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public longlong2(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public longlong2(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public longlong2 position(int position) {
+    private native void allocateArray(long size);
+    @Override public longlong2 position(long position) {
         return (longlong2)super.position(position);
     }
 
@@ -14609,13 +14609,13 @@ public static class ulonglong2 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public ulonglong2() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ulonglong2(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ulonglong2(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ulonglong2(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ulonglong2 position(int position) {
+    private native void allocateArray(long size);
+    @Override public ulonglong2 position(long position) {
         return (ulonglong2)super.position(position);
     }
 
@@ -14627,13 +14627,13 @@ public static class longlong3 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public longlong3() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public longlong3(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public longlong3(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public longlong3(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public longlong3 position(int position) {
+    private native void allocateArray(long size);
+    @Override public longlong3 position(long position) {
         return (longlong3)super.position(position);
     }
 
@@ -14646,13 +14646,13 @@ public static class ulonglong3 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public ulonglong3() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ulonglong3(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ulonglong3(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ulonglong3(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ulonglong3 position(int position) {
+    private native void allocateArray(long size);
+    @Override public ulonglong3 position(long position) {
         return (ulonglong3)super.position(position);
     }
 
@@ -14665,13 +14665,13 @@ public static class longlong4 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public longlong4() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public longlong4(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public longlong4(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public longlong4(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public longlong4 position(int position) {
+    private native void allocateArray(long size);
+    @Override public longlong4 position(long position) {
         return (longlong4)super.position(position);
     }
 
@@ -14685,13 +14685,13 @@ public static class ulonglong4 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public ulonglong4() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ulonglong4(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ulonglong4(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ulonglong4(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ulonglong4 position(int position) {
+    private native void allocateArray(long size);
+    @Override public ulonglong4 position(long position) {
         return (ulonglong4)super.position(position);
     }
 
@@ -14705,13 +14705,13 @@ public static class double1 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public double1() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public double1(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public double1(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public double1(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public double1 position(int position) {
+    private native void allocateArray(long size);
+    @Override public double1 position(long position) {
         return (double1)super.position(position);
     }
 
@@ -14722,13 +14722,13 @@ public static class double2 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public double2() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public double2(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public double2(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public double2(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public double2 position(int position) {
+    private native void allocateArray(long size);
+    @Override public double2 position(long position) {
         return (double2)super.position(position);
     }
 
@@ -14740,13 +14740,13 @@ public static class double3 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public double3() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public double3(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public double3(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public double3(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public double3 position(int position) {
+    private native void allocateArray(long size);
+    @Override public double3 position(long position) {
         return (double3)super.position(position);
     }
 
@@ -14759,13 +14759,13 @@ public static class double4 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public double4() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public double4(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public double4(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public double4(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public double4 position(int position) {
+    private native void allocateArray(long size);
+    @Override public double4 position(long position) {
         return (double4)super.position(position);
     }
 
@@ -14796,10 +14796,10 @@ public static class double4 extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dim3(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dim3(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public dim3 position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public dim3(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public dim3 position(long position) {
         return (dim3)super.position(position);
     }
 
@@ -21948,13 +21948,13 @@ public static class __half extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public __half() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public __half(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public __half(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public __half(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public __half position(int position) {
+    private native void allocateArray(long size);
+    @Override public __half position(long position) {
         return (__half)super.position(position);
     }
 
@@ -21965,13 +21965,13 @@ public static class __half2 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public __half2() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public __half2(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public __half2(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public __half2(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public __half2 position(int position) {
+    private native void allocateArray(long size);
+    @Override public __half2 position(long position) {
         return (__half2)super.position(position);
     }
 

@@ -119,10 +119,10 @@ being computed by cross-validation.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ParamGrid(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ParamGrid(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public ParamGrid position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ParamGrid(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public ParamGrid position(long position) {
         return (ParamGrid)super.position(position);
     }
 
@@ -1103,10 +1103,10 @@ use this capability to implement decision tree ensembles.
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Node(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public Node(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public Node position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public Node(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public Node position(long position) {
             return (Node)super.position(position);
         }
     
@@ -1137,10 +1137,10 @@ use this capability to implement decision tree ensembles.
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Split(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public Split(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public Split position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public Split(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public Split position(long position) {
             return (Split)super.position(position);
         }
     

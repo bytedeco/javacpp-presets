@@ -1182,13 +1182,13 @@ prototyped as void Foo(void\*) .
     static { Loader.load(); }
     /** Default native constructor. */
     public QtFont() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public QtFont(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public QtFont(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public QtFont(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public QtFont position(int position) {
+    private native void allocateArray(long size);
+    @Override public QtFont position(long position) {
         return (QtFont)super.position(position);
     }
 

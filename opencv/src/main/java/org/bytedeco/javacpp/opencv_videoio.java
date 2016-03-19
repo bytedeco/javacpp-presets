@@ -957,6 +957,12 @@ class can be used: :
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VideoCapture(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public VideoCapture(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public VideoCapture position(long position) {
+        return (VideoCapture)super.position(position);
+    }
 
     /** \brief
     \note In C API, when you finished working with video, release CvCapture structure with
@@ -1160,10 +1166,10 @@ class can be used: :
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VideoWriter(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public VideoWriter(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public VideoWriter position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public VideoWriter(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public VideoWriter position(long position) {
         return (VideoWriter)super.position(position);
     }
 

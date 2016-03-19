@@ -151,13 +151,13 @@ public static class NativeOpInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public NativeOpInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NativeOpInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NativeOpInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NativeOpInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NativeOpInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public NativeOpInfo position(long position) {
         return (NativeOpInfo)super.position(position);
     }
 
@@ -218,13 +218,13 @@ public static class NDArrayOpInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public NDArrayOpInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NDArrayOpInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NDArrayOpInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NDArrayOpInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NDArrayOpInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public NDArrayOpInfo position(long position) {
         return (NDArrayOpInfo)super.position(position);
     }
 

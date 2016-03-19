@@ -4107,13 +4107,13 @@ public static class LLVMOpInfoSymbol1 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public LLVMOpInfoSymbol1() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public LLVMOpInfoSymbol1(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public LLVMOpInfoSymbol1(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMOpInfoSymbol1(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public LLVMOpInfoSymbol1 position(int position) {
+    private native void allocateArray(long size);
+    @Override public LLVMOpInfoSymbol1 position(long position) {
         return (LLVMOpInfoSymbol1)super.position(position);
     }
 
@@ -4126,13 +4126,13 @@ public static class LLVMOpInfo1 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public LLVMOpInfo1() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public LLVMOpInfo1(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public LLVMOpInfo1(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMOpInfo1(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public LLVMOpInfo1 position(int position) {
+    private native void allocateArray(long size);
+    @Override public LLVMOpInfo1 position(long position) {
         return (LLVMOpInfo1)super.position(position);
     }
 
@@ -5764,13 +5764,13 @@ public static class LLVMMCJITCompilerOptions extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public LLVMMCJITCompilerOptions() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public LLVMMCJITCompilerOptions(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public LLVMMCJITCompilerOptions(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMMCJITCompilerOptions(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public LLVMMCJITCompilerOptions position(int position) {
+    private native void allocateArray(long size);
+    @Override public LLVMMCJITCompilerOptions position(long position) {
         return (LLVMMCJITCompilerOptions)super.position(position);
     }
 

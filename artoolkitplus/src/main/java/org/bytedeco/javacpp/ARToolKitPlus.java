@@ -123,10 +123,10 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CornerPoint(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CornerPoint(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CornerPoint position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CornerPoint(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public CornerPoint position(long position) {
         return (CornerPoint)super.position(position);
     }
 
@@ -318,13 +318,13 @@ public static final int P_MAX =       500;
     static { Loader.load(); }
     /** Default native constructor. */
     public ARMarkerInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ARMarkerInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ARMarkerInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ARMarkerInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ARMarkerInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public ARMarkerInfo position(long position) {
         return (ARMarkerInfo)super.position(position);
     }
 
@@ -335,22 +335,22 @@ public static final int P_MAX =       500;
     public native @Cast("ARFloat") float pos(int i); public native ARMarkerInfo pos(int i, float pos);
     @MemberGetter public native @Cast("ARFloat*") FloatPointer pos();
     public native @Cast("ARFloat") float line(int i, int j); public native ARMarkerInfo line(int i, int j, float line);
-    @MemberGetter public native @Cast("ARFloat(*)[3]") FloatPointer line();
+    @MemberGetter public native @Cast("ARFloat(* /*[4]*/ )[3]") FloatPointer line();
     public native @Cast("ARFloat") float vertex(int i, int j); public native ARMarkerInfo vertex(int i, int j, float vertex);
-    @MemberGetter public native @Cast("ARFloat(*)[2]") FloatPointer vertex();
+    @MemberGetter public native @Cast("ARFloat(* /*[4]*/ )[2]") FloatPointer vertex();
 }
 
 @Namespace("ARToolKitPlus") public static class ARMarkerInfo2 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public ARMarkerInfo2() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ARMarkerInfo2(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ARMarkerInfo2(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ARMarkerInfo2(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ARMarkerInfo2 position(int position) {
+    private native void allocateArray(long size);
+    @Override public ARMarkerInfo2 position(long position) {
         return (ARMarkerInfo2)super.position(position);
     }
 
@@ -370,13 +370,13 @@ public static final int P_MAX =       500;
     static { Loader.load(); }
     /** Default native constructor. */
     public arPrevInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public arPrevInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public arPrevInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public arPrevInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public arPrevInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public arPrevInfo position(long position) {
         return (arPrevInfo)super.position(position);
     }
 
@@ -423,13 +423,13 @@ public static final int P_MAX =       500;
     static { Loader.load(); }
     /** Default native constructor. */
     public ARMultiEachMarkerInfoT() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ARMultiEachMarkerInfoT(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ARMultiEachMarkerInfoT(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ARMultiEachMarkerInfoT(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ARMultiEachMarkerInfoT position(int position) {
+    private native void allocateArray(long size);
+    @Override public ARMultiEachMarkerInfoT position(long position) {
         return (ARMultiEachMarkerInfoT)super.position(position);
     }
 
@@ -438,11 +438,11 @@ public static final int P_MAX =       500;
     public native @Cast("ARFloat") float center(int i); public native ARMultiEachMarkerInfoT center(int i, float center);
     @MemberGetter public native @Cast("ARFloat*") FloatPointer center();
     public native @Cast("ARFloat") float trans(int i, int j); public native ARMultiEachMarkerInfoT trans(int i, int j, float trans);
-    @MemberGetter public native @Cast("ARFloat(*)[4]") FloatPointer trans();
+    @MemberGetter public native @Cast("ARFloat(* /*[3]*/ )[4]") FloatPointer trans();
     public native @Cast("ARFloat") float itrans(int i, int j); public native ARMultiEachMarkerInfoT itrans(int i, int j, float itrans);
-    @MemberGetter public native @Cast("ARFloat(*)[4]") FloatPointer itrans();
+    @MemberGetter public native @Cast("ARFloat(* /*[3]*/ )[4]") FloatPointer itrans();
     public native @Cast("ARFloat") float pos3d(int i, int j); public native ARMultiEachMarkerInfoT pos3d(int i, int j, float pos3d);
-    @MemberGetter public native @Cast("ARFloat(*)[3]") FloatPointer pos3d();
+    @MemberGetter public native @Cast("ARFloat(* /*[4]*/ )[3]") FloatPointer pos3d();
     public native int visible(); public native ARMultiEachMarkerInfoT visible(int visible);
 /*---*/
     public native int visibleR(); public native ARMultiEachMarkerInfoT visibleR(int visibleR);
@@ -452,24 +452,24 @@ public static final int P_MAX =       500;
     static { Loader.load(); }
     /** Default native constructor. */
     public ARMultiMarkerInfoT() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ARMultiMarkerInfoT(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ARMultiMarkerInfoT(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ARMultiMarkerInfoT(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ARMultiMarkerInfoT position(int position) {
+    private native void allocateArray(long size);
+    @Override public ARMultiMarkerInfoT position(long position) {
         return (ARMultiMarkerInfoT)super.position(position);
     }
 
     public native ARMultiEachMarkerInfoT marker(); public native ARMultiMarkerInfoT marker(ARMultiEachMarkerInfoT marker);
     public native int marker_num(); public native ARMultiMarkerInfoT marker_num(int marker_num);
     public native @Cast("ARFloat") float trans(int i, int j); public native ARMultiMarkerInfoT trans(int i, int j, float trans);
-    @MemberGetter public native @Cast("ARFloat(*)[4]") FloatPointer trans();
+    @MemberGetter public native @Cast("ARFloat(* /*[3]*/ )[4]") FloatPointer trans();
     public native int prevF(); public native ARMultiMarkerInfoT prevF(int prevF);
 /*---*/
     public native @Cast("ARFloat") float transR(int i, int j); public native ARMultiMarkerInfoT transR(int i, int j, float transR);
-    @MemberGetter public native @Cast("ARFloat(*)[4]") FloatPointer transR();
+    @MemberGetter public native @Cast("ARFloat(* /*[3]*/ )[4]") FloatPointer transR();
 }
 
 
@@ -521,13 +521,13 @@ public static final int P_MAX =       500;
     static { Loader.load(); }
     /** Default native constructor. */
     public ARMat() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ARMat(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ARMat(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ARMat(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ARMat position(int position) {
+    private native void allocateArray(long size);
+    @Override public ARMat position(long position) {
         return (ARMat)super.position(position);
     }
 
@@ -590,13 +590,13 @@ public static final int P_MAX =       500;
     static { Loader.load(); }
     /** Default native constructor. */
     public ARVec() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ARVec(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ARVec(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ARVec(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ARVec position(int position) {
+    private native void allocateArray(long size);
+    @Override public ARVec position(long position) {
         return (ARVec)super.position(position);
     }
 
@@ -652,10 +652,10 @@ public static final int P_MAX =       500;
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Camera(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Camera(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public Camera position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Camera(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Camera position(long position) {
         return (Camera)super.position(position);
     }
 
@@ -666,7 +666,7 @@ public static final int P_MAX =       500;
     public native int ysize(); public native Camera ysize(int ysize);
     // http://www.vision.caltech.edu/bouguetj/calib_doc/htmls/parameters.html
     public native @Cast("ARFloat") float mat(int i, int j); public native Camera mat(int i, int j, float mat);
-    @MemberGetter public native @Cast("ARFloat(*)[4]") FloatPointer mat();
+    @MemberGetter public native @Cast("ARFloat(* /*[3]*/ )[4]") FloatPointer mat();
     public native @Cast("ARFloat") float kc(int i); public native Camera kc(int i, float kc);
     @MemberGetter public native @Cast("ARFloat*") FloatPointer kc();
 
@@ -755,10 +755,10 @@ public static final int BCH_MAX_SQ =   8;  // SQRT(MAX_LUT) -- (?)
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BCH(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public BCH(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public BCH position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BCH(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public BCH position(long position) {
         return (BCH)super.position(position);
     }
 
@@ -821,13 +821,13 @@ public static final int BCH_MAX_SQ =   8;  // SQRT(MAX_LUT) -- (?)
     static { Loader.load(); }
     /** Default native constructor. */
     public MarkerPoint() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public MarkerPoint(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public MarkerPoint(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MarkerPoint(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public MarkerPoint position(int position) {
+    private native void allocateArray(long size);
+    @Override public MarkerPoint position(long position) {
         return (MarkerPoint)super.position(position);
     }
 
@@ -1018,22 +1018,22 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
     public native @Cast("ARFloat") float arMultiGetTransMatHull(ARMarkerInfo marker_info, int marker_num, ARMultiMarkerInfoT config);
 
     /** calculates the transformation matrix between camera and the given marker */
-    public native @Cast("ARFloat") float arGetTransMat(ARMarkerInfo marker_info, @Cast("ARFloat*") FloatPointer center, @Cast("ARFloat") float width, @Cast("ARFloat(*)[4]") FloatPointer conv);
-    public native @Cast("ARFloat") float arGetTransMat(ARMarkerInfo marker_info, @Cast("ARFloat*") FloatBuffer center, @Cast("ARFloat") float width, @Cast("ARFloat(*)[4]") FloatBuffer conv);
-    public native @Cast("ARFloat") float arGetTransMat(ARMarkerInfo marker_info, @Cast("ARFloat*") float[] center, @Cast("ARFloat") float width, @Cast("ARFloat(*)[4]") float[] conv);
+    public native @Cast("ARFloat") float arGetTransMat(ARMarkerInfo marker_info, @Cast("ARFloat*") FloatPointer center, @Cast("ARFloat") float width, @Cast("ARFloat(* /*[3]*/ )[4]") FloatPointer conv);
+    public native @Cast("ARFloat") float arGetTransMat(ARMarkerInfo marker_info, @Cast("ARFloat*") FloatBuffer center, @Cast("ARFloat") float width, @Cast("ARFloat(* /*[3]*/ )[4]") FloatBuffer conv);
+    public native @Cast("ARFloat") float arGetTransMat(ARMarkerInfo marker_info, @Cast("ARFloat*") float[] center, @Cast("ARFloat") float width, @Cast("ARFloat(* /*[3]*/ )[4]") float[] conv);
 
-    public native @Cast("ARFloat") float arGetTransMatCont(ARMarkerInfo marker_info, @Cast("ARFloat(*)[4]") FloatPointer prev_conv, @Cast("ARFloat*") FloatPointer center,
-                @Cast("ARFloat") float width, @Cast("ARFloat(*)[4]") FloatPointer conv);
-    public native @Cast("ARFloat") float arGetTransMatCont(ARMarkerInfo marker_info, @Cast("ARFloat(*)[4]") FloatBuffer prev_conv, @Cast("ARFloat*") FloatBuffer center,
-                @Cast("ARFloat") float width, @Cast("ARFloat(*)[4]") FloatBuffer conv);
-    public native @Cast("ARFloat") float arGetTransMatCont(ARMarkerInfo marker_info, @Cast("ARFloat(*)[4]") float[] prev_conv, @Cast("ARFloat*") float[] center,
-                @Cast("ARFloat") float width, @Cast("ARFloat(*)[4]") float[] conv);
+    public native @Cast("ARFloat") float arGetTransMatCont(ARMarkerInfo marker_info, @Cast("ARFloat(* /*[3]*/ )[4]") FloatPointer prev_conv, @Cast("ARFloat*") FloatPointer center,
+                @Cast("ARFloat") float width, @Cast("ARFloat(* /*[3]*/ )[4]") FloatPointer conv);
+    public native @Cast("ARFloat") float arGetTransMatCont(ARMarkerInfo marker_info, @Cast("ARFloat(* /*[3]*/ )[4]") FloatBuffer prev_conv, @Cast("ARFloat*") FloatBuffer center,
+                @Cast("ARFloat") float width, @Cast("ARFloat(* /*[3]*/ )[4]") FloatBuffer conv);
+    public native @Cast("ARFloat") float arGetTransMatCont(ARMarkerInfo marker_info, @Cast("ARFloat(* /*[3]*/ )[4]") float[] prev_conv, @Cast("ARFloat*") float[] center,
+                @Cast("ARFloat") float width, @Cast("ARFloat(* /*[3]*/ )[4]") float[] conv);
 
     // RPP integration -- [t.pintaric]
     public native @Cast("ARFloat") float rppMultiGetTransMat(ARMarkerInfo marker_info, int marker_num, ARMultiMarkerInfoT config);
-    public native @Cast("ARFloat") float rppGetTransMat(ARMarkerInfo marker_info, @Cast("ARFloat*") FloatPointer center, @Cast("ARFloat") float width, @Cast("ARFloat(*)[4]") FloatPointer conv);
-    public native @Cast("ARFloat") float rppGetTransMat(ARMarkerInfo marker_info, @Cast("ARFloat*") FloatBuffer center, @Cast("ARFloat") float width, @Cast("ARFloat(*)[4]") FloatBuffer conv);
-    public native @Cast("ARFloat") float rppGetTransMat(ARMarkerInfo marker_info, @Cast("ARFloat*") float[] center, @Cast("ARFloat") float width, @Cast("ARFloat(*)[4]") float[] conv);
+    public native @Cast("ARFloat") float rppGetTransMat(ARMarkerInfo marker_info, @Cast("ARFloat*") FloatPointer center, @Cast("ARFloat") float width, @Cast("ARFloat(* /*[3]*/ )[4]") FloatPointer conv);
+    public native @Cast("ARFloat") float rppGetTransMat(ARMarkerInfo marker_info, @Cast("ARFloat*") FloatBuffer center, @Cast("ARFloat") float width, @Cast("ARFloat(* /*[3]*/ )[4]") FloatBuffer conv);
+    public native @Cast("ARFloat") float rppGetTransMat(ARMarkerInfo marker_info, @Cast("ARFloat*") float[] center, @Cast("ARFloat") float width, @Cast("ARFloat(* /*[3]*/ )[4]") float[] conv);
 
     /** loads a pattern from a file */
     public native int arLoadPatt(@Cast("char*") BytePointer filename);
@@ -1203,11 +1203,11 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
 
     /** Calls the pose estimator set with setPoseEstimator() for single marker tracking */
     public native @Cast("ARFloat") float executeSingleMarkerPoseEstimator(ARMarkerInfo marker_info, @Cast("ARFloat*") FloatPointer center, @Cast("ARFloat") float width,
-                @Cast("ARFloat(*)[4]") FloatPointer conv);
+                @Cast("ARFloat(* /*[3]*/ )[4]") FloatPointer conv);
     public native @Cast("ARFloat") float executeSingleMarkerPoseEstimator(ARMarkerInfo marker_info, @Cast("ARFloat*") FloatBuffer center, @Cast("ARFloat") float width,
-                @Cast("ARFloat(*)[4]") FloatBuffer conv);
+                @Cast("ARFloat(* /*[3]*/ )[4]") FloatBuffer conv);
     public native @Cast("ARFloat") float executeSingleMarkerPoseEstimator(ARMarkerInfo marker_info, @Cast("ARFloat*") float[] center, @Cast("ARFloat") float width,
-                @Cast("ARFloat(*)[4]") float[] conv);
+                @Cast("ARFloat(* /*[3]*/ )[4]") float[] conv);
 
     /** Calls the pose estimator set with setPoseEstimator() for multi marker tracking */
     public native @Cast("ARFloat") float executeMultiMarkerPoseEstimator(ARMarkerInfo marker_info, int marker_num,
@@ -1349,9 +1349,9 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
      *  matrix ARToolKit calculates rather than the OpenGL style version of this matrix
      *  that can be retrieved via getModelViewMatrix().
      */
-    public native void getARMatrix(@Cast("ARFloat(*)[4]") FloatPointer nMatrix);
-    public native void getARMatrix(@Cast("ARFloat(*)[4]") FloatBuffer nMatrix);
-    public native void getARMatrix(@Cast("ARFloat(*)[4]") float[] nMatrix);
+    public native void getARMatrix(@Cast("ARFloat(* /*[3]*/ )[4]") FloatPointer nMatrix);
+    public native void getARMatrix(@Cast("ARFloat(* /*[3]*/ )[4]") FloatBuffer nMatrix);
+    public native void getARMatrix(@Cast("ARFloat(* /*[3]*/ )[4]") float[] nMatrix);
 }
 
  // namespace ARToolKitPlus
@@ -1474,9 +1474,9 @@ public static native void robustPlanarPose(@Cast("rpp_float*") @ByRef double[] e
      *  matrix ARToolKit calculates rather than the OpenGL style version of this matrix
      *  that can be retrieved via getModelViewMatrix().
      */
-    public native void getARMatrix(@Cast("ARFloat(*)[4]") FloatPointer nMatrix);
-    public native void getARMatrix(@Cast("ARFloat(*)[4]") FloatBuffer nMatrix);
-    public native void getARMatrix(@Cast("ARFloat(*)[4]") float[] nMatrix);
+    public native void getARMatrix(@Cast("ARFloat(* /*[3]*/ )[4]") FloatPointer nMatrix);
+    public native void getARMatrix(@Cast("ARFloat(* /*[3]*/ )[4]") FloatBuffer nMatrix);
+    public native void getARMatrix(@Cast("ARFloat(* /*[3]*/ )[4]") float[] nMatrix);
 
     /**
      * Returns the confidence value of the currently best detected marker.
