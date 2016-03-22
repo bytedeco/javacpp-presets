@@ -149,8 +149,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         @Override public <I extends Indexer> I createIndexer(boolean direct) {
             BytePointer ptr = arrayData();
             int size = arraySize();
-            int[] sizes = { arrayHeight(), arrayWidth(), arrayChannels() };
-            int[] strides = { arrayStep(), arrayChannels(), 1 };
+            long[] sizes = { arrayHeight(), arrayWidth(), arrayChannels() };
+            long[] strides = { arrayStep(), arrayChannels(), 1 };
             switch (arrayDepth()) {
                 case IPL_DEPTH_8U:
                     return (I)UByteIndexer.create(ptr.capacity(size), sizes, strides, direct);

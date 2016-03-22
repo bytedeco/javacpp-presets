@@ -116,8 +116,8 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
             int size = (int)TotalBytes();
             boolean complex = dtype() == DT_COMPLEX64;
             int dims = complex ? dims() + 1 : dims();
-            int[] sizes = new int[dims];
-            int[] strides = new int[dims];
+            long[] sizes = new long[dims];
+            long[] strides = new long[dims];
             sizes[dims - 1] = complex ? 2 : (int)dim_size(dims - 1);
             strides[dims - 1] = 1;
             for (int i = dims - 2; i >= 0; i--) {
