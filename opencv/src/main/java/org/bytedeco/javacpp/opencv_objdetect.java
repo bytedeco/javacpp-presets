@@ -92,13 +92,13 @@ public static class CvHaarFeature extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CvHaarFeature() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvHaarFeature(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CvHaarFeature(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvHaarFeature(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CvHaarFeature position(int position) {
+    private native void allocateArray(long size);
+    @Override public CvHaarFeature position(long position) {
         return (CvHaarFeature)super.position(position);
     }
 
@@ -111,13 +111,13 @@ public static class CvHaarClassifier extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CvHaarClassifier() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvHaarClassifier(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CvHaarClassifier(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvHaarClassifier(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CvHaarClassifier position(int position) {
+    private native void allocateArray(long size);
+    @Override public CvHaarClassifier position(long position) {
         return (CvHaarClassifier)super.position(position);
     }
 
@@ -133,13 +133,13 @@ public static class CvHaarStageClassifier extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CvHaarStageClassifier() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvHaarStageClassifier(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CvHaarStageClassifier(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvHaarStageClassifier(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CvHaarStageClassifier position(int position) {
+    private native void allocateArray(long size);
+    @Override public CvHaarStageClassifier position(long position) {
         return (CvHaarStageClassifier)super.position(position);
     }
 
@@ -163,13 +163,13 @@ public static class CvHaarClassifierCascade extends AbstractCvHaarClassifierCasc
     static { Loader.load(); }
     /** Default native constructor. */
     public CvHaarClassifierCascade() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvHaarClassifierCascade(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CvHaarClassifierCascade(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvHaarClassifierCascade(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CvHaarClassifierCascade position(int position) {
+    private native void allocateArray(long size);
+    @Override public CvHaarClassifierCascade position(long position) {
         return (CvHaarClassifierCascade)super.position(position);
     }
 
@@ -186,13 +186,13 @@ public static class CvAvgComp extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CvAvgComp() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvAvgComp(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CvAvgComp(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvAvgComp(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CvAvgComp position(int position) {
+    private native void allocateArray(long size);
+    @Override public CvAvgComp position(long position) {
         return (CvAvgComp)super.position(position);
     }
 
@@ -566,10 +566,10 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CascadeClassifier(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CascadeClassifier(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CascadeClassifier position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CascadeClassifier(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public CascadeClassifier position(long position) {
         return (CascadeClassifier)super.position(position);
     }
 
@@ -741,13 +741,13 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
     static { Loader.load(); }
     /** Default native constructor. */
     public DetectionROI() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public DetectionROI(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public DetectionROI(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DetectionROI(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public DetectionROI position(int position) {
+    private native void allocateArray(long size);
+    @Override public DetectionROI position(long position) {
         return (DetectionROI)super.position(position);
     }
 
@@ -763,10 +763,10 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HOGDescriptor(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public HOGDescriptor(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public HOGDescriptor position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public HOGDescriptor(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public HOGDescriptor position(long position) {
         return (HOGDescriptor)super.position(position);
     }
 
@@ -1036,10 +1036,10 @@ public static final int CASCADE_DO_CANNY_PRUNING    = 1,
             static { Loader.load(); }
             /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
             public Parameters(Pointer p) { super(p); }
-            /** Native array allocator. Access with {@link Pointer#position(int)}. */
-            public Parameters(int size) { super((Pointer)null); allocateArray(size); }
-            private native void allocateArray(int size);
-            @Override public Parameters position(int position) {
+            /** Native array allocator. Access with {@link Pointer#position(long)}. */
+            public Parameters(long size) { super((Pointer)null); allocateArray(size); }
+            private native void allocateArray(long size);
+            @Override public Parameters position(long position) {
                 return (Parameters)super.position(position);
             }
         

@@ -166,13 +166,13 @@ public static class CXString extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXString() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXString(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXString(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXString(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXString position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXString position(long position) {
         return (CXString)super.position(position);
     }
 
@@ -690,13 +690,13 @@ public static class CXUnsavedFile extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXUnsavedFile() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXUnsavedFile(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXUnsavedFile(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXUnsavedFile(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXUnsavedFile position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXUnsavedFile position(long position) {
         return (CXUnsavedFile)super.position(position);
     }
 
@@ -751,13 +751,13 @@ public static class CXVersion extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXVersion() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXVersion(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXVersion(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXVersion(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXVersion position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXVersion position(long position) {
         return (CXVersion)super.position(position);
     }
 
@@ -922,13 +922,13 @@ public static class CXFileUniqueID extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXFileUniqueID() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXFileUniqueID(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXFileUniqueID(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXFileUniqueID(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXFileUniqueID position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXFileUniqueID position(long position) {
         return (CXFileUniqueID)super.position(position);
     }
 
@@ -1002,13 +1002,13 @@ public static class CXSourceLocation extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXSourceLocation() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXSourceLocation(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXSourceLocation(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXSourceLocation(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXSourceLocation position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXSourceLocation position(long position) {
         return (CXSourceLocation)super.position(position);
     }
 
@@ -1027,13 +1027,13 @@ public static class CXSourceRange extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXSourceRange() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXSourceRange(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXSourceRange(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXSourceRange(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXSourceRange position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXSourceRange position(long position) {
         return (CXSourceRange)super.position(position);
     }
 
@@ -1322,13 +1322,13 @@ public static class CXSourceRangeList extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXSourceRangeList() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXSourceRangeList(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXSourceRangeList(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXSourceRangeList(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXSourceRangeList position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXSourceRangeList position(long position) {
         return (CXSourceRangeList)super.position(position);
     }
 
@@ -2369,13 +2369,13 @@ public static class CXTUResourceUsageEntry extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXTUResourceUsageEntry() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXTUResourceUsageEntry(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXTUResourceUsageEntry(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXTUResourceUsageEntry(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXTUResourceUsageEntry position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXTUResourceUsageEntry position(long position) {
         return (CXTUResourceUsageEntry)super.position(position);
     }
 
@@ -2393,13 +2393,13 @@ public static class CXTUResourceUsage extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXTUResourceUsage() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXTUResourceUsage(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXTUResourceUsage(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXTUResourceUsage(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXTUResourceUsage position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXTUResourceUsage position(long position) {
         return (CXTUResourceUsage)super.position(position);
     }
 
@@ -3226,13 +3226,13 @@ public static class CXCursor extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXCursor() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXCursor(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXCursor(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXCursor(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXCursor position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXCursor position(long position) {
         return (CXCursor)super.position(position);
     }
 
@@ -3379,13 +3379,13 @@ public static class CXPlatformAvailability extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXPlatformAvailability() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXPlatformAvailability(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXPlatformAvailability(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXPlatformAvailability(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXPlatformAvailability position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXPlatformAvailability position(long position) {
         return (CXPlatformAvailability)super.position(position);
     }
 
@@ -3845,13 +3845,13 @@ public static class CXType extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXType() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXType(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXType(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXType(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXType position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXType position(long position) {
         return (CXType)super.position(position);
     }
 
@@ -5096,13 +5096,13 @@ public static class CXToken extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXToken() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXToken(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXToken(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXToken(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXToken position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXToken position(long position) {
         return (CXToken)super.position(position);
     }
 
@@ -5299,13 +5299,13 @@ public static class CXCompletionResult extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXCompletionResult() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXCompletionResult(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXCompletionResult(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXCompletionResult(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXCompletionResult position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXCompletionResult position(long position) {
         return (CXCompletionResult)super.position(position);
     }
 
@@ -5643,13 +5643,13 @@ public static class CXCodeCompleteResults extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXCodeCompleteResults() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXCodeCompleteResults(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXCodeCompleteResults(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXCodeCompleteResults(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXCodeCompleteResults position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXCodeCompleteResults position(long position) {
         return (CXCodeCompleteResults)super.position(position);
     }
 
@@ -6155,13 +6155,13 @@ public static class CXCursorAndRangeVisitor extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXCursorAndRangeVisitor() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXCursorAndRangeVisitor(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXCursorAndRangeVisitor(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXCursorAndRangeVisitor(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXCursorAndRangeVisitor position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXCursorAndRangeVisitor position(long position) {
         return (CXCursorAndRangeVisitor)super.position(position);
     }
 
@@ -6281,13 +6281,13 @@ public static class CXIdxLoc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXIdxLoc() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxLoc(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXIdxLoc(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxLoc(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXIdxLoc position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXIdxLoc position(long position) {
         return (CXIdxLoc)super.position(position);
     }
 
@@ -6303,13 +6303,13 @@ public static class CXIdxIncludedFileInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXIdxIncludedFileInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxIncludedFileInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXIdxIncludedFileInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxIncludedFileInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXIdxIncludedFileInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXIdxIncludedFileInfo position(long position) {
         return (CXIdxIncludedFileInfo)super.position(position);
     }
 
@@ -6341,13 +6341,13 @@ public static class CXIdxImportedASTFileInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXIdxImportedASTFileInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxImportedASTFileInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXIdxImportedASTFileInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxImportedASTFileInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXIdxImportedASTFileInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXIdxImportedASTFileInfo position(long position) {
         return (CXIdxImportedASTFileInfo)super.position(position);
     }
 
@@ -6440,13 +6440,13 @@ public static class CXIdxAttrInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXIdxAttrInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxAttrInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXIdxAttrInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxAttrInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXIdxAttrInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXIdxAttrInfo position(long position) {
         return (CXIdxAttrInfo)super.position(position);
     }
 
@@ -6459,13 +6459,13 @@ public static class CXIdxEntityInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXIdxEntityInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxEntityInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXIdxEntityInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxEntityInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXIdxEntityInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXIdxEntityInfo position(long position) {
         return (CXIdxEntityInfo)super.position(position);
     }
 
@@ -6484,13 +6484,13 @@ public static class CXIdxContainerInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXIdxContainerInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxContainerInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXIdxContainerInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxContainerInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXIdxContainerInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXIdxContainerInfo position(long position) {
         return (CXIdxContainerInfo)super.position(position);
     }
 
@@ -6501,13 +6501,13 @@ public static class CXIdxIBOutletCollectionAttrInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXIdxIBOutletCollectionAttrInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxIBOutletCollectionAttrInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXIdxIBOutletCollectionAttrInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxIBOutletCollectionAttrInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXIdxIBOutletCollectionAttrInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXIdxIBOutletCollectionAttrInfo position(long position) {
         return (CXIdxIBOutletCollectionAttrInfo)super.position(position);
     }
 
@@ -6525,13 +6525,13 @@ public static class CXIdxDeclInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXIdxDeclInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxDeclInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXIdxDeclInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxDeclInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXIdxDeclInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXIdxDeclInfo position(long position) {
         return (CXIdxDeclInfo)super.position(position);
     }
 
@@ -6571,13 +6571,13 @@ public static class CXIdxObjCContainerDeclInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXIdxObjCContainerDeclInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxObjCContainerDeclInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXIdxObjCContainerDeclInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxObjCContainerDeclInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXIdxObjCContainerDeclInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXIdxObjCContainerDeclInfo position(long position) {
         return (CXIdxObjCContainerDeclInfo)super.position(position);
     }
 
@@ -6589,13 +6589,13 @@ public static class CXIdxBaseClassInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXIdxBaseClassInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxBaseClassInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXIdxBaseClassInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxBaseClassInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXIdxBaseClassInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXIdxBaseClassInfo position(long position) {
         return (CXIdxBaseClassInfo)super.position(position);
     }
 
@@ -6608,13 +6608,13 @@ public static class CXIdxObjCProtocolRefInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXIdxObjCProtocolRefInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxObjCProtocolRefInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXIdxObjCProtocolRefInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxObjCProtocolRefInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXIdxObjCProtocolRefInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXIdxObjCProtocolRefInfo position(long position) {
         return (CXIdxObjCProtocolRefInfo)super.position(position);
     }
 
@@ -6627,13 +6627,13 @@ public static class CXIdxObjCProtocolRefListInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXIdxObjCProtocolRefListInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxObjCProtocolRefListInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXIdxObjCProtocolRefListInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxObjCProtocolRefListInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXIdxObjCProtocolRefListInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXIdxObjCProtocolRefListInfo position(long position) {
         return (CXIdxObjCProtocolRefListInfo)super.position(position);
     }
 
@@ -6646,13 +6646,13 @@ public static class CXIdxObjCInterfaceDeclInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXIdxObjCInterfaceDeclInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxObjCInterfaceDeclInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXIdxObjCInterfaceDeclInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxObjCInterfaceDeclInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXIdxObjCInterfaceDeclInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXIdxObjCInterfaceDeclInfo position(long position) {
         return (CXIdxObjCInterfaceDeclInfo)super.position(position);
     }
 
@@ -6665,13 +6665,13 @@ public static class CXIdxObjCCategoryDeclInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXIdxObjCCategoryDeclInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxObjCCategoryDeclInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXIdxObjCCategoryDeclInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxObjCCategoryDeclInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXIdxObjCCategoryDeclInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXIdxObjCCategoryDeclInfo position(long position) {
         return (CXIdxObjCCategoryDeclInfo)super.position(position);
     }
 
@@ -6686,13 +6686,13 @@ public static class CXIdxObjCPropertyDeclInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXIdxObjCPropertyDeclInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxObjCPropertyDeclInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXIdxObjCPropertyDeclInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxObjCPropertyDeclInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXIdxObjCPropertyDeclInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXIdxObjCPropertyDeclInfo position(long position) {
         return (CXIdxObjCPropertyDeclInfo)super.position(position);
     }
 
@@ -6705,13 +6705,13 @@ public static class CXIdxCXXClassDeclInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXIdxCXXClassDeclInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxCXXClassDeclInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXIdxCXXClassDeclInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxCXXClassDeclInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXIdxCXXClassDeclInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXIdxCXXClassDeclInfo position(long position) {
         return (CXIdxCXXClassDeclInfo)super.position(position);
     }
 
@@ -6743,13 +6743,13 @@ public static class CXIdxEntityRefInfo extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXIdxEntityRefInfo() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXIdxEntityRefInfo(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXIdxEntityRefInfo(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXIdxEntityRefInfo(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXIdxEntityRefInfo position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXIdxEntityRefInfo position(long position) {
         return (CXIdxEntityRefInfo)super.position(position);
     }
 
@@ -6789,13 +6789,13 @@ public static class IndexerCallbacks extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public IndexerCallbacks() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public IndexerCallbacks(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public IndexerCallbacks(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IndexerCallbacks(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public IndexerCallbacks position(int position) {
+    private native void allocateArray(long size);
+    @Override public IndexerCallbacks position(long position) {
         return (IndexerCallbacks)super.position(position);
     }
 
@@ -7279,13 +7279,13 @@ public static class CXComment extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CXComment() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CXComment(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXComment(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXComment(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CXComment position(int position) {
+    private native void allocateArray(long size);
+    @Override public CXComment position(long position) {
         return (CXComment)super.position(position);
     }
 

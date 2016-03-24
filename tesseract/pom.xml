@@ -34,6 +34,10 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
         <artifactId>maven-resources-plugin</artifactId>
       </plugin>
       <plugin>
@@ -72,13 +76,13 @@
         </configuration>
         <executions>
           <execution>
-            <id>generate-sources</id>
+            <id>javacpp.parser</id>
             <configuration>
               <classOrPackageName>org.bytedeco.javacpp.presets.tesseract</classOrPackageName>
             </configuration>
           </execution>
           <execution>
-            <id>process-classes</id>
+            <id>javacpp.compiler</id>
             <configuration>
               <classOrPackageName>org.bytedeco.javacpp.tesseract</classOrPackageName>
             </configuration>

@@ -156,10 +156,10 @@ public class chilitags extends org.bytedeco.javacpp.presets.chilitags {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Chilitags(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Chilitags(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public Chilitags position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Chilitags(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Chilitags position(long position) {
         return (Chilitags)super.position(position);
     }
 
@@ -439,10 +439,10 @@ public native @ByVal Mat draw(
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Chilitags3D(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Chilitags3D(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public Chilitags3D position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Chilitags3D(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Chilitags3D position(long position) {
         return (Chilitags3D)super.position(position);
     }
 
@@ -700,10 +700,10 @@ public native @Const @ByRef Mat getDistortionCoeffs();
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Chilitags3Dd(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Chilitags3Dd(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public Chilitags3Dd position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Chilitags3Dd(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Chilitags3Dd position(long position) {
         return (Chilitags3Dd)super.position(position);
     }
 

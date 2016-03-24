@@ -121,10 +121,12 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
     /*@{*/ 
 
     /** The maximum length that is allocated for a string. */
-    @Namespace("FlyCapture2") @MemberGetter public static native @Cast("const unsigned int") int sk_maxStringLength();  
+    @Namespace("FlyCapture2") @MemberGetter public static native @Cast("const unsigned int") int sk_maxStringLength();
+    public static final int sk_maxStringLength = sk_maxStringLength();  
 
     /** The maximum number of ports one device can have. */
-    @Namespace("FlyCapture2") @MemberGetter public static native @Cast("const unsigned int") int sk_maxNumPorts();  
+    @Namespace("FlyCapture2") @MemberGetter public static native @Cast("const unsigned int") int sk_maxNumPorts();
+    public static final int sk_maxNumPorts = sk_maxNumPorts();  
 
     /*@}*/  
 
@@ -705,13 +707,13 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Default native constructor. */
         public FC2Version() { super((Pointer)null); allocate(); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public FC2Version(int size) { super((Pointer)null); allocateArray(size); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public FC2Version(long size) { super((Pointer)null); allocateArray(size); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public FC2Version(Pointer p) { super(p); }
         private native void allocate();
-        private native void allocateArray(int size);
-        @Override public FC2Version position(int position) {
+        private native void allocateArray(long size);
+        @Override public FC2Version position(long position) {
             return (FC2Version)super.position(position);
         }
     
@@ -730,10 +732,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public PGRGuid(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public PGRGuid(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public PGRGuid position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public PGRGuid(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public PGRGuid position(long position) {
             return (PGRGuid)super.position(position);
         }
     
@@ -764,6 +766,12 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public IPAddress(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public IPAddress(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public IPAddress position(long position) {
+            return (IPAddress)super.position(position);
+        }
     
         public native @Cast("unsigned char") byte octets(int i); public native IPAddress octets(int i, byte octets);
         @MemberGetter public native @Cast("unsigned char*") BytePointer octets();
@@ -786,10 +794,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public MACAddress(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public MACAddress(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public MACAddress position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public MACAddress(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public MACAddress position(long position) {
             return (MACAddress)super.position(position);
         }
     
@@ -814,13 +822,13 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Default native constructor. */
         public GigEProperty() { super((Pointer)null); allocate(); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public GigEProperty(int size) { super((Pointer)null); allocateArray(size); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public GigEProperty(long size) { super((Pointer)null); allocateArray(size); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public GigEProperty(Pointer p) { super(p); }
         private native void allocate();
-        private native void allocateArray(int size);
-        @Override public GigEProperty position(int position) {
+        private native void allocateArray(long size);
+        @Override public GigEProperty position(long position) {
             return (GigEProperty)super.position(position);
         }
     
@@ -846,10 +854,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public GigEStreamChannel(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public GigEStreamChannel(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public GigEStreamChannel position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public GigEStreamChannel(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public GigEStreamChannel position(long position) {
             return (GigEStreamChannel)super.position(position);
         }
     
@@ -883,10 +891,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public GigEConfig(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public GigEConfig(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public GigEConfig position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public GigEConfig(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public GigEConfig position(long position) {
             return (GigEConfig)super.position(position);
         }
     
@@ -914,10 +922,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public GigEImageSettingsInfo(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public GigEImageSettingsInfo(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public GigEImageSettingsInfo position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public GigEImageSettingsInfo(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public GigEImageSettingsInfo position(long position) {
             return (GigEImageSettingsInfo)super.position(position);
         }
     
@@ -950,10 +958,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public GigEImageSettings(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public GigEImageSettings(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public GigEImageSettings position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public GigEImageSettings(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public GigEImageSettings position(long position) {
             return (GigEImageSettings)super.position(position);
         }
     
@@ -990,10 +998,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Format7ImageSettings(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public Format7ImageSettings(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public Format7ImageSettings position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public Format7ImageSettings(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public Format7ImageSettings position(long position) {
             return (Format7ImageSettings)super.position(position);
         }
     
@@ -1022,10 +1030,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Format7Info(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public Format7Info(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public Format7Info position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public Format7Info(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public Format7Info position(long position) {
             return (Format7Info)super.position(position);
         }
     
@@ -1070,10 +1078,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Format7PacketInfo(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public Format7PacketInfo(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public Format7PacketInfo position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public Format7PacketInfo(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public Format7PacketInfo position(long position) {
             return (Format7PacketInfo)super.position(position);
         }
     
@@ -1101,10 +1109,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public FC2Config(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public FC2Config(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public FC2Config position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public FC2Config(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public FC2Config position(long position) {
             return (FC2Config)super.position(position);
         }
     
@@ -1200,6 +1208,12 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public PropertyInfo(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public PropertyInfo(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public PropertyInfo position(long position) {
+            return (PropertyInfo)super.position(position);
+        }
     
         /** Property info type. */
         public native @Cast("FlyCapture2::PropertyType") int type(); public native PropertyInfo type(int type);
@@ -1258,6 +1272,12 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Property(Pointer p) { super(p); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public Property(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public Property position(long position) {
+            return (Property)super.position(position);
+        }
     
         /** Property info type. */
         public native @Cast("FlyCapture2::PropertyType") int type(); public native Property type(int type);
@@ -1298,10 +1318,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public TriggerModeInfo(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public TriggerModeInfo(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public TriggerModeInfo position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public TriggerModeInfo(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public TriggerModeInfo position(long position) {
             return (TriggerModeInfo)super.position(position);
         }
     
@@ -1334,10 +1354,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public TriggerMode(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public TriggerMode(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public TriggerMode position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public TriggerMode(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public TriggerMode position(long position) {
             return (TriggerMode)super.position(position);
         }
           
@@ -1364,10 +1384,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public StrobeInfo(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public StrobeInfo(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public StrobeInfo position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public StrobeInfo(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public StrobeInfo position(long position) {
             return (StrobeInfo)super.position(position);
         }
     
@@ -1398,10 +1418,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public StrobeControl(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public StrobeControl(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public StrobeControl position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public StrobeControl(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public StrobeControl position(long position) {
             return (StrobeControl)super.position(position);
         }
           
@@ -1428,10 +1448,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public TimeStamp(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public TimeStamp(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public TimeStamp position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public TimeStamp(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public TimeStamp position(long position) {
             return (TimeStamp)super.position(position);
         }
     
@@ -1458,10 +1478,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public ConfigROM(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public ConfigROM(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public ConfigROM position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public ConfigROM(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public ConfigROM position(long position) {
             return (ConfigROM)super.position(position);
         }
     
@@ -1501,10 +1521,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public CameraInfo(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public CameraInfo(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public CameraInfo position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public CameraInfo(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public CameraInfo position(long position) {
             return (CameraInfo)super.position(position);
         }
           
@@ -1603,10 +1623,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public EmbeddedImageInfoProperty(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public EmbeddedImageInfoProperty(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public EmbeddedImageInfoProperty position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public EmbeddedImageInfoProperty(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public EmbeddedImageInfoProperty position(long position) {
             return (EmbeddedImageInfoProperty)super.position(position);
         }
     
@@ -1624,13 +1644,13 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Default native constructor. */
         public EmbeddedImageInfo() { super((Pointer)null); allocate(); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public EmbeddedImageInfo(int size) { super((Pointer)null); allocateArray(size); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public EmbeddedImageInfo(long size) { super((Pointer)null); allocateArray(size); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public EmbeddedImageInfo(Pointer p) { super(p); }
         private native void allocate();
-        private native void allocateArray(int size);
-        @Override public EmbeddedImageInfo position(int position) {
+        private native void allocateArray(long size);
+        @Override public EmbeddedImageInfo position(long position) {
             return (EmbeddedImageInfo)super.position(position);
         }
     
@@ -1651,10 +1671,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public ImageMetadata(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public ImageMetadata(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public ImageMetadata position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public ImageMetadata(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public ImageMetadata position(long position) {
             return (ImageMetadata)super.position(position);
         }
             
@@ -1692,10 +1712,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public LUTData(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public LUTData(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public LUTData position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public LUTData(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public LUTData position(long position) {
             return (LUTData)super.position(position);
         }
     
@@ -1726,10 +1746,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public CameraStats(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public CameraStats(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public CameraStats position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public CameraStats(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public CameraStats position(long position) {
             return (CameraStats)super.position(position);
         }
     
@@ -1808,10 +1828,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public PNGOption(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public PNGOption(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public PNGOption position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public PNGOption(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public PNGOption position(long position) {
             return (PNGOption)super.position(position);
         }
     
@@ -1832,10 +1852,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public PPMOption(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public PPMOption(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public PPMOption position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public PPMOption(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public PPMOption position(long position) {
             return (PPMOption)super.position(position);
         }
     
@@ -1854,10 +1874,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public PGMOption(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public PGMOption(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public PGMOption position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public PGMOption(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public PGMOption position(long position) {
             return (PGMOption)super.position(position);
         }
     
@@ -1876,10 +1896,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public TIFFOption(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public TIFFOption(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public TIFFOption position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public TIFFOption(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public TIFFOption position(long position) {
             return (TIFFOption)super.position(position);
         }
     
@@ -1926,10 +1946,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public JPEGOption(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public JPEGOption(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public JPEGOption position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public JPEGOption(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public JPEGOption position(long position) {
             return (JPEGOption)super.position(position);
         }
     
@@ -1956,10 +1976,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public JPG2Option(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public JPG2Option(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public JPG2Option position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public JPG2Option(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public JPG2Option position(long position) {
             return (JPG2Option)super.position(position);
         }
     
@@ -1978,10 +1998,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 	    static { Loader.load(); }
 	    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
 	    public BMPOption(Pointer p) { super(p); }
-	    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-	    public BMPOption(int size) { super((Pointer)null); allocateArray(size); }
-	    private native void allocateArray(int size);
-	    @Override public BMPOption position(int position) {
+	    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+	    public BMPOption(long size) { super((Pointer)null); allocateArray(size); }
+	    private native void allocateArray(long size);
+	    @Override public BMPOption position(long position) {
 	        return (BMPOption)super.position(position);
 	    }
 	
@@ -1999,10 +2019,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 	    static { Loader.load(); }
 	    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
 	    public MJPGOption(Pointer p) { super(p); }
-	    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-	    public MJPGOption(int size) { super((Pointer)null); allocateArray(size); }
-	    private native void allocateArray(int size);
-	    @Override public MJPGOption position(int position) {
+	    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+	    public MJPGOption(long size) { super((Pointer)null); allocateArray(size); }
+	    private native void allocateArray(long size);
+	    @Override public MJPGOption position(long position) {
 	        return (MJPGOption)super.position(position);
 	    }
 	
@@ -2024,10 +2044,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 	    static { Loader.load(); }
 	    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
 	    public H264Option(Pointer p) { super(p); }
-	    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-	    public H264Option(int size) { super((Pointer)null); allocateArray(size); }
-	    private native void allocateArray(int size);
-	    @Override public H264Option position(int position) {
+	    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+	    public H264Option(long size) { super((Pointer)null); allocateArray(size); }
+	    private native void allocateArray(long size);
+	    @Override public H264Option position(long position) {
 	        return (H264Option)super.position(position);
 	    }
 	
@@ -2056,10 +2076,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public AVIOption(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public AVIOption(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public AVIOption position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public AVIOption(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public AVIOption position(long position) {
             return (AVIOption)super.position(position);
         }
     
@@ -2115,8 +2135,8 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
 // #include "FlyCapture2Defs.h"
 // #include <stdio.h>
     @Namespace("FlyCapture2") @Opaque public static class ErrorImpl extends Pointer {
-        /** Empty constructor. */
-        public ErrorImpl() { }
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public ErrorImpl() { super((Pointer)null); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public ErrorImpl(Pointer p) { super(p); }
     }
@@ -2130,10 +2150,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Error(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public Error(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public Error position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public Error(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public Error position(long position) {
             return (Error)super.position(position);
         }
     
@@ -2291,8 +2311,8 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      * when unregistering the callback.
      */
     @Namespace @Name("void") @Opaque public static class CallbackHandle extends Pointer {
-        /** Empty constructor. */
-        public CallbackHandle() { }
+        /** Empty constructor. Calls {@code super((Pointer)null)}. */
+        public CallbackHandle() { super((Pointer)null); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public CallbackHandle(Pointer p) { super(p); }
     }    
@@ -2309,10 +2329,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public BusManager(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public BusManager(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public BusManager position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public BusManager(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public BusManager position(long position) {
             return (BusManager)super.position(position);
         }
      
@@ -2672,6 +2692,8 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
          */
 		public native @ByVal Error IsCameraControlable( 
 					PGRGuid pGuid, @Cast("bool*") BoolPointer pControlable );
+		public native @ByVal Error IsCameraControlable( 
+					PGRGuid pGuid, @Cast("bool*") boolean[] pControlable );
     }
 
 
@@ -2730,8 +2752,6 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      */
     @Namespace("FlyCapture2") @NoOffset public static class CameraBase extends Pointer {
         static { Loader.load(); }
-        /** Empty constructor. */
-        public CameraBase() { }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public CameraBase(Pointer p) { super(p); }
     
@@ -3293,6 +3313,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned int") int bank,
                     @Cast("bool*") BoolPointer pReadSupported,
                     @Cast("bool*") BoolPointer pWriteSupported );
+        public native @ByVal Error GetLUTBankInfo(
+                    @Cast("unsigned int") int bank,
+                    @Cast("bool*") boolean[] pReadSupported,
+                    @Cast("bool*") boolean[] pWriteSupported );
 
         /**
          * Get the LUT bank that is currently being used. For cameras with
@@ -3679,10 +3703,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Camera(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public Camera(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public Camera position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public Camera(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public Camera position(long position) {
             return (Camera)super.position(position);
         }
     
@@ -3723,6 +3747,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("FlyCapture2::VideoMode") int videoMode,
                     @Cast("FlyCapture2::FrameRate") int frameRate,
                     @Cast("bool*") BoolPointer pSupported);
+        public native @ByVal Error GetVideoModeAndFrameRateInfo(
+                    @Cast("FlyCapture2::VideoMode") int videoMode,
+                    @Cast("FlyCapture2::FrameRate") int frameRate,
+                    @Cast("bool*") boolean[] pSupported);
         
         /**
          * Get the current video mode and frame rate from the camera. If
@@ -3794,6 +3822,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @ByVal Error GetFormat7Info( 
                     Format7Info pInfo,
                     @Cast("bool*") BoolPointer pSupported );
+        public native @ByVal Error GetFormat7Info( 
+                    Format7Info pInfo,
+                    @Cast("bool*") boolean[] pSupported );
         
         /**
          * Validates Format7ImageSettings structure and returns valid packet
@@ -3815,6 +3846,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @ByVal Error ValidateFormat7Settings( 
                     @Const Format7ImageSettings pImageSettings,
                     @Cast("bool*") BoolPointer pSettingsAreValid,
+                    Format7PacketInfo pPacketInfo );
+        public native @ByVal Error ValidateFormat7Settings( 
+                    @Const Format7ImageSettings pImageSettings,
+                    @Cast("bool*") boolean[] pSettingsAreValid,
                     Format7PacketInfo pPacketInfo );
         
         /**
@@ -3969,6 +4004,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned int") int bank,
                     @Cast("bool*") BoolPointer pReadSupported,
                     @Cast("bool*") BoolPointer pWriteSupported );
+        public native @ByVal Error GetLUTBankInfo(
+                    @Cast("unsigned int") int bank,
+                    @Cast("bool*") boolean[] pReadSupported,
+                    @Cast("bool*") boolean[] pWriteSupported );
         public native @ByVal Error GetActiveLUTBank( @Cast("unsigned int*") IntPointer pActiveBank );
         public native @ByVal Error GetActiveLUTBank( @Cast("unsigned int*") IntBuffer pActiveBank );
         public native @ByVal Error GetActiveLUTBank( @Cast("unsigned int*") int[] pActiveBank );
@@ -4111,10 +4150,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public GigECamera(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public GigECamera(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public GigECamera position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public GigECamera(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public GigECamera position(long position) {
             return (GigECamera)super.position(position);
         }
     
@@ -4321,6 +4360,7 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
          * @return An Error indicating the success or failure of the function.
          */
         public native @ByVal Error QueryGigEImagingMode( @Cast("FlyCapture2::Mode") int mode, @Cast("bool*") BoolPointer isSupported );
+        public native @ByVal Error QueryGigEImagingMode( @Cast("FlyCapture2::Mode") int mode, @Cast("bool*") boolean[] isSupported );
 
         /**
          * Get the current imaging mode on the camera.
@@ -4561,6 +4601,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
                     @Cast("unsigned int") int bank,
                     @Cast("bool*") BoolPointer pReadSupported,
                     @Cast("bool*") BoolPointer pWriteSupported );
+        public native @ByVal Error GetLUTBankInfo(
+                    @Cast("unsigned int") int bank,
+                    @Cast("bool*") boolean[] pReadSupported,
+                    @Cast("bool*") boolean[] pWriteSupported );
         public native @ByVal Error GetActiveLUTBank( @Cast("unsigned int*") IntPointer pActiveBank );
         public native @ByVal Error GetActiveLUTBank( @Cast("unsigned int*") IntBuffer pActiveBank );
         public native @ByVal Error GetActiveLUTBank( @Cast("unsigned int*") int[] pActiveBank );
@@ -4702,10 +4746,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Image(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public Image(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public Image position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public Image(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public Image position(long position) {
             return (Image)super.position(position);
         }
     
@@ -5489,13 +5533,13 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Default native constructor. */
         public SystemInfo() { super((Pointer)null); allocate(); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public SystemInfo(int size) { super((Pointer)null); allocateArray(size); }
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public SystemInfo(long size) { super((Pointer)null); allocateArray(size); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public SystemInfo(Pointer p) { super(p); }
         private native void allocate();
-        private native void allocateArray(int size);
-        @Override public SystemInfo position(int position) {
+        private native void allocateArray(long size);
+        @Override public SystemInfo position(long position) {
             return (SystemInfo)super.position(position);
         }
     
@@ -5563,8 +5607,6 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
      */ 
     @Namespace("FlyCapture2") public static class Utilities extends Pointer {
         static { Loader.load(); }
-        /** Empty constructor. */
-        public Utilities() { }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public Utilities(Pointer p) { super(p); }
     
@@ -5716,10 +5758,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public AVIRecorder(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public AVIRecorder(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public AVIRecorder position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public AVIRecorder(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public AVIRecorder position(long position) {
             return (AVIRecorder)super.position(position);
         }
      
@@ -5856,10 +5898,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public TopologyNode(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public TopologyNode(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public TopologyNode position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public TopologyNode(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public TopologyNode position(long position) {
             return (TopologyNode)super.position(position);
         }
     
@@ -6061,10 +6103,10 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
         public ImageStatistics(Pointer p) { super(p); }
-        /** Native array allocator. Access with {@link Pointer#position(int)}. */
-        public ImageStatistics(int size) { super((Pointer)null); allocateArray(size); }
-        private native void allocateArray(int size);
-        @Override public ImageStatistics position(int position) {
+        /** Native array allocator. Access with {@link Pointer#position(long)}. */
+        public ImageStatistics(long size) { super((Pointer)null); allocateArray(size); }
+        private native void allocateArray(long size);
+        @Override public ImageStatistics position(long position) {
             return (ImageStatistics)super.position(position);
         }
     
@@ -6154,6 +6196,9 @@ public static final int FULL_32BIT_VALUE = 0x7FFFFFFF;
         public native @ByVal Error GetChannelStatus(
                     @Cast("FlyCapture2::ImageStatistics::StatisticsChannel") int channel,
                     @Cast("bool*") BoolPointer pEnabled );
+        public native @ByVal Error GetChannelStatus(
+                    @Cast("FlyCapture2::ImageStatistics::StatisticsChannel") int channel,
+                    @Cast("bool*") boolean[] pEnabled );
 
         /**
          * Set the status of a statistics channel.

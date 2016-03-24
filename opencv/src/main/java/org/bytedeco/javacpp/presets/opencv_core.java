@@ -176,6 +176,7 @@ public class opencv_core implements InfoMapper {
                      + "public Mat(int ... n) { this(new IntPointer(n)); }\n"
                      + "public Mat(double ... d) { this(new DoublePointer(d)); }\n"
                      + "public Mat(float ... f) { this(new FloatPointer(f)); }\n"
+                     + "private Mat(long rows, long cols, int type, Pointer data) { this((int)Math.min(rows, Integer.MAX_VALUE), (int)Math.min(cols, Integer.MAX_VALUE), type, data, AUTO_STEP); }\n"
                      + "public Mat(BytePointer p, boolean signed) { this(p.limit - p.position, 1, signed ? CV_8SC1 : CV_8UC1, p); }\n"
                      + "public Mat(ShortPointer p, boolean signed) { this(p.limit - p.position, 1, signed ? CV_16SC1 : CV_16UC1, p); }\n"
                      + "public Mat(IntPointer p) { this(p.limit - p.position, 1, CV_32SC1, p); }\n"
@@ -245,7 +246,7 @@ public class opencv_core implements InfoMapper {
 
     @Documented @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.METHOD, ElementType.PARAMETER})
-    @Cast({"cv::Ptr", "&"}) @Adapter("PtrAdapter") public @interface Ptr {
+    @Cast({"cv::Ptr"}) @Adapter("PtrAdapter") public @interface Ptr {
         /** @return template type */
         String value() default "";
     }

@@ -130,13 +130,13 @@ public static class fftw_iodim extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public fftw_iodim() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public fftw_iodim(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public fftw_iodim(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftw_iodim(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public fftw_iodim position(int position) {
+    private native void allocateArray(long size);
+    @Override public fftw_iodim position(long position) {
         return (fftw_iodim)super.position(position);
     }
 
@@ -149,13 +149,13 @@ public static class fftw_iodim64 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public fftw_iodim64() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public fftw_iodim64(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public fftw_iodim64(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public fftw_iodim64(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public fftw_iodim64 position(int position) {
+    private native void allocateArray(long size);
+    @Override public fftw_iodim64 position(long position) {
         return (fftw_iodim64)super.position(position);
     }
 

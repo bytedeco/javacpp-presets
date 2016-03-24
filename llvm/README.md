@@ -61,9 +61,9 @@ public class Fac {
     public static void main (String[] args) {
         BytePointer error = new BytePointer((Pointer)null); // Used to retrieve messages from functions
         LLVMLinkInMCJIT();
-        LLVMInitializeNativeAsmPrinter()
-        LLVMInitializeNativeAsmParser()
-        LLVMInitializeNativeDisassembler()
+        LLVMInitializeNativeAsmPrinter();
+        LLVMInitializeNativeAsmParser();
+        LLVMInitializeNativeDisassembler();
         LLVMInitializeNativeTarget();
         LLVMModuleRef mod = LLVMModuleCreateWithName("fac_module");
         LLVMTypeRef[] fac_args = { LLVMInt32Type() };

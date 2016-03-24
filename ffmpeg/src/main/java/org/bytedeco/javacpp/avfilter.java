@@ -10,6 +10,7 @@ import static org.bytedeco.javacpp.avutil.*;
 import static org.bytedeco.javacpp.swresample.*;
 import static org.bytedeco.javacpp.avcodec.*;
 import static org.bytedeco.javacpp.avformat.*;
+import static org.bytedeco.javacpp.postproc.*;
 import static org.bytedeco.javacpp.swscale.*;
 
 public class avfilter extends org.bytedeco.javacpp.presets.avfilter {
@@ -68,17 +69,23 @@ public class avfilter extends org.bytedeco.javacpp.presets.avfilter {
 /**
  * Return the LIBAVFILTER_VERSION_INT constant.
  */
-public static native @Cast("unsigned") int avfilter_version();
+@NoException public static native @Cast("unsigned") int avfilter_version();
 
 /**
  * Return the libavfilter build-time configuration.
  */
-public static native @Cast("const char*") BytePointer avfilter_configuration();
+@NoException public static native @Cast("const char*") BytePointer avfilter_configuration();
 
 /**
  * Return the libavfilter license.
  */
-public static native @Cast("const char*") BytePointer avfilter_license();
+@NoException public static native @Cast("const char*") BytePointer avfilter_license();
+@Opaque public static class AVFilterPad extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public AVFilterPad() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AVFilterPad(Pointer p) { super(p); }
+}
 @Opaque public static class AVFilterFormats extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public AVFilterFormats() { super((Pointer)null); }
@@ -86,524 +93,11 @@ public static native @Cast("const char*") BytePointer avfilter_license();
     public AVFilterFormats(Pointer p) { super(p); }
 }
 
-// #if FF_API_AVFILTERBUFFER
-/**
- * A reference-counted buffer data type used by the filter system. Filters
- * should not store pointers to this structure directly, but instead use the
- * AVFilterBufferRef structure below.
- */
-public static class AVFilterBuffer extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public AVFilterBuffer() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVFilterBuffer(int size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public AVFilterBuffer(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVFilterBuffer position(int position) {
-        return (AVFilterBuffer)super.position(position);
-    }
-
-    /** buffer data for each plane/channel */
-    public native @Cast("uint8_t*") BytePointer data(int i); public native AVFilterBuffer data(int i, BytePointer data);
-    @MemberGetter public native @Cast("uint8_t**") PointerPointer data();
-
-    /**
-     * pointers to the data planes/channels.
-     *
-     * For video, this should simply point to data[].
-     *
-     * For planar audio, each channel has a separate data pointer, and
-     * linesize[0] contains the size of each channel buffer.
-     * For packed audio, there is just one data pointer, and linesize[0]
-     * contains the total size of the buffer for all channels.
-     *
-     * Note: Both data and extended_data will always be set, but for planar
-     * audio with more channels that can fit in data, extended_data must be used
-     * in order to access all channels.
-     */
-    public native @Cast("uint8_t*") BytePointer extended_data(int i); public native AVFilterBuffer extended_data(int i, BytePointer extended_data);
-    @MemberGetter public native @Cast("uint8_t**") PointerPointer extended_data();
-    /** number of bytes per line */
-    public native int linesize(int i); public native AVFilterBuffer linesize(int i, int linesize);
-    @MemberGetter public native IntPointer linesize();
-
-    /** private data to be used by a custom free function */
-    public native Pointer priv(); public native AVFilterBuffer priv(Pointer priv);
-    /**
-     * A pointer to the function to deallocate this buffer if the default
-     * function is not sufficient. This could, for example, add the memory
-     * back into a memory pool to be reused later without the overhead of
-     * reallocating it from scratch.
-     */
-    public static class Free_AVFilterBuffer extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Free_AVFilterBuffer(Pointer p) { super(p); }
-        protected Free_AVFilterBuffer() { allocate(); }
-        private native void allocate();
-        public native void call(AVFilterBuffer buf);
-    }
-    public native Free_AVFilterBuffer free(); public native AVFilterBuffer free(Free_AVFilterBuffer free);
-
-    /** media format */
-    public native int format(); public native AVFilterBuffer format(int format);
-    /** width and height of the allocated buffer */
-    public native int w(); public native AVFilterBuffer w(int w);
-    public native int h(); public native AVFilterBuffer h(int h);
-    /** number of references to this buffer */
-    public native @Cast("unsigned") int refcount(); public native AVFilterBuffer refcount(int refcount);
-}
-
-/** can read from the buffer */
-public static final int AV_PERM_READ =     0x01;
-/** can write to the buffer */
-public static final int AV_PERM_WRITE =    0x02;
-/** nobody else can overwrite the buffer */
-public static final int AV_PERM_PRESERVE = 0x04;
-/** can output the buffer multiple times, with the same contents each time */
-public static final int AV_PERM_REUSE =    0x08;
-/** can output the buffer multiple times, modified each time */
-public static final int AV_PERM_REUSE2 =   0x10;
-/** the buffer requested can have negative linesizes */
-public static final int AV_PERM_NEG_LINESIZES = 0x20;
-/** the buffer must be aligned */
-public static final int AV_PERM_ALIGN =    0x40;
-
-public static final int AVFILTER_ALIGN = 16; //not part of ABI
-
-/**
- * Audio specific properties in a reference to an AVFilterBuffer. Since
- * AVFilterBufferRef is common to different media formats, audio specific
- * per reference properties must be separated out.
- */
-public static class AVFilterBufferRefAudioProps extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public AVFilterBufferRefAudioProps() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVFilterBufferRefAudioProps(int size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public AVFilterBufferRefAudioProps(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVFilterBufferRefAudioProps position(int position) {
-        return (AVFilterBufferRefAudioProps)super.position(position);
-    }
-
-    /** channel layout of audio buffer */
-    public native @Cast("uint64_t") long channel_layout(); public native AVFilterBufferRefAudioProps channel_layout(long channel_layout);
-    /** number of audio samples per channel */
-    public native int nb_samples(); public native AVFilterBufferRefAudioProps nb_samples(int nb_samples);
-    /** audio buffer sample rate */
-    public native int sample_rate(); public native AVFilterBufferRefAudioProps sample_rate(int sample_rate);
-    /** number of channels (do not access directly) */
-    public native int channels(); public native AVFilterBufferRefAudioProps channels(int channels);
-}
-
-/**
- * Video specific properties in a reference to an AVFilterBuffer. Since
- * AVFilterBufferRef is common to different media formats, video specific
- * per reference properties must be separated out.
- */
-public static class AVFilterBufferRefVideoProps extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public AVFilterBufferRefVideoProps() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVFilterBufferRefVideoProps(int size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public AVFilterBufferRefVideoProps(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVFilterBufferRefVideoProps position(int position) {
-        return (AVFilterBufferRefVideoProps)super.position(position);
-    }
-
-    /** image width */
-    public native int w(); public native AVFilterBufferRefVideoProps w(int w);
-    /** image height */
-    public native int h(); public native AVFilterBufferRefVideoProps h(int h);
-    /** sample aspect ratio */
-    public native @ByRef AVRational sample_aspect_ratio(); public native AVFilterBufferRefVideoProps sample_aspect_ratio(AVRational sample_aspect_ratio);
-    /** is frame interlaced */
-    public native int interlaced(); public native AVFilterBufferRefVideoProps interlaced(int interlaced);
-    /** field order */
-    public native int top_field_first(); public native AVFilterBufferRefVideoProps top_field_first(int top_field_first);
-    /** picture type of the frame */
-    public native @Cast("AVPictureType") int pict_type(); public native AVFilterBufferRefVideoProps pict_type(int pict_type);
-    /** 1 -> keyframe, 0-> not */
-    public native int key_frame(); public native AVFilterBufferRefVideoProps key_frame(int key_frame);
-    /** qp_table stride */
-    public native int qp_table_linesize(); public native AVFilterBufferRefVideoProps qp_table_linesize(int qp_table_linesize);
-    /** qp_table size */
-    public native int qp_table_size(); public native AVFilterBufferRefVideoProps qp_table_size(int qp_table_size);
-    /** array of Quantization Parameters */
-    public native BytePointer qp_table(); public native AVFilterBufferRefVideoProps qp_table(BytePointer qp_table);
-}
-
-/**
- * A reference to an AVFilterBuffer. Since filters can manipulate the origin of
- * a buffer to, for example, crop image without any memcpy, the buffer origin
- * and dimensions are per-reference properties. Linesize is also useful for
- * image flipping, frame to field filters, etc, and so is also per-reference.
- *
- * TODO: add anything necessary for frame reordering
- */
-public static class AVFilterBufferRef extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public AVFilterBufferRef() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVFilterBufferRef(int size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public AVFilterBufferRef(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVFilterBufferRef position(int position) {
-        return (AVFilterBufferRef)super.position(position);
-    }
-
-    /** the buffer that this is a reference to */
-    public native AVFilterBuffer buf(); public native AVFilterBufferRef buf(AVFilterBuffer buf);
-    /** picture/audio data for each plane */
-    public native @Cast("uint8_t*") BytePointer data(int i); public native AVFilterBufferRef data(int i, BytePointer data);
-    @MemberGetter public native @Cast("uint8_t**") PointerPointer data();
-    /**
-     * pointers to the data planes/channels.
-     *
-     * For video, this should simply point to data[].
-     *
-     * For planar audio, each channel has a separate data pointer, and
-     * linesize[0] contains the size of each channel buffer.
-     * For packed audio, there is just one data pointer, and linesize[0]
-     * contains the total size of the buffer for all channels.
-     *
-     * Note: Both data and extended_data will always be set, but for planar
-     * audio with more channels that can fit in data, extended_data must be used
-     * in order to access all channels.
-     */
-    public native @Cast("uint8_t*") BytePointer extended_data(int i); public native AVFilterBufferRef extended_data(int i, BytePointer extended_data);
-    @MemberGetter public native @Cast("uint8_t**") PointerPointer extended_data();
-    /** number of bytes per line */
-    public native int linesize(int i); public native AVFilterBufferRef linesize(int i, int linesize);
-    @MemberGetter public native IntPointer linesize();
-
-    /** video buffer specific properties */
-    public native AVFilterBufferRefVideoProps video(); public native AVFilterBufferRef video(AVFilterBufferRefVideoProps video);
-    /** audio buffer specific properties */
-    public native AVFilterBufferRefAudioProps audio(); public native AVFilterBufferRef audio(AVFilterBufferRefAudioProps audio);
-
-    /**
-     * presentation timestamp. The time unit may change during
-     * filtering, as it is specified in the link and the filter code
-     * may need to rescale the PTS accordingly.
-     */
-    public native long pts(); public native AVFilterBufferRef pts(long pts);
-    /** byte position in stream, -1 if unknown */
-    public native long pos(); public native AVFilterBufferRef pos(long pos);
-
-    /** media format */
-    public native int format(); public native AVFilterBufferRef format(int format);
-
-    /** permissions, see the AV_PERM_* flags */
-    public native int perms(); public native AVFilterBufferRef perms(int perms);
-
-    /** media type of buffer data */
-    public native @Cast("AVMediaType") int type(); public native AVFilterBufferRef type(int type);
-
-    /** dictionary containing metadata key=value tags */
-    public native AVDictionary metadata(); public native AVFilterBufferRef metadata(AVDictionary metadata);
-}
-
-/**
- * Copy properties of src to dst, without copying the actual data
- */
-public static native @Deprecated void avfilter_copy_buffer_ref_props(AVFilterBufferRef dst, @Const AVFilterBufferRef src);
-
-/**
- * Add a new reference to a buffer.
- *
- * @param ref   an existing reference to the buffer
- * @param pmask a bitmask containing the allowable permissions in the new
- *              reference
- * @return      a new reference to the buffer with the same properties as the
- *              old, excluding any permissions denied by pmask
- */
-public static native @Deprecated AVFilterBufferRef avfilter_ref_buffer(AVFilterBufferRef ref, int pmask);
-
-/**
- * Remove a reference to a buffer. If this is the last reference to the
- * buffer, the buffer itself is also automatically freed.
- *
- * @param ref reference to the buffer, may be NULL
- *
- * \note it is recommended to use avfilter_unref_bufferp() instead of this
- * function
- */
-public static native @Deprecated void avfilter_unref_buffer(AVFilterBufferRef ref);
-
-/**
- * Remove a reference to a buffer and set the pointer to NULL.
- * If this is the last reference to the buffer, the buffer itself
- * is also automatically freed.
- *
- * @param ref pointer to the buffer reference
- */
-public static native @Deprecated void avfilter_unref_bufferp(@Cast("AVFilterBufferRef**") PointerPointer ref);
-public static native @Deprecated void avfilter_unref_bufferp(@ByPtrPtr AVFilterBufferRef ref);
-
-/**
- * Get the number of channels of a buffer reference.
- */
-public static native @Deprecated int avfilter_ref_get_channels(AVFilterBufferRef ref);
-// #endif
-
-// #if FF_API_AVFILTERPAD_PUBLIC
-/**
- * A filter pad used for either input or output.
- *
- * See doc/filter_design.txt for details on how to implement the methods.
- *
- * \warning this struct might be removed from public API.
- * users should call avfilter_pad_get_name() and avfilter_pad_get_type()
- * to access the name and type fields; there should be no need to access
- * any other fields from outside of libavfilter.
- */
-public static class AVFilterPad extends Pointer {
-    static { Loader.load(); }
-    /** Default native constructor. */
-    public AVFilterPad() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVFilterPad(int size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public AVFilterPad(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVFilterPad position(int position) {
-        return (AVFilterPad)super.position(position);
-    }
-
-    /**
-     * Pad name. The name is unique among inputs and among outputs, but an
-     * input may have the same name as an output. This may be NULL if this
-     * pad has no need to ever be referenced by name.
-     */
-    @MemberGetter public native @Cast("const char*") BytePointer name();
-
-    /**
-     * AVFilterPad type.
-     */
-    public native @Cast("AVMediaType") int type(); public native AVFilterPad type(int type);
-
-    /**
-     * Input pads:
-     * Minimum required permissions on incoming buffers. Any buffer with
-     * insufficient permissions will be automatically copied by the filter
-     * system to a new buffer which provides the needed access permissions.
-     *
-     * Output pads:
-     * Guaranteed permissions on outgoing buffers. Any buffer pushed on the
-     * link must have at least these permissions; this fact is checked by
-     * asserts. It can be used to optimize buffer allocation.
-     */
-    public native @Deprecated int min_perms(); public native AVFilterPad min_perms(int min_perms);
-
-    /**
-     * Input pads:
-     * Permissions which are not accepted on incoming buffers. Any buffer
-     * which has any of these permissions set will be automatically copied
-     * by the filter system to a new buffer which does not have those
-     * permissions. This can be used to easily disallow buffers with
-     * AV_PERM_REUSE.
-     *
-     * Output pads:
-     * Permissions which are automatically removed on outgoing buffers. It
-     * can be used to optimize buffer allocation.
-     */
-    public native @Deprecated int rej_perms(); public native AVFilterPad rej_perms(int rej_perms);
-
-    /**
-     * @deprecated unused
-     */
-    public static class Start_frame_AVFilterLink_AVFilterBufferRef extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Start_frame_AVFilterLink_AVFilterBufferRef(Pointer p) { super(p); }
-        protected Start_frame_AVFilterLink_AVFilterBufferRef() { allocate(); }
-        private native void allocate();
-        public native int call(AVFilterLink link, AVFilterBufferRef picref);
-    }
-    public native Start_frame_AVFilterLink_AVFilterBufferRef start_frame(); public native AVFilterPad start_frame(Start_frame_AVFilterLink_AVFilterBufferRef start_frame);
-
-    /**
-     * Callback function to get a video buffer. If NULL, the filter system will
-     * use ff_default_get_video_buffer().
-     *
-     * Input video pads only.
-     */
-    public static class Get_video_buffer_AVFilterLink_int_int extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Get_video_buffer_AVFilterLink_int_int(Pointer p) { super(p); }
-        protected Get_video_buffer_AVFilterLink_int_int() { allocate(); }
-        private native void allocate();
-        public native AVFrame call(AVFilterLink link, int w, int h);
-    }
-    public native Get_video_buffer_AVFilterLink_int_int get_video_buffer(); public native AVFilterPad get_video_buffer(Get_video_buffer_AVFilterLink_int_int get_video_buffer);
-
-    /**
-     * Callback function to get an audio buffer. If NULL, the filter system will
-     * use ff_default_get_audio_buffer().
-     *
-     * Input audio pads only.
-     */
-    public static class Get_audio_buffer_AVFilterLink_int extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Get_audio_buffer_AVFilterLink_int(Pointer p) { super(p); }
-        protected Get_audio_buffer_AVFilterLink_int() { allocate(); }
-        private native void allocate();
-        public native AVFrame call(AVFilterLink link, int nb_samples);
-    }
-    public native Get_audio_buffer_AVFilterLink_int get_audio_buffer(); public native AVFilterPad get_audio_buffer(Get_audio_buffer_AVFilterLink_int get_audio_buffer);
-
-    /**
-     * @deprecated unused
-     */
-    public static class End_frame_AVFilterLink extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    End_frame_AVFilterLink(Pointer p) { super(p); }
-        protected End_frame_AVFilterLink() { allocate(); }
-        private native void allocate();
-        public native int call(AVFilterLink link);
-    }
-    public native End_frame_AVFilterLink end_frame(); public native AVFilterPad end_frame(End_frame_AVFilterLink end_frame);
-
-    /**
-     * @deprecated unused
-     */
-    public static class Draw_slice_AVFilterLink_int_int_int extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Draw_slice_AVFilterLink_int_int_int(Pointer p) { super(p); }
-        protected Draw_slice_AVFilterLink_int_int_int() { allocate(); }
-        private native void allocate();
-        public native int call(AVFilterLink link, int y, int height, int slice_dir);
-    }
-    public native Draw_slice_AVFilterLink_int_int_int draw_slice(); public native AVFilterPad draw_slice(Draw_slice_AVFilterLink_int_int_int draw_slice);
-
-    /**
-     * Filtering callback. This is where a filter receives a frame with
-     * audio/video data and should do its processing.
-     *
-     * Input pads only.
-     *
-     * @return >= 0 on success, a negative AVERROR on error. This function
-     * must ensure that frame is properly unreferenced on error if it
-     * hasn't been passed on to another filter.
-     */
-    public static class Filter_frame_AVFilterLink_AVFrame extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Filter_frame_AVFilterLink_AVFrame(Pointer p) { super(p); }
-        protected Filter_frame_AVFilterLink_AVFrame() { allocate(); }
-        private native void allocate();
-        public native int call(AVFilterLink link, AVFrame frame);
-    }
-    public native Filter_frame_AVFilterLink_AVFrame filter_frame(); public native AVFilterPad filter_frame(Filter_frame_AVFilterLink_AVFrame filter_frame);
-
-    /**
-     * Frame poll callback. This returns the number of immediately available
-     * samples. It should return a positive value if the next request_frame()
-     * is guaranteed to return one frame (with no delay).
-     *
-     * Defaults to just calling the source poll_frame() method.
-     *
-     * Output pads only.
-     */
-    public static class Poll_frame_AVFilterLink extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Poll_frame_AVFilterLink(Pointer p) { super(p); }
-        protected Poll_frame_AVFilterLink() { allocate(); }
-        private native void allocate();
-        public native int call(AVFilterLink link);
-    }
-    public native Poll_frame_AVFilterLink poll_frame(); public native AVFilterPad poll_frame(Poll_frame_AVFilterLink poll_frame);
-
-    /**
-     * Frame request callback. A call to this should result in at least one
-     * frame being output over the given link. This should return zero on
-     * success, and another value on error.
-     * See ff_request_frame() for the error codes with a specific
-     * meaning.
-     *
-     * Output pads only.
-     */
-    public static class Request_frame_AVFilterLink extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Request_frame_AVFilterLink(Pointer p) { super(p); }
-        protected Request_frame_AVFilterLink() { allocate(); }
-        private native void allocate();
-        public native int call(AVFilterLink link);
-    }
-    public native Request_frame_AVFilterLink request_frame(); public native AVFilterPad request_frame(Request_frame_AVFilterLink request_frame);
-
-    /**
-     * Link configuration callback.
-     *
-     * For output pads, this should set the following link properties:
-     * video: width, height, sample_aspect_ratio, time_base
-     * audio: sample_rate.
-     *
-     * This should NOT set properties such as format, channel_layout, etc which
-     * are negotiated between filters by the filter system using the
-     * query_formats() callback before this function is called.
-     *
-     * For input pads, this should check the properties of the link, and update
-     * the filter's internal state as necessary.
-     *
-     * For both input and output pads, this should return zero on success,
-     * and another value on error.
-     */
-    public static class Config_props_AVFilterLink extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Config_props_AVFilterLink(Pointer p) { super(p); }
-        protected Config_props_AVFilterLink() { allocate(); }
-        private native void allocate();
-        public native int call(AVFilterLink link);
-    }
-    public native Config_props_AVFilterLink config_props(); public native AVFilterPad config_props(Config_props_AVFilterLink config_props);
-
-    /**
-     * The filter expects a fifo to be inserted on its input link,
-     * typically because it has a delay.
-     *
-     * input pads only.
-     */
-    public native int needs_fifo(); public native AVFilterPad needs_fifo(int needs_fifo);
-
-    /**
-     * The filter expects writable frames from its input link,
-     * duplicating data buffers if needed.
-     *
-     * input pads only.
-     */
-    public native int needs_writable(); public native AVFilterPad needs_writable(int needs_writable);
-}
-// #endif
-
 /**
  * Get the number of elements in a NULL-terminated array of AVFilterPads (e.g.
  * AVFilter.inputs/outputs).
  */
-public static native int avfilter_pad_count(@Const AVFilterPad pads);
+@NoException public static native int avfilter_pad_count(@Const AVFilterPad pads);
 
 /**
  * Get the name of an AVFilterPad.
@@ -614,7 +108,7 @@ public static native int avfilter_pad_count(@Const AVFilterPad pads);
  *
  * @return name of the pad_idx'th pad in pads
  */
-public static native @Cast("const char*") BytePointer avfilter_pad_get_name(@Const AVFilterPad pads, int pad_idx);
+@NoException public static native @Cast("const char*") BytePointer avfilter_pad_get_name(@Const AVFilterPad pads, int pad_idx);
 
 /**
  * Get the type of an AVFilterPad.
@@ -625,7 +119,7 @@ public static native @Cast("const char*") BytePointer avfilter_pad_get_name(@Con
  *
  * @return type of the pad_idx'th pad in pads
  */
-public static native @Cast("AVMediaType") int avfilter_pad_get_type(@Const AVFilterPad pads, int pad_idx);
+@NoException public static native @Cast("AVMediaType") int avfilter_pad_get_type(@Const AVFilterPad pads, int pad_idx);
 
 /**
  * The number of the filter inputs is not determined just by AVFilter.inputs.
@@ -675,13 +169,13 @@ public static class AVFilter extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVFilter() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVFilter(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVFilter(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilter(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVFilter position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVFilter position(long position) {
         return (AVFilter)super.position(position);
     }
 
@@ -905,13 +399,13 @@ public static class AVFilterContext extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVFilterContext() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVFilterContext(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVFilterContext(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilterContext(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVFilterContext position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVFilterContext position(long position) {
         return (AVFilterContext)super.position(position);
     }
 
@@ -929,10 +423,6 @@ public static class AVFilterContext extends Pointer {
     /** array of pointers to input links */
     public native AVFilterLink inputs(int i); public native AVFilterContext inputs(int i, AVFilterLink inputs);
     @MemberGetter public native @Cast("AVFilterLink**") PointerPointer inputs();
-// #if FF_API_FOO_COUNT
-    /** @deprecated use nb_inputs */
-    public native @Cast("unsigned") @Deprecated int input_count(); public native AVFilterContext input_count(int input_count);
-// #endif
     /** number of input pads */
     public native @Cast("unsigned") int nb_inputs(); public native AVFilterContext nb_inputs(int nb_inputs);
 
@@ -941,10 +431,6 @@ public static class AVFilterContext extends Pointer {
     /** array of pointers to output links */
     public native AVFilterLink outputs(int i); public native AVFilterContext outputs(int i, AVFilterLink outputs);
     @MemberGetter public native @Cast("AVFilterLink**") PointerPointer outputs();
-// #if FF_API_FOO_COUNT
-    /** @deprecated use nb_outputs */
-    public native @Cast("unsigned") @Deprecated int output_count(); public native AVFilterContext output_count(int output_count);
-// #endif
     /** number of output pads */
     public native @Cast("unsigned") int nb_outputs(); public native AVFilterContext nb_outputs(int nb_outputs);
 
@@ -1000,13 +486,13 @@ public static class AVFilterLink extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVFilterLink() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVFilterLink(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVFilterLink(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilterLink(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVFilterLink position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVFilterLink position(long position) {
         return (AVFilterLink)super.position(position);
     }
 
@@ -1093,10 +579,6 @@ public static class AVFilterLink extends Pointer {
         /** complete */
         AVLINK_INIT = 2;
 
-// #if FF_API_AVFILTERBUFFER
-    public native @Cast("AVFilterPool*") Pointer pool(); public native AVFilterLink pool(Pointer pool);
-// #endif
-
     /**
      * Graph the filter belongs to.
      */
@@ -1104,9 +586,15 @@ public static class AVFilterLink extends Pointer {
 
     /**
      * Current timestamp of the link, as defined by the most recent
-     * frame(s), in AV_TIME_BASE units.
+     * frame(s), in link time_base units.
      */
     public native long current_pts(); public native AVFilterLink current_pts(long current_pts);
+
+    /**
+     * Current timestamp of the link, as defined by the most recent
+     * frame(s), in AV_TIME_BASE units.
+     */
+    public native long current_pts_us(); public native AVFilterLink current_pts_us(long current_pts_us);
 
     /**
      * Index in the age array.
@@ -1114,11 +602,12 @@ public static class AVFilterLink extends Pointer {
     public native int age_index(); public native AVFilterLink age_index(int age_index);
 
     /**
-     * Frame rate of the stream on the link, or 1/0 if unknown;
-     * if left to 0/0, will be automatically be copied from the first input
+     * Frame rate of the stream on the link, or 1/0 if unknown or variable;
+     * if left to 0/0, will be automatically copied from the first input
      * of the source filter if it exists.
      *
      * Sources should set it to the best estimation of the real frame rate.
+     * If the source frame rate is unknown or variable, set this to 1/0.
      * Filters should update it if necessary depending on their function.
      * Sinks can use it to set a default output frame rate.
      * It is similar to the r_frame_rate field in AVStream.
@@ -1151,39 +640,22 @@ public static class AVFilterLink extends Pointer {
      */
     public native int max_samples(); public native AVFilterLink max_samples(int max_samples);
 
-// #if FF_API_AVFILTERBUFFER
     /**
-     * The buffer reference currently being received across the link by the
-     * destination filter. This is used internally by the filter system to
-     * allow automatic copying of buffers which do not have sufficient
-     * permissions for the destination. This should not be accessed directly
-     * by the filters.
-     */
-    public native AVFilterBufferRef cur_buf_copy(); public native AVFilterLink cur_buf_copy(AVFilterBufferRef cur_buf_copy);
-// #endif
-
-    /**
-     * True if the link is closed.
-     * If set, all attempts of start_frame, filter_frame or request_frame
-     * will fail with AVERROR_EOF, and if necessary the reference will be
-     * destroyed.
-     * If request_frame returns AVERROR_EOF, this flag is set on the
+     * Link status.
+     * If not zero, all attempts of filter_frame or request_frame
+     * will fail with the corresponding code, and if necessary the reference
+     * will be destroyed.
+     * If request_frame returns an error, the status is set on the
      * corresponding link.
      * It can be set also be set by either the source or the destination
      * filter.
      */
-    public native int closed(); public native AVFilterLink closed(int closed);
+    public native int status(); public native AVFilterLink status(int status);
 
     /**
      * Number of channels.
      */
     public native int channels(); public native AVFilterLink channels(int channels);
-
-    /**
-     * True if a frame is being requested on the link.
-     * Used internally by the framework.
-     */
-    public native @Cast("unsigned") int frame_requested(); public native AVFilterLink frame_requested(int frame_requested);
 
     /**
      * Link processing flags.
@@ -1194,6 +666,25 @@ public static class AVFilterLink extends Pointer {
      * Number of past frames sent through the link.
      */
     public native long frame_count(); public native AVFilterLink frame_count(long frame_count);
+
+    /**
+     * A pointer to a FFVideoFramePool struct.
+     */
+    public native Pointer video_frame_pool(); public native AVFilterLink video_frame_pool(Pointer video_frame_pool);
+
+    /**
+     * True if a frame is currently wanted on the input of this filter.
+     * Set when ff_request_frame() is called by the output,
+     * cleared when the request is handled or forwarded.
+     */
+    public native int frame_wanted_in(); public native AVFilterLink frame_wanted_in(int frame_wanted_in);
+
+    /**
+     * True if a frame is currently wanted on the output of this filter.
+     * Set when ff_request_frame() is called by the output,
+     * cleared when a frame is filtered.
+     */
+    public native int frame_wanted_out(); public native AVFilterLink frame_wanted_out(int frame_wanted_out);
 }
 
 /**
@@ -1205,24 +696,26 @@ public static class AVFilterLink extends Pointer {
  * @param dstpad index of the input pad on the destination filter
  * @return       zero on success
  */
-public static native int avfilter_link(AVFilterContext src, @Cast("unsigned") int srcpad,
+@NoException public static native int avfilter_link(AVFilterContext src, @Cast("unsigned") int srcpad,
                   AVFilterContext dst, @Cast("unsigned") int dstpad);
 
 /**
  * Free the link in *link, and set its pointer to NULL.
  */
-public static native void avfilter_link_free(@Cast("AVFilterLink**") PointerPointer link);
-public static native void avfilter_link_free(@ByPtrPtr AVFilterLink link);
+@NoException public static native void avfilter_link_free(@Cast("AVFilterLink**") PointerPointer link);
+@NoException public static native void avfilter_link_free(@ByPtrPtr AVFilterLink link);
 
 /**
  * Get the number of channels of a link.
  */
-public static native int avfilter_link_get_channels(AVFilterLink link);
+@NoException public static native int avfilter_link_get_channels(AVFilterLink link);
 
 /**
  * Set the closed field of a link.
+ * @deprecated applications are not supposed to mess with links, they should
+ * close the sinks.
  */
-public static native void avfilter_link_set_closed(AVFilterLink link, int closed);
+@NoException public static native @Deprecated void avfilter_link_set_closed(AVFilterLink link, int closed);
 
 /**
  * Negotiate the media format, dimensions, etc of all inputs to a filter.
@@ -1230,111 +723,7 @@ public static native void avfilter_link_set_closed(AVFilterLink link, int closed
  * @param filter the filter to negotiate the properties for its inputs
  * @return       zero on successful negotiation
  */
-public static native int avfilter_config_links(AVFilterContext filter);
-
-// #if FF_API_AVFILTERBUFFER
-/**
- * Create a buffer reference wrapped around an already allocated image
- * buffer.
- *
- * @param data pointers to the planes of the image to reference
- * @param linesize linesizes for the planes of the image to reference
- * @param perms the required access permissions
- * @param w the width of the image specified by the data and linesize arrays
- * @param h the height of the image specified by the data and linesize arrays
- * @param format the pixel format of the image specified by the data and linesize arrays
- */
-public static native @Deprecated AVFilterBufferRef avfilter_get_video_buffer_ref_from_arrays(@Cast("uint8_t*const*") PointerPointer data, @Const IntPointer linesize, int perms,
-                                          int w, int h, @Cast("AVPixelFormat") int format);
-public static native @Deprecated AVFilterBufferRef avfilter_get_video_buffer_ref_from_arrays(@Cast("uint8_t*const*") @ByPtrPtr BytePointer data, @Const IntPointer linesize, int perms,
-                                          int w, int h, @Cast("AVPixelFormat") int format);
-public static native @Deprecated AVFilterBufferRef avfilter_get_video_buffer_ref_from_arrays(@Cast("uint8_t*const*") @ByPtrPtr ByteBuffer data, @Const IntBuffer linesize, int perms,
-                                          int w, int h, @Cast("AVPixelFormat") int format);
-public static native @Deprecated AVFilterBufferRef avfilter_get_video_buffer_ref_from_arrays(@Cast("uint8_t*const*") @ByPtrPtr byte[] data, @Const int[] linesize, int perms,
-                                          int w, int h, @Cast("AVPixelFormat") int format);
-
-/**
- * Create an audio buffer reference wrapped around an already
- * allocated samples buffer.
- *
- * See avfilter_get_audio_buffer_ref_from_arrays_channels() for a version
- * that can handle unknown channel layouts.
- *
- * @param data           pointers to the samples plane buffers
- * @param linesize       linesize for the samples plane buffers
- * @param perms          the required access permissions
- * @param nb_samples     number of samples per channel
- * @param sample_fmt     the format of each sample in the buffer to allocate
- * @param channel_layout the channel layout of the buffer
- */
-public static native @Deprecated AVFilterBufferRef avfilter_get_audio_buffer_ref_from_arrays(@Cast("uint8_t**") PointerPointer data,
-                                                             int linesize,
-                                                             int perms,
-                                                             int nb_samples,
-                                                             @Cast("AVSampleFormat") int sample_fmt,
-                                                             @Cast("uint64_t") long channel_layout);
-public static native @Deprecated AVFilterBufferRef avfilter_get_audio_buffer_ref_from_arrays(@Cast("uint8_t**") @ByPtrPtr BytePointer data,
-                                                             int linesize,
-                                                             int perms,
-                                                             int nb_samples,
-                                                             @Cast("AVSampleFormat") int sample_fmt,
-                                                             @Cast("uint64_t") long channel_layout);
-public static native @Deprecated AVFilterBufferRef avfilter_get_audio_buffer_ref_from_arrays(@Cast("uint8_t**") @ByPtrPtr ByteBuffer data,
-                                                             int linesize,
-                                                             int perms,
-                                                             int nb_samples,
-                                                             @Cast("AVSampleFormat") int sample_fmt,
-                                                             @Cast("uint64_t") long channel_layout);
-public static native @Deprecated AVFilterBufferRef avfilter_get_audio_buffer_ref_from_arrays(@Cast("uint8_t**") @ByPtrPtr byte[] data,
-                                                             int linesize,
-                                                             int perms,
-                                                             int nb_samples,
-                                                             @Cast("AVSampleFormat") int sample_fmt,
-                                                             @Cast("uint64_t") long channel_layout);
-/**
- * Create an audio buffer reference wrapped around an already
- * allocated samples buffer.
- *
- * @param data           pointers to the samples plane buffers
- * @param linesize       linesize for the samples plane buffers
- * @param perms          the required access permissions
- * @param nb_samples     number of samples per channel
- * @param sample_fmt     the format of each sample in the buffer to allocate
- * @param channels       the number of channels of the buffer
- * @param channel_layout the channel layout of the buffer,
- *                       must be either 0 or consistent with channels
- */
-public static native @Deprecated AVFilterBufferRef avfilter_get_audio_buffer_ref_from_arrays_channels(@Cast("uint8_t**") PointerPointer data,
-                                                                      int linesize,
-                                                                      int perms,
-                                                                      int nb_samples,
-                                                                      @Cast("AVSampleFormat") int sample_fmt,
-                                                                      int channels,
-                                                                      @Cast("uint64_t") long channel_layout);
-public static native @Deprecated AVFilterBufferRef avfilter_get_audio_buffer_ref_from_arrays_channels(@Cast("uint8_t**") @ByPtrPtr BytePointer data,
-                                                                      int linesize,
-                                                                      int perms,
-                                                                      int nb_samples,
-                                                                      @Cast("AVSampleFormat") int sample_fmt,
-                                                                      int channels,
-                                                                      @Cast("uint64_t") long channel_layout);
-public static native @Deprecated AVFilterBufferRef avfilter_get_audio_buffer_ref_from_arrays_channels(@Cast("uint8_t**") @ByPtrPtr ByteBuffer data,
-                                                                      int linesize,
-                                                                      int perms,
-                                                                      int nb_samples,
-                                                                      @Cast("AVSampleFormat") int sample_fmt,
-                                                                      int channels,
-                                                                      @Cast("uint64_t") long channel_layout);
-public static native @Deprecated AVFilterBufferRef avfilter_get_audio_buffer_ref_from_arrays_channels(@Cast("uint8_t**") @ByPtrPtr byte[] data,
-                                                                      int linesize,
-                                                                      int perms,
-                                                                      int nb_samples,
-                                                                      @Cast("AVSampleFormat") int sample_fmt,
-                                                                      int channels,
-                                                                      @Cast("uint64_t") long channel_layout);
-
-// #endif
-
+@NoException public static native int avfilter_config_links(AVFilterContext filter);
 
 /** Stop once a filter understood the command (for target=all for example), fast filters are favored automatically */
 public static final int AVFILTER_CMD_FLAG_ONE =   1;
@@ -1345,19 +734,19 @@ public static final int AVFILTER_CMD_FLAG_FAST =  2;
  * Make the filter instance process a command.
  * It is recommended to use avfilter_graph_send_command().
  */
-public static native int avfilter_process_command(AVFilterContext filter, @Cast("const char*") BytePointer cmd, @Cast("const char*") BytePointer arg, @Cast("char*") BytePointer res, int res_len, int flags);
-public static native int avfilter_process_command(AVFilterContext filter, String cmd, String arg, @Cast("char*") ByteBuffer res, int res_len, int flags);
-public static native int avfilter_process_command(AVFilterContext filter, @Cast("const char*") BytePointer cmd, @Cast("const char*") BytePointer arg, @Cast("char*") byte[] res, int res_len, int flags);
-public static native int avfilter_process_command(AVFilterContext filter, String cmd, String arg, @Cast("char*") BytePointer res, int res_len, int flags);
-public static native int avfilter_process_command(AVFilterContext filter, @Cast("const char*") BytePointer cmd, @Cast("const char*") BytePointer arg, @Cast("char*") ByteBuffer res, int res_len, int flags);
-public static native int avfilter_process_command(AVFilterContext filter, String cmd, String arg, @Cast("char*") byte[] res, int res_len, int flags);
+@NoException public static native int avfilter_process_command(AVFilterContext filter, @Cast("const char*") BytePointer cmd, @Cast("const char*") BytePointer arg, @Cast("char*") BytePointer res, int res_len, int flags);
+@NoException public static native int avfilter_process_command(AVFilterContext filter, String cmd, String arg, @Cast("char*") ByteBuffer res, int res_len, int flags);
+@NoException public static native int avfilter_process_command(AVFilterContext filter, @Cast("const char*") BytePointer cmd, @Cast("const char*") BytePointer arg, @Cast("char*") byte[] res, int res_len, int flags);
+@NoException public static native int avfilter_process_command(AVFilterContext filter, String cmd, String arg, @Cast("char*") BytePointer res, int res_len, int flags);
+@NoException public static native int avfilter_process_command(AVFilterContext filter, @Cast("const char*") BytePointer cmd, @Cast("const char*") BytePointer arg, @Cast("char*") ByteBuffer res, int res_len, int flags);
+@NoException public static native int avfilter_process_command(AVFilterContext filter, String cmd, String arg, @Cast("char*") byte[] res, int res_len, int flags);
 
 /** Initialize the filter system. Register all builtin filters. */
-public static native void avfilter_register_all();
+@NoException public static native void avfilter_register_all();
 
 // #if FF_API_OLD_FILTER_REGISTER
 /** Uninitialize the filter system. Unregister all filters. */
-public static native @Deprecated void avfilter_uninit();
+@NoException public static native @Deprecated void avfilter_uninit();
 // #endif
 
 /**
@@ -1370,7 +759,7 @@ public static native @Deprecated void avfilter_uninit();
  * @return 0 if the registration was successful, a negative value
  * otherwise
  */
-public static native int avfilter_register(AVFilter filter);
+@NoException public static native int avfilter_register(AVFilter filter);
 
 /**
  * Get a filter definition matching the given name.
@@ -1380,15 +769,15 @@ public static native int avfilter_register(AVFilter filter);
  *             NULL if none found.
  */
 // #if !FF_API_NOCONST_GET_NAME
-public static native @Const AVFilter avfilter_get_by_name(@Cast("const char*") BytePointer name);
-public static native @Const AVFilter avfilter_get_by_name(String name);
+@NoException public static native @Const AVFilter avfilter_get_by_name(@Cast("const char*") BytePointer name);
+@NoException public static native @Const AVFilter avfilter_get_by_name(String name);
 
 /**
  * Iterate over all registered filters.
  * @return If prev is non-NULL, next registered filter after prev or NULL if
  * prev is the last filter. If prev is NULL, return the first registered filter.
  */
-public static native @Const AVFilter avfilter_next(@Const AVFilter prev);
+@NoException public static native @Const AVFilter avfilter_next(@Const AVFilter prev);
 
 // #if FF_API_OLD_FILTER_REGISTER
 /**
@@ -1398,8 +787,8 @@ public static native @Const AVFilter avfilter_next(@Const AVFilter prev);
  * was already reached.
  * @deprecated use avfilter_next()
  */
-public static native @Cast("AVFilter**") @Deprecated PointerPointer av_filter_next(@Cast("AVFilter**") PointerPointer filter);
-public static native @Deprecated @ByPtrPtr AVFilter av_filter_next(@ByPtrPtr AVFilter filter);
+@NoException public static native @Cast("AVFilter**") @Deprecated PointerPointer av_filter_next(@Cast("AVFilter**") PointerPointer filter);
+@NoException public static native @Deprecated @ByPtrPtr AVFilter av_filter_next(@ByPtrPtr AVFilter filter);
 // #endif
 
 // #if FF_API_AVFILTER_OPEN
@@ -1413,9 +802,9 @@ public static native @Deprecated @ByPtrPtr AVFilter av_filter_next(@ByPtrPtr AVF
  * @return >= 0 in case of success, a negative error code otherwise
  * @deprecated use avfilter_graph_alloc_filter() instead
  */
-public static native @Deprecated int avfilter_open(@Cast("AVFilterContext**") PointerPointer filter_ctx, AVFilter filter, @Cast("const char*") BytePointer inst_name);
-public static native @Deprecated int avfilter_open(@ByPtrPtr AVFilterContext filter_ctx, AVFilter filter, @Cast("const char*") BytePointer inst_name);
-public static native @Deprecated int avfilter_open(@ByPtrPtr AVFilterContext filter_ctx, AVFilter filter, String inst_name);
+@NoException public static native @Deprecated int avfilter_open(@Cast("AVFilterContext**") PointerPointer filter_ctx, AVFilter filter, @Cast("const char*") BytePointer inst_name);
+@NoException public static native @Deprecated int avfilter_open(@ByPtrPtr AVFilterContext filter_ctx, AVFilter filter, @Cast("const char*") BytePointer inst_name);
+@NoException public static native @Deprecated int avfilter_open(@ByPtrPtr AVFilterContext filter_ctx, AVFilter filter, String inst_name);
 // #endif
 
 
@@ -1430,8 +819,8 @@ public static native @Deprecated int avfilter_open(@ByPtrPtr AVFilterContext fil
  *               of this parameter varies by filter.
  * @return       zero on success
  */
-public static native @Deprecated int avfilter_init_filter(AVFilterContext filter, @Cast("const char*") BytePointer args, Pointer opaque);
-public static native @Deprecated int avfilter_init_filter(AVFilterContext filter, String args, Pointer opaque);
+@NoException public static native @Deprecated int avfilter_init_filter(AVFilterContext filter, @Cast("const char*") BytePointer args, Pointer opaque);
+@NoException public static native @Deprecated int avfilter_init_filter(AVFilterContext filter, String args, Pointer opaque);
 // #endif
 
 /**
@@ -1444,8 +833,8 @@ public static native @Deprecated int avfilter_init_filter(AVFilterContext filter
  *             AVOptions API or there are no options that need to be set.
  * @return 0 on success, a negative AVERROR on failure
  */
-public static native int avfilter_init_str(AVFilterContext ctx, @Cast("const char*") BytePointer args);
-public static native int avfilter_init_str(AVFilterContext ctx, String args);
+@NoException public static native int avfilter_init_str(AVFilterContext ctx, @Cast("const char*") BytePointer args);
+@NoException public static native int avfilter_init_str(AVFilterContext ctx, String args);
 
 /**
  * Initialize a filter with the supplied dictionary of options.
@@ -1467,8 +856,8 @@ public static native int avfilter_init_str(AVFilterContext ctx, String args);
  * this function will leave those extra options in the options AVDictionary and
  * continue as usual.
  */
-public static native int avfilter_init_dict(AVFilterContext ctx, @Cast("AVDictionary**") PointerPointer options);
-public static native int avfilter_init_dict(AVFilterContext ctx, @ByPtrPtr AVDictionary options);
+@NoException public static native int avfilter_init_dict(AVFilterContext ctx, @Cast("AVDictionary**") PointerPointer options);
+@NoException public static native int avfilter_init_dict(AVFilterContext ctx, @ByPtrPtr AVDictionary options);
 
 /**
  * Free a filter context. This will also remove the filter from its
@@ -1476,7 +865,7 @@ public static native int avfilter_init_dict(AVFilterContext ctx, @ByPtrPtr AVDic
  *
  * @param filter the filter to free
  */
-public static native void avfilter_free(AVFilterContext filter);
+@NoException public static native void avfilter_free(AVFilterContext filter);
 
 /**
  * Insert a filter in the middle of an existing link.
@@ -1487,33 +876,15 @@ public static native void avfilter_free(AVFilterContext filter);
  * @param filt_dstpad_idx the output pad on the filter to connect
  * @return     zero on success
  */
-public static native int avfilter_insert_filter(AVFilterLink link, AVFilterContext filt,
+@NoException public static native int avfilter_insert_filter(AVFilterLink link, AVFilterContext filt,
                            @Cast("unsigned") int filt_srcpad_idx, @Cast("unsigned") int filt_dstpad_idx);
-
-// #if FF_API_AVFILTERBUFFER
-/**
- * Copy the frame properties of src to dst, without copying the actual
- * image data.
- *
- * @return 0 on success, a negative number on error.
- */
-public static native @Deprecated int avfilter_copy_frame_props(AVFilterBufferRef dst, @Const AVFrame src);
-
-/**
- * Copy the frame properties and data pointers of src to dst, without copying
- * the actual data.
- *
- * @return 0 on success, a negative number on error.
- */
-public static native @Deprecated int avfilter_copy_buf_props(AVFrame dst, @Const AVFilterBufferRef src);
-// #endif
 
 /**
  * @return AVClass for AVFilterContext.
  *
  * @see av_opt_find().
  */
-public static native @Const AVClass avfilter_get_class();
+@NoException public static native @Const AVClass avfilter_get_class();
 
 @Opaque public static class AVFilterGraphInternal extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -1569,32 +940,25 @@ public static class AVFilterGraph extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVFilterGraph() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVFilterGraph(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVFilterGraph(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilterGraph(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVFilterGraph position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVFilterGraph position(long position) {
         return (AVFilterGraph)super.position(position);
     }
 
     @MemberGetter public native @Const AVClass av_class();
-// #if FF_API_FOO_COUNT
-    public native @Cast("unsigned") @Deprecated int filter_count_unused(); public native AVFilterGraph filter_count_unused(int filter_count_unused);
-// #endif
     public native AVFilterContext filters(int i); public native AVFilterGraph filters(int i, AVFilterContext filters);
     @MemberGetter public native @Cast("AVFilterContext**") PointerPointer filters();
-// #if !FF_API_FOO_COUNT
-// #endif
+    public native @Cast("unsigned") int nb_filters(); public native AVFilterGraph nb_filters(int nb_filters);
 
     /** sws options to use for the auto-inserted scale filters */
     public native @Cast("char*") BytePointer scale_sws_opts(); public native AVFilterGraph scale_sws_opts(BytePointer scale_sws_opts);
     /** libavresample options to use for the auto-inserted resample filters */
     public native @Cast("char*") BytePointer resample_lavr_opts(); public native AVFilterGraph resample_lavr_opts(BytePointer resample_lavr_opts);
-// #if FF_API_FOO_COUNT
-    public native @Cast("unsigned") int nb_filters(); public native AVFilterGraph nb_filters(int nb_filters);
-// #endif
 
     /**
      * Type of multithreading allowed for filters in this graph. A combination
@@ -1665,7 +1029,7 @@ public static class AVFilterGraph extends Pointer {
  *
  * @return the allocated filter graph on success or NULL.
  */
-public static native AVFilterGraph avfilter_graph_alloc();
+@NoException public static native AVFilterGraph avfilter_graph_alloc();
 
 /**
  * Create a new filter instance in a filter graph.
@@ -1681,10 +1045,10 @@ public static native AVFilterGraph avfilter_graph_alloc();
  *         also retrievable directly through AVFilterGraph.filters or with
  *         avfilter_graph_get_filter()) on success or NULL on failure.
  */
-public static native AVFilterContext avfilter_graph_alloc_filter(AVFilterGraph graph,
+@NoException public static native AVFilterContext avfilter_graph_alloc_filter(AVFilterGraph graph,
                                              @Const AVFilter filter,
                                              @Cast("const char*") BytePointer name);
-public static native AVFilterContext avfilter_graph_alloc_filter(AVFilterGraph graph,
+@NoException public static native AVFilterContext avfilter_graph_alloc_filter(AVFilterGraph graph,
                                              @Const AVFilter filter,
                                              String name);
 
@@ -1696,8 +1060,8 @@ public static native AVFilterContext avfilter_graph_alloc_filter(AVFilterGraph g
  * @return the pointer to the found filter instance or NULL if it
  * cannot be found.
  */
-public static native AVFilterContext avfilter_graph_get_filter(AVFilterGraph graph, @Cast("const char*") BytePointer name);
-public static native AVFilterContext avfilter_graph_get_filter(AVFilterGraph graph, String name);
+@NoException public static native AVFilterContext avfilter_graph_get_filter(AVFilterGraph graph, @Cast("const char*") BytePointer name);
+@NoException public static native AVFilterContext avfilter_graph_get_filter(AVFilterGraph graph, String name);
 
 // #if FF_API_AVFILTER_OPEN
 /**
@@ -1709,7 +1073,7 @@ public static native AVFilterContext avfilter_graph_get_filter(AVFilterGraph gra
  * @deprecated use avfilter_graph_alloc_filter() to allocate a filter in a
  * filter graph
  */
-public static native @Deprecated int avfilter_graph_add_filter(AVFilterGraph graphctx, AVFilterContext filter);
+@NoException public static native @Deprecated int avfilter_graph_add_filter(AVFilterGraph graphctx, AVFilterContext filter);
 // #endif
 
 /**
@@ -1725,13 +1089,13 @@ public static native @Deprecated int avfilter_graph_add_filter(AVFilterGraph gra
  * @return a negative AVERROR error code in case of failure, a non
  * negative value otherwise
  */
-public static native int avfilter_graph_create_filter(@Cast("AVFilterContext**") PointerPointer filt_ctx, @Const AVFilter filt,
+@NoException public static native int avfilter_graph_create_filter(@Cast("AVFilterContext**") PointerPointer filt_ctx, @Const AVFilter filt,
                                  @Cast("const char*") BytePointer name, @Cast("const char*") BytePointer args, Pointer opaque,
                                  AVFilterGraph graph_ctx);
-public static native int avfilter_graph_create_filter(@ByPtrPtr AVFilterContext filt_ctx, @Const AVFilter filt,
+@NoException public static native int avfilter_graph_create_filter(@ByPtrPtr AVFilterContext filt_ctx, @Const AVFilter filt,
                                  @Cast("const char*") BytePointer name, @Cast("const char*") BytePointer args, Pointer opaque,
                                  AVFilterGraph graph_ctx);
-public static native int avfilter_graph_create_filter(@ByPtrPtr AVFilterContext filt_ctx, @Const AVFilter filt,
+@NoException public static native int avfilter_graph_create_filter(@ByPtrPtr AVFilterContext filt_ctx, @Const AVFilter filt,
                                  String name, String args, Pointer opaque,
                                  AVFilterGraph graph_ctx);
 
@@ -1743,7 +1107,7 @@ public static native int avfilter_graph_create_filter(@ByPtrPtr AVFilterContext 
  *
  * @param flags  any of the AVFILTER_AUTO_CONVERT_* constants
  */
-public static native void avfilter_graph_set_auto_convert(AVFilterGraph graph, @Cast("unsigned") int flags);
+@NoException public static native void avfilter_graph_set_auto_convert(AVFilterGraph graph, @Cast("unsigned") int flags);
 
 /** enum  */
 public static final int
@@ -1759,14 +1123,14 @@ public static final int
  * @param log_ctx context used for logging
  * @return >= 0 in case of success, a negative AVERROR code otherwise
  */
-public static native int avfilter_graph_config(AVFilterGraph graphctx, Pointer log_ctx);
+@NoException public static native int avfilter_graph_config(AVFilterGraph graphctx, Pointer log_ctx);
 
 /**
  * Free a graph, destroy its links, and set *graph to NULL.
  * If *graph is NULL, do nothing.
  */
-public static native void avfilter_graph_free(@Cast("AVFilterGraph**") PointerPointer graph);
-public static native void avfilter_graph_free(@ByPtrPtr AVFilterGraph graph);
+@NoException public static native void avfilter_graph_free(@Cast("AVFilterGraph**") PointerPointer graph);
+@NoException public static native void avfilter_graph_free(@ByPtrPtr AVFilterGraph graph);
 
 /**
  * A linked-list of the inputs/outputs of the filter chain.
@@ -1781,13 +1145,13 @@ public static class AVFilterInOut extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVFilterInOut() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVFilterInOut(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVFilterInOut(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVFilterInOut(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVFilterInOut position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVFilterInOut position(long position) {
         return (AVFilterInOut)super.position(position);
     }
 
@@ -1809,16 +1173,15 @@ public static class AVFilterInOut extends Pointer {
  * Must be freed with avfilter_inout_free().
  * @return allocated AVFilterInOut on success, NULL on failure.
  */
-public static native AVFilterInOut avfilter_inout_alloc();
+@NoException public static native AVFilterInOut avfilter_inout_alloc();
 
 /**
  * Free the supplied list of AVFilterInOut and set *inout to NULL.
  * If *inout is NULL, do nothing.
  */
-public static native void avfilter_inout_free(@Cast("AVFilterInOut**") PointerPointer inout);
-public static native void avfilter_inout_free(@ByPtrPtr AVFilterInOut inout);
+@NoException public static native void avfilter_inout_free(@Cast("AVFilterInOut**") PointerPointer inout);
+@NoException public static native void avfilter_inout_free(@ByPtrPtr AVFilterInOut inout);
 
-// #if AV_HAVE_INCOMPATIBLE_LIBAV_ABI || !FF_API_OLD_GRAPH_PARSE
 /**
  * Add a graph described by a string to a graph.
  *
@@ -1837,14 +1200,12 @@ public static native void avfilter_inout_free(@ByPtrPtr AVFilterInOut inout);
  * @param outputs linked list to the outputs of the graph
  * @return zero on success, a negative AVERROR code on error
  */
-public static native int avfilter_graph_parse(AVFilterGraph graph, @Cast("const char*") BytePointer filters,
+@NoException public static native int avfilter_graph_parse(AVFilterGraph graph, @Cast("const char*") BytePointer filters,
                          AVFilterInOut inputs, AVFilterInOut outputs,
                          Pointer log_ctx);
-public static native int avfilter_graph_parse(AVFilterGraph graph, String filters,
+@NoException public static native int avfilter_graph_parse(AVFilterGraph graph, String filters,
                          AVFilterInOut inputs, AVFilterInOut outputs,
                          Pointer log_ctx);
-// #else
-// #endif
 
 /**
  * Add a graph described by a string to a graph.
@@ -1863,13 +1224,13 @@ public static native int avfilter_graph_parse(AVFilterGraph graph, String filter
  *                after the parsing, should be freed with avfilter_inout_free().
  * @return non negative on success, a negative AVERROR code on error
  */
-public static native int avfilter_graph_parse_ptr(AVFilterGraph graph, @Cast("const char*") BytePointer filters,
+@NoException public static native int avfilter_graph_parse_ptr(AVFilterGraph graph, @Cast("const char*") BytePointer filters,
                              @Cast("AVFilterInOut**") PointerPointer inputs, @Cast("AVFilterInOut**") PointerPointer outputs,
                              Pointer log_ctx);
-public static native int avfilter_graph_parse_ptr(AVFilterGraph graph, @Cast("const char*") BytePointer filters,
+@NoException public static native int avfilter_graph_parse_ptr(AVFilterGraph graph, @Cast("const char*") BytePointer filters,
                              @ByPtrPtr AVFilterInOut inputs, @ByPtrPtr AVFilterInOut outputs,
                              Pointer log_ctx);
-public static native int avfilter_graph_parse_ptr(AVFilterGraph graph, String filters,
+@NoException public static native int avfilter_graph_parse_ptr(AVFilterGraph graph, String filters,
                              @ByPtrPtr AVFilterInOut inputs, @ByPtrPtr AVFilterInOut outputs,
                              Pointer log_ctx);
 
@@ -1895,13 +1256,13 @@ public static native int avfilter_graph_parse_ptr(AVFilterGraph graph, String fi
  * the outputs parameter will contain outputs of the newly created
  * filters.
  */
-public static native int avfilter_graph_parse2(AVFilterGraph graph, @Cast("const char*") BytePointer filters,
+@NoException public static native int avfilter_graph_parse2(AVFilterGraph graph, @Cast("const char*") BytePointer filters,
                           @Cast("AVFilterInOut**") PointerPointer inputs,
                           @Cast("AVFilterInOut**") PointerPointer outputs);
-public static native int avfilter_graph_parse2(AVFilterGraph graph, @Cast("const char*") BytePointer filters,
+@NoException public static native int avfilter_graph_parse2(AVFilterGraph graph, @Cast("const char*") BytePointer filters,
                           @ByPtrPtr AVFilterInOut inputs,
                           @ByPtrPtr AVFilterInOut outputs);
-public static native int avfilter_graph_parse2(AVFilterGraph graph, String filters,
+@NoException public static native int avfilter_graph_parse2(AVFilterGraph graph, String filters,
                           @ByPtrPtr AVFilterInOut inputs,
                           @ByPtrPtr AVFilterInOut outputs);
 
@@ -1920,12 +1281,12 @@ public static native int avfilter_graph_parse2(AVFilterGraph graph, String filte
  * @return >=0 on success otherwise an error code.
  *              AVERROR(ENOSYS) on unsupported commands
  */
-public static native int avfilter_graph_send_command(AVFilterGraph graph, @Cast("const char*") BytePointer target, @Cast("const char*") BytePointer cmd, @Cast("const char*") BytePointer arg, @Cast("char*") BytePointer res, int res_len, int flags);
-public static native int avfilter_graph_send_command(AVFilterGraph graph, String target, String cmd, String arg, @Cast("char*") ByteBuffer res, int res_len, int flags);
-public static native int avfilter_graph_send_command(AVFilterGraph graph, @Cast("const char*") BytePointer target, @Cast("const char*") BytePointer cmd, @Cast("const char*") BytePointer arg, @Cast("char*") byte[] res, int res_len, int flags);
-public static native int avfilter_graph_send_command(AVFilterGraph graph, String target, String cmd, String arg, @Cast("char*") BytePointer res, int res_len, int flags);
-public static native int avfilter_graph_send_command(AVFilterGraph graph, @Cast("const char*") BytePointer target, @Cast("const char*") BytePointer cmd, @Cast("const char*") BytePointer arg, @Cast("char*") ByteBuffer res, int res_len, int flags);
-public static native int avfilter_graph_send_command(AVFilterGraph graph, String target, String cmd, String arg, @Cast("char*") byte[] res, int res_len, int flags);
+@NoException public static native int avfilter_graph_send_command(AVFilterGraph graph, @Cast("const char*") BytePointer target, @Cast("const char*") BytePointer cmd, @Cast("const char*") BytePointer arg, @Cast("char*") BytePointer res, int res_len, int flags);
+@NoException public static native int avfilter_graph_send_command(AVFilterGraph graph, String target, String cmd, String arg, @Cast("char*") ByteBuffer res, int res_len, int flags);
+@NoException public static native int avfilter_graph_send_command(AVFilterGraph graph, @Cast("const char*") BytePointer target, @Cast("const char*") BytePointer cmd, @Cast("const char*") BytePointer arg, @Cast("char*") byte[] res, int res_len, int flags);
+@NoException public static native int avfilter_graph_send_command(AVFilterGraph graph, String target, String cmd, String arg, @Cast("char*") BytePointer res, int res_len, int flags);
+@NoException public static native int avfilter_graph_send_command(AVFilterGraph graph, @Cast("const char*") BytePointer target, @Cast("const char*") BytePointer cmd, @Cast("const char*") BytePointer arg, @Cast("char*") ByteBuffer res, int res_len, int flags);
+@NoException public static native int avfilter_graph_send_command(AVFilterGraph graph, String target, String cmd, String arg, @Cast("char*") byte[] res, int res_len, int flags);
 
 /**
  * Queue a command for one or more filter instances.
@@ -1942,8 +1303,8 @@ public static native int avfilter_graph_send_command(AVFilterGraph graph, String
  * \note As this executes commands after this function returns, no return code
  *       from the filter is provided, also AVFILTER_CMD_FLAG_ONE is not supported.
  */
-public static native int avfilter_graph_queue_command(AVFilterGraph graph, @Cast("const char*") BytePointer target, @Cast("const char*") BytePointer cmd, @Cast("const char*") BytePointer arg, int flags, double ts);
-public static native int avfilter_graph_queue_command(AVFilterGraph graph, String target, String cmd, String arg, int flags, double ts);
+@NoException public static native int avfilter_graph_queue_command(AVFilterGraph graph, @Cast("const char*") BytePointer target, @Cast("const char*") BytePointer cmd, @Cast("const char*") BytePointer arg, int flags, double ts);
+@NoException public static native int avfilter_graph_queue_command(AVFilterGraph graph, String target, String cmd, String arg, int flags, double ts);
 
 
 /**
@@ -1954,8 +1315,8 @@ public static native int avfilter_graph_queue_command(AVFilterGraph graph, Strin
  * @return  a string, or NULL in case of memory allocation failure;
  *          the string must be freed using av_free
  */
-public static native @Cast("char*") BytePointer avfilter_graph_dump(AVFilterGraph graph, @Cast("const char*") BytePointer options);
-public static native @Cast("char*") ByteBuffer avfilter_graph_dump(AVFilterGraph graph, String options);
+@NoException public static native @Cast("char*") BytePointer avfilter_graph_dump(AVFilterGraph graph, @Cast("const char*") BytePointer options);
+@NoException public static native @Cast("char*") ByteBuffer avfilter_graph_dump(AVFilterGraph graph, String options);
 
 /**
  * Request a frame on the oldest sink link.
@@ -1975,7 +1336,7 @@ public static native @Cast("char*") ByteBuffer avfilter_graph_dump(AVFilterGraph
  * @return  the return value of ff_request_frame(),
  *          or AVERROR_EOF if all links returned AVERROR_EOF
  */
-public static native int avfilter_graph_request_oldest(AVFilterGraph graph);
+@NoException public static native int avfilter_graph_request_oldest(AVFilterGraph graph);
 
 /**
  * \}
@@ -2021,64 +1382,6 @@ public static native int avfilter_graph_request_oldest(AVFilterGraph graph);
  * \{
  */
 
-// #if FF_API_AVFILTERBUFFER
-/**
- * Get an audio/video buffer data from buffer_sink and put it in bufref.
- *
- * This function works with both audio and video buffer sinks.
- *
- * @param buffer_sink pointer to a buffersink or abuffersink context
- * @param flags a combination of AV_BUFFERSINK_FLAG_* flags
- * @return >= 0 in case of success, a negative AVERROR code in case of
- * failure
- */
-public static native @Deprecated int av_buffersink_get_buffer_ref(AVFilterContext buffer_sink,
-                                 @Cast("AVFilterBufferRef**") PointerPointer bufref, int flags);
-public static native @Deprecated int av_buffersink_get_buffer_ref(AVFilterContext buffer_sink,
-                                 @ByPtrPtr AVFilterBufferRef bufref, int flags);
-
-/**
- * Get the number of immediately available frames.
- */
-public static native @Deprecated int av_buffersink_poll_frame(AVFilterContext ctx);
-
-/**
- * Get a buffer with filtered data from sink and put it in buf.
- *
- * @param ctx pointer to a context of a buffersink or abuffersink AVFilter.
- * @param buf pointer to the buffer will be written here if buf is non-NULL. buf
- *            must be freed by the caller using avfilter_unref_buffer().
- *            Buf may also be NULL to query whether a buffer is ready to be
- *            output.
- *
- * @return >= 0 in case of success, a negative AVERROR code in case of
- *         failure.
- */
-public static native @Deprecated int av_buffersink_read(AVFilterContext ctx, @Cast("AVFilterBufferRef**") PointerPointer buf);
-public static native @Deprecated int av_buffersink_read(AVFilterContext ctx, @ByPtrPtr AVFilterBufferRef buf);
-
-/**
- * Same as av_buffersink_read, but with the ability to specify the number of
- * samples read. This function is less efficient than av_buffersink_read(),
- * because it copies the data around.
- *
- * @param ctx pointer to a context of the abuffersink AVFilter.
- * @param buf pointer to the buffer will be written here if buf is non-NULL. buf
- *            must be freed by the caller using avfilter_unref_buffer(). buf
- *            will contain exactly nb_samples audio samples, except at the end
- *            of stream, when it can contain less than nb_samples.
- *            Buf may also be NULL to query whether a buffer is ready to be
- *            output.
- *
- * \warning do not mix this function with av_buffersink_read(). Use only one or
- * the other with a single sink, not both.
- */
-public static native @Deprecated int av_buffersink_read_samples(AVFilterContext ctx, @Cast("AVFilterBufferRef**") PointerPointer buf,
-                               int nb_samples);
-public static native @Deprecated int av_buffersink_read_samples(AVFilterContext ctx, @ByPtrPtr AVFilterBufferRef buf,
-                               int nb_samples);
-// #endif
-
 /**
  * Get a frame with filtered data from sink and put it in frame.
  *
@@ -2089,7 +1392,7 @@ public static native @Deprecated int av_buffersink_read_samples(AVFilterContext 
  *
  * @return  >= 0 in for success, a negative AVERROR code for failure.
  */
-public static native int av_buffersink_get_frame_flags(AVFilterContext ctx, AVFrame frame, int flags);
+@NoException public static native int av_buffersink_get_frame_flags(AVFilterContext ctx, AVFrame frame, int flags);
 
 /**
  * Tell av_buffersink_get_buffer_ref() to read video/samples buffer
@@ -2112,13 +1415,13 @@ public static class AVBufferSinkParams extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVBufferSinkParams() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVBufferSinkParams(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVBufferSinkParams(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVBufferSinkParams(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVBufferSinkParams position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVBufferSinkParams position(long position) {
         return (AVBufferSinkParams)super.position(position);
     }
 
@@ -2131,7 +1434,7 @@ public static class AVBufferSinkParams extends Pointer {
  *
  * Must be freed with av_free().
  */
-public static native AVBufferSinkParams av_buffersink_params_alloc();
+@NoException public static native AVBufferSinkParams av_buffersink_params_alloc();
 
 /**
  * Struct to use for initializing an abuffersink context.
@@ -2140,13 +1443,13 @@ public static class AVABufferSinkParams extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public AVABufferSinkParams() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AVABufferSinkParams(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVABufferSinkParams(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AVABufferSinkParams(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AVABufferSinkParams position(int position) {
+    private native void allocateArray(long size);
+    @Override public AVABufferSinkParams position(long position) {
         return (AVABufferSinkParams)super.position(position);
     }
 
@@ -2167,7 +1470,7 @@ public static class AVABufferSinkParams extends Pointer {
  *
  * Must be freed with av_free().
  */
-public static native AVABufferSinkParams av_abuffersink_params_alloc();
+@NoException public static native AVABufferSinkParams av_abuffersink_params_alloc();
 
 /**
  * Set the frame size for an audio buffer sink.
@@ -2176,12 +1479,12 @@ public static native AVABufferSinkParams av_abuffersink_params_alloc();
  * exactly the specified number of samples, or AVERROR(EAGAIN) if there is
  * not enough. The last buffer at EOF will be padded with 0.
  */
-public static native void av_buffersink_set_frame_size(AVFilterContext ctx, @Cast("unsigned") int frame_size);
+@NoException public static native void av_buffersink_set_frame_size(AVFilterContext ctx, @Cast("unsigned") int frame_size);
 
 /**
  * Get the frame rate of the input.
  */
-public static native @ByVal AVRational av_buffersink_get_frame_rate(AVFilterContext ctx);
+@NoException public static native @ByVal AVRational av_buffersink_get_frame_rate(AVFilterContext ctx);
 
 /**
  * Get a frame with filtered data from sink and put it in frame.
@@ -2197,7 +1500,7 @@ public static native @ByVal AVRational av_buffersink_get_frame_rate(AVFilterCont
  *         - AVERROR_EOF if there will be no more output frames on this sink.
  *         - A different negative AVERROR code in other failure cases.
  */
-public static native int av_buffersink_get_frame(AVFilterContext ctx, AVFrame frame);
+@NoException public static native int av_buffersink_get_frame(AVFilterContext ctx, AVFrame frame);
 
 /**
  * Same as av_buffersink_get_frame(), but with the ability to specify the number
@@ -2216,7 +1519,7 @@ public static native int av_buffersink_get_frame(AVFilterContext ctx, AVFrame fr
  * \warning do not mix this function with av_buffersink_get_frame(). Use only one or
  * the other with a single sink, not both.
  */
-public static native int av_buffersink_get_samples(AVFilterContext ctx, AVFrame frame, int nb_samples);
+@NoException public static native int av_buffersink_get_samples(AVFilterContext ctx, AVFrame frame, int nb_samples);
 
 /**
  * \}
@@ -2272,13 +1575,6 @@ public static final int
      */
     AV_BUFFERSRC_FLAG_NO_CHECK_FORMAT = 1,
 
-// #if FF_API_AVFILTERBUFFER
-    /**
-     * Ignored
-     */
-    AV_BUFFERSRC_FLAG_NO_COPY = 2,
-// #endif
-
     /**
      * Immediately push the frame to the output.
      */
@@ -2291,20 +1587,6 @@ public static final int
      */
     AV_BUFFERSRC_FLAG_KEEP_REF = 8;
 
-// #if FF_API_AVFILTERBUFFER
-/**
- * Add buffer data in picref to buffer_src.
- *
- * @param buffer_src  pointer to a buffer source context
- * @param picref      a buffer reference, or NULL to mark EOF
- * @param flags       a combination of AV_BUFFERSRC_FLAG_*
- * @return            >= 0 in case of success, a negative AVERROR code
- *                    in case of failure
- */
-public static native @Deprecated int av_buffersrc_add_ref(AVFilterContext buffer_src,
-                         AVFilterBufferRef picref, int flags);
-// #endif
-
 /**
  * Get the number of failed requests.
  *
@@ -2312,21 +1594,7 @@ public static native @Deprecated int av_buffersrc_add_ref(AVFilterContext buffer
  * frame is present in the buffer.
  * The number is reset when a frame is added.
  */
-public static native @Cast("unsigned") int av_buffersrc_get_nb_failed_requests(AVFilterContext buffer_src);
-
-// #if FF_API_AVFILTERBUFFER
-/**
- * Add a buffer to a filtergraph.
- *
- * @param ctx an instance of the buffersrc filter
- * @param buf buffer containing frame data to be passed down the filtergraph.
- * This function will take ownership of buf, the user must not free it.
- * A NULL buf signals EOF -- i.e. no more frames will be sent to this filter.
- *
- * @deprecated use av_buffersrc_write_frame() or av_buffersrc_add_frame()
- */
-public static native @Deprecated int av_buffersrc_buffer(AVFilterContext ctx, AVFilterBufferRef buf);
-// #endif
+@NoException public static native @Cast("unsigned") int av_buffersrc_get_nb_failed_requests(AVFilterContext buffer_src);
 
 /**
  * Add a frame to the buffer source.
@@ -2341,7 +1609,7 @@ public static native @Deprecated int av_buffersrc_buffer(AVFilterContext ctx, AV
  * This function is equivalent to av_buffersrc_add_frame_flags() with the
  * AV_BUFFERSRC_FLAG_KEEP_REF flag.
  */
-public static native int av_buffersrc_write_frame(AVFilterContext ctx, @Const AVFrame frame);
+@NoException public static native int av_buffersrc_write_frame(AVFilterContext ctx, @Const AVFrame frame);
 
 /**
  * Add a frame to the buffer source.
@@ -2361,7 +1629,7 @@ public static native int av_buffersrc_write_frame(AVFilterContext ctx, @Const AV
  * This function is equivalent to av_buffersrc_add_frame_flags() without the
  * AV_BUFFERSRC_FLAG_KEEP_REF flag.
  */
-public static native int av_buffersrc_add_frame(AVFilterContext ctx, AVFrame frame);
+@NoException public static native int av_buffersrc_add_frame(AVFilterContext ctx, AVFrame frame);
 
 /**
  * Add a frame to the buffer source.
@@ -2378,7 +1646,7 @@ public static native int av_buffersrc_add_frame(AVFilterContext ctx, AVFrame fra
  * @return            >= 0 in case of success, a negative AVERROR code
  *                    in case of failure
  */
-public static native int av_buffersrc_add_frame_flags(AVFilterContext buffer_src,
+@NoException public static native int av_buffersrc_add_frame_flags(AVFilterContext buffer_src,
                                  AVFrame frame, int flags);
 
 

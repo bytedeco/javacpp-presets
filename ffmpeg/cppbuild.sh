@@ -16,9 +16,9 @@ ENABLE_MAC="--enable-filter=scale --enable-filter=format --enable-pthreads --ena
 #DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl"
 #ENABLE="--enable-pthreads --enable-shared --enable-gpl --enable-version3 --enable-nonfree --enable-runtime-cpudetect --enable-libmp3lame --enable-libspeex --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-openssl --enable-libopenh264 --enable-libx264 --enable-libx265 --enable-libvpx"
 
-# minimal configuration to support MPEG-4 streams with H.264 and AAC
+# minimal configuration to support MPEG-4 streams with H.264 and AAC as well as Motion JPEG
 # DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
-# ENABLE="--enable-pthreads --enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=aac --enable-decoder=h264 --enable-decoder=aac --enable-parser=h264 --enable-parser=aac --enable-muxer=mp4 --enable-muxer=rtsp --enable-demuxer=mov --enable-demuxer=rtsp --enable-protocol=file --enable-protocol=http --enable-protocol=rtp --enable-protocol=rtmp"
+# ENABLE="--enable-pthreads --enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=aac --enable-encoder=mjpeg --enable-decoder=h264 --enable-decoder=aac --enable-decoder=mjpeg --enable-parser=h264 --enable-parser=aac --enable-parser=mjpeg --enable-muxer=mp4 --enable-muxer=rtsp --enable-muxer=mjpeg --enable-demuxer=mov --enable-demuxer=rtsp --enable-demuxer=mjpeg --enable-protocol=file --enable-protocol=http --enable-protocol=rtp --enable-protocol=rtmp"
 
 DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
 ENABLE="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-gpl --enable-nonfree --enable-shared --enable-runtime-cpudetect --enable-openssl --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=rawvideo --enable-decoder=rawvideo --enable-decoder=h264 --enable-parser=h264 --enable-muxer=mp4 --enable-demuxer=mov --enable-encoder=flv --enable-decoder=flv --enable-muxer=flv --enable-demuxer=flv --enable-protocol=file --enable-protocol=rtmp --enable-protocol=rtmps --enable-protocol=tls_openssl"
@@ -26,7 +26,7 @@ ENABLE="--enable-filter=scale --enable-filter=format --enable-pthreads --enable-
 
 
 if [[ $PLATFORM == windows* && !($DISABLE =~ "--disable-everything") ]]; then
-    FFMPEG_VERSION=2.8.5
+    FFMPEG_VERSION=3.0
     [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
     download http://ffmpeg.zeranoe.com/builds/win$BITS/dev/ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z
     download http://ffmpeg.zeranoe.com/builds/win$BITS/shared/ffmpeg-$FFMPEG_VERSION-win$BITS-shared.7z ffmpeg-$FFMPEG_VERSION-win$BITS-shared.7z
@@ -43,7 +43,7 @@ else
     OPENH264_VERSION=1.5.0
     X265=x265_1.8
     VPX_VERSION=v1.5.0
-    FFMPEG_VERSION=2.8.5
+    FFMPEG_VERSION=3.0
     download http://downloads.sourceforge.net/project/lame/lame/3.99/$LAME.tar.gz $LAME.tar.gz
     download http://downloads.xiph.org/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
     download http://sourceforge.net/projects/opencore-amr/files/opencore-amr/$OPENCORE_AMR.tar.gz/download $OPENCORE_AMR.tar.gz
@@ -82,7 +82,7 @@ case $PLATFORM in
         export CPPFLAGS="--sysroot=$ANDROID_ROOT -DANDROID"
         export CFLAGS="$CPPFLAGS -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
         export CXXFLAGS="$CFLAGS"
-        export LDFLAGS="-nostdlib -Wl,--fix-cortex-a8"
+        export LDFLAGS="-nostdlib -Wl,--fix-cortex-a8 -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         cd $LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux
@@ -135,7 +135,7 @@ case $PLATFORM in
         export CPPFLAGS="--sysroot=$ANDROID_ROOT -DANDROID"
         export CFLAGS="$CPPFLAGS -fPIC -ffunction-sections -funwind-tables -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
         export CXXFLAGS="$CFLAGS"
-        export LDFLAGS="-nostdlib"
+        export LDFLAGS="-nostdlib -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         cd $LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
@@ -157,9 +157,9 @@ case $PLATFORM in
         ANDROID_DEV="$ANDROID_ROOT/usr" make # fails with -j > 1
         make install
         cd ../openh264-$OPENH264_VERSION
-        LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86 NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" libraries install-static
+        LDFLAGS= make -j $MAKEJ PREFIX=$INSTALL_PATH OS=android ARCH=x86 USE_ASM=No NDKROOT="$ANDROID_NDK" TARGET="$ANDROID_ROOT" libraries install-static
         cd ../$X264
-        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=i686-linux --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS $LIBS"
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-cli --cross-prefix="$ANDROID_BIN-" --sysroot="$ANDROID_ROOT" --host=i686-linux --disable-asm --extra-cflags="$CFLAGS" --extra-ldflags="$LDFLAGS $LIBS"
         make -j $MAKEJ
         make install
         cd ../$X265
@@ -250,6 +250,44 @@ case $PLATFORM in
         cd ../ffmpeg-$FFMPEG_VERSION
         [[ $ENABLE_LINUX =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
         PKG_CONFIG_PATH=../lib/pkgconfig/  ./configure --prefix=.. $DISABLE_LINUX $ENABLE_LINUX --enable-x11grab --enable-indev=x11grab --cc="gcc -m64" --pkg-config-flags="--static" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
+        make -j $MAKEJ
+        make install
+        ;;
+
+    linux-armhf)
+        cd $LAME
+        CFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CXXFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" CPPFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
+        make -j $MAKEJ
+        make install
+        cd ../$SPEEX
+        CFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CXXFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" CPPFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
+        make -j $MAKEJ
+        make install
+        cd ../$OPENCORE_AMR
+        CFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" CXXFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" CPPFLAGS="-march=armv6 -marm -mfpu=vfp -mfloat-abi=hard" ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
+        make -j $MAKEJ
+        make install
+        cd ../$OPENSSL
+        ./Configure linux-armv4:arm-linux-gnueabihf-gcc -march=armv6 -mfpu=vfp -mfloat-abi=hard -fPIC no-shared --prefix=$INSTALL_PATH
+        make # fails with -j > 1
+        make install
+        cd ../openh264-$OPENH264_VERSION
+        CFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" CXXFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" CPPFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=arm-linux-gnueabihf-ar ARCH=armhf libraries install-static CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++
+        cd ../$X264
+        CFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" CXXFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" CPPFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --disable-cli --host=arm-linux-gnueabihf --cross-prefix="arm-linux-gnueabihf-" --disable-asm
+        make -j $MAKEJ
+        make install
+        cd ../$X265
+        $CMAKE -DENABLE_CLI=OFF -DENABLE_SHARED=OFF -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_SYSTEM_VERSION=1 -DCMAKE_SYSTEM_PROCESSOR=armv6 -DCMAKE_CXX_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" -DCMAKE_C_FLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" -DCMAKE_C_COMPILER=/usr/bin/arm-linux-gnueabihf-gcc -DCMAKE_CXX_COMPILER=/usr/bin/arm-linux-gnueabihf-g++ -DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_STRIP=/usr/bin/arm-linux-gnueabihf-strip -DCMAKE_FIND_ROOT_PATH=/usr/arm-linux-gnueabihf -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        make -j $MAKEJ
+        make install
+        cd ../libvpx-$VPX_VERSION
+        CROSS=arm-linux-gnueabihf- CFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" CXXFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" CPPFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=armv7-linux-gcc
+        make -j $MAKEJ
+        make install
+        cd ../ffmpeg-$FFMPEG_VERSION
+        [[ $ENABLE =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
+        PKG_CONFIG_PATH=../lib/pkgconfig/ CFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" CXXFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" CPPFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" ./configure --prefix=.. $DISABLE $ENABLE --cc="arm-linux-gnueabihf-gcc" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" --pkg-config-flags="--static" --pkg-config="pkg-config --static"
         make -j $MAKEJ
         make install
         ;;

@@ -266,13 +266,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_ieee_float_rep() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_ieee_float_rep(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_ieee_float_rep(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_ieee_float_rep(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_ieee_float_rep position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_ieee_float_rep position(long position) {
         return (gsl_ieee_float_rep)super.position(position);
     }
 
@@ -287,13 +287,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_ieee_double_rep() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_ieee_double_rep(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_ieee_double_rep(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_ieee_double_rep(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_ieee_double_rep position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_ieee_double_rep position(long position) {
         return (gsl_ieee_double_rep)super.position(position);
     }
 
@@ -569,13 +569,13 @@ public static class gsl_complex_long_double extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_complex_long_double() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_complex_long_double(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_complex_long_double(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_complex_long_double(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_complex_long_double position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_complex_long_double position(long position) {
         return (gsl_complex_long_double)super.position(position);
     }
 
@@ -587,13 +587,13 @@ public static class gsl_complex extends DoublePointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_complex() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_complex(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_complex(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_complex(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_complex position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_complex position(long position) {
         return (gsl_complex)super.position(position);
     }
 
@@ -605,13 +605,13 @@ public static class gsl_complex_float extends FloatPointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_complex_float() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_complex_float(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_complex_float(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_complex_float(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_complex_float position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_complex_float position(long position) {
         return (gsl_complex_float)super.position(position);
     }
 
@@ -1285,13 +1285,13 @@ public static final double M_EULER =    0.57721566490153286060651209008;      /*
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_function() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_function(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_function(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_function(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_function position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_function position(long position) {
         return (gsl_function)super.position(position);
     }
 
@@ -1315,13 +1315,13 @@ public static final double M_EULER =    0.57721566490153286060651209008;      /*
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_function_fdf() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_function_fdf(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_function_fdf(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_function_fdf(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_function_fdf position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_function_fdf position(long position) {
         return (gsl_function_fdf)super.position(position);
     }
 
@@ -1366,13 +1366,13 @@ public static final double M_EULER =    0.57721566490153286060651209008;      /*
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_function_vec() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_function_vec(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_function_vec(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_function_vec(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_function_vec position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_function_vec position(long position) {
         return (gsl_function_vec)super.position(position);
     }
 
@@ -1433,13 +1433,13 @@ public static class gsl_min_fminimizer_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_min_fminimizer_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_min_fminimizer_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_min_fminimizer_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_min_fminimizer_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_min_fminimizer_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_min_fminimizer_type position(long position) {
         return (gsl_min_fminimizer_type)super.position(position);
     }
 
@@ -1469,13 +1469,13 @@ public static class gsl_min_fminimizer extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_min_fminimizer() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_min_fminimizer(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_min_fminimizer(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_min_fminimizer(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_min_fminimizer position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_min_fminimizer position(long position) {
         return (gsl_min_fminimizer)super.position(position);
     }
 
@@ -1854,13 +1854,13 @@ public static final int GSL_MINOR_VERSION = 1;
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_block_complex() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_block_complex(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_block_complex(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_block_complex(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_block_complex position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_block_complex position(long position) {
         return (gsl_block_complex)super.position(position);
     }
 
@@ -1939,13 +1939,13 @@ public static native DoublePointer gsl_block_complex_data(@Const gsl_block_compl
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_block_complex_float() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_block_complex_float(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_block_complex_float(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_block_complex_float(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_block_complex_float position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_block_complex_float position(long position) {
         return (gsl_block_complex_float)super.position(position);
     }
 
@@ -2024,13 +2024,13 @@ public static native FloatPointer gsl_block_complex_float_data(@Const gsl_block_
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_block() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_block(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_block(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_block(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_block position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_block position(long position) {
         return (gsl_block)super.position(position);
     }
 
@@ -2109,13 +2109,13 @@ public static native DoublePointer gsl_block_data(@Const gsl_block b);
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_block_float() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_block_float(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_block_float(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_block_float(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_block_float position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_block_float position(long position) {
         return (gsl_block_float)super.position(position);
     }
 
@@ -2194,13 +2194,13 @@ public static native FloatPointer gsl_block_float_data(@Const gsl_block_float b)
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_block_ulong() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_block_ulong(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_block_ulong(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_block_ulong(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_block_ulong position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_block_ulong position(long position) {
         return (gsl_block_ulong)super.position(position);
     }
 
@@ -2269,13 +2269,13 @@ public static native @Cast("unsigned long*") CLongPointer gsl_block_ulong_data(@
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_block_long() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_block_long(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_block_long(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_block_long(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_block_long position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_block_long position(long position) {
         return (gsl_block_long)super.position(position);
     }
 
@@ -2344,13 +2344,13 @@ public static native CLongPointer gsl_block_long_data(@Const gsl_block_long b);
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_block_uint() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_block_uint(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_block_uint(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_block_uint(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_block_uint position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_block_uint position(long position) {
         return (gsl_block_uint)super.position(position);
     }
 
@@ -2429,13 +2429,13 @@ public static native @Cast("unsigned int*") IntPointer gsl_block_uint_data(@Cons
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_block_int() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_block_int(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_block_int(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_block_int(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_block_int position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_block_int position(long position) {
         return (gsl_block_int)super.position(position);
     }
 
@@ -2514,13 +2514,13 @@ public static native IntPointer gsl_block_int_data(@Const gsl_block_int b);
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_block_ushort() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_block_ushort(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_block_ushort(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_block_ushort(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_block_ushort position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_block_ushort position(long position) {
         return (gsl_block_ushort)super.position(position);
     }
 
@@ -2599,13 +2599,13 @@ public static native @Cast("unsigned short*") ShortPointer gsl_block_ushort_data
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_block_short() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_block_short(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_block_short(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_block_short(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_block_short position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_block_short position(long position) {
         return (gsl_block_short)super.position(position);
     }
 
@@ -2684,13 +2684,13 @@ public static native ShortPointer gsl_block_short_data(@Const gsl_block_short b)
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_block_uchar() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_block_uchar(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_block_uchar(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_block_uchar(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_block_uchar position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_block_uchar position(long position) {
         return (gsl_block_uchar)super.position(position);
     }
 
@@ -2769,13 +2769,13 @@ public static native @Cast("unsigned char*") BytePointer gsl_block_uchar_data(@C
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_block_char() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_block_char(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_block_char(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_block_char(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_block_char position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_block_char position(long position) {
         return (gsl_block_char)super.position(position);
     }
 
@@ -2904,13 +2904,13 @@ public static class gsl_vector_complex extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_vector_complex() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_vector_complex(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_vector_complex(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_vector_complex(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_vector_complex position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_vector_complex position(long position) {
         return (gsl_vector_complex)super.position(position);
     }
 
@@ -2925,13 +2925,13 @@ public static class _gsl_vector_complex_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_complex_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_complex_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_complex_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_complex_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_complex_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_complex_view position(long position) {
         return (_gsl_vector_complex_view)super.position(position);
     }
 
@@ -2942,13 +2942,13 @@ public static class _gsl_vector_complex_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_complex_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_complex_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_complex_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_complex_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_complex_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_complex_const_view position(long position) {
         return (_gsl_vector_complex_const_view)super.position(position);
     }
 
@@ -3137,13 +3137,13 @@ public static class gsl_vector_complex_float extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_vector_complex_float() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_vector_complex_float(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_vector_complex_float(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_vector_complex_float(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_vector_complex_float position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_vector_complex_float position(long position) {
         return (gsl_vector_complex_float)super.position(position);
     }
 
@@ -3158,13 +3158,13 @@ public static class _gsl_vector_complex_float_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_complex_float_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_complex_float_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_complex_float_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_complex_float_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_complex_float_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_complex_float_view position(long position) {
         return (_gsl_vector_complex_float_view)super.position(position);
     }
 
@@ -3175,13 +3175,13 @@ public static class _gsl_vector_complex_float_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_complex_float_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_complex_float_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_complex_float_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_complex_float_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_complex_float_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_complex_float_const_view position(long position) {
         return (_gsl_vector_complex_float_const_view)super.position(position);
     }
 
@@ -3368,13 +3368,13 @@ public static class gsl_vector extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_vector() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_vector(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_vector(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_vector(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_vector position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_vector position(long position) {
         return (gsl_vector)super.position(position);
     }
 
@@ -3389,13 +3389,13 @@ public static class _gsl_vector_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_view position(long position) {
         return (_gsl_vector_view)super.position(position);
     }
 
@@ -3406,13 +3406,13 @@ public static class _gsl_vector_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_const_view position(long position) {
         return (_gsl_vector_const_view)super.position(position);
     }
 
@@ -3587,13 +3587,13 @@ public static class gsl_vector_float extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_vector_float() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_vector_float(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_vector_float(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_vector_float(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_vector_float position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_vector_float position(long position) {
         return (gsl_vector_float)super.position(position);
     }
 
@@ -3608,13 +3608,13 @@ public static class _gsl_vector_float_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_float_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_float_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_float_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_float_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_float_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_float_view position(long position) {
         return (_gsl_vector_float_view)super.position(position);
     }
 
@@ -3625,13 +3625,13 @@ public static class _gsl_vector_float_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_float_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_float_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_float_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_float_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_float_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_float_const_view position(long position) {
         return (_gsl_vector_float_const_view)super.position(position);
     }
 
@@ -3806,13 +3806,13 @@ public static class gsl_vector_ulong extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_vector_ulong() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_vector_ulong(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_vector_ulong(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_vector_ulong(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_vector_ulong position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_vector_ulong position(long position) {
         return (gsl_vector_ulong)super.position(position);
     }
 
@@ -3827,13 +3827,13 @@ public static class _gsl_vector_ulong_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_ulong_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_ulong_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_ulong_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_ulong_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_ulong_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_ulong_view position(long position) {
         return (_gsl_vector_ulong_view)super.position(position);
     }
 
@@ -3844,13 +3844,13 @@ public static class _gsl_vector_ulong_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_ulong_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_ulong_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_ulong_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_ulong_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_ulong_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_ulong_const_view position(long position) {
         return (_gsl_vector_ulong_const_view)super.position(position);
     }
 
@@ -4007,13 +4007,13 @@ public static class gsl_vector_long extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_vector_long() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_vector_long(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_vector_long(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_vector_long(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_vector_long position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_vector_long position(long position) {
         return (gsl_vector_long)super.position(position);
     }
 
@@ -4028,13 +4028,13 @@ public static class _gsl_vector_long_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_long_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_long_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_long_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_long_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_long_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_long_view position(long position) {
         return (_gsl_vector_long_view)super.position(position);
     }
 
@@ -4045,13 +4045,13 @@ public static class _gsl_vector_long_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_long_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_long_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_long_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_long_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_long_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_long_const_view position(long position) {
         return (_gsl_vector_long_const_view)super.position(position);
     }
 
@@ -4208,13 +4208,13 @@ public static class gsl_vector_uint extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_vector_uint() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_vector_uint(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_vector_uint(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_vector_uint(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_vector_uint position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_vector_uint position(long position) {
         return (gsl_vector_uint)super.position(position);
     }
 
@@ -4229,13 +4229,13 @@ public static class _gsl_vector_uint_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_uint_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_uint_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_uint_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_uint_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_uint_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_uint_view position(long position) {
         return (_gsl_vector_uint_view)super.position(position);
     }
 
@@ -4246,13 +4246,13 @@ public static class _gsl_vector_uint_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_uint_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_uint_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_uint_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_uint_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_uint_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_uint_const_view position(long position) {
         return (_gsl_vector_uint_const_view)super.position(position);
     }
 
@@ -4427,13 +4427,13 @@ public static class gsl_vector_int extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_vector_int() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_vector_int(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_vector_int(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_vector_int(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_vector_int position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_vector_int position(long position) {
         return (gsl_vector_int)super.position(position);
     }
 
@@ -4448,13 +4448,13 @@ public static class _gsl_vector_int_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_int_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_int_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_int_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_int_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_int_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_int_view position(long position) {
         return (_gsl_vector_int_view)super.position(position);
     }
 
@@ -4465,13 +4465,13 @@ public static class _gsl_vector_int_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_int_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_int_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_int_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_int_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_int_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_int_const_view position(long position) {
         return (_gsl_vector_int_const_view)super.position(position);
     }
 
@@ -4646,13 +4646,13 @@ public static class gsl_vector_ushort extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_vector_ushort() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_vector_ushort(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_vector_ushort(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_vector_ushort(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_vector_ushort position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_vector_ushort position(long position) {
         return (gsl_vector_ushort)super.position(position);
     }
 
@@ -4667,13 +4667,13 @@ public static class _gsl_vector_ushort_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_ushort_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_ushort_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_ushort_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_ushort_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_ushort_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_ushort_view position(long position) {
         return (_gsl_vector_ushort_view)super.position(position);
     }
 
@@ -4684,13 +4684,13 @@ public static class _gsl_vector_ushort_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_ushort_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_ushort_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_ushort_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_ushort_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_ushort_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_ushort_const_view position(long position) {
         return (_gsl_vector_ushort_const_view)super.position(position);
     }
 
@@ -4865,13 +4865,13 @@ public static class gsl_vector_short extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_vector_short() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_vector_short(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_vector_short(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_vector_short(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_vector_short position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_vector_short position(long position) {
         return (gsl_vector_short)super.position(position);
     }
 
@@ -4886,13 +4886,13 @@ public static class _gsl_vector_short_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_short_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_short_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_short_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_short_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_short_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_short_view position(long position) {
         return (_gsl_vector_short_view)super.position(position);
     }
 
@@ -4903,13 +4903,13 @@ public static class _gsl_vector_short_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_short_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_short_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_short_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_short_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_short_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_short_const_view position(long position) {
         return (_gsl_vector_short_const_view)super.position(position);
     }
 
@@ -5084,13 +5084,13 @@ public static class gsl_vector_uchar extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_vector_uchar() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_vector_uchar(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_vector_uchar(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_vector_uchar(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_vector_uchar position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_vector_uchar position(long position) {
         return (gsl_vector_uchar)super.position(position);
     }
 
@@ -5105,13 +5105,13 @@ public static class _gsl_vector_uchar_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_uchar_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_uchar_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_uchar_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_uchar_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_uchar_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_uchar_view position(long position) {
         return (_gsl_vector_uchar_view)super.position(position);
     }
 
@@ -5122,13 +5122,13 @@ public static class _gsl_vector_uchar_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_uchar_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_uchar_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_uchar_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_uchar_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_uchar_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_uchar_const_view position(long position) {
         return (_gsl_vector_uchar_const_view)super.position(position);
     }
 
@@ -5303,13 +5303,13 @@ public static class gsl_vector_char extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_vector_char() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_vector_char(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_vector_char(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_vector_char(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_vector_char position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_vector_char position(long position) {
         return (gsl_vector_char)super.position(position);
     }
 
@@ -5324,13 +5324,13 @@ public static class _gsl_vector_char_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_char_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_char_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_char_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_char_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_char_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_char_view position(long position) {
         return (_gsl_vector_char_view)super.position(position);
     }
 
@@ -5341,13 +5341,13 @@ public static class _gsl_vector_char_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_vector_char_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_vector_char_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_vector_char_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_vector_char_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_vector_char_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_vector_char_const_view position(long position) {
         return (_gsl_vector_char_const_view)super.position(position);
     }
 
@@ -5547,13 +5547,13 @@ public static native int gsl_vector_char_isnonneg(@Const gsl_vector_char v);
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_matrix_complex() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_matrix_complex(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_matrix_complex(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_matrix_complex(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_matrix_complex position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_matrix_complex position(long position) {
         return (gsl_matrix_complex)super.position(position);
     }
 
@@ -5569,13 +5569,13 @@ public static class _gsl_matrix_complex_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_complex_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_complex_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_complex_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_complex_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_complex_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_complex_view position(long position) {
         return (_gsl_matrix_complex_view)super.position(position);
     }
 
@@ -5586,13 +5586,13 @@ public static class _gsl_matrix_complex_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_complex_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_complex_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_complex_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_complex_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_complex_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_complex_const_view position(long position) {
         return (_gsl_matrix_complex_const_view)super.position(position);
     }
 
@@ -5841,13 +5841,13 @@ public static native int gsl_matrix_complex_set_col(gsl_matrix_complex m, @Cast(
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_matrix_complex_float() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_matrix_complex_float(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_matrix_complex_float(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_matrix_complex_float(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_matrix_complex_float position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_matrix_complex_float position(long position) {
         return (gsl_matrix_complex_float)super.position(position);
     }
 
@@ -5863,13 +5863,13 @@ public static class _gsl_matrix_complex_float_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_complex_float_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_complex_float_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_complex_float_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_complex_float_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_complex_float_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_complex_float_view position(long position) {
         return (_gsl_matrix_complex_float_view)super.position(position);
     }
 
@@ -5880,13 +5880,13 @@ public static class _gsl_matrix_complex_float_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_complex_float_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_complex_float_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_complex_float_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_complex_float_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_complex_float_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_complex_float_const_view position(long position) {
         return (_gsl_matrix_complex_float_const_view)super.position(position);
     }
 
@@ -6135,13 +6135,13 @@ public static class gsl_matrix extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_matrix() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_matrix(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_matrix(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_matrix(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_matrix position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_matrix position(long position) {
         return (gsl_matrix)super.position(position);
     }
 
@@ -6157,13 +6157,13 @@ public static class _gsl_matrix_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_view position(long position) {
         return (_gsl_matrix_view)super.position(position);
     }
 
@@ -6174,13 +6174,13 @@ public static class _gsl_matrix_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_const_view position(long position) {
         return (_gsl_matrix_const_view)super.position(position);
     }
 
@@ -6437,13 +6437,13 @@ public static class gsl_matrix_float extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_matrix_float() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_matrix_float(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_matrix_float(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_matrix_float(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_matrix_float position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_matrix_float position(long position) {
         return (gsl_matrix_float)super.position(position);
     }
 
@@ -6459,13 +6459,13 @@ public static class _gsl_matrix_float_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_float_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_float_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_float_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_float_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_float_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_float_view position(long position) {
         return (_gsl_matrix_float_view)super.position(position);
     }
 
@@ -6476,13 +6476,13 @@ public static class _gsl_matrix_float_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_float_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_float_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_float_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_float_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_float_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_float_const_view position(long position) {
         return (_gsl_matrix_float_const_view)super.position(position);
     }
 
@@ -6739,13 +6739,13 @@ public static class gsl_matrix_ulong extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_matrix_ulong() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_matrix_ulong(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_matrix_ulong(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_matrix_ulong(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_matrix_ulong position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_matrix_ulong position(long position) {
         return (gsl_matrix_ulong)super.position(position);
     }
 
@@ -6761,13 +6761,13 @@ public static class _gsl_matrix_ulong_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_ulong_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_ulong_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_ulong_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_ulong_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_ulong_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_ulong_view position(long position) {
         return (_gsl_matrix_ulong_view)super.position(position);
     }
 
@@ -6778,13 +6778,13 @@ public static class _gsl_matrix_ulong_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_ulong_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_ulong_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_ulong_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_ulong_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_ulong_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_ulong_const_view position(long position) {
         return (_gsl_matrix_ulong_const_view)super.position(position);
     }
 
@@ -7011,13 +7011,13 @@ public static class gsl_matrix_long extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_matrix_long() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_matrix_long(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_matrix_long(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_matrix_long(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_matrix_long position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_matrix_long position(long position) {
         return (gsl_matrix_long)super.position(position);
     }
 
@@ -7033,13 +7033,13 @@ public static class _gsl_matrix_long_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_long_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_long_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_long_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_long_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_long_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_long_view position(long position) {
         return (_gsl_matrix_long_view)super.position(position);
     }
 
@@ -7050,13 +7050,13 @@ public static class _gsl_matrix_long_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_long_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_long_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_long_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_long_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_long_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_long_const_view position(long position) {
         return (_gsl_matrix_long_const_view)super.position(position);
     }
 
@@ -7283,13 +7283,13 @@ public static class gsl_matrix_uint extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_matrix_uint() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_matrix_uint(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_matrix_uint(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_matrix_uint(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_matrix_uint position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_matrix_uint position(long position) {
         return (gsl_matrix_uint)super.position(position);
     }
 
@@ -7305,13 +7305,13 @@ public static class _gsl_matrix_uint_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_uint_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_uint_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_uint_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_uint_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_uint_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_uint_view position(long position) {
         return (_gsl_matrix_uint_view)super.position(position);
     }
 
@@ -7322,13 +7322,13 @@ public static class _gsl_matrix_uint_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_uint_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_uint_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_uint_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_uint_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_uint_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_uint_const_view position(long position) {
         return (_gsl_matrix_uint_const_view)super.position(position);
     }
 
@@ -7585,13 +7585,13 @@ public static class gsl_matrix_int extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_matrix_int() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_matrix_int(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_matrix_int(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_matrix_int(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_matrix_int position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_matrix_int position(long position) {
         return (gsl_matrix_int)super.position(position);
     }
 
@@ -7607,13 +7607,13 @@ public static class _gsl_matrix_int_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_int_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_int_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_int_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_int_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_int_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_int_view position(long position) {
         return (_gsl_matrix_int_view)super.position(position);
     }
 
@@ -7624,13 +7624,13 @@ public static class _gsl_matrix_int_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_int_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_int_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_int_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_int_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_int_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_int_const_view position(long position) {
         return (_gsl_matrix_int_const_view)super.position(position);
     }
 
@@ -7887,13 +7887,13 @@ public static class gsl_matrix_ushort extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_matrix_ushort() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_matrix_ushort(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_matrix_ushort(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_matrix_ushort(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_matrix_ushort position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_matrix_ushort position(long position) {
         return (gsl_matrix_ushort)super.position(position);
     }
 
@@ -7909,13 +7909,13 @@ public static class _gsl_matrix_ushort_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_ushort_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_ushort_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_ushort_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_ushort_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_ushort_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_ushort_view position(long position) {
         return (_gsl_matrix_ushort_view)super.position(position);
     }
 
@@ -7926,13 +7926,13 @@ public static class _gsl_matrix_ushort_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_ushort_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_ushort_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_ushort_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_ushort_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_ushort_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_ushort_const_view position(long position) {
         return (_gsl_matrix_ushort_const_view)super.position(position);
     }
 
@@ -8189,13 +8189,13 @@ public static class gsl_matrix_short extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_matrix_short() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_matrix_short(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_matrix_short(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_matrix_short(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_matrix_short position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_matrix_short position(long position) {
         return (gsl_matrix_short)super.position(position);
     }
 
@@ -8211,13 +8211,13 @@ public static class _gsl_matrix_short_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_short_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_short_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_short_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_short_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_short_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_short_view position(long position) {
         return (_gsl_matrix_short_view)super.position(position);
     }
 
@@ -8228,13 +8228,13 @@ public static class _gsl_matrix_short_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_short_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_short_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_short_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_short_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_short_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_short_const_view position(long position) {
         return (_gsl_matrix_short_const_view)super.position(position);
     }
 
@@ -8491,13 +8491,13 @@ public static class gsl_matrix_uchar extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_matrix_uchar() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_matrix_uchar(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_matrix_uchar(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_matrix_uchar(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_matrix_uchar position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_matrix_uchar position(long position) {
         return (gsl_matrix_uchar)super.position(position);
     }
 
@@ -8513,13 +8513,13 @@ public static class _gsl_matrix_uchar_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_uchar_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_uchar_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_uchar_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_uchar_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_uchar_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_uchar_view position(long position) {
         return (_gsl_matrix_uchar_view)super.position(position);
     }
 
@@ -8530,13 +8530,13 @@ public static class _gsl_matrix_uchar_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_uchar_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_uchar_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_uchar_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_uchar_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_uchar_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_uchar_const_view position(long position) {
         return (_gsl_matrix_uchar_const_view)super.position(position);
     }
 
@@ -8793,13 +8793,13 @@ public static class gsl_matrix_char extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_matrix_char() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_matrix_char(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_matrix_char(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_matrix_char(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_matrix_char position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_matrix_char position(long position) {
         return (gsl_matrix_char)super.position(position);
     }
 
@@ -8815,13 +8815,13 @@ public static class _gsl_matrix_char_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_char_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_char_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_char_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_char_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_char_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_char_view position(long position) {
         return (_gsl_matrix_char_view)super.position(position);
     }
 
@@ -8832,13 +8832,13 @@ public static class _gsl_matrix_char_const_view extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public _gsl_matrix_char_const_view() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public _gsl_matrix_char_const_view(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public _gsl_matrix_char_const_view(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public _gsl_matrix_char_const_view(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public _gsl_matrix_char_const_view position(int position) {
+    private native void allocateArray(long size);
+    @Override public _gsl_matrix_char_const_view position(long position) {
         return (_gsl_matrix_char_const_view)super.position(position);
     }
 
@@ -10833,13 +10833,13 @@ public static class gsl_bspline_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_bspline_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_bspline_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_bspline_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_bspline_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_bspline_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_bspline_workspace position(long position) {
         return (gsl_bspline_workspace)super.position(position);
     }
 
@@ -10865,13 +10865,13 @@ public static class gsl_bspline_deriv_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_bspline_deriv_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_bspline_deriv_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_bspline_deriv_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_bspline_deriv_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_bspline_deriv_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_bspline_deriv_workspace position(long position) {
         return (gsl_bspline_deriv_workspace)super.position(position);
     }
 
@@ -11144,13 +11144,13 @@ public static native double gsl_cdf_hypergeometric_Q(@Cast("const unsigned int")
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_cheb_series() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_cheb_series(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_cheb_series(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_cheb_series(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_cheb_series position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_cheb_series position(long position) {
         return (gsl_cheb_series)super.position(position);
     }
 
@@ -11295,13 +11295,13 @@ public static native int gsl_cheb_calc_integ(gsl_cheb_series integ, @Const gsl_c
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_combination() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_combination(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_combination(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_combination(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_combination position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_combination position(long position) {
         return (gsl_combination)super.position(position);
     }
 
@@ -11445,13 +11445,13 @@ public static native int gsl_deriv_forward(@Const gsl_function f,
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_dht() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_dht(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_dht(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_dht(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_dht position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_dht position(long position) {
         return (gsl_dht)super.position(position);
     }
 
@@ -11611,13 +11611,13 @@ public static class gsl_eigen_symm_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_eigen_symm_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_eigen_symm_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_eigen_symm_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_eigen_symm_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_eigen_symm_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_eigen_symm_workspace position(long position) {
         return (gsl_eigen_symm_workspace)super.position(position);
     }
 
@@ -11634,13 +11634,13 @@ public static class gsl_eigen_symmv_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_eigen_symmv_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_eigen_symmv_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_eigen_symmv_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_eigen_symmv_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_eigen_symmv_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_eigen_symmv_workspace position(long position) {
         return (gsl_eigen_symmv_workspace)super.position(position);
     }
 
@@ -11659,13 +11659,13 @@ public static class gsl_eigen_herm_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_eigen_herm_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_eigen_herm_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_eigen_herm_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_eigen_herm_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_eigen_herm_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_eigen_herm_workspace position(long position) {
         return (gsl_eigen_herm_workspace)super.position(position);
     }
 
@@ -11684,13 +11684,13 @@ public static class gsl_eigen_hermv_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_eigen_hermv_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_eigen_hermv_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_eigen_hermv_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_eigen_hermv_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_eigen_hermv_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_eigen_hermv_workspace position(long position) {
         return (gsl_eigen_hermv_workspace)super.position(position);
     }
 
@@ -11712,13 +11712,13 @@ public static class gsl_eigen_francis_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_eigen_francis_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_eigen_francis_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_eigen_francis_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_eigen_francis_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_eigen_francis_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_eigen_francis_workspace position(long position) {
         return (gsl_eigen_francis_workspace)super.position(position);
     }
 
@@ -11747,13 +11747,13 @@ public static class gsl_eigen_nonsymm_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_eigen_nonsymm_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_eigen_nonsymm_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_eigen_nonsymm_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_eigen_nonsymm_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_eigen_nonsymm_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_eigen_nonsymm_workspace position(long position) {
         return (gsl_eigen_nonsymm_workspace)super.position(position);
     }
 
@@ -11780,13 +11780,13 @@ public static class gsl_eigen_nonsymmv_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_eigen_nonsymmv_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_eigen_nonsymmv_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_eigen_nonsymmv_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_eigen_nonsymmv_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_eigen_nonsymmv_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_eigen_nonsymmv_workspace position(long position) {
         return (gsl_eigen_nonsymmv_workspace)super.position(position);
     }
 
@@ -11815,13 +11815,13 @@ public static class gsl_eigen_gensymm_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_eigen_gensymm_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_eigen_gensymm_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_eigen_gensymm_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_eigen_gensymm_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_eigen_gensymm_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_eigen_gensymm_workspace position(long position) {
         return (gsl_eigen_gensymm_workspace)super.position(position);
     }
 
@@ -11839,13 +11839,13 @@ public static class gsl_eigen_gensymmv_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_eigen_gensymmv_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_eigen_gensymmv_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_eigen_gensymmv_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_eigen_gensymmv_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_eigen_gensymmv_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_eigen_gensymmv_workspace position(long position) {
         return (gsl_eigen_gensymmv_workspace)super.position(position);
     }
 
@@ -11863,13 +11863,13 @@ public static class gsl_eigen_genherm_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_eigen_genherm_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_eigen_genherm_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_eigen_genherm_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_eigen_genherm_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_eigen_genherm_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_eigen_genherm_workspace position(long position) {
         return (gsl_eigen_genherm_workspace)super.position(position);
     }
 
@@ -11888,13 +11888,13 @@ public static class gsl_eigen_genhermv_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_eigen_genhermv_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_eigen_genhermv_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_eigen_genhermv_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_eigen_genhermv_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_eigen_genhermv_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_eigen_genhermv_workspace position(long position) {
         return (gsl_eigen_genhermv_workspace)super.position(position);
     }
 
@@ -11912,13 +11912,13 @@ public static class gsl_eigen_gen_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_eigen_gen_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_eigen_gen_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_eigen_gen_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_eigen_gen_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_eigen_gen_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_eigen_gen_workspace position(long position) {
         return (gsl_eigen_gen_workspace)super.position(position);
     }
 
@@ -11964,13 +11964,13 @@ public static class gsl_eigen_genv_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_eigen_genv_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_eigen_genv_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_eigen_genv_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_eigen_genv_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_eigen_genv_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_eigen_genv_workspace position(long position) {
         return (gsl_eigen_genv_workspace)super.position(position);
     }
 
@@ -12306,13 +12306,13 @@ public static native int gsl_fit_mul_est(double x,
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_permutation() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_permutation(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_permutation(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_permutation(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_permutation position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_permutation position(long position) {
         return (gsl_permutation)super.position(position);
     }
 
@@ -12448,13 +12448,13 @@ public static native int gsl_heapsort_index(@Cast("size_t*") SizeTPointer p, @Co
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_histogram2d() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_histogram2d(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_histogram2d(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_histogram2d(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_histogram2d position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_histogram2d position(long position) {
         return (gsl_histogram2d)super.position(position);
     }
 
@@ -12469,13 +12469,13 @@ public static native int gsl_heapsort_index(@Cast("size_t*") SizeTPointer p, @Co
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_histogram2d_pdf() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_histogram2d_pdf(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_histogram2d_pdf(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_histogram2d_pdf(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_histogram2d_pdf position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_histogram2d_pdf position(long position) {
         return (gsl_histogram2d_pdf)super.position(position);
     }
 
@@ -12651,13 +12651,13 @@ public static native int gsl_histogram2d_pdf_sample(@Const gsl_histogram2d_pdf p
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_histogram() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_histogram(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_histogram(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_histogram(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_histogram position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_histogram position(long position) {
         return (gsl_histogram)super.position(position);
     }
 
@@ -12670,13 +12670,13 @@ public static native int gsl_histogram2d_pdf_sample(@Const gsl_histogram2d_pdf p
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_histogram_pdf() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_histogram_pdf(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_histogram_pdf(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_histogram_pdf(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_histogram_pdf position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_histogram_pdf position(long position) {
         return (gsl_histogram_pdf)super.position(position);
     }
 
@@ -12809,13 +12809,13 @@ public static class gsl_integration_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_integration_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_integration_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_integration_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_integration_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_integration_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_integration_workspace position(long position) {
         return (gsl_integration_workspace)super.position(position);
     }
 
@@ -12843,13 +12843,13 @@ public static class gsl_integration_qaws_table extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_integration_qaws_table() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_integration_qaws_table(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_integration_qaws_table(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_integration_qaws_table(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_integration_qaws_table position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_integration_qaws_table position(long position) {
         return (gsl_integration_qaws_table)super.position(position);
     }
 
@@ -12883,13 +12883,13 @@ public static class gsl_integration_qawo_table extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_integration_qawo_table() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_integration_qawo_table(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_integration_qawo_table(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_integration_qawo_table(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_integration_qawo_table position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_integration_qawo_table position(long position) {
         return (gsl_integration_qawo_table)super.position(position);
     }
 
@@ -13232,13 +13232,13 @@ public static class gsl_integration_glfixed_table extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_integration_glfixed_table() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_integration_glfixed_table(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_integration_glfixed_table(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_integration_glfixed_table(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_integration_glfixed_table position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_integration_glfixed_table position(long position) {
         return (gsl_integration_glfixed_table)super.position(position);
     }
 
@@ -13289,13 +13289,13 @@ public static class gsl_integration_cquad_ival extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_integration_cquad_ival() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_integration_cquad_ival(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_integration_cquad_ival(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_integration_cquad_ival(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_integration_cquad_ival position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_integration_cquad_ival position(long position) {
         return (gsl_integration_cquad_ival)super.position(position);
     }
 
@@ -13318,13 +13318,13 @@ public static class gsl_integration_cquad_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_integration_cquad_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_integration_cquad_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_integration_cquad_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_integration_cquad_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_integration_cquad_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_integration_cquad_workspace position(long position) {
         return (gsl_integration_cquad_workspace)super.position(position);
     }
 
@@ -13395,13 +13395,13 @@ public static class gsl_interp_accel extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_interp_accel() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_interp_accel(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_interp_accel(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_interp_accel(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_interp_accel position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_interp_accel position(long position) {
         return (gsl_interp_accel)super.position(position);
     }
 
@@ -13416,13 +13416,13 @@ public static class gsl_interp_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_interp_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_interp_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_interp_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_interp_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_interp_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_interp_type position(long position) {
         return (gsl_interp_type)super.position(position);
     }
 
@@ -13500,13 +13500,13 @@ public static class gsl_interp extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_interp() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_interp(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_interp(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_interp(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_interp position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_interp position(long position) {
         return (gsl_interp)super.position(position);
     }
 
@@ -14475,13 +14475,13 @@ public static native int gsl_poly_complex_solve_cubic(double a, double b, double
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_poly_complex_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_poly_complex_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_poly_complex_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_poly_complex_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_poly_complex_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_poly_complex_workspace position(long position) {
         return (gsl_poly_complex_workspace)super.position(position);
     }
  
@@ -14545,13 +14545,13 @@ public static class gsl_rng_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_rng_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_rng_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_rng_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_rng_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_rng_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_rng_type position(long position) {
         return (gsl_rng_type)super.position(position);
     }
 
@@ -14592,13 +14592,13 @@ public static class gsl_rng extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_rng() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_rng(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_rng(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_rng(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_rng position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_rng position(long position) {
         return (gsl_rng)super.position(position);
     }
 
@@ -14745,13 +14745,13 @@ public static class gsl_qrng_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_qrng_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_qrng_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_qrng_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_qrng_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_qrng_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_qrng_type position(long position) {
         return (gsl_qrng_type)super.position(position);
     }
 
@@ -14794,13 +14794,13 @@ public static class gsl_qrng extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_qrng() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_qrng(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_qrng(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_qrng(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_qrng position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_qrng position(long position) {
         return (gsl_qrng)super.position(position);
     }
 
@@ -15074,13 +15074,13 @@ public static class gsl_ran_discrete_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_ran_discrete_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_ran_discrete_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_ran_discrete_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_ran_discrete_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_ran_discrete_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_ran_discrete_t position(long position) {
         return (gsl_ran_discrete_t)super.position(position);
     }
                 /* struct for Walker algorithm */
@@ -15139,13 +15139,13 @@ public static class gsl_root_fsolver_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_root_fsolver_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_root_fsolver_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_root_fsolver_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_root_fsolver_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_root_fsolver_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_root_fsolver_type position(long position) {
         return (gsl_root_fsolver_type)super.position(position);
     }
 
@@ -15175,13 +15175,13 @@ public static class gsl_root_fsolver extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_root_fsolver() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_root_fsolver(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_root_fsolver(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_root_fsolver(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_root_fsolver position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_root_fsolver position(long position) {
         return (gsl_root_fsolver)super.position(position);
     }
 
@@ -15197,13 +15197,13 @@ public static class gsl_root_fdfsolver_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_root_fdfsolver_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_root_fdfsolver_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_root_fdfsolver_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_root_fdfsolver_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_root_fdfsolver_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_root_fdfsolver_type position(long position) {
         return (gsl_root_fdfsolver_type)super.position(position);
     }
 
@@ -15233,13 +15233,13 @@ public static class gsl_root_fdfsolver extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_root_fdfsolver() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_root_fdfsolver(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_root_fdfsolver(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_root_fdfsolver(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_root_fdfsolver position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_root_fdfsolver position(long position) {
         return (gsl_root_fdfsolver)super.position(position);
     }
 
@@ -15393,13 +15393,13 @@ public static class gsl_siman_params_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_siman_params_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_siman_params_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_siman_params_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_siman_params_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_siman_params_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_siman_params_t position(long position) {
         return (gsl_siman_params_t)super.position(position);
     }
 
@@ -15476,13 +15476,13 @@ public static class gsl_spline extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_spline() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_spline(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_spline(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_spline(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_spline position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_spline position(long position) {
         return (gsl_spline)super.position(position);
     }
 
@@ -15619,13 +15619,13 @@ public static class gsl_sum_levin_u_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_sum_levin_u_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_sum_levin_u_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_sum_levin_u_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_sum_levin_u_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_sum_levin_u_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_sum_levin_u_workspace position(long position) {
         return (gsl_sum_levin_u_workspace)super.position(position);
     }
 
@@ -15736,13 +15736,13 @@ public static class gsl_sum_levin_utrunc_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_sum_levin_utrunc_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_sum_levin_utrunc_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_sum_levin_utrunc_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_sum_levin_utrunc_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_sum_levin_utrunc_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_sum_levin_utrunc_workspace position(long position) {
         return (gsl_sum_levin_utrunc_workspace)super.position(position);
     }
 
@@ -15849,13 +15849,13 @@ public static class gsl_wavelet_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_wavelet_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_wavelet_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_wavelet_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_wavelet_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_wavelet_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_wavelet_type position(long position) {
         return (gsl_wavelet_type)super.position(position);
     }
 
@@ -15877,13 +15877,13 @@ public static class gsl_wavelet extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_wavelet() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_wavelet(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_wavelet(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_wavelet(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_wavelet position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_wavelet position(long position) {
         return (gsl_wavelet)super.position(position);
     }
 
@@ -15900,13 +15900,13 @@ public static class gsl_wavelet_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_wavelet_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_wavelet_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_wavelet_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_wavelet_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_wavelet_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_wavelet_workspace position(long position) {
         return (gsl_wavelet_workspace)super.position(position);
     }
 
@@ -16157,13 +16157,13 @@ public static class gsl_multilarge_linear_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multilarge_linear_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multilarge_linear_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multilarge_linear_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multilarge_linear_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multilarge_linear_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multilarge_linear_type position(long position) {
         return (gsl_multilarge_linear_type)super.position(position);
     }
 
@@ -16240,13 +16240,13 @@ public static class gsl_multilarge_linear_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multilarge_linear_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multilarge_linear_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multilarge_linear_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multilarge_linear_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multilarge_linear_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multilarge_linear_workspace position(long position) {
         return (gsl_multilarge_linear_workspace)super.position(position);
     }
 
@@ -16377,13 +16377,13 @@ public static class gsl_rstat_quantile_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_rstat_quantile_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_rstat_quantile_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_rstat_quantile_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_rstat_quantile_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_rstat_quantile_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_rstat_quantile_workspace position(long position) {
         return (gsl_rstat_quantile_workspace)super.position(position);
     }
 
@@ -16408,13 +16408,13 @@ public static class gsl_rstat_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_rstat_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_rstat_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_rstat_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_rstat_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_rstat_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_rstat_workspace position(long position) {
         return (gsl_rstat_workspace)super.position(position);
     }
 
@@ -16493,13 +16493,13 @@ public static class gsl_spmatrix_tree extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_spmatrix_tree() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_spmatrix_tree(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_spmatrix_tree(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_spmatrix_tree(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_spmatrix_tree position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_spmatrix_tree position(long position) {
         return (gsl_spmatrix_tree)super.position(position);
     }
 
@@ -16528,13 +16528,13 @@ public static class gsl_spmatrix extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_spmatrix() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_spmatrix(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_spmatrix(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_spmatrix(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_spmatrix position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_spmatrix position(long position) {
         return (gsl_spmatrix)super.position(position);
     }
 
@@ -16728,13 +16728,13 @@ public static class gsl_splinalg_itersolve_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_splinalg_itersolve_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_splinalg_itersolve_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_splinalg_itersolve_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_splinalg_itersolve_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_splinalg_itersolve_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_splinalg_itersolve_type position(long position) {
         return (gsl_splinalg_itersolve_type)super.position(position);
     }
 
@@ -16782,13 +16782,13 @@ public static class gsl_splinalg_itersolve extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_splinalg_itersolve() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_splinalg_itersolve(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_splinalg_itersolve(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_splinalg_itersolve(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_splinalg_itersolve position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_splinalg_itersolve position(long position) {
         return (gsl_splinalg_itersolve)super.position(position);
     }
 
@@ -16854,13 +16854,13 @@ public static class gsl_interp2d_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_interp2d_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_interp2d_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_interp2d_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_interp2d_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_interp2d_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_interp2d_type position(long position) {
         return (gsl_interp2d_type)super.position(position);
     }
 
@@ -16953,13 +16953,13 @@ public static class gsl_interp2d extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_interp2d() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_interp2d(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_interp2d(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_interp2d(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_interp2d position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_interp2d position(long position) {
         return (gsl_interp2d)super.position(position);
     }
 
@@ -17249,13 +17249,13 @@ public static class gsl_spline2d extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_spline2d() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_spline2d(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_spline2d(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_spline2d(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_spline2d position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_spline2d position(long position) {
         return (gsl_spline2d)super.position(position);
     }
 
@@ -18146,13 +18146,13 @@ public static class gsl_fft_complex_wavetable_float extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_fft_complex_wavetable_float() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_fft_complex_wavetable_float(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_fft_complex_wavetable_float(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_fft_complex_wavetable_float(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_fft_complex_wavetable_float position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_fft_complex_wavetable_float position(long position) {
         return (gsl_fft_complex_wavetable_float)super.position(position);
     }
 
@@ -18169,13 +18169,13 @@ public static class gsl_fft_complex_workspace_float extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_fft_complex_workspace_float() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_fft_complex_workspace_float(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_fft_complex_workspace_float(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_fft_complex_workspace_float(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_fft_complex_workspace_float position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_fft_complex_workspace_float position(long position) {
         return (gsl_fft_complex_workspace_float)super.position(position);
     }
 
@@ -18399,13 +18399,13 @@ public static class gsl_fft_complex_wavetable extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_fft_complex_wavetable() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_fft_complex_wavetable(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_fft_complex_wavetable(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_fft_complex_wavetable(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_fft_complex_wavetable position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_fft_complex_wavetable position(long position) {
         return (gsl_fft_complex_wavetable)super.position(position);
     }
 
@@ -18422,13 +18422,13 @@ public static class gsl_fft_complex_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_fft_complex_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_fft_complex_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_fft_complex_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_fft_complex_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_fft_complex_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_fft_complex_workspace position(long position) {
         return (gsl_fft_complex_workspace)super.position(position);
     }
 
@@ -18569,13 +18569,13 @@ public static class gsl_fft_halfcomplex_wavetable_float extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_fft_halfcomplex_wavetable_float() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_fft_halfcomplex_wavetable_float(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_fft_halfcomplex_wavetable_float(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_fft_halfcomplex_wavetable_float(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_fft_halfcomplex_wavetable_float position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_fft_halfcomplex_wavetable_float position(long position) {
         return (gsl_fft_halfcomplex_wavetable_float)super.position(position);
     }
 
@@ -18699,13 +18699,13 @@ public static class gsl_fft_halfcomplex_wavetable extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_fft_halfcomplex_wavetable() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_fft_halfcomplex_wavetable(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_fft_halfcomplex_wavetable(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_fft_halfcomplex_wavetable(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_fft_halfcomplex_wavetable position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_fft_halfcomplex_wavetable position(long position) {
         return (gsl_fft_halfcomplex_wavetable)super.position(position);
     }
 
@@ -18822,13 +18822,13 @@ public static class gsl_fft_real_wavetable_float extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_fft_real_wavetable_float() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_fft_real_wavetable_float(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_fft_real_wavetable_float(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_fft_real_wavetable_float(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_fft_real_wavetable_float position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_fft_real_wavetable_float position(long position) {
         return (gsl_fft_real_wavetable_float)super.position(position);
     }
 
@@ -18845,13 +18845,13 @@ public static class gsl_fft_real_workspace_float extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_fft_real_workspace_float() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_fft_real_workspace_float(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_fft_real_workspace_float(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_fft_real_workspace_float(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_fft_real_workspace_float position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_fft_real_workspace_float position(long position) {
         return (gsl_fft_real_workspace_float)super.position(position);
     }
 
@@ -18937,13 +18937,13 @@ public static class gsl_fft_real_wavetable extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_fft_real_wavetable() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_fft_real_wavetable(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_fft_real_wavetable(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_fft_real_wavetable(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_fft_real_wavetable position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_fft_real_wavetable position(long position) {
         return (gsl_fft_real_wavetable)super.position(position);
     }
 
@@ -18960,13 +18960,13 @@ public static class gsl_fft_real_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_fft_real_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_fft_real_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_fft_real_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_fft_real_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_fft_real_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_fft_real_workspace position(long position) {
         return (gsl_fft_real_workspace)super.position(position);
     }
 
@@ -19188,13 +19188,13 @@ public static native int gsl_dft_complex_transform(@Const double[] data, @Cast("
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_monte_function() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_monte_function(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_monte_function(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_monte_function(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_monte_function position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_monte_function position(long position) {
         return (gsl_monte_function)super.position(position);
     }
 
@@ -19260,13 +19260,13 @@ public static class gsl_monte_plain_state extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_monte_plain_state() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_monte_plain_state(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_monte_plain_state(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_monte_plain_state(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_monte_plain_state position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_monte_plain_state position(long position) {
         return (gsl_monte_plain_state)super.position(position);
     }
 
@@ -19348,13 +19348,13 @@ public static class gsl_monte_miser_state extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_monte_miser_state() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_monte_miser_state(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_monte_miser_state(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_monte_miser_state(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_monte_miser_state position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_monte_miser_state position(long position) {
         return (gsl_monte_miser_state)super.position(position);
     }
 
@@ -19412,13 +19412,13 @@ public static class gsl_monte_miser_params extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_monte_miser_params() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_monte_miser_params(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_monte_miser_params(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_monte_miser_params(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_monte_miser_params position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_monte_miser_params position(long position) {
         return (gsl_monte_miser_params)super.position(position);
     }
 
@@ -19486,13 +19486,13 @@ public static class gsl_monte_vegas_state extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_monte_vegas_state() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_monte_vegas_state(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_monte_vegas_state(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_monte_vegas_state(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_monte_vegas_state position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_monte_vegas_state position(long position) {
         return (gsl_monte_vegas_state)super.position(position);
     }
 
@@ -19574,13 +19574,13 @@ public static class gsl_monte_vegas_params extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_monte_vegas_params() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_monte_vegas_params(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_monte_vegas_params(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_monte_vegas_params(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_monte_vegas_params position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_monte_vegas_params position(long position) {
         return (gsl_monte_vegas_params)super.position(position);
     }
 
@@ -19645,13 +19645,13 @@ public static class gsl_multifit_linear_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multifit_linear_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multifit_linear_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multifit_linear_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multifit_linear_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multifit_linear_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multifit_linear_workspace position(long position) {
         return (gsl_multifit_linear_workspace)super.position(position);
     }
 
@@ -19905,13 +19905,13 @@ public static class gsl_multifit_robust_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multifit_robust_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multifit_robust_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multifit_robust_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multifit_robust_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multifit_robust_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multifit_robust_type position(long position) {
         return (gsl_multifit_robust_type)super.position(position);
     }
 
@@ -19941,13 +19941,13 @@ public static class gsl_multifit_robust_stats extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multifit_robust_stats() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multifit_robust_stats(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multifit_robust_stats(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multifit_robust_stats(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multifit_robust_stats position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multifit_robust_stats position(long position) {
         return (gsl_multifit_robust_stats)super.position(position);
     }
 
@@ -19969,13 +19969,13 @@ public static class gsl_multifit_robust_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multifit_robust_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multifit_robust_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multifit_robust_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multifit_robust_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multifit_robust_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multifit_robust_workspace position(long position) {
         return (gsl_multifit_robust_workspace)super.position(position);
     }
 
@@ -20094,13 +20094,13 @@ public static native int gsl_multifit_covar_QRPT(gsl_matrix r, gsl_permutation p
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multifit_function() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multifit_function(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multifit_function(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multifit_function(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multifit_function position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multifit_function position(long position) {
         return (gsl_multifit_function)super.position(position);
     }
 
@@ -20124,13 +20124,13 @@ public static class gsl_multifit_fsolver_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multifit_fsolver_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multifit_fsolver_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multifit_fsolver_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multifit_fsolver_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multifit_fsolver_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multifit_fsolver_type position(long position) {
         return (gsl_multifit_fsolver_type)super.position(position);
     }
 
@@ -20178,13 +20178,13 @@ public static class gsl_multifit_fsolver extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multifit_fsolver() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multifit_fsolver(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multifit_fsolver(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multifit_fsolver(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multifit_fsolver position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multifit_fsolver position(long position) {
         return (gsl_multifit_fsolver)super.position(position);
     }
 
@@ -20221,13 +20221,13 @@ public static native gsl_vector gsl_multifit_fsolver_position(@Const gsl_multifi
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multifit_function_fdf() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multifit_function_fdf(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multifit_function_fdf(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multifit_function_fdf(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multifit_function_fdf position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multifit_function_fdf position(long position) {
         return (gsl_multifit_function_fdf)super.position(position);
     }
 
@@ -20269,13 +20269,13 @@ public static class gsl_multifit_fdfsolver_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multifit_fdfsolver_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multifit_fdfsolver_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multifit_fdfsolver_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multifit_fdfsolver_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multifit_fdfsolver_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multifit_fdfsolver_type position(long position) {
         return (gsl_multifit_fdfsolver_type)super.position(position);
     }
 
@@ -20345,13 +20345,13 @@ public static class gsl_multifit_fdfsolver extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multifit_fdfsolver() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multifit_fdfsolver(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multifit_fdfsolver(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multifit_fdfsolver(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multifit_fdfsolver position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multifit_fdfsolver position(long position) {
         return (gsl_multifit_fdfsolver)super.position(position);
     }
 
@@ -20442,13 +20442,13 @@ public static class gsl_multifit_fdfridge extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multifit_fdfridge() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multifit_fdfridge(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multifit_fdfridge(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multifit_fdfridge(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multifit_fdfridge position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multifit_fdfridge position(long position) {
         return (gsl_multifit_fdfridge)super.position(position);
     }
 
@@ -20575,13 +20575,13 @@ public static native int gsl_multifit_fdfridge_driver(gsl_multifit_fdfridge w,
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multimin_function() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multimin_function(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multimin_function(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multimin_function(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multimin_function position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multimin_function position(long position) {
         return (gsl_multimin_function)super.position(position);
     }
 
@@ -20606,13 +20606,13 @@ public static native int gsl_multifit_fdfridge_driver(gsl_multifit_fdfridge w,
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multimin_function_fdf() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multimin_function_fdf(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multimin_function_fdf(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multimin_function_fdf(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multimin_function_fdf position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multimin_function_fdf position(long position) {
         return (gsl_multimin_function_fdf)super.position(position);
     }
 
@@ -20660,13 +20660,13 @@ public static class gsl_multimin_fminimizer_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multimin_fminimizer_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multimin_fminimizer_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multimin_fminimizer_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multimin_fminimizer_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multimin_fminimizer_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multimin_fminimizer_type position(long position) {
         return (gsl_multimin_fminimizer_type)super.position(position);
     }
 
@@ -20720,13 +20720,13 @@ public static class gsl_multimin_fminimizer extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multimin_fminimizer() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multimin_fminimizer(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multimin_fminimizer(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multimin_fminimizer(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multimin_fminimizer position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multimin_fminimizer position(long position) {
         return (gsl_multimin_fminimizer)super.position(position);
     }
 
@@ -20774,13 +20774,13 @@ public static class gsl_multimin_fdfminimizer_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multimin_fdfminimizer_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multimin_fdfminimizer_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multimin_fdfminimizer_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multimin_fdfminimizer_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multimin_fdfminimizer_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multimin_fdfminimizer_type position(long position) {
         return (gsl_multimin_fdfminimizer_type)super.position(position);
     }
 
@@ -20841,13 +20841,13 @@ public static class gsl_multimin_fdfminimizer extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multimin_fdfminimizer() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multimin_fdfminimizer(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multimin_fdfminimizer(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multimin_fdfminimizer(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multimin_fdfminimizer position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multimin_fdfminimizer position(long position) {
         return (gsl_multimin_fdfminimizer)super.position(position);
     }
 
@@ -20943,13 +20943,13 @@ public static native double gsl_multimin_fdfminimizer_minimum(@Const gsl_multimi
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multiroot_function() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multiroot_function(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multiroot_function(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multiroot_function(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multiroot_function position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multiroot_function position(long position) {
         return (gsl_multiroot_function)super.position(position);
     }
 
@@ -20977,13 +20977,13 @@ public static class gsl_multiroot_fsolver_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multiroot_fsolver_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multiroot_fsolver_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multiroot_fsolver_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multiroot_fsolver_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multiroot_fsolver_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multiroot_fsolver_type position(long position) {
         return (gsl_multiroot_fsolver_type)super.position(position);
     }
 
@@ -21031,13 +21031,13 @@ public static class gsl_multiroot_fsolver extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multiroot_fsolver() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multiroot_fsolver(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multiroot_fsolver(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multiroot_fsolver(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multiroot_fsolver position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multiroot_fsolver position(long position) {
         return (gsl_multiroot_fsolver)super.position(position);
     }
 
@@ -21072,13 +21072,13 @@ public static native gsl_vector gsl_multiroot_fsolver_f(@Const gsl_multiroot_fso
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multiroot_function_fdf() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multiroot_function_fdf(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multiroot_function_fdf(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multiroot_function_fdf(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multiroot_function_fdf position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multiroot_function_fdf position(long position) {
         return (gsl_multiroot_function_fdf)super.position(position);
     }
 
@@ -21121,13 +21121,13 @@ public static class gsl_multiroot_fdfsolver_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multiroot_fdfsolver_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multiroot_fdfsolver_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multiroot_fdfsolver_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multiroot_fdfsolver_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multiroot_fdfsolver_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multiroot_fdfsolver_type position(long position) {
         return (gsl_multiroot_fdfsolver_type)super.position(position);
     }
 
@@ -21175,13 +21175,13 @@ public static class gsl_multiroot_fdfsolver extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multiroot_fdfsolver() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multiroot_fdfsolver(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multiroot_fdfsolver(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multiroot_fdfsolver(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multiroot_fdfsolver position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multiroot_fdfsolver position(long position) {
         return (gsl_multiroot_fdfsolver)super.position(position);
     }
 
@@ -21272,13 +21272,13 @@ public static native int gsl_multiroot_test_residual(@Const gsl_vector f, double
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_multiset() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_multiset(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_multiset(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_multiset(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_multiset position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_multiset position(long position) {
         return (gsl_multiset)super.position(position);
     }
 
@@ -21361,13 +21361,13 @@ public static class gsl_ntuple extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_ntuple() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_ntuple(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_ntuple(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_ntuple(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_ntuple position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_ntuple position(long position) {
         return (gsl_ntuple)super.position(position);
     }
 
@@ -21380,13 +21380,13 @@ public static class gsl_ntuple_select_fn extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_ntuple_select_fn() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_ntuple_select_fn(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_ntuple_select_fn(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_ntuple_select_fn(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_ntuple_select_fn position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_ntuple_select_fn position(long position) {
         return (gsl_ntuple_select_fn)super.position(position);
     }
 
@@ -21406,13 +21406,13 @@ public static class gsl_ntuple_value_fn extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_ntuple_value_fn() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_ntuple_value_fn(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_ntuple_value_fn(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_ntuple_value_fn(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_ntuple_value_fn position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_ntuple_value_fn position(long position) {
         return (gsl_ntuple_value_fn)super.position(position);
     }
 
@@ -21511,13 +21511,13 @@ public static native int gsl_ntuple_close(gsl_ntuple ntuple);
       static { Loader.load(); }
       /** Default native constructor. */
       public gsl_odeiv2_system() { super((Pointer)null); allocate(); }
-      /** Native array allocator. Access with {@link Pointer#position(int)}. */
-      public gsl_odeiv2_system(int size) { super((Pointer)null); allocateArray(size); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public gsl_odeiv2_system(long size) { super((Pointer)null); allocateArray(size); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public gsl_odeiv2_system(Pointer p) { super(p); }
       private native void allocate();
-      private native void allocateArray(int size);
-      @Override public gsl_odeiv2_system position(int position) {
+      private native void allocateArray(long size);
+      @Override public gsl_odeiv2_system position(long position) {
           return (gsl_odeiv2_system)super.position(position);
       }
   
@@ -21562,13 +21562,13 @@ public static class gsl_odeiv2_step_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_odeiv2_step_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_odeiv2_step_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_odeiv2_step_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_odeiv2_step_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_odeiv2_step_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_odeiv2_step_type position(long position) {
         return (gsl_odeiv2_step_type)super.position(position);
     }
 
@@ -21637,13 +21637,13 @@ public static class gsl_odeiv2_step_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_odeiv2_step() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_odeiv2_step(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_odeiv2_step(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_odeiv2_step(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_odeiv2_step position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_odeiv2_step position(long position) {
         return (gsl_odeiv2_step)super.position(position);
     }
 
@@ -21692,13 +21692,13 @@ public static class gsl_odeiv2_control_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_odeiv2_control_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_odeiv2_control_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_odeiv2_control_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_odeiv2_control_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_odeiv2_control_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_odeiv2_control_type position(long position) {
         return (gsl_odeiv2_control_type)super.position(position);
     }
 
@@ -21766,13 +21766,13 @@ public static class gsl_odeiv2_control_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_odeiv2_control() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_odeiv2_control(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_odeiv2_control(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_odeiv2_control(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_odeiv2_control position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_odeiv2_control position(long position) {
         return (gsl_odeiv2_control)super.position(position);
     }
 
@@ -21878,13 +21878,13 @@ public static native gsl_odeiv2_control gsl_odeiv2_control_scaled_new(double eps
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_odeiv2_evolve() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_odeiv2_evolve(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_odeiv2_evolve(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_odeiv2_evolve(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_odeiv2_evolve position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_odeiv2_evolve position(long position) {
         return (gsl_odeiv2_evolve)super.position(position);
     }
 
@@ -21947,13 +21947,13 @@ public static native int gsl_odeiv2_evolve_set_driver(gsl_odeiv2_evolve e,
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_odeiv2_driver() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_odeiv2_driver(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_odeiv2_driver(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_odeiv2_driver(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_odeiv2_driver position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_odeiv2_driver position(long position) {
         return (gsl_odeiv2_driver)super.position(position);
     }
 
@@ -22093,13 +22093,13 @@ public static class gsl_odeiv_system extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_odeiv_system() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_odeiv_system(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_odeiv_system(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_odeiv_system(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_odeiv_system position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_odeiv_system position(long position) {
         return (gsl_odeiv_system)super.position(position);
     }
 
@@ -22140,13 +22140,13 @@ public static class gsl_odeiv_step_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_odeiv_step_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_odeiv_step_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_odeiv_step_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_odeiv_step_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_odeiv_step_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_odeiv_step_type position(long position) {
         return (gsl_odeiv_step_type)super.position(position);
     }
 
@@ -22204,13 +22204,13 @@ public static class gsl_odeiv_step extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_odeiv_step() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_odeiv_step(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_odeiv_step(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_odeiv_step(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_odeiv_step position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_odeiv_step position(long position) {
         return (gsl_odeiv_step)super.position(position);
     }
 
@@ -22274,13 +22274,13 @@ public static class gsl_odeiv_control_type extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_odeiv_control_type() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_odeiv_control_type(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_odeiv_control_type(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_odeiv_control_type(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_odeiv_control_type position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_odeiv_control_type position(long position) {
         return (gsl_odeiv_control_type)super.position(position);
     }
 
@@ -22327,13 +22327,13 @@ public static class gsl_odeiv_control extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_odeiv_control() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_odeiv_control(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_odeiv_control(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_odeiv_control(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_odeiv_control position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_odeiv_control position(long position) {
         return (gsl_odeiv_control)super.position(position);
     }
 
@@ -22390,13 +22390,13 @@ public static class gsl_odeiv_evolve extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_odeiv_evolve() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_odeiv_evolve(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_odeiv_evolve(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_odeiv_evolve(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_odeiv_evolve position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_odeiv_evolve position(long position) {
         return (gsl_odeiv_evolve)super.position(position);
     }
 
@@ -23635,13 +23635,13 @@ public static native int gsl_permute_vector_char_inverse(@Const gsl_permutation 
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_sf_result() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_sf_result(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_sf_result(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_sf_result(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_sf_result position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_sf_result position(long position) {
         return (gsl_sf_result)super.position(position);
     }
 
@@ -23656,13 +23656,13 @@ public static native int gsl_permute_vector_char_inverse(@Const gsl_permutation 
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_sf_result_e10() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_sf_result_e10(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_sf_result_e10(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_sf_result_e10(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_sf_result_e10 position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_sf_result_e10 position(long position) {
         return (gsl_sf_result_e10)super.position(position);
     }
 
@@ -26964,13 +26964,13 @@ public static class gsl_sf_mathieu_workspace extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public gsl_sf_mathieu_workspace() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public gsl_sf_mathieu_workspace(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public gsl_sf_mathieu_workspace(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public gsl_sf_mathieu_workspace(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public gsl_sf_mathieu_workspace position(int position) {
+    private native void allocateArray(long size);
+    @Override public gsl_sf_mathieu_workspace position(long position) {
         return (gsl_sf_mathieu_workspace)super.position(position);
     }
 

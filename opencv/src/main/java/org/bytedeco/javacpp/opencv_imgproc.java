@@ -72,13 +72,13 @@ public static class CvConnectedComp extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CvConnectedComp() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvConnectedComp(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CvConnectedComp(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvConnectedComp(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CvConnectedComp position(int position) {
+    private native void allocateArray(long size);
+    @Override public CvConnectedComp position(long position) {
         return (CvConnectedComp)super.position(position);
     }
 
@@ -420,10 +420,10 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvMoments(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvMoments(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvMoments position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CvMoments(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public CvMoments position(long position) {
         return (CvMoments)super.position(position);
     }
 
@@ -463,13 +463,13 @@ public static class CvHuMoments extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CvHuMoments() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvHuMoments(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CvHuMoments(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvHuMoments(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CvHuMoments position(int position) {
+    private native void allocateArray(long size);
+    @Override public CvHuMoments position(long position) {
         return (CvHuMoments)super.position(position);
     }
 
@@ -537,13 +537,13 @@ public static class CvChainPtReader extends CvSeqReader {
     static { Loader.load(); }
     /** Default native constructor. */
     public CvChainPtReader() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvChainPtReader(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CvChainPtReader(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvChainPtReader(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CvChainPtReader position(int position) {
+    private native void allocateArray(long size);
+    @Override public CvChainPtReader position(long position) {
         return (CvChainPtReader)super.position(position);
     }
 
@@ -565,7 +565,7 @@ public static class CvChainPtReader extends CvSeqReader {
     public native @Cast("char") byte code(); public native CvChainPtReader code(byte code);
     public native @ByRef CvPoint pt(); public native CvChainPtReader pt(CvPoint pt);
     public native @Cast("schar") byte deltas(int i, int j); public native CvChainPtReader deltas(int i, int j, byte deltas);
-    @MemberGetter public native @Cast("schar(*)[2]") BytePointer deltas();
+    @MemberGetter public native @Cast("schar(* /*[8]*/ )[2]") BytePointer deltas();
 }
 
 /** initializes 8-element array for fast access to 3x3 neighborhood of a pixel */
@@ -610,13 +610,13 @@ public static class CvConvexityDefect extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CvConvexityDefect() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvConvexityDefect(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CvConvexityDefect(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvConvexityDefect(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CvConvexityDefect position(int position) {
+    private native void allocateArray(long size);
+    @Override public CvConvexityDefect position(long position) {
         return (CvConvexityDefect)super.position(position);
     }
 
@@ -2315,13 +2315,13 @@ public static class CvFont extends AbstractCvFont {
     static { Loader.load(); }
     /** Default native constructor. */
     public CvFont() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvFont(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CvFont(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvFont(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CvFont position(int position) {
+    private native void allocateArray(long size);
+    @Override public CvFont position(long position) {
         return (CvFont)super.position(position);
     }
 
@@ -3412,10 +3412,10 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Subdiv2D(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Subdiv2D(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public Subdiv2D position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Subdiv2D(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Subdiv2D position(long position) {
         return (Subdiv2D)super.position(position);
     }
 

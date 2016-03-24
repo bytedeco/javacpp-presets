@@ -468,13 +468,13 @@ public static class CvStereoBMState extends AbstractCvStereoBMState {
     static { Loader.load(); }
     /** Default native constructor. */
     public CvStereoBMState() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvStereoBMState(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CvStereoBMState(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvStereoBMState(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CvStereoBMState position(int position) {
+    private native void allocateArray(long size);
+    @Override public CvStereoBMState position(long position) {
         return (CvStereoBMState)super.position(position);
     }
 
@@ -550,10 +550,10 @@ public static native void cvReprojectImageTo3D( @Const CvArr disparityImage,
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvLevMarq(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvLevMarq(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CvLevMarq position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CvLevMarq(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public CvLevMarq position(long position) {
         return (CvLevMarq)super.position(position);
     }
 

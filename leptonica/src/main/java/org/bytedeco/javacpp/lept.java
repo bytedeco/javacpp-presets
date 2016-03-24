@@ -336,13 +336,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public L_WALLTIMER() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_WALLTIMER(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_WALLTIMER(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_WALLTIMER(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_WALLTIMER position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_WALLTIMER position(long position) {
         return (L_WALLTIMER)super.position(position);
     }
 
@@ -616,13 +616,13 @@ public static final int NUMA_VERSION_NUMBER =     1;
     static { Loader.load(); }
     /** Default native constructor. */
     public NUMA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NUMA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NUMA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NUMA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NUMA position(int position) {
+    private native void allocateArray(long size);
+    @Override public NUMA position(long position) {
         return (NUMA)super.position(position);
     }
 
@@ -640,13 +640,13 @@ public static final int NUMA_VERSION_NUMBER =     1;
     static { Loader.load(); }
     /** Default native constructor. */
     public NUMAA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NUMAA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NUMAA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NUMAA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NUMAA position(int position) {
+    private native void allocateArray(long size);
+    @Override public NUMAA position(long position) {
         return (NUMAA)super.position(position);
     }
 
@@ -662,13 +662,13 @@ public static final int NUMA_VERSION_NUMBER =     1;
     static { Loader.load(); }
     /** Default native constructor. */
     public NUMA2D() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NUMA2D(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NUMA2D(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NUMA2D(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NUMA2D position(int position) {
+    private native void allocateArray(long size);
+    @Override public NUMA2D position(long position) {
         return (NUMA2D)super.position(position);
     }
 
@@ -685,13 +685,13 @@ public static final int NUMA_VERSION_NUMBER =     1;
     static { Loader.load(); }
     /** Default native constructor. */
     public NUMAHASH() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NUMAHASH(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NUMAHASH(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NUMAHASH(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NUMAHASH position(int position) {
+    private native void allocateArray(long size);
+    @Override public NUMAHASH position(long position) {
         return (NUMAHASH)super.position(position);
     }
 
@@ -709,13 +709,13 @@ public static final int DNA_VERSION_NUMBER =     1;
     static { Loader.load(); }
     /** Default native constructor. */
     public L_DNA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_DNA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_DNA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_DNA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_DNA position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_DNA position(long position) {
         return (L_DNA)super.position(position);
     }
 
@@ -733,13 +733,13 @@ public static final int DNA_VERSION_NUMBER =     1;
     static { Loader.load(); }
     /** Default native constructor. */
     public L_DNAA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_DNAA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_DNAA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_DNAA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_DNAA position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_DNAA position(long position) {
         return (L_DNAA)super.position(position);
     }
 
@@ -757,13 +757,13 @@ public static final int SARRAY_VERSION_NUMBER =     1;
     static { Loader.load(); }
     /** Default native constructor. */
     public SARRAY() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SARRAY(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public SARRAY(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SARRAY(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public SARRAY position(int position) {
+    private native void allocateArray(long size);
+    @Override public SARRAY position(long position) {
         return (SARRAY)super.position(position);
     }
 
@@ -780,13 +780,13 @@ public static final int SARRAY_VERSION_NUMBER =     1;
     static { Loader.load(); }
     /** Default native constructor. */
     public L_BYTEA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_BYTEA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_BYTEA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_BYTEA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_BYTEA position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_BYTEA position(long position) {
         return (L_BYTEA)super.position(position);
     }
 
@@ -875,13 +875,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public BBUFFER() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public BBUFFER(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BBUFFER(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BBUFFER(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public BBUFFER position(int position) {
+    private native void allocateArray(long size);
+    @Override public BBUFFER position(long position) {
         return (BBUFFER)super.position(position);
     }
 
@@ -974,13 +974,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public L_HEAP() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_HEAP(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_HEAP(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_HEAP(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_HEAP position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_HEAP position(long position) {
         return (L_HEAP)super.position(position);
     }
 
@@ -1060,13 +1060,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public DLLIST() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public DLLIST(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public DLLIST(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DLLIST(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public DLLIST position(int position) {
+    private native void allocateArray(long size);
+    @Override public DLLIST position(long position) {
         return (DLLIST)super.position(position);
     }
 
@@ -1149,13 +1149,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public L_PTRA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_PTRA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_PTRA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_PTRA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_PTRA position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_PTRA position(long position) {
         return (L_PTRA)super.position(position);
     }
 
@@ -1172,13 +1172,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public L_PTRAA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_PTRAA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_PTRAA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_PTRAA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_PTRAA position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_PTRAA position(long position) {
         return (L_PTRAA)super.position(position);
     }
 
@@ -1282,13 +1282,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public L_QUEUE() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_QUEUE(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_QUEUE(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_QUEUE(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_QUEUE position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_QUEUE position(long position) {
         return (L_QUEUE)super.position(position);
     }
 
@@ -1366,13 +1366,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public L_STACK() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_STACK(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_STACK(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_STACK(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_STACK position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_STACK position(long position) {
         return (L_STACK)super.position(position);
     }
 
@@ -1646,13 +1646,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public L_BMF() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_BMF(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_BMF(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_BMF(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_BMF position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_BMF position(long position) {
         return (L_BMF)super.position(position);
     }
 
@@ -1765,13 +1765,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public CCBORD() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CCBORD(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CCBORD(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CCBORD(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CCBORD position(int position) {
+    private native void allocateArray(long size);
+    @Override public CCBORD position(long position) {
         return (CCBORD)super.position(position);
     }
 
@@ -1791,13 +1791,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public CCBORDA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CCBORDA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CCBORDA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CCBORDA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CCBORDA position(int position) {
+    private native void allocateArray(long size);
+    @Override public CCBORDA position(long position) {
         return (CCBORDA)super.position(position);
     }
 
@@ -1916,13 +1916,13 @@ public static final int DEWARP_VERSION_NUMBER =      4;
     static { Loader.load(); }
     /** Default native constructor. */
     public L_DEWARPA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_DEWARPA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_DEWARPA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_DEWARPA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_DEWARPA position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_DEWARPA position(long position) {
         return (L_DEWARPA)super.position(position);
     }
 
@@ -1963,13 +1963,13 @@ public static final int DEWARP_VERSION_NUMBER =      4;
     static { Loader.load(); }
     /** Default native constructor. */
     public L_DEWARP() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_DEWARP(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_DEWARP(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_DEWARP(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_DEWARP position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_DEWARP position(long position) {
         return (L_DEWARP)super.position(position);
     }
 
@@ -2084,13 +2084,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public GPLOT() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public GPLOT(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public GPLOT(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GPLOT(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public GPLOT position(int position) {
+    private native void allocateArray(long size);
+    @Override public GPLOT position(long position) {
         return (GPLOT)super.position(position);
     }
 
@@ -2261,13 +2261,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public L_COMP_DATA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_COMP_DATA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_COMP_DATA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_COMP_DATA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_COMP_DATA position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_COMP_DATA position(long position) {
         return (L_COMP_DATA)super.position(position);
     }
 
@@ -2309,13 +2309,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public L_PDF_DATA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_PDF_DATA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_PDF_DATA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_PDF_DATA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_PDF_DATA position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_PDF_DATA position(long position) {
         return (L_PDF_DATA)super.position(position);
     }
 
@@ -2393,13 +2393,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public JBCLASSER() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public JBCLASSER(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public JBCLASSER(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public JBCLASSER(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public JBCLASSER position(int position) {
+    private native void allocateArray(long size);
+    @Override public JBCLASSER position(long position) {
         return (JBCLASSER)super.position(position);
     }
 
@@ -2457,13 +2457,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public JBDATA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public JBDATA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public JBDATA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public JBDATA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public JBDATA position(int position) {
+    private native void allocateArray(long size);
+    @Override public JBDATA position(long position) {
         return (JBDATA)super.position(position);
     }
 
@@ -2568,13 +2568,13 @@ public static final int SEL_VERSION_NUMBER =    1;
     static { Loader.load(); }
     /** Default native constructor. */
     public SEL() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SEL(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public SEL(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SEL(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public SEL position(int position) {
+    private native void allocateArray(long size);
+    @Override public SEL position(long position) {
         return (SEL)super.position(position);
     }
 
@@ -2591,13 +2591,13 @@ public static final int SEL_VERSION_NUMBER =    1;
     static { Loader.load(); }
     /** Default native constructor. */
     public SELA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SELA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public SELA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SELA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public SELA position(int position) {
+    private native void allocateArray(long size);
+    @Override public SELA position(long position) {
         return (SELA)super.position(position);
     }
 
@@ -2617,13 +2617,13 @@ public static final int KERNEL_VERSION_NUMBER =    2;
     static { Loader.load(); }
     /** Default native constructor. */
     public L_KERNEL() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_KERNEL(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_KERNEL(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_KERNEL(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_KERNEL position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_KERNEL position(long position) {
         return (L_KERNEL)super.position(position);
     }
 
@@ -2900,13 +2900,13 @@ public static final int ADDED_BORDER = ADDED_BORDER();   /* pixels, not bits */
     static { Loader.load(); }
     /** Default native constructor. */
     public PIX() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PIX(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PIX(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PIX(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public PIX position(int position) {
+    private native void allocateArray(long size);
+    @Override public PIX position(long position) {
         return (PIX)super.position(position);
     }
 
@@ -2932,13 +2932,13 @@ public static final int ADDED_BORDER = ADDED_BORDER();   /* pixels, not bits */
     static { Loader.load(); }
     /** Default native constructor. */
     public PIXCMAP() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PIXCMAP(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PIXCMAP(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PIXCMAP(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public PIXCMAP position(int position) {
+    private native void allocateArray(long size);
+    @Override public PIXCMAP position(long position) {
         return (PIXCMAP)super.position(position);
     }
 
@@ -2957,13 +2957,13 @@ public static final int ADDED_BORDER = ADDED_BORDER();   /* pixels, not bits */
     static { Loader.load(); }
     /** Default native constructor. */
     public RGBA_QUAD() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public RGBA_QUAD(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public RGBA_QUAD(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RGBA_QUAD(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public RGBA_QUAD position(int position) {
+    private native void allocateArray(long size);
+    @Override public RGBA_QUAD position(long position) {
         return (RGBA_QUAD)super.position(position);
     }
 
@@ -3226,13 +3226,13 @@ public static final int BOXAA_VERSION_NUMBER =      3;
     static { Loader.load(); }
     /** Default native constructor. */
     public PIXA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PIXA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PIXA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PIXA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public PIXA position(int position) {
+    private native void allocateArray(long size);
+    @Override public PIXA position(long position) {
         return (PIXA)super.position(position);
     }
 
@@ -3249,13 +3249,13 @@ public static final int BOXAA_VERSION_NUMBER =      3;
     static { Loader.load(); }
     /** Default native constructor. */
     public PIXAA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PIXAA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PIXAA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PIXAA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public PIXAA position(int position) {
+    private native void allocateArray(long size);
+    @Override public PIXAA position(long position) {
         return (PIXAA)super.position(position);
     }
 
@@ -3274,13 +3274,13 @@ public static final int BOXAA_VERSION_NUMBER =      3;
     static { Loader.load(); }
     /** Default native constructor. */
     public BOX() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public BOX(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BOX(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BOX(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public BOX position(int position) {
+    private native void allocateArray(long size);
+    @Override public BOX position(long position) {
         return (BOX)super.position(position);
     }
 
@@ -3296,13 +3296,13 @@ public static final int BOXAA_VERSION_NUMBER =      3;
     static { Loader.load(); }
     /** Default native constructor. */
     public BOXA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public BOXA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BOXA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BOXA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public BOXA position(int position) {
+    private native void allocateArray(long size);
+    @Override public BOXA position(long position) {
         return (BOXA)super.position(position);
     }
 
@@ -3317,13 +3317,13 @@ public static final int BOXAA_VERSION_NUMBER =      3;
     static { Loader.load(); }
     /** Default native constructor. */
     public BOXAA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public BOXAA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BOXAA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BOXAA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public BOXAA position(int position) {
+    private native void allocateArray(long size);
+    @Override public BOXAA position(long position) {
         return (BOXAA)super.position(position);
     }
 
@@ -3343,13 +3343,13 @@ public static final int PTA_VERSION_NUMBER =      1;
     static { Loader.load(); }
     /** Default native constructor. */
     public PTA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PTA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PTA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PTA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public PTA position(int position) {
+    private native void allocateArray(long size);
+    @Override public PTA position(long position) {
         return (PTA)super.position(position);
     }
 
@@ -3368,13 +3368,13 @@ public static final int PTA_VERSION_NUMBER =      1;
     static { Loader.load(); }
     /** Default native constructor. */
     public PTAA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PTAA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PTAA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PTAA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public PTAA position(int position) {
+    private native void allocateArray(long size);
+    @Override public PTAA position(long position) {
         return (PTAA)super.position(position);
     }
 
@@ -3392,13 +3392,13 @@ public static final int PTA_VERSION_NUMBER =      1;
     static { Loader.load(); }
     /** Default native constructor. */
     public PIXACC() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PIXACC(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PIXACC(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PIXACC(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public PIXACC position(int position) {
+    private native void allocateArray(long size);
+    @Override public PIXACC position(long position) {
         return (PIXACC)super.position(position);
     }
 
@@ -3417,13 +3417,13 @@ public static final int PTA_VERSION_NUMBER =      1;
     static { Loader.load(); }
     /** Default native constructor. */
     public PIXTILING() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PIXTILING(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PIXTILING(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PIXTILING(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public PIXTILING position(int position) {
+    private native void allocateArray(long size);
+    @Override public PIXTILING position(long position) {
         return (PIXTILING)super.position(position);
     }
 
@@ -3447,13 +3447,13 @@ public static final int FPIX_VERSION_NUMBER =      2;
     static { Loader.load(); }
     /** Default native constructor. */
     public FPIX() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FPIX(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FPIX(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FPIX(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FPIX position(int position) {
+    private native void allocateArray(long size);
+    @Override public FPIX position(long position) {
         return (FPIX)super.position(position);
     }
 
@@ -3473,13 +3473,13 @@ public static final int FPIX_VERSION_NUMBER =      2;
     static { Loader.load(); }
     /** Default native constructor. */
     public FPIXA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FPIXA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FPIXA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FPIXA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FPIXA position(int position) {
+    private native void allocateArray(long size);
+    @Override public FPIXA position(long position) {
         return (FPIXA)super.position(position);
     }
 
@@ -3500,13 +3500,13 @@ public static final int DPIX_VERSION_NUMBER =      2;
     static { Loader.load(); }
     /** Default native constructor. */
     public DPIX() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public DPIX(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public DPIX(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DPIX(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public DPIX position(int position) {
+    private native void allocateArray(long size);
+    @Override public DPIX position(long position) {
         return (DPIX)super.position(position);
     }
 
@@ -3529,13 +3529,13 @@ public static final int DPIX_VERSION_NUMBER =      2;
     static { Loader.load(); }
     /** Default native constructor. */
     public PIXC() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PIXC(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PIXC(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PIXC(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public PIXC position(int position) {
+    private native void allocateArray(long size);
+    @Override public PIXC position(long position) {
         return (PIXC)super.position(position);
     }
 
@@ -3564,13 +3564,13 @@ public static final int PIXACOMP_VERSION_NUMBER =      2;
     static { Loader.load(); }
     /** Default native constructor. */
     public PIXAC() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public PIXAC(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PIXAC(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PIXAC(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public PIXAC position(int position) {
+    private native void allocateArray(long size);
+    @Override public PIXAC position(long position) {
         return (PIXAC)super.position(position);
     }
 
@@ -4194,13 +4194,13 @@ public static final int RECOG_VERSION_NUMBER =      1;
     static { Loader.load(); }
     /** Default native constructor. */
     public L_RECOGA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_RECOGA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_RECOGA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_RECOGA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_RECOGA position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_RECOGA position(long position) {
         return (L_RECOGA)super.position(position);
     }
 
@@ -4216,13 +4216,13 @@ public static final int RECOG_VERSION_NUMBER =      1;
     static { Loader.load(); }
     /** Default native constructor. */
     public L_RECOG() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_RECOG(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_RECOG(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_RECOG(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_RECOG position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_RECOG position(long position) {
         return (L_RECOG)super.position(position);
     }
 
@@ -4301,13 +4301,13 @@ public static final int RECOG_VERSION_NUMBER =      1;
     static { Loader.load(); }
     /** Default native constructor. */
     public L_RCH() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_RCH(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_RCH(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_RCH(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_RCH position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_RCH position(long position) {
         return (L_RCH)super.position(position);
     }
 
@@ -4328,13 +4328,13 @@ public static final int RECOG_VERSION_NUMBER =      1;
     static { Loader.load(); }
     /** Default native constructor. */
     public L_RCHA() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_RCHA(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_RCHA(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_RCHA(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_RCHA position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_RCHA position(long position) {
         return (L_RCHA)super.position(position);
     }
 
@@ -4354,13 +4354,13 @@ public static final int RECOG_VERSION_NUMBER =      1;
     static { Loader.load(); }
     /** Default native constructor. */
     public L_RDID() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_RDID(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_RDID(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_RDID(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_RDID position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_RDID position(long position) {
         return (L_RDID)super.position(position);
     }
 
@@ -4541,13 +4541,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public L_REGPARAMS() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_REGPARAMS(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_REGPARAMS(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_REGPARAMS(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_REGPARAMS position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_REGPARAMS position(long position) {
         return (L_REGPARAMS)super.position(position);
     }
 
@@ -4616,13 +4616,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public L_STRCODE() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_STRCODE(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_STRCODE(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_STRCODE(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_STRCODE position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_STRCODE position(long position) {
         return (L_STRCODE)super.position(position);
     }
 
@@ -4691,13 +4691,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public L_SUDOKU() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_SUDOKU(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_SUDOKU(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_SUDOKU(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_SUDOKU position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_SUDOKU position(long position) {
         return (L_SUDOKU)super.position(position);
     }
 
@@ -4767,13 +4767,13 @@ public static final int
     static { Loader.load(); }
     /** Default native constructor. */
     public L_WSHED() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public L_WSHED(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public L_WSHED(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_WSHED(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public L_WSHED position(int position) {
+    private native void allocateArray(long size);
+    @Override public L_WSHED position(long position) {
         return (L_WSHED)super.position(position);
     }
 

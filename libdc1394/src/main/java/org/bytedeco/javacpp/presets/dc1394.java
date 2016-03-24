@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2014 Samuel Audet
+ * Copyright (C) 2013-2016 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -63,12 +63,12 @@ public class dc1394 implements InfoMapper {
     public static class pollfd extends Pointer {
         static { Loader.load(); }
         public pollfd() { allocate(); }
-        public pollfd(int size) { allocateArray(size); }
+        public pollfd(long size) { allocateArray(size); }
         public pollfd(Pointer p) { super(p); }
         private native void allocate();
-        private native void allocateArray(int size);
+        private native void allocateArray(long size);
 
-        @Override public pollfd position(int position) {
+        @Override public pollfd position(long position) {
             return (pollfd)super.position(position);
         }
 

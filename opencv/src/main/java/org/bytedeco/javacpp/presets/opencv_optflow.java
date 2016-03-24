@@ -29,7 +29,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 
 /**
  *
- * @author Jarek Sacha
+ * @author Samuel Audet
  */
 @Properties(inherit = {opencv_ximgproc.class, opencv_video.class}, value = {
     @Platform(include = {"<opencv2/optflow.hpp>", "<opencv2/optflow/motempl.hpp>"}, link = "opencv_optflow@.3.1"),

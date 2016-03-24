@@ -209,13 +209,13 @@ public static class dc1394color_codings_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public dc1394color_codings_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394color_codings_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public dc1394color_codings_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394color_codings_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public dc1394color_codings_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public dc1394color_codings_t position(long position) {
         return (dc1394color_codings_t)super.position(position);
     }
 
@@ -231,13 +231,13 @@ public static class dc1394video_modes_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public dc1394video_modes_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394video_modes_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public dc1394video_modes_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394video_modes_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public dc1394video_modes_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public dc1394video_modes_t position(long position) {
         return (dc1394video_modes_t)super.position(position);
     }
 
@@ -649,13 +649,13 @@ public static class dc1394camera_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public dc1394camera_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394camera_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public dc1394camera_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394camera_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public dc1394camera_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public dc1394camera_t position(long position) {
         return (dc1394camera_t)super.position(position);
     }
 
@@ -702,13 +702,13 @@ public static class dc1394camera_id_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public dc1394camera_id_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394camera_id_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public dc1394camera_id_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394camera_id_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public dc1394camera_id_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public dc1394camera_id_t position(long position) {
         return (dc1394camera_id_t)super.position(position);
     }
 
@@ -725,13 +725,13 @@ public static class dc1394camera_list_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public dc1394camera_list_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394camera_list_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public dc1394camera_list_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394camera_list_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public dc1394camera_list_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public dc1394camera_list_t position(long position) {
         return (dc1394camera_list_t)super.position(position);
     }
 
@@ -977,13 +977,13 @@ public static class dc1394feature_modes_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public dc1394feature_modes_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394feature_modes_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public dc1394feature_modes_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394feature_modes_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public dc1394feature_modes_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public dc1394feature_modes_t position(long position) {
         return (dc1394feature_modes_t)super.position(position);
     }
 
@@ -999,13 +999,13 @@ public static class dc1394trigger_modes_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public dc1394trigger_modes_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394trigger_modes_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public dc1394trigger_modes_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394trigger_modes_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public dc1394trigger_modes_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public dc1394trigger_modes_t position(long position) {
         return (dc1394trigger_modes_t)super.position(position);
     }
 
@@ -1021,13 +1021,13 @@ public static class dc1394trigger_sources_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public dc1394trigger_sources_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394trigger_sources_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public dc1394trigger_sources_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394trigger_sources_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public dc1394trigger_sources_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public dc1394trigger_sources_t position(long position) {
         return (dc1394trigger_sources_t)super.position(position);
     }
 
@@ -1045,13 +1045,13 @@ public static class dc1394feature_info_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public dc1394feature_info_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394feature_info_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public dc1394feature_info_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394feature_info_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public dc1394feature_info_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public dc1394feature_info_t position(long position) {
         return (dc1394feature_info_t)super.position(position);
     }
 
@@ -1093,13 +1093,13 @@ public static class dc1394featureset_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public dc1394featureset_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394featureset_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public dc1394featureset_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394featureset_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public dc1394featureset_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public dc1394featureset_t position(long position) {
         return (dc1394featureset_t)super.position(position);
     }
 
@@ -1808,13 +1808,13 @@ public static class dc1394format7mode_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public dc1394format7mode_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394format7mode_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public dc1394format7mode_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394format7mode_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public dc1394format7mode_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public dc1394format7mode_t position(long position) {
         return (dc1394format7mode_t)super.position(position);
     }
 
@@ -1856,13 +1856,13 @@ public static class dc1394format7modeset_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public dc1394format7modeset_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394format7modeset_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public dc1394format7modeset_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394format7modeset_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public dc1394format7modeset_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public dc1394format7modeset_t position(long position) {
         return (dc1394format7modeset_t)super.position(position);
     }
 
@@ -2569,13 +2569,13 @@ public static class dc1394framerates_t extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public dc1394framerates_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394framerates_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public dc1394framerates_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394framerates_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public dc1394framerates_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public dc1394framerates_t position(long position) {
         return (dc1394framerates_t)super.position(position);
     }
 
@@ -2597,13 +2597,13 @@ public static class dc1394video_frame_t extends dc1394video_frame_t_abstract {
     static { Loader.load(); }
     /** Default native constructor. */
     public dc1394video_frame_t() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public dc1394video_frame_t(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public dc1394video_frame_t(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public dc1394video_frame_t(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public dc1394video_frame_t position(int position) {
+    private native void allocateArray(long size);
+    @Override public dc1394video_frame_t position(long position) {
         return (dc1394video_frame_t)super.position(position);
     }
 

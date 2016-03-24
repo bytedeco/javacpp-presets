@@ -11,7 +11,7 @@
 
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>caffe</artifactId>
-  <version>master-${project.parent.version}</version>
+  <version>rc3-${project.parent.version}</version>
   <packaging>jar</packaging>
   <name>JavaCPP Presets for Caffe</name>
 
@@ -33,6 +33,10 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+      </plugin>
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
       </plugin>
@@ -74,13 +78,13 @@
         </configuration>
         <executions>
           <execution>
-            <id>generate-sources</id>
+            <id>javacpp.parser</id>
             <configuration>
               <classOrPackageName>org.bytedeco.javacpp.presets.caffe</classOrPackageName>
             </configuration>
           </execution>
           <execution>
-            <id>process-classes</id>
+            <id>javacpp.compiler</id>
             <configuration>
               <classOrPackageName>org.bytedeco.javacpp.caffe</classOrPackageName>
             </configuration>

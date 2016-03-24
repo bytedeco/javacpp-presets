@@ -9,6 +9,20 @@ import org.bytedeco.javacpp.annotation.*;
 public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     static { Loader.load(); }
 
+@Name("tensorflow::gtl::InlinedVector<long long,4>") public static class LongVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LongVector(Pointer p) { super(p); }
+    public LongVector()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef LongVector put(@ByRef LongVector x);
+
+    public native long size();
+
+    @Index public native @Cast("long long") long get(@Cast("size_t") long i);
+    public native LongVector put(@Cast("size_t") long i, long value);
+}
+
 @Name("tensorflow::gtl::InlinedVector<tensorflow::DataType,4>") public static class DataTypeVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -21,6 +35,32 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
 
     @Index public native @Cast("tensorflow::DataType") int get(@Cast("size_t") long i);
     public native DataTypeVector put(@Cast("size_t") long i, int value);
+}
+
+@Name("google::protobuf::Map<std::string,tensorflow::AttrValue>") public static class StringAttrValueMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public StringAttrValueMap(Pointer p) { super(p); }
+    public StringAttrValueMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef StringAttrValueMap put(@ByRef StringAttrValueMap x);
+
+    public native long size();
+
+    @Index public native @ByRef AttrValue get(@StdString BytePointer i);
+    public native StringAttrValueMap put(@StdString BytePointer i, AttrValue value);
+
+    public native @ByVal Iterator begin();
+    public native @ByVal Iterator end();
+    @NoOffset @Name("iterator") public static class Iterator extends Pointer {
+        public Iterator(Pointer p) { super(p); }
+        public Iterator() { }
+
+        public native @Name("operator++") @ByRef Iterator increment();
+        public native @Name("operator==") boolean equals(@ByRef Iterator it);
+        public native @Name("operator*().first") @MemberGetter @StdString BytePointer first();
+        public native @Name("operator*().second") @MemberGetter @ByRef AttrValue second();
+    }
 }
 
 @Name("std::vector<std::string>") public static class StringVector extends Pointer {
@@ -77,6 +117,32 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     public native TensorVector put(@Cast("size_t") long i, Tensor value);
 
     public TensorVector put(Tensor ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<tensorflow::TensorProto>") public static class TensorProtoVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TensorProtoVector(Pointer p) { super(p); }
+    public TensorProtoVector(TensorProto ... array) { this(array.length); put(array); }
+    public TensorProtoVector()       { allocate();  }
+    public TensorProtoVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef TensorProtoVector put(@ByRef TensorProtoVector x);
+
+    public native long size();
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native @ByRef TensorProto get(@Cast("size_t") long i);
+    public native TensorProtoVector put(@Cast("size_t") long i, TensorProto value);
+
+    public TensorProtoVector put(TensorProto ... array) {
         if (size() != array.length) { resize(array.length); }
         for (int i = 0; i < array.length; i++) {
             put(i, array[i]);
@@ -635,13 +701,13 @@ public static final int
 @Namespace("tensorflow::error") public static native @Cast("bool") boolean Code_Parse(
     @StdString String name, @Cast("tensorflow::error::Code*") IntBuffer value);
 @Namespace("tensorflow::error") public static native @Cast("bool") boolean Code_Parse(
-    @StdString BytePointer name, @Cast("tensorflow::error::Code*") int[] value);
+    @StdString BytePointer name, @Cast("tensorflow::error::Code*") int... value);
 @Namespace("tensorflow::error") public static native @Cast("bool") boolean Code_Parse(
     @StdString String name, @Cast("tensorflow::error::Code*") IntPointer value);
 @Namespace("tensorflow::error") public static native @Cast("bool") boolean Code_Parse(
     @StdString BytePointer name, @Cast("tensorflow::error::Code*") IntBuffer value);
 @Namespace("tensorflow::error") public static native @Cast("bool") boolean Code_Parse(
-    @StdString String name, @Cast("tensorflow::error::Code*") int[] value);
+    @StdString String name, @Cast("tensorflow::error::Code*") int... value);
 // ===================================================================
 
 
@@ -738,10 +804,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Status(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Status(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public Status position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Status(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Status position(long position) {
         return (Status)super.position(position);
     }
 
@@ -1183,10 +1249,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Thread(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Thread(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public Thread position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Thread(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Thread position(long position) {
         return (Thread)super.position(position);
     }
 
@@ -1204,13 +1270,13 @@ limitations under the License.
     static { Loader.load(); }
     /** Default native constructor. */
     public ThreadOptions() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ThreadOptions(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ThreadOptions(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ThreadOptions(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public ThreadOptions position(int position) {
+    private native void allocateArray(long size);
+    @Override public ThreadOptions position(long position) {
         return (ThreadOptions)super.position(position);
     }
 
@@ -1303,23 +1369,23 @@ public static final int
 @Namespace("tensorflow") public static native @Cast("bool") boolean OptimizerOptions_Level_Parse(
     @StdString String name, @Cast("tensorflow::OptimizerOptions_Level*") IntBuffer value);
 @Namespace("tensorflow") public static native @Cast("bool") boolean OptimizerOptions_Level_Parse(
-    @StdString BytePointer name, @Cast("tensorflow::OptimizerOptions_Level*") int[] value);
+    @StdString BytePointer name, @Cast("tensorflow::OptimizerOptions_Level*") int... value);
 @Namespace("tensorflow") public static native @Cast("bool") boolean OptimizerOptions_Level_Parse(
     @StdString String name, @Cast("tensorflow::OptimizerOptions_Level*") IntPointer value);
 @Namespace("tensorflow") public static native @Cast("bool") boolean OptimizerOptions_Level_Parse(
     @StdString BytePointer name, @Cast("tensorflow::OptimizerOptions_Level*") IntBuffer value);
 @Namespace("tensorflow") public static native @Cast("bool") boolean OptimizerOptions_Level_Parse(
-    @StdString String name, @Cast("tensorflow::OptimizerOptions_Level*") int[] value);
+    @StdString String name, @Cast("tensorflow::OptimizerOptions_Level*") int... value);
 // ===================================================================
 
 @Namespace("tensorflow") @NoOffset public static class GPUOptions extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GPUOptions(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public GPUOptions(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public GPUOptions position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public GPUOptions(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public GPUOptions position(long position) {
         return (GPUOptions)super.position(position);
     }
 
@@ -1397,10 +1463,10 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OptimizerOptions(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public OptimizerOptions(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public OptimizerOptions position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public OptimizerOptions(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public OptimizerOptions position(long position) {
         return (OptimizerOptions)super.position(position);
     }
 
@@ -1462,13 +1528,13 @@ public static final int
   public static native @Cast("bool") boolean Level_Parse(@StdString String name,
         @Cast("tensorflow::OptimizerOptions::Level*") IntBuffer value);
   public static native @Cast("bool") boolean Level_Parse(@StdString BytePointer name,
-        @Cast("tensorflow::OptimizerOptions::Level*") int[] value);
+        @Cast("tensorflow::OptimizerOptions::Level*") int... value);
   public static native @Cast("bool") boolean Level_Parse(@StdString String name,
         @Cast("tensorflow::OptimizerOptions::Level*") IntPointer value);
   public static native @Cast("bool") boolean Level_Parse(@StdString BytePointer name,
         @Cast("tensorflow::OptimizerOptions::Level*") IntBuffer value);
   public static native @Cast("bool") boolean Level_Parse(@StdString String name,
-        @Cast("tensorflow::OptimizerOptions::Level*") int[] value);
+        @Cast("tensorflow::OptimizerOptions::Level*") int... value);
 
   // accessors -------------------------------------------------------
 
@@ -1506,10 +1572,10 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GraphOptions(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public GraphOptions(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public GraphOptions position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public GraphOptions(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public GraphOptions position(long position) {
         return (GraphOptions)super.position(position);
     }
 
@@ -1577,10 +1643,10 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConfigProto(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public ConfigProto(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public ConfigProto position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ConfigProto(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public ConfigProto position(long position) {
         return (ConfigProto)super.position(position);
     }
 
@@ -1915,10 +1981,10 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public VersionDef(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public VersionDef(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public VersionDef position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public VersionDef(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public VersionDef position(long position) {
         return (VersionDef)super.position(position);
     }
 
@@ -2053,10 +2119,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SessionOptions(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SessionOptions(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public SessionOptions position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public SessionOptions(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public SessionOptions position(long position) {
         return (SessionOptions)super.position(position);
     }
 
@@ -2221,10 +2287,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AllocationDescription(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AllocationDescription(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public AllocationDescription position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AllocationDescription(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public AllocationDescription position(long position) {
         return (AllocationDescription)super.position(position);
     }
 
@@ -2395,13 +2461,13 @@ limitations under the License.
     static { Loader.load(); }
     /** Default native constructor. */
     public AllocationAttributes() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AllocationAttributes(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AllocationAttributes(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AllocationAttributes(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AllocationAttributes position(int position) {
+    private native void allocateArray(long size);
+    @Override public AllocationAttributes position(long position) {
         return (AllocationAttributes)super.position(position);
     }
 
@@ -2448,7 +2514,7 @@ limitations under the License.
 
   // Returns true if this allocator tracks the sizes of allocations.
   // RequestedSize and AllocatedSize must be overridden if
-  // TracksAlloctionSizes is overridden to return true.
+  // TracksAllocationSizes is overridden to return true.
   public native @Cast("bool") boolean TracksAllocationSizes();
 
   // Returns true if this allocator requires tensors with 0 elements
@@ -2532,13 +2598,13 @@ limitations under the License.
     static { Loader.load(); }
     /** Default native constructor. */
     public AllocatorAttributes() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AllocatorAttributes(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AllocatorAttributes(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AllocatorAttributes(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public AllocatorAttributes position(int position) {
+    private native void allocateArray(long size);
+    @Override public AllocatorAttributes position(long position) {
         return (AllocatorAttributes)super.position(position);
     }
 
@@ -2551,7 +2617,7 @@ limitations under the License.
 
   public native void Merge(@ByVal AllocatorAttributes other);
 
-  public native @Cast("tensorflow::uint32") int value(); public native AllocatorAttributes value(int value);
+  public native @Cast("tensorflow::uint8") byte value(); public native AllocatorAttributes value(byte value);
 }
 
 // Returns a trivial implementation of Allocator which uses the system
@@ -2607,10 +2673,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorShapeProto_Dim(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public TensorShapeProto_Dim(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public TensorShapeProto_Dim position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TensorShapeProto_Dim(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public TensorShapeProto_Dim position(long position) {
         return (TensorShapeProto_Dim)super.position(position);
     }
 
@@ -2681,10 +2747,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorShapeProto(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public TensorShapeProto(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public TensorShapeProto position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TensorShapeProto(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public TensorShapeProto position(long position) {
         return (TensorShapeProto)super.position(position);
     }
 
@@ -2956,10 +3022,10 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorProto(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public TensorProto(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public TensorProto position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TensorProto(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public TensorProto position(long position) {
         return (TensorProto)super.position(position);
     }
 
@@ -3272,10 +3338,10 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorDescription(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public TensorDescription(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public TensorDescription position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TensorDescription(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public TensorDescription position(long position) {
         return (TensorDescription)super.position(position);
     }
 
@@ -3439,6 +3505,7 @@ limitations under the License.
 
 // #include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
 // #include "tensorflow/core/framework/tensor_shape.pb.h"
+// #include "tensorflow/core/framework/types.pb.h"
 // #include "tensorflow/core/lib/core/errors.h"
 // #include "tensorflow/core/lib/core/status.h"
 // #include "tensorflow/core/lib/core/stringpiece.h"
@@ -3447,15 +3514,14 @@ limitations under the License.
 // #include "tensorflow/core/lib/strings/strcat.h"
 // #include "tensorflow/core/platform/logging.h"  // Declared below
 
-/** Manages the dimensions of a Tensor and their sizes. */
 @Namespace("tensorflow") @NoOffset public static class TensorShape extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorShape(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public TensorShape(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public TensorShape position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TensorShape(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public TensorShape position(long position) {
         return (TensorShape)super.position(position);
     }
 
@@ -3476,6 +3542,11 @@ limitations under the License.
    *  then call {@code AddDim()} on. */
   public TensorShape() { super((Pointer)null); allocate(); }
   private native void allocate();
+
+  /** Copy the specified shape */
+  public TensorShape(@Const @ByRef TensorShape b) { super((Pointer)null); allocate(b); }
+  private native void allocate(@Const @ByRef TensorShape b);
+  public native @Name("operator =") void put(@Const @ByRef TensorShape b);
 
   /** Returns {@code true} iff {@code proto} is a valid tensor shape. */
   public static native @Cast("bool") boolean IsValid(@Const @ByRef TensorShapeProto proto);
@@ -3520,7 +3591,7 @@ limitations under the License.
   /** Returns sizes of all dimensions. */
   
   ///
-  public native @Cast("tensorflow::int64*") @ArraySlice LongPointer dim_sizes();
+  public native @ByVal LongVector dim_sizes();
 
   /** \brief Returns the number of elements in the tensor.
    * 
@@ -3551,6 +3622,8 @@ limitations under the License.
   /** Same as {@code TensorShape(proto).DebugString()} but doesn't crash for
    *  invalid protos. */
   public static native @StdString BytePointer DebugString(@Const @ByRef TensorShapeProto proto);
+
+  public native void DumpRep();
 }
 
 @Namespace("tensorflow") @NoOffset public static class TensorShapeDim extends Pointer {
@@ -3582,13 +3655,13 @@ limitations under the License.
     static { Loader.load(); }
     /** Default native constructor. */
     public TensorShapeUtils() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public TensorShapeUtils(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TensorShapeUtils(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TensorShapeUtils(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public TensorShapeUtils position(int position) {
+    private native void allocateArray(long size);
+    @Override public TensorShapeUtils position(long position) {
         return (TensorShapeUtils)super.position(position);
     }
 
@@ -3613,6 +3686,16 @@ limitations under the License.
 // ----------------------------------------------------------------------------
 // Template method implementation details below
 // ----------------------------------------------------------------------------
+
+
+
+
+
+// ----------------------------------------------------------------------------
+// Inlining of some performance critical routines
+// ----------------------------------------------------------------------------
+
+
 
 
 
@@ -3670,6 +3753,12 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Tensor(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Tensor(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Tensor position(long position) {
+        return (Tensor)super.position(position);
+    }
 
   /** Default Tensor constructor. Creates a 1-dimension, 0-element float tensor. */
   
@@ -3991,10 +4080,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AttrValue_ListValue(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AttrValue_ListValue(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public AttrValue_ListValue position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AttrValue_ListValue(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public AttrValue_ListValue position(long position) {
         return (AttrValue_ListValue)super.position(position);
     }
 
@@ -4114,10 +4203,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AttrValue(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public AttrValue(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public AttrValue position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AttrValue(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public AttrValue position(long position) {
         return (AttrValue)super.position(position);
     }
 
@@ -4263,10 +4352,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NameAttrList(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NameAttrList(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public NameAttrList position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NameAttrList(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public NameAttrList position(long position) {
         return (NameAttrList)super.position(position);
     }
 
@@ -4330,6 +4419,8 @@ limitations under the License.
   public native void clear_attr();
   @MemberGetter public static native int kAttrFieldNumber();
   public static final int kAttrFieldNumber = kAttrFieldNumber();
+  public native @Const @ByRef StringAttrValueMap attr();
+  public native StringAttrValueMap mutable_attr();
 }
 // ===================================================================
 
@@ -4584,10 +4675,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OpDef_ArgDef(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public OpDef_ArgDef(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public OpDef_ArgDef position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public OpDef_ArgDef(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public OpDef_ArgDef position(long position) {
         return (OpDef_ArgDef)super.position(position);
     }
 
@@ -4717,10 +4808,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OpDef_AttrDef(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public OpDef_AttrDef(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public OpDef_AttrDef position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public OpDef_AttrDef(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public OpDef_AttrDef position(long position) {
         return (OpDef_AttrDef)super.position(position);
     }
 
@@ -4844,10 +4935,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OpDef(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public OpDef(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public OpDef position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public OpDef(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public OpDef position(long position) {
         return (OpDef)super.position(position);
     }
 
@@ -4992,10 +5083,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OpList(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public OpList(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public OpList position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public OpList(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public OpList position(long position) {
         return (OpList)super.position(position);
     }
 
@@ -5336,10 +5427,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FunctionDefLibrary(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FunctionDefLibrary(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public FunctionDefLibrary position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FunctionDefLibrary(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public FunctionDefLibrary position(long position) {
         return (FunctionDefLibrary)super.position(position);
     }
 
@@ -5399,10 +5490,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FunctionDef_Node(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FunctionDef_Node(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public FunctionDef_Node position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FunctionDef_Node(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public FunctionDef_Node position(long position) {
         return (FunctionDef_Node)super.position(position);
     }
 
@@ -5517,6 +5608,8 @@ limitations under the License.
   public native void clear_attr();
   @MemberGetter public static native int kAttrFieldNumber();
   public static final int kAttrFieldNumber = kAttrFieldNumber();
+  public native @Const @ByRef StringAttrValueMap attr();
+  public native StringAttrValueMap mutable_attr();
 }
 // -------------------------------------------------------------------
 
@@ -5524,10 +5617,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FunctionDef(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FunctionDef(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public FunctionDef position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FunctionDef(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public FunctionDef position(long position) {
         return (FunctionDef)super.position(position);
     }
 
@@ -5758,10 +5851,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GraphDef(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public GraphDef(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public GraphDef position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public GraphDef(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public GraphDef position(long position) {
         return (GraphDef)super.position(position);
     }
 
@@ -5848,10 +5941,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NodeDef(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NodeDef(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public NodeDef position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NodeDef(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public NodeDef position(long position) {
         return (NodeDef)super.position(position);
     }
 
@@ -5958,6 +6051,8 @@ limitations under the License.
   public native void clear_attr();
   @MemberGetter public static native int kAttrFieldNumber();
   public static final int kAttrFieldNumber = kAttrFieldNumber();
+  public native @Const @ByRef StringAttrValueMap attr();
+  public native StringAttrValueMap mutable_attr();
 }
 // ===================================================================
 
@@ -6385,13 +6480,13 @@ public static class TF_Buffer extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public TF_Buffer() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public TF_Buffer(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TF_Buffer(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TF_Buffer(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public TF_Buffer position(int position) {
+    private native void allocateArray(long size);
+    @Override public TF_Buffer position(long position) {
         return (TF_Buffer)super.position(position);
     }
 
@@ -6966,10 +7061,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public OpRegistry(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public OpRegistry(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public OpRegistry position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public OpRegistry(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public OpRegistry position(long position) {
         return (OpRegistry)super.position(position);
     }
 
@@ -7021,7 +7116,8 @@ limitations under the License.
 // Treats 'registry_ptr' as a pointer to OpRegistry, and calls
 // registry_ptr->Register(op_def) for each op_def that has been registered with
 // the current library's global op registry (obtained by calling
-// OpRegistry::Global(). @Namespace("tensorflow") public static native void RegisterOps(Pointer registry_ptr);
+// OpRegistry::Global().
+@Namespace("tensorflow") public static native void RegisterOps(Pointer registry_ptr);
 
 // Support for defining the OpDef (specifying the semantics of the Op and how
 // it should be created) and registering it in the OpRegistry::Global()
@@ -7207,13 +7303,13 @@ public static final int kDataTypeRefOffset = 100;
     static { Loader.load(); }
     /** Default native constructor. */
     public DataTypeToEnum() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public DataTypeToEnum(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public DataTypeToEnum(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DataTypeToEnum(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public DataTypeToEnum position(int position) {
+    private native void allocateArray(long size);
+    @Override public DataTypeToEnum position(long position) {
         return (DataTypeToEnum)super.position(position);
     }
 
@@ -7226,13 +7322,13 @@ public static final int kDataTypeRefOffset = 100;
       static { Loader.load(); }
       /** Default native constructor. */
       public IsValidDataType() { super((Pointer)null); allocate(); }
-      /** Native array allocator. Access with {@link Pointer#position(int)}. */
-      public IsValidDataType(int size) { super((Pointer)null); allocateArray(size); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public IsValidDataType(long size) { super((Pointer)null); allocateArray(size); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public IsValidDataType(Pointer p) { super(p); }
       private native void allocate();
-      private native void allocateArray(int size);
-      @Override public IsValidDataType position(int position) {
+      private native void allocateArray(long size);
+      @Override public IsValidDataType position(long position) {
           return (IsValidDataType)super.position(position);
       }
   
@@ -7243,13 +7339,13 @@ public static final int kDataTypeRefOffset = 100;
       static { Loader.load(); }
       /** Default native constructor. */
       public EnumToDataType() { super((Pointer)null); allocate(); }
-      /** Native array allocator. Access with {@link Pointer#position(int)}. */
-      public EnumToDataType(int size) { super((Pointer)null); allocateArray(size); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public EnumToDataType(long size) { super((Pointer)null); allocateArray(size); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public EnumToDataType(Pointer p) { super(p); }
       private native void allocate();
-      private native void allocateArray(int size);
-      @Override public EnumToDataType position(int position) {
+      private native void allocateArray(long size);
+      @Override public EnumToDataType position(long position) {
           return (EnumToDataType)super.position(position);
       }
   
@@ -7299,10 +7395,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EdgeSet(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public EdgeSet(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public EdgeSet position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public EdgeSet(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public EdgeSet position(long position) {
         return (EdgeSet)super.position(position);
     }
 
@@ -7331,10 +7427,10 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EdgeSetIterator(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public EdgeSetIterator(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public EdgeSetIterator position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public EdgeSetIterator(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public EdgeSetIterator position(long position) {
         return (EdgeSetIterator)super.position(position);
     }
 
@@ -7473,7 +7569,7 @@ limitations under the License.
 
 // A Graph describes a set of computations that are to be
 // performed, as well as the dependencies between those
-// compuations. The basic model is a DAG (directed acyclic graph) with
+// computations. The basic model is a DAG (directed acyclic graph) with
 // * internal nodes representing computational operations to be performed;
 // * edges represent dependencies, indicating the target may only be
 //   executed once the source has completed; and
@@ -7852,10 +7948,10 @@ limitations under the License.
       static { Loader.load(); }
       /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
       public NodeOut(Pointer p) { super(p); }
-      /** Native array allocator. Access with {@link Pointer#position(int)}. */
-      public NodeOut(int size) { super((Pointer)null); allocateArray(size); }
-      private native void allocateArray(int size);
-      @Override public NodeOut position(int position) {
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public NodeOut(long size) { super((Pointer)null); allocateArray(size); }
+      private native void allocateArray(long size);
+      @Override public NodeOut position(long position) {
           return (NodeOut)super.position(position);
       }
   
@@ -7992,7 +8088,7 @@ limitations under the License.
 //     node_builder.Input(input);
 //     return opts.FinalizeBuilder(&node_builder);
 //   }
-//   }  // namspace ops
+//   }  // namespace ops
 //
 //   // Or, alternatively:
 //   namespace ops {
@@ -8000,7 +8096,7 @@ limitations under the License.
 //     static const string kOpName = "Identity";
 //     return UnaryOp(kOpName, input, opts);
 //   }
-//   }  // namspace ops
+//   }  // namespace ops
 //
 // You call it like:
 //   GraphDefBuilder b;
@@ -8022,6 +8118,12 @@ limitations under the License.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public GraphDefBuilder(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public GraphDefBuilder(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public GraphDefBuilder position(long position) {
+        return (GraphDefBuilder)super.position(position);
+    }
 
   // Options for adding a Node to a Graph.
   @NoOffset public static class Options extends Pointer {
@@ -8045,6 +8147,60 @@ limitations under the License.
     public native @ByVal Options WithControlInputs(@ByVal NodeVector control_inputs);
 
     // Override the default value for an optional attr.
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, int value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, int value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ArraySlice IntPointer value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ArraySlice IntBuffer value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ArraySlice int... value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ArraySlice IntPointer value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ArraySlice IntBuffer value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ArraySlice int... value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @Cast("long long") long value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @Cast("long long") long value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @Cast("long long*") @ArraySlice LongPointer value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @Cast("long long*") @ArraySlice LongBuffer value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @Cast("long long*") @ArraySlice long... value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @Cast("long long*") @ArraySlice LongPointer value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @Cast("long long*") @ArraySlice LongBuffer value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @Cast("long long*") @ArraySlice long... value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, float value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, float value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ArraySlice FloatPointer value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ArraySlice FloatBuffer value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ArraySlice float... value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ArraySlice FloatPointer value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ArraySlice FloatBuffer value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ArraySlice float... value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, double value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, double value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ArraySlice DoublePointer value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ArraySlice DoubleBuffer value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ArraySlice double... value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ArraySlice DoublePointer value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ArraySlice DoubleBuffer value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ArraySlice double... value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @Cast("bool") boolean value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @Cast("bool") boolean value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @Cast("bool*") @ArraySlice BoolPointer value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @Cast("bool*") @ArraySlice boolean... value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @StdString BytePointer value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @StdString String value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ByVal StringVector value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ByVal StringVector value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ByVal Tensor value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ByVal Tensor value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ByVal TensorVector value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ByVal TensorVector value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ByVal TensorProto value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ByVal TensorProto value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ByVal TensorProtoVector value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ByVal TensorProtoVector value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ByVal TensorShape value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ByVal TensorShape value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ByVal TensorShapeVector value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ByVal TensorShapeVector value);
+    public native @ByVal Options WithAttr(@StringPiece BytePointer attr_name, @ByVal NameAttrList value);
+    public native @ByVal Options WithAttr(@StringPiece String attr_name, @ByVal NameAttrList value);
     // Note: overload needed to allow {...} expressions for value.
 
     // Methods for using options from a function that creates a Node.
@@ -8170,6 +8326,107 @@ limitations under the License.
   // namespace tensorflow
 
 // #endif  // TENSORFLOW_GRAPH_DEFAULT_DEVICE_H_
+
+
+// Parsed from tensorflow/core/graph/graph_constructor.h
+
+/* Copyright 2015 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_GRAPH_GRAPH_CONSTRUCTOR_H_
+// #define TENSORFLOW_GRAPH_GRAPH_CONSTRUCTOR_H_
+
+// #include "tensorflow/core/framework/config.pb.h"
+// #include "tensorflow/core/framework/graph.pb.h"
+// #include "tensorflow/core/graph/graph.h"
+// #include "tensorflow/core/lib/core/status.h"
+
+// Options specific to constant folding optimizations.
+@Namespace("tensorflow") public static class ConstantFoldingOptions extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public ConstantFoldingOptions() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public ConstantFoldingOptions(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ConstantFoldingOptions(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public ConstantFoldingOptions position(long position) {
+        return (ConstantFoldingOptions)super.position(position);
+    }
+
+  // If "consider" is not a nullptr, then only constant fold a node "n" if
+  // consider(n) returns true.
+  @MemberSetter public native ConstantFoldingOptions consider(@ByVal ConsiderFunction consider);
+}
+
+// Construct a graph *g out of a GraphDef gdef. Returns non-OK on
+// error, in which case *g is left in an incomplete state.
+@Namespace("tensorflow") @NoOffset public static class GraphConstructorOptions extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public GraphConstructorOptions(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public GraphConstructorOptions(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public GraphConstructorOptions position(long position) {
+        return (GraphConstructorOptions)super.position(position);
+    }
+
+  public GraphConstructorOptions() { super((Pointer)null); allocate(); }
+  private native void allocate();
+  public GraphConstructorOptions(@Const @ByRef OptimizerOptions opts) { super((Pointer)null); allocate(opts); }
+  private native void allocate(@Const @ByRef OptimizerOptions opts);
+
+  // If true, allows internal ops in the GraphDef.
+  public native @Cast("bool") boolean allow_internal_ops(); public native GraphConstructorOptions allow_internal_ops(boolean allow_internal_ops);
+
+  // If true, the graph def is expected to have fully specified
+  // devices for all nodes. A node in the resulting graph "g" has the
+  // device name set accordingly.
+  //
+  // TODO(zhifengc): if possible, consider removing this option.
+  public native @Cast("bool") boolean expect_device_spec(); public native GraphConstructorOptions expect_device_spec(boolean expect_device_spec);
+
+  // If true, perform common subexpression elimination on the graph.
+  // TODO(jeff): Turn this default to true?
+  public native @Cast("bool") boolean optimizer_do_cse(); public native GraphConstructorOptions optimizer_do_cse(boolean optimizer_do_cse);
+
+  // If "optimizer_do_cse" is true and "cse_consider_function" is
+  // not nullptr, then only consider nodes for CSE for which
+  // "cse_consider_function(node)" returns true.
+  @MemberSetter public native GraphConstructorOptions cse_consider_function(@ByVal ConsiderFunction cse_consider_function);
+
+  // If true, perform constant folding on the graph.
+  public native @Cast("bool") boolean optimizer_do_constant_folding(); public native GraphConstructorOptions optimizer_do_constant_folding(boolean optimizer_do_constant_folding);
+
+  public native @ByRef ConstantFoldingOptions constant_folding_opts(); public native GraphConstructorOptions constant_folding_opts(ConstantFoldingOptions constant_folding_opts);
+}
+@Namespace("tensorflow") public static native @ByVal Status ConvertGraphDefToGraph(@Const @ByRef GraphConstructorOptions opts,
+                                     @Const @ByRef GraphDef gdef, Graph g);
+
+// Make a copy of "src" into "*dest".
+//
+// REQUIRES: "*dest" is a freshly allocated graph without any nodes or edges
+// other than the implicit Source/Sink nodes.
+@Namespace("tensorflow") public static native void CopyGraph(@Const @ByRef Graph src, Graph dest);
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_GRAPH_GRAPH_CONSTRUCTOR_H_
 
 
 // Parsed from tensorflow/cc/ops/standard_ops.h
@@ -8352,6 +8609,9 @@ limitations under the License.
 
 // String
 @Namespace("tensorflow::ops") public static native Node Const(@Cast({"", "tensorflow::StringPiece&"}) @StringPiece String s, @Const @ByRef GraphDefBuilder.Options options);
+@Namespace("tensorflow::ops") public static native Node Const(@ByVal StringVector v, @Const @ByRef GraphDefBuilder.Options options);
+@Namespace("tensorflow::ops") public static native Node Const(@ByVal StringVector t, @Const @ByRef TensorShape shape,
+            @Const @ByRef GraphDefBuilder.Options options);
 
 // A Tensor of any type.
 @Namespace("tensorflow::ops") public static native Node Const(@Const @ByRef Tensor t, @Const @ByRef GraphDefBuilder.Options options);
@@ -8485,7 +8745,7 @@ limitations under the License.
 //
 // Arguments:
 // * concat_dim: The dimension along which to concatenate.
-// * shape: The `N` int32 vetors representing shape of tensors being concatenated.
+// * shape: The `N` int32 vectors representing shape of tensors being concatenated.
 // * opts:
 //   .WithName(StringPiece): Set the Node's name
 //   .WithDevice(StringPiece): Set the Node's requested device
@@ -9564,7 +9824,7 @@ limitations under the License.
 //
 // ```prettyprint
 // # tensor 'x' is [1, 1, 2, 4, 4, 4, 7, 8, 8]
-// y, idx, count = unique(x)
+// y, idx, count = unique_with_counts(x)
 // y ==> [1, 2, 4, 7, 8]
 // idx ==> [0, 0, 1, 2, 2, 2, 3, 4, 4]
 // count ==> [2, 1, 3, 1, 2]
@@ -10561,6 +10821,36 @@ limitations under the License.
 @Namespace("tensorflow::ops") public static native Node DecodePng(@ByVal NodeBuilder.NodeOut contents, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node DecodePng(Node contents, @Const @ByRef GraphDefBuilder.Options opts);
 
+// Draw bounding boxes on a batch of images.
+//
+// Outputs a copy of `images` but draws on top of the pixels zero or more bounding
+// boxes specified by the locations in `boxes`. The coordinates of the each
+// bounding box in `boxes are encoded as `[y_min, x_min, y_max, x_max]`. The
+// bounding box coordinates are floats in `[0.0, 1.0]` relative to the width and
+// height of the underlying image.
+//
+// For example, if an image is 100 x 200 pixels and the bounding box is
+// `[0.1, 0.5, 0.2, 0.9]`, the bottom-left and upper-right coordinates of the
+// bounding box will be `(10, 40)` to `(50, 180)`.
+//
+// Parts of the bounding box may fall outside the image.
+//
+// Arguments:
+// * images: 4-D with shape `[batch, height, width, depth]`. A batch of images.
+// * boxes: 3-D with shape `[batch, num_bounding_boxes, 4]` containing bounding
+// boxes.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// 4-D with the same shape as `images`. The batch of input images with
+// bounding boxes drawn on the images.
+@Namespace("tensorflow::ops") public static native Node DrawBoundingBoxes(@ByVal NodeBuilder.NodeOut images, @ByVal NodeBuilder.NodeOut boxes, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node DrawBoundingBoxes(Node images, Node boxes, @Const @ByRef GraphDefBuilder.Options opts);
+
 // JPEG-encode an image.
 //
 // `image` is a 3-D uint8 Tensor of shape `[height, width, channels]`.
@@ -10851,6 +11141,90 @@ limitations under the License.
 // with respect to the input image.
 @Namespace("tensorflow::ops") public static native Node ResizeNearestNeighborGrad(@ByVal NodeBuilder.NodeOut grads, @ByVal NodeBuilder.NodeOut size, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node ResizeNearestNeighborGrad(Node grads, Node size, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Generate a single randomly distorted bounding box for an image.
+//
+// Bounding box annotations are often supplied in addition to ground-truth labels
+// in image recognition or object localization tasks. A common technique for
+// training such a system is to randomly distort an image while preserving
+// its content, i.e. *data augmentation*. This Op outputs a randomly distorted
+// localization of an object, i.e. bounding box, given an `image_size`,
+// `bounding_boxes` and a series of constraints.
+//
+// The output of this Op is a single bounding box that may be used to crop the
+// original image. The output is returned as 3 tensors: `begin`, `size` and
+// `bboxes`. The first 2 tensors can be fed directly into `tf.slice` to crop the
+// image. The latter may be supplied to `tf.image.draw_bounding_box` to visualize
+// what the bounding box looks like.
+//
+// Bounding boxes are supplied and returned as `[y_min, x_min, y_max, x_max]`. The
+// bounding box coordinates are floats in `[0.0, 1.0]` relative to the width and
+// height of the underlying image.
+//
+// For example,
+//
+//     # Generate a single distorted bounding box.
+//     begin, size, bbox_for_draw = tf.image.sample_distorted_bounding_box(
+//         tf.shape(image),
+//         bounding_boxes=bounding_boxes)
+//
+//     # Draw the bounding box in an image summary.
+//     image_with_box = tf.image.draw_bounding_boxes(tf.expand_dims(image, 0),
+//                                                   bbox_for_draw)
+//     tf.image_summary('images_with_box', image_with_box)
+//
+//     # Employ the bounding box to distort the image.
+//     distorted_image = tf.slice(image, begin, size)
+//
+// Note that if no bounding box information is available, setting
+// `use_image_if_no_bounding_boxes = true` will assume there is a single implicit
+// bounding box covering the whole image. If `use_image_if_no_bounding_boxes` is
+// false and no bounding boxes are supplied, an error is raised.
+//
+// Arguments:
+// * image_size: 1-D, containing `[height, width, channels]`.
+// * bounding_boxes: 3-D with shape `[batch, N, 4]` describing the N bounding boxes
+// associated with the image.
+// * opts:
+//   .WithAttr("seed", int64): Defaults to 0.
+//     If either `seed` or `seed2` are set to non-zero, the random number
+// generator is seeded by the given `seed`.  Otherwise, it is seeded by a random
+// seed.
+//   .WithAttr("seed2", int64): Defaults to 0.
+//     A second seed to avoid seed collision.
+//   .WithAttr("min_object_covered", float): Defaults to 0.1.
+//     The cropped area of the image must contain at least this
+// fraction of any bounding box supplied.
+//   .WithAttr("aspect_ratio_range", gtl::ArraySlice<float>): Defaults to [0.75, 1.33].
+//     The cropped area of the image must have an aspect ratio =
+// width / height within this range.
+//   .WithAttr("area_range", gtl::ArraySlice<float>): Defaults to [0.05, 1].
+//     The cropped area of the image must contain a fraction of the
+// supplied image within in this range.
+//   .WithAttr("max_attempts", int64): Defaults to 100.
+//     Number of attempts at generating a cropped region of the image
+// of the specified constraints. After `max_attempts` failures, return the entire
+// image.
+//   .WithAttr("use_image_if_no_bounding_boxes", bool): Defaults to false.
+//     Controls behavior if no bounding boxes supplied.
+// If true, assume an implicit bounding box covering the whole input. If false,
+// raise an error.
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with outputs:
+// * begin: 1-D, containing `[offset_height, offset_width, 0]`. Provide as input to
+// `tf.slice`.
+// * size: 1-D, containing `[target_height, target_width, -1]`. Provide as input to
+// `tf.slice`.
+// * bboxes: 3-D with shape `[1, 1, 4]` containing the distorted bounding box.
+// Provide as input to `tf.image.draw_bounding_boxes`.
+@Namespace("tensorflow::ops") public static native Node SampleDistortedBoundingBox(@ByVal NodeBuilder.NodeOut image_size, @ByVal NodeBuilder.NodeOut bounding_boxes,
+                                 @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node SampleDistortedBoundingBox(Node image_size, Node bounding_boxes,
+                                 @Const @ByRef GraphDefBuilder.Options opts);
 
   // namespace ops
   // namespace tensorflow
@@ -12045,6 +12419,26 @@ limitations under the License.
 // Returns a pointer to the created Node.
 @Namespace("tensorflow::ops") public static native Node Cos(@ByVal NodeBuilder.NodeOut x, @Const @ByRef GraphDefBuilder.Options opts);
 @Namespace("tensorflow::ops") public static native Node Cos(Node x, @Const @ByRef GraphDefBuilder.Options opts);
+
+// Compute the pairwise cross product.
+//
+// `a` and `b` must be the same shape; they can either be simple 3-element vectors,
+// or any shape where the innermost dimension is 3. In the latter case, each pair
+// of corresponding 3-element vectors is cross-multiplied independently.
+//
+// Arguments:
+// * a: A tensor containing 3-element vectors.
+// * b: Another tensor, of same type and shape as `a`.
+// * opts:
+//   .WithName(StringPiece): Set the Node's name
+//   .WithDevice(StringPiece): Set the Node's requested device
+//   .WithControlInput(Node*) / .WithControlInputs({Node*, ...}):
+//     Add control dependencies on the specified Node(s).
+//
+// Returns a pointer to the created Node, with output:
+// Pairwise cross product of the vectors in `a` and `b`.
+@Namespace("tensorflow::ops") public static native Node Cross(@ByVal NodeBuilder.NodeOut a, @ByVal NodeBuilder.NodeOut b, @Const @ByRef GraphDefBuilder.Options opts);
+@Namespace("tensorflow::ops") public static native Node Cross(Node a, Node b, @Const @ByRef GraphDefBuilder.Options opts);
 
 // Returns x / y element-wise.
 //
@@ -14974,8 +15368,9 @@ limitations under the License.
 // This operation outputs `ref` after the update is done.
 // This makes it easier to chain operations that need to use the reset value.
 //
-// If `indices` contains duplicate entries, lexicographically later entries
-// override earlier entries.
+// If values in `ref` is to be updated more than once, because there are
+// duplicate entires in `indices`, the order at which the updates happen
+// for each value is undefined.
 //
 // Requires `updates.shape = indices.shape + ref.shape[1:]`.
 //

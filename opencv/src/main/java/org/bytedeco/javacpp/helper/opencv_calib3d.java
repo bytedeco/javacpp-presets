@@ -64,7 +64,7 @@ public class opencv_calib3d extends org.bytedeco.javacpp.presets.opencv_calib3d 
     public static abstract class AbstractCvStereoBMState extends Pointer {
         public AbstractCvStereoBMState(Pointer p) { super(p); }
 
-        @Override public CvStereoBMState position(int position) {
+        @Override public CvStereoBMState position(long position) {
             return (CvStereoBMState)super.position(position);
         }
 

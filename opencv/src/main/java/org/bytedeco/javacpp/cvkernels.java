@@ -45,12 +45,12 @@ public class cvkernels {
     public static class KernelData extends Pointer {
         static { load(); }
         public KernelData() { allocate(); }
-        public KernelData(int size) { allocateArray(size); }
+        public KernelData(long size) { allocateArray(size); }
         public KernelData(Pointer p) { super(p); }
         private native void allocate();
-        private native void allocateArray(int size);
+        private native void allocateArray(long size);
 
-        @Override public KernelData position(int position) {
+        @Override public KernelData position(long position) {
             return (KernelData)super.position(position);
         }
 
@@ -80,13 +80,13 @@ public class cvkernels {
         private native @MemberSetter @Name("dstDstDot") KernelData setDstDstDot(DoubleBuffer dstDstDot);
         private DoubleBuffer[] dstDstDotBuffers = new DoubleBuffer[1];
         public DoubleBuffer dstDstDot() {
-            return dstDstDotBuffers[position];
+            return dstDstDotBuffers[(int)position];
         }
         public KernelData dstDstDot(DoubleBuffer dstDstDot) {
             if (dstDstDotBuffers.length < capacity) {
-                dstDstDotBuffers = Arrays.copyOf(dstDstDotBuffers, capacity);
+                dstDstDotBuffers = Arrays.copyOf(dstDstDotBuffers, (int)capacity);
             }
-            dstDstDotBuffers[position] = dstDstDot;
+            dstDstDotBuffers[(int)position] = dstDstDot;
             return setDstDstDot(dstDstDot);
         }
 

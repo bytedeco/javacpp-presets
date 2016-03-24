@@ -256,13 +256,13 @@ public static class CvKalman extends AbstractCvKalman {
     static { Loader.load(); }
     /** Default native constructor. */
     public CvKalman() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CvKalman(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CvKalman(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CvKalman(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CvKalman position(int position) {
+    private native void allocateArray(long size);
+    @Override public CvKalman position(long position) {
         return (CvKalman)super.position(position);
     }
 
@@ -673,10 +673,10 @@ an extended Kalman filter functionality. See the OpenCV sample kalman.cpp.
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public KalmanFilter(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public KalmanFilter(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public KalmanFilter position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public KalmanFilter(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public KalmanFilter position(long position) {
         return (KalmanFilter)super.position(position);
     }
 

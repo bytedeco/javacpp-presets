@@ -44,38 +44,38 @@ case $PLATFORM in
         export CPPFLAGS=
         export CFLAGS=
         export CXXFLAGS=
-        export LDFLAGS="-L$INSTALL_PATH/lib/ -nostdlib -Wl,--fix-cortex-a8"
+        export LDFLAGS="-L$INSTALL_PATH/lib/ -nostdlib -Wl,--fix-cortex-a8 -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         export STRIP="$ANDROID_BIN-strip"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=arm-linux
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$GIFLIB
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux --with-sysroot="$ANDROID_ROOT"
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBJPEG
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux --with-sysroot="$ANDROID_ROOT"
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBPNG
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux --with-sysroot="$ANDROID_ROOT"
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBTIFF
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux --with-sysroot="$ANDROID_ROOT" --disable-lzma --without-x
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBWEBP
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-androideabi --with-sysroot="$ANDROID_ROOT"
         cd src
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../../leptonica-$LEPTONICA_VERSION
         patch -Np1 < ../../../leptonica-$LEPTONICA_VERSION-android.patch
         ./configure --prefix=$INSTALL_PATH --host=arm-linux-androideabi --disable-programs
-        make -j4
+        make -j $MAKEJ
         make install-strip
         ;;
      android-x86)
@@ -88,190 +88,190 @@ case $PLATFORM in
         export CPPFLAGS=
         export CFLAGS=
         export CXXFLAGS=
-        export LDFLAGS="-L$INSTALL_PATH/lib/ -nostdlib"
+        export LDFLAGS="-L$INSTALL_PATH/lib/ -nostdlib -z text"
         export LIBS="-lgcc -ldl -lz -lm -lc"
         export STRIP="$ANDROID_BIN-strip"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static --uname=arm-linux
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$GIFLIB
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --with-sysroot="$ANDROID_ROOT"
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBJPEG
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --with-sysroot="$ANDROID_ROOT"
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBPNG
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --with-sysroot="$ANDROID_ROOT"
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBTIFF
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --with-sysroot="$ANDROID_ROOT" --disable-lzma --without-x
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBWEBP
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux-android --with-sysroot="$ANDROID_ROOT"
         cd src
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../../leptonica-$LEPTONICA_VERSION
         patch -Np1 < ../../../leptonica-$LEPTONICA_VERSION-android.patch
         ./configure --prefix=$INSTALL_PATH --host=i686-linux-android --disable-programs
-        make -j4
+        make -j $MAKEJ
         make install-strip
         ;;
     linux-x86)
         export CC="$OLDCC -m32 -fPIC"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$GIFLIB
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBJPEG
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBPNG
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBTIFF
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux --disable-lzma
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBWEBP
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=i686-linux
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
         ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-programs
-        make -j4
+        make -j $MAKEJ
         make install-strip
         ;;
     linux-x86_64)
         export CC="$OLDCC -m64 -fPIC"
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$GIFLIB
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBJPEG
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBPNG
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBTIFF
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux --disable-lzma
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBWEBP
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=x86_64-linux
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
         ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-programs
-        make -j4
+        make -j $MAKEJ
         make install-strip
         ;;
     macosx-*)
         cd $ZLIB
         ./configure --prefix=$INSTALL_PATH --static
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$GIFLIB
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBJPEG
         [[ $ARCH == x86_64 ]] && BUILD=--build=x86_64-darwin || BUILD=
         NASM=yasm ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic $BUILD
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBPNG
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBTIFF
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --disable-lzma
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBWEBP
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
         patch -Np1 < ../../../leptonica-$LEPTONICA_VERSION-macosx.patch
         ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-programs
-        make -j4
+        make -j $MAKEJ
         make install-strip
         ;;
     windows-x86)
         export CC="gcc -m32"
         cd $ZLIB
-        make -j4 install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
+        make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
         cd ../$GIFLIB
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBJPEG
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBPNG
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBTIFF
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 --disable-lzma
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBWEBP
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
         ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/ -Wl,$INSTALL_PATH/lib/*.a" --disable-programs
-        make -j4
+        make -j $MAKEJ
         make install-strip
         ;;
     windows-x86_64)
         export CC="gcc -m64"
         cd $ZLIB
-        make -j4 install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
+        make -j $MAKEJ install -fwin32/Makefile.gcc BINARY_PATH=$INSTALL_PATH/bin/ INCLUDE_PATH=$INSTALL_PATH/include/ LIBRARY_PATH=$INSTALL_PATH/lib/
         cd ../$GIFLIB
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBJPEG
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBPNG
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBTIFF
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 --disable-lzma
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../$LIBWEBP
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32
-        make -j4
+        make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
         ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/ -Wl,$INSTALL_PATH/lib/*.a" --disable-programs
-        make -j4
+        make -j $MAKEJ
         make install-strip
         ;;
     *)

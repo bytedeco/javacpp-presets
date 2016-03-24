@@ -193,10 +193,10 @@ public static final int
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UNICHAR(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public UNICHAR(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public UNICHAR position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public UNICHAR(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public UNICHAR position(long position) {
         return (UNICHAR)super.position(position);
     }
 
@@ -467,13 +467,13 @@ public static class TessCallbackUtils_ extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public TessCallbackUtils_() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public TessCallbackUtils_(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TessCallbackUtils_(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TessCallbackUtils_(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public TessCallbackUtils_ position(int position) {
+    private native void allocateArray(long size);
+    @Override public TessCallbackUtils_ position(long position) {
         return (TessCallbackUtils_)super.position(position);
     }
 
@@ -584,13 +584,13 @@ public static class TessClosure extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CharClearCallback() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CharClearCallback(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CharClearCallback(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CharClearCallback(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CharClearCallback position(int position) {
+    private native void allocateArray(long size);
+    @Override public CharClearCallback position(long position) {
         return (CharClearCallback)super.position(position);
     }
 
@@ -601,13 +601,13 @@ public static class TessClosure extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public StringClearCallback() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public StringClearCallback(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public StringClearCallback(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringClearCallback(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public StringClearCallback position(int position) {
+    private native void allocateArray(long size);
+    @Override public StringClearCallback position(long position) {
         return (StringClearCallback)super.position(position);
     }
 
@@ -618,13 +618,13 @@ public static class TessClosure extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public IntClearCallback() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public IntClearCallback(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public IntClearCallback(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IntClearCallback(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public IntClearCallback position(int position) {
+    private native void allocateArray(long size);
+    @Override public IntClearCallback position(long position) {
         return (IntClearCallback)super.position(position);
     }
 
@@ -635,13 +635,13 @@ public static class TessClosure extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public DeleteCallback() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public DeleteCallback(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public DeleteCallback(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DeleteCallback(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public DeleteCallback position(int position) {
+    private native void allocateArray(long size);
+    @Override public DeleteCallback position(long position) {
         return (DeleteCallback)super.position(position);
     }
 
@@ -652,13 +652,13 @@ public static class TessClosure extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CharCompareCallback() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CharCompareCallback(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CharCompareCallback(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CharCompareCallback(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CharCompareCallback position(int position) {
+    private native void allocateArray(long size);
+    @Override public CharCompareCallback position(long position) {
         return (CharCompareCallback)super.position(position);
     }
 
@@ -669,13 +669,13 @@ public static class TessClosure extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CharWriteCallback() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CharWriteCallback(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CharWriteCallback(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CharWriteCallback(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CharWriteCallback position(int position) {
+    private native void allocateArray(long size);
+    @Override public CharWriteCallback position(long position) {
         return (CharWriteCallback)super.position(position);
     }
 
@@ -686,13 +686,13 @@ public static class TessClosure extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public StringCompareCallback() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public StringCompareCallback(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public StringCompareCallback(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringCompareCallback(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public StringCompareCallback position(int position) {
+    private native void allocateArray(long size);
+    @Override public StringCompareCallback position(long position) {
         return (StringCompareCallback)super.position(position);
     }
 
@@ -703,13 +703,13 @@ public static class TessClosure extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public StringWriteCallback() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public StringWriteCallback(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public StringWriteCallback(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringWriteCallback(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public StringWriteCallback position(int position) {
+    private native void allocateArray(long size);
+    @Override public StringWriteCallback position(long position) {
         return (StringWriteCallback)super.position(position);
     }
 
@@ -720,13 +720,13 @@ public static class TessClosure extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public IntCompareCallback() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public IntCompareCallback(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public IntCompareCallback(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IntCompareCallback(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public IntCompareCallback position(int position) {
+    private native void allocateArray(long size);
+    @Override public IntCompareCallback position(long position) {
         return (IntCompareCallback)super.position(position);
     }
 
@@ -737,13 +737,13 @@ public static class TessClosure extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public IntWriteCallback() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public IntWriteCallback(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public IntWriteCallback(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IntWriteCallback(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public IntWriteCallback position(int position) {
+    private native void allocateArray(long size);
+    @Override public IntWriteCallback position(long position) {
         return (IntWriteCallback)super.position(position);
     }
 
@@ -754,13 +754,13 @@ public static class TessClosure extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public TruthCallback3() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public TruthCallback3(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TruthCallback3(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TruthCallback3(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public TruthCallback3 position(int position) {
+    private native void allocateArray(long size);
+    @Override public TruthCallback3 position(long position) {
         return (TruthCallback3)super.position(position);
     }
 
@@ -771,13 +771,13 @@ public static class TessClosure extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public CharReadCallback() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CharReadCallback(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CharReadCallback(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CharReadCallback(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public CharReadCallback position(int position) {
+    private native void allocateArray(long size);
+    @Override public CharReadCallback position(long position) {
         return (CharReadCallback)super.position(position);
     }
 
@@ -788,13 +788,13 @@ public static class TessClosure extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public StringReadCallback() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public StringReadCallback(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public StringReadCallback(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringReadCallback(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public StringReadCallback position(int position) {
+    private native void allocateArray(long size);
+    @Override public StringReadCallback position(long position) {
         return (StringReadCallback)super.position(position);
     }
 
@@ -805,13 +805,13 @@ public static class TessClosure extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public IntReadCallback() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public IntReadCallback(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public IntReadCallback(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IntReadCallback(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public IntReadCallback position(int position) {
+    private native void allocateArray(long size);
+    @Override public IntReadCallback position(long position) {
         return (IntReadCallback)super.position(position);
     }
 
@@ -822,13 +822,13 @@ public static class TessClosure extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public TruthCallback4() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public TruthCallback4(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TruthCallback4(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TruthCallback4(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public TruthCallback4 position(int position) {
+    private native void allocateArray(long size);
+    @Override public TruthCallback4 position(long position) {
         return (TruthCallback4)super.position(position);
     }
 
@@ -2507,10 +2507,10 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public STRING(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public STRING(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public STRING position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public STRING(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public STRING position(long position) {
         return (STRING)super.position(position);
     }
 
@@ -2632,10 +2632,10 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CharGenericVector(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public CharGenericVector(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public CharGenericVector position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CharGenericVector(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public CharGenericVector position(long position) {
         return (CharGenericVector)super.position(position);
     }
 
@@ -2838,10 +2838,10 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StringGenericVector(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public StringGenericVector(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public StringGenericVector position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public StringGenericVector(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public StringGenericVector position(long position) {
         return (StringGenericVector)super.position(position);
     }
 
@@ -3034,10 +3034,10 @@ public static final int STRING_IS_PROTECTED = STRING_IS_PROTECTED();
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IntGenericVector(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public IntGenericVector(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public IntGenericVector position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public IntGenericVector(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public IntGenericVector position(long position) {
         return (IntGenericVector)super.position(position);
     }
 
@@ -3288,10 +3288,10 @@ public static class FileWriter extends FunctionPointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public IntGenericVectorEqEq(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public IntGenericVectorEqEq(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public IntGenericVectorEqEq position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public IntGenericVectorEqEq(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public IntGenericVectorEqEq position(long position) {
         return (IntGenericVectorEqEq)super.position(position);
     }
 
@@ -3637,10 +3637,10 @@ public static final int TESSERACT_VERSION = 0x030400;
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TessBaseAPI(Pointer p) { super(p); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public TessBaseAPI(int size) { super((Pointer)null); allocateArray(size); }
-    private native void allocateArray(int size);
-    @Override public TessBaseAPI position(int position) {
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public TessBaseAPI(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public TessBaseAPI position(long position) {
         return (TessBaseAPI)super.position(position);
     }
 

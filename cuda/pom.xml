@@ -29,6 +29,10 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
         <artifactId>maven-resources-plugin</artifactId>
       </plugin>
       <plugin>
@@ -51,7 +55,7 @@
         </configuration>
         <executions>
           <execution>
-            <id>process-classes</id>
+            <id>javacpp.compiler</id>
             <phase>process-classes</phase>
             <goals>
               <goal>build</goal>

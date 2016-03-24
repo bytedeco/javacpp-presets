@@ -1287,13 +1287,13 @@ the use of this software, even if advised of the possibility of such damage.
                 static { Loader.load(); }
                 /** Default native constructor. */
                 public Edge() { super((Pointer)null); allocate(); }
-                /** Native array allocator. Access with {@link Pointer#position(int)}. */
-                public Edge(int size) { super((Pointer)null); allocateArray(size); }
+                /** Native array allocator. Access with {@link Pointer#position(long)}. */
+                public Edge(long size) { super((Pointer)null); allocateArray(size); }
                 /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
                 public Edge(Pointer p) { super(p); }
                 private native void allocate();
-                private native void allocateArray(int size);
-                @Override public Edge position(int position) {
+                private native void allocateArray(long size);
+                @Override public Edge position(long position) {
                     return (Edge)super.position(position);
                 }
             
@@ -1309,6 +1309,12 @@ the use of this software, even if advised of the possibility of such damage.
                 static { Loader.load(); }
                 /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
                 public PointSetElement(Pointer p) { super(p); }
+                /** Native array allocator. Access with {@link Pointer#position(long)}. */
+                public PointSetElement(long size) { super((Pointer)null); allocateArray(size); }
+                private native void allocateArray(long size);
+                @Override public PointSetElement position(long position) {
+                    return (PointSetElement)super.position(position);
+                }
             
                     public native int p(); public native PointSetElement p(int p);
                     public native int size(); public native PointSetElement size(int size);

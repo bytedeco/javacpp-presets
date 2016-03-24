@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014-2015 Samuel Audet
+ * Copyright (C) 2014-2016 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -149,8 +149,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
         @Override public <I extends Indexer> I createIndexer(boolean direct) {
             BytePointer ptr = arrayData();
             int size = arraySize();
-            int[] sizes = { arrayHeight(), arrayWidth(), arrayChannels() };
-            int[] strides = { arrayStep(), arrayChannels(), 1 };
+            long[] sizes = { arrayHeight(), arrayWidth(), arrayChannels() };
+            long[] strides = { arrayStep(), arrayChannels(), 1 };
             switch (arrayDepth()) {
                 case IPL_DEPTH_8U:
                     return (I)UByteIndexer.create(ptr.capacity(size), sizes, strides, direct);
@@ -249,11 +249,11 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
     public static class CvArrArray extends PointerPointer<CvArr> {
         static { Loader.load(); }
         public CvArrArray(CvArr ... array) { this(array.length); put(array); position(0); }
-        public CvArrArray(int size) { super(size); allocateArray(size); }
+        public CvArrArray(long size) { super(size); allocateArray(size); }
         public CvArrArray(Pointer p) { super(p); }
-        private native void allocateArray(int size);
+        private native void allocateArray(long size);
 
-        @Override public CvArrArray position(int position) {
+        @Override public CvArrArray position(long position) {
             return (CvArrArray)super.position(position);
         }
 
@@ -271,11 +271,11 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
     @Name("CvMat*")
     public static class CvMatArray extends CvArrArray {
         public CvMatArray(CvMat ... array) { this(array.length); put(array); position(0); }
-        public CvMatArray(int size) { allocateArray(size); }
+        public CvMatArray(long size) { allocateArray(size); }
         public CvMatArray(Pointer p) { super(p); }
-        private native void allocateArray(int size);
+        private native void allocateArray(long size);
 
-        @Override public CvMatArray position(int position) {
+        @Override public CvMatArray position(long position) {
             return (CvMatArray)super.position(position);
         }
         @Override public CvMatArray put(CvArr ... array) {
@@ -294,11 +294,11 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
     @Name("CvMatND*")
     public static class CvMatNDArray extends CvArrArray {
         public CvMatNDArray(CvMatND ... array) { this(array.length); put(array); position(0); }
-        public CvMatNDArray(int size) { allocateArray(size); }
+        public CvMatNDArray(long size) { allocateArray(size); }
         public CvMatNDArray(Pointer p) { super(p); }
-        private native void allocateArray(int size);
+        private native void allocateArray(long size);
 
-        @Override public CvMatNDArray position(int position) {
+        @Override public CvMatNDArray position(long position) {
             return (CvMatNDArray)super.position(position);
         }
         @Override public CvMatNDArray put(CvArr ... array) {
@@ -317,11 +317,11 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
     @Name("IplImage*")
     public static class IplImageArray extends CvArrArray {
         public IplImageArray(IplImage ... array) { this(array.length); put(array); position(0); }
-        public IplImageArray(int size) { allocateArray(size); }
+        public IplImageArray(long size) { allocateArray(size); }
         public IplImageArray(Pointer p) { super(p); }
-        private native void allocateArray(int size);
+        private native void allocateArray(long size);
 
-        @Override public IplImageArray position(int position) {
+        @Override public IplImageArray position(long position) {
             return (IplImageArray)super.position(position);
         }
         @Override public IplImageArray put(CvArr ... array) {
@@ -1061,8 +1061,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
                     return "(" + x() + ", " + y() + "; " + width() + ", " + height() + ")";
                 }
                 String s = "";
-                int p = position();
-                for (int i = 0; i < capacity(); i++) {
+                long p = position();
+                for (long i = 0; i < capacity(); i++) {
                     position(i);
                     s += (i == 0 ? "(" : " (") + x() + ", " + y() + "; " + width() + ", " + height() + ")";
                 }
@@ -1156,8 +1156,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
                     return "(" + x() + ", " + y() + ")";
                 }
                 String s = "";
-                int p = position();
-                for (int i = 0; i < capacity(); i++) {
+                long p = position();
+                for (long i = 0; i < capacity(); i++) {
                     position(i);
                     s += (i == 0 ? "(" : " (") + x() + ", " + y() + ")";
                 }
@@ -1232,8 +1232,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
                     return "(" + x() + ", " + y() + ")";
                 }
                 String s = "";
-                int p = position();
-                for (int i = 0; i < capacity(); i++) {
+                long p = position();
+                for (long i = 0; i < capacity(); i++) {
                     position(i);
                     s += (i == 0 ? "(" : " (") + x() + ", " + y() + ")";
                 }
@@ -1308,8 +1308,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
                     return "(" + x() + ", " + y() + ", " + z() + ")";
                 }
                 String s = "";
-                int p = position();
-                for (int i = 0; i < capacity(); i++) {
+                long p = position();
+                for (long i = 0; i < capacity(); i++) {
                     position(i);
                     s += (i == 0 ? "(" : " (") + x() + ", " + y() + ", " + z() + ")";
                 }
@@ -1382,8 +1382,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
                     return "(" + (float)x() + ", " + (float)y() + ")";
                 }
                 String s = "";
-                int p = position();
-                for (int i = 0; i < capacity(); i++) {
+                long p = position();
+                for (long i = 0; i < capacity(); i++) {
                     position(i);
                     s += (i == 0 ? "(" : " (") + (float)x() + ", " + (float)y() + ")";
                 }
@@ -1458,8 +1458,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
                     return "(" + (float)x() + ", " + (float)y() + ", " + (float)z() + ")";
                 }
                 String s = "";
-                int p = position();
-                for (int i = 0; i < capacity(); i++) {
+                long p = position();
+                for (long i = 0; i < capacity(); i++) {
                     position(i);
                     s += (i == 0 ? "(" : " (") + (float)x() + ", " + (float)y() + ", " + (float)z() + ")";
                 }
@@ -1488,8 +1488,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
                     return "(" + width() + ", " + height() + ")";
                 }
                 String s = "";
-                int p = position();
-                for (int i = 0; i < capacity(); i++) {
+                long p = position();
+                for (long i = 0; i < capacity(); i++) {
                     position(i);
                     s += (i == 0 ? "(" : " (") + width() + ", " + height() + ")";
                 }
@@ -1519,8 +1519,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
                     return "(" + width() + ", " + height() + ")";
                 }
                 String s = "";
-                int p = position();
-                for (int i = 0; i < capacity(); i++) {
+                long p = position();
+                for (long i = 0; i < capacity(); i++) {
                     position(i);
                     s += (i == 0 ? "(" : " (") + width() + ", " + height() + ")";
                 }
@@ -1550,8 +1550,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
                     return "(" + center() + ", " + size() + ", " + angle() + ")";
                 }
                 String s = "";
-                int p = position();
-                for (int i = 0; i < capacity(); i++) {
+                long p = position();
+                for (long i = 0; i < capacity(); i++) {
                     position(i);
                     s += (i == 0 ? "(" : " (") + center() + ", " + size() + ", " + angle() + ")";
                 }
@@ -1603,8 +1603,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
                             (float)val(2) + ", " + (float)val(3) + ")";
                 }
                 String s = "";
-                int p = position();
-                for (int i = 0; i < capacity(); i++) {
+                long p = position();
+                for (long i = 0; i < capacity(); i++) {
                     position(i);
                     s += (i == 0 ? "(" : " (") + (float)val(0) + ", " + (float)val(1) + ", " +
                             (float)val(2) + ", " + (float)val(3) + ")";
@@ -1861,8 +1861,8 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
                             (float)get(2) + ", " + (float)get(3) + ")";
                 }
                 String s = "";
-                int p = position();
-                for (int i = 0; i < capacity(); i++) {
+                long p = position();
+                for (long i = 0; i < capacity(); i++) {
                     position(i);
                     s += (i == 0 ? "(" : " (") + (float)get(0) + ", " + (float)get(1) + ", " +
                             (float)get(2) + ", " + (float)get(3) + ")";

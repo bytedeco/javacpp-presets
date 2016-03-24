@@ -100,13 +100,13 @@ They are competitive alternatives to existing keypoints in particular for embedd
     static { Loader.load(); }
     /** Default native constructor. */
     public FREAK() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public FREAK(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public FREAK(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FREAK(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public FREAK position(int position) {
+    private native void allocateArray(long size);
+    @Override public FREAK position(long position) {
         return (FREAK)super.position(position);
     }
 
@@ -147,13 +147,13 @@ They are competitive alternatives to existing keypoints in particular for embedd
     static { Loader.load(); }
     /** Default native constructor. */
     public StarDetector() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public StarDetector(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public StarDetector(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public StarDetector(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public StarDetector position(int position) {
+    private native void allocateArray(long size);
+    @Override public StarDetector position(long position) {
         return (StarDetector)super.position(position);
     }
 
@@ -179,13 +179,13 @@ They are competitive alternatives to existing keypoints in particular for embedd
     static { Loader.load(); }
     /** Default native constructor. */
     public BriefDescriptorExtractor() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public BriefDescriptorExtractor(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public BriefDescriptorExtractor(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BriefDescriptorExtractor(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public BriefDescriptorExtractor position(int position) {
+    private native void allocateArray(long size);
+    @Override public BriefDescriptorExtractor position(long position) {
         return (BriefDescriptorExtractor)super.position(position);
     }
 
@@ -202,13 +202,13 @@ about as robust as, for example, SURF or BRIEF.
     static { Loader.load(); }
     /** Default native constructor. */
     public LUCID() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public LUCID(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public LUCID(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LUCID(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public LUCID position(int position) {
+    private native void allocateArray(long size);
+    @Override public LUCID position(long position) {
         return (LUCID)super.position(position);
     }
 
@@ -245,13 +245,13 @@ Note: a complete example can be found under /samples/cpp/tutorial_code/xfeatures
     static { Loader.load(); }
     /** Default native constructor. */
     public LATCH() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public LATCH(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public LATCH(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LATCH(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public LATCH position(int position) {
+    private native void allocateArray(long size);
+    @Override public LATCH position(long position) {
         return (LATCH)super.position(position);
     }
 
@@ -373,13 +373,13 @@ localization accuracy.
     static { Loader.load(); }
     /** Default native constructor. */
     public MSDDetector() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public MSDDetector(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public MSDDetector(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MSDDetector(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public MSDDetector position(int position) {
+    private native void allocateArray(long size);
+    @Override public MSDDetector position(long position) {
         return (MSDDetector)super.position(position);
     }
 
@@ -457,13 +457,13 @@ localization accuracy.
     static { Loader.load(); }
     /** Default native constructor. */
     public SIFT() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public SIFT(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public SIFT(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SIFT(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public SIFT position(int position) {
+    private native void allocateArray(long size);
+    @Override public SIFT position(long position) {
         return (SIFT)super.position(position);
     }
 

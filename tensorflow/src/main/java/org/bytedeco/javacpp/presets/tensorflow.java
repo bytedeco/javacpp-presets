@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Samuel Audet
+ * Copyright (C) 2015-2016 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -58,7 +58,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "tensorflow/core/public/tensor_c_api.h", "tensorflow/core/framework/op_def.pb.h", "tensorflow/core/framework/op_def_builder.h",
         "tensorflow/core/framework/op_def_util.h", "tensorflow/core/framework/op.h", "tensorflow/core/framework/types.h",
         "tensorflow/core/graph/edgeset.h", "tensorflow/core/lib/gtl/iterator_range.h", "tensorflow/core/graph/graph.h",
-        "tensorflow/core/graph/node_builder.h", "tensorflow/core/graph/graph_def_builder.h", "tensorflow/core/graph/default_device.h",
+        "tensorflow/core/graph/node_builder.h", "tensorflow/core/graph/graph_def_builder.h", "tensorflow/core/graph/default_device.h", "tensorflow/core/graph/graph_constructor.h",
         "tensorflow/cc/ops/standard_ops.h", "tensorflow/cc/ops/const_op.h", "tensorflow/cc/ops/cc_op_gen.h",
         "tensorflow/cc/ops/array_ops.h", "tensorflow/cc/ops/attention_ops.h", "tensorflow/cc/ops/const_op.h",
         "tensorflow/cc/ops/data_flow_ops.h", "tensorflow/cc/ops/image_ops.h", "tensorflow/cc/ops/io_ops.h",
@@ -76,7 +76,12 @@ public class tensorflow implements InfoMapper {
                .put(new Info("TF_CHECK_OK", "TF_QCHECK_OK").cppTypes("void", "tensorflow::Status"))
                .put(new Info("TF_DISALLOW_COPY_AND_ASSIGN").cppText("#define TF_DISALLOW_COPY_AND_ASSIGN(TypeName)"))
                .put(new Info("SWIG").define())
+               .put(new Info("int").valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
                .put(new Info("long long").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long..."))
+               .put(new Info("float").valueTypes("float").pointerTypes("FloatPointer", "FloatBuffer", "float..."))
+               .put(new Info("double").valueTypes("double").pointerTypes("DoublePointer", "DoubleBuffer", "double..."))
+               .put(new Info("bool").cast().valueTypes("boolean").pointerTypes("BoolPointer", "boolean..."))
+               .put(new Info("std::complex<float>").cast().pointerTypes("FloatPointer", "FloatBuffer", "float..."))
                .put(new Info("std::initializer_list").skip())
                .put(new Info("std::string").annotations("@StdString").valueTypes("BytePointer", "String").pointerTypes("@Cast({\"char*\", \"std::string*\"}) BytePointer"))
                .put(new Info("std::vector<std::string>").pointerTypes("StringVector").define())
@@ -95,8 +100,9 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::protobuf::Message", "tensorflow::protobuf::MessageLite").cast().pointerTypes("Pointer"))
                .put(new Info("tensorflow::Allocator::is_simple<bfloat16>").skip())
 
-               .put(new Info("basic/containers").cppTypes("tensorflow::gtl::InlinedVector"))
+               .put(new Info("basic/containers").cppTypes("tensorflow::gtl::InlinedVector", "google::protobuf::Map"))
                .put(new Info("tensorflow::DataType").cast().valueTypes("int").pointerTypes("IntPointer"))
+               .put(new Info("tensorflow::gtl::InlinedVector<long long,4>").pointerTypes("LongVector").define())
                .put(new Info("tensorflow::gtl::InlinedVector<tensorflow::DataType,4>").pointerTypes("DataTypeVector").define())
                .put(new Info("tensorflow::DataTypeSlice")/*.cast()*/.pointerTypes("DataTypeVector"))
 
@@ -105,11 +111,16 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::Session::~Session()").javaText("/** Calls {@link tensorflow#NewSession(SessionOptions)} and registers a deallocator. */\n"
                                                                        + "public Session(SessionOptions options) { super(options); }"))
                .put(new Info("std::vector<tensorflow::Tensor>").pointerTypes("TensorVector").define())
+               .put(new Info("std::vector<tensorflow::TensorProto>").pointerTypes("TensorProtoVector").define())
                .put(new Info("std::vector<tensorflow::TensorShape>").pointerTypes("TensorShapeVector").define())
                .put(new Info("std::vector<tensorflow::NodeBuilder::NodeOut>").pointerTypes("NodeOutVector").define())
                .put(new Info("std::vector<tensorflow::Node*>").pointerTypes("NodeVector").define())
+               .put(new Info("google::protobuf::Map<std::string,tensorflow::AttrValue>").pointerTypes("StringAttrValueMap").define())
                .put(new Info("tensorflow::ops::NodeOut").valueTypes("@ByVal NodeBuilder.NodeOut", "Node"))
                .put(new Info("tensorflow::NodeBuilder::NodeOut").pointerTypes("NodeBuilder.NodeOut"))
+               .put(new Info("tensorflow::gtl::ArraySlice<std::string>")/*.cast()*/.pointerTypes("StringVector"))
+               .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::Tensor>")/*.cast()*/.pointerTypes("TensorVector"))
+               .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::TensorProto>")/*.cast()*/.pointerTypes("TensorProtoVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::TensorShape>")/*.cast()*/.pointerTypes("TensorShapeVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::ops::NodeOut>")/*.cast()*/.pointerTypes("NodeOutVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::Node*>")/*.cast()*/.pointerTypes("NodeVector"))
@@ -124,8 +135,22 @@ public class tensorflow implements InfoMapper {
 
                .put(new Info("std::function<void()>").pointerTypes("Fn"))
                .put(new Info("std::function<tensorflow::OpDef(void)>").pointerTypes("OpDefFunc"))
+               .put(new Info("tensorflow::ConstantFoldingOptions::consider")
+                       .javaText("@MemberSetter public native ConstantFoldingOptions consider(@ByVal ConsiderFunction consider);"))
+               .put(new Info("tensorflow::GraphConstructorOptions::cse_consider_function")
+                       .javaText("@MemberSetter public native GraphConstructorOptions cse_consider_function(@ByVal ConsiderFunction cse_consider_function);"));
 
-               .put(new Info("tensorflow::gtl::ArraySlice").annotations("@ArraySlice"))
+        String[] attrs = {"int", "long long", "float", "double", "bool", "std::string",
+                          "tensorflow::Tensor", "tensorflow::TensorProto", "tensorflow::TensorShape",
+                          "tensorflow::NameAttrList", "tensorflow::StringPiece"};
+        for (int i = 0; i < attrs.length; i++) {
+            infoMap.put(new Info("tensorflow::GraphDefBuilder::Options::WithAttr<" + attrs[i] + ">").javaNames("WithAttr"));
+            if (i < attrs.length - 2) {
+                infoMap.put(new Info("tensorflow::GraphDefBuilder::Options::WithAttr<tensorflow::gtl::ArraySlice<" + attrs[i] + "> >").javaNames("WithAttr"));
+            }
+        }
+
+        infoMap.put(new Info("tensorflow::gtl::ArraySlice").annotations("@ArraySlice"))
                .put(new Info("tensorflow::StringPiece").annotations("@StringPiece").valueTypes("BytePointer", "String").pointerTypes("BytePointer"))
                .put(new Info("tensorflow::ops::Const(tensorflow::StringPiece, tensorflow::GraphDefBuilder::Options&)")
                        .javaText("@Namespace(\"tensorflow::ops\") public static native Node Const("
@@ -148,6 +173,15 @@ public class tensorflow implements InfoMapper {
         protected OpDefFunc() { allocate(); }
         private native void allocate();
         public native @ByVal @Cast("tensorflow::OpDef*") Pointer call();
+    }
+
+    public static class ConsiderFunction extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    ConsiderFunction(Pointer p) { super(p); }
+        protected ConsiderFunction() { allocate(); }
+        private native void allocate();
+        public native @Cast("bool") boolean call(@Cast("const tensorflow::Node*") Pointer node);
     }
 
     @Documented @Retention(RetentionPolicy.RUNTIME)

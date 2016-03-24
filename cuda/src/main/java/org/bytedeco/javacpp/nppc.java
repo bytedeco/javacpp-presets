@@ -460,13 +460,13 @@ public static class NppLibraryVersion extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public NppLibraryVersion() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NppLibraryVersion(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NppLibraryVersion(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NppLibraryVersion(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NppLibraryVersion position(int position) {
+    private native void allocateArray(long size);
+    @Override public NppLibraryVersion position(long position) {
         return (NppLibraryVersion)super.position(position);
     }
 
@@ -503,13 +503,13 @@ public static class Npp8uc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public Npp8uc() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Npp8uc(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Npp8uc(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Npp8uc(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public Npp8uc position(int position) {
+    private native void allocateArray(long size);
+    @Override public Npp8uc position(long position) {
         return (Npp8uc)super.position(position);
     }
 
@@ -527,13 +527,13 @@ public static class Npp16uc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public Npp16uc() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Npp16uc(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Npp16uc(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Npp16uc(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public Npp16uc position(int position) {
+    private native void allocateArray(long size);
+    @Override public Npp16uc position(long position) {
         return (Npp16uc)super.position(position);
     }
 
@@ -551,13 +551,13 @@ public static class Npp16sc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public Npp16sc() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Npp16sc(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Npp16sc(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Npp16sc(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public Npp16sc position(int position) {
+    private native void allocateArray(long size);
+    @Override public Npp16sc position(long position) {
         return (Npp16sc)super.position(position);
     }
 
@@ -575,13 +575,13 @@ public static class Npp32uc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public Npp32uc() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Npp32uc(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Npp32uc(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Npp32uc(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public Npp32uc position(int position) {
+    private native void allocateArray(long size);
+    @Override public Npp32uc position(long position) {
         return (Npp32uc)super.position(position);
     }
 
@@ -599,13 +599,13 @@ public static class Npp32sc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public Npp32sc() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Npp32sc(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Npp32sc(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Npp32sc(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public Npp32sc position(int position) {
+    private native void allocateArray(long size);
+    @Override public Npp32sc position(long position) {
         return (Npp32sc)super.position(position);
     }
 
@@ -623,13 +623,13 @@ public static class Npp32fc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public Npp32fc() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Npp32fc(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Npp32fc(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Npp32fc(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public Npp32fc position(int position) {
+    private native void allocateArray(long size);
+    @Override public Npp32fc position(long position) {
         return (Npp32fc)super.position(position);
     }
 
@@ -647,13 +647,13 @@ public static class Npp64sc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public Npp64sc() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Npp64sc(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Npp64sc(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Npp64sc(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public Npp64sc position(int position) {
+    private native void allocateArray(long size);
+    @Override public Npp64sc position(long position) {
         return (Npp64sc)super.position(position);
     }
 
@@ -671,13 +671,13 @@ public static class Npp64fc extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public Npp64fc() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public Npp64fc(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Npp64fc(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Npp64fc(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public Npp64fc position(int position) {
+    private native void allocateArray(long size);
+    @Override public Npp64fc position(long position) {
         return (Npp64fc)super.position(position);
     }
 
@@ -741,13 +741,13 @@ public static class NppiPoint extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public NppiPoint() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NppiPoint(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NppiPoint(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NppiPoint(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NppiPoint position(int position) {
+    private native void allocateArray(long size);
+    @Override public NppiPoint position(long position) {
         return (NppiPoint)super.position(position);
     }
 
@@ -766,13 +766,13 @@ public static class NppiSize extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public NppiSize() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NppiSize(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NppiSize(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NppiSize(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NppiSize position(int position) {
+    private native void allocateArray(long size);
+    @Override public NppiSize position(long position) {
         return (NppiSize)super.position(position);
     }
 
@@ -793,13 +793,13 @@ public static class NppiRect extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public NppiRect() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NppiRect(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NppiRect(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NppiRect(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NppiRect position(int position) {
+    private native void allocateArray(long size);
+    @Override public NppiRect position(long position) {
         return (NppiRect)super.position(position);
     }
 
@@ -927,13 +927,13 @@ public static class NppiHaarClassifier_32f extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public NppiHaarClassifier_32f() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NppiHaarClassifier_32f(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NppiHaarClassifier_32f(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NppiHaarClassifier_32f(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NppiHaarClassifier_32f position(int position) {
+    private native void allocateArray(long size);
+    @Override public NppiHaarClassifier_32f position(long position) {
         return (NppiHaarClassifier_32f)super.position(position);
     }
 
@@ -950,13 +950,13 @@ public static class NppiHaarBuffer extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
     public NppiHaarBuffer() { super((Pointer)null); allocate(); }
-    /** Native array allocator. Access with {@link Pointer#position(int)}. */
-    public NppiHaarBuffer(int size) { super((Pointer)null); allocateArray(size); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NppiHaarBuffer(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NppiHaarBuffer(Pointer p) { super(p); }
     private native void allocate();
-    private native void allocateArray(int size);
-    @Override public NppiHaarBuffer position(int position) {
+    private native void allocateArray(long size);
+    @Override public NppiHaarBuffer position(long position) {
         return (NppiHaarBuffer)super.position(position);
     }
 

@@ -33,8 +33,8 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit=avcodec.class, target="org.bytedeco.javacpp.avformat", value={
-    @Platform(cinclude={"<libavformat/avio.h>", "<libavformat/avformat.h>"}, link="avformat@.56"),
-    @Platform(value="windows", preload="avformat-56") })
+    @Platform(cinclude={"<libavformat/avio.h>", "<libavformat/avformat.h>"}, link="avformat@.57"),
+    @Platform(value="windows", preload="avformat-57") })
 public class avformat implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("URLContext", "FFFrac").cast().pointerTypes("Pointer"))

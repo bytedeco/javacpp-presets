@@ -16,7 +16,7 @@
   <name>JavaCPP Presets for TensorFlow</name>
 
   <properties>
-    <tensorflow.version>master</tensorflow.version>
+    <tensorflow.version>0.7.1</tensorflow.version>
   </properties>
 
   <dependencies>
@@ -28,6 +28,10 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+      </plugin>
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
       </plugin>
@@ -45,7 +49,7 @@
             <includePath>${basedir}/cppbuild/${javacpp.platform}/tensorflow-${tensorflow.version}/google/protobuf/src/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/tensorflow-${tensorflow.version}/third_party/eigen3/</includePath>
             <includePath>${basedir}/cppbuild/${javacpp.platform}/tensorflow-${tensorflow.version}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/</includePath>
-            <includePath>${basedir}/cppbuild/${javacpp.platform}/tensorflow-${tensorflow.version}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/eigen-eigen-8cd7c2c6e9e1/</includePath>
+            <includePath>${basedir}/cppbuild/${javacpp.platform}/tensorflow-${tensorflow.version}/bazel-tensorflow-${tensorflow.version}/external/eigen_archive/eigen-eigen-c5e90d9e764e/</includePath>
           </includePaths>
           <linkPaths>
              <linkPath>${basedir}/cppbuild/${javacpp.platform}/tensorflow-${tensorflow.version}/bazel-bin/tensorflow/cc/</linkPath>
