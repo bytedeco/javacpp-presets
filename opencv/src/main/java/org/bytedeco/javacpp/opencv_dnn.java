@@ -548,148 +548,6 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 // #endif
 
 
-// Parsed from <opencv2/dnn/layer.hpp>
-
-/*M///////////////////////////////////////////////////////////////////////////////////////
-//
-//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
-//
-//  By downloading, copying, installing or using the software you agree to this license.
-//  If you do not agree to this license, do not download, install,
-//  copy or use the software.
-//
-//
-//                           License Agreement
-//                For Open Source Computer Vision Library
-//
-// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
-// Third party copyrights are property of their respective owners.
-//
-// Redistribution and use in source and binary forms, with or without modification,
-// are permitted provided that the following conditions are met:
-//
-//   * Redistribution's of source code must retain the above copyright notice,
-//     this list of conditions and the following disclaimer.
-//
-//   * Redistribution's in binary form must reproduce the above copyright notice,
-//     this list of conditions and the following disclaimer in the documentation
-//     and/or other materials provided with the distribution.
-//
-//   * The name of the copyright holders may not be used to endorse or promote products
-//     derived from this software without specific prior written permission.
-//
-// This software is provided by the copyright holders and contributors "as is" and
-// any express or implied warranties, including, but not limited to, the implied
-// warranties of merchantability and fitness for a particular purpose are disclaimed.
-// In no event shall the Intel Corporation or contributors be liable for any direct,
-// indirect, incidental, special, exemplary, or consequential damages
-// (including, but not limited to, procurement of substitute goods or services;
-// loss of use, data, or profits; or business interruption) however caused
-// and on any theory of liability, whether in contract, strict liability,
-// or tort (including negligence or otherwise) arising in any way out of
-// the use of this software, even if advised of the possibility of such damage.
-//
-//M*/
-
-// #ifndef __OPENCV_DNN_LAYER_HPP__
-// #define __OPENCV_DNN_LAYER_HPP__
-// #include <opencv2/dnn.hpp>
-/** \addtogroup dnn
- *  \{
- * 
- *  \defgroup LayerFactoryModule Utilities for new layers registration
- *  \{
-<p>
-/** \brief %Layer factory allows to create instances of registered layers. */
-@Namespace("cv::dnn") public static class LayerFactory extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public LayerFactory(Pointer p) { super(p); }
-
-
-    /** Each Layer class must provide this function to the factory */
-    public static class Constuctor extends FunctionPointer {
-        static { Loader.load(); }
-        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    Constuctor(Pointer p) { super(p); }
-        protected Constuctor() { allocate(); }
-        private native void allocate();
-        public native @Ptr Layer call(@ByRef LayerParams params);
-    }
-
-    /** Registers the layer class with typename \p type and specified \p constructor. */
-    public static native void registerLayer(@Str BytePointer type, Constuctor constructor);
-    public static native void registerLayer(@Str String type, Constuctor constructor);
-
-    /** Unregisters registered layer with specified type name. */
-    public static native void unregisterLayer(@Str BytePointer type);
-    public static native void unregisterLayer(@Str String type);
-
-    /** \brief Creates instance of registered layer.
-     *  @param type type name of creating layer.
-     *  @param params parameters which will be used for layer initialization.
-     */
-    public static native @Ptr Layer createLayerInstance(@Str BytePointer type, @ByRef LayerParams params);
-    public static native @Ptr Layer createLayerInstance(@Str String type, @ByRef LayerParams params);
-}
-
-/** \brief Registers layer constructor in runtime.
-*   @param type string, containing type name of the layer.
-*   @param constuctorFunc pointer to the function of type LayerRegister::Constuctor, which creates the layer.
-*   \details This macros must be placed inside the function code.
-*/
-// #define REG_RUNTIME_LAYER_FUNC(type, constuctorFunc)
-//     LayerFactory::registerLayer(#type, constuctorFunc);
-
-/** \brief Registers layer class in runtime.
- *  @param type string, containing type name of the layer.
- *  @param class C++ class, derived from Layer.
- *  \details This macros must be placed inside the function code.
- */
-// #define REG_RUNTIME_LAYER_CLASS(type, class)
-//     LayerFactory::registerLayer(#type, _layerDynamicRegisterer<class>);
-
-/** \brief Registers layer constructor on module load time.
-*   @param type string, containing type name of the layer.
-*   @param constuctorFunc pointer to the function of type LayerRegister::Constuctor, which creates the layer.
-*   \details This macros must be placed outside the function code.
-*/
-// #define REG_STATIC_LAYER_FUNC(type, constuctorFunc)
-// static _LayerStaticRegisterer __LayerStaticRegisterer_##type(#type, constuctorFunc);
-
-/** \brief Registers layer class on module load time.
- *  @param type string, containing type name of the layer.
- *  @param class C++ class, derived from Layer.
- *  \details This macros must be placed outside the function code.
- */
-// #define REG_STATIC_LAYER_CLASS(type, class)
-// Ptr<Layer> __LayerStaticRegisterer_func_##type(LayerParams &params)
-//     { return Ptr<Layer>(new class(params)); }
-// static _LayerStaticRegisterer __LayerStaticRegisterer_##type(#type, __LayerStaticRegisterer_func_##type);
-
-
-/** \}
- *  \} */
-
-//allows automatically register created layer on module load time
-@Namespace("cv::dnn") @NoOffset public static class _LayerStaticRegisterer extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public _LayerStaticRegisterer(Pointer p) { super(p); }
-
-    public native @Str BytePointer type(); public native _LayerStaticRegisterer type(BytePointer type);
-
-    public _LayerStaticRegisterer(@Str BytePointer type, LayerFactory.Constuctor constuctor) { super((Pointer)null); allocate(type, constuctor); }
-    private native void allocate(@Str BytePointer type, LayerFactory.Constuctor constuctor);
-    public _LayerStaticRegisterer(@Str String type, LayerFactory.Constuctor constuctor) { super((Pointer)null); allocate(type, constuctor); }
-    private native void allocate(@Str String type, LayerFactory.Constuctor constuctor);
-}
-
-
-
-// #endif
-
-
 // Parsed from <opencv2/dnn/dnn.hpp>
 
 /*M///////////////////////////////////////////////////////////////////////////////////////
@@ -1025,6 +883,148 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
 // #include <opencv2/dnn/dnn.inl.hpp>
 
 // #endif  /* __OPENCV_DNN_DNN_HPP__ */
+
+
+// Parsed from <opencv2/dnn/layer.hpp>
+
+/*M///////////////////////////////////////////////////////////////////////////////////////
+//
+//  IMPORTANT: READ BEFORE DOWNLOADING, COPYING, INSTALLING OR USING.
+//
+//  By downloading, copying, installing or using the software you agree to this license.
+//  If you do not agree to this license, do not download, install,
+//  copy or use the software.
+//
+//
+//                           License Agreement
+//                For Open Source Computer Vision Library
+//
+// Copyright (C) 2013, OpenCV Foundation, all rights reserved.
+// Third party copyrights are property of their respective owners.
+//
+// Redistribution and use in source and binary forms, with or without modification,
+// are permitted provided that the following conditions are met:
+//
+//   * Redistribution's of source code must retain the above copyright notice,
+//     this list of conditions and the following disclaimer.
+//
+//   * Redistribution's in binary form must reproduce the above copyright notice,
+//     this list of conditions and the following disclaimer in the documentation
+//     and/or other materials provided with the distribution.
+//
+//   * The name of the copyright holders may not be used to endorse or promote products
+//     derived from this software without specific prior written permission.
+//
+// This software is provided by the copyright holders and contributors "as is" and
+// any express or implied warranties, including, but not limited to, the implied
+// warranties of merchantability and fitness for a particular purpose are disclaimed.
+// In no event shall the Intel Corporation or contributors be liable for any direct,
+// indirect, incidental, special, exemplary, or consequential damages
+// (including, but not limited to, procurement of substitute goods or services;
+// loss of use, data, or profits; or business interruption) however caused
+// and on any theory of liability, whether in contract, strict liability,
+// or tort (including negligence or otherwise) arising in any way out of
+// the use of this software, even if advised of the possibility of such damage.
+//
+//M*/
+
+// #ifndef __OPENCV_DNN_LAYER_HPP__
+// #define __OPENCV_DNN_LAYER_HPP__
+// #include <opencv2/dnn.hpp>
+/** \addtogroup dnn
+ *  \{
+ * 
+ *  \defgroup LayerFactoryModule Utilities for new layers registration
+ *  \{
+<p>
+/** \brief %Layer factory allows to create instances of registered layers. */
+@Namespace("cv::dnn") public static class LayerFactory extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LayerFactory(Pointer p) { super(p); }
+
+
+    /** Each Layer class must provide this function to the factory */
+    @Convention(value="", extern="C++") public static class Constuctor extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Constuctor(Pointer p) { super(p); }
+        protected Constuctor() { allocate(); }
+        private native void allocate();
+        public native @Ptr Layer call(@ByRef LayerParams params);
+    }
+
+    /** Registers the layer class with typename \p type and specified \p constructor. */
+    public static native void registerLayer(@Str BytePointer type, Constuctor constructor);
+    public static native void registerLayer(@Str String type, Constuctor constructor);
+
+    /** Unregisters registered layer with specified type name. */
+    public static native void unregisterLayer(@Str BytePointer type);
+    public static native void unregisterLayer(@Str String type);
+
+    /** \brief Creates instance of registered layer.
+     *  @param type type name of creating layer.
+     *  @param params parameters which will be used for layer initialization.
+     */
+    public static native @Ptr Layer createLayerInstance(@Str BytePointer type, @ByRef LayerParams params);
+    public static native @Ptr Layer createLayerInstance(@Str String type, @ByRef LayerParams params);
+}
+
+/** \brief Registers layer constructor in runtime.
+*   @param type string, containing type name of the layer.
+*   @param constuctorFunc pointer to the function of type LayerRegister::Constuctor, which creates the layer.
+*   \details This macros must be placed inside the function code.
+*/
+// #define REG_RUNTIME_LAYER_FUNC(type, constuctorFunc)
+//     LayerFactory::registerLayer(#type, constuctorFunc);
+
+/** \brief Registers layer class in runtime.
+ *  @param type string, containing type name of the layer.
+ *  @param class C++ class, derived from Layer.
+ *  \details This macros must be placed inside the function code.
+ */
+// #define REG_RUNTIME_LAYER_CLASS(type, class)
+//     LayerFactory::registerLayer(#type, _layerDynamicRegisterer<class>);
+
+/** \brief Registers layer constructor on module load time.
+*   @param type string, containing type name of the layer.
+*   @param constuctorFunc pointer to the function of type LayerRegister::Constuctor, which creates the layer.
+*   \details This macros must be placed outside the function code.
+*/
+// #define REG_STATIC_LAYER_FUNC(type, constuctorFunc)
+// static _LayerStaticRegisterer __LayerStaticRegisterer_##type(#type, constuctorFunc);
+
+/** \brief Registers layer class on module load time.
+ *  @param type string, containing type name of the layer.
+ *  @param class C++ class, derived from Layer.
+ *  \details This macros must be placed outside the function code.
+ */
+// #define REG_STATIC_LAYER_CLASS(type, class)
+// Ptr<Layer> __LayerStaticRegisterer_func_##type(LayerParams &params)
+//     { return Ptr<Layer>(new class(params)); }
+// static _LayerStaticRegisterer __LayerStaticRegisterer_##type(#type, __LayerStaticRegisterer_func_##type);
+
+
+/** \}
+ *  \} */
+
+//allows automatically register created layer on module load time
+@Namespace("cv::dnn") @NoOffset public static class _LayerStaticRegisterer extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public _LayerStaticRegisterer(Pointer p) { super(p); }
+
+    public native @Str BytePointer type(); public native _LayerStaticRegisterer type(BytePointer type);
+
+    public _LayerStaticRegisterer(@Str BytePointer type, LayerFactory.Constuctor constuctor) { super((Pointer)null); allocate(type, constuctor); }
+    private native void allocate(@Str BytePointer type, LayerFactory.Constuctor constuctor);
+    public _LayerStaticRegisterer(@Str String type, LayerFactory.Constuctor constuctor) { super((Pointer)null); allocate(type, constuctor); }
+    private native void allocate(@Str String type, LayerFactory.Constuctor constuctor);
+}
+
+
+
+// #endif
 
 
 }
