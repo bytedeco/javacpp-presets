@@ -32,7 +32,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  *
  * @author Samuel Audet
  */
-@Properties(inherit={avformat.class, postproc.class, swresample.class, swscale.class}, target="org.bytedeco.javacpp.avfilter", value={
+@Properties(inherit={avformat.class, swresample.class, swscale.class}, target="org.bytedeco.javacpp.avfilter", value={
     @Platform(cinclude={"<libavfilter/avfilter.h>", "<libavfilter/buffersink.h>", "<libavfilter/buffersrc.h>"}, link="avfilter@.6"),
     @Platform(value="windows", preload="avfilter-6") })
 public class avfilter implements InfoMapper {

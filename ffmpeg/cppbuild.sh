@@ -47,7 +47,7 @@ else
     download http://downloads.sourceforge.net/project/lame/lame/3.99/$LAME.tar.gz $LAME.tar.gz
     download http://downloads.xiph.org/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
     download http://sourceforge.net/projects/opencore-amr/files/opencore-amr/$OPENCORE_AMR.tar.gz/download $OPENCORE_AMR.tar.gz
-#    download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
+    download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
     download https://github.com/cisco/openh264/archive/v$OPENH264_VERSION.tar.gz openh264-$OPENH264_VERSION.tar.gz
     download ftp://ftp.videolan.org/pub/videolan/x264/snapshots/last_stable_x264.tar.bz2 last_stable_x264.tar.bz2
     download https://ftp.videolan.org/pub/videolan/x265/$X265.tar.gz $X265.tar.gz
