@@ -237,8 +237,13 @@
               <skipIfEmpty>true</skipIfEmpty>
               <includes>
                 <include>${javacpp.platform.library.path}/</include>
-                <include>org/bytedeco/javacpp/${javacpp.platform}/${javacpp.platform.library.prefix}*${javacpp.platform.library.suffix}*</include>
+                <include>org/bytedeco/javacpp/${javacpp.platform}/</include>
               </includes>
+              <excludes>
+                <exclude>**/*.exp</exclude>
+                <exclude>**/*.lib</exclude>
+                <exclude>**/*.obj</exclude>
+              </excludes>
             </configuration>
           </execution>
         </executions>

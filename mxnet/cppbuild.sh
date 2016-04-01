@@ -30,17 +30,17 @@ export PKG_CONFIG_PATH="$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/lib/pkg
 
 case $PLATFORM in
     linux-x86)
-        make -j4 CC="gcc -m32" CXX="g++ -m32" USE_BLAS="openblas"
+        make -j $MAKEJ CC="gcc -m32" CXX="g++ -m32" USE_BLAS="openblas"
         cp -a include lib ../dmlc-core-$MXNET_VERSION/include ..
         cp -a ../mshadow-$MXNET_VERSION/mshadow ../include
         ;;
     linux-x86_64)
-        make -j4 CC="gcc -m64" CXX="g++ -m64" USE_BLAS="openblas"
+        make -j $MAKEJ CC="gcc -m64" CXX="g++ -m64" USE_BLAS="openblas"
         cp -a include lib ../dmlc-core-$MXNET_VERSION/include ..
         cp -a ../mshadow-$MXNET_VERSION/mshadow ../include
         ;;
     macosx-*)
-        make -j4 USE_BLAS="apple"
+        make -j $MAKEJ CC="clang-omp" CXX="clang-omp++" USE_BLAS="apple"
         cp -a include lib ../dmlc-core-$MXNET_VERSION/include ..
         cp -a ../mshadow-$MXNET_VERSION/mshadow ../include
         ;;
