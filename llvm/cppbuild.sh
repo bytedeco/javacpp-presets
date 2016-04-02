@@ -7,6 +7,23 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
+case $PLATFORM in
+    linux-x86)
+        export CC="clang -m32"
+        export CXX="clang++ -m32"
+        ;;
+    linux-x86_64)
+        export CC="clang -m64"
+        export CXX="clang++ -m64"
+        ;;
+    macosx-*)
+        ;;
+    *)
+        echo "Error: Platform \"$PLATFORM\" is not supported"
+        return 0
+        ;;
+esac
+
 LLVM_VERSION=3.7.0
 download http://llvm.org/releases/$LLVM_VERSION/llvm-$LLVM_VERSION.src.tar.xz llvm-$LLVM_VERSION.src.tar.xz
 download http://llvm.org/releases/$LLVM_VERSION/cfe-$LLVM_VERSION.src.tar.xz cfe-$LLVM_VERSION.src.tar.xz
@@ -23,25 +40,8 @@ rm -Rf clang
 mv cfe-$LLVM_VERSION.src clang
 cd ../build
 
-case $PLATFORM in
-    linux-x86)
-        ../configure --prefix=$INSTALL_PATH --enable-shared --enable-optimized CC="clang -m32" CXX="clang++ -m32"
-        make -j $MAKEJ
-        make install
-        ;;
-    linux-x86_64)
-        ../configure --prefix=$INSTALL_PATH --enable-shared --enable-optimized CC="clang -m64" CXX="clang++ -m64"
-        make -j $MAKEJ
-        make install
-        ;;
-    macosx-*)
-        ../configure --prefix=$INSTALL_PATH --enable-shared --enable-optimized
-        make -j $MAKEJ
-        make install
-        ;;
-    *)
-        echo "Error: Platform \"$PLATFORM\" is not supported"
-        ;;
-esac
+../configure --prefix=$INSTALL_PATH --enable-shared --enable-optimized
+make -j $MAKEJ
+make install
 
 cd ../..

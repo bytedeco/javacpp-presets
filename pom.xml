@@ -123,6 +123,14 @@
         </configuration>
         <executions>
           <execution>
+            <id>default-compile</id>
+            <configuration>
+              <includes>
+                <include>org/bytedeco/javacpp/*.java</include>
+              </includes>
+            </configuration>
+          </execution>
+          <execution>
             <id>javacpp.parser</id>
             <phase>generate-sources</phase>
             <goals>

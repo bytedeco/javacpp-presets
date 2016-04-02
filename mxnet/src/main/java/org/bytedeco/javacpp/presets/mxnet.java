@@ -37,8 +37,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = opencv_highgui.class, target = "org.bytedeco.javacpp.mxnet", value = {
-    @Platform(not = "android", compiler = "cpp11", define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1"},
-        include = {"mxnet/c_api.h", "mxnet/c_predict_api.h"}, link = "mxnet", includepath = {"/usr/local/cuda/include/",
+    @Platform(value = {"linux", "macosx"}, compiler = "cpp11", define = {"DMLC_USE_CXX11 1", "MSHADOW_USE_CBLAS 1", "MSHADOW_IN_CXX11 1"},
+        include = {"mxnet/c_api.h", "mxnet/c_predict_api.h", /*"dmlc/base.h", "dmlc/io.h", "dmlc/logging.h", "dmlc/type_traits.h",
+                   "dmlc/parameter.h", "mshadow/base.h", "mshadow/expression.h", "mshadow/tensor.h", "mxnet/base.h",*/},
+        link = "mxnet", includepath = {"/usr/local/cuda/include/",
         "/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}, linkpath = "/usr/local/cuda/lib/") })
 public class mxnet implements InfoMapper {
     public void map(InfoMap infoMap) {
@@ -56,5 +58,39 @@ public class mxnet implements InfoMapper {
                .put(new Info("RtcHandle").valueTypes("RtcHandle").pointerTypes("PointerPointer"))
                .put(new Info("OptimizerCreator").valueTypes("OptimizerCreator").pointerTypes("PointerPointer"))
                .put(new Info("OptimizerHandle").valueTypes("OptimizerHandle").pointerTypes("PointerPointer"));
+/*
+        infoMap.put(new Info("DMLC_USE_REGEX", "DMLC_USE_CXX11", "DMLC_ENABLE_STD_THREAD").define())
+               .put(new Info("!defined(__GNUC__)", "_MSC_VER < 1900", "__APPLE__", "defined(_MSC_VER) && _MSC_VER < 1900").define(false))
+               .put(new Info("std::basic_ostream<char>", "std::basic_istream<char>", "std::runtime_error").cast().pointerTypes("Pointer"))
+               .put(new Info("LOG_INFO", "LOG_ERROR", "LOG_WARNING", "LOG_FATAL", "LOG_QFATAL", "LG", "LOG_DFATAL", "DFATAL").cppTypes().annotations())
+               .put(new Info("type_name<float>").javaNames("type_name_float"))
+               .put(new Info("type_name<double>").javaNames("type_name_double"))
+               .put(new Info("type_name<int>").javaNames("type_name_int"))
+               .put(new Info("type_name<uint32_t>").javaNames("type_name_uint32_t"))
+               .put(new Info("type_name<uint64_t>").javaNames("type_name_uint64_t"))
+               .put(new Info("type_name<bool>").javaNames("type_name_bool"))
+               .put(new Info("std::pair<std::string,std::string>").pointerTypes("StringStringPair").define())
+               .put(new Info("IfThenElseType<dmlc::is_arithmetic<int>::value,dmlc::parameter::FieldEntryNumeric<dmlc::parameter::FieldEntry<int>,int>,"
+                           + "dmlc::parameter::FieldEntryBase<dmlc::parameter::FieldEntry<int>,int> >::Type").pointerTypes("Pointer"))
+               .put(new Info("dmlc::parameter::FieldEntry<int>").pointerTypes("IntFieldEntry").define())
+               .put(new Info("dmlc::parameter::FieldEntryBase<dmlc::parameter::FieldEntry<int>,int>").pointerTypes("IntIntFieldEntryBase").define())
+               .put(new Info("dmlc::parameter::FieldEntryNumeric<dmlc::parameter::FieldEntry<int>,int>").pointerTypes("IntIntFieldEntryNumeric").define())
+
+               .put(new Info("MSHADOW_FORCE_INLINE", "MSHADOW_XINLINE", "MSHADOW_CINLINE", "MSHADOW_CONSTEXPR", "MSHADOW_DEFAULT_DTYPE",
+                             "MSHADOW_USE_GLOG", "MSHADOW_ALLOC_PAD", "MSHADOW_SCALAR_").cppTypes().annotations())
+               .put(new Info("mshadow::red::limits::MinValue<float>").javaNames("MinValueFloat"))
+               .put(new Info("mshadow::red::limits::MinValue<double>").javaNames("MinValueDouble"))
+               .put(new Info("mshadow::red::limits::MinValue<int>").javaNames("MinValueInt"));
+
+        for (int i = 1; i <= 5; i++) {
+            infoMap.put(new Info("mshadow::Shape<" + i + ">").pointerTypes("Shape" + i).define())
+                   .put(new Info("mshadow::Shape<mshadow::Shape<" + i + ">::kDimension>").pointerTypes("Shape" + i));
+            if (i > 1) {
+                infoMap.put(new Info("mshadow::Shape<mshadow::Shape<" + i + ">::kSubdim>").pointerTypes("Shape" + (i - 1)));
+            } else {
+                infoMap.put(new Info("mshadow::Shape<1>::SubShape").skip());
+            }
+        }
+*/
     }
 }
