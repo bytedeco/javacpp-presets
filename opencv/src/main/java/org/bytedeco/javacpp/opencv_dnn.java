@@ -435,8 +435,8 @@ public class opencv_dnn extends org.bytedeco.javacpp.presets.opencv_dnn {
         /** \brief Creates blob from user data.
          *  \details If \p deepCopy is false then CPU data will not be allocated.
          */
-        public native void fill(@Const @ByRef BlobShape shape, int type, Pointer data, @Cast("bool") boolean deepCopy/*=true*/);
-        public native void fill(@Const @ByRef BlobShape shape, int type, Pointer data);
+        public native @Name("fill") void _fill(@Const @ByRef BlobShape shape, int type, Pointer data, @Cast("bool") boolean deepCopy/*=true*/);
+        public native @Name("fill") void _fill(@Const @ByRef BlobShape shape, int type, Pointer data);
 
         /** Returns reference to cv::Mat, containing blob data. */
         public native @ByRef Mat matRef();

@@ -46,6 +46,7 @@
     <module>artoolkitplus</module>
     <module>chilitags</module>
     <module>flandmark</module>
+    <module>clandmark</module>
     <module>fftw</module>
     <module>gsl</module>
     <module>llvm</module>

@@ -13454,8 +13454,8 @@ introduced by G. Marsaglia and W. W. Tsang.
     with zero mean and identity covariation matrix, and then transforms them
     using transform to get samples from the specified Gaussian distribution.
     */
-    public native void fill( @ByVal Mat mat, int distType, @ByVal Mat a, @ByVal Mat b, @Cast("bool") boolean saturateRange/*=false*/ );
-    public native void fill( @ByVal Mat mat, int distType, @ByVal Mat a, @ByVal Mat b );
+    public native @Name("fill") void _fill( @ByVal Mat mat, int distType, @ByVal Mat a, @ByVal Mat b, @Cast("bool") boolean saturateRange/*=false*/ );
+    public native @Name("fill") void _fill( @ByVal Mat mat, int distType, @ByVal Mat a, @ByVal Mat b );
 
     /** \brief Returns the next random number sampled from the Gaussian distribution
     @param sigma standard deviation of the distribution.
