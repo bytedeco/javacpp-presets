@@ -33,12 +33,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(value = @Platform(
         define = "_MSVC_COMPAT__",
-        include = {"CLandmark.h", "Flandmark.h", "CFeaturePool.h", "CFeatures.h"},
+        include = {"CLandmark.h", "Flandmark.h", "CFeaturePool.h", "CFeatures.h", "CImg.h"},
         link = { "clandmark@.1.5", "flandmark@.1.5"}),
         inherit = opencv_imgproc.class, target = "org.bytedeco.javacpp.clandmark")
 public class clandmark implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("fl_double_t", "clandmark::fl_double_t").cast().valueTypes("float").pointerTypes("FloatPointer").define());
-        infoMap.put(new Info("cimg_library::CImg<unsigned char>").cast().pointerTypes("BytePointer"));
+        infoMap.put(new Info("METHODDEF").cppText("#define METHODDEF(type) static type"));
+        infoMap.put(new Info("unsigned char").translate().valueTypes("byte").pointerTypes("BytePointer"));
+        infoMap.put(new Info("cimg_library::CImg<unsigned char>").pointerTypes("ByteCImg").define());
     }
 }
