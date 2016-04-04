@@ -6,6 +6,9 @@ import java.nio.*;
 import org.bytedeco.javacpp.*;
 import org.bytedeco.javacpp.annotation.*;
 
+import static org.bytedeco.javacpp.opencv_core.*;
+import static org.bytedeco.javacpp.opencv_imgproc.*;
+
 public class clandmark extends org.bytedeco.javacpp.presets.clandmark {
     static { Loader.load(); }
 
@@ -68,13 +71,13 @@ public static final int
     }
 
 	/** */
-	public native @ByRef fl_double_t overall(); public native Timings overall(fl_double_t overall);
+	public native @Cast("clandmark::fl_double_t") float overall(); public native Timings overall(float overall);
 	/** */
-	public native @ByRef fl_double_t normalizedFrame(); public native Timings normalizedFrame(fl_double_t normalizedFrame);
+	public native @Cast("clandmark::fl_double_t") float normalizedFrame(); public native Timings normalizedFrame(float normalizedFrame);
 	/** */
-	public native @ByRef fl_double_t features(); public native Timings features(fl_double_t features);
+	public native @Cast("clandmark::fl_double_t") float features(); public native Timings features(float features);
 	/** */
-	public native @ByRef fl_double_t maxsum(); public native Timings maxsum(fl_double_t maxsum);
+	public native @Cast("clandmark::fl_double_t") float maxsum(); public native Timings maxsum(float maxsum);
 }
 
 
@@ -107,16 +110,16 @@ public static final int
 			int edgesCount,
 			int base_window_width,
 			int base_window_height,
-			@ByVal fl_double_t base_window_margin_x,
-			@ByVal fl_double_t base_window_margin_y
+			@Cast("clandmark::fl_double_t") float base_window_margin_x,
+			@Cast("clandmark::fl_double_t") float base_window_margin_y
 		) { super((Pointer)null); allocate(landmarksCount, edgesCount, base_window_width, base_window_height, base_window_margin_x, base_window_margin_y); }
 	private native void allocate(
 			int landmarksCount,
 			int edgesCount,
 			int base_window_width,
 			int base_window_height,
-			@ByVal fl_double_t base_window_margin_x,
-			@ByVal fl_double_t base_window_margin_y
+			@Cast("clandmark::fl_double_t") float base_window_margin_x,
+			@Cast("clandmark::fl_double_t") float base_window_margin_y
 		);
 
 	/**
@@ -138,8 +141,8 @@ public static final int
 				  int edgesCount,
 				  int base_window_width,
 				  int base_window_height,
-				  @ByVal fl_double_t base_window_margin_x,
-				  @ByVal fl_double_t base_window_margin_y);
+				  @Cast("clandmark::fl_double_t") float base_window_margin_x,
+				  @Cast("clandmark::fl_double_t") float base_window_margin_y);
 
 	/**
 	 * \brief init_optimized;
@@ -154,8 +157,8 @@ public static final int
 							int edgesCount,
 							int base_window_width,
 							int base_window_height,
-							@ByVal fl_double_t base_window_margin_x,
-							@ByVal fl_double_t base_window_margin_y);
+							@Cast("clandmark::fl_double_t") float base_window_margin_x,
+							@Cast("clandmark::fl_double_t") float base_window_margin_y);
 
 	/**
 	 * \brief ~CLandmark destructor
@@ -167,12 +170,12 @@ public static final int
 	 * @param boundingBox	Bounding box (format: [min_x, min_y, max_x, max_y]) of object of interest (i.e. axis aligned)
 	 * @param ground_truth
 	 */
-	public native void detect(cimg_library::CImg<unsigned char> inputImage, IntPointer boundingBox, fl_double_t ground_truth/*=0*/);
-	public native void detect(cimg_library::CImg<unsigned char> inputImage, IntPointer boundingBox);
-	public native void detect(cimg_library::CImg<unsigned char> inputImage, IntBuffer boundingBox, fl_double_t ground_truth/*=0*/);
-	public native void detect(cimg_library::CImg<unsigned char> inputImage, IntBuffer boundingBox);
-	public native void detect(cimg_library::CImg<unsigned char> inputImage, int[] boundingBox, fl_double_t ground_truth/*=0*/);
-	public native void detect(cimg_library::CImg<unsigned char> inputImage, int[] boundingBox);
+	public native void detect(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, IntPointer boundingBox, @Cast("clandmark::fl_double_t*const") FloatPointer ground_truth/*=0*/);
+	public native void detect(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, IntPointer boundingBox);
+	public native void detect(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, IntBuffer boundingBox, @Cast("clandmark::fl_double_t*const") FloatPointer ground_truth/*=0*/);
+	public native void detect(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, IntBuffer boundingBox);
+	public native void detect(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, int[] boundingBox, @Cast("clandmark::fl_double_t*const") FloatPointer ground_truth/*=0*/);
+	public native void detect(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, int[] boundingBox);
 
 	/**
 	 * \brief detect_optimized
@@ -180,22 +183,22 @@ public static final int
 	 * @param boundingBox
 	 * @param ground_truth
 	 */
-	public native void detect_optimized(cimg_library::CImg<unsigned char> inputImage, IntPointer boundingBox, fl_double_t ground_truth/*=0*/);
-	public native void detect_optimized(cimg_library::CImg<unsigned char> inputImage, IntPointer boundingBox);
-	public native void detect_optimized(cimg_library::CImg<unsigned char> inputImage, IntBuffer boundingBox, fl_double_t ground_truth/*=0*/);
-	public native void detect_optimized(cimg_library::CImg<unsigned char> inputImage, IntBuffer boundingBox);
-	public native void detect_optimized(cimg_library::CImg<unsigned char> inputImage, int[] boundingBox, fl_double_t ground_truth/*=0*/);
-	public native void detect_optimized(cimg_library::CImg<unsigned char> inputImage, int[] boundingBox);
+	public native void detect_optimized(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, IntPointer boundingBox, @Cast("clandmark::fl_double_t*const") FloatPointer ground_truth/*=0*/);
+	public native void detect_optimized(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, IntPointer boundingBox);
+	public native void detect_optimized(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, IntBuffer boundingBox, @Cast("clandmark::fl_double_t*const") FloatPointer ground_truth/*=0*/);
+	public native void detect_optimized(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, IntBuffer boundingBox);
+	public native void detect_optimized(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, int[] boundingBox, @Cast("clandmark::fl_double_t*const") FloatPointer ground_truth/*=0*/);
+	public native void detect_optimized(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, int[] boundingBox);
 
 	/**
 	 * \brief detect_optimizedFromPool
 	 * @param ground_truth
 	 */
-	public native void detect_optimizedFromPool(IntPointer boundingBox, fl_double_t ground_truth/*=0*/);
+	public native void detect_optimizedFromPool(IntPointer boundingBox, @Cast("clandmark::fl_double_t*const") FloatPointer ground_truth/*=0*/);
 	public native void detect_optimizedFromPool(IntPointer boundingBox);
-	public native void detect_optimizedFromPool(IntBuffer boundingBox, fl_double_t ground_truth/*=0*/);
+	public native void detect_optimizedFromPool(IntBuffer boundingBox, @Cast("clandmark::fl_double_t*const") FloatPointer ground_truth/*=0*/);
 	public native void detect_optimizedFromPool(IntBuffer boundingBox);
-	public native void detect_optimizedFromPool(int[] boundingBox, fl_double_t ground_truth/*=0*/);
+	public native void detect_optimizedFromPool(int[] boundingBox, @Cast("clandmark::fl_double_t*const") FloatPointer ground_truth/*=0*/);
 	public native void detect_optimizedFromPool(int[] boundingBox);
 
 	/**
@@ -204,22 +207,22 @@ public static final int
 	 * @param boundingBox
 	 * @param ground_truth
 	 */
-	public native void detect_mirrored(cimg_library::CImg<unsigned char> inputImage, IntPointer boundingBox, fl_double_t ground_truth/*=0*/);
-	public native void detect_mirrored(cimg_library::CImg<unsigned char> inputImage, IntPointer boundingBox);
-	public native void detect_mirrored(cimg_library::CImg<unsigned char> inputImage, IntBuffer boundingBox, fl_double_t ground_truth/*=0*/);
-	public native void detect_mirrored(cimg_library::CImg<unsigned char> inputImage, IntBuffer boundingBox);
-	public native void detect_mirrored(cimg_library::CImg<unsigned char> inputImage, int[] boundingBox, fl_double_t ground_truth/*=0*/);
-	public native void detect_mirrored(cimg_library::CImg<unsigned char> inputImage, int[] boundingBox);
+	public native void detect_mirrored(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, IntPointer boundingBox, @Cast("clandmark::fl_double_t*const") FloatPointer ground_truth/*=0*/);
+	public native void detect_mirrored(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, IntPointer boundingBox);
+	public native void detect_mirrored(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, IntBuffer boundingBox, @Cast("clandmark::fl_double_t*const") FloatPointer ground_truth/*=0*/);
+	public native void detect_mirrored(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, IntBuffer boundingBox);
+	public native void detect_mirrored(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, int[] boundingBox, @Cast("clandmark::fl_double_t*const") FloatPointer ground_truth/*=0*/);
+	public native void detect_mirrored(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, int[] boundingBox);
 
 	/**
 	 * \brief detect
 	 * @param inputImage	normalized image frame
 	 * @param ground_truth
 	 */
-	public native void detect_base(cimg_library::CImg<unsigned char> inputImage, IntPointer ground_truth/*=0*/);
-	public native void detect_base(cimg_library::CImg<unsigned char> inputImage);
-	public native void detect_base(cimg_library::CImg<unsigned char> inputImage, IntBuffer ground_truth/*=0*/);
-	public native void detect_base(cimg_library::CImg<unsigned char> inputImage, int[] ground_truth/*=0*/);
+	public native void detect_base(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, IntPointer ground_truth/*=0*/);
+	public native void detect_base(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage);
+	public native void detect_base(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, IntBuffer ground_truth/*=0*/);
+	public native void detect_base(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, int[] ground_truth/*=0*/);
 
 	/**
 	 * \brief detect_base_optimized
@@ -236,20 +239,20 @@ public static final int
 	 * @param inputImage
 	 * @param ground_truth
 	 */
-	public native void detect_base_optimized(cimg_library::CImg<unsigned char> inputImage, IntPointer ground_truth/*=0*/);
-	public native void detect_base_optimized(cimg_library::CImg<unsigned char> inputImage);
-	public native void detect_base_optimized(cimg_library::CImg<unsigned char> inputImage, IntBuffer ground_truth/*=0*/);
-	public native void detect_base_optimized(cimg_library::CImg<unsigned char> inputImage, int[] ground_truth/*=0*/);
+	public native void detect_base_optimized(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, IntPointer ground_truth/*=0*/);
+	public native void detect_base_optimized(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage);
+	public native void detect_base_optimized(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, IntBuffer ground_truth/*=0*/);
+	public native void detect_base_optimized(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, int[] ground_truth/*=0*/);
 
 	/**
 	 * \brief nodemax_base
 	 * @param inputImage
 	 * @param ground_truth
 	 */
-	public native void nodemax_base(cimg_library::CImg<unsigned char> inputImage, IntPointer ground_truth/*=0*/);
-	public native void nodemax_base(cimg_library::CImg<unsigned char> inputImage);
-	public native void nodemax_base(cimg_library::CImg<unsigned char> inputImage, IntBuffer ground_truth/*=0*/);
-	public native void nodemax_base(cimg_library::CImg<unsigned char> inputImage, int[] ground_truth/*=0*/);
+	public native void nodemax_base(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, IntPointer ground_truth/*=0*/);
+	public native void nodemax_base(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage);
+	public native void nodemax_base(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, IntBuffer ground_truth/*=0*/);
+	public native void nodemax_base(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, int[] ground_truth/*=0*/);
 
 	/**
 	 * \brief getFeatures
@@ -257,9 +260,9 @@ public static final int
 	 * @param boundingBox
 	 * @return
 	 */
-	public native fl_double_t getFeatures(cimg_library::CImg<unsigned char> inputImage, IntPointer boundingBox, IntPointer configuration);
-	public native fl_double_t getFeatures(cimg_library::CImg<unsigned char> inputImage, IntBuffer boundingBox, IntBuffer configuration);
-	public native fl_double_t getFeatures(cimg_library::CImg<unsigned char> inputImage, int[] boundingBox, int[] configuration);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getFeatures(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, IntPointer boundingBox, IntPointer configuration);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getFeatures(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, IntBuffer boundingBox, IntBuffer configuration);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getFeatures(@Cast("cimg_library::CImg<unsigned char>*") BytePointer inputImage, int[] boundingBox, int[] configuration);
 
 	/**
 	 * \brief getFeatures_base
@@ -267,27 +270,27 @@ public static final int
 	 * @param configuration
 	 * @return
 	 */
-	public native fl_double_t getFeatures_base(cimg_library::CImg<unsigned char> nf, IntPointer configuration);
-	public native fl_double_t getFeatures_base(cimg_library::CImg<unsigned char> nf, IntBuffer configuration);
-	public native fl_double_t getFeatures_base(cimg_library::CImg<unsigned char> nf, int[] configuration);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getFeatures_base(@Cast("cimg_library::CImg<unsigned char>*") BytePointer nf, IntPointer configuration);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getFeatures_base(@Cast("cimg_library::CImg<unsigned char>*") BytePointer nf, IntBuffer configuration);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getFeatures_base(@Cast("cimg_library::CImg<unsigned char>*") BytePointer nf, int[] configuration);
 
 	/**
 	 * \brief getFeatures_base_optimized
 	 * @param configuration
 	 * @return
 	 */
-	public native fl_double_t getFeatures_base_optimized(IntPointer configuration);
-	public native fl_double_t getFeatures_base_optimized(IntBuffer configuration);
-	public native fl_double_t getFeatures_base_optimized(int[] configuration);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getFeatures_base_optimized(IntPointer configuration);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getFeatures_base_optimized(IntBuffer configuration);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getFeatures_base_optimized(int[] configuration);
 
 	/**
 	 * \brief getFeatures
 	 * @param configuration
 	 * @return
 	 */
-	public native fl_double_t getFeatures(IntPointer configuration);
-	public native fl_double_t getFeatures(IntBuffer configuration);
-	public native fl_double_t getFeatures(int[] configuration);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getFeatures(IntPointer configuration);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getFeatures(IntBuffer configuration);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getFeatures(int[] configuration);
 
 	/**
 	 * \brief getPsiNodes_base
@@ -295,24 +298,24 @@ public static final int
 	 * @param configuration
 	 * @return
 	 */
-	public native fl_double_t getPsiNodes_base(cimg_library::CImg<unsigned char> nf, IntPointer configuration);
-	public native fl_double_t getPsiNodes_base(cimg_library::CImg<unsigned char> nf, IntBuffer configuration);
-	public native fl_double_t getPsiNodes_base(cimg_library::CImg<unsigned char> nf, int[] configuration);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getPsiNodes_base(@Cast("cimg_library::CImg<unsigned char>*") BytePointer nf, IntPointer configuration);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getPsiNodes_base(@Cast("cimg_library::CImg<unsigned char>*") BytePointer nf, IntBuffer configuration);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getPsiNodes_base(@Cast("cimg_library::CImg<unsigned char>*") BytePointer nf, int[] configuration);
 
 	/**
 	 * \brief getPsiNodes
 	 * @param configuration
 	 * @return
 	 */
-	public native fl_double_t getPsiNodes(IntPointer configuration);
-	public native fl_double_t getPsiNodes(IntBuffer configuration);
-	public native fl_double_t getPsiNodes(int[] configuration);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getPsiNodes(IntPointer configuration);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getPsiNodes(IntBuffer configuration);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getPsiNodes(int[] configuration);
 
 	/**
 	 * \brief setNormalizationFactor
 	 * @param factor
 	 */
-	public native void setNormalizationFactor(@ByVal fl_double_t factor);
+	public native void setNormalizationFactor(@Cast("clandmark::fl_double_t") float factor);
 
 	/**
 	 * \brief getName
@@ -331,7 +334,7 @@ public static final int
 	 * \brief getLandmarks
 	 * @return
 	 */
-	public native fl_double_t getLandmarks();
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getLandmarks();
 
 	/**
 	 * \brief getLandmarksNF
@@ -390,39 +393,39 @@ public static final int
 	 * \brief setW
 	 * @param input_w
 	 */
-	public native void setW(fl_double_t input_w);
+	public native void setW(@Cast("clandmark::fl_double_t*const") FloatPointer input_w);
 
 	/**
 	 * \brief getW
 	 * @return joint weight vector w, allocates memory, does not care about its freeing!
 	 */
-	public native fl_double_t getW();
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getW();
 
 	/**
 	 * \brief setNodesW
 	 * @param input_w
 	 */
-	public native void setNodesW(fl_double_t input_w);
+	public native void setNodesW(@Cast("clandmark::fl_double_t*const") FloatPointer input_w);
 
 	/**
 	 * \brief getQvalues
 	 * @return
 	 */
-	public native fl_double_t getQvalues();
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getQvalues();
 
 	/**
 	 * \brief getGvalues
 	 * @return
 	 */
-	public native fl_double_t getGvalues();
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getGvalues();
 
 	/**
 	 * \brief getLossValues
 	 * @return
 	 */
-	public native fl_double_t getLossValues(IntPointer position);
-	public native fl_double_t getLossValues(IntBuffer position);
-	public native fl_double_t getLossValues(int[] position);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getLossValues(IntPointer position);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getLossValues(IntBuffer position);
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getLossValues(int[] position);
 
 	/**
 	 * \brief write
@@ -455,13 +458,13 @@ public static final int
 	 * \brief getH
 	 * @return
 	 */
-	public native fl_double_t getH();
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getH();
 
 	/**
 	 * \brief getHinv
 	 * @return
 	 */
-	public native fl_double_t getHinv();
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getHinv();
 
 	/**
 	 * \brief nodeHasLoss
@@ -489,7 +492,7 @@ public static final int
 	 * @param output
 	 * @return
 	 */
-	public native @Cast("fl_double_t**") @StdVector PointerPointer getIntermediateResults();
+	public native @Cast("clandmark::fl_double_t**") @StdVector PointerPointer getIntermediateResults();
 
 	/** */
 	public native @ByRef Timings timings(); public native CLandmark timings(Timings timings);
@@ -546,16 +549,16 @@ public static final int
 			int edgesCount/*=7*/,
 			int base_window_width/*=40*/,
 			int base_window_height/*=40*/,
-			@ByVal(nullValue = "1.2") fl_double_t base_window_margin_x/*=1.2*/,
-			@ByVal(nullValue = "1.2") fl_double_t base_window_margin_y/*=1.2*/
+			@Cast("clandmark::fl_double_t") float base_window_margin_x/*=1.2*/,
+			@Cast("clandmark::fl_double_t") float base_window_margin_y/*=1.2*/
 		) { super((Pointer)null); allocate(landmarksCount, edgesCount, base_window_width, base_window_height, base_window_margin_x, base_window_margin_y); }
 	private native void allocate(
 			int landmarksCount/*=8*/,
 			int edgesCount/*=7*/,
 			int base_window_width/*=40*/,
 			int base_window_height/*=40*/,
-			@ByVal(nullValue = "1.2") fl_double_t base_window_margin_x/*=1.2*/,
-			@ByVal(nullValue = "1.2") fl_double_t base_window_margin_y/*=1.2*/
+			@Cast("clandmark::fl_double_t") float base_window_margin_x/*=1.2*/,
+			@Cast("clandmark::fl_double_t") float base_window_margin_y/*=1.2*/
 		);
 	public Flandmark(
 		) { super((Pointer)null); allocate(); }
@@ -593,7 +596,7 @@ public static final int
 	 * \brief getNF
 	 * @return
 	 */
-	public native cimg_library::CImg<unsigned char> getNF();
+	public native @Cast("cimg_library::CImg<unsigned char>*") BytePointer getNF();
 
 	/**
 	 * \brief getNF
@@ -601,12 +604,12 @@ public static final int
 	 * @param bbox
 	 * @return
 	 */
-	public native cimg_library::CImg<unsigned char> getNF(cimg_library::CImg<unsigned char> img, IntPointer bbox, fl_double_t ground_truth/*=0*/);
-	public native cimg_library::CImg<unsigned char> getNF(cimg_library::CImg<unsigned char> img, IntPointer bbox);
-	public native cimg_library::CImg<unsigned char> getNF(cimg_library::CImg<unsigned char> img, IntBuffer bbox, fl_double_t ground_truth/*=0*/);
-	public native cimg_library::CImg<unsigned char> getNF(cimg_library::CImg<unsigned char> img, IntBuffer bbox);
-	public native cimg_library::CImg<unsigned char> getNF(cimg_library::CImg<unsigned char> img, int[] bbox, fl_double_t ground_truth/*=0*/);
-	public native cimg_library::CImg<unsigned char> getNF(cimg_library::CImg<unsigned char> img, int[] bbox);
+	public native @Cast("cimg_library::CImg<unsigned char>*") BytePointer getNF(@Cast("cimg_library::CImg<unsigned char>*") BytePointer img, IntPointer bbox, @Cast("clandmark::fl_double_t*const") FloatPointer ground_truth/*=0*/);
+	public native @Cast("cimg_library::CImg<unsigned char>*") BytePointer getNF(@Cast("cimg_library::CImg<unsigned char>*") BytePointer img, IntPointer bbox);
+	public native @Cast("cimg_library::CImg<unsigned char>*") BytePointer getNF(@Cast("cimg_library::CImg<unsigned char>*") BytePointer img, IntBuffer bbox, @Cast("clandmark::fl_double_t*const") FloatPointer ground_truth/*=0*/);
+	public native @Cast("cimg_library::CImg<unsigned char>*") BytePointer getNF(@Cast("cimg_library::CImg<unsigned char>*") BytePointer img, IntBuffer bbox);
+	public native @Cast("cimg_library::CImg<unsigned char>*") BytePointer getNF(@Cast("cimg_library::CImg<unsigned char>*") BytePointer img, int[] bbox, @Cast("clandmark::fl_double_t*const") FloatPointer ground_truth/*=0*/);
+	public native @Cast("cimg_library::CImg<unsigned char>*") BytePointer getNF(@Cast("cimg_library::CImg<unsigned char>*") BytePointer img, int[] bbox);
 
 	/**
 	 * \brief getGroundTruthNF
@@ -618,20 +621,20 @@ public static final int
 	 * \brief getGroundTruth
 	 * @return
 	 */
-	public native fl_double_t getGroundTruth();
+	public native @Cast("clandmark::fl_double_t*") FloatPointer getGroundTruth();
 
 	/**
 	 * \brief getNormalizationFactor
 	 * @return
 	 */
-	public native @ByVal fl_double_t getNormalizationFactor();
+	public native @Cast("clandmark::fl_double_t") float getNormalizationFactor();
 
 	/**
 	 * \brief setLossTables
 	 * @param loss_data
 	 * @param landmark_id
 	 */
-	public native void setLossTable(fl_double_t loss_data, int landmark_id);
+	public native void setLossTable(@Cast("clandmark::fl_double_t*") FloatPointer loss_data, int landmark_id);
 
 	/**
 	 * \brief getVersion
@@ -662,13 +665,232 @@ public static final int
 	 * \brief getScore
 	 * @return
 	 */
-	public native @ByVal fl_double_t getScore();
+	public native @Cast("clandmark::fl_double_t") float getScore();
 
 }
 
 
 
 // #endif // _FLANDMARK_H__
+
+
+// Parsed from CFeaturePool.h
+
+/*
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Written (W) 2014, 2015 Michal Uricar
+ * Copyright (C) 2014, 2015 Michal Uricar
+ */
+
+// #include "CFeatures.h"
+
+// #include <vector>
+
+// #ifndef _CFEATUREPOOL_H__
+// #define _CFEATUREPOOL_H__
+
+/**
+ * \brief The CFeaturePool class
+ */
+@Namespace("clandmark") @NoOffset public static class CFeaturePool extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CFeaturePool(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CFeaturePool(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public CFeaturePool position(long position) {
+        return (CFeaturePool)super.position(position);
+    }
+
+
+	/**
+	 * \brief CFeaturePool
+	 */
+	public CFeaturePool() { super((Pointer)null); allocate(); }
+	private native void allocate();
+
+	/**
+	 * \brief CFeaturePool
+	 * @param width
+	 * @param height
+	 */
+	public CFeaturePool(int width, int height, @Cast("unsigned char*") BytePointer nf/*=0x0*/) { super((Pointer)null); allocate(width, height, nf); }
+	private native void allocate(int width, int height, @Cast("unsigned char*") BytePointer nf/*=0x0*/);
+	public CFeaturePool(int width, int height) { super((Pointer)null); allocate(width, height); }
+	private native void allocate(int width, int height);
+	public CFeaturePool(int width, int height, @Cast("unsigned char*") ByteBuffer nf/*=0x0*/) { super((Pointer)null); allocate(width, height, nf); }
+	private native void allocate(int width, int height, @Cast("unsigned char*") ByteBuffer nf/*=0x0*/);
+	public CFeaturePool(int width, int height, @Cast("unsigned char*") byte[] nf/*=0x0*/) { super((Pointer)null); allocate(width, height, nf); }
+	private native void allocate(int width, int height, @Cast("unsigned char*") byte[] nf/*=0x0*/);
+
+	/**
+	 *
+	 */
+
+	/**
+	 * \brief getFeaturesFromPool
+	 * @param index
+	 * @return
+	 */
+	public native CFeatures getFeaturesFromPool(@Cast("unsigned int") int index);
+
+	/**
+	 * \brief addFeaturesToPool
+	 * @param features
+	 */
+	public native void addFeaturesToPool(CFeatures features);
+
+	/**
+	 * \brief updateNFmipmap
+	 * @param nf
+	 */
+	public native void updateNFmipmap(int width, int height, @Cast("unsigned char*const") BytePointer nf);
+	public native void updateNFmipmap(int width, int height, @Cast("unsigned char*const") ByteBuffer nf);
+	public native void updateNFmipmap(int width, int height, @Cast("unsigned char*const") byte[] nf);
+
+	/**
+	 * \brief setNFmipmap
+	 * @param mipmap
+	 */
+	public native void setNFmipmap(@Cast("unsigned char*const") BytePointer mipmap);
+	public native void setNFmipmap(@Cast("unsigned char*const") ByteBuffer mipmap);
+	public native void setNFmipmap(@Cast("unsigned char*const") byte[] mipmap);
+
+	/**
+	 * \brief getCumulativeWidths
+	 * @return
+	 */
+	public native IntPointer getCumulativeWidths();
+
+	/**
+	 * \brief getPyramidLevels
+	 * @return
+	 */
+	public native int getPyramidLevels();
+
+	/**
+	 * \brief getWidth
+	 * @return
+	 */
+	public native int getWidth();
+
+	/**
+	 * \brief getHeight
+	 * @return
+	 */
+	public native int getHeight();
+
+	/**
+	 * \brief computeFeatures
+	 */
+	public native void computeFeatures();
+
+	/**
+	 * \brief updateFeaturesRaw
+	 * @param data
+	 */
+	public native void updateFeaturesRaw(int index, Pointer data);
+
+}
+
+
+
+// #endif // _CFEATUREPOOL_H__
+
+
+// Parsed from CFeatures.h
+
+/*
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Written (W) 2014, 2015 Michal Uricar
+ * Copyright (C) 2014, 2015 Michal Uricar
+ */
+
+// #ifndef _CFEATURES_H__
+// #define _CFEATURES_H__
+
+//#include "CImg.h"
+
+// #include "msvc-compat.h"
+
+/**
+ * \brief The CFeatures class
+ */
+@Namespace("clandmark") @NoOffset public static class CFeatures extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CFeatures(Pointer p) { super(p); }
+
+
+	/**
+	 * \brief CFeatures
+	 */
+
+	/**
+	 * \brief CFeatures
+	 * @param width
+	 * @param height
+	 */
+
+	/**
+	 * \brief ~CFeatures
+	 */
+
+	/**
+	 * \brief compute
+	 */
+	public native void compute();
+
+	/**
+	 * \brief getFeatures
+	 * @return
+	 */
+	public native Pointer getFeatures();
+
+	/**
+	 * \brief setFeatures
+	 * @param features
+	 */
+	public native void setFeatures(CFeatures features);
+
+	/**
+	 * \brief setFeaturesRaw
+	 * @param data
+	 */
+	public native void setFeaturesRaw(Pointer data);
+
+	/**
+	 * \brief setNFmipmap
+	 * @param nfMipmap
+	 */
+	public native void setNFmipmap( @Cast("unsigned char*") BytePointer nfMipmap);
+	public native void setNFmipmap( @Cast("unsigned char*") ByteBuffer nfMipmap);
+	public native void setNFmipmap( @Cast("unsigned char*") byte[] nfMipmap);
+
+	/** Normalized frame mipmap */
+	public native @Cast("unsigned char*") BytePointer NFmipmap(); public native CFeatures NFmipmap(BytePointer NFmipmap);
+	/** */
+	@MemberGetter public native int kWidth();
+	/** */
+	@MemberGetter public native int kHeight();
+	/** */
+	@MemberGetter public native int kLevels();
+	/** */
+	public native IntPointer cumWidths(); public native CFeatures cumWidths(IntPointer cumWidths);
+}
+
+
+
+// #endif // _CFEATURES_H__
 
 
 }

@@ -11,7 +11,8 @@
 
     <groupId>org.bytedeco.javacpp-presets</groupId>
     <artifactId>clandmark</artifactId>
-    <version>1.07-${project.parent.version}</version>
+    <!-- TODO figure out what version CLandmark is actually at?!?!? -->
+    <version>0.01-${project.parent.version}</version>
     <packaging>jar</packaging>
     <name>JavaCPP Presets for clandmark</name>
 
@@ -66,6 +67,8 @@
                         <includePath>${basedir}/../opencv/cppbuild/${javacpp.platform}/include/opencv/</includePath>
                         <includePath>${basedir}/../opencv/cppbuild/${javacpp.platform}/include/</includePath>
                         <includePath>${basedir}/cppbuild/${javacpp.platform}/include/</includePath>
+                        <includePath>${basedir}/cppbuild/${javacpp.platform}/clandmark-master/3rd_party/CImg-1.5.6</includePath>
+                        <includePath>${basedir}/cppbuild/${javacpp.platform}/clandmark-master/3rd_party/rapidxml-1.13</includePath>
                     </includePaths>
                     <linkPaths>
                         <linkPath>${basedir}/../opencv/cppbuild/${javacpp.platform}/lib/</linkPath>

@@ -31,9 +31,14 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 /**
  * @author Lloyd @ github.com/lloydmeta
  */
-@Properties(value = @Platform(include = {"CLandmark.h", "Flandmark.h"}, link = { "clandmark@.1.5", "flandmark@.1.5"}),
-        target = "org.bytedeco.javacpp.clandmark")
+@Properties(value = @Platform(
+        define = "_MSVC_COMPAT__",
+        include = {"CLandmark.h", "Flandmark.h", "CFeaturePool.h", "CFeatures.h"},
+        link = { "clandmark@.1.5", "flandmark@.1.5"}),
+        inherit = opencv_imgproc.class, target = "org.bytedeco.javacpp.clandmark")
 public class clandmark implements InfoMapper {
     public void map(InfoMap infoMap) {
+        infoMap.put(new Info("fl_double_t", "clandmark::fl_double_t").cast().valueTypes("float").pointerTypes("FloatPointer").define());
+        infoMap.put(new Info("cimg_library::CImg<unsigned char>").cast().pointerTypes("BytePointer"));
     }
 }
