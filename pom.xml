@@ -340,24 +340,42 @@
         <version>1.4.0</version>
         <executions>
           <execution>
-            <id>javacpp.cppbuild</id>
+            <id>javacpp.cppbuild.install</id>
             <phase>generate-sources</phase>
             <goals>
               <goal>exec</goal>
-            </goals>
+            </goals>			
+            <configuration>
+              <arguments>
+                <argument>${project.basedir}/../cppbuild.sh</argument>
+                <argument>install</argument>
+                <argument>${project.artifactId}</argument>
+                <argument>-platform</argument>
+                <argument>${javacpp.platform}</argument>
+              </arguments>
+            </configuration>
           </execution>
+          <execution>
+            <id>javacpp.cppbuild.clean</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>			
+            <configuration>
+              <arguments>
+                <argument>${project.basedir}/../cppbuild.sh</argument>
+                <argument>clean</argument>
+                <argument>${project.artifactId}</argument>
+                <argument>-platform</argument>
+                <argument>${javacpp.platform}</argument>
+              </arguments>
+            </configuration>
+          </execution>		  
         </executions>
         <configuration>
           <skip>${javacpp.cppbuild.skip}</skip>
           <workingDirectory>${project.basedir}/..</workingDirectory>
-          <executable>bash</executable>
-          <arguments>
-            <argument>${project.basedir}/../cppbuild.sh</argument>
-            <argument>install</argument>
-            <argument>${project.artifactId}</argument>
-            <argument>-platform</argument>
-            <argument>${javacpp.platform}</argument>
-          </arguments>
+          <executable>bash</executable>			
         </configuration>
       </plugin>
     </plugins>
