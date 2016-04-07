@@ -129,6 +129,32 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
     }
 }
 
+@Name("std::vector<const google::protobuf::FieldDescriptor*>") public static class FieldDescriptorVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FieldDescriptorVector(Pointer p) { super(p); }
+    public FieldDescriptorVector(FieldDescriptor ... array) { this(array.length); put(array); }
+    public FieldDescriptorVector()       { allocate();  }
+    public FieldDescriptorVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef FieldDescriptorVector put(@ByRef FieldDescriptorVector x);
+
+    public native long size();
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native @Const FieldDescriptor get(@Cast("size_t") long i);
+    public native FieldDescriptorVector put(@Cast("size_t") long i, FieldDescriptor value);
+
+    public FieldDescriptorVector put(FieldDescriptor ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
 @Name("std::vector<caffe::Datum>") public static class DatumVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -584,6 +610,3333 @@ public class caffe extends org.bytedeco.javacpp.presets.caffe {
 // #endif  // CAFFE_UTIL_DEVICE_ALTERNATE_H_
 
 
+// Parsed from google/protobuf/stubs/common.h
+
+// Protocol Buffers - Google's data interchange format
+// Copyright 2008 Google Inc.  All rights reserved.
+// https://developers.google.com/protocol-buffers/
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+// Author: kenton@google.com (Kenton Varda) and others
+//
+// Contains basic types and utilities used by the rest of the library.
+
+// #ifndef GOOGLE_PROTOBUF_COMMON_H__
+// #define GOOGLE_PROTOBUF_COMMON_H__
+
+// #include <assert.h>
+// #include <stdlib.h>
+// #include <cstddef>
+// #include <string>
+// #include <string.h>
+// #if defined(__osf__)
+// Tru64 lacks stdint.h, but has inttypes.h which defines a superset of
+// what stdint.h would define.
+// #include <inttypes.h>
+// #elif !defined(_MSC_VER)
+// #include <stdint.h>
+// #endif
+
+// #ifndef PROTOBUF_USE_EXCEPTIONS
+// #if defined(_MSC_VER) && defined(_CPPUNWIND)
+  public static final int PROTOBUF_USE_EXCEPTIONS = 1;
+// #elif defined(__EXCEPTIONS)
+// #else
+// #endif
+// #endif
+
+// #if PROTOBUF_USE_EXCEPTIONS
+// #include <exception>
+// #endif
+
+// #if defined(_WIN32) && defined(GetMessage)
+// #endif
+
+
+
+
+// #undef GOOGLE_DISALLOW_EVIL_CONSTRUCTORS
+// #define GOOGLE_DISALLOW_EVIL_CONSTRUCTORS(TypeName)
+//   TypeName(const TypeName&);
+//   void operator=(const TypeName&)
+
+// #if defined(_MSC_VER) && defined(PROTOBUF_USE_DLLS)
+//   #ifdef LIBPROTOBUF_EXPORTS
+//     #define LIBPROTOBUF_EXPORT __declspec(dllexport)
+//   #else
+//     #define LIBPROTOBUF_EXPORT __declspec(dllimport)
+//   #endif
+//   #ifdef LIBPROTOC_EXPORTS
+//     #define LIBPROTOC_EXPORT   __declspec(dllexport)
+//   #else
+//     #define LIBPROTOC_EXPORT   __declspec(dllimport)
+//   #endif
+// #else
+//   #define LIBPROTOBUF_EXPORT
+//   #define LIBPROTOC_EXPORT
+// #endif
+
+// Some of these constants are macros rather than const ints so that they can
+// be used in #if directives.
+
+// The current version, represented as a single integer to make comparison
+// easier:  major * 10^6 + minor * 10^3 + micro
+public static final int GOOGLE_PROTOBUF_VERSION = 2006001;
+
+// The minimum library version which works with the current version of the
+// headers.
+public static final int GOOGLE_PROTOBUF_MIN_LIBRARY_VERSION = 2006000;
+
+// The minimum header version which works with the current version of
+// the library.  This constant should only be used by protoc's C++ code
+// generator.
+@Namespace("google::protobuf::internal") @MemberGetter public static native int kMinHeaderVersionForLibrary();
+public static final int kMinHeaderVersionForLibrary = kMinHeaderVersionForLibrary();
+
+// The minimum protoc version which works with the current version of the
+// headers.
+public static final int GOOGLE_PROTOBUF_MIN_PROTOC_VERSION = 2006000;
+
+// The minimum header version which works with the current version of
+// protoc.  This constant should only be used in VerifyVersion().
+@Namespace("google::protobuf::internal") @MemberGetter public static native int kMinHeaderVersionForProtoc();
+public static final int kMinHeaderVersionForProtoc = kMinHeaderVersionForProtoc();
+
+// Verifies that the headers and libraries are compatible.  Use the macro
+// below to call this.
+@Namespace("google::protobuf::internal") public static native void VerifyVersion(int headerVersion, int minLibraryVersion,
+                                      @Cast("const char*") BytePointer filename);
+@Namespace("google::protobuf::internal") public static native void VerifyVersion(int headerVersion, int minLibraryVersion,
+                                      String filename);
+
+// Converts a numeric version number to a string.
+@Namespace("google::protobuf::internal") public static native @StdString BytePointer VersionString(int version);
+
+  // namespace internal
+
+// Place this macro in your main() function (or somewhere before you attempt
+// to use the protobuf library) to verify that the version you link against
+// matches the headers you compiled against.  If a version mismatch is
+// detected, the process will abort.
+// #define GOOGLE_PROTOBUF_VERIFY_VERSION
+//   ::google::protobuf::internal::VerifyVersion(
+//     GOOGLE_PROTOBUF_VERSION, GOOGLE_PROTOBUF_MIN_LIBRARY_VERSION,
+//     __FILE__)
+
+// ===================================================================
+// from google3/base/port.h
+
+// #ifdef _MSC_VER
+// #else
+// #endif
+
+// long long macros to be used because gcc and vc++ use different suffixes,
+// and different size specifiers in format strings
+// #undef GOOGLE_LONGLONG
+// #undef GOOGLE_ULONGLONG
+// #undef GOOGLE_LL_FORMAT
+
+// #ifdef _MSC_VER
+// #define GOOGLE_LONGLONG(x) x##I64
+// #define GOOGLE_ULONGLONG(x) x##UI64
+public static final String GOOGLE_LL_FORMAT = "I64";  // As in printf("%I64d", ...)
+// #else
+// #define GOOGLE_LONGLONG(x) x##LL
+// #define GOOGLE_ULONGLONG(x) x##ULL  // As in "%lld". Note that "q" is poor form also.
+// #endif
+
+@Namespace("google::protobuf") @MemberGetter public static native @Cast("const google::protobuf::int32") int kint32max();
+public static final int kint32max = kint32max();
+@Namespace("google::protobuf") @MemberGetter public static native @Cast("const google::protobuf::int32") int kint32min();
+public static final int kint32min = kint32min();
+@Namespace("google::protobuf") @MemberGetter public static native @Cast("const google::protobuf::int64") long kint64max();
+public static final long kint64max = kint64max();
+@Namespace("google::protobuf") @MemberGetter public static native @Cast("const google::protobuf::int64") long kint64min();
+public static final long kint64min = kint64min();
+@Namespace("google::protobuf") @MemberGetter public static native @Cast("const google::protobuf::uint32") int kuint32max();
+public static final int kuint32max = kuint32max();
+@Namespace("google::protobuf") @MemberGetter public static native @Cast("const google::protobuf::uint64") long kuint64max();
+public static final long kuint64max = kuint64max();
+
+// -------------------------------------------------------------------
+// Annotations:  Some parts of the code have been annotated in ways that might
+//   be useful to some compilers or tools, but are not supported universally.
+//   You can #define these annotations yourself if the default implementation
+//   is not right for you.
+
+// #ifndef GOOGLE_ATTRIBUTE_ALWAYS_INLINE
+// #if defined(__GNUC__) && (__GNUC__ > 3 ||(__GNUC__ == 3 && __GNUC_MINOR__ >= 1))
+// For functions we want to force inline.
+// Introduced in gcc 3.1.
+// #define GOOGLE_ATTRIBUTE_ALWAYS_INLINE __attribute__ ((always_inline))
+// #else
+// Other compilers will have to figure it out for themselves.
+// #define GOOGLE_ATTRIBUTE_ALWAYS_INLINE
+// #endif
+// #endif
+
+// #ifndef GOOGLE_ATTRIBUTE_DEPRECATED
+// #ifdef __GNUC__
+// If the method/variable/type is used anywhere, produce a warning.
+// #define GOOGLE_ATTRIBUTE_DEPRECATED __attribute__((deprecated))
+// #else
+// #define GOOGLE_ATTRIBUTE_DEPRECATED
+// #endif
+// #endif
+
+// #ifndef GOOGLE_PREDICT_TRUE
+// #ifdef __GNUC__
+// Provided at least since GCC 3.0.
+// #define GOOGLE_PREDICT_TRUE(x) (__builtin_expect(!!(x), 1))
+// #else
+// #define GOOGLE_PREDICT_TRUE
+// #endif
+// #endif
+
+// Delimits a block of code which may write to memory which is simultaneously
+// written by other threads, but which has been determined to be thread-safe
+// (e.g. because it is an idempotent write).
+// #ifndef GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN
+// #define GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN()
+// #endif
+// #ifndef GOOGLE_SAFE_CONCURRENT_WRITES_END
+// #define GOOGLE_SAFE_CONCURRENT_WRITES_END()
+// #endif
+
+// ===================================================================
+// from google3/base/basictypes.h
+
+// The GOOGLE_ARRAYSIZE(arr) macro returns the # of elements in an array arr.
+// The expression is a compile-time constant, and therefore can be
+// used in defining new arrays, for example.
+//
+// GOOGLE_ARRAYSIZE catches a few type errors.  If you see a compiler error
+//
+//   "warning: division by zero in ..."
+//
+// when using GOOGLE_ARRAYSIZE, you are (wrongfully) giving it a pointer.
+// You should only use GOOGLE_ARRAYSIZE on statically allocated arrays.
+//
+// The following comments are on the implementation details, and can
+// be ignored by the users.
+//
+// ARRAYSIZE(arr) works by inspecting sizeof(arr) (the # of bytes in
+// the array) and sizeof(*(arr)) (the # of bytes in one array
+// element).  If the former is divisible by the latter, perhaps arr is
+// indeed an array, in which case the division result is the # of
+// elements in the array.  Otherwise, arr cannot possibly be an array,
+// and we generate a compiler error to prevent the code from
+// compiling.
+//
+// Since the size of bool is implementation-defined, we need to cast
+// !(sizeof(a) & sizeof(*(a))) to size_t in order to ensure the final
+// result has type size_t.
+//
+// This macro is not perfect as it wrongfully accepts certain
+// pointers, namely where the pointer size is divisible by the pointee
+// size.  Since all our code has to go through a 32-bit compiler,
+// where a pointer is 4 bytes, this means all pointers to a type whose
+// size is 3 or greater than 4 will be (righteously) rejected.
+//
+// Kudos to Jorg Brown for this simple and elegant implementation.
+
+// #undef GOOGLE_ARRAYSIZE
+// #define GOOGLE_ARRAYSIZE(a)
+//   ((sizeof(a) / sizeof(*(a))) /
+//    static_cast<size_t>(!(sizeof(a) % sizeof(*(a)))))
+
+// Use implicit_cast as a safe version of static_cast or const_cast
+// for upcasting in the type hierarchy (i.e. casting a pointer to Foo
+// to a pointer to SuperclassOfFoo or casting a pointer to Foo to
+// a const pointer to Foo).
+// When you use implicit_cast, the compiler checks that the cast is safe.
+// Such explicit implicit_casts are necessary in surprisingly many
+// situations where C++ demands an exact type match instead of an
+// argument type convertable to a target type.
+//
+// The From type can be inferred, so the preferred syntax for using
+// implicit_cast is the same as for static_cast etc.:
+//
+//   implicit_cast<ToType>(expr)
+//
+// implicit_cast would have been part of the C++ standard library,
+// but the proposal was submitted too late.  It will probably make
+// its way into the language in the future.
+
+// When you upcast (that is, cast a pointer from type Foo to type
+// SuperclassOfFoo), it's fine to use implicit_cast<>, since upcasts
+// always succeed.  When you downcast (that is, cast a pointer from
+// type Foo to type SubclassOfFoo), static_cast<> isn't safe, because
+// how do you know the pointer is really of type SubclassOfFoo?  It
+// could be a bare Foo, or of type DifferentSubclassOfFoo.  Thus,
+// when you downcast, you should use this macro.  In debug mode, we
+// use dynamic_cast<> to double-check the downcast is legal (we die
+// if it's not).  In normal mode, we do the efficient static_cast<>
+// instead.  Thus, it's important to test in debug mode to make sure
+// the cast is legal!
+//    This is the only place in the code we should use dynamic_cast<>.
+// In particular, you SHOULDN'T be using dynamic_cast<> in order to
+// do RTTI (eg code like this:
+//    if (dynamic_cast<Subclass1>(foo)) HandleASubclass1Object(foo);
+//    if (dynamic_cast<Subclass2>(foo)) HandleASubclass2Object(foo);
+// You should design the code some other way not to need this.
+
+  // namespace internal
+
+// We made these internal so that they would show up as such in the docs,
+// but we don't want to stick "internal::" in front of them everywhere.
+
+// The COMPILE_ASSERT macro can be used to verify that a compile time
+// expression is true. For example, you could use it to verify the
+// size of a static array:
+//
+//   COMPILE_ASSERT(ARRAYSIZE(content_type_names) == CONTENT_NUM_TYPES,
+//                  content_type_names_incorrect_size);
+//
+// or to make sure a struct is smaller than a certain size:
+//
+//   COMPILE_ASSERT(sizeof(foo) < 128, foo_too_large);
+//
+// The second argument to the macro is the name of the variable. If
+// the expression is false, most compilers will issue a warning/error
+// containing the name of the variable.
+
+  // namespace internal
+
+// #undef GOOGLE_COMPILE_ASSERT
+// #define GOOGLE_COMPILE_ASSERT(expr, msg)
+//   typedef ::google::protobuf::internal::CompileAssert<(bool(expr))>
+//           msg[bool(expr) ? 1 : -1]
+
+
+// Implementation details of COMPILE_ASSERT:
+//
+// - COMPILE_ASSERT works by defining an array type that has -1
+//   elements (and thus is invalid) when the expression is false.
+//
+// - The simpler definition
+//
+//     #define COMPILE_ASSERT(expr, msg) typedef char msg[(expr) ? 1 : -1]
+//
+//   does not work, as gcc supports variable-length arrays whose sizes
+//   are determined at run-time (this is gcc's extension and not part
+//   of the C++ standard).  As a result, gcc fails to reject the
+//   following code with the simple definition:
+//
+//     int foo;
+//     COMPILE_ASSERT(foo, msg); // not supposed to compile as foo is
+//                               // not a compile-time constant.
+//
+// - By using the type CompileAssert<(bool(expr))>, we ensures that
+//   expr is a compile-time constant.  (Template arguments must be
+//   determined at compile-time.)
+//
+// - The outter parentheses in CompileAssert<(bool(expr))> are necessary
+//   to work around a bug in gcc 3.4.4 and 4.0.1.  If we had written
+//
+//     CompileAssert<bool(expr)>
+//
+//   instead, these compilers will refuse to compile
+//
+//     COMPILE_ASSERT(5 > 0, some_message);
+//
+//   (They seem to think the ">" in "5 > 0" marks the end of the
+//   template argument list.)
+//
+// - The array size is (bool(expr) ? 1 : -1), instead of simply
+//
+//     ((expr) ? 1 : -1).
+//
+//   This is to avoid running into a bug in MS VC 7.1, which
+//   causes ((0.0) ? 1 : -1) to incorrectly evaluate to 1.
+
+// ===================================================================
+// from google3/base/scoped_ptr.h
+
+//  This is an implementation designed to match the anticipated future TR2
+//  implementation of the scoped_ptr class, and its closely-related brethren,
+//  scoped_array, scoped_ptr_malloc, and make_scoped_ptr.
+
+// A scoped_ptr<T> is like a T*, except that the destructor of scoped_ptr<T>
+// automatically deletes the pointer it holds (if any).
+// That is, scoped_ptr<T> owns the T object that it points to.
+// Like a T*, a scoped_ptr<T> may hold either NULL or a pointer to a T object.
+//
+// The size of a scoped_ptr is small:
+// sizeof(scoped_ptr<C>) == sizeof(C*)
+
+// scoped_array<C> is like scoped_ptr<C>, except that the caller must allocate
+// with new [] and the destructor deletes objects with delete [].
+//
+// As with scoped_ptr<C>, a scoped_array<C> either points to an object
+// or is NULL.  A scoped_array<C> owns the object that it points to.
+//
+// Size: sizeof(scoped_array<C>) == sizeof(C*)
+
+  // namespace internal
+
+// We made these internal so that they would show up as such in the docs,
+// but we don't want to stick "internal::" in front of them everywhere.
+
+// ===================================================================
+// emulates google3/base/logging.h
+
+/** enum google::protobuf::LogLevel */
+public static final int
+  LOGLEVEL_INFO = 0,     // Informational.  This is never actually used by
+                     // libprotobuf.
+  LOGLEVEL_WARNING = 1,  // Warns about issues that, although not technically a
+                     // problem now, could cause problems in the future.  For
+                     // example, a // warning will be printed when parsing a
+                     // message that is near the message size limit.
+  LOGLEVEL_ERROR = 2,    // An error occurred which should never happen during
+                     // normal use.
+  LOGLEVEL_FATAL = 3,    // An error occurred from which the library cannot
+                     // recover.  This usually indicates a programming error
+                     // in the code which calls the library, especially when
+                     // compiled in debug mode.
+
+// #ifdef NDEBUG
+  LOGLEVEL_DFATAL =  LOGLEVEL_ERROR;
+// #else
+// #endif
+
+// Used to make the entire "LOG(BLAH) << etc." expression have a void return
+// type and print a newline after each message.
+
+  // namespace internal
+
+// Undef everything in case we're being mixed with some other Google library
+// which already defined them itself.  Presumably all Google libraries will
+// support the same syntax for these so it should not be a big deal if they
+// end up using our definitions instead.
+// #undef GOOGLE_LOG
+// #undef GOOGLE_LOG_IF
+
+// #undef GOOGLE_CHECK
+// #undef GOOGLE_CHECK_OK
+// #undef GOOGLE_CHECK_EQ
+// #undef GOOGLE_CHECK_NE
+// #undef GOOGLE_CHECK_LT
+// #undef GOOGLE_CHECK_LE
+// #undef GOOGLE_CHECK_GT
+// #undef GOOGLE_CHECK_GE
+// #undef GOOGLE_CHECK_NOTNULL
+
+// #undef GOOGLE_DLOG
+// #undef GOOGLE_DCHECK
+// #undef GOOGLE_DCHECK_EQ
+// #undef GOOGLE_DCHECK_NE
+// #undef GOOGLE_DCHECK_LT
+// #undef GOOGLE_DCHECK_LE
+// #undef GOOGLE_DCHECK_GT
+// #undef GOOGLE_DCHECK_GE
+
+// #define GOOGLE_LOG(LEVEL)
+//   ::google::protobuf::internal::LogFinisher() =
+//     ::google::protobuf::internal::LogMessage(
+//       ::google::protobuf::LOGLEVEL_##LEVEL, __FILE__, __LINE__)
+// #define GOOGLE_LOG_IF(LEVEL, CONDITION)
+//   !(CONDITION) ? (void)0 : GOOGLE_LOG(LEVEL)
+
+// #define GOOGLE_CHECK(EXPRESSION)
+//   GOOGLE_LOG_IF(FATAL, !(EXPRESSION)) << "CHECK failed: " #EXPRESSION ": "
+// #define GOOGLE_CHECK_OK(A) GOOGLE_CHECK(A)
+// #define GOOGLE_CHECK_EQ(A, B) GOOGLE_CHECK((A) == (B))
+// #define GOOGLE_CHECK_NE(A, B) GOOGLE_CHECK((A) != (B))
+// #define GOOGLE_CHECK_LT(A, B) GOOGLE_CHECK((A) <  (B))
+// #define GOOGLE_CHECK_LE(A, B) GOOGLE_CHECK((A) <= (B))
+// #define GOOGLE_CHECK_GT(A, B) GOOGLE_CHECK((A) >  (B))
+// #define GOOGLE_CHECK_GE(A, B) GOOGLE_CHECK((A) >= (B))
+  // namespace internal
+// #define GOOGLE_CHECK_NOTNULL(A)
+//   internal::CheckNotNull(__FILE__, __LINE__, "'" #A "' must not be NULL", (A))
+
+// #ifdef NDEBUG
+
+// #define GOOGLE_DLOG GOOGLE_LOG_IF(INFO, false)
+
+// #define GOOGLE_DCHECK(EXPRESSION) while(false) GOOGLE_CHECK(EXPRESSION)
+// #define GOOGLE_DCHECK_EQ(A, B) GOOGLE_DCHECK((A) == (B))
+// #define GOOGLE_DCHECK_NE(A, B) GOOGLE_DCHECK((A) != (B))
+// #define GOOGLE_DCHECK_LT(A, B) GOOGLE_DCHECK((A) <  (B))
+// #define GOOGLE_DCHECK_LE(A, B) GOOGLE_DCHECK((A) <= (B))
+// #define GOOGLE_DCHECK_GT(A, B) GOOGLE_DCHECK((A) >  (B))
+// #define GOOGLE_DCHECK_GE(A, B) GOOGLE_DCHECK((A) >= (B))
+
+// #else  // NDEBUG
+
+// #endif  // !NDEBUG
+
+public static class LogHandler extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    LogHandler(Pointer p) { super(p); }
+    protected LogHandler() { allocate(); }
+    private native void allocate();
+    public native void call(@Cast("google::protobuf::LogLevel") int level, @Cast("const char*") BytePointer filename, int line,
+                        @StdString BytePointer message);
+}
+
+// The protobuf library sometimes writes warning and error messages to
+// stderr.  These messages are primarily useful for developers, but may
+// also help end users figure out a problem.  If you would prefer that
+// these messages be sent somewhere other than stderr, call SetLogHandler()
+// to set your own handler.  This returns the old handler.  Set the handler
+// to NULL to ignore log messages (but see also LogSilencer, below).
+//
+// Obviously, SetLogHandler is not thread-safe.  You should only call it
+// at initialization time, and probably not from library code.  If you
+// simply want to suppress log messages temporarily (e.g. because you
+// have some code that tends to trigger them frequently and you know
+// the warnings are not important to you), use the LogSilencer class
+// below.
+
+// Create a LogSilencer if you want to temporarily suppress all log
+// messages.  As long as any LogSilencer objects exist, non-fatal
+// log messages will be discarded (the current LogHandler will *not*
+// be called).  Constructing a LogSilencer is thread-safe.  You may
+// accidentally suppress log messages occurring in another thread, but
+// since messages are generally for debugging purposes only, this isn't
+// a big deal.  If you want to intercept log messages, use SetLogHandler().
+@Namespace("google::protobuf") public static class LogSilencer extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public LogSilencer(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public LogSilencer(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public LogSilencer position(long position) {
+        return (LogSilencer)super.position(position);
+    }
+
+  public LogSilencer() { super((Pointer)null); allocate(); }
+  private native void allocate();
+}
+
+// ===================================================================
+// emulates google3/base/callback.h
+
+// Abstract interface for a callback.  When calling an RPC, you must provide
+// a Closure to call when the procedure completes.  See the Service interface
+// in service.h.
+//
+// To automatically construct a Closure which calls a particular function or
+// method with a particular set of parameters, use the NewCallback() function.
+// Example:
+//   void FooDone(const FooResponse* response) {
+//     ...
+//   }
+//
+//   void CallFoo() {
+//     ...
+//     // When done, call FooDone() and pass it a pointer to the response.
+//     Closure* callback = NewCallback(&FooDone, response);
+//     // Make the call.
+//     service->Foo(controller, request, response, callback);
+//   }
+//
+// Example that calls a method:
+//   class Handler {
+//    public:
+//     ...
+//
+//     void FooDone(const FooResponse* response) {
+//       ...
+//     }
+//
+//     void CallFoo() {
+//       ...
+//       // When done, call FooDone() and pass it a pointer to the response.
+//       Closure* callback = NewCallback(this, &Handler::FooDone, response);
+//       // Make the call.
+//       service->Foo(controller, request, response, callback);
+//     }
+//   };
+//
+// Currently NewCallback() supports binding zero, one, or two arguments.
+//
+// Callbacks created with NewCallback() automatically delete themselves when
+// executed.  They should be used when a callback is to be called exactly
+// once (usually the case with RPC callbacks).  If a callback may be called
+// a different number of times (including zero), create it with
+// NewPermanentCallback() instead.  You are then responsible for deleting the
+// callback (using the "delete" keyword as normal).
+//
+// Note that NewCallback() is a bit touchy regarding argument types.  Generally,
+// the values you provide for the parameter bindings must exactly match the
+// types accepted by the callback function.  For example:
+//   void Foo(string s);
+//   NewCallback(&Foo, "foo");          // WON'T WORK:  const char* != string
+//   NewCallback(&Foo, string("foo"));  // WORKS
+// Also note that the arguments cannot be references:
+//   void Foo(const string& s);
+//   string my_str;
+//   NewCallback(&Foo, my_str);  // WON'T WORK:  Can't use referecnes.
+// However, correctly-typed pointers will work just fine.
+@Namespace("google::protobuf") public static class Closure extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Closure(Pointer p) { super(p); }
+
+
+  public native void Run();
+}
+
+@Namespace("google::protobuf::internal") @NoOffset public static class FunctionClosure0 extends Closure {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FunctionClosure0(Pointer p) { super(p); }
+
+  public static class FunctionType extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    FunctionType(Pointer p) { super(p); }
+      protected FunctionType() { allocate(); }
+      private native void allocate();
+      public native void call();
+  }
+
+  public FunctionClosure0(FunctionType function, @Cast("bool") boolean self_deleting) { super((Pointer)null); allocate(function, self_deleting); }
+  private native void allocate(FunctionType function, @Cast("bool") boolean self_deleting);
+
+  public native void Run();
+}
+
+  // namespace internal
+
+// See Closure.
+public static class Function extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    Function(Pointer p) { super(p); }
+    protected Function() { allocate(); }
+    private native void allocate();
+    public native void call();
+}
+@Namespace("google::protobuf") public static native Closure NewCallback(Function function);
+
+// See Closure.
+@Namespace("google::protobuf") public static native Closure NewPermanentCallback(Function function);
+
+// See Closure.
+
+// See Closure.
+
+// See Closure.
+
+// See Closure.
+
+// See Closure.
+
+// See Closure.
+
+// See Closure.
+
+// See Closure.
+
+// See Closure.
+
+// See Closure.
+
+// A function which does nothing.  Useful for creating no-op callbacks, e.g.:
+//   Closure* nothing = NewCallback(&DoNothing);
+@Namespace("google::protobuf") public static native void DoNothing();
+
+// ===================================================================
+// emulates google3/base/mutex.h
+
+// A Mutex is a non-reentrant (aka non-recursive) mutex.  At most one thread T
+// may hold a mutex at a given time.  If T attempts to Lock() the same Mutex
+// while holding it, T will deadlock.
+@Namespace("google::protobuf::internal") @NoOffset public static class Mutex extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Mutex(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Mutex(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public Mutex position(long position) {
+        return (Mutex)super.position(position);
+    }
+
+  // Create a Mutex that is not held by anybody.
+  public Mutex() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  // Destructor
+
+  // Block if necessary until this Mutex is free, then acquire it exclusively.
+  public native void Lock();
+
+  // Release this Mutex.  Caller must hold it exclusively.
+  public native void Unlock();
+
+  // Crash if this Mutex is not held exclusively by this thread.
+  // May fail to crash when it should; will never crash when it should not.
+  public native void AssertHeld();
+}
+
+// MutexLock(mu) acquires mu when constructed and releases it when destroyed.
+@Namespace("google::protobuf::internal") @NoOffset public static class MutexLock extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public MutexLock(Pointer p) { super(p); }
+
+  public MutexLock(Mutex mu) { super((Pointer)null); allocate(mu); }
+  private native void allocate(Mutex mu);
+}
+
+// TODO(kenton):  Implement these?  Hard to implement portably.
+
+// MutexLockMaybe is like MutexLock, but is a no-op when mu is NULL.
+@Namespace("google::protobuf::internal") @NoOffset public static class MutexLockMaybe extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public MutexLockMaybe(Pointer p) { super(p); }
+
+  public MutexLockMaybe(Mutex mu) { super((Pointer)null); allocate(mu); }
+  private native void allocate(Mutex mu);
+}
+
+  // namespace internal
+
+// We made these internal so that they would show up as such in the docs,
+// but we don't want to stick "internal::" in front of them everywhere.
+
+// ===================================================================
+// from google3/util/utf8/public/unilib.h
+
+// Checks if the buffer contains structurally-valid UTF-8.  Implemented in
+// structurally_valid.cc.
+@Namespace("google::protobuf::internal") public static native @Cast("bool") boolean IsStructurallyValidUTF8(@Cast("const char*") BytePointer buf, int len);
+@Namespace("google::protobuf::internal") public static native @Cast("bool") boolean IsStructurallyValidUTF8(String buf, int len);
+
+  // namespace internal
+
+// ===================================================================
+// from google3/util/endian/endian.h
+@Namespace("google::protobuf") public static native @Cast("google::protobuf::uint32") int ghtonl(@Cast("google::protobuf::uint32") int x);
+
+// ===================================================================
+// Shutdown support.
+
+// Shut down the entire protocol buffers library, deleting all static-duration
+// objects allocated by the library or by generated .pb.cc files.
+//
+// There are two reasons you might want to call this:
+// * You use a draconian definition of "memory leak" in which you expect
+//   every single malloc() to have a corresponding free(), even for objects
+//   which live until program exit.
+// * You are writing a dynamically-loaded library which needs to clean up
+//   after itself when the library is unloaded.
+//
+// It is safe to call this multiple times.  However, it is not safe to use
+// any other part of the protocol buffers library after
+// ShutdownProtobufLibrary() has been called.
+@Namespace("google::protobuf") public static native void ShutdownProtobufLibrary();
+
+// Register a function to be called when ShutdownProtocolBuffers() is called.
+public static class Func extends FunctionPointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public    Func(Pointer p) { super(p); }
+    protected Func() { allocate(); }
+    private native void allocate();
+    public native void call();
+}
+@Namespace("google::protobuf::internal") public static native void OnShutdown(Func func);
+
+  // namespace internal
+
+// #if PROTOBUF_USE_EXCEPTIONS
+@Namespace("google::protobuf") @NoOffset public static class FatalException extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FatalException(Pointer p) { super(p); }
+
+  public FatalException(@Cast("const char*") BytePointer filename, int line, @StdString BytePointer message) { super((Pointer)null); allocate(filename, line, message); }
+  private native void allocate(@Cast("const char*") BytePointer filename, int line, @StdString BytePointer message);
+  public FatalException(String filename, int line, @StdString String message) { super((Pointer)null); allocate(filename, line, message); }
+  private native void allocate(String filename, int line, @StdString String message);
+
+  public native @Cast("const char*") BytePointer what();
+
+  public native @Cast("const char*") BytePointer filename();
+  public native int line();
+  public native @StdString BytePointer message();
+}
+// #endif
+
+// This is at the end of the file instead of the beginning to work around a bug
+// in some versions of MSVC.  // Don't do this at home, kids.
+
+  // namespace protobuf
+  // namespace google
+
+// #endif  // GOOGLE_PROTOBUF_COMMON_H__
+
+
+// Parsed from google/protobuf/descriptor.h
+
+// Protocol Buffers - Google's data interchange format
+// Copyright 2008 Google Inc.  All rights reserved.
+// https://developers.google.com/protocol-buffers/
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+// Author: kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// This file contains classes which describe a type of protocol message.
+// You can use a message's descriptor to learn at runtime what fields
+// it contains and what the types of those fields are.  The Message
+// interface also allows you to dynamically access and modify individual
+// fields by passing the FieldDescriptor of the field you are interested
+// in.
+//
+// Most users will not care about descriptors, because they will write
+// code specific to certain protocol types and will simply use the classes
+// generated by the protocol compiler directly.  Advanced users who want
+// to operate on arbitrary types (not known at compile time) may want to
+// read descriptors in order to learn about the contents of a message.
+// A very small number of users will want to construct their own
+// Descriptors, either because they are implementing Message manually or
+// because they are writing something like the protocol compiler.
+//
+// For an example of how you might use descriptors, see the code example
+// at the top of message.h.
+
+// #ifndef GOOGLE_PROTOBUF_DESCRIPTOR_H__
+// #define GOOGLE_PROTOBUF_DESCRIPTOR_H__
+
+// #include <set>
+// #include <string>
+// #include <vector>
+// #include <google/protobuf/stubs/common.h>
+
+// Defined in this file.
+@Namespace("google::protobuf") @Opaque public static class DescriptorDatabase extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public DescriptorDatabase() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DescriptorDatabase(Pointer p) { super(p); }
+}
+
+// Defined in descriptor.proto
+@Namespace("google::protobuf") @Opaque public static class DescriptorProto extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public DescriptorProto() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DescriptorProto(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf") @Opaque public static class FieldDescriptorProto extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public FieldDescriptorProto() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FieldDescriptorProto(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf") @Opaque public static class OneofDescriptorProto extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public OneofDescriptorProto() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OneofDescriptorProto(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf") @Opaque public static class EnumDescriptorProto extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public EnumDescriptorProto() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public EnumDescriptorProto(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf") @Opaque public static class EnumValueDescriptorProto extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public EnumValueDescriptorProto() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public EnumValueDescriptorProto(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf") @Opaque public static class ServiceDescriptorProto extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ServiceDescriptorProto() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ServiceDescriptorProto(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf") @Opaque public static class MethodDescriptorProto extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public MethodDescriptorProto() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public MethodDescriptorProto(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf") @Opaque public static class FileDescriptorProto extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public FileDescriptorProto() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FileDescriptorProto(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf") @Opaque public static class MessageOptions extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public MessageOptions() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public MessageOptions(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf") @Opaque public static class FieldOptions extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public FieldOptions() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FieldOptions(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf") @Opaque public static class EnumOptions extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public EnumOptions() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public EnumOptions(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf") @Opaque public static class EnumValueOptions extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public EnumValueOptions() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public EnumValueOptions(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf") @Opaque public static class ServiceOptions extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public ServiceOptions() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ServiceOptions(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf") @Opaque public static class MethodOptions extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public MethodOptions() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public MethodOptions(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf") @Opaque public static class FileOptions extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public FileOptions() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FileOptions(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf") @Opaque public static class UninterpretedOption extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public UninterpretedOption() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public UninterpretedOption(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf") @Opaque public static class SourceCodeInfo extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public SourceCodeInfo() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SourceCodeInfo(Pointer p) { super(p); }
+}
+
+// Defined in message.h
+
+// Defined in descriptor.cc
+@Namespace("google::protobuf") @Opaque public static class DescriptorBuilder extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public DescriptorBuilder() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DescriptorBuilder(Pointer p) { super(p); }
+}
+@Namespace("google::protobuf") @Opaque public static class FileDescriptorTables extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public FileDescriptorTables() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FileDescriptorTables(Pointer p) { super(p); }
+}
+
+// Defined in unknown_field_set.h.
+@Namespace("google::protobuf") @Opaque public static class UnknownField extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public UnknownField() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public UnknownField(Pointer p) { super(p); }
+}
+
+// NB, all indices are zero-based.
+@Namespace("google::protobuf") public static class SourceLocation extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public SourceLocation() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public SourceLocation(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public SourceLocation(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public SourceLocation position(long position) {
+        return (SourceLocation)super.position(position);
+    }
+
+  public native int start_line(); public native SourceLocation start_line(int start_line);
+  public native int end_line(); public native SourceLocation end_line(int end_line);
+  public native int start_column(); public native SourceLocation start_column(int start_column);
+  public native int end_column(); public native SourceLocation end_column(int end_column);
+
+  // Doc comments found at the source location.
+  // TODO(kenton):  Maybe this struct should have been named SourceInfo or
+  //   something instead.  Oh well.
+  public native @StdString BytePointer leading_comments(); public native SourceLocation leading_comments(BytePointer leading_comments);
+  public native @StdString BytePointer trailing_comments(); public native SourceLocation trailing_comments(BytePointer trailing_comments);
+}
+
+// Describes a type of protocol message, or a particular group within a
+// message.  To obtain the Descriptor for a given message object, call
+// Message::GetDescriptor().  Generated message classes also have a
+// static method called descriptor() which returns the type's descriptor.
+// Use DescriptorPool to construct your own descriptors.
+@Namespace("google::protobuf") @NoOffset public static class Descriptor extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Descriptor(Pointer p) { super(p); }
+
+  // The name of the message type, not including its scope.
+  public native @StdString BytePointer name();
+
+  // The fully-qualified name of the message type, scope delimited by
+  // periods.  For example, message type "Foo" which is declared in package
+  // "bar" has full name "bar.Foo".  If a type "Baz" is nested within
+  // Foo, Baz's full_name is "bar.Foo.Baz".  To get only the part that
+  // comes after the last '.', use name().
+  public native @StdString BytePointer full_name();
+
+  // Index of this descriptor within the file or containing type's message
+  // type array.
+  public native int index();
+
+  // The .proto file in which this message type was defined.  Never NULL.
+  public native @Const FileDescriptor file();
+
+  // If this Descriptor describes a nested type, this returns the type
+  // in which it is nested.  Otherwise, returns NULL.
+  public native @Const Descriptor containing_type();
+
+  // Get options for this message type.  These are specified in the .proto file
+  // by placing lines like "option foo = 1234;" in the message definition.
+  // Allowed options are defined by MessageOptions in
+  // google/protobuf/descriptor.proto, and any available extensions of that
+  // message.
+  public native @Const @ByRef MessageOptions options();
+
+  // Write the contents of this Descriptor into the given DescriptorProto.
+  // The target DescriptorProto must be clear before calling this; if it
+  // isn't, the result may be garbage.
+  public native void CopyTo(DescriptorProto proto);
+
+  // Write the contents of this decriptor in a human-readable form. Output
+  // will be suitable for re-parsing.
+  public native @StdString BytePointer DebugString();
+
+  // Returns true if this is a placeholder for an unknown type. This will
+  // only be the case if this descriptor comes from a DescriptorPool
+  // with AllowUnknownDependencies() set.
+  public native @Cast("bool") boolean is_placeholder();
+
+  // Field stuff -----------------------------------------------------
+
+  // The number of fields in this message type.
+  public native int field_count();
+  // Gets a field by index, where 0 <= index < field_count().
+  // These are returned in the order they were defined in the .proto file.
+  public native @Const FieldDescriptor field(int index);
+
+  // Looks up a field by declared tag number.  Returns NULL if no such field
+  // exists.
+  public native @Const FieldDescriptor FindFieldByNumber(int number);
+  // Looks up a field by name.  Returns NULL if no such field exists.
+  public native @Const FieldDescriptor FindFieldByName(@StdString BytePointer name);
+  public native @Const FieldDescriptor FindFieldByName(@StdString String name);
+
+  // Looks up a field by lowercased name (as returned by lowercase_name()).
+  // This lookup may be ambiguous if multiple field names differ only by case,
+  // in which case the field returned is chosen arbitrarily from the matches.
+  public native @Const FieldDescriptor FindFieldByLowercaseName(
+        @StdString BytePointer lowercase_name);
+  public native @Const FieldDescriptor FindFieldByLowercaseName(
+        @StdString String lowercase_name);
+
+  // Looks up a field by camel-case name (as returned by camelcase_name()).
+  // This lookup may be ambiguous if multiple field names differ in a way that
+  // leads them to have identical camel-case names, in which case the field
+  // returned is chosen arbitrarily from the matches.
+  public native @Const FieldDescriptor FindFieldByCamelcaseName(
+        @StdString BytePointer camelcase_name);
+  public native @Const FieldDescriptor FindFieldByCamelcaseName(
+        @StdString String camelcase_name);
+
+  // The number of oneofs in this message type.
+  public native int oneof_decl_count();
+  // Get a oneof by index, where 0 <= index < oneof_decl_count().
+  // These are returned in the order they were defined in the .proto file.
+  public native @Const OneofDescriptor oneof_decl(int index);
+
+  // Looks up a oneof by name.  Returns NULL if no such oneof exists.
+  public native @Const OneofDescriptor FindOneofByName(@StdString BytePointer name);
+  public native @Const OneofDescriptor FindOneofByName(@StdString String name);
+
+  // Nested type stuff -----------------------------------------------
+
+  // The number of nested types in this message type.
+  public native int nested_type_count();
+  // Gets a nested type by index, where 0 <= index < nested_type_count().
+  // These are returned in the order they were defined in the .proto file.
+  public native @Const Descriptor nested_type(int index);
+
+  // Looks up a nested type by name.  Returns NULL if no such nested type
+  // exists.
+  public native @Const Descriptor FindNestedTypeByName(@StdString BytePointer name);
+  public native @Const Descriptor FindNestedTypeByName(@StdString String name);
+
+  // Enum stuff ------------------------------------------------------
+
+  // The number of enum types in this message type.
+  public native int enum_type_count();
+  // Gets an enum type by index, where 0 <= index < enum_type_count().
+  // These are returned in the order they were defined in the .proto file.
+  public native @Const EnumDescriptor enum_type(int index);
+
+  // Looks up an enum type by name.  Returns NULL if no such enum type exists.
+  public native @Const EnumDescriptor FindEnumTypeByName(@StdString BytePointer name);
+  public native @Const EnumDescriptor FindEnumTypeByName(@StdString String name);
+
+  // Looks up an enum value by name, among all enum types in this message.
+  // Returns NULL if no such value exists.
+  public native @Const EnumValueDescriptor FindEnumValueByName(@StdString BytePointer name);
+  public native @Const EnumValueDescriptor FindEnumValueByName(@StdString String name);
+
+  // Extensions ------------------------------------------------------
+
+  // A range of field numbers which are designated for third-party
+  // extensions.
+  public static class ExtensionRange extends Pointer {
+      static { Loader.load(); }
+      /** Default native constructor. */
+      public ExtensionRange() { super((Pointer)null); allocate(); }
+      /** Native array allocator. Access with {@link Pointer#position(long)}. */
+      public ExtensionRange(long size) { super((Pointer)null); allocateArray(size); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public ExtensionRange(Pointer p) { super(p); }
+      private native void allocate();
+      private native void allocateArray(long size);
+      @Override public ExtensionRange position(long position) {
+          return (ExtensionRange)super.position(position);
+      }
+  
+    public native int start(); public native ExtensionRange start(int start);  // inclusive
+    public native int end(); public native ExtensionRange end(int end);    // exclusive
+  }
+
+  // The number of extension ranges in this message type.
+  public native int extension_range_count();
+  // Gets an extension range by index, where 0 <= index <
+  // extension_range_count(). These are returned in the order they were defined
+  // in the .proto file.
+  public native @Const ExtensionRange extension_range(int index);
+
+  // Returns true if the number is in one of the extension ranges.
+  public native @Cast("bool") boolean IsExtensionNumber(int number);
+
+  // Returns NULL if no extension range contains the given number.
+  public native @Const ExtensionRange FindExtensionRangeContainingNumber(int number);
+
+  // The number of extensions -- extending *other* messages -- that were
+  // defined nested within this message type's scope.
+  public native int extension_count();
+  // Get an extension by index, where 0 <= index < extension_count().
+  // These are returned in the order they were defined in the .proto file.
+  public native @Const FieldDescriptor extension(int index);
+
+  // Looks up a named extension (which extends some *other* message type)
+  // defined within this message type's scope.
+  public native @Const FieldDescriptor FindExtensionByName(@StdString BytePointer name);
+  public native @Const FieldDescriptor FindExtensionByName(@StdString String name);
+
+  // Similar to FindFieldByLowercaseName(), but finds extensions defined within
+  // this message type's scope.
+  public native @Const FieldDescriptor FindExtensionByLowercaseName(@StdString BytePointer name);
+  public native @Const FieldDescriptor FindExtensionByLowercaseName(@StdString String name);
+
+  // Similar to FindFieldByCamelcaseName(), but finds extensions defined within
+  // this message type's scope.
+  public native @Const FieldDescriptor FindExtensionByCamelcaseName(@StdString BytePointer name);
+  public native @Const FieldDescriptor FindExtensionByCamelcaseName(@StdString String name);
+
+  // Source Location ---------------------------------------------------
+
+  // Updates |*out_location| to the source location of the complete
+  // extent of this message declaration.  Returns false and leaves
+  // |*out_location| unchanged iff location information was not available.
+  public native @Cast("bool") boolean GetSourceLocation(SourceLocation out_location);
+}
+
+// Describes a single field of a message.  To get the descriptor for a given
+// field, first get the Descriptor for the message in which it is defined,
+// then call Descriptor::FindFieldByName().  To get a FieldDescriptor for
+// an extension, do one of the following:
+// - Get the Descriptor or FileDescriptor for its containing scope, then
+//   call Descriptor::FindExtensionByName() or
+//   FileDescriptor::FindExtensionByName().
+// - Given a DescriptorPool, call DescriptorPool::FindExtensionByNumber().
+// - Given a Reflection for a message object, call
+//   Reflection::FindKnownExtensionByName() or
+//   Reflection::FindKnownExtensionByNumber().
+// Use DescriptorPool to construct your own descriptors.
+@Namespace("google::protobuf") @NoOffset public static class FieldDescriptor extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FieldDescriptor(Pointer p) { super(p); }
+
+  // Identifies a field type.  0 is reserved for errors.  The order is weird
+  // for historical reasons.  Types 12 and up are new in proto2.
+  /** enum google::protobuf::FieldDescriptor::Type */
+  public static final int
+    TYPE_DOUBLE         = 1,   // double, exactly eight bytes on the wire.
+    TYPE_FLOAT          = 2,   // float, exactly four bytes on the wire.
+    TYPE_INT64          = 3,   // int64, varint on the wire.  Negative numbers
+                               // take 10 bytes.  Use TYPE_SINT64 if negative
+                               // values are likely.
+    TYPE_UINT64         = 4,   // uint64, varint on the wire.
+    TYPE_INT32          = 5,   // int32, varint on the wire.  Negative numbers
+                               // take 10 bytes.  Use TYPE_SINT32 if negative
+                               // values are likely.
+    TYPE_FIXED64        = 6,   // uint64, exactly eight bytes on the wire.
+    TYPE_FIXED32        = 7,   // uint32, exactly four bytes on the wire.
+    TYPE_BOOL           = 8,   // bool, varint on the wire.
+    TYPE_STRING         = 9,   // UTF-8 text.
+    TYPE_GROUP          = 10,  // Tag-delimited message.  Deprecated.
+    TYPE_MESSAGE        = 11,  // Length-delimited message.
+
+    TYPE_BYTES          = 12,  // Arbitrary byte array.
+    TYPE_UINT32         = 13,  // uint32, varint on the wire
+    TYPE_ENUM           = 14,  // Enum, varint on the wire
+    TYPE_SFIXED32       = 15,  // int32, exactly four bytes on the wire
+    TYPE_SFIXED64       = 16,  // int64, exactly eight bytes on the wire
+    TYPE_SINT32         = 17,  // int32, ZigZag-encoded varint on the wire
+    TYPE_SINT64         = 18,  // int64, ZigZag-encoded varint on the wire
+
+    MAX_TYPE            = 18;  // Constant useful for defining lookup tables
+                               // indexed by Type.
+
+  // Specifies the C++ data type used to represent the field.  There is a
+  // fixed mapping from Type to CppType where each Type maps to exactly one
+  // CppType.  0 is reserved for errors.
+  /** enum google::protobuf::FieldDescriptor::CppType */
+  public static final int
+    CPPTYPE_INT32       = 1,     // TYPE_INT32, TYPE_SINT32, TYPE_SFIXED32
+    CPPTYPE_INT64       = 2,     // TYPE_INT64, TYPE_SINT64, TYPE_SFIXED64
+    CPPTYPE_UINT32      = 3,     // TYPE_UINT32, TYPE_FIXED32
+    CPPTYPE_UINT64      = 4,     // TYPE_UINT64, TYPE_FIXED64
+    CPPTYPE_DOUBLE      = 5,     // TYPE_DOUBLE
+    CPPTYPE_FLOAT       = 6,     // TYPE_FLOAT
+    CPPTYPE_BOOL        = 7,     // TYPE_BOOL
+    CPPTYPE_ENUM        = 8,     // TYPE_ENUM
+    CPPTYPE_STRING      = 9,     // TYPE_STRING, TYPE_BYTES
+    CPPTYPE_MESSAGE     = 10,    // TYPE_MESSAGE, TYPE_GROUP
+
+    MAX_CPPTYPE         = 10;    // Constant useful for defining lookup tables
+                                 // indexed by CppType.
+
+  // Identifies whether the field is optional, required, or repeated.  0 is
+  // reserved for errors.
+  /** enum google::protobuf::FieldDescriptor::Label */
+  public static final int
+    LABEL_OPTIONAL      = 1,    // optional
+    LABEL_REQUIRED      = 2,    // required
+    LABEL_REPEATED      = 3,    // repeated
+
+    MAX_LABEL           = 3;    // Constant useful for defining lookup tables
+                                // indexed by Label.
+
+  // Valid field numbers are positive integers up to kMaxNumber.
+  @MemberGetter public static native int kMaxNumber();
+  public static final int kMaxNumber = kMaxNumber();
+
+  // First field number reserved for the protocol buffer library implementation.
+  // Users may not declare fields that use reserved numbers.
+  @MemberGetter public static native int kFirstReservedNumber();
+  public static final int kFirstReservedNumber = kFirstReservedNumber();
+  // Last field number reserved for the protocol buffer library implementation.
+  // Users may not declare fields that use reserved numbers.
+  @MemberGetter public static native int kLastReservedNumber();
+  public static final int kLastReservedNumber = kLastReservedNumber();
+
+  public native @StdString BytePointer name();        // Name of this field within the message.
+  public native @StdString BytePointer full_name();   // Fully-qualified name of the field.
+  public native @Const FileDescriptor file();// File in which this field was defined.
+  public native @Cast("bool") boolean is_extension();         // Is this an extension field?
+  public native int number();                // Declared tag number.
+
+  // Same as name() except converted to lower-case.  This (and especially the
+  // FindFieldByLowercaseName() method) can be useful when parsing formats
+  // which prefer to use lowercase naming style.  (Although, technically
+  // field names should be lowercased anyway according to the protobuf style
+  // guide, so this only makes a difference when dealing with old .proto files
+  // which do not follow the guide.)
+  public native @StdString BytePointer lowercase_name();
+
+  // Same as name() except converted to camel-case.  In this conversion, any
+  // time an underscore appears in the name, it is removed and the next
+  // letter is capitalized.  Furthermore, the first letter of the name is
+  // lower-cased.  Examples:
+  //   FooBar -> fooBar
+  //   foo_bar -> fooBar
+  //   fooBar -> fooBar
+  // This (and especially the FindFieldByCamelcaseName() method) can be useful
+  // when parsing formats which prefer to use camel-case naming style.
+  public native @StdString BytePointer camelcase_name();
+
+  public native @Cast("google::protobuf::FieldDescriptor::Type") int type();                  // Declared type of this field.
+  public native @Cast("const char*") BytePointer type_name();      // Name of the declared type.
+  public native @Cast("google::protobuf::FieldDescriptor::CppType") int cpp_type();           // C++ type of this field.
+  public native @Cast("const char*") BytePointer cpp_type_name();  // Name of the C++ type.
+  public native @Cast("google::protobuf::FieldDescriptor::Label") int label();                // optional/required/repeated
+
+  public native @Cast("bool") boolean is_required();      // shorthand for label() == LABEL_REQUIRED
+  public native @Cast("bool") boolean is_optional();      // shorthand for label() == LABEL_OPTIONAL
+  public native @Cast("bool") boolean is_repeated();      // shorthand for label() == LABEL_REPEATED
+  public native @Cast("bool") boolean is_packable();      // shorthand for is_repeated() &&
+                                 //               IsTypePackable(type())
+  public native @Cast("bool") boolean is_packed();        // shorthand for is_packable() &&
+                                 //               options().packed()
+
+  // Index of this field within the message's field array, or the file or
+  // extension scope's extensions array.
+  public native int index();
+
+  // Does this field have an explicitly-declared default value?
+  public native @Cast("bool") boolean has_default_value();
+
+  // Get the field default value if cpp_type() == CPPTYPE_INT32.  If no
+  // explicit default was defined, the default is 0.
+  public native @Cast("google::protobuf::int32") int default_value_int32();
+  // Get the field default value if cpp_type() == CPPTYPE_INT64.  If no
+  // explicit default was defined, the default is 0.
+  public native @Cast("google::protobuf::int64") long default_value_int64();
+  // Get the field default value if cpp_type() == CPPTYPE_UINT32.  If no
+  // explicit default was defined, the default is 0.
+  public native @Cast("google::protobuf::uint32") int default_value_uint32();
+  // Get the field default value if cpp_type() == CPPTYPE_UINT64.  If no
+  // explicit default was defined, the default is 0.
+  public native @Cast("google::protobuf::uint64") long default_value_uint64();
+  // Get the field default value if cpp_type() == CPPTYPE_FLOAT.  If no
+  // explicit default was defined, the default is 0.0.
+  public native float default_value_float();
+  // Get the field default value if cpp_type() == CPPTYPE_DOUBLE.  If no
+  // explicit default was defined, the default is 0.0.
+  public native double default_value_double();
+  // Get the field default value if cpp_type() == CPPTYPE_BOOL.  If no
+  // explicit default was defined, the default is false.
+  public native @Cast("bool") boolean default_value_bool();
+  // Get the field default value if cpp_type() == CPPTYPE_ENUM.  If no
+  // explicit default was defined, the default is the first value defined
+  // in the enum type (all enum types are required to have at least one value).
+  // This never returns NULL.
+  public native @Const EnumValueDescriptor default_value_enum();
+  // Get the field default value if cpp_type() == CPPTYPE_STRING.  If no
+  // explicit default was defined, the default is the empty string.
+  public native @StdString BytePointer default_value_string();
+
+  // The Descriptor for the message of which this is a field.  For extensions,
+  // this is the extended type.  Never NULL.
+  public native @Const Descriptor containing_type();
+
+  // If the field is a member of a oneof, this is the one, otherwise this is
+  // NULL.
+  public native @Const OneofDescriptor containing_oneof();
+
+  // If the field is a member of a oneof, returns the index in that oneof.
+  public native int index_in_oneof();
+
+  // An extension may be declared within the scope of another message.  If this
+  // field is an extension (is_extension() is true), then extension_scope()
+  // returns that message, or NULL if the extension was declared at global
+  // scope.  If this is not an extension, extension_scope() is undefined (may
+  // assert-fail).
+  public native @Const Descriptor extension_scope();
+
+  // If type is TYPE_MESSAGE or TYPE_GROUP, returns a descriptor for the
+  // message or the group type.  Otherwise, returns null.
+  public native @Const Descriptor message_type();
+  // If type is TYPE_ENUM, returns a descriptor for the enum.  Otherwise,
+  // returns null.
+  public native @Const EnumDescriptor enum_type();
+
+  // EXPERIMENTAL; DO NOT USE.
+  // If this field is a map field, experimental_map_key() is the field
+  // that is the key for this map.
+  // experimental_map_key()->containing_type() is the same as message_type().
+  public native @Const FieldDescriptor experimental_map_key();
+
+  // Get the FieldOptions for this field.  This includes things listed in
+  // square brackets after the field definition.  E.g., the field:
+  //   optional string text = 1 [ctype=CORD];
+  // has the "ctype" option set.  Allowed options are defined by FieldOptions
+  // in google/protobuf/descriptor.proto, and any available extensions of that
+  // message.
+  public native @Const @ByRef FieldOptions options();
+
+  // See Descriptor::CopyTo().
+  public native void CopyTo(FieldDescriptorProto proto);
+
+  // See Descriptor::DebugString().
+  public native @StdString BytePointer DebugString();
+
+  // Helper method to get the CppType for a particular Type.
+  public static native @Cast("google::protobuf::FieldDescriptor::CppType") int TypeToCppType(@Cast("google::protobuf::FieldDescriptor::Type") int type);
+
+  // Helper method to get the name of a Type.
+  public static native @Cast("const char*") BytePointer TypeName(@Cast("google::protobuf::FieldDescriptor::Type") int type);
+
+  // Helper method to get the name of a CppType.
+  public static native @Cast("const char*") BytePointer CppTypeName(@Cast("google::protobuf::FieldDescriptor::CppType") int cpp_type);
+
+  // Return true iff [packed = true] is valid for fields of this type.
+  public static native @Cast("bool") boolean IsTypePackable(@Cast("google::protobuf::FieldDescriptor::Type") int field_type);
+
+  // Source Location ---------------------------------------------------
+
+  // Updates |*out_location| to the source location of the complete
+  // extent of this field declaration.  Returns false and leaves
+  // |*out_location| unchanged iff location information was not available.
+  public native @Cast("bool") boolean GetSourceLocation(SourceLocation out_location);
+}
+
+// Describes a oneof defined in a message type.
+@Namespace("google::protobuf") @NoOffset public static class OneofDescriptor extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public OneofDescriptor(Pointer p) { super(p); }
+
+  public native @StdString BytePointer name();       // Name of this oneof.
+  public native @StdString BytePointer full_name();  // Fully-qualified name of the oneof.
+
+  // Index of this oneof within the message's oneof array.
+  public native int index();
+
+  // The Descriptor for the message containing this oneof.
+  public native @Const Descriptor containing_type();
+
+  // The number of (non-extension) fields which are members of this oneof.
+  public native int field_count();
+  // Get a member of this oneof, in the order in which they were declared in the
+  // .proto file.  Does not include extensions.
+  public native @Const FieldDescriptor field(int index);
+
+  // See Descriptor::CopyTo().
+  public native void CopyTo(OneofDescriptorProto proto);
+
+  // See Descriptor::DebugString().
+  public native @StdString BytePointer DebugString();
+
+  // Source Location ---------------------------------------------------
+
+  // Updates |*out_location| to the source location of the complete
+  // extent of this oneof declaration.  Returns false and leaves
+  // |*out_location| unchanged iff location information was not available.
+  public native @Cast("bool") boolean GetSourceLocation(SourceLocation out_location);
+}
+
+// Describes an enum type defined in a .proto file.  To get the EnumDescriptor
+// for a generated enum type, call TypeName_descriptor().  Use DescriptorPool
+// to construct your own descriptors.
+@Namespace("google::protobuf") @NoOffset public static class EnumDescriptor extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public EnumDescriptor(Pointer p) { super(p); }
+
+  // The name of this enum type in the containing scope.
+  public native @StdString BytePointer name();
+
+  // The fully-qualified name of the enum type, scope delimited by periods.
+  public native @StdString BytePointer full_name();
+
+  // Index of this enum within the file or containing message's enum array.
+  public native int index();
+
+  // The .proto file in which this enum type was defined.  Never NULL.
+  public native @Const FileDescriptor file();
+
+  // The number of values for this EnumDescriptor.  Guaranteed to be greater
+  // than zero.
+  public native int value_count();
+  // Gets a value by index, where 0 <= index < value_count().
+  // These are returned in the order they were defined in the .proto file.
+  public native @Const EnumValueDescriptor value(int index);
+
+  // Looks up a value by name.  Returns NULL if no such value exists.
+  public native @Const EnumValueDescriptor FindValueByName(@StdString BytePointer name);
+  public native @Const EnumValueDescriptor FindValueByName(@StdString String name);
+  // Looks up a value by number.  Returns NULL if no such value exists.  If
+  // multiple values have this number, the first one defined is returned.
+  public native @Const EnumValueDescriptor FindValueByNumber(int number);
+
+  // If this enum type is nested in a message type, this is that message type.
+  // Otherwise, NULL.
+  public native @Const Descriptor containing_type();
+
+  // Get options for this enum type.  These are specified in the .proto file by
+  // placing lines like "option foo = 1234;" in the enum definition.  Allowed
+  // options are defined by EnumOptions in google/protobuf/descriptor.proto,
+  // and any available extensions of that message.
+  public native @Const @ByRef EnumOptions options();
+
+  // See Descriptor::CopyTo().
+  public native void CopyTo(EnumDescriptorProto proto);
+
+  // See Descriptor::DebugString().
+  public native @StdString BytePointer DebugString();
+
+  // Returns true if this is a placeholder for an unknown enum. This will
+  // only be the case if this descriptor comes from a DescriptorPool
+  // with AllowUnknownDependencies() set.
+  public native @Cast("bool") boolean is_placeholder();
+
+  // Source Location ---------------------------------------------------
+
+  // Updates |*out_location| to the source location of the complete
+  // extent of this enum declaration.  Returns false and leaves
+  // |*out_location| unchanged iff location information was not available.
+  public native @Cast("bool") boolean GetSourceLocation(SourceLocation out_location);
+}
+
+// Describes an individual enum constant of a particular type.  To get the
+// EnumValueDescriptor for a given enum value, first get the EnumDescriptor
+// for its type, then use EnumDescriptor::FindValueByName() or
+// EnumDescriptor::FindValueByNumber().  Use DescriptorPool to construct
+// your own descriptors.
+@Namespace("google::protobuf") @NoOffset public static class EnumValueDescriptor extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public EnumValueDescriptor(Pointer p) { super(p); }
+
+  public native @StdString BytePointer name();  // Name of this enum constant.
+  public native int index();           // Index within the enums's Descriptor.
+  public native int number();          // Numeric value of this enum constant.
+
+  // The full_name of an enum value is a sibling symbol of the enum type.
+  // e.g. the full name of FieldDescriptorProto::TYPE_INT32 is actually
+  // "google.protobuf.FieldDescriptorProto.TYPE_INT32", NOT
+  // "google.protobuf.FieldDescriptorProto.Type.TYPE_INT32".  This is to conform
+  // with C++ scoping rules for enums.
+  public native @StdString BytePointer full_name();
+
+  // The type of this value.  Never NULL.
+  public native @Const EnumDescriptor type();
+
+  // Get options for this enum value.  These are specified in the .proto file
+  // by adding text like "[foo = 1234]" after an enum value definition.
+  // Allowed options are defined by EnumValueOptions in
+  // google/protobuf/descriptor.proto, and any available extensions of that
+  // message.
+  public native @Const @ByRef EnumValueOptions options();
+
+  // See Descriptor::CopyTo().
+  public native void CopyTo(EnumValueDescriptorProto proto);
+
+  // See Descriptor::DebugString().
+  public native @StdString BytePointer DebugString();
+
+  // Source Location ---------------------------------------------------
+
+  // Updates |*out_location| to the source location of the complete
+  // extent of this enum value declaration.  Returns false and leaves
+  // |*out_location| unchanged iff location information was not available.
+  public native @Cast("bool") boolean GetSourceLocation(SourceLocation out_location);
+}
+
+// Describes an RPC service.  To get the ServiceDescriptor for a service,
+// call Service::GetDescriptor().  Generated service classes also have a
+// static method called descriptor() which returns the type's
+// ServiceDescriptor.  Use DescriptorPool to construct your own descriptors.
+@Namespace("google::protobuf") @NoOffset public static class ServiceDescriptor extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ServiceDescriptor(Pointer p) { super(p); }
+
+  // The name of the service, not including its containing scope.
+  public native @StdString BytePointer name();
+  // The fully-qualified name of the service, scope delimited by periods.
+  public native @StdString BytePointer full_name();
+  // Index of this service within the file's services array.
+  public native int index();
+
+  // The .proto file in which this service was defined.  Never NULL.
+  public native @Const FileDescriptor file();
+
+  // Get options for this service type.  These are specified in the .proto file
+  // by placing lines like "option foo = 1234;" in the service definition.
+  // Allowed options are defined by ServiceOptions in
+  // google/protobuf/descriptor.proto, and any available extensions of that
+  // message.
+  public native @Const @ByRef ServiceOptions options();
+
+  // The number of methods this service defines.
+  public native int method_count();
+  // Gets a MethodDescriptor by index, where 0 <= index < method_count().
+  // These are returned in the order they were defined in the .proto file.
+  public native @Const MethodDescriptor method(int index);
+
+  // Look up a MethodDescriptor by name.
+  public native @Const MethodDescriptor FindMethodByName(@StdString BytePointer name);
+  public native @Const MethodDescriptor FindMethodByName(@StdString String name);
+  // See Descriptor::CopyTo().
+  public native void CopyTo(ServiceDescriptorProto proto);
+
+  // See Descriptor::DebugString().
+  public native @StdString BytePointer DebugString();
+
+  // Source Location ---------------------------------------------------
+
+  // Updates |*out_location| to the source location of the complete
+  // extent of this service declaration.  Returns false and leaves
+  // |*out_location| unchanged iff location information was not available.
+  public native @Cast("bool") boolean GetSourceLocation(SourceLocation out_location);
+}
+
+// Describes an individual service method.  To obtain a MethodDescriptor given
+// a service, first get its ServiceDescriptor, then call
+// ServiceDescriptor::FindMethodByName().  Use DescriptorPool to construct your
+// own descriptors.
+@Namespace("google::protobuf") @NoOffset public static class MethodDescriptor extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public MethodDescriptor(Pointer p) { super(p); }
+
+  // Name of this method, not including containing scope.
+  public native @StdString BytePointer name();
+  // The fully-qualified name of the method, scope delimited by periods.
+  public native @StdString BytePointer full_name();
+  // Index within the service's Descriptor.
+  public native int index();
+
+  // Gets the service to which this method belongs.  Never NULL.
+  public native @Const ServiceDescriptor service();
+
+  // Gets the type of protocol message which this method accepts as input.
+  public native @Const Descriptor input_type();
+  // Gets the type of protocol message which this message produces as output.
+  public native @Const Descriptor output_type();
+
+  // Get options for this method.  These are specified in the .proto file by
+  // placing lines like "option foo = 1234;" in curly-braces after a method
+  // declaration.  Allowed options are defined by MethodOptions in
+  // google/protobuf/descriptor.proto, and any available extensions of that
+  // message.
+  public native @Const @ByRef MethodOptions options();
+
+  // See Descriptor::CopyTo().
+  public native void CopyTo(MethodDescriptorProto proto);
+
+  // See Descriptor::DebugString().
+  public native @StdString BytePointer DebugString();
+
+  // Source Location ---------------------------------------------------
+
+  // Updates |*out_location| to the source location of the complete
+  // extent of this method declaration.  Returns false and leaves
+  // |*out_location| unchanged iff location information was not available.
+  public native @Cast("bool") boolean GetSourceLocation(SourceLocation out_location);
+}
+
+
+// Describes a whole .proto file.  To get the FileDescriptor for a compiled-in
+// file, get the descriptor for something defined in that file and call
+// descriptor->file().  Use DescriptorPool to construct your own descriptors.
+@Namespace("google::protobuf") @NoOffset public static class FileDescriptor extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FileDescriptor(Pointer p) { super(p); }
+
+  // The filename, relative to the source tree.
+  // e.g. "google/protobuf/descriptor.proto"
+  public native @StdString BytePointer name();
+
+  // The package, e.g. "google.protobuf.compiler".
+  public native @StdString @Name("package") BytePointer _package();
+
+  // The DescriptorPool in which this FileDescriptor and all its contents were
+  // allocated.  Never NULL.
+  public native @Const DescriptorPool pool();
+
+  // The number of files imported by this one.
+  public native int dependency_count();
+  // Gets an imported file by index, where 0 <= index < dependency_count().
+  // These are returned in the order they were defined in the .proto file.
+  public native @Const FileDescriptor dependency(int index);
+
+  // The number of files public imported by this one.
+  // The public dependency list is a subset of the dependency list.
+  public native int public_dependency_count();
+  // Gets a public imported file by index, where 0 <= index <
+  // public_dependency_count().
+  // These are returned in the order they were defined in the .proto file.
+  public native @Const FileDescriptor public_dependency(int index);
+
+  // The number of files that are imported for weak fields.
+  // The weak dependency list is a subset of the dependency list.
+  public native int weak_dependency_count();
+  // Gets a weak imported file by index, where 0 <= index <
+  // weak_dependency_count().
+  // These are returned in the order they were defined in the .proto file.
+  public native @Const FileDescriptor weak_dependency(int index);
+
+  // Number of top-level message types defined in this file.  (This does not
+  // include nested types.)
+  public native int message_type_count();
+  // Gets a top-level message type, where 0 <= index < message_type_count().
+  // These are returned in the order they were defined in the .proto file.
+  public native @Const Descriptor message_type(int index);
+
+  // Number of top-level enum types defined in this file.  (This does not
+  // include nested types.)
+  public native int enum_type_count();
+  // Gets a top-level enum type, where 0 <= index < enum_type_count().
+  // These are returned in the order they were defined in the .proto file.
+  public native @Const EnumDescriptor enum_type(int index);
+
+  // Number of services defined in this file.
+  public native int service_count();
+  // Gets a service, where 0 <= index < service_count().
+  // These are returned in the order they were defined in the .proto file.
+  public native @Const ServiceDescriptor service(int index);
+
+  // Number of extensions defined at file scope.  (This does not include
+  // extensions nested within message types.)
+  public native int extension_count();
+  // Gets an extension's descriptor, where 0 <= index < extension_count().
+  // These are returned in the order they were defined in the .proto file.
+  public native @Const FieldDescriptor extension(int index);
+
+  // Get options for this file.  These are specified in the .proto file by
+  // placing lines like "option foo = 1234;" at the top level, outside of any
+  // other definitions.  Allowed options are defined by FileOptions in
+  // google/protobuf/descriptor.proto, and any available extensions of that
+  // message.
+  public native @Const @ByRef FileOptions options();
+
+  // Find a top-level message type by name.  Returns NULL if not found.
+  public native @Const Descriptor FindMessageTypeByName(@StdString BytePointer name);
+  public native @Const Descriptor FindMessageTypeByName(@StdString String name);
+  // Find a top-level enum type by name.  Returns NULL if not found.
+  public native @Const EnumDescriptor FindEnumTypeByName(@StdString BytePointer name);
+  public native @Const EnumDescriptor FindEnumTypeByName(@StdString String name);
+  // Find an enum value defined in any top-level enum by name.  Returns NULL if
+  // not found.
+  public native @Const EnumValueDescriptor FindEnumValueByName(@StdString BytePointer name);
+  public native @Const EnumValueDescriptor FindEnumValueByName(@StdString String name);
+  // Find a service definition by name.  Returns NULL if not found.
+  public native @Const ServiceDescriptor FindServiceByName(@StdString BytePointer name);
+  public native @Const ServiceDescriptor FindServiceByName(@StdString String name);
+  // Find a top-level extension definition by name.  Returns NULL if not found.
+  public native @Const FieldDescriptor FindExtensionByName(@StdString BytePointer name);
+  public native @Const FieldDescriptor FindExtensionByName(@StdString String name);
+  // Similar to FindExtensionByName(), but searches by lowercased-name.  See
+  // Descriptor::FindFieldByLowercaseName().
+  public native @Const FieldDescriptor FindExtensionByLowercaseName(@StdString BytePointer name);
+  public native @Const FieldDescriptor FindExtensionByLowercaseName(@StdString String name);
+  // Similar to FindExtensionByName(), but searches by camelcased-name.  See
+  // Descriptor::FindFieldByCamelcaseName().
+  public native @Const FieldDescriptor FindExtensionByCamelcaseName(@StdString BytePointer name);
+  public native @Const FieldDescriptor FindExtensionByCamelcaseName(@StdString String name);
+
+  // See Descriptor::CopyTo().
+  // Notes:
+  // - This method does NOT copy source code information since it is relatively
+  //   large and rarely needed.  See CopySourceCodeInfoTo() below.
+  public native void CopyTo(FileDescriptorProto proto);
+  // Write the source code information of this FileDescriptor into the given
+  // FileDescriptorProto.  See CopyTo() above.
+  public native void CopySourceCodeInfoTo(FileDescriptorProto proto);
+
+  // See Descriptor::DebugString().
+  public native @StdString BytePointer DebugString();
+
+  // Returns true if this is a placeholder for an unknown file. This will
+  // only be the case if this descriptor comes from a DescriptorPool
+  // with AllowUnknownDependencies() set.
+  public native @Cast("bool") boolean is_placeholder();
+}
+
+// ===================================================================
+
+// Used to construct descriptors.
+//
+// Normally you won't want to build your own descriptors.  Message classes
+// constructed by the protocol compiler will provide them for you.  However,
+// if you are implementing Message on your own, or if you are writing a
+// program which can operate on totally arbitrary types and needs to load
+// them from some sort of database, you might need to.
+//
+// Since Descriptors are composed of a whole lot of cross-linked bits of
+// data that would be a pain to put together manually, the
+// DescriptorPool class is provided to make the process easier.  It can
+// take a FileDescriptorProto (defined in descriptor.proto), validate it,
+// and convert it to a set of nicely cross-linked Descriptors.
+//
+// DescriptorPool also helps with memory management.  Descriptors are
+// composed of many objects containing static data and pointers to each
+// other.  In all likelihood, when it comes time to delete this data,
+// you'll want to delete it all at once.  In fact, it is not uncommon to
+// have a whole pool of descriptors all cross-linked with each other which
+// you wish to delete all at once.  This class represents such a pool, and
+// handles the memory management for you.
+//
+// You can also search for descriptors within a DescriptorPool by name, and
+// extensions by number.
+@Namespace("google::protobuf") @NoOffset public static class DescriptorPool extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DescriptorPool(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public DescriptorPool(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public DescriptorPool position(long position) {
+        return (DescriptorPool)super.position(position);
+    }
+
+  // Create a normal, empty DescriptorPool.
+  public DescriptorPool() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  // Constructs a DescriptorPool that, when it can't find something among the
+  // descriptors already in the pool, looks for it in the given
+  // DescriptorDatabase.
+  // Notes:
+  // - If a DescriptorPool is constructed this way, its BuildFile*() methods
+  //   must not be called (they will assert-fail).  The only way to populate
+  //   the pool with descriptors is to call the Find*By*() methods.
+  // - The Find*By*() methods may block the calling thread if the
+  //   DescriptorDatabase blocks.  This in turn means that parsing messages
+  //   may block if they need to look up extensions.
+  // - The Find*By*() methods will use mutexes for thread-safety, thus making
+  //   them slower even when they don't have to fall back to the database.
+  //   In fact, even the Find*By*() methods of descriptor objects owned by
+  //   this pool will be slower, since they will have to obtain locks too.
+  // - An ErrorCollector may optionally be given to collect validation errors
+  //   in files loaded from the database.  If not given, errors will be printed
+  //   to GOOGLE_LOG(ERROR).  Remember that files are built on-demand, so this
+  //   ErrorCollector may be called from any thread that calls one of the
+  //   Find*By*() methods.
+  // - The DescriptorDatabase must not be mutated during the lifetime of
+  //   the DescriptorPool. Even if the client takes care to avoid data races,
+  //   changes to the content of the DescriptorDatabase may not be reflected
+  //   in subsequent lookups in the DescriptorPool.
+  public DescriptorPool(DescriptorDatabase fallback_database,
+                            ErrorCollector error_collector/*=NULL*/) { super((Pointer)null); allocate(fallback_database, error_collector); }
+  private native void allocate(DescriptorDatabase fallback_database,
+                            ErrorCollector error_collector/*=NULL*/);
+  public DescriptorPool(DescriptorDatabase fallback_database) { super((Pointer)null); allocate(fallback_database); }
+  private native void allocate(DescriptorDatabase fallback_database);
+
+  // Get a pointer to the generated pool.  Generated protocol message classes
+  // which are compiled into the binary will allocate their descriptors in
+  // this pool.  Do not add your own descriptors to this pool.
+  public static native @Const DescriptorPool generated_pool();
+
+  // Find a FileDescriptor in the pool by file name.  Returns NULL if not
+  // found.
+  public native @Const FileDescriptor FindFileByName(@StdString BytePointer name);
+  public native @Const FileDescriptor FindFileByName(@StdString String name);
+
+  // Find the FileDescriptor in the pool which defines the given symbol.
+  // If any of the Find*ByName() methods below would succeed, then this is
+  // equivalent to calling that method and calling the result's file() method.
+  // Otherwise this returns NULL.
+  public native @Const FileDescriptor FindFileContainingSymbol(
+        @StdString BytePointer symbol_name);
+  public native @Const FileDescriptor FindFileContainingSymbol(
+        @StdString String symbol_name);
+
+  // Looking up descriptors ------------------------------------------
+  // These find descriptors by fully-qualified name.  These will find both
+  // top-level descriptors and nested descriptors.  They return NULL if not
+  // found.
+
+  public native @Const Descriptor FindMessageTypeByName(@StdString BytePointer name);
+  public native @Const Descriptor FindMessageTypeByName(@StdString String name);
+  public native @Const FieldDescriptor FindFieldByName(@StdString BytePointer name);
+  public native @Const FieldDescriptor FindFieldByName(@StdString String name);
+  public native @Const FieldDescriptor FindExtensionByName(@StdString BytePointer name);
+  public native @Const FieldDescriptor FindExtensionByName(@StdString String name);
+  public native @Const OneofDescriptor FindOneofByName(@StdString BytePointer name);
+  public native @Const OneofDescriptor FindOneofByName(@StdString String name);
+  public native @Const EnumDescriptor FindEnumTypeByName(@StdString BytePointer name);
+  public native @Const EnumDescriptor FindEnumTypeByName(@StdString String name);
+  public native @Const EnumValueDescriptor FindEnumValueByName(@StdString BytePointer name);
+  public native @Const EnumValueDescriptor FindEnumValueByName(@StdString String name);
+  public native @Const ServiceDescriptor FindServiceByName(@StdString BytePointer name);
+  public native @Const ServiceDescriptor FindServiceByName(@StdString String name);
+  public native @Const MethodDescriptor FindMethodByName(@StdString BytePointer name);
+  public native @Const MethodDescriptor FindMethodByName(@StdString String name);
+
+  // Finds an extension of the given type by number.  The extendee must be
+  // a member of this DescriptorPool or one of its underlays.
+  public native @Const FieldDescriptor FindExtensionByNumber(@Const Descriptor extendee,
+                                                 int number);
+
+  // Finds extensions of extendee. The extensions will be appended to
+  // out in an undefined order. Only extensions defined directly in
+  // this DescriptorPool or one of its underlays are guaranteed to be
+  // found: extensions defined in the fallback database might not be found
+  // depending on the database implementation.
+  public native void FindAllExtensions(@Const Descriptor extendee,
+                           FieldDescriptorVector out);
+
+  // Building descriptors --------------------------------------------
+
+  // When converting a FileDescriptorProto to a FileDescriptor, various
+  // errors might be detected in the input.  The caller may handle these
+  // programmatically by implementing an ErrorCollector.
+  public static class ErrorCollector extends Pointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public ErrorCollector(Pointer p) { super(p); }
+  
+
+    // These constants specify what exact part of the construct is broken.
+    // This is useful e.g. for mapping the error back to an exact location
+    // in a .proto file.
+    /** enum google::protobuf::DescriptorPool::ErrorCollector::ErrorLocation */
+    public static final int
+      NAME = 0,              // the symbol name, or the package name for files
+      NUMBER = 1,            // field or extension range number
+      TYPE = 2,              // field type
+      EXTENDEE = 3,          // field extendee
+      DEFAULT_VALUE = 4,     // field default value
+      INPUT_TYPE = 5,        // method input type
+      OUTPUT_TYPE = 6,       // method output type
+      OPTION_NAME = 7,       // name in assignment
+      OPTION_VALUE = 8,      // value in option assignment
+      OTHER = 9;              // some other problem
+
+    // Reports an error in the FileDescriptorProto. Use this function if the
+    // problem occured should interrupt building the FileDescriptorProto.
+    public native void AddError(
+          @StdString BytePointer filename,
+          @StdString BytePointer element_name,
+          @Const Message descriptor,
+          @Cast("google::protobuf::DescriptorPool::ErrorCollector::ErrorLocation") int location,
+          @StdString BytePointer message
+          );
+    public native void AddError(
+          @StdString String filename,
+          @StdString String element_name,
+          @Const Message descriptor,
+          @Cast("google::protobuf::DescriptorPool::ErrorCollector::ErrorLocation") int location,
+          @StdString String message
+          );
+
+    // Reports a warning in the FileDescriptorProto. Use this function if the
+    // problem occured should NOT interrupt building the FileDescriptorProto.
+    public native void AddWarning(
+          @StdString BytePointer filename,
+          @StdString BytePointer element_name,
+          @Const Message descriptor,
+          @Cast("google::protobuf::DescriptorPool::ErrorCollector::ErrorLocation") int location,
+          @StdString BytePointer message
+          );
+    public native void AddWarning(
+          @StdString String filename,
+          @StdString String element_name,
+          @Const Message descriptor,
+          @Cast("google::protobuf::DescriptorPool::ErrorCollector::ErrorLocation") int location,
+          @StdString String message
+          );
+  }
+
+  // Convert the FileDescriptorProto to real descriptors and place them in
+  // this DescriptorPool.  All dependencies of the file must already be in
+  // the pool.  Returns the resulting FileDescriptor, or NULL if there were
+  // problems with the input (e.g. the message was invalid, or dependencies
+  // were missing).  Details about the errors are written to GOOGLE_LOG(ERROR).
+  public native @Const FileDescriptor BuildFile(@Const @ByRef FileDescriptorProto proto);
+
+  // Same as BuildFile() except errors are sent to the given ErrorCollector.
+  public native @Const FileDescriptor BuildFileCollectingErrors(
+      @Const @ByRef FileDescriptorProto proto,
+      ErrorCollector error_collector);
+
+  // By default, it is an error if a FileDescriptorProto contains references
+  // to types or other files that are not found in the DescriptorPool (or its
+  // backing DescriptorDatabase, if any).  If you call
+  // AllowUnknownDependencies(), however, then unknown types and files
+  // will be replaced by placeholder descriptors (which can be identified by
+  // the is_placeholder() method).  This can allow you to
+  // perform some useful operations with a .proto file even if you do not
+  // have access to other .proto files on which it depends.  However, some
+  // heuristics must be used to fill in the gaps in information, and these
+  // can lead to descriptors which are inaccurate.  For example, the
+  // DescriptorPool may be forced to guess whether an unknown type is a message
+  // or an enum, as well as what package it resides in.  Furthermore,
+  // placeholder types will not be discoverable via FindMessageTypeByName()
+  // and similar methods, which could confuse some descriptor-based algorithms.
+  // Generally, the results of this option should be handled with extreme care.
+  public native void AllowUnknownDependencies();
+
+  // By default, weak imports are allowed to be missing, in which case we will
+  // use a placeholder for the dependency and convert the field to be an Empty
+  // message field. If you call EnforceWeakDependencies(true), however, the
+  // DescriptorPool will report a import not found error.
+  public native void EnforceWeakDependencies(@Cast("bool") boolean enforce);
+
+  // Internal stuff --------------------------------------------------
+  // These methods MUST NOT be called from outside the proto2 library.
+  // These methods may contain hidden pitfalls and may be removed in a
+  // future library version.
+
+  // Create a DescriptorPool which is overlaid on top of some other pool.
+  // If you search for a descriptor in the overlay and it is not found, the
+  // underlay will be searched as a backup.  If the underlay has its own
+  // underlay, that will be searched next, and so on.  This also means that
+  // files built in the overlay will be cross-linked with the underlay's
+  // descriptors if necessary.  The underlay remains property of the caller;
+  // it must remain valid for the lifetime of the newly-constructed pool.
+  //
+  // Example:  Say you want to parse a .proto file at runtime in order to use
+  // its type with a DynamicMessage.  Say this .proto file has dependencies,
+  // but you know that all the dependencies will be things that are already
+  // compiled into the binary.  For ease of use, you'd like to load the types
+  // right out of generated_pool() rather than have to parse redundant copies
+  // of all these .protos and runtime.  But, you don't want to add the parsed
+  // types directly into generated_pool(): this is not allowed, and would be
+  // bad design anyway.  So, instead, you could use generated_pool() as an
+  // underlay for a new DescriptorPool in which you add only the new file.
+  //
+  // WARNING:  Use of underlays can lead to many subtle gotchas.  Instead,
+  //   try to formulate what you want to do in terms of DescriptorDatabases.
+  public DescriptorPool(@Const DescriptorPool underlay) { super((Pointer)null); allocate(underlay); }
+  private native void allocate(@Const DescriptorPool underlay);
+
+  // Called by generated classes at init time to add their descriptors to
+  // generated_pool.  Do NOT call this in your own code!  filename must be a
+  // permanent string (e.g. a string literal).
+  public static native void InternalAddGeneratedFile(
+        @Const Pointer encoded_file_descriptor, int size);
+
+
+  // For internal use only:  Gets a non-const pointer to the generated pool.
+  // This is called at static-initialization time only, so thread-safety is
+  // not a concern.  If both an underlay and a fallback database are present,
+  // the underlay takes precedence.
+  public static native DescriptorPool internal_generated_pool();
+
+  // For internal use only:  Changes the behavior of BuildFile() such that it
+  // allows the file to make reference to message types declared in other files
+  // which it did not officially declare as dependencies.
+  public native void InternalDontEnforceDependencies();
+
+  // For internal use only.
+  public native void internal_set_underlay(@Const DescriptorPool underlay);
+
+  // For internal (unit test) use only:  Returns true if a FileDescriptor has
+  // been constructed for the given file, false otherwise.  Useful for testing
+  // lazy descriptor initialization behavior.
+  public native @Cast("bool") boolean InternalIsFileLoaded(@StdString BytePointer filename);
+  public native @Cast("bool") boolean InternalIsFileLoaded(@StdString String filename);
+
+
+  // Add a file to unused_import_track_files_. DescriptorBuilder will log
+  // warnings for those files if there is any unused import.
+  public native void AddUnusedImportTrackFile(@StdString BytePointer file_name);
+  public native void AddUnusedImportTrackFile(@StdString String file_name);
+  public native void ClearUnusedImportTrackFiles();
+}
+
+// inline methods ====================================================
+
+// These macros makes this repetitive code more readable.
+// #define PROTOBUF_DEFINE_ACCESSOR(CLASS, FIELD, TYPE)
+//   inline TYPE CLASS::FIELD() const { return FIELD##_; }
+
+// Strings fields are stored as pointers but returned as const references.
+// #define PROTOBUF_DEFINE_STRING_ACCESSOR(CLASS, FIELD)
+//   inline const string& CLASS::FIELD() const { return *FIELD##_; }
+
+// Arrays take an index parameter, obviously.
+// #define PROTOBUF_DEFINE_ARRAY_ACCESSOR(CLASS, FIELD, TYPE)
+//   inline TYPE CLASS::FIELD(int index) const { return FIELD##s_ + index; }
+
+// #define PROTOBUF_DEFINE_OPTIONS_ACCESSOR(CLASS, TYPE)
+//   inline const TYPE& CLASS::options() const { return *options_; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// #undef PROTOBUF_DEFINE_ACCESSOR
+// #undef PROTOBUF_DEFINE_STRING_ACCESSOR
+// #undef PROTOBUF_DEFINE_ARRAY_ACCESSOR
+
+// A few accessors differ from the macros...
+
+
+
+
+
+
+
+
+
+
+
+// To save space, index() is computed by looking at the descriptor's position
+// in the parent's array of children.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Can't use PROTOBUF_DEFINE_ARRAY_ACCESSOR because fields_ is actually an array
+// of pointers rather than the usual array of objects.
+
+
+  // namespace protobuf
+
+  // namespace google
+// #endif  // GOOGLE_PROTOBUF_DESCRIPTOR_H__
+
+
+// Parsed from google/protobuf/message_lite.h
+
+// Protocol Buffers - Google's data interchange format
+// Copyright 2008 Google Inc.  All rights reserved.
+// https://developers.google.com/protocol-buffers/
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+// Authors: wink@google.com (Wink Saville),
+//          kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// Defines MessageLite, the abstract interface implemented by all (lite
+// and non-lite) protocol message objects.
+
+// #ifndef GOOGLE_PROTOBUF_MESSAGE_LITE_H__
+// #define GOOGLE_PROTOBUF_MESSAGE_LITE_H__
+
+// #include <google/protobuf/stubs/common.h>
+  @Namespace("google::protobuf::io") @Opaque public static class CodedInputStream extends Pointer {
+      /** Empty constructor. Calls {@code super((Pointer)null)}. */
+      public CodedInputStream() { super((Pointer)null); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public CodedInputStream(Pointer p) { super(p); }
+  }
+  @Namespace("google::protobuf::io") @Opaque public static class CodedOutputStream extends Pointer {
+      /** Empty constructor. Calls {@code super((Pointer)null)}. */
+      public CodedOutputStream() { super((Pointer)null); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public CodedOutputStream(Pointer p) { super(p); }
+  }
+  @Namespace("google::protobuf::io") @Opaque public static class ZeroCopyInputStream extends Pointer {
+      /** Empty constructor. Calls {@code super((Pointer)null)}. */
+      public ZeroCopyInputStream() { super((Pointer)null); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public ZeroCopyInputStream(Pointer p) { super(p); }
+  }
+  @Namespace("google::protobuf::io") @Opaque public static class ZeroCopyOutputStream extends Pointer {
+      /** Empty constructor. Calls {@code super((Pointer)null)}. */
+      public ZeroCopyOutputStream() { super((Pointer)null); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public ZeroCopyOutputStream(Pointer p) { super(p); }
+  }
+
+
+// Interface to light weight protocol messages.
+//
+// This interface is implemented by all protocol message objects.  Non-lite
+// messages additionally implement the Message interface, which is a
+// subclass of MessageLite.  Use MessageLite instead when you only need
+// the subset of features which it supports -- namely, nothing that uses
+// descriptors or reflection.  You can instruct the protocol compiler
+// to generate classes which implement only MessageLite, not the full
+// Message interface, by adding the following line to the .proto file:
+//
+//   option optimize_for = LITE_RUNTIME;
+//
+// This is particularly useful on resource-constrained systems where
+// the full protocol buffers runtime library is too big.
+//
+// Note that on non-constrained systems (e.g. servers) when you need
+// to link in lots of protocol definitions, a better way to reduce
+// total code footprint is to use optimize_for = CODE_SIZE.  This
+// will make the generated code smaller while still supporting all the
+// same features (at the expense of speed).  optimize_for = LITE_RUNTIME
+// is best when you only have a small number of message types linked
+// into your binary, in which case the size of the protocol buffers
+// runtime itself is the biggest problem.
+@Namespace("google::protobuf") public static class MessageLite extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public MessageLite(Pointer p) { super(p); }
+
+
+  // Basic Operations ------------------------------------------------
+
+  // Get the name of this message type, e.g. "foo.bar.BazProto".
+  public native @StdString BytePointer GetTypeName();
+
+  // Construct a new instance of the same type.  Ownership is passed to the
+  // caller.
+  public native MessageLite New();
+
+  // Clear all fields of the message and set them to their default values.
+  // Clear() avoids freeing memory, assuming that any memory allocated
+  // to hold parts of the message will be needed again to hold the next
+  // message.  If you actually want to free the memory used by a Message,
+  // you must delete it.
+  public native void Clear();
+
+  // Quickly check if all required fields have values set.
+  public native @Cast("bool") boolean IsInitialized();
+
+  // This is not implemented for Lite messages -- it just returns "(cannot
+  // determine missing fields for lite message)".  However, it is implemented
+  // for full messages.  See message.h.
+  public native @StdString BytePointer InitializationErrorString();
+
+  // If |other| is the exact same class as this, calls MergeFrom().  Otherwise,
+  // results are undefined (probably crash).
+  public native void CheckTypeAndMergeFrom(@Const @ByRef MessageLite other);
+
+  // Parsing ---------------------------------------------------------
+  // Methods for parsing in protocol buffer format.  Most of these are
+  // just simple wrappers around MergeFromCodedStream().  Clear() will be called
+  // before merging the input.
+
+  // Fill the message with a protocol buffer parsed from the given input
+  // stream.  Returns false on a read error or if the input is in the
+  // wrong format.
+  public native @Cast("bool") boolean ParseFromCodedStream(CodedInputStream input);
+  // Like ParseFromCodedStream(), but accepts messages that are missing
+  // required fields.
+  public native @Cast("bool") boolean ParsePartialFromCodedStream(CodedInputStream input);
+  // Read a protocol buffer from the given zero-copy input stream.  If
+  // successful, the entire input will be consumed.
+  public native @Cast("bool") boolean ParseFromZeroCopyStream(ZeroCopyInputStream input);
+  // Like ParseFromZeroCopyStream(), but accepts messages that are missing
+  // required fields.
+  public native @Cast("bool") boolean ParsePartialFromZeroCopyStream(ZeroCopyInputStream input);
+  // Read a protocol buffer from the given zero-copy input stream, expecting
+  // the message to be exactly "size" bytes long.  If successful, exactly
+  // this many bytes will have been consumed from the input.
+  public native @Cast("bool") boolean ParseFromBoundedZeroCopyStream(ZeroCopyInputStream input, int size);
+  // Like ParseFromBoundedZeroCopyStream(), but accepts messages that are
+  // missing required fields.
+  public native @Cast("bool") boolean ParsePartialFromBoundedZeroCopyStream(ZeroCopyInputStream input,
+                                               int size);
+  // Parse a protocol buffer contained in a string.
+  public native @Cast("bool") boolean ParseFromString(@StdString BytePointer data);
+  public native @Cast("bool") boolean ParseFromString(@StdString String data);
+  // Like ParseFromString(), but accepts messages that are missing
+  // required fields.
+  public native @Cast("bool") boolean ParsePartialFromString(@StdString BytePointer data);
+  public native @Cast("bool") boolean ParsePartialFromString(@StdString String data);
+  // Parse a protocol buffer contained in an array of bytes.
+  public native @Cast("bool") boolean ParseFromArray(@Const Pointer data, int size);
+  // Like ParseFromArray(), but accepts messages that are missing
+  // required fields.
+  public native @Cast("bool") boolean ParsePartialFromArray(@Const Pointer data, int size);
+
+
+  // Reads a protocol buffer from the stream and merges it into this
+  // Message.  Singular fields read from the input overwrite what is
+  // already in the Message and repeated fields are appended to those
+  // already present.
+  //
+  // It is the responsibility of the caller to call input->LastTagWas()
+  // (for groups) or input->ConsumedEntireMessage() (for non-groups) after
+  // this returns to verify that the message's end was delimited correctly.
+  //
+  // ParsefromCodedStream() is implemented as Clear() followed by
+  // MergeFromCodedStream().
+  public native @Cast("bool") boolean MergeFromCodedStream(CodedInputStream input);
+
+  // Like MergeFromCodedStream(), but succeeds even if required fields are
+  // missing in the input.
+  //
+  // MergeFromCodedStream() is just implemented as MergePartialFromCodedStream()
+  // followed by IsInitialized().
+  public native @Cast("bool") boolean MergePartialFromCodedStream(CodedInputStream input);
+
+
+  // Serialization ---------------------------------------------------
+  // Methods for serializing in protocol buffer format.  Most of these
+  // are just simple wrappers around ByteSize() and SerializeWithCachedSizes().
+
+  // Write a protocol buffer of this message to the given output.  Returns
+  // false on a write error.  If the message is missing required fields,
+  // this may GOOGLE_CHECK-fail.
+  public native @Cast("bool") boolean SerializeToCodedStream(CodedOutputStream output);
+  // Like SerializeToCodedStream(), but allows missing required fields.
+  public native @Cast("bool") boolean SerializePartialToCodedStream(CodedOutputStream output);
+  // Write the message to the given zero-copy output stream.  All required
+  // fields must be set.
+  public native @Cast("bool") boolean SerializeToZeroCopyStream(ZeroCopyOutputStream output);
+  // Like SerializeToZeroCopyStream(), but allows missing required fields.
+  public native @Cast("bool") boolean SerializePartialToZeroCopyStream(ZeroCopyOutputStream output);
+  // Serialize the message and store it in the given string.  All required
+  // fields must be set.
+  public native @Cast("bool") boolean SerializeToString(@StdString @Cast({"char*", "std::string*"}) BytePointer output);
+  // Like SerializeToString(), but allows missing required fields.
+  public native @Cast("bool") boolean SerializePartialToString(@StdString @Cast({"char*", "std::string*"}) BytePointer output);
+  // Serialize the message and store it in the given byte array.  All required
+  // fields must be set.
+  public native @Cast("bool") boolean SerializeToArray(Pointer data, int size);
+  // Like SerializeToArray(), but allows missing required fields.
+  public native @Cast("bool") boolean SerializePartialToArray(Pointer data, int size);
+
+  // Make a string encoding the message. Is equivalent to calling
+  // SerializeToString() on a string and using that.  Returns the empty
+  // string if SerializeToString() would have returned an error.
+  // Note: If you intend to generate many such strings, you may
+  // reduce heap fragmentation by instead re-using the same string
+  // object with calls to SerializeToString().
+  public native @StdString BytePointer SerializeAsString();
+  // Like SerializeAsString(), but allows missing required fields.
+  public native @StdString BytePointer SerializePartialAsString();
+
+  // Like SerializeToString(), but appends to the data to the string's existing
+  // contents.  All required fields must be set.
+  public native @Cast("bool") boolean AppendToString(@StdString @Cast({"char*", "std::string*"}) BytePointer output);
+  // Like AppendToString(), but allows missing required fields.
+  public native @Cast("bool") boolean AppendPartialToString(@StdString @Cast({"char*", "std::string*"}) BytePointer output);
+
+  // Computes the serialized size of the message.  This recursively calls
+  // ByteSize() on all embedded messages.  If a subclass does not override
+  // this, it MUST override SetCachedSize().
+  public native int ByteSize();
+
+  // Serializes the message without recomputing the size.  The message must
+  // not have changed since the last call to ByteSize(); if it has, the results
+  // are undefined.
+  public native void SerializeWithCachedSizes(
+        CodedOutputStream output);
+
+  // Like SerializeWithCachedSizes, but writes directly to *target, returning
+  // a pointer to the byte immediately after the last byte written.  "target"
+  // must point at a byte array of at least ByteSize() bytes.
+  public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer target);
+  public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer target);
+  public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] target);
+
+  // Returns the result of the last call to ByteSize().  An embedded message's
+  // size is needed both to serialize it (because embedded messages are
+  // length-delimited) and to compute the outer message's size.  Caching
+  // the size avoids computing it multiple times.
+  //
+  // ByteSize() does not automatically use the cached size when available
+  // because this would require invalidating it every time the message was
+  // modified, which would be too hard and expensive.  (E.g. if a deeply-nested
+  // sub-message is changed, all of its parents' cached sizes would need to be
+  // invalidated, which is too much work for an otherwise inlined setter
+  // method.)
+  public native int GetCachedSize();
+}
+
+  // namespace protobuf
+
+  // namespace google
+// #endif  // GOOGLE_PROTOBUF_MESSAGE_LITE_H__
+
+
+// Parsed from google/protobuf/message.h
+
+// Protocol Buffers - Google's data interchange format
+// Copyright 2008 Google Inc.  All rights reserved.
+// https://developers.google.com/protocol-buffers/
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are
+// met:
+//
+//     * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//     * Redistributions in binary form must reproduce the above
+// copyright notice, this list of conditions and the following disclaimer
+// in the documentation and/or other materials provided with the
+// distribution.
+//     * Neither the name of Google Inc. nor the names of its
+// contributors may be used to endorse or promote products derived from
+// this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+// Author: kenton@google.com (Kenton Varda)
+//  Based on original Protocol Buffers design by
+//  Sanjay Ghemawat, Jeff Dean, and others.
+//
+// Defines Message, the abstract interface implemented by non-lite
+// protocol message objects.  Although it's possible to implement this
+// interface manually, most users will use the protocol compiler to
+// generate implementations.
+//
+// Example usage:
+//
+// Say you have a message defined as:
+//
+//   message Foo {
+//     optional string text = 1;
+//     repeated int32 numbers = 2;
+//   }
+//
+// Then, if you used the protocol compiler to generate a class from the above
+// definition, you could use it like so:
+//
+//   string data;  // Will store a serialized version of the message.
+//
+//   {
+//     // Create a message and serialize it.
+//     Foo foo;
+//     foo.set_text("Hello World!");
+//     foo.add_numbers(1);
+//     foo.add_numbers(5);
+//     foo.add_numbers(42);
+//
+//     foo.SerializeToString(&data);
+//   }
+//
+//   {
+//     // Parse the serialized message and check that it contains the
+//     // correct data.
+//     Foo foo;
+//     foo.ParseFromString(data);
+//
+//     assert(foo.text() == "Hello World!");
+//     assert(foo.numbers_size() == 3);
+//     assert(foo.numbers(0) == 1);
+//     assert(foo.numbers(1) == 5);
+//     assert(foo.numbers(2) == 42);
+//   }
+//
+//   {
+//     // Same as the last block, but do it dynamically via the Message
+//     // reflection interface.
+//     Message* foo = new Foo;
+//     const Descriptor* descriptor = foo->GetDescriptor();
+//
+//     // Get the descriptors for the fields we're interested in and verify
+//     // their types.
+//     const FieldDescriptor* text_field = descriptor->FindFieldByName("text");
+//     assert(text_field != NULL);
+//     assert(text_field->type() == FieldDescriptor::TYPE_STRING);
+//     assert(text_field->label() == FieldDescriptor::LABEL_OPTIONAL);
+//     const FieldDescriptor* numbers_field = descriptor->
+//                                            FindFieldByName("numbers");
+//     assert(numbers_field != NULL);
+//     assert(numbers_field->type() == FieldDescriptor::TYPE_INT32);
+//     assert(numbers_field->label() == FieldDescriptor::LABEL_REPEATED);
+//
+//     // Parse the message.
+//     foo->ParseFromString(data);
+//
+//     // Use the reflection interface to examine the contents.
+//     const Reflection* reflection = foo->GetReflection();
+//     assert(reflection->GetString(foo, text_field) == "Hello World!");
+//     assert(reflection->FieldSize(foo, numbers_field) == 3);
+//     assert(reflection->GetRepeatedInt32(foo, numbers_field, 0) == 1);
+//     assert(reflection->GetRepeatedInt32(foo, numbers_field, 1) == 5);
+//     assert(reflection->GetRepeatedInt32(foo, numbers_field, 2) == 42);
+//
+//     delete foo;
+//   }
+
+// #ifndef GOOGLE_PROTOBUF_MESSAGE_H__
+// #define GOOGLE_PROTOBUF_MESSAGE_H__
+
+// #include <iosfwd>
+// #include <string>
+// #include <vector>
+
+// #include <google/protobuf/message_lite.h>
+
+// #include <google/protobuf/stubs/common.h>
+// #include <google/protobuf/descriptor.h>
+
+
+// #define GOOGLE_PROTOBUF_HAS_ONEOF
+
+// Defined in this file.
+
+// Defined in other files.
+@Namespace("google::protobuf") @Opaque public static class UnknownFieldSet extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public UnknownFieldSet() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public UnknownFieldSet(Pointer p) { super(p); }
+}         // unknown_field_set.h   // zero_copy_stream.h  // zero_copy_stream.h      // coded_stream.h     // coded_stream.h
+     // repeated_field.h  // repeated_field.h
+
+// A container to hold message metadata.
+@Namespace("google::protobuf") public static class Metadata extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public Metadata() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public Metadata(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Metadata(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public Metadata position(long position) {
+        return (Metadata)super.position(position);
+    }
+
+  @MemberGetter public native @Const Descriptor descriptor();
+  @MemberGetter public native @Const Reflection reflection();
+}
+
+// Abstract interface for protocol messages.
+//
+// See also MessageLite, which contains most every-day operations.  Message
+// adds descriptors and reflection on top of that.
+//
+// The methods of this class that are virtual but not pure-virtual have
+// default implementations based on reflection.  Message classes which are
+// optimized for speed will want to override these with faster implementations,
+// but classes optimized for code size may be happy with keeping them.  See
+// the optimize_for option in descriptor.proto.
+@Namespace("google::protobuf") public static class Message extends MessageLite {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Message(Pointer p) { super(p); }
+
+
+  // Basic Operations ------------------------------------------------
+
+  // Construct a new instance of the same type.  Ownership is passed to the
+  // caller.  (This is also defined in MessageLite, but is defined again here
+  // for return-type covariance.)
+  public native Message New();
+
+  // Make this message into a copy of the given message.  The given message
+  // must have the same descriptor, but need not necessarily be the same class.
+  // By default this is just implemented as "Clear(); MergeFrom(from);".
+  public native void CopyFrom(@Const @ByRef Message from);
+
+  // Merge the fields from the given message into this message.  Singular
+  // fields will be overwritten, if specified in from, except for embedded
+  // messages which will be merged.  Repeated fields will be concatenated.
+  // The given message must be of the same type as this message (i.e. the
+  // exact same class).
+  public native void MergeFrom(@Const @ByRef Message from);
+
+  // Verifies that IsInitialized() returns true.  GOOGLE_CHECK-fails otherwise, with
+  // a nice error message.
+  public native void CheckInitialized();
+
+  // Slowly build a list of all required fields that are not set.
+  // This is much, much slower than IsInitialized() as it is implemented
+  // purely via reflection.  Generally, you should not call this unless you
+  // have already determined that an error exists by calling IsInitialized().
+  public native void FindInitializationErrors(StringVector errors);
+
+  // Like FindInitializationErrors, but joins all the strings, delimited by
+  // commas, and returns them.
+  public native @StdString BytePointer InitializationErrorString();
+
+  // Clears all unknown fields from this message and all embedded messages.
+  // Normally, if unknown tag numbers are encountered when parsing a message,
+  // the tag and value are stored in the message's UnknownFieldSet and
+  // then written back out when the message is serialized.  This allows servers
+  // which simply route messages to other servers to pass through messages
+  // that have new field definitions which they don't yet know about.  However,
+  // this behavior can have security implications.  To avoid it, call this
+  // method after parsing.
+  //
+  // See Reflection::GetUnknownFields() for more on unknown fields.
+  public native void DiscardUnknownFields();
+
+  // Computes (an estimate of) the total number of bytes currently used for
+  // storing the message in memory.  The default implementation calls the
+  // Reflection object's SpaceUsed() method.
+  public native int SpaceUsed();
+
+  // Debugging & Testing----------------------------------------------
+
+  // Generates a human readable form of this message, useful for debugging
+  // and other purposes.
+  public native @StdString BytePointer DebugString();
+  // Like DebugString(), but with less whitespace.
+  public native @StdString BytePointer ShortDebugString();
+  // Like DebugString(), but do not escape UTF-8 byte sequences.
+  public native @StdString BytePointer Utf8DebugString();
+  // Convenience function useful in GDB.  Prints DebugString() to stdout.
+  public native void PrintDebugString();
+
+  // Heavy I/O -------------------------------------------------------
+  // Additional parsing and serialization methods not implemented by
+  // MessageLite because they are not supported by the lite library.
+
+  // Parse a protocol buffer from a file descriptor.  If successful, the entire
+  // input will be consumed.
+  public native @Cast("bool") boolean ParseFromFileDescriptor(int file_descriptor);
+  // Like ParseFromFileDescriptor(), but accepts messages that are missing
+  // required fields.
+  public native @Cast("bool") boolean ParsePartialFromFileDescriptor(int file_descriptor);
+  // Parse a protocol buffer from a C++ istream.  If successful, the entire
+  // input will be consumed.
+  public native @Cast("bool") boolean ParseFromIstream(@Cast("std::istream*") Pointer input);
+  // Like ParseFromIstream(), but accepts messages that are missing
+  // required fields.
+  public native @Cast("bool") boolean ParsePartialFromIstream(@Cast("std::istream*") Pointer input);
+
+  // Serialize the message and write it to the given file descriptor.  All
+  // required fields must be set.
+  public native @Cast("bool") boolean SerializeToFileDescriptor(int file_descriptor);
+  // Like SerializeToFileDescriptor(), but allows missing required fields.
+  public native @Cast("bool") boolean SerializePartialToFileDescriptor(int file_descriptor);
+  // Serialize the message and write it to the given C++ ostream.  All
+  // required fields must be set.
+  public native @Cast("bool") boolean SerializeToOstream(@Cast("std::ostream*") Pointer output);
+  // Like SerializeToOstream(), but allows missing required fields.
+  public native @Cast("bool") boolean SerializePartialToOstream(@Cast("std::ostream*") Pointer output);
+
+
+  // Reflection-based methods ----------------------------------------
+  // These methods are pure-virtual in MessageLite, but Message provides
+  // reflection-based default implementations.
+
+  public native @StdString BytePointer GetTypeName();
+  public native void Clear();
+  public native @Cast("bool") boolean IsInitialized();
+  public native void CheckTypeAndMergeFrom(@Const @ByRef MessageLite other);
+  public native @Cast("bool") boolean MergePartialFromCodedStream(CodedInputStream input);
+  public native int ByteSize();
+  public native void SerializeWithCachedSizes(CodedOutputStream output);
+
+  // Introspection ---------------------------------------------------
+
+  // Typedef for backwards-compatibility.
+
+  // Get a Descriptor for this message's type.  This describes what
+  // fields the message contains, the types of those fields, etc.
+  public native @Const Descriptor GetDescriptor();
+
+  // Get the Reflection interface for this Message, which can be used to
+  // read and modify the fields of the Message dynamically (in other words,
+  // without knowing the message type at compile time).  This object remains
+  // property of the Message.
+  //
+  // This method remains virtual in case a subclass does not implement
+  // reflection and wants to override the default behavior.
+  public native @Const Reflection GetReflection();
+}
+
+// This interface contains methods that can be used to dynamically access
+// and modify the fields of a protocol message.  Their semantics are
+// similar to the accessors the protocol compiler generates.
+//
+// To get the Reflection for a given Message, call Message::GetReflection().
+//
+// This interface is separate from Message only for efficiency reasons;
+// the vast majority of implementations of Message will share the same
+// implementation of Reflection (GeneratedMessageReflection,
+// defined in generated_message.h), and all Messages of a particular class
+// should share the same Reflection object (though you should not rely on
+// the latter fact).
+//
+// There are several ways that these methods can be used incorrectly.  For
+// example, any of the following conditions will lead to undefined
+// results (probably assertion failures):
+// - The FieldDescriptor is not a field of this message type.
+// - The method called is not appropriate for the field's type.  For
+//   each field type in FieldDescriptor::TYPE_*, there is only one
+//   Get*() method, one Set*() method, and one Add*() method that is
+//   valid for that type.  It should be obvious which (except maybe
+//   for TYPE_BYTES, which are represented using strings in C++).
+// - A Get*() or Set*() method for singular fields is called on a repeated
+//   field.
+// - GetRepeated*(), SetRepeated*(), or Add*() is called on a non-repeated
+//   field.
+// - The Message object passed to any method is not of the right type for
+//   this Reflection object (i.e. message.GetReflection() != reflection).
+//
+// You might wonder why there is not any abstract representation for a field
+// of arbitrary type.  E.g., why isn't there just a "GetField()" method that
+// returns "const Field&", where "Field" is some class with accessors like
+// "GetInt32Value()".  The problem is that someone would have to deal with
+// allocating these Field objects.  For generated message classes, having to
+// allocate space for an additional object to wrap every field would at least
+// double the message's memory footprint, probably worse.  Allocating the
+// objects on-demand, on the other hand, would be expensive and prone to
+// memory leaks.  So, instead we ended up with this flat interface.
+//
+// TODO(kenton):  Create a utility class which callers can use to read and
+//   write fields from a Reflection without paying attention to the type.
+@Namespace("google::protobuf") public static class Reflection extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Reflection(Pointer p) { super(p); }
+
+
+  // Get the UnknownFieldSet for the message.  This contains fields which
+  // were seen when the Message was parsed but were not recognized according
+  // to the Message's definition.
+  public native @Const @ByRef UnknownFieldSet GetUnknownFields(
+        @Const @ByRef Message message);
+  // Get a mutable pointer to the UnknownFieldSet for the message.  This
+  // contains fields which were seen when the Message was parsed but were not
+  // recognized according to the Message's definition.
+  public native UnknownFieldSet MutableUnknownFields(Message message);
+
+  // Estimate the amount of memory used by the message object.
+  public native int SpaceUsed(@Const @ByRef Message message);
+
+  // Check if the given non-repeated field is set.
+  public native @Cast("bool") boolean HasField(@Const @ByRef Message message,
+                          @Const FieldDescriptor field);
+
+  // Get the number of elements of a repeated field.
+  public native int FieldSize(@Const @ByRef Message message,
+                          @Const FieldDescriptor field);
+
+  // Clear the value of a field, so that HasField() returns false or
+  // FieldSize() returns zero.
+  public native void ClearField(Message message,
+                            @Const FieldDescriptor field);
+
+  // Check if the oneof is set. Returns ture if any field in oneof
+  // is set, false otherwise.
+  // TODO(jieluo) - make it pure virtual after updating all
+  // the subclasses.
+  public native @Cast("bool") boolean HasOneof(@Const @ByRef Message message,
+                          @Const OneofDescriptor oneof_descriptor);
+
+  public native void ClearOneof(Message message,
+                            @Const OneofDescriptor oneof_descriptor);
+
+  // Returns the field descriptor if the oneof is set. NULL otherwise.
+  // TODO(jieluo) - make it pure virtual.
+  public native @Const FieldDescriptor GetOneofFieldDescriptor(
+        @Const @ByRef Message message,
+        @Const OneofDescriptor oneof_descriptor);
+
+  // Removes the last element of a repeated field.
+  // We don't provide a way to remove any element other than the last
+  // because it invites inefficient use, such as O(n^2) filtering loops
+  // that should have been O(n).  If you want to remove an element other
+  // than the last, the best way to do it is to re-arrange the elements
+  // (using Swap()) so that the one you want removed is at the end, then
+  // call RemoveLast().
+  public native void RemoveLast(Message message,
+                            @Const FieldDescriptor field);
+  // Removes the last element of a repeated message field, and returns the
+  // pointer to the caller.  Caller takes ownership of the returned pointer.
+  public native Message ReleaseLast(Message message,
+                                 @Const FieldDescriptor field);
+
+  // Swap the complete contents of two messages.
+  public native void Swap(Message message1, Message message2);
+
+  // Swap fields listed in fields vector of two messages.
+  public native void SwapFields(Message message1,
+                            Message message2,
+                            @Const @ByRef FieldDescriptorVector fields);
+
+  // Swap two elements of a repeated field.
+  public native void SwapElements(Message message,
+                              @Const FieldDescriptor field,
+                              int index1,
+                              int index2);
+
+  // List all fields of the message which are currently set.  This includes
+  // extensions.  Singular fields will only be listed if HasField(field) would
+  // return true and repeated fields will only be listed if FieldSize(field)
+  // would return non-zero.  Fields (both normal fields and extension fields)
+  // will be listed ordered by field number.
+  public native void ListFields(@Const @ByRef Message message,
+                            FieldDescriptorVector output);
+
+  // Singular field getters ------------------------------------------
+  // These get the value of a non-repeated field.  They return the default
+  // value for fields that aren't set.
+
+  public native @Cast("google::protobuf::int32") int GetInt32(@Const @ByRef Message message,
+                             @Const FieldDescriptor field);
+  public native @Cast("google::protobuf::int64") long GetInt64(@Const @ByRef Message message,
+                             @Const FieldDescriptor field);
+  public native @Cast("google::protobuf::uint32") int GetUInt32(@Const @ByRef Message message,
+                             @Const FieldDescriptor field);
+  public native @Cast("google::protobuf::uint64") long GetUInt64(@Const @ByRef Message message,
+                             @Const FieldDescriptor field);
+  public native float GetFloat(@Const @ByRef Message message,
+                             @Const FieldDescriptor field);
+  public native double GetDouble(@Const @ByRef Message message,
+                             @Const FieldDescriptor field);
+  public native @Cast("bool") boolean GetBool(@Const @ByRef Message message,
+                             @Const FieldDescriptor field);
+  public native @StdString BytePointer GetString(@Const @ByRef Message message,
+                             @Const FieldDescriptor field);
+  public native @Const EnumValueDescriptor GetEnum(
+        @Const @ByRef Message message, @Const FieldDescriptor field);
+  // See MutableMessage() for the meaning of the "factory" parameter.
+  public native @Const @ByRef Message GetMessage(@Const @ByRef Message message,
+                                      @Const FieldDescriptor field,
+                                      MessageFactory factory/*=NULL*/);
+  public native @Const @ByRef Message GetMessage(@Const @ByRef Message message,
+                                      @Const FieldDescriptor field);
+
+  // Get a string value without copying, if possible.
+  //
+  // GetString() necessarily returns a copy of the string.  This can be
+  // inefficient when the string is already stored in a string object in the
+  // underlying message.  GetStringReference() will return a reference to the
+  // underlying string in this case.  Otherwise, it will copy the string into
+  // *scratch and return that.
+  //
+  // Note:  It is perfectly reasonable and useful to write code like:
+  //     str = reflection->GetStringReference(field, &str);
+  //   This line would ensure that only one copy of the string is made
+  //   regardless of the field's underlying representation.  When initializing
+  //   a newly-constructed string, though, it's just as fast and more readable
+  //   to use code like:
+  //     string str = reflection->GetString(field);
+  public native @StdString BytePointer GetStringReference(@Const @ByRef Message message,
+                                             @Const FieldDescriptor field,
+                                             @StdString @Cast({"char*", "std::string*"}) BytePointer scratch);
+
+
+  // Singular field mutators -----------------------------------------
+  // These mutate the value of a non-repeated field.
+
+  public native void SetInt32(Message message,
+                           @Const FieldDescriptor field, @Cast("google::protobuf::int32") int value);
+  public native void SetInt64(Message message,
+                           @Const FieldDescriptor field, @Cast("google::protobuf::int64") long value);
+  public native void SetUInt32(Message message,
+                           @Const FieldDescriptor field, @Cast("google::protobuf::uint32") int value);
+  public native void SetUInt64(Message message,
+                           @Const FieldDescriptor field, @Cast("google::protobuf::uint64") long value);
+  public native void SetFloat(Message message,
+                           @Const FieldDescriptor field, float value);
+  public native void SetDouble(Message message,
+                           @Const FieldDescriptor field, double value);
+  public native void SetBool(Message message,
+                           @Const FieldDescriptor field, @Cast("bool") boolean value);
+  public native void SetString(Message message,
+                           @Const FieldDescriptor field,
+                           @StdString BytePointer value);
+  public native void SetString(Message message,
+                           @Const FieldDescriptor field,
+                           @StdString String value);
+  public native void SetEnum(Message message,
+                           @Const FieldDescriptor field,
+                           @Const EnumValueDescriptor value);
+  // Get a mutable pointer to a field with a message type.  If a MessageFactory
+  // is provided, it will be used to construct instances of the sub-message;
+  // otherwise, the default factory is used.  If the field is an extension that
+  // does not live in the same pool as the containing message's descriptor (e.g.
+  // it lives in an overlay pool), then a MessageFactory must be provided.
+  // If you have no idea what that meant, then you probably don't need to worry
+  // about it (don't provide a MessageFactory).  WARNING:  If the
+  // FieldDescriptor is for a compiled-in extension, then
+  // factory->GetPrototype(field->message_type() MUST return an instance of the
+  // compiled-in class for this type, NOT DynamicMessage.
+  public native Message MutableMessage(Message message,
+                                    @Const FieldDescriptor field,
+                                    MessageFactory factory/*=NULL*/);
+  public native Message MutableMessage(Message message,
+                                    @Const FieldDescriptor field);
+  // Replaces the message specified by 'field' with the already-allocated object
+  // sub_message, passing ownership to the message.  If the field contained a
+  // message, that message is deleted.  If sub_message is NULL, the field is
+  // cleared.
+  public native void SetAllocatedMessage(Message message,
+                                     Message sub_message,
+                                     @Const FieldDescriptor field);
+  // Releases the message specified by 'field' and returns the pointer,
+  // ReleaseMessage() will return the message the message object if it exists.
+  // Otherwise, it may or may not return NULL.  In any case, if the return value
+  // is non-NULL, the caller takes ownership of the pointer.
+  // If the field existed (HasField() is true), then the returned pointer will
+  // be the same as the pointer returned by MutableMessage().
+  // This function has the same effect as ClearField().
+  public native Message ReleaseMessage(Message message,
+                                    @Const FieldDescriptor field,
+                                    MessageFactory factory/*=NULL*/);
+  public native Message ReleaseMessage(Message message,
+                                    @Const FieldDescriptor field);
+
+
+  // Repeated field getters ------------------------------------------
+  // These get the value of one element of a repeated field.
+
+  public native @Cast("google::protobuf::int32") int GetRepeatedInt32(@Const @ByRef Message message,
+                                     @Const FieldDescriptor field,
+                                     int index);
+  public native @Cast("google::protobuf::int64") long GetRepeatedInt64(@Const @ByRef Message message,
+                                     @Const FieldDescriptor field,
+                                     int index);
+  public native @Cast("google::protobuf::uint32") int GetRepeatedUInt32(@Const @ByRef Message message,
+                                     @Const FieldDescriptor field,
+                                     int index);
+  public native @Cast("google::protobuf::uint64") long GetRepeatedUInt64(@Const @ByRef Message message,
+                                     @Const FieldDescriptor field,
+                                     int index);
+  public native float GetRepeatedFloat(@Const @ByRef Message message,
+                                     @Const FieldDescriptor field,
+                                     int index);
+  public native double GetRepeatedDouble(@Const @ByRef Message message,
+                                     @Const FieldDescriptor field,
+                                     int index);
+  public native @Cast("bool") boolean GetRepeatedBool(@Const @ByRef Message message,
+                                     @Const FieldDescriptor field,
+                                     int index);
+  public native @StdString BytePointer GetRepeatedString(@Const @ByRef Message message,
+                                     @Const FieldDescriptor field,
+                                     int index);
+  public native @Const EnumValueDescriptor GetRepeatedEnum(
+        @Const @ByRef Message message,
+        @Const FieldDescriptor field, int index);
+  public native @Const @ByRef Message GetRepeatedMessage(
+        @Const @ByRef Message message,
+        @Const FieldDescriptor field, int index);
+
+  // See GetStringReference(), above.
+  public native @StdString BytePointer GetRepeatedStringReference(
+        @Const @ByRef Message message, @Const FieldDescriptor field,
+        int index, @StdString @Cast({"char*", "std::string*"}) BytePointer scratch);
+
+
+  // Repeated field mutators -----------------------------------------
+  // These mutate the value of one element of a repeated field.
+
+  public native void SetRepeatedInt32(Message message,
+                                   @Const FieldDescriptor field,
+                                   int index, @Cast("google::protobuf::int32") int value);
+  public native void SetRepeatedInt64(Message message,
+                                   @Const FieldDescriptor field,
+                                   int index, @Cast("google::protobuf::int64") long value);
+  public native void SetRepeatedUInt32(Message message,
+                                   @Const FieldDescriptor field,
+                                   int index, @Cast("google::protobuf::uint32") int value);
+  public native void SetRepeatedUInt64(Message message,
+                                   @Const FieldDescriptor field,
+                                   int index, @Cast("google::protobuf::uint64") long value);
+  public native void SetRepeatedFloat(Message message,
+                                   @Const FieldDescriptor field,
+                                   int index, float value);
+  public native void SetRepeatedDouble(Message message,
+                                   @Const FieldDescriptor field,
+                                   int index, double value);
+  public native void SetRepeatedBool(Message message,
+                                   @Const FieldDescriptor field,
+                                   int index, @Cast("bool") boolean value);
+  public native void SetRepeatedString(Message message,
+                                   @Const FieldDescriptor field,
+                                   int index, @StdString BytePointer value);
+  public native void SetRepeatedString(Message message,
+                                   @Const FieldDescriptor field,
+                                   int index, @StdString String value);
+  public native void SetRepeatedEnum(Message message,
+                                 @Const FieldDescriptor field, int index,
+                                 @Const EnumValueDescriptor value);
+  // Get a mutable pointer to an element of a repeated field with a message
+  // type.
+  public native Message MutableRepeatedMessage(
+        Message message, @Const FieldDescriptor field, int index);
+
+
+  // Repeated field adders -------------------------------------------
+  // These add an element to a repeated field.
+
+  public native void AddInt32(Message message,
+                           @Const FieldDescriptor field, @Cast("google::protobuf::int32") int value);
+  public native void AddInt64(Message message,
+                           @Const FieldDescriptor field, @Cast("google::protobuf::int64") long value);
+  public native void AddUInt32(Message message,
+                           @Const FieldDescriptor field, @Cast("google::protobuf::uint32") int value);
+  public native void AddUInt64(Message message,
+                           @Const FieldDescriptor field, @Cast("google::protobuf::uint64") long value);
+  public native void AddFloat(Message message,
+                           @Const FieldDescriptor field, float value);
+  public native void AddDouble(Message message,
+                           @Const FieldDescriptor field, double value);
+  public native void AddBool(Message message,
+                           @Const FieldDescriptor field, @Cast("bool") boolean value);
+  public native void AddString(Message message,
+                           @Const FieldDescriptor field,
+                           @StdString BytePointer value);
+  public native void AddString(Message message,
+                           @Const FieldDescriptor field,
+                           @StdString String value);
+  public native void AddEnum(Message message,
+                           @Const FieldDescriptor field,
+                           @Const EnumValueDescriptor value);
+  // See MutableMessage() for comments on the "factory" parameter.
+  public native Message AddMessage(Message message,
+                                @Const FieldDescriptor field,
+                                MessageFactory factory/*=NULL*/);
+  public native Message AddMessage(Message message,
+                                @Const FieldDescriptor field);
+
+
+  // Repeated field accessors  -------------------------------------------------
+  // The methods above, e.g. GetRepeatedInt32(msg, fd, index), provide singular
+  // access to the data in a RepeatedField.  The methods below provide aggregate
+  // access by exposing the RepeatedField object itself with the Message.
+  // Applying these templates to inappropriate types will lead to an undefined
+  // reference at link time (e.g. GetRepeatedField<***double>), or possibly a
+  // template matching error at compile time (e.g. GetRepeatedPtrField<File>).
+  //
+  // Usage example: my_doubs = refl->GetRepeatedField<double>(msg, fd);
+
+  // for T = Cord and all protobuf scalar types except enums.
+
+  // for T = Cord and all protobuf scalar types except enums.
+
+  // for T = string, google::protobuf::internal::StringPieceField
+  //         google::protobuf::Message & descendants.
+
+  // for T = string, google::protobuf::internal::StringPieceField
+  //         google::protobuf::Message & descendants.
+
+  // Extensions ----------------------------------------------------------------
+
+  // Try to find an extension of this message type by fully-qualified field
+  // name.  Returns NULL if no extension is known for this name or number.
+  public native @Const FieldDescriptor FindKnownExtensionByName(
+        @StdString BytePointer name);
+  public native @Const FieldDescriptor FindKnownExtensionByName(
+        @StdString String name);
+
+  // Try to find an extension of this message type by field number.
+  // Returns NULL if no extension is known for this name or number.
+  public native @Const FieldDescriptor FindKnownExtensionByNumber(
+        int number);
+}
+
+// Abstract interface for a factory for message objects.
+@Namespace("google::protobuf") public static class MessageFactory extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public MessageFactory(Pointer p) { super(p); }
+
+
+  // Given a Descriptor, gets or constructs the default (prototype) Message
+  // of that type.  You can then call that message's New() method to construct
+  // a mutable message of that type.
+  //
+  // Calling this method twice with the same Descriptor returns the same
+  // object.  The returned object remains property of the factory.  Also, any
+  // objects created by calling the prototype's New() method share some data
+  // with the prototype, so these must be destroyed before the MessageFactory
+  // is destroyed.
+  //
+  // The given descriptor must outlive the returned message, and hence must
+  // outlive the MessageFactory.
+  //
+  // Some implementations do not support all types.  GetPrototype() will
+  // return NULL if the descriptor passed in is not supported.
+  //
+  // This method may or may not be thread-safe depending on the implementation.
+  // Each implementation should document its own degree thread-safety.
+  public native @Const Message GetPrototype(@Const Descriptor type);
+
+  // Gets a MessageFactory which supports all generated, compiled-in messages.
+  // In other words, for any compiled-in type FooMessage, the following is true:
+  //   MessageFactory::generated_factory()->GetPrototype(
+  //     FooMessage::descriptor()) == FooMessage::default_instance()
+  // This factory supports all types which are found in
+  // DescriptorPool::generated_pool().  If given a descriptor from any other
+  // pool, GetPrototype() will return NULL.  (You can also check if a
+  // descriptor is for a generated message by checking if
+  // descriptor->file()->pool() == DescriptorPool::generated_pool().)
+  //
+  // This factory is 100% thread-safe; calling GetPrototype() does not modify
+  // any shared data.
+  //
+  // This factory is a singleton.  The caller must not delete the object.
+  public static native MessageFactory generated_factory();
+
+  // For internal use only:  Registers a .proto file at static initialization
+  // time, to be placed in generated_factory.  The first time GetPrototype()
+  // is called with a descriptor from this file, |register_messages| will be
+  // called, with the file name as the parameter.  It must call
+  // InternalRegisterGeneratedMessage() (below) to register each message type
+  // in the file.  This strange mechanism is necessary because descriptors are
+  // built lazily, so we can't register types by their descriptor until we
+  // know that the descriptor exists.  |filename| must be a permanent string.
+  
+
+  // For internal use only:  Registers a message type.  Called only by the
+  // functions which are registered with InternalRegisterGeneratedFile(),
+  // above.
+  public static native void InternalRegisterGeneratedMessage(@Const Descriptor descriptor,
+                                                 @Const Message prototype);
+}
+
+// #define DECLARE_GET_REPEATED_FIELD(TYPE)
+// template<>
+// LIBPROTOBUF_EXPORT
+// const RepeatedField<TYPE>& Reflection::GetRepeatedField<TYPE>(
+//     const Message& message, const FieldDescriptor* field) const;
+// 
+// template<>
+// RepeatedField<TYPE>* Reflection::MutableRepeatedField<TYPE>(
+//     Message* message, const FieldDescriptor* field) const;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// #undef DECLARE_GET_REPEATED_FIELD
+
+// =============================================================================
+// Implementation details for {Get,Mutable}RawRepeatedPtrField.  We provide
+// specializations for <string>, <StringPieceField> and <Message> and handle
+// everything else with the default template which will match any type having
+// a method with signature "static const google::protobuf::Descriptor* descriptor()".
+// Such a type presumably is a descendant of google::protobuf::Message.
+
+
+
+
+
+
+// -----
+
+
+
+
+
+
+
+
+
+  // namespace protobuf
+
+  // namespace google
+// #endif  // GOOGLE_PROTOBUF_MESSAGE_H__
+
+
 // Parsed from caffe/common.hpp
 
 // #ifndef CAFFE_COMMON_HPP_
@@ -786,7 +4139,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::FillerParameter_VarianceNorm") int FillerParameter_VarianceNorm_VarianceNorm_MAX();
 @Namespace("caffe") @MemberGetter public static native int FillerParameter_VarianceNorm_VarianceNorm_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer FillerParameter_VarianceNorm_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor FillerParameter_VarianceNorm_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer FillerParameter_VarianceNorm_Name(@Cast("caffe::FillerParameter_VarianceNorm") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean FillerParameter_VarianceNorm_Parse(
     @StdString BytePointer name, @Cast("caffe::FillerParameter_VarianceNorm*") IntPointer value);
@@ -809,7 +4162,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::SolverParameter_SnapshotFormat") int SolverParameter_SnapshotFormat_SnapshotFormat_MAX();
 @Namespace("caffe") @MemberGetter public static native int SolverParameter_SnapshotFormat_SnapshotFormat_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer SolverParameter_SnapshotFormat_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor SolverParameter_SnapshotFormat_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer SolverParameter_SnapshotFormat_Name(@Cast("caffe::SolverParameter_SnapshotFormat") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean SolverParameter_SnapshotFormat_Parse(
     @StdString BytePointer name, @Cast("caffe::SolverParameter_SnapshotFormat*") IntPointer value);
@@ -832,7 +4185,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::SolverParameter_SolverMode") int SolverParameter_SolverMode_SolverMode_MAX();
 @Namespace("caffe") @MemberGetter public static native int SolverParameter_SolverMode_SolverMode_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer SolverParameter_SolverMode_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor SolverParameter_SolverMode_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer SolverParameter_SolverMode_Name(@Cast("caffe::SolverParameter_SolverMode") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean SolverParameter_SolverMode_Parse(
     @StdString BytePointer name, @Cast("caffe::SolverParameter_SolverMode*") IntPointer value);
@@ -859,7 +4212,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::SolverParameter_SolverType") int SolverParameter_SolverType_SolverType_MAX();
 @Namespace("caffe") @MemberGetter public static native int SolverParameter_SolverType_SolverType_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer SolverParameter_SolverType_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor SolverParameter_SolverType_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer SolverParameter_SolverType_Name(@Cast("caffe::SolverParameter_SolverType") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean SolverParameter_SolverType_Parse(
     @StdString BytePointer name, @Cast("caffe::SolverParameter_SolverType*") IntPointer value);
@@ -882,7 +4235,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::ParamSpec_DimCheckMode") int ParamSpec_DimCheckMode_DimCheckMode_MAX();
 @Namespace("caffe") @MemberGetter public static native int ParamSpec_DimCheckMode_DimCheckMode_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer ParamSpec_DimCheckMode_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor ParamSpec_DimCheckMode_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer ParamSpec_DimCheckMode_Name(@Cast("caffe::ParamSpec_DimCheckMode") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean ParamSpec_DimCheckMode_Parse(
     @StdString BytePointer name, @Cast("caffe::ParamSpec_DimCheckMode*") IntPointer value);
@@ -907,7 +4260,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::LossParameter_NormalizationMode") int LossParameter_NormalizationMode_NormalizationMode_MAX();
 @Namespace("caffe") @MemberGetter public static native int LossParameter_NormalizationMode_NormalizationMode_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer LossParameter_NormalizationMode_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor LossParameter_NormalizationMode_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer LossParameter_NormalizationMode_Name(@Cast("caffe::LossParameter_NormalizationMode") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean LossParameter_NormalizationMode_Parse(
     @StdString BytePointer name, @Cast("caffe::LossParameter_NormalizationMode*") IntPointer value);
@@ -931,7 +4284,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::ConvolutionParameter_Engine") int ConvolutionParameter_Engine_Engine_MAX();
 @Namespace("caffe") @MemberGetter public static native int ConvolutionParameter_Engine_Engine_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer ConvolutionParameter_Engine_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor ConvolutionParameter_Engine_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer ConvolutionParameter_Engine_Name(@Cast("caffe::ConvolutionParameter_Engine") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean ConvolutionParameter_Engine_Parse(
     @StdString BytePointer name, @Cast("caffe::ConvolutionParameter_Engine*") IntPointer value);
@@ -954,7 +4307,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::DataParameter_DB") int DataParameter_DB_DB_MAX();
 @Namespace("caffe") @MemberGetter public static native int DataParameter_DB_DB_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer DataParameter_DB_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor DataParameter_DB_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer DataParameter_DB_Name(@Cast("caffe::DataParameter_DB") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean DataParameter_DB_Parse(
     @StdString BytePointer name, @Cast("caffe::DataParameter_DB*") IntPointer value);
@@ -978,7 +4331,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::EltwiseParameter_EltwiseOp") int EltwiseParameter_EltwiseOp_EltwiseOp_MAX();
 @Namespace("caffe") @MemberGetter public static native int EltwiseParameter_EltwiseOp_EltwiseOp_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer EltwiseParameter_EltwiseOp_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor EltwiseParameter_EltwiseOp_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer EltwiseParameter_EltwiseOp_Name(@Cast("caffe::EltwiseParameter_EltwiseOp") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean EltwiseParameter_EltwiseOp_Parse(
     @StdString BytePointer name, @Cast("caffe::EltwiseParameter_EltwiseOp*") IntPointer value);
@@ -1001,7 +4354,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::HingeLossParameter_Norm") int HingeLossParameter_Norm_Norm_MAX();
 @Namespace("caffe") @MemberGetter public static native int HingeLossParameter_Norm_Norm_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer HingeLossParameter_Norm_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor HingeLossParameter_Norm_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer HingeLossParameter_Norm_Name(@Cast("caffe::HingeLossParameter_Norm") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean HingeLossParameter_Norm_Parse(
     @StdString BytePointer name, @Cast("caffe::HingeLossParameter_Norm*") IntPointer value);
@@ -1024,7 +4377,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::LRNParameter_NormRegion") int LRNParameter_NormRegion_NormRegion_MAX();
 @Namespace("caffe") @MemberGetter public static native int LRNParameter_NormRegion_NormRegion_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer LRNParameter_NormRegion_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor LRNParameter_NormRegion_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer LRNParameter_NormRegion_Name(@Cast("caffe::LRNParameter_NormRegion") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean LRNParameter_NormRegion_Parse(
     @StdString BytePointer name, @Cast("caffe::LRNParameter_NormRegion*") IntPointer value);
@@ -1048,7 +4401,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::LRNParameter_Engine") int LRNParameter_Engine_Engine_MAX();
 @Namespace("caffe") @MemberGetter public static native int LRNParameter_Engine_Engine_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer LRNParameter_Engine_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor LRNParameter_Engine_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer LRNParameter_Engine_Name(@Cast("caffe::LRNParameter_Engine") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean LRNParameter_Engine_Parse(
     @StdString BytePointer name, @Cast("caffe::LRNParameter_Engine*") IntPointer value);
@@ -1072,7 +4425,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::PoolingParameter_PoolMethod") int PoolingParameter_PoolMethod_PoolMethod_MAX();
 @Namespace("caffe") @MemberGetter public static native int PoolingParameter_PoolMethod_PoolMethod_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer PoolingParameter_PoolMethod_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor PoolingParameter_PoolMethod_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer PoolingParameter_PoolMethod_Name(@Cast("caffe::PoolingParameter_PoolMethod") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean PoolingParameter_PoolMethod_Parse(
     @StdString BytePointer name, @Cast("caffe::PoolingParameter_PoolMethod*") IntPointer value);
@@ -1096,7 +4449,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::PoolingParameter_Engine") int PoolingParameter_Engine_Engine_MAX();
 @Namespace("caffe") @MemberGetter public static native int PoolingParameter_Engine_Engine_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer PoolingParameter_Engine_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor PoolingParameter_Engine_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer PoolingParameter_Engine_Name(@Cast("caffe::PoolingParameter_Engine") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean PoolingParameter_Engine_Parse(
     @StdString BytePointer name, @Cast("caffe::PoolingParameter_Engine*") IntPointer value);
@@ -1121,7 +4474,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::ReductionParameter_ReductionOp") int ReductionParameter_ReductionOp_ReductionOp_MAX();
 @Namespace("caffe") @MemberGetter public static native int ReductionParameter_ReductionOp_ReductionOp_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer ReductionParameter_ReductionOp_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor ReductionParameter_ReductionOp_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer ReductionParameter_ReductionOp_Name(@Cast("caffe::ReductionParameter_ReductionOp") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean ReductionParameter_ReductionOp_Parse(
     @StdString BytePointer name, @Cast("caffe::ReductionParameter_ReductionOp*") IntPointer value);
@@ -1145,7 +4498,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::ReLUParameter_Engine") int ReLUParameter_Engine_Engine_MAX();
 @Namespace("caffe") @MemberGetter public static native int ReLUParameter_Engine_Engine_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer ReLUParameter_Engine_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor ReLUParameter_Engine_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer ReLUParameter_Engine_Name(@Cast("caffe::ReLUParameter_Engine") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean ReLUParameter_Engine_Parse(
     @StdString BytePointer name, @Cast("caffe::ReLUParameter_Engine*") IntPointer value);
@@ -1169,7 +4522,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::SigmoidParameter_Engine") int SigmoidParameter_Engine_Engine_MAX();
 @Namespace("caffe") @MemberGetter public static native int SigmoidParameter_Engine_Engine_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer SigmoidParameter_Engine_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor SigmoidParameter_Engine_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer SigmoidParameter_Engine_Name(@Cast("caffe::SigmoidParameter_Engine") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean SigmoidParameter_Engine_Parse(
     @StdString BytePointer name, @Cast("caffe::SigmoidParameter_Engine*") IntPointer value);
@@ -1193,7 +4546,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::SoftmaxParameter_Engine") int SoftmaxParameter_Engine_Engine_MAX();
 @Namespace("caffe") @MemberGetter public static native int SoftmaxParameter_Engine_Engine_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer SoftmaxParameter_Engine_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor SoftmaxParameter_Engine_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer SoftmaxParameter_Engine_Name(@Cast("caffe::SoftmaxParameter_Engine") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean SoftmaxParameter_Engine_Parse(
     @StdString BytePointer name, @Cast("caffe::SoftmaxParameter_Engine*") IntPointer value);
@@ -1217,7 +4570,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::TanHParameter_Engine") int TanHParameter_Engine_Engine_MAX();
 @Namespace("caffe") @MemberGetter public static native int TanHParameter_Engine_Engine_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer TanHParameter_Engine_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor TanHParameter_Engine_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer TanHParameter_Engine_Name(@Cast("caffe::TanHParameter_Engine") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean TanHParameter_Engine_Parse(
     @StdString BytePointer name, @Cast("caffe::TanHParameter_Engine*") IntPointer value);
@@ -1241,7 +4594,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::SPPParameter_PoolMethod") int SPPParameter_PoolMethod_PoolMethod_MAX();
 @Namespace("caffe") @MemberGetter public static native int SPPParameter_PoolMethod_PoolMethod_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer SPPParameter_PoolMethod_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor SPPParameter_PoolMethod_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer SPPParameter_PoolMethod_Name(@Cast("caffe::SPPParameter_PoolMethod") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean SPPParameter_PoolMethod_Parse(
     @StdString BytePointer name, @Cast("caffe::SPPParameter_PoolMethod*") IntPointer value);
@@ -1265,7 +4618,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::SPPParameter_Engine") int SPPParameter_Engine_Engine_MAX();
 @Namespace("caffe") @MemberGetter public static native int SPPParameter_Engine_Engine_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer SPPParameter_Engine_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor SPPParameter_Engine_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer SPPParameter_Engine_Name(@Cast("caffe::SPPParameter_Engine") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean SPPParameter_Engine_Parse(
     @StdString BytePointer name, @Cast("caffe::SPPParameter_Engine*") IntPointer value);
@@ -1326,7 +4679,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::V1LayerParameter_LayerType") int V1LayerParameter_LayerType_LayerType_MAX();
 @Namespace("caffe") @MemberGetter public static native int V1LayerParameter_LayerType_LayerType_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer V1LayerParameter_LayerType_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor V1LayerParameter_LayerType_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer V1LayerParameter_LayerType_Name(@Cast("caffe::V1LayerParameter_LayerType") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean V1LayerParameter_LayerType_Parse(
     @StdString BytePointer name, @Cast("caffe::V1LayerParameter_LayerType*") IntPointer value);
@@ -1349,7 +4702,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::V1LayerParameter_DimCheckMode") int V1LayerParameter_DimCheckMode_DimCheckMode_MAX();
 @Namespace("caffe") @MemberGetter public static native int V1LayerParameter_DimCheckMode_DimCheckMode_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer V1LayerParameter_DimCheckMode_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor V1LayerParameter_DimCheckMode_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer V1LayerParameter_DimCheckMode_Name(@Cast("caffe::V1LayerParameter_DimCheckMode") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean V1LayerParameter_DimCheckMode_Parse(
     @StdString BytePointer name, @Cast("caffe::V1LayerParameter_DimCheckMode*") IntPointer value);
@@ -1373,7 +4726,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::V0LayerParameter_PoolMethod") int V0LayerParameter_PoolMethod_PoolMethod_MAX();
 @Namespace("caffe") @MemberGetter public static native int V0LayerParameter_PoolMethod_PoolMethod_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer V0LayerParameter_PoolMethod_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor V0LayerParameter_PoolMethod_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer V0LayerParameter_PoolMethod_Name(@Cast("caffe::V0LayerParameter_PoolMethod") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean V0LayerParameter_PoolMethod_Parse(
     @StdString BytePointer name, @Cast("caffe::V0LayerParameter_PoolMethod*") IntPointer value);
@@ -1396,7 +4749,7 @@ public static final int
 @Namespace("caffe") @MemberGetter public static native @Cast("const caffe::Phase") int Phase_MAX();
 @Namespace("caffe") @MemberGetter public static native int Phase_ARRAYSIZE();
 
-@Namespace("caffe") public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer Phase_descriptor();
+@Namespace("caffe") public static native @Const EnumDescriptor Phase_descriptor();
 @Namespace("caffe") public static native @StdString BytePointer Phase_Name(@Cast("caffe::Phase") int value);
 @Namespace("caffe") public static native @Cast("bool") boolean Phase_Parse(
     @StdString BytePointer name, @Cast("caffe::Phase*") IntPointer value);
@@ -1412,7 +4765,7 @@ public static final int
     @StdString String name, @Cast("caffe::Phase*") int[] value);
 // ===================================================================
 
-@Namespace("caffe") @NoOffset public static class BlobShape extends Pointer {
+@Namespace("caffe") @NoOffset public static class BlobShape extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BlobShape(Pointer p) { super(p); }
@@ -1431,11 +4784,11 @@ public static final int
 
   public native @ByRef @Name("operator =") BlobShape put(@Const @ByRef BlobShape from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef BlobShape default_instance();
 
   public native void Swap(BlobShape other);
@@ -1443,8 +4796,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native BlobShape New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef BlobShape from);
   public native void MergeFrom(@Const @ByRef BlobShape from);
   public native void Clear();
@@ -1452,14 +4805,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -1476,7 +4829,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class BlobProto extends Pointer {
+@Namespace("caffe") @NoOffset public static class BlobProto extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BlobProto(Pointer p) { super(p); }
@@ -1495,11 +4848,11 @@ public static final int
 
   public native @ByRef @Name("operator =") BlobProto put(@Const @ByRef BlobProto from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef BlobProto default_instance();
 
   public native void Swap(BlobProto other);
@@ -1507,8 +4860,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native BlobProto New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef BlobProto from);
   public native void MergeFrom(@Const @ByRef BlobProto from);
   public native void Clear();
@@ -1516,14 +4869,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -1609,7 +4962,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class BlobProtoVector extends Pointer {
+@Namespace("caffe") @NoOffset public static class BlobProtoVector extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BlobProtoVector(Pointer p) { super(p); }
@@ -1628,11 +4981,11 @@ public static final int
 
   public native @ByRef @Name("operator =") BlobProtoVector put(@Const @ByRef BlobProtoVector from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef BlobProtoVector default_instance();
 
   public native void Swap(BlobProtoVector other);
@@ -1640,8 +4993,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native BlobProtoVector New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef BlobProtoVector from);
   public native void MergeFrom(@Const @ByRef BlobProtoVector from);
   public native void Clear();
@@ -1649,14 +5002,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -1673,7 +5026,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class Datum extends Pointer {
+@Namespace("caffe") @NoOffset public static class Datum extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Datum(Pointer p) { super(p); }
@@ -1692,11 +5045,11 @@ public static final int
 
   public native @ByRef @Name("operator =") Datum put(@Const @ByRef Datum from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef Datum default_instance();
 
   public native void Swap(Datum other);
@@ -1704,8 +5057,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native Datum New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef Datum from);
   public native void MergeFrom(@Const @ByRef Datum from);
   public native void Clear();
@@ -1713,14 +5066,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -1790,7 +5143,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class FillerParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class FillerParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FillerParameter(Pointer p) { super(p); }
@@ -1809,11 +5162,11 @@ public static final int
 
   public native @ByRef @Name("operator =") FillerParameter put(@Const @ByRef FillerParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef FillerParameter default_instance();
 
   public native void Swap(FillerParameter other);
@@ -1821,8 +5174,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native FillerParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef FillerParameter from);
   public native void MergeFrom(@Const @ByRef FillerParameter from);
   public native void Clear();
@@ -1830,14 +5183,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
   @MemberGetter public static native @Cast("const caffe::FillerParameter::VarianceNorm") int FAN_IN();
@@ -1853,7 +5206,7 @@ public static final int
   public static final int VarianceNorm_MAX = VarianceNorm_MAX();
   @MemberGetter public static native int VarianceNorm_ARRAYSIZE();
   public static final int VarianceNorm_ARRAYSIZE = VarianceNorm_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer VarianceNorm_descriptor();
+  public static native @Const EnumDescriptor VarianceNorm_descriptor();
   public static native @StdString BytePointer VarianceNorm_Name(@Cast("caffe::FillerParameter::VarianceNorm") int value);
   public static native @Cast("bool") boolean VarianceNorm_Parse(@StdString BytePointer name,
         @Cast("caffe::FillerParameter::VarianceNorm*") IntPointer value);
@@ -1942,7 +5295,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class NetParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class NetParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NetParameter(Pointer p) { super(p); }
@@ -1961,11 +5314,11 @@ public static final int
 
   public native @ByRef @Name("operator =") NetParameter put(@Const @ByRef NetParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef NetParameter default_instance();
 
   public native void Swap(NetParameter other);
@@ -1973,8 +5326,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native NetParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef NetParameter from);
   public native void MergeFrom(@Const @ByRef NetParameter from);
   public native void Clear();
@@ -1982,14 +5335,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -2090,7 +5443,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class SolverParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class SolverParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SolverParameter(Pointer p) { super(p); }
@@ -2109,11 +5462,11 @@ public static final int
 
   public native @ByRef @Name("operator =") SolverParameter put(@Const @ByRef SolverParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef SolverParameter default_instance();
 
   public native void Swap(SolverParameter other);
@@ -2121,8 +5474,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native SolverParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef SolverParameter from);
   public native void MergeFrom(@Const @ByRef SolverParameter from);
   public native void Clear();
@@ -2130,14 +5483,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
   @MemberGetter public static native @Cast("const caffe::SolverParameter::SnapshotFormat") int HDF5();
@@ -2151,7 +5504,7 @@ public static final int
   public static final int SnapshotFormat_MAX = SnapshotFormat_MAX();
   @MemberGetter public static native int SnapshotFormat_ARRAYSIZE();
   public static final int SnapshotFormat_ARRAYSIZE = SnapshotFormat_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer SnapshotFormat_descriptor();
+  public static native @Const EnumDescriptor SnapshotFormat_descriptor();
   public static native @StdString BytePointer SnapshotFormat_Name(@Cast("caffe::SolverParameter::SnapshotFormat") int value);
   public static native @Cast("bool") boolean SnapshotFormat_Parse(@StdString BytePointer name,
         @Cast("caffe::SolverParameter::SnapshotFormat*") IntPointer value);
@@ -2176,7 +5529,7 @@ public static final int
   public static final int SolverMode_MAX = SolverMode_MAX();
   @MemberGetter public static native int SolverMode_ARRAYSIZE();
   public static final int SolverMode_ARRAYSIZE = SolverMode_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer SolverMode_descriptor();
+  public static native @Const EnumDescriptor SolverMode_descriptor();
   public static native @StdString BytePointer SolverMode_Name(@Cast("caffe::SolverParameter::SolverMode") int value);
   public static native @Cast("bool") boolean SolverMode_Parse(@StdString BytePointer name,
         @Cast("caffe::SolverParameter::SolverMode*") IntPointer value);
@@ -2209,7 +5562,7 @@ public static final int
   public static final int SolverType_MAX = SolverType_MAX();
   @MemberGetter public static native int SolverType_ARRAYSIZE();
   public static final int SolverType_ARRAYSIZE = SolverType_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer SolverType_descriptor();
+  public static native @Const EnumDescriptor SolverType_descriptor();
   public static native @StdString BytePointer SolverType_Name(@Cast("caffe::SolverParameter::SolverType") int value);
   public static native @Cast("bool") boolean SolverType_Parse(@StdString BytePointer name,
         @Cast("caffe::SolverParameter::SolverType*") IntPointer value);
@@ -2603,7 +5956,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class SolverState extends Pointer {
+@Namespace("caffe") @NoOffset public static class SolverState extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SolverState(Pointer p) { super(p); }
@@ -2622,11 +5975,11 @@ public static final int
 
   public native @ByRef @Name("operator =") SolverState put(@Const @ByRef SolverState from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef SolverState default_instance();
 
   public native void Swap(SolverState other);
@@ -2634,8 +5987,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native SolverState New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef SolverState from);
   public native void MergeFrom(@Const @ByRef SolverState from);
   public native void Clear();
@@ -2643,14 +5996,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -2697,7 +6050,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class NetState extends Pointer {
+@Namespace("caffe") @NoOffset public static class NetState extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NetState(Pointer p) { super(p); }
@@ -2716,11 +6069,11 @@ public static final int
 
   public native @ByRef @Name("operator =") NetState put(@Const @ByRef NetState from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef NetState default_instance();
 
   public native void Swap(NetState other);
@@ -2728,8 +6081,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native NetState New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef NetState from);
   public native void MergeFrom(@Const @ByRef NetState from);
   public native void Clear();
@@ -2737,14 +6090,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -2785,7 +6138,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class NetStateRule extends Pointer {
+@Namespace("caffe") @NoOffset public static class NetStateRule extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public NetStateRule(Pointer p) { super(p); }
@@ -2804,11 +6157,11 @@ public static final int
 
   public native @ByRef @Name("operator =") NetStateRule put(@Const @ByRef NetStateRule from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef NetStateRule default_instance();
 
   public native void Swap(NetStateRule other);
@@ -2816,8 +6169,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native NetStateRule New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef NetStateRule from);
   public native void MergeFrom(@Const @ByRef NetStateRule from);
   public native void Clear();
@@ -2825,14 +6178,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -2898,7 +6251,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class ParamSpec extends Pointer {
+@Namespace("caffe") @NoOffset public static class ParamSpec extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ParamSpec(Pointer p) { super(p); }
@@ -2917,11 +6270,11 @@ public static final int
 
   public native @ByRef @Name("operator =") ParamSpec put(@Const @ByRef ParamSpec from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ParamSpec default_instance();
 
   public native void Swap(ParamSpec other);
@@ -2929,8 +6282,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native ParamSpec New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef ParamSpec from);
   public native void MergeFrom(@Const @ByRef ParamSpec from);
   public native void Clear();
@@ -2938,14 +6291,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
   @MemberGetter public static native @Cast("const caffe::ParamSpec::DimCheckMode") int STRICT();
@@ -2959,7 +6312,7 @@ public static final int
   public static final int DimCheckMode_MAX = DimCheckMode_MAX();
   @MemberGetter public static native int DimCheckMode_ARRAYSIZE();
   public static final int DimCheckMode_ARRAYSIZE = DimCheckMode_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer DimCheckMode_descriptor();
+  public static native @Const EnumDescriptor DimCheckMode_descriptor();
   public static native @StdString BytePointer DimCheckMode_Name(@Cast("caffe::ParamSpec::DimCheckMode") int value);
   public static native @Cast("bool") boolean DimCheckMode_Parse(@StdString BytePointer name,
         @Cast("caffe::ParamSpec::DimCheckMode*") IntPointer value);
@@ -3016,7 +6369,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class LayerParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class LayerParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LayerParameter(Pointer p) { super(p); }
@@ -3035,11 +6388,11 @@ public static final int
 
   public native @ByRef @Name("operator =") LayerParameter put(@Const @ByRef LayerParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef LayerParameter default_instance();
 
   public native void Swap(LayerParameter other);
@@ -3047,8 +6400,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native LayerParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef LayerParameter from);
   public native void MergeFrom(@Const @ByRef LayerParameter from);
   public native void Clear();
@@ -3056,14 +6409,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -3625,7 +6978,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class TransformationParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class TransformationParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TransformationParameter(Pointer p) { super(p); }
@@ -3644,11 +6997,11 @@ public static final int
 
   public native @ByRef @Name("operator =") TransformationParameter put(@Const @ByRef TransformationParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef TransformationParameter default_instance();
 
   public native void Swap(TransformationParameter other);
@@ -3656,8 +7009,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native TransformationParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef TransformationParameter from);
   public native void MergeFrom(@Const @ByRef TransformationParameter from);
   public native void Clear();
@@ -3665,14 +7018,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -3743,7 +7096,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class LossParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class LossParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LossParameter(Pointer p) { super(p); }
@@ -3762,11 +7115,11 @@ public static final int
 
   public native @ByRef @Name("operator =") LossParameter put(@Const @ByRef LossParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef LossParameter default_instance();
 
   public native void Swap(LossParameter other);
@@ -3774,8 +7127,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native LossParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef LossParameter from);
   public native void MergeFrom(@Const @ByRef LossParameter from);
   public native void Clear();
@@ -3783,14 +7136,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
   @MemberGetter public static native @Cast("const caffe::LossParameter::NormalizationMode") int FULL();
@@ -3808,7 +7161,7 @@ public static final int
   public static final int NormalizationMode_MAX = NormalizationMode_MAX();
   @MemberGetter public static native int NormalizationMode_ARRAYSIZE();
   public static final int NormalizationMode_ARRAYSIZE = NormalizationMode_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer NormalizationMode_descriptor();
+  public static native @Const EnumDescriptor NormalizationMode_descriptor();
   public static native @StdString BytePointer NormalizationMode_Name(@Cast("caffe::LossParameter::NormalizationMode") int value);
   public static native @Cast("bool") boolean NormalizationMode_Parse(@StdString BytePointer name,
         @Cast("caffe::LossParameter::NormalizationMode*") IntPointer value);
@@ -3851,7 +7204,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class AccuracyParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class AccuracyParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public AccuracyParameter(Pointer p) { super(p); }
@@ -3870,11 +7223,11 @@ public static final int
 
   public native @ByRef @Name("operator =") AccuracyParameter put(@Const @ByRef AccuracyParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef AccuracyParameter default_instance();
 
   public native void Swap(AccuracyParameter other);
@@ -3882,8 +7235,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native AccuracyParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef AccuracyParameter from);
   public native void MergeFrom(@Const @ByRef AccuracyParameter from);
   public native void Clear();
@@ -3891,14 +7244,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -3930,7 +7283,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class ArgMaxParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class ArgMaxParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ArgMaxParameter(Pointer p) { super(p); }
@@ -3949,11 +7302,11 @@ public static final int
 
   public native @ByRef @Name("operator =") ArgMaxParameter put(@Const @ByRef ArgMaxParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ArgMaxParameter default_instance();
 
   public native void Swap(ArgMaxParameter other);
@@ -3961,8 +7314,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native ArgMaxParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef ArgMaxParameter from);
   public native void MergeFrom(@Const @ByRef ArgMaxParameter from);
   public native void Clear();
@@ -3970,14 +7323,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -4009,7 +7362,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class ConcatParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class ConcatParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConcatParameter(Pointer p) { super(p); }
@@ -4028,11 +7381,11 @@ public static final int
 
   public native @ByRef @Name("operator =") ConcatParameter put(@Const @ByRef ConcatParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ConcatParameter default_instance();
 
   public native void Swap(ConcatParameter other);
@@ -4040,8 +7393,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native ConcatParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef ConcatParameter from);
   public native void MergeFrom(@Const @ByRef ConcatParameter from);
   public native void Clear();
@@ -4049,14 +7402,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -4080,7 +7433,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class BatchNormParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class BatchNormParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BatchNormParameter(Pointer p) { super(p); }
@@ -4099,11 +7452,11 @@ public static final int
 
   public native @ByRef @Name("operator =") BatchNormParameter put(@Const @ByRef BatchNormParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef BatchNormParameter default_instance();
 
   public native void Swap(BatchNormParameter other);
@@ -4111,8 +7464,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native BatchNormParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef BatchNormParameter from);
   public native void MergeFrom(@Const @ByRef BatchNormParameter from);
   public native void Clear();
@@ -4120,14 +7473,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -4159,7 +7512,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class BiasParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class BiasParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public BiasParameter(Pointer p) { super(p); }
@@ -4178,11 +7531,11 @@ public static final int
 
   public native @ByRef @Name("operator =") BiasParameter put(@Const @ByRef BiasParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef BiasParameter default_instance();
 
   public native void Swap(BiasParameter other);
@@ -4190,8 +7543,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native BiasParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef BiasParameter from);
   public native void MergeFrom(@Const @ByRef BiasParameter from);
   public native void Clear();
@@ -4199,14 +7552,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -4240,7 +7593,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class ContrastiveLossParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class ContrastiveLossParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ContrastiveLossParameter(Pointer p) { super(p); }
@@ -4259,11 +7612,11 @@ public static final int
 
   public native @ByRef @Name("operator =") ContrastiveLossParameter put(@Const @ByRef ContrastiveLossParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ContrastiveLossParameter default_instance();
 
   public native void Swap(ContrastiveLossParameter other);
@@ -4271,8 +7624,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native ContrastiveLossParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef ContrastiveLossParameter from);
   public native void MergeFrom(@Const @ByRef ContrastiveLossParameter from);
   public native void Clear();
@@ -4280,14 +7633,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -4311,7 +7664,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class ConvolutionParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class ConvolutionParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ConvolutionParameter(Pointer p) { super(p); }
@@ -4330,11 +7683,11 @@ public static final int
 
   public native @ByRef @Name("operator =") ConvolutionParameter put(@Const @ByRef ConvolutionParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ConvolutionParameter default_instance();
 
   public native void Swap(ConvolutionParameter other);
@@ -4342,8 +7695,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native ConvolutionParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef ConvolutionParameter from);
   public native void MergeFrom(@Const @ByRef ConvolutionParameter from);
   public native void Clear();
@@ -4351,14 +7704,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
   @MemberGetter public static native @Cast("const caffe::ConvolutionParameter::Engine") int DEFAULT();
@@ -4374,7 +7727,7 @@ public static final int
   public static final int Engine_MAX = Engine_MAX();
   @MemberGetter public static native int Engine_ARRAYSIZE();
   public static final int Engine_ARRAYSIZE = Engine_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer Engine_descriptor();
+  public static native @Const EnumDescriptor Engine_descriptor();
   public static native @StdString BytePointer Engine_Name(@Cast("caffe::ConvolutionParameter::Engine") int value);
   public static native @Cast("bool") boolean Engine_Parse(@StdString BytePointer name,
         @Cast("caffe::ConvolutionParameter::Engine*") IntPointer value);
@@ -4545,7 +7898,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class DataParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class DataParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DataParameter(Pointer p) { super(p); }
@@ -4564,11 +7917,11 @@ public static final int
 
   public native @ByRef @Name("operator =") DataParameter put(@Const @ByRef DataParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef DataParameter default_instance();
 
   public native void Swap(DataParameter other);
@@ -4576,8 +7929,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native DataParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef DataParameter from);
   public native void MergeFrom(@Const @ByRef DataParameter from);
   public native void Clear();
@@ -4585,14 +7938,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
   @MemberGetter public static native @Cast("const caffe::DataParameter::DB") int LEVELDB();
@@ -4606,7 +7959,7 @@ public static final int
   public static final int DB_MAX = DB_MAX();
   @MemberGetter public static native int DB_ARRAYSIZE();
   public static final int DB_ARRAYSIZE = DB_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer DB_descriptor();
+  public static native @Const EnumDescriptor DB_descriptor();
   public static native @StdString BytePointer DB_Name(@Cast("caffe::DataParameter::DB") int value);
   public static native @Cast("bool") boolean DB_Parse(@StdString BytePointer name,
         @Cast("caffe::DataParameter::DB*") IntPointer value);
@@ -4717,7 +8070,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class DropoutParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class DropoutParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DropoutParameter(Pointer p) { super(p); }
@@ -4736,11 +8089,11 @@ public static final int
 
   public native @ByRef @Name("operator =") DropoutParameter put(@Const @ByRef DropoutParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef DropoutParameter default_instance();
 
   public native void Swap(DropoutParameter other);
@@ -4748,8 +8101,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native DropoutParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef DropoutParameter from);
   public native void MergeFrom(@Const @ByRef DropoutParameter from);
   public native void Clear();
@@ -4757,14 +8110,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -4780,7 +8133,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class DummyDataParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class DummyDataParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public DummyDataParameter(Pointer p) { super(p); }
@@ -4799,11 +8152,11 @@ public static final int
 
   public native @ByRef @Name("operator =") DummyDataParameter put(@Const @ByRef DummyDataParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef DummyDataParameter default_instance();
 
   public native void Swap(DummyDataParameter other);
@@ -4811,8 +8164,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native DummyDataParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef DummyDataParameter from);
   public native void MergeFrom(@Const @ByRef DummyDataParameter from);
   public native void Clear();
@@ -4820,14 +8173,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -4889,7 +8242,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class EltwiseParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class EltwiseParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EltwiseParameter(Pointer p) { super(p); }
@@ -4908,11 +8261,11 @@ public static final int
 
   public native @ByRef @Name("operator =") EltwiseParameter put(@Const @ByRef EltwiseParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef EltwiseParameter default_instance();
 
   public native void Swap(EltwiseParameter other);
@@ -4920,8 +8273,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native EltwiseParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef EltwiseParameter from);
   public native void MergeFrom(@Const @ByRef EltwiseParameter from);
   public native void Clear();
@@ -4929,14 +8282,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
   @MemberGetter public static native @Cast("const caffe::EltwiseParameter::EltwiseOp") int PROD();
@@ -4952,7 +8305,7 @@ public static final int
   public static final int EltwiseOp_MAX = EltwiseOp_MAX();
   @MemberGetter public static native int EltwiseOp_ARRAYSIZE();
   public static final int EltwiseOp_ARRAYSIZE = EltwiseOp_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer EltwiseOp_descriptor();
+  public static native @Const EnumDescriptor EltwiseOp_descriptor();
   public static native @StdString BytePointer EltwiseOp_Name(@Cast("caffe::EltwiseParameter::EltwiseOp") int value);
   public static native @Cast("bool") boolean EltwiseOp_Parse(@StdString BytePointer name,
         @Cast("caffe::EltwiseParameter::EltwiseOp*") IntPointer value);
@@ -4996,7 +8349,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class ELUParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class ELUParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ELUParameter(Pointer p) { super(p); }
@@ -5015,11 +8368,11 @@ public static final int
 
   public native @ByRef @Name("operator =") ELUParameter put(@Const @ByRef ELUParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ELUParameter default_instance();
 
   public native void Swap(ELUParameter other);
@@ -5027,8 +8380,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native ELUParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef ELUParameter from);
   public native void MergeFrom(@Const @ByRef ELUParameter from);
   public native void Clear();
@@ -5036,14 +8389,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -5059,7 +8412,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class EmbedParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class EmbedParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EmbedParameter(Pointer p) { super(p); }
@@ -5078,11 +8431,11 @@ public static final int
 
   public native @ByRef @Name("operator =") EmbedParameter put(@Const @ByRef EmbedParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef EmbedParameter default_instance();
 
   public native void Swap(EmbedParameter other);
@@ -5090,8 +8443,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native EmbedParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef EmbedParameter from);
   public native void MergeFrom(@Const @ByRef EmbedParameter from);
   public native void Clear();
@@ -5099,14 +8452,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -5158,7 +8511,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class ExpParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class ExpParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ExpParameter(Pointer p) { super(p); }
@@ -5177,11 +8530,11 @@ public static final int
 
   public native @ByRef @Name("operator =") ExpParameter put(@Const @ByRef ExpParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ExpParameter default_instance();
 
   public native void Swap(ExpParameter other);
@@ -5189,8 +8542,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native ExpParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef ExpParameter from);
   public native void MergeFrom(@Const @ByRef ExpParameter from);
   public native void Clear();
@@ -5198,14 +8551,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -5237,7 +8590,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class FlattenParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class FlattenParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public FlattenParameter(Pointer p) { super(p); }
@@ -5256,11 +8609,11 @@ public static final int
 
   public native @ByRef @Name("operator =") FlattenParameter put(@Const @ByRef FlattenParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef FlattenParameter default_instance();
 
   public native void Swap(FlattenParameter other);
@@ -5268,8 +8621,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native FlattenParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef FlattenParameter from);
   public native void MergeFrom(@Const @ByRef FlattenParameter from);
   public native void Clear();
@@ -5277,14 +8630,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -5308,7 +8661,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class HDF5DataParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class HDF5DataParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HDF5DataParameter(Pointer p) { super(p); }
@@ -5327,11 +8680,11 @@ public static final int
 
   public native @ByRef @Name("operator =") HDF5DataParameter put(@Const @ByRef HDF5DataParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef HDF5DataParameter default_instance();
 
   public native void Swap(HDF5DataParameter other);
@@ -5339,8 +8692,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native HDF5DataParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef HDF5DataParameter from);
   public native void MergeFrom(@Const @ByRef HDF5DataParameter from);
   public native void Clear();
@@ -5348,14 +8701,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -5393,7 +8746,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class HDF5OutputParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class HDF5OutputParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HDF5OutputParameter(Pointer p) { super(p); }
@@ -5412,11 +8765,11 @@ public static final int
 
   public native @ByRef @Name("operator =") HDF5OutputParameter put(@Const @ByRef HDF5OutputParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef HDF5OutputParameter default_instance();
 
   public native void Swap(HDF5OutputParameter other);
@@ -5424,8 +8777,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native HDF5OutputParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef HDF5OutputParameter from);
   public native void MergeFrom(@Const @ByRef HDF5OutputParameter from);
   public native void Clear();
@@ -5433,14 +8786,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -5462,7 +8815,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class HingeLossParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class HingeLossParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public HingeLossParameter(Pointer p) { super(p); }
@@ -5481,11 +8834,11 @@ public static final int
 
   public native @ByRef @Name("operator =") HingeLossParameter put(@Const @ByRef HingeLossParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef HingeLossParameter default_instance();
 
   public native void Swap(HingeLossParameter other);
@@ -5493,8 +8846,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native HingeLossParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef HingeLossParameter from);
   public native void MergeFrom(@Const @ByRef HingeLossParameter from);
   public native void Clear();
@@ -5502,14 +8855,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
   @MemberGetter public static native @Cast("const caffe::HingeLossParameter::Norm") int L1();
@@ -5523,7 +8876,7 @@ public static final int
   public static final int Norm_MAX = Norm_MAX();
   @MemberGetter public static native int Norm_ARRAYSIZE();
   public static final int Norm_ARRAYSIZE = Norm_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer Norm_descriptor();
+  public static native @Const EnumDescriptor Norm_descriptor();
   public static native @StdString BytePointer Norm_Name(@Cast("caffe::HingeLossParameter::Norm") int value);
   public static native @Cast("bool") boolean Norm_Parse(@StdString BytePointer name,
         @Cast("caffe::HingeLossParameter::Norm*") IntPointer value);
@@ -5550,7 +8903,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class ImageDataParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class ImageDataParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ImageDataParameter(Pointer p) { super(p); }
@@ -5569,11 +8922,11 @@ public static final int
 
   public native @ByRef @Name("operator =") ImageDataParameter put(@Const @ByRef ImageDataParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ImageDataParameter default_instance();
 
   public native void Swap(ImageDataParameter other);
@@ -5581,8 +8934,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native ImageDataParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef ImageDataParameter from);
   public native void MergeFrom(@Const @ByRef ImageDataParameter from);
   public native void Clear();
@@ -5590,14 +8943,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -5719,7 +9072,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class InfogainLossParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class InfogainLossParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public InfogainLossParameter(Pointer p) { super(p); }
@@ -5738,11 +9091,11 @@ public static final int
 
   public native @ByRef @Name("operator =") InfogainLossParameter put(@Const @ByRef InfogainLossParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef InfogainLossParameter default_instance();
 
   public native void Swap(InfogainLossParameter other);
@@ -5750,8 +9103,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native InfogainLossParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef InfogainLossParameter from);
   public native void MergeFrom(@Const @ByRef InfogainLossParameter from);
   public native void Clear();
@@ -5759,14 +9112,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -5788,7 +9141,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class InnerProductParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class InnerProductParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public InnerProductParameter(Pointer p) { super(p); }
@@ -5807,11 +9160,11 @@ public static final int
 
   public native @ByRef @Name("operator =") InnerProductParameter put(@Const @ByRef InnerProductParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef InnerProductParameter default_instance();
 
   public native void Swap(InnerProductParameter other);
@@ -5819,8 +9172,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native InnerProductParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef InnerProductParameter from);
   public native void MergeFrom(@Const @ByRef InnerProductParameter from);
   public native void Clear();
@@ -5828,14 +9181,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -5887,7 +9240,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class LogParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class LogParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LogParameter(Pointer p) { super(p); }
@@ -5906,11 +9259,11 @@ public static final int
 
   public native @ByRef @Name("operator =") LogParameter put(@Const @ByRef LogParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef LogParameter default_instance();
 
   public native void Swap(LogParameter other);
@@ -5918,8 +9271,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native LogParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef LogParameter from);
   public native void MergeFrom(@Const @ByRef LogParameter from);
   public native void Clear();
@@ -5927,14 +9280,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -5966,7 +9319,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class LRNParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class LRNParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LRNParameter(Pointer p) { super(p); }
@@ -5985,11 +9338,11 @@ public static final int
 
   public native @ByRef @Name("operator =") LRNParameter put(@Const @ByRef LRNParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef LRNParameter default_instance();
 
   public native void Swap(LRNParameter other);
@@ -5997,8 +9350,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native LRNParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef LRNParameter from);
   public native void MergeFrom(@Const @ByRef LRNParameter from);
   public native void Clear();
@@ -6006,14 +9359,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
   @MemberGetter public static native @Cast("const caffe::LRNParameter::NormRegion") int ACROSS_CHANNELS();
@@ -6027,7 +9380,7 @@ public static final int
   public static final int NormRegion_MAX = NormRegion_MAX();
   @MemberGetter public static native int NormRegion_ARRAYSIZE();
   public static final int NormRegion_ARRAYSIZE = NormRegion_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer NormRegion_descriptor();
+  public static native @Const EnumDescriptor NormRegion_descriptor();
   public static native @StdString BytePointer NormRegion_Name(@Cast("caffe::LRNParameter::NormRegion") int value);
   public static native @Cast("bool") boolean NormRegion_Parse(@StdString BytePointer name,
         @Cast("caffe::LRNParameter::NormRegion*") IntPointer value);
@@ -6054,7 +9407,7 @@ public static final int
   public static final int Engine_MAX = Engine_MAX();
   @MemberGetter public static native int Engine_ARRAYSIZE();
   public static final int Engine_ARRAYSIZE = Engine_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer Engine_descriptor();
+  public static native @Const EnumDescriptor Engine_descriptor();
   public static native @StdString BytePointer Engine_Name(@Cast("caffe::LRNParameter::Engine") int value);
   public static native @Cast("bool") boolean Engine_Parse(@StdString BytePointer name,
         @Cast("caffe::LRNParameter::Engine*") IntPointer value);
@@ -6121,7 +9474,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class MemoryDataParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class MemoryDataParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MemoryDataParameter(Pointer p) { super(p); }
@@ -6140,11 +9493,11 @@ public static final int
 
   public native @ByRef @Name("operator =") MemoryDataParameter put(@Const @ByRef MemoryDataParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef MemoryDataParameter default_instance();
 
   public native void Swap(MemoryDataParameter other);
@@ -6152,8 +9505,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native MemoryDataParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef MemoryDataParameter from);
   public native void MergeFrom(@Const @ByRef MemoryDataParameter from);
   public native void Clear();
@@ -6161,14 +9514,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -6208,7 +9561,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class MVNParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class MVNParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MVNParameter(Pointer p) { super(p); }
@@ -6227,11 +9580,11 @@ public static final int
 
   public native @ByRef @Name("operator =") MVNParameter put(@Const @ByRef MVNParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef MVNParameter default_instance();
 
   public native void Swap(MVNParameter other);
@@ -6239,8 +9592,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native MVNParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef MVNParameter from);
   public native void MergeFrom(@Const @ByRef MVNParameter from);
   public native void Clear();
@@ -6248,14 +9601,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -6287,7 +9640,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class PoolingParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class PoolingParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PoolingParameter(Pointer p) { super(p); }
@@ -6306,11 +9659,11 @@ public static final int
 
   public native @ByRef @Name("operator =") PoolingParameter put(@Const @ByRef PoolingParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef PoolingParameter default_instance();
 
   public native void Swap(PoolingParameter other);
@@ -6318,8 +9671,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native PoolingParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef PoolingParameter from);
   public native void MergeFrom(@Const @ByRef PoolingParameter from);
   public native void Clear();
@@ -6327,14 +9680,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
   @MemberGetter public static native @Cast("const caffe::PoolingParameter::PoolMethod") int MAX();
@@ -6350,7 +9703,7 @@ public static final int
   public static final int PoolMethod_MAX = PoolMethod_MAX();
   @MemberGetter public static native int PoolMethod_ARRAYSIZE();
   public static final int PoolMethod_ARRAYSIZE = PoolMethod_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer PoolMethod_descriptor();
+  public static native @Const EnumDescriptor PoolMethod_descriptor();
   public static native @StdString BytePointer PoolMethod_Name(@Cast("caffe::PoolingParameter::PoolMethod") int value);
   public static native @Cast("bool") boolean PoolMethod_Parse(@StdString BytePointer name,
         @Cast("caffe::PoolingParameter::PoolMethod*") IntPointer value);
@@ -6377,7 +9730,7 @@ public static final int
   public static final int Engine_MAX = Engine_MAX();
   @MemberGetter public static native int Engine_ARRAYSIZE();
   public static final int Engine_ARRAYSIZE = Engine_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer Engine_descriptor();
+  public static native @Const EnumDescriptor Engine_descriptor();
   public static native @StdString BytePointer Engine_Name(@Cast("caffe::PoolingParameter::Engine") int value);
   public static native @Cast("bool") boolean Engine_Parse(@StdString BytePointer name,
         @Cast("caffe::PoolingParameter::Engine*") IntPointer value);
@@ -6492,7 +9845,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class PowerParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class PowerParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PowerParameter(Pointer p) { super(p); }
@@ -6511,11 +9864,11 @@ public static final int
 
   public native @ByRef @Name("operator =") PowerParameter put(@Const @ByRef PowerParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef PowerParameter default_instance();
 
   public native void Swap(PowerParameter other);
@@ -6523,8 +9876,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native PowerParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef PowerParameter from);
   public native void MergeFrom(@Const @ByRef PowerParameter from);
   public native void Clear();
@@ -6532,14 +9885,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -6571,7 +9924,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class PythonParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class PythonParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PythonParameter(Pointer p) { super(p); }
@@ -6590,11 +9943,11 @@ public static final int
 
   public native @ByRef @Name("operator =") PythonParameter put(@Const @ByRef PythonParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef PythonParameter default_instance();
 
   public native void Swap(PythonParameter other);
@@ -6602,8 +9955,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native PythonParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef PythonParameter from);
   public native void MergeFrom(@Const @ByRef PythonParameter from);
   public native void Clear();
@@ -6611,14 +9964,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -6676,7 +10029,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class ReductionParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class ReductionParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ReductionParameter(Pointer p) { super(p); }
@@ -6695,11 +10048,11 @@ public static final int
 
   public native @ByRef @Name("operator =") ReductionParameter put(@Const @ByRef ReductionParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ReductionParameter default_instance();
 
   public native void Swap(ReductionParameter other);
@@ -6707,8 +10060,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native ReductionParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef ReductionParameter from);
   public native void MergeFrom(@Const @ByRef ReductionParameter from);
   public native void Clear();
@@ -6716,14 +10069,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
   @MemberGetter public static native @Cast("const caffe::ReductionParameter::ReductionOp") int SUM();
@@ -6741,7 +10094,7 @@ public static final int
   public static final int ReductionOp_MAX = ReductionOp_MAX();
   @MemberGetter public static native int ReductionOp_ARRAYSIZE();
   public static final int ReductionOp_ARRAYSIZE = ReductionOp_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer ReductionOp_descriptor();
+  public static native @Const EnumDescriptor ReductionOp_descriptor();
   public static native @StdString BytePointer ReductionOp_Name(@Cast("caffe::ReductionParameter::ReductionOp") int value);
   public static native @Cast("bool") boolean ReductionOp_Parse(@StdString BytePointer name,
         @Cast("caffe::ReductionParameter::ReductionOp*") IntPointer value);
@@ -6784,7 +10137,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class ReLUParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class ReLUParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ReLUParameter(Pointer p) { super(p); }
@@ -6803,11 +10156,11 @@ public static final int
 
   public native @ByRef @Name("operator =") ReLUParameter put(@Const @ByRef ReLUParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ReLUParameter default_instance();
 
   public native void Swap(ReLUParameter other);
@@ -6815,8 +10168,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native ReLUParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef ReLUParameter from);
   public native void MergeFrom(@Const @ByRef ReLUParameter from);
   public native void Clear();
@@ -6824,14 +10177,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
   @MemberGetter public static native @Cast("const caffe::ReLUParameter::Engine") int DEFAULT();
@@ -6847,7 +10200,7 @@ public static final int
   public static final int Engine_MAX = Engine_MAX();
   @MemberGetter public static native int Engine_ARRAYSIZE();
   public static final int Engine_ARRAYSIZE = Engine_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer Engine_descriptor();
+  public static native @Const EnumDescriptor Engine_descriptor();
   public static native @StdString BytePointer Engine_Name(@Cast("caffe::ReLUParameter::Engine") int value);
   public static native @Cast("bool") boolean Engine_Parse(@StdString BytePointer name,
         @Cast("caffe::ReLUParameter::Engine*") IntPointer value);
@@ -6882,7 +10235,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class ReshapeParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class ReshapeParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ReshapeParameter(Pointer p) { super(p); }
@@ -6901,11 +10254,11 @@ public static final int
 
   public native @ByRef @Name("operator =") ReshapeParameter put(@Const @ByRef ReshapeParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ReshapeParameter default_instance();
 
   public native void Swap(ReshapeParameter other);
@@ -6913,8 +10266,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native ReshapeParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef ReshapeParameter from);
   public native void MergeFrom(@Const @ByRef ReshapeParameter from);
   public native void Clear();
@@ -6922,14 +10275,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -6963,7 +10316,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class ScaleParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class ScaleParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ScaleParameter(Pointer p) { super(p); }
@@ -6982,11 +10335,11 @@ public static final int
 
   public native @ByRef @Name("operator =") ScaleParameter put(@Const @ByRef ScaleParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ScaleParameter default_instance();
 
   public native void Swap(ScaleParameter other);
@@ -6994,8 +10347,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native ScaleParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef ScaleParameter from);
   public native void MergeFrom(@Const @ByRef ScaleParameter from);
   public native void Clear();
@@ -7003,14 +10356,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -7062,7 +10415,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class SigmoidParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class SigmoidParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SigmoidParameter(Pointer p) { super(p); }
@@ -7081,11 +10434,11 @@ public static final int
 
   public native @ByRef @Name("operator =") SigmoidParameter put(@Const @ByRef SigmoidParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef SigmoidParameter default_instance();
 
   public native void Swap(SigmoidParameter other);
@@ -7093,8 +10446,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native SigmoidParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef SigmoidParameter from);
   public native void MergeFrom(@Const @ByRef SigmoidParameter from);
   public native void Clear();
@@ -7102,14 +10455,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
   @MemberGetter public static native @Cast("const caffe::SigmoidParameter::Engine") int DEFAULT();
@@ -7125,7 +10478,7 @@ public static final int
   public static final int Engine_MAX = Engine_MAX();
   @MemberGetter public static native int Engine_ARRAYSIZE();
   public static final int Engine_ARRAYSIZE = Engine_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer Engine_descriptor();
+  public static native @Const EnumDescriptor Engine_descriptor();
   public static native @StdString BytePointer Engine_Name(@Cast("caffe::SigmoidParameter::Engine") int value);
   public static native @Cast("bool") boolean Engine_Parse(@StdString BytePointer name,
         @Cast("caffe::SigmoidParameter::Engine*") IntPointer value);
@@ -7152,7 +10505,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class SliceParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class SliceParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SliceParameter(Pointer p) { super(p); }
@@ -7171,11 +10524,11 @@ public static final int
 
   public native @ByRef @Name("operator =") SliceParameter put(@Const @ByRef SliceParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef SliceParameter default_instance();
 
   public native void Swap(SliceParameter other);
@@ -7183,8 +10536,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native SliceParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef SliceParameter from);
   public native void MergeFrom(@Const @ByRef SliceParameter from);
   public native void Clear();
@@ -7192,14 +10545,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -7232,7 +10585,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class SoftmaxParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class SoftmaxParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SoftmaxParameter(Pointer p) { super(p); }
@@ -7251,11 +10604,11 @@ public static final int
 
   public native @ByRef @Name("operator =") SoftmaxParameter put(@Const @ByRef SoftmaxParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef SoftmaxParameter default_instance();
 
   public native void Swap(SoftmaxParameter other);
@@ -7263,8 +10616,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native SoftmaxParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef SoftmaxParameter from);
   public native void MergeFrom(@Const @ByRef SoftmaxParameter from);
   public native void Clear();
@@ -7272,14 +10625,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
   @MemberGetter public static native @Cast("const caffe::SoftmaxParameter::Engine") int DEFAULT();
@@ -7295,7 +10648,7 @@ public static final int
   public static final int Engine_MAX = Engine_MAX();
   @MemberGetter public static native int Engine_ARRAYSIZE();
   public static final int Engine_ARRAYSIZE = Engine_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer Engine_descriptor();
+  public static native @Const EnumDescriptor Engine_descriptor();
   public static native @StdString BytePointer Engine_Name(@Cast("caffe::SoftmaxParameter::Engine") int value);
   public static native @Cast("bool") boolean Engine_Parse(@StdString BytePointer name,
         @Cast("caffe::SoftmaxParameter::Engine*") IntPointer value);
@@ -7330,7 +10683,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class TanHParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class TanHParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TanHParameter(Pointer p) { super(p); }
@@ -7349,11 +10702,11 @@ public static final int
 
   public native @ByRef @Name("operator =") TanHParameter put(@Const @ByRef TanHParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef TanHParameter default_instance();
 
   public native void Swap(TanHParameter other);
@@ -7361,8 +10714,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native TanHParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef TanHParameter from);
   public native void MergeFrom(@Const @ByRef TanHParameter from);
   public native void Clear();
@@ -7370,14 +10723,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
   @MemberGetter public static native @Cast("const caffe::TanHParameter::Engine") int DEFAULT();
@@ -7393,7 +10746,7 @@ public static final int
   public static final int Engine_MAX = Engine_MAX();
   @MemberGetter public static native int Engine_ARRAYSIZE();
   public static final int Engine_ARRAYSIZE = Engine_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer Engine_descriptor();
+  public static native @Const EnumDescriptor Engine_descriptor();
   public static native @StdString BytePointer Engine_Name(@Cast("caffe::TanHParameter::Engine") int value);
   public static native @Cast("bool") boolean Engine_Parse(@StdString BytePointer name,
         @Cast("caffe::TanHParameter::Engine*") IntPointer value);
@@ -7420,7 +10773,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class TileParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class TileParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public TileParameter(Pointer p) { super(p); }
@@ -7439,11 +10792,11 @@ public static final int
 
   public native @ByRef @Name("operator =") TileParameter put(@Const @ByRef TileParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef TileParameter default_instance();
 
   public native void Swap(TileParameter other);
@@ -7451,8 +10804,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native TileParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef TileParameter from);
   public native void MergeFrom(@Const @ByRef TileParameter from);
   public native void Clear();
@@ -7460,14 +10813,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -7491,7 +10844,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class ThresholdParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class ThresholdParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public ThresholdParameter(Pointer p) { super(p); }
@@ -7510,11 +10863,11 @@ public static final int
 
   public native @ByRef @Name("operator =") ThresholdParameter put(@Const @ByRef ThresholdParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef ThresholdParameter default_instance();
 
   public native void Swap(ThresholdParameter other);
@@ -7522,8 +10875,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native ThresholdParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef ThresholdParameter from);
   public native void MergeFrom(@Const @ByRef ThresholdParameter from);
   public native void Clear();
@@ -7531,14 +10884,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -7554,7 +10907,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class WindowDataParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class WindowDataParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public WindowDataParameter(Pointer p) { super(p); }
@@ -7573,11 +10926,11 @@ public static final int
 
   public native @ByRef @Name("operator =") WindowDataParameter put(@Const @ByRef WindowDataParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef WindowDataParameter default_instance();
 
   public native void Swap(WindowDataParameter other);
@@ -7585,8 +10938,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native WindowDataParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef WindowDataParameter from);
   public native void MergeFrom(@Const @ByRef WindowDataParameter from);
   public native void Clear();
@@ -7594,14 +10947,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -7737,7 +11090,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class SPPParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class SPPParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SPPParameter(Pointer p) { super(p); }
@@ -7756,11 +11109,11 @@ public static final int
 
   public native @ByRef @Name("operator =") SPPParameter put(@Const @ByRef SPPParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef SPPParameter default_instance();
 
   public native void Swap(SPPParameter other);
@@ -7768,8 +11121,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native SPPParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef SPPParameter from);
   public native void MergeFrom(@Const @ByRef SPPParameter from);
   public native void Clear();
@@ -7777,14 +11130,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
   @MemberGetter public static native @Cast("const caffe::SPPParameter::PoolMethod") int MAX();
@@ -7800,7 +11153,7 @@ public static final int
   public static final int PoolMethod_MAX = PoolMethod_MAX();
   @MemberGetter public static native int PoolMethod_ARRAYSIZE();
   public static final int PoolMethod_ARRAYSIZE = PoolMethod_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer PoolMethod_descriptor();
+  public static native @Const EnumDescriptor PoolMethod_descriptor();
   public static native @StdString BytePointer PoolMethod_Name(@Cast("caffe::SPPParameter::PoolMethod") int value);
   public static native @Cast("bool") boolean PoolMethod_Parse(@StdString BytePointer name,
         @Cast("caffe::SPPParameter::PoolMethod*") IntPointer value);
@@ -7827,7 +11180,7 @@ public static final int
   public static final int Engine_MAX = Engine_MAX();
   @MemberGetter public static native int Engine_ARRAYSIZE();
   public static final int Engine_ARRAYSIZE = Engine_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer Engine_descriptor();
+  public static native @Const EnumDescriptor Engine_descriptor();
   public static native @StdString BytePointer Engine_Name(@Cast("caffe::SPPParameter::Engine") int value);
   public static native @Cast("bool") boolean Engine_Parse(@StdString BytePointer name,
         @Cast("caffe::SPPParameter::Engine*") IntPointer value);
@@ -7870,7 +11223,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class V1LayerParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class V1LayerParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public V1LayerParameter(Pointer p) { super(p); }
@@ -7889,11 +11242,11 @@ public static final int
 
   public native @ByRef @Name("operator =") V1LayerParameter put(@Const @ByRef V1LayerParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef V1LayerParameter default_instance();
 
   public native void Swap(V1LayerParameter other);
@@ -7901,8 +11254,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native V1LayerParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef V1LayerParameter from);
   public native void MergeFrom(@Const @ByRef V1LayerParameter from);
   public native void Clear();
@@ -7910,14 +11263,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
   @MemberGetter public static native @Cast("const caffe::V1LayerParameter::LayerType") int NONE();
@@ -8007,7 +11360,7 @@ public static final int
   public static final int LayerType_MAX = LayerType_MAX();
   @MemberGetter public static native int LayerType_ARRAYSIZE();
   public static final int LayerType_ARRAYSIZE = LayerType_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer LayerType_descriptor();
+  public static native @Const EnumDescriptor LayerType_descriptor();
   public static native @StdString BytePointer LayerType_Name(@Cast("caffe::V1LayerParameter::LayerType") int value);
   public static native @Cast("bool") boolean LayerType_Parse(@StdString BytePointer name,
         @Cast("caffe::V1LayerParameter::LayerType*") IntPointer value);
@@ -8032,7 +11385,7 @@ public static final int
   public static final int DimCheckMode_MAX = DimCheckMode_MAX();
   @MemberGetter public static native int DimCheckMode_ARRAYSIZE();
   public static final int DimCheckMode_ARRAYSIZE = DimCheckMode_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer DimCheckMode_descriptor();
+  public static native @Const EnumDescriptor DimCheckMode_descriptor();
   public static native @StdString BytePointer DimCheckMode_Name(@Cast("caffe::V1LayerParameter::DimCheckMode") int value);
   public static native @Cast("bool") boolean DimCheckMode_Parse(@StdString BytePointer name,
         @Cast("caffe::V1LayerParameter::DimCheckMode*") IntPointer value);
@@ -8497,7 +11850,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class V0LayerParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class V0LayerParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public V0LayerParameter(Pointer p) { super(p); }
@@ -8516,11 +11869,11 @@ public static final int
 
   public native @ByRef @Name("operator =") V0LayerParameter put(@Const @ByRef V0LayerParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef V0LayerParameter default_instance();
 
   public native void Swap(V0LayerParameter other);
@@ -8528,8 +11881,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native V0LayerParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef V0LayerParameter from);
   public native void MergeFrom(@Const @ByRef V0LayerParameter from);
   public native void Clear();
@@ -8537,14 +11890,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
   @MemberGetter public static native @Cast("const caffe::V0LayerParameter::PoolMethod") int MAX();
@@ -8560,7 +11913,7 @@ public static final int
   public static final int PoolMethod_MAX = PoolMethod_MAX();
   @MemberGetter public static native int PoolMethod_ARRAYSIZE();
   public static final int PoolMethod_ARRAYSIZE = PoolMethod_ARRAYSIZE();
-  public static native @Cast("const google::protobuf::EnumDescriptor*") Pointer PoolMethod_descriptor();
+  public static native @Const EnumDescriptor PoolMethod_descriptor();
   public static native @StdString BytePointer PoolMethod_Name(@Cast("caffe::V0LayerParameter::PoolMethod") int value);
   public static native @Cast("bool") boolean PoolMethod_Parse(@StdString BytePointer name,
         @Cast("caffe::V0LayerParameter::PoolMethod*") IntPointer value);
@@ -8922,7 +12275,7 @@ public static final int
 }
 // -------------------------------------------------------------------
 
-@Namespace("caffe") @NoOffset public static class PReLUParameter extends Pointer {
+@Namespace("caffe") @NoOffset public static class PReLUParameter extends Message {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PReLUParameter(Pointer p) { super(p); }
@@ -8941,11 +12294,11 @@ public static final int
 
   public native @ByRef @Name("operator =") PReLUParameter put(@Const @ByRef PReLUParameter from);
 
-  public native @Cast("const google::protobuf::UnknownFieldSet*") @ByRef Pointer unknown_fields();
+  public native @Const @ByRef UnknownFieldSet unknown_fields();
 
-  public native @Cast("google::protobuf::UnknownFieldSet*") Pointer mutable_unknown_fields();
+  public native UnknownFieldSet mutable_unknown_fields();
 
-  public static native @Cast("const google::protobuf::Descriptor*") Pointer descriptor();
+  public static native @Const Descriptor descriptor();
   public static native @Const @ByRef PReLUParameter default_instance();
 
   public native void Swap(PReLUParameter other);
@@ -8953,8 +12306,8 @@ public static final int
   // implements Message ----------------------------------------------
 
   public native PReLUParameter New();
-  public native void CopyFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
-  public native void MergeFrom(@Cast("const google::protobuf::Message*") @ByRef Pointer from);
+  public native void CopyFrom(@Const @ByRef Message from);
+  public native void MergeFrom(@Const @ByRef Message from);
   public native void CopyFrom(@Const @ByRef PReLUParameter from);
   public native void MergeFrom(@Const @ByRef PReLUParameter from);
   public native void Clear();
@@ -8962,14 +12315,14 @@ public static final int
 
   public native int ByteSize();
   public native @Cast("bool") boolean MergePartialFromCodedStream(
-        @Cast("google::protobuf::io::CodedInputStream*") Pointer input);
+        CodedInputStream input);
   public native void SerializeWithCachedSizes(
-        @Cast("google::protobuf::io::CodedOutputStream*") Pointer output);
+        CodedOutputStream output);
   public native @Cast("google::protobuf::uint8*") BytePointer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") BytePointer output);
   public native @Cast("google::protobuf::uint8*") ByteBuffer SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") ByteBuffer output);
   public native @Cast("google::protobuf::uint8*") byte[] SerializeWithCachedSizesToArray(@Cast("google::protobuf::uint8*") byte[] output);
   public native int GetCachedSize();
-  public native @ByVal @Cast("google::protobuf::Metadata*") Pointer GetMetadata();
+  public native @ByVal Metadata GetMetadata();
 
   // nested types ----------------------------------------------------
 
@@ -20737,24 +24090,24 @@ public static final int CAFFE_TMP_DIR_RETRIES = 100;
 
 @Namespace("caffe") public static native void MakeTempFilename(@StdString @Cast({"char*", "std::string*"}) BytePointer temp_filename);
 
-@Namespace("caffe") public static native @Cast("bool") boolean ReadProtoFromTextFile(@Cast("const char*") BytePointer filename, @Cast("google::protobuf::Message*") Pointer proto);
-@Namespace("caffe") public static native @Cast("bool") boolean ReadProtoFromTextFile(String filename, @Cast("google::protobuf::Message*") Pointer proto);
+@Namespace("caffe") public static native @Cast("bool") boolean ReadProtoFromTextFile(@Cast("const char*") BytePointer filename, Message proto);
+@Namespace("caffe") public static native @Cast("bool") boolean ReadProtoFromTextFile(String filename, Message proto);
 
-@Namespace("caffe") public static native void ReadProtoFromTextFileOrDie(@Cast("const char*") BytePointer filename, @Cast("google::protobuf::Message*") Pointer proto);
-@Namespace("caffe") public static native void ReadProtoFromTextFileOrDie(String filename, @Cast("google::protobuf::Message*") Pointer proto);
+@Namespace("caffe") public static native void ReadProtoFromTextFileOrDie(@Cast("const char*") BytePointer filename, Message proto);
+@Namespace("caffe") public static native void ReadProtoFromTextFileOrDie(String filename, Message proto);
 
-@Namespace("caffe") public static native void WriteProtoToTextFile(@Cast("const google::protobuf::Message*") @ByRef Pointer proto, @Cast("const char*") BytePointer filename);
-@Namespace("caffe") public static native void WriteProtoToTextFile(@Cast("const google::protobuf::Message*") @ByRef Pointer proto, String filename);
+@Namespace("caffe") public static native void WriteProtoToTextFile(@Const @ByRef Message proto, @Cast("const char*") BytePointer filename);
+@Namespace("caffe") public static native void WriteProtoToTextFile(@Const @ByRef Message proto, String filename);
 
-@Namespace("caffe") public static native @Cast("bool") boolean ReadProtoFromBinaryFile(@Cast("const char*") BytePointer filename, @Cast("google::protobuf::Message*") Pointer proto);
-@Namespace("caffe") public static native @Cast("bool") boolean ReadProtoFromBinaryFile(String filename, @Cast("google::protobuf::Message*") Pointer proto);
+@Namespace("caffe") public static native @Cast("bool") boolean ReadProtoFromBinaryFile(@Cast("const char*") BytePointer filename, Message proto);
+@Namespace("caffe") public static native @Cast("bool") boolean ReadProtoFromBinaryFile(String filename, Message proto);
 
-@Namespace("caffe") public static native void ReadProtoFromBinaryFileOrDie(@Cast("const char*") BytePointer filename, @Cast("google::protobuf::Message*") Pointer proto);
-@Namespace("caffe") public static native void ReadProtoFromBinaryFileOrDie(String filename, @Cast("google::protobuf::Message*") Pointer proto);
+@Namespace("caffe") public static native void ReadProtoFromBinaryFileOrDie(@Cast("const char*") BytePointer filename, Message proto);
+@Namespace("caffe") public static native void ReadProtoFromBinaryFileOrDie(String filename, Message proto);
 
 
-@Namespace("caffe") public static native void WriteProtoToBinaryFile(@Cast("const google::protobuf::Message*") @ByRef Pointer proto, @Cast("const char*") BytePointer filename);
-@Namespace("caffe") public static native void WriteProtoToBinaryFile(@Cast("const google::protobuf::Message*") @ByRef Pointer proto, String filename);
+@Namespace("caffe") public static native void WriteProtoToBinaryFile(@Const @ByRef Message proto, @Cast("const char*") BytePointer filename);
+@Namespace("caffe") public static native void WriteProtoToBinaryFile(@Const @ByRef Message proto, String filename);
 
 @Namespace("caffe") public static native @Cast("bool") boolean ReadFileToDatum(@StdString BytePointer filename, int label, Datum datum);
 @Namespace("caffe") public static native @Cast("bool") boolean ReadFileToDatum(@StdString String filename, int label, Datum datum);
