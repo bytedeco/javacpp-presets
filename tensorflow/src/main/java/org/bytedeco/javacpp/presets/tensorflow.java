@@ -76,8 +76,8 @@ public class tensorflow implements InfoMapper {
                .put(new Info("TF_CHECK_OK", "TF_QCHECK_OK").cppTypes("void", "tensorflow::Status"))
                .put(new Info("TF_DISALLOW_COPY_AND_ASSIGN").cppText("#define TF_DISALLOW_COPY_AND_ASSIGN(TypeName)"))
                .put(new Info("SWIG").define())
-               .put(new Info("int").valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
-               .put(new Info("long long").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long..."))
+               .put(new Info("int", "tensorflow::int32", "tensorflow::uint32").valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
+               .put(new Info("long long", "tensorflow::int64", "tensorflow::uint64").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long..."))
                .put(new Info("float").valueTypes("float").pointerTypes("FloatPointer", "FloatBuffer", "float..."))
                .put(new Info("double").valueTypes("double").pointerTypes("DoublePointer", "DoubleBuffer", "double..."))
                .put(new Info("bool").cast().valueTypes("boolean").pointerTypes("BoolPointer", "boolean..."))
@@ -102,7 +102,7 @@ public class tensorflow implements InfoMapper {
 
                .put(new Info("basic/containers").cppTypes("tensorflow::gtl::InlinedVector", "google::protobuf::Map"))
                .put(new Info("tensorflow::DataType").cast().valueTypes("int").pointerTypes("IntPointer"))
-               .put(new Info("tensorflow::gtl::InlinedVector<long long,4>").pointerTypes("LongVector").define())
+               .put(new Info("tensorflow::gtl::InlinedVector<tensorflow::int64,4>").pointerTypes("LongVector").define())
                .put(new Info("tensorflow::gtl::InlinedVector<tensorflow::DataType,4>").pointerTypes("DataTypeVector").define())
                .put(new Info("tensorflow::DataTypeSlice")/*.cast()*/.pointerTypes("DataTypeVector"))
 
@@ -130,8 +130,8 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::gtl::iterator_range<tensorflow::NodeIter>()").skip())
 
                .put(new Info("std::vector<std::pair<std::string,tensorflow::Tensor> >").pointerTypes("StringTensorPairVector").define())
-               .put(new Info("std::pair<tensorflow::EdgeSet::const_iterator,bool>").pointerTypes("EdgeSetBoolPair").define())
-               .put(new Info("tensorflow::EdgeSet::const_iterator").pointerTypes("EdgeSetIterator"))
+               .put(new Info("std::pair<tensorflow::EdgeSet::iterator,bool>").pointerTypes("EdgeSetBoolPair").define())
+               .put(new Info("tensorflow::EdgeSet::const_iterator", "tensorflow::EdgeSet::iterator").pointerTypes("EdgeSetIterator"))
 
                .put(new Info("std::function<void()>").pointerTypes("Fn"))
                .put(new Info("std::function<tensorflow::OpDef(void)>").pointerTypes("OpDefFunc"))

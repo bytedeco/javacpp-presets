@@ -254,7 +254,7 @@ public static final int FF_QUALITY_SCALE = FF_LAMBDA_SCALE; //FIXME maybe remove
  * either pts or dts.
  */
 
-public static native @MemberGetter long AV_NOPTS_VALUE();
+public static native @MemberGetter @Cast("int64_t") long AV_NOPTS_VALUE();
 public static final long AV_NOPTS_VALUE = AV_NOPTS_VALUE();
 
 /**
@@ -1046,13 +1046,13 @@ public static final int
  * @return gcd of a and b up to sign; if a >= 0 and b >= 0, return value is >= 0;
  * if a == 0 and b == 0, returns 0.
  */
-@NoException public static native @Const long av_gcd(long a, long b);
+@NoException public static native @Cast("int64_t") @Const long av_gcd(@Cast("int64_t") long a, @Cast("int64_t") long b);
 
 /**
  * Rescale a 64-bit integer with rounding to nearest.
  * A simple a*b/c isn't possible as it can overflow.
  */
-@NoException public static native long av_rescale(long a, long b, long c);
+@NoException public static native @Cast("int64_t") long av_rescale(@Cast("int64_t") long a, @Cast("int64_t") long b, @Cast("int64_t") long c);
 
 /**
  * Rescale a 64-bit integer with specified rounding.
@@ -1061,12 +1061,12 @@ public static final int
  * @return rescaled value a, or if AV_ROUND_PASS_MINMAX is set and a is
  *         INT64_MIN or INT64_MAX then a is passed through unchanged.
  */
-@NoException public static native long av_rescale_rnd(long a, long b, long c, @Cast("AVRounding") int arg3);
+@NoException public static native @Cast("int64_t") long av_rescale_rnd(@Cast("int64_t") long a, @Cast("int64_t") long b, @Cast("int64_t") long c, @Cast("AVRounding") int arg3);
 
 /**
  * Rescale a 64-bit integer by 2 rational numbers.
  */
-@NoException public static native long av_rescale_q(long a, @ByVal AVRational bq, @ByVal AVRational cq);
+@NoException public static native @Cast("int64_t") long av_rescale_q(@Cast("int64_t") long a, @ByVal AVRational bq, @ByVal AVRational cq);
 
 /**
  * Rescale a 64-bit integer by 2 rational numbers with specified rounding.
@@ -1074,7 +1074,7 @@ public static final int
  * @return rescaled value a, or if AV_ROUND_PASS_MINMAX is set and a is
  *         INT64_MIN or INT64_MAX then a is passed through unchanged.
  */
-@NoException public static native long av_rescale_q_rnd(long a, @ByVal AVRational bq, @ByVal AVRational cq,
+@NoException public static native @Cast("int64_t") long av_rescale_q_rnd(@Cast("int64_t") long a, @ByVal AVRational bq, @ByVal AVRational cq,
                          @Cast("AVRounding") int arg3);
 
 /**
@@ -1083,7 +1083,7 @@ public static final int
  * is outside the int64_t range when represented in the others timebase.
  * @return -1 if ts_a is before ts_b, 1 if ts_a is after ts_b or 0 if they represent the same position
  */
-@NoException public static native int av_compare_ts(long ts_a, @ByVal AVRational tb_a, long ts_b, @ByVal AVRational tb_b);
+@NoException public static native int av_compare_ts(@Cast("int64_t") long ts_a, @ByVal AVRational tb_a, @Cast("int64_t") long ts_b, @ByVal AVRational tb_b);
 
 /**
  * Compare 2 integers modulo mod.
@@ -1095,7 +1095,7 @@ public static final int
  *         a positive value if a is greater than b
  *         0                if a equals          b
  */
-@NoException public static native long av_compare_mod(@Cast("uint64_t") long a, @Cast("uint64_t") long b, @Cast("uint64_t") long mod);
+@NoException public static native @Cast("int64_t") long av_compare_mod(@Cast("uint64_t") long a, @Cast("uint64_t") long b, @Cast("uint64_t") long mod);
 
 /**
  * Rescale a timestamp while preserving known durations.
@@ -1106,9 +1106,9 @@ public static final int
  * @param duration duration till the next call
  * @param out_tb Output timebase
  */
-@NoException public static native long av_rescale_delta(@ByVal AVRational in_tb, long in_ts,  @ByVal AVRational fs_tb, int duration, LongPointer last, @ByVal AVRational out_tb);
-@NoException public static native long av_rescale_delta(@ByVal AVRational in_tb, long in_ts,  @ByVal AVRational fs_tb, int duration, LongBuffer last, @ByVal AVRational out_tb);
-@NoException public static native long av_rescale_delta(@ByVal AVRational in_tb, long in_ts,  @ByVal AVRational fs_tb, int duration, long[] last, @ByVal AVRational out_tb);
+@NoException public static native @Cast("int64_t") long av_rescale_delta(@ByVal AVRational in_tb, @Cast("int64_t") long in_ts,  @ByVal AVRational fs_tb, int duration, @Cast("int64_t*") LongPointer last, @ByVal AVRational out_tb);
+@NoException public static native @Cast("int64_t") long av_rescale_delta(@ByVal AVRational in_tb, @Cast("int64_t") long in_ts,  @ByVal AVRational fs_tb, int duration, @Cast("int64_t*") LongBuffer last, @ByVal AVRational out_tb);
+@NoException public static native @Cast("int64_t") long av_rescale_delta(@ByVal AVRational in_tb, @Cast("int64_t") long in_ts,  @ByVal AVRational fs_tb, int duration, @Cast("int64_t*") long[] last, @ByVal AVRational out_tb);
 
 /**
  * Add a value to a timestamp.
@@ -1121,7 +1121,7 @@ public static final int
  * @param inc value to add to ts
  * @param inc_tb inc timebase
  */
-@NoException public static native long av_add_stable(@ByVal AVRational ts_tb, long ts, @ByVal AVRational inc_tb, long inc);
+@NoException public static native @Cast("int64_t") long av_add_stable(@ByVal AVRational ts_tb, @Cast("int64_t") long ts, @ByVal AVRational inc_tb, @Cast("int64_t") long inc);
 
 
     /**
@@ -1228,9 +1228,9 @@ public static class AVRational extends Pointer {
  * @param max the maximum allowed for dst_num & dst_den
  * @return 1 if exact, 0 otherwise
  */
-@NoException public static native int av_reduce(IntPointer dst_num, IntPointer dst_den, long num, long den, long max);
-@NoException public static native int av_reduce(IntBuffer dst_num, IntBuffer dst_den, long num, long den, long max);
-@NoException public static native int av_reduce(int[] dst_num, int[] dst_den, long num, long den, long max);
+@NoException public static native int av_reduce(IntPointer dst_num, IntPointer dst_den, @Cast("int64_t") long num, @Cast("int64_t") long den, @Cast("int64_t") long max);
+@NoException public static native int av_reduce(IntBuffer dst_num, IntBuffer dst_den, @Cast("int64_t") long num, @Cast("int64_t") long den, @Cast("int64_t") long max);
+@NoException public static native int av_reduce(int[] dst_num, int[] dst_den, @Cast("int64_t") long num, @Cast("int64_t") long den, @Cast("int64_t") long max);
 
 /**
  * Multiply two rationals.
@@ -3133,19 +3133,19 @@ public static final int AV_NUM_DATA_POINTERS = 8;
     /**
      * Presentation timestamp in time_base units (time when frame should be shown to user).
      */
-    public native long pts(); public native AVFrame pts(long pts);
+    public native @Cast("int64_t") long pts(); public native AVFrame pts(long pts);
 
     /**
      * PTS copied from the AVPacket that was decoded to produce this frame.
      */
-    public native long pkt_pts(); public native AVFrame pkt_pts(long pkt_pts);
+    public native @Cast("int64_t") long pkt_pts(); public native AVFrame pkt_pts(long pkt_pts);
 
     /**
      * DTS copied from the AVPacket that triggered returning this frame. (if frame threading isn't used)
      * This is also the Presentation time of this AVFrame calculated from
      * only AVPacket.dts values without pts values.
      */
-    public native long pkt_dts(); public native AVFrame pkt_dts(long pkt_dts);
+    public native @Cast("int64_t") long pkt_dts(); public native AVFrame pkt_dts(long pkt_dts);
 
     /**
      * picture number in bitstream order
@@ -3204,7 +3204,7 @@ public static final int AV_NUM_DATA_POINTERS = 8;
      * to exactly one of the values provided by the user through AVCodecContext.reordered_opaque
      * @deprecated in favor of pkt_pts
      */
-    public native long reordered_opaque(); public native AVFrame reordered_opaque(long reordered_opaque);
+    public native @Cast("int64_t") long reordered_opaque(); public native AVFrame reordered_opaque(long reordered_opaque);
 
     /**
      * Sample rate of the audio data.
@@ -3305,7 +3305,7 @@ public static final int AV_FRAME_FLAG_CORRUPT =       (1 << 0);
      * - encoding: unused
      * - decoding: set by libavcodec, read by user.
      */
-    public native long best_effort_timestamp(); public native AVFrame best_effort_timestamp(long best_effort_timestamp);
+    public native @Cast("int64_t") long best_effort_timestamp(); public native AVFrame best_effort_timestamp(long best_effort_timestamp);
 
     /**
      * reordered pos from the last AVPacket that has been input into the decoder
@@ -3314,7 +3314,7 @@ public static final int AV_FRAME_FLAG_CORRUPT =       (1 << 0);
      * - encoding: unused
      * - decoding: Read by user.
      */
-    public native long pkt_pos(); public native AVFrame pkt_pos(long pkt_pos);
+    public native @Cast("int64_t") long pkt_pos(); public native AVFrame pkt_pos(long pkt_pos);
 
     /**
      * duration of the corresponding packet, expressed in
@@ -3324,7 +3324,7 @@ public static final int AV_FRAME_FLAG_CORRUPT =       (1 << 0);
      * - encoding: unused
      * - decoding: Read by user.
      */
-    public native long pkt_duration(); public native AVFrame pkt_duration(long pkt_duration);
+    public native @Cast("int64_t") long pkt_duration(); public native AVFrame pkt_duration(long pkt_duration);
 
     /**
      * metadata.
@@ -3393,14 +3393,14 @@ public static final int FF_DECODE_ERROR_MISSING_REFERENCE =   2;
  * The position of these field in the structure is not part of the ABI,
  * they should not be accessed directly outside libavutil.
  */
-@NoException public static native long av_frame_get_best_effort_timestamp(@Const AVFrame frame);
-@NoException public static native void av_frame_set_best_effort_timestamp(AVFrame frame, long val);
-@NoException public static native long av_frame_get_pkt_duration(@Const AVFrame frame);
-@NoException public static native void av_frame_set_pkt_duration(AVFrame frame, long val);
-@NoException public static native long av_frame_get_pkt_pos(@Const AVFrame frame);
-@NoException public static native void av_frame_set_pkt_pos(AVFrame frame, long val);
-@NoException public static native long av_frame_get_channel_layout(@Const AVFrame frame);
-@NoException public static native void av_frame_set_channel_layout(AVFrame frame, long val);
+@NoException public static native @Cast("int64_t") long av_frame_get_best_effort_timestamp(@Const AVFrame frame);
+@NoException public static native void av_frame_set_best_effort_timestamp(AVFrame frame, @Cast("int64_t") long val);
+@NoException public static native @Cast("int64_t") long av_frame_get_pkt_duration(@Const AVFrame frame);
+@NoException public static native void av_frame_set_pkt_duration(AVFrame frame, @Cast("int64_t") long val);
+@NoException public static native @Cast("int64_t") long av_frame_get_pkt_pos(@Const AVFrame frame);
+@NoException public static native void av_frame_set_pkt_pos(AVFrame frame, @Cast("int64_t") long val);
+@NoException public static native @Cast("int64_t") long av_frame_get_channel_layout(@Const AVFrame frame);
+@NoException public static native void av_frame_set_channel_layout(AVFrame frame, @Cast("int64_t") long val);
 @NoException public static native int av_frame_get_channels(@Const AVFrame frame);
 @NoException public static native void av_frame_set_channels(AVFrame frame, int val);
 @NoException public static native int av_frame_get_sample_rate(@Const AVFrame frame);
@@ -4113,7 +4113,7 @@ public static final int
 /**
  * Return default channel layout for a given number of channels.
  */
-@NoException public static native long av_get_default_channel_layout(int nb_channels);
+@NoException public static native @Cast("int64_t") long av_get_default_channel_layout(int nb_channels);
 
 /**
  * Get the index of a channel in channel_layout.
@@ -4492,9 +4492,9 @@ public static class AVDictionaryEntry extends Pointer {
  *
  * Note: If AV_DICT_DONT_STRDUP_KEY is set, key will be freed on error.
  */
-@NoException public static native int av_dict_set_int(@Cast("AVDictionary**") PointerPointer pm, @Cast("const char*") BytePointer key, long value, int flags);
-@NoException public static native int av_dict_set_int(@ByPtrPtr AVDictionary pm, @Cast("const char*") BytePointer key, long value, int flags);
-@NoException public static native int av_dict_set_int(@ByPtrPtr AVDictionary pm, String key, long value, int flags);
+@NoException public static native int av_dict_set_int(@Cast("AVDictionary**") PointerPointer pm, @Cast("const char*") BytePointer key, @Cast("int64_t") long value, int flags);
+@NoException public static native int av_dict_set_int(@ByPtrPtr AVDictionary pm, @Cast("const char*") BytePointer key, @Cast("int64_t") long value, int flags);
+@NoException public static native int av_dict_set_int(@ByPtrPtr AVDictionary pm, String key, @Cast("int64_t") long value, int flags);
 
 /**
  * Parse the key/value pairs list and add the parsed entries to a dictionary.
@@ -4870,7 +4870,7 @@ public static class AVOption extends Pointer {
     /**
      * the default value for scalar options
      */
-        @Name("default_val.i64") public native long default_val_i64(); public native AVOption default_val_i64(long default_val_i64);
+        @Name("default_val.i64") public native @Cast("int64_t") long default_val_i64(); public native AVOption default_val_i64(long default_val_i64);
         @Name("default_val.dbl") public native double default_val_dbl(); public native AVOption default_val_dbl(double default_val_dbl);
         @Name("default_val.str") @MemberGetter public native @Cast("const char*") BytePointer default_val_str();
         /* TODO those are unused now */
@@ -5244,12 +5244,12 @@ public static final int
 @NoException public static native int av_opt_eval_int(Pointer obj, @Const AVOption o, String val, IntPointer int_out);
 @NoException public static native int av_opt_eval_int(Pointer obj, @Const AVOption o, @Cast("const char*") BytePointer val, IntBuffer int_out);
 @NoException public static native int av_opt_eval_int(Pointer obj, @Const AVOption o, String val, int[] int_out);
-@NoException public static native int av_opt_eval_int64(Pointer obj, @Const AVOption o, @Cast("const char*") BytePointer val, LongPointer int64_out);
-@NoException public static native int av_opt_eval_int64(Pointer obj, @Const AVOption o, String val, LongBuffer int64_out);
-@NoException public static native int av_opt_eval_int64(Pointer obj, @Const AVOption o, @Cast("const char*") BytePointer val, long[] int64_out);
-@NoException public static native int av_opt_eval_int64(Pointer obj, @Const AVOption o, String val, LongPointer int64_out);
-@NoException public static native int av_opt_eval_int64(Pointer obj, @Const AVOption o, @Cast("const char*") BytePointer val, LongBuffer int64_out);
-@NoException public static native int av_opt_eval_int64(Pointer obj, @Const AVOption o, String val, long[] int64_out);
+@NoException public static native int av_opt_eval_int64(Pointer obj, @Const AVOption o, @Cast("const char*") BytePointer val, @Cast("int64_t*") LongPointer int64_out);
+@NoException public static native int av_opt_eval_int64(Pointer obj, @Const AVOption o, String val, @Cast("int64_t*") LongBuffer int64_out);
+@NoException public static native int av_opt_eval_int64(Pointer obj, @Const AVOption o, @Cast("const char*") BytePointer val, @Cast("int64_t*") long[] int64_out);
+@NoException public static native int av_opt_eval_int64(Pointer obj, @Const AVOption o, String val, @Cast("int64_t*") LongPointer int64_out);
+@NoException public static native int av_opt_eval_int64(Pointer obj, @Const AVOption o, @Cast("const char*") BytePointer val, @Cast("int64_t*") LongBuffer int64_out);
+@NoException public static native int av_opt_eval_int64(Pointer obj, @Const AVOption o, String val, @Cast("int64_t*") long[] int64_out);
 @NoException public static native int av_opt_eval_float(Pointer obj, @Const AVOption o, @Cast("const char*") BytePointer val, FloatPointer float_out);
 @NoException public static native int av_opt_eval_float(Pointer obj, @Const AVOption o, String val, FloatBuffer float_out);
 @NoException public static native int av_opt_eval_float(Pointer obj, @Const AVOption o, @Cast("const char*") BytePointer val, float[] float_out);
@@ -5402,8 +5402,8 @@ public static final int AV_OPT_MULTI_COMPONENT_RANGE = (1 << 12);
  */
 @NoException public static native int av_opt_set(Pointer obj, @Cast("const char*") BytePointer name, @Cast("const char*") BytePointer val, int search_flags);
 @NoException public static native int av_opt_set(Pointer obj, String name, String val, int search_flags);
-@NoException public static native int av_opt_set_int(Pointer obj, @Cast("const char*") BytePointer name, long val, int search_flags);
-@NoException public static native int av_opt_set_int(Pointer obj, String name, long val, int search_flags);
+@NoException public static native int av_opt_set_int(Pointer obj, @Cast("const char*") BytePointer name, @Cast("int64_t") long val, int search_flags);
+@NoException public static native int av_opt_set_int(Pointer obj, String name, @Cast("int64_t") long val, int search_flags);
 @NoException public static native int av_opt_set_double(Pointer obj, @Cast("const char*") BytePointer name, double val, int search_flags);
 @NoException public static native int av_opt_set_double(Pointer obj, String name, double val, int search_flags);
 @NoException public static native int av_opt_set_q(Pointer obj, @Cast("const char*") BytePointer name, @ByVal AVRational val, int search_flags);
@@ -5422,8 +5422,8 @@ public static final int AV_OPT_MULTI_COMPONENT_RANGE = (1 << 12);
 @NoException public static native int av_opt_set_sample_fmt(Pointer obj, String name, @Cast("AVSampleFormat") int fmt, int search_flags);
 @NoException public static native int av_opt_set_video_rate(Pointer obj, @Cast("const char*") BytePointer name, @ByVal AVRational val, int search_flags);
 @NoException public static native int av_opt_set_video_rate(Pointer obj, String name, @ByVal AVRational val, int search_flags);
-@NoException public static native int av_opt_set_channel_layout(Pointer obj, @Cast("const char*") BytePointer name, long ch_layout, int search_flags);
-@NoException public static native int av_opt_set_channel_layout(Pointer obj, String name, long ch_layout, int search_flags);
+@NoException public static native int av_opt_set_channel_layout(Pointer obj, @Cast("const char*") BytePointer name, @Cast("int64_t") long ch_layout, int search_flags);
+@NoException public static native int av_opt_set_channel_layout(Pointer obj, String name, @Cast("int64_t") long ch_layout, int search_flags);
 /**
  * \note Any old dictionary present is discarded and replaced with a copy of the new one. The
  * caller still owns val is and responsible for freeing it.
@@ -5477,12 +5477,12 @@ public static final int AV_OPT_MULTI_COMPONENT_RANGE = (1 << 12);
 @NoException public static native int av_opt_get(Pointer obj, String name, int search_flags, @Cast("uint8_t**") @ByPtrPtr BytePointer out_val);
 @NoException public static native int av_opt_get(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, @Cast("uint8_t**") @ByPtrPtr ByteBuffer out_val);
 @NoException public static native int av_opt_get(Pointer obj, String name, int search_flags, @Cast("uint8_t**") @ByPtrPtr byte[] out_val);
-@NoException public static native int av_opt_get_int(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, LongPointer out_val);
-@NoException public static native int av_opt_get_int(Pointer obj, String name, int search_flags, LongBuffer out_val);
-@NoException public static native int av_opt_get_int(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, long[] out_val);
-@NoException public static native int av_opt_get_int(Pointer obj, String name, int search_flags, LongPointer out_val);
-@NoException public static native int av_opt_get_int(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, LongBuffer out_val);
-@NoException public static native int av_opt_get_int(Pointer obj, String name, int search_flags, long[] out_val);
+@NoException public static native int av_opt_get_int(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, @Cast("int64_t*") LongPointer out_val);
+@NoException public static native int av_opt_get_int(Pointer obj, String name, int search_flags, @Cast("int64_t*") LongBuffer out_val);
+@NoException public static native int av_opt_get_int(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, @Cast("int64_t*") long[] out_val);
+@NoException public static native int av_opt_get_int(Pointer obj, String name, int search_flags, @Cast("int64_t*") LongPointer out_val);
+@NoException public static native int av_opt_get_int(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, @Cast("int64_t*") LongBuffer out_val);
+@NoException public static native int av_opt_get_int(Pointer obj, String name, int search_flags, @Cast("int64_t*") long[] out_val);
 @NoException public static native int av_opt_get_double(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, DoublePointer out_val);
 @NoException public static native int av_opt_get_double(Pointer obj, String name, int search_flags, DoubleBuffer out_val);
 @NoException public static native int av_opt_get_double(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, double[] out_val);
@@ -5511,12 +5511,12 @@ public static final int AV_OPT_MULTI_COMPONENT_RANGE = (1 << 12);
 @NoException public static native int av_opt_get_sample_fmt(Pointer obj, String name, int search_flags, @Cast("AVSampleFormat*") int[] out_fmt);
 @NoException public static native int av_opt_get_video_rate(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, AVRational out_val);
 @NoException public static native int av_opt_get_video_rate(Pointer obj, String name, int search_flags, AVRational out_val);
-@NoException public static native int av_opt_get_channel_layout(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, LongPointer ch_layout);
-@NoException public static native int av_opt_get_channel_layout(Pointer obj, String name, int search_flags, LongBuffer ch_layout);
-@NoException public static native int av_opt_get_channel_layout(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, long[] ch_layout);
-@NoException public static native int av_opt_get_channel_layout(Pointer obj, String name, int search_flags, LongPointer ch_layout);
-@NoException public static native int av_opt_get_channel_layout(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, LongBuffer ch_layout);
-@NoException public static native int av_opt_get_channel_layout(Pointer obj, String name, int search_flags, long[] ch_layout);
+@NoException public static native int av_opt_get_channel_layout(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, @Cast("int64_t*") LongPointer ch_layout);
+@NoException public static native int av_opt_get_channel_layout(Pointer obj, String name, int search_flags, @Cast("int64_t*") LongBuffer ch_layout);
+@NoException public static native int av_opt_get_channel_layout(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, @Cast("int64_t*") long[] ch_layout);
+@NoException public static native int av_opt_get_channel_layout(Pointer obj, String name, int search_flags, @Cast("int64_t*") LongPointer ch_layout);
+@NoException public static native int av_opt_get_channel_layout(Pointer obj, @Cast("const char*") BytePointer name, int search_flags, @Cast("int64_t*") LongBuffer ch_layout);
+@NoException public static native int av_opt_get_channel_layout(Pointer obj, String name, int search_flags, @Cast("int64_t*") long[] ch_layout);
 /**
  * @param [out] out_val The returned dictionary is a copy of the actual value and must
  * be freed with av_dict_free() by the caller

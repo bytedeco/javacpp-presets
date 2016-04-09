@@ -282,8 +282,8 @@ public static final int
  * @return NULL on error, allocated context otherwise
  */
 @NoException public static native SwrContext swr_alloc_set_opts(SwrContext s,
-                                      long out_ch_layout, @Cast("AVSampleFormat") int out_sample_fmt, int out_sample_rate,
-                                      long in_ch_layout, @Cast("AVSampleFormat") int in_sample_fmt, int in_sample_rate,
+                                      @Cast("int64_t") long out_ch_layout, @Cast("AVSampleFormat") int out_sample_fmt, int out_sample_rate,
+                                      @Cast("int64_t") long in_ch_layout, @Cast("AVSampleFormat") int in_sample_fmt, int in_sample_rate,
                                       int log_offset, Pointer log_ctx);
 
 /**
@@ -364,7 +364,7 @@ public static final int
  *      function used internally for timestamp compensation.
  * @return the output timestamp for the next output sample
  */
-@NoException public static native long swr_next_pts(SwrContext s, long pts);
+@NoException public static native @Cast("int64_t") long swr_next_pts(SwrContext s, @Cast("int64_t") long pts);
 
 /**
  * \}
@@ -475,7 +475,7 @@ public static final int
  *                  returned
  * @return     the delay in 1 / \c base units.
  */
-@NoException public static native long swr_get_delay(SwrContext s, long base);
+@NoException public static native @Cast("int64_t") long swr_get_delay(SwrContext s, @Cast("int64_t") long base);
 
 /**
  * Find an upper bound on the number of samples that the next swr_convert

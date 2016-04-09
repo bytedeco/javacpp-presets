@@ -1584,13 +1584,13 @@ public static class AVPacket extends Pointer {
      * the terms dts and pts/cts to mean something different. Such timestamps
      * must be converted to true pts/dts before they are stored in AVPacket.
      */
-    public native long pts(); public native AVPacket pts(long pts);
+    public native @Cast("int64_t") long pts(); public native AVPacket pts(long pts);
     /**
      * Decompression timestamp in AVStream->time_base units; the time at which
      * the packet is decompressed.
      * Can be AV_NOPTS_VALUE if it is not stored in the file.
      */
-    public native long dts(); public native AVPacket dts(long dts);
+    public native @Cast("int64_t") long dts(); public native AVPacket dts(long dts);
     public native @Cast("uint8_t*") BytePointer data(); public native AVPacket data(BytePointer data);
     public native int size(); public native AVPacket size(int size);
     public native int stream_index(); public native AVPacket stream_index(int stream_index);
@@ -1609,10 +1609,10 @@ public static class AVPacket extends Pointer {
      * Duration of this packet in AVStream->time_base units, 0 if unknown.
      * Equals next_pts - this_pts in presentation order.
      */
-    public native long duration(); public native AVPacket duration(long duration);
+    public native @Cast("int64_t") long duration(); public native AVPacket duration(long duration);
 
     /** byte position in stream, -1 if unknown */
-    public native long pos(); public native AVPacket pos(long pos);
+    public native @Cast("int64_t") long pos(); public native AVPacket pos(long pos);
 
 // #if FF_API_CONVERGENCE_DURATION
     /**
@@ -1620,7 +1620,7 @@ public static class AVPacket extends Pointer {
      * for Matroska subtitles, whose duration values could overflow when the
      * duration field was still an int.
      */
-    public native @Deprecated long convergence_duration(); public native AVPacket convergence_duration(long convergence_duration);
+    public native @Cast("int64_t") @Deprecated long convergence_duration(); public native AVPacket convergence_duration(long convergence_duration);
 // #endif
 }
 /** The packet contains a keyframe */
@@ -1740,7 +1740,7 @@ public static class AVCodecContext extends Pointer {
      * - decoding: Set by user, may be overwritten by libavcodec
      *             if this info is available in the stream
      */
-    public native long bit_rate(); public native AVCodecContext bit_rate(long bit_rate);
+    public native @Cast("int64_t") long bit_rate(); public native AVCodecContext bit_rate(long bit_rate);
 
     /**
      * number of bits the bitstream is allowed to diverge from the reference.
@@ -2686,14 +2686,14 @@ public static final int FF_MB_DECISION_RD =     2;
      * - encoding: Set by user.
      * - decoding: Set by user, may be overwritten by libavcodec.
      */
-    public native long rc_max_rate(); public native AVCodecContext rc_max_rate(long rc_max_rate);
+    public native @Cast("int64_t") long rc_max_rate(); public native AVCodecContext rc_max_rate(long rc_max_rate);
 
     /**
      * minimum bitrate
      * - encoding: Set by user.
      * - decoding: unused
      */
-    public native long rc_min_rate(); public native AVCodecContext rc_min_rate(long rc_min_rate);
+    public native @Cast("int64_t") long rc_min_rate(); public native AVCodecContext rc_min_rate(long rc_min_rate);
 
 // #if FF_API_MPV_OPT
     /**
@@ -2785,7 +2785,7 @@ public static final int FF_CODER_TYPE_DEFLATE =   4;
     public native @Deprecated int max_prediction_order(); public native AVCodecContext max_prediction_order(int max_prediction_order);
 
     /** @deprecated use encoder private options instead */
-    public native @Deprecated long timecode_frame_start(); public native AVCodecContext timecode_frame_start(long timecode_frame_start);
+    public native @Cast("int64_t") @Deprecated long timecode_frame_start(); public native AVCodecContext timecode_frame_start(long timecode_frame_start);
 // #endif
 
 // #if FF_API_RTP_CALLBACK
@@ -2999,7 +2999,7 @@ public static final int AV_EF_AGGRESSIVE = (1<<18);
      * - encoding: unused
      * - decoding: Set by user.
      */
-    public native long reordered_opaque(); public native AVCodecContext reordered_opaque(long reordered_opaque);
+    public native @Cast("int64_t") long reordered_opaque(); public native AVCodecContext reordered_opaque(long reordered_opaque);
 
     /**
      * Hardware accelerator in use
@@ -3442,10 +3442,10 @@ public static final int FF_LEVEL_UNKNOWN = -99;
      * - decoding: maintained and used by libavcodec, not intended to be used by user apps
      * - encoding: unused
      */
-    public native long pts_correction_num_faulty_pts(); public native AVCodecContext pts_correction_num_faulty_pts(long pts_correction_num_faulty_pts); /** Number of incorrect PTS values so far */
-    public native long pts_correction_num_faulty_dts(); public native AVCodecContext pts_correction_num_faulty_dts(long pts_correction_num_faulty_dts); /** Number of incorrect DTS values so far */
-    public native long pts_correction_last_pts(); public native AVCodecContext pts_correction_last_pts(long pts_correction_last_pts);       /** PTS of the last frame */
-    public native long pts_correction_last_dts(); public native AVCodecContext pts_correction_last_dts(long pts_correction_last_dts);       /** DTS of the last frame
+    public native @Cast("int64_t") long pts_correction_num_faulty_pts(); public native AVCodecContext pts_correction_num_faulty_pts(long pts_correction_num_faulty_pts); /** Number of incorrect PTS values so far */
+    public native @Cast("int64_t") long pts_correction_num_faulty_dts(); public native AVCodecContext pts_correction_num_faulty_dts(long pts_correction_num_faulty_dts); /** Number of incorrect DTS values so far */
+    public native @Cast("int64_t") long pts_correction_last_pts(); public native AVCodecContext pts_correction_last_pts(long pts_correction_last_pts);       /** PTS of the last frame */
+    public native @Cast("int64_t") long pts_correction_last_dts(); public native AVCodecContext pts_correction_last_dts(long pts_correction_last_dts);       /** DTS of the last frame
     <p>
     /**
      * Character encoding of the input subtitles file.
@@ -4156,7 +4156,7 @@ public static class AVSubtitle extends Pointer {
     public native AVSubtitleRect rects(int i); public native AVSubtitle rects(int i, AVSubtitleRect rects);
     @MemberGetter public native @Cast("AVSubtitleRect**") PointerPointer rects();
     /** Same as packet pts, in AV_TIME_BASE */
-    public native long pts(); public native AVSubtitle pts(long pts);
+    public native @Cast("int64_t") long pts(); public native AVSubtitle pts(long pts);
 }
 
 /**
@@ -4894,10 +4894,10 @@ public static class AVCodecParserContext extends Pointer {
 
     public native Pointer priv_data(); public native AVCodecParserContext priv_data(Pointer priv_data);
     public native AVCodecParser parser(); public native AVCodecParserContext parser(AVCodecParser parser);
-    public native long frame_offset(); public native AVCodecParserContext frame_offset(long frame_offset); /* offset of the current frame */
-    public native long cur_offset(); public native AVCodecParserContext cur_offset(long cur_offset); /* current offset
+    public native @Cast("int64_t") long frame_offset(); public native AVCodecParserContext frame_offset(long frame_offset); /* offset of the current frame */
+    public native @Cast("int64_t") long cur_offset(); public native AVCodecParserContext cur_offset(long cur_offset); /* current offset
                            (incremented by each av_parser_parse()) */
-    public native long next_frame_offset(); public native AVCodecParserContext next_frame_offset(long next_frame_offset); /* offset of the next frame */
+    public native @Cast("int64_t") long next_frame_offset(); public native AVCodecParserContext next_frame_offset(long next_frame_offset); /* offset of the next frame */
     /* video info */
     public native int pict_type(); public native AVCodecParserContext pict_type(int pict_type); /* XXX: Put it back in AVCodecContext. */
     /**
@@ -4910,22 +4910,22 @@ public static class AVCodecParserContext extends Pointer {
      * It is used by codecs like H.264 to display telecined material.
      */
     public native int repeat_pict(); public native AVCodecParserContext repeat_pict(int repeat_pict); /* XXX: Put it back in AVCodecContext. */
-    public native long pts(); public native AVCodecParserContext pts(long pts);     /* pts of the current frame */
-    public native long dts(); public native AVCodecParserContext dts(long dts);     /* dts of the current frame */
+    public native @Cast("int64_t") long pts(); public native AVCodecParserContext pts(long pts);     /* pts of the current frame */
+    public native @Cast("int64_t") long dts(); public native AVCodecParserContext dts(long dts);     /* dts of the current frame */
 
     /* private data */
-    public native long last_pts(); public native AVCodecParserContext last_pts(long last_pts);
-    public native long last_dts(); public native AVCodecParserContext last_dts(long last_dts);
+    public native @Cast("int64_t") long last_pts(); public native AVCodecParserContext last_pts(long last_pts);
+    public native @Cast("int64_t") long last_dts(); public native AVCodecParserContext last_dts(long last_dts);
     public native int fetch_timestamp(); public native AVCodecParserContext fetch_timestamp(int fetch_timestamp);
 
 public static final int AV_PARSER_PTS_NB = 4;
     public native int cur_frame_start_index(); public native AVCodecParserContext cur_frame_start_index(int cur_frame_start_index);
-    public native long cur_frame_offset(int i); public native AVCodecParserContext cur_frame_offset(int i, long cur_frame_offset);
-    @MemberGetter public native LongPointer cur_frame_offset();
-    public native long cur_frame_pts(int i); public native AVCodecParserContext cur_frame_pts(int i, long cur_frame_pts);
-    @MemberGetter public native LongPointer cur_frame_pts();
-    public native long cur_frame_dts(int i); public native AVCodecParserContext cur_frame_dts(int i, long cur_frame_dts);
-    @MemberGetter public native LongPointer cur_frame_dts();
+    public native @Cast("int64_t") long cur_frame_offset(int i); public native AVCodecParserContext cur_frame_offset(int i, long cur_frame_offset);
+    @MemberGetter public native @Cast("int64_t*") LongPointer cur_frame_offset();
+    public native @Cast("int64_t") long cur_frame_pts(int i); public native AVCodecParserContext cur_frame_pts(int i, long cur_frame_pts);
+    @MemberGetter public native @Cast("int64_t*") LongPointer cur_frame_pts();
+    public native @Cast("int64_t") long cur_frame_dts(int i); public native AVCodecParserContext cur_frame_dts(int i, long cur_frame_dts);
+    @MemberGetter public native @Cast("int64_t*") LongPointer cur_frame_dts();
 
     public native int flags(); public native AVCodecParserContext flags(int flags);
 public static final int PARSER_FLAG_COMPLETE_FRAMES =           0x0001;
@@ -4935,9 +4935,9 @@ public static final int PARSER_FLAG_FETCHED_OFFSET =            0x0004;
 public static final int PARSER_FLAG_USE_CODEC_TS =              0x1000;
 
     /** byte offset from starting packet start */
-    public native long offset(); public native AVCodecParserContext offset(long offset);
-    public native long cur_frame_end(int i); public native AVCodecParserContext cur_frame_end(int i, long cur_frame_end);
-    @MemberGetter public native LongPointer cur_frame_end();
+    public native @Cast("int64_t") long offset(); public native AVCodecParserContext offset(long offset);
+    public native @Cast("int64_t") long cur_frame_end(int i); public native AVCodecParserContext cur_frame_end(int i, long cur_frame_end);
+    @MemberGetter public native @Cast("int64_t*") LongPointer cur_frame_end();
 
     /**
      * Set by parser to 1 for key frames and 0 for non-key frames.
@@ -4951,7 +4951,7 @@ public static final int PARSER_FLAG_USE_CODEC_TS =              0x1000;
     /**
      * @deprecated unused
      */
-    public native @Deprecated long convergence_duration(); public native AVCodecParserContext convergence_duration(long convergence_duration);
+    public native @Cast("int64_t") @Deprecated long convergence_duration(); public native AVCodecParserContext convergence_duration(long convergence_duration);
 // #endif
 
     // Timestamp generation support:
@@ -5000,18 +5000,18 @@ public static final int PARSER_FLAG_USE_CODEC_TS =              0x1000;
      *
      * Analogous to cur_frame_pts/dts
      */
-    public native long cur_frame_pos(int i); public native AVCodecParserContext cur_frame_pos(int i, long cur_frame_pos);
-    @MemberGetter public native LongPointer cur_frame_pos();
+    public native @Cast("int64_t") long cur_frame_pos(int i); public native AVCodecParserContext cur_frame_pos(int i, long cur_frame_pos);
+    @MemberGetter public native @Cast("int64_t*") LongPointer cur_frame_pos();
 
     /**
      * Byte position of currently parsed frame in stream.
      */
-    public native long pos(); public native AVCodecParserContext pos(long pos);
+    public native @Cast("int64_t") long pos(); public native AVCodecParserContext pos(long pos);
 
     /**
      * Previous frame byte position.
      */
-    public native long last_pos(); public native AVCodecParserContext last_pos(long last_pos);
+    public native @Cast("int64_t") long last_pos(); public native AVCodecParserContext last_pos(long last_pos);
 
     /**
      * Duration of the current frame.
@@ -5161,26 +5161,26 @@ public static class AVCodecParser extends Pointer {
                      AVCodecContext avctx,
                      @Cast("uint8_t**") PointerPointer poutbuf, IntPointer poutbuf_size,
                      @Cast("const uint8_t*") BytePointer buf, int buf_size,
-                     long pts, long dts,
-                     long pos);
+                     @Cast("int64_t") long pts, @Cast("int64_t") long dts,
+                     @Cast("int64_t") long pos);
 @NoException public static native int av_parser_parse2(AVCodecParserContext s,
                      AVCodecContext avctx,
                      @Cast("uint8_t**") @ByPtrPtr BytePointer poutbuf, IntPointer poutbuf_size,
                      @Cast("const uint8_t*") BytePointer buf, int buf_size,
-                     long pts, long dts,
-                     long pos);
+                     @Cast("int64_t") long pts, @Cast("int64_t") long dts,
+                     @Cast("int64_t") long pos);
 @NoException public static native int av_parser_parse2(AVCodecParserContext s,
                      AVCodecContext avctx,
                      @Cast("uint8_t**") @ByPtrPtr ByteBuffer poutbuf, IntBuffer poutbuf_size,
                      @Cast("const uint8_t*") ByteBuffer buf, int buf_size,
-                     long pts, long dts,
-                     long pos);
+                     @Cast("int64_t") long pts, @Cast("int64_t") long dts,
+                     @Cast("int64_t") long pos);
 @NoException public static native int av_parser_parse2(AVCodecParserContext s,
                      AVCodecContext avctx,
                      @Cast("uint8_t**") @ByPtrPtr byte[] poutbuf, int[] poutbuf_size,
                      @Cast("const uint8_t*") byte[] buf, int buf_size,
-                     long pts, long dts,
-                     long pos);
+                     @Cast("int64_t") long pts, @Cast("int64_t") long dts,
+                     @Cast("int64_t") long pos);
 
 /**
  * @return 0 if the output buffer is a subset of the input, 1 if it is allocated and must be freed

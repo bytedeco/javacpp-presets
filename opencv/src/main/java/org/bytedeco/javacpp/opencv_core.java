@@ -107,7 +107,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     }
 }
 
-@Name("std::vector<cv::Point_<int> >") public static class PointVector extends Pointer {
+@Name("std::vector<cv::Point>") public static class PointVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PointVector(Pointer p) { super(p); }
@@ -133,7 +133,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     }
 }
 
-@Name("std::vector<cv::Point_<float> >") public static class Point2fVector extends Pointer {
+@Name("std::vector<cv::Point2f>") public static class Point2fVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Point2fVector(Pointer p) { super(p); }
@@ -159,7 +159,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     }
 }
 
-@Name("std::vector<cv::Point_<double> >") public static class Point2dVector extends Pointer {
+@Name("std::vector<cv::Point2d>") public static class Point2dVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Point2dVector(Pointer p) { super(p); }
@@ -185,7 +185,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     }
 }
 
-@Name("std::vector<cv::Size_<int> >") public static class SizeVector extends Pointer {
+@Name("std::vector<cv::Size>") public static class SizeVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public SizeVector(Pointer p) { super(p); }
@@ -211,7 +211,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     }
 }
 
-@Name("std::vector<cv::Rect_<int> >") public static class RectVector extends Pointer {
+@Name("std::vector<cv::Rect>") public static class RectVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RectVector(Pointer p) { super(p); }
@@ -289,7 +289,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     }
 }
 
-@Name("std::vector<std::vector<cv::Point_<int> > >") public static class PointVectorVector extends Pointer {
+@Name("std::vector<std::vector<cv::Point> >") public static class PointVectorVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public PointVectorVector(Pointer p) { super(p); }
@@ -315,7 +315,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     }
 }
 
-@Name("std::vector<std::vector<cv::Point_<float> > >") public static class Point2fVectorVector extends Pointer {
+@Name("std::vector<std::vector<cv::Point2f> >") public static class Point2fVectorVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Point2fVectorVector(Pointer p) { super(p); }
@@ -341,7 +341,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     }
 }
 
-@Name("std::vector<std::vector<cv::Point_<double> > >") public static class Point2dVectorVector extends Pointer {
+@Name("std::vector<std::vector<cv::Point2d> >") public static class Point2dVectorVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Point2dVectorVector(Pointer p) { super(p); }
@@ -367,7 +367,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     }
 }
 
-@Name("std::vector<std::vector<cv::Rect_<int> > >") public static class RectVectorVector extends Pointer {
+@Name("std::vector<std::vector<cv::Rect> >") public static class RectVectorVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RectVectorVector(Pointer p) { super(p); }
@@ -523,7 +523,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     }
 }
 
-@Name("std::vector<std::pair<cv::Mat,unsigned char> >") public static class MatBytePairVector extends Pointer {
+@Name("std::vector<std::pair<cv::Mat,uchar> >") public static class MatBytePairVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public MatBytePairVector(Pointer p) { super(p); }
@@ -549,7 +549,7 @@ public class opencv_core extends org.bytedeco.javacpp.helper.opencv_core {
     }
 }
 
-@Name("std::vector<std::pair<cv::UMat,unsigned char> >") public static class UMatBytePairVector extends Pointer {
+@Name("std::vector<std::pair<cv::UMat,uchar> >") public static class UMatBytePairVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public UMatBytePairVector(Pointer p) { super(p); }
@@ -13454,8 +13454,8 @@ introduced by G. Marsaglia and W. W. Tsang.
     with zero mean and identity covariation matrix, and then transforms them
     using transform to get samples from the specified Gaussian distribution.
     */
-    public native void fill( @ByVal Mat mat, int distType, @ByVal Mat a, @ByVal Mat b, @Cast("bool") boolean saturateRange/*=false*/ );
-    public native void fill( @ByVal Mat mat, int distType, @ByVal Mat a, @ByVal Mat b );
+    public native @Name("fill") void _fill( @ByVal Mat mat, int distType, @ByVal Mat a, @ByVal Mat b, @Cast("bool") boolean saturateRange/*=false*/ );
+    public native @Name("fill") void _fill( @ByVal Mat mat, int distType, @ByVal Mat a, @ByVal Mat b );
 
     /** \brief Returns the next random number sampled from the Gaussian distribution
     @param sigma standard deviation of the distribution.

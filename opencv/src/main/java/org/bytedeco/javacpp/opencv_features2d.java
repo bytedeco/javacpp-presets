@@ -1248,7 +1248,7 @@ connecting two keypoints (circles). See cv::DrawMatchesFlags.
                                          @ByRef float[] repeatability, @ByRef int[] correspCount );
 
 @Namespace("cv") public static native void computeRecallPrecisionCurve( @Const @ByRef DMatchVectorVector matches1to2,
-                                             @Cast("const std::vector<std::vector<unsigned char> >*") @ByRef ByteVectorVector correctMatches1to2Mask,
+                                             @Cast("const std::vector<std::vector<uchar> >*") @ByRef ByteVectorVector correctMatches1to2Mask,
                                              @ByRef Point2fVector recallPrecisionCurve );
 
 @Namespace("cv") public static native float getRecall( @Const @ByRef Point2fVector recallPrecisionCurve, float l_precision );

@@ -9,7 +9,7 @@ import org.bytedeco.javacpp.annotation.*;
 public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     static { Loader.load(); }
 
-@Name("tensorflow::gtl::InlinedVector<long long,4>") public static class LongVector extends Pointer {
+@Name("tensorflow::gtl::InlinedVector<tensorflow::int64,4>") public static class LongVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LongVector(Pointer p) { super(p); }
@@ -19,7 +19,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
 
     public native long size();
 
-    @Index public native @Cast("long long") long get(@Cast("size_t") long i);
+    @Index public native @Cast("tensorflow::int64") long get(@Cast("size_t") long i);
     public native LongVector put(@Cast("size_t") long i, long value);
 }
 
@@ -265,7 +265,7 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     }
 }
 
-@NoOffset @Name("std::pair<tensorflow::EdgeSet::const_iterator,bool>") public static class EdgeSetBoolPair extends Pointer {
+@NoOffset @Name("std::pair<tensorflow::EdgeSet::iterator,bool>") public static class EdgeSetBoolPair extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public EdgeSetBoolPair(Pointer p) { super(p); }
@@ -425,7 +425,7 @@ limitations under the License.
 public static final byte kuint8max = kuint8max();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::uint16") short kuint16max();
 public static final short kuint16max = kuint16max();
-@Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::uint32") int kuint32max();
+@Namespace("tensorflow") @MemberGetter public static native int kuint32max();
 public static final int kuint32max = kuint32max();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::uint64") long kuint64max();
 public static final long kuint64max = kuint64max();
@@ -437,9 +437,9 @@ public static final byte kint8max = kint8max();
 public static final short kint16min = kint16min();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::int16") short kint16max();
 public static final short kint16max = kint16max();
-@Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::int32") int kint32min();
+@Namespace("tensorflow") @MemberGetter public static native int kint32min();
 public static final int kint32min = kint32min();
-@Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::int32") int kint32max();
+@Namespace("tensorflow") @MemberGetter public static native int kint32max();
 public static final int kint32max = kint32max();
 @Namespace("tensorflow") @MemberGetter public static native @Cast("const tensorflow::int64") long kint64min();
 public static final long kint64min = kint64min();
@@ -1061,10 +1061,10 @@ limitations under the License.
   /** Stores the size of {@code fname} in {@code *file_size}. */
   public native @ByVal Status GetFileSize(@StdString BytePointer fname, @Cast("tensorflow::uint64*") LongPointer file_size);
   public native @ByVal Status GetFileSize(@StdString String fname, @Cast("tensorflow::uint64*") LongBuffer file_size);
-  public native @ByVal Status GetFileSize(@StdString BytePointer fname, @Cast("tensorflow::uint64*") long[] file_size);
+  public native @ByVal Status GetFileSize(@StdString BytePointer fname, @Cast("tensorflow::uint64*") long... file_size);
   public native @ByVal Status GetFileSize(@StdString String fname, @Cast("tensorflow::uint64*") LongPointer file_size);
   public native @ByVal Status GetFileSize(@StdString BytePointer fname, @Cast("tensorflow::uint64*") LongBuffer file_size);
-  public native @ByVal Status GetFileSize(@StdString String fname, @Cast("tensorflow::uint64*") long[] file_size);
+  public native @ByVal Status GetFileSize(@StdString String fname, @Cast("tensorflow::uint64*") long... file_size);
 
   /** \brief Renames file src to target. If target already exists, it will be
    *  replaced. */
@@ -1220,10 +1220,10 @@ limitations under the License.
   public native @ByVal Status DeleteDir(@StdString String d);
   public native @ByVal Status GetFileSize(@StdString BytePointer f, @Cast("tensorflow::uint64*") LongPointer s);
   public native @ByVal Status GetFileSize(@StdString String f, @Cast("tensorflow::uint64*") LongBuffer s);
-  public native @ByVal Status GetFileSize(@StdString BytePointer f, @Cast("tensorflow::uint64*") long[] s);
+  public native @ByVal Status GetFileSize(@StdString BytePointer f, @Cast("tensorflow::uint64*") long... s);
   public native @ByVal Status GetFileSize(@StdString String f, @Cast("tensorflow::uint64*") LongPointer s);
   public native @ByVal Status GetFileSize(@StdString BytePointer f, @Cast("tensorflow::uint64*") LongBuffer s);
-  public native @ByVal Status GetFileSize(@StdString String f, @Cast("tensorflow::uint64*") long[] s);
+  public native @ByVal Status GetFileSize(@StdString String f, @Cast("tensorflow::uint64*") long... s);
   public native @ByVal Status RenameFile(@StdString BytePointer s, @StdString BytePointer t);
   public native @ByVal Status RenameFile(@StdString String s, @StdString String t);
   public native @Cast("tensorflow::uint64") long NowMicros();
@@ -8543,18 +8543,18 @@ limitations under the License.
                 @Const @ByRef GraphDefBuilder.Options options);
   @Namespace("tensorflow::ops") public static native Node Const(@ArraySlice double[] t, @Const @ByRef TensorShape shape,
                 @Const @ByRef GraphDefBuilder.Options options); /* Tensor */
-@Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int32") int s, @Const @ByRef GraphDefBuilder.Options options); /* Scalar */
-  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int32*") @ArraySlice IntPointer v,
+@Namespace("tensorflow::ops") public static native Node Const(int s, @Const @ByRef GraphDefBuilder.Options options); /* Scalar */
+  @Namespace("tensorflow::ops") public static native Node Const(@ArraySlice IntPointer v,
                 @Const @ByRef GraphDefBuilder.Options options);
-  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int32*") @ArraySlice IntBuffer v,
+  @Namespace("tensorflow::ops") public static native Node Const(@ArraySlice IntBuffer v,
                 @Const @ByRef GraphDefBuilder.Options options);
-  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int32*") @ArraySlice int[] v,
+  @Namespace("tensorflow::ops") public static native Node Const(@ArraySlice int[] v,
                 @Const @ByRef GraphDefBuilder.Options options); /* Vector */
-  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int32*") @ArraySlice IntPointer t, @Const @ByRef TensorShape shape,
+  @Namespace("tensorflow::ops") public static native Node Const(@ArraySlice IntPointer t, @Const @ByRef TensorShape shape,
                 @Const @ByRef GraphDefBuilder.Options options);
-  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int32*") @ArraySlice IntBuffer t, @Const @ByRef TensorShape shape,
+  @Namespace("tensorflow::ops") public static native Node Const(@ArraySlice IntBuffer t, @Const @ByRef TensorShape shape,
                 @Const @ByRef GraphDefBuilder.Options options);
-  @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::int32*") @ArraySlice int[] t, @Const @ByRef TensorShape shape,
+  @Namespace("tensorflow::ops") public static native Node Const(@ArraySlice int[] t, @Const @ByRef TensorShape shape,
                 @Const @ByRef GraphDefBuilder.Options options); /* Tensor */
 @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::uint8") byte s, @Const @ByRef GraphDefBuilder.Options options); /* Scalar */
   @Namespace("tensorflow::ops") public static native Node Const(@Cast("tensorflow::uint8*") @ArraySlice BytePointer v,

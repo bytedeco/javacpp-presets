@@ -588,13 +588,13 @@ public static class AVFilterLink extends Pointer {
      * Current timestamp of the link, as defined by the most recent
      * frame(s), in link time_base units.
      */
-    public native long current_pts(); public native AVFilterLink current_pts(long current_pts);
+    public native @Cast("int64_t") long current_pts(); public native AVFilterLink current_pts(long current_pts);
 
     /**
      * Current timestamp of the link, as defined by the most recent
      * frame(s), in AV_TIME_BASE units.
      */
-    public native long current_pts_us(); public native AVFilterLink current_pts_us(long current_pts_us);
+    public native @Cast("int64_t") long current_pts_us(); public native AVFilterLink current_pts_us(long current_pts_us);
 
     /**
      * Index in the age array.
@@ -665,7 +665,7 @@ public static class AVFilterLink extends Pointer {
     /**
      * Number of past frames sent through the link.
      */
-    public native long frame_count(); public native AVFilterLink frame_count(long frame_count);
+    public native @Cast("int64_t") long frame_count(); public native AVFilterLink frame_count(long frame_count);
 
     /**
      * A pointer to a FFVideoFramePool struct.
@@ -1456,7 +1456,7 @@ public static class AVABufferSinkParams extends Pointer {
     /** list of allowed sample formats, terminated by AV_SAMPLE_FMT_NONE */
     @MemberGetter public native @Cast("const AVSampleFormat*") IntPointer sample_fmts();
     /** list of allowed channel layouts, terminated by -1 */
-    @MemberGetter public native @Const LongPointer channel_layouts();
+    @MemberGetter public native @Cast("const int64_t*") LongPointer channel_layouts();
     /** list of allowed channel counts, terminated by -1 */
     @MemberGetter public native @Const IntPointer channel_counts();
     /** if not 0, accept any channel count or layout */

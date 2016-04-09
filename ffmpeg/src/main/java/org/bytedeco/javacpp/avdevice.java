@@ -501,7 +501,7 @@ public static class AVDeviceCapabilitiesQuery extends Pointer {
     public native @Cast("AVPixelFormat") int pixel_format(); public native AVDeviceCapabilitiesQuery pixel_format(int pixel_format);
     public native int sample_rate(); public native AVDeviceCapabilitiesQuery sample_rate(int sample_rate);
     public native int channels(); public native AVDeviceCapabilitiesQuery channels(int channels);
-    public native long channel_layout(); public native AVDeviceCapabilitiesQuery channel_layout(long channel_layout);
+    public native @Cast("int64_t") long channel_layout(); public native AVDeviceCapabilitiesQuery channel_layout(long channel_layout);
     public native int window_width(); public native AVDeviceCapabilitiesQuery window_width(int window_width);
     public native int window_height(); public native AVDeviceCapabilitiesQuery window_height(int window_height);
     public native int frame_width(); public native AVDeviceCapabilitiesQuery frame_width(int frame_width);

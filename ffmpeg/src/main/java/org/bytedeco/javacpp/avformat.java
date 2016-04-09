@@ -136,22 +136,22 @@ public static class AVIODirEntry extends Pointer {
                                                    Name can be encoded with UTF-8 even though 0 is set. */
     public native int utf8(); public native AVIODirEntry utf8(int utf8);
     /** File size in bytes, -1 if unknown. */
-    public native long size(); public native AVIODirEntry size(long size);
+    public native @Cast("int64_t") long size(); public native AVIODirEntry size(long size);
     /** Time of last modification in microseconds since unix
                                                    epoch, -1 if unknown. */
-    public native long modification_timestamp(); public native AVIODirEntry modification_timestamp(long modification_timestamp);
+    public native @Cast("int64_t") long modification_timestamp(); public native AVIODirEntry modification_timestamp(long modification_timestamp);
     /** Time of last access in microseconds since unix epoch,
                                                    -1 if unknown. */
-    public native long access_timestamp(); public native AVIODirEntry access_timestamp(long access_timestamp);
+    public native @Cast("int64_t") long access_timestamp(); public native AVIODirEntry access_timestamp(long access_timestamp);
     /** Time of last status change in microseconds since unix
                                                    epoch, -1 if unknown. */
-    public native long status_change_timestamp(); public native AVIODirEntry status_change_timestamp(long status_change_timestamp);
+    public native @Cast("int64_t") long status_change_timestamp(); public native AVIODirEntry status_change_timestamp(long status_change_timestamp);
     /** User ID of owner, -1 if unknown. */
-    public native long user_id(); public native AVIODirEntry user_id(long user_id);
+    public native @Cast("int64_t") long user_id(); public native AVIODirEntry user_id(long user_id);
     /** Group ID of owner, -1 if unknown. */
-    public native long group_id(); public native AVIODirEntry group_id(long group_id);
+    public native @Cast("int64_t") long group_id(); public native AVIODirEntry group_id(long group_id);
     /** Unix file mode, -1 if unknown. */
-    public native long filemode(); public native AVIODirEntry filemode(long filemode);
+    public native @Cast("int64_t") long filemode(); public native AVIODirEntry filemode(long filemode);
 }
 
 public static class AVIODirContext extends Pointer {
@@ -295,11 +295,11 @@ public static class AVIOContext extends Pointer {
         public    Seek_Pointer_long_int(Pointer p) { super(p); }
         protected Seek_Pointer_long_int() { allocate(); }
         private native void allocate();
-        public native long call(Pointer opaque, long offset, int whence);
+        public native @Cast("int64_t") long call(Pointer opaque, @Cast("int64_t") long offset, int whence);
     }
     public native Seek_Pointer_long_int seek(); public native AVIOContext seek(Seek_Pointer_long_int seek);
     /** position in the file of the current buffer */
-    public native long pos(); public native AVIOContext pos(long pos);
+    public native @Cast("int64_t") long pos(); public native AVIOContext pos(long pos);
     /** true if the next seek should flush */
     public native int must_flush(); public native AVIOContext must_flush(int must_flush);
     /** true if eof reached */
@@ -343,8 +343,8 @@ public static class AVIOContext extends Pointer {
         public    Read_seek_Pointer_int_long_int(Pointer p) { super(p); }
         protected Read_seek_Pointer_int_long_int() { allocate(); }
         private native void allocate();
-        public native long call(Pointer opaque, int stream_index,
-                             long timestamp, int flags);
+        public native @Cast("int64_t") long call(Pointer opaque, int stream_index,
+                             @Cast("int64_t") long timestamp, int flags);
     }
     public native Read_seek_Pointer_int_long_int read_seek(); public native AVIOContext read_seek(Read_seek_Pointer_int_long_int read_seek);
     /**
@@ -356,7 +356,7 @@ public static class AVIOContext extends Pointer {
      * max filesize, used to limit allocations
      * This field is internal to libavformat and access from outside is not allowed.
      */
-    public native long maxsize(); public native AVIOContext maxsize(long maxsize);
+    public native @Cast("int64_t") long maxsize(); public native AVIOContext maxsize(long maxsize);
 
     /**
      * avio_read and avio_write should if possible be satisfied directly
@@ -369,7 +369,7 @@ public static class AVIOContext extends Pointer {
      * Bytes read statistic
      * This field is internal to libavformat and access from outside is not allowed.
      */
-    public native long bytes_read(); public native AVIOContext bytes_read(long bytes_read);
+    public native @Cast("int64_t") long bytes_read(); public native AVIOContext bytes_read(long bytes_read);
 
     /**
      * seek statistic
@@ -541,7 +541,7 @@ public static class Seek_Pointer_long_int extends FunctionPointer {
     public    Seek_Pointer_long_int(Pointer p) { super(p); }
     protected Seek_Pointer_long_int() { allocate(); }
     private native void allocate();
-    public native long call(Pointer opaque, long offset, int whence);
+    public native @Cast("int64_t") long call(Pointer opaque, @Cast("int64_t") long offset, int whence);
 }
 @NoException public static native AVIOContext avio_alloc_context(
                   @Cast("unsigned char*") BytePointer buffer,
@@ -659,25 +659,25 @@ public static final int AVSEEK_FORCE = 0x20000;
  * fseek() equivalent for AVIOContext.
  * @return new position or AVERROR.
  */
-@NoException public static native long avio_seek(AVIOContext s, long offset, int whence);
+@NoException public static native @Cast("int64_t") long avio_seek(AVIOContext s, @Cast("int64_t") long offset, int whence);
 
 /**
  * Skip given number of bytes forward
  * @return new position or AVERROR.
  */
-@NoException public static native long avio_skip(AVIOContext s, long offset);
+@NoException public static native @Cast("int64_t") long avio_skip(AVIOContext s, @Cast("int64_t") long offset);
 
 /**
  * ftell() equivalent for AVIOContext.
  * @return position or AVERROR.
  */
-@NoException public static native long avio_tell(AVIOContext s);
+@NoException public static native @Cast("int64_t") long avio_tell(AVIOContext s);
 
 /**
  * Get the filesize.
  * @return filesize or AVERROR
  */
-@NoException public static native long avio_size(AVIOContext s);
+@NoException public static native @Cast("int64_t") long avio_size(AVIOContext s);
 
 /**
  * feof() equivalent for AVIOContext.
@@ -938,8 +938,8 @@ public static final int AVIO_FLAG_DIRECT = 0x8000;
  * @return >= 0 on success
  * @see AVInputFormat::read_seek
  */
-@NoException public static native long avio_seek_time(AVIOContext h, int stream_index,
-                       long timestamp, int flags);
+@NoException public static native @Cast("int64_t") long avio_seek_time(AVIOContext h, int stream_index,
+                       @Cast("int64_t") long timestamp, int flags);
 
 /* Avoid a warning. The header can not be included because it breaks c++. */
 @Opaque public static class AVBPrint extends Pointer {
@@ -1460,9 +1460,9 @@ public static class AVFrac extends Pointer {
         return (AVFrac)super.position(position);
     }
 
-    public native long val(); public native AVFrac val(long val);
-    public native long num(); public native AVFrac num(long num);
-    public native long den(); public native AVFrac den(long den);
+    public native @Cast("int64_t") long val(); public native AVFrac val(long val);
+    public native @Cast("int64_t") long num(); public native AVFrac num(long num);
+    public native @Cast("int64_t") long den(); public native AVFrac den(long den);
 }
 // #endif
 
@@ -1705,7 +1705,7 @@ public static class AVOutputFormat extends Pointer {
         protected Get_output_timestamp_AVFormatContext_int_LongPointer_LongPointer() { allocate(); }
         private native void allocate();
         public native void call(AVFormatContext s, int stream,
-                                     LongPointer dts, LongPointer wall);
+                                     @Cast("int64_t*") LongPointer dts, @Cast("int64_t*") LongPointer wall);
     }
     public native Get_output_timestamp_AVFormatContext_int_LongPointer_LongPointer get_output_timestamp(); public native AVOutputFormat get_output_timestamp(Get_output_timestamp_AVFormatContext_int_LongPointer_LongPointer get_output_timestamp);
     /**
@@ -1988,7 +1988,7 @@ public static class AVInputFormat extends Pointer {
         protected Read_seek_AVFormatContext_int_long_int() { allocate(); }
         private native void allocate();
         public native int call(AVFormatContext arg0,
-                         int stream_index, long timestamp, int flags);
+                         int stream_index, @Cast("int64_t") long timestamp, int flags);
     }
     public native Read_seek_AVFormatContext_int_long_int read_seek(); public native AVInputFormat read_seek(Read_seek_AVFormatContext_int_long_int read_seek);
 
@@ -2002,8 +2002,8 @@ public static class AVInputFormat extends Pointer {
         public    Read_timestamp_AVFormatContext_int_LongPointer_long(Pointer p) { super(p); }
         protected Read_timestamp_AVFormatContext_int_LongPointer_long() { allocate(); }
         private native void allocate();
-        public native long call(AVFormatContext s, int stream_index,
-                                  LongPointer pos, long pos_limit);
+        public native @Cast("int64_t") long call(AVFormatContext s, int stream_index,
+                                  @Cast("int64_t*") LongPointer pos, @Cast("int64_t") long pos_limit);
     }
     public native Read_timestamp_AVFormatContext_int_LongPointer_long read_timestamp(); public native AVInputFormat read_timestamp(Read_timestamp_AVFormatContext_int_LongPointer_long read_timestamp);
 
@@ -2047,7 +2047,7 @@ public static class AVInputFormat extends Pointer {
         public    Read_seek2_AVFormatContext_int_long_long_long_int(Pointer p) { super(p); }
         protected Read_seek2_AVFormatContext_int_long_long_long_int() { allocate(); }
         private native void allocate();
-        public native int call(AVFormatContext s, int stream_index, long min_ts, long ts, long max_ts, int flags);
+        public native int call(AVFormatContext s, int stream_index, @Cast("int64_t") long min_ts, @Cast("int64_t") long ts, @Cast("int64_t") long max_ts, int flags);
     }
     public native Read_seek2_AVFormatContext_int_long_long_long_int read_seek2(); public native AVInputFormat read_seek2(Read_seek2_AVFormatContext_int_long_long_long_int read_seek2);
 
@@ -2129,14 +2129,14 @@ public static class AVIndexEntry extends Pointer {
         return (AVIndexEntry)super.position(position);
     }
 
-    public native long pos(); public native AVIndexEntry pos(long pos);
+    public native @Cast("int64_t") long pos(); public native AVIndexEntry pos(long pos);
     /**
                                    * Timestamp in AVStream.time_base units, preferably the time from which on correctly decoded frames are available
                                    * when seeking to this entry. That means preferable PTS on keyframe based formats.
                                    * But demuxers can choose to store a different timestamp, if it is more convenient for the implementation or nothing better
                                    * is known
                                    */
-    public native long timestamp(); public native AVIndexEntry timestamp(long timestamp);
+    public native @Cast("int64_t") long timestamp(); public native AVIndexEntry timestamp(long timestamp);
 public static final int AVINDEX_KEYFRAME = 0x0001;
     public native @NoOffset int flags(); public native AVIndexEntry flags(int flags);
     public native @NoOffset int size(); public native AVIndexEntry size(int size); //Yeah, trying to keep the size of this small to reduce memory requirements (it is 24 vs. 32 bytes due to possible 8-byte alignment).
@@ -2267,17 +2267,17 @@ public static class AVStream extends Pointer {
      * \note The ASF header does NOT contain a correct start_time the ASF
      * demuxer must NOT set this.
      */
-    public native long start_time(); public native AVStream start_time(long start_time);
+    public native @Cast("int64_t") long start_time(); public native AVStream start_time(long start_time);
 
     /**
      * Decoding: duration of the stream, in stream time base.
      * If a source file does not specify a duration, but does specify
      * a bitrate, this value will be estimated from bitrate and file size.
      */
-    public native long duration(); public native AVStream duration(long duration);
+    public native @Cast("int64_t") long duration(); public native AVStream duration(long duration);
 
     /** number of frames in this stream if known or 0 */
-    public native long nb_frames(); public native AVStream nb_frames(long nb_frames);
+    public native @Cast("int64_t") long nb_frames(); public native AVStream nb_frames(long nb_frames);
 
     /** AV_DISPOSITION_* bit field */
     public native int disposition(); public native AVStream disposition(int disposition);
@@ -2357,13 +2357,13 @@ public static final int AVSTREAM_EVENT_FLAG_METADATA_UPDATED = 0x0001;
      * Stream information used internally by av_find_stream_info()
      */
 public static final int MAX_STD_TIMEBASES = (30*12+30+3+6);
-        @Name({"info", ".last_dts"}) public native long info_last_dts(int i); public native AVStream info_last_dts(int i, long info_last_dts);
-        @Name({"info", ".duration_gcd"}) public native long info_duration_gcd(int i); public native AVStream info_duration_gcd(int i, long info_duration_gcd);
+        @Name({"info", ".last_dts"}) public native @Cast("int64_t") long info_last_dts(int i); public native AVStream info_last_dts(int i, long info_last_dts);
+        @Name({"info", ".duration_gcd"}) public native @Cast("int64_t") long info_duration_gcd(int i); public native AVStream info_duration_gcd(int i, long info_duration_gcd);
         @Name({"info", ".duration_count"}) public native int info_duration_count(int i); public native AVStream info_duration_count(int i, int info_duration_count);
-        @Name({"info", ".rfps_duration_sum"}) public native long info_rfps_duration_sum(int i); public native AVStream info_rfps_duration_sum(int i, long info_rfps_duration_sum);
+        @Name({"info", ".rfps_duration_sum"}) public native @Cast("int64_t") long info_rfps_duration_sum(int i); public native AVStream info_rfps_duration_sum(int i, long info_rfps_duration_sum);
         @Name({"info", ".duration_error"}) @MemberGetter public native @Cast("double*") DoublePointer info_duration_error(int i);
-        @Name({"info", ".codec_info_duration"}) public native long info_codec_info_duration(int i); public native AVStream info_codec_info_duration(int i, long info_codec_info_duration);
-        @Name({"info", ".codec_info_duration_fields"}) public native long info_codec_info_duration_fields(int i); public native AVStream info_codec_info_duration_fields(int i, long info_codec_info_duration_fields);
+        @Name({"info", ".codec_info_duration"}) public native @Cast("int64_t") long info_codec_info_duration(int i); public native AVStream info_codec_info_duration(int i, long info_codec_info_duration);
+        @Name({"info", ".codec_info_duration_fields"}) public native @Cast("int64_t") long info_codec_info_duration_fields(int i); public native AVStream info_codec_info_duration_fields(int i, long info_codec_info_duration_fields);
 
         /**
          * 0  -> decoder has not been searched for yet.
@@ -2372,14 +2372,14 @@ public static final int MAX_STD_TIMEBASES = (30*12+30+3+6);
          */
         @Name({"info", ".found_decoder"}) public native int info_found_decoder(int i); public native AVStream info_found_decoder(int i, int info_found_decoder);
 
-        @Name({"info", ".last_duration"}) public native long info_last_duration(int i); public native AVStream info_last_duration(int i, long info_last_duration);
+        @Name({"info", ".last_duration"}) public native @Cast("int64_t") long info_last_duration(int i); public native AVStream info_last_duration(int i, long info_last_duration);
 
         /**
          * Those are used for average framerate estimation.
          */
-        @Name({"info", ".fps_first_dts"}) public native long info_fps_first_dts(int i); public native AVStream info_fps_first_dts(int i, long info_fps_first_dts);
+        @Name({"info", ".fps_first_dts"}) public native @Cast("int64_t") long info_fps_first_dts(int i); public native AVStream info_fps_first_dts(int i, long info_fps_first_dts);
         @Name({"info", ".fps_first_dts_idx"}) public native int info_fps_first_dts_idx(int i); public native AVStream info_fps_first_dts_idx(int i, int info_fps_first_dts_idx);
-        @Name({"info", ".fps_last_dts"}) public native long info_fps_last_dts(int i); public native AVStream info_fps_last_dts(int i, long info_fps_last_dts);
+        @Name({"info", ".fps_last_dts"}) public native @Cast("int64_t") long info_fps_last_dts(int i); public native AVStream info_fps_last_dts(int i, long info_fps_last_dts);
         @Name({"info", ".fps_last_dts_idx"}) public native int info_fps_last_dts_idx(int i); public native AVStream info_fps_last_dts_idx(int i, int info_fps_last_dts_idx);
 
     /** number of bits in pts (used for wrapping control) */
@@ -2393,9 +2393,9 @@ public static final int MAX_STD_TIMEBASES = (30*12+30+3+6);
      * a DTS is received from the underlying container. Otherwise set to
      * AV_NOPTS_VALUE by default.
      */
-    public native long first_dts(); public native AVStream first_dts(long first_dts);
-    public native long cur_dts(); public native AVStream cur_dts(long cur_dts);
-    public native long last_IP_pts(); public native AVStream last_IP_pts(long last_IP_pts);
+    public native @Cast("int64_t") long first_dts(); public native AVStream first_dts(long first_dts);
+    public native @Cast("int64_t") long cur_dts(); public native AVStream cur_dts(long cur_dts);
+    public native @Cast("int64_t") long last_IP_pts(); public native AVStream last_IP_pts(long last_IP_pts);
     public native int last_IP_duration(); public native AVStream last_IP_duration(int last_IP_duration);
 
     /**
@@ -2418,8 +2418,8 @@ public static final int MAX_STD_TIMEBASES = (30*12+30+3+6);
     public native AVPacketList last_in_packet_buffer(); public native AVStream last_in_packet_buffer(AVPacketList last_in_packet_buffer);
     public native @ByRef AVProbeData probe_data(); public native AVStream probe_data(AVProbeData probe_data);
 public static final int MAX_REORDER_DELAY = 16;
-    public native long pts_buffer(int i); public native AVStream pts_buffer(int i, long pts_buffer);
-    @MemberGetter public native LongPointer pts_buffer();
+    public native @Cast("int64_t") long pts_buffer(int i); public native AVStream pts_buffer(int i, long pts_buffer);
+    @MemberGetter public native @Cast("int64_t*") LongPointer pts_buffer();
 
     /** Only used if the format does not
                                         support seeking natively. */
@@ -2447,8 +2447,8 @@ public static final int MAX_REORDER_DELAY = 16;
      */
     public native int stream_identifier(); public native AVStream stream_identifier(int stream_identifier);
 
-    public native long interleaver_chunk_size(); public native AVStream interleaver_chunk_size(long interleaver_chunk_size);
-    public native long interleaver_chunk_duration(); public native AVStream interleaver_chunk_duration(long interleaver_chunk_duration);
+    public native @Cast("int64_t") long interleaver_chunk_size(); public native AVStream interleaver_chunk_size(long interleaver_chunk_size);
+    public native @Cast("int64_t") long interleaver_chunk_duration(); public native AVStream interleaver_chunk_duration(long interleaver_chunk_duration);
 
     /**
      * stream probing state
@@ -2476,7 +2476,7 @@ public static final int MAX_REORDER_DELAY = 16;
      * Intended for use with formats such as mp3 with ad-hoc gapless audio
      * support.
      */
-    public native long start_skip_samples(); public native AVStream start_skip_samples(long start_skip_samples);
+    public native @Cast("int64_t") long start_skip_samples(); public native AVStream start_skip_samples(long start_skip_samples);
 
     /**
      * If not 0, the first audio sample that should be discarded from the stream.
@@ -2484,14 +2484,14 @@ public static final int MAX_REORDER_DELAY = 16;
      * avoided for broken by design formats such as mp3 with ad-hoc gapless
      * audio support.
      */
-    public native long first_discard_sample(); public native AVStream first_discard_sample(long first_discard_sample);
+    public native @Cast("int64_t") long first_discard_sample(); public native AVStream first_discard_sample(long first_discard_sample);
 
     /**
      * The sample after last sample that is intended to be discarded after
      * first_discard_sample. Works on frame boundaries only. Used to prevent
      * early EOF if the gapless info is broken (considered concatenated mp3s).
      */
-    public native long last_discard_sample(); public native AVStream last_discard_sample(long last_discard_sample);
+    public native @Cast("int64_t") long last_discard_sample(); public native AVStream last_discard_sample(long last_discard_sample);
 
     /**
      * Number of internally decoded frames, used internally in libavformat, do not access
@@ -2503,12 +2503,12 @@ public static final int MAX_REORDER_DELAY = 16;
      * Timestamp offset added to timestamps before muxing
      * NOT PART OF PUBLIC API
      */
-    public native long mux_ts_offset(); public native AVStream mux_ts_offset(long mux_ts_offset);
+    public native @Cast("int64_t") long mux_ts_offset(); public native AVStream mux_ts_offset(long mux_ts_offset);
 
     /**
      * Internal data to check for wrapping of the time stamp
      */
-    public native long pts_wrap_reference(); public native AVStream pts_wrap_reference(long pts_wrap_reference);
+    public native @Cast("int64_t") long pts_wrap_reference(); public native AVStream pts_wrap_reference(long pts_wrap_reference);
 
     /**
      * Options for behavior, when a wrap is detected.
@@ -2530,15 +2530,15 @@ public static final int MAX_REORDER_DELAY = 16;
     /**
      * Internal data to generate dts from pts
      */
-    public native long pts_reorder_error(int i); public native AVStream pts_reorder_error(int i, long pts_reorder_error);
-    @MemberGetter public native LongPointer pts_reorder_error();
+    public native @Cast("int64_t") long pts_reorder_error(int i); public native AVStream pts_reorder_error(int i, long pts_reorder_error);
+    @MemberGetter public native @Cast("int64_t*") LongPointer pts_reorder_error();
     public native @Cast("uint8_t") byte pts_reorder_error_count(int i); public native AVStream pts_reorder_error_count(int i, byte pts_reorder_error_count);
     @MemberGetter public native @Cast("uint8_t*") BytePointer pts_reorder_error_count();
 
     /**
      * Internal data to analyze DTS and detect faulty mpeg streams
      */
-    public native long last_dts_for_order_check(); public native AVStream last_dts_for_order_check(long last_dts_for_order_check);
+    public native @Cast("int64_t") long last_dts_for_order_check(); public native AVStream last_dts_for_order_check(long last_dts_for_order_check);
     public native @Cast("uint8_t") byte dts_ordered(); public native AVStream dts_ordered(byte dts_ordered);
     public native @Cast("uint8_t") byte dts_misordered(); public native AVStream dts_misordered(byte dts_misordered);
 
@@ -2583,7 +2583,7 @@ public static final int MAX_REORDER_DELAY = 16;
  *
  * the retuned value is undefined when used with a demuxer.
  */
-@NoException public static native long av_stream_get_end_pts(@Const AVStream st);
+@NoException public static native @Cast("int64_t") long av_stream_get_end_pts(@Const AVStream st);
 
 public static final int AV_PROGRAM_RUNNING = 1;
 
@@ -2626,11 +2626,11 @@ public static class AVProgram extends Pointer {
      * New public fields should be added right above.
      *****************************************************************
      */
-    public native long start_time(); public native AVProgram start_time(long start_time);
-    public native long end_time(); public native AVProgram end_time(long end_time);
+    public native @Cast("int64_t") long start_time(); public native AVProgram start_time(long start_time);
+    public native @Cast("int64_t") long end_time(); public native AVProgram end_time(long end_time);
 
     /** reference dts for wrap detection */
-    public native long pts_wrap_reference(); public native AVProgram pts_wrap_reference(long pts_wrap_reference);
+    public native @Cast("int64_t") long pts_wrap_reference(); public native AVProgram pts_wrap_reference(long pts_wrap_reference);
     /** behavior on wrap detection */
     public native int pts_wrap_behavior(); public native AVProgram pts_wrap_behavior(int pts_wrap_behavior);
 }
@@ -2658,8 +2658,8 @@ public static class AVChapter extends Pointer {
     /** time base in which the start/end timestamps are specified */
     public native @ByRef AVRational time_base(); public native AVChapter time_base(AVRational time_base);
     /** chapter start/end time in time_base units */
-    public native long start(); public native AVChapter start(long start);
-    public native long end(); public native AVChapter end(long end);
+    public native @Cast("int64_t") long start(); public native AVChapter start(long start);
+    public native @Cast("int64_t") long end(); public native AVChapter end(long end);
     public native AVDictionary metadata(); public native AVChapter metadata(AVDictionary metadata);
 }
 
@@ -2815,7 +2815,7 @@ public static class AVFormatContext extends Pointer {
      *
      * Demuxing only, set by libavformat.
      */
-    public native long start_time(); public native AVFormatContext start_time(long start_time);
+    public native @Cast("int64_t") long start_time(); public native AVFormatContext start_time(long start_time);
 
     /**
      * Duration of the stream, in AV_TIME_BASE fractional
@@ -2825,14 +2825,14 @@ public static class AVFormatContext extends Pointer {
      *
      * Demuxing only, set by libavformat.
      */
-    public native long duration(); public native AVFormatContext duration(long duration);
+    public native @Cast("int64_t") long duration(); public native AVFormatContext duration(long duration);
 
     /**
      * Total stream bitrate in bit/s, 0 if not
      * available. Never set it directly if the file_size and the
      * duration are known as FFmpeg can compute it automatically.
      */
-    public native long bit_rate(); public native AVFormatContext bit_rate(long bit_rate);
+    public native @Cast("int64_t") long bit_rate(); public native AVFormatContext bit_rate(long bit_rate);
 
     public native @Cast("unsigned int") int packet_size(); public native AVFormatContext packet_size(int packet_size);
     public native int max_delay(); public native AVFormatContext max_delay(int max_delay);
@@ -2885,7 +2885,7 @@ public static final int AVFMT_FLAG_FAST_SEEK =   0x80000;
      * the input container format.
      * Demuxing only, set by the caller before avformat_open_input().
      */
-    public native long probesize(); public native AVFormatContext probesize(long probesize);
+    public native @Cast("int64_t") long probesize(); public native AVFormatContext probesize(long probesize);
 
     /**
      * Maximum duration (in AV_TIME_BASE units) of the data read
@@ -2893,7 +2893,7 @@ public static final int AVFMT_FLAG_FAST_SEEK =   0x80000;
      * Demuxing only, set by the caller before avformat_find_stream_info().
      * Can be set to 0 to let avformat choose using a heuristic.
      */
-    public native long max_analyze_duration(); public native AVFormatContext max_analyze_duration(long max_analyze_duration);
+    public native @Cast("int64_t") long max_analyze_duration(); public native AVFormatContext max_analyze_duration(long max_analyze_duration);
 
     @MemberGetter public native @Cast("const uint8_t*") BytePointer key();
     public native int keylen(); public native AVFormatContext keylen(int keylen);
@@ -2974,7 +2974,7 @@ public static final int AVFMT_FLAG_FAST_SEEK =   0x80000;
      *             the value may become known after some number of frames
      *             have been received.
      */
-    public native long start_time_realtime(); public native AVFormatContext start_time_realtime(long start_time_realtime);
+    public native @Cast("int64_t") long start_time_realtime(); public native AVFormatContext start_time_realtime(long start_time_realtime);
 
     /**
      * The number of frames used for determining the framerate in
@@ -3023,7 +3023,7 @@ public static final int FF_FDEBUG_TS =        0x0001;
      *
      * Muxing only, set by the caller before avformat_write_header().
      */
-    public native long max_interleave_delta(); public native AVFormatContext max_interleave_delta(long max_interleave_delta);
+    public native @Cast("int64_t") long max_interleave_delta(); public native AVFormatContext max_interleave_delta(long max_interleave_delta);
 
     /**
      * Allow non-standard and experimental extension
@@ -3119,7 +3119,7 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
      * - encoding: unused
      * - decoding: Set by user via AVOptions (NO direct access)
      */
-    public native long skip_initial_bytes(); public native AVFormatContext skip_initial_bytes(long skip_initial_bytes);
+    public native @Cast("int64_t") long skip_initial_bytes(); public native AVFormatContext skip_initial_bytes(long skip_initial_bytes);
 
     /**
      * Correct single timestamp overflows
@@ -3242,7 +3242,7 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
      * Output timestamp offset, in microseconds.
      * Muxing: set by user via AVOptions (NO direct access)
      */
-    public native long output_ts_offset(); public native AVFormatContext output_ts_offset(long output_ts_offset);
+    public native @Cast("int64_t") long output_ts_offset(); public native AVFormatContext output_ts_offset(long output_ts_offset);
 
     /**
      * dump format separator.
@@ -3781,7 +3781,7 @@ public static class AVPacketList extends Pointer {
  * @param flags flags which select direction and seeking mode
  * @return >= 0 on success
  */
-@NoException public static native int av_seek_frame(AVFormatContext s, int stream_index, long timestamp,
+@NoException public static native int av_seek_frame(AVFormatContext s, int stream_index, @Cast("int64_t") long timestamp,
                   int flags);
 
 /**
@@ -3812,7 +3812,7 @@ public static class AVPacketList extends Pointer {
  *       Thus do not use this yet. It may change at any time, do not expect
  *       ABI compatibility yet!
  */
-@NoException public static native int avformat_seek_file(AVFormatContext s, int stream_index, long min_ts, long ts, long max_ts, int flags);
+@NoException public static native int avformat_seek_file(AVFormatContext s, int stream_index, @Cast("int64_t") long min_ts, @Cast("int64_t") long ts, @Cast("int64_t") long max_ts, int flags);
 
 /**
  * Discard all internally buffered data. This can be useful when dealing with
@@ -4060,11 +4060,11 @@ public static final int AVSEEK_FLAG_FRAME =    8;
  * atomically.
  */
 @NoException public static native int av_get_output_timestamp(AVFormatContext s, int stream,
-                            LongPointer dts, LongPointer wall);
+                            @Cast("int64_t*") LongPointer dts, @Cast("int64_t*") LongPointer wall);
 @NoException public static native int av_get_output_timestamp(AVFormatContext s, int stream,
-                            LongBuffer dts, LongBuffer wall);
+                            @Cast("int64_t*") LongBuffer dts, @Cast("int64_t*") LongBuffer wall);
 @NoException public static native int av_get_output_timestamp(AVFormatContext s, int stream,
-                            long[] dts, long[] wall);
+                            @Cast("int64_t*") long[] dts, @Cast("int64_t*") long[] wall);
 
 
 /**
@@ -4188,7 +4188,7 @@ public static final int AVSEEK_FLAG_FRAME =    8;
  *              if AVSEEK_FLAG_ANY seek to any frame, only keyframes otherwise
  * @return < 0 if no such timestamp could be found
  */
-@NoException public static native int av_index_search_timestamp(AVStream st, long timestamp, int flags);
+@NoException public static native int av_index_search_timestamp(AVStream st, @Cast("int64_t") long timestamp, int flags);
 
 /**
  * Add an index entry into a sorted list. Update the entry if the list
@@ -4196,7 +4196,7 @@ public static final int AVSEEK_FLAG_FRAME =    8;
  *
  * @param timestamp timestamp in the time base of the given stream
  */
-@NoException public static native int av_add_index_entry(AVStream st, long pos, long timestamp,
+@NoException public static native int av_add_index_entry(AVStream st, @Cast("int64_t") long pos, @Cast("int64_t") long timestamp,
                        int size, int distance, int flags);
 
 
