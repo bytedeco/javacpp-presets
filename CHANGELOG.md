@@ -1,4 +1,5 @@
 
+ * Lower Maven prerequisite in the `pom.xml` file to 3.0 ([issue bytedeco/javacpp#93](https://github.com/bytedeco/javacpp/issues/93))
  * Include the `Descriptor` and `Message` APIs in the presets for Caffe ([issue #196](https://github.com/bytedeco/javacpp-presets/issues/196))
  * Prevent creating text relocations for shared libraries on Android ([issue bytedeco/javacv#245](https://github.com/bytedeco/javacv/issues/245))
  * Make sure to include only native libraries in platform specific JAR files ([pull bytedeco/javacpp#89](https://github.com/bytedeco/javacpp/pull/89))
