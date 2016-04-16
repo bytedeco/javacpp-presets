@@ -180,6 +180,24 @@ public static class CXString extends Pointer {
   public native @Cast("unsigned") int private_flags(); public native CXString private_flags(int private_flags);
 }
 
+public static class CXStringSet extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public CXStringSet() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public CXStringSet(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public CXStringSet(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public CXStringSet position(long position) {
+        return (CXStringSet)super.position(position);
+    }
+
+  public native CXString Strings(); public native CXStringSet Strings(CXString Strings);
+  public native @Cast("unsigned") int Count(); public native CXStringSet Count(int Count);
+}
+
 /**
  * \brief Retrieve the character data associated with the given string.
  */
@@ -189,6 +207,11 @@ public static native @Cast("const char*") BytePointer clang_getCString(@ByVal CX
  * \brief Free the given string.
  */
 public static native void clang_disposeString(@ByVal CXString string);
+
+/**
+ * \brief Free the given string set.
+ */
+public static native void clang_disposeStringSet(CXStringSet set);
 
 /**
  * \}
@@ -346,6 +369,11 @@ public static native CXCompileCommand clang_CompileCommands_getCommand(CXCompile
  * \brief Get the working directory where the CompileCommand was executed from
  */
 public static native @ByVal CXString clang_CompileCommand_getDirectory(CXCompileCommand arg0);
+
+/**
+ * \brief Get the filename associated with the CompileCommand.
+ */
+public static native @ByVal CXString clang_CompileCommand_getFilename(CXCompileCommand arg0);
 
 /**
  * \brief Get the number of arguments in the compiler invocation.
@@ -607,7 +635,7 @@ public static native void clang_ModuleMapDescriptor_dispose(CXModuleMapDescripto
  * compatible, thus CINDEX_VERSION_MAJOR is expected to remain stable.
  */
 public static final int CINDEX_VERSION_MAJOR = 0;
-public static final int CINDEX_VERSION_MINOR = 30;
+public static final int CINDEX_VERSION_MINOR = 32;
 
 // #define CINDEX_VERSION_ENCODE(major, minor) (
 //       ((major) * 10000)
@@ -902,7 +930,6 @@ public static native @Cast("unsigned") int clang_CXIndex_getGlobalOptions(CXInde
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CXFile(Pointer p) { super(p); }
 }
-
 
 /**
  * \brief Retrieve the complete file and path name of the given file.
@@ -1436,7 +1463,6 @@ public static native @Cast("unsigned") int clang_getNumDiagnosticsInSet(CXDiagno
  */
 public static native CXDiagnostic clang_getDiagnosticInSet(CXDiagnosticSet Diags,
                                                      @Cast("unsigned") int Index);  
-
 
 /**
  * \brief Describes the kind of error that occurred (if any) in a call to
@@ -1995,7 +2021,15 @@ public static final int
    * included into the set of code completions returned from this translation
    * unit.
    */
-  CXTranslationUnit_IncludeBriefCommentsInCodeCompletion =  0x80;
+  CXTranslationUnit_IncludeBriefCommentsInCodeCompletion =  0x80,
+
+  /**
+   * \brief Used to indicate that the precompiled preamble should be created on
+   * the first parse. Otherwise it will be created on the first reparse. This
+   * trades runtime on the first parse (serializing the preamble takes time) for
+   * reduced runtime on the second parse (can now reuse the preamble).
+   */
+  CXTranslationUnit_CreatePreambleOnFirstParse =  0x100;
 
 /**
  * \brief Returns the set of flags that is suitable for parsing a translation
@@ -2167,6 +2201,47 @@ public static native @Cast("CXErrorCode") int clang_parseTranslationUnit2(CXInde
                             @Cast("unsigned") int num_unsaved_files,
                             @Cast("unsigned") int options,
                             @Cast("CXTranslationUnit*") PointerPointer out_TU);
+
+/**
+ * \brief Same as clang_parseTranslationUnit2 but requires a full command line
+ * for \c command_line_args including argv[0]. This is useful if the standard
+ * library paths are relative to the binary.
+ */
+public static native @Cast("CXErrorCode") int clang_parseTranslationUnit2FullArgv(
+    CXIndex CIdx, @Cast("const char*") BytePointer source_filename,
+    @Cast("const char*const*") PointerPointer command_line_args, int num_command_line_args,
+    CXUnsavedFile unsaved_files, @Cast("unsigned") int num_unsaved_files,
+    @Cast("unsigned") int options, @ByPtrPtr CXTranslationUnit out_TU);
+public static native @Cast("CXErrorCode") int clang_parseTranslationUnit2FullArgv(
+    CXIndex CIdx, @Cast("const char*") BytePointer source_filename,
+    @Cast("const char*const*") @ByPtrPtr BytePointer command_line_args, int num_command_line_args,
+    CXUnsavedFile unsaved_files, @Cast("unsigned") int num_unsaved_files,
+    @Cast("unsigned") int options, @ByPtrPtr CXTranslationUnit out_TU);
+public static native @Cast("CXErrorCode") int clang_parseTranslationUnit2FullArgv(
+    CXIndex CIdx, String source_filename,
+    @Cast("const char*const*") @ByPtrPtr ByteBuffer command_line_args, int num_command_line_args,
+    CXUnsavedFile unsaved_files, @Cast("unsigned") int num_unsaved_files,
+    @Cast("unsigned") int options, @Cast("CXTranslationUnit*") PointerPointer out_TU);
+public static native @Cast("CXErrorCode") int clang_parseTranslationUnit2FullArgv(
+    CXIndex CIdx, @Cast("const char*") BytePointer source_filename,
+    @Cast("const char*const*") @ByPtrPtr byte[] command_line_args, int num_command_line_args,
+    CXUnsavedFile unsaved_files, @Cast("unsigned") int num_unsaved_files,
+    @Cast("unsigned") int options, @ByPtrPtr CXTranslationUnit out_TU);
+public static native @Cast("CXErrorCode") int clang_parseTranslationUnit2FullArgv(
+    CXIndex CIdx, String source_filename,
+    @Cast("const char*const*") @ByPtrPtr BytePointer command_line_args, int num_command_line_args,
+    CXUnsavedFile unsaved_files, @Cast("unsigned") int num_unsaved_files,
+    @Cast("unsigned") int options, @Cast("CXTranslationUnit*") PointerPointer out_TU);
+public static native @Cast("CXErrorCode") int clang_parseTranslationUnit2FullArgv(
+    CXIndex CIdx, @Cast("const char*") BytePointer source_filename,
+    @Cast("const char*const*") @ByPtrPtr ByteBuffer command_line_args, int num_command_line_args,
+    CXUnsavedFile unsaved_files, @Cast("unsigned") int num_unsaved_files,
+    @Cast("unsigned") int options, @ByPtrPtr CXTranslationUnit out_TU);
+public static native @Cast("CXErrorCode") int clang_parseTranslationUnit2FullArgv(
+    CXIndex CIdx, String source_filename,
+    @Cast("const char*const*") @ByPtrPtr byte[] command_line_args, int num_command_line_args,
+    CXUnsavedFile unsaved_files, @Cast("unsigned") int num_unsaved_files,
+    @Cast("unsigned") int options, @Cast("CXTranslationUnit*") PointerPointer out_TU);
 
 /**
  * \brief Flags that control how translation units are saved.
@@ -2482,7 +2557,7 @@ public static final int
   CXCursor_ObjCImplementationDecl        = 18,
   /** \brief An Objective-C \\implementation for a category. */
   CXCursor_ObjCCategoryImplDecl          = 19,
-  /** \brief A typedef */
+  /** \brief A typedef. */
   CXCursor_TypedefDecl                   = 20,
   /** \brief A C++ class method. */
   CXCursor_CXXMethod                     = 21,
@@ -2891,7 +2966,11 @@ public static final int
    */
   CXCursor_ObjCSelfExpr                  = 146,
 
-  CXCursor_LastExpr                      =  CXCursor_ObjCSelfExpr,
+  /** \brief OpenMP 4.0 [2.4, Array Section].
+   */
+  CXCursor_OMPArraySectionExpr           = 147,
+
+  CXCursor_LastExpr                      =  CXCursor_OMPArraySectionExpr,
 
   /* Statements */
   CXCursor_FirstStmt                     = 200,
@@ -3136,17 +3215,33 @@ public static final int
 
   /** \brief OpenMP taskgroup directive.
    */
-  CXCursor_OMPTaskgroupDirective          = 254,
+  CXCursor_OMPTaskgroupDirective         = 254,
 
   /** \brief OpenMP cancellation point directive.
    */
-  CXCursor_OMPCancellationPointDirective  = 255,
+  CXCursor_OMPCancellationPointDirective = 255,
 
   /** \brief OpenMP cancel directive.
    */
-  CXCursor_OMPCancelDirective             = 256,
+  CXCursor_OMPCancelDirective            = 256,
 
-  CXCursor_LastStmt                    =  CXCursor_OMPCancelDirective,
+  /** \brief OpenMP target data directive.
+   */
+  CXCursor_OMPTargetDataDirective        = 257,
+
+  /** \brief OpenMP taskloop directive.
+   */
+  CXCursor_OMPTaskLoopDirective          = 258,
+
+  /** \brief OpenMP taskloop simd directive.
+   */
+  CXCursor_OMPTaskLoopSimdDirective      = 259,
+
+   /** \brief OpenMP distribute directive.
+   */
+  CXCursor_OMPDistributeDirective        = 260,
+
+  CXCursor_LastStmt                      =  CXCursor_OMPDistributeDirective,
 
   /**
    * \brief Cursor that represents the translation unit itself.
@@ -3180,7 +3275,10 @@ public static final int
   CXCursor_CUDAGlobalAttr                = 414,
   CXCursor_CUDAHostAttr                  = 415,
   CXCursor_CUDASharedAttr                = 416,
-  CXCursor_LastAttr                      =  CXCursor_CUDASharedAttr,
+  CXCursor_VisibilityAttr                = 417,
+  CXCursor_DLLExport                     = 418,
+  CXCursor_DLLImport                     = 419,
+  CXCursor_LastAttr                      =  CXCursor_DLLImport,
 
   /* Preprocessing */
   CXCursor_PreprocessingDirective        = 500,
@@ -3196,8 +3294,9 @@ public static final int
    * \brief A module import declaration.
    */
   CXCursor_ModuleImportDecl              = 600,
+  CXCursor_TypeAliasTemplateDecl         = 601,
   CXCursor_FirstExtraDecl                =  CXCursor_ModuleImportDecl,
-  CXCursor_LastExtraDecl                 =  CXCursor_ModuleImportDecl,
+  CXCursor_LastExtraDecl                 =  CXCursor_TypeAliasTemplateDecl,
 
   /**
    * \brief A code completion overload candidate.
@@ -3361,6 +3460,32 @@ public static final int
  */
 public static native @Cast("CXLinkageKind") int clang_getCursorLinkage(@ByVal CXCursor cursor);
 
+/** enum CXVisibilityKind */
+public static final int
+  /** \brief This value indicates that no visibility information is available
+   * for a provided CXCursor. */
+  CXVisibility_Invalid = 0,
+
+  /** \brief Symbol not seen by the linker. */
+  CXVisibility_Hidden = 1,
+  /** \brief Symbol seen by the linker but resolves to a symbol inside this object. */
+  CXVisibility_Protected = 2,
+  /** \brief Symbol seen by the linker and acts like a normal symbol. */
+  CXVisibility_Default = 3;
+
+/**
+ * \brief Describe the visibility of the entity referred to by a cursor.
+ *
+ * This returns the default visibility if not explicitly specified by
+ * a visibility attribute. The default visibility may be changed by
+ * commandline arguments.
+ *
+ * @param cursor The cursor to query.
+ *
+ * @return The visibility of the cursor.
+ */
+public static native @Cast("CXVisibilityKind") int clang_getCursorVisibility(@ByVal CXCursor cursor);
+
 /**
  * \brief Determine the availability of the entity that this cursor refers to,
  * taking the current target platform into account.
@@ -3503,7 +3628,6 @@ public static native @Cast("CXLanguageKind") int clang_getCursorLanguage(@ByVal 
  * \brief Returns the translation unit that a cursor originated from.
  */
 public static native CXTranslationUnit clang_Cursor_getTranslationUnit(@ByVal CXCursor arg0);
-
 
 /**
  * \brief A fast container representing a set of CXCursors.
@@ -3812,7 +3936,8 @@ public static final int
   CXType_IncompleteArray = 114,
   CXType_VariableArray = 115,
   CXType_DependentSizedArray = 116,
-  CXType_MemberPointer = 117;
+  CXType_MemberPointer = 117,
+  CXType_Auto = 118;
 
 /**
  * \brief Describes the calling convention of a function type
@@ -3835,7 +3960,6 @@ public static final int
 
   CXCallingConv_Invalid = 100,
   CXCallingConv_Unexposed = 200;
-
 
 /**
  * \brief The type of an element in the abstract syntax tree.
@@ -4289,7 +4413,6 @@ public static native long clang_Cursor_getOffsetOfField(@ByVal CXCursor C);
  */
 public static native @Cast("unsigned") int clang_Cursor_isAnonymous(@ByVal CXCursor C);
 
-
 /** enum CXRefQualifierKind */
 public static final int
   /** \brief No ref-qualifier was provided. */
@@ -4417,7 +4540,6 @@ public static native @ByVal CXCursor clang_getOverloadedDecl(@ByVal CXCursor cur
  *
  * \{
  */
-
 
 /**
  * \brief For cursors representing an iboutletcollection attribute,
@@ -4562,7 +4684,6 @@ public static native @ByVal CXString clang_constructUSR_ObjCCategory(String clas
 public static native @ByVal CXString clang_constructUSR_ObjCProtocol(@Cast("const char*") BytePointer protocol_name);
 public static native @ByVal CXString clang_constructUSR_ObjCProtocol(String protocol_name);
 
-
 /**
  * \brief Construct a USR for a specified Objective-C instance variable and
  *   the USR for its containing class.
@@ -4695,7 +4816,6 @@ public static native @Cast("unsigned") int clang_isCursorDefinition(@ByVal CXCur
  */
 public static native @ByVal CXCursor clang_getCanonicalCursor(@ByVal CXCursor arg0);
 
-
 /**
  * \brief If the cursor points to a selector identifier in an Objective-C
  * method or message expression, this returns the selector index.
@@ -4826,6 +4946,12 @@ public static native @ByVal CXString clang_Cursor_getBriefCommentText(@ByVal CXC
 public static native @ByVal CXString clang_Cursor_getMangling(@ByVal CXCursor arg0);
 
 /**
+ * \brief Retrieve the CXStrings representing the mangled symbols of the C++
+ * constructor or destructor at the cursor.
+ */
+public static native CXStringSet clang_Cursor_getCXXManglings(@ByVal CXCursor arg0);
+
+/**
  * \}
  */
 
@@ -4922,6 +5048,11 @@ public static native CXFile clang_Module_getTopLevelHeader(CXTranslationUnit arg
  *
  * \{
  */
+
+/**
+ * \brief Determine if a C++ field is declared 'mutable'.
+ */
+public static native @Cast("unsigned") int clang_CXXField_isMutable(@ByVal CXCursor C);
 
 /**
  * \brief Determine if a C++ member function or member function template is
@@ -5993,8 +6124,7 @@ public static native @Cast("CXCursorKind") int clang_codeCompleteGetContainerKin
  * @return the USR for the container
  */
 public static native @ByVal CXString clang_codeCompleteGetContainerUSR(CXCodeCompleteResults Results);
-  
-  
+
 /**
  * \brief Returns the currently-entered selector for an Objective-C message
  * send, formatted like "initWithFoo:bar:". Only guaranteed to return a
@@ -6012,7 +6142,6 @@ public static native @ByVal CXString clang_codeCompleteGetObjCSelector(CXCodeCom
  * \}
  */
 
-
 /**
  * \defgroup CINDEX_MISC Miscellaneous utility functions
  *
@@ -6025,7 +6154,6 @@ public static native @ByVal CXString clang_codeCompleteGetObjCSelector(CXCodeCom
  */
 public static native @ByVal CXString clang_getClangVersion();
 
-  
 /**
  * \brief Enable/disable crash recovery.
  *
@@ -7125,6 +7253,54 @@ public static native int clang_indexSourceFile(CXIndexAction arg0,
                                          @Cast("unsigned") int TU_options);
 
 /**
+ * \brief Same as clang_indexSourceFile but requires a full command line
+ * for \c command_line_args including argv[0]. This is useful if the standard
+ * library paths are relative to the binary.
+ */
+public static native int clang_indexSourceFileFullArgv(
+    CXIndexAction arg0, CXClientData client_data, IndexerCallbacks index_callbacks,
+    @Cast("unsigned") int index_callbacks_size, @Cast("unsigned") int index_options,
+    @Cast("const char*") BytePointer source_filename, @Cast("const char*const*") PointerPointer command_line_args,
+    int num_command_line_args, CXUnsavedFile unsaved_files,
+    @Cast("unsigned") int num_unsaved_files, @ByPtrPtr CXTranslationUnit out_TU, @Cast("unsigned") int TU_options);
+public static native int clang_indexSourceFileFullArgv(
+    CXIndexAction arg0, CXClientData client_data, IndexerCallbacks index_callbacks,
+    @Cast("unsigned") int index_callbacks_size, @Cast("unsigned") int index_options,
+    @Cast("const char*") BytePointer source_filename, @Cast("const char*const*") @ByPtrPtr BytePointer command_line_args,
+    int num_command_line_args, CXUnsavedFile unsaved_files,
+    @Cast("unsigned") int num_unsaved_files, @ByPtrPtr CXTranslationUnit out_TU, @Cast("unsigned") int TU_options);
+public static native int clang_indexSourceFileFullArgv(
+    CXIndexAction arg0, CXClientData client_data, IndexerCallbacks index_callbacks,
+    @Cast("unsigned") int index_callbacks_size, @Cast("unsigned") int index_options,
+    String source_filename, @Cast("const char*const*") @ByPtrPtr ByteBuffer command_line_args,
+    int num_command_line_args, CXUnsavedFile unsaved_files,
+    @Cast("unsigned") int num_unsaved_files, @Cast("CXTranslationUnit*") PointerPointer out_TU, @Cast("unsigned") int TU_options);
+public static native int clang_indexSourceFileFullArgv(
+    CXIndexAction arg0, CXClientData client_data, IndexerCallbacks index_callbacks,
+    @Cast("unsigned") int index_callbacks_size, @Cast("unsigned") int index_options,
+    @Cast("const char*") BytePointer source_filename, @Cast("const char*const*") @ByPtrPtr byte[] command_line_args,
+    int num_command_line_args, CXUnsavedFile unsaved_files,
+    @Cast("unsigned") int num_unsaved_files, @ByPtrPtr CXTranslationUnit out_TU, @Cast("unsigned") int TU_options);
+public static native int clang_indexSourceFileFullArgv(
+    CXIndexAction arg0, CXClientData client_data, IndexerCallbacks index_callbacks,
+    @Cast("unsigned") int index_callbacks_size, @Cast("unsigned") int index_options,
+    String source_filename, @Cast("const char*const*") @ByPtrPtr BytePointer command_line_args,
+    int num_command_line_args, CXUnsavedFile unsaved_files,
+    @Cast("unsigned") int num_unsaved_files, @Cast("CXTranslationUnit*") PointerPointer out_TU, @Cast("unsigned") int TU_options);
+public static native int clang_indexSourceFileFullArgv(
+    CXIndexAction arg0, CXClientData client_data, IndexerCallbacks index_callbacks,
+    @Cast("unsigned") int index_callbacks_size, @Cast("unsigned") int index_options,
+    @Cast("const char*") BytePointer source_filename, @Cast("const char*const*") @ByPtrPtr ByteBuffer command_line_args,
+    int num_command_line_args, CXUnsavedFile unsaved_files,
+    @Cast("unsigned") int num_unsaved_files, @ByPtrPtr CXTranslationUnit out_TU, @Cast("unsigned") int TU_options);
+public static native int clang_indexSourceFileFullArgv(
+    CXIndexAction arg0, CXClientData client_data, IndexerCallbacks index_callbacks,
+    @Cast("unsigned") int index_callbacks_size, @Cast("unsigned") int index_options,
+    String source_filename, @Cast("const char*const*") @ByPtrPtr byte[] command_line_args,
+    int num_command_line_args, CXUnsavedFile unsaved_files,
+    @Cast("unsigned") int num_unsaved_files, @Cast("CXTranslationUnit*") PointerPointer out_TU, @Cast("unsigned") int TU_options);
+
+/**
  * \brief Index the given translation unit via callbacks implemented through
  * #IndexerCallbacks.
  * 
@@ -7223,7 +7399,6 @@ public static native @Cast("unsigned") int clang_Type_visitFields(@ByVal CXType 
                                                CXFieldVisitor visitor,
                                                CXClientData client_data);
 
-
 /**
  * \}
  */
@@ -7235,7 +7410,6 @@ public static native @Cast("unsigned") int clang_Type_visitFields(@ByVal CXType 
 // #ifdef __cplusplus
 // #endif
 // #endif
-
 
 
 // Parsed from <clang-c/Documentation.h>

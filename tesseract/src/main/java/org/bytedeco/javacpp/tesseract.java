@@ -44,7 +44,9 @@ public class tesseract extends org.bytedeco.javacpp.presets.tesseract {
 // #endif  /* __GNUC__ */
 // #define SIGNED
 // #if defined(_MSC_VER)
+// #if (_MSC_VER < 1900)
 // #define snprintf _snprintf
+// #endif
 // #if (_MSC_VER <= 1400)
 // #define vsnprintf _vsnprintf
 // #endif /* (_MSC_VER <= 1400) */
@@ -59,7 +61,7 @@ public static final int MAX_PATH = 4096;
 // #define SIGNED signed
 // #endif
 
-// #ifdef _WIN32
+// #if defined(_WIN32) || defined(__CYGWIN__)
 // #ifndef M_PI
 public static final double M_PI = 3.14159265358979323846;
 // #endif
@@ -427,10 +429,6 @@ public static final int TRUE =            1;
 
 // #ifndef FALSE
 public static final int FALSE =           0;
-// #endif
-
-// #ifndef NULL
-public static final long NULL =            0L;
 // #endif
 
 // Return true if x is within tolerance of y
@@ -2166,6 +2164,17 @@ public static final int
   // The number should be interpreted as a percent probability. (0.0f-100.0f)
   public native float Confidence(@Cast("tesseract::PageIteratorLevel") int level);
 
+  // Returns the attributes of the current row.
+  public native void RowAttributes(FloatPointer row_height,
+                       FloatPointer descenders,
+                       FloatPointer ascenders);
+  public native void RowAttributes(FloatBuffer row_height,
+                       FloatBuffer descenders,
+                       FloatBuffer ascenders);
+  public native void RowAttributes(float[] row_height,
+                       float[] descenders,
+                       float[] ascenders);
+
   // ============= Functions that refer to words only ============.
 
   // Returns the font attributes of the current word. If iterating at a higher
@@ -3396,7 +3405,7 @@ public static class FileWriter extends FunctionPointer {
 
 // Reads a vector of classes from the given file. Assumes the existence of
 // bool T::Deserialize(bool swap, FILE* fp) that returns false in case of
-// error. Alse needs T::T() and T::T(constT&), as init_to_size is used in
+// error. Also needs T::T() and T::T(constT&), as init_to_size is used in
 // this function. Returns false in case of error.
 // If swap is true, assumes a big/little-endian swap is needed.
 
@@ -3451,8 +3460,8 @@ public static class FileWriter extends FunctionPointer {
 // #ifndef TESSERACT_API_BASEAPI_H__
 // #define TESSERACT_API_BASEAPI_H__
 
-public static final String TESSERACT_VERSION_STR = "3.04.00";
-public static final int TESSERACT_VERSION = 0x030400;
+public static final String TESSERACT_VERSION_STR = "3.04.01";
+public static final int TESSERACT_VERSION = 0x030401;
 // #define MAKE_VERSION(major, minor, patch) (((major) << 16) | ((minor) << 8) |
 //                                             (patch))
 
@@ -3542,12 +3551,14 @@ public static final int TESSERACT_VERSION = 0x030400;
     public TBLOB(Pointer p) { super(p); }
 }
 
+// #ifndef NO_CUBE_BUILD
 @Namespace("tesseract") @Opaque public static class CubeRecoContext extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public CubeRecoContext() { super((Pointer)null); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public CubeRecoContext(Pointer p) { super(p); }
 }
+// #endif  // NO_CUBE_BUILD
 @Namespace("tesseract") @Opaque public static class Dawg extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
     public Dawg() { super((Pointer)null); }
@@ -4230,12 +4241,21 @@ public static final int TESSERACT_VERSION = 0x030400;
    * page_number is a 0-based page index that will appear in the box file.
    */
   public native @Cast("char*") BytePointer GetBoxText(int page_number);
+
   /**
    * The recognized text is returned as a char* which is coded
    * as UNLV format Latin-1 with specific reject and suspect codes
    * and must be freed with the delete [] operator.
    */
   public native @Cast("char*") BytePointer GetUNLVText();
+
+  /**
+   * The recognized text is returned as a char* which is coded
+   * as UTF8 and must be freed with the delete [] operator.
+   * page_number is a 0-based page index that will appear in the osd file.
+   */
+  public native @Cast("char*") BytePointer GetOsdText(int page_number);
+
   /** Returns the (average) confidence value between 0 and 100. */
   public native int MeanTextConf();
   /**
@@ -4378,12 +4398,14 @@ public static final int TESSERACT_VERSION = 0x030400;
 
   public native Tesseract tesseract();
 
-  public native @Cast("tesseract::OcrEngineMode const") int oem();
+  public native @Cast("tesseract::OcrEngineMode") int oem();
 
   public native void InitTruthCallback(@Cast("tesseract::TruthCallback*") TruthCallback4 cb);
 
+// #ifndef NO_CUBE_BUILD
   /** Return a pointer to underlying CubeRecoContext object if present. */
   public native CubeRecoContext GetCubeRecoContext();
+// #endif  // NO_CUBE_BUILD
 
   public native void set_min_orientation_margin(double margin);
 
@@ -4454,6 +4476,8 @@ public static final int TESSERACT_VERSION = 0x030400;
 
 // #ifdef TESS_CAPI_INCLUDE_BASEAPI
 // typedef tesseract::ParamsModelClassifyFunc TessParamsModelClassifyFunc;
+// #ifndef NO_CUBE_BUILD
+// #endif  // NO_CUBE_BUILD
 // #else
 // #endif
 
@@ -4768,7 +4792,9 @@ public static native void TessNormalizeTBLOB(TBLOB tblob, ROW row, @Cast("BOOL")
 public static native @Cast("TessOcrEngineMode") int TessBaseAPIOem(@Const TessBaseAPI handle);
 public static native void TessBaseAPIInitTruthCallback(TessBaseAPI handle, @Cast("TessTruthCallback*") TruthCallback4 cb);
 
+// #ifndef NO_CUBE_BUILD
 public static native @Cast("TessCubeRecoContext*") CubeRecoContext TessBaseAPIGetCubeRecoContext(@Const TessBaseAPI handle);
+// #endif  // NO_CUBE_BUILD
 // #endif
 
 public static native void TessBaseAPISetMinOrientationMargin(TessBaseAPI handle, double margin);

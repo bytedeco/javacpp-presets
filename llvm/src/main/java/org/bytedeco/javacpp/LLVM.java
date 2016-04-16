@@ -9,9 +9,9 @@ import org.bytedeco.javacpp.annotation.*;
 public class LLVM extends org.bytedeco.javacpp.presets.LLVM {
     static { Loader.load(); }
 
-// Parsed from <llvm-c/Support.h>
+// Parsed from <llvm-c/Types.h>
 
-/*===-- llvm-c/Support.h - Support C Interface --------------------*- C -*-===*\
+/*===-- llvm-c/Support.h - C Interface Types declarations ---------*- C -*-===*\
 |*                                                                            *|
 |*                     The LLVM Compiler Infrastructure                       *|
 |*                                                                            *|
@@ -20,12 +20,12 @@ public class LLVM extends org.bytedeco.javacpp.presets.LLVM {
 |*                                                                            *|
 |*===----------------------------------------------------------------------===*|
 |*                                                                            *|
-|* This file defines the C interface to the LLVM support library.             *|
+|* This file defines types used by the the C interface to LLVM.               *|
 |*                                                                            *|
 \*===----------------------------------------------------------------------===*/
 
-// #ifndef LLVM_C_SUPPORT_H
-// #define LLVM_C_SUPPORT_H
+// #ifndef LLVM_C_TYPES_H
+// #define LLVM_C_TYPES_H
 
 // #include "llvm/Support/DataTypes.h"
 
@@ -36,6 +36,19 @@ public class LLVM extends org.bytedeco.javacpp.presets.LLVM {
  * \defgroup LLVMCSupportTypes Types and Enumerations
  *
  * \{
+ */
+
+/* Opaque types. */
+
+/**
+ * LLVM uses a polymorphic type hierarchy which C cannot represent, therefore
+ * parameters must be passed as base types. Despite the declared types, most
+ * of the functions provided operate only on branches of the type hierarchy.
+ * The declared parameter names are descriptive and specify which type is
+ * required. Additionally, each type hierarchy is documented along with the
+ * functions that operate upon it. For more detail, refer to LLVM's C++ code.
+ * If in doubt, refer to Core.cpp, which performs parameter downcasts in the
+ * form unwrap<RequiredType>(Param).
  */
 
 /**
@@ -49,135 +62,6 @@ public class LLVM extends org.bytedeco.javacpp.presets.LLVM {
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMMemoryBufferRef(Pointer p) { super(p); }
 }
-
-/**
- * \}
- */
-
-/**
- * This function permanently loads the dynamic library at the given path.
- * It is safe to call this function multiple times for the same library.
- *
- * @see sys::DynamicLibrary::LoadLibraryPermanently()
-  */
-public static native @Cast("LLVMBool") int LLVMLoadLibraryPermanently(@Cast("const char*") BytePointer Filename);
-public static native @Cast("LLVMBool") int LLVMLoadLibraryPermanently(String Filename);
-
-/**
- * This function parses the given arguments using the LLVM command line parser.
- * Note that the only stable thing about this function is its signature; you
- * cannot rely on any particular set of command line arguments being interpreted
- * the same way across LLVM versions.
- *
- * @see llvm::cl::ParseCommandLineOptions()
- */
-public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") PointerPointer argv,
-                                 @Cast("const char*") BytePointer Overview);
-public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") @ByPtrPtr BytePointer argv,
-                                 @Cast("const char*") BytePointer Overview);
-public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") @ByPtrPtr ByteBuffer argv,
-                                 String Overview);
-public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") @ByPtrPtr byte[] argv,
-                                 @Cast("const char*") BytePointer Overview);
-public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") @ByPtrPtr BytePointer argv,
-                                 String Overview);
-public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") @ByPtrPtr ByteBuffer argv,
-                                 @Cast("const char*") BytePointer Overview);
-public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") @ByPtrPtr byte[] argv,
-                                 String Overview);
-
-/**
- * This function will search through all previously loaded dynamic
- * libraries for the symbol \p symbolName. If it is found, the address of
- * that symbol is returned. If not, null is returned.
- *
- * @see sys::DynamicLibrary::SearchForAddressOfSymbol()
- */
-public static native Pointer LLVMSearchForAddressOfSymbol(@Cast("const char*") BytePointer symbolName);
-public static native Pointer LLVMSearchForAddressOfSymbol(String symbolName);
-
-/**
- * This functions permanently adds the symbol \p symbolName with the
- * value \p symbolValue.  These symbols are searched before any
- * libraries.
- *
- * @see sys::DynamicLibrary::AddSymbol()
- */
-public static native void LLVMAddSymbol(@Cast("const char*") BytePointer symbolName, Pointer symbolValue);
-public static native void LLVMAddSymbol(String symbolName, Pointer symbolValue);
-
-// #ifdef __cplusplus
-// #endif
-
-// #endif
-
-
-// Parsed from <llvm-c/Core.h>
-
-/*===-- llvm-c/Core.h - Core Library C Interface ------------------*- C -*-===*\
-|*                                                                            *|
-|*                     The LLVM Compiler Infrastructure                       *|
-|*                                                                            *|
-|* This file is distributed under the University of Illinois Open Source      *|
-|* License. See LICENSE.TXT for details.                                      *|
-|*                                                                            *|
-|*===----------------------------------------------------------------------===*|
-|*                                                                            *|
-|* This header declares the C interface to libLLVMCore.a, which implements    *|
-|* the LLVM intermediate representation.                                      *|
-|*                                                                            *|
-\*===----------------------------------------------------------------------===*/
-
-// #ifndef LLVM_C_CORE_H
-// #define LLVM_C_CORE_H
-
-// #include "llvm-c/Support.h"
-
-// #ifdef __cplusplus
-// #endif
-
-/**
- * \defgroup LLVMC LLVM-C: C interface to LLVM
- *
- * This module exposes parts of the LLVM library as a C API.
- *
- * \{
- */
-
-/**
- * \defgroup LLVMCTransforms Transforms
- */
-
-/**
- * \defgroup LLVMCCore Core
- *
- * This modules provide an interface to libLLVMCore, which implements
- * the LLVM intermediate representation as well as other related types
- * and utilities.
- *
- * LLVM uses a polymorphic type hierarchy which C cannot represent, therefore
- * parameters must be passed as base types. Despite the declared types, most
- * of the functions provided operate only on branches of the type hierarchy.
- * The declared parameter names are descriptive and specify which type is
- * required. Additionally, each type hierarchy is documented along with the
- * functions that operate upon it. For more detail, refer to LLVM's C++ code.
- * If in doubt, refer to Core.cpp, which performs parameter downcasts in the
- * form unwrap<RequiredType>(Param).
- *
- * Many exotic languages can interoperate with C code but have a harder time
- * with C++ due to name mangling. So in addition to C, this interface enables
- * tools written in such languages.
- *
- * \{
- */
-
-/**
- * \defgroup LLVMCCoreTypes Types and Enumerations
- *
- * \{
- */
-
-/* Opaque types. */
 
 /**
  * The top-level container for all LLVM global data. See the LLVMContext class.
@@ -289,7 +173,6 @@ public static native void LLVMAddSymbol(String symbolName, Pointer symbolValue);
     public LLVMUseRef(Pointer p) { super(p); }
 }
 
-
 /**
  * @see llvm::DiagnosticInfo
  */
@@ -299,6 +182,155 @@ public static native void LLVMAddSymbol(String symbolName, Pointer symbolValue);
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public LLVMDiagnosticInfoRef(Pointer p) { super(p); }
 }
+
+/**
+ * \}
+ */
+
+// #ifdef __cplusplus
+// #endif
+
+// #endif
+
+
+// Parsed from <llvm-c/Support.h>
+
+/*===-- llvm-c/Support.h - Support C Interface --------------------*- C -*-===*\
+|*                                                                            *|
+|*                     The LLVM Compiler Infrastructure                       *|
+|*                                                                            *|
+|* This file is distributed under the University of Illinois Open Source      *|
+|* License. See LICENSE.TXT for details.                                      *|
+|*                                                                            *|
+|*===----------------------------------------------------------------------===*|
+|*                                                                            *|
+|* This file defines the C interface to the LLVM support library.             *|
+|*                                                                            *|
+\*===----------------------------------------------------------------------===*/
+
+// #ifndef LLVM_C_SUPPORT_H
+// #define LLVM_C_SUPPORT_H
+
+// #include "llvm/Support/DataTypes.h"
+// #include "llvm-c/Types.h"
+
+// #ifdef __cplusplus
+// #endif
+
+/**
+ * This function permanently loads the dynamic library at the given path.
+ * It is safe to call this function multiple times for the same library.
+ *
+ * @see sys::DynamicLibrary::LoadLibraryPermanently()
+  */
+public static native @Cast("LLVMBool") int LLVMLoadLibraryPermanently(@Cast("const char*") BytePointer Filename);
+public static native @Cast("LLVMBool") int LLVMLoadLibraryPermanently(String Filename);
+
+/**
+ * This function parses the given arguments using the LLVM command line parser.
+ * Note that the only stable thing about this function is its signature; you
+ * cannot rely on any particular set of command line arguments being interpreted
+ * the same way across LLVM versions.
+ *
+ * @see llvm::cl::ParseCommandLineOptions()
+ */
+public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") PointerPointer argv,
+                                 @Cast("const char*") BytePointer Overview);
+public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") @ByPtrPtr BytePointer argv,
+                                 @Cast("const char*") BytePointer Overview);
+public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") @ByPtrPtr ByteBuffer argv,
+                                 String Overview);
+public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") @ByPtrPtr byte[] argv,
+                                 @Cast("const char*") BytePointer Overview);
+public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") @ByPtrPtr BytePointer argv,
+                                 String Overview);
+public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") @ByPtrPtr ByteBuffer argv,
+                                 @Cast("const char*") BytePointer Overview);
+public static native void LLVMParseCommandLineOptions(int argc, @Cast("const char*const*") @ByPtrPtr byte[] argv,
+                                 String Overview);
+
+/**
+ * This function will search through all previously loaded dynamic
+ * libraries for the symbol \p symbolName. If it is found, the address of
+ * that symbol is returned. If not, null is returned.
+ *
+ * @see sys::DynamicLibrary::SearchForAddressOfSymbol()
+ */
+public static native Pointer LLVMSearchForAddressOfSymbol(@Cast("const char*") BytePointer symbolName);
+public static native Pointer LLVMSearchForAddressOfSymbol(String symbolName);
+
+/**
+ * This functions permanently adds the symbol \p symbolName with the
+ * value \p symbolValue.  These symbols are searched before any
+ * libraries.
+ *
+ * @see sys::DynamicLibrary::AddSymbol()
+ */
+public static native void LLVMAddSymbol(@Cast("const char*") BytePointer symbolName, Pointer symbolValue);
+public static native void LLVMAddSymbol(String symbolName, Pointer symbolValue);
+
+// #ifdef __cplusplus
+// #endif
+
+// #endif
+
+
+// Parsed from <llvm-c/Core.h>
+
+/*===-- llvm-c/Core.h - Core Library C Interface ------------------*- C -*-===*\
+|*                                                                            *|
+|*                     The LLVM Compiler Infrastructure                       *|
+|*                                                                            *|
+|* This file is distributed under the University of Illinois Open Source      *|
+|* License. See LICENSE.TXT for details.                                      *|
+|*                                                                            *|
+|*===----------------------------------------------------------------------===*|
+|*                                                                            *|
+|* This header declares the C interface to libLLVMCore.a, which implements    *|
+|* the LLVM intermediate representation.                                      *|
+|*                                                                            *|
+\*===----------------------------------------------------------------------===*/
+
+// #ifndef LLVM_C_CORE_H
+// #define LLVM_C_CORE_H
+
+// #include "llvm-c/ErrorHandling.h"
+// #include "llvm-c/Types.h"
+
+// #ifdef __cplusplus
+// #endif
+
+/**
+ * \defgroup LLVMC LLVM-C: C interface to LLVM
+ *
+ * This module exposes parts of the LLVM library as a C API.
+ *
+ * \{
+ */
+
+/**
+ * \defgroup LLVMCTransforms Transforms
+ */
+
+/**
+ * \defgroup LLVMCCore Core
+ *
+ * This modules provide an interface to libLLVMCore, which implements
+ * the LLVM intermediate representation as well as other related types
+ * and utilities.
+ *
+ * Many exotic languages can interoperate with C code but have a harder time
+ * with C++ due to name mangling. So in addition to C, this interface enables
+ * tools written in such languages.
+ *
+ * \{
+ */
+
+/**
+ * \defgroup LLVMCCoreTypes Types and Enumerations
+ *
+ * \{
+ */
 
 /** enum LLVMAttribute */
 public static final int
@@ -419,7 +451,12 @@ public static final int
 
   /* Exception Handling Operators */
   LLVMResume         = 58,
-  LLVMLandingPad     = 59;
+  LLVMLandingPad     = 59,
+  LLVMCleanupRet     = 61,
+  LLVMCatchRet       = 62,
+  LLVMCatchPad       = 63,
+  LLVMCleanupPad     = 64,
+  LLVMCatchSwitch    = 65;
 
 /** enum LLVMTypeKind */
 public static final int
@@ -454,7 +491,9 @@ public static final int
   /** Metadata */
   LLVMMetadataTypeKind = 14,
   /** X86 MMX */
-  LLVMX86_MMXTypeKind = 15;
+  LLVMX86_MMXTypeKind = 15,
+  /** Tokens */
+  LLVMTokenTypeKind = 16;
 
 /** enum LLVMLinkage */
 public static final int
@@ -680,7 +719,6 @@ public static native void LLVMInitializeCore(LLVMPassRegistryRef R);
     @see ManagedStatic */
 public static native void LLVMShutdown();
 
-
 /*===-- Error handling ----------------------------------------------------===*/
 
 public static native @Cast("char*") BytePointer LLVMCreateMessage(@Cast("const char*") BytePointer Message);
@@ -688,37 +726,6 @@ public static native @Cast("char*") ByteBuffer LLVMCreateMessage(String Message)
 public static native void LLVMDisposeMessage(@Cast("char*") BytePointer Message);
 public static native void LLVMDisposeMessage(@Cast("char*") ByteBuffer Message);
 public static native void LLVMDisposeMessage(@Cast("char*") byte[] Message);
-
-public static class LLVMFatalErrorHandler extends FunctionPointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public    LLVMFatalErrorHandler(Pointer p) { super(p); }
-    protected LLVMFatalErrorHandler() { allocate(); }
-    private native void allocate();
-    public native void call(@Cast("const char*") BytePointer Reason);
-}
-
-/**
- * Install a fatal error handler. By default, if LLVM detects a fatal error, it
- * will call exit(1). This may not be appropriate in many contexts. For example,
- * doing exit(1) will bypass many crash reporting/tracing system tools. This
- * function allows you to install a callback that will be invoked prior to the
- * call to exit(1).
- */
-public static native void LLVMInstallFatalErrorHandler(LLVMFatalErrorHandler Handler);
-
-/**
- * Reset the fatal error handler. This resets LLVM's fatal error handling
- * behavior to the default.
- */
-public static native void LLVMResetFatalErrorHandler();
-
-/**
- * Enable LLVM's built-in stack trace code. This intercepts the OS's crash
- * signals and prints which component of LLVM you were in at the time if the
- * crash.
- */
-public static native void LLVMEnablePrettyStackTrace();
 
 /**
  * \defgroup LLVMCCoreContext Contexts
@@ -1113,6 +1120,7 @@ public static native LLVMTypeRef LLVMInt8TypeInContext(LLVMContextRef C);
 public static native LLVMTypeRef LLVMInt16TypeInContext(LLVMContextRef C);
 public static native LLVMTypeRef LLVMInt32TypeInContext(LLVMContextRef C);
 public static native LLVMTypeRef LLVMInt64TypeInContext(LLVMContextRef C);
+public static native LLVMTypeRef LLVMInt128TypeInContext(LLVMContextRef C);
 public static native LLVMTypeRef LLVMIntTypeInContext(LLVMContextRef C, @Cast("unsigned") int NumBits);
 
 /**
@@ -1124,6 +1132,7 @@ public static native LLVMTypeRef LLVMInt8Type();
 public static native LLVMTypeRef LLVMInt16Type();
 public static native LLVMTypeRef LLVMInt32Type();
 public static native LLVMTypeRef LLVMInt64Type();
+public static native LLVMTypeRef LLVMInt128Type();
 public static native LLVMTypeRef LLVMIntType(@Cast("unsigned") int NumBits);
 public static native @Cast("unsigned") int LLVMGetIntTypeWidth(LLVMTypeRef IntegerTy);
 
@@ -1339,7 +1348,6 @@ public static native @Cast("LLVMBool") int LLVMIsOpaqueStruct(LLVMTypeRef Struct
  * \}
  */
 
-
 /**
  * \defgroup LLVMCCoreTypeSequential Sequential Types
  *
@@ -1495,6 +1503,7 @@ public static native LLVMTypeRef LLVMX86MMXType();
 //       macro(ConstantInt)
 //       macro(ConstantPointerNull)
 //       macro(ConstantStruct)
+//       macro(ConstantTokenNone)
 //       macro(ConstantVector)
 //       macro(GlobalValue)
 //         macro(GlobalAlias)
@@ -1532,6 +1541,11 @@ public static native LLVMTypeRef LLVMX86MMXType();
 //         macro(SwitchInst)
 //         macro(UnreachableInst)
 //         macro(ResumeInst)
+//         macro(CleanupReturnInst)
+//         macro(CatchReturnInst)
+//       macro(FuncletPadInst)
+//         macro(CatchPadInst)
+//         macro(CleanupPadInst)
 //       macro(UnaryInstruction)
 //         macro(AllocaInst)
 //         macro(CastInst)
@@ -1645,6 +1659,7 @@ public static native LLVMValueRef LLVMIsAConstantFP(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAConstantInt(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAConstantPointerNull(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAConstantStruct(LLVMValueRef Val);
+public static native LLVMValueRef LLVMIsAConstantTokenNone(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAConstantVector(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAGlobalValue(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAGlobalAlias(LLVMValueRef Val);
@@ -1682,6 +1697,11 @@ public static native LLVMValueRef LLVMIsAReturnInst(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsASwitchInst(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAUnreachableInst(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAResumeInst(LLVMValueRef Val);
+public static native LLVMValueRef LLVMIsACleanupReturnInst(LLVMValueRef Val);
+public static native LLVMValueRef LLVMIsACatchReturnInst(LLVMValueRef Val);
+public static native LLVMValueRef LLVMIsAFuncletPadInst(LLVMValueRef Val);
+public static native LLVMValueRef LLVMIsACatchPadInst(LLVMValueRef Val);
+public static native LLVMValueRef LLVMIsACleanupPadInst(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAUnaryInstruction(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsAAllocaInst(LLVMValueRef Val);
 public static native LLVMValueRef LLVMIsACastInst(LLVMValueRef Val);
@@ -2396,7 +2416,7 @@ public static native void LLVMSetGC(LLVMValueRef Fn, String Name);
 public static native void LLVMAddFunctionAttr(LLVMValueRef Fn, @Cast("LLVMAttribute") int PA);
 
 /**
- * Add a target-dependent attribute to a fuction
+ * Add a target-dependent attribute to a function
  * @see llvm::AttrBuilder::addAttribute()
  */
 public static native void LLVMAddTargetDependentFunctionAttr(LLVMValueRef Fn, @Cast("const char*") BytePointer A,
@@ -3153,9 +3173,11 @@ public static native LLVMValueRef LLVMBuildInvoke(LLVMBuilderRef arg0, LLVMValue
                              LLVMBasicBlockRef Then, LLVMBasicBlockRef Catch,
                              String Name);
 public static native LLVMValueRef LLVMBuildLandingPad(LLVMBuilderRef B, LLVMTypeRef Ty,
-                                 @Cast("unsigned") int NumClauses, @Cast("const char*") BytePointer Name);
+                                 LLVMValueRef PersFn, @Cast("unsigned") int NumClauses,
+                                 @Cast("const char*") BytePointer Name);
 public static native LLVMValueRef LLVMBuildLandingPad(LLVMBuilderRef B, LLVMTypeRef Ty,
-                                 @Cast("unsigned") int NumClauses, String Name);
+                                 LLVMValueRef PersFn, @Cast("unsigned") int NumClauses,
+                                 String Name);
 public static native LLVMValueRef LLVMBuildResume(LLVMBuilderRef B, LLVMValueRef Exn);
 public static native LLVMValueRef LLVMBuildUnreachable(LLVMBuilderRef arg0);
 
@@ -3339,6 +3361,8 @@ public static native LLVMValueRef LLVMBuildGlobalStringPtr(LLVMBuilderRef B, Str
                                       String Name);
 public static native @Cast("LLVMBool") int LLVMGetVolatile(LLVMValueRef MemoryAccessInst);
 public static native void LLVMSetVolatile(LLVMValueRef MemoryAccessInst, @Cast("LLVMBool") int IsVolatile);
+public static native @Cast("LLVMAtomicOrdering") int LLVMGetOrdering(LLVMValueRef MemoryAccessInst);
+public static native void LLVMSetOrdering(LLVMValueRef MemoryAccessInst, @Cast("LLVMAtomicOrdering") int Ordering);
 
 /* Casts */
 public static native LLVMValueRef LLVMBuildTrunc(LLVMBuilderRef arg0, LLVMValueRef Val,
@@ -3690,9 +3714,9 @@ public static native @Cast("LLVMBool") int LLVMIsMultithreaded();
  */
 
 // #ifdef __cplusplus
-// #endif /* !defined(__cplusplus) */
+// #endif
 
-// #endif /* !defined(LLVM_C_CORE_H) */
+// #endif /* LLVM_C_CORE_H */
 
 
 // Parsed from <llvm-c/Analysis.h>
@@ -3718,7 +3742,7 @@ public static native @Cast("LLVMBool") int LLVMIsMultithreaded();
 // #ifndef LLVM_C_ANALYSIS_H
 // #define LLVM_C_ANALYSIS_H
 
-// #include "llvm-c/Core.h"
+// #include "llvm-c/Types.h"
 
 // #ifdef __cplusplus
 // #endif
@@ -3791,7 +3815,7 @@ public static native void LLVMViewFunctionCFGOnly(LLVMValueRef Fn);
 // #ifndef LLVM_C_BITREADER_H
 // #define LLVM_C_BITREADER_H
 
-// #include "llvm-c/Core.h"
+// #include "llvm-c/Types.h"
 
 // #ifdef __cplusplus
 // #endif
@@ -3805,22 +3829,32 @@ public static native void LLVMViewFunctionCFGOnly(LLVMValueRef Fn);
 
 /* Builds a module from the bitcode in the specified memory buffer, returning a
    reference to the module via the OutModule parameter. Returns 0 on success.
-   Optionally returns a human-readable error message via OutMessage. */
-public static native @Cast("LLVMBool") int LLVMParseBitcode(LLVMMemoryBufferRef MemBuf,
-                          @ByPtrPtr LLVMModuleRef OutModule, @Cast("char**") PointerPointer OutMessage);
-public static native @Cast("LLVMBool") int LLVMParseBitcode(LLVMMemoryBufferRef MemBuf,
-                          @ByPtrPtr LLVMModuleRef OutModule, @Cast("char**") @ByPtrPtr BytePointer OutMessage);
-public static native @Cast("LLVMBool") int LLVMParseBitcode(LLVMMemoryBufferRef MemBuf,
-                          @Cast("LLVMModuleRef*") PointerPointer OutModule, @Cast("char**") @ByPtrPtr ByteBuffer OutMessage);
-public static native @Cast("LLVMBool") int LLVMParseBitcode(LLVMMemoryBufferRef MemBuf,
-                          @ByPtrPtr LLVMModuleRef OutModule, @Cast("char**") @ByPtrPtr byte[] OutMessage);
-public static native @Cast("LLVMBool") int LLVMParseBitcode(LLVMMemoryBufferRef MemBuf,
-                          @Cast("LLVMModuleRef*") PointerPointer OutModule, @Cast("char**") @ByPtrPtr BytePointer OutMessage);
-public static native @Cast("LLVMBool") int LLVMParseBitcode(LLVMMemoryBufferRef MemBuf,
-                          @ByPtrPtr LLVMModuleRef OutModule, @Cast("char**") @ByPtrPtr ByteBuffer OutMessage);
-public static native @Cast("LLVMBool") int LLVMParseBitcode(LLVMMemoryBufferRef MemBuf,
-                          @Cast("LLVMModuleRef*") PointerPointer OutModule, @Cast("char**") @ByPtrPtr byte[] OutMessage);
+   Optionally returns a human-readable error message via OutMessage.
 
+   This is deprecated. Use LLVMParseBitcode2. */
+public static native @Cast("LLVMBool") int LLVMParseBitcode(LLVMMemoryBufferRef MemBuf, @ByPtrPtr LLVMModuleRef OutModule,
+                          @Cast("char**") PointerPointer OutMessage);
+public static native @Cast("LLVMBool") int LLVMParseBitcode(LLVMMemoryBufferRef MemBuf, @ByPtrPtr LLVMModuleRef OutModule,
+                          @Cast("char**") @ByPtrPtr BytePointer OutMessage);
+public static native @Cast("LLVMBool") int LLVMParseBitcode(LLVMMemoryBufferRef MemBuf, @Cast("LLVMModuleRef*") PointerPointer OutModule,
+                          @Cast("char**") @ByPtrPtr ByteBuffer OutMessage);
+public static native @Cast("LLVMBool") int LLVMParseBitcode(LLVMMemoryBufferRef MemBuf, @ByPtrPtr LLVMModuleRef OutModule,
+                          @Cast("char**") @ByPtrPtr byte[] OutMessage);
+public static native @Cast("LLVMBool") int LLVMParseBitcode(LLVMMemoryBufferRef MemBuf, @Cast("LLVMModuleRef*") PointerPointer OutModule,
+                          @Cast("char**") @ByPtrPtr BytePointer OutMessage);
+public static native @Cast("LLVMBool") int LLVMParseBitcode(LLVMMemoryBufferRef MemBuf, @ByPtrPtr LLVMModuleRef OutModule,
+                          @Cast("char**") @ByPtrPtr ByteBuffer OutMessage);
+public static native @Cast("LLVMBool") int LLVMParseBitcode(LLVMMemoryBufferRef MemBuf, @Cast("LLVMModuleRef*") PointerPointer OutModule,
+                          @Cast("char**") @ByPtrPtr byte[] OutMessage);
+
+/* Builds a module from the bitcode in the specified memory buffer, returning a
+   reference to the module via the OutModule parameter. Returns 0 on success. */
+public static native @Cast("LLVMBool") int LLVMParseBitcode2(LLVMMemoryBufferRef MemBuf,
+                           @ByPtrPtr LLVMModuleRef OutModule);
+public static native @Cast("LLVMBool") int LLVMParseBitcode2(LLVMMemoryBufferRef MemBuf,
+                           @Cast("LLVMModuleRef*") PointerPointer OutModule);
+
+/* This is deprecated. Use LLVMParseBitcodeInContext2. */
 public static native @Cast("LLVMBool") int LLVMParseBitcodeInContext(LLVMContextRef ContextRef,
                                    LLVMMemoryBufferRef MemBuf,
                                    @ByPtrPtr LLVMModuleRef OutModule, @Cast("char**") PointerPointer OutMessage);
@@ -3843,38 +3877,49 @@ public static native @Cast("LLVMBool") int LLVMParseBitcodeInContext(LLVMContext
                                    LLVMMemoryBufferRef MemBuf,
                                    @Cast("LLVMModuleRef*") PointerPointer OutModule, @Cast("char**") @ByPtrPtr byte[] OutMessage);
 
+public static native @Cast("LLVMBool") int LLVMParseBitcodeInContext2(LLVMContextRef ContextRef,
+                                    LLVMMemoryBufferRef MemBuf,
+                                    @ByPtrPtr LLVMModuleRef OutModule);
+public static native @Cast("LLVMBool") int LLVMParseBitcodeInContext2(LLVMContextRef ContextRef,
+                                    LLVMMemoryBufferRef MemBuf,
+                                    @Cast("LLVMModuleRef*") PointerPointer OutModule);
+
 /** Reads a module from the specified path, returning via the OutMP parameter
     a module provider which performs lazy deserialization. Returns 0 on success.
-    Optionally returns a human-readable error message via OutMessage. */
+    Optionally returns a human-readable error message via OutMessage.
+    This is deprecated. Use LLVMGetBitcodeModuleInContext2. */
 public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleInContext(LLVMContextRef ContextRef,
                                        LLVMMemoryBufferRef MemBuf,
-                                       @ByPtrPtr LLVMModuleRef OutM,
-                                       @Cast("char**") PointerPointer OutMessage);
+                                       @ByPtrPtr LLVMModuleRef OutM, @Cast("char**") PointerPointer OutMessage);
 public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleInContext(LLVMContextRef ContextRef,
                                        LLVMMemoryBufferRef MemBuf,
-                                       @ByPtrPtr LLVMModuleRef OutM,
-                                       @Cast("char**") @ByPtrPtr BytePointer OutMessage);
+                                       @ByPtrPtr LLVMModuleRef OutM, @Cast("char**") @ByPtrPtr BytePointer OutMessage);
 public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleInContext(LLVMContextRef ContextRef,
                                        LLVMMemoryBufferRef MemBuf,
-                                       @Cast("LLVMModuleRef*") PointerPointer OutM,
-                                       @Cast("char**") @ByPtrPtr ByteBuffer OutMessage);
+                                       @Cast("LLVMModuleRef*") PointerPointer OutM, @Cast("char**") @ByPtrPtr ByteBuffer OutMessage);
 public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleInContext(LLVMContextRef ContextRef,
                                        LLVMMemoryBufferRef MemBuf,
-                                       @ByPtrPtr LLVMModuleRef OutM,
-                                       @Cast("char**") @ByPtrPtr byte[] OutMessage);
+                                       @ByPtrPtr LLVMModuleRef OutM, @Cast("char**") @ByPtrPtr byte[] OutMessage);
 public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleInContext(LLVMContextRef ContextRef,
                                        LLVMMemoryBufferRef MemBuf,
-                                       @Cast("LLVMModuleRef*") PointerPointer OutM,
-                                       @Cast("char**") @ByPtrPtr BytePointer OutMessage);
+                                       @Cast("LLVMModuleRef*") PointerPointer OutM, @Cast("char**") @ByPtrPtr BytePointer OutMessage);
 public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleInContext(LLVMContextRef ContextRef,
                                        LLVMMemoryBufferRef MemBuf,
-                                       @ByPtrPtr LLVMModuleRef OutM,
-                                       @Cast("char**") @ByPtrPtr ByteBuffer OutMessage);
+                                       @ByPtrPtr LLVMModuleRef OutM, @Cast("char**") @ByPtrPtr ByteBuffer OutMessage);
 public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleInContext(LLVMContextRef ContextRef,
                                        LLVMMemoryBufferRef MemBuf,
-                                       @Cast("LLVMModuleRef*") PointerPointer OutM,
-                                       @Cast("char**") @ByPtrPtr byte[] OutMessage);
+                                       @Cast("LLVMModuleRef*") PointerPointer OutM, @Cast("char**") @ByPtrPtr byte[] OutMessage);
 
+/** Reads a module from the specified path, returning via the OutMP parameter a
+ * module provider which performs lazy deserialization. Returns 0 on success. */
+public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleInContext2(LLVMContextRef ContextRef,
+                                        LLVMMemoryBufferRef MemBuf,
+                                        @ByPtrPtr LLVMModuleRef OutM);
+public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleInContext2(LLVMContextRef ContextRef,
+                                        LLVMMemoryBufferRef MemBuf,
+                                        @Cast("LLVMModuleRef*") PointerPointer OutM);
+
+/* This is deprecated. Use LLVMGetBitcodeModule2. */
 public static native @Cast("LLVMBool") int LLVMGetBitcodeModule(LLVMMemoryBufferRef MemBuf, @ByPtrPtr LLVMModuleRef OutM,
                               @Cast("char**") PointerPointer OutMessage);
 public static native @Cast("LLVMBool") int LLVMGetBitcodeModule(LLVMMemoryBufferRef MemBuf, @ByPtrPtr LLVMModuleRef OutM,
@@ -3890,59 +3935,8 @@ public static native @Cast("LLVMBool") int LLVMGetBitcodeModule(LLVMMemoryBuffer
 public static native @Cast("LLVMBool") int LLVMGetBitcodeModule(LLVMMemoryBufferRef MemBuf, @Cast("LLVMModuleRef*") PointerPointer OutM,
                               @Cast("char**") @ByPtrPtr byte[] OutMessage);
 
-
-/** Deprecated: Use LLVMGetBitcodeModuleInContext instead. */
-public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleProviderInContext(LLVMContextRef ContextRef,
-                                               LLVMMemoryBufferRef MemBuf,
-                                               @ByPtrPtr LLVMModuleProviderRef OutMP,
-                                               @Cast("char**") PointerPointer OutMessage);
-public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleProviderInContext(LLVMContextRef ContextRef,
-                                               LLVMMemoryBufferRef MemBuf,
-                                               @ByPtrPtr LLVMModuleProviderRef OutMP,
-                                               @Cast("char**") @ByPtrPtr BytePointer OutMessage);
-public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleProviderInContext(LLVMContextRef ContextRef,
-                                               LLVMMemoryBufferRef MemBuf,
-                                               @Cast("LLVMModuleProviderRef*") PointerPointer OutMP,
-                                               @Cast("char**") @ByPtrPtr ByteBuffer OutMessage);
-public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleProviderInContext(LLVMContextRef ContextRef,
-                                               LLVMMemoryBufferRef MemBuf,
-                                               @ByPtrPtr LLVMModuleProviderRef OutMP,
-                                               @Cast("char**") @ByPtrPtr byte[] OutMessage);
-public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleProviderInContext(LLVMContextRef ContextRef,
-                                               LLVMMemoryBufferRef MemBuf,
-                                               @Cast("LLVMModuleProviderRef*") PointerPointer OutMP,
-                                               @Cast("char**") @ByPtrPtr BytePointer OutMessage);
-public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleProviderInContext(LLVMContextRef ContextRef,
-                                               LLVMMemoryBufferRef MemBuf,
-                                               @ByPtrPtr LLVMModuleProviderRef OutMP,
-                                               @Cast("char**") @ByPtrPtr ByteBuffer OutMessage);
-public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleProviderInContext(LLVMContextRef ContextRef,
-                                               LLVMMemoryBufferRef MemBuf,
-                                               @Cast("LLVMModuleProviderRef*") PointerPointer OutMP,
-                                               @Cast("char**") @ByPtrPtr byte[] OutMessage);
-
-/** Deprecated: Use LLVMGetBitcodeModule instead. */
-public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleProvider(LLVMMemoryBufferRef MemBuf,
-                                      @ByPtrPtr LLVMModuleProviderRef OutMP,
-                                      @Cast("char**") PointerPointer OutMessage);
-public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleProvider(LLVMMemoryBufferRef MemBuf,
-                                      @ByPtrPtr LLVMModuleProviderRef OutMP,
-                                      @Cast("char**") @ByPtrPtr BytePointer OutMessage);
-public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleProvider(LLVMMemoryBufferRef MemBuf,
-                                      @Cast("LLVMModuleProviderRef*") PointerPointer OutMP,
-                                      @Cast("char**") @ByPtrPtr ByteBuffer OutMessage);
-public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleProvider(LLVMMemoryBufferRef MemBuf,
-                                      @ByPtrPtr LLVMModuleProviderRef OutMP,
-                                      @Cast("char**") @ByPtrPtr byte[] OutMessage);
-public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleProvider(LLVMMemoryBufferRef MemBuf,
-                                      @Cast("LLVMModuleProviderRef*") PointerPointer OutMP,
-                                      @Cast("char**") @ByPtrPtr BytePointer OutMessage);
-public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleProvider(LLVMMemoryBufferRef MemBuf,
-                                      @ByPtrPtr LLVMModuleProviderRef OutMP,
-                                      @Cast("char**") @ByPtrPtr ByteBuffer OutMessage);
-public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleProvider(LLVMMemoryBufferRef MemBuf,
-                                      @Cast("LLVMModuleProviderRef*") PointerPointer OutMP,
-                                      @Cast("char**") @ByPtrPtr byte[] OutMessage);
+public static native @Cast("LLVMBool") int LLVMGetBitcodeModule2(LLVMMemoryBufferRef MemBuf, @ByPtrPtr LLVMModuleRef OutM);
+public static native @Cast("LLVMBool") int LLVMGetBitcodeModule2(LLVMMemoryBufferRef MemBuf, @Cast("LLVMModuleRef*") PointerPointer OutM);
 
 /**
  * \}
@@ -3977,7 +3971,7 @@ public static native @Cast("LLVMBool") int LLVMGetBitcodeModuleProvider(LLVMMemo
 // #ifndef LLVM_C_BITWRITER_H
 // #define LLVM_C_BITWRITER_H
 
-// #include "llvm-c/Core.h"
+// #include "llvm-c/Types.h"
 
 // #ifdef __cplusplus
 // #endif
@@ -4353,7 +4347,7 @@ public static native @Cast("size_t") long LLVMDisasmInstruction(LLVMDisasmContex
 // #ifndef LLVM_C_INITIALIZATION_H
 // #define LLVM_C_INITIALIZATION_H
 
-// #include "llvm-c/Core.h"
+// #include "llvm-c/Types.h"
 
 // #ifdef __cplusplus
 // #endif
@@ -4406,7 +4400,7 @@ public static native void LLVMInitializeTarget(LLVMPassRegistryRef R);
 // #ifndef LLVM_C_IRREADER_H
 // #define LLVM_C_IRREADER_H
 
-// #include "llvm-c/Core.h"
+// #include "llvm-c/Types.h"
 
 // #ifdef __cplusplus
 // #endif
@@ -4466,7 +4460,7 @@ public static native @Cast("LLVMBool") int LLVMParseIRInContext(LLVMContextRef C
 // #ifndef LLVM_C_LINKER_H
 // #define LLVM_C_LINKER_H
 
-// #include "llvm-c/Core.h"
+// #include "llvm-c/Types.h"
 
 // #ifdef __cplusplus
 // #endif
@@ -4478,14 +4472,17 @@ public static final int
   LLVMLinkerPreserveSource_Removed = 1; /* This option has been deprecated and
                                           should not be used. */
 
-/* Links the source module into the destination module, taking ownership
- * of the source module away from the caller. Optionally returns a
- * human-readable description of any errors that occurred in linking.
- * OutMessage must be disposed with LLVMDisposeMessage. The return value
- * is true if an error occurred, false otherwise.
+/* Links the source module into the destination module. The source module is
+ * damaged. The only thing that can be done is destroy it. Optionally returns a
+ * human-readable description of any errors that occurred in linking. OutMessage
+ * must be disposed with LLVMDisposeMessage. The return value is true if an
+ * error occurred, false otherwise.
  *
  * Note that the linker mode parameter \p Unused is no longer used, and has
- * no effect. */
+ * no effect.
+ *
+ * This function is deprecated. Use LLVMLinkModules2 instead.
+ */
 public static native @Cast("LLVMBool") int LLVMLinkModules(LLVMModuleRef Dest, LLVMModuleRef Src,
                          @Cast("LLVMLinkerMode") int Unused, @Cast("char**") PointerPointer OutMessage);
 public static native @Cast("LLVMBool") int LLVMLinkModules(LLVMModuleRef Dest, LLVMModuleRef Src,
@@ -4494,6 +4491,13 @@ public static native @Cast("LLVMBool") int LLVMLinkModules(LLVMModuleRef Dest, L
                          @Cast("LLVMLinkerMode") int Unused, @Cast("char**") @ByPtrPtr ByteBuffer OutMessage);
 public static native @Cast("LLVMBool") int LLVMLinkModules(LLVMModuleRef Dest, LLVMModuleRef Src,
                          @Cast("LLVMLinkerMode") int Unused, @Cast("char**") @ByPtrPtr byte[] OutMessage);
+
+/* Links the source module into the destination module. The source module is
+ * destroyed.
+ * The return value is true if an error occurred, false otherwise.
+ * Use the diagnostic handler to get any diagnostic message.
+*/
+public static native @Cast("LLVMBool") int LLVMLinkModules2(LLVMModuleRef Dest, LLVMModuleRef Src);
 
 // #ifdef __cplusplus
 // #endif
@@ -4958,8 +4962,8 @@ public static native void lto_codegen_dispose(lto_code_gen_t arg0);
 public static native @Cast("lto_bool_t") boolean lto_codegen_add_module(lto_code_gen_t cg, lto_module_t mod);
 
 /**
- * Sets the object module for code generation. This will transfer the ownship of
- * the module to code generator.
+ * Sets the object module for code generation. This will transfer the ownership
+ * of the module to the code generator.
  *
  * \c cg and \c mod must both be in the same context.
  *
@@ -5162,7 +5166,7 @@ public static native void lto_codegen_set_should_embed_uselists(lto_code_gen_t c
 // #ifndef LLVM_C_OBJECT_H
 // #define LLVM_C_OBJECT_H
 
-// #include "llvm-c/Core.h"
+// #include "llvm-c/Types.h"
 // #include "llvm/Config/llvm-config.h"
 
 // #ifdef __cplusplus
@@ -5284,7 +5288,7 @@ public static native @Cast("const char*") BytePointer LLVMGetRelocationValueStri
 // #ifndef LLVM_C_TARGET_H
 // #define LLVM_C_TARGET_H
 
-// #include "llvm-c/Core.h"
+// #include "llvm-c/Types.h"
 // #include "llvm/Config/llvm-config.h"
 
 // #if defined(_MSC_VER) && !defined(inline)
@@ -5531,7 +5535,7 @@ public static native void LLVMDisposeTargetData(LLVMTargetDataRef TD);
 // #ifndef LLVM_C_TARGETMACHINE_H
 // #define LLVM_C_TARGETMACHINE_H
 
-// #include "llvm-c/Core.h"
+// #include "llvm-c/Types.h"
 // #include "llvm-c/Target.h"
 
 // #ifdef __cplusplus
@@ -5652,7 +5656,7 @@ public static native @Cast("char*") BytePointer LLVMGetTargetMachineCPU(LLVMTarg
   LLVMDisposeMessage. */
 public static native @Cast("char*") BytePointer LLVMGetTargetMachineFeatureString(LLVMTargetMachineRef T);
 
-/** Deprecated: use LLVMGetDataLayout(LLVMModuleRef M) instead. */
+/** Returns the llvm::DataLayout used for this llvm:TargetMachine. */
 public static native LLVMTargetDataRef LLVMGetTargetMachineData(LLVMTargetMachineRef T);
 
 /** Set the target machine's ASM verbosity. */
@@ -5724,7 +5728,7 @@ public static native void LLVMAddAnalysisPasses(LLVMTargetMachineRef T, LLVMPass
 // #ifndef LLVM_C_EXECUTIONENGINE_H
 // #define LLVM_C_EXECUTIONENGINE_H
 
-// #include "llvm-c/Core.h"
+// #include "llvm-c/Types.h"
 // #include "llvm-c/Target.h"
 // #include "llvm-c/TargetMachine.h"
 
@@ -5926,82 +5930,6 @@ public static native @Cast("LLVMBool") int LLVMCreateMCJITCompilerForModule(
   LLVMMCJITCompilerOptions Options, @Cast("size_t") long SizeOfOptions,
   @Cast("char**") @ByPtrPtr byte[] OutError);
 
-/** Deprecated: Use LLVMCreateExecutionEngineForModule instead. */
-public static native @Cast("LLVMBool") int LLVMCreateExecutionEngine(@ByPtrPtr LLVMExecutionEngineRef OutEE,
-                                   LLVMModuleProviderRef MP,
-                                   @Cast("char**") PointerPointer OutError);
-public static native @Cast("LLVMBool") int LLVMCreateExecutionEngine(@ByPtrPtr LLVMExecutionEngineRef OutEE,
-                                   LLVMModuleProviderRef MP,
-                                   @Cast("char**") @ByPtrPtr BytePointer OutError);
-public static native @Cast("LLVMBool") int LLVMCreateExecutionEngine(@Cast("LLVMExecutionEngineRef*") PointerPointer OutEE,
-                                   LLVMModuleProviderRef MP,
-                                   @Cast("char**") @ByPtrPtr ByteBuffer OutError);
-public static native @Cast("LLVMBool") int LLVMCreateExecutionEngine(@ByPtrPtr LLVMExecutionEngineRef OutEE,
-                                   LLVMModuleProviderRef MP,
-                                   @Cast("char**") @ByPtrPtr byte[] OutError);
-public static native @Cast("LLVMBool") int LLVMCreateExecutionEngine(@Cast("LLVMExecutionEngineRef*") PointerPointer OutEE,
-                                   LLVMModuleProviderRef MP,
-                                   @Cast("char**") @ByPtrPtr BytePointer OutError);
-public static native @Cast("LLVMBool") int LLVMCreateExecutionEngine(@ByPtrPtr LLVMExecutionEngineRef OutEE,
-                                   LLVMModuleProviderRef MP,
-                                   @Cast("char**") @ByPtrPtr ByteBuffer OutError);
-public static native @Cast("LLVMBool") int LLVMCreateExecutionEngine(@Cast("LLVMExecutionEngineRef*") PointerPointer OutEE,
-                                   LLVMModuleProviderRef MP,
-                                   @Cast("char**") @ByPtrPtr byte[] OutError);
-
-/** Deprecated: Use LLVMCreateInterpreterForModule instead. */
-public static native @Cast("LLVMBool") int LLVMCreateInterpreter(@ByPtrPtr LLVMExecutionEngineRef OutInterp,
-                               LLVMModuleProviderRef MP,
-                               @Cast("char**") PointerPointer OutError);
-public static native @Cast("LLVMBool") int LLVMCreateInterpreter(@ByPtrPtr LLVMExecutionEngineRef OutInterp,
-                               LLVMModuleProviderRef MP,
-                               @Cast("char**") @ByPtrPtr BytePointer OutError);
-public static native @Cast("LLVMBool") int LLVMCreateInterpreter(@Cast("LLVMExecutionEngineRef*") PointerPointer OutInterp,
-                               LLVMModuleProviderRef MP,
-                               @Cast("char**") @ByPtrPtr ByteBuffer OutError);
-public static native @Cast("LLVMBool") int LLVMCreateInterpreter(@ByPtrPtr LLVMExecutionEngineRef OutInterp,
-                               LLVMModuleProviderRef MP,
-                               @Cast("char**") @ByPtrPtr byte[] OutError);
-public static native @Cast("LLVMBool") int LLVMCreateInterpreter(@Cast("LLVMExecutionEngineRef*") PointerPointer OutInterp,
-                               LLVMModuleProviderRef MP,
-                               @Cast("char**") @ByPtrPtr BytePointer OutError);
-public static native @Cast("LLVMBool") int LLVMCreateInterpreter(@ByPtrPtr LLVMExecutionEngineRef OutInterp,
-                               LLVMModuleProviderRef MP,
-                               @Cast("char**") @ByPtrPtr ByteBuffer OutError);
-public static native @Cast("LLVMBool") int LLVMCreateInterpreter(@Cast("LLVMExecutionEngineRef*") PointerPointer OutInterp,
-                               LLVMModuleProviderRef MP,
-                               @Cast("char**") @ByPtrPtr byte[] OutError);
-
-/** Deprecated: Use LLVMCreateJITCompilerForModule instead. */
-public static native @Cast("LLVMBool") int LLVMCreateJITCompiler(@ByPtrPtr LLVMExecutionEngineRef OutJIT,
-                               LLVMModuleProviderRef MP,
-                               @Cast("unsigned") int OptLevel,
-                               @Cast("char**") PointerPointer OutError);
-public static native @Cast("LLVMBool") int LLVMCreateJITCompiler(@ByPtrPtr LLVMExecutionEngineRef OutJIT,
-                               LLVMModuleProviderRef MP,
-                               @Cast("unsigned") int OptLevel,
-                               @Cast("char**") @ByPtrPtr BytePointer OutError);
-public static native @Cast("LLVMBool") int LLVMCreateJITCompiler(@Cast("LLVMExecutionEngineRef*") PointerPointer OutJIT,
-                               LLVMModuleProviderRef MP,
-                               @Cast("unsigned") int OptLevel,
-                               @Cast("char**") @ByPtrPtr ByteBuffer OutError);
-public static native @Cast("LLVMBool") int LLVMCreateJITCompiler(@ByPtrPtr LLVMExecutionEngineRef OutJIT,
-                               LLVMModuleProviderRef MP,
-                               @Cast("unsigned") int OptLevel,
-                               @Cast("char**") @ByPtrPtr byte[] OutError);
-public static native @Cast("LLVMBool") int LLVMCreateJITCompiler(@Cast("LLVMExecutionEngineRef*") PointerPointer OutJIT,
-                               LLVMModuleProviderRef MP,
-                               @Cast("unsigned") int OptLevel,
-                               @Cast("char**") @ByPtrPtr BytePointer OutError);
-public static native @Cast("LLVMBool") int LLVMCreateJITCompiler(@ByPtrPtr LLVMExecutionEngineRef OutJIT,
-                               LLVMModuleProviderRef MP,
-                               @Cast("unsigned") int OptLevel,
-                               @Cast("char**") @ByPtrPtr ByteBuffer OutError);
-public static native @Cast("LLVMBool") int LLVMCreateJITCompiler(@Cast("LLVMExecutionEngineRef*") PointerPointer OutJIT,
-                               LLVMModuleProviderRef MP,
-                               @Cast("unsigned") int OptLevel,
-                               @Cast("char**") @ByPtrPtr byte[] OutError);
-
 public static native void LLVMDisposeExecutionEngine(LLVMExecutionEngineRef EE);
 
 public static native void LLVMRunStaticConstructors(LLVMExecutionEngineRef EE);
@@ -6032,9 +5960,6 @@ public static native void LLVMFreeMachineCodeForFunction(LLVMExecutionEngineRef 
 
 public static native void LLVMAddModule(LLVMExecutionEngineRef EE, LLVMModuleRef M);
 
-/** Deprecated: Use LLVMAddModule instead. */
-public static native void LLVMAddModuleProvider(LLVMExecutionEngineRef EE, LLVMModuleProviderRef MP);
-
 public static native @Cast("LLVMBool") int LLVMRemoveModule(LLVMExecutionEngineRef EE, LLVMModuleRef M,
                           @ByPtrPtr LLVMModuleRef OutMod, @Cast("char**") PointerPointer OutError);
 public static native @Cast("LLVMBool") int LLVMRemoveModule(LLVMExecutionEngineRef EE, LLVMModuleRef M,
@@ -6049,29 +5974,6 @@ public static native @Cast("LLVMBool") int LLVMRemoveModule(LLVMExecutionEngineR
                           @ByPtrPtr LLVMModuleRef OutMod, @Cast("char**") @ByPtrPtr ByteBuffer OutError);
 public static native @Cast("LLVMBool") int LLVMRemoveModule(LLVMExecutionEngineRef EE, LLVMModuleRef M,
                           @Cast("LLVMModuleRef*") PointerPointer OutMod, @Cast("char**") @ByPtrPtr byte[] OutError);
-
-/** Deprecated: Use LLVMRemoveModule instead. */
-public static native @Cast("LLVMBool") int LLVMRemoveModuleProvider(LLVMExecutionEngineRef EE,
-                                  LLVMModuleProviderRef MP,
-                                  @ByPtrPtr LLVMModuleRef OutMod, @Cast("char**") PointerPointer OutError);
-public static native @Cast("LLVMBool") int LLVMRemoveModuleProvider(LLVMExecutionEngineRef EE,
-                                  LLVMModuleProviderRef MP,
-                                  @ByPtrPtr LLVMModuleRef OutMod, @Cast("char**") @ByPtrPtr BytePointer OutError);
-public static native @Cast("LLVMBool") int LLVMRemoveModuleProvider(LLVMExecutionEngineRef EE,
-                                  LLVMModuleProviderRef MP,
-                                  @Cast("LLVMModuleRef*") PointerPointer OutMod, @Cast("char**") @ByPtrPtr ByteBuffer OutError);
-public static native @Cast("LLVMBool") int LLVMRemoveModuleProvider(LLVMExecutionEngineRef EE,
-                                  LLVMModuleProviderRef MP,
-                                  @ByPtrPtr LLVMModuleRef OutMod, @Cast("char**") @ByPtrPtr byte[] OutError);
-public static native @Cast("LLVMBool") int LLVMRemoveModuleProvider(LLVMExecutionEngineRef EE,
-                                  LLVMModuleProviderRef MP,
-                                  @Cast("LLVMModuleRef*") PointerPointer OutMod, @Cast("char**") @ByPtrPtr BytePointer OutError);
-public static native @Cast("LLVMBool") int LLVMRemoveModuleProvider(LLVMExecutionEngineRef EE,
-                                  LLVMModuleProviderRef MP,
-                                  @ByPtrPtr LLVMModuleRef OutMod, @Cast("char**") @ByPtrPtr ByteBuffer OutError);
-public static native @Cast("LLVMBool") int LLVMRemoveModuleProvider(LLVMExecutionEngineRef EE,
-                                  LLVMModuleProviderRef MP,
-                                  @Cast("LLVMModuleRef*") PointerPointer OutMod, @Cast("char**") @ByPtrPtr byte[] OutError);
 
 public static native @Cast("LLVMBool") int LLVMFindFunction(LLVMExecutionEngineRef EE, @Cast("const char*") BytePointer Name,
                           @ByPtrPtr LLVMValueRef OutFn);
@@ -6184,7 +6086,7 @@ public static native void LLVMDisposeMCJITMemoryManager(LLVMMCJITMemoryManagerRe
 // #ifndef LLVM_C_TRANSFORMS_IPO_H
 // #define LLVM_C_TRANSFORMS_IPO_H
 
-// #include "llvm-c/Core.h"
+// #include "llvm-c/Types.h"
 
 // #ifdef __cplusplus
 // #endif
@@ -6266,7 +6168,7 @@ public static native void LLVMAddStripSymbolsPass(LLVMPassManagerRef PM);
 // #ifndef LLVM_C_TRANSFORMS_PASSMANAGERBUILDER_H
 // #define LLVM_C_TRANSFORMS_PASSMANAGERBUILDER_H
 
-// #include "llvm-c/Core.h"
+// #include "llvm-c/Types.h"
 
 @Name("LLVMOpaquePassManagerBuilder") @Opaque public static class LLVMPassManagerBuilderRef extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -6360,7 +6262,7 @@ public static native void LLVMPassManagerBuilderPopulateLTOPassManager(LLVMPassM
 // #ifndef LLVM_C_TRANSFORMS_SCALAR_H
 // #define LLVM_C_TRANSFORMS_SCALAR_H
 
-// #include "llvm-c/Core.h"
+// #include "llvm-c/Types.h"
 
 // #ifdef __cplusplus
 // #endif
@@ -6521,7 +6423,7 @@ public static native void LLVMAddBasicAliasAnalysisPass(LLVMPassManagerRef PM);
 // #ifndef LLVM_C_TRANSFORMS_VECTORIZE_H
 // #define LLVM_C_TRANSFORMS_VECTORIZE_H
 
-// #include "llvm-c/Core.h"
+// #include "llvm-c/Types.h"
 
 // #ifdef __cplusplus
 // #endif
@@ -6550,7 +6452,6 @@ public static native void LLVMAddSLPVectorizePass(LLVMPassManagerRef PM);
 // #endif /* defined(__cplusplus) */
 
 // #endif
-
 
 
 }

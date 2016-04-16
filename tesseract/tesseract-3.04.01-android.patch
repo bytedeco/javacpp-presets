@@ -1,0 +1,42 @@
+diff -ruN tesseract-3.04.01/api/Makefile.am tesseract-3.04.01-android/api/Makefile.am
+--- tesseract-3.04.01/api/Makefile.am	2016-02-17 06:27:01.000000000 +0900
++++ tesseract-3.04.01-android/api/Makefile.am	2016-04-16 18:35:14.256310883 +0900
+@@ -20,7 +20,7 @@
+ noinst_LTLIBRARIES = libtesseract_api.la
+ else
+ lib_LTLIBRARIES += libtesseract_api.la
+-libtesseract_api_la_LDFLAGS = -version-info $(GENERIC_LIBRARY_VERSION)
++libtesseract_api_la_LDFLAGS = -avoid-version
+ libtesseract_api_la_LIBADD = \
+     ../ccmain/libtesseract_main.la \
+     ../textord/libtesseract_textord.la \
+@@ -67,7 +67,7 @@
+         ../neural_networks/runtime/libtesseract_neural.la
+ endif
+ 
+-libtesseract_la_LDFLAGS += -version-info $(GENERIC_LIBRARY_VERSION)
++libtesseract_la_LDFLAGS += -avoid-version
+ 
+ bin_PROGRAMS = tesseract
+ tesseract_SOURCES = tesseractmain.cpp
+diff -ruN tesseract-3.04.01/api/Makefile.in tesseract-3.04.01-android/api/Makefile.in
+--- tesseract-3.04.01/api/Makefile.in	2016-02-17 06:27:01.000000000 +0900
++++ tesseract-3.04.01-android/api/Makefile.in	2016-04-16 18:35:35.340789977 +0900
+@@ -400,7 +400,7 @@
+ include_HEADERS = apitypes.h baseapi.h capi.h renderer.h
+ lib_LTLIBRARIES = $(am__append_2) libtesseract.la
+ @USING_MULTIPLELIBS_FALSE@noinst_LTLIBRARIES = libtesseract_api.la
+-@USING_MULTIPLELIBS_TRUE@libtesseract_api_la_LDFLAGS = -version-info $(GENERIC_LIBRARY_VERSION)
++@USING_MULTIPLELIBS_TRUE@libtesseract_api_la_LDFLAGS = -avoid-version
+ @USING_MULTIPLELIBS_TRUE@libtesseract_api_la_LIBADD =  \
+ @USING_MULTIPLELIBS_TRUE@	../ccmain/libtesseract_main.la \
+ @USING_MULTIPLELIBS_TRUE@	../textord/libtesseract_textord.la \
+@@ -417,7 +417,7 @@
+ @USING_MULTIPLELIBS_TRUE@	endif
+ libtesseract_api_la_CPPFLAGS = $(AM_CPPFLAGS) $(am__append_3)
+ libtesseract_api_la_SOURCES = baseapi.cpp capi.cpp renderer.cpp pdfrenderer.cpp
+-libtesseract_la_LDFLAGS = -version-info $(GENERIC_LIBRARY_VERSION) \
++libtesseract_la_LDFLAGS = -avoid-version \
+ 	$(am__append_8)
+ libtesseract_la_SOURCES = 
+ # Dummy C++ source to cause C++ linking.

@@ -24,7 +24,7 @@ case $PLATFORM in
         ;;
 esac
 
-LLVM_VERSION=3.7.0
+LLVM_VERSION=3.8.0
 download http://llvm.org/releases/$LLVM_VERSION/llvm-$LLVM_VERSION.src.tar.xz llvm-$LLVM_VERSION.src.tar.xz
 download http://llvm.org/releases/$LLVM_VERSION/cfe-$LLVM_VERSION.src.tar.xz cfe-$LLVM_VERSION.src.tar.xz
 

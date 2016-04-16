@@ -29,6 +29,8 @@ public class mxnet extends org.bytedeco.javacpp.presets.mxnet {
 // #define MXNET_EXTERN_C extern "C"
 // #endif
 
+// #include <stdint.h>
+
 /** \brief MXNET_DLL prefix for windows */
 // #ifdef _WIN32
 // #ifdef MXNET_EXPORTS
@@ -1873,8 +1875,26 @@ public static native int MXDataIterGetPadNum(DataIterHandle handle,
 public static native int MXDataIterGetLabel(DataIterHandle handle,
                                  PointerPointer out);
 //--------------------------------------------
-// Part 5: basic KVStore interface
+// Part 6: basic KVStore interface
 //--------------------------------------------
+/**
+ * \brief Initialized ps-lite environment variables
+ * @param num_vars number of variables to initialize
+ * @param keys environment keys
+ * @param vals environment values
+ */
+public static native int MXInitPSEnv(@Cast("mx_uint") int num_vars,
+                          @Cast("const char**") PointerPointer keys,
+                          @Cast("const char**") PointerPointer vals);
+public static native int MXInitPSEnv(@Cast("mx_uint") int num_vars,
+                          @Cast("const char**") @ByPtrPtr BytePointer keys,
+                          @Cast("const char**") @ByPtrPtr BytePointer vals);
+public static native int MXInitPSEnv(@Cast("mx_uint") int num_vars,
+                          @Cast("const char**") @ByPtrPtr ByteBuffer keys,
+                          @Cast("const char**") @ByPtrPtr ByteBuffer vals);
+public static native int MXInitPSEnv(@Cast("mx_uint") int num_vars,
+                          @Cast("const char**") @ByPtrPtr byte[] keys,
+                          @Cast("const char**") @ByPtrPtr byte[] vals);
 /**
  * \brief Create a kvstore
  * @param type the type of KVStore
@@ -2078,6 +2098,7 @@ public static native int MXKVStoreBarrier(KVStoreHandle handle);
  * \brief the prototype of a server controller
  * @param head the head of the command
  * @param body the body of the command
+ * @param controller_handle helper handle for implementing controller
  */
 public static class MXKVStoreServerController extends FunctionPointer {
     static { Loader.load(); }
@@ -2086,7 +2107,8 @@ public static class MXKVStoreServerController extends FunctionPointer {
     protected MXKVStoreServerController() { allocate(); }
     private native void allocate();
     public native void call(int head,
-                                         @Cast("const char*") BytePointer body);
+                                         @Cast("const char*") BytePointer body,
+                                         Pointer controller_handle);
 }
 
 /**
@@ -2094,10 +2116,12 @@ public static class MXKVStoreServerController extends FunctionPointer {
  *
  * @param handle handle to the KVStore
  * @param controller the user-defined server controller
+ * @param controller_handle helper handle for implementing controller
  * @return 0 when success, -1 when failure happens
  */
 public static native int MXKVStoreRunServer(KVStoreHandle handle,
-                                 MXKVStoreServerController controller);
+                                 MXKVStoreServerController controller,
+                                 Pointer controller_handle);
 
 /**
  * @return Send a command to all server nodes
