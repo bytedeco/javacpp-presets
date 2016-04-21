@@ -38,6 +38,24 @@ case $PLATFORM in
         make -j4
         make install-strip
         ;;
+    windows-x86)
+        export C_INCLUDE_PATH="/c/Program Files (x86)/CMU/1394Camera/include/"
+        mkdir -p "$INSTALL_PATH/bin"
+        cp "/c/Program Files (x86)/CMU/1394Camera/lib/1394camera.dll" "$INSTALL_PATH/bin/lib1394camera.dll"
+        export LIBRARY_PATH="$INSTALL_PATH/bin/"
+        CC="gcc -m32 -static-libgcc" ./configure --prefix=$INSTALL_PATH --enable-shared --disable-static
+        make -j4
+        make install-strip
+        ;;
+    windows-x86_64)
+        export C_INCLUDE_PATH="/c/Program Files (x86)/CMU/1394Camera/include/"
+        mkdir -p "$INSTALL_PATH/bin"
+        cp "/c/Program Files (x86)/CMU/1394Camera/lib64/x64/1394camera.dll" "$INSTALL_PATH/bin/lib1394camera.dll"
+        export LIBRARY_PATH="$INSTALL_PATH/bin/"
+        CC="gcc -m64 -static-libgcc" ./configure --prefix=$INSTALL_PATH --enable-shared --disable-static
+        make -j4
+        make install-strip
+        ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
         ;;
