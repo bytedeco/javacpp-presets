@@ -5039,6 +5039,7 @@ limitations under the License.
 // #include "tensorflow/core/lib/core/refcount.h"
 // #include "tensorflow/core/lib/core/status.h"
 // #include "tensorflow/core/lib/core/stringpiece.h"
+// #include "tensorflow/core/lib/gtl/inlined_vector.h"
 // #include "tensorflow/core/platform/logging.h"
 // #include "tensorflow/core/platform/macros.h"
 // #include "tensorflow/core/platform/types.h"  // Forward declaration.
@@ -5262,11 +5263,15 @@ limitations under the License.
    * 
    *  }</pre> */
 
-  /** Returns the data as an Eigen::Tensor with 2 dimensions, collapsing all
-   *  Tensor dimensions but the last one into the first dimension of the result. */
+  /** Returns the data as an Eigen::Tensor with NDIMS dimensions, collapsing all
+   *  Tensor dimensions but the last NDIMS-1 into the first dimension of the
+   *  result. If NDIMS > dims() then leading dimensions of size 1 will be
+   *  added to make the output rank NDIMS. */
 
-  /** Returns the data as an Eigen::Tensor with 2 dimensions, collapsing all
-   *  Tensor dimensions but the first one into the last dimension of the result. */
+  /** Returns the data as an Eigen::Tensor with NDIMS dimensions, collapsing all
+   *  Tensor dimensions but the first NDIMS-1 into the last dimension of the
+   *  result. If NDIMS > dims() then trailing dimensions of size 1 will be
+   *  added to make the output rank NDIMS. */
 
   /** \brief Return the Tensor data as a {@code TensorMap} of fixed size 1:
    *  {@code TensorMap<TensorFixedSize<T, 1>>}.
@@ -5333,6 +5338,8 @@ limitations under the License.
   public native void FillAllocationDescription(
         AllocationDescription proto);
 }
+
+
 
 
 

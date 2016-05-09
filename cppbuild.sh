@@ -60,7 +60,7 @@ while [[ $# > 0 ]]; do
     esac
     shift
 done
-echo "Targeting platform \"$PLATFORM\""
+echo "Building for platform \"$PLATFORM\""
 
 if [[ -z ${OPERATION:-} ]]; then
     echo "Usage: ANDROID_NDK=/path/to/android-ndk/ bash cppbuild.sh [-platform <name>] <install | clean> [projects]"

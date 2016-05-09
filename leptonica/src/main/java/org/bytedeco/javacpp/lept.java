@@ -686,30 +686,24 @@ public static final int DNA_VERSION_NUMBER =     1;
 }
 
     /* A hash table of Dnas */
-public static class L_DnaHash extends Pointer {
+@Name("L_DnaHash") public static class L_DNAHASH extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_DnaHash() { super((Pointer)null); allocate(); }
+    public L_DNAHASH() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public L_DnaHash(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public L_DnaHash(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public L_DnaHash position(long position) {
-        return (L_DnaHash)super.position(position);
-    }
-
-    public native @Cast("l_int32") int nbuckets(); public native L_DnaHash nbuckets(int nbuckets);
-    public native @Cast("l_int32") int initsize(); public native L_DnaHash initsize(int initsize);   /* initial size of each dna that is made  */
-    public native L_DNA dna(int i); public native L_DnaHash dna(int i, L_DNA dna);
-    @MemberGetter public native @Cast("L_Dna**") PointerPointer dna();
-}
-@Opaque public static class L_DNAHASH extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public L_DNAHASH() { super((Pointer)null); }
+    public L_DNAHASH(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_DNAHASH(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public L_DNAHASH position(long position) {
+        return (L_DNAHASH)super.position(position);
+    }
+
+    public native @Cast("l_int32") int nbuckets(); public native L_DNAHASH nbuckets(int nbuckets);
+    public native @Cast("l_int32") int initsize(); public native L_DNAHASH initsize(int initsize);   /* initial size of each dna that is made  */
+    public native L_DNA dna(int i); public native L_DNAHASH dna(int i, L_DNA dna);
+    @MemberGetter public native @Cast("L_Dna**") PointerPointer dna();
 }
 
 public static final int SARRAY_VERSION_NUMBER =     1;
@@ -832,30 +826,24 @@ public static final int
  *      For implementation details, see bbuffer.c.
  */
 
-public static class L_ByteBuffer extends Pointer {
+@Name("L_ByteBuffer") public static class L_BBUFFER extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_ByteBuffer() { super((Pointer)null); allocate(); }
+    public L_BBUFFER() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public L_ByteBuffer(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public L_ByteBuffer(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public L_ByteBuffer position(long position) {
-        return (L_ByteBuffer)super.position(position);
-    }
-
-    public native @Cast("l_int32") int nalloc(); public native L_ByteBuffer nalloc(int nalloc);       /* size of allocated byte array            */
-    public native @Cast("l_int32") int n(); public native L_ByteBuffer n(int n);            /* number of bytes read into to the array  */
-    public native @Cast("l_int32") int nwritten(); public native L_ByteBuffer nwritten(int nwritten);     /* number of bytes written from the array  */
-    public native @Cast("l_uint8*") BytePointer array(); public native L_ByteBuffer array(BytePointer array);        /* byte array                              */
-}
-@Opaque public static class L_BBUFFER extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public L_BBUFFER() { super((Pointer)null); }
+    public L_BBUFFER(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_BBUFFER(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public L_BBUFFER position(long position) {
+        return (L_BBUFFER)super.position(position);
+    }
+
+    public native @Cast("l_int32") int nalloc(); public native L_BBUFFER nalloc(int nalloc);       /* size of allocated byte array            */
+    public native @Cast("l_int32") int n(); public native L_BBUFFER n(int n);            /* number of bytes read into to the array  */
+    public native @Cast("l_int32") int nwritten(); public native L_BBUFFER nwritten(int nwritten);     /* number of bytes written from the array  */
+    public native @Cast("l_uint8*") BytePointer array(); public native L_BBUFFER array(BytePointer array);        /* byte array                              */
 }
 
 
@@ -1332,30 +1320,24 @@ public static final int
      *   (1) Keys and values of the valid key types are all 64-bit
      *   (2) (void *) can be used for values but not for keys.
      */
-public static class Rb_Type extends Pointer {
+@Name("Rb_Type") public static class RB_TYPE extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public Rb_Type() { super((Pointer)null); allocate(); }
+    public RB_TYPE() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public Rb_Type(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public Rb_Type(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public Rb_Type position(long position) {
-        return (Rb_Type)super.position(position);
-    }
-
-    public native @Cast("l_int64") long itype(); public native Rb_Type itype(long itype);
-    public native @Cast("l_uint64") int utype(); public native Rb_Type utype(int utype);
-    public native @Cast("l_float64") double ftype(); public native Rb_Type ftype(double ftype);
-    public native Pointer ptype(); public native Rb_Type ptype(Pointer ptype);
-}
-@Opaque public static class RB_TYPE extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public RB_TYPE() { super((Pointer)null); }
+    public RB_TYPE(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public RB_TYPE(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public RB_TYPE position(long position) {
+        return (RB_TYPE)super.position(position);
+    }
+
+    public native @Cast("l_int64") long itype(); public native RB_TYPE itype(long itype);
+    public native @Cast("l_uint64") int utype(); public native RB_TYPE utype(int utype);
+    public native @Cast("l_float64") double ftype(); public native RB_TYPE ftype(double ftype);
+    public native Pointer ptype(); public native RB_TYPE ptype(Pointer ptype);
 }
 
 @Name("L_Rbtree") public static class L_RBTREE extends Pointer {
@@ -1372,7 +1354,7 @@ public static class Rb_Type extends Pointer {
         return (L_RBTREE)super.position(position);
     }
 
-    public native L_Rbtree_Node root(); public native L_RBTREE root(L_Rbtree_Node root);
+    public native L_RBTREE_NODE root(); public native L_RBTREE root(L_RBTREE_NODE root);
     public native @Cast("l_int32") int keytype(); public native L_RBTREE keytype(int keytype);
 }
 @Opaque public static class L_AMAP extends Pointer {
@@ -1388,32 +1370,26 @@ public static class Rb_Type extends Pointer {
     public L_ASET(Pointer p) { super(p); }
 }  /* hide underlying implementation for set */
 
-public static class L_Rbtree_Node extends Pointer {
+@Name("L_Rbtree_Node") public static class L_RBTREE_NODE extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
-    public L_Rbtree_Node() { super((Pointer)null); allocate(); }
+    public L_RBTREE_NODE() { super((Pointer)null); allocate(); }
     /** Native array allocator. Access with {@link Pointer#position(long)}. */
-    public L_Rbtree_Node(long size) { super((Pointer)null); allocateArray(size); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public L_Rbtree_Node(Pointer p) { super(p); }
-    private native void allocate();
-    private native void allocateArray(long size);
-    @Override public L_Rbtree_Node position(long position) {
-        return (L_Rbtree_Node)super.position(position);
-    }
-
-    public native @ByRef Rb_Type key(); public native L_Rbtree_Node key(Rb_Type key);
-    public native @ByRef Rb_Type value(); public native L_Rbtree_Node value(Rb_Type value);
-    public native L_Rbtree_Node left(); public native L_Rbtree_Node left(L_Rbtree_Node left);
-    public native L_Rbtree_Node right(); public native L_Rbtree_Node right(L_Rbtree_Node right);
-    public native L_Rbtree_Node parent(); public native L_Rbtree_Node parent(L_Rbtree_Node parent);
-    public native @Cast("l_int32") int color(); public native L_Rbtree_Node color(int color);
-}
-@Opaque public static class L_RBTREE_NODE extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public L_RBTREE_NODE() { super((Pointer)null); }
+    public L_RBTREE_NODE(long size) { super((Pointer)null); allocateArray(size); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public L_RBTREE_NODE(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public L_RBTREE_NODE position(long position) {
+        return (L_RBTREE_NODE)super.position(position);
+    }
+
+    public native @ByRef RB_TYPE key(); public native L_RBTREE_NODE key(RB_TYPE key);
+    public native @ByRef RB_TYPE value(); public native L_RBTREE_NODE value(RB_TYPE value);
+    public native L_RBTREE_NODE left(); public native L_RBTREE_NODE left(L_RBTREE_NODE left);
+    public native L_RBTREE_NODE right(); public native L_RBTREE_NODE right(L_RBTREE_NODE right);
+    public native L_RBTREE_NODE parent(); public native L_RBTREE_NODE parent(L_RBTREE_NODE parent);
+    public native @Cast("l_int32") int color(); public native L_RBTREE_NODE color(int color);
 }
 @Opaque public static class L_AMAP_NODE extends Pointer {
     /** Empty constructor. Calls {@code super((Pointer)null)}. */
@@ -2556,7 +2532,7 @@ public static final int
                                    /* and not dilated                        */
     public native PIXA pixatd(); public native JBCLASSER pixatd(PIXA pixatd);       /* templates for each class; bordered     */
                                    /* and dilated                            */
-    public native L_DnaHash dahash(); public native JBCLASSER dahash(L_DnaHash dahash);      /* Hash table to find templates by size   */
+    public native L_DNAHASH dahash(); public native JBCLASSER dahash(L_DNAHASH dahash);      /* Hash table to find templates by size   */
     public native NUMA nafgt(); public native JBCLASSER nafgt(NUMA nafgt);        /* fg areas of undilated templates;       */
                                    /* only used for rank < 1.0               */
     public native PTA ptac(); public native JBCLASSER ptac(PTA ptac);         /* centroids of all bordered cc           */

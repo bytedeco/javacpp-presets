@@ -49,6 +49,18 @@
             <CL>&quot;/I${env.SDKDIR}/Include/&quot; &quot;/IC:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Include&quot;</CL>
           </environmentVariables>
         </configuration>
+        <executions>
+          <execution>
+            <id>javacpp.compiler</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+            <configuration>
+              <copyLibs>false</copyLibs>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-jar-plugin</artifactId>

@@ -1023,6 +1023,25 @@ public static native int MXSymbolPrint(SymbolHandle symbol, @Cast("const char**"
 public static native int MXSymbolPrint(SymbolHandle symbol, @Cast("const char**") @ByPtrPtr ByteBuffer out_str);
 public static native int MXSymbolPrint(SymbolHandle symbol, @Cast("const char**") @ByPtrPtr byte[] out_str);
 /**
+ * \brief Get string name from symbol
+ * @param symbol the source symbol
+ * @param out The result name.
+ * @param success Whether the result is contained in out.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXSymbolGetName(SymbolHandle symbol,
+                              @Cast("const char**") PointerPointer out,
+                              IntPointer success);
+public static native int MXSymbolGetName(SymbolHandle symbol,
+                              @Cast("const char**") @ByPtrPtr BytePointer out,
+                              IntPointer success);
+public static native int MXSymbolGetName(SymbolHandle symbol,
+                              @Cast("const char**") @ByPtrPtr ByteBuffer out,
+                              IntBuffer success);
+public static native int MXSymbolGetName(SymbolHandle symbol,
+                              @Cast("const char**") @ByPtrPtr byte[] out,
+                              int[] success);
+/**
  * \brief Get string attribute from symbol
  * @param symbol the source symbol
  * @param key The key of the symbol.
@@ -1080,6 +1099,22 @@ public static native int MXSymbolSetAttr(SymbolHandle symbol,
 public static native int MXSymbolSetAttr(SymbolHandle symbol,
                               String key,
                               String value);
+/**
+ * \brief Get all attributes from symbol
+ * @param symbol the source symbol
+ * @param out_size The number of output attributes
+ * @param out 2*out_size strings representing key value pairs.
+ * @return 0 when success, -1 when failure happens
+ */
+public static native int MXSymbolListAttr(SymbolHandle symbol,
+                               @Cast("mx_uint*") IntPointer out_size,
+                               @Cast("const char***") PointerPointer out);
+public static native int MXSymbolListAttr(SymbolHandle symbol,
+                               @Cast("mx_uint*") IntBuffer out_size,
+                               @Cast("const char***") PointerPointer out);
+public static native int MXSymbolListAttr(SymbolHandle symbol,
+                               @Cast("mx_uint*") int[] out_size,
+                               @Cast("const char***") PointerPointer out);
 /**
  * \brief List arguments in the symbol.
  * @param symbol the symbol

@@ -25,6 +25,7 @@ case $PLATFORM in
         ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
+        return 0
         ;;
 esac
 

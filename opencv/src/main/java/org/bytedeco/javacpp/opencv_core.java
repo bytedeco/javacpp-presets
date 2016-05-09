@@ -14644,7 +14644,9 @@ including std::sort().
     public Mat(double ... d) { this(new DoublePointer(d)); }
     public Mat(float ... f) { this(new FloatPointer(f)); }
     private Mat(long rows, long cols, int type, Pointer data) { this((int)Math.min(rows, Integer.MAX_VALUE), (int)Math.min(cols, Integer.MAX_VALUE), type, data, AUTO_STEP); }
+    public Mat(BytePointer p) { this(p, false); }
     public Mat(BytePointer p, boolean signed) { this(p.limit - p.position, 1, signed ? CV_8SC1 : CV_8UC1, p); }
+    public Mat(ShortPointer p) { this(p, false); }
     public Mat(ShortPointer p, boolean signed) { this(p.limit - p.position, 1, signed ? CV_16SC1 : CV_16UC1, p); }
     public Mat(IntPointer p) { this(p.limit - p.position, 1, CV_32SC1, p); }
     public Mat(FloatPointer p) { this(p.limit - p.position, 1, CV_32FC1, p); }

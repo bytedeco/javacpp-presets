@@ -366,8 +366,6 @@
                 <argument>${project.basedir}/../cppbuild.sh</argument>
                 <argument>clean</argument>
                 <argument>${project.artifactId}</argument>
-                <argument>-platform</argument>
-                <argument>${javacpp.platform}</argument>
               </arguments>
             </configuration>
           </execution>		  

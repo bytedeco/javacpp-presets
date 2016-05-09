@@ -46,10 +46,10 @@ GFLAGS=2.1.2
 PROTO=2.6.1
 LEVELDB=1.18
 SNAPPY=1.1.3
-LMDB=0.9.17
+LMDB=0.9.18
 BOOST=1_59_0
 HDF5=1.8.16
-OPENBLAS=0.2.15
+OPENBLAS=0.2.18
 CAFFE_VERSION=rc3
 
 download https://github.com/google/glog/archive/v$GLOG.tar.gz glog-$GLOG.tar.gz
@@ -150,7 +150,7 @@ export PATH=../bin:$PATH
 export CXXFLAGS="-I../include -I$OPENCV_PATH/include"
 export NVCCFLAGS="-I../include -I$OPENCV_PATH/include"
 export LINKFLAGS="-L../lib -L$OPENCV_PATH/lib"
-make -j $MAKEJ BLAS=$BLAS OPENCV_VERSION=3 DISTRIBUTE_DIR=.. lib
+make -j $MAKEJ BLAS=$BLAS OPENCV_VERSION=3 DISTRIBUTE_DIR=.. # lib
 # Manual deploy to avoid Caffe's python build
 mkdir -p ../include/caffe/proto
 cp -a include/caffe/* ../include/caffe/
