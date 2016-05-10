@@ -18624,13 +18624,7 @@ public static final String HDF5_DATA_LABEL_NAME = "label";
 /**
  Forward declare boost::thread instead of including boost/thread.hpp
  to avoid a boost/NVCC issues (#1009, #1010) on OSX.
- */
-@Namespace("boost") @Opaque public static class mutex extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public mutex() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public mutex(Pointer p) { super(p); }
-} 
+ */ 
 
 /**
  * \brief An interface for the units of computation which can be composed into a

@@ -79,7 +79,7 @@ public class caffe implements InfoMapper {
                .put(new Info("leveldb::Iterator", "leveldb::DB", "MDB_txn", "MDB_cursor", "MDB_dbi", "boost::mt19937").cast().pointerTypes("Pointer"))
                .put(new Info("google::protobuf::internal::CompileAssert", "google::protobuf::MessageFactory::InternalRegisterGeneratedFile",
                              "google::protobuf::internal::LogMessage", "google::protobuf::internal::LogFinisher", "google::protobuf::LogHandler",
-                             "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField").skip());
+                             "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "boost::mutex").skip());
 
         String[] functionTemplates = { "caffe_cpu_gemm", "caffe_cpu_gemv", "caffe_axpy", "caffe_cpu_axpby", "caffe_copy", "caffe_set", "caffe_add_scalar",
                 "caffe_scal", "caffe_sqr", "caffe_add", "caffe_sub", "caffe_mul", "caffe_div", "caffe_powx", "caffe_nextafter", "caffe_rng_uniform",
