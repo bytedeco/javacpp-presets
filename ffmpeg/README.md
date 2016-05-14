@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * FFmpeg 2.8.1  http://ffmpeg.org/
+ * FFmpeg 3.0.2  http://ffmpeg.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.ffmpeg</groupId>
     <artifactId>tutorial01</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
     <properties>
         <exec.mainClass>Tutorial01</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>ffmpeg</artifactId>
-            <version>2.8.1-1.1</version>
+            <version>3.0.2-1.2</version>
         </dependency>
     </dependencies>
 </project>

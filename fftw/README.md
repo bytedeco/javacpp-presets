@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.fftw</groupId>
     <artifactId>example</artifactId>
-    <version>1.1</version>
+    <version>1.2</version>
     <properties>
         <exec.mainClass>Example</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>fftw</artifactId>
-            <version>3.3.4-1.1</version>
+            <version>3.3.4-1.2</version>
         </dependency>
     </dependencies>
 </project>

@@ -36,7 +36,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.mxnet</groupId>
     <artifactId>ImageClassificationPredict</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     <properties>
         <exec.mainClass>ImageClassificationPredict</exec.mainClass>
     </properties>
@@ -44,7 +44,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>mxnet</artifactId>
-            <version>master-1.2-SNAPSHOT</version>
+            <version>master-1.2</version>
         </dependency>
     </dependencies>
 </project>

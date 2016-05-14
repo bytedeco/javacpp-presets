@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * TensorFlow  http://www.tensorflow.org/
+ * TensorFlow 0.8.0  http://www.tensorflow.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -34,7 +34,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.bytedeco.javacpp-presets.tensorflow</groupId>
     <artifactId>exampletrainer</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     <properties>
         <exec.mainClass>ExampleTrainer</exec.mainClass>
     </properties>
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>tensorflow</artifactId>
-            <version>master-1.2-SNAPSHOT</version>
+            <version>0.8.0-1.2</version>
         </dependency>
     </dependencies>
 </project>
