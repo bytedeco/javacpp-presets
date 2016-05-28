@@ -1,0 +1,12 @@
+diff -ruN opencv_contrib-3.1.0/modules/dnn/3rdparty/protobuf/src/google/protobuf/stubs/platform_macros.h opencv_contrib-3.1.0-linux-ppc64le/modules/dnn/3rdparty/protobuf/src/google/protobuf/stubs/platform_macros.h
+--- opencv_contrib-3.1.0/modules/dnn/3rdparty/protobuf/src/google/protobuf/stubs/platform_macros.h	2015-12-17 11:11:31.000000000 -0600
++++ opencv_contrib-3.1.0-linux-ppc64le/modules/dnn/3rdparty/protobuf/src/google/protobuf/stubs/platform_macros.h	2016-05-27 20:35:35.540608341 -0500
+@@ -37,7 +37,7 @@
+ //   http://msdn.microsoft.com/en-us/library/b0084kay.aspx
+ //   http://www.agner.org/optimize/calling_conventions.pdf
+ //   or with gcc, run: "echo | gcc -E -dM -"
+-#if defined(_M_X64) || defined(__x86_64__)
++#if defined(_M_X64) || defined(__x86_64__) || defined(__PPC64__)
+ #define GOOGLE_PROTOBUF_ARCH_X64 1
+ #define GOOGLE_PROTOBUF_ARCH_64_BIT 1
+ #elif defined(_M_IX86) || defined(__i386__)

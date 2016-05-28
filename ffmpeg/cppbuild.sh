@@ -280,6 +280,44 @@ case $PLATFORM in
         make install
         ;;
 
+    linux-ppc64le)
+        cd $LAME
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64"
+        make -j $MAKEJ
+        make install
+        cd ../$SPEEX
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64"
+        make -j $MAKEJ
+        make install
+        cd ../$OPENCORE_AMR
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=ppc64le-linux CFLAGS="-m64" CXXFLAGS="-m64"
+        make -j $MAKEJ
+        make install
+        cd ../$OPENSSL
+        ./Configure linux-ppc64le -fPIC no-shared --prefix=$INSTALL_PATH
+        make # fails with -j > 1
+        make install
+        cd ../openh264-$OPENH264_VERSION
+        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=ppc64le libraries install-static
+        cd ../$X264
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=ppc64le-linux
+        make -j $MAKEJ
+        make install
+        cd ../$X265
+        CC="gcc -m64" CXX="g++ -m64" $CMAKE -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
+        make -j $MAKEJ
+        make install
+        cd ../libvpx-$VPX_VERSION
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-examples --target=generic-gnu
+        make -j $MAKEJ
+        make install
+        cd ../ffmpeg-$FFMPEG_VERSION
+        [[ $ENABLE =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $X11GRAB --cc="gcc -m64" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
+        make -j $MAKEJ
+        make install
+        ;;
+
     macosx-*)
         cd $LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic
