@@ -1,0 +1,11 @@
+--- ffmpeg-3.0/libavformat/rtmpproto.c	2016-04-11 11:00:14.455993000 -0400
++++ ffmpeg-3.0/libavformat/rtmpproto.c.rtmps-fix	2016-04-11 10:59:38.981530700 -0400
+@@ -3046,7 +3046,7 @@
+     rt->stream->flags |= AVIO_FLAG_NONBLOCK;
+ 
+     /* try to read one byte from the stream */
+-    ret = ffurl_read(rt->stream, &c, 1);
++//    ret = ffurl_read(rt->stream, &c, 1);
+ 
+     /* switch the stream back into blocking mode */
+     rt->stream->flags &= ~AVIO_FLAG_NONBLOCK;
