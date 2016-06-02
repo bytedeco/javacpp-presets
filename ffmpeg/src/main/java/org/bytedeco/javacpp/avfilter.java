@@ -57,6 +57,7 @@ public class avfilter extends org.bytedeco.javacpp.presets.avfilter {
 
 // #include "libavutil/attributes.h"
 // #include "libavutil/avutil.h"
+// #include "libavutil/buffer.h"
 // #include "libavutil/dict.h"
 // #include "libavutil/frame.h"
 // #include "libavutil/log.h"
@@ -463,6 +464,15 @@ public static class AVFilterContext extends Pointer {
      */
     public native AVFilterInternal internal(); public native AVFilterContext internal(AVFilterInternal internal);
 
+    /**
+     * For filters which will create hardware frames, sets the device the
+     * filter should create them in.  All other filters will ignore this field:
+     * in particular, a filter which consumes or processes hardware frames will
+     * instead use the hw_frames_ctx field in AVFilterLink to carry the
+     * hardware context information.
+     */
+    public native AVBufferRef hw_device_ctx(); public native AVFilterContext hw_device_ctx(AVBufferRef hw_device_ctx);
+
     public native @Cast("AVFilterCommand*") Pointer command_queue(); public native AVFilterContext command_queue(Pointer command_queue);
 
     /** enable expression string */
@@ -613,6 +623,12 @@ public static class AVFilterLink extends Pointer {
      * It is similar to the r_frame_rate field in AVStream.
      */
     public native @ByRef AVRational frame_rate(); public native AVFilterLink frame_rate(AVRational frame_rate);
+
+    /**
+     * For hwaccel pixel formats, this should be a reference to the
+     * AVHWFramesContext describing the frames.
+     */
+    public native AVBufferRef hw_frames_ctx(); public native AVFilterLink hw_frames_ctx(AVBufferRef hw_frames_ctx);
 
     /**
      * Buffer partially filled with samples to achieve a fixed/minimum size.
@@ -1531,7 +1547,6 @@ public static class AVABufferSinkParams extends Pointer {
 // Parsed from <libavfilter/buffersrc.h>
 
 /*
- *
  * This file is part of FFmpeg.
  *
  * FFmpeg is free software; you can redistribute it and/or
@@ -1595,6 +1610,94 @@ public static final int
  * The number is reset when a frame is added.
  */
 @NoException public static native @Cast("unsigned") int av_buffersrc_get_nb_failed_requests(AVFilterContext buffer_src);
+
+/**
+ * This structure contains the parameters describing the frames that will be
+ * passed to this filter.
+ *
+ * It should be allocated with av_buffersrc_parameters_alloc() and freed with
+ * av_free(). All the allocated fields in it remain owned by the caller.
+ */
+public static class AVBufferSrcParameters extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public AVBufferSrcParameters() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public AVBufferSrcParameters(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AVBufferSrcParameters(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public AVBufferSrcParameters position(long position) {
+        return (AVBufferSrcParameters)super.position(position);
+    }
+
+    /**
+     * video: the pixel format, value corresponds to enum AVPixelFormat
+     * audio: the sample format, value corresponds to enum AVSampleFormat
+     */
+    public native int format(); public native AVBufferSrcParameters format(int format);
+    /**
+     * The timebase to be used for the timestamps on the input frames.
+     */
+    public native @ByRef AVRational time_base(); public native AVBufferSrcParameters time_base(AVRational time_base);
+
+    /**
+     * Video only, the display dimensions of the input frames.
+     */
+    public native int width(); public native AVBufferSrcParameters width(int width);
+    public native int height(); public native AVBufferSrcParameters height(int height);
+
+    /**
+     * Video only, the sample (pixel) aspect ratio.
+     */
+    public native @ByRef AVRational sample_aspect_ratio(); public native AVBufferSrcParameters sample_aspect_ratio(AVRational sample_aspect_ratio);
+
+    /**
+     * Video only, the frame rate of the input video. This field must only be
+     * set to a non-zero value if input stream has a known constant framerate
+     * and should be left at its initial value if the framerate is variable or
+     * unknown.
+     */
+    public native @ByRef AVRational frame_rate(); public native AVBufferSrcParameters frame_rate(AVRational frame_rate);
+
+    /**
+     * Video with a hwaccel pixel format only. This should be a reference to an
+     * AVHWFramesContext instance describing the input frames.
+     */
+    public native AVBufferRef hw_frames_ctx(); public native AVBufferSrcParameters hw_frames_ctx(AVBufferRef hw_frames_ctx);
+
+    /**
+     * Audio only, the audio sampling rate in samples per secon.
+     */
+    public native int sample_rate(); public native AVBufferSrcParameters sample_rate(int sample_rate);
+
+    /**
+     * Audio only, the audio channel layout
+     */
+    public native @Cast("uint64_t") long channel_layout(); public native AVBufferSrcParameters channel_layout(long channel_layout);
+}
+
+/**
+ * Allocate a new AVBufferSrcParameters instance. It should be freed by the
+ * caller with av_free().
+ */
+@NoException public static native AVBufferSrcParameters av_buffersrc_parameters_alloc();
+
+/**
+ * Initialize the buffersrc or abuffersrc filter with the provided parameters.
+ * This function may be called multiple times, the later calls override the
+ * previous ones. Some of the parameters may also be set through AVOptions, then
+ * whatever method is used last takes precedence.
+ *
+ * @param ctx an instance of the buffersrc or abuffersrc filter
+ * @param param the stream parameters. The frames later passed to this filter
+ *              must conform to those parameters. All the allocated fields in
+ *              param remain owned by the caller, libavfilter will make internal
+ *              copies or references when necessary.
+ * @return 0 on success, a negative AVERROR code on failure.
+ */
+@NoException public static native int av_buffersrc_parameters_set(AVFilterContext ctx, AVBufferSrcParameters param);
 
 /**
  * Add a frame to the buffer source.

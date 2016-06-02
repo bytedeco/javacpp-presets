@@ -400,6 +400,11 @@ public static class AVIOContext extends Pointer {
      * ',' separated list of allowed protocols.
      */
     @MemberGetter public native @Cast("const char*") BytePointer protocol_whitelist();
+
+    /**
+     * ',' separated list of disallowed protocols.
+     */
+    @MemberGetter public native @Cast("const char*") BytePointer protocol_blacklist();
 }
 
 /* unbuffered I/O */
@@ -1155,8 +1160,8 @@ public static final int AVIO_FLAG_DIRECT = 0x8000;
  * av_read_frame() on it. Each call, if successful, will return an AVPacket
  * containing encoded data for one AVStream, identified by
  * AVPacket.stream_index. This packet may be passed straight into the libavcodec
- * decoding functions avcodec_decode_video2(), avcodec_decode_audio4() or
- * avcodec_decode_subtitle2() if the caller wishes to decode the data.
+ * decoding functions avcodec_send_packet() or avcodec_decode_subtitle2() if the
+ * caller wishes to decode the data.
  *
  * AVPacket.pts, AVPacket.dts and AVPacket.duration timing information will be
  * set if known. They may also be unset (i.e. AV_NOPTS_VALUE for
@@ -1304,7 +1309,6 @@ public static final int AVIO_FLAG_DIRECT = 0x8000;
  * \{
  * \}
  * \}
- *
  */
 
 // #include <time.h>
@@ -2224,18 +2228,12 @@ public static class AVStream extends Pointer {
      * encoding: set by the user, replaced by libavformat if left unset
      */
     public native int id(); public native AVStream id(int id);
+// #if FF_API_LAVF_AVCTX
     /**
-     * Codec context associated with this stream. Allocated and freed by
-     * libavformat.
-     *
-     * - decoding: The demuxer exports codec information stored in the headers
-     *             here.
-     * - encoding: The user sets codec information, the muxer writes it to the
-     *             output. Mandatory fields as specified in AVCodecContext
-     *             documentation must be set even if this AVCodecContext is
-     *             not actually used for encoding.
+     * @deprecated use the codecpar struct instead
      */
-    public native AVCodecContext codec(); public native AVStream codec(AVCodecContext codec);
+    public native @Deprecated AVCodecContext codec(); public native AVStream codec(AVCodecContext codec);
+// #endif
     public native Pointer priv_data(); public native AVStream priv_data(Pointer priv_data);
 
 // #if FF_API_LAVF_FRAC
@@ -2344,6 +2342,17 @@ public static class AVStream extends Pointer {
     public native int event_flags(); public native AVStream event_flags(int event_flags);
 /** The call resulted in updated metadata. */
 public static final int AVSTREAM_EVENT_FLAG_METADATA_UPDATED = 0x0001;
+
+    /*
+     * Codec parameters associated with this stream. Allocated and freed by
+     * libavformat in avformat_new_stream() and avformat_free_context()
+     * respectively.
+     *
+     * - demuxing: filled by libavformat on stream creation or in
+     *             avformat_find_stream_info()
+     * - muxing: filled by the caller before avformat_write_header()
+     */
+    public native AVCodecParameters codecpar(); public native AVStream codecpar(AVCodecParameters codecpar);
 
     /*****************************************************************
      * All fields below this line are not part of the public API. They
@@ -3299,9 +3308,9 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
     /*
      * A callback for opening new IO streams.
      *
-     * Certain muxers or demuxers (e.g. for various playlist-based formats) need
-     * to open additional files during muxing or demuxing. This callback allows
-     * the caller to provide custom IO in such cases.
+     * Whenever a muxer or a demuxer needs to open an IO stream (typically from
+     * avformat_open_input() for demuxers, but for certain formats can happen at
+     * other times as well), it will call this callback to obtain an IO context.
      *
      * @param s the format context
      * @param pb on success, the newly opened IO context should be returned here
@@ -3339,6 +3348,13 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
         public native void call(AVFormatContext s, AVIOContext pb);
     }
     public native Io_close_AVFormatContext_AVIOContext io_close(); public native AVFormatContext io_close(Io_close_AVFormatContext_AVIOContext io_close);
+
+    /**
+     * ',' separated list of disallowed protocols.
+     * - encoding: unused
+     * - decoding: set by user through AVOptions (NO direct access)
+     */
+    public native @Cast("char*") BytePointer protocol_blacklist(); public native AVFormatContext protocol_blacklist(BytePointer protocol_blacklist);
 }
 
 @NoException public static native int av_format_get_probe_score(@Const AVFormatContext s);
@@ -3967,7 +3983,7 @@ public static final int AVSEEK_FLAG_FRAME =    8;
 @NoException public static native int av_interleaved_write_frame(AVFormatContext s, AVPacket pkt);
 
 /**
- * Write a uncoded frame to an output media file.
+ * Write an uncoded frame to an output media file.
  *
  * The frame must be correctly interleaved according to the container
  * specification; if not, then av_interleaved_write_frame() must be used.
@@ -3978,7 +3994,7 @@ public static final int AVSEEK_FLAG_FRAME =    8;
                            AVFrame frame);
 
 /**
- * Write a uncoded frame to an output media file.
+ * Write an uncoded frame to an output media file.
  *
  * If the muxer supports it, this function makes it possible to write an AVFrame
  * structure directly, without encoding it into a packet.
@@ -4441,7 +4457,9 @@ public static final int AVSEEK_FLAG_FRAME =    8;
  * Apply a list of bitstream filters to a packet.
  *
  * @param codec AVCodecContext, usually from an AVStream
- * @param pkt the packet to apply filters to
+ * @param pkt the packet to apply filters to. If, on success, the returned
+ *        packet has size == 0 and side_data_elems == 0, it indicates that
+ *        the packet should be dropped
  * @param bsfc a NULL-terminated list of filters to apply
  * @return  >=0 on success;
  *          AVERROR code on failure
