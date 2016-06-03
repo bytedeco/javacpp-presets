@@ -14,50 +14,38 @@ ENABLE="--enable-pthreads --enable-shared --enable-gpl --enable-version3 --enabl
 # DISABLE="--disable-w32threads --disable-iconv --disable-libxcb --disable-opencl --disable-sdl --disable-zlib --disable-everything"
 # ENABLE="--enable-pthreads --enable-shared --enable-runtime-cpudetect --enable-libopenh264 --enable-encoder=libopenh264 --enable-encoder=aac --enable-encoder=mjpeg --enable-decoder=h264 --enable-decoder=aac --enable-decoder=mjpeg --enable-parser=h264 --enable-parser=aac --enable-parser=mjpeg --enable-muxer=mp4 --enable-muxer=rtsp --enable-muxer=mjpeg --enable-demuxer=mov --enable-demuxer=rtsp --enable-demuxer=mjpeg --enable-protocol=file --enable-protocol=http --enable-protocol=rtp --enable-protocol=rtmp"
 
-if [[ $PLATFORM == windows* && !($DISABLE =~ "--disable-everything") ]]; then
-    FFMPEG_VERSION=20160428-git-78baa45
-    [[ $PLATFORM == *64 ]] && BITS=64 || BITS=32
-    download http://ffmpeg.zeranoe.com/builds/win$BITS/dev/ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z
-    download http://ffmpeg.zeranoe.com/builds/win$BITS/shared/ffmpeg-$FFMPEG_VERSION-win$BITS-shared.7z ffmpeg-$FFMPEG_VERSION-win$BITS-shared.7z
+LAME=lame-3.99.5
+SPEEX=speex-1.2rc2
+OPENCORE_AMR=opencore-amr-0.1.3
+OPENSSL=openssl-1.0.2h
+OPENH264_VERSION=1.5.0
+X265=x265_1.9
+VPX_VERSION=v1.5.0
+FFMPEG_VERSION=3.0.2
+download http://downloads.sourceforge.net/project/lame/lame/3.99/$LAME.tar.gz $LAME.tar.gz
+download http://downloads.xiph.org/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
+download http://sourceforge.net/projects/opencore-amr/files/opencore-amr/$OPENCORE_AMR.tar.gz/download $OPENCORE_AMR.tar.gz
+download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
+download https://github.com/cisco/openh264/archive/v$OPENH264_VERSION.tar.gz openh264-$OPENH264_VERSION.tar.gz
+download ftp://ftp.videolan.org/pub/videolan/x264/snapshots/last_stable_x264.tar.bz2 last_stable_x264.tar.bz2
+download https://ftp.videolan.org/pub/videolan/x265/$X265.tar.gz $X265.tar.gz
+download https://chromium.googlesource.com/webm/libvpx/+archive/$VPX_VERSION.tar.gz libvpx-$VPX_VERSION.tar.gz
+download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
 
-    mkdir -p $PLATFORM
-    cd $PLATFORM
-    7z x -y ../ffmpeg-$FFMPEG_VERSION-win$BITS-dev.7z
-    7z x -y ../ffmpeg-$FFMPEG_VERSION-win$BITS-shared.7z
-else
-    LAME=lame-3.99.5
-    SPEEX=speex-1.2rc2
-    OPENCORE_AMR=opencore-amr-0.1.3
-    OPENSSL=openssl-1.0.2h
-    OPENH264_VERSION=1.5.0
-    X265=x265_1.9
-    VPX_VERSION=v1.5.0
-    FFMPEG_VERSION=3.0.2
-    download http://downloads.sourceforge.net/project/lame/lame/3.99/$LAME.tar.gz $LAME.tar.gz
-    download http://downloads.xiph.org/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
-    download http://sourceforge.net/projects/opencore-amr/files/opencore-amr/$OPENCORE_AMR.tar.gz/download $OPENCORE_AMR.tar.gz
-    download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
-    download https://github.com/cisco/openh264/archive/v$OPENH264_VERSION.tar.gz openh264-$OPENH264_VERSION.tar.gz
-    download ftp://ftp.videolan.org/pub/videolan/x264/snapshots/last_stable_x264.tar.bz2 last_stable_x264.tar.bz2
-    download https://ftp.videolan.org/pub/videolan/x265/$X265.tar.gz $X265.tar.gz
-    download https://chromium.googlesource.com/webm/libvpx/+archive/$VPX_VERSION.tar.gz libvpx-$VPX_VERSION.tar.gz
-    download http://ffmpeg.org/releases/ffmpeg-$FFMPEG_VERSION.tar.bz2 ffmpeg-$FFMPEG_VERSION.tar.bz2
-
-    mkdir -p $PLATFORM
-    cd $PLATFORM
-    INSTALL_PATH=`pwd`
-    tar -xzvf ../$LAME.tar.gz
-    tar -xzvf ../$SPEEX.tar.gz
-    tar -xzvf ../$OPENCORE_AMR.tar.gz
-    tar -xzvf ../$OPENSSL.tar.gz
-    tar -xzvf ../openh264-$OPENH264_VERSION.tar.gz
-    tar -xjvf ../last_stable_x264.tar.bz2
-    tar -xzvf ../$X265.tar.gz
-    mkdir -p libvpx-$VPX_VERSION
-    tar -xzvf ../libvpx-$VPX_VERSION.tar.gz -C libvpx-$VPX_VERSION
-    tar -xjvf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
-    X264=`echo x264-snapshot-*`
-fi
+mkdir -p $PLATFORM
+cd $PLATFORM
+INSTALL_PATH=`pwd`
+tar -xzvf ../$LAME.tar.gz
+tar -xzvf ../$SPEEX.tar.gz
+tar -xzvf ../$OPENCORE_AMR.tar.gz
+tar -xzvf ../$OPENSSL.tar.gz
+tar -xzvf ../openh264-$OPENH264_VERSION.tar.gz
+tar -xjvf ../last_stable_x264.tar.bz2
+tar -xzvf ../$X265.tar.gz
+mkdir -p libvpx-$VPX_VERSION
+tar -xzvf ../libvpx-$VPX_VERSION.tar.gz -C libvpx-$VPX_VERSION
+tar -xjvf ../ffmpeg-$FFMPEG_VERSION.tar.bz2
+X264=`echo x264-snapshot-*`
 
 case $PLATFORM in
     android-arm)
@@ -357,14 +345,6 @@ case $PLATFORM in
         ;;
 
     windows-x86)
-        if [[ !($DISABLE =~ "--disable-everything") ]]; then
-            cp -r ffmpeg-$FFMPEG_VERSION-win32-dev/include .
-            cp -r ffmpeg-$FFMPEG_VERSION-win32-dev/lib .
-            cp -r ffmpeg-$FFMPEG_VERSION-win32-shared/bin .
-            cd ..
-            return
-        fi
-
         cd $LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=i686-w64-mingw32 CFLAGS="-m32 -msse2"
         make -j $MAKEJ
@@ -403,14 +383,6 @@ case $PLATFORM in
         ;;
 
     windows-x86_64)
-        if [[ !($DISABLE =~ "--disable-everything") ]]; then
-            cp -r ffmpeg-$FFMPEG_VERSION-win64-dev/include .
-            cp -r ffmpeg-$FFMPEG_VERSION-win64-dev/lib .
-            cp -r ffmpeg-$FFMPEG_VERSION-win64-shared/bin .
-            cd ..
-            return
-        fi
-
         cd $LAME
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --build=x86_64-w64-mingw32 CFLAGS="-m64"
         make -j $MAKEJ
