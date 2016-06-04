@@ -106,4 +106,30 @@
     </plugins>
   </build>
 
+  <profiles>
+    <profile>
+      <id>mingw</id>
+      <activation>
+        <os><family>windows</family></os>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacpp</artifactId>
+			<executions>
+			  <execution>
+				<id>javacpp.compiler</id>
+				<configuration>
+				  <copyLibs>false</copyLibs>
+				  <classOrPackageName>org.bytedeco.javacpp.mxnet</classOrPackageName>
+				</configuration>
+			  </execution>
+			</executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+  
 </project>

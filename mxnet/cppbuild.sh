@@ -23,6 +23,22 @@ case $PLATFORM in
         export CXX="clang-omp++"
         export BLAS="apple"
         ;;
+	windows-*)
+		# convert Windows native filenames to Cygwin POSIX-style pathnames
+		MXNET_PATH="$(CYGPATH -u $MXNET_HOME)"
+		if [[ ! -d "$MXNET_PATH" ]]; then
+            echo "Please install MXNet and run the setupenv.cmd. This should create the system variable MXNET_HOME."
+            exit 1
+        fi
+		# copy include files and libs from MXNET_PATH
+		mkdir -p $PLATFORM
+		cd $PLATFORM
+		cp -r $MXNET_PATH/include/ .
+		mkdir -p lib
+		cp $MXNET_PATH/lib/libmxnet.lib lib
+		cd ..
+        return 0
+        ;;
     *)
         echo "Error: Platform \"$PLATFORM\" is not supported"
         return 0
