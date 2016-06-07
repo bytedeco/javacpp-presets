@@ -43,6 +43,11 @@ case $PLATFORM in
         make -j $MAKEJ
         make install-strip
         ;;
+    linux-ppc64le)
+        ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64" CXX="$OLDCXX -m64" LIBLEPT_HEADERSDIR="$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" CPPFLAGS="-I$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" LDFLAGS="-L$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/lib/"
+        make -j $MAKEJ
+        make install-strip
+        ;;
     macosx-*)
         patch -Np1 < ../../../tesseract-$TESSERACT_VERSION-macosx.patch
         ./configure --prefix=$INSTALL_PATH LIBLEPT_HEADERSDIR="$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" CPPFLAGS="-I$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/include/" LDFLAGS="-L$INSTALL_PATH/../../../leptonica/cppbuild/$PLATFORM/lib/"

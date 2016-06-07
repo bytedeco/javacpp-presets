@@ -1,5 +1,6 @@
 
  * Stop using Zeranoe FFmpeg builds, often not available for release versions ([issue #225](https://github.com/bytedeco/javacpp-presets/issues/225))
+ * Add `linux-ppc64le` to `cppbuild.sh` scripts of OpenCV, FFmpeg, Leptonica, and Tesseract
 
 ### May 15, 2016 version 1.2
  * Build libdc1394 for the Windows platform as well ([issue bytedeco/procamcalib#4](https://github.com/bytedeco/procamcalib/issues/4))
