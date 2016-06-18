@@ -1,4 +1,5 @@
 
+ * Work around build issues for TensorFlow on some Linux distributions ([issue bazelbuild/bazel#1322](https://github.com/bazelbuild/bazel/issues/1322))
  * Fix `cppbuild.sh` script to build properly FFmpeg from source on Windows
  * Stop using Zeranoe FFmpeg builds, often not available for release versions ([issue #225](https://github.com/bytedeco/javacpp-presets/issues/225))
  * Add `linux-ppc64le` to `cppbuild.sh` scripts of OpenCV, FFmpeg, Leptonica, and Tesseract
