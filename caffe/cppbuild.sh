@@ -70,8 +70,8 @@ mkdir -p include lib bin
 
 OPENCV_PATH="$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/"
 
-echo "Decompressing archives"
-tar --totals -xzf ../glog-$GLOG.tar.gz
+echo "Decompressing archives..."
+tar --totals -xzf ../glog-$GLOG.tar.gz || true
 tar --totals -xzf ../gflags-$GFLAGS.tar.gz
 tar --totals -xzf ../protobuf-$PROTO.tar.gz
 tar --totals -xzf ../leveldb-$LEVELDB.tar.gz
