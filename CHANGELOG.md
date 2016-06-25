@@ -1,4 +1,5 @@
 
+ * Fix Javadoc links for externally referenced classes
  * Work around build issues for TensorFlow on some Linux distributions ([issue bazelbuild/bazel#1322](https://github.com/bazelbuild/bazel/issues/1322))
  * Fix `cppbuild.sh` script to build properly FFmpeg from source on Windows
  * Stop using Zeranoe FFmpeg builds, often not available for release versions ([issue #225](https://github.com/bytedeco/javacpp-presets/issues/225))
