@@ -9,9 +9,13 @@ fi
 
 case $PLATFORM in
     linux-x86)
+        export CC="/usr/bin/gcc"
+        export CXX="/usr/bin/g++"
         export BUILDFLAGS="--copt=-m32 --linkopt=-m32"
         ;;
     linux-x86_64)
+        export CC="/usr/bin/gcc"
+        export CXX="/usr/bin/g++"
         export BUILDFLAGS="--copt=-m64 --linkopt=-m64"
         ;;
     macosx-*)

@@ -329,7 +329,9 @@
               <goal>jar</goal>
             </goals>
             <configuration>
-              <detectLinks>true</detectLinks>
+              <links>
+                <link>http://bytedeco.org/javacpp/apidocs/</link>
+              </links>
             </configuration>
           </execution>
         </executions>
