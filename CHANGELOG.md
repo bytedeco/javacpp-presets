@@ -1,4 +1,5 @@
 
+ * Add `Tensor.createStringArray()` method to access `DT_STRING` data ([issue #249](https://github.com/bytedeco/javacpp-presets/issues/249))
  * Fix Javadoc links for externally referenced classes
  * Work around build issues for TensorFlow on some Linux distributions ([issue bazelbuild/bazel#1322](https://github.com/bazelbuild/bazel/issues/1322))
  * Fix `cppbuild.sh` script to build properly FFmpeg from source on Windows

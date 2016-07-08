@@ -31,6 +31,9 @@ import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.LongPointer;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.ShortPointer;
+import org.bytedeco.javacpp.annotation.ByRef;
+import org.bytedeco.javacpp.annotation.Cast;
+import org.bytedeco.javacpp.annotation.Index;
 import org.bytedeco.javacpp.annotation.Name;
 import org.bytedeco.javacpp.annotation.Namespace;
 import org.bytedeco.javacpp.indexer.ByteIndexer;
@@ -67,6 +70,38 @@ import static org.bytedeco.javacpp.tensorflow.NewSession;
  * @author Samuel Audet
  */
 public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
+
+    @Name("std::string") public static class StringArray extends Pointer {
+        static { Loader.load(); }
+        public StringArray(Pointer p) { super(p); }
+        public StringArray() { allocate(); }
+        private native void allocate();
+        public StringArray(StringArray p) { allocate(p); }
+        private native void allocate(@ByRef StringArray p);
+        public StringArray(BytePointer s, long count) { allocate(s, count); }
+        private native void allocate(@Cast("char*") BytePointer s, long count);
+        public StringArray(String s) { allocate(s); }
+        private native void allocate(String s);
+        public native @Name("operator=") @ByRef StringArray put(@ByRef StringArray str);
+        public native @Name("operator=") @ByRef StringArray put(String str);
+        @Override public StringArray position(long position) {
+            return (StringArray)super.position(position);
+        }
+
+        public native @Cast("size_t") long size();
+        public native void resize(@Cast("size_t") long n);
+
+        @Index public native @Cast("char") int get(@Cast("size_t") long pos);
+        public native StringArray put(@Cast("size_t") long pos, int c);
+        public native @Cast("const char*") BytePointer data();
+
+        @Override public String toString() {
+            long length = size();
+            byte[] bytes = new byte[length < Integer.MAX_VALUE ? (int)length : Integer.MAX_VALUE];
+            data().get(bytes);
+            return new String(bytes);
+        }
+    }
 
     public static abstract class AbstractTensor extends Pointer implements Indexable {
         static { Loader.load(); }
@@ -142,6 +177,15 @@ public class tensorflow extends org.bytedeco.javacpp.presets.tensorflow {
                 default: assert false;
             }
             return null;
+        }
+
+        /** Returns {@code new StringArray(tensor_data()).capacity(NumElements()).limit(NumElements())} when {@code dtype() == DT_STRING}. */
+        public StringArray createStringArray() {
+            if (dtype() != DT_STRING) {
+                return null;
+            }
+            long size = NumElements();
+            return new StringArray(tensor_data()).capacity(size).limit(size);
         }
     }
 
