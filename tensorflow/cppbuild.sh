@@ -7,6 +7,9 @@ if [[ -z "$PLATFORM" ]]; then
     exit
 fi
 
+export PYTHON_BIN_PATH=$(which python)
+export TF_NEED_CUDA=0
+
 case $PLATFORM in
     linux-x86)
         export CC="/usr/bin/gcc"
