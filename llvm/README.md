@@ -29,6 +29,8 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
  $ mvn compile exec:java
 ```
 
+&lowast; In the case of Clang, we might need to disable crash recovery with the `LIBCLANG_DISABLE_CRASH_RECOVERY=1` environment variable to prevent clashes with the JVM's own signal handlers.
+
 ### The `pom.xml` build file
 ```xml
 <project>

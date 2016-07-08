@@ -153,24 +153,24 @@ public class opencv_core extends org.bytedeco.javacpp.presets.opencv_core {
             long[] strides = { arrayStep(), arrayChannels(), 1 };
             switch (arrayDepth()) {
                 case IPL_DEPTH_8U:
-                    return (I)UByteIndexer.create(ptr.capacity(size), sizes, strides, direct);
+                    return (I)UByteIndexer.create(ptr.capacity(size), sizes, strides, direct).indexable(this);
                 case IPL_DEPTH_8S:
-                    return (I)ByteIndexer.create(ptr.capacity(size), sizes, strides, direct);
+                    return (I)ByteIndexer.create(ptr.capacity(size), sizes, strides, direct).indexable(this);
                 case IPL_DEPTH_16U:
                     strides[0] /= 2;
-                    return (I)UShortIndexer.create(new ShortPointer(ptr).capacity(size/2), sizes, strides, direct);
+                    return (I)UShortIndexer.create(new ShortPointer(ptr).capacity(size/2), sizes, strides, direct).indexable(this);
                 case IPL_DEPTH_16S:
                     strides[0] /= 2;
-                    return (I)ShortIndexer.create(new ShortPointer(ptr).capacity(size/2), sizes, strides, direct);
+                    return (I)ShortIndexer.create(new ShortPointer(ptr).capacity(size/2), sizes, strides, direct).indexable(this);
                 case IPL_DEPTH_32S:
                     strides[0] /= 4;
-                    return (I)IntIndexer.create(new IntPointer(ptr).capacity(size/4), sizes, strides, direct);
+                    return (I)IntIndexer.create(new IntPointer(ptr).capacity(size/4), sizes, strides, direct).indexable(this);
                 case IPL_DEPTH_32F:
                     strides[0] /= 4;
-                    return (I)FloatIndexer.create(new FloatPointer(ptr).capacity(size/4), sizes, strides, direct);
+                    return (I)FloatIndexer.create(new FloatPointer(ptr).capacity(size/4), sizes, strides, direct).indexable(this);
                 case IPL_DEPTH_64F:
                     strides[0] /= 8;
-                    return (I)DoubleIndexer.create(new DoublePointer(ptr).capacity(size/8), sizes, strides, direct);
+                    return (I)DoubleIndexer.create(new DoublePointer(ptr).capacity(size/8), sizes, strides, direct).indexable(this);
                 case IPL_DEPTH_1U:
                 default: assert false;
             }
