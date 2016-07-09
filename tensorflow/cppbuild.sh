@@ -9,6 +9,7 @@ fi
 
 export PYTHON_BIN_PATH=$(which python)
 export TF_NEED_CUDA=0
+export TF_NEED_GCP=0
 
 case $PLATFORM in
     linux-x86)
@@ -30,24 +31,17 @@ case $PLATFORM in
         ;;
 esac
 
-PROTOBUF_VERSION=fb714b3606bd663b823f6960a73d052f97283b74
-TENSORFLOW_VERSION=0.8.0
-
-download https://github.com/google/protobuf/archive/$PROTOBUF_VERSION.tar.gz protobuf-$PROTOBUF_VERSION.tar.gz
+TENSORFLOW_VERSION=0.9.0
 download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
 
 echo "Decompressing archives"
-tar --totals -xzf ../protobuf-$PROTOBUF_VERSION.tar.gz
 tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz
 
 # Assumes Bazel is available in the path: http://bazel.io/docs/install.html
-cd tensorflow-$TENSORFLOW_VERSION/google
-rmdir protobuf || true
-ln -snf ../../protobuf-$PROTOBUF_VERSION protobuf
-cd ..
+cd tensorflow-$TENSORFLOW_VERSION
 patch -Np1 < ../../../tensorflow-$TENSORFLOW_VERSION.patch
 ./configure
 bazel build -c opt //tensorflow/cc:libtensorflow.so $BUILDFLAGS --spawn_strategy=standalone --genrule_strategy=standalone --verbose_failures

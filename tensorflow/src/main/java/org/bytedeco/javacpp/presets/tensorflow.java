@@ -49,7 +49,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "tensorflow/core/lib/core/stringpiece.h", */ "tensorflow/core/platform/types.h", "tensorflow/core/platform/mutex.h",
         "tensorflow/core/platform/macros.h", "tensorflow/core/util/port.h", "tensorflow/core/lib/core/error_codes.pb.h",
         "tensorflow/core/platform/logging.h", "tensorflow/core/lib/core/status.h", "tensorflow/core/platform/protobuf.h",
-        "tensorflow/core/platform/file_system.h", "tensorflow/core/platform/env.h", "tensorflow/core/protobuf/config.pb.h",
+        "tensorflow/core/platform/file_system.h", "tensorflow/core/platform/env.h", "tensorflow/core/protobuf/config.pb.h", "tensorflow/core/framework/cost_graph.pb.h",
         "tensorflow/core/framework/step_stats.pb.h", "tensorflow/core/framework/versions.pb.h", "tensorflow/core/public/session_options.h",
         "tensorflow/core/lib/core/threadpool.h", "tensorflow/core/framework/allocation_description.pb.h", "tensorflow/core/framework/allocator.h",
         "tensorflow/core/framework/tensor_shape.pb.h", "tensorflow/core/framework/types.pb.h", "tensorflow/core/framework/tensor.pb.h",
@@ -76,6 +76,7 @@ public class tensorflow implements InfoMapper {
                              "TF_ATTRIBUTE_UNUSED", "TF_ATTRIBUTE_COLD", "TF_PACKED", "TF_MUST_USE_RESULT").cppTypes().annotations())
                .put(new Info("TF_CHECK_OK", "TF_QCHECK_OK").cppTypes("void", "tensorflow::Status"))
                .put(new Info("TF_DISALLOW_COPY_AND_ASSIGN").cppText("#define TF_DISALLOW_COPY_AND_ASSIGN(TypeName)"))
+               .put(new Info("PROTOBUF_DEPRECATED_ATTR").cppTypes().annotations("@Deprecated"))
                .put(new Info("SWIG").define())
                .put(new Info("Eigen::half").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short..."))
                .put(new Info("short", "tensorflow::int16", "tensorflow::uint16").valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short..."))
@@ -140,7 +141,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::register_op::OpDefBuilderWrapper<false>").pointerTypes("FalseOpDefBuilderWrapper"))
 
                .put(new Info("std::function<void()>").pointerTypes("Fn"))
-               .put(new Info("std::function<tensorflow::OpDef(void)>").pointerTypes("OpDefFunc"))
+               .put(new Info("std::function<void(int64,int64)>").pointerTypes("ForFn"))
                .put(new Info("tensorflow::ConstantFoldingOptions::consider")
                        .javaText("@MemberSetter public native ConstantFoldingOptions consider(@ByVal ConsiderFunction consider);"))
                .put(new Info("tensorflow::GraphConstructorOptions::cse_consider_function")
@@ -172,13 +173,13 @@ public class tensorflow implements InfoMapper {
         public native void call();
     }
 
-    public static class OpDefFunc extends FunctionPointer {
+    public static class ForFn extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-        public    OpDefFunc(Pointer p) { super(p); }
-        protected OpDefFunc() { allocate(); }
+        public    ForFn(Pointer p) { super(p); }
+        protected ForFn() { allocate(); }
         private native void allocate();
-        public native @ByVal @Cast("tensorflow::OpDef*") Pointer call();
+        public native void call(long from, long to);
     }
 
     public static class ConsiderFunction extends FunctionPointer {
