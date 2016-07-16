@@ -37,7 +37,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
                          "<vector_types.h>", "<builtin_types.h>", "<cuda_runtime_api.h>", "<driver_functions.h>", "<vector_functions.h>",
                        /*"<cuda_device_runtime_api.h>", <cuda_runtime.h>"*/ "<cuComplex.h>", "<cuda_fp16.h>"}, includepath = "/usr/local/cuda/include/",
               link = {"cudart@.7.5", "cuda@.7.5"}, linkpath = "/usr/local/cuda/lib/"),
-    @Platform(value = "linux-x86_64", linkpath = "/usr/local/cuda/lib64/"),
+    @Platform(value = {"linux-x86_64", "linux-ppc64le"}, linkpath = "/usr/local/cuda/lib64/"),
     @Platform(value = "windows-x86_64", includepath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5/include/",
                                         preloadpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5/bin/",
                                            linkpath = "C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v7.5/lib/x64/") },

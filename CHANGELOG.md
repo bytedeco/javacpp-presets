@@ -1,4 +1,5 @@
 
+ * Fix presets for CUDA 7.5 on the `linux-ppc64le` platform
  * Upgrade presets for TensorFlow 0.9.0
  * Set default options in `tensorflow/cppbuild.sh` to prevent console reads during build
  * Add `Tensor.createStringArray()` method to access `DT_STRING` data ([issue #249](https://github.com/bytedeco/javacpp-presets/issues/249))
