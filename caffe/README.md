@@ -253,9 +253,9 @@ public class caffe {
                 solver.Solve(snapshot);
             } else if (weights.length() > 0) {
                 CopyLayers(solver, weights);
-                solver.Solve();
+                solver.Solve((String)null);
             } else {
-                solver.Solve();
+                solver.Solve((String)null);
             }
             logger.info("Optimization Done.");
             return 0;

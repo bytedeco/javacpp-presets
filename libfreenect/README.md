@@ -292,7 +292,7 @@ public class GLPCLView {
         });
         canvas.addKeyListener(new KeyAdapter() {
             @Override public void keyPressed(KeyEvent e) {
-                keyPressed(e.getKeyCode());
+                GLPCLView.keyPressed(e.getKeyCode());
             }
         });
         canvas.addMouseMotionListener(new MouseMotionAdapter() {

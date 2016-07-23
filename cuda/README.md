@@ -194,6 +194,7 @@ public class MNISTCUDNN {
                           biasTensorDesc = new cudnnTensorStruct();
         cudnnFilterStruct filterDesc = new cudnnFilterStruct();
         cudnnConvolutionStruct convDesc = new cudnnConvolutionStruct();
+        cudnnActivationStruct activationDesc = new cudnnActivationStruct();
         cudnnPoolingStruct poolingDesc = new cudnnPoolingStruct();
         cublasContext cublasHandle = new cublasContext();
         void createHandles() {
@@ -203,12 +204,14 @@ public class MNISTCUDNN {
             checkCUDNN( cudnnCreateTensorDescriptor(biasTensorDesc) );
             checkCUDNN( cudnnCreateFilterDescriptor(filterDesc) );
             checkCUDNN( cudnnCreateConvolutionDescriptor(convDesc) );
+            checkCUDNN( cudnnCreateActivationDescriptor(activationDesc) );
             checkCUDNN( cudnnCreatePoolingDescriptor(poolingDesc) );
 
             checkCudaErrors( cublasCreate_v2(cublasHandle) );
         }
         void destroyHandles() {
             checkCUDNN( cudnnDestroyPoolingDescriptor(poolingDesc) );
+            checkCUDNN( cudnnCreateActivationDescriptor(activationDesc) );
             checkCUDNN( cudnnDestroyConvolutionDescriptor(convDesc) );
             checkCUDNN( cudnnDestroyFilterDescriptor(filterDesc) );
             checkCUDNN( cudnnDestroyTensorDescriptor(srcTensorDesc) );
@@ -241,7 +244,7 @@ public class MNISTCUDNN {
                                                     1) );
             FloatPointer alpha = new FloatPointer(1.0f);
             FloatPointer beta  = new FloatPointer(1.0f);
-            checkCUDNN( cudnnAddTensor(cudnnHandle, CUDNN_ADD_SAME_C,
+            checkCUDNN( cudnnAddTensor(cudnnHandle,
                                           alpha, biasTensorDesc,
                                           layer.bias_d[0],
                                           beta,
@@ -285,6 +288,7 @@ public class MNISTCUDNN {
 
             checkCUDNN( cudnnSetFilter4dDescriptor(filterDesc,
                                                   dataType,
+                                                  tensorFormat,
                                                   conv.outputs,
                                                   conv.inputs,
                                                   conv.kernel_dim,
@@ -356,6 +360,7 @@ public class MNISTCUDNN {
                          FloatPointer srcData, FloatPointer dstData) {
             checkCUDNN( cudnnSetPooling2dDescriptor(poolingDesc,
                                                     CUDNN_POOLING_MAX,
+                                                    CUDNN_PROPAGATE_NAN,
                                                     2, 2, // window
                                                     0, 0, // padding
                                                     2, 2  // stride
@@ -426,10 +431,14 @@ public class MNISTCUDNN {
                                                     n, c,
                                                     h,
                                                     w) );
+            checkCUDNN( cudnnSetActivationDescriptor(activationDesc,
+                                                      CUDNN_ACTIVATION_RELU,
+                                                      CUDNN_PROPAGATE_NAN,
+                                                      0) );
             FloatPointer alpha = new FloatPointer(1.0f);
             FloatPointer beta  = new FloatPointer(0.0f);
             checkCUDNN( cudnnActivationForward(cudnnHandle,
-                                                CUDNN_ACTIVATION_RELU,
+                                                activationDesc,
                                                 alpha,
                                                 srcTensorDesc,
                                                 srcData,

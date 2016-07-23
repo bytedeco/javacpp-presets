@@ -159,7 +159,7 @@ public class DetectLive {
                 int id = tag.first();
                 // We wrap the corner matrix into a datastructure that allows an
                 // easy access to the coordinates
-                FloatIndexer corners = FloatIndexer.create(tag.second().capacity(8), new int[] { 4 }, new int[] { 2 });
+                FloatIndexer corners = FloatIndexer.create(tag.second().capacity(8), new long[] { 4 }, new long[] { 2 });
 
                 // We start by drawing the borders of the tag
                 for (int i = 0; i < 4; i++) {

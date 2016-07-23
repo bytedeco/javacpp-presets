@@ -69,7 +69,7 @@ public class Example {
     static void acquire_from_somewhere(DoublePointer signal) {
         /* Generate two sine waves of different frequencies and amplitudes. */
 
-        double[] s = new double[signal.capacity()];
+        double[] s = new double[(int)signal.capacity()];
         for (int i = 0; i < NUM_POINTS; i++) {
             double theta = (double)i / (double)NUM_POINTS * PI;
 
@@ -83,7 +83,7 @@ public class Example {
     }
 
     static void do_something_with(DoublePointer result) {
-        double[] r = new double[result.capacity()];
+        double[] r = new double[(int)result.capacity()];
         result.get(r);
         for (int i = 0; i < NUM_POINTS; i++) {
             double mag = sqrt(r[2 * i + REAL] * r[2 * i + REAL] +

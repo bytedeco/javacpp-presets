@@ -106,9 +106,7 @@ public class Fac {
 
 
         LLVMExecutionEngineRef engine = new LLVMExecutionEngineRef();
-        LLVMModuleProviderRef provider = LLVMCreateModuleProviderForExistingModule(mod);
-        error = new BytePointer((Pointer)null);
-        if(LLVMCreateJITCompiler(engine, provider, 2, error) != 0) {
+        if(LLVMCreateJITCompilerForModule(engine, mod, 2, error) != 0) {
             System.err.println(error.getString());
             LLVMDisposeMessage(error);
             System.exit(-1);
