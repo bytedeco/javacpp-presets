@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Samuel Audet
+ * Copyright (C) 2015-2016 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -51,10 +51,11 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "caffe/layers/eltwise_layer.hpp", "caffe/layers/embed_layer.hpp", "caffe/layers/filter_layer.hpp", "caffe/layers/flatten_layer.hpp", "caffe/layers/inner_product_layer.hpp",
         "caffe/layers/mvn_layer.hpp", "caffe/layers/reshape_layer.hpp", "caffe/layers/reduction_layer.hpp", "caffe/layers/silence_layer.hpp", "caffe/layers/softmax_layer.hpp",
         "caffe/layers/cudnn_softmax_layer.hpp", "caffe/layers/split_layer.hpp", "caffe/layers/slice_layer.hpp", "caffe/layers/tile_layer.hpp", "caffe/net.hpp", "caffe/parallel.hpp",
-        "caffe/solver.hpp", "caffe/solver_factory.hpp", "caffe/sgd_solvers.hpp", "caffe/layers/base_conv_layer.hpp", "caffe/layers/conv_layer.hpp", "caffe/layers/deconv_layer.hpp",
-        "caffe/layers/cudnn_conv_layer.hpp", "caffe/layers/im2col_layer.hpp", "caffe/layers/lrn_layer.hpp", "caffe/layers/cudnn_lrn_layer.hpp", "caffe/layers/cudnn_lcn_layer.hpp",
-        "caffe/layers/pooling_layer.hpp", "caffe/layers/cudnn_pooling_layer.hpp", "caffe/layers/spp_layer.hpp", "caffe/util/benchmark.hpp", "caffe/util/db.hpp", "caffe/util/db_leveldb.hpp",
-        "caffe/util/db_lmdb.hpp", "caffe/util/io.hpp", "caffe/util/rng.hpp", "caffe/util/im2col.hpp", "caffe/util/insert_splits.hpp", "caffe/util/mkl_alternate.hpp",
+        "caffe/solver.hpp", "caffe/solver_factory.hpp", "caffe/sgd_solvers.hpp", "caffe/layers/input_layer.hpp", "caffe/layers/parameter_layer.hpp", "caffe/layers/base_conv_layer.hpp",
+        "caffe/layers/conv_layer.hpp", "caffe/layers/crop_layer.hpp", "caffe/layers/deconv_layer.hpp", "caffe/layers/cudnn_conv_layer.hpp", "caffe/layers/im2col_layer.hpp",
+        "caffe/layers/lrn_layer.hpp", "caffe/layers/cudnn_lrn_layer.hpp", "caffe/layers/cudnn_lcn_layer.hpp", "caffe/layers/pooling_layer.hpp", "caffe/layers/cudnn_pooling_layer.hpp",
+        "caffe/layers/spp_layer.hpp", "caffe/layers/recurrent_layer.hpp", "caffe/layers/lstm_layer.hpp", "caffe/layers/rnn_layer.hpp", "caffe/util/benchmark.hpp", "caffe/util/db.hpp",
+        "caffe/util/db_leveldb.hpp", "caffe/util/db_lmdb.hpp", "caffe/util/io.hpp", "caffe/util/rng.hpp", "caffe/util/im2col.hpp", "caffe/util/insert_splits.hpp", "caffe/util/mkl_alternate.hpp",
         "caffe/util/upgrade_proto.hpp", "caffe/util/cudnn.hpp"}, link = "caffe@.1.0.0-rc3", includepath = {"/usr/local/cuda/include/",
         "/System/Library/Frameworks/vecLib.framework/", "/System/Library/Frameworks/Accelerate.framework/"}, linkpath = "/usr/local/cuda/lib/"),
     @Platform(value = {"linux-x86_64", "macosx-x86_64"}, define = {"SHARED_PTR_NAMESPACE boost", "USE_LEVELDB", "USE_LMDB", "USE_OPENCV"}) })
@@ -76,7 +77,7 @@ public class caffe implements InfoMapper {
                .put(new Info("google::protobuf::int16", "google::protobuf::uint16").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short[]"))
                .put(new Info("google::protobuf::int32", "google::protobuf::uint32").cast().valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int[]"))
                .put(new Info("google::protobuf::int64", "google::protobuf::uint64").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long[]"))
-               .put(new Info("leveldb::Iterator", "leveldb::DB", "MDB_txn", "MDB_cursor", "MDB_dbi", "boost::mt19937").cast().pointerTypes("Pointer"))
+               .put(new Info("leveldb::Iterator", "leveldb::DB", "MDB_txn", "MDB_cursor", "MDB_dbi", "MDB_env", "boost::mt19937").cast().pointerTypes("Pointer"))
                .put(new Info("google::protobuf::internal::CompileAssert", "google::protobuf::MessageFactory::InternalRegisterGeneratedFile",
                              "google::protobuf::internal::LogMessage", "google::protobuf::internal::LogFinisher", "google::protobuf::LogHandler",
                              "google::protobuf::RepeatedField", "google::protobuf::RepeatedPtrField", "boost::mutex").skip());
@@ -102,8 +103,9 @@ public class caffe implements InfoMapper {
                 "DropoutLayer", "ExpLayer", "PowerLayer", "ReLULayer", "SigmoidLayer", "TanHLayer", "ThresholdLayer", "PReLULayer", "PythonLayer", "ArgMaxLayer", "BatchNormLayer",
                 "BatchReindexLayer", "ConcatLayer", "EltwiseLayer", "EmbedLayer", "FilterLayer", "FlattenLayer", "InnerProductLayer", "MVNLayer", "ReshapeLayer", "ReductionLayer",
                 "SilenceLayer", "SoftmaxLayer", "SplitLayer", "SliceLayer", "TileLayer", "Net", "Solver", "WorkerSolver", "SolverRegistry", "SolverRegisterer", "SGDSolver", "NesterovSolver",
-                "AdaGradSolver", "RMSPropSolver", "AdaDeltaSolver", "AdamSolver",  "BaseConvolutionLayer", "ConvolutionLayer", "DeconvolutionLayer", "Im2colLayer", "LRNLayer", "PoolingLayer",
-                /* "SPPLayer", "CuDNNReLULayer", "CuDNNSigmoidLayer", "CuDNNTanHLayer", "CuDNNSoftmaxLayer", "CuDNNConvolutionLayer", "CuDNNPoolingLayer" */ };
+                "AdaGradSolver", "RMSPropSolver", "AdaDeltaSolver", "AdamSolver",  "InputLayer", "ParameterLayer", "BaseConvolutionLayer", "ConvolutionLayer", "CropLayer", "DeconvolutionLayer",
+                "Im2colLayer", "LRNLayer", "PoolingLayer", "SPPLayer", "RecurrentLayer", "LSTMLayer", "RNNLayer"
+                /* "CuDNNReLULayer", "CuDNNSigmoidLayer", "CuDNNTanHLayer", "CuDNNSoftmaxLayer", "CuDNNConvolutionLayer", "CuDNNPoolingLayer" */ };
         for (String t : classTemplates) {
             boolean purify = t.equals("BaseDataLayer") || t.equals("LossLayer") || t.equals("NeuronLayer");
             boolean virtualize = t.endsWith("Layer") || t.endsWith("Solver");
@@ -112,6 +114,10 @@ public class caffe implements InfoMapper {
         }
         infoMap.put(new Info("caffe::BasePrefetchingDataLayer<float>::InternalThreadEntry()",
                              "caffe::BasePrefetchingDataLayer<double>::InternalThreadEntry()").skip())
+
+               .put(new Info("caffe::Solver<float>::Solve(std::string)", "caffe::Solver<double>::Solve(std::string)").javaText(
+                             "public void Solve(String resume_file) { Solve(new BytePointer(resume_file)); }\n"
+                           + "public void Solve() { Solve((BytePointer)null); }"))
 
                .put(new Info("caffe::Batch<float>::data_").javaText("@MemberGetter public native @ByRef FloatBlob data_();"))
                .put(new Info("caffe::Batch<double>::data_").javaText("@MemberGetter public native @ByRef DoubleBlob data_();"))

@@ -1,0 +1,27 @@
+diff -ruN caffe-master/include/caffe/util/device_alternate.hpp caffe-master-nogpu/include/caffe/util/device_alternate.hpp
+--- caffe-master/include/caffe/util/device_alternate.hpp	2016-06-18 08:35:07.000000000 +0900
++++ caffe-master-nogpu/include/caffe/util/device_alternate.hpp	2016-07-31 17:37:38.000000000 +0900
+@@ -49,20 +49,20 @@
+   /* Code block avoids redefinition of cudaError_t error */ \
+   do { \
+     cudaError_t error = condition; \
+-    CHECK_EQ(error, cudaSuccess) << " " << cudaGetErrorString(error); \
++    LOG_IF(ERROR, error != cudaSuccess) << " " << cudaGetErrorString(error); \
+   } while (0)
+ 
+ #define CUBLAS_CHECK(condition) \
+   do { \
+     cublasStatus_t status = condition; \
+-    CHECK_EQ(status, CUBLAS_STATUS_SUCCESS) << " " \
++    LOG_IF(ERROR, status != CUBLAS_STATUS_SUCCESS) << " " \
+       << caffe::cublasGetErrorString(status); \
+   } while (0)
+ 
+ #define CURAND_CHECK(condition) \
+   do { \
+     curandStatus_t status = condition; \
+-    CHECK_EQ(status, CURAND_STATUS_SUCCESS) << " " \
++    LOG_IF(ERROR, status != CURAND_STATUS_SUCCESS) << " " \
+       << caffe::curandGetErrorString(status); \
+   } while (0)
+ 

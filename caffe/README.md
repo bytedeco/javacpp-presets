@@ -5,7 +5,7 @@ Introduction
 ------------
 This directory contains the JavaCPP Presets module for:
 
- * Caffe 1.0-rc3  http://caffe.berkeleyvision.org/
+ * Caffe  http://caffe.berkeleyvision.org/
 
 Please refer to the parent README.md file for more detailed information about the JavaCPP Presets.
 
@@ -42,7 +42,7 @@ We can use [Maven 3](http://maven.apache.org/) to download and install automatic
         <dependency>
             <groupId>org.bytedeco.javacpp-presets</groupId>
             <artifactId>caffe</artifactId>
-            <version>rc3-1.2</version>
+            <version>master-1.2</version>
         </dependency>
     </dependencies>
 </project>
@@ -253,9 +253,9 @@ public class caffe {
                 solver.Solve(snapshot);
             } else if (weights.length() > 0) {
                 CopyLayers(solver, weights);
-                solver.Solve((String)null);
+                solver.Solve();
             } else {
-                solver.Solve((String)null);
+                solver.Solve();
             }
             logger.info("Optimization Done.");
             return 0;

@@ -47,10 +47,10 @@ PROTO=2.6.1
 LEVELDB=1.18
 SNAPPY=1.1.3
 LMDB=0.9.18
-BOOST=1_59_0
-HDF5=1.8.16
+BOOST=1_61_0
+HDF5=1.8.17
 OPENBLAS=0.2.18
-CAFFE_VERSION=rc3
+CAFFE_VERSION=master
 
 download https://github.com/google/glog/archive/v$GLOG.tar.gz glog-$GLOG.tar.gz
 download https://github.com/gflags/gflags/archive/v$GFLAGS.tar.gz gflags-$GFLAGS.tar.gz
@@ -145,6 +145,7 @@ if [[ $BLAS == "open" ]]; then
 fi
 
 cd caffe-$CAFFE_VERSION
+patch -Np1 < ../../../caffe-nogpu.patch
 cp Makefile.config.example Makefile.config
 export PATH=../bin:$PATH
 export CXXFLAGS="-I../include -I$OPENCV_PATH/include"
