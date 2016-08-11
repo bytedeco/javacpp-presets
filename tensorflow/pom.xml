@@ -16,7 +16,7 @@
   <name>JavaCPP Presets for TensorFlow</name>
 
   <properties>
-    <tensorflow.version>0.9.0</tensorflow.version>
+    <tensorflow.version>0.10.0rc0</tensorflow.version>
   </properties>
 
   <dependencies>

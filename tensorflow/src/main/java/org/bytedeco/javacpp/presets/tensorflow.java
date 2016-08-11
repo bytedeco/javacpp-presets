@@ -22,22 +22,18 @@
 
 package org.bytedeco.javacpp.presets;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import org.bytedeco.javacpp.FunctionPointer;
 import org.bytedeco.javacpp.Loader;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.annotation.Adapter;
-import org.bytedeco.javacpp.annotation.ByVal;
 import org.bytedeco.javacpp.annotation.Cast;
 import org.bytedeco.javacpp.annotation.Platform;
 import org.bytedeco.javacpp.annotation.Properties;
 import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
+
+import java.lang.annotation.*;
 
 /**
  *
@@ -60,8 +56,9 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "tensorflow/core/framework/op_def_util.h", "tensorflow/core/framework/op.h", "tensorflow/core/framework/types.h",
         "tensorflow/core/graph/edgeset.h", "tensorflow/core/lib/gtl/iterator_range.h", "tensorflow/core/graph/graph.h",
         "tensorflow/core/framework/node_def_builder.h", "tensorflow/core/graph/node_builder.h", "tensorflow/core/graph/graph_def_builder.h",
-        "tensorflow/core/graph/default_device.h", "tensorflow/core/graph/graph_constructor.h", "tensorflow/cc/ops/standard_ops.h",
-        "tensorflow/cc/ops/const_op.h", "tensorflow/cc/ops/cc_op_gen.h", "tensorflow/cc/ops/array_ops.h",
+        "tensorflow/core/graph/default_device.h", "tensorflow/core/graph/graph_constructor.h", "tensorflow/cc/framework/ops.h",
+        "tensorflow/cc/ops/standard_ops.h", "tensorflow/cc/framework/scope.h",
+        "tensorflow/cc/ops/const_op.h", "tensorflow/cc/framework/cc_op_gen.h", "tensorflow/cc/ops/array_ops.h",
         "tensorflow/cc/ops/data_flow_ops.h", "tensorflow/cc/ops/image_ops.h", "tensorflow/cc/ops/io_ops.h",
         "tensorflow/cc/ops/linalg_ops.h", "tensorflow/cc/ops/logging_ops.h", "tensorflow/cc/ops/math_ops.h",
         "tensorflow/cc/ops/nn_ops.h", "tensorflow/cc/ops/parsing_ops.h", "tensorflow/cc/ops/random_ops.h",
@@ -122,6 +119,17 @@ public class tensorflow implements InfoMapper {
                .put(new Info("google::protobuf::Map<std::string,tensorflow::AttrValue>").pointerTypes("StringAttrValueMap").define())
                .put(new Info("tensorflow::ops::NodeOut").valueTypes("@ByVal NodeBuilder.NodeOut", "Node"))
                .put(new Info("tensorflow::NodeBuilder::NodeOut").pointerTypes("NodeBuilder.NodeOut"))
+
+               .put(new Info("std::unique_ptr<tensorflow::RandomAccessFile>").pointerTypes("RandomAccessFile"))
+               .put(new Info("std::unique_ptr<tensorflow::WritableFile>").pointerTypes("WritableFile"))
+               .put(new Info("std::unique_ptr<tensorflow::ReadOnlyMemoryRegion>").pointerTypes("ReadOnlyMemoryRegion"))
+               .put(new Info("std::vector<tensorflow::ops::Input>").pointerTypes("InputVector"))
+               .put(new Info("std::vector<tensorflow::ops::Input>::iterator").skip())
+               .put(new Info("std::vector<tensorflow::ops::Input>::const_iterator").skip())
+               .put(new Info("Cast").pointerTypes("CastOp"))
+               .put(new Info("Const").pointerTypes("ConstOp"))
+               .put(new Info("mode_t").skip())
+
                .put(new Info("tensorflow::gtl::ArraySlice<std::string>")/*.cast()*/.pointerTypes("StringVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::Tensor>")/*.cast()*/.pointerTypes("TensorVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::TensorProto>")/*.cast()*/.pointerTypes("TensorProtoVector"))
