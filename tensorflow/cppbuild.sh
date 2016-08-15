@@ -42,8 +42,7 @@ tar --totals -xzf ../tensorflow-$TENSORFLOW_VERSION.tar.gz
 
 # Assumes Bazel is available in the path: http://bazel.io/docs/install.html
 cd tensorflow-$TENSORFLOW_VERSION
-patch -Np1 < ../../../tensorflow-$TENSORFLOW_VERSION.patch
 ./configure
-bazel build -c opt //tensorflow/cc:libtensorflow.so $BUILDFLAGS --spawn_strategy=standalone --genrule_strategy=standalone --verbose_failures
+bazel build -c opt //tensorflow:libtensorflow.so $BUILDFLAGS --spawn_strategy=standalone --genrule_strategy=standalone --verbose_failures
 
 cd ../..
