@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
-import java.lang.annotation.*;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  *
