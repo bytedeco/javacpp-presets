@@ -12,7 +12,6 @@
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>opencv</artifactId>
   <version>3.1.0-${project.parent.version}</version>
-  <packaging>jar</packaging>
   <name>JavaCPP Presets for OpenCV</name>
 
   <properties>

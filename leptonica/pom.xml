@@ -12,7 +12,6 @@
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>leptonica</artifactId>
   <version>1.73-${project.parent.version}</version>
-  <packaging>jar</packaging>
   <name>JavaCPP Presets for Leptonica</name>
 
   <properties>

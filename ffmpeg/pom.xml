@@ -12,7 +12,6 @@
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>ffmpeg</artifactId>
   <version>3.0.2-${project.parent.version}</version>
-  <packaging>jar</packaging>
   <name>JavaCPP Presets for FFmpeg</name>
 
   <dependencies>

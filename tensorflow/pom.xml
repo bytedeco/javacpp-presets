@@ -12,7 +12,6 @@
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>tensorflow</artifactId>
   <version>${tensorflow.version}-${project.parent.version}</version>
-  <packaging>jar</packaging>
   <name>JavaCPP Presets for TensorFlow</name>
 
   <properties>
