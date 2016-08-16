@@ -75,14 +75,6 @@ public class cufftw extends org.bytedeco.javacpp.presets.cufftw {
 // #include <stdio.h>
 // #include "cufft.h"
 
-// #ifndef CUFFTAPI
-// #ifdef _WIN32
-// #define CUFFTAPI __stdcall
-// #else
-// #define CUFFTAPI 
-// #endif
-// #endif
-
 // #ifdef __cplusplus
 // #endif
 
@@ -871,10 +863,14 @@ public static native void fftwf_execute_dft_c2r(fftwf_plan plan,
 public static native void fftwf_execute_dft_c2r(fftwf_plan plan, 
                                     @Cast("fftwf_complex*") float[] idata,
                                     float[] odata);
-                                   
+
+// #ifdef _WIN32
+// #define _CUFFTAPI(T) T CUFFTAPI
+// #else
+// #define _CUFFTAPI(T) CUFFTAPI T
+// #endif
 
 // CUFFTW defines and supports the following support APIs
-
 public static native Pointer fftw_malloc(@Cast("size_t") long n);
 
 public static native Pointer fftwf_malloc(@Cast("size_t") long n);

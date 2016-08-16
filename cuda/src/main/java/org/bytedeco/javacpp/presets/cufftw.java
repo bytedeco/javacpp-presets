@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Samuel Audet
+ * Copyright (C) 2015-2016 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  * @author Samuel Audet
  */
 @Properties(inherit = cufft.class, value = {
-    @Platform(include = "<cufftw.h>", link = "cufftw@.7.5")},
+    @Platform(include = "<cufftw.h>", link = "cufftw@.8.0")},
         target = "org.bytedeco.javacpp.cufftw")
 public class cufftw implements InfoMapper {
     public void map(InfoMap infoMap) {

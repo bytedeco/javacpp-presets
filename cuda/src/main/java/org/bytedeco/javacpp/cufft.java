@@ -73,10 +73,13 @@ public class cufft extends org.bytedeco.javacpp.presets.cufft {
 
 // #include "cuComplex.h"
 // #include "driver_types.h"
+// #include "library_types.h"
 
 // #ifndef CUFFTAPI
 // #ifdef _WIN32
 // #define CUFFTAPI __stdcall
+// #elif __GNUC__ >= 4
+// #define CUFFTAPI __attribute__ ((visibility ("default")))
 // #else
 // #define CUFFTAPI 
 // #endif
@@ -103,9 +106,10 @@ public static final int
   CUFFT_PARSE_ERROR =  0xC,
   CUFFT_NO_WORKSPACE =  0xD,
   CUFFT_NOT_IMPLEMENTED =  0xE,
-  CUFFT_LICENSE_ERROR =  0x0F;
+  CUFFT_LICENSE_ERROR =  0x0F,
+  CUFFT_NOT_SUPPORTED =  0x10;
 
-public static final int MAX_CUFFT_ERROR = 0x10;
+public static final int MAX_CUFFT_ERROR = 0x11;
 
     
 // CUFFT defines and supports the following data types
@@ -135,11 +139,7 @@ public static final int
 // CUFFT supports the following data layouts
 /** enum cufftCompatibility */
 public static final int
-    CUFFT_COMPATIBILITY_NATIVE          =  0x00,    // deprecated
-    CUFFT_COMPATIBILITY_FFTW_PADDING    =  0x01,    // The default value
-    CUFFT_COMPATIBILITY_FFTW_ASYMMETRIC =  0x02,    // Deprecated. Asymmetric input is 
-                                                   // always treated as in FFTW.
-    CUFFT_COMPATIBILITY_FFTW_ALL        =  0x03;
+    CUFFT_COMPATIBILITY_FFTW_PADDING    =  0x01;    // The default value
 
 public static final int CUFFT_COMPATIBILITY_DEFAULT =   CUFFT_COMPATIBILITY_FFTW_PADDING;
 
@@ -455,6 +455,13 @@ public static native @Cast("cufftResult") int cufftDestroy(@Cast("cufftHandle") 
 public static native @Cast("cufftResult") int cufftGetVersion(IntPointer version);
 public static native @Cast("cufftResult") int cufftGetVersion(IntBuffer version);
 public static native @Cast("cufftResult") int cufftGetVersion(int[] version);
+
+public static native @Cast("cufftResult") int cufftGetProperty(@Cast("libraryPropertyType") int type,
+                                      IntPointer value);
+public static native @Cast("cufftResult") int cufftGetProperty(@Cast("libraryPropertyType") int type,
+                                      IntBuffer value);
+public static native @Cast("cufftResult") int cufftGetProperty(@Cast("libraryPropertyType") int type,
+                                      int[] value);
 
 // #ifdef __cplusplus
 // #endif

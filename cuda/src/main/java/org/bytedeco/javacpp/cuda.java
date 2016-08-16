@@ -70,7 +70,7 @@ public class cuda extends org.bytedeco.javacpp.presets.cuda {
  */
 // #if defined(CUDA_FORCE_API_VERSION)
 // #else
-    public static final int __CUDA_API_VERSION = 7050;
+    public static final int __CUDA_API_VERSION = 8000;
 // #endif /* CUDA_FORCE_API_VERSION */
 
 // #if defined(__CUDA_API_VERSION_INTERNAL) || defined(CUDA_API_PER_THREAD_DEFAULT_STREAM)
@@ -122,7 +122,7 @@ public class cuda extends org.bytedeco.javacpp.presets.cuda {
 /**
  * CUDA API version number
  */
-public static final int CUDA_VERSION = 7050;
+public static final int CUDA_VERSION = 8000;
 
 // #ifdef __cplusplus
 // #endif
@@ -614,7 +614,17 @@ public static final int
     CU_DEVICE_ATTRIBUTE_MULTI_GPU_BOARD = 84, 
     /** Unique id for a group of devices on the same multi-GPU board */
     CU_DEVICE_ATTRIBUTE_MULTI_GPU_BOARD_GROUP_ID = 85,
-    CU_DEVICE_ATTRIBUTE_MAX = 86;
+    /** Link between the device and the host supports native atomic operations (this is a placeholder attribute, and is not supported on any current hardware)*/
+    CU_DEVICE_ATTRIBUTE_HOST_NATIVE_ATOMIC_SUPPORTED = 86,
+    /** Ratio of single precision performance (in floating-point operations per second) to double precision performance */
+    CU_DEVICE_ATTRIBUTE_SINGLE_TO_DOUBLE_PRECISION_PERF_RATIO = 87,
+    /** Device supports coherently accessing pageable memory without calling cudaHostRegister on it */
+    CU_DEVICE_ATTRIBUTE_PAGEABLE_MEMORY_ACCESS = 88,
+    /** Device can coherently access managed memory concurrently with the CPU */
+    CU_DEVICE_ATTRIBUTE_CONCURRENT_MANAGED_ACCESS = 89,
+    /** Device supports compute preemption. */
+    CU_DEVICE_ATTRIBUTE_COMPUTE_PREEMPTION_SUPPORTED = 90,
+    CU_DEVICE_ATTRIBUTE_MAX = 91;
 
 /**
  * Legacy device properties
@@ -787,12 +797,28 @@ public static final int
 public static final int
     /** Default compute mode (Multiple contexts allowed per device) */
     CU_COMPUTEMODE_DEFAULT           = 0,
-    /** Compute-exclusive-thread mode (Only one context used by a single thread can be present on this device at a time) */
-    CU_COMPUTEMODE_EXCLUSIVE         = 1,
     /** Compute-prohibited mode (No contexts can be created on this device at this time) */
     CU_COMPUTEMODE_PROHIBITED        = 2,
     /** Compute-exclusive-process mode (Only one context used by a single process can be present on this device at a time) */
     CU_COMPUTEMODE_EXCLUSIVE_PROCESS = 3;
+
+/**
+ * Memory advise values
+ */
+/** enum CUmem_advise */
+public static final int
+    /** Data will mostly be read and only occassionally be written to */
+    CU_MEM_ADVISE_SET_READ_MOSTLY          = 1,
+    /** Undo the effect of ::CU_MEM_ADVISE_SET_READ_MOSTLY */
+    CU_MEM_ADVISE_UNSET_READ_MOSTLY        = 2,
+    /** Set the preferred location for the data as the specified device */
+    CU_MEM_ADVISE_SET_PREFERRED_LOCATION   = 3,
+    /** Clear the preferred location for the data */
+    CU_MEM_ADVISE_UNSET_PREFERRED_LOCATION = 4,
+    /** Data will be accessed by the specified device, so prevent page faults as much as possible */
+    CU_MEM_ADVISE_SET_ACCESSED_BY          = 5,
+    /** Let the Unified Memory subsystem decide on the page faulting policy for the specified device */
+    CU_MEM_ADVISE_UNSET_ACCESSED_BY        = 6;
 
 /**
  * Online compiler and linker options
@@ -958,7 +984,15 @@ public static final int
     /** Compute device class 5.0 */
     CU_TARGET_COMPUTE_50 = 50,
     /** Compute device class 5.2 */
-    CU_TARGET_COMPUTE_52 = 52;
+    CU_TARGET_COMPUTE_52 = 52,
+    /** Compute device class 5.3 */
+    CU_TARGET_COMPUTE_53 = 53,
+    /** Compute device class 6.0. This must be removed for CUDA 7.0 toolkit. See bug 1518217. */
+    CU_TARGET_COMPUTE_60 = 60,
+    /** Compute device class 6.1. This must be removed for CUDA 7.0 toolkit.*/
+    CU_TARGET_COMPUTE_61 = 61,
+    /** Compute device class 6.2. This must be removed for CUDA 7.0 toolkit.*/
+    CU_TARGET_COMPUTE_62 = 62;
 
 /**
  * Cubin matching fallback strategies
@@ -1494,6 +1528,18 @@ public static final int
      */
     CUDA_ERROR_UNKNOWN                        = 999;
 
+/**
+ * P2P Attributes
+ */
+/** enum CUdevice_P2PAttribute */
+public static final int
+    /** A relative value indicating the performance of the link between two devices */
+    CU_DEVICE_P2P_ATTRIBUTE_PERFORMANCE_RANK        =  0x01,
+    /** P2P Access is enable */
+    CU_DEVICE_P2P_ATTRIBUTE_ACCESS_SUPPORTED        =  0x02,
+    /** Atomic operation over the link supported */
+    CU_DEVICE_P2P_ATTRIBUTE_NATIVE_ATOMIC_SUPPORTED =  0x03;
+
 // #ifdef _WIN32
 // #define CUDA_CB __stdcall
 // #else
@@ -1925,7 +1971,10 @@ public static class CUDA_TEXTURE_DESC extends Pointer {
     /** Mipmap minimum level clamp */
     public native float minMipmapLevelClamp(); public native CUDA_TEXTURE_DESC minMipmapLevelClamp(float minMipmapLevelClamp);
     /** Mipmap maximum level clamp */
-    public native float maxMipmapLevelClamp(); public native CUDA_TEXTURE_DESC maxMipmapLevelClamp(float maxMipmapLevelClamp);
+    public native float maxMipmapLevelClamp(); public native CUDA_TEXTURE_DESC maxMipmapLevelClamp(float maxMipmapLevelClamp); 
+    /** Border Color */
+    public native float borderColor(int i); public native CUDA_TEXTURE_DESC borderColor(int i, float borderColor);
+    @MemberGetter public native FloatPointer borderColor();
     public native int reserved(int i); public native CUDA_TEXTURE_DESC reserved(int i, int reserved);
     @MemberGetter public native IntPointer reserved();
 }
@@ -2164,6 +2213,12 @@ public static final Pointer CU_LAUNCH_PARAM_BUFFER_SIZE = CU_LAUNCH_PARAM_BUFFER
  * texture reference.
  */
 public static final int CU_PARAM_TR_DEFAULT = -1;
+
+/**
+ * Device that represents the CPU
+ */
+public static native @MemberGetter int CU_DEVICE_CPU();
+public static final int CU_DEVICE_CPU = CU_DEVICE_CPU(); 
 
 /** \} */ /* END CUDA_TYPES */
 
@@ -2542,8 +2597,6 @@ public static native @Cast("CUresult") int cuDeviceTotalMem(@Cast("size_t*") Siz
  *   in. Available modes are as follows:
  *   - ::CU_COMPUTEMODE_DEFAULT: Default mode - Device is not restricted and
  *     can have multiple CUDA contexts present at a single time.
- *   - ::CU_COMPUTEMODE_EXCLUSIVE: Compute-exclusive mode - Device can have
- *     only one CUDA context present on it at a time.
  *   - ::CU_COMPUTEMODE_PROHIBITED: Compute-prohibited mode - Device is
  *     prohibited from creating new CUDA contexts.
  *   - ::CU_COMPUTEMODE_EXCLUSIVE_PROCESS:  Compute-exclusive-process mode - Device
@@ -2583,6 +2636,15 @@ public static native @Cast("CUresult") int cuDeviceTotalMem(@Cast("size_t*") Siz
  * - ::CU_DEVICE_ATTRIBUTE_MULTI_GPU_BOARD: 1 if device is on a multi-GPU board, 0 if not.
  * - ::CU_DEVICE_ATTRIBUTE_MULTI_GPU_BOARD_GROUP_ID: Unique identifier for a group of devices
  *   associated with the same board. Devices on the same multi-GPU board will share the same identifier.
+ * - ::CU_DEVICE_ATTRIBUTE_HOST_NATIVE_ATOMIC_SUPPORTED: 1 if Link between the device and the host
+ *   supports native atomic operations.
+ * - ::CU_DEVICE_ATTRIBUTE_SINGLE_TO_DOUBLE_PRECISION_PERF_RATIO: Ratio of single precision performance
+ *   (in floating-point operations per second) to double precision performance.
+ * - ::CU_DEVICE_ATTRIBUTE_PAGEABLE_MEMORY_ACCESS: Device suppports coherently accessing
+ *   pageable memory without calling cudaHostRegister on it.
+ * - ::CU_DEVICE_ATTRIBUTE_CONCURRENT_MANAGED_ACCESS: Device can coherently access managed memory
+ *   concurrently with the CPU.
+ * - ::CU_DEVICE_ATTRIBUTE_COMPUTE_PREEMPTION_SUPPORTED: Device supports Compute Preemption.
  *
  * @param pi     - Returned device attribute value
  * @param attrib - Device attribute to query
@@ -2747,12 +2809,10 @@ public static native @Cast("CUresult") int cuDeviceComputeCapability(int[] major
  * Unlike ::cuCtxCreate() the newly created context is not pushed onto the stack.
  *
  * Context creation will fail with ::CUDA_ERROR_UNKNOWN if the compute mode of
- * the device is ::CU_COMPUTEMODE_PROHIBITED. Similarly, context creation will
- * also fail with ::CUDA_ERROR_UNKNOWN if the compute mode for the device is
- * set to ::CU_COMPUTEMODE_EXCLUSIVE and there is already an active, non-primary,
- * context on the device. The function ::cuDeviceGetAttribute() can be used with
- * ::CU_DEVICE_ATTRIBUTE_COMPUTE_MODE to determine the compute mode of the
- * device. The <i>nvidia-smi</i> tool can be used to set the compute mode for
+ * the device is ::CU_COMPUTEMODE_PROHIBITED.  The function ::cuDeviceGetAttribute() 
+ * can be used with ::CU_DEVICE_ATTRIBUTE_COMPUTE_MODE to determine the compute mode 
+ * of the device. 
+ * The <i>nvidia-smi</i> tool can be used to set the compute mode for
  * devices. Documentation for <i>nvidia-smi</i> can be obtained by passing a
  * -h option to it.
  *
@@ -3020,13 +3080,11 @@ public static native @Cast("CUresult") int cuDevicePrimaryCtxReset(@Cast("CUdevi
  * memory usage at the cost of potentially increased memory usage.
  *
  * Context creation will fail with ::CUDA_ERROR_UNKNOWN if the compute mode of
- * the device is ::CU_COMPUTEMODE_PROHIBITED. Similarly, context creation will
- * also fail with ::CUDA_ERROR_UNKNOWN if the compute mode for the device is
- * set to ::CU_COMPUTEMODE_EXCLUSIVE and there is already an active context on
- * the device. The function ::cuDeviceGetAttribute() can be used with
- * ::CU_DEVICE_ATTRIBUTE_COMPUTE_MODE to determine the compute mode of the
- * device. The <i>nvidia-smi</i> tool can be used to set the compute mode for
- * devices. Documentation for <i>nvidia-smi</i> can be obtained by passing a
+ * the device is ::CU_COMPUTEMODE_PROHIBITED. The function ::cuDeviceGetAttribute() 
+ * can be used with ::CU_DEVICE_ATTRIBUTE_COMPUTE_MODE to determine the 
+ * compute mode of the device. The <i>nvidia-smi</i> tool can be used to set 
+ * the compute mode for * devices. 
+ * Documentation for <i>nvidia-smi</i> can be obtained by passing a
  * -h option to it.
  *
  * @param pctx  - Returned context handle of the new context
@@ -7945,6 +8003,126 @@ public static native @Cast("CUresult") int cuMipmappedArrayDestroy(CUmipmappedAr
 public static native @Cast("CUresult") int cuPointerGetAttribute(Pointer data, @Cast("CUpointer_attribute") int attribute, @Cast("CUdeviceptr") long ptr);
 // #endif /* __CUDA_API_VERSION >= 4000 */
 
+// #if __CUDA_API_VERSION >= 8000
+/**
+ * \brief Prefetches memory to the specified destination device
+ *
+ * Prefetches memory to the specified destination device.  \p devPtr is the 
+ * base device pointer of the memory to be prefetched and \p dstDevice is the 
+ * destination device. \p count specifies the number of bytes to copy. \p hStream
+ * is the stream in which the operation is enqueued.
+ *
+ * Passing in CU_DEVICE_CPU for \p dstDevice will prefetch the data to CPU memory.
+ *
+ * If no physical memory has been allocated for this region, then this memory region
+ * will be populated and mapped on the destination device. If there's insufficient
+ * memory to prefetch the desired region, the Unified Memory driver may evict pages
+ * belonging to other memory regions to make room. If there's no memory that can be
+ * evicted, then the Unified Memory driver will prefetch less than what was requested.
+ *
+ * In the normal case, any mappings to the previous location of the migrated pages are
+ * removed and mappings for the new location are only setup on the \p dstDevice.
+ * The application can exercise finer control on these mappings using ::cudaMemAdvise.
+ <p>
+ * Note that this function is asynchronous with respect to the host and all work
+ * on other devices.
+ *
+ * @param devPtr    - Pointer to be prefetched
+ * @param count     - Size in bytes
+ * @param dstDevice - Destination device to prefetch to
+ * @param hStream    - Stream to enqueue prefetch operation
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_INVALID_DEVICE
+ * \notefnerr
+ * \note_async
+ * \note_null_stream
+ *
+ * \sa ::cuMemcpy, ::cuMemcpyPeer, ::cuMemcpyAsync,
+ * ::cuMemcpy3DPeerAsync, ::cuMemAdvise
+ */
+public static native @Cast("CUresult") int cuMemPrefetchAsync(@Cast("CUdeviceptr") long devPtr, @Cast("size_t") long count, @Cast("CUdevice") int dstDevice, CUstream_st hStream);
+
+/**
+ * \brief Advise about the usage of a given memory range
+ *
+ * Advise the Unified Memory subsystem about the usage pattern for the memory range
+ * starting at \p devPtr with a size of \p count bytes.
+ *
+ * The \p advice parameter can take the following values:
+ * - ::CU_MEM_ADVISE_SET_READ_MOSTLY: This implies that the data is mostly going to be read
+ * from and only occasionally written to. This allows the driver to create read-only
+ * copies of the data in a processor's memory when that processor accesses it. Similarly,
+ * if cuMemPrefetchAsync is called on this region, it will create a read-only copy of
+ * the data on the destination processor. When a processor writes to this data, all copies
+ * of the corresponding page are invalidated except for the one where the write occurred.
+ * The \p device argument is ignored for this advice.
+ * - ::CU_MEM_ADVISE_UNSET_READ_MOSTLY: Undoes the effect of ::CU_MEM_ADVISE_SET_READ_MOSTLY. Any read
+ * duplicated copies of the data will be freed no later than the next write access to that data.
+ * - ::CU_MEM_ADVISE_SET_PREFERRED_LOCATION: This advice sets the preferred location for the
+ * data to be the memory belonging to \p device. Passing in CU_DEVICE_CPU for \p device sets the
+ * preferred location as CPU memory. Setting the preferred location does not cause data to
+ * migrate to that location immediately. Instead, it guides the migration policy when a fault
+ * occurs on that memory region. If the data is already in its preferred location and the
+ * faulting processor can establish a mapping without requiring the data to be migrated, then
+ * the migration will be avoided. On the other hand, if the data is not in its preferred location
+ * or if a direct mapping cannot be established, then it will be migrated to the processor accessing
+ * it. It is important to note that setting the preferred location does not prevent data prefetching
+ * done using ::cuMemPrefetchAsync.
+ * Having a preferred location can override the thrash detection and resolution logic in the Unified
+ * Memory driver. Normally, if a page is detected to be constantly thrashing between CPU and GPU
+ * memory say, the page will eventually be pinned to CPU memory by the Unified Memory driver. But
+ * if the preferred location is set as GPU memory, then the page will continue to thrash indefinitely.
+ * When the Unified Memory driver has to evict pages from a certain location on account of that
+ * memory being oversubscribed, the preferred location will be used to decide the destination to which
+ * a page should be evicted to.
+ * If ::CU_MEM_ADVISE_SET_READ_MOSTLY is also set on this memory region or any subset of it, the preferred
+ * location will be ignored for that subset.
+ * - ::CU_MEM_ADVISE_UNSET_PREFERRED_LOCATION: Undoes the effect of ::CU_MEM_ADVISE_SET_PREFERRED_LOCATION
+ * and changes the preferred location to none.
+ * - ::CU_MEM_ADVISE_SET_ACCESSED_BY: This advice implies that the data will be accessed by \p device.
+ * This does not cause data migration and has no impact on the location of the data per se. Instead,
+ * it causes the data to always be mapped in the specified processor's page tables, as long as the
+ * location of the data permits a mapping to be established. If the data gets migrated for any reason,
+ * the mappings are updated accordingly.
+ * This advice is useful in scenarios where data locality is not important, but avoiding faults is.
+ * Consider for example a system containing multiple GPUs with peer-to-peer access enabled, where the
+ * data located on one GPU is occasionally accessed by other GPUs. In such scenarios, migrating data
+ * over to the other GPUs is not as important because the accesses are infrequent and the overhead of
+ * migration may be too high. But preventing faults can still help improve performance, and so having
+ * a mapping set up in advance is useful. Note that on CPU access of this data, the data may be migrated
+ * to CPU memory because the CPU typically cannot access GPU memory directly. Any GPU that had the
+ * ::CU_MEM_ADVISE_SET_ACCESSED_BY flag set for this data will now have its mapping updated to point to the
+ * page in CPU memory.
+ * - ::CU_MEM_ADVISE_UNSET_ACCESSED_BY: Undoes the effect of CU_MEM_ADVISE_SET_ACCESSED_BY. The current set of
+ * mappings may be removed at any time causing accesses to result in page faults.
+ *
+ * Passing in ::CU_DEVICE_CPU for \p device will set the advice for the CPU.
+ *
+ * Note that this function is asynchronous with respect to the host and all work
+ * on other devices.
+ *
+ * @param devPtr - Pointer to memory to set the advice for
+ * @param count  - Size in bytes of the memory range
+ * @param advice - Advice to be applied for the specified memory range
+ * @param device - Device to apply the advice for
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_INVALID_VALUE,
+ * ::CUDA_ERROR_INVALID_DEVICE
+ * \notefnerr
+ * \note_async
+ * \note_null_stream
+ *
+ * \sa ::cuMemcpy, ::cuMemcpyPeer, ::cuMemcpyAsync,
+ * ::cuMemcpy3DPeerAsync, ::cuMemPrefetchAsync
+ */
+public static native @Cast("CUresult") int cuMemAdvise(@Cast("CUdeviceptr") long devPtr, @Cast("size_t") long count, @Cast("CUmem_advise") int advice, @Cast("CUdevice") int device);
+// #endif /* __CUDA_API_VERSION >= 8000 */
+
 // #if __CUDA_API_VERSION >= 6000
 /**
  * \brief Set attributes on a previously allocated memory region
@@ -9926,6 +10104,38 @@ public static native @Cast("CUresult") int cuTexRefSetMipmapLevelClamp(CUtexref_
 public static native @Cast("CUresult") int cuTexRefSetMaxAnisotropy(CUtexref_st hTexRef, @Cast("unsigned int") int maxAniso);
 
 /**
+ * \brief Sets the border color for a texture reference
+ *
+ * Specifies the value of the RGBA color via the \p pBorderColor to the texture reference
+ * \p hTexRef. The color value supports only float type and holds color components in
+ * the following sequence:
+ * pBorderColor[0] holds 'R' component
+ * pBorderColor[1] holds 'G' component
+ * pBorderColor[2] holds 'B' component
+ * pBorderColor[3] holds 'A' component
+ *
+ * Note that the color values can be set only when the Address mode is set to
+ * CU_TR_ADDRESS_MODE_BORDER using ::cuTexRefSetAddressMode.
+ * Applications using integer border color values have to "reinterpret_cast" their values to float.
+ *
+ * @param hTexRef       - Texture reference
+ * @param pBorderColor  - RGBA color
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_CONTEXT,
+ * ::CUDA_ERROR_INVALID_VALUE
+ *
+ * \sa ::cuTexRefSetAddressMode,
+ * ::cuTexRefGetAddressMode, ::cuTexRefGetBorderColor
+ */
+public static native @Cast("CUresult") int cuTexRefSetBorderColor(CUtexref_st hTexRef, FloatPointer pBorderColor);
+public static native @Cast("CUresult") int cuTexRefSetBorderColor(CUtexref_st hTexRef, FloatBuffer pBorderColor);
+public static native @Cast("CUresult") int cuTexRefSetBorderColor(CUtexref_st hTexRef, float[] pBorderColor);
+
+/**
  * \brief Sets the flags for a texture reference
  *
  * Specifies optional flags via \p Flags to specify the behavior of data
@@ -10225,6 +10435,35 @@ public static native @Cast("CUresult") int cuTexRefGetMipmapLevelClamp(float[] p
 public static native @Cast("CUresult") int cuTexRefGetMaxAnisotropy(IntPointer pmaxAniso, CUtexref_st hTexRef);
 public static native @Cast("CUresult") int cuTexRefGetMaxAnisotropy(IntBuffer pmaxAniso, CUtexref_st hTexRef);
 public static native @Cast("CUresult") int cuTexRefGetMaxAnisotropy(int[] pmaxAniso, CUtexref_st hTexRef);
+
+/**
+ * \brief Gets the border color used by a texture reference
+ *
+ * Returns in \p pBorderColor, values of the RGBA color used by
+ * the texture reference \p hTexRef.
+ * The color value is of type float and holds color components in
+ * the following sequence:
+ * pBorderColor[0] holds 'R' component
+ * pBorderColor[1] holds 'G' component
+ * pBorderColor[2] holds 'B' component
+ * pBorderColor[3] holds 'A' component
+ *
+ * @param hTexRef  - Texture reference
+ * @param pBorderColor   - Returned Type and Value of RGBA color
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_CONTEXT,
+ * ::CUDA_ERROR_INVALID_VALUE
+ *
+ * \sa ::cuTexRefSetAddressMode,
+ * ::cuTexRefSetAddressMode, ::cuTexRefSetBorderColor
+ */
+public static native @Cast("CUresult") int cuTexRefGetBorderColor(FloatPointer pBorderColor, CUtexref_st hTexRef);
+public static native @Cast("CUresult") int cuTexRefGetBorderColor(FloatBuffer pBorderColor, CUtexref_st hTexRef);
+public static native @Cast("CUresult") int cuTexRefGetBorderColor(float[] pBorderColor, CUtexref_st hTexRef); 
 
 /**
  * \brief Gets the flags used by a texture reference
@@ -10793,6 +11032,45 @@ public static native @Cast("CUresult") int cuSurfObjectGetResourceDesc(CUDA_RESO
 public static native @Cast("CUresult") int cuDeviceCanAccessPeer(IntPointer canAccessPeer, @Cast("CUdevice") int dev, @Cast("CUdevice") int peerDev);
 public static native @Cast("CUresult") int cuDeviceCanAccessPeer(IntBuffer canAccessPeer, @Cast("CUdevice") int dev, @Cast("CUdevice") int peerDev);
 public static native @Cast("CUresult") int cuDeviceCanAccessPeer(int[] canAccessPeer, @Cast("CUdevice") int dev, @Cast("CUdevice") int peerDev);
+
+
+/**
+ * \brief Queries attributes of the link between two devices.
+ *
+ * Returns in \p *value the value of the requested attribute \p attrib of the
+ * link between \p srcDevice and \p dstDevice. The supported attributes are:
+ * - ::CU_DEVICE_P2P_ATTRIBUTE_PERFORMANCE_RANK: A relative value indicating the
+ *   performance of the link between two devices.
+ * - ::CU_DEVICE_P2P_ATTRIBUTE_ACCESS_SUPPORTED P2P: 1 if P2P Access is enable.
+ * - ::CU_DEVICE_P2P_ATTRIBUTE_NATIVE_ATOMIC_SUPPORTED: 1 if Atomic operations over
+ *   the link are supported.
+ *
+ * Returns ::CUDA_ERROR_INVALID_DEVICE if \p srcDevice or \p dstDevice are not valid
+ * or if they represent the same device.
+ *
+ * Returns ::CUDA_ERROR_INVALID_VALUE if \p attrib is not valid or if \p value is
+ * a null pointer.
+ *
+ * @param value         - Returned value of the requested attribute
+ * @param attrib        - The requested attribute of the link between \p srcDevice and \p dstDevice.
+ * @param srcDevice     - The source device of the target link.
+ * @param dstDevice     - The destination device of the target link.
+ *
+ * @return
+ * ::CUDA_SUCCESS,
+ * ::CUDA_ERROR_DEINITIALIZED,
+ * ::CUDA_ERROR_NOT_INITIALIZED,
+ * ::CUDA_ERROR_INVALID_DEVICE,
+ * ::CUDA_ERROR_INVALID_VALUE
+ * \notefnerr
+ *
+ * \sa ::cuCtxEnablePeerAccess,
+ * ::cuCtxDisablePeerAccess,
+ * ::cuCtxCanAccessPeer
+ */
+public static native @Cast("CUresult") int cuDeviceGetP2PAttribute(IntPointer value, @Cast("CUdevice_P2PAttribute") int attrib, @Cast("CUdevice") int srcDevice, @Cast("CUdevice") int dstDevice);
+public static native @Cast("CUresult") int cuDeviceGetP2PAttribute(IntBuffer value, @Cast("CUdevice_P2PAttribute") int attrib, @Cast("CUdevice") int srcDevice, @Cast("CUdevice") int dstDevice);
+public static native @Cast("CUresult") int cuDeviceGetP2PAttribute(int[] value, @Cast("CUdevice_P2PAttribute") int attrib, @Cast("CUdevice") int srcDevice, @Cast("CUdevice") int dstDevice);
 
 /**
  * \brief Enables direct access to memory allocations in a peer context.
@@ -11673,6 +11951,9 @@ public static final int cudaOccupancyDefault =                0x00;
 /** Assume global caching is enabled and cannot be automatically turned off */
 public static final int cudaOccupancyDisableCachingOverride = 0x01;
 
+/** Device id that represents the CPU */
+public static final int cudaCpuDeviceId =                     ((int)-1);
+
 // #endif /* !__CUDA_INTERNAL_COMPILATION__ && !__CUDACC_RTC__ */
 
 /*******************************************************************************
@@ -12364,7 +12645,7 @@ public static final int
     cudaMemcpyDeviceToHost        = 2,
     /** Device -> Device */
     cudaMemcpyDeviceToDevice      = 3,
-    /** Default based unified virtual address space */
+    /** Direction of the transfer is inferred from the pointer values. Requires unified virtual addressing */
     cudaMemcpyDefault             = 4;
 
 /**
@@ -12924,6 +13205,24 @@ public static final int
     cudaLimitDevRuntimePendingLaunchCount =  0x04;
 
 /**
+ * CUDA Memory Advise values
+ */
+/** enum cudaMemoryAdvise */
+public static final int
+    /** Data will mostly be read and only occassionally be written to */
+    cudaMemAdviseSetReadMostly          = 1,
+    /** Undo the effect of ::cudaMemAdviseSetReadMostly */
+    cudaMemAdviseUnsetReadMostly        = 2,
+    /** Set the preferred location for the data as the specified device */
+    cudaMemAdviseSetPreferredLocation   = 3,
+    /** Clear the preferred location for the data */
+    cudaMemAdviseUnsetPreferredLocation = 4,
+    /** Data will be accessed by the specified device, so prevent page faults as much as possible */
+    cudaMemAdviseSetAccessedBy          = 5,
+    /** Let the Unified Memory subsystem decide on the page faulting policy for the specified device */
+    cudaMemAdviseUnsetAccessedBy        = 6;
+
+/**
  * CUDA Profiler Output modes
  */
 /** enum cudaOutputMode */
@@ -13105,8 +13404,28 @@ public static final int
     /** Device is on a multi-GPU board */
     cudaDevAttrIsMultiGpuBoard                = 84,
     /** Unique identifier for a group of devices on the same multi-GPU board */
-    cudaDevAttrMultiGpuBoardGroupID           = 85;
+    cudaDevAttrMultiGpuBoardGroupID           = 85,
+    /** Link between the device and the host supports native atomic operations */
+    cudaDevAttrHostNativeAtomicSupported      = 86,
+    /** Ratio of single precision performance (in floating-point operations per second) to double precision performance */
+    cudaDevAttrSingleToDoublePrecisionPerfRatio = 87,
+    /** Device supports coherently accessing pageable memory without calling cudaHostRegister on it */
+    cudaDevAttrPageableMemoryAccess           = 88,
+    /** Device can coherently access managed memory concurrently with the CPU */
+    cudaDevAttrConcurrentManagedAccess        = 89;
 
+/**
+ * CUDA device P2P attributes
+ */
+
+/** enum cudaDeviceP2PAttr */
+public static final int
+    /** A relative value indicating the performance of the link between two devices */
+    cudaDevP2PAttrPerformanceRank              = 1,
+    /** Peer access is enabled */
+    cudaDevP2PAttrAccessSupported              = 2,
+    /** Native atomic operation over the link supported */
+    cudaDevP2PAttrNativeAtomicSupported        = 3;
 /**
  * CUDA device properties
  */
@@ -13265,6 +13584,14 @@ public static class cudaDeviceProp extends Pointer {
     public native int isMultiGpuBoard(); public native cudaDeviceProp isMultiGpuBoard(int isMultiGpuBoard);
     /** Unique identifier for a group of devices on the same multi-GPU board */
     public native int multiGpuBoardGroupID(); public native cudaDeviceProp multiGpuBoardGroupID(int multiGpuBoardGroupID);
+    /** Link between the device and the host supports native atomic operations */
+    public native int hostNativeAtomicSupported(); public native cudaDeviceProp hostNativeAtomicSupported(int hostNativeAtomicSupported);
+    /** Ratio of single precision performance (in floating-point operations per second) to double precision performance */
+    public native int singleToDoublePrecisionPerfRatio(); public native cudaDeviceProp singleToDoublePrecisionPerfRatio(int singleToDoublePrecisionPerfRatio);
+    /** Device supports coherently accessing pageable memory without calling cudaHostRegister on it */
+    public native int pageableMemoryAccess(); public native cudaDeviceProp pageableMemoryAccess(int pageableMemoryAccess);
+    /** Device can coherently access managed memory concurrently with the CPU */
+    public native int concurrentManagedAccess(); public native cudaDeviceProp concurrentManagedAccess(int concurrentManagedAccess);
 }
 
 /** Empty device properties */
@@ -13332,6 +13659,10 @@ public static class cudaDeviceProp extends Pointer {
 //           0,         /* int    managedMemory            */
 //           0,         /* int    isMultiGpuBoard          */
 //           0,         /* int    multiGpuBoardGroupID     */
+//           0,         /* int    hostNativeAtomicSupported */
+//           0,         /* int    singleToDoublePrecisionPerfRatio */
+//           0,         /* int    pageableMemoryAccess     */
+//           0,         /* int    concurrentManagedAccess  */
 //         }
 
 /**
@@ -13772,6 +14103,11 @@ public static class cudaTextureDesc extends Pointer {
      * Perform sRGB->linear conversion during texture read
      */
     public native int sRGB(); public native cudaTextureDesc sRGB(int sRGB);
+    /**
+     * Texture Border Color
+     */
+    public native float borderColor(int i); public native cudaTextureDesc borderColor(int i, float borderColor);
+    @MemberGetter public native FloatPointer borderColor();
     /**
      * Indicates whether texture reads are normalized or not
      */
@@ -14359,7 +14695,7 @@ public static class ulong1 extends Pointer {
     public native @Cast("unsigned long") long x(); public native ulong1 x(long x);
 }
 
-// #if defined(__CUDACC_RTC__) || defined(_WIN32)
+// #if defined(_WIN32)
 public static class long2 extends Pointer {
     static { Loader.load(); }
     /** Default native constructor. */
@@ -14390,9 +14726,9 @@ public static class ulong2 extends Pointer {
     }
  public native @Cast("unsigned long int") long x(); public native ulong2 x(long x); public native @Cast("unsigned long int") long y(); public native ulong2 y(long y);
 }
-// #else /* __CUDACC_RTC__ || _WIN32 */
+// #else /* !_WIN32 */
 
-// #endif /* __CUDACC_RTC__ || _WIN32 */
+// #endif /* _WIN32 */
 
 public static class long3 extends Pointer {
     static { Loader.load(); }
@@ -15022,7 +15358,7 @@ public static class double4 extends Pointer {
  */
 
 /** CUDA Runtime API Version */
-public static final int CUDART_VERSION =  7050;
+public static final int CUDART_VERSION =  8000;
 
 // #include "host_defines.h"
 // #include "builtin_types.h"
@@ -16115,6 +16451,9 @@ public static native @Cast("cudaError_t") int cudaGetDeviceCount(int[] count);
         int managedMemSupported;
         int isMultiGpuBoard;
         int multiGpuBoardGroupID;
+        int singleToDoublePrecisionPerfRatio;
+        int pageableMemoryAccess;
+        int concurrentManagedAccess;
     }
  }</pre>
  * where:
@@ -16269,6 +16608,13 @@ public static native @Cast("cudaError_t") int cudaGetDeviceCount(int[] count);
  * - \ref ::cudaDeviceProp::multiGpuBoardGroupID "multiGpuBoardGroupID" is a unique identifier
  *   for a group of devices associated with the same board.
  *   Devices on the same multi-GPU board will share the same identifier;
+ * - \ref ::cudaDeviceProp::singleToDoublePrecisionPerfRatio "singleToDoublePrecisionPerfRatio"  
+ *   is the ratio of single precision performance (in floating-point operations per second)
+ *   to double precision performance.
+ * - \ref ::cudaDeviceProp::pageableMemoryAccess "pageableMemoryAccess" is 1 if the device supports
+ *   coherently accessing pageable memory without calling cudaHostRegister on it, and 0 otherwise.
+ * - \ref ::cudaDeviceProp::concurrentManagedAccess "concurrentManagedAccess" is 1 if the device can
+ *   coherently access managed memory concurrently with the CPU, and 0 otherwise.
  *
  * @param prop   - Properties for the specified device
  * @param device - Device number to get properties for
@@ -16426,6 +16772,14 @@ public static native @Cast("cudaError_t") int cudaGetDeviceProperties(cudaDevice
  * - ::cudaDevAttrIsMultiGpuBoard: 1 if device is on a multi-GPU board, 0 if not;
  * - ::cudaDevAttrMultiGpuBoardGroupID: Unique identifier for a group of devices on the
  *   same multi-GPU board;
+ * - ::cudaDevAttrHostNativeAtomicSupported: 1 if the link between the device and the
+ *   host supports native atomic operations;
+ * - ::cudaDevAttrSingleToDoublePrecisionPerfRatio: Ratio of single precision performance
+ *   (in floating-point operations per second) to double precision performance;
+ * - ::cudaDevAttrPageableMemoryAccess: 1 if the device supports coherently accessing
+ *   pageable memory without calling cudaHostRegister on it, and 0 otherwise.
+ * - ::cudaDevAttrConcurrentManagedAccess: 1 if the device can coherently access managed
+ *   memory concurrently with the CPU, and 0 otherwise.
  *
  * @param value  - Returned device attribute value
  * @param attr   - Device attribute to query
@@ -16443,6 +16797,43 @@ public static native @Cast("cudaError_t") int cudaGetDeviceProperties(cudaDevice
 public static native @Cast("cudaError_t") int cudaDeviceGetAttribute(IntPointer value, @Cast("cudaDeviceAttr") int attr, int device);
 public static native @Cast("cudaError_t") int cudaDeviceGetAttribute(IntBuffer value, @Cast("cudaDeviceAttr") int attr, int device);
 public static native @Cast("cudaError_t") int cudaDeviceGetAttribute(int[] value, @Cast("cudaDeviceAttr") int attr, int device);
+
+/**
+ * \brief Queries attributes of the link between two devices.
+ *
+ * Returns in \p *value the value of the requested attribute \p attrib of the
+ * link between \p srcDevice and \p dstDevice. The supported attributes are:
+ * - ::CudaDevP2PAttrPerformanceRank: A relative value indicating the
+ *   performance of the link between two devices. Lower value means better
+ *   performance (0 being the value used for most performant link).
+ * - ::CudaDevP2PAttrAccessSupported: 1 if peer access is enabled.
+ * - ::CudaDevP2PAttrNativeAtomicSupported: 1 if native atomic operations over
+ *   the link are supported.
+ *
+ * Returns ::cudaErrorInvalidDevice if \p srcDevice or \p dstDevice are not valid
+ * or if they represent the same device.
+ *
+ * Returns ::cudaErrorInvalidValue if \p attrib is not valid or if \p value is
+ * a null pointer.
+ *
+ * @param value         - Returned value of the requested attribute
+ * @param attrib        - The requested attribute of the link between \p srcDevice and \p dstDevice.
+ * @param srcDevice     - The source device of the target link.
+ * @param dstDevice     - The destination device of the target link.
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidDevice,
+ * ::cudaErrorInvalidValue
+ * \notefnerr
+ *
+ * \sa ::cudaCtxEnablePeerAccess,
+ * ::cudaCtxDisablePeerAccess,
+ * ::cudaCtxCanAccessPeer
+ */
+public static native @Cast("cudaError_t") int cudaDeviceGetP2PAttribute(IntPointer value, @Cast("cudaDeviceP2PAttr") int attr, int srcDevice, int dstDevice);
+public static native @Cast("cudaError_t") int cudaDeviceGetP2PAttribute(IntBuffer value, @Cast("cudaDeviceP2PAttr") int attr, int srcDevice, int dstDevice);
+public static native @Cast("cudaError_t") int cudaDeviceGetP2PAttribute(int[] value, @Cast("cudaDeviceP2PAttr") int attr, int srcDevice, int dstDevice);
 
 /**
  * \brief Select compute-device which best matches criteria
@@ -16998,10 +17389,12 @@ public static native @Cast("cudaError_t") int cudaStreamQuery(CUstream_st stream
  *
  * \p length must be zero, to indicate that the entire allocation's
  * stream association is being changed.  Currently, it's not possible
- * to change stream association for a portion of an allocation.
+ * to change stream association for a portion of an allocation. The default
+ * value for \p length is zero.
  *
  * The stream association is specified using \p flags which must be
  * one of ::cudaMemAttachGlobal, ::cudaMemAttachHost or ::cudaMemAttachSingle.
+ * The default value for \p flags is ::cudaMemAttachSingle
  * If the ::cudaMemAttachGlobal flag is specified, the memory can be accessed
  * by any stream on any device.
  * If the ::cudaMemAttachHost flag is specified, the program makes a guarantee
@@ -17036,8 +17429,8 @@ public static native @Cast("cudaError_t") int cudaStreamQuery(CUstream_st stream
  *
  * @param stream  - Stream in which to enqueue the attach operation
  * @param devPtr  - Pointer to memory (must be a pointer to managed memory)
- * @param length  - Length of memory (must be zero)
- * @param flags   - Must be one of ::cudaMemAttachGlobal, ::cudaMemAttachHost or ::cudaMemAttachSingle
+ * @param length  - Length of memory (must be zero, defaults to zero)
+ * @param flags   - Must be one of ::cudaMemAttachGlobal, ::cudaMemAttachHost or ::cudaMemAttachSingle (defaults to ::cudaMemAttachSingle)
  *
  * @return
  * ::cudaSuccess,
@@ -17048,7 +17441,8 @@ public static native @Cast("cudaError_t") int cudaStreamQuery(CUstream_st stream
  *
  * \sa ::cudaStreamCreate, ::cudaStreamCreateWithFlags, ::cudaStreamWaitEvent, ::cudaStreamSynchronize, ::cudaStreamAddCallback, ::cudaStreamDestroy, ::cudaMallocManaged
  */
-public static native @Cast("cudaError_t") int cudaStreamAttachMemAsync(CUstream_st stream, Pointer devPtr, @Cast("size_t") long length, @Cast("unsigned int") int flags);
+public static native @Cast("cudaError_t") int cudaStreamAttachMemAsync(CUstream_st stream, Pointer devPtr, @Cast("size_t") long length/*=0*/, @Cast("unsigned int") int flags/*=cudaMemAttachSingle*/);
+public static native @Cast("cudaError_t") int cudaStreamAttachMemAsync(CUstream_st stream, Pointer devPtr);
 
 /** \} */ /* END CUDART_STREAM */
 
@@ -17788,7 +18182,8 @@ public static native @Cast("cudaError_t") int cudaLaunch(@Const Pointer func);
  * All accesses to this pointer must obey the Unified Memory programming model.
  *
  * \p flags specifies the default stream association for this allocation.
- * \p flags must be one of ::cudaMemAttachGlobal or ::cudaMemAttachHost.
+ * \p flags must be one of ::cudaMemAttachGlobal or ::cudaMemAttachHost. The
+ * default value for \p flags is ::cudaMemAttachGlobal.
  * If ::cudaMemAttachGlobal is specified, then this memory is accessible from
  * any stream on any device. If ::cudaMemAttachHost is specified, then the
  * allocation is created with initial visibility restricted to host access only;
@@ -17829,7 +18224,7 @@ public static native @Cast("cudaError_t") int cudaLaunch(@Const Pointer func);
  *
  * @param devPtr - Pointer to allocated device memory
  * @param size   - Requested allocation size in bytes
- * @param flags  - Must be either ::cudaMemAttachGlobal or ::cudaMemAttachHost
+ * @param flags  - Must be either ::cudaMemAttachGlobal or ::cudaMemAttachHost (defaults to ::cudaMemAttachGlobal)
  *
  * @return
  * ::cudaSuccess,
@@ -17842,8 +18237,9 @@ public static native @Cast("cudaError_t") int cudaLaunch(@Const Pointer func);
  * \ref ::cudaMallocHost(void**, size_t) "cudaMallocHost (C API)",
  * ::cudaFreeHost, ::cudaHostAlloc, ::cudaDeviceGetAttribute, ::cudaStreamAttachMemAsync
  */
-public static native @Cast("cudaError_t") int cudaMallocManaged(@Cast("void**") PointerPointer devPtr, @Cast("size_t") long size, @Cast("unsigned int") int flags);
-public static native @Cast("cudaError_t") int cudaMallocManaged(@Cast("void**") @ByPtrPtr Pointer devPtr, @Cast("size_t") long size, @Cast("unsigned int") int flags);
+public static native @Cast("cudaError_t") int cudaMallocManaged(@Cast("void**") PointerPointer devPtr, @Cast("size_t") long size, @Cast("unsigned int") int flags/*=cudaMemAttachGlobal*/);
+public static native @Cast("cudaError_t") int cudaMallocManaged(@Cast("void**") @ByPtrPtr Pointer devPtr, @Cast("size_t") long size);
+public static native @Cast("cudaError_t") int cudaMallocManaged(@Cast("void**") @ByPtrPtr Pointer devPtr, @Cast("size_t") long size, @Cast("unsigned int") int flags/*=cudaMemAttachGlobal*/);
 
 
 /**
@@ -18643,7 +19039,10 @@ cudaMemcpy3DParms myParms = {0};
  *
  * The \p kind field defines the direction of the copy. It must be one of
  * ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
- * or ::cudaMemcpyDeviceToDevice.
+ * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
+ * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
+ * inferred from the pointer values. However, ::cudaMemcpyDefault is only
+ * allowed on systems that support unified virtual addressing.
  *
  * If the source and destination are both arrays, ::cudaMemcpy3D() will return
  * an error if they do not have the same element size.
@@ -18768,7 +19167,10 @@ cudaMemcpy3DParms myParms = {0};
  *
  * The \p kind field defines the direction of the copy. It must be one of
  * ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
- * or ::cudaMemcpyDeviceToDevice.
+ * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
+ * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
+ * inferred from the pointer values. However, ::cudaMemcpyDefault is only
+ * allowed on systems that support unified virtual addressing.
  *
  * If the source and destination are both arrays, ::cudaMemcpy3DAsync() will
  * return an error if they do not have the same element size.
@@ -18889,12 +19291,15 @@ public static native @Cast("cudaError_t") int cudaArrayGetInfo(cudaChannelFormat
  * \brief Copies data between host and device
  *
  * Copies \p count bytes from the memory area pointed to by \p src to the
- * memory area pointed to by \p dst, where \p kind is one of
- * ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
- * or ::cudaMemcpyDeviceToDevice, and specifies the direction of the copy. The
- * memory areas may not overlap. Calling ::cudaMemcpy() with \p dst and \p src
- * pointers that do not match the direction of the copy results in an
- * undefined behavior.
+ * memory area pointed to by \p dst, where \p kind specifies the direction
+ * of the copy, and must be one of ::cudaMemcpyHostToHost,
+ * ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
+ * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
+ * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
+ * inferred from the pointer values. However, ::cudaMemcpyDefault is only
+ * allowed on systems that support unified virtual addressing. Calling
+ * ::cudaMemcpy() with dst and src pointers that do not match the direction of
+ * the copy results in an undefined behavior.
  *
  * @param dst   - Destination memory address
  * @param src   - Source memory address
@@ -18957,9 +19362,13 @@ public static native @Cast("cudaError_t") int cudaMemcpyPeer(Pointer dst, int ds
  *
  * Copies \p count bytes from the memory area pointed to by \p src to the
  * CUDA array \p dst starting at the upper left corner
- * (\p wOffset, \p hOffset), where \p kind is one of ::cudaMemcpyHostToHost,
- * ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost, or
- * ::cudaMemcpyDeviceToDevice, and specifies the direction of the copy.
+ * (\p wOffset, \p hOffset), where \p kind specifies the direction
+ * of the copy, and must be one of ::cudaMemcpyHostToHost,
+ * ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
+ * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
+ * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
+ * inferred from the pointer values. However, ::cudaMemcpyDefault is only
+ * allowed on systems that support unified virtual addressing.
  *
  * @param dst     - Destination memory address
  * @param wOffset - Destination starting X offset
@@ -18991,9 +19400,12 @@ public static native @Cast("cudaError_t") int cudaMemcpyToArray(cudaArray dst, @
  *
  * Copies \p count bytes from the CUDA array \p src starting at the upper
  * left corner (\p wOffset, hOffset) to the memory area pointed to by \p dst,
- * where \p kind is one of ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice,
- * ::cudaMemcpyDeviceToHost, or ::cudaMemcpyDeviceToDevice, and specifies the
- * direction of the copy.
+ * where \p kind specifies the direction of the copy, and must be one of
+ * ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
+ * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
+ * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
+ * inferred from the pointer values. However, ::cudaMemcpyDefault is only
+ * allowed on systems that support unified virtual addressing.
  *
  * @param dst     - Destination memory address
  * @param src     - Source memory address
@@ -19026,9 +19438,12 @@ public static native @Cast("cudaError_t") int cudaMemcpyFromArray(Pointer dst, c
  * Copies \p count bytes from the CUDA array \p src starting at the upper
  * left corner (\p wOffsetSrc, \p hOffsetSrc) to the CUDA array \p dst
  * starting at the upper left corner (\p wOffsetDst, \p hOffsetDst) where
- * \p kind is one of ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice,
- * ::cudaMemcpyDeviceToHost, or ::cudaMemcpyDeviceToDevice, and specifies the
- * direction of the copy.
+ * \p kind specifies the direction of the copy, and must be one of
+ * ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
+ * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
+ * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
+ * inferred from the pointer values. However, ::cudaMemcpyDefault is only
+ * allowed on systems that support unified virtual addressing.
  *
  * @param dst        - Destination memory address
  * @param wOffsetDst - Destination starting X offset
@@ -19061,14 +19476,17 @@ public static native @Cast("cudaError_t") int cudaMemcpyArrayToArray(cudaArray d
  *
  * Copies a matrix (\p height rows of \p width bytes each) from the memory
  * area pointed to by \p src to the memory area pointed to by \p dst, where
- * \p kind is one of ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice,
- * ::cudaMemcpyDeviceToHost, or ::cudaMemcpyDeviceToDevice, and specifies the
- * direction of the copy. \p dpitch and \p spitch are the widths in memory in
- * bytes of the 2D arrays pointed to by \p dst and \p src, including any
- * padding added to the end of each row. The memory areas may not overlap.
- * \p width must not exceed either \p dpitch or \p spitch.
- * Calling ::cudaMemcpy2D() with \p dst and \p src pointers that do not match
- * the direction of the copy results in an undefined behavior.
+ * \p kind specifies the direction of the copy, and must be one of
+ * ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
+ * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
+ * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
+ * inferred from the pointer values. However, ::cudaMemcpyDefault is only
+ * allowed on systems that support unified virtual addressing. \p dpitch and
+ * \p spitch are the widths in memory in bytes of the 2D arrays pointed to by
+ * \p dst and \p src, including any padding added to the end of each row. The
+ * memory areas may not overlap. \p width must not exceed either \p dpitch or
+ * \p spitch. Calling ::cudaMemcpy2D() with \p dst and \p src pointers that do
+ * not match the direction of the copy results in an undefined behavior.
  * ::cudaMemcpy2D() returns an error if \p dpitch or \p spitch exceeds
  * the maximum allowed.
  *
@@ -19103,9 +19521,13 @@ public static native @Cast("cudaError_t") int cudaMemcpy2D(Pointer dst, @Cast("s
  *
  * Copies a matrix (\p height rows of \p width bytes each) from the memory
  * area pointed to by \p src to the CUDA array \p dst starting at the
- * upper left corner (\p wOffset, \p hOffset) where \p kind is one of
- * ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
- * or ::cudaMemcpyDeviceToDevice, and specifies the direction of the copy.
+ * upper left corner (\p wOffset, \p hOffset) where \p kind specifies the
+ * direction of the copy, and must be one of ::cudaMemcpyHostToHost,
+ * ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
+ * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
+ * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
+ * inferred from the pointer values. However, ::cudaMemcpyDefault is only
+ * allowed on systems that support unified virtual addressing.
  * \p spitch is the width in memory in bytes of the 2D array pointed to by
  * \p src, including any padding added to the end of each row. \p wOffset +
  * \p width must not exceed the width of the CUDA array \p dst. \p width must
@@ -19146,13 +19568,17 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DToArray(cudaArray dst,
  * Copies a matrix (\p height rows of \p width bytes each) from the CUDA
  * array \p srcArray starting at the upper left corner
  * (\p wOffset, \p hOffset) to the memory area pointed to by \p dst, where
- * \p kind is one of ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice,
- * ::cudaMemcpyDeviceToHost, or ::cudaMemcpyDeviceToDevice, and specifies the
- * direction of the copy. \p dpitch is the width in memory in bytes of the 2D
- * array pointed to by \p dst, including any padding added to the end of each
- * row. \p wOffset + \p width must not exceed the width of the CUDA array
- * \p src. \p width must not exceed \p dpitch. ::cudaMemcpy2DFromArray()
- * returns an error if \p dpitch exceeds the maximum allowed.
+ * \p kind specifies the direction of the copy, and must be one of
+ * ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
+ * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
+ * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
+ * inferred from the pointer values. However, ::cudaMemcpyDefault is only
+ * allowed on systems that support unified virtual addressing. \p dpitch is the
+ * width in memory in bytes of the 2D array pointed to by \p dst, including any
+ * padding added to the end of each row. \p wOffset + \p width must not exceed
+ * the width of the CUDA array \p src. \p width must not exceed \p dpitch.
+ * ::cudaMemcpy2DFromArray() returns an error if \p dpitch exceeds the maximum
+ * allowed.
  *
  * @param dst     - Destination memory address
  * @param dpitch  - Pitch of destination memory
@@ -19188,12 +19614,15 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DFromArray(Pointer dst,
  * Copies a matrix (\p height rows of \p width bytes each) from the CUDA
  * array \p srcArray starting at the upper left corner
  * (\p wOffsetSrc, \p hOffsetSrc) to the CUDA array \p dst starting at
- * the upper left corner (\p wOffsetDst, \p hOffsetDst), where \p kind is one
- * of ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice,
- * ::cudaMemcpyDeviceToHost, or ::cudaMemcpyDeviceToDevice, and specifies the
- * direction of the copy. \p wOffsetDst + \p width must not exceed the width
- * of the CUDA array \p dst. \p wOffsetSrc + \p width must not exceed the width
- * of the CUDA array \p src.
+ * the upper left corner (\p wOffsetDst, \p hOffsetDst), where \p kind
+ * specifies the direction of the copy, and must be one of
+ * ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
+ * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
+ * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
+ * inferred from the pointer values. However, ::cudaMemcpyDefault is only
+ * allowed on systems that support unified virtual addressing.
+ * \p wOffsetDst + \p width must not exceed the width of the CUDA array \p dst.
+ * \p wOffsetSrc + \p width must not exceed the width of the CUDA array \p src.
  *
  * @param dst        - Destination memory address
  * @param wOffsetDst - Destination starting X offset
@@ -19230,7 +19659,10 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DArrayToArray(cudaArray
  * to the memory area pointed to by \p offset bytes from the start of symbol
  * \p symbol. The memory areas may not overlap. \p symbol is a variable that
  * resides in global or constant memory space. \p kind can be either
- * ::cudaMemcpyHostToDevice or ::cudaMemcpyDeviceToDevice.
+ * ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault.
+ * Passing ::cudaMemcpyDefault is recommended, in which case the type of
+ * transfer is inferred from the pointer values. However, ::cudaMemcpyDefault
+ * is only allowed on systems that support unified virtual addressing.
  *
  * @param symbol - Device symbol address
  * @param src    - Source memory address
@@ -19266,7 +19698,10 @@ public static native @Cast("cudaError_t") int cudaMemcpyToSymbol(@Const Pointer 
  * from the start of symbol \p symbol to the memory area pointed to by \p dst.
  * The memory areas may not overlap. \p symbol is a variable that
  * resides in global or constant memory space. \p kind can be either
- * ::cudaMemcpyDeviceToHost or ::cudaMemcpyDeviceToDevice.
+ * ::cudaMemcpyDeviceToHost, ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault.
+ * Passing ::cudaMemcpyDefault is recommended, in which case the type of
+ * transfer is inferred from the pointer values. However, ::cudaMemcpyDefault
+ * is only allowed on systems that support unified virtual addressing.
  *
  * @param dst    - Destination memory address
  * @param symbol - Device symbol address
@@ -19300,10 +19735,15 @@ public static native @Cast("cudaError_t") int cudaMemcpyFromSymbol(Pointer dst, 
  * \brief Copies data between host and device
  *
  * Copies \p count bytes from the memory area pointed to by \p src to the
- * memory area pointed to by \p dst, where \p kind is one of
- * ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
- * or ::cudaMemcpyDeviceToDevice, and specifies the direction of the copy. The
- * memory areas may not overlap. Calling ::cudaMemcpyAsync() with \p dst and
+ * memory area pointed to by \p dst, where \p kind specifies the
+ * direction of the copy, and must be one of ::cudaMemcpyHostToHost,
+ * ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
+ * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
+ * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
+ * inferred from the pointer values. However, ::cudaMemcpyDefault is only
+ * allowed on systems that support unified virtual addressing.
+ * 
+ * The memory areas may not overlap. Calling ::cudaMemcpyAsync() with \p dst and
  * \p src pointers that do not match the direction of the copy results in an
  * undefined behavior.
  *
@@ -19380,9 +19820,13 @@ public static native @Cast("cudaError_t") int cudaMemcpyPeerAsync(Pointer dst, i
  *
  * Copies \p count bytes from the memory area pointed to by \p src to the
  * CUDA array \p dst starting at the upper left corner
- * (\p wOffset, \p hOffset), where \p kind is one of ::cudaMemcpyHostToHost,
- * ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost, or
- * ::cudaMemcpyDeviceToDevice, and specifies the direction of the copy.
+ * (\p wOffset, \p hOffset), where \p kind specifies the
+ * direction of the copy, and must be one of ::cudaMemcpyHostToHost,
+ * ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
+ * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
+ * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
+ * inferred from the pointer values. However, ::cudaMemcpyDefault is only
+ * allowed on systems that support unified virtual addressing.
  *
  * ::cudaMemcpyToArrayAsync() is asynchronous with respect to the host, so
  * the call may return before the copy is complete. The copy can optionally
@@ -19423,9 +19867,12 @@ public static native @Cast("cudaError_t") int cudaMemcpyToArrayAsync(cudaArray d
  *
  * Copies \p count bytes from the CUDA array \p src starting at the upper
  * left corner (\p wOffset, hOffset) to the memory area pointed to by \p dst,
- * where \p kind is one of ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice,
- * ::cudaMemcpyDeviceToHost, or ::cudaMemcpyDeviceToDevice, and specifies the
- * direction of the copy.
+ * where \p kind specifies the direction of the copy, and must be one of
+ * ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
+ * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
+ * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
+ * inferred from the pointer values. However, ::cudaMemcpyDefault is only
+ * allowed on systems that support unified virtual addressing.
  *
  * ::cudaMemcpyFromArrayAsync() is asynchronous with respect to the host, so
  * the call may return before the copy is complete. The copy can optionally
@@ -19466,12 +19913,17 @@ public static native @Cast("cudaError_t") int cudaMemcpyFromArrayAsync(Pointer d
  *
  * Copies a matrix (\p height rows of \p width bytes each) from the memory
  * area pointed to by \p src to the memory area pointed to by \p dst, where
- * \p kind is one of ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice,
- * ::cudaMemcpyDeviceToHost, or ::cudaMemcpyDeviceToDevice, and specifies the
- * direction of the copy. \p dpitch and \p spitch are the widths in memory in
- * bytes of the 2D arrays pointed to by \p dst and \p src, including any
- * padding added to the end of each row. The memory areas may not overlap.
- * \p width must not exceed either \p dpitch or \p spitch.
+ * \p kind specifies the direction of the copy, and must be one of
+ * ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
+ * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
+ * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
+ * inferred from the pointer values. However, ::cudaMemcpyDefault is only
+ * allowed on systems that support unified virtual addressing.
+ * \p dpitch and \p spitch are the widths in memory in bytes of the 2D arrays
+ * pointed to by \p dst and \p src, including any padding added to the end of
+ * each row. The memory areas may not overlap. \p width must not exceed either
+ * \p dpitch or \p spitch.
+ *
  * Calling ::cudaMemcpy2DAsync() with \p dst and \p src pointers that do not
  * match the direction of the copy results in an undefined behavior.
  * ::cudaMemcpy2DAsync() returns an error if \p dpitch or \p spitch is greater
@@ -19522,9 +19974,13 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DAsync(Pointer dst, @Ca
  *
  * Copies a matrix (\p height rows of \p width bytes each) from the memory
  * area pointed to by \p src to the CUDA array \p dst starting at the
- * upper left corner (\p wOffset, \p hOffset) where \p kind is one of
- * ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
- * or ::cudaMemcpyDeviceToDevice, and specifies the direction of the copy.
+ * upper left corner (\p wOffset, \p hOffset) where \p kind specifies the
+ * direction of the copy, and must be one of ::cudaMemcpyHostToHost,
+ * ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
+ * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
+ * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
+ * inferred from the pointer values. However, ::cudaMemcpyDefault is only
+ * allowed on systems that support unified virtual addressing.
  * \p spitch is the width in memory in bytes of the 2D array pointed to by
  * \p src, including any padding added to the end of each row. \p wOffset +
  * \p width must not exceed the width of the CUDA array \p dst. \p width must
@@ -19575,9 +20031,13 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DToArrayAsync(cudaArray
  * Copies a matrix (\p height rows of \p width bytes each) from the CUDA
  * array \p srcArray starting at the upper left corner
  * (\p wOffset, \p hOffset) to the memory area pointed to by \p dst, where
- * \p kind is one of ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice,
- * ::cudaMemcpyDeviceToHost, or ::cudaMemcpyDeviceToDevice, and specifies the
- * direction of the copy. \p dpitch is the width in memory in bytes of the 2D
+ * \p kind specifies the direction of the copy, and must be one of
+ * ::cudaMemcpyHostToHost, ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToHost,
+ * ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault. Passing
+ * ::cudaMemcpyDefault is recommended, in which case the type of transfer is
+ * inferred from the pointer values. However, ::cudaMemcpyDefault is only
+ * allowed on systems that support unified virtual addressing.
+ * \p dpitch is the width in memory in bytes of the 2D
  * array pointed to by \p dst, including any padding added to the end of each
  * row. \p wOffset + \p width must not exceed the width of the CUDA array
  * \p src. \p width must not exceed \p dpitch. ::cudaMemcpy2DFromArrayAsync()
@@ -19627,7 +20087,10 @@ public static native @Cast("cudaError_t") int cudaMemcpy2DFromArrayAsync(Pointer
  * to the memory area pointed to by \p offset bytes from the start of symbol
  * \p symbol. The memory areas may not overlap. \p symbol is a variable that
  * resides in global or constant memory space. \p kind can be either
- * ::cudaMemcpyHostToDevice or ::cudaMemcpyDeviceToDevice.
+ * ::cudaMemcpyHostToDevice, ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault.
+ * Passing ::cudaMemcpyDefault is recommended, in which case the type of transfer
+ * is inferred from the pointer values. However, ::cudaMemcpyDefault is only
+ * allowed on systems that support unified virtual addressing.
  *
  * ::cudaMemcpyToSymbolAsync() is asynchronous with respect to the host, so
  * the call may return before the copy is complete. The copy can optionally
@@ -19671,7 +20134,10 @@ public static native @Cast("cudaError_t") int cudaMemcpyToSymbolAsync(@Const Poi
  * from the start of symbol \p symbol to the memory area pointed to by \p dst.
  * The memory areas may not overlap. \p symbol is a variable that resides in
  * global or constant memory space. \p kind can be either
- * ::cudaMemcpyDeviceToHost or ::cudaMemcpyDeviceToDevice.
+ * ::cudaMemcpyDeviceToHost, ::cudaMemcpyDeviceToDevice, or ::cudaMemcpyDefault.
+ * Passing ::cudaMemcpyDefault is recommended, in which case the type of transfer
+ * is inferred from the pointer values. However, ::cudaMemcpyDefault is only
+ * allowed on systems that support unified virtual addressing.
  *
  * ::cudaMemcpyFromSymbolAsync() is asynchronous with respect to the host, so
  * the call may return before the copy is complete. The copy can optionally be
@@ -19974,6 +20440,125 @@ public static native @Cast("cudaError_t") int cudaGetSymbolAddress(@Cast("void**
  * \ref ::cudaGetSymbolSize(size_t*, const T&) "cudaGetSymbolSize (C++ API)"
  */
 public static native @Cast("cudaError_t") int cudaGetSymbolSize(@Cast("size_t*") SizeTPointer size, @Const Pointer symbol);
+
+/**
+ * \brief Prefetches memory to the specified destination device
+ *
+ * Prefetches memory to the specified destination device.  \p devPtr is the 
+ * base device pointer of the memory to be prefetched and \p dstDevice is the 
+ * destination device. \p count specifies the number of bytes to copy. \p stream
+ * is the stream in which the operation is enqueued.
+ *
+ * Passing in cudaCpuDeviceId for \p dstDevice will prefetch the data to CPU memory.
+ *
+ * If no physical memory has been allocated for this region, then this memory region
+ * will be populated and mapped on the destination device. If there's insufficient
+ * memory to prefetch the desired region, the Unified Memory driver may evict pages
+ * belonging to other memory regions to make room. If there's no memory that can be
+ * evicted, then the Unified Memory driver will prefetch less than what was requested.
+ *
+ * In the normal case, any mappings to the previous location of the migrated pages are
+ * removed and mappings for the new location are only setup on the \p dstDevice.
+ * The application can exercise finer control on these mappings using ::cudaMemAdvise.
+ <p>
+ * Note that this function is asynchronous with respect to the host and all work
+ * on other devices.
+ *
+ * @param devPtr    - Pointer to be prefetched
+ * @param count     - Size in bytes
+ * @param dstDevice - Destination device to prefetch to
+ * @param stream    - Stream to enqueue prefetch operation
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevice
+ * \notefnerr
+ * \note_async
+ * \note_null_stream
+ *
+ * \sa ::cudaMemcpy, ::cudaMemcpyPeer, ::cudaMemcpyAsync,
+ * ::cudaMemcpy3DPeerAsync, ::cudaMemAdvise
+ */
+public static native @Cast("cudaError_t") int cudaMemPrefetchAsync(@Const Pointer devPtr, @Cast("size_t") long count, int dstDevice, CUstream_st stream/*=0*/);
+public static native @Cast("cudaError_t") int cudaMemPrefetchAsync(@Const Pointer devPtr, @Cast("size_t") long count, int dstDevice);
+
+/**
+ * \brief Advise about the usage of a given memory range
+ *
+ * Advise the Unified Memory subsystem about the usage pattern for the memory range
+ * starting at \p devPtr with a size of \p count bytes.
+ *
+ * The \p advice parameter can take the following values:
+ * - ::cudaMemAdviseSetReadMostly: This implies that the data is mostly going to be read
+ * from and only occasionally written to. This allows the driver to create read-only
+ * copies of the data in a processor's memory when that processor accesses it. Similarly,
+ * if cudaMemPrefetchAsync is called on this region, it will create a read-only copy of
+ * the data on the destination processor. When a processor writes to this data, all copies
+ * of the corresponding page are invalidated except for the one where the write occurred.
+ * The \p device argument is ignored for this advice.
+ * - ::cudaMemAdviceUnsetReadMostly: Undoes the effect of ::cudaMemAdviceReadMostly. Any read
+ * duplicated copies of the data will be freed no later than the next write access to that data.
+ * - ::cudaMemAdviseSetPreferredLocation: This advice sets the preferred location for the
+ * data to be the memory belonging to \p device. Passing in cudaCpuDeviceId for \p device sets the
+ * preferred location as CPU memory. Setting the preferred location does not cause data to
+ * migrate to that location immediately. Instead, it guides the migration policy when a fault
+ * occurs on that memory region. If the data is already in its preferred location and the
+ * faulting processor can establish a mapping without requiring the data to be migrated, then
+ * the migration will be avoided. On the other hand, if the data is not in its preferred location
+ * or if a direct mapping cannot be established, then it will be migrated to the processor accessing
+ * it. It is important to note that setting the preferred location does not prevent data prefetching
+ * done using ::cudaMemPrefetchAsync.
+ * Having a preferred location can override the thrash detection and resolution logic in the Unified
+ * Memory driver. Normally, if a page is detected to be constantly thrashing between CPU and GPU
+ * memory say, the page will eventually be pinned to CPU memory by the Unified Memory driver. But
+ * if the preferred location is set as GPU memory, then the page will continue to thrash indefinitely.
+ * When the Unified Memory driver has to evict pages from a certain location on account of that
+ * memory being oversubscribed, the preferred location will be used to decide the destination to which
+ * a page should be evicted to.
+ * If ::cudaMemAdviseSetReadMostly is also set on this memory region or any subset of it, the preferred
+ * location will be ignored for that subset.
+ * - ::cudaMemAdviseUnsetPreferredLocation: Undoes the effect of ::cudaMemAdviseSetPreferredLocation
+ * and changes the preferred location to none.
+ * - ::cudaMemAdviseSetAccessedBy: This advice implies that the data will be accessed by \p device.
+ * This does not cause data migration and has no impact on the location of the data per se. Instead,
+ * it causes the data to always be mapped in the specified processor's page tables, as long as the
+ * location of the data permits a mapping to be established. If the data gets migrated for any reason,
+ * the mappings are updated accordingly.
+ * This advice is useful in scenarios where data locality is not important, but avoiding faults is.
+ * Consider for example a system containing multiple GPUs with peer-to-peer access enabled, where the
+ * data located on one GPU is occasionally accessed by other GPUs. In such scenarios, migrating data
+ * over to the other GPUs is not as important because the accesses are infrequent and the overhead of
+ * migration may be too high. But preventing faults can still help improve performance, and so having
+ * a mapping set up in advance is useful. Note that on CPU access of this data, the data may be migrated
+ * to CPU memory because the CPU typically cannot access GPU memory directly. Any GPU that had the
+ * ::cudaMemAdviceAccessedBy flag set for this data will now have its mapping updated to point to the
+ * page in CPU memory.
+ * - ::cudaMemAdviseUnsetAccessedBy: Undoes the effect of cudaMemAdviseSetAccessedBy. The current set of
+ * mappings may be removed at any time causing accesses to result in page faults.
+ *
+ * Passing in ::cudaCpuDeviceId for \p device will set the advice for the CPU.
+ *
+ * Note that this function is asynchronous with respect to the host and all work
+ * on other devices.
+ *
+ * @param devPtr - Pointer to memory to set the advice for
+ * @param count  - Size in bytes of the memory range
+ * @param advice - Advice to be applied for the specified memory range
+ * @param device - Device to apply the advice for
+ *
+ * @return
+ * ::cudaSuccess,
+ * ::cudaErrorInvalidValue,
+ * ::cudaErrorInvalidDevice
+ * \notefnerr
+ * \note_async
+ * \note_null_stream
+ *
+ * \sa ::cudaMemcpy, ::cudaMemcpyPeer, ::cudaMemcpyAsync,
+ * ::cudaMemcpy3DPeerAsync, ::cudaMemPrefetchAsync
+ */
+public static native @Cast("cudaError_t") int cudaMemAdvise(@Const Pointer devPtr, @Cast("size_t") long count, @Cast("cudaMemoryAdvise") int advice, int device);
 
 /** \} */ /* END CUDART_MEMORY */
 
@@ -20937,6 +21522,7 @@ public static native @Cast("cudaError_t") int cudaGetSurfaceReference(@Const @By
             enum cudaTextureFilterMode  filterMode;
             enum cudaTextureReadMode    readMode;
             int                         sRGB;
+            float                       borderColor[4];
             int                         normalizedCoords;
             unsigned int                maxAnisotropy;
             enum cudaTextureFilterMode  mipmapFilterMode;
@@ -20978,6 +21564,14 @@ public static native @Cast("cudaError_t") int cudaGetSurfaceReference(@Const @By
  *   whether or not this ::cudaTextureDesc::readMode is set ::cudaReadModeNormalizedFloat is specified.
  *
  * - ::cudaTextureDesc::sRGB specifies whether sRGB to linear conversion should be performed during texture fetch.
+ *
+ * - ::cudaTextureDesc::borderColor specifies the float values of color. where:
+ *   ::cudaTextureDesc::borderColor[0] contains value of 'R', 
+ *   ::cudaTextureDesc::borderColor[1] contains value of 'G',
+ *   ::cudaTextureDesc::borderColor[2] contains value of 'B', 
+ *   ::cudaTextureDesc::borderColor[3] contains value of 'A'
+ *   Note that application using integer border color values will need to <reinterpret_cast> these values to float.
+ *   The values are set only when the addressing mode specified by ::cudaTextureDesc::addressMode is cudaAddressModeBorder.
  *
  * - ::cudaTextureDesc::normalizedCoords specifies whether the texture coordinates will be normalized or not.
  *
@@ -21496,7 +22090,7 @@ public static native @ByVal cudaPos make_cudaPos(@Cast("size_t") long x, @Cast("
  * Returns a ::cudaExtent based on the specified input parameters \p w,
  * \p h, and \p d.
  *
- * @param w - Width in bytes
+ * @param w - Width in elements when referring to array memory, in bytes when referring to linear memory
  * @param h - Height in elements
  * @param d - Depth in elements
  *
@@ -21582,6 +22176,7 @@ public static native @ByVal cudaExtent make_cudaExtent(@Cast("size_t") long w, @
 // #define __VECTOR_FUNCTIONS_DECL__ static __inline__ __host__ __device__
 // #endif /* __CUDACC_RTC__ */
 
+// #if defined(__CUDACC_RTC__)
 /*******************************************************************************
 *                                                                              *
 *                                                                              *
@@ -21683,6 +22278,7 @@ public static native @ByVal double2 make_double2(double x, double y);
 public static native @ByVal double3 make_double3(double x, double y, double z);
 
 public static native @ByVal double4 make_double4(double x, double y, double z, double w);
+// #endif /* __CUDACC_RTC__ */
 
 // #undef __VECTOR_FUNCTIONS_DECL__
 
@@ -21941,6 +22537,16 @@ public static native @ByVal @Cast("cuDoubleComplex*") double2 cuCfma( @ByVal @Ca
  * \ingroup CUDA_MATH_INTRINSIC_HALF
  */
 
+/**
+ * \defgroup CUDA_MATH__HALF_FUNCTIONS Half Math Functions
+ * \ingroup CUDA_MATH_INTRINSIC_HALF
+ */
+
+/**
+ * \defgroup CUDA_MATH__HALF2_FUNCTIONS Half2 Math Functions
+ * \ingroup CUDA_MATH_INTRINSIC_HALF
+ */
+
 // #ifndef CUDA_FP16_H_JNESTUG4
 // #define CUDA_FP16_H_JNESTUG4
 
@@ -21995,10 +22601,37 @@ public static class __half2 extends Pointer {
 
 /**
  * \ingroup CUDA_MATH__HALF_MISC
- * \brief Converts float number to half precision in round-to-nearest mode and
- * returns \p half with converted value.
+ * \brief Converts float number to half precision in round-to-nearest-even mode
+ * and returns \p half with converted value.
  *
- * Converts float number \p a to half precision in round-to-nearest mode.
+ * Converts float number \p a to half precision in round-to-nearest-even mode.
+ *
+ * @return Returns \p half result with converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Converts float number to half precision in round-towards-zero mode
+ * and returns \p half with converted value.
+ *
+ * Converts float number \p a to half precision in round-towards-zero mode.
+ *
+ * @return Returns \p half result with converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Converts float number to half precision in round-down mode
+ * and returns \p half with converted value.
+ *
+ * Converts float number \p a to half precision in round-down mode.
+ *
+ * @return Returns \p half result with converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Converts float number to half precision in round-up mode
+ * and returns \p half with converted value.
+ *
+ * Converts float number \p a to half precision in round-up mode.
  *
  * @return Returns \p half result with converted value.
  */
@@ -22010,48 +22643,585 @@ public static class __half2 extends Pointer {
  *
  * @return Returns float result with converted value.
  */
+
 /**
  * \ingroup CUDA_MATH__HALF_MISC
- * \brief Converts input to half precision in round-to-nearest mode and
+ * \brief Convert a half to a signed integer in round-to-nearest-even mode.
+ *
+ * Convert the half-precision floating point value \p h to a signed integer in
+ * round-to-nearest-even mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to a signed integer in round-towards-zero mode.
+ *
+ * Convert the half-precision floating point value \p h to a signed integer in
+ * round-towards-zero mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to a signed integer in round-down mode.
+ *
+ * Convert the half-precision floating point value \p h to a signed integer in
+ * round-down mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to a signed integer in round-up mode.
+ *
+ * Convert the half-precision floating point value \p h to a signed integer in
+ * round-up mode.
+ *
+ * @return Returns converted value.
+ */
+
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a signed integer to a half in round-to-nearest-even mode.
+ *
+ * Convert the signed integer value \p i to a half-precision floating point
+ * value in round-to-nearest-even mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a signed integer to a half in round-towards-zero mode.
+ *
+ * Convert the signed integer value \p i to a half-precision floating point
+ * value in round-towards-zero mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a signed integer to a half in round-down mode.
+ *
+ * Convert the signed integer value \p i to a half-precision floating point
+ * value in round-down mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a signed integer to a half in round-up mode.
+ *
+ * Convert the signed integer value \p i to a half-precision floating point
+ * value in round-up mode.
+ *
+ * @return Returns converted value.
+ */
+
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to a signed short integer in round-to-nearest-even
+ * mode.
+ *
+ * Convert the half-precision floating point value \p h to a signed short
+ * integer in round-to-nearest-even mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to a signed short integer in round-towards-zero mode.
+ *
+ * Convert the half-precision floating point value \p h to a signed short
+ * integer in round-towards-zero mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to a signed short integer in round-down mode.
+ *
+ * Convert the half-precision floating point value \p h to a signed short
+ * integer in round-down mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to a signed short integer in round-up mode.
+ *
+ * Convert the half-precision floating point value \p h to a signed short
+ * integer in round-up mode.
+ *
+ * @return Returns converted value.
+ */
+
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a signed short integer to a half in round-to-nearest-even
+ * mode.
+ *
+ * Convert the signed short integer value \p i to a half-precision floating
+ * point value in round-to-nearest-even mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a signed short integer to a half in round-towards-zero mode.
+ *
+ * Convert the signed short integer value \p i to a half-precision floating
+ * point value in round-towards-zero mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a signed short integer to a half in round-down mode.
+ *
+ * Convert the signed short integer value \p i to a half-precision floating
+ * point value in round-down mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a signed short integer to a half in round-up mode.
+ *
+ * Convert the signed short integer value \p i to a half-precision floating
+ * point value in round-up mode.
+ *
+ * @return Returns converted value.
+ */
+
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to an unsigned integer in round-to-nearest-even mode.
+ *
+ * Convert the half-precision floating point value \p h to an unsigned integer
+ * in round-to-nearest-even mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to an unsigned integer in round-towards-zero mode.
+ *
+ * Convert the half-precision floating point value \p h to an unsigned integer
+ * in round-towards-zero mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to an unsigned integer in round-down mode.
+ *
+ * Convert the half-precision floating point value \p h to an unsigned integer
+ * in round-down mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to an unsigned integer in round-up mode.
+ *
+ * Convert the half-precision floating point value \p h to an unsigned integer
+ * in round-up mode.
+ *
+ * @return Returns converted value.
+ */
+
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert an unsigned integer to a half in round-to-nearest-even mode.
+ *
+ * Convert the unsigned integer value \p i to a half-precision floating point
+ * value in round-to-nearest-even mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert an unsigned integer to a half in round-towards-zero mode.
+ *
+ * Convert the unsigned integer value \p i to a half-precision floating point
+ * value in round-towards-zero mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert an unsigned integer to a half in round-down mode.
+ *
+ * Convert the unsigned integer value \p i to a half-precision floating point
+ * value in round-down mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert an unsigned integer to a half in round-up mode.
+ *
+ * Convert the unsigned integer value \p i to a half-precision floating point
+ * value in round-up mode.
+ *
+ * @return Returns converted value.
+ */
+
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to an unsigned short integer in round-to-nearest-even
+ * mode.
+ *
+ * Convert the half-precision floating point value \p h to an unsigned short
+ * integer in round-to-nearest-even mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to an unsigned short integer in round-towards-zero
+ * mode.
+ *
+ * Convert the half-precision floating point value \p h to an unsigned short
+ * integer in round-towards-zero mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to an unsigned short integer in round-down mode.
+ *
+ * Convert the half-precision floating point value \p h to an unsigned short
+ * integer in round-down mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to an unsigned short integer in round-up mode.
+ *
+ * Convert the half-precision floating point value \p h to an unsigned short
+ * integer in round-up mode.
+ *
+ * @return Returns converted value.
+ */
+
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert an unsigned short integer to a half in round-to-nearest-even
+ * mode.
+ *
+ * Convert the unsigned short integer value \p i to a half-precision floating
+ * point value in round-to-nearest-even mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert an unsigned short integer to a half in round-towards-zero
+ * mode.
+ *
+ * Convert the unsigned short integer value \p i to a half-precision floating
+ * point value in round-towards-zero mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert an unsigned short integer to a half in round-down mode.
+ *
+ * Convert the unsigned short integer value \p i to a half-precision floating
+ * point value in round-down mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert an unsigned short integer to a half in round-up mode.
+ *
+ * Convert the unsigned short integer value \p i to a half-precision floating
+ * point value in round-up mode.
+ *
+ * @return Returns converted value.
+ */
+
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to an unsigned 64-bit integer in round-to-nearest-even
+ * mode.
+ *
+ * Convert the half-precision floating point value \p h to an unsigned 64-bit
+ * integer in round-to-nearest-even mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to an unsigned 64-bit integer in round-towards-zero
+ * mode.
+ *
+ * Convert the half-precision floating point value \p h to an unsigned 64-bit
+ * integer in round-towards-zero mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to an unsigned 64-bit integer in round-down mode.
+ *
+ * Convert the half-precision floating point value \p h to an unsigned 64-bit
+ * integer in round-down mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to an unsigned 64-bit integer in round-up mode.
+ *
+ * Convert the half-precision floating point value \p h to an unsigned 64-bit
+ * integer in round-up mode.
+ *
+ * @return Returns converted value.
+ */
+
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert an unsigned 64-bit integer to a half in round-to-nearest-even
+ * mode.
+ *
+ * Convert the unsigned 64-bit integer value \p i to a half-precision floating
+ * point value in round-to-nearest-even mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert an unsigned 64-bit integer to a half in round-towards-zero
+ * mode.
+ *
+ * Convert the unsigned 64-bit integer value \p i to a half-precision floating
+ * point value in round-towards-zero mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert an unsigned 64-bit integer to a half in round-down mode.
+ *
+ * Convert the unsigned 64-bit integer value \p i to a half-precision floating
+ * point value in round-down mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert an unsigned 64-bit integer to a half in round-up mode.
+ *
+ * Convert the unsigned 64-bit integer value \p i to a half-precision floating
+ * point value in round-up mode.
+ *
+ * @return Returns converted value.
+ */
+
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to a signed 64-bit integer in round-to-nearest-even
+ * mode.
+ *
+ * Convert the half-precision floating point value \p h to a signed 64-bit
+ * integer in round-to-nearest-even mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to a signed 64-bit integer in round-towards-zero mode.
+ *
+ * Convert the half-precision floating point value \p h to a signed 64-bit
+ * integer in round-towards-zero mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to a signed 64-bit integer in round-down mode.
+ *
+ * Convert the half-precision floating point value \p h to a signed 64-bit
+ * integer in round-down mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a half to a signed 64-bit integer in round-up mode.
+ *
+ * Convert the half-precision floating point value \p h to a signed 64-bit
+ * integer in round-up mode.
+ *
+ * @return Returns converted value.
+ */
+
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a signed 64-bit integer to a half in round-to-nearest-even
+ * mode.
+ *
+ * Convert the signed 64-bit integer value \p i to a half-precision floating
+ * point value in round-to-nearest-even mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a signed 64-bit integer to a half in round-towards-zero mode.
+ *
+ * Convert the signed 64-bit integer value \p i to a half-precision floating
+ * point value in round-towards-zero mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a signed 64-bit integer to a half in round-down mode.
+ *
+ * Convert the signed 64-bit integer value \p i to a half-precision floating
+ * point value in round-down mode.
+ *
+ * @return Returns converted value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Convert a signed 64-bit integer to a half in round-up mode.
+ *
+ * Convert the signed 64-bit integer value \p i to a half-precision floating
+ * point value in round-up mode.
+ *
+ * @return Returns converted value.
+ */
+
+/**
+ * \ingroup CUDA_MATH__HALF_FUNCTIONS
+ * \brief Truncate input argument to the integral part.
+ *
+ * Round \p h to the nearest integer value that does not exceed \p h in
+ * magnitude.
+ *
+ * @return Returns truncated integer value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_FUNCTIONS
+ * \brief Calculate ceiling of the input argument.
+ *
+ * Compute the smallest integer value not less than \p h.
+ *
+ * @return Returns ceiling expressed as a half-precision floating point number.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_FUNCTIONS
+ * \brief Calculate the largest integer less than or equal to \p h.
+ *
+ * Calculate the largest integer value which is less than or equal to \p h.
+ *
+ * @return Returns floor expressed as half-precision floating point number.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_FUNCTIONS
+ * \brief Round input to nearest integer value in half-precision floating point
+ * number.
+ *
+ * Round \p h to the nearest integer value in half-precision floating point
+ * format, with halfway cases rounded to the nearest even integer value.
+ *
+ * @return Returns rounded integer value expressed as half-precision floating
+ * point number.
+ */
+
+/**
+ * \ingroup CUDA_MATH__HALF2_FUNCTIONS
+ * \brief Truncate \p half2 vector input argument to the integral part.
+ *
+ * Round each component of vector \p h to the nearest integer value that does
+ * not exceed \p h in magnitude.
+ *
+ * @return Returns \p half2 vector truncated integer value.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_FUNCTIONS
+ * \brief Calculate \p half2 vector ceiling of the input argument.
+ *
+ * For each component of vector \p h compute the smallest integer value not less
+ * than \p h.
+ *
+ * @return Returns \p half2 vector ceiling expressed as a pair of half-precision
+ * floating point numbers.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_FUNCTIONS
+ * \brief Calculate the largest integer less than or equal to \p h.
+ *
+ * For each component of vector \p h calculate the largest integer value which
+ * is less than or equal to \p h.
+ *
+ * @return Returns \p half2 vector floor expressed as a pair of half-precision
+ * floating point number.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_FUNCTIONS
+ * \brief Round input to nearest integer value in half-precision floating point
+ * number.
+ *
+ * Round each component of \p half2 vector \p h to the nearest integer value in
+ * half-precision floating point format, with halfway cases rounded to the
+ * nearest even integer value.
+ *
+ * @return Returns \p half2 vector of rounded integer values expressed as
+ * half-precision floating point numbers.
+ */
+
+/**
+ * \ingroup CUDA_MATH__HALF_MISC
+ * \brief Converts input to half precision in round-to-nearest-even mode and
  * populates both halves of \p half2 with converted value.
  *
- * Converts input \p a to half precision in round-to-nearest mode and populates
- * both halves of \p half2 with converted value.
+ * Converts input \p a to half precision in round-to-nearest-even mode and
+ * populates both halves of \p half2 with converted value.
  *
  * @return Returns \p half2 with both halves equal to the converted half
  * precision number.
  */
 /**
  * \ingroup CUDA_MATH__HALF_MISC
- * \brief Converts both input floats to half precision in round-to-nearest mode
- * and returns \p half2 with converted values.
+ * \brief Converts both input floats to half precision in round-to-nearest-even
+ * mode and returns \p half2 with converted values.
  *
- * Converts both input floats to half precision in round-to-nearest mode and
- * combines the results into one \p half2 number. Low 16 bits of the return
+ * Converts both input floats to half precision in round-to-nearest-even mode
+ * and combines the results into one \p half2 number. Low 16 bits of the return
  * value correspond to the input \p a, high 16 bits correspond to the input \p
  * b.
  *
- * @return Returns \p half2 which has corresponding halves equal to the converted
- * input floats.
+ * @return Returns \p half2 which has corresponding halves equal to the
+ * converted input floats.
  */
 /**
  * \ingroup CUDA_MATH__HALF_MISC
  * \brief Converts both components of float2 number to half precision in
- * round-to-nearest mode and returns \p half2 with converted values.
+ * round-to-nearest-even mode and returns \p half2 with converted values.
  *
- * Converts both components of float2 to half precision in round-to-nearest mode
- * and combines the results into one \p half2 number. Low 16 bits of the return
- * value correspond to \p a.x and high 16 bits of the return value correspond to
- * \p a.y.
+ * Converts both components of float2 to half precision in round-to-nearest
+ * mode and combines the results into one \p half2 number. Low 16 bits of the
+ * return value correspond to \p a.x and high 16 bits of the return value
+ * correspond to \p a.y.
  *
- * @return Returns \p half2 which has corresponding halves equal to the converted
- * float2 components.
+ * @return Returns \p half2 which has corresponding halves equal to the
+ * converted float2 components.
  */
 /**
  * \ingroup CUDA_MATH__HALF_MISC
  * \brief Converts both halves of \p half2 to float2 and returns the result.
  *
- * Converts both halves of \p half2 input \p a to float2 and returns the result.
+ * Converts both halves of \p half2 input \p a to float2 and returns the
+ * result.
  *
  * @return Returns converted float2.
  */
@@ -22105,8 +23275,8 @@ public static class __half2 extends Pointer {
  */
 /**
  * \ingroup CUDA_MATH__HALF_MISC
- * \brief Extracts high 16 bits from each of the two \p half2 inputs and combines
- * into one \p half2 number.
+ * \brief Extracts high 16 bits from each of the two \p half2 inputs and
+ * combines into one \p half2 number.
  *
  * Extracts high 16 bits from each of the two \p half2 inputs and combines into
  * one \p half2 number. High 16 bits from input \p a is stored in low 16 bits of
@@ -22158,7 +23328,8 @@ public static class __half2 extends Pointer {
  * Extracts low 16 bits from \p half2 input \p a and returns a new \p half2
  * number which has both halves equal to the extracted bits.
  *
- * @return Returns \p half2 with both halves equal to low 16 bits from the input.
+ * @return Returns \p half2 with both halves equal to low 16 bits from the
+ * input.
  */
 /**
  * \ingroup CUDA_MATH__HALF_MISC
@@ -22321,7 +23492,7 @@ public static class __half2 extends Pointer {
  */
 /**
  * \ingroup CUDA_MATH__HALF2_ARITHMETIC
- * \brief Performs \p half2 vector addition in round-to-nearest mode.
+ * \brief Performs \p half2 vector addition in round-to-nearest-even mode.
  *
  * Performs \p half2 vector add of inputs \p a and \p b, in round-to-nearest
  * mode.
@@ -22330,53 +23501,64 @@ public static class __half2 extends Pointer {
  */
 /**
  * \ingroup CUDA_MATH__HALF2_ARITHMETIC
- * \brief Performs \p half2 vector subtraction in round-to-nearest mode.
+ * \brief Performs \p half2 vector subtraction in round-to-nearest-even mode.
  *
- * Subtracts \p half2 input vector \p b from input vector \p a in round-to-nearest
- * mode.
+ * Subtracts \p half2 input vector \p b from input vector \p a in
+ * round-to-nearest-even mode.
  *
  * @return Returns the \p half2 vector result of subtraction vector \p b from \p
  * a.
  */
 /**
  * \ingroup CUDA_MATH__HALF2_ARITHMETIC
- * \brief Performs \p half2 vector multiplication in round-to-nearest mode.
+ * \brief Performs \p half2 vector multiplication in round-to-nearest-even mode.
  *
  * Performs \p half2 vector multiplication of inputs \p a and \p b, in
- * round-to-nearest mode.
+ * round-to-nearest-even mode.
  *
- * @return Returns the \p half2 vector result of multiplying vectors \p a and \p b.
+ * @return Returns the \p half2 vector result of multiplying vectors \p a and \p
+ * b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_ARITHMETIC
+ * \brief Performs \p half2 vector division in round-to-nearest-even mode.
+ *
+ * Divides \p half2 input vector \p a by input vector \p b in round-to-nearest
+ * mode.
+ *
+ * @return Returns the \p half2 vector result of division \p a by \p b.
  */
 /**
  * \ingroup CUDA_MATH__HALF2_ARITHMETIC
- * \brief Performs \p half2 vector addition in round-to-nearest mode, with
+ * \brief Performs \p half2 vector addition in round-to-nearest-even mode, with
  * saturation to [0.0, 1.0].
  *
- * Performs \p half2 vector add of inputs \p a and \p b, in round-to-nearest mode,
- * and clamps the results to range [0.0, 1.0]. NaN results are flushed to +0.0.
+ * Performs \p half2 vector add of inputs \p a and \p b, in round-to-nearest
+ * mode, and clamps the results to range [0.0, 1.0]. NaN results are flushed to
+ * +0.0.
  *
  * @return Returns the \p half2 vector result of adding vectors \p a and \p b
  * with saturation.
  */
 /**
  * \ingroup CUDA_MATH__HALF2_ARITHMETIC
- * \brief Performs \p half2 vector subtraction in round-to-nearest mode, with
- * saturation to [0.0, 1.0].
+ * \brief Performs \p half2 vector subtraction in round-to-nearest-even mode,
+ * with saturation to [0.0, 1.0].
  *
- * Subtracts \p half2 input vector \p b from input vector \p a in round-to-nearest
- * mode,
- * and clamps the results to range [0.0, 1.0]. NaN results are flushed to +0.0.
+ * Subtracts \p half2 input vector \p b from input vector \p a in
+ * round-to-nearest-even mode, and clamps the results to range [0.0, 1.0]. NaN
+ * results are flushed to +0.0.
  *
- * @return Returns the \p half2 vector result of subtraction vector \p b from \p a
- * with saturation.
+ * @return Returns the \p half2 vector result of subtraction vector \p b from \p
+ * a with saturation.
  */
 /**
  * \ingroup CUDA_MATH__HALF2_ARITHMETIC
- * \brief Performs \p half2 vector multiplication in round-to-nearest mode, with
- * saturation to [0.0, 1.0].
+ * \brief Performs \p half2 vector multiplication in round-to-nearest-even mode,
+ * with saturation to [0.0, 1.0].
  *
  * Performs \p half2 vector multiplication of inputs \p a and \p b, in
- * round-to-nearest mode, and clamps the results to range [0.0, 1.0]. NaN
+ * round-to-nearest-even mode, and clamps the results to range [0.0, 1.0]. NaN
  * results are flushed to +0.0.
  *
  * @return Returns the \p half2 vector result of multiplying vectors \p a and \p
@@ -22384,31 +23566,33 @@ public static class __half2 extends Pointer {
  */
 /**
  * \ingroup CUDA_MATH__HALF2_ARITHMETIC
- * \brief Performs \p half2 vector fused multiply-add in round-to-nearest mode.
+ * \brief Performs \p half2 vector fused multiply-add in round-to-nearest-even
+ * mode.
  *
  * Performs \p half2 vector multiply on inputs \p a and \p b,
  * then performs a \p half2 vector add of the result with \p c,
- * rounding the result once in round-to-nearest mode.
+ * rounding the result once in round-to-nearest-even mode.
  *
  * @return Returns the \p half2 vector result of the fused multiply-add
  * operation on vectors \p a, \p b, and \p c.
  */
 /**
  * \ingroup CUDA_MATH__HALF2_ARITHMETIC
- * \brief Performs \p half2 vector fused multiply-add in round-to-nearest mode,
- * with saturation to [0.0, 1.0].
+ * \brief Performs \p half2 vector fused multiply-add in round-to-nearest-even
+ * mode, with saturation to [0.0, 1.0].
  *
  * Performs \p half2 vector multiply on inputs \p a and \p b,
  * then performs a \p half2 vector add of the result with \p c,
- * rounding the result once in round-to-nearest mode, and clamps the results to
- * range [0.0, 1.0]. NaN results are flushed to +0.0.
+ * rounding the result once in round-to-nearest-even mode, and clamps the
+ * results to range [0.0, 1.0]. NaN results are flushed to +0.0.
  *
  * @return Returns the \p half2 vector result of the fused multiply-add
  * operation on vectors \p a, \p b, and \p c with saturation.
  */
 /**
  * \ingroup CUDA_MATH__HALF2_ARITHMETIC
- * \brief Negates both halves of the input \p half2 number and returns the result.
+ * \brief Negates both halves of the input \p half2 number and returns the
+ * result.
  *
  * Negates both halves of the input \p half2 number \p a and returns the result.
  *
@@ -22416,15 +23600,16 @@ public static class __half2 extends Pointer {
  */
 /**
  * \ingroup CUDA_MATH__HALF_ARITHMETIC
- * \brief Performs \p half addition in round-to-nearest mode.
+ * \brief Performs \p half addition in round-to-nearest-even mode.
  *
- * Performs \p half addition of inputs \p a and \p b, in round-to-nearest mode.
+ * Performs \p half addition of inputs \p a and \p b, in round-to-nearest-even
+ * mode.
  *
  * @return Returns the \p half result of adding \p a and \p b.
  */
 /**
  * \ingroup CUDA_MATH__HALF_ARITHMETIC
- * \brief Performs \p half subtraction in round-to-nearest mode.
+ * \brief Performs \p half subtraction in round-to-nearest-even mode.
  *
  * Subtracts \p half input \p b from input \p a in round-to-nearest
  * mode.
@@ -22433,7 +23618,7 @@ public static class __half2 extends Pointer {
  */
 /**
  * \ingroup CUDA_MATH__HALF_ARITHMETIC
- * \brief Performs \p half multiplication in round-to-nearest mode.
+ * \brief Performs \p half multiplication in round-to-nearest-even mode.
  *
  * Performs \p half multiplication of inputs \p a and \p b, in round-to-nearest
  * mode.
@@ -22442,18 +23627,27 @@ public static class __half2 extends Pointer {
  */
 /**
  * \ingroup CUDA_MATH__HALF_ARITHMETIC
- * \brief Performs \p half addition in round-to-nearest mode, with saturation to
- * [0.0, 1.0].
+ * \brief Performs \p half division in round-to-nearest-even mode.
  *
- * Performs \p half add of inputs \p a and \p b, in round-to-nearest mode,
+ * Divides \p half input \p a by input \p b in round-to-nearest
+ * mode.
+ *
+ * @return Returns the \p half result of division \p a by \p b.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_ARITHMETIC
+ * \brief Performs \p half addition in round-to-nearest-even mode, with
+ * saturation to [0.0, 1.0].
+ *
+ * Performs \p half add of inputs \p a and \p b, in round-to-nearest-even mode,
  * and clamps the result to range [0.0, 1.0]. NaN results are flushed to +0.0.
  *
  * @return Returns the \p half result of adding \p a and \p b with saturation.
  */
 /**
  * \ingroup CUDA_MATH__HALF_ARITHMETIC
- * \brief Performs \p half subtraction in round-to-nearest mode, with saturation
- * to [0.0, 1.0].
+ * \brief Performs \p half subtraction in round-to-nearest-even mode, with
+ * saturation to [0.0, 1.0].
  *
  * Subtracts \p half input \p b from input \p a in round-to-nearest
  * mode,
@@ -22464,7 +23658,7 @@ public static class __half2 extends Pointer {
  */
 /**
  * \ingroup CUDA_MATH__HALF_ARITHMETIC
- * \brief Performs \p half multiplication in round-to-nearest mode, with
+ * \brief Performs \p half multiplication in round-to-nearest-even mode, with
  * saturation to [0.0, 1.0].
  *
  * Performs \p half multiplication of inputs \p a and \p b, in round-to-nearest
@@ -22476,24 +23670,24 @@ public static class __half2 extends Pointer {
  */
 /**
  * \ingroup CUDA_MATH__HALF_ARITHMETIC
- * \brief Performs \p half fused multiply-add in round-to-nearest mode.
+ * \brief Performs \p half fused multiply-add in round-to-nearest-even mode.
  *
  * Performs \p half multiply on inputs \p a and \p b,
  * then performs a \p half add of the result with \p c,
- * rounding the result once in round-to-nearest mode.
+ * rounding the result once in round-to-nearest-even mode.
  *
  * @return Returns the \p half result of the fused multiply-add operation on \p
  * a, \p b, and \p c.
  */
 /**
  * \ingroup CUDA_MATH__HALF_ARITHMETIC
- * \brief Performs \p half fused multiply-add in round-to-nearest mode,
+ * \brief Performs \p half fused multiply-add in round-to-nearest-even mode,
  * with saturation to [0.0, 1.0].
  *
  * Performs \p half multiply on inputs \p a and \p b,
  * then performs a \p half add of the result with \p c,
- * rounding the result once in round-to-nearest mode, and clamps the result to
- * range [0.0, 1.0]. NaN results are flushed to +0.0.
+ * rounding the result once in round-to-nearest-even mode, and clamps the result
+ * to range [0.0, 1.0]. NaN results are flushed to +0.0.
  *
  * @return Returns the \p half result of the fused multiply-add operation on \p
  * a, \p b, and \p c with saturation.
@@ -22788,6 +23982,210 @@ public static class __half2 extends Pointer {
  *
  * @return Returns boolean true iff argument is a NaN, boolean false otherwise.
  */
+/**
+ * \ingroup CUDA_MATH__HALF_FUNCTIONS
+ * \brief Calculates \p half square root in round-to-nearest-even mode.
+ *
+ * Calculates \p half square root of input \p a in round-to-nearest-even mode.
+ *
+ * @return Returns \p half square root of \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_FUNCTIONS
+ * \brief Calculates \p half reciprocal square root in round-to-nearest-even
+ * mode.
+ *
+ * Calculates \p half reciprocal square root of input \p a in round-to-nearest
+ * mode.
+ *
+ * @return Returns \p half reciprocal square root of \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_FUNCTIONS
+ * \brief Calculates \p half reciprocal in round-to-nearest-even mode.
+ *
+ * Calculates \p half reciprocal of input \p a in round-to-nearest-even mode.
+ *
+ * @return Returns \p half reciprocal of \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_FUNCTIONS
+ * \brief Calculates \p half natural logarithm in round-to-nearest-even mode.
+ *
+ * Calculates \p half natural logarithm of input \p a in round-to-nearest-even
+ * mode.
+ *
+ * @return Returns \p half natural logarithm of \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_FUNCTIONS
+ * \brief Calculates \p half binary logarithm in round-to-nearest-even mode.
+ *
+ * Calculates \p half binary logarithm of input \p a in round-to-nearest-even
+ * mode.
+ *
+ * @return Returns \p half binary logarithm of \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_FUNCTIONS
+ * \brief Calculates \p half decimal logarithm in round-to-nearest-even mode.
+ *
+ * Calculates \p half decimal logarithm of input \p a in round-to-nearest-even
+ * mode.
+ *
+ * @return Returns \p half decimal logarithm of \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_FUNCTIONS
+ * \brief Calculates \p half natural exponential function in round-to-nearest
+ * mode.
+ *
+ * Calculates \p half natural exponential function of input \p a in
+ * round-to-nearest-even mode.
+ *
+ * @return Returns \p half natural exponential function of \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_FUNCTIONS
+ * \brief Calculates \p half binary exponential function in round-to-nearest
+ * mode.
+ *
+ * Calculates \p half binary exponential function of input \p a in
+ * round-to-nearest-even mode.
+ *
+ * @return Returns \p half binary exponential function of \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_FUNCTIONS
+ * \brief Calculates \p half decimal exponential function in round-to-nearest
+ * mode.
+ *
+ * Calculates \p half decimal exponential function of input \p a in
+ * round-to-nearest-even mode.
+ *
+ * @return Returns \p half decimal exponential function of \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_FUNCTIONS
+ * \brief Calculates \p half cosine in round-to-nearest-even mode.
+ *
+ * Calculates \p half cosine of input \p a in round-to-nearest-even mode.
+ *
+ * @return Returns \p half cosine of \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF_FUNCTIONS
+ * \brief Calculates \p half sine in round-to-nearest-even mode.
+ *
+ * Calculates \p half sine of input \p a in round-to-nearest-even mode.
+ *
+ * @return Returns \p half sine of \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_FUNCTIONS
+ * \brief Calculates \p half2 vector square root in round-to-nearest-even mode.
+ *
+ * Calculates \p half2 square root of input vector \p a in round-to-nearest
+ * mode.
+ *
+ * @return Returns \p half2 square root of vector \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_FUNCTIONS
+ * \brief Calculates \p half2 vector reciprocal square root in round-to-nearest
+ * mode.
+ *
+ * Calculates \p half2 reciprocal square root of input vector \p a in
+ * round-to-nearest-even mode.
+ *
+ * @return Returns \p half2 reciprocal square root of vector \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_FUNCTIONS
+ * \brief Calculates \p half2 vector reciprocal in round-to-nearest-even mode.
+ *
+ * Calculates \p half2 reciprocal of input vector \p a in round-to-nearest-even
+ * mode.
+ *
+ * @return Returns \p half2 reciprocal of vector \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_FUNCTIONS
+ * \brief Calculates \p half2 vector natural logarithm in round-to-nearest-even
+ * mode.
+ *
+ * Calculates \p half2 natural logarithm of input vector \p a in
+ * round-to-nearest-even mode.
+ *
+ * @return Returns \p half2 natural logarithm of vector \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_FUNCTIONS
+ * \brief Calculates \p half2 vector binary logarithm in round-to-nearest-even
+ * mode.
+ *
+ * Calculates \p half2 binary logarithm of input vector \p a in round-to-nearest
+ * mode.
+ *
+ * @return Returns \p half2 binary logarithm of vector \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_FUNCTIONS
+ * \brief Calculates \p half2 vector decimal logarithm in round-to-nearest-even
+ * mode.
+ *
+ * Calculates \p half2 decimal logarithm of input vector \p a in
+ * round-to-nearest-even mode.
+ *
+ * @return Returns \p half2 decimal logarithm of vector \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_FUNCTIONS
+ * \brief Calculates \p half2 vector exponential function in round-to-nearest
+ * mode.
+ *
+ * Calculates \p half2 exponential function of input vector \p a in
+ * round-to-nearest-even mode.
+ *
+ * @return Returns \p half2 exponential function of vector \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_FUNCTIONS
+ * \brief Calculates \p half2 vector binary exponential function in
+ * round-to-nearest-even mode.
+ *
+ * Calculates \p half2 binary exponential function of input vector \p a in
+ * round-to-nearest-even mode.
+ *
+ * @return Returns \p half2 binary exponential function of vector \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_FUNCTIONS
+ * \brief Calculates \p half2 vector decimal exponential function in
+ * round-to-nearest-even mode.
+ *
+ * Calculates \p half2 decimal exponential function of input vector \p a in 
+ * round-to-nearest-even mode.
+ *
+ * @return Returns \p half2 decimal exponential function of vector \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_FUNCTIONS
+ * \brief Calculates \p half2 vector cosine in round-to-nearest-even mode.
+ *
+ * Calculates \p half2 cosine of input vector \p a in round-to-nearest-even
+ * mode.
+ *
+ * @return Returns \p half2 cosine of vector \p a.
+ */
+/**
+ * \ingroup CUDA_MATH__HALF2_FUNCTIONS
+ * \brief Calculates \p half2 vector sine in round-to-nearest-even mode.
+ *
+ * Calculates \p half2 sine of input vector \p a in round-to-nearest-even mode.
+ *
+ * @return Returns \p half2 sine of vector \p a.
+ */
 
 // #endif /*if __CUDA_ARCH__ >= 530 || !defined(__CUDA_ARCH__)*/
 // #if __CUDA_ARCH__ >= 300 || !defined(__CUDA_ARCH__)
@@ -22803,8 +24201,9 @@ public static class __half2 extends Pointer {
 // #undef SHUFFLE_HALF2_MACRO
 // #endif /*__CUDA_ARCH__ >= 300 || !defined(__CUDA_ARCH__)*/
 /******************************************************************************
- *                          __half and __half2 __ldg                          *
+ *               __half and __half2 __ldg,__ldcg,__ldca,__ldcs                *
  ******************************************************************************/
+
 // #if defined(__cplusplus) && (__CUDA_ARCH__ >= 320 || !defined(__CUDA_ARCH__))
 // #if (defined(_MSC_VER) && defined(_WIN64)) || defined(__LP64__) || defined(__CUDACC_RTC__)
 // #define __LDG_PTR   "l"
@@ -22880,10 +24279,141 @@ public static class __half2 extends Pointer {
 //    return val;
 // } while(0);
 // #undef TERNARY_OP_HALF2_MACRO
+
+/******************************************************************************
+ *                             __half2 functions                  *
+ ******************************************************************************/
+// #define SPEC_CASE2(i,r, spc, ulp)
+//    "{.reg.b32 spc, ulp, p;\n"
+//    "  mov.b32 spc,"#spc";\n"
+//    "  mov.b32 ulp,"#ulp";\n"
+//    "  set.eq.f16x2.f16x2 p,"#i", spc;\n"
+//    "  fma.rn.f16x2 "#r",p,ulp,"#r";\n}\n"
+// #define SPEC_CASE(i,r, spc, ulp)
+//    "{.reg.b16 spc, ulp, p;\n"
+//    "  mov.b16 spc,"#spc";\n"
+//    "  mov.b16 ulp,"#ulp";\n"
+//    "  set.eq.f16.f16 p,"#i", spc;\n"
+//    "  fma.rn.f16 "#r",p,ulp,"#r";\n}\n"
+// #define APPROX_FCAST(fun) do {
+//    __half val;
+//    asm volatile("{.reg.b32         f;        \n"
+//                 " .reg.b16         r;        \n"
+//                 "  mov.b16         r,%1;     \n"
+//                 "  cvt.f32.f16     f,r;      \n"
+//                 "  "#fun".approx.f32   f,f;  \n"
+//                 "  cvt.rn.f16.f32      r,f;  \n"
+//                 "  mov.b16         %0,r;     \n"
+//                 "}": "=h"(val.x) : "h"(a.x));
+//    return val;
+// } while(0);
+// #define APPROX_FCAST2(fun) do {
+//    __half2 val;
+//    asm volatile("{.reg.b16         hl, hu;         \n"
+//                 " .reg.b32         fl, fu;         \n"
+//                 "  mov.b32         {hl, hu}, %1;   \n"
+//                 "  cvt.f32.f16     fl, hl;         \n"
+//                 "  cvt.f32.f16     fu, hu;         \n"
+//                 "  "#fun".approx.f32   fl, fl;     \n"
+//                 "  "#fun".approx.f32   fu, fu;     \n"
+//                 "  cvt.rn.f16.f32      hl, fl;     \n"
+//                 "  cvt.rn.f16.f32      hu, fu;     \n"
+//                 "  mov.b32         %0, {hl, hu};   \n"
+//                 "}":"=r"(val.x) : "r"(a.x));
+//    return val;
+// } while(0);
+
+
+
+
+
+
+// #undef SPEC_CASE2
+// #undef SPEC_CASE
+// #undef APPROX_FCAST
+// #undef APPROX_FCAST2
 // #endif /*__CUDA_ARCH__ >= 530 || !defined(__CUDA_ARCH__)*/
 // #undef __CUDA_FP16_DECL__
 // #endif /*defined(__CUDACC__)*/
 // #endif /* end of include guard: CUDA_FP16_H_JNESTUG4 */
+
+
+// Parsed from <library_types.h>
+
+/*
+ * Copyright 1993-2015 NVIDIA Corporation.  All rights reserved.
+ *
+ * NOTICE TO LICENSEE:
+ *
+ * This source code and/or documentation ("Licensed Deliverables") are
+ * subject to NVIDIA intellectual property rights under U.S. and
+ * international Copyright laws.
+ *
+ * These Licensed Deliverables contained herein is PROPRIETARY and
+ * CONFIDENTIAL to NVIDIA and is being provided under the terms and
+ * conditions of a form of NVIDIA software license agreement by and
+ * between NVIDIA and Licensee ("License Agreement") or electronically
+ * accepted by Licensee.  Notwithstanding any terms or conditions to
+ * the contrary in the License Agreement, reproduction or disclosure
+ * of the Licensed Deliverables to any third party without the express
+ * written consent of NVIDIA is prohibited.
+ *
+ * NOTWITHSTANDING ANY TERMS OR CONDITIONS TO THE CONTRARY IN THE
+ * LICENSE AGREEMENT, NVIDIA MAKES NO REPRESENTATION ABOUT THE
+ * SUITABILITY OF THESE LICENSED DELIVERABLES FOR ANY PURPOSE.  IT IS
+ * PROVIDED "AS IS" WITHOUT EXPRESS OR IMPLIED WARRANTY OF ANY KIND.
+ * NVIDIA DISCLAIMS ALL WARRANTIES WITH REGARD TO THESE LICENSED
+ * DELIVERABLES, INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY,
+ * NONINFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE.
+ * NOTWITHSTANDING ANY TERMS OR CONDITIONS TO THE CONTRARY IN THE
+ * LICENSE AGREEMENT, IN NO EVENT SHALL NVIDIA BE LIABLE FOR ANY
+ * SPECIAL, INDIRECT, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, OR ANY
+ * DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+ * WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS
+ * ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
+ * OF THESE LICENSED DELIVERABLES.
+ *
+ * U.S. Government End Users.  These Licensed Deliverables are a
+ * "commercial item" as that term is defined at 48 C.F.R. 2.101 (OCT
+ * 1995), consisting of "commercial computer software" and "commercial
+ * computer software documentation" as such terms are used in 48
+ * C.F.R. 12.212 (SEPT 1995) and is provided to the U.S. Government
+ * only as a commercial end item.  Consistent with 48 C.F.R.12.212 and
+ * 48 C.F.R. 227.7202-1 through 227.7202-4 (JUNE 1995), all
+ * U.S. Government End Users acquire the Licensed Deliverables with
+ * only those rights set forth herein.
+ *
+ * Any use of the Licensed Deliverables in individual and commercial
+ * software must include, in the user documentation and internal
+ * comments to the code, the above Disclaimer and U.S. Government End
+ * Users Notice.
+ */
+
+// #if !defined(__LIBRARY_TYPES_H__)
+// #define __LIBRARY_TYPES_H__
+
+
+/** enum cudaDataType */
+public static final int
+	CUDA_R_16F= 2, // 16 bit real 
+	CUDA_C_16F= 6, // 16 bit complex
+	CUDA_R_32F= 0, // 32 bit real
+	CUDA_C_32F= 4, // 32 bit complex
+	CUDA_R_64F= 1, // 64 bit real
+	CUDA_C_64F= 5, // 64 bit complex
+	CUDA_R_8I= 3,  // 8 bit real as a signed integer 
+	CUDA_C_8I= 7,   // 8 bit complex as a pair of signed integers
+	CUDA_R_8U= 8,  // 8 bit real as a signed integer 
+	CUDA_C_8U= 9;   // 8 bit complex as a pair of signed integers 
+
+
+/** enum libraryPropertyType */
+public static final int
+	MAJOR_VERSION = 0,
+	MINOR_VERSION = 1,
+	PATCH_LEVEL = 2;
+
+// #endif /* !__LIBRARY_TYPES_H__ */
 
 
 }

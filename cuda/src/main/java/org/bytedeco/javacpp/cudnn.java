@@ -70,7 +70,7 @@ public class cudnn extends org.bytedeco.javacpp.presets.cudnn {
 // #define CUDNN_H_
 
 public static final int CUDNN_MAJOR =      5;
-public static final int CUDNN_MINOR =      0;
+public static final int CUDNN_MINOR =      1;
 public static final int CUDNN_PATCHLEVEL = 5;
 
 public static final int CUDNN_VERSION =    (CUDNN_MAJOR * 1000 + CUDNN_MINOR * 100 + CUDNN_PATCHLEVEL);
@@ -715,7 +715,8 @@ public static final int
     CUDNN_CONVOLUTION_FWD_ALGO_DIRECT                = 3,
     CUDNN_CONVOLUTION_FWD_ALGO_FFT                   = 4,
     CUDNN_CONVOLUTION_FWD_ALGO_FFT_TILING            = 5,
-    CUDNN_CONVOLUTION_FWD_ALGO_WINOGRAD              = 6;
+    CUDNN_CONVOLUTION_FWD_ALGO_WINOGRAD              = 6,
+    CUDNN_CONVOLUTION_FWD_ALGO_WINOGRAD_NONFUSED     = 7;
 
 public static class cudnnConvolutionFwdAlgoPerf_t extends Pointer {
     static { Loader.load(); }
@@ -893,7 +894,9 @@ public static final int
     CUDNN_CONVOLUTION_BWD_FILTER_ALGO_0         = 0,  // non-deterministic
     CUDNN_CONVOLUTION_BWD_FILTER_ALGO_1         = 1,
     CUDNN_CONVOLUTION_BWD_FILTER_ALGO_FFT       = 2,
-    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_3         = 3;   // non-deterministic, algo0 with workspace
+    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_3         = 3,  // non-deterministic, algo0 with workspace
+    // CUDNN_CONVOLUTION_BWD_FILTER_ALGO_WINOGRAD  = 4, // not implemented
+    CUDNN_CONVOLUTION_BWD_FILTER_ALGO_WINOGRAD_NONFUSED = 5;
 
 
 public static class cudnnConvolutionBwdFilterAlgoPerf_t extends Pointer {
@@ -1054,11 +1057,12 @@ public static final int
 
 /** enum cudnnConvolutionBwdDataAlgo_t */
 public static final int
-    CUDNN_CONVOLUTION_BWD_DATA_ALGO_0          = 0, // non-deterministic
-    CUDNN_CONVOLUTION_BWD_DATA_ALGO_1          = 1,
-    CUDNN_CONVOLUTION_BWD_DATA_ALGO_FFT        = 2,
-    CUDNN_CONVOLUTION_BWD_DATA_ALGO_FFT_TILING = 3,
-    CUDNN_CONVOLUTION_BWD_DATA_ALGO_WINOGRAD   = 4;
+    CUDNN_CONVOLUTION_BWD_DATA_ALGO_0                 = 0, // non-deterministic
+    CUDNN_CONVOLUTION_BWD_DATA_ALGO_1                 = 1,
+    CUDNN_CONVOLUTION_BWD_DATA_ALGO_FFT               = 2,
+    CUDNN_CONVOLUTION_BWD_DATA_ALGO_FFT_TILING        = 3,
+    CUDNN_CONVOLUTION_BWD_DATA_ALGO_WINOGRAD          = 4,
+    CUDNN_CONVOLUTION_BWD_DATA_ALGO_WINOGRAD_NONFUSED = 5;
 
 public static class cudnnConvolutionBwdDataAlgoPerf_t extends Pointer {
     static { Loader.load(); }
