@@ -56,19 +56,15 @@ import java.lang.annotation.RetentionPolicy;
         "tensorflow/core/framework/op_def_util.h", "tensorflow/core/framework/op.h", "tensorflow/core/framework/types.h",
         "tensorflow/core/graph/edgeset.h", "tensorflow/core/lib/gtl/iterator_range.h", "tensorflow/core/graph/graph.h",
         "tensorflow/core/framework/node_def_builder.h", "tensorflow/core/graph/node_builder.h", "tensorflow/core/graph/graph_def_builder.h",
-        "tensorflow/core/graph/default_device.h", "tensorflow/core/graph/graph_constructor.h", "tensorflow/cc/framework/ops.h",
-        "tensorflow/cc/ops/standard_ops.h", "tensorflow/cc/framework/scope.h",
-        "tensorflow/cc/ops/const_op.h", "tensorflow/cc/framework/cc_op_gen.h", "tensorflow/cc/ops/array_ops.h",
-        "tensorflow/cc/ops/data_flow_ops.h", "tensorflow/cc/ops/image_ops.h", "tensorflow/cc/ops/io_ops.h",
-        "tensorflow/cc/ops/linalg_ops.h", "tensorflow/cc/ops/logging_ops.h", "tensorflow/cc/ops/math_ops.h",
-        "tensorflow/cc/ops/nn_ops.h", "tensorflow/cc/ops/parsing_ops.h", "tensorflow/cc/ops/random_ops.h",
-        "tensorflow/cc/ops/sparse_ops.h", "tensorflow/cc/ops/state_ops.h", "tensorflow/cc/ops/string_ops.h",
-        "tensorflow/cc/ops/training_ops.h", "tensorflow/cc/ops/user_ops.h",
+        "tensorflow/core/graph/default_device.h", "tensorflow/core/graph/graph_constructor.h",
         "tensorflow_adapters.h"}, link = "tensorflow"),
             target = "org.bytedeco.javacpp.tensorflow", helper = "org.bytedeco.javacpp.helper.tensorflow")
 public class tensorflow implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("tensorflow_adapters.h").skip())
+               .put(new Info("const_op.h").skip())
+               .put(new Info("math_ops.h").skip())
+               .put(new Info("array_ops.h").skip())
                .put(new Info("TF_FALLTHROUGH_INTENDED", "TF_ATTRIBUTE_NORETURN", "TF_ATTRIBUTE_NOINLINE",
                              "TF_ATTRIBUTE_UNUSED", "TF_ATTRIBUTE_COLD", "TF_PACKED", "TF_MUST_USE_RESULT").cppTypes().annotations())
                .put(new Info("TF_CHECK_OK", "TF_QCHECK_OK").cppTypes("void", "tensorflow::Status"))
@@ -105,7 +101,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::DataType").cast().valueTypes("int").pointerTypes("IntPointer"))
                .put(new Info("tensorflow::gtl::InlinedVector<tensorflow::int64,4>").pointerTypes("LongVector").define())
                .put(new Info("tensorflow::gtl::InlinedVector<tensorflow::DataType,4>").pointerTypes("DataTypeVector").define())
-               .put(new Info("tensorflow::DataTypeSlice")/*.cast()*/.pointerTypes("DataTypeVector"))
+               .put(new Info("tensorflow::DataTypeSlice").cast().pointerTypes("DataTypeVector"))
 
                .put(new Info("tensorflow::Tensor").base("AbstractTensor"))
                .put(new Info("tensorflow::Session").base("AbstractSession"))
@@ -120,20 +116,28 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::ops::NodeOut").valueTypes("@ByVal NodeBuilder.NodeOut", "Node"))
                .put(new Info("tensorflow::NodeBuilder::NodeOut").pointerTypes("NodeBuilder.NodeOut"))
 
-               .put(new Info("std::unique_ptr<tensorflow::RandomAccessFile>").pointerTypes("RandomAccessFile"))
-               .put(new Info("std::unique_ptr<tensorflow::WritableFile>").pointerTypes("WritableFile"))
-               .put(new Info("std::unique_ptr<tensorflow::ReadOnlyMemoryRegion>").pointerTypes("ReadOnlyMemoryRegion"))
+               .put(new Info("tensorflow::RandomAccessFile").skip())
+               .put(new Info("tensorflow::WritableFile").skip())
+               .put(new Info("tensorflow::ReadOnlyMemoryRegion").skip())
+               .put(new Info("tensorflow::FileSystem").skip())
+               .put(new Info("tensorflow::NullFileSystem").skip())
+               .put(new Info("tensorflow::Env").skip())
+               .put(new Info("tensorflow::EnvWrapper").skip())
+               .put(new Info("tensorflow::ThreadPool").skip())
+               .put(new Info("tensorflow::Scope").skip())
+               .put(new Info("tensorflow::OpShapeInferenceFn").skip())
+               .put(new Info("shape_inference::InferenceContext").skip())
                .put(new Info("std::vector<tensorflow::ops::Input>").pointerTypes("InputVector"))
                .put(new Info("std::vector<tensorflow::ops::Input>::iterator").skip())
                .put(new Info("std::vector<tensorflow::ops::Input>::const_iterator").skip())
-               .put(new Info("Cast").pointerTypes("CastOp"))
-               .put(new Info("Const").pointerTypes("ConstOp"))
+               .put(new Info("tensorflow::ops::Cast").pointerTypes("CastOp"))
+               .put(new Info("tensorflow::ops::Const").pointerTypes("ConstOp"))
                .put(new Info("mode_t").skip())
 
-               .put(new Info("tensorflow::gtl::ArraySlice<std::string>")/*.cast()*/.pointerTypes("StringVector"))
+               .put(new Info("tensorflow::gtl::ArraySlice<std::string>").cast().pointerTypes("StringVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::Tensor>")/*.cast()*/.pointerTypes("TensorVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::TensorProto>")/*.cast()*/.pointerTypes("TensorProtoVector"))
-               .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::TensorShape>")/*.cast()*/.pointerTypes("TensorShapeVector"))
+               .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::TensorShape>").cast().pointerTypes("TensorShapeVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::ops::NodeOut>")/*.cast()*/.pointerTypes("NodeOutVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::Node*>")/*.cast()*/.pointerTypes("NodeVector"))
                .put(new Info("tensorflow::gtl::iterator_range<tensorflow::NeighborIter>").pointerTypes("NeighborIterRange").define())
@@ -150,6 +154,7 @@ public class tensorflow implements InfoMapper {
 
                .put(new Info("std::function<void()>").pointerTypes("Fn"))
                .put(new Info("std::function<void(int64,int64)>").pointerTypes("ForFn"))
+               .put(new Info("function<tensorflow::Status(shape_inference::InferenceContext *)>").skip())
                .put(new Info("tensorflow::ConstantFoldingOptions::consider")
                        .javaText("@MemberSetter public native ConstantFoldingOptions consider(@ByVal ConsiderFunction consider);"))
                .put(new Info("tensorflow::GraphConstructorOptions::cse_consider_function")
@@ -199,12 +204,14 @@ public class tensorflow implements InfoMapper {
         public native @Cast("bool") boolean call(@Cast("const tensorflow::Node*") Pointer node);
     }
 
-    @Documented @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.METHOD, ElementType.PARAMETER})
+    @java.lang.annotation.Documented
+    @java.lang.annotation.Retention(RetentionPolicy.RUNTIME)
+    @java.lang.annotation.Target({java.lang.annotation.ElementType.METHOD, java.lang.annotation.ElementType.PARAMETER})
     @Cast({"tensorflow::gtl::ArraySlice", "&"}) @Adapter("ArraySliceAdapter")
     public @interface ArraySlice { String value() default ""; }
 
-    @Documented @Retention(RetentionPolicy.RUNTIME)
-    @Target({ElementType.METHOD, ElementType.PARAMETER})
+    @java.lang.annotation.Documented
+    @java.lang.annotation.Retention(RetentionPolicy.RUNTIME)
+    @java.lang.annotation.Target({java.lang.annotation.ElementType.METHOD, java.lang.annotation.ElementType.PARAMETER})
     @Adapter("StringPieceAdapter") public @interface StringPiece { }
 }
