@@ -172,6 +172,42 @@ public static class AVIODirContext extends Pointer {
 }
 
 /**
+ * Different data types that can be returned via the AVIO
+ * write_data_type callback.
+ */
+/** enum AVIODataMarkerType */
+public static final int
+    /**
+     * Header data; this needs to be present for the stream to be decodeable.
+     */
+    AVIO_DATA_MARKER_HEADER = 0,
+    /**
+     * A point in the output bytestream where a decoder can start decoding
+     * (i.e. a keyframe). A demuxer/decoder given the data flagged with
+     * AVIO_DATA_MARKER_HEADER, followed by any AVIO_DATA_MARKER_SYNC_POINT,
+     * should give decodeable results.
+     */
+    AVIO_DATA_MARKER_SYNC_POINT = 1,
+    /**
+     * A point in the output bytestream where a demuxer can start parsing
+     * (for non self synchronizing bytestream formats). That is, any
+     * non-keyframe packet start point.
+     */
+    AVIO_DATA_MARKER_BOUNDARY_POINT = 2,
+    /**
+     * This is any, unlabelled data. It can either be a muxer not marking
+     * any positions at all, it can be an actual boundary/sync point
+     * that the muxer chooses not to mark, or a later part of a packet/fragment
+     * that is cut into multiple write callbacks due to limited IO buffer size.
+     */
+    AVIO_DATA_MARKER_UNKNOWN = 3,
+    /**
+     * Trailer data, which doesn't contain actual content, but only for
+     * finalizing the output file.
+     */
+    AVIO_DATA_MARKER_TRAILER = 4;
+
+/**
  * Bytestream IO Context.
  * New fields can be added to the end with minor version bumps.
  * Removal, reordering and changes to existing fields require a major
@@ -400,9 +436,38 @@ public static class AVIOContext extends Pointer {
      * ',' separated list of allowed protocols.
      */
     @MemberGetter public native @Cast("const char*") BytePointer protocol_whitelist();
-}
 
-/* unbuffered I/O */
+    /**
+     * ',' separated list of disallowed protocols.
+     */
+    @MemberGetter public native @Cast("const char*") BytePointer protocol_blacklist();
+
+    /**
+     * A callback that is used instead of write_packet.
+     */
+    public static class Write_data_type_Pointer_BytePointer_int_int_long extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    Write_data_type_Pointer_BytePointer_int_int_long(Pointer p) { super(p); }
+        protected Write_data_type_Pointer_BytePointer_int_int_long() { allocate(); }
+        private native void allocate();
+        public native int call(Pointer opaque, @Cast("uint8_t*") BytePointer buf, int buf_size,
+                               @Cast("AVIODataMarkerType") int type, @Cast("int64_t") long time);
+    }
+    public native Write_data_type_Pointer_BytePointer_int_int_long write_data_type(); public native AVIOContext write_data_type(Write_data_type_Pointer_BytePointer_int_int_long write_data_type);
+    /**
+     * If set, don't call write_data_type separately for AVIO_DATA_MARKER_BOUNDARY_POINT,
+     * but ignore them and treat them as AVIO_DATA_MARKER_UNKNOWN (to avoid needlessly
+     * small chunks of data returned from the callback).
+     */
+    public native int ignore_boundary_point(); public native AVIOContext ignore_boundary_point(int ignore_boundary_point);
+
+    /**
+     * Internal, not meant to be used from outside of AVIOContext.
+     */
+    public native @Cast("AVIODataMarkerType") int current_type(); public native AVIOContext current_type(int current_type);
+    public native @Cast("int64_t") long last_time(); public native AVIOContext last_time(long last_time);
+}
 
 /**
  * Return the name of the protocol that will handle the passed URL.
@@ -641,14 +706,26 @@ public static class Write_packet_Pointer_byte___int extends FunctionPointer {
 @NoException public static native int avio_put_str16be(AVIOContext s, String str);
 
 /**
- * Passing this as the "whence" parameter to a seek function causes it to
+ * Mark the written bytestream as a specific type.
+ *
+ * Zero-length ranges are omitted from the output.
+ *
+ * @param time the stream time the current bytestream pos corresponds to
+ *             (in AV_TIME_BASE units), or AV_NOPTS_VALUE if unknown or not
+ *             applicable
+ * @param type the kind of data written starting at the current pos
+ */
+@NoException public static native void avio_write_marker(AVIOContext s, @Cast("int64_t") long time, @Cast("AVIODataMarkerType") int type);
+
+/**
+ * ORing this as the "whence" parameter to a seek function causes it to
  * return the filesize without seeking anywhere. Supporting this is optional.
  * If it is not supported then the seek function will return <0.
  */
 public static final int AVSEEK_SIZE = 0x10000;
 
 /**
- * Oring this flag as into the "whence" parameter to a seek function causes it to
+ * Passing this flag as the "whence" parameter to a seek function causes it to
  * seek by any means (like reopening and linear reading) or other normally unreasonable
  * means that can be extremely slow.
  * This may be ignored by the seek code.
@@ -1155,8 +1232,8 @@ public static final int AVIO_FLAG_DIRECT = 0x8000;
  * av_read_frame() on it. Each call, if successful, will return an AVPacket
  * containing encoded data for one AVStream, identified by
  * AVPacket.stream_index. This packet may be passed straight into the libavcodec
- * decoding functions avcodec_decode_video2(), avcodec_decode_audio4() or
- * avcodec_decode_subtitle2() if the caller wishes to decode the data.
+ * decoding functions avcodec_send_packet() or avcodec_decode_subtitle2() if the
+ * caller wishes to decode the data.
  *
  * AVPacket.pts, AVPacket.dts and AVPacket.duration timing information will be
  * set if known. They may also be unset (i.e. AV_NOPTS_VALUE for
@@ -1197,15 +1274,15 @@ public static final int AVIO_FLAG_DIRECT = 0x8000;
  *   avio_open2() or a custom one.
  * - Unless the format is of the AVFMT_NOSTREAMS type, at least one stream must
  *   be created with the avformat_new_stream() function. The caller should fill
- *   the \ref AVStream.codec "stream codec context" information, such as the
- *   codec \ref AVCodecContext.codec_type "type", \ref AVCodecContext.codec_id
+ *   the \ref AVStream.codecpar "stream codec parameters" information, such as the
+ *   codec \ref AVCodecParameters.codec_type "type", \ref AVCodecParameters.codec_id
  *   "id" and other parameters (e.g. width / height, the pixel or sample format,
  *   etc.) as known. The \ref AVStream.time_base "stream timebase" should
  *   be set to the timebase that the caller desires to use for this stream (note
  *   that the timebase actually used by the muxer can be different, as will be
  *   described later).
  * - It is advised to manually initialize only the relevant fields in
- *   AVCodecContext, rather than using \ref avcodec_copy_context() during
+ *   AVCodecParameters, rather than using \ref avcodec_parameters_copy() during
  *   remuxing: there is no guarantee that the codec context values remain valid
  *   for both input and output format contexts.
  * - The caller may fill in additional information, such as \ref
@@ -1304,7 +1381,6 @@ public static final int AVIO_FLAG_DIRECT = 0x8000;
  * \{
  * \}
  * \}
- *
  */
 
 // #include <time.h>
@@ -1606,7 +1682,7 @@ public static class AVOutputFormat extends Pointer {
      * can use flags: AVFMT_NOFILE, AVFMT_NEEDNUMBER,
      * AVFMT_GLOBALHEADER, AVFMT_NOTIMESTAMPS, AVFMT_VARIABLE_FPS,
      * AVFMT_NODIMENSIONS, AVFMT_NOSTREAMS, AVFMT_ALLOW_FLUSH,
-     * AVFMT_TS_NONSTRICT
+     * AVFMT_TS_NONSTRICT, AVFMT_TS_NEGATIVE
      */
     public native int flags(); public native AVOutputFormat flags(int flags);
 
@@ -2224,18 +2300,12 @@ public static class AVStream extends Pointer {
      * encoding: set by the user, replaced by libavformat if left unset
      */
     public native int id(); public native AVStream id(int id);
+// #if FF_API_LAVF_AVCTX
     /**
-     * Codec context associated with this stream. Allocated and freed by
-     * libavformat.
-     *
-     * - decoding: The demuxer exports codec information stored in the headers
-     *             here.
-     * - encoding: The user sets codec information, the muxer writes it to the
-     *             output. Mandatory fields as specified in AVCodecContext
-     *             documentation must be set even if this AVCodecContext is
-     *             not actually used for encoding.
+     * @deprecated use the codecpar struct instead
      */
-    public native AVCodecContext codec(); public native AVStream codec(AVCodecContext codec);
+    public native @Deprecated AVCodecContext codec(); public native AVStream codec(AVCodecContext codec);
+// #endif
     public native Pointer priv_data(); public native AVStream priv_data(Pointer priv_data);
 
 // #if FF_API_LAVF_FRAC
@@ -2568,6 +2638,17 @@ public static final int MAX_REORDER_DELAY = 16;
      * Must not be accessed in any way by callers.
      */
     public native AVStreamInternal internal(); public native AVStream internal(AVStreamInternal internal);
+
+    /*
+     * Codec parameters associated with this stream. Allocated and freed by
+     * libavformat in avformat_new_stream() and avformat_free_context()
+     * respectively.
+     *
+     * - demuxing: filled by libavformat on stream creation or in
+     *             avformat_find_stream_info()
+     * - muxing: filled by the caller before avformat_write_header()
+     */
+    public native AVCodecParameters codecpar(); public native AVStream codecpar(AVCodecParameters codecpar);
 }
 
 @NoException public static native @ByVal AVRational av_stream_get_r_frame_rate(@Const AVStream s);
@@ -2714,6 +2795,12 @@ public static final int
  * version bump.
  * sizeof(AVFormatContext) must not be used outside libav*, use
  * avformat_alloc_context() to create an AVFormatContext.
+ *
+ * Fields can be accessed through AVOptions (av_opt*),
+ * the name string used matches the associated command line parameter name and
+ * can be found in libavformat/options_table.h.
+ * The AVOption/command line parameter names differ in some cases from the C
+ * structure field names for historic reasons or brevity.
  */
 public static class AVFormatContext extends Pointer {
     static { Loader.load(); }
@@ -3299,9 +3386,9 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
     /*
      * A callback for opening new IO streams.
      *
-     * Certain muxers or demuxers (e.g. for various playlist-based formats) need
-     * to open additional files during muxing or demuxing. This callback allows
-     * the caller to provide custom IO in such cases.
+     * Whenever a muxer or a demuxer needs to open an IO stream (typically from
+     * avformat_open_input() for demuxers, but for certain formats can happen at
+     * other times as well), it will call this callback to obtain an IO context.
      *
      * @param s the format context
      * @param pb on success, the newly opened IO context should be returned here
@@ -3339,6 +3426,13 @@ public static final int AVFMT_AVOID_NEG_TS_MAKE_ZERO =         2;
         public native void call(AVFormatContext s, AVIOContext pb);
     }
     public native Io_close_AVFormatContext_AVIOContext io_close(); public native AVFormatContext io_close(Io_close_AVFormatContext_AVIOContext io_close);
+
+    /**
+     * ',' separated list of disallowed protocols.
+     * - encoding: unused
+     * - decoding: set by user through AVOptions (NO direct access)
+     */
+    public native @Cast("char*") BytePointer protocol_blacklist(); public native AVFormatContext protocol_blacklist(BytePointer protocol_blacklist);
 }
 
 @NoException public static native int av_format_get_probe_score(@Const AVFormatContext s);
@@ -3933,6 +4027,10 @@ public static final int AVSEEK_FLAG_FRAME =    8;
  * increasing dts. Callers doing their own interleaving should call
  * av_write_frame() instead of this function.
  *
+ * Using this function instead of av_write_frame() can give muxers advance
+ * knowledge of future packets, improving e.g. the behaviour of the mp4
+ * muxer for VFR content in fragmenting mode.
+ *
  * @param s media file handle
  * @param pkt The packet containing the data to be written.
  *            <br>
@@ -3967,7 +4065,7 @@ public static final int AVSEEK_FLAG_FRAME =    8;
 @NoException public static native int av_interleaved_write_frame(AVFormatContext s, AVPacket pkt);
 
 /**
- * Write a uncoded frame to an output media file.
+ * Write an uncoded frame to an output media file.
  *
  * The frame must be correctly interleaved according to the container
  * specification; if not, then av_interleaved_write_frame() must be used.
@@ -3978,7 +4076,7 @@ public static final int AVSEEK_FLAG_FRAME =    8;
                            AVFrame frame);
 
 /**
- * Write a uncoded frame to an output media file.
+ * Write an uncoded frame to an output media file.
  *
  * If the muxer supports it, this function makes it possible to write an AVFrame
  * structure directly, without encoding it into a packet.
@@ -4441,13 +4539,17 @@ public static final int AVSEEK_FLAG_FRAME =    8;
  * Apply a list of bitstream filters to a packet.
  *
  * @param codec AVCodecContext, usually from an AVStream
- * @param pkt the packet to apply filters to
+ * @param pkt the packet to apply filters to. If, on success, the returned
+ *        packet has size == 0 and side_data_elems == 0, it indicates that
+ *        the packet should be dropped
  * @param bsfc a NULL-terminated list of filters to apply
  * @return  >=0 on success;
  *          AVERROR code on failure
  */
-@NoException public static native int av_apply_bitstream_filters(AVCodecContext codec, AVPacket pkt,
+// #if FF_API_OLD_BSF
+@NoException public static native @Deprecated int av_apply_bitstream_filters(AVCodecContext codec, AVPacket pkt,
                                AVBitStreamFilterContext bsfc);
+// #endif
 
 /**
  * \}
