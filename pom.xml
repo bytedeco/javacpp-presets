@@ -42,6 +42,7 @@
     <module>flycapture</module>
     <module>libdc1394</module>
     <module>libfreenect</module>
+    <module>librealsense</module>
     <module>videoinput</module>
     <module>artoolkitplus</module>
     <module>chilitags</module>
@@ -346,7 +347,7 @@
             <phase>generate-sources</phase>
             <goals>
               <goal>exec</goal>
-            </goals>			
+            </goals>
             <configuration>
               <arguments>
                 <argument>${project.basedir}/../cppbuild.sh</argument>
@@ -362,7 +363,7 @@
             <phase>clean</phase>
             <goals>
               <goal>exec</goal>
-            </goals>			
+            </goals>
             <configuration>
               <arguments>
                 <argument>${project.basedir}/../cppbuild.sh</argument>
@@ -370,12 +371,12 @@
                 <argument>${project.artifactId}</argument>
               </arguments>
             </configuration>
-          </execution>		  
+          </execution>
         </executions>
         <configuration>
           <skip>${javacpp.cppbuild.skip}</skip>
           <workingDirectory>${project.basedir}/..</workingDirectory>
-          <executable>bash</executable>			
+          <executable>bash</executable>
         </configuration>
       </plugin>
     </plugins>

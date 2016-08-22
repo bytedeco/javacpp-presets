@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.bytedeco</groupId>
+    <artifactId>javacpp-presets</artifactId>
+    <version>1.2.2</version>
+  </parent>
+
+  <groupId>org.bytedeco.javacpp-presets</groupId>
+  <artifactId>librealsense</artifactId>
+  <version>1.9.6-${project.parent.version}</version>
+  <!--<version>1.9.6-1.2.2</version>-->
+  <name>JavaCPP Presets for librealsense</name>
+
+  <properties>
+    <javacpp.platform.oldcompiler>${javacpp.platform.compiler}</javacpp.platform.oldcompiler>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.bytedeco</groupId>
+      <artifactId>javacpp</artifactId>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.bytedeco</groupId>
+        <artifactId>javacpp</artifactId>
+        <configuration>
+          <propertyKeysAndValues>
+            <property>
+              <name>platform.root</name>
+              <value>${javacpp.platform.root}</value>
+            </property>
+            <property>
+              <name>platform.compiler</name>
+              <value>${javacpp.platform.oldcompiler}</value>
+            </property>
+          </propertyKeysAndValues>
+           <compilerOptions>
+            <compilerOption>-std=c++11</compilerOption>
+            <!--<compilerOption>-fpermissive</compilerOption>-->
+          </compilerOptions>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
