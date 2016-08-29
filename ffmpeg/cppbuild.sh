@@ -47,7 +47,7 @@ else
     download http://downloads.sourceforge.net/project/lame/lame/3.99/$LAME.tar.gz $LAME.tar.gz
     download http://downloads.xiph.org/releases/speex/$SPEEX.tar.gz $SPEEX.tar.gz
     download http://sourceforge.net/projects/opencore-amr/files/opencore-amr/$OPENCORE_AMR.tar.gz/download $OPENCORE_AMR.tar.gz
-    download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
+#    download https://www.openssl.org/source/$OPENSSL.tar.gz $OPENSSL.tar.gz
     download https://github.com/cisco/openh264/archive/v$OPENH264_VERSION.tar.gz openh264-$OPENH264_VERSION.tar.gz
     download ftp://ftp.videolan.org/pub/videolan/x264/snapshots/last_stable_x264.tar.bz2 last_stable_x264.tar.bz2
     download https://ftp.videolan.org/pub/videolan/x265/$X265.tar.gz $X265.tar.gz
@@ -195,8 +195,8 @@ case $PLATFORM in
         ./Configure linux-elf -m32 -fPIC no-shared --prefix=$INSTALL_PATH
         make # fails with -j > 1
         make install
-        cd ../openh264-$OPENH264_VERSION
-        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86 libraries install-static
+#        cd ../openh264-$OPENH264_VERSION
+#        make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86 libraries install-static
         cd ../$X264
         ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=i686-linux
         make -j $MAKEJ
@@ -210,8 +210,9 @@ case $PLATFORM in
 #        make -j $MAKEJ
 #        make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        [[ $ENABLE =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
-        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE $ENABLE $X11GRAB --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
+        patch -Np1 < ../../../ffmpeg-rtmps-block.patch
+#        [[ $ENABLE =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
+        PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE_LINUX $ENABLE_LINUX --enable-x11grab --enable-indev=x11grab --cc="gcc -m32" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --disable-doc --disable-programs
         make -j $MAKEJ
         make install
         ;;
@@ -235,10 +236,10 @@ case $PLATFORM in
         make install
         cd ../openh264-$OPENH264_VERSION
         make -j $MAKEJ DESTDIR=./ PREFIX=.. AR=ar ARCH=x86_64 libraries install-static
-#        cd ../$X264
-#        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=x86_64-linux
-#        make -j $MAKEJ
-#        make install
+        cd ../$X264
+        ./configure --prefix=$INSTALL_PATH --enable-static --enable-pic --disable-opencl --host=x86_64-linux
+        make -j $MAKEJ
+        make install
 #        cd ../$X265
 #        CC="gcc -m64" CXX="g++ -m64" $CMAKE -DENABLE_SHARED=OFF -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. source
 #        make -j $MAKEJ
@@ -248,8 +249,9 @@ case $PLATFORM in
 #        make -j $MAKEJ
 #        make install
         cd ../ffmpeg-$FFMPEG_VERSION
-        [[ $ENABLE_LINUX =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
-        PKG_CONFIG_PATH=../lib/pkgconfig/  ./configure --prefix=.. $DISABLE_LINUX $ENABLE_LINUX --enable-x11grab --enable-indev=x11grab --cc="gcc -m64" --pkg-config-flags="--static" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl"
+        patch -Np1 < ../../../ffmpeg-rtmps-block.patch
+#        [[ $ENABLE_LINUX =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
+        PKG_CONFIG_PATH=../lib/pkgconfig/  ./configure --prefix=.. $DISABLE_LINUX $ENABLE_LINUX --enable-x11grab --enable-indev=x11grab --enable-indev=x11grab_xcb --cc="gcc -m64" --pkg-config-flags="--static" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --disable-doc --disable-programs
         make -j $MAKEJ
         make install
         ;;
@@ -286,6 +288,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../ffmpeg-$FFMPEG_VERSION
+        patch -Np1 < ../../../ffmpeg-rtmps-block.patch
         [[ $ENABLE =~ "--enable-gpl" ]] && X11GRAB="--enable-x11grab" || X11GRAB=
         PKG_CONFIG_PATH=../lib/pkgconfig/ CFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" CXXFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" CPPFLAGS="-march=armv6 -mfpu=vfp -mfloat-abi=hard" ./configure --prefix=.. $DISABLE $ENABLE --cc="arm-linux-gnueabihf-gcc" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --enable-cross-compile --arch=armhf --target-os=linux --cross-prefix="arm-linux-gnueabihf-" --pkg-config-flags="--static" --pkg-config="pkg-config --static"
         make -j $MAKEJ
@@ -325,6 +328,7 @@ case $PLATFORM in
 #        make install
         cd ../ffmpeg-$FFMPEG_VERSION
         patch -Np1 < ../../../ffmpeg-$FFMPEG_VERSION-macosx.patch
+        patch -Np1 < ../../../ffmpeg-rtmps-block.patch
         PKG_CONFIG_PATH=../lib/pkgconfig/ ./configure --prefix=.. $DISABLE_MAC $ENABLE_MAC --enable-indev=avfoundation  --pkg-config-flags="--static" --extra-cflags="-I../include/" --extra-ldflags="-L../lib/" --extra-libs="-lstdc++ -ldl" --disable-doc --disable-programs
         make -j $MAKEJ
         make install
