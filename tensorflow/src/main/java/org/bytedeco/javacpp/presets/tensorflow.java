@@ -27,7 +27,6 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.FunctionPointer;
 import org.bytedeco.javacpp.Loader;
@@ -52,9 +51,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
         "tensorflow/core/lib/core/stringpiece.h", */ "tensorflow/core/platform/types.h", "tensorflow/core/platform/mutex.h",
         "tensorflow/core/platform/macros.h", "tensorflow/core/util/port.h", "tensorflow/core/lib/core/error_codes.pb.h",
         "tensorflow/core/platform/logging.h", "tensorflow/core/lib/core/status.h", "tensorflow/core/platform/protobuf.h",
-        "tensorflow/core/platform/file_system.h", "tensorflow/core/platform/env.h",
-        "tensorflow/core/graph/dot.h",
-        "tensorflow/core/graph/graph.h",
+        "tensorflow/core/platform/file_system.h", "tensorflow/core/platform/env.h", "tensorflow/core/graph/dot.h",
         "tensorflow/core/protobuf/config.pb.h", "tensorflow/core/framework/cost_graph.pb.h",
         "tensorflow/core/framework/step_stats.pb.h", "tensorflow/core/framework/versions.pb.h", "tensorflow/core/public/session_options.h",
         "tensorflow/core/lib/core/threadpool.h", "tensorflow/core/framework/allocation_description.pb.h", "tensorflow/core/framework/allocator.h",
@@ -258,8 +255,6 @@ public class tensorflow implements InfoMapper {
         private native void allocate();
         public native @StdString BytePointer call(@Cast("const tensorflow::Edge*") Pointer node);
     }
-
-
 
     @Documented @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.METHOD, ElementType.PARAMETER})
