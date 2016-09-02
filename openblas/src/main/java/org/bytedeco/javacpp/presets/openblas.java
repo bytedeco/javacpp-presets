@@ -34,10 +34,10 @@ import org.bytedeco.javacpp.tools.InfoMapper;
  */
 @Properties(target = "org.bytedeco.javacpp.openblas", value = {
     @Platform(include = {"openblas_config.h", "cblas.h", "lapacke_config.h", "lapacke_mangling.h", "lapacke.h", "lapacke_utils.h"}, link = "openblas@.0",
-              preload = {"iomp5", "iomp5md", "iomp5mt", "mkl_avx", "mkl_avx2", "mkl_def", "mkl_mc3", "mkl_core", "mkl_gnu_thread", "mkl_intel_lp64",
+              preload = {"iomp5", "mkl_avx", "mkl_avx2", "mkl_avx512_mic", "mkl_def", "mkl_mc3", "mkl_core", "mkl_gnu_thread", "mkl_intel_lp64",
                          "mkl_intel_thread", "mkl_rt", "mkl_rt#openblas@.0", "gcc_s@.1", "gomp@.1", "quadmath@.0", "gfortran@.3"}, compiler = "fastfpu"),
-    @Platform(value = "android", include = {"openblas_config.h", "cblas.h" /* no LAPACK */}, link = "openblas", preload = "", compiler = {"!default", "hardfpu"}),
-    @Platform(value = "windows", preload = {"iomp5", "iomp5md", "iomp5mt", "mkl_avx", "mkl_avx2", "mkl_def", "mkl_mc3", "mkl_core", "mkl_gnu_thread", "mkl_intel_lp64",
+    @Platform(value = "android", include = {"openblas_config.h", "cblas.h" /* no LAPACK */}, link = "openblas", preload = "", compiler = "fastfpu"),
+    @Platform(value = "windows", preload = {"iomp5md", "mkl_avx", "mkl_avx2", "mkl_avx512_mic", "mkl_def", "mkl_mc3", "mkl_core", "mkl_gnu_thread", "mkl_intel_lp64",
                 "mkl_intel_thread", "mkl_rt", "mkl_rt#libopenblas", "libwinpthread-1", "libgcc_s_seh-1", "libgomp-1", "libstdc++-6", "libquadmath-0", "libgfortran-3"}) })
 public class openblas implements InfoMapper {
     public void map(InfoMap infoMap) {

@@ -27,7 +27,7 @@ export TARGET=GENERIC
 case $PLATFORM in
     android-arm)
         patch -Np1 < ../../../OpenBLAS-$OPENBLAS_VERSION-android.patch
-        export CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
+        export CFLAGS="--sysroot=$ANDROID_ROOT -DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300"
         export CC="$ANDROID_BIN-gcc $CFLAGS"
         export FC="$ANDROID_BIN-gfortran $CFLAGS"
         export CROSS_SUFFIX="$ANDROID_BIN-"
@@ -36,7 +36,7 @@ case $PLATFORM in
             export NO_LAPACK=1
         fi
         export BINARY=32
-        export TARGET=ARMV7
+        export TARGET=ARMV5
         ;;
     android-x86)
         patch -Np1 < ../../../OpenBLAS-$OPENBLAS_VERSION-android.patch
