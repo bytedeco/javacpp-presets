@@ -998,16 +998,64 @@ limitations under the License.
 // Degenerate file system that provides no implementations.
 
 /** A file abstraction for randomly reading the contents of a file. */
+@Namespace("tensorflow") public static class RandomAccessFile extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public RandomAccessFile(Pointer p) { super(p); }
+
+
+  /** \brief Reads up to {@code n} bytes from the file starting at {@code offset}.
+   * 
+   *  {@code scratch[0..n-1]} may be written by this routine.  Sets {@code *result}
+   *  to the data that was read (including if fewer than {@code n} bytes were
+   *  successfully read).  May set {@code *result} to point at data in
+   *  {@code scratch[0..n-1]}, so {@code scratch[0..n-1]} must be live when
+   *  {@code *result} is used.
+   * 
+   *  On OK returned status: {@code n} bytes have been stored in {@code *result}.
+   *  On non-OK returned status: {@code [0..n]} bytes have been stored in {@code *result}.
+   * 
+   *  Returns {@code OUT_OF_RANGE} if fewer than n bytes were stored in {@code *result}
+   *  because of EOF.
+   * 
+   *  Safe for concurrent use by multiple threads. */
+  public native @ByVal Status Read(@Cast("tensorflow::uint64") long offset, @Cast("size_t") long n, @StringPiece BytePointer result,
+                        @Cast("char*") BytePointer scratch);
+  public native @ByVal Status Read(@Cast("tensorflow::uint64") long offset, @Cast("size_t") long n, @StringPiece BytePointer result,
+                        @Cast("char*") ByteBuffer scratch);
+  public native @ByVal Status Read(@Cast("tensorflow::uint64") long offset, @Cast("size_t") long n, @StringPiece BytePointer result,
+                        @Cast("char*") byte[] scratch);
+}
 
 /** \brief A file abstraction for sequential writing.
  * 
  *  The implementation must provide buffering since callers may append
  *  small fragments at a time to the file. */
+@Namespace("tensorflow") public static class WritableFile extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public WritableFile(Pointer p) { super(p); }
+
+
+  public native @ByVal Status Append(@StringPiece BytePointer data);
+  public native @ByVal Status Append(@StringPiece String data);
+  public native @ByVal Status Close();
+  public native @ByVal Status Flush();
+  public native @ByVal Status Sync();
+}
 
 /** \brief A readonly memmapped file abstraction.
  * 
  *  The implementation must guarantee that all memory is accessable when the
  *  object exists, independently from the Env that created it. */
+@Namespace("tensorflow") public static class ReadOnlyMemoryRegion extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ReadOnlyMemoryRegion(Pointer p) { super(p); }
+
+  public native @Const Pointer data();
+  public native @Cast("tensorflow::uint64") long length();
+}
 
 /** \brief A registry for file system implementations.
  * 
@@ -1081,11 +1129,282 @@ limitations under the License.
  * 
  *  All Env implementations are safe for concurrent access from
  *  multiple threads without any external synchronization. */
+@Namespace("tensorflow") @NoOffset public static class Env extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Env(Pointer p) { super(p); }
+
+
+  /** \brief Returns a default environment suitable for the current operating
+   *  system.
+   * 
+   *  Sophisticated users may wish to provide their own Env
+   *  implementation instead of relying on this default environment.
+   * 
+   *  The result of Default() belongs to this library and must never be deleted. */
+  public static native Env Default();
+
+  /** \brief Returns the FileSystem object to handle operations on the file
+   *  specified by 'fname'. The FileSystem object is used as the implementation
+   *  for the file system related (non-virtual) functions that follow.
+   *  Returned FileSystem object is still owned by the Env object and will */
+  // (might) be destroyed when the environment is destroyed.
+
+  /** \brief Returns the file system schemes registered for this Env. */
+  public native @ByVal Status GetRegisteredFileSystemSchemes(StringVector schemes);
+
+  // \brief Register a file system for a scheme.
+  
+  ///
+  ///
+  public native @ByVal Status RegisterFileSystem(@StdString BytePointer scheme,
+                                      @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
+  public native @ByVal Status RegisterFileSystem(@StdString String scheme,
+                                      @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
+
+  /** \brief Creates a brand new random access read-only file with the
+   *  specified name.
+   <p>
+   *  On success, stores a pointer to the new file in
+   *  *result and returns OK.  On failure stores NULL in *result and
+   *  returns non-OK.  If the file does not exist, returns a non-OK
+   *  status.
+   * 
+   *  The returned file may be concurrently accessed by multiple threads.
+   * 
+   *  The ownership of the returned RandomAccessFile is passed to the caller
+   *  and the object should be deleted when is not used. The file object
+   *  shouldn't live longer than the Env object. */
+  
+
+  /** \brief Creates an object that writes to a new file with the specified
+   *  name.
+   * 
+   *  Deletes any existing file with the same name and creates a
+   *  new file.  On success, stores a pointer to the new file in
+   *  *result and returns OK.  On failure stores NULL in *result and
+   *  returns non-OK.
+   * 
+   *  The returned file will only be accessed by one thread at a time.
+   * 
+   *  The ownership of the returned WritableFile is passed to the caller
+   *  and the object should be deleted when is not used. The file object
+   *  shouldn't live longer than the Env object. */
+  
+
+  /** \brief Creates an object that either appends to an existing file, or
+   *  writes to a new file (if the file does not exist to begin with).
+   * 
+   *  On success, stores a pointer to the new file in *result and
+   *  returns OK.  On failure stores NULL in *result and returns
+   *  non-OK.
+   * 
+   *  The returned file will only be accessed by one thread at a time.
+   * 
+   *  The ownership of the returned WritableFile is passed to the caller
+   *  and the object should be deleted when is not used. The file object
+   *  shouldn't live longer than the Env object. */
+  
+
+  /** \brief Creates a readonly region of memory with the file context.
+   * 
+   *  On success, it returns a pointer to read-only memory region
+   *  from the content of file fname. The ownership of the region is passed to
+   *  the caller. On failure stores nullptr in *result and returns non-OK.
+   * 
+   *  The returned memory region can be accessed from many threads in parallel.
+   * 
+   *  The ownership of the returned ReadOnlyMemoryRegion is passed to the caller
+   *  and the object should be deleted when is not used. The memory region
+   *  object shouldn't live longer than the Env object. */
+  
+
+  /** Returns true iff the named file exists. */
+  
+  ///
+  public native @Cast("bool") boolean FileExists(@StdString BytePointer fname);
+  public native @Cast("bool") boolean FileExists(@StdString String fname);
+
+  /** \brief Stores in *result the names of the children of the specified
+   *  directory. The names are relative to "dir".
+   * 
+   *  Original contents of *results are dropped. */
+  public native @ByVal Status GetChildren(@StdString BytePointer dir, StringVector result);
+  public native @ByVal Status GetChildren(@StdString String dir, StringVector result);
+
+  /** Deletes the named file. */
+  public native @ByVal Status DeleteFile(@StdString BytePointer fname);
+  public native @ByVal Status DeleteFile(@StdString String fname);
+
+  /** \brief Deletes the specified directory and all subdirectories and files
+   *  underneath it. undeleted_files and undeleted_dirs stores the number of
+   *  files and directories that weren't deleted (unspecified if the return
+   *  status is not OK).
+   *  REQUIRES: undeleted_files, undeleted_dirs to be not null.
+   *  Typical return codes
+   *   * OK - dirname exists and we were able to delete everything underneath.
+   *   * NOT_FOUND - dirname doesn't exist
+   *   * PERMISSION_DENIED - dirname or some descendant is not writable
+   *   * UNIMPLEMENTED - Some underlying functions (like Delete) are not
+   *                     implemented */
+  public native @ByVal Status DeleteRecursively(@StdString BytePointer dirname, @Cast("tensorflow::int64*") LongPointer undeleted_files,
+                             @Cast("tensorflow::int64*") LongPointer undeleted_dirs);
+  public native @ByVal Status DeleteRecursively(@StdString String dirname, @Cast("tensorflow::int64*") LongBuffer undeleted_files,
+                             @Cast("tensorflow::int64*") LongBuffer undeleted_dirs);
+  public native @ByVal Status DeleteRecursively(@StdString BytePointer dirname, @Cast("tensorflow::int64*") long[] undeleted_files,
+                             @Cast("tensorflow::int64*") long... undeleted_dirs);
+  public native @ByVal Status DeleteRecursively(@StdString String dirname, @Cast("tensorflow::int64*") LongPointer undeleted_files,
+                             @Cast("tensorflow::int64*") LongPointer undeleted_dirs);
+  public native @ByVal Status DeleteRecursively(@StdString BytePointer dirname, @Cast("tensorflow::int64*") LongBuffer undeleted_files,
+                             @Cast("tensorflow::int64*") LongBuffer undeleted_dirs);
+  public native @ByVal Status DeleteRecursively(@StdString String dirname, @Cast("tensorflow::int64*") long[] undeleted_files,
+                             @Cast("tensorflow::int64*") long... undeleted_dirs);
+
+  /** Creates the specified directory. */
+  public native @ByVal Status CreateDir(@StdString BytePointer dirname);
+  public native @ByVal Status CreateDir(@StdString String dirname);
+
+  /** Deletes the specified directory. */
+  public native @ByVal Status DeleteDir(@StdString BytePointer dirname);
+  public native @ByVal Status DeleteDir(@StdString String dirname);
+
+  /** Obtains statistics for the given path. */
+  public native @ByVal Status Stat(@StdString BytePointer fname, FileStatistics stat);
+  public native @ByVal Status Stat(@StdString String fname, FileStatistics stat);
+
+  /** \brief Returns whether the given path is a directory or not.
+   *  Typical return codes (not guaranteed exhaustive):
+   *   * OK - The path exists and is a directory.
+   *   * FAILED_PRECONDITION - The path exists and is not a directory.
+   *   * NOT_FOUND - The path entry does not exist.
+   *   * PERMISSION_DENIED - Insufficient permissions.
+   *   * UNIMPLEMENTED - The file factory doesn't support directories. */
+  public native @ByVal Status IsDirectory(@StdString BytePointer fname);
+  public native @ByVal Status IsDirectory(@StdString String fname);
+
+  /** Stores the size of {@code fname} in {@code *file_size}. */
+  public native @ByVal Status GetFileSize(@StdString BytePointer fname, @Cast("tensorflow::uint64*") LongPointer file_size);
+  public native @ByVal Status GetFileSize(@StdString String fname, @Cast("tensorflow::uint64*") LongBuffer file_size);
+  public native @ByVal Status GetFileSize(@StdString BytePointer fname, @Cast("tensorflow::uint64*") long... file_size);
+  public native @ByVal Status GetFileSize(@StdString String fname, @Cast("tensorflow::uint64*") LongPointer file_size);
+  public native @ByVal Status GetFileSize(@StdString BytePointer fname, @Cast("tensorflow::uint64*") LongBuffer file_size);
+  public native @ByVal Status GetFileSize(@StdString String fname, @Cast("tensorflow::uint64*") long... file_size);
+
+  /** \brief Renames file src to target. If target already exists, it will be
+   *  replaced. */
+  public native @ByVal Status RenameFile(@StdString BytePointer src, @StdString BytePointer target);
+  public native @ByVal Status RenameFile(@StdString String src, @StdString String target);
+
+  // TODO(jeff,sanjay): Add back thread/thread-pool support if needed.
+  // TODO(jeff,sanjay): if needed, tighten spec so relative to epoch, or
+  // provide a routine to get the absolute time.
+
+  /** \brief Returns the number of micro-seconds since some fixed point in
+   *  time. Only useful for computing deltas of time. */
+  public native @Cast("tensorflow::uint64") long NowMicros();
+
+  /** \brief Returns the number of seconds since some fixed point in
+   *  time. Only useful for computing deltas of time. */
+  public native @Cast("tensorflow::uint64") long NowSeconds();
+
+  /** Sleeps/delays the thread for the prescribed number of micro-seconds. */
+  
+  ///
+  public native void SleepForMicroseconds(@Cast("tensorflow::int64") long micros);
+
+  /** \brief Returns a new thread that is running fn() and is identified
+   *  (for debugging/performance-analysis) by "name".
+   * 
+   *  Caller takes ownership of the result and must delete it eventually
+   *  (the deletion will block until fn() stops running). */
+  public native Thread StartThread(@Const @ByRef ThreadOptions thread_options,
+                                @StdString BytePointer name,
+                                @ByVal Fn fn);
+  public native Thread StartThread(@Const @ByRef ThreadOptions thread_options,
+                                @StdString String name,
+                                @ByVal Fn fn);
+
+  // \brief Schedules the given closure on a thread-pool.
+  //
+  // NOTE(mrry): This closure may block.
+  public native void SchedClosure(@ByVal Fn closure);
+
+  // \brief Schedules the given closure on a thread-pool after the given number
+  // of microseconds.
+  //
+  // NOTE(mrry): This closure must not block.
+  public native void SchedClosureAfter(@Cast("tensorflow::int64") long micros,
+                                   @ByVal Fn closure);
+
+  // \brief Load a dynamic library.
+  //
+  // Pass "library_filename" to a platform-specific mechanism for dynamically
+  // loading a library.  The rules for determining the exact location of the
+  // library are platform-specific and are not documented here.
+  //
+  // On success, returns a handle to the library in "*handle" and returns
+  // OK from the function.
+  // Otherwise returns nullptr in "*handle" and an error status from the
+  // function.
+  public native @ByVal Status LoadLibrary(@Cast("const char*") BytePointer library_filename, @Cast("void**") PointerPointer handle);
+  public native @ByVal Status LoadLibrary(@Cast("const char*") BytePointer library_filename, @Cast("void**") @ByPtrPtr Pointer handle);
+  public native @ByVal Status LoadLibrary(String library_filename, @Cast("void**") @ByPtrPtr Pointer handle);
+
+  // \brief Get a pointer to a symbol from a dynamic library.
+  //
+  // "handle" should be a pointer returned from a previous call to LoadLibrary.
+  // On success, store a pointer to the located symbol in "*symbol" and return
+  // OK from the function. Otherwise, returns nullptr in "*symbol" and an error
+  // status from the function.
+  public native @ByVal Status GetSymbolFromLibrary(Pointer handle, @Cast("const char*") BytePointer symbol_name,
+                                        @Cast("void**") PointerPointer symbol);
+  public native @ByVal Status GetSymbolFromLibrary(Pointer handle, @Cast("const char*") BytePointer symbol_name,
+                                        @Cast("void**") @ByPtrPtr Pointer symbol);
+  public native @ByVal Status GetSymbolFromLibrary(Pointer handle, String symbol_name,
+                                        @Cast("void**") @ByPtrPtr Pointer symbol);
+}
 
 /** \brief An implementation of Env that forwards all calls to another Env.
  * 
  *  May be useful to clients who wish to override just part of the
  *  functionality of another Env. */
+@Namespace("tensorflow") @NoOffset public static class EnvWrapper extends Env {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public EnvWrapper(Pointer p) { super(p); }
+
+  /** Initializes an EnvWrapper that delegates all calls to *t */
+  public EnvWrapper(Env t) { super((Pointer)null); allocate(t); }
+  private native void allocate(Env t);
+
+  /** Returns the target to which this Env forwards all calls */
+  public native Env target();
+
+  public native @ByVal Status GetRegisteredFileSystemSchemes(StringVector schemes);
+
+  public native @ByVal Status RegisterFileSystem(@StdString BytePointer scheme,
+                              @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
+  public native @ByVal Status RegisterFileSystem(@StdString String scheme,
+                              @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
+
+  public native @Cast("tensorflow::uint64") long NowMicros();
+  public native void SleepForMicroseconds(@Cast("tensorflow::int64") long micros);
+  public native Thread StartThread(@Const @ByRef ThreadOptions thread_options, @StdString BytePointer name,
+                        @ByVal Fn fn);
+  public native Thread StartThread(@Const @ByRef ThreadOptions thread_options, @StdString String name,
+                        @ByVal Fn fn);
+  public native void SchedClosure(@ByVal Fn closure);
+  public native void SchedClosureAfter(@Cast("tensorflow::int64") long micros, @ByVal Fn closure);
+  public native @ByVal Status LoadLibrary(@Cast("const char*") BytePointer library_filename, @Cast("void**") PointerPointer handle);
+  public native @ByVal Status LoadLibrary(@Cast("const char*") BytePointer library_filename, @Cast("void**") @ByPtrPtr Pointer handle);
+  public native @ByVal Status LoadLibrary(String library_filename, @Cast("void**") @ByPtrPtr Pointer handle);
+  public native @ByVal Status GetSymbolFromLibrary(Pointer handle, @Cast("const char*") BytePointer symbol_name,
+                                @Cast("void**") PointerPointer symbol);
+  public native @ByVal Status GetSymbolFromLibrary(Pointer handle, @Cast("const char*") BytePointer symbol_name,
+                                @Cast("void**") @ByPtrPtr Pointer symbol);
+  public native @ByVal Status GetSymbolFromLibrary(Pointer handle, String symbol_name,
+                                @Cast("void**") @ByPtrPtr Pointer symbol);
+}
 
 @Namespace("tensorflow") public static class Thread extends Pointer {
     static { Loader.load(); }
@@ -1129,12 +1448,22 @@ limitations under the License.
 }
 
 /** A utility routine: reads contents of named file into {@code *data} */
+@Namespace("tensorflow") public static native @ByVal Status ReadFileToString(Env env, @StdString BytePointer fname, @StdString @Cast({"char*", "std::string*"}) BytePointer data);
+@Namespace("tensorflow") public static native @ByVal Status ReadFileToString(Env env, @StdString String fname, @StdString @Cast({"char*", "std::string*"}) BytePointer data);
 
 /** A utility routine: write contents of {@code data} to file named {@code fname}
  *  (overwriting existing contents, if any). */
+@Namespace("tensorflow") public static native @ByVal Status WriteStringToFile(Env env, @StdString BytePointer fname,
+                         @StringPiece BytePointer data);
+@Namespace("tensorflow") public static native @ByVal Status WriteStringToFile(Env env, @StdString String fname,
+                         @StringPiece String data);
 
 /** Reads contents of named file and parse as binary encoded proto data
  *  and store into {@code *proto}. */
+@Namespace("tensorflow") public static native @ByVal Status ReadBinaryProto(Env env, @StdString BytePointer fname,
+                       @Cast("tensorflow::protobuf::MessageLite*") Pointer proto);
+@Namespace("tensorflow") public static native @ByVal Status ReadBinaryProto(Env env, @StdString String fname,
+                       @Cast("tensorflow::protobuf::MessageLite*") Pointer proto);
 
   // namespace register_file_system
 
@@ -3783,6 +4112,13 @@ limitations under the License.
     }
 
   /** The environment to use. */
+  
+  ///
+  ///
+  ///
+  ///
+  ///
+  public native Env env(); public native SessionOptions env(Env env);
 
   /** \brief The TensorFlow runtime to connect to.
    * 
