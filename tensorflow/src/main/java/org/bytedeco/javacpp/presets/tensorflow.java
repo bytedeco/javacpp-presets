@@ -22,11 +22,6 @@
 
 package org.bytedeco.javacpp.presets;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import org.bytedeco.javacpp.BytePointer;
 import org.bytedeco.javacpp.FunctionPointer;
 import org.bytedeco.javacpp.Loader;
@@ -40,7 +35,11 @@ import org.bytedeco.javacpp.tools.Info;
 import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  *
@@ -228,9 +227,6 @@ public class tensorflow implements InfoMapper {
         public native @Cast("bool") boolean call(@Cast("const tensorflow::Node*") Pointer node);
     }
 
-    @java.lang.annotation.Documented
-    @java.lang.annotation.Retention(RetentionPolicy.RUNTIME)
-    @java.lang.annotation.Target({java.lang.annotation.ElementType.METHOD, java.lang.annotation.ElementType.PARAMETER})
     public static class NodeColorFunction extends FunctionPointer {
         static { Loader.load(); }
         /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -281,8 +277,8 @@ public class tensorflow implements InfoMapper {
     @Cast({"tensorflow::gtl::ArraySlice", "&"}) @Adapter("ArraySliceAdapter")
     public @interface ArraySlice { String value() default ""; }
 
-    @java.lang.annotation.Documented
-    @java.lang.annotation.Retention(RetentionPolicy.RUNTIME)
-    @java.lang.annotation.Target({java.lang.annotation.ElementType.METHOD, java.lang.annotation.ElementType.PARAMETER})
-    @Adapter("StringPieceAdapter") public @interface StringPiece { }
+    @Documented @Retention(RetentionPolicy.RUNTIME)
+    @Target({java.lang.annotation.ElementType.METHOD, java.lang.annotation.ElementType.PARAMETER})
+    @Adapter("StringPieceAdapter")
+    public @interface StringPiece { }
 }
