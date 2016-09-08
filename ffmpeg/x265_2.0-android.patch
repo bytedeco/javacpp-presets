@@ -1,0 +1,99 @@
+diff -ruN x265_1.5/android-arm.cmake x265_1.5-patch/android-arm.cmake
+--- x265_1.5/android-arm.cmake	1970-01-01 09:00:00.000000000 +0900
++++ x265_1.5-patch/android-arm.cmake	2015-02-20 19:53:38.075894018 +0900
+@@ -0,0 +1,26 @@
++# CMake toolchain to build x265 1.5 for Android 2.2. Sample usage:
++#
++# ANDROID_BIN=$HOME/Android/android-ndk/toolchains/arm-linux-androideabi-4.6/prebuilt/linux-x86_64/bin/arm-linux-androideabi \
++# ANDROID_CPP=$HOME/Android/android-ndk/sources/cxx-stl/gnu-libstdc++/4.6/ \
++# ANDROID_ROOT=$HOME/Android/android-ndk/platforms/android-9/arch-arm/ \
++# cmake -DCMAKE_TOOLCHAIN_FILE=android-arm.cmake -DCMAKE_INSTALL_PREFIX=..
++#
++# If you really need to use x265 on a CPU with no FPU, replace "libs/armeabi-v7a" by "libs/armeabi" and
++# "-march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16" with "-march=armv5te -mtune=xscale -msoft-float"
++
++set(CMAKE_SYSTEM_NAME UnixPaths)
++set(CMAKE_SYSTEM_PROCESSOR arm)
++set(ANDROID TRUE)
++
++set(CMAKE_C_COMPILER   "$ENV{ANDROID_BIN}-gcc")
++set(CMAKE_CXX_COMPILER "$ENV{ANDROID_BIN}-g++")
++
++set(CMAKE_C_LINK_EXECUTABLE    "<CMAKE_C_COMPILER>   <FLAGS> <CMAKE_C_LINK_FLAGS>   <LINK_FLAGS> <OBJECTS> -o <TARGET> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_ROOT}/usr/lib/ -lgcc -ldl -lz -lm -lc")
++set(CMAKE_CXX_LINK_EXECUTABLE  "<CMAKE_CXX_COMPILER> <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_CPP}/libs/armeabi-v7a/ -L$ENV{ANDROID_ROOT}/usr/lib/ -lgnustl_static -lgcc -ldl -lz -lm -lc")
++
++set(CMAKE_C_CREATE_SHARED_LIBRARY    "<CMAKE_C_COMPILER> <CMAKE_SHARED_LIBRARY_C_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS> <CMAKE_SHARED_LIBRARY_SONAME_C_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_ROOT}/usr/lib/ -lgcc -ldl -lz -lm -lc")
++set(CMAKE_CXX_CREATE_SHARED_LIBRARY  "<CMAKE_CXX_COMPILER> <CMAKE_SHARED_LIBRARY_CXX_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS> <CMAKE_SHARED_LIBRARY_SONAME_CXX_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_CPP}/libs/armeabi-v7a/ -L$ENV{ANDROID_ROOT}/usr/lib/ -lgnustl_static -lgcc -ldl -lz -lm -lc")
++
++add_definitions("-DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300")
++
++include_directories("$ENV{ANDROID_CPP}/include/" "$ENV{ANDROID_CPP}/libs/armeabi-v7a/include/" "$ENV{ANDROID_ROOT}/usr/include/")
+diff -ruN x265_1.5/android-x86.cmake x265_1.5-patch/android-x86.cmake
+--- x265_1.5/android-x86.cmake	1970-01-01 09:00:00.000000000 +0900
++++ x265_1.5-patch/android-x86.cmake	2015-02-20 19:54:30.680919265 +0900
+@@ -0,0 +1,23 @@
++# CMake toolchain to build x265 1.5 for Android 2.2. Sample usage:
++#
++# ANDROID_BIN=$HOME/Android/android-ndk/toolchains/x86-4.6/prebuilt/linux-x86_64/bin/i686-linux-android \
++# ANDROID_CPP=$HOME/Android/android-ndk/sources/cxx-stl/gnu-libstdc++/4.6/ \
++# ANDROID_ROOT=$HOME/Android/android-ndk/platforms/android-9/arch-x86/ \
++# cmake -DCMAKE_TOOLCHAIN_FILE=android-x86.cmake -DCMAKE_INSTALL_PREFIX=..
++
++set(CMAKE_SYSTEM_NAME UnixPaths)
++set(CMAKE_SYSTEM_PROCESSOR atom)
++set(ANDROID TRUE)
++
++set(CMAKE_C_COMPILER   "$ENV{ANDROID_BIN}-gcc")
++set(CMAKE_CXX_COMPILER "$ENV{ANDROID_BIN}-g++")
++
++set(CMAKE_C_LINK_EXECUTABLE    "<CMAKE_C_COMPILER>   <FLAGS> <CMAKE_C_LINK_FLAGS>   <LINK_FLAGS> <OBJECTS> -o <TARGET> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_ROOT}/usr/lib/ -lgcc -ldl -lz -lm -lc")
++set(CMAKE_CXX_LINK_EXECUTABLE  "<CMAKE_CXX_COMPILER> <FLAGS> <CMAKE_CXX_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_CPP}/libs/x86/ -L$ENV{ANDROID_ROOT}/usr/lib/ -lgnustl_static -lgcc -ldl -lz -lm -lc")
++
++set(CMAKE_C_CREATE_SHARED_LIBRARY    "<CMAKE_C_COMPILER> <CMAKE_SHARED_LIBRARY_C_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_C_FLAGS> <CMAKE_SHARED_LIBRARY_SONAME_C_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_ROOT}/usr/lib/ -lgcc -ldl -lz -lm -lc")
++set(CMAKE_CXX_CREATE_SHARED_LIBRARY  "<CMAKE_CXX_COMPILER> <CMAKE_SHARED_LIBRARY_CXX_FLAGS> <LANGUAGE_COMPILE_FLAGS> <LINK_FLAGS> <CMAKE_SHARED_LIBRARY_CREATE_CXX_FLAGS> <CMAKE_SHARED_LIBRARY_SONAME_CXX_FLAG><TARGET_SONAME> -o <TARGET> <OBJECTS> -nostdlib <LINK_LIBRARIES> -L$ENV{ANDROID_CPP}/libs/x86/ -L$ENV{ANDROID_ROOT}/usr/lib/ -lgnustl_static -lgcc -ldl -lz -lm -lc")
++
++add_definitions("-DANDROID -fPIC -ffunction-sections -funwind-tables -fstack-protector -mtune=atom -mssse3 -mfpmath=sse -fomit-frame-pointer -fstrict-aliasing -funswitch-loops -finline-limit=300")
++
++include_directories("$ENV{ANDROID_CPP}/include/" "$ENV{ANDROID_CPP}/libs/x86/include/" "$ENV{ANDROID_ROOT}/usr/include/")
+diff -ruN x265_1.5/source/common/common.cpp x265_1.5-patch/source/common/common.cpp
+--- x265_1.5/source/common/common.cpp	2015-02-11 06:15:13.000000000 +0900
++++ x265_1.5-patch/source/common/common.cpp	2015-02-20 23:08:50.961086752 +0900
+@@ -72,7 +72,7 @@
+ {
+     void *ptr;
+ 
+-    if (posix_memalign((void**)&ptr, X265_ALIGNBYTES, size) == 0)
++    if ((ptr = memalign(X265_ALIGNBYTES, size)) == 0)
+         return ptr;
+     else
+         return NULL;
+diff -ruN x265_1.5/source/common/common.h x265_1.5-patch/source/common/common.h
+--- x265_1.5/source/common/common.h	2015-02-11 06:15:13.000000000 +0900
++++ x265_1.5-patch/source/common/common.h	2015-02-21 00:29:32.640851371 +0900
+@@ -36,6 +36,7 @@
+ #include <ctime>
+ 
+ #include <stdint.h>
++#include <malloc.h>
+ #include <memory.h>
+ #include <assert.h>
+ 
+@@ -238,13 +239,13 @@
+         } \
+     }
+ 
+-#if defined(_MSC_VER)
++//#if defined(_MSC_VER)
+ #define X265_LOG2F(x) (logf((float)(x)) * 1.44269504088896405f)
+ #define X265_LOG2(x) (log((double)(x)) * 1.4426950408889640513713538072172)
+-#else
+-#define X265_LOG2F(x) log2f(x)
+-#define X265_LOG2(x)  log2(x)
+-#endif
++//#else
++//#define X265_LOG2F(x) log2f(x)
++//#define X265_LOG2(x)  log2(x)
++//#endif
+ 
+ #define NUM_CU_DEPTH            4                           // maximum number of CU depths
+ #define NUM_FULL_DEPTH          5                           // maximum number of full depths

@@ -12,7 +12,6 @@
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>libfreenect</artifactId>
   <version>0.5.3-${project.parent.version}</version>
-  <packaging>jar</packaging>
   <name>JavaCPP Presets for libfreenect</name>
 
   <properties>

@@ -12,7 +12,6 @@
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>libdc1394</artifactId>
   <version>2.2.4-${project.parent.version}</version>
-  <packaging>jar</packaging>
   <name>JavaCPP Presets for libdc1394</name>
 
   <properties>

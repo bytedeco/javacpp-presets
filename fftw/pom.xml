@@ -12,7 +12,6 @@
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>fftw</artifactId>
   <version>3.3.4-${project.parent.version}</version>
-  <packaging>jar</packaging>
   <name>JavaCPP Presets for FFTW</name>
 
   <properties>

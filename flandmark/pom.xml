@@ -12,7 +12,6 @@
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>flandmark</artifactId>
   <version>1.07-${project.parent.version}</version>
-  <packaging>jar</packaging>
   <name>JavaCPP Presets for flandmark</name>
 
   <properties>

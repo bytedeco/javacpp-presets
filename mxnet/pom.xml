@@ -12,7 +12,6 @@
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>mxnet</artifactId>
   <version>master-${project.parent.version}</version>
-  <packaging>jar</packaging>
   <name>JavaCPP Presets for MXNet</name>
 
   <properties>

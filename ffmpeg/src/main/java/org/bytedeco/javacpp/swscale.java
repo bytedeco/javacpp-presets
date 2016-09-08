@@ -88,7 +88,7 @@ public static final int SWS_PARAM_DEFAULT =           123456;
 public static final int SWS_PRINT_INFO =              0x1000;
 
 //the following 3 flags are not completely implemented
-//internal chrominace subsampling info
+//internal chrominance subsampling info
 public static final int SWS_FULL_CHR_H_INT =    0x2000;
 //input subsampling info
 public static final int SWS_FULL_CHR_H_INP =    0x4000;
@@ -106,6 +106,7 @@ public static final int SWS_CS_ITU624 =         5;
 public static final int SWS_CS_SMPTE170M =      5;
 public static final int SWS_CS_SMPTE240M =      7;
 public static final int SWS_CS_DEFAULT =        5;
+public static final int SWS_CS_BT2020 =         9;
 
 /**
  * Return a pointer to yuv<->rgb coefficients for the given colorspace
@@ -327,18 +328,6 @@ public static class SwsFilter extends Pointer {
 @NoException public static native SwsVector sws_getGaussianVec(double variance, double quality);
 
 /**
- * Allocate and return a vector with length coefficients, all
- * with the same value c.
- */
-@NoException public static native SwsVector sws_getConstVec(double c, int length);
-
-/**
- * Allocate and return a vector with just one coefficient, with
- * value 1.0.
- */
-@NoException public static native SwsVector sws_getIdentityVec();
-
-/**
  * Scale all the coefficients of a by the scalar value.
  */
 @NoException public static native void sws_scaleVec(SwsVector a, double scalar);
@@ -347,22 +336,17 @@ public static class SwsFilter extends Pointer {
  * Scale all the coefficients of a so that their sum equals height.
  */
 @NoException public static native void sws_normalizeVec(SwsVector a, double height);
-@NoException public static native void sws_convVec(SwsVector a, SwsVector b);
-@NoException public static native void sws_addVec(SwsVector a, SwsVector b);
-@NoException public static native void sws_subVec(SwsVector a, SwsVector b);
-@NoException public static native void sws_shiftVec(SwsVector a, int shift);
 
-/**
- * Allocate and return a clone of the vector a, that is a vector
- * with the same coefficients as a.
- */
-@NoException public static native SwsVector sws_cloneVec(SwsVector a);
-
-/**
- * Print with av_log() a textual representation of the vector a
- * if log_level <= av_log_level.
- */
-@NoException public static native void sws_printVec2(SwsVector a, AVClass log_ctx, int log_level);
+// #if FF_API_SWS_VECTOR
+@NoException public static native @Deprecated SwsVector sws_getConstVec(double c, int length);
+@NoException public static native @Deprecated SwsVector sws_getIdentityVec();
+@NoException public static native @Deprecated void sws_convVec(SwsVector a, SwsVector b);
+@NoException public static native @Deprecated void sws_addVec(SwsVector a, SwsVector b);
+@NoException public static native @Deprecated void sws_subVec(SwsVector a, SwsVector b);
+@NoException public static native @Deprecated void sws_shiftVec(SwsVector a, int shift);
+@NoException public static native @Deprecated SwsVector sws_cloneVec(SwsVector a);
+@NoException public static native @Deprecated void sws_printVec2(SwsVector a, AVClass log_ctx, int log_level);
+// #endif
 
 @NoException public static native void sws_freeVec(SwsVector a);
 

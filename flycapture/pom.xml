@@ -12,7 +12,6 @@
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>flycapture</artifactId>
   <version>2.9.3.43-${project.parent.version}</version>
-  <packaging>jar</packaging>
   <name>JavaCPP Presets for FlyCapture</name>
 
   <properties>

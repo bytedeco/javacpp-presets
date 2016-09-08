@@ -144,9 +144,9 @@ public class nppc extends org.bytedeco.javacpp.presets.nppc {
 // #ifdef __cplusplus
 // #endif
 
-public static final int NPP_VERSION_MAJOR = 7;
-public static final int NPP_VERSION_MINOR = 5;
-public static final int NPP_VERSION_BUILD = 18;
+public static final int NPP_VERSION_MAJOR = 8;
+public static final int NPP_VERSION_MINOR = 0;
+public static final int NPP_VERSION_BUILD = 27;
 
 // #ifdef __cplusplus /* extern "C" */
 // #endif
@@ -296,6 +296,15 @@ public static final int
     NPP_MASK_SIZE_11_X_11 = 600,
     NPP_MASK_SIZE_13_X_13 = 700,
     NPP_MASK_SIZE_15_X_15 = 800;
+
+/** 
+ * Differential Filter types
+ */
+ 
+/** enum NppiDifferentialKernel */
+public static final int
+    NPP_FILTER_SOBEL = 0,
+    NPP_FILTER_SCHARR = 1;
 
 /**
  * Error Status Codes
@@ -803,9 +812,9 @@ public static class NppiRect extends Pointer {
         return (NppiRect)super.position(position);
     }
 
-    /**  x-coordinate of upper left corner. */
+    /**  x-coordinate of upper left corner (lowest memory address). */
     public native int x(); public native NppiRect x(int x);
-    /**  y-coordinate of upper left corner. */
+    /**  y-coordinate of upper left corner (lowest memory address). */
     public native int y(); public native NppiRect y(int y);
     /**  Rectangle width. */
     public native int width(); public native NppiRect width(int width);
@@ -983,6 +992,16 @@ public static final int
     /**  AC Table */
     nppiACTable = 1;
 
+/** enum NppiNorm */
+public static final int
+    /**  maximum */
+    nppiNormInf = 0,
+    /**  sum */
+    nppiNormL1 = 1,
+    /**  square root of sum of squares */
+    nppiNormL2 = 2;
+
+
 // #ifdef __cplusplus /* extern "C" */
 // #endif
 
@@ -993,7 +1012,7 @@ public static final int
 
 // Parsed from <nppcore.h>
 
- /* Copyright 2009-2014 NVIDIA Corporation.  All rights reserved. 
+ /* Copyright 2009-2015 NVIDIA Corporation.  All rights reserved. 
   * 
   * NOTICE TO LICENSEE: 
   * 
@@ -1103,6 +1122,15 @@ public static native int nppGetMaxThreadsPerBlock();
  */
 public static native int nppGetMaxThreadsPerSM();
 
+/**
+ * Get the maximum number of threads per SM, maximum threads per block, and number of SMs for the active GPU
+ *
+ * @return cudaSuccess for success, -1 for failure
+ */
+public static native int nppGetGpuDeviceProperties(IntPointer pMaxThreadsPerSM, IntPointer pMaxThreadsPerBlock, IntPointer pNumberOfSMs);
+public static native int nppGetGpuDeviceProperties(IntBuffer pMaxThreadsPerSM, IntBuffer pMaxThreadsPerBlock, IntBuffer pNumberOfSMs);
+public static native int nppGetGpuDeviceProperties(int[] pMaxThreadsPerSM, int[] pMaxThreadsPerBlock, int[] pNumberOfSMs);
+
 /** 
  * Get the name of the active CUDA device.
  *
@@ -1119,6 +1147,26 @@ public static native @Cast("const char*") BytePointer nppGetGpuName();
  * issed to that NPP stream.
  */
 public static native CUstream_st nppGetStream();
+
+/**
+ * Get the number of SMs on the device associated with the current NPP CUDA stream.
+ * NPP enables concurrent device tasks via a global stream state varible.
+ * The NPP stream by default is set to stream 0, i.e. non-concurrent mode.
+ * A user can set the NPP stream to any valid CUDA stream. All CUDA commands
+ * issued by NPP (e.g. kernels launched by the NPP library) are then
+ * issed to that NPP stream.  This call avoids a cudaGetDeviceProperties() call.
+ */
+public static native @Cast("unsigned int") int nppGetStreamNumSMs();
+
+/**
+ * Get the maximum number of threads per SM on the device associated with the current NPP CUDA stream.
+ * NPP enables concurrent device tasks via a global stream state varible.
+ * The NPP stream by default is set to stream 0, i.e. non-concurrent mode.
+ * A user can set the NPP stream to any valid CUDA stream. All CUDA commands
+ * issued by NPP (e.g. kernels launched by the NPP library) are then
+ * issed to that NPP stream.  This call avoids a cudaGetDeviceProperties() call.
+ */
+public static native @Cast("unsigned int") int nppGetStreamMaxThreadsPerSM();
 
 /**
  * Set the NPP CUDA stream.

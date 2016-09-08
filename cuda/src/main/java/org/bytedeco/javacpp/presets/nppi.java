@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Samuel Audet
+ * Copyright (C) 2015-2016 Samuel Audet
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
             "<nppi_threshold_and_compare_operations.h>", "<nppi_morphological_operations.h>",
             "<nppi_filtering_functions.h>", "<nppi_statistics_functions.h>",
             "<nppi_linear_transforms.h>", "<nppi_geometry_transforms.h>",
-            "<nppi_compression_functions.h>", "<nppi_computer_vision.h>"}, link = "nppi@.7.5")},
+            "<nppi_compression_functions.h>", "<nppi_computer_vision.h>"}, link = "nppi@.8.0")},
         target = "org.bytedeco.javacpp.nppi")
 public class nppi implements InfoMapper {
     public void map(InfoMap infoMap) {

@@ -12,7 +12,6 @@
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>chilitags</artifactId>
   <version>master-${project.parent.version}</version>
-  <packaging>jar</packaging>
   <name>JavaCPP Presets for Chilitags</name>
 
   <dependencies>

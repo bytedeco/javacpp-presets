@@ -12,7 +12,6 @@
   <groupId>org.bytedeco.javacpp-presets</groupId>
   <artifactId>tesseract</artifactId>
   <version>3.04.01-${project.parent.version}</version>
-  <packaging>jar</packaging>
   <name>JavaCPP Presets for Tesseract</name>
 
   <properties>
