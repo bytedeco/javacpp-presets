@@ -79,6 +79,11 @@ case $PLATFORM in
         ;;
     windows-x86_64)
         patch -Np1 < ../../../opencv-$OPENCV_VERSION-windows.patch
+        cd ..
+		cd opencv_contrib-$OPENCV_VERSION
+		patch -Np1 < ../../../opencv-contrib-bioinspired-$OPENCV_VERSION-windows.patch
+		cd ..
+		cd opencv-$OPENCV_VERSION
         BUILD_X="-DBUILD_TESTS=OFF -DBUILD_PERF_TESTS=OFF -DBUILD_JASPER=ON -DBUILD_JPEG=ON -DBUILD_WEBP=ON -DBUILD_OPENEXR=ON -DBUILD_PNG=ON -DBUILD_TIFF=ON -DBUILD_ZLIB=ON -DBUILD_opencv_java=OFF -DBUILD_opencv_python2=OFF"
         WITH_X="-DWITH_1394=OFF -DWITH_FFMPEG=OFF -DWITH_GSTREAMER=OFF -DWITH_OPENMP=OFF -DWITH_CUDA=OFF -DWITH_OPENCL=OFF -DWITH_IPP=OFF"
         "$CMAKE" -G "Visual Studio 12 2013 Win64" -DCMAKE_INSTALL_PREFIX=.. $BUILD_X -DENABLE_PRECOMPILED_HEADERS=OFF $WITH_X $BUILD_CONTRIB_X -DOPENCV_EXTRA_MODULES_PATH=../opencv_contrib-$OPENCV_VERSION/modules
