@@ -42,6 +42,11 @@ case $PLATFORM in
         make -j4
         make install
         ;;
+    linux-ppc64le)
+        CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
+        make -j4
+        make install
+        ;;
     macosx-*)
         $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=..
         make -j4

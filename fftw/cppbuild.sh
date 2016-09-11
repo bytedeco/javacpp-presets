@@ -88,7 +88,15 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf --enable-float
         make -j $MAKEJ
         make install-strip
-	;;
+        ;;
+    linux-ppc64le)
+        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads CC="$OLDCC -m64"
+        make -j $MAKEJ
+        make install-strip
+        ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads CC="$OLDCC -m64" --enable-float
+        make -j $MAKEJ
+        make install-strip
+        ;;
     macosx-*)
         patch -Np1 < ../../../fftw-$FFTW_VERSION-macosx.patch
         ./configure --prefix=$INSTALL_PATH --enable-shared --enable-threads --with-combined-threads --enable-sse2

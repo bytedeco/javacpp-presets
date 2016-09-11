@@ -63,7 +63,12 @@ case $PLATFORM in
         ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
         make -j $MAKEJ
         make install-strip
-	;;
+        ;;
+    linux-ppc64le)
+        ./configure --prefix=$INSTALL_PATH CC="$OLDCC -m64"
+        make -j $MAKEJ
+        make install-strip
+        ;;
     macosx-*)
         patch -Np1 < ../../../gsl-$GSL_VERSION-macosx.patch
         ./configure --prefix=$INSTALL_PATH

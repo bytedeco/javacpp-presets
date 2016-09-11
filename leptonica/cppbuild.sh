@@ -195,23 +195,23 @@ case $PLATFORM in
         make install
         cd ../$GIFLIB
         CC="arm-linux-gnueabihf-gcc -fPIC" ./configure --prefix=$INSTALL_PATH --host=arm-linux-gnueabihf --disable-shared
-	#./configure --prefix=$INSTALL_PATH --disable-shared --host=arm-linux-gnueabihf
+        #./configure --prefix=$INSTALL_PATH --disable-shared --host=arm-linux-gnueabihf
         make -j $MAKEJ
         make install
         cd ../$LIBJPEG
-	./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
         make -j $MAKEJ
         make install
         cd ../$LIBPNG
-	CC="arm-linux-gnueabihf-gcc -fPIC" ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-shared --with-pic --host=arm-linux-gnueabihf
+        CC="arm-linux-gnueabihf-gcc -fPIC" ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --disable-shared --with-pic --host=arm-linux-gnueabihf
         make -j $MAKEJ
         make install
         cd ../$LIBTIFF
-	./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --disable-lzma --host=arm-linux-gnueabihf
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --disable-lzma --host=arm-linux-gnueabihf
         make -j $MAKEJ
         make install
         cd ../$LIBWEBP
-	./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
+        ./configure --prefix=$INSTALL_PATH --disable-shared --with-pic --host=arm-linux-gnueabihf
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
@@ -246,6 +246,7 @@ case $PLATFORM in
         make -j $MAKEJ
         make install
         cd ../leptonica-$LEPTONICA_VERSION
+        sed -i s/elf64ppc/elf64lppc/ configure
         ./configure --prefix=$INSTALL_PATH CFLAGS="-pthread -I$INSTALL_PATH/include/" LDFLAGS="-L$INSTALL_PATH/lib/" --build=ppc64le-linux --disable-programs
         make -j $MAKEJ
         make install-strip

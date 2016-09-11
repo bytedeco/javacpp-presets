@@ -1,4 +1,5 @@
 
+ * Fix `linux-armhf` and `linux-ppc64le` builds for all presets ([pull #279](https://github.com/bytedeco/javacpp-presets/pull/279))
  * Fix `libdc1394` not properly linking with `libusb-1.0` on Mac OS X ([issue bytedeco/javacv#501](https://github.com/bytedeco/javacv/issues/501)
  * Add presets for the `bioinspired` module of OpenCV 3.1 ([pull #282](https://github.com/bytedeco/javacpp-presets/pull/282))
  * Include `tensorflow/core/graph/dot.h` header file from TensorFlow ([pull #272](https://github.com/bytedeco/javacpp-presets/pull/272))
