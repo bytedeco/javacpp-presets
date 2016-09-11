@@ -67,6 +67,12 @@ case $PLATFORM in
         export BINARY=64
         export TARGET=POWER8
         ;;
+    linux-armhf)
+        export CC="arm-linux-gnueabihf-gcc"
+        export FC="arm-linux-gnueabihf-gfortran"
+        export BINARY=32
+        export TARGET=ARMV6
+        ;;
     macosx-*)
         export CC="gcc"
         export FC="gfortran"

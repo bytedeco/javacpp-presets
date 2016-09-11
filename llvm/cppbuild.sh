@@ -16,6 +16,10 @@ case $PLATFORM in
         export CC="clang -m64"
         export CXX="clang++ -m64"
         ;;
+    linux-armhf)
+	export CC_FLAGS="clang -target arm -march=armv7 -mfloat-abi=hard"
+	export CXX_FLAGS="-target arm -march=armv7 -mfloat-abi=hard"
+        ;;
     macosx-*)
         ;;
     *)
