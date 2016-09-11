@@ -1,4 +1,5 @@
 
+ * Add presets for the `bioinspired` module of OpenCV 3.1 ([pull #282](https://github.com/bytedeco/javacpp-presets/pull/282))
  * Include `tensorflow/core/graph/dot.h` header file from TensorFlow ([pull #272](https://github.com/bytedeco/javacpp-presets/pull/272))
  * Add presets for OpenBLAS/MKL ([issue #112](https://github.com/bytedeco/javacpp-presets/issues/112))
  * Make Caffe work on CPU-only machines ([issue #219](https://github.com/bytedeco/javacpp-presets/issues/219))
