@@ -34,7 +34,7 @@ case $PLATFORM in
         ;;
     macosx-*)
         patch -Np1 < ../../../libdc1394-$LIBDC1394_VERSION-macosx.patch
-        LIBUSB_CFLAGS=-I/usr/local/include/libusb-1.0/ LIBUSB_LIBS=-L/usr/local/lib/ ./configure --prefix=$INSTALL_PATH
+        LIBUSB_CFLAGS=-I/usr/local/include/libusb-1.0/ LIBUSB_LIBS="-L/usr/local/lib/ -lusb-1.0" ./configure --prefix=$INSTALL_PATH
         make -j4
         make install-strip
         ;;
