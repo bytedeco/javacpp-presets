@@ -53,6 +53,11 @@ case $PLATFORM in
         make -j4
         make install
         ;;
+    linux-ppc64le)
+        CC="$OLDCC -m64" CXX="$OLDCXX -m64" $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=..
+        make -j4
+        make install
+        ;;
     macosx-*)
         patch -Np1 < ../../../libfreenect-$LIBFREENECT_VERSION-macosx.patch
         $CMAKE -DCMAKE_BUILD_TYPE=Release -DBUILD_EXAMPLES=OFF -DBUILD_FAKENECT=OFF -DCMAKE_INSTALL_PREFIX=..

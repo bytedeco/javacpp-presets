@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015-2016 Samuel Audet
+ * Copyright (C) 2016 Maurice Betzel
  *
  * Licensed either under the Apache License, Version 2.0, or (at your option)
  * under the terms of the GNU General Public License as published by
@@ -29,20 +29,16 @@ import org.bytedeco.javacpp.tools.InfoMap;
 import org.bytedeco.javacpp.tools.InfoMapper;
 
 /**
- *
- * @author Samuel Audet
+ * @author Maurice Betzel
  */
-@Properties(inherit = {cublas.class, cusparse.class}, value = {
-    @Platform(include = {"<cusolver_common.h>", "<cusolverDn.h>", "<cusolverRf.h>", "cusolverSp.h"}, link = "cusolver@.8.0")},
-        target = "org.bytedeco.javacpp.cusolver")
-public class cusolver implements InfoMapper {
+@Properties(inherit = {opencv_core.class, opencv_highgui.class}, value = {
+        @Platform(include = {"<opencv2/bioinspired.hpp>", "opencv2/bioinspired/bioinspired.hpp", "opencv2/bioinspired/retina.hpp",
+                "opencv2/bioinspired/retinafasttonemapping.hpp", "opencv2/bioinspired/transientareassegmentationmodule.hpp"}, link = "opencv_bioinspired@.3.1"),
+        @Platform(value = "windows", link = "opencv_bioinspired310")},
+        target = "org.bytedeco.javacpp.opencv_bioinspired")
+public class opencv_bioinspired implements InfoMapper {
     public void map(InfoMap infoMap) {
-        infoMap.put(new Info("CUDENSEAPI", "CRFWINAPI", "CUSOLVERAPI").cppTypes().annotations().cppText(""))
-               .put(new Info("cusolverDnCunmtr_bufferSize", "cusolverDnDormtr_bufferSize", "cusolverDnZunmtr_bufferSize", "cusolverDnZunmtr",
-                             "cusolverDnSormtr_bufferSize", "cusolverDnDormtr", "cusolverDnCunmtr", "cusolverDnSormtr").skip())
-               .put(new Info("cusolverDnHandle_t").valueTypes("cusolverDnContext").pointerTypes("@ByPtrPtr cusolverDnContext"))
-               .put(new Info("cusolverRfHandle_t").valueTypes("cusolverRfCommon").pointerTypes("@ByPtrPtr cusolverRfCommon"))
-               .put(new Info("cusolverSpHandle_t").valueTypes("cusolverSpContext").pointerTypes("@ByPtrPtr cusolverSpContext"))
-               .put(new Info("csrqrInfo_t").valueTypes("csrqrInfo").pointerTypes("@ByPtrPtr csrqrInfo"));
+        infoMap.put(new Info("cv::bioinspired::createRetina_OCL").skip());
     }
+
 }

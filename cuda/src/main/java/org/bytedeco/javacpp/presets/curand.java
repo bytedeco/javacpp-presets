@@ -38,6 +38,7 @@ import org.bytedeco.javacpp.tools.InfoMapper;
 public class curand implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("CURANDAPI").cppTypes().annotations().cppText(""))
+               .put(new Info("curandGenerateBinomial", "curandGenerateBinomialMethod").skip())
                .put(new Info("curandGenerator_t").valueTypes("curandGenerator_st").pointerTypes("@ByPtrPtr curandGenerator_st"))
                .put(new Info("curandDistribution_t").valueTypes("curandDistribution_st").pointerTypes("@ByPtrPtr curandDistribution_st"))
                .put(new Info("curandDistributionM2Shift_t").valueTypes("curandDistributionM2Shift_st").pointerTypes("@ByPtrPtr curandDistributionM2Shift_st"))

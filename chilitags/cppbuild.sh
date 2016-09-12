@@ -40,6 +40,16 @@ case $PLATFORM in
         make -j4
         make install
         ;;
+    linux-armhf)
+        CC=arm-linux-gnueabihf-gcc CXX=arm-linux-gnueabihf-g++ $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
+        make -j4
+        make install
+        ;;
+    linux-ppc64le)
+        CXX="g++ -m64 -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
+        make -j4
+        make install
+        ;;
     macosx-*)
         CXX="clang++ -fPIC" $CMAKE -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=.. -DOpenCV_DIR=$OPENCV_PATH/share/OpenCV/
         make -j4

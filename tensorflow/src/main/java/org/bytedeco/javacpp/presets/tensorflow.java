@@ -45,7 +45,7 @@ import java.lang.annotation.Target;
  *
  * @author Samuel Audet
  */
-@Properties(value = @Platform(value = {"linux", "macosx"}, compiler = "cpp11", define = "NDEBUG", include = {
+@Properties(value = @Platform(value = {"linux-x86", "macosx"}, compiler = "cpp11", define = "NDEBUG", include = {
         "tensorflow/core/platform/default/integral_types.h",
         "tensorflow/core/framework/numeric_types.h",
         "tensorflow/core/platform/init_main.h",
@@ -100,7 +100,8 @@ import java.lang.annotation.Target;
         "tensorflow/cc/framework/cc_op_gen.h",
         "tensorflow_adapters.h"},
         link = "tensorflow"),
-            target = "org.bytedeco.javacpp.tensorflow", helper = "org.bytedeco.javacpp.helper.tensorflow")
+        target = "org.bytedeco.javacpp.tensorflow",
+        helper = "org.bytedeco.javacpp.helper.tensorflow")
 public class tensorflow implements InfoMapper {
     public void map(InfoMap infoMap) {
         infoMap.put(new Info("tensorflow_adapters.h").skip())
