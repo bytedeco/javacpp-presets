@@ -31,8 +31,9 @@ case $PLATFORM in
         ;;
 esac
 
-TENSORFLOW_VERSION=0.10.0rc0
-download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
+TENSORFLOW_VERSION=r0.10
+#download https://github.com/tensorflow/tensorflow/archive/v$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
+download https://github.com/tensorflow/tensorflow/archive/$TENSORFLOW_VERSION.tar.gz tensorflow-$TENSORFLOW_VERSION.tar.gz
 
 mkdir -p $PLATFORM
 cd $PLATFORM
