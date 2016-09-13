@@ -75,11 +75,16 @@ import java.lang.annotation.Target;
         "tensorflow/core/framework/tensor_description.pb.h",
         "tensorflow/core/framework/tensor_types.h",
         "tensorflow/core/framework/tensor_shape.h",
+//        "tensorflow/core/framework/tensor_slice.h",
+        "tensorflow/core/framework/tensor_util.h",
+        "tensorflow/core/framework/tensor_reference.h",
         "tensorflow/core/framework/tensor.h",
         "tensorflow/core/framework/attr_value.pb.h",
         "tensorflow/core/framework/op_def.pb.h",
         "tensorflow/core/framework/function.pb.h",
         "tensorflow/core/framework/graph.pb.h",
+        "tensorflow/core/framework/shape_inference.h",
+        "tensorflow/core/framework/partial_tensor_shape.h",
         "tensorflow/core/public/session.h",
         "tensorflow/c/c_api.h",
         "tensorflow/core/framework/op_def.pb.h",
@@ -89,8 +94,10 @@ import java.lang.annotation.Target;
         "tensorflow/core/framework/types.h",
         "tensorflow/core/graph/edgeset.h",
         "tensorflow/core/lib/gtl/iterator_range.h",
+//        "tensorflow/core/lib/gtl/inlined_vector.h",
         "tensorflow/core/graph/graph.h",
         "tensorflow/core/framework/node_def_builder.h",
+        "tensorflow/core/framework/node_def_util.h",
         "tensorflow/core/graph/node_builder.h",
         "tensorflow/core/graph/graph_def_builder.h",
         "tensorflow/core/graph/default_device.h",
@@ -98,6 +105,32 @@ import java.lang.annotation.Target;
         "tensorflow/cc/framework/scope.h",
         "tensorflow/cc/framework/ops.h",
         "tensorflow/cc/framework/cc_op_gen.h",
+        "tensorflow/core/ops/array_grad.cc",
+        "tensorflow/core/ops/array_ops.cc",
+        "tensorflow/core/ops/candidate_sampling_ops.cc",
+        "tensorflow/core/ops/control_flow_ops.cc",
+        "tensorflow/core/ops/ctc_ops.cc",
+        "tensorflow/core/ops/data_flow_ops.cc",
+        "tensorflow/core/ops/function_ops.cc",
+        "tensorflow/core/ops/functional_grad.cc",
+        "tensorflow/core/ops/functional_ops.cc",
+        "tensorflow/core/ops/image_ops.cc",
+        "tensorflow/core/ops/io_ops.cc",
+        "tensorflow/core/ops/linalg_ops.cc",
+        "tensorflow/core/ops/logging_ops.cc",
+//        "tensorflow/core/ops/math_grad.cc",
+//        "tensorflow/core/ops/math_ops.cc",
+        "tensorflow/core/ops/nn_grad.cc",
+        "tensorflow/core/ops/nn_ops.cc",
+        "tensorflow/core/ops/parsing_ops.cc",
+        "tensorflow/core/ops/random_grad.cc",
+        "tensorflow/core/ops/random_ops.cc",
+        "tensorflow/core/ops/script_ops.cc",
+        "tensorflow/core/ops/sendrecv_ops.cc",
+        "tensorflow/core/ops/sparse_ops.cc",
+        "tensorflow/core/ops/state_ops.cc",
+        "tensorflow/core/ops/string_ops.cc",
+        "tensorflow/core/ops/training_ops.cc",
         "tensorflow_adapters.h"},
         link = "tensorflow"),
         target = "org.bytedeco.javacpp.tensorflow",
@@ -167,9 +200,6 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::NullFileSystem").skip())
                .put(new Info("tensorflow::ThreadPool").skip())
                .put(new Info("tensorflow::Scope").pointerTypes("Scope"))
-               .put(new Info("tensorflow::CompositeOpScopes").skip())
-               .put(new Info("tensorflow::OpShapeInferenceFn").skip())
-               .put(new Info("shape_inference::InferenceContext").skip())
                .put(new Info("std::vector<tensorflow::ops::Input>").pointerTypes("InputVector"))
                .put(new Info("std::vector<tensorflow::ops::Input>::iterator").skip())
                .put(new Info("std::vector<tensorflow::ops::Input>::const_iterator").skip())
@@ -190,6 +220,51 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::gtl::iterator_range<tensorflow::NodeIter>").pointerTypes("NodeIterRange").define())
                .put(new Info("tensorflow::gtl::iterator_range<tensorflow::NodeIter>()").skip())
 
+                // These two relate to NameRanges for node, they can be unskipped when we know how to deal with the
+                // wrongly generated unordered map
+               .put(new Info("std::unordered_map<std::string,std::pair<int,int> >").pointerTypes("NameRangeMap").skip())
+               .put(new Info("tensorflow::NameRangesForNode").skip())
+
+                // Skip composite op scopes bc: call to implicitly-deleted default constructor of '::tensorflow::CompositeOpScopes'
+               .put(new Info("tensorflow::CompositeOpScopes").skip())
+
+               .put(new Info("std::function<tensorflow::Status(tensorflow::shape_inference::InferenceContext* c)>").skip())
+               .put(new Info("tensorflow::OpShapeInferenceFn").skip())
+
+                // cannot find symbol
+                // [ERROR] symbol:   class Factory
+                // [ERROR] location: class org.bytedeco.javacpp.tensorflow.Env
+               .put(new Info("tensorflow::RegisterFileSystem").skip())
+               .put(new Info("tensorflow::EnvWrapper::RegisterFileSystem").skip())
+               .put(new Info("tensorflow::FileSystemRegistry").skip())
+               .put(new Info("tensorflow::Factory").pointerTypes("Factory"))
+
+                // cannot find symbol
+                // [ERROR] symbol:   class FakeInputFunctor
+                // [ERROR] location: class org.bytedeco.javacpp.tensorflow.NodeDefBuilder
+               .put(new Info("std::function<tensorflow::Status(const tensorflow::OpDef&, int, const tensorflow::NodeDef&, tensorflow::NodeDefBuilder*)>").skip())
+               .put(new Info("tensorflow::FakeInputFunctor").skip())
+
+                // cannot find symbol
+                // [ERROR] symbol:   class OpRegistrationDataFactory
+                // [ERROR] location: class org.bytedeco.javacpp.tensorflow.OpRegistry
+                .put(new Info("tensorflow::OpRegistrationDataFactory").skip())
+                .put(new Info("std::function<tensorflow::Status(tensorflow::OpRegistrationData*)>").skip())
+
+                .put(new Info("tensorflow::Watcher").skip())
+                .put(new Info("std::function<tensorflow::Status(const tensorflow::Status&, const OpDef&)>").pointerTypes("WatcherFn"))
+
+                //no matching constructor for initialization of 'VectorAdapter< ::tensorflow::Tensor *>'
+                //        VectorAdapter< ::tensorflow::Tensor* > adapter3((const ::tensorflow::Tensor**)ptr3, size3, owner3);
+                //                                           ^        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                //                /Users/miroslav.zoricak/work/machine-learning/javacpp-presets/tensorflow/target/classes/org/bytedeco/javacpp/jnitensorflow.cpp:554:5: note: candidate constructor not viable: no known conversion from 'const ::tensorflow::Tensor **' to 'tensorflow::Tensor *const *' for 1st argument
+                .put(new Info("tensorflow::shape_inference::InferenceContext").skip())
+                .put(new Info("tensorflow::OpDefBuilderWrapper").skip())
+                .put(new Info("tensorflow::register_op::OpDefBuilderWrapper<true>", "tensorflow::register_op::OpDefBuilderWrapper<false>").skip())
+                .put(new Info("tensorflow::OpDefBuilder::SetShapeFn").skip())
+                .put(new Info("tensorflow::register_op::OpDefBuilderReceiver").skip())
+
+
                .put(new Info("std::vector<std::pair<std::string,tensorflow::Tensor> >").pointerTypes("StringTensorPairVector").define())
                .put(new Info("std::pair<tensorflow::EdgeSet::iterator,bool>").pointerTypes("EdgeSetBoolPair").define())
                .put(new Info("tensorflow::EdgeSet::const_iterator", "tensorflow::EdgeSet::iterator").pointerTypes("EdgeSetIterator"))
@@ -197,9 +272,10 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::register_op::OpDefBuilderWrapper<true>").pointerTypes("TrueOpDefBuilderWrapper"))
                .put(new Info("tensorflow::register_op::OpDefBuilderWrapper<false>").pointerTypes("FalseOpDefBuilderWrapper"))
 
+               .put(new Info("protobuf::Map<std::string,tensorflow::AttrValue>").pointerTypes("StringAttrValueMap"))
+
                .put(new Info("std::function<void()>").pointerTypes("Fn"))
                .put(new Info("std::function<void(int64,int64)>").pointerTypes("ForFn"))
-               .put(new Info("function<tensorflow::Status(shape_inference::InferenceContext *)>").skip())
                .put(new Info("tensorflow::ConstantFoldingOptions::consider")
                        .javaText("@MemberSetter public native ConstantFoldingOptions consider(@ByVal ConsiderFunction consider);"))
                .put(new Info("tensorflow::GraphConstructorOptions::cse_consider_function")

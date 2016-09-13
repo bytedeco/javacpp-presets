@@ -1042,16 +1042,6 @@ limitations under the License.
  *  [scheme://]<filename>.
  *  File system implementations are registered using the REGISTER_FILE_SYSTEM
  *  macro, providing the 'scheme' as the key. */
-@Namespace("tensorflow") public static class FileSystemRegistry extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public FileSystemRegistry(Pointer p) { super(p); }
-
-  public native @ByVal Status Register(@StdString BytePointer scheme, @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
-  public native @ByVal Status Register(@StdString String scheme, @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
-  public native @ByVal Status GetRegisteredFileSystemSchemes(
-        StringVector schemes);
-}
 
 // Given URI of the form [scheme://]<filename>, return 'scheme'.
 @Namespace("tensorflow") public static native @StdString BytePointer GetSchemeFromURI(@StdString BytePointer name);
@@ -1157,7 +1147,7 @@ limitations under the License.
  * 
  *  All Env implementations are safe for concurrent access from
  *  multiple threads without any external synchronization. */
-@Namespace("tensorflow") @NoOffset public static class Env extends Pointer {
+@Namespace("tensorflow") public static class Env extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
     public Env(Pointer p) { super(p); }
@@ -1183,12 +1173,6 @@ limitations under the License.
 
   // \brief Register a file system for a scheme.
   
-  ///
-  ///
-  public native @ByVal Status RegisterFileSystem(@StdString BytePointer scheme,
-                                      @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
-  public native @ByVal Status RegisterFileSystem(@StdString String scheme,
-                                      @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
 
   /** \brief Creates a brand new random access read-only file with the
    *  specified name.
@@ -1410,10 +1394,7 @@ limitations under the License.
 
   public native @ByVal Status GetRegisteredFileSystemSchemes(StringVector schemes);
 
-  public native @ByVal Status RegisterFileSystem(@StdString BytePointer scheme,
-                              @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
-  public native @ByVal Status RegisterFileSystem(@StdString String scheme,
-                              @ByVal @Cast("tensorflow::FileSystemRegistry::Factory*") Fn factory);
+  
 
   public native @Cast("tensorflow::uint64") long NowMicros();
   public native void SleepForMicroseconds(@Cast("tensorflow::int64") long micros);
@@ -5979,6 +5960,136 @@ limitations under the License.
 // #endif  // TENSORFLOW_CORE_FRAMEWORK_TENSOR_SHAPE_H_
 
 
+// Parsed from tensorflow/core/framework/tensor_util.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_FRAMEWORK_TENSOR_UTIL_H_
+// #define TENSORFLOW_FRAMEWORK_TENSOR_UTIL_H_
+
+// #include "tensorflow/core/framework/tensor.h"
+
+// #include <vector>
+
+// DeepCopy returns a tensor whose contents are a deep copy of the
+// contents of 'other'.  This function is intended only for
+// convenience, not speed.
+//
+// REQUIRES: 'other' must point to data stored in CPU memory.
+// REQUIRES: 'other' must be a Tensor of a copy-able type if
+//           'other' is not appropriately memory-aligned.
+@Namespace("tensorflow::tensor") public static native @ByVal Tensor DeepCopy(@Const @ByRef Tensor other);
+
+// Concatenates 'tensors' into a single tensor, along their 0th dimension.
+//
+// REQUIRES: All members of 'tensors' must have the same data type parameter.
+// REQUIRES: Each member of 'tensors' must have at least one dimension.
+// REQUIRES: Each member of 'tensors' must point to data stored in CPU memory.
+// REQUIRES: Each member of 'tensors' must be a Tensor of a copy-able type if it
+//           is not appropriately memory-aligned.
+@Namespace("tensorflow::tensor") public static native @ByVal Tensor Concat(@Const @ByRef TensorVector tensors);
+
+// Splits 'tensor' into 'sizes.size()' individual tensors, along the 0th
+// dimension. The ith output tensor has 0th-dimension size 'sizes[i]'.
+//
+// REQUIRES: 'tensor' must have at least one dimension.
+// REQUIRES: 'tensor.dim_size(0)' must equal the sum of the elements of 'sizes'.
+// REQUIRES: 'tensor' must point to data stored in CPU memory.
+// REQUIRES: 'tensor' must be a Tensor of a copy-able type if it is not
+//           appropriately memory-aligned.
+//
+// Split() and Concat() are inverse operations.
+@Namespace("tensorflow::tensor") public static native @ByVal TensorVector Split(@Const @ByRef Tensor tensor,
+                          @Cast("tensorflow::int64*") @ArraySlice LongPointer sizes);
+@Namespace("tensorflow::tensor") public static native @ByVal TensorVector Split(@Const @ByRef Tensor tensor,
+                          @Cast("tensorflow::int64*") @ArraySlice LongBuffer sizes);
+@Namespace("tensorflow::tensor") public static native @ByVal TensorVector Split(@Const @ByRef Tensor tensor,
+                          @Cast("tensorflow::int64*") @ArraySlice long... sizes);
+
+  // namespace tensor
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_FRAMEWORK_TENSOR_UTIL_H_
+
+
+// Parsed from tensorflow/core/framework/tensor_reference.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_FRAMEWORK_TENSOR_REFERENCE_H_
+// #define TENSORFLOW_FRAMEWORK_TENSOR_REFERENCE_H_
+
+// #include "tensorflow/core/framework/allocation_description.pb.h"
+// #include "tensorflow/core/framework/tensor.h"
+// #include "tensorflow/core/lib/gtl/inlined_vector.h"
+
+// An opaque class that holds a reference to an underlying TensorBuffer.
+// Unlike Tensor, it does not have any shape or type information, so
+// it is cheaper to construct/move, but the only thing you can really do
+// with it is Unref it, which releases one of the references to the underlying
+// TensorBuffer.
+// IMPORTANT: If you do not call Unref(), you will likely leak tensor memory.
+@Namespace("tensorflow") @NoOffset public static class TensorReference extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TensorReference(Pointer p) { super(p); }
+
+  // Take the reference of the root buffer so the size will be more accurate
+  public TensorReference(@Const @ByRef Tensor tensor) { super((Pointer)null); allocate(tensor); }
+  private native void allocate(@Const @ByRef Tensor tensor);
+
+  public native void Unref();
+
+  // Return an estimate of the total bytes being kept alive by this reference.
+  public native @Cast("size_t") long TotalBytes();
+
+  public native void FillDescription(AllocationDescription description);
+
+  // Convenience function for de-duplicating tensor references.
+  public native @Cast("bool") boolean SharesBufferWith(@Const @ByRef TensorReference t);
+
+  // Convenience function for de-duplicating tensor references.
+  public native @Cast("bool") boolean SharesBufferWith(@Const @ByRef Tensor t);
+
+  // Convenience function for de-duplicating tensor references.
+  public native @Cast("size_t") long BufferHash();
+
+  // A constructor used only for tests
+  public TensorReference(TensorBuffer test_buffer) { super((Pointer)null); allocate(test_buffer); }
+  private native void allocate(TensorBuffer test_buffer);
+}
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_FRAMEWORK_TENSOR_REFERENCE_H_
+
+
 // Parsed from tensorflow/core/framework/tensor.h
 
 /* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
@@ -8963,6 +9074,272 @@ limitations under the License.
 // #endif  // PROTOBUF_tensorflow_2fcore_2fframework_2fgraph_2eproto__INCLUDED
 
 
+// Parsed from tensorflow/core/framework/shape_inference.h
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+// #ifndef THIRD_PARTY_TENSORFLOW_CORE_FRAMEWORK_SHAPE_INFERENCE_H_
+// #define THIRD_PARTY_TENSORFLOW_CORE_FRAMEWORK_SHAPE_INFERENCE_H_
+
+// #include <vector>
+
+// #include "tensorflow/core/framework/graph.pb.h"
+// #include "tensorflow/core/framework/node_def_util.h"
+// #include "tensorflow/core/framework/tensor.h"
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/lib/gtl/inlined_vector.h"
+// #include "tensorflow/core/platform/macros.h"
+
+// Dimension values are accessed through InferenceContext.
+@Namespace("tensorflow::shape_inference") @NoOffset public static class Dimension extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Dimension(Pointer p) { super(p); }
+
+}
+
+// Shape rank and dimensions are accessed through InferenceContext.
+@Namespace("tensorflow::shape_inference") @NoOffset public static class Shape extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public Shape(Pointer p) { super(p); }
+
+}
+
+// Struct used to allow functions to take const Dimension* or a dimension value.
+// Not meant to be constructed directly.
+@Namespace("tensorflow::shape_inference") @NoOffset public static class DimensionOrConstant extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public DimensionOrConstant(Pointer p) { super(p); }
+
+  // Intentionally not explicit.
+  public DimensionOrConstant(@Const Dimension dim) { super((Pointer)null); allocate(dim); }
+  private native void allocate(@Const Dimension dim);
+
+  // val must be non-negative or InferenceContext::kUnknownDim.
+  public DimensionOrConstant(@Cast("tensorflow::int64") long val) { super((Pointer)null); allocate(val); }
+  private native void allocate(@Cast("tensorflow::int64") long val);
+
+  // dim takes precedence. If dim != nullptr, val is ignored.
+  @MemberGetter public native @Const Dimension dim();
+  public native @Cast("tensorflow::int64") long val(); public native DimensionOrConstant val(long val);
+}
+
+// Note: This is experimental support for op shape inference in C++.  Shape
+// inference functions are not ready to be implemented yet.
+//
+// An InferenceContext is created by the framework and passed to a shape
+// inference function.  The shape inference function calls functions on the
+// context, and should call set_output() to set the shape on all outputs.
+//
+// All Shape* and Dimension* returned by functions of InferenceContext are owned
+// by the InferenceContext.
+
+// -----------------------------------------------------------------------------
+// Template and inline method implementations, please ignore
+
+
+
+
+
+
+
+
+
+
+
+
+
+  // namespace shape_inference
+  // namespace tensorflow
+
+// #endif  // THIRD_PARTY_TENSORFLOW_CORE_FRAMEWORK_SHAPE_INFERENCE_H_
+
+
+// Parsed from tensorflow/core/framework/partial_tensor_shape.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_CORE_FRAMEWORK_PARTIAL_TENSOR_SHAPE_H_
+// #define TENSORFLOW_CORE_FRAMEWORK_PARTIAL_TENSOR_SHAPE_H_
+
+// #include <string>
+
+// #include "third_party/eigen3/unsupported/Eigen/CXX11/Tensor"
+// #include "tensorflow/core/framework/tensor_shape.h"
+// #include "tensorflow/core/framework/tensor_shape.pb.h"
+// #include "tensorflow/core/lib/core/errors.h"
+// #include "tensorflow/core/lib/core/status.h"
+// #include "tensorflow/core/lib/core/stringpiece.h"
+// #include "tensorflow/core/lib/gtl/array_slice.h"
+// #include "tensorflow/core/lib/gtl/inlined_vector.h"
+// #include "tensorflow/core/lib/strings/strcat.h"
+// #include "tensorflow/core/platform/logging.h"
+
+@Namespace("tensorflow") @Opaque public static class PartialTensorShapeIter extends Pointer {
+    /** Empty constructor. Calls {@code super((Pointer)null)}. */
+    public PartialTensorShapeIter() { super((Pointer)null); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PartialTensorShapeIter(Pointer p) { super(p); }
+}  // Declared below
+
+/** Manages the partially known dimensions of a Tensor and their sizes. */
+@Namespace("tensorflow") @NoOffset public static class PartialTensorShape extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PartialTensorShape(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PartialTensorShape(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public PartialTensorShape position(long position) {
+        return (PartialTensorShape)super.position(position);
+    }
+
+  /** \brief Construct an unknown {@code PartialTensorShape}. */
+  public PartialTensorShape() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  /** \brief Construct a {@code PartialTensorShape} from the provided sizes.
+   *  REQUIRES: {@code dim_sizes[i] >= 0} */
+  public PartialTensorShape(@Cast("tensorflow::int64*") @ArraySlice LongPointer dim_sizes) { super((Pointer)null); allocate(dim_sizes); }
+  private native void allocate(@Cast("tensorflow::int64*") @ArraySlice LongPointer dim_sizes);
+  public PartialTensorShape(@Cast("tensorflow::int64*") @ArraySlice LongBuffer dim_sizes) { super((Pointer)null); allocate(dim_sizes); }
+  private native void allocate(@Cast("tensorflow::int64*") @ArraySlice LongBuffer dim_sizes);
+  public PartialTensorShape(@Cast("tensorflow::int64*") @ArraySlice long... dim_sizes) { super((Pointer)null); allocate(dim_sizes); }
+  private native void allocate(@Cast("tensorflow::int64*") @ArraySlice long... dim_sizes);
+
+  /** REQUIRES: {@code IsValid(proto)} */
+  public PartialTensorShape(@Const @ByRef TensorShapeProto proto) { super((Pointer)null); allocate(proto); }
+  private native void allocate(@Const @ByRef TensorShapeProto proto);
+
+  /** Returns {@code true} iff {@code proto} is a valid partial tensor shape. */
+  public static native @Cast("bool") boolean IsValid(@Const @ByRef TensorShapeProto proto);
+
+  /** Returns {@code OK} iff {@code proto} is a valid tensor shape, and a descriptive error
+   *  status otherwise. */
+  public static native @ByVal Status IsValidShape(@Const @ByRef TensorShapeProto proto);
+
+  /** Add a dimension to the end ("inner-most"), returns a new
+   *  PartialTensorShape.
+   *  REQUIRES: {@code size >= -1}, where -1 means unknown */
+  public native @ByVal PartialTensorShape Concatenate(@Cast("tensorflow::int64") long size);
+
+  /** Appends all the dimensions from {@code shape}.  Returns a new
+   *  PartialTensorShape. */
+  public native @ByVal PartialTensorShape Concatenate(@Const @ByRef PartialTensorShape shape);
+
+  /** Merges all the dimensions from {@code shape}.  Returns
+   *  {@code InvalidArgument} error if either {@code shape} has a different rank
+   *  or if any of the dimensions are incompatible. */
+  public native @ByVal Status MergeWith(@Const @ByRef PartialTensorShape shape,
+                     PartialTensorShape result);
+
+  /** Return the number of dimensions in the tensor. If the number of
+   *  dimensions is unknown, return -1. */
+  public native int dims();
+
+  /** Return true iff the rank and all of the dimensions are well defined */
+  public native @Cast("bool") boolean IsFullyDefined();
+
+  /** Return true iff the ranks match, and if the
+   *  dimensions all either match or one is unknown. */
+  public native @Cast("bool") boolean IsCompatibleWith(@Const @ByRef PartialTensorShape shape);
+
+  /** Return true iff the dimensions of {@code shape} are compatible with
+   *  {@code *this}. */
+  public native @Cast("bool") boolean IsCompatibleWith(@Const @ByRef TensorShape shape);
+
+  /** \brief Returns the number of elements in dimension {@code d}.
+   *  REQUIRES: {@code 0 <= d < dims()} */
+  public native @Cast("tensorflow::int64") long dim_size(int d);
+
+  /** Returns sizes of all dimensions. */
+  public native @Cast("tensorflow::int64*") @ArraySlice LongPointer dim_sizes();
+
+  /** Fill {@code *proto} from {@code *this}. */
+  public native void AsProto(TensorShapeProto proto);
+
+  // Fill `*tensor_shape` from `*this`.
+  // If `*this` is not fully defined, returns false and
+  // `*tensor_shape` is left in an intermediate state.  Otherwise
+  // returns true.
+  public native @Cast("bool") boolean AsTensorShape(TensorShape tensor_shape);
+
+  /** For error messages. */
+  public native @StdString BytePointer DebugString();
+  public static native @StdString BytePointer DebugString(@Const @ByRef TensorShapeProto proto);
+
+  /** \brief Returns a {@code PartialTensorShape} whose dimensions are
+   *  {@code dims[0]}, {@code dims[1]}, ..., {@code dims[n-1]}.  Values of -1 are
+   *  considered "unknown". */
+  public static native @ByVal Status MakePartialShape(@Const IntPointer dims, int n,
+                                   PartialTensorShape out);
+  public static native @ByVal Status MakePartialShape(@Const IntBuffer dims, int n,
+                                   PartialTensorShape out);
+  public static native @ByVal Status MakePartialShape(@Const int[] dims, int n,
+                                   PartialTensorShape out);
+  public static native @ByVal Status MakePartialShape(@Cast("const tensorflow::int64*") LongPointer dims, int n,
+                                   PartialTensorShape out);
+  public static native @ByVal Status MakePartialShape(@Cast("const tensorflow::int64*") LongBuffer dims, int n,
+                                   PartialTensorShape out);
+  public static native @ByVal Status MakePartialShape(@Cast("const tensorflow::int64*") long[] dims, int n,
+                                   PartialTensorShape out);
+}
+
+/** \brief Static helper routines for {@code PartialTensorShape}. Includes a few
+ *  common predicates on a partially known tensor shape. */
+@Namespace("tensorflow") public static class PartialTensorShapeUtils extends Pointer {
+    static { Loader.load(); }
+    /** Default native constructor. */
+    public PartialTensorShapeUtils() { super((Pointer)null); allocate(); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public PartialTensorShapeUtils(long size) { super((Pointer)null); allocateArray(size); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public PartialTensorShapeUtils(Pointer p) { super(p); }
+    private native void allocate();
+    private native void allocateArray(long size);
+    @Override public PartialTensorShapeUtils position(long position) {
+        return (PartialTensorShapeUtils)super.position(position);
+    }
+
+  public static native @StdString BytePointer PartialShapeListString(
+        @ArraySlice PartialTensorShape shapes);
+
+  public static native @Cast("bool") boolean AreCompatible(@ArraySlice PartialTensorShape shapes0,
+                              @ArraySlice PartialTensorShape shapes1);
+}
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_CORE_FRAMEWORK_PARTIAL_TENSOR_SHAPE_H_
+
+
 // Parsed from tensorflow/core/public/session.h
 
 /* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
@@ -10337,12 +10714,6 @@ limitations under the License.
 // #include "tensorflow/core/lib/core/status.h"
 // #include "tensorflow/core/lib/core/stringpiece.h"
 // #include "tensorflow/core/platform/macros.h"
-@Namespace("tensorflow::shape_inference") @Opaque public static class InferenceContext extends Pointer {
-    /** Empty constructor. Calls {@code super((Pointer)null)}. */
-    public InferenceContext() { super((Pointer)null); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public InferenceContext(Pointer p) { super(p); }
-}
 
 
 @Namespace("tensorflow") @NoOffset public static class OpRegistrationData extends Pointer {
@@ -10458,15 +10829,7 @@ limitations under the License.
 // #else
 // #endif
 
-  public static class Fn_InferenceContext extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    Fn_InferenceContext(Pointer p) { super(p); }
-      protected Fn_InferenceContext() { allocate(); }
-      private native void allocate();
-      public native @ByVal Status call(InferenceContext arg0);
-  }
-  public native @ByRef OpDefBuilder SetShapeFn(Fn_InferenceContext fn);
+  
 
   // Sets op_reg_data->op_def to the requested OpDef and
   // op_reg_data->shape_inference_fn to the requested shape inference function,
@@ -10645,8 +11008,6 @@ limitations under the License.
   public OpRegistry() { super((Pointer)null); allocate(); }
   private native void allocate();
 
-  public native void Register(@ByVal @Cast("tensorflow::OpRegistry::OpRegistrationDataFactory*") Fn op_data_factory);
-
   public native @ByVal Status LookUp(@StdString BytePointer op_type_name,
                   @Cast("const tensorflow::OpRegistrationData**") PointerPointer op_reg_data);
   public native @ByVal Status LookUp(@StdString BytePointer op_type_name,
@@ -10685,7 +11046,6 @@ limitations under the License.
   // SetWatcher(nullptr);
   // Returns a non-OK status if a non-null watcher is over-written by another
   // non-null watcher.
-  public native @ByVal Status SetWatcher(@Cast("const tensorflow::OpRegistry::Watcher*") @ByRef Fn watcher);
 
   // Process the current list of deferred registrations. Note that calls to
   // Export, LookUp and DebugString would also implicitly process the deferred
@@ -10757,93 +11117,8 @@ limitations under the License.
 // registration to turn the entire call-chain into a no-op.
 
 // Template specialization that forwards all calls to the contained builder.
-@Name("tensorflow::register_op::OpDefBuilderWrapper<true>") @NoOffset public static class TrueOpDefBuilderWrapper extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public TrueOpDefBuilderWrapper(Pointer p) { super(p); }
-
-  public TrueOpDefBuilderWrapper(@Cast("const char*") BytePointer name) { super((Pointer)null); allocate(name); }
-  private native void allocate(@Cast("const char*") BytePointer name);
-  public TrueOpDefBuilderWrapper(String name) { super((Pointer)null); allocate(name); }
-  private native void allocate(String name);
-  public native @ByRef TrueOpDefBuilderWrapper Attr(@StringPiece BytePointer spec);
-  public native @ByRef TrueOpDefBuilderWrapper Attr(@StringPiece String spec);
-  public native @ByRef TrueOpDefBuilderWrapper Input(@StringPiece BytePointer spec);
-  public native @ByRef TrueOpDefBuilderWrapper Input(@StringPiece String spec);
-  public native @ByRef TrueOpDefBuilderWrapper Output(@StringPiece BytePointer spec);
-  public native @ByRef TrueOpDefBuilderWrapper Output(@StringPiece String spec);
-  public native @ByRef TrueOpDefBuilderWrapper SetIsCommutative();
-  public native @ByRef TrueOpDefBuilderWrapper SetIsAggregate();
-  public native @ByRef TrueOpDefBuilderWrapper SetIsStateful();
-  public native @ByRef TrueOpDefBuilderWrapper SetAllowsUninitializedInput();
-  public native @ByRef TrueOpDefBuilderWrapper Deprecated(int version, @StringPiece BytePointer explanation);
-  public native @ByRef TrueOpDefBuilderWrapper Deprecated(int version, @StringPiece String explanation);
-  public native @ByRef TrueOpDefBuilderWrapper Doc(@StringPiece BytePointer text);
-  public native @ByRef TrueOpDefBuilderWrapper Doc(@StringPiece String text);
-  public static class Fn_InferenceContext extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    Fn_InferenceContext(Pointer p) { super(p); }
-      protected Fn_InferenceContext() { allocate(); }
-      private native void allocate();
-      public native @ByVal Status call(InferenceContext arg0);
-  }
-  public native @ByRef TrueOpDefBuilderWrapper SetShapeFn(
-        Fn_InferenceContext fn);
-  public native @Const @ByRef OpDefBuilder builder();
-}
 
 // Template specialization that turns all calls into no-ops.
-@Name("tensorflow::register_op::OpDefBuilderWrapper<false>") public static class FalseOpDefBuilderWrapper extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public FalseOpDefBuilderWrapper(Pointer p) { super(p); }
-
-  public FalseOpDefBuilderWrapper(@Cast("const char*") BytePointer name) { super((Pointer)null); allocate(name); }
-  private native void allocate(@Cast("const char*") BytePointer name);
-  public FalseOpDefBuilderWrapper(String name) { super((Pointer)null); allocate(name); }
-  private native void allocate(String name);
-  public native @ByRef FalseOpDefBuilderWrapper Attr(@StringPiece BytePointer spec);
-  public native @ByRef FalseOpDefBuilderWrapper Attr(@StringPiece String spec);
-  public native @ByRef FalseOpDefBuilderWrapper Input(@StringPiece BytePointer spec);
-  public native @ByRef FalseOpDefBuilderWrapper Input(@StringPiece String spec);
-  public native @ByRef FalseOpDefBuilderWrapper Output(@StringPiece BytePointer spec);
-  public native @ByRef FalseOpDefBuilderWrapper Output(@StringPiece String spec);
-  public native @ByRef FalseOpDefBuilderWrapper SetIsCommutative();
-  public native @ByRef FalseOpDefBuilderWrapper SetIsAggregate();
-  public native @ByRef FalseOpDefBuilderWrapper SetIsStateful();
-  public native @ByRef FalseOpDefBuilderWrapper SetAllowsUninitializedInput();
-  public native @ByRef FalseOpDefBuilderWrapper Deprecated(int arg0, @StringPiece BytePointer arg1);
-  public native @ByRef FalseOpDefBuilderWrapper Deprecated(int arg0, @StringPiece String arg1);
-  public native @ByRef FalseOpDefBuilderWrapper Doc(@StringPiece BytePointer text);
-  public native @ByRef FalseOpDefBuilderWrapper Doc(@StringPiece String text);
-  public static class Fn_InferenceContext extends FunctionPointer {
-      static { Loader.load(); }
-      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-      public    Fn_InferenceContext(Pointer p) { super(p); }
-      protected Fn_InferenceContext() { allocate(); }
-      private native void allocate();
-      public native @ByVal Status call(InferenceContext arg0);
-  }
-  public native @ByRef FalseOpDefBuilderWrapper SetShapeFn(
-        Fn_InferenceContext fn);
-}
-
-@Namespace("tensorflow::register_op") public static class OpDefBuilderReceiver extends Pointer {
-    static { Loader.load(); }
-    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-    public OpDefBuilderReceiver(Pointer p) { super(p); }
-
-  // To call OpRegistry::Global()->Register(...), used by the
-  // REGISTER_OP macro below.
-  // Note: These are implicitly converting constructors.
-  public OpDefBuilderReceiver(
-        @Const @ByRef TrueOpDefBuilderWrapper wrapper) { super((Pointer)null); allocate(wrapper); }
-  private native void allocate(
-        @Const @ByRef TrueOpDefBuilderWrapper wrapper);  // NOLINT(runtime/explicit)
-  public OpDefBuilderReceiver(@Const @ByRef FalseOpDefBuilderWrapper arg0) { super((Pointer)null); allocate(arg0); }
-  private native void allocate(@Const @ByRef FalseOpDefBuilderWrapper arg0);  // NOLINT(runtime/explicit)
-}
   // namespace register_op
 
 // #define REGISTER_OP(name) REGISTER_OP_UNIQ_HELPER(__COUNTER__, name)
@@ -11709,7 +11984,6 @@ limitations under the License.
   // For inputs that take a list of tensors.
 
   // To create inputs in tests, see fake_input.h.
-  public native @ByRef NodeDefBuilder Input(@ByVal @Cast("tensorflow::FakeInputFunctor*") Fn fake_input);
 
   // Specify that this node must only run after src_node.
   public native @ByRef NodeDefBuilder ControlInput(@StringPiece BytePointer src_node);
@@ -11741,6 +12015,209 @@ limitations under the License.
   // namespace tensorflow
 
 // #endif  // TENSORFLOW_FRAMEWORK_NODE_DEF_BUILDER_H_
+
+
+// Parsed from tensorflow/core/framework/node_def_util.h
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #ifndef TENSORFLOW_FRAMEWORK_NODE_DEF_UTIL_H_
+// #define TENSORFLOW_FRAMEWORK_NODE_DEF_UTIL_H_
+
+// #include <string>
+// #include <unordered_map>
+// #include <vector>
+
+// #include "tensorflow/core/framework/attr_value_util.h"
+// #include "tensorflow/core/framework/graph.pb.h"
+// #include "tensorflow/core/framework/op_def.pb.h"
+// #include "tensorflow/core/framework/types.h"
+// #include "tensorflow/core/lib/core/stringpiece.h"
+// #include "tensorflow/core/platform/protobuf.h"
+
+// Produce a human-readable version of a NodeDef that is more concise
+// than a text-format proto.
+@Namespace("tensorflow") public static native @StdString BytePointer SummarizeNodeDef(@Const @ByRef NodeDef node_def);
+
+// Adds an attr with name <name> and value <value> to *node_def.
+// The type of the attr is based on the type of value.
+
+// Version to workaround C++'s "perfect" forwarding not being able to
+// forward {...} initialization.
+
+@Namespace("tensorflow") @NoOffset public static class AttrSlice extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public AttrSlice(Pointer p) { super(p); }
+
+  public AttrSlice(@Const @ByRef NodeDef node_def) { super((Pointer)null); allocate(node_def); }
+  private native void allocate(@Const @ByRef NodeDef node_def);  // NOLINT(runtime/explicit)
+
+  public AttrSlice(@Cast("const tensorflow::AttrValueMap*") StringAttrValueMap a) { super((Pointer)null); allocate(a); }
+  private native void allocate(@Cast("const tensorflow::AttrValueMap*") StringAttrValueMap a);
+
+  // Returns the attr with attr_name if found.  Otherwise, returns
+  // nullptr.
+  public native @Const AttrValue Find(@StringPiece BytePointer attr_name);
+  public native @Const AttrValue Find(@StringPiece String attr_name);
+
+  // Returns the attr_value for attr_name if found. Otherwise, returns a
+  // NotFound status.
+  public native @ByVal Status Find(@StringPiece BytePointer attr_name, @Cast("const tensorflow::AttrValue**") PointerPointer attr_value);
+  public native @ByVal Status Find(@StringPiece BytePointer attr_name, @Const @ByPtrPtr AttrValue attr_value);
+  public native @ByVal Status Find(@StringPiece String attr_name, @Const @ByPtrPtr AttrValue attr_value);
+}
+
+// Look up the attr with name attr_name and set *value to its value.  If no
+// attr with attr_name is found in node_def, or the attr does not have
+// a matching type, a non-ok status will be returned.
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   @StdString @Cast({"char*", "std::string*"}) BytePointer value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   @StdString @Cast({"char*", "std::string*"}) BytePointer value);  // type: "string"
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   @Cast("tensorflow::int64*") LongPointer value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   @Cast("tensorflow::int64*") LongBuffer value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   @Cast("tensorflow::int64*") long... value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   @Cast("tensorflow::int64*") LongPointer value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   @Cast("tensorflow::int64*") LongBuffer value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   @Cast("tensorflow::int64*") long... value);  // type: "int"
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   IntPointer value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   IntBuffer value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   int... value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   IntPointer value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   IntBuffer value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   int... value);  // type: "int"
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   FloatPointer value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   FloatBuffer value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   float... value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   FloatPointer value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   FloatBuffer value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   float... value);  // type: "float"
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   @Cast("bool*") BoolPointer value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   @Cast("bool*") boolean... value);  // type: "bool"  // type: "type"
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   TensorShapeProto value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   TensorShapeProto value);  // type: "shape"
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   TensorShape value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   TensorShape value);  // type: "shape"
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   PartialTensorShape value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   PartialTensorShape value);  // type: "shape"
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   Tensor value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   Tensor value);  // type: "tensor"
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   StringVector value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   StringVector value);  // type "list(string)"  // type "list(int)"  // type "list(int)"  // type "list(float)"  // type "list(bool)"  // type "list(type)"
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   DataTypeVector value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   DataTypeVector value);  // type "list(type)"  // type "list(shape)"
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   TensorShapeVector value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   TensorShapeVector value);  // type "list(shape)"  // type "list(shape)"
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   TensorVector value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   TensorVector value);  // type: "list(tensor)"
+
+// This version avoids copying the TensorProto.
+// REQUIRES: Must not use *value beyond the lifetime of node_def.
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   @Cast("const tensorflow::TensorProto**") PointerPointer value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   @Const @ByPtrPtr TensorProto value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   @Const @ByPtrPtr TensorProto value);  // type: "tensor"
+
+// This version avoids copying the NameAttrList.
+// REQUIRES: Must not use *value beyond the lifetime of node_def.
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece BytePointer attr_name,
+                   @Const @ByPtrPtr NameAttrList value);
+@Namespace("tensorflow") public static native @ByVal Status GetNodeAttr(@Const @ByRef AttrSlice attrs, @StringPiece String attr_name,
+                   @Const @ByPtrPtr NameAttrList value);  // type: "func"
+
+// Computes the input and output types for a specific node.
+// REQUIRES: ValidateOpDef(op_def).ok()
+@Namespace("tensorflow") public static native @ByVal Status InOutTypesForNode(@Const @ByRef NodeDef node_def, @Const @ByRef OpDef op_def,
+                         DataTypeVector inputs, DataTypeVector outputs);
+
+// Validates that the NodeDef:
+// * Defines all expected attrs from the OpDef.
+// * All attrs satisfies constraints from the OpDef.
+// * Has a signature matching SignatureForNode().
+// etc.
+@Namespace("tensorflow") public static native @ByVal Status ValidateNodeDef(@Const @ByRef NodeDef node_def, @Const @ByRef OpDef op_def);
+
+// Computes the mapping from input/output argument name to the
+// corresponding input/output index range.  For example,
+// input "foo" corresponds to input indices
+//   [ (*inputs)["foo"].first, (*inputs)["foo"].second ).
+
+
+// Adds default values to *node_def for unspecified attrs from op_def.
+@Namespace("tensorflow") public static native void AddDefaultsToNodeDef(@Const @ByRef OpDef op_def, NodeDef node_def);
+
+// Validates the syntax of a NodeDef provided externally.
+//
+// The following is an EBNF-style syntax for NodeDef objects. Note that
+// Node objects are actually specified as tensorflow::NodeDef protocol buffers,
+// which contain many other fields that are not (currently) validated.
+//
+// Node         = NodeName, Inputs
+// Inputs       = ( DataInput * ), ( ControlInput * )
+// DataInput    = NodeName, ( ":", [1-9], [0-9] * ) ?
+// ControlInput = "^", NodeName
+// NodeName     = [A-Za-z0-9.], [A-Za-z0-9_./] *
+@Namespace("tensorflow") public static native @ByVal Status ValidateExternalNodeDefSyntax(@Const @ByRef NodeDef node_def);
+
+// Returns "status" with kernel's NodeDef attached as additional text
+// in the error message.
+@Namespace("tensorflow") public static native @ByVal Status AttachDef(@Const @ByRef Status status, @Const @ByRef NodeDef node_def);
+
+  // namespace tensorflow
+
+// #endif  // TENSORFLOW_FRAMEWORK_NODE_DEF_UTIL_H_
 
 
 // Parsed from tensorflow/core/graph/node_builder.h
@@ -12685,6 +13162,969 @@ limitations under the License.
   // namespace tensorflow
 
 // #endif  // THIRD_PARTY_TENSORFLOW_CC_FRAMEWORK_CC_OP_GEN_H_
+
+
+// Parsed from tensorflow/core/ops/array_grad.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include <vector>
+// #include "tensorflow/core/framework/function.h"
+// #include "tensorflow/core/lib/core/errors.h"
+
+
+
+
+
+
+
+
+
+@Namespace("tensorflow") public static native @ByVal Status ReshapeGrad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+
+@Namespace("tensorflow") public static native @ByVal Status SqueezeGrad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+@Namespace("tensorflow") public static native @ByVal Status IdentityGrad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+@Namespace("tensorflow") public static native @ByVal Status PackGrad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+@Namespace("tensorflow") public static native @ByVal Status UnpackGrad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+@Namespace("tensorflow") public static native @ByVal Status ConcatGrad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+@Namespace("tensorflow") public static native @ByVal Status SplitGrad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+@Namespace("tensorflow") public static native @ByVal Status ArrayToListGrad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+@Namespace("tensorflow") public static native @ByVal Status ListToArrayGrad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+@Namespace("tensorflow") public static native @ByVal Status FillGrad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+@Namespace("tensorflow") public static native @ByVal Status TransposeGrad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+@Namespace("tensorflow") public static native @ByVal Status ReverseGrad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+@Namespace("tensorflow") public static native @ByVal Status SliceGrad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+@Namespace("tensorflow") public static native @ByVal Status StridedSliceGrad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+@Namespace("tensorflow") public static native @ByVal Status StridedSliceGradGrad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+  // end namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/array_ops.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/common_shape_fns.h"
+// #include "tensorflow/core/framework/op.h"
+// #include "tensorflow/core/framework/shape_inference.h"
+// #include "tensorflow/core/util/mirror_pad_mode.h"
+// #include "tensorflow/core/util/padding.h"
+
+  // namespace
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+// TODO(josh11b): Remove the >= 2 constraint, once we can rewrite the graph
+// in the N == 1 case to remove the node.
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+// TODO(mgubin): Update the doc when the freeze_graph script supports converting
+// into memmapped format.
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+  // namespace
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// EXPERIMENTAL. DO NOT USE OR DEPEND ON THIS YET.
+
+// EXPERIMENTAL: tfdb debugger-inserted ops.
+
+  // namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/candidate_sampling_ops.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/op.h"
+// #include "tensorflow/core/framework/shape_inference.h"
+
+  // namespace
+
+  // namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/control_flow_ops.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/common_shape_fns.h"
+// #include "tensorflow/core/framework/op.h"
+// #include "tensorflow/core/framework/shape_inference.h"
+
+// --------------------------------------------------------------------------
+  // namespace
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+  // namespace
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+  // namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/ctc_ops.cc
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/op.h"
+// #include "tensorflow/core/framework/shape_inference.h"
+
+// CTC is Connectionist Temporal Classification.  See util/ctc/ for details.
+
+  // namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/data_flow_ops.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/common_shape_fns.h"
+// #include "tensorflow/core/framework/op.h"
+// #include "tensorflow/core/framework/op_def_builder.h"
+// #include "tensorflow/core/framework/shape_inference.h"
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+  // namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/function_ops.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/op.h"
+
+  // namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/functional_grad.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/function.h"
+// #include <vector>
+// #include "tensorflow/core/lib/core/errors.h"
+
+@Namespace("tensorflow") public static native @ByVal Status MapAccumulateGrad(@Const @ByRef AttrSlice attrs, FunctionDef ret);
+
+
+  // end namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/functional_ops.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/op.h"
+// #include "tensorflow/core/framework/shape_inference.h"
+
+  // end namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/image_ops.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/common_shape_fns.h"
+// #include "tensorflow/core/framework/op.h"
+// #include "tensorflow/core/framework/shape_inference.h"
+
+// Sets output[0] to shape [batch_dim,height,width,channel_dim], where
+// height and width come from the size_tensor.
+
+  // namespace
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+// TODO(shlens): Support variable rank in RandomCrop.
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// glimpse = extract_glimpse(input, size, offsets) extract the glimpse
+// of size `size` centered at location `offsets` from the input tensor
+// `input`.
+//
+// REQUIRES: input.dims() == 4
+//
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+  // namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/io_ops.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/common_shape_fns.h"
+// #include "tensorflow/core/framework/op.h"
+// #include "tensorflow/core/framework/shape_inference.h"
+
+  // namespace
+
+// Reader source ops ----------------------------------------------------------
+
+// Ops that operate on Readers ------------------------------------------------
+
+// Other input Ops ----------------------------------------------------------
+
+  // namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/linalg_ops.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/op.h"
+// #include "tensorflow/core/framework/shape_inference.h"
+
+// Return in <out> the result of making <s> a square matrix.
+
+// Return in <out> the result of making the end of <s> a square matrix.
+
+// Inputs are [...,M,N] and [...,M,K].  Output is [...,N,K].
+// If <square>, then input is [...,M,M].
+
+// Input is [M,N].  First output is [min(M,N)].
+// Second and third outputs are:
+//   [0]; [0], if compute_uv is false.
+//   [M,M]; [N,N], if compute_uv is true and full_matrices is true,
+//   [M,P]; [N,P], if compute_uv is true and full_matrices is false,
+// where P = min(M,N).
+
+// Input is [...,M,N].  First output is [...,min(M,N)].
+// Second and third outputs are:
+//   [0]; [0], if compute_uv is false.
+//   [...,M,M]; [...,N,N], if compute_uv is true and full_matrices is true,
+//   [...,M,P]; [...,N,P], if compute_uv is true and full_matrices is false,
+// where P = min(M,N).
+
+// Input is [N,N]. Outputs are:
+//   [N];[0], if compute_v is false,
+//   [N];[N,N], if compute_v is true.
+
+// Input is [...,N,N]. Outputs are:
+//   [...,N];[0], if compute_v is false,
+//   [...,N];[...,N,N], if compute_v is true.
+
+  // namespace
+
+  // namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/logging_ops.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/common_shape_fns.h"
+// #include "tensorflow/core/framework/op.h"
+// #include "tensorflow/core/framework/shape_inference.h"
+
+// ----------------------------------------------------------------------------
+// Operators that deal with SummaryProtos (encoded as DT_STRING tensors) as
+// inputs or outputs in various ways.
+
+  // end namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/nn_grad.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/function.h"
+// #include "tensorflow/core/lib/core/errors.h"
+// #include "tensorflow/core/util/padding.h"
+// #include "tensorflow/core/util/tensor_format.h"
+
+@Namespace("tensorflow") public static native @ByVal Status SoftmaxGrad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+@Namespace("tensorflow") public static native @ByVal Status ReluGrad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+@Namespace("tensorflow") public static native @ByVal Status Relu6Grad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+@Namespace("tensorflow") public static native @ByVal Status CrossEntropyGrad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+@Namespace("tensorflow") public static native @ByVal Status Conv2DGrad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+@Namespace("tensorflow") public static native @ByVal Status MaxPoolGrad(@Const @ByRef AttrSlice attrs, FunctionDef g);
+
+
+  // end namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/nn_ops.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/common_shape_fns.h"
+// #include "tensorflow/core/framework/numeric_op.h"
+// #include "tensorflow/core/framework/op.h"
+// #include "tensorflow/core/framework/shape_inference.h"
+// #include "tensorflow/core/util/padding.h"
+// #include "tensorflow/core/util/tensor_format.h"
+
+// A shape function that uses the tensor value at <input_idx> as a shape for
+// output 0. If the tensor value is not available, it uses a shape with <ndims>
+// unknown dims.
+
+  // namespace
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+// --------------------------------------------------------------------------
+// --------------------------------------------------------------------------
+// --------------------------------------------------------------------------
+
+// TODO(jeff): Instead of 'use_cudnn_for_gpu', maybe we should have a
+// more general string attribute ('kernel_impl'?) that can be used to
+// select among several possible implementations.
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------
+
+  // namespace
+
+  // namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/parsing_ops.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/op.h"
+// #include "tensorflow/core/framework/shape_inference.h"
+
+  // namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/random_grad.cc
+
+/* Copyright 2016 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/function.h"
+
+  // end namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/random_ops.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/common_shape_fns.h"
+// #include "tensorflow/core/framework/op.h"
+// #include "tensorflow/core/framework/shape_inference.h"
+
+  // namepsace
+
+  // namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/script_ops.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/common_shape_fns.h"
+// #include "tensorflow/core/framework/op.h"
+
+  // namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/sendrecv_ops.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/op.h"
+
+  // end namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/sparse_ops.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/common_shape_fns.h"
+// #include "tensorflow/core/framework/op.h"
+// #include "tensorflow/core/framework/shape_inference.h"
+
+  // namespace
+
+// #define SPARSE_DENSE_CWISE_SIGNATURE()
+//   Input("sp_indices: int64")
+//       .Input("sp_values: T")
+//       .Input("sp_shape: int64")
+//       .Input("dense: T")
+//       .Output("output: T")
+//       .Attr("T: numbertype")
+//       .SetShapeFn([](InferenceContext* c) {
+//         const Shape* input;
+//         TF_RETURN_IF_ERROR(c->WithRank(c->input(1), 2, &input));
+//         c->set_output(0, c->Vector(c->Dim(input, 0)));
+//         return Status::OK();
+//       })
+
+// #undef SPARSE_DENSE_CWISE_SIGNATURE
+
+  // namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/state_ops.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/common_shape_fns.h"
+// #include "tensorflow/core/framework/op.h"
+
+  // namespace
+
+  // namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/string_ops.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/common_shape_fns.h"
+// #include "tensorflow/core/framework/op.h"
+// #include "tensorflow/core/framework/shape_inference.h"
+
+  // namespace tensorflow
+
+
+// Parsed from tensorflow/core/ops/training_ops.cc
+
+/* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
+// #include "tensorflow/core/framework/op.h"
+// #include "tensorflow/core/framework/shape_inference.h"
+
+// Handle the gradient and, if <sparse>, indices inputs.
+// <s> is an input+output parameter, containing the current known input shape to
+// the gradient.
+
+  // namespace tensorflow
 
 
 }
