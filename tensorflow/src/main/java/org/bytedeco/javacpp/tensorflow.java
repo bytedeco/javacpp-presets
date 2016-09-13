@@ -229,6 +229,58 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     }
 }
 
+@Name("std::vector<const tensorflow::Tensor*>") public static class ConstTensorPtrVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ConstTensorPtrVector(Pointer p) { super(p); }
+    public ConstTensorPtrVector(Tensor ... array) { this(array.length); put(array); }
+    public ConstTensorPtrVector()       { allocate();  }
+    public ConstTensorPtrVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef ConstTensorPtrVector put(@ByRef ConstTensorPtrVector x);
+
+    public native long size();
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native @Const Tensor get(@Cast("size_t") long i);
+    public native ConstTensorPtrVector put(@Cast("size_t") long i, Tensor value);
+
+    public ConstTensorPtrVector put(Tensor ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
+@Name("std::vector<const tensorflow::shape_inference::Dimension*>") public static class ConstDimensionPtrVector extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ConstDimensionPtrVector(Pointer p) { super(p); }
+    public ConstDimensionPtrVector(Dimension ... array) { this(array.length); put(array); }
+    public ConstDimensionPtrVector()       { allocate();  }
+    public ConstDimensionPtrVector(long n) { allocate(n); }
+    private native void allocate();
+    private native void allocate(@Cast("size_t") long n);
+    public native @Name("operator=") @ByRef ConstDimensionPtrVector put(@ByRef ConstDimensionPtrVector x);
+
+    public native long size();
+    public native void resize(@Cast("size_t") long n);
+
+    @Index public native @Const Dimension get(@Cast("size_t") long i);
+    public native ConstDimensionPtrVector put(@Cast("size_t") long i, Dimension value);
+
+    public ConstDimensionPtrVector put(Dimension ... array) {
+        if (size() != array.length) { resize(array.length); }
+        for (int i = 0; i < array.length; i++) {
+            put(i, array[i]);
+        }
+        return this;
+    }
+}
+
 @Name("std::vector<std::pair<std::string,tensorflow::Tensor> >") public static class StringTensorPairVector extends Pointer {
     static { Loader.load(); }
     /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
@@ -9147,6 +9199,243 @@ limitations under the License.
 //
 // All Shape* and Dimension* returned by functions of InferenceContext are owned
 // by the InferenceContext.
+@Namespace("tensorflow::shape_inference") @NoOffset public static class InferenceContext extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public InferenceContext(Pointer p) { super(p); }
+
+  @MemberGetter public static native @Cast("const tensorflow::int64") long kUnknownDim();
+  public static final long kUnknownDim = kUnknownDim();
+  @MemberGetter public static native int kUnknownRank();
+  public static final int kUnknownRank = kUnknownRank();
+
+  // This is a temporary constructor used for initial testing.
+  //
+  // TODO(cwhipkey): remove this temporary constructor.
+  //
+  // Each input shape describes the input shape as follows:
+  // * "?" : the shape's rank and dimensions are unknown
+  // * "[1,?,3]" : the shape's rank is known, and dimensions can be known or
+  //               unknown (? for unknown #1 - multiple dimensions can be
+  //               labeled with the same unknown number, and are deduplicated to
+  //               the same Dimension*.
+  //
+  // <input_tensors> is NULL-padded to be the same size as <input_shapes>.
+  //
+  // REQUIRES: <node_def> is not NULL, and must outlive the InferenceContext.
+  public InferenceContext(@Const NodeDef node_def, @Const @ByRef OpDef op_def,
+                     @Const @ByRef StringVector input_shapes,
+                     @Const @ByRef ConstTensorPtrVector input_tensors) { super((Pointer)null); allocate(node_def, op_def, input_shapes, input_tensors); }
+  private native void allocate(@Const NodeDef node_def, @Const @ByRef OpDef op_def,
+                     @Const @ByRef StringVector input_shapes,
+                     @Const @ByRef ConstTensorPtrVector input_tensors);
+
+  public native @Const Shape input(int idx);
+  public native int num_inputs();
+
+  // Returns the input tensor at index <idx>, or nullptr if the input tensor is
+  // not available at the time of shape inference.
+  public native @Const Tensor input_tensor(int idx);
+
+  public native void set_output(int idx, @Const Shape shape);
+  public native int num_outputs();
+  public native @Const Shape output(int idx);
+
+  // idx can be negative for an offset from end of dimensions.
+  // idx must be in the range [-1 * s.rank, s.rank).
+  public native @Const Dimension Dim(@Const Shape s, int idx);
+  public native int Rank(@Const Shape s);
+  public native @Cast("bool") boolean RankKnown(@Const Shape s);
+  public native @Cast("tensorflow::int64") long Value(@ByVal DimensionOrConstant d);
+  public native @Cast("bool") boolean ValueKnown(@ByVal DimensionOrConstant d);
+
+  // Returns true if the rank and all dimensions of the Shape are known.
+  public native @Cast("bool") boolean FullyDefined(@Const Shape s);
+
+  // Returns the total number of elements, or an unknown dimension for an
+  // incomplete shape.
+  public native @Const Dimension NumElements(@Const Shape s);
+
+  public native @StdString BytePointer DebugString(@Const Shape s);
+  public native @StdString BytePointer DebugString(@Const Dimension d);
+
+  // If <shape> has rank <rank>, or its rank is unknown, return OK and return
+  // the shape with asserted rank in <*out>. Otherwise return an error.
+  //
+  // Note that <*out> may be set to <shape>.
+  public native @ByVal Status WithRank(@Const Shape shape, int rank,
+                    @Cast("const tensorflow::shape_inference::Shape**") PointerPointer out);
+  public native @ByVal Status WithRank(@Const Shape shape, int rank,
+                    @Const @ByPtrPtr Shape out);
+  public native @ByVal Status WithRankAtLeast(@Const Shape shape, int rank,
+                           @Cast("const tensorflow::shape_inference::Shape**") PointerPointer out);
+  public native @ByVal Status WithRankAtLeast(@Const Shape shape, int rank,
+                           @Const @ByPtrPtr Shape out);
+  public native @ByVal Status WithRankAtMost(@Const Shape shape, int rank,
+                          @Cast("const tensorflow::shape_inference::Shape**") PointerPointer out);
+  public native @ByVal Status WithRankAtMost(@Const Shape shape, int rank,
+                          @Const @ByPtrPtr Shape out);
+
+  // If <dim> has value <value>, or its value is unknown, returns OK and returns
+  // the dimension with asserted value in <*out>. Otherwise returns an error.
+  //
+  // Note that <*out> may be set to <dim>.
+  public native @ByVal Status WithValue(@Const Dimension dim, @Cast("tensorflow::int64") long value,
+                     @Cast("const tensorflow::shape_inference::Dimension**") PointerPointer out);
+  public native @ByVal Status WithValue(@Const Dimension dim, @Cast("tensorflow::int64") long value,
+                     @Const @ByPtrPtr Dimension out);
+
+  // Merges <in0> and <in1> and returns the merged shape in <*out>. If <in0> and
+  // <in1> are incompatible in rank, or in the value of any dimension, returns
+  // an error.
+  //
+  // Note that <*out> may be set to <in0> or <in1>.
+  public native @ByVal Status Merge(@Const Shape in0, @Const Shape in1,
+                 @Cast("const tensorflow::shape_inference::Shape**") PointerPointer out);
+  public native @ByVal Status Merge(@Const Shape in0, @Const Shape in1,
+                 @Const @ByPtrPtr Shape out);
+
+  // Asserts that <s>'s rank >= <prefix>'s rank, and the first
+  // <prefix.rank> dimensions of <s> are compatible with the dimensions of
+  // <prefix>.
+  // Returns the merged results in <*s_out> and <*prefix_out>.
+  public native @ByVal Status MergePrefix(@Const Shape s, @Const Shape prefix, @Cast("const tensorflow::shape_inference::Shape**") PointerPointer s_out,
+                       @Cast("const tensorflow::shape_inference::Shape**") PointerPointer prefix_out);
+  public native @ByVal Status MergePrefix(@Const Shape s, @Const Shape prefix, @Const @ByPtrPtr Shape s_out,
+                       @Const @ByPtrPtr Shape prefix_out);
+
+  // Merges <d0> and <d1> and returns the merged dimension in <*out>. If <d0>
+  // and <d1> have incompatible values, returns an error.
+  //
+  // Note that <*out> may be set to <d0> or <d1>.
+  public native @ByVal Status Merge(@Const Dimension d0, @Const Dimension d1,
+                 @Cast("const tensorflow::shape_inference::Dimension**") PointerPointer out);
+  public native @ByVal Status Merge(@Const Dimension d0, @Const Dimension d1,
+                 @Const @ByPtrPtr Dimension out);
+
+  // Returns in <*out> a sub-shape of <s> with dimensions [start:].
+  // <start> can be negative to index from the end of the shape. If <start> >
+  // rank of <s>, then an empty subshape is returned.
+  // Returns an error if the rank of <s> is < <start>.
+  public native @ByVal Status Subshape(@Const Shape s, @Cast("tensorflow::int64") long start,
+                    @Cast("const tensorflow::shape_inference::Shape**") PointerPointer out);
+  public native @ByVal Status Subshape(@Const Shape s, @Cast("tensorflow::int64") long start,
+                    @Const @ByPtrPtr Shape out);
+
+  // Returns in <*out> a sub-shape of <s>, with dimensions [start:end].
+  // <start> and <end> can be negative, to index from the end of the shape.
+  // <start> and <end> are set to the rank of <s> if > rank of <s>.
+  // Returns an error if the rank of <s> is insufficient.
+  public native @ByVal Status Subshape(@Const Shape s, @Cast("tensorflow::int64") long start, @Cast("tensorflow::int64") long end,
+                    @Cast("const tensorflow::shape_inference::Shape**") PointerPointer out);
+  public native @ByVal Status Subshape(@Const Shape s, @Cast("tensorflow::int64") long start, @Cast("tensorflow::int64") long end,
+                    @Const @ByPtrPtr Shape out);
+
+  // Returns in <*out> the result of appending the dimensions of <s2> to those
+  // of <s1>.
+  public native @ByVal Status Concatenate(@Const Shape s1, @Const Shape s2,
+                       @Cast("const tensorflow::shape_inference::Shape**") PointerPointer out);
+  public native @ByVal Status Concatenate(@Const Shape s1, @Const Shape s2,
+                       @Const @ByPtrPtr Shape out);
+
+  // Returns in <out> the shape from replacing <s.dim[dim_index]> with
+  // <new_dim>.
+  public native @ByVal Status ReplaceDim(@Const Shape s, int dim_index, @Const Dimension new_dim,
+                      @Cast("const tensorflow::shape_inference::Shape**") PointerPointer out);
+  public native @ByVal Status ReplaceDim(@Const Shape s, int dim_index, @Const Dimension new_dim,
+                      @Const @ByPtrPtr Shape out);
+
+  // Returns a new shape with the given dims. The returned value is owned by
+  // this context.
+  public native @Const Shape MakeShape(@Const @ByRef ConstDimensionPtrVector dims);
+
+  // Returns a new unknown shape.
+  public native @Const Shape UnknownShape();
+
+  // Returns a new shape of zero dimensions.
+  public native @Const Shape Scalar();
+
+  // Returns a new shape of one dimension.
+  public native @Const Shape Vector(@ByVal DimensionOrConstant dim);
+
+  // Returns a new shape of two dimensions.
+  public native @Const Shape Matrix(@ByVal DimensionOrConstant dim1, @ByVal DimensionOrConstant dim2);
+
+  // Returns in <out> a new shape whose dimension sizes come from input tensor
+  // <input_idx>. The tensor must be a 1-dimensional int32 or int64 tensor.  If
+  // the input tensor is NULL, then an unknown shape is returned.
+  public native @ByVal Status MakeShapeFromShapeTensor(int input_idx, @Cast("const tensorflow::shape_inference::Shape**") PointerPointer out);
+  public native @ByVal Status MakeShapeFromShapeTensor(int input_idx, @Const @ByPtrPtr Shape out);
+
+  // Returns in <out> a new shape corresponding to <proto>.
+  public native @ByVal Status MakeShapeFromShapeProto(@Const @ByRef TensorShapeProto proto,
+                                   @Cast("const tensorflow::shape_inference::Shape**") PointerPointer out);
+  public native @ByVal Status MakeShapeFromShapeProto(@Const @ByRef TensorShapeProto proto,
+                                   @Const @ByPtrPtr Shape out);
+
+  // Returns a new dimension of the given size.  The returned value is owned by
+  // this context.
+  public native @Const Dimension MakeDim(@ByVal DimensionOrConstant d);
+  public native @Const Dimension UnknownDim();
+
+  // Returns a new dimension whose value is given by a scalar input tensor.
+  // The input tensor must be in host memory, since it is dereferenced to get
+  // the value.
+  public native @ByVal Status MakeDimForScalarInput(int idx, @Cast("const tensorflow::shape_inference::Dimension**") PointerPointer out);
+  public native @ByVal Status MakeDimForScalarInput(int idx, @Const @ByPtrPtr Dimension out);
+
+  // Look up the attr for the NodeDef being evaluated with name attr_name and
+  // set *value to its value.  If no attr with attr_name is found in def(), or
+  // the attr does not have a matching type, a non-ok status will be returned.
+
+  // Returns in <out> the result of dividing <dividend> by <divisor>.
+  // Returns an error if <divisor>  is not positive or does not evenly
+  // divide <dividend>.
+  public native @ByVal Status Divide(@Const Dimension dividend, @Cast("tensorflow::int64") long divisor,
+                  @Cast("const tensorflow::shape_inference::Dimension**") PointerPointer out);
+  public native @ByVal Status Divide(@Const Dimension dividend, @Cast("tensorflow::int64") long divisor,
+                  @Const @ByPtrPtr Dimension out);
+
+  // Returns in <out> the sum of <first> and <second>.
+  public native @ByVal Status Add(@Const Dimension first, @ByVal DimensionOrConstant second,
+               @Cast("const tensorflow::shape_inference::Dimension**") PointerPointer out);
+  public native @ByVal Status Add(@Const Dimension first, @ByVal DimensionOrConstant second,
+               @Const @ByPtrPtr Dimension out);
+
+  // Returns in <out> the dimension that is <first> minus <second>.
+  public native @ByVal Status Subtract(@Const Dimension first, @ByVal DimensionOrConstant second,
+                    @Cast("const tensorflow::shape_inference::Dimension**") PointerPointer out);
+  public native @ByVal Status Subtract(@Const Dimension first, @ByVal DimensionOrConstant second,
+                    @Const @ByPtrPtr Dimension out);
+
+  // Returns in <out> the product of <first> and <second>.
+  public native @ByVal Status Multiply(@Const Dimension first, @ByVal DimensionOrConstant second,
+                    @Cast("const tensorflow::shape_inference::Dimension**") PointerPointer out);
+  public native @ByVal Status Multiply(@Const Dimension first, @ByVal DimensionOrConstant second,
+                    @Const @ByPtrPtr Dimension out);
+
+  // Returns in <out> the minimum of <first> and <second>. If either <first> or
+  // <second> is zero the results is zero. Otherwise, if either <first> or
+  // <second> is unknown the results is unknown.
+  public native @ByVal Status Min(@Const Dimension first, @ByVal DimensionOrConstant second,
+               @Cast("const tensorflow::shape_inference::Dimension**") PointerPointer out);
+  public native @ByVal Status Min(@Const Dimension first, @ByVal DimensionOrConstant second,
+               @Const @ByPtrPtr Dimension out);
+
+  // Returns in <out> the maximum of <first> and <second>. If either <first> or
+  // <second> is unknown the results is unknown.
+  public native @ByVal Status Max(@Const Dimension first, @ByVal DimensionOrConstant second,
+               @Cast("const tensorflow::shape_inference::Dimension**") PointerPointer out);
+  public native @ByVal Status Max(@Const Dimension first, @ByVal DimensionOrConstant second,
+               @Const @ByPtrPtr Dimension out);
+
+  public native @ByVal Status construction_status();
+
+  // Validates that 'dim' has a known value, and prints an error
+  // message containing 'name' if validation fails.
+  public native @ByVal Status ValidateKnownDim(@Const Dimension dim, @Cast("const char*") BytePointer name);
+  public native @ByVal Status ValidateKnownDim(@Const Dimension dim, String name);
+}
 
 // -----------------------------------------------------------------------------
 // Template and inline method implementations, please ignore
@@ -10829,7 +11118,15 @@ limitations under the License.
 // #else
 // #endif
 
-  
+  public static class Fn_InferenceContext extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Fn_InferenceContext(Pointer p) { super(p); }
+      protected Fn_InferenceContext() { allocate(); }
+      private native void allocate();
+      public native @ByVal Status call(InferenceContext arg0);
+  }
+  public native @ByRef OpDefBuilder SetShapeFn(Fn_InferenceContext fn);
 
   // Sets op_reg_data->op_def to the requested OpDef and
   // op_reg_data->shape_inference_fn to the requested shape inference function,
@@ -11117,8 +11414,77 @@ limitations under the License.
 // registration to turn the entire call-chain into a no-op.
 
 // Template specialization that forwards all calls to the contained builder.
+@Name("tensorflow::register_op::OpDefBuilderWrapper<true>") @NoOffset public static class TrueOpDefBuilderWrapper extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public TrueOpDefBuilderWrapper(Pointer p) { super(p); }
+
+  public TrueOpDefBuilderWrapper(@Cast("const char*") BytePointer name) { super((Pointer)null); allocate(name); }
+  private native void allocate(@Cast("const char*") BytePointer name);
+  public TrueOpDefBuilderWrapper(String name) { super((Pointer)null); allocate(name); }
+  private native void allocate(String name);
+  public native @ByRef TrueOpDefBuilderWrapper Attr(@StringPiece BytePointer spec);
+  public native @ByRef TrueOpDefBuilderWrapper Attr(@StringPiece String spec);
+  public native @ByRef TrueOpDefBuilderWrapper Input(@StringPiece BytePointer spec);
+  public native @ByRef TrueOpDefBuilderWrapper Input(@StringPiece String spec);
+  public native @ByRef TrueOpDefBuilderWrapper Output(@StringPiece BytePointer spec);
+  public native @ByRef TrueOpDefBuilderWrapper Output(@StringPiece String spec);
+  public native @ByRef TrueOpDefBuilderWrapper SetIsCommutative();
+  public native @ByRef TrueOpDefBuilderWrapper SetIsAggregate();
+  public native @ByRef TrueOpDefBuilderWrapper SetIsStateful();
+  public native @ByRef TrueOpDefBuilderWrapper SetAllowsUninitializedInput();
+  public native @ByRef TrueOpDefBuilderWrapper Deprecated(int version, @StringPiece BytePointer explanation);
+  public native @ByRef TrueOpDefBuilderWrapper Deprecated(int version, @StringPiece String explanation);
+  public native @ByRef TrueOpDefBuilderWrapper Doc(@StringPiece BytePointer text);
+  public native @ByRef TrueOpDefBuilderWrapper Doc(@StringPiece String text);
+  public static class Fn_InferenceContext extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Fn_InferenceContext(Pointer p) { super(p); }
+      protected Fn_InferenceContext() { allocate(); }
+      private native void allocate();
+      public native @ByVal Status call(InferenceContext arg0);
+  }
+  public native @ByRef TrueOpDefBuilderWrapper SetShapeFn(
+        Fn_InferenceContext fn);
+  public native @Const @ByRef OpDefBuilder builder();
+}
 
 // Template specialization that turns all calls into no-ops.
+@Name("tensorflow::register_op::OpDefBuilderWrapper<false>") public static class FalseOpDefBuilderWrapper extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FalseOpDefBuilderWrapper(Pointer p) { super(p); }
+
+  public FalseOpDefBuilderWrapper(@Cast("const char*") BytePointer name) { super((Pointer)null); allocate(name); }
+  private native void allocate(@Cast("const char*") BytePointer name);
+  public FalseOpDefBuilderWrapper(String name) { super((Pointer)null); allocate(name); }
+  private native void allocate(String name);
+  public native @ByRef FalseOpDefBuilderWrapper Attr(@StringPiece BytePointer spec);
+  public native @ByRef FalseOpDefBuilderWrapper Attr(@StringPiece String spec);
+  public native @ByRef FalseOpDefBuilderWrapper Input(@StringPiece BytePointer spec);
+  public native @ByRef FalseOpDefBuilderWrapper Input(@StringPiece String spec);
+  public native @ByRef FalseOpDefBuilderWrapper Output(@StringPiece BytePointer spec);
+  public native @ByRef FalseOpDefBuilderWrapper Output(@StringPiece String spec);
+  public native @ByRef FalseOpDefBuilderWrapper SetIsCommutative();
+  public native @ByRef FalseOpDefBuilderWrapper SetIsAggregate();
+  public native @ByRef FalseOpDefBuilderWrapper SetIsStateful();
+  public native @ByRef FalseOpDefBuilderWrapper SetAllowsUninitializedInput();
+  public native @ByRef FalseOpDefBuilderWrapper Deprecated(int arg0, @StringPiece BytePointer arg1);
+  public native @ByRef FalseOpDefBuilderWrapper Deprecated(int arg0, @StringPiece String arg1);
+  public native @ByRef FalseOpDefBuilderWrapper Doc(@StringPiece BytePointer text);
+  public native @ByRef FalseOpDefBuilderWrapper Doc(@StringPiece String text);
+  public static class Fn_InferenceContext extends FunctionPointer {
+      static { Loader.load(); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public    Fn_InferenceContext(Pointer p) { super(p); }
+      protected Fn_InferenceContext() { allocate(); }
+      private native void allocate();
+      public native @ByVal Status call(InferenceContext arg0);
+  }
+  public native @ByRef FalseOpDefBuilderWrapper SetShapeFn(
+        Fn_InferenceContext fn);
+}
   // namespace register_op
 
 // #define REGISTER_OP(name) REGISTER_OP_UNIQ_HELPER(__COUNTER__, name)
@@ -13265,6 +13631,15 @@ limitations under the License.
 // #include "tensorflow/core/util/mirror_pad_mode.h"
 // #include "tensorflow/core/util/padding.h"
 
+public static native @ByVal Status GetAxisForPackAndUnpack(InferenceContext c, int rank_after_pack,
+                               IntPointer axis);
+public static native @ByVal Status GetAxisForPackAndUnpack(InferenceContext c, int rank_after_pack,
+                               IntBuffer axis);
+public static native @ByVal Status GetAxisForPackAndUnpack(InferenceContext c, int rank_after_pack,
+                               int... axis);
+
+public static native @ByVal Status PadShapeFn(InferenceContext c);
+
   // namespace
 
 // --------------------------------------------------------------------------
@@ -13322,6 +13697,8 @@ limitations under the License.
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
+
+public static native @ByVal Status ShapeShapeFn(InferenceContext c);
 
   // namespace
 
@@ -13398,6 +13775,8 @@ limitations under the License.
 // #include "tensorflow/core/framework/op.h"
 // #include "tensorflow/core/framework/shape_inference.h"
 
+public static native @ByVal Status CandidateSamplerShapeFn(InferenceContext c);
+
   // namespace
 
   // namespace tensorflow
@@ -13425,11 +13804,13 @@ limitations under the License.
 // #include "tensorflow/core/framework/shape_inference.h"
 
 // --------------------------------------------------------------------------
+public static native @ByVal Status SwitchShape(InferenceContext c);
   // namespace
 
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
+public static native @ByVal Status MergeShape(InferenceContext c);
   // namespace
 
 // --------------------------------------------------------------------------
@@ -13606,6 +13987,16 @@ limitations under the License.
 
 // Sets output[0] to shape [batch_dim,height,width,channel_dim], where
 // height and width come from the size_tensor.
+public static native @ByVal Status SetOutputToSizedImage(InferenceContext c, @Const Dimension batch_dim,
+                             int size_input_idx, @Const Dimension channel_dim);
+
+public static native @ByVal Status ResizeShapeFn(InferenceContext c);
+
+public static native @ByVal Status DecodeImageShapeFn(InferenceContext c);
+
+public static native @ByVal Status EncodeImageShapeFn(InferenceContext c);
+
+public static native @ByVal Status ColorspaceShapeFn(InferenceContext c);
 
   // namespace
 
@@ -13683,6 +14074,8 @@ limitations under the License.
 // #include "tensorflow/core/framework/op.h"
 // #include "tensorflow/core/framework/shape_inference.h"
 
+public static native @ByVal Status ScalarInputsAndOutputs(InferenceContext c);
+
   // namespace
 
 // Reader source ops ----------------------------------------------------------
@@ -13715,11 +14108,28 @@ limitations under the License.
 // #include "tensorflow/core/framework/shape_inference.h"
 
 // Return in <out> the result of making <s> a square matrix.
+public static native @ByVal Status MakeSquareMatrix(InferenceContext c, @Const Shape s,
+                        @Cast("const tensorflow::shape_inference::Shape**") PointerPointer out);
+public static native @ByVal Status MakeSquareMatrix(InferenceContext c, @Const Shape s,
+                        @Const @ByPtrPtr Shape out);
+
+public static native @ByVal Status UnchangedSquareShapeFn(InferenceContext c);
 
 // Return in <out> the result of making the end of <s> a square matrix.
+public static native @ByVal Status MakeBatchSquareMatrix(InferenceContext c, @Const Shape input,
+                             @Cast("const tensorflow::shape_inference::Shape**") PointerPointer out);
+public static native @ByVal Status MakeBatchSquareMatrix(InferenceContext c, @Const Shape input,
+                             @Const @ByPtrPtr Shape out);
+
+public static native @ByVal Status BatchUnchangedSquareShapeFn(InferenceContext c);
+
+public static native @ByVal Status SquareMatrixSolveShapeFn(InferenceContext c);
 
 // Inputs are [...,M,N] and [...,M,K].  Output is [...,N,K].
 // If <square>, then input is [...,M,M].
+public static native @ByVal Status BatchMatrixSolveShapeFn(InferenceContext c, @Cast("bool") boolean square);
+
+public static native @ByVal Status BatchSvdShapeHelperFn(InferenceContext c, @Const Shape input);
 
 // Input is [M,N].  First output is [min(M,N)].
 // Second and third outputs are:
@@ -13727,6 +14137,7 @@ limitations under the License.
 //   [M,M]; [N,N], if compute_uv is true and full_matrices is true,
 //   [M,P]; [N,P], if compute_uv is true and full_matrices is false,
 // where P = min(M,N).
+public static native @ByVal Status SvdShapeFn(InferenceContext c);
 
 // Input is [...,M,N].  First output is [...,min(M,N)].
 // Second and third outputs are:
@@ -13734,14 +14145,17 @@ limitations under the License.
 //   [...,M,M]; [...,N,N], if compute_uv is true and full_matrices is true,
 //   [...,M,P]; [...,N,P], if compute_uv is true and full_matrices is false,
 // where P = min(M,N).
+public static native @ByVal Status BatchSvdShapeFn(InferenceContext c);
 
 // Input is [N,N]. Outputs are:
 //   [N];[0], if compute_v is false,
 //   [N];[N,N], if compute_v is true.
+public static native @ByVal Status SelfAdjointEigV2ShapeFn(InferenceContext c);
 
 // Input is [...,N,N]. Outputs are:
 //   [...,N];[0], if compute_v is false,
 //   [...,N];[...,N,N], if compute_v is true.
+public static native @ByVal Status BatchSelfAdjointEigV2ShapeFn(InferenceContext c);
 
   // namespace
 
@@ -13846,6 +14260,8 @@ limitations under the License.
 // A shape function that uses the tensor value at <input_idx> as a shape for
 // output 0. If the tensor value is not available, it uses a shape with <ndims>
 // unknown dims.
+public static native @ByVal Status InputTensorShapeOrUnknown(InferenceContext c, int input_idx,
+                                 int ndims);
 
   // namespace
 
@@ -13887,6 +14303,8 @@ limitations under the License.
 // --------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------
+
+public static native @ByVal Status TopKShapeFn(InferenceContext c);
 
   // namespace
 
@@ -13959,6 +14377,8 @@ limitations under the License.
 // #include "tensorflow/core/framework/op.h"
 // #include "tensorflow/core/framework/shape_inference.h"
 
+public static native @ByVal Status RandomShape(InferenceContext c);
+
   // namepsace
 
   // namespace tensorflow
@@ -14030,6 +14450,8 @@ limitations under the License.
 // #include "tensorflow/core/framework/op.h"
 // #include "tensorflow/core/framework/shape_inference.h"
 
+public static native @ByVal Status SparseSparseMinOrMaxShapeFn(InferenceContext c);
+
   // namespace
 
 // #define SPARSE_DENSE_CWISE_SIGNATURE()
@@ -14070,6 +14492,8 @@ limitations under the License.
 
 // #include "tensorflow/core/framework/common_shape_fns.h"
 // #include "tensorflow/core/framework/op.h"
+
+public static native @ByVal Status ScatterUpdateShape(InferenceContext c);
 
   // namespace
 
@@ -14123,6 +14547,27 @@ limitations under the License.
 // Handle the gradient and, if <sparse>, indices inputs.
 // <s> is an input+output parameter, containing the current known input shape to
 // the gradient.
+@Namespace("tensorflow") public static native @ByVal Status HandleGradAndIndicesInputs(InferenceContext c, @Cast("bool") boolean sparse,
+                                         int grad_idx, @Cast("const tensorflow::shape_inference::Shape**") PointerPointer s);
+@Namespace("tensorflow") public static native @ByVal Status HandleGradAndIndicesInputs(InferenceContext c, @Cast("bool") boolean sparse,
+                                         int grad_idx, @Const @ByPtrPtr Shape s);
+
+@Namespace("tensorflow") public static native @ByVal Status ApplyGradientDescentShapeFn(InferenceContext c);
+
+@Namespace("tensorflow") public static native @ByVal Status ApplyProximalGradientDescentShapeFn(InferenceContext c,
+                                                  @Cast("bool") boolean sparse);
+@Namespace("tensorflow") public static native @ByVal Status ApplyAdadeltaShapeFn(InferenceContext c, @Cast("bool") boolean sparse);
+
+@Namespace("tensorflow") public static native @ByVal Status ApplyAdagradShapeFn(InferenceContext c, @Cast("bool") boolean sparse);
+@Namespace("tensorflow") public static native @ByVal Status ApplyProximalAdagradShapeFn(InferenceContext c, @Cast("bool") boolean sparse);
+
+@Namespace("tensorflow") public static native @ByVal Status ApplyFtrlShapeFn(InferenceContext c, @Cast("bool") boolean sparse);
+
+@Namespace("tensorflow") public static native @ByVal Status ApplyMomentumShapeFn(InferenceContext c, @Cast("bool") boolean sparse);
+
+@Namespace("tensorflow") public static native @ByVal Status ApplyAdamShapeFn(InferenceContext c, @Cast("bool") boolean sparse);
+
+@Namespace("tensorflow") public static native @ByVal Status ApplyRMSPropShapeFn(InferenceContext c, @Cast("bool") boolean sparse);
 
   // namespace tensorflow
 

@@ -149,7 +149,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("SWIG").define())
                .put(new Info("Eigen::half").cast().valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short..."))
                .put(new Info("short", "tensorflow::int16", "tensorflow::uint16").valueTypes("short").pointerTypes("ShortPointer", "ShortBuffer", "short..."))
-               .put(new Info("int", "tensorflow::int32", "tensorflow::uint32").valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
+               .put(new Info("int", "int32", "tensorflow::int32", "tensorflow::uint32").valueTypes("int").pointerTypes("IntPointer", "IntBuffer", "int..."))
                .put(new Info("long long", "tensorflow::int64", "tensorflow::uint64").cast().valueTypes("long").pointerTypes("LongPointer", "LongBuffer", "long..."))
                .put(new Info("float").valueTypes("float").pointerTypes("FloatPointer", "FloatBuffer", "float..."))
                .put(new Info("double").valueTypes("double").pointerTypes("DoublePointer", "DoubleBuffer", "double..."))
@@ -254,16 +254,13 @@ public class tensorflow implements InfoMapper {
                 .put(new Info("tensorflow::Watcher").skip())
                 .put(new Info("std::function<tensorflow::Status(const tensorflow::Status&, const OpDef&)>").pointerTypes("WatcherFn"))
 
-                //no matching constructor for initialization of 'VectorAdapter< ::tensorflow::Tensor *>'
-                //        VectorAdapter< ::tensorflow::Tensor* > adapter3((const ::tensorflow::Tensor**)ptr3, size3, owner3);
-                //                                           ^        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                //                /Users/miroslav.zoricak/work/machine-learning/javacpp-presets/tensorflow/target/classes/org/bytedeco/javacpp/jnitensorflow.cpp:554:5: note: candidate constructor not viable: no known conversion from 'const ::tensorflow::Tensor **' to 'tensorflow::Tensor *const *' for 1st argument
-                .put(new Info("tensorflow::shape_inference::InferenceContext").skip())
-                .put(new Info("tensorflow::OpDefBuilderWrapper").skip())
-                .put(new Info("tensorflow::register_op::OpDefBuilderWrapper<true>", "tensorflow::register_op::OpDefBuilderWrapper<false>").skip())
-                .put(new Info("tensorflow::OpDefBuilder::SetShapeFn").skip())
+                // no member named 'register_op__COUNTER__' in namespace 'tensorflow'
+                // rptr = &tensorflow::register_op__COUNTER__;
                 .put(new Info("tensorflow::register_op::OpDefBuilderReceiver").skip())
 
+                // Fixed shape inference
+                .put(new Info("std::vector<const tensorflow::Tensor*>").pointerTypes("ConstTensorPtrVector").define())
+                .put(new Info("std::vector<const tensorflow::shape_inference::Dimension*>").pointerTypes("ConstDimensionPtrVector").define())
 
                .put(new Info("std::vector<std::pair<std::string,tensorflow::Tensor> >").pointerTypes("StringTensorPairVector").define())
                .put(new Info("std::pair<tensorflow::EdgeSet::iterator,bool>").pointerTypes("EdgeSetBoolPair").define())
