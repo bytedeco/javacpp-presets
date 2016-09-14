@@ -232,7 +232,8 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::RegisterFileSystem").skip())
                .put(new Info("tensorflow::EnvWrapper::RegisterFileSystem").skip())
                .put(new Info("tensorflow::FileSystemRegistry").skip())
-               .put(new Info("tensorflow::Factory").pointerTypes("Factory"))
+               .put(new Info("std::function<tensorflow::FileSystem*()>").skip())
+               .put(new Info("tensorflow::Factory").skip())
 
                 // cannot find symbol
                 // [ERROR] symbol:   class FakeInputFunctor
@@ -378,6 +379,23 @@ public class tensorflow implements InfoMapper {
         private native void allocate();
         public native @StdString BytePointer call(@Cast("const tensorflow::Edge*") Pointer node);
     }
+//    public static class FactoryFn extends FunctionPointer {
+//        static { Loader.load(); }
+//        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+//        public    FactoryFn(Pointer p) { super(p); }
+//        protected FactoryFn() { allocate(); }
+//        private native void allocate();
+//        public native org.bytedeco.javacpp.tensorflow.FileSystem call();
+//    }
+//
+//    public static class ShapeInferenceFn extends FunctionPointer {
+//        static { Loader.load(); }
+//        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+//        public    ShapeInferenceFn(Pointer p) { super(p); }
+//        protected ShapeInferenceFn() { allocate(); }
+//        private native void allocate();
+//        public native org.bytedeco.javacpp.tensorflow.Status call(@Cast("shape_inference::InferenceContext*") Pointer node);
+//    }
 
     @Documented @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.METHOD, ElementType.PARAMETER})
