@@ -337,6 +337,20 @@ public class tensorflow extends org.bytedeco.javacpp.helper.tensorflow {
     }
 }
 
+@Name("std::unordered_map<std::string,std::pair<int,int> >") public static class NameRangeMap extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public NameRangeMap(Pointer p) { super(p); }
+    public NameRangeMap()       { allocate();  }
+    private native void allocate();
+    public native @Name("operator=") @ByRef NameRangeMap put(@ByRef NameRangeMap x);
+
+    public native long size();
+
+    @Index public native int first(@StdString BytePointer i); public native NameRangeMap first(@StdString BytePointer i, int first);
+    @Index public native int second(@StdString BytePointer i);  public native NameRangeMap second(@StdString BytePointer i, int second);
+}
+
 // Parsed from tensorflow/core/platform/default/integral_types.h
 
 /* Copyright 2015 The TensorFlow Authors. All Rights Reserved.
@@ -12785,7 +12799,8 @@ limitations under the License.
 // corresponding input/output index range.  For example,
 // input "foo" corresponds to input indices
 //   [ (*inputs)["foo"].first, (*inputs)["foo"].second ).
-
+@Namespace("tensorflow") public static native @ByVal Status NameRangesForNode(@Const @ByRef NodeDef node_def, @Const @ByRef OpDef op_def,
+                         NameRangeMap inputs, NameRangeMap outputs);
 
 // Adds default values to *node_def for unspecified attrs from op_def.
 @Namespace("tensorflow") public static native void AddDefaultsToNodeDef(@Const @ByRef OpDef op_def, NodeDef node_def);

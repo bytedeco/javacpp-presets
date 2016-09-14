@@ -215,10 +215,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::gtl::iterator_range<tensorflow::NodeIter>").pointerTypes("NodeIterRange").define())
                .put(new Info("tensorflow::gtl::iterator_range<tensorflow::NodeIter>()").skip())
 
-                // These two relate to NameRanges for node, they can be unskipped when we know how to deal with the
-                // wrongly generated unordered map
-               .put(new Info("std::unordered_map<std::string,std::pair<int,int> >").pointerTypes("NameRangeMap").skip())
-               .put(new Info("tensorflow::NameRangesForNode").skip())
+                .put(new Info("std::unordered_map<std::string,std::pair<int,int> >").pointerTypes("NameRangeMap").define())
 
                 // Skip composite op scopes bc: call to implicitly-deleted default constructor of '::tensorflow::CompositeOpScopes'
                .put(new Info("tensorflow::CompositeOpScopes").skip())
