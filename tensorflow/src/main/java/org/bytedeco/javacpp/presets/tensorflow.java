@@ -45,7 +45,11 @@ import java.lang.annotation.Target;
  *
  * @author Samuel Audet
  */
-@Properties(value = @Platform(value = {"linux-x86", "macosx"}, compiler = "cpp11", define = "NDEBUG", include = {
+@Properties(value = @Platform(
+        value = {"linux-x86", "macosx"},
+        compiler = "cpp11",
+        define = {"NDEBUG", "UNIQUE_PTR_NAMESPACE std"},
+        include = {
         "tensorflow/core/platform/default/integral_types.h",
         "tensorflow/core/framework/numeric_types.h",
         "tensorflow/core/platform/init_main.h",
@@ -192,13 +196,6 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::ops::NodeOut").valueTypes("@ByVal NodeBuilder.NodeOut", "Node"))
                .put(new Info("tensorflow::NodeBuilder::NodeOut").pointerTypes("NodeBuilder.NodeOut"))
 
-               .put(new Info("tensorflow::Env::NewRandomAccessFile").skip())
-               .put(new Info("tensorflow::Env::NewWritableFile").skip())
-               .put(new Info("tensorflow::Env::NewAppendableFile").skip())
-               .put(new Info("tensorflow::Env::NewReadOnlyMemoryRegionFromFile").skip())
-               .put(new Info("tensorflow::FileSystem").skip())
-               .put(new Info("tensorflow::NullFileSystem").skip())
-               .put(new Info("tensorflow::ThreadPool").skip())
                .put(new Info("tensorflow::Scope").pointerTypes("Scope"))
                .put(new Info("std::vector<tensorflow::ops::Input>").pointerTypes("InputVector"))
                .put(new Info("std::vector<tensorflow::ops::Input>::iterator").skip())
@@ -206,8 +203,6 @@ public class tensorflow implements InfoMapper {
                .put(new Info("tensorflow::ops::Cast").pointerTypes("CastOp"))
                .put(new Info("tensorflow::ops::Const").pointerTypes("ConstOp"))
                .put(new Info("mode_t").skip())
-
-               .put(new Info("tensorflow::ops::Fact").skip())
 
                .put(new Info("tensorflow::gtl::ArraySlice<std::string>").cast().pointerTypes("StringVector"))
                .put(new Info("tensorflow::gtl::ArraySlice<tensorflow::Tensor>")/*.cast()*/.pointerTypes("TensorVector"))
@@ -228,7 +223,10 @@ public class tensorflow implements InfoMapper {
                 // Skip composite op scopes bc: call to implicitly-deleted default constructor of '::tensorflow::CompositeOpScopes'
                .put(new Info("tensorflow::CompositeOpScopes").skip())
 
-               .put(new Info("std::function<tensorflow::Status(tensorflow::shape_inference::InferenceContext* c)>").skip())
+                //cannot find symbol
+                //symbol:   class ShapeInferenceFn
+                //location: class org.bytedeco.javacpp.tensorflow.OpRegistrationData
+               .put(new Info("std::function<tensorflow::Status(tensorflow::shape_inference::InferenceContext*)>").pointerTypes("ShapeInferenceFn"))
                .put(new Info("tensorflow::OpShapeInferenceFn").skip())
 
                 // cannot find symbol

@@ -1025,8 +1025,145 @@ limitations under the License.
 // #include "tensorflow/core/platform/types.h"
 
 /** A generic interface for accessing a file system. */
+@Namespace("tensorflow") public static class FileSystem extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public FileSystem(Pointer p) { super(p); }
+
+
+  /** The following functions are the implementations used by the corresponding
+   *  functions in the Env class. */
+  public native @ByVal Status NewRandomAccessFile(
+        @StdString BytePointer fname, @UniquePtr RandomAccessFile result);
+  public native @ByVal Status NewRandomAccessFile(
+        @StdString String fname, @UniquePtr RandomAccessFile result);
+
+  public native @ByVal Status NewWritableFile(@StdString BytePointer fname,
+                                   @UniquePtr WritableFile result);
+  public native @ByVal Status NewWritableFile(@StdString String fname,
+                                   @UniquePtr WritableFile result);
+
+  public native @ByVal Status NewAppendableFile(@StdString BytePointer fname,
+                                     @UniquePtr WritableFile result);
+  public native @ByVal Status NewAppendableFile(@StdString String fname,
+                                     @UniquePtr WritableFile result);
+
+  public native @ByVal Status NewReadOnlyMemoryRegionFromFile(
+        @StdString BytePointer fname, @UniquePtr ReadOnlyMemoryRegion result);
+  public native @ByVal Status NewReadOnlyMemoryRegionFromFile(
+        @StdString String fname, @UniquePtr ReadOnlyMemoryRegion result);
+
+  public native @Cast("bool") boolean FileExists(@StdString BytePointer fname);
+  public native @Cast("bool") boolean FileExists(@StdString String fname);
+
+  public native @ByVal Status GetChildren(@StdString BytePointer dir,
+                               StringVector result);
+  public native @ByVal Status GetChildren(@StdString String dir,
+                               StringVector result);
+
+  public native @ByVal Status Stat(@StdString BytePointer fname, FileStatistics stat);
+  public native @ByVal Status Stat(@StdString String fname, FileStatistics stat);
+
+  public native @ByVal Status DeleteFile(@StdString BytePointer fname);
+  public native @ByVal Status DeleteFile(@StdString String fname);
+
+  public native @ByVal Status CreateDir(@StdString BytePointer dirname);
+  public native @ByVal Status CreateDir(@StdString String dirname);
+
+  public native @ByVal Status DeleteDir(@StdString BytePointer dirname);
+  public native @ByVal Status DeleteDir(@StdString String dirname);
+
+  public native @ByVal Status GetFileSize(@StdString BytePointer fname, @Cast("tensorflow::uint64*") LongPointer file_size);
+  public native @ByVal Status GetFileSize(@StdString String fname, @Cast("tensorflow::uint64*") LongBuffer file_size);
+  public native @ByVal Status GetFileSize(@StdString BytePointer fname, @Cast("tensorflow::uint64*") long... file_size);
+  public native @ByVal Status GetFileSize(@StdString String fname, @Cast("tensorflow::uint64*") LongPointer file_size);
+  public native @ByVal Status GetFileSize(@StdString BytePointer fname, @Cast("tensorflow::uint64*") LongBuffer file_size);
+  public native @ByVal Status GetFileSize(@StdString String fname, @Cast("tensorflow::uint64*") long... file_size);
+
+  public native @ByVal Status RenameFile(@StdString BytePointer src, @StdString BytePointer target);
+  public native @ByVal Status RenameFile(@StdString String src, @StdString String target);
+
+  // Translate an URI to a filename usable by the FileSystem implementation. The
+  // implementation in this class returns the name as-is.
+  public native @StdString BytePointer TranslateName(@StdString BytePointer name);
+  public native @StdString String TranslateName(@StdString String name);
+
+  // Returns whether the given path is a directory or not.
+  // Typical return codes (not guaranteed exhaustive):
+  //  * OK - The path exists and is a directory.
+  //  * FAILED_PRECONDITION - The path exists and is not a directory.
+  //  * NOT_FOUND - The path entry does not exist.
+  //  * PERMISSION_DENIED - Insufficient permissions.
+  //  * UNIMPLEMENTED - The file factory doesn't support directories.
+  public native @ByVal Status IsDirectory(@StdString BytePointer fname);
+  public native @ByVal Status IsDirectory(@StdString String fname);
+}
 
 // Degenerate file system that provides no implementations.
+@Namespace("tensorflow") public static class NullFileSystem extends FileSystem {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public NullFileSystem(Pointer p) { super(p); }
+    /** Native array allocator. Access with {@link Pointer#position(long)}. */
+    public NullFileSystem(long size) { super((Pointer)null); allocateArray(size); }
+    private native void allocateArray(long size);
+    @Override public NullFileSystem position(long position) {
+        return (NullFileSystem)super.position(position);
+    }
+
+  public NullFileSystem() { super((Pointer)null); allocate(); }
+  private native void allocate();
+
+  public native @ByVal Status NewRandomAccessFile(
+        @StdString BytePointer fname, @UniquePtr RandomAccessFile result);
+  public native @ByVal Status NewRandomAccessFile(
+        @StdString String fname, @UniquePtr RandomAccessFile result);
+
+  public native @ByVal Status NewWritableFile(@StdString BytePointer fname,
+                           @UniquePtr WritableFile result);
+  public native @ByVal Status NewWritableFile(@StdString String fname,
+                           @UniquePtr WritableFile result);
+
+  public native @ByVal Status NewAppendableFile(@StdString BytePointer fname,
+                             @UniquePtr WritableFile result);
+  public native @ByVal Status NewAppendableFile(@StdString String fname,
+                             @UniquePtr WritableFile result);
+
+  public native @ByVal Status NewReadOnlyMemoryRegionFromFile(
+        @StdString BytePointer fname,
+        @UniquePtr ReadOnlyMemoryRegion result);
+  public native @ByVal Status NewReadOnlyMemoryRegionFromFile(
+        @StdString String fname,
+        @UniquePtr ReadOnlyMemoryRegion result);
+
+  public native @Cast("bool") boolean FileExists(@StdString BytePointer fname);
+  public native @Cast("bool") boolean FileExists(@StdString String fname);
+
+  public native @ByVal Status GetChildren(@StdString BytePointer dir, StringVector result);
+  public native @ByVal Status GetChildren(@StdString String dir, StringVector result);
+
+  public native @ByVal Status DeleteFile(@StdString BytePointer fname);
+  public native @ByVal Status DeleteFile(@StdString String fname);
+
+  public native @ByVal Status CreateDir(@StdString BytePointer dirname);
+  public native @ByVal Status CreateDir(@StdString String dirname);
+
+  public native @ByVal Status DeleteDir(@StdString BytePointer dirname);
+  public native @ByVal Status DeleteDir(@StdString String dirname);
+
+  public native @ByVal Status GetFileSize(@StdString BytePointer fname, @Cast("tensorflow::uint64*") LongPointer file_size);
+  public native @ByVal Status GetFileSize(@StdString String fname, @Cast("tensorflow::uint64*") LongBuffer file_size);
+  public native @ByVal Status GetFileSize(@StdString BytePointer fname, @Cast("tensorflow::uint64*") long... file_size);
+  public native @ByVal Status GetFileSize(@StdString String fname, @Cast("tensorflow::uint64*") LongPointer file_size);
+  public native @ByVal Status GetFileSize(@StdString BytePointer fname, @Cast("tensorflow::uint64*") LongBuffer file_size);
+  public native @ByVal Status GetFileSize(@StdString String fname, @Cast("tensorflow::uint64*") long... file_size);
+
+  public native @ByVal Status RenameFile(@StdString BytePointer src, @StdString BytePointer target);
+  public native @ByVal Status RenameFile(@StdString String src, @StdString String target);
+
+  public native @ByVal Status Stat(@StdString BytePointer fname, FileStatistics stat);
+  public native @ByVal Status Stat(@StdString String fname, FileStatistics stat);
+}
 
 /** A file abstraction for randomly reading the contents of a file. */
 @Namespace("tensorflow") public static class RandomAccessFile extends Pointer {
@@ -1219,6 +1356,9 @@ limitations under the License.
    *  for the file system related (non-virtual) functions that follow.
    *  Returned FileSystem object is still owned by the Env object and will */
   // (might) be destroyed when the environment is destroyed.
+  public native @ByVal Status GetFileSystemForFile(@StdString BytePointer fname, @Cast("tensorflow::FileSystem**") PointerPointer result);
+  public native @ByVal Status GetFileSystemForFile(@StdString BytePointer fname, @ByPtrPtr FileSystem result);
+  public native @ByVal Status GetFileSystemForFile(@StdString String fname, @ByPtrPtr FileSystem result);
 
   /** \brief Returns the file system schemes registered for this Env. */
   public native @ByVal Status GetRegisteredFileSystemSchemes(StringVector schemes);
@@ -1240,6 +1380,13 @@ limitations under the License.
    *  and the object should be deleted when is not used. The file object
    *  shouldn't live longer than the Env object. */
   
+  ///
+  ///
+  ///
+  public native @ByVal Status NewRandomAccessFile(@StdString BytePointer fname,
+                               @UniquePtr RandomAccessFile result);
+  public native @ByVal Status NewRandomAccessFile(@StdString String fname,
+                               @UniquePtr RandomAccessFile result);
 
   /** \brief Creates an object that writes to a new file with the specified
    *  name.
@@ -1255,6 +1402,13 @@ limitations under the License.
    *  and the object should be deleted when is not used. The file object
    *  shouldn't live longer than the Env object. */
   
+  ///
+  ///
+  ///
+  public native @ByVal Status NewWritableFile(@StdString BytePointer fname,
+                           @UniquePtr WritableFile result);
+  public native @ByVal Status NewWritableFile(@StdString String fname,
+                           @UniquePtr WritableFile result);
 
   /** \brief Creates an object that either appends to an existing file, or
    *  writes to a new file (if the file does not exist to begin with).
@@ -1269,6 +1423,13 @@ limitations under the License.
    *  and the object should be deleted when is not used. The file object
    *  shouldn't live longer than the Env object. */
   
+  ///
+  ///
+  ///
+  public native @ByVal Status NewAppendableFile(@StdString BytePointer fname,
+                             @UniquePtr WritableFile result);
+  public native @ByVal Status NewAppendableFile(@StdString String fname,
+                             @UniquePtr WritableFile result);
 
   /** \brief Creates a readonly region of memory with the file context.
    * 
@@ -1281,7 +1442,10 @@ limitations under the License.
    *  The ownership of the returned ReadOnlyMemoryRegion is passed to the caller
    *  and the object should be deleted when is not used. The memory region
    *  object shouldn't live longer than the Env object. */
-  
+  public native @ByVal Status NewReadOnlyMemoryRegionFromFile(
+        @StdString BytePointer fname, @UniquePtr ReadOnlyMemoryRegion result);
+  public native @ByVal Status NewReadOnlyMemoryRegionFromFile(
+        @StdString String fname, @UniquePtr ReadOnlyMemoryRegion result);
 
   /** Returns true iff the named file exists. */
   
@@ -1443,6 +1607,13 @@ limitations under the License.
 
   /** Returns the target to which this Env forwards all calls */
   public native Env target();
+
+  public native @ByVal Status GetFileSystemForFile(@StdString BytePointer fname,
+                                @Cast("tensorflow::FileSystem**") PointerPointer result);
+  public native @ByVal Status GetFileSystemForFile(@StdString BytePointer fname,
+                                @ByPtrPtr FileSystem result);
+  public native @ByVal Status GetFileSystemForFile(@StdString String fname,
+                                @ByPtrPtr FileSystem result);
 
   public native @ByVal Status GetRegisteredFileSystemSchemes(StringVector schemes);
 
@@ -4357,6 +4528,61 @@ limitations under the License.
 // #include "tensorflow/core/platform/env.h"
 // #include "tensorflow/core/platform/macros.h"
 // #include "tensorflow/core/platform/types.h"
+
+@Namespace("tensorflow::thread") @NoOffset public static class ThreadPool extends Pointer {
+    static { Loader.load(); }
+    /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+    public ThreadPool(Pointer p) { super(p); }
+
+  // Construct a pool that contains "num_threads" threads with specified "name".
+  // env->StartThread() is used to create individual threads.
+  //
+  // REQUIRES: num_threads > 0
+  public ThreadPool(Env env, @StdString BytePointer name, int num_threads) { super((Pointer)null); allocate(env, name, num_threads); }
+  private native void allocate(Env env, @StdString BytePointer name, int num_threads);
+  public ThreadPool(Env env, @StdString String name, int num_threads) { super((Pointer)null); allocate(env, name, num_threads); }
+  private native void allocate(Env env, @StdString String name, int num_threads);
+
+  // Construct a pool that contains "num_threads" threads with specified "name".
+  // env->StartThread() is used to create individual threads.
+  //
+  // REQUIRES: num_threads > 0
+  public ThreadPool(Env env, @Const @ByRef ThreadOptions thread_options, @StdString BytePointer name,
+               int num_threads) { super((Pointer)null); allocate(env, thread_options, name, num_threads); }
+  private native void allocate(Env env, @Const @ByRef ThreadOptions thread_options, @StdString BytePointer name,
+               int num_threads);
+  public ThreadPool(Env env, @Const @ByRef ThreadOptions thread_options, @StdString String name,
+               int num_threads) { super((Pointer)null); allocate(env, thread_options, name, num_threads); }
+  private native void allocate(Env env, @Const @ByRef ThreadOptions thread_options, @StdString String name,
+               int num_threads);
+
+  // Wait until all scheduled work has finished and then destroy the
+  // set of threads.
+
+  // Schedule fn() for execution in the pool of threads.
+  public native void Schedule(@ByVal Fn fn);
+
+  // ParallelFor shards the "total" unit of work assuming each unit of work
+  // having roughly "cost_per_unit" cost, in cycles. Each unit of work is
+  // indexed 0, 1, ..., total - 1. Each shard contains 1 or more units of work
+  // and the total cost of each shard is roughly the same.
+  public native void ParallelFor(@Cast("tensorflow::int64") long total, @Cast("tensorflow::int64") long cost_per_unit,
+                     @ByVal ForFn fn);
+
+  // Returns the number of threads in the pool.
+  public native int NumThreads();
+
+  // Returns current thread id between 0 and NumThreads() - 1, if called from a
+  // thread in the pool. Returns -1 otherwise.
+  public native int CurrentThreadId();
+
+  @Opaque public static class Impl extends Pointer {
+      /** Empty constructor. Calls {@code super((Pointer)null)}. */
+      public Impl() { super((Pointer)null); }
+      /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+      public Impl(Pointer p) { super(p); }
+  }
+}
 
   // namespace thread
   // namespace tensorflow
