@@ -102,6 +102,7 @@ import java.lang.annotation.Target;
         "tensorflow/core/graph/graph.h",
         "tensorflow/core/framework/node_def_builder.h",
         "tensorflow/core/framework/node_def_util.h",
+        "tensorflow/core/framework/selective_registration.h",
         "tensorflow/core/graph/node_builder.h",
         "tensorflow/core/graph/graph_def_builder.h",
         "tensorflow/core/graph/default_device.h",
@@ -146,7 +147,7 @@ public class tensorflow implements InfoMapper {
                .put(new Info("math_ops.h").skip())
                .put(new Info("array_ops.h").skip())
                .put(new Info("TF_FALLTHROUGH_INTENDED", "TF_ATTRIBUTE_NORETURN", "TF_ATTRIBUTE_NOINLINE",
-                             "TF_ATTRIBUTE_UNUSED", "TF_ATTRIBUTE_COLD", "TF_PACKED", "TF_MUST_USE_RESULT", "__COUNTER__").cppTypes().annotations())
+                             "TF_ATTRIBUTE_UNUSED", "TF_ATTRIBUTE_COLD", "TF_PACKED", "TF_MUST_USE_RESULT").cppTypes().annotations())
                .put(new Info("TF_CHECK_OK", "TF_QCHECK_OK").cppTypes("void", "tensorflow::Status"))
                .put(new Info("TF_DISALLOW_COPY_AND_ASSIGN").cppText("#define TF_DISALLOW_COPY_AND_ASSIGN(TypeName)"))
                .put(new Info("PROTOBUF_DEPRECATED_ATTR").cppTypes().annotations("@Deprecated"))
@@ -253,6 +254,13 @@ public class tensorflow implements InfoMapper {
                 // no member named 'register_op__COUNTER__' in namespace 'tensorflow'
                 // rptr = &tensorflow::register_op__COUNTER__;
                 .put(new Info("tensorflow::register_op::OpDefBuilderReceiver").skip())
+
+                //Failed to execute JavaCPP Builder: null:4: Could not parse declaration at '=' -> [Help 1]
+//                .put(new Info("tensorflow::register_op__COUNTER__").skip())
+
+                // For some reason the #define this was in got parsed even though its #ifdef guard failed
+                // see "tensorflow/core/framework/selective_registration.h" for more details
+                .put(new Info("SHOULD_REGISTER_OP_GRADIENT").skip())
 
                 // Fixed shape inference
                 .put(new Info("std::vector<const tensorflow::Tensor*>").pointerTypes("ConstTensorPtrVector").define())
