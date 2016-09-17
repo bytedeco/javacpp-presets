@@ -59,7 +59,7 @@ download https://github.com/google/leveldb/archive/v$LEVELDB.tar.gz leveldb-$LEV
 download https://github.com/google/snappy/releases/download/$SNAPPY/snappy-$SNAPPY.tar.gz snappy-$SNAPPY.tar.gz
 download https://github.com/LMDB/lmdb/archive/LMDB_$LMDB.tar.gz lmdb-LMDB_$LMDB.tar.gz
 download http://downloads.sourceforge.net/project/boost/boost/${BOOST//_/.}/boost_$BOOST.tar.gz boost_$BOOST.tar.gz
-download http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-$HDF5/src/hdf5-$HDF5.tar.bz2 hdf5-$HDF5.tar.bz2
+download http://support.hdfgroup.org/ftp/HDF5/releases/hdf5-$HDF5/src/hdf5-$HDF5.tar.bz2 hdf5-$HDF5.tar.bz2
 download https://github.com/xianyi/OpenBLAS/archive/v$OPENBLAS.tar.gz OpenBLAS-$OPENBLAS.tar.gz
 download https://github.com/BVLC/caffe/archive/$CAFFE_VERSION.tar.gz caffe-$CAFFE_VERSION.tar.gz
 
@@ -71,16 +71,16 @@ mkdir -p include lib bin
 OPENCV_PATH="$INSTALL_PATH/../../../opencv/cppbuild/$PLATFORM/"
 
 echo "Decompressing archives..."
-tar --totals -xzf ../glog-$GLOG.tar.gz || true
-tar --totals -xzf ../gflags-$GFLAGS.tar.gz
-tar --totals -xzf ../protobuf-$PROTO.tar.gz
-tar --totals -xzf ../leveldb-$LEVELDB.tar.gz
-tar --totals -xzf ../snappy-$SNAPPY.tar.gz
-tar --totals -xzf ../lmdb-LMDB_$LMDB.tar.gz
-tar --totals -xzf ../boost_$BOOST.tar.gz
-tar --totals -xjf ../hdf5-$HDF5.tar.bz2
-tar --totals -xzf ../OpenBLAS-$OPENBLAS.tar.gz
-tar --totals -xzf ../caffe-$CAFFE_VERSION.tar.gz
+tar --totals -xf ../glog-$GLOG.tar.gz || true
+tar --totals -xf ../gflags-$GFLAGS.tar.gz
+tar --totals -xf ../protobuf-$PROTO.tar.gz
+tar --totals -xf ../leveldb-$LEVELDB.tar.gz
+tar --totals -xf ../snappy-$SNAPPY.tar.gz
+tar --totals -xf ../lmdb-LMDB_$LMDB.tar.gz
+tar --totals -xf ../boost_$BOOST.tar.gz
+tar --totals -xf ../hdf5-$HDF5.tar.bz2
+tar --totals -xf ../OpenBLAS-$OPENBLAS.tar.gz
+tar --totals -xf ../caffe-$CAFFE_VERSION.tar.gz
 
 export CFLAGS="-fPIC"
 export CXXFLAGS="-fPIC"
