@@ -110,32 +110,6 @@ import java.lang.annotation.Target;
         "tensorflow/cc/framework/scope.h",
         "tensorflow/cc/framework/ops.h",
         "tensorflow/cc/framework/cc_op_gen.h",
-        "tensorflow/core/ops/array_grad.cc",
-        "tensorflow/core/ops/array_ops.cc",
-        "tensorflow/core/ops/candidate_sampling_ops.cc",
-        "tensorflow/core/ops/control_flow_ops.cc",
-        "tensorflow/core/ops/ctc_ops.cc",
-        "tensorflow/core/ops/data_flow_ops.cc",
-        "tensorflow/core/ops/function_ops.cc",
-        "tensorflow/core/ops/functional_grad.cc",
-        "tensorflow/core/ops/functional_ops.cc",
-        "tensorflow/core/ops/image_ops.cc",
-        "tensorflow/core/ops/io_ops.cc",
-        "tensorflow/core/ops/linalg_ops.cc",
-        "tensorflow/core/ops/logging_ops.cc",
-//        "tensorflow/core/ops/math_grad.cc",
-//        "tensorflow/core/ops/math_ops.cc",
-        "tensorflow/core/ops/nn_grad.cc",
-        "tensorflow/core/ops/nn_ops.cc",
-        "tensorflow/core/ops/parsing_ops.cc",
-        "tensorflow/core/ops/random_grad.cc",
-        "tensorflow/core/ops/random_ops.cc",
-        "tensorflow/core/ops/script_ops.cc",
-        "tensorflow/core/ops/sendrecv_ops.cc",
-        "tensorflow/core/ops/sparse_ops.cc",
-        "tensorflow/core/ops/state_ops.cc",
-        "tensorflow/core/ops/string_ops.cc",
-        "tensorflow/core/ops/training_ops.cc",
         "tensorflow_adapters.h"},
         link = "tensorflow"),
         target = "org.bytedeco.javacpp.tensorflow",
@@ -226,37 +200,6 @@ public class tensorflow implements InfoMapper {
                 //location: class org.bytedeco.javacpp.tensorflow.OpRegistrationData
                .put(new Info("std::function<tensorflow::Status(tensorflow::shape_inference::InferenceContext*)>").pointerTypes("ShapeInferenceFn"))
                .put(new Info("tensorflow::OpShapeInferenceFn").skip())
-
-                // cannot find symbol
-                // [ERROR] symbol:   class Factory
-                // [ERROR] location: class org.bytedeco.javacpp.tensorflow.Env
-               .put(new Info("tensorflow::RegisterFileSystem").skip())
-               .put(new Info("tensorflow::EnvWrapper::RegisterFileSystem").skip())
-               .put(new Info("tensorflow::FileSystemRegistry").skip())
-               .put(new Info("std::function<tensorflow::FileSystem*()>").skip())
-               .put(new Info("tensorflow::Factory").skip())
-
-                // cannot find symbol
-                // [ERROR] symbol:   class FakeInputFunctor
-                // [ERROR] location: class org.bytedeco.javacpp.tensorflow.NodeDefBuilder
-               .put(new Info("std::function<tensorflow::Status(const tensorflow::OpDef&, int, const tensorflow::NodeDef&, tensorflow::NodeDefBuilder*)>").skip())
-               .put(new Info("tensorflow::FakeInputFunctor").skip())
-
-                // cannot find symbol
-                // [ERROR] symbol:   class OpRegistrationDataFactory
-                // [ERROR] location: class org.bytedeco.javacpp.tensorflow.OpRegistry
-                .put(new Info("tensorflow::OpRegistrationDataFactory").skip())
-                .put(new Info("std::function<tensorflow::Status(tensorflow::OpRegistrationData*)>").skip())
-
-                .put(new Info("tensorflow::Watcher").skip())
-                .put(new Info("std::function<tensorflow::Status(const tensorflow::Status&, const OpDef&)>").pointerTypes("WatcherFn"))
-
-                // no member named 'register_op__COUNTER__' in namespace 'tensorflow'
-                // rptr = &tensorflow::register_op__COUNTER__;
-                .put(new Info("tensorflow::register_op::OpDefBuilderReceiver").skip())
-
-                //Failed to execute JavaCPP Builder: null:4: Could not parse declaration at '=' -> [Help 1]
-//                .put(new Info("tensorflow::register_op__COUNTER__").skip())
 
                 // For some reason the #define this was in got parsed even though its #ifdef guard failed
                 // see "tensorflow/core/framework/selective_registration.h" for more details
@@ -396,14 +339,14 @@ public class tensorflow implements InfoMapper {
 //        public native org.bytedeco.javacpp.tensorflow.FileSystem call();
 //    }
 //
-//    public static class ShapeInferenceFn extends FunctionPointer {
-//        static { Loader.load(); }
-//        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
-//        public    ShapeInferenceFn(Pointer p) { super(p); }
-//        protected ShapeInferenceFn() { allocate(); }
-//        private native void allocate();
-//        public native org.bytedeco.javacpp.tensorflow.Status call(@Cast("shape_inference::InferenceContext*") Pointer node);
-//    }
+    public static class ShapeInferenceFn extends FunctionPointer {
+        static { Loader.load(); }
+        /** Pointer cast constructor. Invokes {@link Pointer#Pointer(Pointer)}. */
+        public    ShapeInferenceFn(Pointer p) { super(p); }
+        protected ShapeInferenceFn() { allocate(); }
+        private native void allocate();
+        public native org.bytedeco.javacpp.tensorflow.Status call(@Cast("shape_inference::InferenceContext*") Pointer node);
+    }
 
     @Documented @Retention(RetentionPolicy.RUNTIME)
     @Target({ElementType.METHOD, ElementType.PARAMETER})
