@@ -110,8 +110,24 @@ import java.lang.annotation.Target;
         "tensorflow/cc/framework/scope.h",
         "tensorflow/cc/framework/ops.h",
         "tensorflow/cc/framework/cc_op_gen.h",
-        "tensorflow_adapters.h"},
-        link = "tensorflow"),
+        "tensorflow_adapters.h",
+        "tensorflow/cc/ops/const_op.h",
+        "tensorflow/cc/ops/array_ops.h",
+        "tensorflow/cc/ops/data_flow_ops.h",
+        "tensorflow/cc/ops/image_ops.h",
+        "tensorflow/cc/ops/io_ops.h",
+        "tensorflow/cc/ops/linalg_ops.h",
+        "tensorflow/cc/ops/logging_ops.h",
+        "tensorflow/cc/ops/math_ops.h",
+        "tensorflow/cc/ops/nn_ops.h",
+        "tensorflow/cc/ops/parsing_ops.h",
+        "tensorflow/cc/ops/random_ops.h",
+        "tensorflow/cc/ops/sparse_ops.h",
+        "tensorflow/cc/ops/state_ops.h",
+        "tensorflow/cc/ops/string_ops.h",
+        "tensorflow/cc/ops/training_ops.h",
+        "tensorflow/cc/ops/user_ops.h"},
+        link = "tensorflow_cc"),
         target = "org.bytedeco.javacpp.tensorflow",
         helper = "org.bytedeco.javacpp.helper.tensorflow")
 public class tensorflow implements InfoMapper {
@@ -203,6 +219,7 @@ public class tensorflow implements InfoMapper {
 
                 // For some reason the #define this was in got parsed even though its #ifdef guard failed
                 // see "tensorflow/core/framework/selective_registration.h" for more details
+                .put(new Info("SELECTIVE_REGISTRATION").define(false))
                 .put(new Info("SHOULD_REGISTER_OP_GRADIENT").skip())
 
                 // Fixed shape inference
